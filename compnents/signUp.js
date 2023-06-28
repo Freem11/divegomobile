@@ -10,10 +10,10 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useContext } from "react";
 import { SessionContext } from "./contexts/sessionContext";
-// import {
-//   register,
-//   sessionCheck,
-// } from "../supabaseCalls/authenticateSupabaseCalls";
+import {
+  register,
+  sessionCheck,
+} from "../supabaseCalls/authenticateSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import Headliner from "../compnents/png/Headliner.png";
@@ -73,26 +73,26 @@ export default function SignUpRoute() {
       lastNameVal: lastVar,
     });
 
-    // if (
-    //   formVals.email === "" ||
-    //   formVals.password == "" ||
-    //   formVals.firstName == "" ||
-    //   formVals.lastName == ""
-    // ) {
-    //   setRegFail("Please fill out all fields");
-    //   return;
-    // } else {
-    //   let registrationToken = await register(formVals);
-    //   console.log("reggie", registrationToken);
-    //   if (registrationToken.session !== null) {
-    //     await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
-    //     setActiveSession(registrationToken);
-    //   } else {
-    //     setRegFail(`You have already registered this account, please sign in`);
-    //   }
-    //   let checker = await sessionCheck();
-    //   //  console.log("checkerbox", checker)
-    // }
+    if (
+      formVals.email === "" ||
+      formVals.password == "" ||
+      formVals.firstName == "" ||
+      formVals.lastName == ""
+    ) {
+      setRegFail("Please fill out all fields");
+      return;
+    } else {
+      let registrationToken = await register(formVals);
+      console.log("reggie", registrationToken);
+      if (registrationToken.session !== null) {
+        await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
+        setActiveSession(registrationToken);
+      } else {
+        setRegFail(`You have already registered this account, please sign in`);
+      }
+      let checker = await sessionCheck();
+      //  console.log("checkerbox", checker)
+    }
   };
 
   const keboardOffset = Platform.OS === "ios" ? 100 : 0;

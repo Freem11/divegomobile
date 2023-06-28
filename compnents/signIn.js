@@ -11,11 +11,11 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useContext, useEffect } from "react";
 import { SessionContext } from "./contexts/sessionContext";
-// import {
-//   sessionCheck,
-//   signInStandard,
-//   register,
-// } from "../supabaseCalls/authenticateSupabaseCalls";
+import {
+  sessionCheck,
+  signInStandard,
+  register,
+} from "../supabaseCalls/authenticateSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebook.png";
@@ -98,12 +98,12 @@ export default function SignInRoute() {
     let Pword = user.id;
     let MailE = user.email;
 
-    // let accessToken = await OAuthSignIn({
-    //   password: Pword,
-    //   email: MailE,
-    //   firstName: Fname,
-    //   lastName: LName,
-    // });
+    let accessToken = await OAuthSignIn({
+      password: Pword,
+      email: MailE,
+      firstName: Fname,
+      lastName: LName,
+    });
   };
 
   async function OAuthSignIn(formVals) {
@@ -208,21 +208,21 @@ export default function SignInRoute() {
       passwordVal: passwordVar,
     });
 
-  //   if (formVals.email === "" || formVals.password == "") {
-  //     setLoginFail("Please fill out both email and password");
-  //     return;
-  //   } else {
-  //     let accessToken = await signInStandard(formVals);
-  //     if (accessToken) {
-  //       await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-  //       setActiveSession(accessToken);
-  //     } else {
-  //       setLoginFail("The credentials you supplied are not valid");
-  //       return;
-  //     }
-  //     let checker = await sessionCheck();
-  //     //  console.log("checkerbox", checker)
-  //   }
+    if (formVals.email === "" || formVals.password == "") {
+      setLoginFail("Please fill out both email and password");
+      return;
+    } else {
+      let accessToken = await signInStandard(formVals);
+      if (accessToken) {
+        await AsyncStorage.setItem("token", JSON.stringify(accessToken));
+        setActiveSession(accessToken);
+      } else {
+        setLoginFail("The credentials you supplied are not valid");
+        return;
+      }
+      let checker = await sessionCheck();
+      //  console.log("checkerbox", checker)
+    }
   };
 
   const keboardOffset = Platform.OS === "ios" ? 100 : 0;
