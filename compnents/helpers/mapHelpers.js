@@ -1,4 +1,4 @@
-import { heatVals } from "../data/testdata";
+//  import { heatVals } from "../data/testdata";
 
 function filterSites(newParams, array) {
 

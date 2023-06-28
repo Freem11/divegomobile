@@ -1,16 +1,23 @@
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import React, {
   useState,
   useCallback,
   useLayoutEffect,
 } from "react";
-// import "react-native-url-polyfill/auto";
+import "react-native-url-polyfill/auto";
 import { StyleSheet, View, Dimensions, KeyboardAvoidingView } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { IndieFlower_400Regular } from "@expo-google-fonts/indie-flower";
 import { PermanentMarker_400Regular } from "@expo-google-fonts/permanent-marker";
+import { BubblegumSans_400Regular } from '@expo-google-fonts/bubblegum-sans';
+import {
+  Caveat_400Regular,
+  Caveat_500Medium,
+  Caveat_600SemiBold,
+  Caveat_700Bold,
+} from "@expo-google-fonts/caveat";
 
 import { PictureAdderContext } from "./compnents/contexts/picModalContext";
 import { DSAdderContext } from "./compnents/contexts/DSModalContext";
@@ -30,10 +37,10 @@ import { SelectedDiveSiteContext } from "./compnents/contexts/selectedDiveSiteCo
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import { HeatPointsContext } from "./compnents/contexts/heatPointsContext";
 
-// import MapPage from "./compnents/mapPage";
+import MapPage from "./compnents/mapPage";
 import AuthenticationPage from "./compnents/authenticationPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
-// import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
+import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 // import 'expo-dev-client';
 
 const { width, height } = Dimensions.get("window");
@@ -108,6 +115,11 @@ export default function App() {
   let [fontsLoaded] = useFonts({
     PermanentMarker_400Regular,
     IndieFlower_400Regular,
+    BubblegumSans_400Regular,
+    Caveat_400Regular,
+    Caveat_500Medium,
+    Caveat_600SemiBold,
+    Caveat_700Bold,
    
   });
 
@@ -196,12 +208,12 @@ export default function App() {
                                   <SessionContext.Provider
                                     value={{ activeSession, setActiveSession }}
                                   >                       
-                                      <AuthenticationPage/>                                 
-                                     {/* {activeSession ? (
+                                      {/* <AuthenticationPage/>                                  */}
+                                     {activeSession ? (
                                       <MapPage />
                                     ) : (
                                       <AuthenticationPage />
-                                    )} */}
+                                    )}
                                   </SessionContext.Provider>
                                 </MapCenterContext.Provider>
                               </DSAdderContext.Provider>

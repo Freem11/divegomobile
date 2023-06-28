@@ -106,11 +106,11 @@ export default function MapPage() {
               </TouchableWithoutFeedback>
             )}
 
-            {/* {masterSwitch && (
+            {masterSwitch && (
               <View style={styles.Fbuttons}>
                 <FABButtons style={{ zIndex: 2 }} />
               </View>
-            )} */}
+            )}
 
             {!masterSwitch && (
               <View style={styles.PinButton}>
