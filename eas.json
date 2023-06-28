@@ -1,0 +1,40 @@
+{
+  "cli": {
+    "version": ">= 3.13.2",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "resourceClass": "large"
+    },
+    "sim": {
+      "extends": "development",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "channel": "preview",
+      "distribution": "internal",
+      "resourceClass": "large"
+    },
+    "production": {
+      "channel": "production",
+      "resourceClass": "large",
+      "env": {
+        "GOOGLE_MAPS_API_KEY": "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg",
+        "SUPABASE_URL": "https://lsakqvscxozherlpunqx.supabase.co",
+        "SUPABASE_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzYWtxdnNjeG96aGVybHB1bnF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjQyOTIxMjYsImV4cCI6MTk3OTg2ODEyNn0.TROef3TdFCdqfVReFpesiMgowJEbRUXfYe3X3KmU0Qk",
+        "ANDROID_CLIENT_ID": "498754860675-tqqdpuns0grhbrsc7i9fdrqtqvbntjlr.apps.googleusercontent.com",
+        "IOS_CLIENT_ID": "498754860675-jgnfsgnuelqn1o55or5585mdgicihfl2.apps.googleusercontent.com",
+        "FACEBOOK_APP_ID": "692861552452156",
+        "ANDROID_HOME": "/Users/matthewfreeman/Library/Android/sdk"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
