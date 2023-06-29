@@ -551,13 +551,13 @@ const styles = StyleSheet.create({
   picContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: scale(10),
+    marginBottom: Platform.OS === "ios" ? scale(30) : scale(20),
     borderWidth: 0.3,
     borderRadius: scale(15),
     borderColor: "darkgrey",
-    width: scale(220),
-    height: scale(110),
-    marginTop: -90,
+    width: scale(240),
+    height: scale(160),
+    marginTop: Platform.OS === "ios" ? scale(-110) : scale(-70),
     shadowColor: "#000",
     shadowOffset: {
       width: 1,

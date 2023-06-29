@@ -137,7 +137,7 @@ export default function App() {
             if (newSession === null){
               setAppIsReady(true);
             } else {
-              // setActiveSession(newSession);
+              setActiveSession(newSession);
               setAppIsReady(true);
             } 
           } else {

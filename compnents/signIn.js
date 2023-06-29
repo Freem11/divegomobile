@@ -6,7 +6,8 @@ import {
   TouchableWithoutFeedback,
   Image,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useContext, useEffect } from "react";
@@ -26,7 +27,7 @@ import * as AuthSession from "expo-auth-session";
 import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import config from "../config";
-import Headliner from "../compnents/png/Headliner.png"
+import Headliner from "../compnents/png/Headliner.png";
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -66,21 +67,20 @@ export default function SignInRoute() {
 
   const [userInfo, setUserInfo] = useState();
 
-   const [request, response, promptAsync] = Google.useAuthRequest({
+  const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: googleAndroidClientId,
     iosClientId: googleIOSClientId,
   });
 
-  const [reqest2, response2, promptAsync2] = Facebook.useAuthRequest({
+  const [request2, response2, promptAsync2] = Facebook.useAuthRequest({
     clientId: facebookAppId,
   });
 
- 
   const handleOAuthSubmit = async (user) => {
     let Fname;
     let LName;
 
-    alert(user.name + " " + user.id + " " + user.email)
+    // alert(user.name + " " + user.id + " " + user.email);
 
     if (user.name) {
       Fname = user.name.split(" ").slice(0, 1);
@@ -114,10 +114,10 @@ export default function SignInRoute() {
     } else {
       let registrationToken = await register(formVals);
       if (registrationToken.session !== null) {
-      await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
-      setActiveSession(registrationToken);
+        await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
+        setActiveSession(registrationToken);
       } else {
-        setLoginFail("You already have an account with this email"); 
+        setLoginFail("You already have an account with this email");
       }
     }
   }
@@ -130,32 +130,20 @@ export default function SignInRoute() {
     handleFEffect();
   }, [response2, token2]);
 
-
-  async function handleFEffect() {
-    // alert("response Facebook?" + response2?.type);
-    if (response2?.type === "success") {
-      // alert("tokenized Facebook! " + response2.authentication.accessToken);
-      // setToken(response.authentication.accessToken);
-      getFacebokUserData(response2.authentication.accessToken);
-    }
-  }
-
   async function handleGEffect() {
-    // alert("response Google?" + response?.type);
     if (response?.type === "success") {
-      // alert("tokenized Google! " + response.authentication.accessToken);
-      // setToken(response.authentication.accessToken);
       getGoogleUserData(response.authentication.accessToken);
     }
   }
 
-  const handleGAsync = async () => {
-    if (Platform.OS === "android") {
-      // await authorize(configAndroid)
-      await promptAsync({ showInRecents: true, useProxy: false });
-    } else {
-      await promptAsync({ showInRecents: true, useProxy: false });
+  async function handleFEffect() {
+    if (response2?.type === "success") {
+      getFacebokUserData(response2.authentication.accessToken);
     }
+  }
+
+  const handleGAsync = async () => {
+    await promptAsync({ showInRecents: true, useProxy: false });
   };
 
   const handleFAsync = async () => {
@@ -227,17 +215,15 @@ export default function SignInRoute() {
 
   const keboardOffset = Platform.OS === "ios" ? 100 : 0;
 
-
   return (
     <View style={styles.container}>
-       <Image source={Headliner} style={[styles.Headliner]} />
+      <Image source={Headliner} style={[styles.Headliner]} />
 
-       <View style={{ marginTop: "5%" }}>
+      <View style={{ marginTop: "5%" }}>
         <TouchableWithoutFeedback
           onPress={handleGAsync}
-          // disabled={!req}
+          disabled={request === null}
         >
-          
           <View style={[styles.SignUpWithButtons]}>
             <Image source={googleLogo} style={[styles.gLogo]} />
             <Text
@@ -253,7 +239,10 @@ export default function SignInRoute() {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={handleFAsync}>
+        <TouchableWithoutFeedback
+          onPress={handleFAsync}
+          // disabled={!request2}
+        >
           <View style={[styles.SignUpWithButtons]}>
             <Image source={facebookLogo} style={[styles.fbLogo]} />
             <Text
@@ -272,66 +261,68 @@ export default function SignInRoute() {
 
         {/* <Text>{JSON.stringify(userInfo)}</Text> */}
       </View>
-      
+
       <KeyboardAvoidingView
         behavior="position"
         keyboardVerticalOffset={keboardOffset}
       >
-      <View style={styles.inputContainer}>
-        <InsetShadow
-          containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 7,
-            marginTop: 10,
-          }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={formValidation.emailVal ? styles.inputRed : styles.input}
-            value={formVals.email}
-            placeholder={"Email"}
-            placeholderTextColor="darkgrey"
-            color="#F0EEEB"
-            fontSize={18}
-            onChangeText={(emailsText) =>
-              setFormVals({ ...formVals, email: emailsText })
-            }
-            onFocus={() => setLoginFail(null)}
-          ></TextInput>
-        </InsetShadow>
+        <View style={styles.inputContainer}>
+          <InsetShadow
+            containerStyle={{
+              borderRadius: 25,
+              height: 40,
+              width: 200,
+              marginRight: 7,
+              marginTop: 10,
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <TextInput
+              style={formValidation.emailVal ? styles.inputRed : styles.input}
+              value={formVals.email}
+              placeholder={"Email"}
+              placeholderTextColor="darkgrey"
+              color="#F0EEEB"
+              fontSize={18}
+              onChangeText={(emailsText) =>
+                setFormVals({ ...formVals, email: emailsText })
+              }
+              onFocus={() => setLoginFail(null)}
+            ></TextInput>
+          </InsetShadow>
 
-        <InsetShadow
-          containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 7,
-            marginTop: 10,
-          }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={formValidation.passwordVal ? styles.inputRed : styles.input}
-            value={formVals.password}
-            placeholder={"Password"}
-            fontSize={18}
-            secureTextEntry={true}
-            placeholderTextColor="darkgrey"
-            color="#F0EEEB"
-            onChangeText={(passwordsText) =>
-              setFormVals({ ...formVals, password: passwordsText })
-            }
-            onFocus={() => setLoginFail(null)}
-          ></TextInput>
-        </InsetShadow>
-        {loginFail && <Text style={styles.erroMsg}>{loginFail}</Text>}
-      </View>
+          <InsetShadow
+            containerStyle={{
+              borderRadius: 25,
+              height: 40,
+              width: 200,
+              marginRight: 7,
+              marginTop: 10,
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <TextInput
+              style={
+                formValidation.passwordVal ? styles.inputRed : styles.input
+              }
+              value={formVals.password}
+              placeholder={"Password"}
+              fontSize={18}
+              secureTextEntry={true}
+              placeholderTextColor="darkgrey"
+              color="#F0EEEB"
+              onChangeText={(passwordsText) =>
+                setFormVals({ ...formVals, password: passwordsText })
+              }
+              onFocus={() => setLoginFail(null)}
+            ></TextInput>
+          </InsetShadow>
+          {loginFail && <Text style={styles.erroMsg}>{loginFail}</Text>}
+        </View>
       </KeyboardAvoidingView>
 
       <View style={styles.SubmitButton2}>
@@ -353,8 +344,6 @@ export default function SignInRoute() {
           </Text>
         </TouchableWithoutFeedback>
       </View>
-
-      
     </View>
   );
 }
@@ -488,12 +477,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "darkblue",
     borderWidth: 1,
-    marginTop: scale(10)
+    marginTop: scale(10),
   },
-  Headliner:{
+  Headliner: {
     height: scale(250),
-    width: '100%',
+    width: "100%",
     marginLeft: "-3%",
-    marginTop: "-5%",
-  }
+    marginTop: "-20%",
+  },
 });

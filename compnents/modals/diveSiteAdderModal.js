@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: Platform.OS ==="ios" ? scale(0) : scale(-50)
   },
   input: {
     fontFamily: "IndieFlower_400Regular",

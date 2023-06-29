@@ -75,11 +75,12 @@ export default function DiveSiteAutoComplete() {
   const handleChangeText = () => {
     handleDiveSiteList()
   };
-
+  
+  
   return (
     <View style={styles.container}>
       <AutocompleteDropdown
-        initialValue="Species"
+        // initialValue={'1'}
         textInputProps={{
           style: {
             justifyContent: "center",

@@ -1,4 +1,4 @@
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Platform } from "react-native";
 import React, { useState } from "react";
 import SignInRoute from "./signIn";
 import SignUpRoute from "./signUp";
@@ -27,7 +27,7 @@ export default function AuthenticationPage() {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
-      style={{ backgroundColor: "#538dbd", paddingTop: 25 }}
+      style={{ backgroundColor: "#538dbd", paddingTop: Platform.OS === "ios" ? 50 : 0 }}
       renderTabBar={(props) => (
         <TabBar
           {...props}

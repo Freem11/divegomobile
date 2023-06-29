@@ -5,6 +5,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Constants from "expo-constants";
 // import Device from "expo-device";
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     //Constants.statusBarHeight +
-    top: scale(0),
+    top: Platform.OS === "ios" ? scale(40) : scale(-5),
     zIndex: 2,
   },
   Hist: {
