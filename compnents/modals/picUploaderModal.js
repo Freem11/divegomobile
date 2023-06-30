@@ -305,6 +305,7 @@ export default function PicUploadModal() {
             marginTop: 2,
           }}
           elevation={20}
+          shadowColor={"black"}
           shadowRadius={15}
           shadowOpacity={0.3}
         >
@@ -370,6 +371,7 @@ export default function PicUploadModal() {
               marginTop: 10,
             }}
             elevation={20}
+            shadowColor={"black"}
             shadowRadius={15}
             shadowOpacity={0.3}
           >
@@ -396,6 +398,7 @@ export default function PicUploadModal() {
               marginTop: 15,
             }}
             elevation={20}
+            shadowColor={"black"}
             shadowRadius={15}
             shadowOpacity={0.3}
           >
@@ -475,6 +478,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 0 },
   },
   inputRed: {
@@ -490,6 +494,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 0 },
   },
   inputCal: {
@@ -514,6 +519,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 0 },
   },
   header: {
@@ -549,6 +555,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   picContainer: {
+    backgroundColor: "#D8DBE2",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: Platform.OS === "ios" ? scale(30) : scale(20),
@@ -564,9 +571,9 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 2,
+    shadowRadius: 3,
 
-    elevation: 20,
+    elevation: 10,
   },
   modalStyle: {
     flex: 1,
@@ -598,6 +605,7 @@ const styles = StyleSheet.create({
     marginLeft: -15,
     marginTop: 15,
     width: 38,
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 0,
@@ -643,6 +651,7 @@ const styles = StyleSheet.create({
     height: 35,
     width: 38,
     marginTop: 3,
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 0,
