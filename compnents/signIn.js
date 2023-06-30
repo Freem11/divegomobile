@@ -28,6 +28,7 @@ import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import config from "../config";
 import Headliner from "../compnents/png/Headliner.png";
+
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -224,7 +225,7 @@ export default function SignInRoute() {
           onPress={handleGAsync}
           disabled={request === null}
         >
-          <View style={[styles.SignUpWithButtons]}>
+          <View style={[styles.SignUpWithGoogle]}>
             <Image source={googleLogo} style={[styles.gLogo]} />
             <Text
               style={{
@@ -243,7 +244,7 @@ export default function SignInRoute() {
           onPress={handleFAsync}
           // disabled={!request2}
         >
-          <View style={[styles.SignUpWithButtons]}>
+          <View style={[styles.SignUpWithFacebook]}>
             <Image source={facebookLogo} style={[styles.fbLogo]} />
             <Text
               style={{
@@ -277,7 +278,7 @@ export default function SignInRoute() {
             }}
             elevation={20}
             shadowRadius={15}
-            shadowOpacity={0.3}
+            shadowOpacity={0.5}
           >
             <TextInput
               style={formValidation.emailVal ? styles.inputRed : styles.input}
@@ -303,7 +304,7 @@ export default function SignInRoute() {
             }}
             elevation={20}
             shadowRadius={15}
-            shadowOpacity={0.3}
+            shadowOpacity={0.5}
           >
             <TextInput
               style={
@@ -436,8 +437,28 @@ const styles = StyleSheet.create({
     marginTop: "25%",
     marginBottom: "-23%",
   },
-  SignUpWithButtons: {
-    backgroundColor: "#538dbd",
+  SignUpWithGoogle: {
+    backgroundColor: "#2d2d2d",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    height: 35,
+    width: 200,
+    marginTop: scale(5),
+    margin: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
+  SignUpWithFacebook: {
+    backgroundColor: "#0000ff",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -466,7 +487,7 @@ const styles = StyleSheet.create({
     height: 18,
     width: 18,
     opacity: 0.5,
-    marginRight: 18,
+    marginRight: 15,
   },
   erroMsg: {
     margin: 5,

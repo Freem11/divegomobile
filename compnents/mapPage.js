@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     //Constants.statusBarHeight + 100 +
-    top: scale(10),
+    top: Platform.OS === "ios" ? 160: 100,
     zIndex: 1,
   },
   Fbuttons: {

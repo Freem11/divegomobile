@@ -116,7 +116,7 @@ export default function SignUpRoute() {
             }}
             elevation={20}
             shadowRadius={15}
-            shadowOpacity={0.3}
+            shadowOpacity={0.5}
           >
             <TextInput
               style={formValidation.emailVal ? styles.inputRed : styles.input}
@@ -142,7 +142,7 @@ export default function SignUpRoute() {
             }}
             elevation={20}
             shadowRadius={15}
-            shadowOpacity={0.3}
+            shadowOpacity={0.5}
           >
             <TextInput
               style={
@@ -171,7 +171,7 @@ export default function SignUpRoute() {
             }}
             elevation={20}
             shadowRadius={15}
-            shadowOpacity={0.3}
+            shadowOpacity={0.5}
           >
             <TextInput
               style={
@@ -199,7 +199,7 @@ export default function SignUpRoute() {
             }}
             elevation={20}
             shadowRadius={15}
-            shadowOpacity={0.3}
+            shadowOpacity={0.5}
           >
             <TextInput
               style={
