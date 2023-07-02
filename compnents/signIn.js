@@ -28,18 +28,18 @@ import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import config from "../config";
 import Headliner from "../compnents/png/Headliner.png";
-
-// import {
-//   GoogleSignin,
-//   GoogleSigninButton,
-//   statusCodes,
-// } from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 WebBrowser.maybeCompleteAuthSession();
 
 let emailVar = false;
 let passwordVar = false;
 
+const googleWebClientId = config.WEB_CLIENT_ID;
 const googleAndroidClientId = config.ANDROID_CLIENT_ID;
 const googleIOSClientId = config.IOS_CLIENT_ID;
 const facebookAppId = config.FACEBOOK_APP_ID;
@@ -47,6 +47,8 @@ const facebookAppId = config.FACEBOOK_APP_ID;
 export default function SignInRoute() {
   const [token, setToken] = useState("");
   const [token2, setToken2] = useState("");
+
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const { activeSession, setActiveSession } = useContext(SessionContext);
 
@@ -66,7 +68,36 @@ export default function SignInRoute() {
     lastName: "",
   });
 
-  const [userInfo, setUserInfo] = useState();
+  Platform.OS === "ios"
+    ? GoogleSignin.configure({
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], // what API you want to access on behalf of the user, default is email and profile
+        iosClientId: googleIOSClientId, // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist) 
+     })
+    : GoogleSignin.configure({
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], // what API you want to access on behalf of the user, default is email and profile
+        webClientId: googleWebClientId, // client ID of type WEB for your server (needed to verify user ID and offline access)
+      });
+
+  googleSignIn = async () => {
+    try {
+      setIsSignedIn(true)
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      alert(userInfo.user.name);
+      handleOAuthSubmit(userInfo.user)
+    } catch (error) {
+      setIsSignedIn(false)
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        alert("canned");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        alert("stuck");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        alert("no Gp service");
+      } else {
+        alert(error);
+      }
+    }
+  };
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: googleAndroidClientId,
@@ -112,12 +143,15 @@ export default function SignInRoute() {
     if (accessToken) {
       await AsyncStorage.setItem("token", JSON.stringify(accessToken));
       setActiveSession(accessToken);
+      setIsSignedIn(false)
     } else {
       let registrationToken = await register(formVals);
       if (registrationToken.session !== null) {
         await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
         setActiveSession(registrationToken);
+        setIsSignedIn(false)
       } else {
+        setIsSignedIn(false)
         setLoginFail("You already have an account with this email");
       }
     }
@@ -144,10 +178,12 @@ export default function SignInRoute() {
   }
 
   const handleGAsync = async () => {
+    setIsSignedIn(true)
     await promptAsync({ showInRecents: true, useProxy: false });
   };
 
   const handleFAsync = async () => {
+    setIsSignedIn(true)
     await promptAsync2();
   };
 
@@ -220,10 +256,19 @@ export default function SignInRoute() {
     <View style={styles.container}>
       <Image source={Headliner} style={[styles.Headliner]} />
 
-      <View style={{ marginTop: "5%" }}>
-        <TouchableWithoutFeedback
+      <View style={{ marginTop: "7%" }}>
+        <GoogleSigninButton
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Light}
+          // onPress={googleSignIn}
           onPress={handleGAsync}
-          disabled={request === null}
+          disabled={isSignedIn}
+          style={{width: scale(200)}}
+        />
+        {/* <TouchableWithoutFeedback
+          onPress={googleSignIn}
+          // onPress={handleGAsync}
+          // disabled={isSignedIn}
         >
           <View style={[styles.SignUpWithGoogle]}>
             <Image source={googleLogo} style={[styles.gLogo]} />
@@ -238,7 +283,7 @@ export default function SignInRoute() {
               Sign In With Google
             </Text>
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
 
         <TouchableWithoutFeedback
           onPress={handleFAsync}

@@ -8,7 +8,8 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "plugins": [
-      "expo-image-picker"
+      "expo-image-picker",
+      "@react-native-google-signin/google-signin"
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -24,6 +25,11 @@
       "infoPlist": {
         "UIBackgroundModes": [
           "fetch"
+        ],
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["com.googleusercontent.apps.498754860675-jgnfsgnuelqn1o55or5585mdgicihfl2"]
+          }
         ],
         "NSLocationUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location, 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of DiveGo’s functionality",
         "NSLocationWhenInUseUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location. 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of DiveGo’s functionality",

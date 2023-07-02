@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: "538bdb"
   },
   shadowbox: {
-    // shadowColor: "#000",
+    shadowColor: "#000",
     shadowOffset: {
       width: 2,
       height: 2,
