@@ -31,7 +31,10 @@
         "ANDROID_CLIENT_ID": "498754860675-tqqdpuns0grhbrsc7i9fdrqtqvbntjlr.apps.googleusercontent.com",
         "IOS_CLIENT_ID": "498754860675-jgnfsgnuelqn1o55or5585mdgicihfl2.apps.googleusercontent.com",
         "FACEBOOK_APP_ID": "692861552452156",
-        "ANDROID_HOME": "/Users/matthewfreeman/Library/Android/sdk"
+        "ANDROID_HOME": "/Users/matthewfreeman/Library/Android/sdk",
+        "ANDROID_CLIENT_ID_2": "498754860675-cvqvd5ekfvgcqdjcalu7h8u04url84i7.apps.googleusercontent.com",
+        "ANDROID_CLIENT_ID_3": "498754860675-99g71935k8idcmvqup3o24olade6j1mu.apps.googleusercontent.com",
+        "ANDROID_CLIENT_ID_4": "498754860675-kqdq5e0u58rlh93m8p8bnsgkv3suevbl.apps.googleusercontent.com"
       }
     }
   },

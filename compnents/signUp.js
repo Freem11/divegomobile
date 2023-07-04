@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "5%",
+    marginTop: "20%",
   },
   input: {
     fontFamily: "IndieFlower_400Regular",
@@ -358,6 +358,6 @@ const styles = StyleSheet.create({
     height: scale(250),
     width: "100%",
     marginLeft: "-3%",
-    marginTop: "-5%",
+    marginTop: Platform.OS === "ios" ? "0%" :"-12%",
   },
 });

@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     //Constants.statusBarHeight +
-    top: Platform.OS === "ios" ? scale(40) : scale(-5),
+    top: Platform.OS === "ios" ? "3%" : "0%",
     zIndex: 2,
   },
   Hist: {

@@ -9,6 +9,7 @@ import { StyleSheet, View, Dimensions, KeyboardAvoidingView } from "react-native
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { Roboto_700Bold } from "@expo-google-fonts/roboto";
 import { IndieFlower_400Regular } from "@expo-google-fonts/indie-flower";
 import { PermanentMarker_400Regular } from "@expo-google-fonts/permanent-marker";
 import { BubblegumSans_400Regular } from '@expo-google-fonts/bubblegum-sans';
@@ -120,6 +121,7 @@ export default function App() {
     Caveat_500Medium,
     Caveat_600SemiBold,
     Caveat_700Bold,
+    Roboto_700Bold,
    
   });
 

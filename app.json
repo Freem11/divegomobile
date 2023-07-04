@@ -2,33 +2,39 @@
   "expo": {
     "name": "divegomobile",
     "slug": "divegomobile",
-    "scheme": ["divegomobile","fb692861552452156"],
+    "scheme": ["divegomobile", "fb692861552452156"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "plugins": [
       "expo-image-picker",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      ["react-native-fbsdk-next",
+      {
+        "appID": "692861552452156",
+        "clientToken": "5fca59edd61f9c418917b4a8f6032a20",
+        "displayName": "DiveGo",
+        "scheme": "fb692861552452156"
+      }]
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ADD8E6"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
+      "buildVersion": 1,
       "supportsTablet": true,
       "bundleIdentifier": "com.freem11.divegomobile",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "fetch"
-        ],
+        "UIBackgroundModes": ["fetch"],
         "CFBundleURLTypes": [
-          {
-            "CFBundleURLSchemes": ["com.googleusercontent.apps.498754860675-jgnfsgnuelqn1o55or5585mdgicihfl2"]
+          {      
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.498754860675-jgnfsgnuelqn1o55or5585mdgicihfl2"
+            ]
           }
         ],
         "NSLocationUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location, 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of DiveGo’s functionality",
@@ -40,6 +46,7 @@
       }
     },
     "android": {
+      "versionCode": 1,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -67,4 +74,3 @@
     }
   }
 }
-

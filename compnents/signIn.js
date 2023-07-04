@@ -19,8 +19,8 @@ import {
 } from "../supabaseCalls/authenticateSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
-import facebookLogo from "../compnents/png/facebook.png";
-import googleLogo from "../compnents/png/google.png";
+import facebookLogo from "../compnents/png/facebookblue.png";
+import googleLogo from "../compnents/png/google-logo-9822.png";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
@@ -33,8 +33,16 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import {
+  Settings,
+  LoginButton,
+  AccessToken,
+  Profile,
+  LoginManager,
+} from "react-native-fbsdk-next";
 
 WebBrowser.maybeCompleteAuthSession();
+Settings.initializeSDK();
 
 let emailVar = false;
 let passwordVar = false;
@@ -44,9 +52,15 @@ const googleAndroidClientId = config.ANDROID_CLIENT_ID;
 const googleIOSClientId = config.IOS_CLIENT_ID;
 const facebookAppId = config.FACEBOOK_APP_ID;
 
+const googleAndroidClientId2 = config.ANDROID_CLIENT_ID_2;
+const googleAndroidClientId3 = config.ANDROID_CLIENT_ID_3;
+const googleAndroidClientId4 = config.ANDROID_CLIENT_ID_4;
+
 export default function SignInRoute() {
   const [token, setToken] = useState("");
   const [token2, setToken2] = useState("");
+
+  const [FBProfile, setFBProfile] = useState({});
 
   const [isSignedIn, setIsSignedIn] = useState(false);
 
@@ -71,8 +85,8 @@ export default function SignInRoute() {
   Platform.OS === "ios"
     ? GoogleSignin.configure({
         scopes: ["https://www.googleapis.com/auth/userinfo.profile"], // what API you want to access on behalf of the user, default is email and profile
-        iosClientId: googleIOSClientId, // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist) 
-     })
+        iosClientId: googleIOSClientId, // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+      })
     : GoogleSignin.configure({
         scopes: ["https://www.googleapis.com/auth/userinfo.profile"], // what API you want to access on behalf of the user, default is email and profile
         webClientId: googleWebClientId, // client ID of type WEB for your server (needed to verify user ID and offline access)
@@ -80,13 +94,12 @@ export default function SignInRoute() {
 
   googleSignIn = async () => {
     try {
-      setIsSignedIn(true)
+      setIsSignedIn(true);
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      alert(userInfo.user.name);
-      handleOAuthSubmit(userInfo.user)
+      handleOAuthSubmit(userInfo.user);
     } catch (error) {
-      setIsSignedIn(false)
+      setIsSignedIn(false);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         alert("canned");
       } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -99,42 +112,62 @@ export default function SignInRoute() {
     }
   };
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: googleAndroidClientId,
-    iosClientId: googleIOSClientId,
-  });
+  facebookSignIn = async () => {
+    setIsSignedIn(true);
 
-  const [request2, response2, promptAsync2] = Facebook.useAuthRequest({
-    clientId: facebookAppId,
-  });
+    LoginManager.logInWithPermissions(["public_profile"]).then(
+      function (result) {
+        if (result.isCancelled) {
+          console.log("Login cancelled");
+        } else {
+          const facebookProfile = Profile.getCurrentProfile().then(function (
+            currentProfile
+          ) {
+            if (currentProfile) {
+              handleOAuthSubmit(currentProfile);
+              LoginManager.logOut();
+            }
+          });
+        }
+      },
+      function (error) {
+        console.log("Login fail with error: " + error);
+      }
+    );
+  };
+
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   androidClientId: googleAndroidClientId,
+  //   iosClientId: googleIOSClientId,
+  // });
+
+  // const [request2, response2, promptAsync2] = Facebook.useAuthRequest({
+  //   clientId: facebookAppId,
+  // });
 
   const handleOAuthSubmit = async (user) => {
     let Fname;
-    let LName;
-
-    // alert(user.name + " " + user.id + " " + user.email);
+    let Lname;
+    let Pword;
 
     if (user.name) {
       Fname = user.name.split(" ").slice(0, 1);
-      LName = user.name.split(" ").slice(-1);
-    } else {
-      if (user.family_name) {
-        Fname = user.given_name;
-        LName = user.family_name;
-      } else {
-        Fname = user.given_name.split(" ").slice(0, -1).join(" ");
-        LName = user.given_name.split(" ").slice(-1)[0];
-      }
+      Lname = user.name.split(" ").slice(-1);
     }
 
-    let Pword = user.id;
+    if(user.userID) {
+      Pword = user.userID;
+    } else if(user.id) {
+      Pword = user.id;
+    }
+
     let MailE = user.email;
 
     let accessToken = await OAuthSignIn({
       password: Pword,
       email: MailE,
       firstName: Fname,
-      lastName: LName,
+      lastName: Lname,
     });
   };
 
@@ -143,27 +176,27 @@ export default function SignInRoute() {
     if (accessToken) {
       await AsyncStorage.setItem("token", JSON.stringify(accessToken));
       setActiveSession(accessToken);
-      setIsSignedIn(false)
+      setIsSignedIn(false);
     } else {
       let registrationToken = await register(formVals);
       if (registrationToken.session !== null) {
         await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
         setActiveSession(registrationToken);
-        setIsSignedIn(false)
+        setIsSignedIn(false);
       } else {
-        setIsSignedIn(false)
+        setIsSignedIn(false);
         setLoginFail("You already have an account with this email");
       }
     }
   }
 
-  useEffect(() => {
-    handleGEffect();
-  }, [response, token]);
+  // useEffect(() => {
+  //   handleGEffect();
+  // }, [response, token]);
 
-  useEffect(() => {
-    handleFEffect();
-  }, [response2, token2]);
+  // useEffect(() => {
+  //   handleFEffect();
+  // }, [response2, token2]);
 
   async function handleGEffect() {
     if (response?.type === "success") {
@@ -177,15 +210,15 @@ export default function SignInRoute() {
     }
   }
 
-  const handleGAsync = async () => {
-    setIsSignedIn(true)
-    await promptAsync({ showInRecents: true, useProxy: false });
-  };
+  // const handleGAsync = async () => {
+  //   setIsSignedIn(true)
+  //   await promptAsync({ showInRecents: true, useProxy: false });
+  // };
 
-  const handleFAsync = async () => {
-    setIsSignedIn(true)
-    await promptAsync2();
-  };
+  // const handleFAsync = async () => {
+  //   setIsSignedIn(true)
+  //   await promptAsync2();
+  // };
 
   async function getFacebokUserData(tokenF) {
     if (!tokenF) return;
@@ -256,38 +289,33 @@ export default function SignInRoute() {
     <View style={styles.container}>
       <Image source={Headliner} style={[styles.Headliner]} />
 
-      <View style={{ marginTop: "7%" }}>
-        <GoogleSigninButton
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Light}
-          // onPress={googleSignIn}
-          onPress={handleGAsync}
-          disabled={isSignedIn}
-          style={{width: scale(200)}}
-        />
-        {/* <TouchableWithoutFeedback
+      <View style={{ marginTop: Platform.OS ==="ios" ? "10%" :"15%", marginLeft: "-2%" }}>
+ 
+        <TouchableWithoutFeedback
           onPress={googleSignIn}
           // onPress={handleGAsync}
-          // disabled={isSignedIn}
+          disabled={isSignedIn}
         >
           <View style={[styles.SignUpWithGoogle]}>
             <Image source={googleLogo} style={[styles.gLogo]} />
             <Text
               style={{
-                color: "#FFFFFF",
-                fontFamily: "PermanentMarker_400Regular",
-                fontSize: 12,
-                opacity: 0.7,
+                color: "#2d2d2d",
+                fontFamily: "Roboto_700Bold",
+                fontWeight: "bold",
+                fontSize: 14,
+                opacity: 0.8,
               }}
             >
-              Sign In With Google
+              Sign in with Google
             </Text>
           </View>
-        </TouchableWithoutFeedback> */}
+        </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
-          onPress={handleFAsync}
-          // disabled={!request2}
+          // onPress={handleFAsync}
+          onPress={facebookSignIn}
+          disabled={isSignedIn}
         >
           <View style={[styles.SignUpWithFacebook]}>
             <Image source={facebookLogo} style={[styles.fbLogo]} />
@@ -295,17 +323,16 @@ export default function SignInRoute() {
               style={{
                 marginLeft: scale(5),
                 color: "#FFFFFF",
-                fontFamily: "PermanentMarker_400Regular",
-                fontSize: 12,
-                opacity: 0.7,
+                fontFamily: "Roboto_700Bold",
+                fontWeight: "bold",
+                fontSize: 14,
+                opacity: 1,
               }}
             >
-              Sign In With Facebook
+              Sign in with Facebook
             </Text>
           </View>
         </TouchableWithoutFeedback>
-
-        {/* <Text>{JSON.stringify(userInfo)}</Text> */}
       </View>
 
       <KeyboardAvoidingView
@@ -483,56 +510,58 @@ const styles = StyleSheet.create({
     marginBottom: "-23%",
   },
   SignUpWithGoogle: {
-    backgroundColor: "#2d2d2d",
+    backgroundColor: "#ffffff",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 5,
-    height: 35,
+    borderRadius: 2,
+    height: 30,
     width: 200,
-    marginTop: scale(5),
+    marginTop: scale(0),
     margin: 10,
-    shadowColor: "#000",
+    shadowColor: "#2d2d2d",
     shadowOffset: {
-      width: 0,
-      height: 5,
+      width: 1,
+      height: 1,
     },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
+    shadowOpacity: 1,
+    shadowRadius: 2,
 
     elevation: 10,
   },
   SignUpWithFacebook: {
-    backgroundColor: "#0000ff",
+    backgroundColor: "#0165E1",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 5,
-    height: 35,
+    borderRadius: 2,
+    height: 30,
     width: 200,
     marginTop: scale(5),
     margin: 10,
-    shadowColor: "#000",
+    shadowColor: "#2d2d2d",
     shadowOffset: {
-      width: 0,
-      height: 5,
+      width: 1,
+      height: 1,
     },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
+    shadowOpacity: 1,
+    shadowRadius: 2,
 
-    elevation: 10,
+    elevation: 1,
   },
   fbLogo: {
-    height: 25,
-    width: 25,
-    opacity: 0.5,
-    marginRight: 0,
-  },
-  gLogo: {
+    backgroundColor: "white",
+    borderRadius: 16/2,
     height: 18,
     width: 18,
-    opacity: 0.5,
-    marginRight: 15,
+    opacity: 1,
+    marginRight: Platform.OS ==="ios" ? 2 : 8,
+    marginLeft: 10
+  },
+  gLogo: {
+    height: 24,
+    width: 24,
+    opacity: 1,
+    marginRight: 12,
+    marginLeft: 7
   },
   erroMsg: {
     margin: 5,
@@ -549,6 +578,6 @@ const styles = StyleSheet.create({
     height: scale(250),
     width: "100%",
     marginLeft: "-3%",
-    marginTop: "-20%",
+    marginTop: Platform.OS === "ios" ? "-10%" :"-20%",
   },
 });
