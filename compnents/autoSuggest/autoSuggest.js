@@ -50,9 +50,6 @@ export default function AnimalAutoSuggest(props) {
             borderRadius: 25,
             height: 40,
             width: 200,
-            marginRight: 20,
-            marginLeft: 2,
-            marginTop: 1,
           }}
           elevation={20}
           shadowRadius={15}
@@ -105,9 +102,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     overflow: "hidden",
-    alignContent: "center",
-    alignItems: "center",
-    marginLeft: 2,
   },
   xButton: {
     marginTop: 0,
@@ -116,8 +110,7 @@ const styles = StyleSheet.create({
   suggestInput: {
     width: 200,
     height: 40,
-    marginBottom: 20,
-    marginRight: 5,
+
     backgroundColor: "#538bdb",
     borderRadius: 10,
     fontSize: 15,
@@ -131,7 +124,6 @@ const styles = StyleSheet.create({
   suggestInputRed: {
     width: 200,
     height: 40,
-    marginBottom: 20,
     backgroundColor: "pink",
     borderRadius: 10,
     fontSize: 15,

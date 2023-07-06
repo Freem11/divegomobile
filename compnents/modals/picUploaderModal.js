@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   KeyboardAvoidingView,
+  Dimensions
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -33,6 +34,7 @@ let DateVar = false;
 let AnimalVar = false;
 let LatVar = false;
 let LngVar = false;
+const windowWidth = Dimensions.get('window').width
 
 export default function PicUploadModal() {
   const { setMasterSwitch } = useContext(MasterContext);
@@ -90,7 +92,6 @@ export default function PicUploadModal() {
       console.log({ title: "Image Upload", message: e.message });
     }
   };
-
 
   useEffect(() => {
     if (pinValues.PicDate === "") {
@@ -187,7 +188,7 @@ export default function PicUploadModal() {
     ) {
       return;
     } else {
-      console.log("wha?", pinValues)
+      console.log("wha?", pinValues);
       insertPhotoWaits(pinValues);
       setPinValues({
         PicFile: null,
@@ -268,14 +269,14 @@ export default function PicUploadModal() {
   return (
     <View style={styles.container}>
       <View style={styles.picContainer}>
-          <Image
-            source={{
-              uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
-            }}
-            style={
-              formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
-            }
-          />
+        <Image
+          source={{
+            uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+          }}
+          style={
+            formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+          }
+        />
       </View>
 
       <TouchableWithoutFeedback onPress={handleImageUpload}>
@@ -294,131 +295,128 @@ export default function PicUploadModal() {
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.calZone}>
-        <InsetShadow
-          containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 18,
-            marginLeft: 1,
-            marginTop: 2,
-          }}
-          elevation={20}
-          shadowColor={"black"}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={
-              formValidation.DateVal ? styles.inputCalRed : styles.inputCal
-            }
-            value={pinValues.PicDate}
-            placeholder={"Date"}
-            placeholderTextColor="darkgrey"
-            editable={false}
-            color={colorDate}
-            fontSize={21}
-            placeholderTextColor={colorDate}
-            onChangeText={(text) =>
-              setPinValues({ ...pinValues, Animal: text })
-            }
-          ></TextInput>
-        </InsetShadow>
-        <TouchableWithoutFeedback onPress={showDatePicker}>
-          <View style={styles.dateIcon}>
-            <FontAwesome name="calendar" color="gold" size={28} style={{marginLeft: 1.5, marginTop: 2}}/>
-            <DateTimePickerModal
-              // date={new Date(pinValues.PicDate)}
-              isVisible={datePickerVisible}
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-            />
+      <View style={styles.lowerZone}>
+        <View style={styles.fields}>
+          <View style={styles.dateZone}>
+          <View style={styles.dizzy}>
+            <InsetShadow
+              containerStyle={{
+                borderRadius: 25,
+                height: 40,
+                width: 200,
+              }}
+              elevation={20}
+              shadowColor={"black"}
+              shadowRadius={15}
+              shadowOpacity={0.3}
+            >
+              <TextInput
+                style={
+                  formValidation.DateVal ? styles.inputCalRed : styles.inputCal
+                }
+                value={pinValues.PicDate}
+                placeholder={"Date"}
+                placeholderTextColor="darkgrey"
+                editable={false}
+                color={colorDate}
+                fontSize={21}
+                placeholderTextColor={colorDate}
+                onChangeText={(text) =>
+                  setPinValues({ ...pinValues, Animal: text })
+                }
+              ></TextInput>
+            </InsetShadow>
+
+            <TouchableWithoutFeedback onPress={showDatePicker}>
+              <View style={styles.dateIcon}>
+                <FontAwesome
+                  name="calendar"
+                  color="gold"
+                  size={28}
+                  style={{ marginLeft: 1.5, marginTop: 2 }}
+                />
+                <DateTimePickerModal
+                  // date={new Date(pinValues.PicDate)}
+                  isVisible={datePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
-      </View>
+          </View>
 
-      <KeyboardAvoidingView
-        behavior="position"
-        keyboardVerticalOffset={AnimalKeboardOffset}
-        style={styles.autocomplete}
-      >
-        <AnimalAutoSuggest
-          pin={pinValues}
-          setPin={setPinValues}
-          formValidation={formValidation}
-          SetFormValidation={SetFormValidation}
-        />
-      </KeyboardAvoidingView>
+          <View style={styles.dateZone1}>
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={AnimalKeboardOffset}
+              style={styles.autocomplete}
+            >
+              <AnimalAutoSuggest
+                pin={pinValues}
+                setPin={setPinValues}
+                formValidation={formValidation}
+                SetFormValidation={SetFormValidation}
+              />
+            </KeyboardAvoidingView>
+          </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          width: "100%",
-          justifyContent: "center",
-          marginBottom: "5%",
-          marginRight: 5
-        }}
-      >
-        <View style={{marginLeft: 5}}>
-          <InsetShadow
-            containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 10,
-            }}
-            elevation={20}
-            shadowColor={"black"}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={formValidation.LatVal ? styles.inputRed : styles.input}
-              value={pinValues.Latitude}
-              placeholder={"Latitude"}
-              editable={false}
-              placeholderTextColor="darkgrey"
-              fontSize={18}
-              color="#F0EEEB"
-              onChangeText={(text) =>
-                setPinValues({ ...pinValues, Latitude: text })
-              }
-            ></TextInput>
-          </InsetShadow>
+          <View style={styles.dateZone2}>
 
-          <InsetShadow
-            containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 15,
-            }}
-            elevation={20}
-            shadowColor={"black"}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={formValidation.LngVal ? styles.inputRed : styles.input}
-              value={pinValues.Longitude}
-              placeholder={"Longitude"}
-              editable={false}
-              placeholderTextColor="darkgrey"
-              fontSize={18}
-              color="#F0EEEB"
-              onChangeText={(text) =>
-                setPinValues({ ...pinValues, Longitude: text })
-              }
-            ></TextInput>
-          </InsetShadow>
-        </View>
+          <View style={styles.coordZone}>
+            <InsetShadow
+              containerStyle={{
+                borderRadius: 25,
+                height: 40,
+                width: 200,
+              }}
+              elevation={20}
+              shadowColor={"black"}
+              shadowRadius={15}
+              shadowOpacity={0.3}
+            >
+              <TextInput
+                style={formValidation.LatVal ? styles.inputRed : styles.input}
+                value={pinValues.Latitude}
+                placeholder={"Latitude"}
+                editable={false}
+                placeholderTextColor="darkgrey"
+                fontSize={18}
+                color="#F0EEEB"
+                onChangeText={(text) =>
+                  setPinValues({ ...pinValues, Latitude: text })
+                }
+              ></TextInput>
+            </InsetShadow>
 
-        <View style={{ marginLeft: 25, marginTop: 15 }}>
-          <TouchableWithoutFeedback onPress={onNavigate}>
+            <InsetShadow
+              containerStyle={{
+                borderRadius: 25,
+                height: 40,
+                width: 200,
+              }}
+              elevation={20}
+              shadowColor={"black"}
+              shadowRadius={15}
+              shadowOpacity={0.3}
+            >
+              <TextInput
+                style={formValidation.LngVal ? styles.inputRed : styles.input}
+                value={pinValues.Longitude}
+                placeholder={"Longitude"}
+                editable={false}
+                placeholderTextColor="darkgrey"
+                fontSize={18}
+                color="#F0EEEB"
+                onChangeText={(text) =>
+                  setPinValues({ ...pinValues, Longitude: text })
+                }
+              ></TextInput>
+            </InsetShadow>
+            </View>
+
+            <TouchableWithoutFeedback onPress={onNavigate}>
             <View style={[styles.LocButton]}>
               <MaterialIcons
                 name="location-pin"
@@ -428,7 +426,10 @@ export default function PicUploadModal() {
               />
             </View>
           </TouchableWithoutFeedback>
+
+          </View>
         </View>
+
       </View>
 
       <View style={styles.SubmitButton}>
@@ -460,20 +461,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
     width: "100%",
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
     minHeight: Platform.OS === "android" ? 490 : 0,
+    // backgroundColor: "pink",
   },
   input: {
     fontFamily: "IndieFlower_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 205,
+    width: 200,
     height: 40,
     alignSelf: "center",
-    marginBottom: 25,
     textAlign: "center",
     overflow: "hidden",
     shadowOpacity: 0.3,
@@ -485,11 +486,9 @@ const styles = StyleSheet.create({
     fontFamily: "IndieFlower_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 205,
+    width: 200,
     height: 40,
     alignSelf: "center",
-    marginBottom: 15,
-    marginLeft: -5,
     textAlign: "center",
     overflow: "hidden",
     shadowOpacity: 0.3,
@@ -504,7 +503,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
     alignSelf: "center",
-    marginBottom: 15,
     textAlign: "center",
   },
   inputCalRed: {
@@ -514,9 +512,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
     alignSelf: "center",
-    marginBottom: 15,
     textAlign: "center",
-    marginRight: 20,
     shadowOpacity: 0.3,
     shadowRadius: 5,
     shadowColor: "#000",
@@ -539,11 +535,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: scale(15),
-    height: scale(35),
-    width: scale(160),
+    height: "7%",
+    width: "50%",
     marginLeft: 0,
-    marginTop: Platform.OS === "ios" ? "1%" :"4%",
-    marginBottom: Platform.OS === "ios" ? "2%" :"6%",
+    marginTop: Platform.OS === "ios" ? "1%" : "4%",
+    marginBottom: Platform.OS === "ios" ? "3%" : "6%",
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -562,9 +558,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.3,
     borderRadius: scale(15),
     borderColor: "darkgrey",
-    width: Platform.OS === "ios" ? "80%": "80%",
+    width: Platform.OS === "ios" ? "80%" : "80%",
     height: Platform.OS === "ios" ? "45%" : "35%",
-    marginTop: Platform.OS === "ios" ? "-10%" : "-30%",
+    // marginTop: Platform.OS === "ios" ? "-5%" : "-30%",
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -574,6 +570,51 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
 
     elevation: 10,
+  },
+  lowerZone: {
+    flexDirection: "row",
+    width: windowWidth > 700 ? "50%" : "100%",
+    // backgroundColor: "green",
+    height: "35%",
+  },
+  fields: {
+    flexDirection: "column",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "space-evenly",
+    // backgroundColor: "green",
+    height: "80%",
+    width: "100%",
+  },
+  dateZone: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "80%",
+    // backgroundColor: "lightblue"
+  },
+  dizzy:{
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "center"
+  },
+  dateZone1: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    // backgroundColor: "orange"
+  },
+  dateZone2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: "37%",
+    width: "80%",
+    // backgroundColor: "blue"
+  },
+  coordZone:{
+    flexDirection: "column",
+    justifyContent: "space-between", 
+    // backgroundColor: "pink"
   },
   modalStyle: {
     flex: 1,
@@ -597,14 +638,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   LocButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: -1,
     backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
     borderRadius: 10,
-    marginLeft: -15,
-    marginTop: 15,
-    width: 38,
+    height: 40,
+    width: 40,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -615,27 +655,19 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  calZone: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginLeft: 2,
-    marginBottom: 0,
-  },
   autocomplete: {
-    width: 275,
+    width: 200,
     height: 30,
-    marginTop: 20,
-    marginBottom: 10,
     alignSelf: "center",
     justifyContent: "center",
-    marginLeft: 15,
     zIndex: 20,
   },
   SubmitButton: {
     position: "absolute",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // alignSelf: "center",
+    // justifyContent: "center",
+    marginBottom: "0%",
     borderWidth: 1,
     width: "85%",
     borderTopColor: "darkgrey",
@@ -646,11 +678,10 @@ const styles = StyleSheet.create({
   dateIcon: {
     backgroundColor: "#538bdb",
     alignItems: "center",
-    alignSelf: "center",
+    justifyContent: "center",
     borderRadius: 10,
-    height: 35,
-    width: 38,
-    marginTop: 3,
+    height: 40,
+    width: 40,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

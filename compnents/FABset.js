@@ -284,12 +284,10 @@ export default function FABButtons() {
       <Modal visible={picAdderModal} animationType="slide" transparent={true}>
         <View style={styles.modalStyle}>
           <View style={styles.title}>
-            <View>
               <Text style={styles.header}>Submit Your Picture</Text>
-            </View>
             <TouchableWithoutFeedback onPress={togglePicModal}>
               <View style={styles.closeButton}>
-                <FontAwesome name="close" color="#BD9F9F" size={28} />
+                <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -304,14 +302,12 @@ export default function FABButtons() {
       >
         <View style={styles.modalStyle}>
           <View style={styles.title}>
-            <View>
               <Text style={styles.header}>Submit Your Dive Site</Text>
-            </View>
             <TouchableWithoutFeedback
               onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
             >
               <View style={styles.closeButton}>
-                <FontAwesome name="close" color="#BD9F9F" size={28} />
+                <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -426,15 +422,12 @@ const styles = StyleSheet.create({
     shadowRadius: 50,
   },
   closeButton: {
-    position: "absolute",
+    position: "relative",
     borderRadius: scale(42 / 2),
-    height: 42,
-    width: 42,
-    top: 0,
-    right: "5%",
+    height: scale(30),
+    width: scale(30),
     justifyContent: "center",
     alignItems: "center",
-    marginTop: -3
   },
   closeButtonAlt: {
     position: "absolute",
@@ -450,11 +443,8 @@ const styles = StyleSheet.create({
     fontFamily: "PermanentMarker_400Regular",
     fontSize: scale(17),
     alignSelf: "center",
-    marginTop: 5,
-    marginBottom: 0,
-    marginLeft: "-15%",
-    height: scale(50),
     color: "#F0EEEB",
+    width: "80%",
   },
   headerAlt: {
     alignItems: "center",
@@ -464,13 +454,18 @@ const styles = StyleSheet.create({
     marginTop: scale(-15),
     marginLeft: "-20%",
     color: "#F0EEEB",
+    
   },
   title: {
-    flexDirection: "column",
-    marginTop: scale(25),
-    width: "100%",
-    height: 80,
-    color: "#F0EEEB",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    marginTop: "3%",
+    marginLeft: "5%",
+    width: "95%",
+    height: scale(30),
   },
   titleAlt: {
     display: "flex",

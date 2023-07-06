@@ -22,7 +22,6 @@
     },
     "production": {
       "channel": "production",
-      "resourceClass": "large",
       "env": {
         "GOOGLE_MAPS_API_KEY": "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg",
         "SUPABASE_URL": "https://lsakqvscxozherlpunqx.supabase.co",
@@ -39,6 +38,15 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "freem1985@gmail.com",
+        "ascAppId": "6443680026",
+        "appleTeamId": "49629863XB"
+      },
+      "android": {
+        "serviceAccountKeyPath": "../../../GoogleServiceAccount/pc-api-5892042463849694566-989-513525c2a557.json"
+      }
+    }
   }
 }

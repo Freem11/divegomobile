@@ -25,7 +25,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildVersion": 1,
+      "buildNumber": "1",
       "supportsTablet": true,
       "bundleIdentifier": "com.freem11.divegomobile",
       "infoPlist": {
@@ -69,7 +69,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "5d334fe3-0f9e-4027-b522-e01eec9e7c8d"
+        "projectId": "df1b7ca8-d86d-4667-859b-0330dad67126"
       }
     }
   }

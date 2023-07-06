@@ -259,12 +259,10 @@ export default function Map() {
       <Modal visible={siteModal} animationType="slide" transparent={true}>
         <View style={styles.modalStyle}>
           <View style={styles.titleAlt}>
-            <View>
               <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
-            </View>
             <TouchableWithoutFeedback onPress={() => setSiteModal(!siteModal)}>
               <View style={styles.closeButtonAlt}>
-                <FontAwesome name="close" color="#BD9F9F" size={28} />
+                <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -291,47 +289,48 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
   },
   modalStyle: {
-    flex: 1,
-    alignContent: "center",
-    alignItems: "center",
+    // flex: 1,
+    // alignContent: "center",
+    // alignItems: "center",
     backgroundColor: "#358BDB",
     borderRadius: 20,
     marginLeft: "5%",
     marginRight: "5%",
-    marginTop: Platform.OS === "android" ? "5%" : "15%",
+    marginTop: Platform.OS === "android" ? "5%" : "10%",
     marginBottom: "5%",
     shadowOpacity: 0.2,
     shadowRadius: 50,
   },
   closeButtonAlt: {
-    position: "absolute",
+    position: "relative",
     borderRadius: scale(42 / 2),
-    height: 42,
-    width: 42,
-    top: scale(-5),
-    right: "5%",
+    height: scale(30),
+    width: scale(30),
+    // backgroundColor: "blue",
+    // top: Platform.OS === "ios" ? "-30%" : "-15%",
+    // right: Platform.OS === "ios" ? "1%" : "5%",
     justifyContent: "center",
     alignItems: "center",
   },
   headerAlt: {
-    alignItems: "center",
-    alignContent: "center",
+    // alignItems: "center",
+    // alignContent: "center",
     fontFamily: "PermanentMarker_400Regular",
     color: "#F0EEEB",
     fontSize: scale(17),
-    marginTop: scale(56),
-    width: scale(180),
-    textAlign: "left",
-    height: scale(100),
+    width: "73%",
+    marginLeft: "13%",
+    // backgroundColor: 'pink'
   },
   titleAlt: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    marginTop: scale(20),
-    width: "100%",
-    height: 50,
+    marginTop: "3%",
+    width: "98%",
+    height: scale(30),
+    // backgroundColor: 'green'
   },
 });

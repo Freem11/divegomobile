@@ -84,12 +84,12 @@ export default function SignInRoute() {
 
   Platform.OS === "ios"
     ? GoogleSignin.configure({
-        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], // what API you want to access on behalf of the user, default is email and profile
-        iosClientId: googleIOSClientId, // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], 
+        iosClientId: googleIOSClientId, 
       })
     : GoogleSignin.configure({
-        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], // what API you want to access on behalf of the user, default is email and profile
-        webClientId: googleWebClientId, // client ID of type WEB for your server (needed to verify user ID and offline access)
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], 
+        webClientId: googleWebClientId, 
       });
 
   googleSignIn = async () => {

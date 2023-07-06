@@ -1,6 +1,9 @@
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Platform } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { getPhotosforAnchor, getPhotosforAnchorMulti } from "../../supabaseCalls/photoSupabaseCalls";
+import {
+  getPhotosforAnchor,
+  getPhotosforAnchorMulti,
+} from "../../supabaseCalls/photoSupabaseCalls";
 // import { getPhotosforAnchor } from "../../axiosCalls/photoAxiosCalls";
 import { SliderContext } from "../contexts/sliderContext";
 import { MonthSelectContext } from "../contexts/monthSelectContext";
@@ -30,7 +33,6 @@ if (IPSetter === 1) {
 let filePath = `/Users/matthewfreeman/divego/wetmap/src/components/uploads/`;
 
 export default function AnchorModal(lat, lng) {
-  
   const { sliderVal } = useContext(SliderContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
@@ -88,39 +90,32 @@ export default function AnchorModal(lat, lng) {
   };
 
   return (
-    <View style={{ maxHeight: Platform.OS === "android" ? scale(570) : scale(600), marginTop: scale(-10)}}>
-      <View style={styles.flagger}>
-      {/* <Text
-        style={{
-          fontFamily: "Caveat_400Regular",
-          fontSize: scale(20),
-          marginLeft: scale(20),
-          marginRight: scale(40),
-          color: "#F0EEEB",
-        }}
-      >
-        {monthVal} Sightings
-      </Text> */}
-      <FontAwesome
-        name="flag"
-        color="maroon"
-        size={20}
-        onLongPress={() => handleEmailDS()}
-        style={styles.flagMajor}
+    <View
+      style={{
+        height:"88%",
+        // maxHeight: Platform.OS === "android" ? "93%" : "89%",
+        // marginTop: Platform.OS === "android" ? "-10%" : "-8%",
+        // backgroundColor: "pink"
+      }}
+    >
+        <FontAwesome
+          name="flag"
+          color="maroon"
+          size={scale(20)}
+          onLongPress={() => handleEmailDS()}
+          style={styles.flagMajor}
         />
-      </View>
-      <ScrollView>
+      <ScrollView style={{marginTop: "-5%", height: "95%"}}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {
               return (
                 <View key={pic.id} style={styles.picContainer3}>
-                  
                   <View style={styles.micro}>
                     <FontAwesome
                       name="flag"
                       color="maroon"
-                      size={20}
+                      size={scale(19)}
                       onLongPress={() => handleEmail(pic)}
                       style={styles.flag}
                     />
@@ -157,19 +152,22 @@ export default function AnchorModal(lat, lng) {
 
 const styles = StyleSheet.create({
   container3: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "transparent",
     alignItems: "center",
-    marginBottom: "20%",
-    marginTop: "0%",
+    marginTop: "-3%",
+    height: "90%",
     marginRight: scale(10),
     marginLeft: scale(10),
+    // backgroundColor: "green"
+
   },
   picContainer3: {
     width: scale(300),
     height: scale(200),
     marginBottom: scale(5),
-    backgroundColor: "538bdb"
+    backgroundColor: "538bdb",
+    marginTop: "-0%"
   },
   shadowbox: {
     shadowColor: "#000",
@@ -189,12 +187,17 @@ const styles = StyleSheet.create({
     fontSize: scale(15),
     marginLeft: scale(-10),
   },
-  flagMajor:{
-    left: scale(40)
+  flagMajor: {
+    width: "10%",
+    height: "5%",
+    marginLeft: "4%",
+    marginTop: "-8%",
+    marginBottom: "6%"
+    //  backgroundColor: 'green'
   },
   flag: {
     left: scale(257),
-    top: scale(2)
+    top: scale(2),
   },
   noSightings: {
     width: scale(200),
@@ -214,13 +217,19 @@ const styles = StyleSheet.create({
     width: "94%",
     borderRadius: 5,
     zIndex: 2,
-    left: 10,
-    top: 30
+    left: "4%",
+    top: Platform.OS === "ios" ? "8%": "9%",
   },
-  flagger:{
-    flexDirection: "row",
-    position: "absolute",
-    top: -33,
-    left: -15
-  }
+  flagger: {
+    height: scale(30),
+    width: "10%",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    backgroundColor: 'green'
+    // flexDirection: "row",
+    // position: "absolute",
+    // top: Platform.OS === "ios" ? "-7%" :"-1.5%",
+    // left: Platform.OS === "ios" ? "-8%" :"-5%",
+  },
 });
