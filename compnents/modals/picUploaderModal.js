@@ -35,6 +35,7 @@ let AnimalVar = false;
 let LatVar = false;
 let LngVar = false;
 const windowWidth = Dimensions.get('window').width
+const windowHeight = Dimensions.get('window').height
 
 export default function PicUploadModal() {
   const { setMasterSwitch } = useContext(MasterContext);
@@ -461,7 +462,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     alignItems: "center",
-    // justifyContent: "center",
+    marginTop: "3%",
     width: "100%",
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
@@ -538,8 +539,8 @@ const styles = StyleSheet.create({
     height: "7%",
     width: "50%",
     marginLeft: 0,
-    marginTop: Platform.OS === "ios" ? "1%" : "4%",
-    marginBottom: Platform.OS === "ios" ? "3%" : "6%",
+    marginTop: Platform.OS === "ios" ? "2%" : "3%",
+    // marginBottom: Platform.OS === "ios" ? "3%" : "6%",
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -559,7 +560,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(15),
     borderColor: "darkgrey",
     width: Platform.OS === "ios" ? "80%" : "80%",
-    height: Platform.OS === "ios" ? "45%" : "35%",
+    height: Platform.OS === "ios" ? "35%" : "35%",
     // marginTop: Platform.OS === "ios" ? "-5%" : "-30%",
     shadowColor: "#000",
     shadowOffset: {
@@ -607,13 +608,14 @@ const styles = StyleSheet.create({
   dateZone2: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: "37%",
+    height: windowHeight > 800 ? (windowHeight/100)*7: (windowHeight/100)*9.5,
     width: "80%",
     // backgroundColor: "blue"
   },
   coordZone:{
     flexDirection: "column",
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
+    height: "100%", 
     // backgroundColor: "pink"
   },
   modalStyle: {
