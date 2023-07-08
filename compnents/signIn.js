@@ -84,12 +84,12 @@ export default function SignInRoute() {
 
   Platform.OS === "ios"
     ? GoogleSignin.configure({
-        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], 
-        iosClientId: googleIOSClientId, 
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+        iosClientId: googleIOSClientId,
       })
     : GoogleSignin.configure({
-        scopes: ["https://www.googleapis.com/auth/userinfo.profile"], 
-        webClientId: googleWebClientId, 
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+        webClientId: googleWebClientId,
       });
 
   googleSignIn = async () => {
@@ -114,27 +114,32 @@ export default function SignInRoute() {
 
   facebookSignIn = async () => {
     setIsSignedIn(true);
-
-    LoginManager.logInWithPermissions(["public_profile"]).then(
-      function (result) {
-        if (result.isCancelled) {
-          console.log("Login cancelled");
-        } else {
-          const facebookProfile = Profile.getCurrentProfile().then(function (
-            currentProfile
-          ) {
-            if (currentProfile) {
-              handleOAuthSubmit(currentProfile);
-              LoginManager.logOut();
-            }
-          });
-        }
-      },
-      function (error) {
-        console.log("Login fail with error: " + error);
+    LoginManager.logInWithPermissions(["public_profile"]).then(function (
+      result
+    ) {
+      if (result.isCancelled) {
+        console.log("Login cancelled");
+      } else {
+        AccessToken.getCurrentAccessToken().then((data) => {
+          getFacebokUserData(data.accessToken);
+        });
       }
-    );
+    });
   };
+
+  async function getFacebokUserData(tokenF) {
+    if (!tokenF) return;
+
+    try {
+      const res2 = await fetch(
+        `https://graph.facebook.com/me?access_token=${tokenF}&fields=id,name,email`
+      );
+      const user2 = await res2.json();
+      handleOAuthSubmit(user2);
+    } catch (err) {
+      console.log("error", err);
+    }
+  }
 
   // const [request, response, promptAsync] = Google.useAuthRequest({
   //   androidClientId: googleAndroidClientId,
@@ -155,9 +160,9 @@ export default function SignInRoute() {
       Lname = user.name.split(" ").slice(-1);
     }
 
-    if(user.userID) {
+    if (user.userID) {
       Pword = user.userID;
-    } else if(user.id) {
+    } else if (user.id) {
       Pword = user.id;
     }
 
@@ -172,6 +177,7 @@ export default function SignInRoute() {
   };
 
   async function OAuthSignIn(formVals) {
+    LoginManager.logOut()
     let accessToken = await signInStandard(formVals);
     if (accessToken) {
       await AsyncStorage.setItem("token", JSON.stringify(accessToken));
@@ -220,19 +226,7 @@ export default function SignInRoute() {
   //   await promptAsync2();
   // };
 
-  async function getFacebokUserData(tokenF) {
-    if (!tokenF) return;
-
-    try {
-      const res2 = await fetch(
-        `https://graph.facebook.com/me?access_token=${tokenF}&fields=id,name,email`
-      );
-      const user2 = await res2.json();
-      handleOAuthSubmit(user2);
-    } catch (err) {
-      console.log("error", err);
-    }
-  }
+  
 
   async function getGoogleUserData(tokenG) {
     if (!tokenG) return;
@@ -289,8 +283,12 @@ export default function SignInRoute() {
     <View style={styles.container}>
       <Image source={Headliner} style={[styles.Headliner]} />
 
-      <View style={{ marginTop: Platform.OS ==="ios" ? "10%" :"15%", marginLeft: "-2%" }}>
- 
+      <View
+        style={{
+          marginTop: Platform.OS === "ios" ? "10%" : "15%",
+          marginLeft: "-2%",
+        }}
+      >
         <TouchableWithoutFeedback
           onPress={googleSignIn}
           // onPress={handleGAsync}
@@ -549,19 +547,19 @@ const styles = StyleSheet.create({
   },
   fbLogo: {
     backgroundColor: "white",
-    borderRadius: 16/2,
+    borderRadius: 16 / 2,
     height: 18,
     width: 18,
     opacity: 1,
-    marginRight: Platform.OS ==="ios" ? 2 : 8,
-    marginLeft: 10
+    marginRight: Platform.OS === "ios" ? 2 : 8,
+    marginLeft: 10,
   },
   gLogo: {
     height: 24,
     width: 24,
     opacity: 1,
     marginRight: 12,
-    marginLeft: 7
+    marginLeft: 7,
   },
   erroMsg: {
     margin: 5,
@@ -578,6 +576,6 @@ const styles = StyleSheet.create({
     height: scale(250),
     width: "100%",
     marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? "-10%" :"-20%",
+    marginTop: Platform.OS === "ios" ? "-10%" : "-20%",
   },
 });

@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
   dateZone2: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: windowHeight > 800 ? (windowHeight/100)*7: (windowHeight/100)*9.5,
+    height: windowHeight > 800 ? (windowHeight/100)*7 : (windowHeight/100)*9.5,
     width: "80%",
     // backgroundColor: "blue"
   },
