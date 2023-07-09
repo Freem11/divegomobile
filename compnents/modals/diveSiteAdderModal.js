@@ -244,9 +244,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#538bdb",
+    // backgroundColor: 'green',
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: "40%",
+    marginTop: "5%",
+    marginBottom: "2%",
     width: "100%",
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: Platform.OS ==="ios" ? scale(0) : scale(-50)
+    marginTop: Platform.OS ==="ios" ? "-20%" : "-20%"
   },
   input: {
     fontFamily: "IndieFlower_400Regular",
@@ -311,17 +313,16 @@ const styles = StyleSheet.create({
   },
   SubmitButton: {
     position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: 4,
-    marginLeft: 70,
-    borderWidth: 0.3,
-    zIndex: 2,
+    // alignItems: "center",
+    // alignSelf: "center",
+    // justifyContent: "center",
+    marginBottom: "0%",
+    borderWidth: 1,
     width: "85%",
     borderTopColor: "darkgrey",
     borderColor: "transparent",
     borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? scale(-45) : scale(-105),
+    bottom: Platform.OS === "android" ? "0%" : "0%",
   },
   inputContainerLower: {
     position: "absolute",

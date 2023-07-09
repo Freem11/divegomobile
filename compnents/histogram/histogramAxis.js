@@ -36,21 +36,29 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     height: 2,
     backgroundColor: "blue",
-    width: "90%",
+    width: "92%",
+    zIndex: 2
   },
   months: {
     width: "90%",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginLeft: scale(11),
+    marginLeft: scale(10),
     marginBottom : 3,
+    marginTop: 10,
+    color: "white",
+    backgroundColor: "black",
+    opacity: 0.6,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5
   },
   letter: {
     marginLeft: 1,
     marginRight: 1,
     width: 13,
-    color: "#001638",
+    color: "white",
     fontWeight: "bold",
     fontFamily: "BubblegumSans_400Regular",
+    opacity: 1   
   }
 });

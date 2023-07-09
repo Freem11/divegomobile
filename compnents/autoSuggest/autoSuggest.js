@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   xButton: {
-    marginTop: 0,
-    marginLeft: -45,
+    marginTop: 10,
+    marginLeft: -30,
   },
   suggestInput: {
     width: 200,

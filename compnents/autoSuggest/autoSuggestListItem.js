@@ -11,9 +11,9 @@ const AutoSuggestListItem = (props) => {
 
   return (
     <View id={name} style={styles.suggestion}>
-      <View>
+      <View style={{zIndex: 100}}>
         <Text
-          style={{ fontFamily: "IndieFlower_400Regular", textAlign: "center", color:"#F0EEEB" }}
+          style={{ fontFamily: "IndieFlower_400Regular", textAlign: "center", color:"#F0EEEB", zIndex: 100 }}
           onPress={() => handleSelect(name)}
         >
           {name}
@@ -25,6 +25,7 @@ const AutoSuggestListItem = (props) => {
 
 const styles = StyleSheet.create({
   suggestion: {
+    zIndex: 100,
     width: 165,
     height: 25,
     marginTop: 1,

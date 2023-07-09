@@ -298,8 +298,8 @@ export default function PicUploadModal() {
 
       <View style={styles.lowerZone}>
         <View style={styles.fields}>
-          <View style={styles.dateZone}>
-          <View style={styles.dizzy}>
+
+          <View style={styles.dateField}>
             <InsetShadow
               containerStyle={{
                 borderRadius: 25,
@@ -327,28 +327,9 @@ export default function PicUploadModal() {
                 }
               ></TextInput>
             </InsetShadow>
-
-            <TouchableWithoutFeedback onPress={showDatePicker}>
-              <View style={styles.dateIcon}>
-                <FontAwesome
-                  name="calendar"
-                  color="gold"
-                  size={28}
-                  style={{ marginLeft: 1.5, marginTop: 2 }}
-                />
-                <DateTimePickerModal
-                  // date={new Date(pinValues.PicDate)}
-                  isVisible={datePickerVisible}
-                  mode="date"
-                  onConfirm={handleConfirm}
-                  onCancel={hideDatePicker}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
           </View>
 
-          <View style={styles.dateZone1}>
+          <View style={styles.animalField}>
             <KeyboardAvoidingView
               behavior="position"
               keyboardVerticalOffset={AnimalKeboardOffset}
@@ -363,10 +344,8 @@ export default function PicUploadModal() {
             </KeyboardAvoidingView>
           </View>
 
-          <View style={styles.dateZone2}>
-
-          <View style={styles.coordZone}>
-            <InsetShadow
+          <View style={styles.latField}>
+          <InsetShadow
               containerStyle={{
                 borderRadius: 25,
                 height: 40,
@@ -390,7 +369,8 @@ export default function PicUploadModal() {
                 }
               ></TextInput>
             </InsetShadow>
-
+            </View>
+            <View style={styles.lngField}>
             <InsetShadow
               containerStyle={{
                 borderRadius: 25,
@@ -415,9 +395,35 @@ export default function PicUploadModal() {
                 }
               ></TextInput>
             </InsetShadow>
-            </View>
+            </View>         
+        </View>
 
-            <TouchableWithoutFeedback onPress={onNavigate}>
+        <View style={styles.smallButtons}>
+        <View style={styles.dateButton}>
+        <TouchableWithoutFeedback onPress={showDatePicker}>
+              <View style={styles.dateIcon}>
+                <FontAwesome
+                  name="calendar"
+                  color="gold"
+                  size={28}
+                  style={{ marginLeft: 1.5, marginTop: 2 }}
+                />
+                <DateTimePickerModal
+                  // date={new Date(pinValues.PicDate)}
+                  isVisible={datePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+        </View>
+
+        <View style={styles.animalButton}>
+        </View>
+
+        <View style={styles.latLngButton}>
+        <TouchableWithoutFeedback onPress={onNavigate}>
             <View style={[styles.LocButton]}>
               <MaterialIcons
                 name="location-pin"
@@ -428,7 +434,8 @@ export default function PicUploadModal() {
             </View>
           </TouchableWithoutFeedback>
 
-          </View>
+        </View>
+
         </View>
 
       </View>
@@ -462,7 +469,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     alignItems: "center",
-    marginTop: "3%",
+    marginTop: "5%",
     width: "100%",
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
@@ -574,6 +581,7 @@ const styles = StyleSheet.create({
   },
   lowerZone: {
     flexDirection: "row",
+    marginTop: "5%",
     width: windowWidth > 700 ? "50%" : "100%",
     // backgroundColor: "green",
     height: "35%",
@@ -583,40 +591,75 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "space-evenly",
-    // backgroundColor: "green",
-    height: "80%",
-    width: "100%",
+    // backgroundColor: "orange",
+    height: "100%",
+    width: "70%",
   },
-  dateZone: {
+  smallButtons: {
+    flexDirection: "column",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "space-evenly",
+    // backgroundColor: "pink",
+    height: "100%",
+    width: "30%",
+  },
+  dateField: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    alignItems: "center",
     width: "80%",
+    height: "25%",
     // backgroundColor: "lightblue"
   },
-  dizzy:{
-    flex: 1,
+  dateButton: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignSelf: "center"
+    justifyContent: "center",
+    alignItems: "center",
+    width: "80%",
+    height: "25%",
+    // backgroundColor: "green"
   },
-  dateZone1: {
+  animalField: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "80%",
-    // backgroundColor: "orange"
+    height: "25%",
+    // backgroundColor: "green"
   },
-  dateZone2: {
+  animalButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "80%",
+    height: "25%",
+    // backgroundColor: "lightblue"
+  },
+  latField: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: windowHeight > 800 ? (windowHeight/100)*7 : (windowHeight/100)*9.5,
+    alignItems: "center",
     width: "80%",
+    height: "25%",
+    zIndex: -1
     // backgroundColor: "blue"
   },
-  coordZone:{
-    flexDirection: "column",
+  lngField: {
+    flexDirection: "row",
     justifyContent: "space-between",
-    height: "100%", 
+    alignItems: "center",
+    width: "80%",
+    height: "25%",
+    zIndex: -1
     // backgroundColor: "pink"
+  },
+  latLngButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "80%",
+    height: "50%",
+    // backgroundColor: "green"
   },
   modalStyle: {
     flex: 1,
