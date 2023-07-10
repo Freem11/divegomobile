@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     borderTopColor: "darkgrey",
     borderColor: "transparent",
     borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "0%" : "0%",
+    bottom: Platform.OS === "android" ? "1%" : "1%",
   },
   inputContainerLower: {
     position: "absolute",
