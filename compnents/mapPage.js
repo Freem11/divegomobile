@@ -79,6 +79,8 @@ export default function MapPage() {
     }
   }, [animalSelection]);
 
+  const [subButState, setSubButState] = useState(false);
+  
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
@@ -114,8 +116,12 @@ export default function MapPage() {
             )}
 
             {!masterSwitch && (
-              <View style={styles.PinButton}>
-                <TouchableWithoutFeedback onPress={onNavigate}>
+              <View style={subButState ? styles.PinButtonPressed : styles.PinButton}>
+                <TouchableWithoutFeedback
+                  onPress={onNavigate}
+                  onPressIn={() => setSubButState(true)}
+                  onPressOut={() => setSubButState(false)}
+                >
                   <Text
                     style={{
                       color: "gold",
@@ -161,7 +167,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     //Constants.statusBarHeight +
-    top:  scale(0),
+    top: scale(0),
     width: "80%",
     height: scale(38),
     zIndex: 2,
@@ -195,7 +201,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     //Constants.statusBarHeight + 100 +
-    top: Platform.OS === "ios" ? 160: 100,
+    top: Platform.OS === "ios" ? 160 : 100,
     zIndex: 1,
   },
   Fbuttons: {
@@ -227,6 +233,27 @@ const styles = StyleSheet.create({
       height: 3,
     },
     shadowOpacity: 0.9,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  PinButtonPressed: {
+    position: "absolute",
+    alignItems: "center",
+    textAlign: "center",
+    bottom: scale(28),
+    backgroundColor: "#538DBD",
+    borderRadius: scale(10),
+    marginBottom: 0,
+    width: "50%",
+    height: scale(30),
+    zIndex: 2,
+    paddingTop: 3,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.4,
     shadowRadius: 5,
 
     elevation: 10,

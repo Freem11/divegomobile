@@ -18,7 +18,12 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
-import { MaterialIcons, FontAwesome5, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  FontAwesome5,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
   interpolate,
@@ -37,8 +42,9 @@ export default function FABButtons() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
   const [guideModal, setGuideModal] = useState(false);
   const [gearModal, setGearModal] = useState(false);
 
@@ -189,77 +195,179 @@ export default function FABButtons() {
     buttonOpac = 0.9;
   }
 
+  const [menuButState, setMenuButState] = useState(false);
+  const [anchButState, setAnchButState] = useState(false);
+  const [siteButState, setSiteButState] = useState(false);
+  const [photButState, setPhotButState] = useState(false);
+  const [searButState, setSearButState] = useState(false);
+  const [naviButState, setNaviButState] = useState(false);
+  const [how2ButState, setHow2ButState] = useState(false);
+  const [settButState, setSettButState] = useState(false);
+
+  const [picCloseState, setPicCloseState] = useState(false);
+  const [diveCloseState, setDiveCloseState] = useState(false);
+  const [gearCloseState, setGearCloseState] = useState(false);
+  const [settCloseState, setSettCloseState] = useState(false);
+
   return (
     <View style={styles.fab}>
       <Animated.View
-        style={[styles.buttonwrapper, styles.optionWrapper, transGearY]}
+        style={[
+          settButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transGearY,
+        ]}
       >
-        <TouchableWithoutFeedback onPress={() => setGearModal(!gearModal)}>
-          <MaterialIcons name="settings" color="aquamarine" size={32} />
+        <TouchableWithoutFeedback
+          onPress={() => setGearModal(!gearModal)}
+          onPressIn={() => setSettButState(true)}
+          onPressOut={() => setSettButState(false)}
+        >
+          <MaterialIcons
+            name="settings"
+            color={settButState ? "black" : "aquamarine"}
+            size={32}
+          />
         </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
-        style={[styles.buttonwrapper, styles.optionWrapper, transInfoY]}
+        style={[
+          how2ButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transInfoY,
+        ]}
       >
-        <TouchableWithoutFeedback onPress={() => setGuideModal(!guideModal)}>
-          <FontAwesome5 name="question" color="aquamarine" size={32} />
+        <TouchableWithoutFeedback
+          onPress={() => setGuideModal(!guideModal)}
+          onPressIn={() => setHow2ButState(true)}
+          onPressOut={() => setHow2ButState(false)}
+        >
+          <FontAwesome5
+            name="question"
+            color={how2ButState ? "black" : "aquamarine"}
+            size={32}
+          />
         </TouchableWithoutFeedback>
       </Animated.View>
 
-      <TouchableWithoutFeedback onPress={startGeoCodeButtonAnimations}>
+      <TouchableWithoutFeedback
+        onPress={startGeoCodeButtonAnimations}
+        onPressIn={() => setNaviButState(true)}
+        onPressOut={() => setNaviButState(false)}
+      >
         <Animated.View
-          style={[styles.buttonwrapper, styles.optionWrapper, transGeoY]}
+          style={[
+            naviButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+            styles.optionWrapper,
+            transGeoY,
+          ]}
         >
-          <MaterialIcons name="explore" color="aquamarine" size={32} />
+          <MaterialIcons
+            name="explore"
+            color={naviButState ? "black" : "aquamarine"}
+            size={32}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback
         onPress={() => setPicAdderModal(!picAdderModal)}
+        onPressIn={() => setPhotButState(true)}
+        onPressOut={() => setPhotButState(false)}
       >
         <Animated.View
-          style={[styles.buttonwrapper, styles.optionWrapper, transPhotoY]}
+          style={[
+            photButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+            styles.optionWrapper,
+            transPhotoY,
+          ]}
         >
-          <MaterialIcons name="photo-camera" color="aquamarine" size={32} />
+          <MaterialIcons
+            name="photo-camera"
+            color={photButState ? "black" : "aquamarine"}
+            size={32}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback
         onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
+        onPressIn={() => setSiteButState(true)}
+        onPressOut={() => setSiteButState(false)}
       >
         <Animated.View
-          style={[styles.buttonwrapper, styles.optionWrapper, transSiteY]}
+          style={[
+            siteButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+            styles.optionWrapper,
+            transSiteY,
+          ]}
         >
-          <MaterialIcons name="add-location-alt" color="aquamarine" size={32} />
+          <MaterialIcons
+            name="add-location-alt"
+            color={siteButState ? "black" : "aquamarine"}
+            size={32}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback onPress={startAnimalButtonAnimations}>
+      <TouchableWithoutFeedback
+        onPress={startAnimalButtonAnimations}
+        onPressIn={() => setSearButState(true)}
+        onPressOut={() => setSearButState(false)}
+      >
         <Animated.View
-          style={[styles.buttonwrapper, styles.optionWrapper, transSearchY]}
+          style={[
+            searButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+            styles.optionWrapper,
+            transSearchY,
+          ]}
         >
-          <MaterialCommunityIcons name="map-search-outline" color="aquamarine" size={32} />
+          <MaterialCommunityIcons
+            name="map-search-outline"
+            color={searButState ? "black" : "aquamarine"}
+            size={32}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback onPress={() => setDiveSitesTog(!diveSitesTog)}>
+      <TouchableWithoutFeedback
+        onPress={() => setDiveSitesTog(!diveSitesTog)}
+        onPressIn={() => setAnchButState(true)}
+        onPressOut={() => setAnchButState(false)}
+      >
         <Animated.View
-          style={[styles.buttonwrapper, styles.optionWrapper, transAnchorY]}
+          style={[
+            anchButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+            styles.optionWrapper,
+            transAnchorY,
+          ]}
         >
-          <MaterialIcons name="anchor" color="aquamarine" size={32} />
+          <MaterialIcons
+            name="anchor"
+            color={anchButState ? "black" : "aquamarine"}
+            size={32}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback onPress={startButtonAnimations}>
+      <TouchableWithoutFeedback
+        onPress={startButtonAnimations}
+        onPressIn={() => setMenuButState(true)}
+        onPressOut={() => setMenuButState(false)}
+      >
         <Animated.View
           style={[
             styles.topbuttonwrapper,
-            styles.menuWrapper,
             animatedRotation,
+            menuButState ? styles.menuWrapperPressed : styles.menuWrapper,
           ]}
         >
-          <FontAwesome5 name="plus" color="black" size={32} />
+          <FontAwesome5
+            name="plus"
+            color={menuButState ? "aquamarine" : "black"}
+            size={32}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
 
@@ -268,7 +376,7 @@ export default function FABButtons() {
         keyboardVerticalOffset={Platform.OS === "android" ? 200 : 0}
       >
         <Animated.View style={[styles.animal, animalReveal]}>
-          <DiveSiteAutoComplete/>
+          <DiveSiteAutoComplete />
         </Animated.View>
       </KeyboardAvoidingView>
 
@@ -276,17 +384,25 @@ export default function FABButtons() {
         behavior="position"
         keyboardVerticalOffset={Platform.OS === "android" ? 200 : 0}
       >
-      <Animated.View style={[styles.geoCoder, geocodeReveal]}>
-        <GeocodeAutocomplete />
-      </Animated.View>
+        <Animated.View style={[styles.geoCoder, geocodeReveal]}>
+          <GeocodeAutocomplete />
+        </Animated.View>
       </KeyboardAvoidingView>
-      
+
       <Modal visible={picAdderModal} animationType="slide" transparent={true}>
         <View style={styles.modalStyle}>
           <View style={styles.title}>
-              <Text style={styles.header}>Submit Your Picture</Text>
-            <TouchableWithoutFeedback onPress={togglePicModal}>
-              <View style={styles.closeButton}>
+            <Text style={styles.header}>Submit Your Picture</Text>
+            <TouchableWithoutFeedback
+              onPress={togglePicModal}
+              onPressIn={() => setPicCloseState(true)}
+              onPressOut={() => setPicCloseState(false)}
+            >
+              <View
+                style={
+                  picCloseState ? styles.closeButtonPressed : styles.closeButton
+                }
+              >
                 <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
               </View>
             </TouchableWithoutFeedback>
@@ -302,16 +418,24 @@ export default function FABButtons() {
       >
         <View style={styles.modalStyle}>
           <View style={styles.title}>
-              <Text style={styles.header}>Submit Your Dive Site</Text>
+            <Text style={styles.header}>Submit Your Dive Site</Text>
             <TouchableWithoutFeedback
               onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
+              onPressIn={() => setDiveCloseState(true)}
+              onPressOut={() => setDiveCloseState(false)}
             >
-              <View style={styles.closeButton}>
+              <View
+                style={
+                  diveCloseState
+                    ? styles.closeButtonPressed
+                    : styles.closeButton
+                }
+              >
                 <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
               </View>
             </TouchableWithoutFeedback>
           </View>
-          <DiveSiteModal/>
+          <DiveSiteModal />
         </View>
       </Modal>
 
@@ -323,8 +447,16 @@ export default function FABButtons() {
             </View>
             <TouchableWithoutFeedback
               onPress={() => setGuideModal(!guideModal)}
+              onPressIn={() => setGearCloseState(true)}
+              onPressOut={() => setGearCloseState(false)}
             >
-              <View style={styles.closeButtonAlt}>
+              <View
+                style={
+                  gearCloseState
+                    ? styles.closeButtonAltPressed
+                    : styles.closeButtonAlt
+                }
+              >
                 <FontAwesome name="close" color="#BD9F9F" size={28} />
               </View>
             </TouchableWithoutFeedback>
@@ -341,8 +473,16 @@ export default function FABButtons() {
             </View>
             <TouchableWithoutFeedback
               onPress={() => setGearModal(!gearModal)}
+              onPressIn={() => setSettCloseState(true)}
+              onPressOut={() => setSettCloseState(false)}
             >
-              <View style={styles.closeButtonAlt}>
+              <View
+                style={
+                  settCloseState
+                    ? styles.closeButtonAltPressed
+                    : styles.closeButtonAlt
+                }
+              >
                 <FontAwesome name="close" color="#BD9F9F" size={28} />
               </View>
             </TouchableWithoutFeedback>
@@ -385,8 +525,24 @@ const styles = StyleSheet.create({
     opacity: 1,
     backgroundColor: "black",
   },
+  buttonwrapperPressed: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    position: "absolute",
+    height: 45,
+    width: 45,
+    opacity: 1,
+    backgroundColor: "aquamarine",
+  },
   menuWrapper: {
     backgroundColor: "aquamarine",
+    bottom: 0,
+    opacity: 1,
+  },
+  menuWrapperPressed: {
+    backgroundColor: "black",
     bottom: 0,
     opacity: 1,
   },
@@ -414,10 +570,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     borderRadius: 15,
     margin: scale(29),
-    marginLeft: '7%',
-    marginRight: '7%',
-    marginTop: '15%',
-    marginBottom: '15%',
+    marginLeft: "7%",
+    marginRight: "7%",
+    marginTop: "15%",
+    marginBottom: "15%",
     shadowOpacity: 0.2,
     shadowRadius: 50,
   },
@@ -429,6 +585,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  closeButtonPressed: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    opacity: 0.3
+  },
   closeButtonAlt: {
     position: "absolute",
     borderRadius: scale(42 / 2),
@@ -438,6 +604,18 @@ const styles = StyleSheet.create({
     right: "5%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  closeButtonAltPressed: {
+    position: "absolute",
+    borderRadius: scale(42 / 2),
+    height: 42,
+    width: 42,
+    top: scale(-5),
+    right: "5%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    opacity: 0.3
   },
   header: {
     fontFamily: "PermanentMarker_400Regular",
@@ -454,7 +632,6 @@ const styles = StyleSheet.create({
     marginTop: scale(-15),
     marginLeft: "-20%",
     color: "#F0EEEB",
-    
   },
   title: {
     display: "flex",

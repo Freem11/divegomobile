@@ -89,6 +89,7 @@ export default function AnchorModal(lat, lng) {
     }).catch(console.error);
   };
 
+
   return (
     <View
       style={{
@@ -200,13 +201,16 @@ const styles = StyleSheet.create({
     top: scale(2),
   },
   noSightings: {
-    width: scale(200),
+    flex: 1,
+    width: "60%",
     alignItems: "center",
+    justifyContent: "center",
     textAlign: "center",
-    marginTop: scale(15),
+    marginTop: "40%",
     fontFamily: "IndieFlower_400Regular",
-    fontSize: scale(15),
+    fontSize: scale(18),
     color: "#F0EEEB",
+    // backgroundColor: "green"
   },
   micro: {
     display: "flex",

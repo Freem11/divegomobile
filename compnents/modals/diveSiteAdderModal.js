@@ -119,6 +119,9 @@ export default function DiveSiteModal() {
     }
   };
 
+  const [imaButState, setImaButState] = useState(false);
+  const [subButState, setSubButState] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -202,8 +205,12 @@ export default function DiveSiteModal() {
         </InsetShadow>
       </View>
 
-      <TouchableWithoutFeedback onPress={getCurrentLocation}>
-        <View style={[styles.GPSbutton]}>
+      <TouchableWithoutFeedback
+        onPress={getCurrentLocation}
+        onPressIn={() => setImaButState(true)}
+        onPressOut={() => setImaButState(false)}
+      >
+        <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
           <FontAwesome5 name="map" color="gold" size={28} />
           <Text
             style={{
@@ -217,8 +224,12 @@ export default function DiveSiteModal() {
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.SubmitButton}>
-        <TouchableWithoutFeedback onPress={handleSubmit}>
+      <View style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}>
+        <TouchableWithoutFeedback
+          onPress={handleSubmit}
+          onPressIn={() => setSubButState(true)}
+          onPressOut={() => setSubButState(false)}
+        >
           <Text
             style={{
               color: "gold",
@@ -256,7 +267,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: Platform.OS ==="ios" ? "-20%" : "-20%"
+    marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
   },
   input: {
     fontFamily: "IndieFlower_400Regular",
@@ -311,11 +322,28 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
+  GPSbuttonPressed: {
+    backgroundColor: "#538dbd",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 35,
+    width: 150,
+    marginLeft: "30%",
+    marginTop: scale(30),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
   SubmitButton: {
     position: "absolute",
-    // alignItems: "center",
-    // alignSelf: "center",
-    // justifyContent: "center",
     marginBottom: "0%",
     borderWidth: 1,
     width: "85%",
@@ -323,6 +351,17 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "1%" : "1%",
+  },
+  SubmitButtonPressed: {
+    position: "absolute",
+    marginBottom: "0%",
+    borderWidth: 1,
+    width: "85%",
+    borderTopColor: "darkgrey",
+    borderColor: "transparent",
+    borderBottomColor: "transparent",
+    bottom: Platform.OS === "android" ? "1%" : "1%",
+    backgroundColor: "#538dbd",
   },
   inputContainerLower: {
     position: "absolute",

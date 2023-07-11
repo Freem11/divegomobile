@@ -110,12 +110,11 @@ export default function Map() {
         },
         zoom: 12,
       });
-      setTempMarker([selectedDiveSite.Latitude, selectedDiveSite.Longitude])
+      setTempMarker([selectedDiveSite.Latitude, selectedDiveSite.Longitude]);
 
       setTimeout(() => {
-        setTempMarker([])
-      }, 2000)
-      
+        setTempMarker([]);
+      }, 2000);
     }
   }, [selectedDiveSite]);
 
@@ -170,6 +169,8 @@ export default function Map() {
     setSiteModal(!siteModal);
   };
 
+  const [siteCloseState, setSiteCloseState] = useState(false);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -191,13 +192,13 @@ export default function Map() {
         )}
 
         {tempMarker.length > 0 && (
-             <Marker
-             coordinate={{
-               latitude: tempMarker[0],
-               longitude: tempMarker[1],
-             }}
-             image={anchorGold}
-           />
+          <Marker
+            coordinate={{
+              latitude: tempMarker[0],
+              longitude: tempMarker[1],
+            }}
+            image={anchorGold}
+          />
         )}
 
         {!masterSwitch && (
@@ -219,8 +220,10 @@ export default function Map() {
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
-          const { cluster: isCluster, point_count: pointCount } =
-            cluster.properties;
+          const {
+            cluster: isCluster,
+            point_count: pointCount,
+          } = cluster.properties;
 
           if (isCluster) {
             return (
@@ -259,18 +262,22 @@ export default function Map() {
       <Modal visible={siteModal} animationType="slide" transparent={true}>
         <View style={styles.modalStyle}>
           <View style={styles.titleAlt}>
-              <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
-            <TouchableWithoutFeedback onPress={() => setSiteModal(!siteModal)}>
-              <View style={styles.closeButtonAlt}>
+            <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
+            <TouchableWithoutFeedback
+              onPress={() => setSiteModal(!siteModal)}
+              onPressIn={() => setSiteCloseState(true)}
+              onPressOut={() => setSiteCloseState(false)}
+            >
+              <View style={siteCloseState ? styles.closeButtonAltPressed : styles.closeButtonAlt}>
                 <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
               </View>
             </TouchableWithoutFeedback>
           </View>
-          <AnchorModal 
-          SiteName={selectedDiveSite.SiteName}
-          Lat={selectedDiveSite.Latitude}
-          Lng={selectedDiveSite.Longitude}
-            />
+          <AnchorModal
+            SiteName={selectedDiveSite.SiteName}
+            Lat={selectedDiveSite.Latitude}
+            Lng={selectedDiveSite.Longitude}
+          />
         </View>
       </Modal>
     </View>
@@ -306,11 +313,18 @@ const styles = StyleSheet.create({
     borderRadius: scale(42 / 2),
     height: scale(30),
     width: scale(30),
-    // backgroundColor: "blue",
-    // top: Platform.OS === "ios" ? "-30%" : "-15%",
-    // right: Platform.OS === "ios" ? "1%" : "5%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  closeButtonAltPressed: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    opacity: 0.3
   },
   headerAlt: {
     // alignItems: "center",

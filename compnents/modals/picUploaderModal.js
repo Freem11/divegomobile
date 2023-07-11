@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   KeyboardAvoidingView,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -34,8 +34,8 @@ let DateVar = false;
 let AnimalVar = false;
 let LatVar = false;
 let LngVar = false;
-const windowWidth = Dimensions.get('window').width
-const windowHeight = Dimensions.get('window').height
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function PicUploadModal() {
   const { setMasterSwitch } = useContext(MasterContext);
@@ -130,7 +130,7 @@ export default function PicUploadModal() {
     hideDatePicker();
   };
 
-  const AnimalKeboardOffset = Platform.OS === "ios" ? 350 : 0;
+  const AnimalKeboardOffset = Platform.OS === "ios" ? 800 : 0;
 
   let colorDate;
   if (pinValues.PicDate === "") {
@@ -267,6 +267,11 @@ export default function PicUploadModal() {
     }
   };
 
+  const [imgButState, setImgButState] = useState(false);
+  const [datButState, setDatButState] = useState(false);
+  const [corButState, setCorButState] = useState(false);
+  const [subButState, setSubButState] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.picContainer}>
@@ -280,8 +285,14 @@ export default function PicUploadModal() {
         />
       </View>
 
-      <TouchableWithoutFeedback onPress={handleImageUpload}>
-        <View style={[styles.ImageButton]}>
+      <TouchableWithoutFeedback
+        onPress={handleImageUpload}
+        onPressIn={() => setImgButState(true)}
+        onPressOut={() => setImgButState(false)}
+      >
+        <View
+          style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
+        >
           <FontAwesome name="picture-o" color="gold" size={28} />
           <Text
             style={{
@@ -298,7 +309,6 @@ export default function PicUploadModal() {
 
       <View style={styles.lowerZone}>
         <View style={styles.fields}>
-
           <View style={styles.dateField}>
             <InsetShadow
               containerStyle={{
@@ -345,7 +355,7 @@ export default function PicUploadModal() {
           </View>
 
           <View style={styles.latField}>
-          <InsetShadow
+            <InsetShadow
               containerStyle={{
                 borderRadius: 25,
                 height: 40,
@@ -369,8 +379,8 @@ export default function PicUploadModal() {
                 }
               ></TextInput>
             </InsetShadow>
-            </View>
-            <View style={styles.lngField}>
+          </View>
+          <View style={styles.lngField}>
             <InsetShadow
               containerStyle={{
                 borderRadius: 25,
@@ -395,13 +405,19 @@ export default function PicUploadModal() {
                 }
               ></TextInput>
             </InsetShadow>
-            </View>         
+          </View>
         </View>
 
         <View style={styles.smallButtons}>
-        <View style={styles.dateButton}>
-        <TouchableWithoutFeedback onPress={showDatePicker}>
-              <View style={styles.dateIcon}>
+          <View style={styles.dateButton}>
+            <TouchableWithoutFeedback
+              onPress={showDatePicker}
+              onPressIn={() => setDatButState(true)}
+              onPressOut={() => setDatButState(false)}
+            >
+              <View
+                style={datButState ? styles.dateIconPressed : styles.dateIcon}
+              >
                 <FontAwesome
                   name="calendar"
                   color="gold"
@@ -417,31 +433,37 @@ export default function PicUploadModal() {
                 />
               </View>
             </TouchableWithoutFeedback>
+          </View>
+
+          <View style={styles.animalButton}></View>
+
+          <View style={styles.latLngButton}>
+            <TouchableWithoutFeedback
+              onPress={onNavigate}
+              onPressIn={() => setCorButState(true)}
+              onPressOut={() => setCorButState(false)}
+            >
+              <View
+                style={corButState ? styles.LocButtonPressed : styles.LocButton}
+              >
+                <MaterialIcons
+                  name="location-pin"
+                  color="gold"
+                  size={38}
+                  style={{ zIndex: -1 }}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
-
-        <View style={styles.animalButton}>
-        </View>
-
-        <View style={styles.latLngButton}>
-        <TouchableWithoutFeedback onPress={onNavigate}>
-            <View style={[styles.LocButton]}>
-              <MaterialIcons
-                name="location-pin"
-                color="gold"
-                size={38}
-                style={{ zIndex: -1 }}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-
-        </View>
-
-        </View>
-
       </View>
 
-      <View style={styles.SubmitButton}>
-        <TouchableWithoutFeedback onPress={handleSubmit}>
+      <View style={subButState ? styles.SubmitButtonPressed: styles.SubmitButton}>
+        <TouchableWithoutFeedback
+          onPress={handleSubmit}
+          onPressIn={() => setSubButState(true)}
+          onPressOut={() => setSubButState(false)}
+        >
           <Text
             style={{
               color: "gold",
@@ -558,6 +580,27 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
+  ImageButtonPressed: {
+    backgroundColor: "#538dbd",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: scale(15),
+    height: "7%",
+    width: "50%",
+    marginLeft: 0,
+    marginTop: Platform.OS === "ios" ? "2%" : "3%",
+    // marginBottom: Platform.OS === "ios" ? "3%" : "6%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+
+    elevation: 10,
+  },
   picContainer: {
     backgroundColor: "#D8DBE2",
     alignItems: "center",
@@ -641,7 +684,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    zIndex: -1
+    zIndex: -1,
     // backgroundColor: "blue"
   },
   lngField: {
@@ -650,7 +693,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    zIndex: -1
+    zIndex: -1,
     // backgroundColor: "pink"
   },
   latLngButton: {
@@ -700,6 +743,24 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
+  LocButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
   autocomplete: {
     width: 200,
     height: 30,
@@ -709,9 +770,6 @@ const styles = StyleSheet.create({
   },
   SubmitButton: {
     position: "absolute",
-    // alignItems: "center",
-    // alignSelf: "center",
-    // justifyContent: "center",
     marginBottom: "0%",
     borderWidth: 1,
     width: "85%",
@@ -719,6 +777,17 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "2%" : "2%",
+  },
+  SubmitButtonPressed: {
+    position: "absolute",
+    marginBottom: "0%",
+    borderWidth: 1,
+    width: "85%",
+    borderTopColor: "darkgrey",
+    borderColor: "transparent",
+    borderBottomColor: "transparent",
+    bottom: Platform.OS === "android" ? "2%" : "2%",
+    backgroundColor: "#538dbd",
   },
   dateIcon: {
     backgroundColor: "#538bdb",
@@ -733,6 +802,23 @@ const styles = StyleSheet.create({
       height: 0,
     },
     shadowOpacity: 0.5,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  dateIconPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
     shadowRadius: 5,
 
     elevation: 10,
