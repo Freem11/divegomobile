@@ -101,13 +101,13 @@ export default function SignInRoute() {
     } catch (error) {
       setIsSignedIn(false);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        alert("canned");
+        console.log("Login cancelled");
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        alert("stuck");
+        console.log("Login stuck");
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        alert("no Gp service");
+        console.log("Login no google play services");
       } else {
-        alert(error);
+        console.log(error);
       }
     }
   };
@@ -118,6 +118,7 @@ export default function SignInRoute() {
       result
     ) {
       if (result.isCancelled) {
+        setIsSignedIn(false);
         console.log("Login cancelled");
       } else {
         AccessToken.getCurrentAccessToken().then((data) => {
