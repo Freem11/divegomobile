@@ -96,6 +96,7 @@ export default function SignUpRoute() {
   };
 
   const keboardOffset = Platform.OS === "ios" ? 100 : 0;
+  const [subButState, setSubButState] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -218,26 +219,30 @@ export default function SignUpRoute() {
           </InsetShadow>
         </View>
         {regFail && <Text style={styles.erroMsg}>{regFail}</Text>}
-        </KeyboardAvoidingView>
-        <View style={styles.SubmitButton}>
-          <TouchableWithoutFeedback onPress={handleSignUpSubmit}>
-            <Text
-              style={{
-                color: "gold",
-                fontSize: 17,
-                marginTop: 8,
-                fontFamily: "PermanentMarker_400Regular",
-                width: "100%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                textAlign: "center",
-              }}
-            >
-              Sign Up
-            </Text>
-          </TouchableWithoutFeedback>
-        </View>
+      </KeyboardAvoidingView>
+      <View style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}>
+        <TouchableWithoutFeedback
+          onPress={handleSignUpSubmit}
+          onPressIn={() => setSubButState(true)}
+          onPressOut={() => setSubButState(false)}
+        >
+          <Text
+            style={{
+              color: "gold",
+              fontSize: 17,
+              marginTop: 8,
+              fontFamily: "PermanentMarker_400Regular",
+              width: "100%",
+              alignSelf: "center",
+              justifyContent: "center",
+              alignContent: "center",
+              textAlign: "center",
+            }}
+          >
+            Sign Up
+          </Text>
+        </TouchableWithoutFeedback>
+      </View>
     </View>
   );
 }
@@ -295,7 +300,7 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     borderBottomColor: "transparent",
   },
-  SubmitButton2: {
+  SubmitButtonPressed: {
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
@@ -307,7 +312,9 @@ const styles = StyleSheet.create({
     borderTopColor: "darkgrey",
     borderColor: "transparent",
     borderBottomColor: "transparent",
+    backgroundColor: "#538aaa",
   },
+ 
   singups: {
     marginTop: "25%",
     marginBottom: "-23%",
@@ -358,6 +365,6 @@ const styles = StyleSheet.create({
     height: scale(250),
     width: "100%",
     marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? "0%" :"-12%",
+    marginTop: Platform.OS === "ios" ? "0%" : "-12%",
   },
 });

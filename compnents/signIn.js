@@ -177,7 +177,7 @@ export default function SignInRoute() {
   };
 
   async function OAuthSignIn(formVals) {
-    LoginManager.logOut()
+    LoginManager.logOut();
     let accessToken = await signInStandard(formVals);
     if (accessToken) {
       await AsyncStorage.setItem("token", JSON.stringify(accessToken));
@@ -225,8 +225,6 @@ export default function SignInRoute() {
   //   setIsSignedIn(true)
   //   await promptAsync2();
   // };
-
-  
 
   async function getGoogleUserData(tokenG) {
     if (!tokenG) return;
@@ -278,6 +276,9 @@ export default function SignInRoute() {
   };
 
   const keboardOffset = Platform.OS === "ios" ? 100 : 0;
+  const [subButState, setSubButState] = useState(false);
+  const [googleButState, setGoogleButState] = useState(false);
+  const [facebookState, setFacebookButState] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -291,14 +292,15 @@ export default function SignInRoute() {
       >
         <TouchableWithoutFeedback
           onPress={googleSignIn}
-          // onPress={handleGAsync}
+          onPressIn={() => setGoogleButState(true)}
+          onPressOut={() => setGoogleButState(false)}
           disabled={isSignedIn}
         >
-          <View style={[styles.SignUpWithGoogle]}>
+          <View style={googleButState ? styles.SignUpWithGooglePressed : styles.SignUpWithGoogle}>
             <Image source={googleLogo} style={[styles.gLogo]} />
             <Text
               style={{
-                color: "#2d2d2d",
+                color: googleButState ? "#ffffff" : "#2d2d2d",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
                 fontSize: 14,
@@ -311,11 +313,12 @@ export default function SignInRoute() {
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
-          // onPress={handleFAsync}
           onPress={facebookSignIn}
+          onPressIn={() => setFacebookButState(true)}
+          onPressOut={() => setFacebookButState(false)}
           disabled={isSignedIn}
         >
-          <View style={[styles.SignUpWithFacebook]}>
+          <View style={facebookState ? styles.SignUpWithFacebookPressed : styles.SignUpWithFacebook }>
             <Image source={facebookLogo} style={[styles.fbLogo]} />
             <Text
               style={{
@@ -396,8 +399,12 @@ export default function SignInRoute() {
         </View>
       </KeyboardAvoidingView>
 
-      <View style={styles.SubmitButton2}>
-        <TouchableWithoutFeedback onPress={handleSignInSubmit}>
+      <View style={subButState ? styles.SubmitButton2Pressed : styles.SubmitButton2}>
+        <TouchableWithoutFeedback
+          onPress={handleSignInSubmit}
+          onPressIn={() => setSubButState(true)}
+          onPressOut={() => setSubButState(false)}
+        >
           <Text
             style={{
               color: "gold",
@@ -477,19 +484,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 5,
   },
-  SubmitButton: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: "3%",
-    marginLeft: 70,
-    borderWidth: 0.3,
-    zIndex: 2,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderColor: "transparent",
-    borderBottomColor: "transparent",
-  },
   SubmitButton2: {
     position: "absolute",
     alignItems: "center",
@@ -502,6 +496,20 @@ const styles = StyleSheet.create({
     borderTopColor: "darkgrey",
     borderColor: "transparent",
     borderBottomColor: "transparent",
+  },
+  SubmitButton2Pressed: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: "3%",
+    marginLeft: 70,
+    borderWidth: 0.3,
+    zIndex: 2,
+    width: "85%",
+    borderTopColor: "darkgrey",
+    borderColor: "transparent",
+    borderBottomColor: "transparent",
+    backgroundColor: "#538aaa",
   },
   singups: {
     marginTop: "25%",
@@ -526,8 +534,46 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
+  SignUpWithGooglePressed: {
+    backgroundColor: "#2d2d2d",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 2,
+    height: 30,
+    width: 200,
+    marginTop: scale(0),
+    margin: 10,
+    shadowColor: "#2d2d2d",
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+
+    elevation: 10,
+  },
   SignUpWithFacebook: {
     backgroundColor: "#0165E1",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 2,
+    height: 30,
+    width: 200,
+    marginTop: scale(5),
+    margin: 10,
+    shadowColor: "#2d2d2d",
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+
+    elevation: 1,
+  },
+  SignUpWithFacebookPressed: {
+    backgroundColor: "#4267b2",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 2,
