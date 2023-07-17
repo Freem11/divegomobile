@@ -14,9 +14,10 @@ export default function SettingsModal() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
 
   const handleLogout = async () => {
+    setActiveSession(null);
     await AsyncStorage.removeItem("token");
     await signOut();
-    setActiveSession(null);
+  
   };
 
   const [signButState, setSignButState] = useState(false);
