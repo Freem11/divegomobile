@@ -102,3 +102,18 @@ export const signOut = async () => {
     console.log("couldn't logout,", error);
   }
 };
+
+export const userDelete = async (userIdValue) => {
+
+  console.log("supa gets", userIdValue)
+  const { data, error } = await supabase.rpc("delete_user", {"userid": userIdValue})
+
+  if (error) {
+    console.log("couldn't delete user,", error);
+    return [];
+  }
+
+  if (data) {
+     console.log("user was deleted")
+  }
+  }; 
