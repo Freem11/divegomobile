@@ -40,6 +40,7 @@ import {
   Profile,
   LoginManager,
 } from "react-native-fbsdk-next";
+import * as AppleAuthentication from "expo-apple-authentication";
 
 WebBrowser.maybeCompleteAuthSession();
 Settings.initializeSDK();
@@ -81,6 +82,72 @@ export default function SignInRoute() {
     firstName: "",
     lastName: "",
   });
+
+  const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
+
+  useEffect(() => {
+    const checkApple = async () => {
+      const isApple = await AppleAuthentication.isAvailableAsync();
+      setAppleAuthAvailable(isApple);
+
+      let appleCore = JSON.parse(await AsyncStorage.getItem("appleCreds"));
+      console.log("success?", appleCore)
+    };
+    checkApple();
+  }, []);
+
+  const getAppleAuth = () => {
+    return (
+      <AppleAuthentication.AppleAuthenticationButton
+        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+        cornerRadius={5}
+        style={styles.appleButton}
+        onPress={appleLogin}
+        disabled={isSignedIn}
+      />
+    );
+  };
+
+  const appleLogin = async () => {
+    setIsSignedIn(true);
+    try {
+      const creds = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      if (
+        (creds.email !== null) &
+        (creds.fullName.familyName !== null) &
+        (creds.fullName.givenName !== null)
+      ) {
+        let appleObject = {
+          name: `${creds.fullName.givenName} ${creds.fullName.familyName}`,
+          email: creds.email,
+          id: creds.user,
+        };
+        alert("appledata:" + appleObject.name + " " + appleObject.email + " " + appleObject.id)
+        await AsyncStorage.setItem("appleCreds", JSON.stringify(appleObject));
+        handleOAuthSubmit(appleObject);
+        setIsSignedIn(false);
+      } else {
+        let reUsedApple = JSON.parse(await AsyncStorage.getItem("appleCreds"));
+        if (reUsedApple.id === creds.user) {
+          alert(reUsedApple)
+          handleOAuthSubmit(reUsedApple);
+          setIsSignedIn(false);
+        } else {
+          setIsSignedIn(false);
+          setLoginFail("Invalid Credentials (email and name required for sign in)");
+        }
+      }
+
+    } catch (e) {
+      alert(e);
+    }
+  };
 
   Platform.OS === "ios"
     ? GoogleSignin.configure({
@@ -142,15 +209,6 @@ export default function SignInRoute() {
     }
   }
 
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   androidClientId: googleAndroidClientId,
-  //   iosClientId: googleIOSClientId,
-  // });
-
-  // const [request2, response2, promptAsync2] = Facebook.useAuthRequest({
-  //   clientId: facebookAppId,
-  // });
-
   const handleOAuthSubmit = async (user) => {
     let Fname;
     let Lname;
@@ -194,49 +252,6 @@ export default function SignInRoute() {
         setIsSignedIn(false);
         setLoginFail("You already have an account with this email");
       }
-    }
-  }
-
-  // useEffect(() => {
-  //   handleGEffect();
-  // }, [response, token]);
-
-  // useEffect(() => {
-  //   handleFEffect();
-  // }, [response2, token2]);
-
-  async function handleGEffect() {
-    if (response?.type === "success") {
-      getGoogleUserData(response.authentication.accessToken);
-    }
-  }
-
-  async function handleFEffect() {
-    if (response2?.type === "success") {
-      getFacebokUserData(response2.authentication.accessToken);
-    }
-  }
-
-  // const handleGAsync = async () => {
-  //   setIsSignedIn(true)
-  //   await promptAsync({ showInRecents: true, useProxy: false });
-  // };
-
-  // const handleFAsync = async () => {
-  //   setIsSignedIn(true)
-  //   await promptAsync2();
-  // };
-
-  async function getGoogleUserData(tokenG) {
-    if (!tokenG) return;
-    try {
-      const res = await fetch(`https://www.googleapis.com/userinfo/v2/me`, {
-        headers: { Authorization: `Bearer ${tokenG}` },
-      });
-      const user = await res.json();
-      handleOAuthSubmit(user);
-    } catch (err) {
-      console.log("error", err);
     }
   }
 
@@ -335,6 +350,8 @@ export default function SignInRoute() {
             </Text>
           </View>
         </TouchableWithoutFeedback>
+
+        {appleAuthAvailable ? getAppleAuth() : null}
       </View>
 
       <KeyboardAvoidingView
@@ -624,5 +641,21 @@ const styles = StyleSheet.create({
     width: "100%",
     marginLeft: "-3%",
     marginTop: Platform.OS === "ios" ? "-10%" : "-20%",
+  },
+  appleButton: {
+    width: 200,
+    height: 32,
+    alignSelf: "center",
+    marginTop: scale(5),
+    margin: 10,
+    shadowColor: "#2d2d2d",
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+
+    elevation: 1,
   },
 });

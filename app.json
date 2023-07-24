@@ -28,6 +28,7 @@
       "buildNumber": "4",
       "supportsTablet": true,
       "bundleIdentifier": "com.freem11.divegomobile",
+      "entitlements": ["com.apple.developer.applesignin"],
       "infoPlist": {
         "UIBackgroundModes": ["fetch"],
         "CFBundleURLTypes": [
