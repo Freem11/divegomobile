@@ -91,7 +91,6 @@ export default function SignInRoute() {
       setAppleAuthAvailable(isApple);
 
       let appleCore = JSON.parse(await AsyncStorage.getItem("appleCreds"));
-      console.log("success?", appleCore)
     };
     checkApple();
   }, []);
@@ -128,14 +127,12 @@ export default function SignInRoute() {
           email: creds.email,
           id: creds.user,
         };
-        alert("appledata:" + appleObject.name + " " + appleObject.email + " " + appleObject.id)
         await AsyncStorage.setItem("appleCreds", JSON.stringify(appleObject));
         handleOAuthSubmit(appleObject);
         setIsSignedIn(false);
       } else {
         let reUsedApple = JSON.parse(await AsyncStorage.getItem("appleCreds"));
-        if (reUsedApple.id === creds.user) {
-          alert(reUsedApple)
+        if (reUsedApple && reUsedApple.id === creds.user) {
           handleOAuthSubmit(reUsedApple);
           setIsSignedIn(false);
         } else {
@@ -145,7 +142,7 @@ export default function SignInRoute() {
       }
 
     } catch (e) {
-      alert(e);
+      console.log(e);
     }
   };
 

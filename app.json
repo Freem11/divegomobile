@@ -3,7 +3,7 @@
     "name": "divegomobile",
     "slug": "divegomobile",
     "scheme": ["divegomobile", "fb692861552452156"],
-    "version": "1.0.3",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -25,10 +25,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "4",
+      "buildNumber": "8",
       "supportsTablet": true,
       "bundleIdentifier": "com.freem11.divegomobile",
-      "entitlements": ["com.apple.developer.applesignin"],
       "infoPlist": {
         "UIBackgroundModes": ["fetch"],
         "CFBundleURLTypes": [
@@ -47,7 +46,7 @@
       }
     },
     "android": {
-      "versionCode": 4,
+      "versionCode": 8,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
