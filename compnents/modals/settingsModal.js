@@ -25,6 +25,7 @@ import { addDeletedAccountInfo } from "../../supabaseCalls/accountSupabaseCalls"
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
+import { scale } from "react-native-size-matters";
 
 export default function SettingsModal() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   dangerZone: {
     width: "75%",
     borderWidth: 0.5,
-    // backgroundColor: "green",
+    marginBottom: "15%",
     borderColor: "darkgrey",
     alignSelf: "center",
     alignItems: "center",
