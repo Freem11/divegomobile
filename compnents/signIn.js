@@ -299,8 +299,8 @@ export default function SignInRoute() {
 
       <View
         style={{
-          marginTop: Platform.OS === "ios" ? "10%" : "15%",
-          marginLeft: "-2%",
+          marginTop: Platform.OS === "ios" ? "6%" : "15%",
+          
         }}
       >
         <TouchableWithoutFeedback
@@ -452,7 +452,8 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: scale(10),
+    marginLeft: "2%",
+    marginTop: scale(0),
   },
   input: {
     fontFamily: "IndieFlower_400Regular",
@@ -538,7 +539,6 @@ const styles = StyleSheet.create({
     height: 30,
     width: 200,
     marginTop: scale(0),
-    margin: 10,
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: 1,
@@ -557,7 +557,6 @@ const styles = StyleSheet.create({
     height: 30,
     width: 200,
     marginTop: scale(0),
-    margin: 10,
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: 1,
@@ -575,8 +574,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 30,
     width: 200,
-    marginTop: scale(5),
-    margin: 10,
+    marginTop: Platform.OS === "ios" ? scale(5) : scale(10),
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: 1,
@@ -594,8 +592,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 30,
     width: 200,
-    marginTop: scale(5),
-    margin: 10,
+    marginTop: Platform.OS === "ios" ? scale(5) : scale(10),
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: 1,
@@ -640,11 +637,11 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? "-10%" : "-20%",
   },
   appleButton: {
-    width: 200,
+    width: 201,
     height: 32,
     alignSelf: "center",
-    marginTop: scale(5),
-    margin: 10,
+    marginTop: scale(4),
+    marginBottom: scale(4),
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: 1,

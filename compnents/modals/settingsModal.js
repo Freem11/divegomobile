@@ -16,8 +16,11 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { AntDesign } from '@expo/vector-icons';
-import { signOut, userDelete } from "../../supabaseCalls/authenticateSupabaseCalls";
+import { AntDesign } from "@expo/vector-icons";
+import {
+  signOut,
+  userDelete,
+} from "../../supabaseCalls/authenticateSupabaseCalls";
 import { addDeletedAccountInfo } from "../../supabaseCalls/accountSupabaseCalls";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -28,12 +31,12 @@ export default function SettingsModal() {
 
   const dangerZoneHeight = useSharedValue(0);
   const dangerZoneOpacity = useSharedValue(0);
-  const [dangerZoneEnabled, setDangerZoneEnabled] = useState(false)
+  const [dangerZoneEnabled, setDangerZoneEnabled] = useState(false);
 
   const dangerZoneReveal = useAnimatedStyle(() => {
     return {
-       height: dangerZoneHeight.value,
-       opacity: dangerZoneOpacity.value
+      height: dangerZoneHeight.value,
+      opacity: dangerZoneOpacity.value,
     };
   });
 
@@ -41,11 +44,11 @@ export default function SettingsModal() {
     if (dangerZoneHeight.value === 0) {
       dangerZoneHeight.value = withSpring(80);
       dangerZoneOpacity.value = withTiming(1);
-      setDangerZoneEnabled(false)
+      setDangerZoneEnabled(false);
     } else {
       dangerZoneHeight.value = withTiming(0);
       dangerZoneOpacity.value = withTiming(0);
-      setDangerZoneEnabled(true)
+      setDangerZoneEnabled(true);
     }
   };
 
@@ -56,22 +59,32 @@ export default function SettingsModal() {
   };
 
   const alertHandler = async () => {
-    Alert.alert('You Are About To Delete Your DiveGo Account', 'Are you sure you want to delete your account?' + '\n' + '\n' + 'Please note that deleting your account will not delete your previous dive site or photos submittsion, please contact us if you wish to have those removed from the community',
-    [
-      {text: "Delete My Account", onPress: () => handleAccountDelete()},
-      {text: "Cancel Request", onPress: () => console.log("no tapped")},
-      {text: "Contact DiveGo", onPress: () => handleEmail()}
-    ])
+    Alert.alert(
+      "You Are About To Delete Your DiveGo Account",
+      "Are you sure you want to delete your account?" +
+        "\n" +
+        "\n" +
+        "Please note that deleting your account will not delete your previous dive site or photo submissions, please contact us if you wish to have those removed from the community",
+      [
+        { text: "Delete My Account", onPress: () => handleAccountDelete() },
+        { text: "Cancel Request", onPress: () => console.log("no tapped") },
+        { text: "Contact DiveGo", onPress: () => handleEmail() },
+      ]
+    );
   };
+
+  let first = activeSession.user.user_metadata.firstName || "";
+  let last = activeSession.user.user_metadata.lastName || "";
+  let blurb = `:${activeSession.user.id}`;
 
   const handleAccountDelete = async () => {
     await addDeletedAccountInfo({
-      firstName: activeSession.user.user_metadata.firstName,
-      lastName: activeSession.user.user_metadata.lastName,
+      firstName: first,
+      lastName: last,
       email: activeSession.user.email,
-      UserID: activeSession.user.id
-    })
-    await userDelete(activeSession.user.id)
+      UserID: activeSession.user.id,
+    });
+    await userDelete(activeSession.user.id);
     await setActiveSession(null);
     await AsyncStorage.removeItem("token");
     await signOut();
@@ -80,7 +93,7 @@ export default function SettingsModal() {
   const handleEmail = () => {
     const to = ["DiveGo2022@gmail.com"];
     email(to, {
-      subject: `Delete Account Request: ${activeSession.user.user_metadata.firstName} ${activeSession.user.user_metadata.lastName}'s Account `,
+      subject: `Delete Account Request ${blurb}`,
       body:
         "Hello I am deleting my DiveGo account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with DiveGo to allow these to stay in the app? (Y/N)",
       checkCanOpen: false,
@@ -91,7 +104,7 @@ export default function SettingsModal() {
   const [dangerButState, setDangerButState] = useState(false);
 
   return (
-    <ScrollView style={{height: "100%", width: "86%"}}>
+    <ScrollView style={{ height: "100%", width: "86%" }}>
       <View style={styles.container}>
         <TouchableWithoutFeedback
           onPress={handleLogout}
@@ -119,20 +132,17 @@ export default function SettingsModal() {
 
       <TouchableWithoutFeedback
         onLongPress={startDangerZoneAnimations}
-        style={{backgroundColor: "purple"}}
+        style={{ backgroundColor: "purple" }}
       >
         <View style={styles.dangerZonebar}>
-        <AntDesign name="exclamationcircleo" size={20} color="maroon" />
-        <Text style={styles.dangerText}>Danger Zone</Text>
-        <AntDesign name="exclamationcircleo" size={20} color="maroon" />
-        
+          <AntDesign name="exclamationcircleo" size={20} color="maroon" />
+          <Text style={styles.dangerText}>Danger Zone</Text>
+          <AntDesign name="exclamationcircleo" size={20} color="maroon" />
         </View>
       </TouchableWithoutFeedback>
 
-      <Animated.View
-        style={[dangerZoneReveal, styles.dangerZone]}
-      >
-         <TouchableWithoutFeedback
+      <Animated.View style={[dangerZoneReveal, styles.dangerZone]}>
+        <TouchableWithoutFeedback
           disabled={dangerZoneEnabled}
           onPressIn={() => setDangerButState(true)}
           onPressOut={() => setDangerButState(false)}
@@ -140,7 +150,9 @@ export default function SettingsModal() {
         >
           <View
             style={
-              dangerButState ? styles.deleteAccountButtonPressed : styles.deleteAccountButton
+              dangerButState
+                ? styles.deleteAccountButtonPressed
+                : styles.deleteAccountButton
             }
           >
             <Text
@@ -211,12 +223,12 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  dangerZonebar:{
+  dangerZonebar: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignSelf: "center",
-    alignItems: 'center',
+    alignItems: "center",
     width: "80%",
     height: 25,
     backgroundColor: "pink",
@@ -224,18 +236,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: "85%",
     paddingLeft: 5,
-    paddingRight: 5
+    paddingRight: 5,
   },
-  dangerZone:{
+  dangerZone: {
     width: "75%",
     borderWidth: 0.5,
     // backgroundColor: "green",
     borderColor: "darkgrey",
     alignSelf: "center",
     alignItems: "center",
-    paddingTop: Platform.OS === "android"? 4 : 1,
+    paddingTop: Platform.OS === "android" ? 4 : 1,
   },
-  dangerText:{
+  dangerText: {
     color: "maroon",
   },
   deleteAccountButton: {
@@ -257,7 +269,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
 
     elevation: -1,
-    zIndex : -1
+    zIndex: -1,
   },
   deleteAccountButtonPressed: {
     backgroundColor: "white",
@@ -277,6 +289,6 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
 
     elevation: -1,
-    zIndex: -1
+    zIndex: -1,
   },
 });
