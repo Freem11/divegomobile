@@ -139,6 +139,8 @@ export default function App() {
             if (newSession === null){
               setAppIsReady(true);
             } else {
+              // alert("at app", newSession)
+              // console.log("at app", newSession)
               setActiveSession(newSession);
               setAppIsReady(true);
             } 

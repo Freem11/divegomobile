@@ -237,13 +237,15 @@ export default function SignInRoute() {
     let accessToken = await signInStandard(formVals);
     if (accessToken) {
       await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-      setActiveSession(accessToken);
+      setActiveSession(accessToken.session);
+      // console.log("at oauth", accessToken)
       setIsSignedIn(false);
     } else {
       let registrationToken = await register(formVals);
       if (registrationToken.session !== null) {
         await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
-        setActiveSession(registrationToken);
+        setActiveSession(registrationToken.session);
+        // console.log("at oauth reg", registrationToken)
         setIsSignedIn(false);
       } else {
         setIsSignedIn(false);
@@ -278,7 +280,8 @@ export default function SignInRoute() {
       let accessToken = await signInStandard(formVals);
       if (accessToken) {
         await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-        setActiveSession(accessToken);
+        setActiveSession(accessToken.session);
+        // console.log("sign in reg", accessToken)
       } else {
         setLoginFail("The credentials you supplied are not valid");
         return;

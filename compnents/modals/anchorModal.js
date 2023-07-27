@@ -106,7 +106,7 @@ export default function AnchorModal(lat, lng) {
           onLongPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
-      <ScrollView style={{marginTop: "-5%", height: "95%"}}>
+      <ScrollView style={{marginTop: "-5%", height: "95%", borderRadius: 15}}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     height: "90%",
     marginRight: scale(10),
     marginLeft: scale(10),
+    borderRadius: 15,
     // backgroundColor: "green"
 
   },
@@ -168,7 +169,8 @@ const styles = StyleSheet.create({
     height: scale(200),
     marginBottom: scale(5),
     backgroundColor: "538bdb",
-    marginTop: "-0%"
+    marginTop: "-0%",
+    borderRadius: 15,
   },
   shadowbox: {
     shadowColor: "#000",
