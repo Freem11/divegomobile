@@ -23,6 +23,7 @@ import {
 import { PictureAdderContext } from "./compnents/contexts/picModalContext";
 import { DSAdderContext } from "./compnents/contexts/DSModalContext";
 import { SettingsContext } from "./compnents/contexts/gearModalContext";
+import { TutorialModelContext } from "./compnents/contexts/tutorialModalContext";
 import { PinContext } from "./compnents/contexts/staticPinContext";
 import { MapCenterContext } from "./compnents/contexts/mapCenterContext";
 import { MapZoomContext } from "./compnents/contexts/mapZoomContext";
@@ -39,7 +40,7 @@ import { SessionContext } from "./compnents/contexts/sessionContext";
 import { HeatPointsContext } from "./compnents/contexts/heatPointsContext";
 
 import MapPage from "./compnents/mapPage";
-import AuthenticationPage from "./compnents/authenticationPage";
+// import AuthenticationPage from "./compnents/authenticationPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 // import 'expo-dev-client';
@@ -51,6 +52,7 @@ export default function App() {
   const [masterSwitch, setMasterSwitch] = useState(true);
   const [picAdderModal, setPicAdderModal] = useState(false);
   const [diveSiteAdderModal, setDiveSiteAdderModal] = useState(false);
+  const [guideModal, setGuideModal] = useState(false);
   const [gearModal, setGearModal] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -172,6 +174,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{flex: 1}}>
+      <TutorialModelContext.Provider value={{guideModal, setGuideModal}}>
       <HeatPointsContext.Provider value={{newHeat, setNewHeat}}>
       <AnimalMultiSelectContext.Provider value={{ animalMultiSelection, setAnimalMultiSelection }}>
       <SettingsContext.Provider value={{ gearModal, setGearModal }}>
@@ -212,12 +215,12 @@ export default function App() {
                                   <SessionContext.Provider
                                     value={{ activeSession, setActiveSession }}
                                   >                       
-                                      {/* <AuthenticationPage/>                                  */}
-                                     {activeSession ? (
+                                      <MapPage/>                                 
+                                     {/* {activeSession ? (
                                       <MapPage />
                                     ) : (
                                       <AuthenticationPage />
-                                    )}
+                                    )} */}
                                   </SessionContext.Provider>
                                 </MapCenterContext.Provider>
                               </DSAdderContext.Provider>
@@ -235,6 +238,7 @@ export default function App() {
       </SettingsContext.Provider>
       </AnimalMultiSelectContext.Provider>
       </HeatPointsContext.Provider>
+      </TutorialModelContext.Provider>
     </GestureHandlerRootView>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
-import GuideModal from "./modals/howToGuideModal";
+// import GuideModal from "./modals/howToGuideModal";
+import TutorialBase from "./tutorial/tutorialBase";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
 import SettingsModal from "./modals/settingsModal";
@@ -8,6 +9,7 @@ import { PictureAdderContext } from "./contexts/picModalContext";
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { PictureContext } from "./contexts/pictureContext";
+import { TutorialModelContext } from "./contexts/tutorialModalContext";
 import { SessionContext } from "./contexts/sessionContext";
 import {
   StyleSheet,
@@ -45,7 +47,7 @@ export default function FABButtons() {
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
   );
-  const [guideModal, setGuideModal] = useState(false);
+  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const [gearModal, setGearModal] = useState(false);
 
   const rotationVal = useSharedValue(0);
@@ -440,7 +442,7 @@ export default function FABButtons() {
       </Modal>
 
       <Modal visible={guideModal} animationType="slide" transparent={true}>
-        <View style={styles.modalStyle}>
+        {/* <View style={styles.modalStyle}>
           <View style={styles.titleAlt}>
             <View>
               <Text style={styles.headerAlt}>How to Use DiveGo</Text>
@@ -461,8 +463,9 @@ export default function FABButtons() {
               </View>
             </TouchableWithoutFeedback>
           </View>
-          <GuideModal />
-        </View>
+         
+        </View> */}
+         <TutorialBase />
       </Modal>
 
       <Modal visible={gearModal} animationType="slide" transparent={true}>
