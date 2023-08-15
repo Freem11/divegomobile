@@ -40,6 +40,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function PicUploadModal() {
   const { setMasterSwitch } = useContext(MasterContext);
   const { activeSession, setActiveSession } = useContext(SessionContext);
+  const [picCloseState, setPicCloseState] = useState(false);
 
   const { pinValues, setPinValues } = useContext(PinContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
@@ -267,6 +268,30 @@ export default function PicUploadModal() {
     }
   };
 
+  const togglePicModal = () => {
+    setPicAdderModal(!picAdderModal);
+
+    if (pinValues.PicFile !== null) {
+      removePhoto({
+        filePath: "./wetmap/src/components/uploads/",
+        fileName: uploadedFile,
+      });
+    }
+
+    setUploadedFile(null);
+
+    if (picAdderModal) {
+      setPinValues({
+        PicFile: null,
+        Animal: "",
+        PicDate: "",
+        Latitude: "",
+        Longitude: "",
+        DDVal: "0",
+      });
+    }
+  };
+
   const [imgButState, setImgButState] = useState(false);
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
@@ -274,6 +299,22 @@ export default function PicUploadModal() {
 
   return (
     <View style={styles.container}>
+       <View style={styles.title}>
+            <Text style={styles.header2}>Submit Your Picture</Text>
+            <TouchableWithoutFeedback
+              onPress={togglePicModal}
+              onPressIn={() => setPicCloseState(true)}
+              onPressOut={() => setPicCloseState(false)}
+            >
+              <View
+                style={
+                  picCloseState ? styles.closeButtonPressed : styles.closeButton
+                }
+              >
+                <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
       <View style={styles.picContainer}>
         <Image
           source={{
@@ -605,6 +646,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#D8DBE2",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: "15%",
     marginBottom: Platform.OS === "ios" ? "3%" : "2%",
     borderWidth: 0.3,
     borderRadius: scale(15),
@@ -834,5 +876,47 @@ const styles = StyleSheet.create({
     height: "101%",
     borderRadius: 15,
     backgroundColor: "pink",
+  },
+  title: {
+    position: "absolute",
+    top: "-1%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    marginTop: "2%",
+    // marginLeft: "32%",
+    width: "80%",
+    height: scale(30),
+    // backgroundColor: "green"
+  },
+  header2: {
+    fontFamily: "PermanentMarker_400Regular",
+    fontSize: scale(17),
+    alignSelf: "center",
+    color: "#F0EEEB",
+    width: "80%",
+    marginLeft: "3%",
+    marginRight: "18%",
+    // backgroundColor: "green"
+  },
+  closeButton: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButtonPressed: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    opacity: 0.3
   },
 });

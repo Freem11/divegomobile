@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
 // import { insertDiveSiteWaits } from "../../axiosCalls/diveSiteWaitAxiosCalls";
@@ -24,6 +24,7 @@ export default function DiveSiteModal() {
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
   );
+  const [diveCloseState, setDiveCloseState] = useState(false);
 
   const [formVals, setFormVals] = useState({
     Site: "",
@@ -124,6 +125,24 @@ export default function DiveSiteModal() {
 
   return (
     <View style={styles.container}>
+       <View style={styles.title}>
+            <Text style={styles.header2}>Submit Your Dive Site</Text>
+            <TouchableWithoutFeedback
+              onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
+              onPressIn={() => setDiveCloseState(true)}
+              onPressOut={() => setDiveCloseState(false)}
+            >
+              <View
+                style={
+                  diveCloseState
+                    ? styles.closeButtonPressed
+                    : styles.closeButton
+                }
+              >
+                <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
       <View style={styles.inputContainer}>
         <InsetShadow
           containerStyle={{
@@ -260,11 +279,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: "5%",
     marginBottom: "2%",
-    width: "100%",
+    width: "98%",
+    marginLeft: 2,
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
   inputContainer: {
-    width: "100%",
+    width: "96%",
     alignItems: "center",
     justifyContent: "center",
     marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
@@ -369,5 +389,46 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     bottom: 0,
     width: "45%",
+  },
+  title: {
+    position: "absolute",
+    top: "-1%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    marginTop: "2%",
+    marginLeft: "12%",
+    width: "80%",
+    height: scale(30),
+  },
+  header2: {
+    fontFamily: "PermanentMarker_400Regular",
+    fontSize: scale(17),
+    alignSelf: "center",
+    color: "#F0EEEB",
+    width: "80%",
+    marginLeft: "0%",
+    marginRight: "18%",
+    // backgroundColor: "green"
+  },
+  closeButton: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButtonPressed: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    opacity: 0.3
   },
 });

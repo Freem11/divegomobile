@@ -26,7 +26,8 @@ import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { TutorialModelContext } from "./contexts/tutorialModalContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
-import { AnchorModalContext } from "./contexts/anchorModalContext";
+import { AnchorModalContext } from "./contexts/anchorModalContext";;
+import { DSAdderContext } from "./contexts/DSModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 
 import { scale } from "react-native-size-matters";
@@ -38,6 +39,8 @@ import Animated, {
 } from "react-native-reanimated";
 import TutorialBase from "./tutorial/tutorialBase";
 import AnchorModal from "./modals/anchorModal";
+import DiveSiteModal from "./modals/diveSiteAdderModal";
+import PicUploadModal from "./modals/picUploaderModal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -48,8 +51,7 @@ export default function MapPage() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-
+  
   //Tutorial Model Animation
   const tutorialModalY = useSharedValue(windowHeight);
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
@@ -104,6 +106,64 @@ export default function MapPage() {
     }
     
   }, [siteModal]);
+
+  //Dive Site Modal Animation
+  const diveSiteModalY = useSharedValue(windowHeight);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
+
+  const diveSiteModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: diveSiteModalY.value }],
+    };
+  });
+
+  const startDiveSiteModalAnimations = () => {
+    if (diveSiteAdderModal) {
+      diveSiteModalY.value = withTiming(0);
+    } else {
+      diveSiteModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startDiveSiteModalAnimations();
+    // if (itterator > 0){
+    //   setItterator(itterator + 1); 
+    // }
+    
+  }, [diveSiteAdderModal]);
+
+  //Picture Adder Modal
+  const pictureModalY = useSharedValue(windowHeight);
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
+
+  const pictureModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: pictureModalY.value }],
+    };
+  });
+
+  const startPictureModalAnimations = () => {
+    if (picAdderModal) {
+      pictureModalY.value = withTiming(0);
+    } else {
+      pictureModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startPictureModalAnimations();
+    // if (itterator > 0){
+    //   setItterator(itterator + 1); 
+    // }
+    
+  }, [picAdderModal]);
+
+
+
+
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -229,6 +289,14 @@ export default function MapPage() {
             Lat={selectedDiveSite.Latitude}
             Lng={selectedDiveSite.Longitude}
              />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, diveSiteModalReveal]}>
+              <DiveSiteModal diveSiteModalY={diveSiteModalY} />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, pictureModalReveal]}>
+              <PicUploadModal pictureModalY={pictureModalY} />
             </Animated.View>
 
             <Map style={{ zIndex: 1 }} />
@@ -377,7 +445,7 @@ const styles = StyleSheet.create({
     height: windowHeight - (windowHeight*0.14),
     width: windowWidth - (windowWidth*0.1),
     marginLeft: "5%",
-    backgroundColor: "#538dbd",
+    backgroundColor: "#538bdb",
     borderRadius: 15,
     zIndex: 25,
     left: 0,
