@@ -40,6 +40,7 @@ import { AnchorModalContext } from "./compnents/contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "./compnents/contexts/selectedDiveSiteContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import { HeatPointsContext } from "./compnents/contexts/heatPointsContext";
+import { TutorialLaunchPadContext } from "./compnents/contexts/tutorialLaunchPadContext";
 import { TutorialContext } from "./compnents/contexts/tutorialContext";
 import { IterratorContext } from "./compnents/contexts/iterratorContext";
 
@@ -59,6 +60,7 @@ export default function App() {
   const [guideModal, setGuideModal] = useState(false);
   const [gearModal, setGearModal] = useState(false);
   const [siteModal, setSiteModal] = useState(false);
+  const [tutorialLaunchpadModal, setTutorialLaunchpadModal] = useState(false);
 
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -184,100 +186,106 @@ export default function App() {
 
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <AnchorModalContext.Provider value={{ siteModal, setSiteModal }}>
-        <TutorialContext.Provider
-          value={{ tutorialRunning, setTutorialRunning }}
-        >
-          <IterratorContext.Provider value={{ itterator, setItterator }}>
-            <TutorialModelContext.Provider
-              value={{ guideModal, setGuideModal }}
-            >
-              <HeatPointsContext.Provider value={{ newHeat, setNewHeat }}>
-                <AnimalMultiSelectContext.Provider
-                  value={{ animalMultiSelection, setAnimalMultiSelection }}
-                >
-                  <SettingsContext.Provider value={{ gearModal, setGearModal }}>
-                    <SelectedDiveSiteContext.Provider
-                      value={{ selectedDiveSite, setSelectedDiveSite }}
+      <TutorialLaunchPadContext.Provider
+        value={{ tutorialLaunchpadModal, setTutorialLaunchpadModal }}
+      >
+        <AnchorModalContext.Provider value={{ siteModal, setSiteModal }}>
+          <TutorialContext.Provider
+            value={{ tutorialRunning, setTutorialRunning }}
+          >
+            <IterratorContext.Provider value={{ itterator, setItterator }}>
+              <TutorialModelContext.Provider
+                value={{ guideModal, setGuideModal }}
+              >
+                <HeatPointsContext.Provider value={{ newHeat, setNewHeat }}>
+                  <AnimalMultiSelectContext.Provider
+                    value={{ animalMultiSelection, setAnimalMultiSelection }}
+                  >
+                    <SettingsContext.Provider
+                      value={{ gearModal, setGearModal }}
                     >
-                      <PictureContext.Provider
-                        value={{ uploadedFile, setUploadedFile }}
+                      <SelectedDiveSiteContext.Provider
+                        value={{ selectedDiveSite, setSelectedDiveSite }}
                       >
-                        <SliderContext.Provider
-                          value={{ sliderVal, setSliderVal }}
+                        <PictureContext.Provider
+                          value={{ uploadedFile, setUploadedFile }}
                         >
-                          <AnimalSelectContext.Provider
-                            value={{ animalSelection, setAnimalSelection }}
+                          <SliderContext.Provider
+                            value={{ sliderVal, setSliderVal }}
                           >
-                            <PinSpotContext.Provider
-                              value={{ dragPin, setDragPin }}
+                            <AnimalSelectContext.Provider
+                              value={{ animalSelection, setAnimalSelection }}
                             >
-                              <MasterContext.Provider
-                                value={{ masterSwitch, setMasterSwitch }}
+                              <PinSpotContext.Provider
+                                value={{ dragPin, setDragPin }}
                               >
-                                <MapZoomContext.Provider
-                                  value={{ zoomlev, setZoomLev }}
+                                <MasterContext.Provider
+                                  value={{ masterSwitch, setMasterSwitch }}
                                 >
-                                  <MapBoundariesContext.Provider
-                                    value={{ boundaries, setBoundaries }}
+                                  <MapZoomContext.Provider
+                                    value={{ zoomlev, setZoomLev }}
                                   >
-                                    <MapRegionContext.Provider
-                                      value={{ region, setRegion }}
+                                    <MapBoundariesContext.Provider
+                                      value={{ boundaries, setBoundaries }}
                                     >
-                                      <PinContext.Provider
-                                        value={{ pinValues, setPinValues }}
+                                      <MapRegionContext.Provider
+                                        value={{ region, setRegion }}
                                       >
-                                        <PictureAdderContext.Provider
-                                          value={{
-                                            picAdderModal,
-                                            setPicAdderModal,
-                                          }}
+                                        <PinContext.Provider
+                                          value={{ pinValues, setPinValues }}
                                         >
-                                          <DSAdderContext.Provider
+                                          <PictureAdderContext.Provider
                                             value={{
-                                              diveSiteAdderModal,
-                                              setDiveSiteAdderModal,
+                                              picAdderModal,
+                                              setPicAdderModal,
                                             }}
                                           >
-                                            <MapCenterContext.Provider
+                                            <DSAdderContext.Provider
                                               value={{
-                                                mapCenter,
-                                                setMapCenter,
+                                                diveSiteAdderModal,
+                                                setDiveSiteAdderModal,
                                               }}
                                             >
-                                              <SessionContext.Provider
+                                              <MapCenterContext.Provider
                                                 value={{
-                                                  activeSession,
-                                                  setActiveSession,
+                                                  mapCenter,
+                                                  setMapCenter,
                                                 }}
                                               >
-                                                <MapPage />
-                                                {/* {activeSession ? (
+                                                <SessionContext.Provider
+                                                  value={{
+                                                    activeSession,
+                                                    setActiveSession,
+                                                  }}
+                                                >
+                                                  <MapPage />
+                                                  {/* {activeSession ? (
                                       <MapPage />
                                     ) : (
                                       <AuthenticationPage />
                                     )} */}
-                                              </SessionContext.Provider>
-                                            </MapCenterContext.Provider>
-                                          </DSAdderContext.Provider>
-                                        </PictureAdderContext.Provider>
-                                      </PinContext.Provider>
-                                    </MapRegionContext.Provider>
-                                  </MapBoundariesContext.Provider>
-                                </MapZoomContext.Provider>
-                              </MasterContext.Provider>
-                            </PinSpotContext.Provider>
-                          </AnimalSelectContext.Provider>
-                        </SliderContext.Provider>
-                      </PictureContext.Provider>
-                    </SelectedDiveSiteContext.Provider>
-                  </SettingsContext.Provider>
-                </AnimalMultiSelectContext.Provider>
-              </HeatPointsContext.Provider>
-            </TutorialModelContext.Provider>
-          </IterratorContext.Provider>
-        </TutorialContext.Provider>
-      </AnchorModalContext.Provider>
+                                                </SessionContext.Provider>
+                                              </MapCenterContext.Provider>
+                                            </DSAdderContext.Provider>
+                                          </PictureAdderContext.Provider>
+                                        </PinContext.Provider>
+                                      </MapRegionContext.Provider>
+                                    </MapBoundariesContext.Provider>
+                                  </MapZoomContext.Provider>
+                                </MasterContext.Provider>
+                              </PinSpotContext.Provider>
+                            </AnimalSelectContext.Provider>
+                          </SliderContext.Provider>
+                        </PictureContext.Provider>
+                      </SelectedDiveSiteContext.Provider>
+                    </SettingsContext.Provider>
+                  </AnimalMultiSelectContext.Provider>
+                </HeatPointsContext.Provider>
+              </TutorialModelContext.Provider>
+            </IterratorContext.Provider>
+          </TutorialContext.Provider>
+        </AnchorModalContext.Provider>
+      </TutorialLaunchPadContext.Provider>
     </GestureHandlerRootView>
   );
 }

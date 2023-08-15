@@ -25,6 +25,7 @@ import { PinContext } from "./contexts/staticPinContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { TutorialModelContext } from "./contexts/tutorialModalContext";
+import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";;
 import { DSAdderContext } from "./contexts/DSModalContext";
@@ -37,7 +38,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import TutorialBase from "./tutorial/tutorialBase";
+import TutorialsModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
@@ -53,30 +54,30 @@ export default function MapPage() {
   const [monthVal, setMonthVal] = useState("");
   
   //Tutorial Model Animation
-  const tutorialModalY = useSharedValue(windowHeight);
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+  const tutorialLaunchpadModalY = useSharedValue(windowHeight);
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
   const { itterator, setItterator } = useContext(IterratorContext);
 
-  const tutorialModalReveal = useAnimatedStyle(() => {
+  const tutorialLaunchpadModalReveal = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: tutorialModalY.value }],
+      transform: [{ translateY: tutorialLaunchpadModalY.value }],
     };
   });
 
-  const startGuideModalAnimations = () => {
-    if (guideModal) {
-      tutorialModalY.value = withTiming(0);
+  const startTutorialLaunchPadModalAnimations = () => {
+    if (tutorialLaunchpadModal) {
+      tutorialLaunchpadModalY.value = withTiming(0);
     } else {
-      tutorialModalY.value = withTiming(windowHeight);
+      tutorialLaunchpadModalY.value = withTiming(windowHeight);
     }
   };
 
   useEffect(() => {
-    startGuideModalAnimations();
-    if (!itterator && guideModal) {
-      setItterator(0);
-    }
-  }, [guideModal]);
+    startTutorialLaunchPadModalAnimations();
+    // if (!itterator && guideModal) {
+    //   setItterator(0);
+    // }
+  }, [tutorialLaunchpadModal]);
 
   //Anchor Modal Animation
   const anchorModalY = useSharedValue(windowHeight);
@@ -278,8 +279,8 @@ export default function MapPage() {
             <Logo style={styles.Logo} pointerEvents={"none"} />
 
             {/* modals go here? */}
-            <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
-              <TutorialBase tutorialModalY={tutorialModalY} />
+            <Animated.View style={[styles.anchorModal, tutorialLaunchpadModalReveal]}>
+              <TutorialsModal tutorialLaunchpadModalY={tutorialLaunchpadModalY} />
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
@@ -298,6 +299,7 @@ export default function MapPage() {
             <Animated.View style={[styles.anchorModal, pictureModalReveal]}>
               <PicUploadModal pictureModalY={pictureModalY} />
             </Animated.View>
+
 
             <Map style={{ zIndex: 1 }} />
           </KeyboardAvoidingView>
