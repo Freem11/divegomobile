@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Platform } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Platform, TouchableWithoutFeedback } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import {
   getPhotosforAnchor,
@@ -10,6 +10,10 @@ import { MonthSelectContext } from "../contexts/monthSelectContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalSelectContext } from "../contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
+import { TutorialModelContext } from "../contexts/tutorialModalContext";
+import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { IterratorContext } from "../contexts/iterratorContext";
+import { TutorialContext } from "../contexts/tutorialContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
 import Lightbox from "react-native-lightbox-v2";
@@ -39,6 +43,11 @@ export default function AnchorModal(lat, lng) {
   const { monthVal } = useContext(MonthSelectContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+  const { itterator, setItterator } = useContext(IterratorContext);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
+  const [siteCloseState, setSiteCloseState] = useState(false);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -46,6 +55,7 @@ export default function AnchorModal(lat, lng) {
       selectedDiveSite.Longitude
     );
 
+    console.log("map bounds", minLat, maxLat, minLng, maxLng)
     try {
       const photos = await getPhotosforAnchorMulti({
         animalMultiSelection,
@@ -65,7 +75,23 @@ export default function AnchorModal(lat, lng) {
 
   useEffect(() => {
     filterAnchorPhotos();
-  }, []);
+
+      if (tutorialRunning){
+        if(itterator > 0){
+          setItterator(itterator + 1)
+        } 
+      }
+  
+  }, [selectedDiveSite]);
+
+  useEffect(() => {
+    if (itterator === 7) {
+      setGuideModal(true);
+    } 
+  }, [itterator]);
+
+ 
+
 
   const handleEmail = (pic) => {
     const to = ["DiveGo2022@gmail.com"];
@@ -93,20 +119,34 @@ export default function AnchorModal(lat, lng) {
   return (
     <View
       style={{
-        height:"88%",
+        height:"96%",
         // maxHeight: Platform.OS === "android" ? "93%" : "89%",
         // marginTop: Platform.OS === "android" ? "-10%" : "-8%",
         // backgroundColor: "pink"
       }}
     >
-        <FontAwesome
+
+<View style={styles.titleAlt}>
+<FontAwesome
           name="flag"
           color="maroon"
           size={scale(20)}
           onLongPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
-      <ScrollView style={{marginTop: "-5%", height: "95%", borderRadius: 15}}>
+            <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
+            <TouchableWithoutFeedback
+              onPress={() => setSiteModal(!siteModal)}
+              onPressIn={() => setSiteCloseState(true)}
+              onPressOut={() => setSiteCloseState(false)}
+            >
+              <View style={siteCloseState ? styles.closeButtonAltPressed : styles.closeButtonAlt}>
+                <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+       
+      <ScrollView style={{marginTop: "-5%", height: "100%", borderRadius: 15}}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {
@@ -162,7 +202,6 @@ const styles = StyleSheet.create({
     marginLeft: scale(10),
     borderRadius: 15,
     // backgroundColor: "green"
-
   },
   picContainer3: {
     width: scale(300),
@@ -192,11 +231,9 @@ const styles = StyleSheet.create({
   },
   flagMajor: {
     width: "10%",
-    height: "5%",
-    marginLeft: "4%",
-    marginTop: "-8%",
-    marginBottom: "6%"
-    //  backgroundColor: 'green'
+    height: 30,
+    marginRight: "-5%"
+    // backgroundColor: 'blue'
   },
   flag: {
     left: scale(257),
@@ -232,10 +269,57 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    backgroundColor: 'green'
+    // backgroundColor: 'green'
     // flexDirection: "row",
     // position: "absolute",
     // top: Platform.OS === "ios" ? "-7%" :"-1.5%",
     // left: Platform.OS === "ios" ? "-8%" :"-5%",
   },
+  headerAlt: {
+    // alignItems: "center",
+    // alignContent: "center",
+    fontFamily: "PermanentMarker_400Regular",
+    color: "#F0EEEB",
+    fontSize: scale(17),
+    width: "80%",
+    marginLeft: "5%",
+    marginRight: "5%",
+    // backgroundColor: 'pink'
+  },
+  titleAlt: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    marginTop: "3%",
+    marginLeft: "5%",
+    marginRight: "5%",
+    marginBottom:"3%",
+    width: "92%",
+    height: scale(30),
+    // backgroundColor: 'pink'
+  },
+  closeButtonAlt: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: "-4%"
+    // backgroundColor: "green"
+  },
+  closeButtonAltPressed: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: "-4%",
+    backgroundColor: "lightgrey",
+    opacity: 0.3
+  },
+
 });

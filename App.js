@@ -1,18 +1,19 @@
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import React, {
-  useState,
-  useCallback,
-  useLayoutEffect,
-} from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import React, { useState, useCallback, useLayoutEffect } from "react";
 import "react-native-url-polyfill/auto";
-import { StyleSheet, View, Dimensions, KeyboardAvoidingView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  KeyboardAvoidingView,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Roboto_700Bold } from "@expo-google-fonts/roboto";
 import { IndieFlower_400Regular } from "@expo-google-fonts/indie-flower";
 import { PermanentMarker_400Regular } from "@expo-google-fonts/permanent-marker";
-import { BubblegumSans_400Regular } from '@expo-google-fonts/bubblegum-sans';
+import { BubblegumSans_400Regular } from "@expo-google-fonts/bubblegum-sans";
 import {
   Caveat_400Regular,
   Caveat_500Medium,
@@ -35,9 +36,12 @@ import { SliderContext } from "./compnents/contexts/sliderContext";
 import { AnimalSelectContext } from "./compnents/contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./compnents/contexts/animalMultiSelectContext";
 import { PictureContext } from "./compnents/contexts/pictureContext";
+import { AnchorModalContext } from "./compnents/contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "./compnents/contexts/selectedDiveSiteContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import { HeatPointsContext } from "./compnents/contexts/heatPointsContext";
+import { TutorialContext } from "./compnents/contexts/tutorialContext";
+import { IterratorContext } from "./compnents/contexts/iterratorContext";
 
 import MapPage from "./compnents/mapPage";
 // import AuthenticationPage from "./compnents/authenticationPage";
@@ -54,9 +58,14 @@ export default function App() {
   const [diveSiteAdderModal, setDiveSiteAdderModal] = useState(false);
   const [guideModal, setGuideModal] = useState(false);
   const [gearModal, setGearModal] = useState(false);
+  const [siteModal, setSiteModal] = useState(false);
+
   const [uploadedFile, setUploadedFile] = useState(null);
 
   const [activeSession, setActiveSession] = useState(null);
+
+  const [itterator, setItterator] = useState(null);
+  const [tutorialRunning, setTutorialRunning] = useState(false);
 
   let currentMonth = new Date().getMonth() + 1;
   const [sliderVal, setSliderVal] = useState(currentMonth);
@@ -69,7 +78,7 @@ export default function App() {
     Latitude: "",
     Longitude: "",
     DDVal: "0",
-    UserId: null
+    UserId: null,
   });
 
   const [selectedDiveSite, setSelectedDiveSite] = useState({
@@ -124,7 +133,6 @@ export default function App() {
     Caveat_600SemiBold,
     Caveat_700Bold,
     Roboto_700Bold,
-   
   });
 
   useLayoutEffect(() => {
@@ -133,25 +141,27 @@ export default function App() {
       await getCurrentLocation();
       try {
         const asyncData = JSON.parse(await AsyncStorage.getItem("token"));
-        if (asyncData === null) { 
+        if (asyncData === null) {
           setAppIsReady(true);
         } else {
           if (asyncData.session.refresh_token) {
-            let newSession = await sessionRefresh(asyncData.session.refresh_token);
-            if (newSession === null){
+            let newSession = await sessionRefresh(
+              asyncData.session.refresh_token
+            );
+            if (newSession === null) {
               setAppIsReady(true);
             } else {
               // alert("at app", newSession)
               // console.log("at app", newSession)
               setActiveSession(newSession);
               setAppIsReady(true);
-            } 
+            }
           } else {
-          setAppIsReady(true);
+            setAppIsReady(true);
           }
         }
       } catch (error) {
-        console.log("no dice:", error.message); 
+        console.log("no dice:", error.message);
         // alert("aha!" + error.message)
       }
     }
@@ -173,72 +183,101 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView onLayout={onLayoutRootView} style={{flex: 1}}>
-      <TutorialModelContext.Provider value={{guideModal, setGuideModal}}>
-      <HeatPointsContext.Provider value={{newHeat, setNewHeat}}>
-      <AnimalMultiSelectContext.Provider value={{ animalMultiSelection, setAnimalMultiSelection }}>
-      <SettingsContext.Provider value={{ gearModal, setGearModal }}>
-        <SelectedDiveSiteContext.Provider
-          value={{ selectedDiveSite, setSelectedDiveSite }}
+    <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <AnchorModalContext.Provider value={{ siteModal, setSiteModal }}>
+        <TutorialContext.Provider
+          value={{ tutorialRunning, setTutorialRunning }}
         >
-          <PictureContext.Provider value={{ uploadedFile, setUploadedFile }}>
-            <SliderContext.Provider value={{ sliderVal, setSliderVal }}>
-              <AnimalSelectContext.Provider
-                value={{ animalSelection, setAnimalSelection }}
-              >
-                <PinSpotContext.Provider value={{ dragPin, setDragPin }}>
-                  <MasterContext.Provider
-                    value={{ masterSwitch, setMasterSwitch }}
-                  >
-                    <MapZoomContext.Provider value={{ zoomlev, setZoomLev }}>
-                      <MapBoundariesContext.Provider
-                        value={{ boundaries, setBoundaries }}
+          <IterratorContext.Provider value={{ itterator, setItterator }}>
+            <TutorialModelContext.Provider
+              value={{ guideModal, setGuideModal }}
+            >
+              <HeatPointsContext.Provider value={{ newHeat, setNewHeat }}>
+                <AnimalMultiSelectContext.Provider
+                  value={{ animalMultiSelection, setAnimalMultiSelection }}
+                >
+                  <SettingsContext.Provider value={{ gearModal, setGearModal }}>
+                    <SelectedDiveSiteContext.Provider
+                      value={{ selectedDiveSite, setSelectedDiveSite }}
+                    >
+                      <PictureContext.Provider
+                        value={{ uploadedFile, setUploadedFile }}
                       >
-                        <MapRegionContext.Provider
-                          value={{ region, setRegion }}
+                        <SliderContext.Provider
+                          value={{ sliderVal, setSliderVal }}
                         >
-                          <PinContext.Provider
-                            value={{ pinValues, setPinValues }}
+                          <AnimalSelectContext.Provider
+                            value={{ animalSelection, setAnimalSelection }}
                           >
-                            <PictureAdderContext.Provider
-                              value={{ picAdderModal, setPicAdderModal }}
+                            <PinSpotContext.Provider
+                              value={{ dragPin, setDragPin }}
                             >
-                              <DSAdderContext.Provider
-                                value={{
-                                  diveSiteAdderModal,
-                                  setDiveSiteAdderModal,
-                                }}
+                              <MasterContext.Provider
+                                value={{ masterSwitch, setMasterSwitch }}
                               >
-                                <MapCenterContext.Provider
-                                  value={{ mapCenter, setMapCenter }}
+                                <MapZoomContext.Provider
+                                  value={{ zoomlev, setZoomLev }}
                                 >
-                                  <SessionContext.Provider
-                                    value={{ activeSession, setActiveSession }}
-                                  >                       
-                                      <MapPage/>                                 
-                                     {/* {activeSession ? (
+                                  <MapBoundariesContext.Provider
+                                    value={{ boundaries, setBoundaries }}
+                                  >
+                                    <MapRegionContext.Provider
+                                      value={{ region, setRegion }}
+                                    >
+                                      <PinContext.Provider
+                                        value={{ pinValues, setPinValues }}
+                                      >
+                                        <PictureAdderContext.Provider
+                                          value={{
+                                            picAdderModal,
+                                            setPicAdderModal,
+                                          }}
+                                        >
+                                          <DSAdderContext.Provider
+                                            value={{
+                                              diveSiteAdderModal,
+                                              setDiveSiteAdderModal,
+                                            }}
+                                          >
+                                            <MapCenterContext.Provider
+                                              value={{
+                                                mapCenter,
+                                                setMapCenter,
+                                              }}
+                                            >
+                                              <SessionContext.Provider
+                                                value={{
+                                                  activeSession,
+                                                  setActiveSession,
+                                                }}
+                                              >
+                                                <MapPage />
+                                                {/* {activeSession ? (
                                       <MapPage />
                                     ) : (
                                       <AuthenticationPage />
                                     )} */}
-                                  </SessionContext.Provider>
-                                </MapCenterContext.Provider>
-                              </DSAdderContext.Provider>
-                            </PictureAdderContext.Provider>
-                          </PinContext.Provider>
-                        </MapRegionContext.Provider>
-                      </MapBoundariesContext.Provider>
-                    </MapZoomContext.Provider>
-                  </MasterContext.Provider>
-                </PinSpotContext.Provider>
-              </AnimalSelectContext.Provider>
-            </SliderContext.Provider>
-          </PictureContext.Provider>
-        </SelectedDiveSiteContext.Provider>
-      </SettingsContext.Provider>
-      </AnimalMultiSelectContext.Provider>
-      </HeatPointsContext.Provider>
-      </TutorialModelContext.Provider>
+                                              </SessionContext.Provider>
+                                            </MapCenterContext.Provider>
+                                          </DSAdderContext.Provider>
+                                        </PictureAdderContext.Provider>
+                                      </PinContext.Provider>
+                                    </MapRegionContext.Provider>
+                                  </MapBoundariesContext.Provider>
+                                </MapZoomContext.Provider>
+                              </MasterContext.Provider>
+                            </PinSpotContext.Provider>
+                          </AnimalSelectContext.Provider>
+                        </SliderContext.Provider>
+                      </PictureContext.Provider>
+                    </SelectedDiveSiteContext.Provider>
+                  </SettingsContext.Provider>
+                </AnimalMultiSelectContext.Provider>
+              </HeatPointsContext.Provider>
+            </TutorialModelContext.Provider>
+          </IterratorContext.Provider>
+        </TutorialContext.Provider>
+      </AnchorModalContext.Provider>
     </GestureHandlerRootView>
   );
 }

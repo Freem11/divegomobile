@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 // import GuideModal from "./modals/howToGuideModal";
 import TutorialBase from "./tutorial/tutorialBase";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
@@ -19,6 +19,7 @@ import {
   Text,
   Platform,
   KeyboardAvoidingView,
+  Dimensions
 } from "react-native";
 import {
   MaterialIcons,
@@ -38,6 +39,10 @@ import DiveSiteAutoComplete from "./diveSiteSearch/diveSiteAutocomplete";
 import GeocodeAutocomplete from "./locationSearch/geocodeAutocomplete";
 import { removePhoto } from "../supabaseCalls/uploadSupabaseCalls";
 import { scale } from "react-native-size-matters";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
 
 export default function FABButtons() {
   const { diveSitesTog, setDiveSitesTog } = useContext(DiveSitesContext);
@@ -62,6 +67,7 @@ export default function FABButtons() {
   const animalWidth = useSharedValue(1000);
   const geocodeWidth = useSharedValue(1000);
 
+  
   const rotation = useDerivedValue(() => {
     return interpolate(rotationVal.value, [0, 45], [0, 45]);
   });
@@ -441,7 +447,7 @@ export default function FABButtons() {
         </View>
       </Modal>
 
-      <Modal visible={guideModal} animationType="slide" transparent={true}>
+      {/* <Modal visible={guideModal} animationType="slide" transparent={true}> */}
         {/* <View style={styles.modalStyle}>
           <View style={styles.titleAlt}>
             <View>
@@ -465,8 +471,9 @@ export default function FABButtons() {
           </View>
          
         </View> */}
-         <TutorialBase />
-      </Modal>
+       
+
+      {/* </Modal> */}
 
       <Modal visible={gearModal} animationType="slide" transparent={true}>
         <View style={styles.modalStyle}>
@@ -658,4 +665,5 @@ const styles = StyleSheet.create({
     height: 50,
     color: "#F0EEEB",
   },
+
 });

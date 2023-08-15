@@ -9,6 +9,7 @@ import { PinSpotContext } from "./contexts/pinSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SliderContext } from "./contexts/sliderContext";
+import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -56,7 +57,7 @@ export default function Map() {
   const [tempMarker, setTempMarker] = useState([]);
   const [mapRef, setMapRef] = useState(null);
   const [newSites, setnewSites] = useState([]);
-  const [siteModal, setSiteModal] = useState(false);
+  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
 
   const handleMapChange = async () => {
     if (mapRef) {
@@ -259,7 +260,7 @@ export default function Map() {
         })}
       </MapView>
 
-      <Modal visible={siteModal} animationType="slide" transparent={true}>
+      {/* <Modal visible={siteModal} animationType="slide" transparent={true}>
         <View style={styles.modalStyle}>
           <View style={styles.titleAlt}>
             <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
@@ -279,7 +280,7 @@ export default function Map() {
             Lng={selectedDiveSite.Longitude}
           />
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   );
 }

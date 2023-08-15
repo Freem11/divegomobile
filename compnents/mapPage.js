@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from "react-native";
 import Constants from "expo-constants";
 // import Device from "expo-device";
@@ -23,12 +24,23 @@ import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
+import { TutorialModelContext } from "./contexts/tutorialModalContext";
+import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
+import { AnchorModalContext } from "./contexts/anchorModalContext";
+import { IterratorContext } from "./contexts/iterratorContext";
+
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  withTiming,
 } from "react-native-reanimated";
+import TutorialBase from "./tutorial/tutorialBase";
+import AnchorModal from "./modals/anchorModal";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function MapPage() {
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
@@ -37,6 +49,61 @@ export default function MapPage() {
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
+
+  //Tutorial Model Animation
+  const tutorialModalY = useSharedValue(windowHeight);
+  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+  const { itterator, setItterator } = useContext(IterratorContext);
+
+  const tutorialModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: tutorialModalY.value }],
+    };
+  });
+
+  const startGuideModalAnimations = () => {
+    if (guideModal) {
+      tutorialModalY.value = withTiming(0);
+    } else {
+      tutorialModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startGuideModalAnimations();
+    if (!itterator && guideModal) {
+      setItterator(0);
+    }
+  }, [guideModal]);
+
+  //Anchor Modal Animation
+  const anchorModalY = useSharedValue(windowHeight);
+  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
+  const { selectedDiveSite, setSelectedDiveSite } = useContext(
+    SelectedDiveSiteContext
+  );
+
+  const anchorModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: anchorModalY.value }],
+    };
+  });
+
+  const startAnchorModalAnimations = () => {
+    if (siteModal) {
+      anchorModalY.value = withTiming(0);
+    } else {
+      anchorModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startAnchorModalAnimations();
+    if (itterator > 0){
+      setItterator(itterator + 1); 
+    }
+    
+  }, [siteModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -80,7 +147,7 @@ export default function MapPage() {
   }, [animalSelection]);
 
   const [subButState, setSubButState] = useState(false);
-  
+
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
@@ -116,7 +183,9 @@ export default function MapPage() {
             )}
 
             {!masterSwitch && (
-              <View style={subButState ? styles.PinButtonPressed : styles.PinButton}>
+              <View
+                style={subButState ? styles.PinButtonPressed : styles.PinButton}
+              >
                 <TouchableWithoutFeedback
                   onPress={onNavigate}
                   onPressIn={() => setSubButState(true)}
@@ -147,6 +216,21 @@ export default function MapPage() {
             )}
 
             <Logo style={styles.Logo} pointerEvents={"none"} />
+
+            {/* modals go here? */}
+            <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
+              <TutorialBase tutorialModalY={tutorialModalY} />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
+              <AnchorModal 
+            anchorModalY={anchorModalY}
+            SiteName={selectedDiveSite.SiteName}
+            Lat={selectedDiveSite.Latitude}
+            Lng={selectedDiveSite.Longitude}
+             />
+            </Animated.View>
+
             <Map style={{ zIndex: 1 }} />
           </KeyboardAvoidingView>
         </DiveSitesContext.Provider>
@@ -280,5 +364,22 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     opacity: 0.8,
     backgroundColor: "transparent",
+  },
+  tutorialModal: {
+    position: "absolute",
+    height: windowHeight,
+    width: windowWidth,
+    zIndex: 50,
+    left: 0,
+  },
+  anchorModal: {
+    position: "absolute",
+    height: windowHeight - (windowHeight*0.14),
+    width: windowWidth - (windowWidth*0.1),
+    marginLeft: "5%",
+    backgroundColor: "#538dbd",
+    borderRadius: 15,
+    zIndex: 25,
+    left: 0,
   },
 });

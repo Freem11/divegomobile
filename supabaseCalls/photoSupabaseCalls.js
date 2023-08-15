@@ -205,4 +205,21 @@ if (data) {
     }; 
 
 
+    export const getRecentPhotos = async (today) => {
+
+      console.log("supa got", today)
+      const { data, error } = await supabase
+      .from("photos")
+      .select()
+      .lte("created_at", today)
+      .limit(3)
   
+    if (error) {
+      console.log("couldn't do it,", error);
+      return [];
+    }
+  
+    if (data) {
+      return data;
+    }
+    }; 
