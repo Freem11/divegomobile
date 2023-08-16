@@ -33,12 +33,15 @@ import {
 } from "@expo/vector-icons";
 import anchorClustIOS from "../png/ClusterAnchor24.png";
 import anchorIconIOS from "../png/SiteAnchor20.png";
+import heatIconIOS from "../png/heatpoint.png";
+import arrowIOS from "../png/arrow.png";
+import UserNamer from "./usernamer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TutorialBase(props) {
-const { tutorialModalY } = props
+  const { tutorialModalY } = props;
 
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { itterator, setItterator } = useContext(IterratorContext);
@@ -46,7 +49,7 @@ const { tutorialModalY } = props
   const { setMapCenter } = useContext(MapCenterContext);
 
   const [pics, setPics] = useState([]);
-
+ 
   const getPhotos = async (today) => {
     try {
       const photos = await getRecentPhotos(today);
@@ -63,9 +66,9 @@ const { tutorialModalY } = props
   const picX = useSharedValue(-300);
   const exploreButtonY = useSharedValue(-1000);
   const clusterAnchorY = useSharedValue(-1200);
-  // const anchor1Y = useSharedValue(-1000);
-  // const anchor2Y = useSharedValue(-1000);
-  // const anchor3 = useSharedValue(-1000);
+  const heatPotintY = useSharedValue(-1200);
+  const arrowY = useSharedValue(-1200);
+  const userBoxX = useSharedValue(-300);
 
   const text0 = "Hi, welcome to SEAsons, I'm XXX, I'm here to show you around.";
   const text1 =
@@ -76,23 +79,50 @@ const { tutorialModalY } = props
   const text4 =
     "Normally to move the Map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
   const text5 =
-    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites, the blue anchors are dive sites try tapping on one and lets take a closer look!";
-  const text6 = ""
-  const text7 =
-    "Wow, cool! look at all the neat sea creatures divers have already seen here by other divers!";
+    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
+  const text6 =
+    "The blue anchors are dive sites try tapping on one and lets take a closer look! But make sure it has a heat point nearby, they look like this, that means sea creatures have been spotted on that dive site.";
+  const text7 = "";
   const text8 =
+    "Wow, cool! look at all the neat sea creatures divers have already seen here by other divers!";
+  const text9 =
     "Now try closing the dive site and chose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
-  const text9 = ""
-
+  const text10 = "";
+  const text11 = "Select one or more sea creatures using the menu at the top.";
+  const text12 = "";
+  const text13 = "As you can see the photos have filtered to show only those creatrues you have selected";
+  const text14 = "Ok well that's all for this guide, in the next one i'll show you how to check if a dive site is in the app and if not, enable you to add it yourself! But to do that... ";
+  const text15 = "We will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
+  const text16 = "Great thanks! If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thanks for joining SEAsons!";
+  const text17 = ""
 
   const [textRead, setTextRead] = useState("");
- 
-  const feederArray = [text0, text1, text2, text3, text4, text5, text6, text7, text8, text9];
+
+  const feederArray = [
+    text0,
+    text1,
+    text2,
+    text3,
+    text4,
+    text5,
+    text6,
+    text7,
+    text8,
+    text9,
+    text10,
+    text11,
+    text12,
+    text13,
+    text14,
+    text15,
+    text16,
+    text17
+  ];
 
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator === 2) {
+    if (itterator === 2 || itterator == 15) {
       return;
     } else {
       if (pushVal === 1 && itterator < feederArray.length - 1) {
@@ -131,12 +161,12 @@ const { tutorialModalY } = props
 
     console.log(itterator, feederArray.length);
 
-    if (itterator === 0){
-      setTutorialRunning(true)
+    if (itterator === 0) {
+      setTutorialRunning(true);
       setTimeout(() => {
         startCharacterAnimation();
       }, 1700);
-  
+
       setTimeout(() => {
         startTextBoxAnimation();
         setupText(0);
@@ -151,29 +181,44 @@ const { tutorialModalY } = props
       startExploreButtonAnimation();
     }
 
-    if (itterator === 5 || itterator === 6) {
+    if (itterator === 5 || itterator === 7) {
       startClusterAnchorAnimation();
     }
 
-    if (itterator === 6) {
-      startCharacterAnimation()
-      startTextBoxAnimation()
-      setGuideModal(!guideModal);
+    if (itterator === 6 || itterator === 7) {
+      startHeatPointAnimation();
     }
 
     if (itterator === 7) {
-      startCharacterAnimation()
-      startTextBoxAnimation()
-    }
-
-    if(itterator === feederArray.length -1){
-      setItterator(null)
-      setTutorialRunning(false)
+      startCharacterAnimation();
+      startTextBoxAnimation();
       setGuideModal(!guideModal);
-      startCharacterAnimation()
-      startTextBoxAnimation()
     }
 
+    if (itterator === 8) {
+      startCharacterAnimation();
+      startTextBoxAnimation();
+    }
+
+    if (itterator === 10 || itterator === 12) {
+      setGuideModal(!guideModal);
+    }
+
+    if (itterator === 11 || itterator === 12) {
+      startArrowAnimation();
+    }
+
+    if (itterator === 15 || itterator === 16) {
+      startUserBoxAnimation();
+    }
+
+    if (itterator === feederArray.length - 1) {
+      setItterator(null);
+      setTutorialRunning(false);
+      setGuideModal(!guideModal);
+      startCharacterAnimation();
+      startTextBoxAnimation();
+    }
   }, [itterator]);
 
   const characterSlide = useAnimatedStyle(() => {
@@ -205,6 +250,26 @@ const { tutorialModalY } = props
       transform: [{ translateY: clusterAnchorY.value }],
     };
   });
+
+  const heatPointSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: heatPotintY.value }],
+    };
+  });
+
+  const arrowSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: arrowY.value }],
+    };
+  });
+
+  const userBoxSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: userBoxX.value }],
+    };
+  });
+
+
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
@@ -246,13 +311,36 @@ const { tutorialModalY } = props
     }
   };
 
-  useEffect(() => {
-
-   
-    if (itterator === null){
-      setItterator(0)
+  const startHeatPointAnimation = () => {
+    if (heatPotintY.value === -1200) {
+      heatPotintY.value = withTiming(windowHeight * 0.3);
+    } else {
+      heatPotintY.value = withTiming(-1200);
     }
-    
+  };
+
+  const startArrowAnimation = () => {
+    if (arrowY.value === -1200) {
+      arrowY.value = withTiming(windowHeight * 0.06);
+    } else {
+      arrowY.value = withTiming(-1200);
+    }
+  };
+
+  const startUserBoxAnimation = () => {
+    if (userBoxX.value === -300) {
+      userBoxX.value = withSpring(windowWidth*0.2);
+    } else {
+      userBoxX.value = withTiming(-300);
+    }
+  };
+
+
+  useEffect(() => {
+    if (itterator === null) {
+      setItterator(0);
+    }
+
     let today = new Date();
     let formattedDate = moment(today).format("YYYY-MM-DD");
     getPhotos(formattedDate);
@@ -261,14 +349,12 @@ const { tutorialModalY } = props
     //   setTimeout(() => {
     //     startCharacterAnimation();
     //   }, 200);
-  
+
     //   setTimeout(() => {
     //     startTextBoxAnimation();
     //     setupText(0);
     //   }, 400);
     // }
-
-   
   }, [guideModal]);
 
   const moveMap = (values) => {
@@ -283,6 +369,7 @@ const { tutorialModalY } = props
     setItterator((prev) => prev + hopper);
     startPicAnimation();
   };
+  
 
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
@@ -377,6 +464,11 @@ const { tutorialModalY } = props
           <MaterialIcons name="explore" color="aquamarine" size={32} />
         </Animated.View>
 
+        {/* new one  */}
+        <Animated.View style={[styles.userContainer, userBoxSlide]}>
+          <UserNamer></UserNamer>
+        </Animated.View>
+
         <Animated.View
           style={[styles.anchorClusterWrapper, clusterAnchorSlide]}
         >
@@ -390,34 +482,72 @@ const { tutorialModalY } = props
 
           <Image
             source={anchorIconIOS}
-            style={[styles.anchor1,{
-              height: 30,
-              width: 30,
-            }]}
+            style={[
+              styles.anchor1,
+              {
+                height: 30,
+                width: 30,
+              },
+            ]}
           />
 
           <Image
             source={anchorIconIOS}
-            style={[styles.anchor2,{
-              height: 30,
-              width: 30,
-            }]}
+            style={[
+              styles.anchor2,
+              {
+                height: 30,
+                width: 30,
+              },
+            ]}
           />
 
           <Image
             source={anchorIconIOS}
-            style={[styles.anchor3,{
-              height: 30,
-              width: 30,
-            }]}
+            style={[
+              styles.anchor3,
+              {
+                height: 30,
+                width: 30,
+              },
+            ]}
           />
 
           <Image
             source={anchorIconIOS}
-            style={[styles.anchor4,{
-              height: 30,
-              width: 30,
-            }]}
+            style={[
+              styles.anchor4,
+              {
+                height: 30,
+                width: 30,
+              },
+            ]}
+          />
+        </Animated.View>
+
+        <Animated.View style={[styles.heatPointWrapper, heatPointSlide]}>
+        <Image
+            source={heatIconIOS}
+            style={[
+              styles.anchor4,
+              {
+                height: 50,
+                width: 50,
+              },
+            ]}
+          />
+        </Animated.View>
+
+        <Animated.View style={[styles.arrowWrapper, arrowSlide]}>
+        <Image
+            source={arrowIOS}
+            style={[
+              styles.anchor4,
+              {
+                height: 50,
+                width: 100,
+              },
+            ]}
           />
         </Animated.View>
 
@@ -474,6 +604,18 @@ const styles = StyleSheet.create({
     marginTop: "-0%",
     borderRadius: 15,
     zIndex: 10,
+  },
+  userContainer: {
+    position: "absolute",
+    top: Platform.OS === "ios" ? "20%" : "20%",
+    backgroundColor: "transparent",
+    alignItems: "center",
+    // marginTop: "-3%",
+    height: "90%",
+    marginRight: scale(10),
+    marginLeft: scale(10),
+    borderRadius: 15,
+    // backgroundColor: "green"
   },
   shadowbox: {
     shadowColor: "#000",
@@ -534,12 +676,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     position: "absolute",
-    left: windowWidth* 0.13,
+    left: windowWidth * 0.13,
     top: -40,
     height: 45,
     width: 45,
     opacity: 1,
-    marginBottom: 15
+    marginBottom: 15,
   },
   anchor2: {
     flex: 1,
@@ -547,12 +689,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     position: "absolute",
-    left: windowWidth* -0.09,
+    left: windowWidth * -0.09,
     top: -40,
     height: 45,
     width: 45,
     opacity: 1,
-    marginBottom: 15
+    marginBottom: 15,
   },
   anchor3: {
     flex: 1,
@@ -560,12 +702,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     position: "absolute",
-    left: windowWidth* -0.09,
+    left: windowWidth * -0.09,
     top: 60,
     height: 45,
     width: 45,
     opacity: 1,
-    marginBottom: 15
+    marginBottom: 15,
   },
   anchor4: {
     flex: 1,
@@ -573,11 +715,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     position: "absolute",
-    left: windowWidth* 0.13,
+    left: windowWidth * 0.13,
     top: 60,
     height: 45,
     width: 45,
     opacity: 1,
-    marginBottom: 15
+    marginBottom: 15,
+  },
+  heatPointWrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    position: "absolute",
+    left: "50%",
+    height: 50,
+    width: 50,
+    opacity: 1,
+  },
+  arrowWrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    position: "absolute",
+    left: "12%",
+    height: 50,
+    width: 50,
+    opacity: 1,
   },
 });

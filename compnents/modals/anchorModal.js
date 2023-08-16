@@ -85,11 +85,12 @@ export default function AnchorModal(lat, lng) {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (itterator === 7) {
+    if (itterator === 8 || itterator === 13) {
       setGuideModal(true);
     } 
   }, [itterator]);
 
+  
  
 
 
@@ -115,6 +116,15 @@ export default function AnchorModal(lat, lng) {
     }).catch(console.error);
   };
 
+  const handleAnchorModalClose = () => {
+    console.log("at close", itterator)
+    if (itterator === 10) {
+      setGuideModal(true);
+    } 
+    setSiteModal(!siteModal)
+    
+  };
+
 
   return (
     <View
@@ -136,7 +146,7 @@ export default function AnchorModal(lat, lng) {
         />
             <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
             <TouchableWithoutFeedback
-              onPress={() => setSiteModal(!siteModal)}
+              onPress={handleAnchorModalClose}
               onPressIn={() => setSiteCloseState(true)}
               onPressOut={() => setSiteCloseState(false)}
             >

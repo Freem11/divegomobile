@@ -225,7 +225,7 @@ import {
       borderRadius: 10,
       height: 35,
       width: 150,
-      marginLeft: "30%",
+      // marginLeft: "30%",
       marginTop: scale(30),
       shadowColor: "#000",
       shadowOffset: {
@@ -245,7 +245,7 @@ import {
       borderRadius: 10,
       height: 35,
       width: 150,
-      marginLeft: "30%",
+      // marginLeft: "30%",
       marginTop: scale(30),
       shadowColor: "#000",
       shadowOffset: {
