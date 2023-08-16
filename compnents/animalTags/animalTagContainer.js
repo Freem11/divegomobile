@@ -3,6 +3,7 @@ import { useContext } from "react";
 import {
   StyleSheet,
   View,
+  Platform,
 } from "react-native";
 import { scale } from "react-native-size-matters";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
@@ -16,7 +17,7 @@ export default function AnimalTopAutoSuggest(props) {
   );
  
   return (
-    <View style={{flex: 1, alignSelf: "center", justifyContent: "center"}}>
+    <View style={{flex: 1, alignSelf: "center", justifyContent: "center", marginTop: Platform.OS === "ios" ? 0 : "5%"}}>
         <Animated.View
         style={[transTagsY]} pointerEvents={'box-none'}>
           <View style={styles.tagContainer} pointerEvents={'box-none'}>

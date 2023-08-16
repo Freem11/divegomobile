@@ -20,6 +20,8 @@ import Animated, {
 import mantaIOS from "../png/Manta32.png";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
+import { SessionContext } from "../contexts/sessionContext";
+import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import moment from "moment";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
@@ -41,6 +43,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TutorialBase(props) {
+  const { activeSession, setActiveSession } = useContext(SessionContext);
   const { tutorialModalY } = props;
 
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
@@ -49,7 +52,23 @@ export default function TutorialBase(props) {
   const { setMapCenter } = useContext(MapCenterContext);
 
   const [pics, setPics] = useState([]);
- 
+  const [profile, setProfile] = useState([]);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      let sessionUserId = activeSession.user.id;
+      try {
+        const success = await grabProfileById(sessionUserId);
+        if (success) {
+          setProfile(success);
+        }
+      } catch (e) {
+        console.log({ title: "Error", message: e.message });
+      }
+    };
+    getProfile();
+  }, []);
+
   const getPhotos = async (today) => {
     try {
       const photos = await getRecentPhotos(today);
@@ -90,11 +109,15 @@ export default function TutorialBase(props) {
   const text10 = "";
   const text11 = "Select one or more sea creatures using the menu at the top.";
   const text12 = "";
-  const text13 = "As you can see the photos have filtered to show only those creatrues you have selected";
-  const text14 = "Ok well that's all for this guide, in the next one i'll show you how to check if a dive site is in the app and if not, enable you to add it yourself! But to do that... ";
-  const text15 = "We will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
-  const text16 = "Great thanks! If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thanks for joining SEAsons!";
-  const text17 = ""
+  const text13 =
+    "As you can see the photos have filtered to show only those creatures you have selected";
+  const text14 =
+    "Ok well that's all for this guide, in the next one i'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+  const text15 =
+    "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
+  const text16 =
+    "Great thanks! If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thanks for joining SEAsons!";
+  const text17 = "";
 
   const [textRead, setTextRead] = useState("");
 
@@ -116,7 +139,7 @@ export default function TutorialBase(props) {
     text14,
     text15,
     text16,
-    text17
+    text17,
   ];
 
   //  var interval;
@@ -209,6 +232,10 @@ export default function TutorialBase(props) {
     }
 
     if (itterator === 15 || itterator === 16) {
+      if (profile[0].UserName) {
+        setItterator(16);
+        return;
+      }
       startUserBoxAnimation();
     }
 
@@ -269,8 +296,6 @@ export default function TutorialBase(props) {
     };
   });
 
-
-
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
       characterX.value = withTiming(190);
@@ -329,12 +354,11 @@ export default function TutorialBase(props) {
 
   const startUserBoxAnimation = () => {
     if (userBoxX.value === -300) {
-      userBoxX.value = withSpring(windowWidth*0.2);
+      userBoxX.value = withSpring(windowWidth * 0.2);
     } else {
-      userBoxX.value = withTiming(-300);
+      userBoxX.value = withTiming(-500);
     }
   };
-
 
   useEffect(() => {
     if (itterator === null) {
@@ -369,7 +393,6 @@ export default function TutorialBase(props) {
     setItterator((prev) => prev + hopper);
     startPicAnimation();
   };
-  
 
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
@@ -526,7 +549,7 @@ export default function TutorialBase(props) {
         </Animated.View>
 
         <Animated.View style={[styles.heatPointWrapper, heatPointSlide]}>
-        <Image
+          <Image
             source={heatIconIOS}
             style={[
               styles.anchor4,
@@ -539,18 +562,17 @@ export default function TutorialBase(props) {
         </Animated.View>
 
         <Animated.View style={[styles.arrowWrapper, arrowSlide]}>
-        <Image
+          <Image
             source={arrowIOS}
             style={[
               styles.anchor4,
               {
-                height: 50,
-                width: 100,
+                height: 90,
+                width: 200,
               },
             ]}
           />
         </Animated.View>
-
       </View>
     </TouchableWithoutFeedback>
   );
@@ -582,6 +604,8 @@ const styles = StyleSheet.create({
   },
   textContain: {
     padding: 10,
+    fontFamily: "IndieFlower_400Regular",
+    fontSize: scale(10)
   },
   container3: {
     // flex: 1,
@@ -739,9 +763,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     position: "absolute",
-    left: "12%",
-    height: 50,
-    width: 50,
+    left: "2%",
+    height: 110,
+    width: 160,
     opacity: 1,
   },
 });

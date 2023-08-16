@@ -17,6 +17,7 @@ import {
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import Headliner from "../compnents/png/Headliner.png";
+import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 
 let emailVar = false;
 let passwordVar = false;
@@ -85,6 +86,7 @@ export default function SignUpRoute() {
       let registrationToken = await register(formVals);
       console.log("reggie", registrationToken);
       if (registrationToken.session !== null) {
+        await createProfile({id: registrationToken.session.user.id , email: formVals.email})
         await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
         setActiveSession(registrationToken);
       } else {

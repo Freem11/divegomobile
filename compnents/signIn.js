@@ -17,6 +17,7 @@ import {
   signInStandard,
   register,
 } from "../supabaseCalls/authenticateSupabaseCalls";
+import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebookblue.png";
@@ -243,6 +244,9 @@ export default function SignInRoute() {
     } else {
       let registrationToken = await register(formVals);
       if (registrationToken.session !== null) {
+           //test me
+           await createProfile({id: registrationToken.session.user.id , email: formVals.email})
+           ////
         await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
         setActiveSession(registrationToken.session);
         // console.log("at oauth reg", registrationToken)

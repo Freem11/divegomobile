@@ -43,11 +43,14 @@ import AnchorModal from "./modals/anchorModal";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
 import TutorialBase from "./tutorial/tutorialBase";
-  
+import { grabProfileById } from "../supabaseCalls/accountSupabaseCalls";
+import { SessionContext } from "./contexts/sessionContext";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function MapPage() {
+  const { activeSession, setActiveSession } = useContext(SessionContext);
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
@@ -232,6 +235,27 @@ export default function MapPage() {
   }, [animalSelection]);
 
   const [subButState, setSubButState] = useState(false);
+
+
+  useEffect(() => {
+    const getProfile = async () => {
+      let sessionUserId = activeSession.user.id;
+      try {
+        const success = await grabProfileById(sessionUserId);
+        if (success) {
+          let bully = success[0].UserName
+          console.log("juummi", bully)
+          if(bully == null){
+            setGuideModal(!guideModal)
+          }
+        }
+      } catch (e) {
+        console.log({ title: "Error", message: e.message });
+      }
+    };
+    getProfile();
+ 
+  }, []);
 
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>

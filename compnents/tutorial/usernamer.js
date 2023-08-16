@@ -1,12 +1,21 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { scale, s } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { IterratorContext } from "../contexts/iterratorContext";
+import { SessionContext } from "../contexts/sessionContext";
+import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 
 let userVar = false;
 
 export default function UserNamer() {
+  const { activeSession, setActiveSession } = useContext(SessionContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const [userFail, setUserFail] = useState(null);
   const [subButState, setSubButState] = useState(false);
@@ -20,27 +29,40 @@ export default function UserNamer() {
   });
 
   const handleSubmit = async () => {
-    
     if (formVal.userName === "" || formVal.userName === null) {
-        userVar = true;
-      } else {
-        userVar = false;
-      }
+      userVar = true;
+    } else {
+      userVar = false;
+    }
 
-      SetFormValidation({
-        ...formValidation,
-        userName: userVar,
-      });
+    SetFormValidation({
+      ...formValidation,
+      userName: userVar,
+    });
 
-      if (formVal.userName === "") {
-        setUserFail("Your Username cannot be blank!")
-        // setUserFail("Sorry that username has already been taken")
-      }  else {
-        setItterator(itterator + 1)
-        setFormVal({userName: ""})
+    if (formVal.userName === "") {
+      setUserFail("Your Username cannot be blank!");  
+    } else {
+      let sessionUserId = activeSession.user.id;
+      console.log(sessionUserId, formVal.userName)
+      try {
+        const success = await updateProfile({
+          id: sessionUserId,
+          username: formVal.userName,
+        });
+        console.log("hmmmm", success)
+        if (success.length > 0) {
+          setItterator(itterator + 1);
+          setFormVal({ userName: "" });
+        } else {
+          setUserFail("Sorry that username has already been taken")
+        }
+      } catch (e) {
+        setUserFail("Sorry that username has already been taken")
+        console.log({ title: "Error", message: e.message });
       }
+    }
   };
-
 
   return (
     <View style={styles.container}>
@@ -104,7 +126,7 @@ export default function UserNamer() {
 const styles = StyleSheet.create({
   container: {
     // position: "absolute",
-    backgroundColor: "#538dbd",
+    backgroundColor: "#538bdb",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -124,7 +146,7 @@ const styles = StyleSheet.create({
     fontFamily: "PermanentMarker_400Regular",
     color: "#F0EEEB",
     fontSize: scale(17),
-    marginTop: scale(20)
+    marginTop: scale(20),
   },
   input: {
     fontFamily: "IndieFlower_400Regular",

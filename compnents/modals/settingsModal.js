@@ -21,7 +21,7 @@ import {
   signOut,
   userDelete,
 } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { addDeletedAccountInfo } from "../../supabaseCalls/accountSupabaseCalls";
+import { addDeletedAccountInfo, deleteProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
@@ -85,6 +85,11 @@ export default function SettingsModal() {
       email: activeSession.user.email,
       UserID: activeSession.user.id,
     });
+
+    //test me
+    await deleteProfile(activeSession.user.id)
+    /////
+
     await userDelete(activeSession.user.id);
     await setActiveSession(null);
     await AsyncStorage.removeItem("token");
