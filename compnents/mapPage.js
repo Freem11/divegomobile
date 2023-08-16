@@ -38,11 +38,12 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import TutorialsModal from "./modals/tutorialsModal";
+import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
-
+import TutorialBase from "./tutorial/tutorialBase";
+  
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -52,12 +53,11 @@ export default function MapPage() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
-  
-  //Tutorial Model Animation
+ 
+  //Tutorial Launch Pad Model Animation
   const tutorialLaunchpadModalY = useSharedValue(windowHeight);
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
-  const { itterator, setItterator } = useContext(IterratorContext);
-
+ 
   const tutorialLaunchpadModalReveal = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: tutorialLaunchpadModalY.value }],
@@ -162,7 +162,31 @@ export default function MapPage() {
     
   }, [picAdderModal]);
 
-
+//Tutorial Animations
+    const tutorialModalY = useSharedValue(windowHeight);
+    const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+    const { itterator, setItterator } = useContext(IterratorContext);
+  
+    const tutorialModalReveal = useAnimatedStyle(() => {
+      return {
+        transform: [{ translateY: tutorialModalY.value }],
+      };
+    });
+  
+    const startGuideModalAnimations = () => {
+      if (guideModal) {
+        tutorialModalY.value = withTiming(0);
+      } else {
+        tutorialModalY.value = withTiming(windowHeight);
+      }
+    };
+  
+    useEffect(() => {
+      startGuideModalAnimations();
+      // if (!itterator && guideModal) {
+      //   setItterator(0);
+      // }
+    }, [guideModal]);
 
 
 
@@ -280,7 +304,7 @@ export default function MapPage() {
 
             {/* modals go here? */}
             <Animated.View style={[styles.anchorModal, tutorialLaunchpadModalReveal]}>
-              <TutorialsModal tutorialLaunchpadModalY={tutorialLaunchpadModalY} />
+              <TutorialLaunchPadModal tutorialLaunchpadModalY={tutorialLaunchpadModalY} />
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
@@ -299,6 +323,12 @@ export default function MapPage() {
             <Animated.View style={[styles.anchorModal, pictureModalReveal]}>
               <PicUploadModal pictureModalY={pictureModalY} />
             </Animated.View>
+
+            <Animated.View
+            style={[styles.tutorialModal, tutorialModalReveal]}
+          >
+            <TutorialBase tutorialModalY={tutorialModalY} />
+          </Animated.View>
 
 
             <Map style={{ zIndex: 1 }} />
@@ -452,4 +482,5 @@ const styles = StyleSheet.create({
     zIndex: 25,
     left: 0,
   },
+
 });

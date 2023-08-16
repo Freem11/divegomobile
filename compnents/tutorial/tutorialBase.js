@@ -269,7 +269,7 @@ const { tutorialModalY } = props
     // }
 
    
-  }, []);
+  }, [guideModal]);
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });

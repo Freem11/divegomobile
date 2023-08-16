@@ -9,7 +9,6 @@ import { PictureAdderContext } from "./contexts/picModalContext";
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { PictureContext } from "./contexts/pictureContext";
-import { TutorialModelContext } from "./contexts/tutorialModalContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SessionContext } from "./contexts/sessionContext";
 import {
@@ -53,10 +52,9 @@ export default function FABButtons() {
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
   );
-
-  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
-  
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
+    TutorialLaunchPadContext
+  );
   const [gearModal, setGearModal] = useState(false);
 
   const rotationVal = useSharedValue(0);

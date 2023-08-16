@@ -186,27 +186,25 @@ export default function App() {
 
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <TutorialLaunchPadContext.Provider
+        <TutorialLaunchPadContext.Provider
         value={{ tutorialLaunchpadModal, setTutorialLaunchpadModal }}
       >
-        <AnchorModalContext.Provider value={{ siteModal, setSiteModal }}>
-          <TutorialContext.Provider
-            value={{ tutorialRunning, setTutorialRunning }}
-          >
-            <IterratorContext.Provider value={{ itterator, setItterator }}>
-              <TutorialModelContext.Provider
-                value={{ guideModal, setGuideModal }}
-              >
-                <HeatPointsContext.Provider value={{ newHeat, setNewHeat }}>
-                  <AnimalMultiSelectContext.Provider
-                    value={{ animalMultiSelection, setAnimalMultiSelection }}
-                  >
-                    <SettingsContext.Provider
-                      value={{ gearModal, setGearModal }}
+      <AnchorModalContext.Provider value={{ siteModal, setSiteModal }}>
+        <TutorialContext.Provider
+          value={{ tutorialRunning, setTutorialRunning }}
+        >
+          <IterratorContext.Provider value={{ itterator, setItterator }}>
+            <TutorialModelContext.Provider
+              value={{ guideModal, setGuideModal }}
+            >
+              <HeatPointsContext.Provider value={{ newHeat, setNewHeat }}>
+                <AnimalMultiSelectContext.Provider
+                  value={{ animalMultiSelection, setAnimalMultiSelection }}
+                >
+                  <SettingsContext.Provider value={{ gearModal, setGearModal }}>
+                    <SelectedDiveSiteContext.Provider
+                      value={{ selectedDiveSite, setSelectedDiveSite }}
                     >
-                      <SelectedDiveSiteContext.Provider
-                        value={{ selectedDiveSite, setSelectedDiveSite }}
-                      >
                         <PictureContext.Provider
                           value={{ uploadedFile, setUploadedFile }}
                         >
@@ -264,27 +262,27 @@ export default function App() {
                                     ) : (
                                       <AuthenticationPage />
                                     )} */}
-                                                </SessionContext.Provider>
-                                              </MapCenterContext.Provider>
-                                            </DSAdderContext.Provider>
-                                          </PictureAdderContext.Provider>
-                                        </PinContext.Provider>
-                                      </MapRegionContext.Provider>
-                                    </MapBoundariesContext.Provider>
-                                  </MapZoomContext.Provider>
-                                </MasterContext.Provider>
-                              </PinSpotContext.Provider>
-                            </AnimalSelectContext.Provider>
-                          </SliderContext.Provider>
-                        </PictureContext.Provider>
-                      </SelectedDiveSiteContext.Provider>
-                    </SettingsContext.Provider>
-                  </AnimalMultiSelectContext.Provider>
-                </HeatPointsContext.Provider>
-              </TutorialModelContext.Provider>
-            </IterratorContext.Provider>
-          </TutorialContext.Provider>
-        </AnchorModalContext.Provider>
+                                              </SessionContext.Provider>
+                                            </MapCenterContext.Provider>
+                                          </DSAdderContext.Provider>
+                                        </PictureAdderContext.Provider>
+                                      </PinContext.Provider>
+                                    </MapRegionContext.Provider>
+                                  </MapBoundariesContext.Provider>
+                                </MapZoomContext.Provider>
+                              </MasterContext.Provider>
+                            </PinSpotContext.Provider>
+                          </AnimalSelectContext.Provider>
+                        </SliderContext.Provider>
+                      </PictureContext.Provider>
+                    </SelectedDiveSiteContext.Provider>
+                  </SettingsContext.Provider>
+                </AnimalMultiSelectContext.Provider>
+              </HeatPointsContext.Provider>
+            </TutorialModelContext.Provider>
+          </IterratorContext.Provider>
+        </TutorialContext.Provider>
+      </AnchorModalContext.Provider>
       </TutorialLaunchPadContext.Provider>
     </GestureHandlerRootView>
   );
