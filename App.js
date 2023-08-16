@@ -40,6 +40,7 @@ import { AnchorModalContext } from "./compnents/contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "./compnents/contexts/selectedDiveSiteContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import { HeatPointsContext } from "./compnents/contexts/heatPointsContext";
+import { TutorialLaunchPadContext } from "./compnents/contexts/tutorialLaunchPadContext";
 import { TutorialContext } from "./compnents/contexts/tutorialContext";
 import { IterratorContext } from "./compnents/contexts/iterratorContext";
 
@@ -59,6 +60,7 @@ export default function App() {
   const [guideModal, setGuideModal] = useState(false);
   const [gearModal, setGearModal] = useState(false);
   const [siteModal, setSiteModal] = useState(false);
+  const [tutorialLaunchpadModal, setTutorialLaunchpadModal] = useState(false);
 
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -184,6 +186,9 @@ export default function App() {
 
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+        <TutorialLaunchPadContext.Provider
+        value={{ tutorialLaunchpadModal, setTutorialLaunchpadModal }}
+      >
       <AnchorModalContext.Provider value={{ siteModal, setSiteModal }}>
         <TutorialContext.Provider
           value={{ tutorialRunning, setTutorialRunning }}
@@ -278,6 +283,7 @@ export default function App() {
           </IterratorContext.Provider>
         </TutorialContext.Provider>
       </AnchorModalContext.Provider>
+      </TutorialLaunchPadContext.Provider>
     </GestureHandlerRootView>
   );
 }

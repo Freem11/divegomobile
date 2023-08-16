@@ -110,8 +110,12 @@ export default function PicUploadModal() {
     }
 
     const getUser = async () => {
-      let UserID = await userCheck();
-      setPinValues({ ...pinValues, UserId: UserID.id });
+      try {
+        let UserID = await userCheck();
+        setPinValues({ ...pinValues, UserId: UserID.id });
+      } catch (e) {
+        console.log({ title: "Error", message: e.message });
+      }
     };
 
     getUser();
@@ -299,22 +303,22 @@ export default function PicUploadModal() {
 
   return (
     <View style={styles.container}>
-       <View style={styles.title}>
-            <Text style={styles.header2}>Submit Your Picture</Text>
-            <TouchableWithoutFeedback
-              onPress={togglePicModal}
-              onPressIn={() => setPicCloseState(true)}
-              onPressOut={() => setPicCloseState(false)}
-            >
-              <View
-                style={
-                  picCloseState ? styles.closeButtonPressed : styles.closeButton
-                }
-              >
-                <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-              </View>
-            </TouchableWithoutFeedback>
+      <View style={styles.title}>
+        <Text style={styles.header2}>Submit Your Picture</Text>
+        <TouchableWithoutFeedback
+          onPress={togglePicModal}
+          onPressIn={() => setPicCloseState(true)}
+          onPressOut={() => setPicCloseState(false)}
+        >
+          <View
+            style={
+              picCloseState ? styles.closeButtonPressed : styles.closeButton
+            }
+          >
+            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
           </View>
+        </TouchableWithoutFeedback>
+      </View>
       <View style={styles.picContainer}>
         <Image
           source={{
@@ -499,7 +503,9 @@ export default function PicUploadModal() {
         </View>
       </View>
 
-      <View style={subButState ? styles.SubmitButtonPressed: styles.SubmitButton}>
+      <View
+        style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
+      >
         <TouchableWithoutFeedback
           onPress={handleSubmit}
           onPressIn={() => setSubButState(true)}
@@ -917,6 +923,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "lightgrey",
-    opacity: 0.3
+    opacity: 0.3,
   },
 });

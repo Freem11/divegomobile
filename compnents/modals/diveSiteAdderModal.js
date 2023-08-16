@@ -43,8 +43,12 @@ export default function DiveSiteModal() {
 
   useEffect(() => {
     const getUser = async () => {
-      UserId = await userCheck();
-      setFormVals({ ...formVals, UserID: UserId.id });
+      try {
+        UserId = await userCheck();
+        setFormVals({ ...formVals, UserID: UserId.id });
+      } catch (e) {
+        console.log({ title: "Error", message: e.message });
+      }
     };
 
     getUser();
@@ -125,24 +129,22 @@ export default function DiveSiteModal() {
 
   return (
     <View style={styles.container}>
-       <View style={styles.title}>
-            <Text style={styles.header2}>Submit Your Dive Site</Text>
-            <TouchableWithoutFeedback
-              onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
-              onPressIn={() => setDiveCloseState(true)}
-              onPressOut={() => setDiveCloseState(false)}
-            >
-              <View
-                style={
-                  diveCloseState
-                    ? styles.closeButtonPressed
-                    : styles.closeButton
-                }
-              >
-                <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-              </View>
-            </TouchableWithoutFeedback>
+      <View style={styles.title}>
+        <Text style={styles.header2}>Submit Your Dive Site</Text>
+        <TouchableWithoutFeedback
+          onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
+          onPressIn={() => setDiveCloseState(true)}
+          onPressOut={() => setDiveCloseState(false)}
+        >
+          <View
+            style={
+              diveCloseState ? styles.closeButtonPressed : styles.closeButton
+            }
+          >
+            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
           </View>
+        </TouchableWithoutFeedback>
+      </View>
       <View style={styles.inputContainer}>
         <InsetShadow
           containerStyle={{
@@ -243,7 +245,9 @@ export default function DiveSiteModal() {
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}>
+      <View
+        style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
+      >
         <TouchableWithoutFeedback
           onPress={handleSubmit}
           onPressIn={() => setSubButState(true)}
@@ -429,6 +433,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "lightgrey",
-    opacity: 0.3
+    opacity: 0.3,
   },
 });

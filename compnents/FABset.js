@@ -9,7 +9,7 @@ import { PictureAdderContext } from "./contexts/picModalContext";
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { PictureContext } from "./contexts/pictureContext";
-import { TutorialModelContext } from "./contexts/tutorialModalContext";
+import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SessionContext } from "./contexts/sessionContext";
 import {
   StyleSheet,
@@ -52,7 +52,9 @@ export default function FABButtons() {
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
   );
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
+    TutorialLaunchPadContext
+  );
   const [gearModal, setGearModal] = useState(false);
 
   const rotationVal = useSharedValue(0);
@@ -247,7 +249,7 @@ export default function FABButtons() {
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => setGuideModal(!guideModal)}
+          onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
           onPressIn={() => setHow2ButState(true)}
           onPressOut={() => setHow2ButState(false)}
         >
