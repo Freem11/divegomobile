@@ -55,19 +55,20 @@ export default function TutorialBase(props) {
   const [profile, setProfile] = useState([]);
 
   useEffect(() => {
-    const getProfile = async () => {
-      let sessionUserId = activeSession.user.id;
-      try {
-        const success = await grabProfileById(sessionUserId);
-        if (success) {
-          setProfile(success);
-        }
-      } catch (e) {
-        console.log({ title: "Error", message: e.message });
-      }
-    };
     getProfile();
   }, []);
+
+  const getProfile = async () => {
+    let sessionUserId = activeSession.user.id;
+    try {
+      const success = await grabProfileById(sessionUserId);
+      if (success) {
+        setProfile(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   const getPhotos = async (today) => {
     try {
@@ -232,6 +233,7 @@ export default function TutorialBase(props) {
     }
 
     if (itterator === 15 || itterator === 16) {
+      getProfile();
       if (profile[0].UserName) {
         setItterator(16);
         return;
