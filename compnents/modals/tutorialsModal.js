@@ -16,6 +16,7 @@ import {
   import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
   import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
   import { TutorialModelContext } from "../contexts/tutorialModalContext";
+  import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
   import { IterratorContext } from "../contexts/iterratorContext";
   import InsetShadow from "react-native-inset-shadow";
   import { scale } from "react-native-size-matters";
@@ -27,12 +28,14 @@ import {
   export default function TutorialLaunchPadModal() {
   
     const [tutPadCloseState, setTutPadCloseState] = useState(false);
+    const [tutPad2CloseState, setTutPad2CloseState] = useState(false);
     const [tutorialsCloseState, setTutorialsCloseState] = useState(false);
 
     const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
       TutorialLaunchPadContext
     );
     const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+    const { secondGuideModal, setSecondGuideModal } = useContext(SecondTutorialModalContext);
     
     //Tutorial Model Animation
     // const tutorialModalY = useSharedValue(windowHeight);
@@ -63,7 +66,11 @@ import {
     const handleTutorialStartup = () => {
       setTutorialLaunchpadModal(!tutorialLaunchpadModal)
       setGuideModal(!guideModal)
-      
+    };
+
+    const handleSecondTutorialStartup = () => {
+      setTutorialLaunchpadModal(!tutorialLaunchpadModal)
+      setSecondGuideModal(!secondGuideModal)
     };
   
     return (
@@ -106,12 +113,24 @@ import {
             </Text>
           </View>
         </TouchableWithoutFeedback>
-{/*   
-          <Animated.View
-            style={[styles.tutorialModal, tutorialModalReveal]}
-          >
-            <TutorialBase tutorialModalY={tutorialModalY} />
-          </Animated.View> */}
+
+        <TouchableWithoutFeedback
+          onPress={handleSecondTutorialStartup}
+          onPressIn={() => setTutPad2CloseState(true)}
+          onPressOut={() => setTutPad2CloseState(false)}
+        >
+          <View style={tutPad2CloseState ? styles.openTutorialButtonPressed : styles.openTutorialButton}>
+            <Text
+              style={{
+                marginLeft: 5,
+                fontFamily: "BubblegumSans_400Regular",
+                color: "gold",
+              }}
+            >
+              How to Contribute Guide
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
         </View>
       </View>
     );

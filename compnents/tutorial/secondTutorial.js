@@ -42,7 +42,7 @@ import UserNamer from "./usernamer";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function TutorialBase(props) {
+export default function SecondTutorial(props) {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { tutorialModalY } = props;
 
@@ -606,8 +606,8 @@ const styles = StyleSheet.create({
   },
   textContain: {
     padding: 10,
-    fontFamily: "IndieFlower_400Regular",
-    fontSize: scale(10)
+    fontFamily: "SanFran",
+    fontSize: scale(10),
   },
   container3: {
     // flex: 1,

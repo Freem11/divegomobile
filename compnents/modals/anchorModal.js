@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     textAlign: "center",
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "GothamBlack",
     color: "#F0EEEB",
     fontSize: scale(15),
     marginLeft: scale(-10),
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   headerAlt: {
     // alignItems: "center",
     // alignContent: "center",
-    fontFamily: "PermanentMarker_400Regular",
+    fontFamily: "GothamBold",
     color: "#F0EEEB",
     fontSize: scale(17),
     width: "80%",

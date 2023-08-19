@@ -25,6 +25,7 @@ import { PinContext } from "./contexts/staticPinContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { TutorialModelContext } from "./contexts/tutorialModalContext";
+import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";;
@@ -42,7 +43,8 @@ import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
-import TutorialBase from "./tutorial/tutorialBase";
+import IntroTutorial from "./tutorial/introTutorial";
+import SecondTutorial from "./tutorial/secondTutorial";
 import { grabProfileById } from "../supabaseCalls/accountSupabaseCalls";
 import { SessionContext } from "./contexts/sessionContext";
 
@@ -165,12 +167,12 @@ export default function MapPage() {
     
   }, [picAdderModal]);
 
-//Tutorial Animations
+//Intro Tutorial Animations
     const tutorialModalY = useSharedValue(windowHeight);
     const { guideModal, setGuideModal } = useContext(TutorialModelContext);
     const { itterator, setItterator } = useContext(IterratorContext);
-  
-    const tutorialModalReveal = useAnimatedStyle(() => {
+
+    const tutorial2ModalReveal = useAnimatedStyle(() => {
       return {
         transform: [{ translateY: tutorialModalY.value }],
       };
@@ -191,7 +193,30 @@ export default function MapPage() {
       // }
     }, [guideModal]);
 
+//Second Tutorial Animations
+const tutorial2ModalY = useSharedValue(windowHeight);
+const { secondGuideModal, setSecondGuideModal } = useContext(SecondTutorialModalContext);
 
+const tutorialModalReveal = useAnimatedStyle(() => {
+  return {
+    transform: [{ translateY: tutorial2ModalY.value }],
+  };
+});
+
+const startSecondGuideModalAnimations = () => {
+  if (secondGuideModal) {
+    tutorial2ModalY.value = withTiming(0);
+  } else {
+    tutorial2ModalY.value = withTiming(windowHeight);
+  }
+};
+
+useEffect(() => {
+  startSecondGuideModalAnimations();
+  // if (!itterator && guideModal) {
+  //   setItterator(0);
+  // }
+}, [secondGuideModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -351,7 +376,13 @@ export default function MapPage() {
             <Animated.View
             style={[styles.tutorialModal, tutorialModalReveal]}
           >
-            <TutorialBase tutorialModalY={tutorialModalY} />
+            <IntroTutorial tutorialModalY={tutorialModalY} />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.tutorialModal, tutorial2ModalReveal]}
+          >
+            <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
           </Animated.View>
 
 

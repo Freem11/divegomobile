@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 // import GuideModal from "./modals/howToGuideModal";
-import TutorialBase from "./tutorial/tutorialBase";
+import IntroTutorial from "./tutorial/introTutorial";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
 import SettingsModal from "./modals/settingsModal";
