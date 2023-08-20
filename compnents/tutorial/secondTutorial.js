@@ -18,14 +18,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import { TutorialModelContext } from "../contexts/tutorialModalContext";
+import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import moment from "moment";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
-import { IterratorContext } from "../contexts/iterratorContext";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import {
   MaterialIcons,
@@ -46,8 +46,8 @@ export default function SecondTutorial(props) {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { tutorialModalY } = props;
 
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
-  const { itterator, setItterator } = useContext(IterratorContext);
+  const { secondGuideModal, setSecondGuideModal } = useContext(SecondTutorialModalContext);
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { setMapCenter } = useContext(MapCenterContext);
 
@@ -90,35 +90,12 @@ export default function SecondTutorial(props) {
   const arrowY = useSharedValue(-1200);
   const userBoxX = useSharedValue(-300);
 
-  const text0 = "Hi, welcome to SEAsons, I'm XXX, I'm here to show you around.";
-  const text1 =
-    "First let's find a spot with some action. Here are 3 of the most recent sightings by other divers.";
-  const text2 = "Choose one and let's see what else is there!";
-  const text3 =
-    "Great! We've moved the map, as you can see there is a lot more action here!";
-  const text4 =
-    "Normally to move the Map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
-  const text5 =
-    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
-  const text6 =
-    "The blue anchors are dive sites try tapping on one and lets take a closer look! But make sure it has a heat point nearby, they look like this, that means sea creatures have been spotted on that dive site.";
-  const text7 = "";
-  const text8 =
-    "Wow, cool! look at all the neat sea creatures divers have already seen here by other divers!";
-  const text9 =
-    "Now try closing the dive site and chose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
-  const text10 = "";
-  const text11 = "Select one or more sea creatures using the menu at the top.";
-  const text12 = "";
-  const text13 =
-    "As you can see the photos have filtered to show only those creatures you have selected";
-  const text14 =
-    "Ok well that's all for this guide, in the next one i'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
-  const text15 =
-    "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
-  const text16 =
-    "Great thanks! If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thanks for joining SEAsons!";
-  const text17 = "";
+  const text0 = "Hey! Welcome back! Now that you have a Diver Name I can now show you how you can contribute to SEAsons!";
+  const text1 = "First, lets look at working with Dive sites, let's say your out at a dive site and you want to see if the site your diving at is in SEAsons already...";
+  const text2 = "No problem! Make sure the map is positioned to your current location and tap the dive site search feature under this button."
+  const text3 = "A list of dive sites in your area will show up, type in the name of your site to verify, in fact why not try it right now!";
+  const text4 = "";
+  const text5 = "";
 
   const [textRead, setTextRead] = useState("");
 
@@ -129,34 +106,22 @@ export default function SecondTutorial(props) {
     text3,
     text4,
     text5,
-    text6,
-    text7,
-    text8,
-    text9,
-    text10,
-    text11,
-    text12,
-    text13,
-    text14,
-    text15,
-    text16,
-    text17,
   ];
 
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator === 2 || itterator == 15) {
-      return;
-    } else {
-      if (pushVal === 1 && itterator < feederArray.length - 1) {
-        setItterator((prev) => prev + pushVal);
+    // if (itterator === 2 || itterator == 15) {
+    //   return;
+    // } else {
+      if (pushVal === 1 && itterator2 < feederArray.length - 1) {
+        setItterator2((prev) => prev + pushVal);
       }
 
-      if (pushVal === 1 && itterator === feederArray.length - 1) {
-        setGuideModal(!guideModal);
+      if (pushVal === 1 && itterator2 === feederArray.length - 1) {
+        setSecondGuideModal(!secondGuideModal);
       }
-    }
+    // }
 
     // setTextRead("");
     // clearInterval(interval);
@@ -180,12 +145,12 @@ export default function SecondTutorial(props) {
   };
 
   useEffect(() => {
-    let textVal = feederArray[itterator];
+    let textVal = feederArray[itterator2];
     setTextRead(textVal);
 
-    console.log(itterator, feederArray.length);
+    console.log(itterator2, feederArray.length);
 
-    if (itterator === 0) {
+    if (itterator2 === 0) {
       setTutorialRunning(true);
       setTimeout(() => {
         startCharacterAnimation();
@@ -197,58 +162,58 @@ export default function SecondTutorial(props) {
       }, 1900);
     }
 
-    if (itterator === 1) {
-      startPicAnimation();
-    }
+    // if (itterator === 1) {
+    //   startPicAnimation();
+    // }
 
-    if (itterator === 4 || itterator === 5) {
-      startExploreButtonAnimation();
-    }
+    // if (itterator === 4 || itterator === 5) {
+    //   startExploreButtonAnimation();
+    // }
 
-    if (itterator === 5 || itterator === 7) {
-      startClusterAnchorAnimation();
-    }
+    // if (itterator === 5 || itterator === 7) {
+    //   startClusterAnchorAnimation();
+    // }
 
-    if (itterator === 6 || itterator === 7) {
-      startHeatPointAnimation();
-    }
+    // if (itterator === 6 || itterator === 7) {
+    //   startHeatPointAnimation();
+    // }
 
-    if (itterator === 7) {
-      startCharacterAnimation();
-      startTextBoxAnimation();
-      setGuideModal(!guideModal);
-    }
+    // if (itterator === 7) {
+    //   startCharacterAnimation();
+    //   startTextBoxAnimation();
+    //   setGuideModal(!guideModal);
+    // }
 
-    if (itterator === 8) {
-      startCharacterAnimation();
-      startTextBoxAnimation();
-    }
+    // if (itterator === 8) {
+    //   startCharacterAnimation();
+    //   startTextBoxAnimation();
+    // }
 
-    if (itterator === 10 || itterator === 12) {
-      setGuideModal(!guideModal);
-    }
+    // if (itterator === 10 || itterator === 12) {
+    //   setGuideModal(!guideModal);
+    // }
 
-    if (itterator === 11 || itterator === 12) {
-      startArrowAnimation();
-    }
+    // if (itterator === 11 || itterator === 12) {
+    //   startArrowAnimation();
+    // }
 
-    if (itterator === 15 || itterator === 16) {
-      getProfile();
-      if (profile[0].UserName) {
-        setItterator(16);
-        return;
-      }
-      startUserBoxAnimation();
-    }
+    // if (itterator === 15 || itterator === 16) {
+    //   getProfile();
+    //   if (profile[0].UserName) {
+    //     setItterator(16);
+    //     return;
+    //   }
+    //   startUserBoxAnimation();
+    // }
 
-    if (itterator === feederArray.length - 1) {
-      setItterator(null);
+    if (itterator2 === feederArray.length - 1) {
+      setItterator2(null);
       setTutorialRunning(false);
-      setGuideModal(!guideModal);
+      setSecondGuideModal(!secondGuideModal);
       startCharacterAnimation();
       startTextBoxAnimation();
     }
-  }, [itterator]);
+  }, [itterator2]);
 
   const characterSlide = useAnimatedStyle(() => {
     return {
@@ -363,8 +328,8 @@ export default function SecondTutorial(props) {
   };
 
   useEffect(() => {
-    if (itterator === null) {
-      setItterator(0);
+    if (itterator2 === null) {
+      setItterator2(0);
     }
 
     let today = new Date();
@@ -381,7 +346,7 @@ export default function SecondTutorial(props) {
     //     setupText(0);
     //   }, 400);
     // }
-  }, [guideModal]);
+  }, [secondGuideModal]);
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
@@ -392,7 +357,7 @@ export default function SecondTutorial(props) {
     } else {
       hopper = 1;
     }
-    setItterator((prev) => prev + hopper);
+    setItterator2((prev) => prev + hopper);
     startPicAnimation();
   };
 

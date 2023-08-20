@@ -31,6 +31,7 @@ import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";;
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
+import { Iterrator2Context } from "./contexts/iterrator2Context";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -172,7 +173,7 @@ export default function MapPage() {
     const { guideModal, setGuideModal } = useContext(TutorialModelContext);
     const { itterator, setItterator } = useContext(IterratorContext);
 
-    const tutorial2ModalReveal = useAnimatedStyle(() => {
+    const tutorialModalReveal = useAnimatedStyle(() => {
       return {
         transform: [{ translateY: tutorialModalY.value }],
       };
@@ -196,8 +197,9 @@ export default function MapPage() {
 //Second Tutorial Animations
 const tutorial2ModalY = useSharedValue(windowHeight);
 const { secondGuideModal, setSecondGuideModal } = useContext(SecondTutorialModalContext);
+const { itterator2, setItterator2 } = useContext(Iterrator2Context);
 
-const tutorialModalReveal = useAnimatedStyle(() => {
+const tutorial2ModalReveal = useAnimatedStyle(() => {
   return {
     transform: [{ translateY: tutorial2ModalY.value }],
   };

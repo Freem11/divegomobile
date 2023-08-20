@@ -20,8 +20,7 @@ import {
   import { IterratorContext } from "../contexts/iterratorContext";
   import InsetShadow from "react-native-inset-shadow";
   import { scale } from "react-native-size-matters";
-  // import TutorialBase from "../tutorial/tutorialBase";
-  
+ 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   
@@ -37,32 +36,6 @@ import {
     const { guideModal, setGuideModal } = useContext(TutorialModelContext);
     const { secondGuideModal, setSecondGuideModal } = useContext(SecondTutorialModalContext);
     
-    //Tutorial Model Animation
-    // const tutorialModalY = useSharedValue(windowHeight);
-    // const { guideModal, setGuideModal } = useContext(TutorialModelContext);
-    // const { itterator, setItterator } = useContext(IterratorContext);
-  
-    // const tutorialModalReveal = useAnimatedStyle(() => {
-    //   return {
-    //     transform: [{ translateY: tutorialModalY.value }],
-    //   };
-    // });
-  
-    // const startGuideModalAnimations = () => {
-    //   if (guideModal) {
-    //     tutorialModalY.value = withTiming(0);
-    //   } else {
-    //     tutorialModalY.value = withTiming(windowHeight);
-    //   }
-    // };
-  
-    // useEffect(() => {
-    //   startGuideModalAnimations();
-    //   // if (!itterator && guideModal) {
-    //   //   setItterator(0);
-    //   // }
-    // }, [guideModal]);
-
     const handleTutorialStartup = () => {
       setTutorialLaunchpadModal(!tutorialLaunchpadModal)
       setGuideModal(!guideModal)
