@@ -186,7 +186,6 @@ export default function IntroTutorial(props) {
     console.log(itterator, feederArray.length);
 
     if (itterator === 0) {
-      setTutorialRunning(true);
       setTimeout(() => {
         startCharacterAnimation();
       }, 1700);
@@ -401,7 +400,7 @@ export default function IntroTutorial(props) {
       <View style={styles.wrapper}>
         <LinearGradient
           style={styles.container}
-          colors={["transparent", "black"]}
+          colors={["transparent", "#538dbd"]}
           start={{ x: 0, y: 0 }}
         ></LinearGradient>
 

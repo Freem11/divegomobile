@@ -101,37 +101,37 @@ export default function SecondTutorial(props) {
   const userBoxX = useSharedValue(-300);
 
   const text0 =
-    "Hey welcome back! Now that you have a Diver Name I can show you how you can contribute to SEAsons!";
+    "Hey welcome back! Now that you have a Diver Name, I can show you how you can contribute to SEAsons!";
   const text1 =
     "First, let's look at working with Dive sites, let's move to a spot with known dive sites";
   const text2 =
-    "Now that the map is positioned let's check for a dive site by tapping on the dive site search tool option, it looks like this";
+    "Now that the map is positioned, let's check for a dive site by tapping on the dive site search tool option, it looks like this";
   const text3 = "";
   const text4 =
-    "Now that the options are open it will show you a list of dive sites in the area, try searching for 'Copper Cliffs' and select it, once you find it";
+    "Now that the options are open it will show you a list of dive sites in the area, try searching for 'Copper Cliffs' and select it, once you have found it";
   const text5 = "";
   const text6 =
     "Nice! As you can see when you selected the dive site, the map zoomed to it and put that yellow indicator over it to highlight it, this means the site is in the app and ready for you to add your sightings to it later!";
   const text7 =
     "Next, let's say the site you were looking for was NOT in the app, no problem adding them is very easy!";
   const text8 =
-    "To add a dive site we need to click on the dive site adding button, it's under this option, pop it open and i'll walk you through how it works";
+    "To add a dive site we need to click on the dive site adding button, it's under this option, pop it open and I'll walk you through how it works";
   const text9 = "";
   const text10 =
     "This is the dive site adding form, here, you can see 3 fields and a button. First is the site name, add the dive site name in this spot";
   const text11 =
     "Next are the GPS lat and lng fields. The easiest way to get them is to be AT the dive site and simply tap the 'I'm at the dive site button' it will take your current location and use them as the coordinates for the dive site!";
   const text12 =
-    "If you are at home and have, the name of the site and the decimal format GPS you can add them manually as well";
+    "If you are at home, and have the name of the site as well as the decimal format GPS coordinates, you can add them manually as well";
   const text13 =
-    "One you have your site name an GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submited for review";
+    "Once you have your site name and GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submited for review";
   const text14 =
-    "Please note you new site won't automatically be added to the map the SEAsons team will verify you submisison befor commiting to the map, but after that you site will go in and be credited to you with your diver name that we setup earlier!";
+    "Please note your new site won't automatically be added to the map, the SEAsons team will verify your submisison before committing to the map, but after that your site will go in and be credited to you with your diver name that we setup earlier!";
   const text15 = "Give it a try for yourself add a name and GPS using the 'I'm at the dive site' button and submit!";
   const text16 = "";
-  const text17 = "Nice Job, That's how you add a new dive site to SEAsons! In this case since we are showing you how this entry was not submitted, but you can from now on in the way I have shown you.";
+  const text17 = "Nice Job, That's how you add a new dive site to SEAsons! In this case since this is a guide, this entry was not submitted, but you can from now on in the same way.";
   const text18 =
-    "That's it for adding dive sites to the app!, in the next guide we will look at doing the same thing but with you sea creature sighting photos instead! Tap on this button to go to that guid next, otherwsie tap anywhere else to close, and thanks for joining me again!";
+    "That's it for adding dive sites to the app!, in the next guide we will look at adding sea creature sighting photos instead! Tap on this button to go to that guide next, otherwise tap anywhere else to close, and thanks for joining me again!";
   const text19 = "";
 
   const [textRead, setTextRead] = useState("");
@@ -162,9 +162,9 @@ export default function SecondTutorial(props) {
   //  var interval;
 
   const setupText = (pushVal) => {
-    // if (itterator === 2 || itterator == 15) {
-    //   return;
-    // } else {
+    if (itterator2 === 3) {
+      return;
+    } else {
     if (pushVal === 1 && itterator2 < feederArray.length - 1) {
       setItterator2((prev) => prev + pushVal);
     }
@@ -172,7 +172,7 @@ export default function SecondTutorial(props) {
     if (pushVal === 1 && itterator2 === feederArray.length - 1) {
       setSecondGuideModal(!secondGuideModal);
     }
-    // }
+    }
 
     // setTextRead("");
     // clearInterval(interval);
@@ -202,7 +202,6 @@ export default function SecondTutorial(props) {
     console.log(itterator2, feederArray.length);
 
     if (itterator2 === 0) {
-      setTutorialRunning(true);
       setTimeout(() => {
         startCharacterAnimation();
       }, 1700);
@@ -258,14 +257,16 @@ export default function SecondTutorial(props) {
         UserID: null,
       });
        setDiveSiteAdderModal(!diveSiteAdderModal);
+       setTutorialRunning(false);
     }
 
     if (itterator2 === feederArray.length - 1) {
-      setItterator2(null);
       setTutorialRunning(false);
+      setItterator2(null);
       setSecondGuideModal(!secondGuideModal);
       startCharacterAnimation();
       startTextBoxAnimation();
+      console.log("what", tutorialRunning)
     }
   }, [itterator2]);
 
@@ -368,24 +369,12 @@ export default function SecondTutorial(props) {
   };
 
   useEffect(() => {
-    if (itterator2 === null) {
-      setItterator2(0);
+    if(tutorialRunning){
+      if (itterator2 === null) {
+        setItterator2(0);
+      }
     }
 
-    let today = new Date();
-    let formattedDate = moment(today).format("YYYY-MM-DD");
-    getPhotos(formattedDate);
-
-    // if(itterator === 0){
-    //   setTimeout(() => {
-    //     startCharacterAnimation();
-    //   }, 200);
-
-    //   setTimeout(() => {
-    //     startTextBoxAnimation();
-    //     setupText(0);
-    //   }, 400);
-    // }
   }, [secondGuideModal]);
 
   const moveMap = (values) => {

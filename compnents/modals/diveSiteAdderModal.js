@@ -162,6 +162,12 @@ export default function DiveSiteModal() {
   };
 
   const toggleDiveModal = () => {
+console.log("hey", tutorialRunning)
+    if (tutorialRunning) {
+      if (itterator2 === 9) {
+        setItterator2(itterator2 + 1);
+      }
+    } else {
     setDiveSiteAdderModal(!diveSiteAdderModal)
 
     if (diveSiteAdderModal) {
@@ -172,6 +178,7 @@ export default function DiveSiteModal() {
         UserID: null,
       });
     }
+  }
   };
   const [imaButState, setImaButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
