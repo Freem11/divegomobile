@@ -30,6 +30,7 @@ import { MapBoundariesContext } from "./compnents/contexts/mapBoundariesContext"
 import { MapRegionContext } from "./compnents/contexts/mapRegionContext";
 import { MasterContext } from "./compnents/contexts/masterContext";
 import { PinSpotContext } from "./compnents/contexts/pinSpotContext";
+import { DiveSpotContext } from "./compnents/contexts/diveSpotContext";
 import { SliderContext } from "./compnents/contexts/sliderContext";
 import { AnimalSelectContext } from "./compnents/contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./compnents/contexts/animalMultiSelectContext";
@@ -84,6 +85,13 @@ export default function App() {
     Longitude: "",
     DDVal: "0",
     UserId: null,
+  });
+
+  const [addSiteVals, setAddSiteVals] = useState({
+    Site: "",
+    Latitude: "",
+    Longitude: "",
+    UserID: null,
   });
 
   const [selectedDiveSite, setSelectedDiveSite] = useState({
@@ -233,67 +241,77 @@ export default function App() {
                                     setAnimalSelection,
                                   }}
                                 >
-                                  <PinSpotContext.Provider
-                                    value={{ dragPin, setDragPin }}
+                                  <DiveSpotContext.Provider
+                                    value={{ addSiteVals, setAddSiteVals }}
                                   >
-                                    <MasterContext.Provider
-                                      value={{ masterSwitch, setMasterSwitch }}
+                                    <PinSpotContext.Provider
+                                      value={{ dragPin, setDragPin }}
                                     >
-                                      <MapZoomContext.Provider
-                                        value={{ zoomlev, setZoomLev }}
+                                      <MasterContext.Provider
+                                        value={{
+                                          masterSwitch,
+                                          setMasterSwitch,
+                                        }}
                                       >
-                                        <MapBoundariesContext.Provider
-                                          value={{ boundaries, setBoundaries }}
+                                        <MapZoomContext.Provider
+                                          value={{ zoomlev, setZoomLev }}
                                         >
-                                          <MapRegionContext.Provider
-                                            value={{ region, setRegion }}
+                                          <MapBoundariesContext.Provider
+                                            value={{
+                                              boundaries,
+                                              setBoundaries,
+                                            }}
                                           >
-                                            <PinContext.Provider
-                                              value={{
-                                                pinValues,
-                                                setPinValues,
-                                              }}
+                                            <MapRegionContext.Provider
+                                              value={{ region, setRegion }}
                                             >
-                                              <PictureAdderContext.Provider
+                                              <PinContext.Provider
                                                 value={{
-                                                  picAdderModal,
-                                                  setPicAdderModal,
+                                                  pinValues,
+                                                  setPinValues,
                                                 }}
                                               >
-                                                <DSAdderContext.Provider
+                                                <PictureAdderContext.Provider
                                                   value={{
-                                                    diveSiteAdderModal,
-                                                    setDiveSiteAdderModal,
+                                                    picAdderModal,
+                                                    setPicAdderModal,
                                                   }}
                                                 >
-                                                  <MapCenterContext.Provider
+                                                  <DSAdderContext.Provider
                                                     value={{
-                                                      mapCenter,
-                                                      setMapCenter,
+                                                      diveSiteAdderModal,
+                                                      setDiveSiteAdderModal,
                                                     }}
                                                   >
-                                                    <SessionContext.Provider
+                                                    <MapCenterContext.Provider
                                                       value={{
-                                                        activeSession,
-                                                        setActiveSession,
+                                                        mapCenter,
+                                                        setMapCenter,
                                                       }}
                                                     >
-                                                      {/* <MapPage /> */}
-                                                      {activeSession ? (
-                                                        <MapPage />
-                                                      ) : (
-                                                        <AuthenticationPage />
-                                                      )}
-                                                    </SessionContext.Provider>
-                                                  </MapCenterContext.Provider>
-                                                </DSAdderContext.Provider>
-                                              </PictureAdderContext.Provider>
-                                            </PinContext.Provider>
-                                          </MapRegionContext.Provider>
-                                        </MapBoundariesContext.Provider>
-                                      </MapZoomContext.Provider>
-                                    </MasterContext.Provider>
-                                  </PinSpotContext.Provider>
+                                                      <SessionContext.Provider
+                                                        value={{
+                                                          activeSession,
+                                                          setActiveSession,
+                                                        }}
+                                                      >
+                                                        {/* <MapPage /> */}
+                                                        {activeSession ? (
+                                                          <MapPage />
+                                                        ) : (
+                                                          <AuthenticationPage />
+                                                        )}
+                                                      </SessionContext.Provider>
+                                                    </MapCenterContext.Provider>
+                                                  </DSAdderContext.Provider>
+                                                </PictureAdderContext.Provider>
+                                              </PinContext.Provider>
+                                            </MapRegionContext.Provider>
+                                          </MapBoundariesContext.Provider>
+                                        </MapZoomContext.Provider>
+                                      </MasterContext.Provider>
+                                    </PinSpotContext.Provider>
+                                  </DiveSpotContext.Provider>
                                 </AnimalSelectContext.Provider>
                               </SliderContext.Provider>
                             </PictureContext.Provider>

@@ -19,7 +19,7 @@ import {
   Text,
   Platform,
   KeyboardAvoidingView,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import {
   MaterialIcons,
@@ -39,10 +39,12 @@ import DiveSiteAutoComplete from "./diveSiteSearch/diveSiteAutocomplete";
 import GeocodeAutocomplete from "./locationSearch/geocodeAutocomplete";
 import { removePhoto } from "../supabaseCalls/uploadSupabaseCalls";
 import { scale } from "react-native-size-matters";
+import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContext";
+import { Iterrator2Context } from "./contexts/iterrator2Context";
+import { TutorialContext } from "./contexts/tutorialContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-
 
 export default function FABButtons() {
   const { diveSitesTog, setDiveSitesTog } = useContext(DiveSitesContext);
@@ -55,6 +57,13 @@ export default function FABButtons() {
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
+
+  const { secondGuideModal, setSecondGuideModal } = useContext(
+    SecondTutorialModalContext
+  );
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+
   const [gearModal, setGearModal] = useState(false);
 
   const rotationVal = useSharedValue(0);
@@ -69,7 +78,6 @@ export default function FABButtons() {
   const animalWidth = useSharedValue(1000);
   const geocodeWidth = useSharedValue(1000);
 
-  
   const rotation = useDerivedValue(() => {
     return interpolate(rotationVal.value, [0, 45], [0, 45]);
   });
@@ -113,6 +121,11 @@ export default function FABButtons() {
   const startAnimalButtonAnimations = () => {
     if (animalWidth.value === 1000) {
       animalWidth.value = withTiming(-200);
+      if (tutorialRunning) {
+        if (itterator2 > 0) {
+          setItterator2(itterator2 + 1);
+        }
+      }
     } else {
       animalWidth.value = withTiming(1000);
     }
@@ -527,7 +540,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "lightgrey",
-    opacity: 0.3
+    opacity: 0.3,
   },
   closeButtonAlt: {
     position: "absolute",
@@ -549,7 +562,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "lightgrey",
-    opacity: 0.3
+    opacity: 0.3,
   },
   header: {
     fontFamily: "PermanentMarker_400Regular",
@@ -589,5 +602,4 @@ const styles = StyleSheet.create({
     height: 50,
     color: "#F0EEEB",
   },
-
 });

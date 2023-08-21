@@ -99,6 +99,8 @@ export default function Map() {
         lat: currentMapPosition.center.latitude,
         lng: currentMapPosition.center.longitude,
       });
+
+      // console.log("map is at", mapCenter)
     }
   };
 

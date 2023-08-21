@@ -15,23 +15,35 @@ import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import InsetShadow from "react-native-inset-shadow";
 import { scale } from "react-native-size-matters";
+import { DiveSpotContext } from "../contexts/diveSpotContext";
+import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { TutorialContext } from "../contexts/tutorialContext";
+import { IterratorContext } from "../contexts/iterratorContext";
 
 let SiteNameVar = false;
 let LatVar = false;
 let LngVar = false;
 
 export default function DiveSiteModal() {
+  const { secondGuideModal, setSecondGuideModal } = useContext(
+    SecondTutorialModalContext
+  );
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
   );
   const [diveCloseState, setDiveCloseState] = useState(false);
 
-  const [formVals, setFormVals] = useState({
-    Site: "",
-    Latitude: "",
-    Longitude: "",
-    UserID: null,
-  });
+  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  // const [formVals, setFormVals] = useState({
+  //   Site: "",
+  //   Latitude: "",
+  //   Longitude: "",
+  //   UserID: null,
+  // });
 
   const [formValidation, SetFormValidation] = useState({
     SiteNameVal: false,
@@ -45,7 +57,7 @@ export default function DiveSiteModal() {
     const getUser = async () => {
       try {
         UserId = await userCheck();
-        setFormVals({ ...formVals, UserID: UserId.id });
+        setAddSiteVals({ ...addSiteVals, UserID: UserId.id });
       } catch (e) {
         console.log({ title: "Error", message: e.message });
       }
@@ -54,12 +66,26 @@ export default function DiveSiteModal() {
     getUser();
   }, []);
 
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator2 > 0) {
+        setItterator2(itterator2 + 1);
+      }
+    }
+  }, [diveSiteAdderModal]);
+
+  useEffect(() => {
+    if (itterator2 === 10 || itterator2 === 17) {
+      setSecondGuideModal(true);
+    }
+  }, [itterator2]);
+
   const getCurrentLocation = async () => {
     try {
       const location = await getCurrentCoordinates();
       if (location) {
-        setFormVals({
-          ...formVals,
+        setAddSiteVals({
+          ...addSiteVals,
           Latitude: location.coords.latitude.toString(),
           Longitude: location.coords.longitude.toString(),
         });
@@ -76,16 +102,16 @@ export default function DiveSiteModal() {
   };
 
   const handleSubmit = () => {
-    if (formVals.Site === "" || formVals.Site === null) {
+    if (addSiteVals.Site === "" || addSiteVals.Site === null) {
       SiteNameVar = true;
     } else {
       SiteNameVar = false;
     }
 
     if (
-      formVals.Latitude === "" ||
-      formVals.Latitude === null ||
-      isNaN(formVals.Latitude)
+      addSiteVals.Latitude === "" ||
+      addSiteVals.Latitude === null ||
+      isNaN(addSiteVals.Latitude)
     ) {
       LatVar = true;
     } else {
@@ -93,9 +119,9 @@ export default function DiveSiteModal() {
     }
 
     if (
-      formVals.Longitude === "" ||
-      formVals.Longitude === null ||
-      isNaN(formVals.Longitude)
+      addSiteVals.Longitude === "" ||
+      addSiteVals.Longitude === null ||
+      isNaN(addSiteVals.Longitude)
     ) {
       LngVar = true;
     } else {
@@ -110,20 +136,43 @@ export default function DiveSiteModal() {
     });
 
     if (
-      formVals.Site === "" ||
-      formVals.Latitude == "" ||
-      isNaN(formVals.Latitude) ||
-      formVals.Longitude == "" ||
-      isNaN(formVals.Longitude)
+      addSiteVals.Site === "" ||
+      addSiteVals.Latitude == "" ||
+      isNaN(addSiteVals.Latitude) ||
+      addSiteVals.Longitude == "" ||
+      isNaN(addSiteVals.Longitude)
     ) {
       return;
     } else {
-      insertDiveSiteWaits(formVals);
-      setFormVals({});
-      setDiveSiteAdderModal(!diveSiteAdderModal);
+      if (tutorialRunning) {
+        if (itterator2 > 0) {
+          setItterator2(itterator2 + 1);
+        }
+      } else {
+        insertDiveSiteWaits(addSiteVals);
+        setAddSiteVals({
+          Site: "",
+          Latitude: "",
+          Longitude: "",
+          UserID: null,
+        });
+        setDiveSiteAdderModal(!diveSiteAdderModal);
+      }
     }
   };
 
+  const toggleDiveModal = () => {
+    setDiveSiteAdderModal(!diveSiteAdderModal)
+
+    if (diveSiteAdderModal) {
+      setAddSiteVals({
+        Site: "",
+        Latitude: "",
+        Longitude: "",
+        UserID: null,
+      });
+    }
+  };
   const [imaButState, setImaButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
 
@@ -132,7 +181,7 @@ export default function DiveSiteModal() {
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Dive Site</Text>
         <TouchableWithoutFeedback
-          onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
+          onPress={toggleDiveModal}
           onPressIn={() => setDiveCloseState(true)}
           onPressOut={() => setDiveCloseState(false)}
         >
@@ -160,13 +209,13 @@ export default function DiveSiteModal() {
         >
           <TextInput
             style={formValidation.SiteNameVal ? styles.inputRed : styles.input}
-            value={formVals.Site}
+            value={addSiteVals.Site}
             placeholder={"Site Name"}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
             fontSize={18}
             onChangeText={(siteText) =>
-              setFormVals({ ...formVals, Site: siteText })
+              setAddSiteVals({ ...addSiteVals, Site: siteText })
             }
           ></TextInput>
         </InsetShadow>
@@ -185,7 +234,7 @@ export default function DiveSiteModal() {
         >
           <TextInput
             style={formValidation.LatVal ? styles.inputRed : styles.input}
-            value={formVals.Latitude}
+            value={addSiteVals.Latitude}
             placeholder={"Latitude"}
             keyboardType="numbers-and-punctuation"
             // editable={false}
@@ -193,7 +242,7 @@ export default function DiveSiteModal() {
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
             onChangeText={(text) =>
-              setFormVals({ ...formVals, Latitude: text })
+              setAddSiteVals({ ...addSiteVals, Latitude: text })
             }
           ></TextInput>
         </InsetShadow>
@@ -212,7 +261,7 @@ export default function DiveSiteModal() {
         >
           <TextInput
             style={formValidation.LngVal ? styles.inputRed : styles.input}
-            value={formVals.Longitude}
+            value={addSiteVals.Longitude}
             placeholder={"Longitude"}
             keyboardType="numbers-and-punctuation"
             // editable={false}
@@ -220,7 +269,7 @@ export default function DiveSiteModal() {
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
             onChangeText={(text) =>
-              setFormVals({ ...formVals, Longitude: text })
+              setAddSiteVals({ ...addSiteVals, Longitude: text })
             }
           ></TextInput>
         </InsetShadow>

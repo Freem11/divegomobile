@@ -5,11 +5,21 @@ import { diveSites } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { TutorialContext } from "../contexts/tutorialContext";
 
 export default function DiveSiteAutoComplete() {
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
+
+  const { secondGuideModal, setSecondGuideModal } = useContext(
+    SecondTutorialModalContext
+  );
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+
 
   let diveSiteData
 
@@ -62,6 +72,12 @@ export default function DiveSiteAutoComplete() {
         diveSiteSet.forEach((site) => {
           if(site.name === diveSite.title)
           setSelectedDiveSite({SiteName: site.name, Latitude: site.lat, Longitude: site.lng});
+          
+          if (tutorialRunning) {
+            if (itterator2 > 0) {
+              setItterator2(itterator2 + 1);
+            }
+          }
         })
       }
      

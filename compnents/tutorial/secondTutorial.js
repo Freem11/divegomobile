@@ -27,6 +27,8 @@ import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
+import { DiveSpotContext } from "../contexts/diveSpotContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -45,11 +47,18 @@ const windowHeight = Dimensions.get("window").height;
 export default function SecondTutorial(props) {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { tutorialModalY } = props;
+  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
-  const { secondGuideModal, setSecondGuideModal } = useContext(SecondTutorialModalContext);
+  const { secondGuideModal, setSecondGuideModal } = useContext(
+    SecondTutorialModalContext
+  );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { setMapCenter } = useContext(MapCenterContext);
+
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
 
   const [pics, setPics] = useState([]);
   const [profile, setProfile] = useState([]);
@@ -83,19 +92,47 @@ export default function SecondTutorial(props) {
 
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
-  const picX = useSharedValue(-300);
-  const exploreButtonY = useSharedValue(-1000);
+  const DsSearchY = useSharedValue(-1000);
+  const diveSiteY = useSharedValue(-1000);
+
   const clusterAnchorY = useSharedValue(-1200);
   const heatPotintY = useSharedValue(-1200);
   const arrowY = useSharedValue(-1200);
   const userBoxX = useSharedValue(-300);
 
-  const text0 = "Hey! Welcome back! Now that you have a Diver Name I can now show you how you can contribute to SEAsons!";
-  const text1 = "First, lets look at working with Dive sites, let's say your out at a dive site and you want to see if the site your diving at is in SEAsons already...";
-  const text2 = "No problem! Make sure the map is positioned to your current location and tap the dive site search feature under this button."
-  const text3 = "A list of dive sites in your area will show up, type in the name of your site to verify, in fact why not try it right now!";
-  const text4 = "";
+  const text0 =
+    "Hey welcome back! Now that you have a Diver Name I can show you how you can contribute to SEAsons!";
+  const text1 =
+    "First, let's look at working with Dive sites, let's move to a spot with known dive sites";
+  const text2 =
+    "Now that the map is positioned let's check for a dive site by tapping on the dive site search tool option, it looks like this";
+  const text3 = "";
+  const text4 =
+    "Now that the options are open it will show you a list of dive sites in the area, try searching for 'Copper Cliffs' and select it, once you find it";
   const text5 = "";
+  const text6 =
+    "Nice! As you can see when you selected the dive site, the map zoomed to it and put that yellow indicator over it to highlight it, this means the site is in the app and ready for you to add your sightings to it later!";
+  const text7 =
+    "Next, let's say the site you were looking for was NOT in the app, no problem adding them is very easy!";
+  const text8 =
+    "To add a dive site we need to click on the dive site adding button, it's under this option, pop it open and i'll walk you through how it works";
+  const text9 = "";
+  const text10 =
+    "This is the dive site adding form, here, you can see 3 fields and a button. First is the site name, add the dive site name in this spot";
+  const text11 =
+    "Next are the GPS lat and lng fields. The easiest way to get them is to be AT the dive site and simply tap the 'I'm at the dive site button' it will take your current location and use them as the coordinates for the dive site!";
+  const text12 =
+    "If you are at home and have, the name of the site and the decimal format GPS you can add them manually as well";
+  const text13 =
+    "One you have your site name an GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submited for review";
+  const text14 =
+    "Please note you new site won't automatically be added to the map the SEAsons team will verify you submisison befor commiting to the map, but after that you site will go in and be credited to you with your diver name that we setup earlier!";
+  const text15 = "Give it a try for yourself add a name and GPS using the 'I'm at the dive site' button and submit!";
+  const text16 = "";
+  const text17 = "Nice Job, That's how you add a new dive site to SEAsons! In this case since we are showing you how this entry was not submitted, but you can from now on in the way I have shown you.";
+  const text18 =
+    "That's it for adding dive sites to the app!, in the next guide we will look at doing the same thing but with you sea creature sighting photos instead! Tap on this button to go to that guid next, otherwsie tap anywhere else to close, and thanks for joining me again!";
+  const text19 = "";
 
   const [textRead, setTextRead] = useState("");
 
@@ -106,6 +143,20 @@ export default function SecondTutorial(props) {
     text3,
     text4,
     text5,
+    text6,
+    text7,
+    text8,
+    text9,
+    text10,
+    text11,
+    text12,
+    text13,
+    text14,
+    text15,
+    text16,
+    text17,
+    text18,
+    text19,
   ];
 
   //  var interval;
@@ -114,13 +165,13 @@ export default function SecondTutorial(props) {
     // if (itterator === 2 || itterator == 15) {
     //   return;
     // } else {
-      if (pushVal === 1 && itterator2 < feederArray.length - 1) {
-        setItterator2((prev) => prev + pushVal);
-      }
+    if (pushVal === 1 && itterator2 < feederArray.length - 1) {
+      setItterator2((prev) => prev + pushVal);
+    }
 
-      if (pushVal === 1 && itterator2 === feederArray.length - 1) {
-        setSecondGuideModal(!secondGuideModal);
-      }
+    if (pushVal === 1 && itterator2 === feederArray.length - 1) {
+      setSecondGuideModal(!secondGuideModal);
+    }
     // }
 
     // setTextRead("");
@@ -162,49 +213,52 @@ export default function SecondTutorial(props) {
       }, 1900);
     }
 
-    // if (itterator === 1) {
-    //   startPicAnimation();
-    // }
+    if (itterator2 === 2) {
+      moveMap({ lat: 50.03312260000001, lng: -125.2733354 });
+      setTimeout(() => {
+        startDsSearchButtonAnimation();
+      }, 1000);
+    }
 
-    // if (itterator === 4 || itterator === 5) {
-    //   startExploreButtonAnimation();
-    // }
+    if (itterator2 === 3) {
+      startDsSearchButtonAnimation();
+      setSecondGuideModal(!secondGuideModal);
+    }
 
-    // if (itterator === 5 || itterator === 7) {
-    //   startClusterAnchorAnimation();
-    // }
+    if (itterator2 === 4) {
+      setSecondGuideModal(!secondGuideModal);
+    }
 
-    // if (itterator === 6 || itterator === 7) {
-    //   startHeatPointAnimation();
-    // }
+    if (itterator2 === 5) {
+      setSecondGuideModal(!secondGuideModal);
+    }
 
-    // if (itterator === 7) {
-    //   startCharacterAnimation();
-    //   startTextBoxAnimation();
-    //   setGuideModal(!guideModal);
-    // }
+    if (itterator2 === 6) {
+      setSecondGuideModal(!secondGuideModal);
+    }
 
-    // if (itterator === 8) {
-    //   startCharacterAnimation();
-    //   startTextBoxAnimation();
-    // }
+    if (itterator2 === 8) {
+      startDiveSiteAnimation();
+    }
 
-    // if (itterator === 10 || itterator === 12) {
-    //   setGuideModal(!guideModal);
-    // }
+    if (itterator2 === 9) {
+      startDiveSiteAnimation();
+      setSecondGuideModal(!secondGuideModal);
+    }
 
-    // if (itterator === 11 || itterator === 12) {
-    //   startArrowAnimation();
-    // }
+    if (itterator2 === 16) {
+      setSecondGuideModal(!secondGuideModal);
+    }
 
-    // if (itterator === 15 || itterator === 16) {
-    //   getProfile();
-    //   if (profile[0].UserName) {
-    //     setItterator(16);
-    //     return;
-    //   }
-    //   startUserBoxAnimation();
-    // }
+    if (itterator2 === 19) {
+      setAddSiteVals({
+        Site: "",
+        Latitude: "",
+        Longitude: "",
+        UserID: null,
+      });
+       setDiveSiteAdderModal(!diveSiteAdderModal);
+    }
 
     if (itterator2 === feederArray.length - 1) {
       setItterator2(null);
@@ -227,21 +281,15 @@ export default function SecondTutorial(props) {
     };
   });
 
-  const picSlide = useAnimatedStyle(() => {
+  const DsSearchButtonSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateX: picX.value }],
+      transform: [{ translateY: DsSearchY.value }],
     };
   });
 
-  const exporeButtonSlide = useAnimatedStyle(() => {
+  const diveSiteSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: exploreButtonY.value }],
-    };
-  });
-
-  const clusterAnchorSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: clusterAnchorY.value }],
+      transform: [{ translateY: diveSiteY.value }],
     };
   });
 
@@ -279,27 +327,19 @@ export default function SecondTutorial(props) {
     }
   };
 
-  const startPicAnimation = () => {
-    if (picX.value === -300) {
-      picX.value = withSpring(0);
+  const startDsSearchButtonAnimation = () => {
+    if (DsSearchY.value === -1000) {
+      DsSearchY.value = withTiming(windowHeight * 0.4);
     } else {
-      picX.value = withTiming(-300);
+      DsSearchY.value = withTiming(-1000);
     }
   };
 
-  const startExploreButtonAnimation = () => {
-    if (exploreButtonY.value === -1000) {
-      exploreButtonY.value = withTiming(windowHeight * 0.4);
+  const startDiveSiteAnimation = () => {
+    if (diveSiteY.value === -1000) {
+      diveSiteY.value = withTiming(windowHeight * 0.4);
     } else {
-      exploreButtonY.value = withTiming(-1000);
-    }
-  };
-
-  const startClusterAnchorAnimation = () => {
-    if (clusterAnchorY.value === -1200) {
-      clusterAnchorY.value = withTiming(windowHeight * 0.4);
-    } else {
-      clusterAnchorY.value = withTiming(-1200);
+      diveSiteY.value = withTiming(-1000);
     }
   };
 
@@ -350,15 +390,6 @@ export default function SecondTutorial(props) {
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
-
-    let hopper = 0;
-    if (itterator === 1) {
-      hopper = 2;
-    } else {
-      hopper = 1;
-    }
-    setItterator2((prev) => prev + hopper);
-    startPicAnimation();
   };
 
   return (
@@ -366,75 +397,9 @@ export default function SecondTutorial(props) {
       <View style={styles.wrapper}>
         <LinearGradient
           style={styles.container}
-          colors={["transparent", "black"]}
+          colors={["transparent", "#538dbd"]}
           start={{ x: 0, y: 0 }}
         ></LinearGradient>
-
-        <View style={styles.container3}>
-          {pics &&
-            pics.map((pic) => {
-              return (
-                <TouchableWithoutFeedback
-                  key={pic.id}
-                  onPress={() =>
-                    moveMap({ lat: pic.latitude, lng: pic.longitude })
-                  }
-                >
-                  <Animated.View
-                    key={pic.id}
-                    style={[styles.picContainer3, picSlide]}
-                  >
-                    <View style={styles.micro}>
-                      <Text style={styles.titleText}>{pic.label}</Text>
-                    </View>
-                    <View style={styles.shadowbox}>
-                      <Image
-                        source={{
-                          uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
-                        }}
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          borderRadius: 15,
-                          borderColor: "grey",
-                        }}
-                      />
-                    </View>
-                  </Animated.View>
-                </TouchableWithoutFeedback>
-              );
-            })}
-        </View>
-
-        {
-          /* <View style={styles.container3}>
-           {pics &&
-            pics.map((pic) => {
-              return(
-                <Text>HI</Text>
-              // <View key={pic.id} style={styles.picContainer3}>
-                /* <View style={styles.micro}>
-                  <Text style={styles.titleText}>{pic.label}</Text>
-                </View> */
-          /* <View style={styles.shadowbox}>
-                  <Image
-                    source={{
-                      uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
-                    }}
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      borderRadius: 15,
-                      borderColor: "grey",
-                    }}
-                  />
-                </View> */
-          // </View>
-          //     )
-          //   })}
-          // )}
-          /* </View> */
-        }
 
         <Animated.View style={[characterSlide, styles.character]}>
           <Image
@@ -450,69 +415,21 @@ export default function SecondTutorial(props) {
           <Text style={styles.textContain}>{textRead}</Text>
         </Animated.View>
 
-        <Animated.View style={[styles.buttonwrapper, exporeButtonSlide]}>
-          <MaterialIcons name="explore" color="aquamarine" size={32} />
+        <Animated.View style={[styles.buttonwrapper, DsSearchButtonSlide]}>
+          <MaterialCommunityIcons
+            name="map-search-outline"
+            color="aquamarine"
+            size={32}
+          />
+        </Animated.View>
+
+        <Animated.View style={[styles.buttonwrapper, diveSiteSlide]}>
+          <MaterialIcons name="add-location-alt" color="aquamarine" size={32} />
         </Animated.View>
 
         {/* new one  */}
         <Animated.View style={[styles.userContainer, userBoxSlide]}>
           <UserNamer></UserNamer>
-        </Animated.View>
-
-        <Animated.View
-          style={[styles.anchorClusterWrapper, clusterAnchorSlide]}
-        >
-          <Image
-            source={anchorClustIOS}
-            style={{
-              height: 30,
-              width: 30,
-            }}
-          />
-
-          <Image
-            source={anchorIconIOS}
-            style={[
-              styles.anchor1,
-              {
-                height: 30,
-                width: 30,
-              },
-            ]}
-          />
-
-          <Image
-            source={anchorIconIOS}
-            style={[
-              styles.anchor2,
-              {
-                height: 30,
-                width: 30,
-              },
-            ]}
-          />
-
-          <Image
-            source={anchorIconIOS}
-            style={[
-              styles.anchor3,
-              {
-                height: 30,
-                width: 30,
-              },
-            ]}
-          />
-
-          <Image
-            source={anchorIconIOS}
-            style={[
-              styles.anchor4,
-              {
-                height: 30,
-                width: 30,
-              },
-            ]}
-          />
         </Animated.View>
 
         <Animated.View style={[styles.heatPointWrapper, heatPointSlide]}>
