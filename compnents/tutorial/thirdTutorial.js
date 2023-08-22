@@ -168,20 +168,13 @@ export default function ThirdTutorial(props) {
     if (itterator3 === 0) {
       setTimeout(() => {
         startCharacterAnimation();
-      }, 1700);
+      }, 400);
 
       setTimeout(() => {
         startTextBoxAnimation();
         setupText(0);
-      }, 1900);
+      }, 600);
     }
-
-    // if (itterator2 === 2) {
-    //   moveMap({ lat: 50.03312260000001, lng: -125.2733354 });
-    //   setTimeout(() => {
-    //     startDsSearchButtonAnimation();
-    //   }, 1000);
-    // }
 
     if (itterator3 === 3) {
       startPhotoButtonAnimation();

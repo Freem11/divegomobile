@@ -188,12 +188,12 @@ export default function SecondTutorial(props) {
     if (itterator2 === 0) {
       setTimeout(() => {
         startCharacterAnimation();
-      }, 1700);
+      }, 400);
 
       setTimeout(() => {
         startTextBoxAnimation();
         setupText(0);
-      }, 1900);
+      }, 600);
     }
 
     if (itterator2 === 2) {

@@ -188,12 +188,12 @@ export default function IntroTutorial(props) {
     if (itterator === 0) {
       setTimeout(() => {
         startCharacterAnimation();
-      }, 1700);
+      }, 400);
 
       setTimeout(() => {
         startTextBoxAnimation();
         setupText(0);
-      }, 1900);
+      }, 600);
     }
 
     if (itterator === 1) {
@@ -362,8 +362,10 @@ export default function IntroTutorial(props) {
   };
 
   useEffect(() => {
-    if (itterator === null) {
-      setItterator(0);
+    if(tutorialRunning){
+      if (itterator === null) {
+        setItterator(0);
+      }
     }
 
     let today = new Date();
