@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -12,11 +12,38 @@ import AutoSuggestListItem from "./autoSuggestListItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
+import { TutorialContext } from "../contexts/tutorialContext";
+import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
+
+let waiter;
 
 export default function AnimalAutoSuggest(props) {
   const { setPin, pin, formValidation, SetFormValidation } = props;
-
   const [list, setList] = useState([]);
+
+  const { thirdGuideModal, setThirdGuideModal } = useContext(
+    ThirdTutorialModalContext
+  );
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+
+useEffect(() => {
+
+  clearTimeout(waiter)
+  
+  if (tutorialRunning) {
+    if (itterator3 === 13) {
+      waiter = setTimeout(() => {
+        console.log("got here?")
+        setItterator3(itterator3 + 1);
+      }, 2000);
+      
+    }
+  } 
+
+}, [pin.Animal])
+
 
   const handleChange = async (text) => {
     setPin({ ...pin, Animal: text });

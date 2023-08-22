@@ -120,8 +120,9 @@ export default function ThirdTutorial(props) {
   const text11 = "";
   const text12 = "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one you can tap right on it and a dropdown will pop up, start entering the name of the sea creature in your picture, if it already exists in SEAsons it will show up and an option to help speed things along, if it's completely new you will need to type it out.";
   const text13 = "";
-  const text14 = "";
+  const text14 = "Wonderful! Now that the sea creature has it's name, the only piece left is the GPS, since we are assuming that we don't have them use the Pin Dropper icon to open up the map so we can drop a pin!";
   const text15 = "";
+  const text16 = "";
 
   const [textRead, setTextRead] = useState("");
 
@@ -141,6 +142,8 @@ export default function ThirdTutorial(props) {
     text12,
     text13,
     text14,
+    text15,
+    text16,
   ];
 
 
@@ -224,7 +227,11 @@ export default function ThirdTutorial(props) {
       setThirdGuideModal(!thirdGuideModal);
     }
 
-    if (itterator3 === 12) {
+    if (itterator3 === 12 || itterator3 === 13) {
+      setThirdGuideModal(!thirdGuideModal);
+    }
+
+    if (itterator3 === 14) {
       setThirdGuideModal(!thirdGuideModal);
     }
 
