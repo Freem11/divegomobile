@@ -1,28 +1,13 @@
 import { StyleSheet, View, Text, Keyboard } from "react-native";
-import { TutorialContext } from "../contexts/tutorialContext";
-import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
-import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { useState, useEffect, useContext } from "react";
 
 const AutoSuggestListItem = (props) => {
-  const { setList, setPin, pin, name } = props;
-  const { thirdGuideModal, setThirdGuideModal } = useContext(
-    ThirdTutorialModalContext
-  );
-  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { setList, setPin, pin, name, handleList, setTextSource } = props;
+ 
 
-
-  const handleSelect = (text) => {
-    setPin({ ...pin, Animal: text });
-    setList([]);
-    Keyboard.dismiss();
-
-    if (tutorialRunning) {
-      if (itterator3 === 13) {
-        setItterator3(itterator3 + 1);
-      }
-    } 
+  const handleSelect = async (text) => {
+    setTextSource(true)
+    handleList({animal: text, value : 0})
   };
 
   return (

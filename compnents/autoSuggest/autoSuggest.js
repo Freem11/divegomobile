@@ -15,18 +15,21 @@ import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { PictureAdderContext } from "../contexts/picModalContext";
 
 let waiter;
 
 export default function AnimalAutoSuggest(props) {
   const { setPin, pin, formValidation, SetFormValidation } = props;
   const [list, setList] = useState([]);
+  const [textSource, setTextSource] = useState(false);
 
   const { thirdGuideModal, setThirdGuideModal } = useContext(
     ThirdTutorialModalContext
   );
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
 
 useEffect(() => {
 
@@ -35,7 +38,6 @@ useEffect(() => {
   if (tutorialRunning) {
     if (itterator3 === 13) {
       waiter = setTimeout(() => {
-        console.log("got here?")
         setItterator3(itterator3 + 1);
       }, 2000);
       
@@ -44,13 +46,23 @@ useEffect(() => {
 
 }, [pin.Animal])
 
+useEffect(() => {
 
-  const handleChange = async (text) => {
-    setPin({ ...pin, Animal: text });
+ if (!picAdderModal){
+   setTextSource(false)
+ }
+
+}, [picAdderModal])
+
+
+const handleList = async (values) => {
+
+  if (values.value === 1){
+    setPin({ ...pin, Animal: values.animal });
     SetFormValidation({ ...formValidation, AnimalVal: false });
-
-    if (text.length > 0) {
-      let newfilteredList = await getAnimalNamesThatFit(text);
+  
+    if (values.animal.length > 0) {
+      let newfilteredList = await getAnimalNamesThatFit(values.animal);
       let animalArray = [];
       newfilteredList.forEach((animal) => {
         if (!animalArray.includes(animal.label)) {
@@ -61,9 +73,23 @@ useEffect(() => {
     } else {
       setList([]);
     }
+  } else {
+    setPin({ ...pin, Animal: values.animal });
+    setList([]);
+    Keyboard.dismiss();
+  }
+
+};
+
+  const handleChange = async (text) => {
+    if(!textSource){
+      handleList({animal: text, value : 1})
+    }
+    
   };
 
   const handleClear = () => {
+    setTextSource(false)
     setPin({ ...pin, Animal: "" });
     setList([]);
     Keyboard.dismiss();
@@ -117,6 +143,8 @@ useEffect(() => {
               pin={pin}
               setPin={setPin}
               setList={setList}
+              handleList={handleList}
+              setTextSource={setTextSource}
             />
           );
         })}
