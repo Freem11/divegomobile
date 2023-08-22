@@ -26,12 +26,14 @@ import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { TutorialModelContext } from "./contexts/tutorialModalContext";
 import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContext";
+import { ThirdTutorialModalContext } from "./contexts/thirdTutorialModalContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";;
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
+import { Iterrator3Context } from "./contexts/iterrator3Context";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -46,6 +48,8 @@ import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
 import IntroTutorial from "./tutorial/introTutorial";
 import SecondTutorial from "./tutorial/secondTutorial";
+import ThirdTutorial from "./tutorial/thirdTutorial";
+
 import { grabProfileById } from "../supabaseCalls/accountSupabaseCalls";
 import { SessionContext } from "./contexts/sessionContext";
 
@@ -220,6 +224,32 @@ useEffect(() => {
   // }
 }, [secondGuideModal]);
 
+//Third Tutorial Animations
+const tutorial3ModalY = useSharedValue(windowHeight);
+const { thirdGuideModal, setThirdGuideModal } = useContext(ThirdTutorialModalContext);
+const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+
+const tutorial3ModalReveal = useAnimatedStyle(() => {
+  return {
+    transform: [{ translateY: tutorial3ModalY.value }],
+  };
+});
+
+const startThirdGuideModalAnimations = () => {
+  if (thirdGuideModal) {
+    tutorial3ModalY.value = withTiming(0);
+  } else {
+    tutorial3ModalY.value = withTiming(windowHeight);
+  }
+};
+
+useEffect(() => {
+  startThirdGuideModalAnimations();
+  // if (!itterator && guideModal) {
+  //   setItterator(0);
+  // }
+}, [thirdGuideModal]);
+
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
   const [mapCenter, setMapCenter] = useState({
@@ -385,6 +415,12 @@ useEffect(() => {
             style={[styles.tutorialModal, tutorial2ModalReveal]}
           >
             <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.tutorialModal, tutorial3ModalReveal]}
+          >
+            <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
           </Animated.View>
 
 

@@ -17,6 +17,7 @@ import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
+import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import InsetShadow from "react-native-inset-shadow";
 import { scale } from "react-native-size-matters";
@@ -29,6 +30,8 @@ export default function TutorialLaunchPadModal() {
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const [tutPadCloseState, setTutPadCloseState] = useState(false);
   const [tutPad2CloseState, setTutPad2CloseState] = useState(false);
+  const [tutPad3CloseState, setTutPad3CloseState] = useState(false);
+  
   const [tutorialsCloseState, setTutorialsCloseState] = useState(false);
 
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
@@ -37,6 +40,9 @@ export default function TutorialLaunchPadModal() {
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
+  );
+  const { thirdGuideModal, setThirdGuideModal } = useContext(
+    ThirdTutorialModalContext
   );
 
   const handleTutorialStartup = () => {
@@ -49,6 +55,12 @@ export default function TutorialLaunchPadModal() {
     setTutorialRunning(true)
     setTutorialLaunchpadModal(!tutorialLaunchpadModal);
     setSecondGuideModal(!secondGuideModal);
+  };
+
+  const handleThirdTutorialStartup = () => {
+    setTutorialRunning(true)
+    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
+    setThirdGuideModal(!thirdGuideModal);
   };
 
   return (
@@ -120,6 +132,31 @@ export default function TutorialLaunchPadModal() {
             </Text>
           </View>
         </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback
+          onPress={handleThirdTutorialStartup}
+          onPressIn={() => setTutPad3CloseState(true)}
+          onPressOut={() => setTutPad3CloseState(false)}
+        >
+          <View
+            style={
+              tutPad2CloseState
+                ? styles.openTutorialButtonPressed
+                : styles.openTutorialButton
+            }
+          >
+            <Text
+              style={{
+                marginLeft: 5,
+                fontFamily: "BubblegumSans_400Regular",
+                color: "gold",
+              }}
+            >
+              Photogenics
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+
       </View>
     </View>
   );

@@ -18,14 +18,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
+import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import moment from "moment";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
-import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
@@ -44,15 +44,15 @@ import UserNamer from "./usernamer";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function SecondTutorial(props) {
+export default function ThirdTutorial(props) {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { tutorialModalY } = props;
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
-  const { secondGuideModal, setSecondGuideModal } = useContext(
-    SecondTutorialModalContext
+  const { thirdGuideModal, setThirdGuideModal } = useContext(
+    ThirdTutorialModalContext
   );
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { setMapCenter } = useContext(MapCenterContext);
 
@@ -79,45 +79,39 @@ export default function SecondTutorial(props) {
     }
   };
 
+  const getPhotos = async (today) => {
+    try {
+      const photos = await getRecentPhotos(today);
+      if (photos) {
+        setPics(photos);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
-  const DsSearchY = useSharedValue(-1000);
+  const photoY = useSharedValue(-1000);
+
+
   const diveSiteY = useSharedValue(-1000);
+  const clusterAnchorY = useSharedValue(-1200);
+  const heatPotintY = useSharedValue(-1200);
+  const arrowY = useSharedValue(-1200);
+  const userBoxX = useSharedValue(-300);
 
   const text0 =
-    "Hey welcome back! Now that you have a Diver Name, I can show you how you can contribute to SEAsons!";
+    "Hey welcome back again! Let's continue with the guide to how you can contribute to SEAsons!";
   const text1 =
-    "First, let's look at working with Dive sites, let's move to a spot with known dive sites";
+    "This time, let's look at working with your sea creature sightings, in other word the photos of sea creatures you have taken on your dives ";
   const text2 =
-    "Now that the map is positioned, let's check for a dive site by tapping on the dive site search tool option, it looks like this";
-  const text3 = "";
+    "At this point you have already seen that diver's photos make up the heat map and show up when you open a dive site that is near to a sighting";
+  const text3 = "Now it's time for you to join your fellow divers! To add a photo, we first need to open up the photo adding form, it's under the photo icon it looks like this";
   const text4 =
-    "Now that the options are open it will show you a list of dive sites in the area, try searching for 'Copper Cliffs' and select it, once you have found it";
+    "Open it up and let's take a look!";
   const text5 = "";
-  const text6 =
-    "Nice! As you can see when you selected the dive site, the map zoomed to it and put that yellow indicator over it to highlight it, this means the site is in the app and ready for you to add your sightings to it later!";
-  const text7 =
-    "Next, let's say the site you were looking for was NOT in the app, no problem adding them is very easy!";
-  const text8 =
-    "To add a dive site we need to click on the dive site adding button, it's under this option, pop it open and I'll walk you through how it works";
-  const text9 = "";
-  const text10 =
-    "This is the dive site adding form, here, you can see 3 fields and a button. First is the site name, add the dive site name in this spot";
-  const text11 =
-    "Next are the GPS lat and lng fields. The easiest way to get them is to be AT the dive site and simply tap the 'I'm at the dive site button' it will take your current location and use them as the coordinates for the dive site!";
-  const text12 =
-    "If you are at home, and have the name of the site as well as the decimal format GPS coordinates, you can add them manually as well";
-  const text13 =
-    "Once you have your site name and GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submited for review";
-  const text14 =
-    "Please note your new site won't automatically be added to the map, the SEAsons team will verify your submisison before committing to the map, but after that your site will go in and be credited to you with your diver name that we setup earlier!";
-  const text15 = "Give it a try for yourself add a name and GPS using the 'I'm at the dive site' button and submit!";
-  const text16 = "";
-  const text17 = "Nice Job, That's how you add a new dive site to SEAsons! In this case since this is a guide, this entry was not submitted, but you can from now on in the same way.";
-  const text18 =
-    "That's it for adding dive sites to the app!, in the next guide we will look at adding sea creature sighting photos! Tap on this button to go to that guide next, otherwise tap anywhere else to close, and thanks for joining me again!";
-  const text19 = "";
-
+ 
   const [textRead, setTextRead] = useState("");
 
   const feederArray = [
@@ -127,34 +121,20 @@ export default function SecondTutorial(props) {
     text3,
     text4,
     text5,
-    text6,
-    text7,
-    text8,
-    text9,
-    text10,
-    text11,
-    text12,
-    text13,
-    text14,
-    text15,
-    text16,
-    text17,
-    text18,
-    text19,
   ];
 
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator2 === 3) {
-      return;
-    } else {
-    if (pushVal === 1 && itterator2 < feederArray.length - 1) {
-      setItterator2((prev) => prev + pushVal);
-    }
+    // if (itterator2 === 3) {
+    //   return;
+    // } else {
+    if (pushVal === 1 && itterator3 < feederArray.length - 1) {
+      setItterator3((prev) => prev + pushVal);
+    // }
 
-    if (pushVal === 1 && itterator2 === feederArray.length - 1) {
-      setSecondGuideModal(!secondGuideModal);
+    if (pushVal === 1 && itterator3 === feederArray.length - 1) {
+      setThirdGuideModal(!thirdGuideModal);
     }
     }
 
@@ -180,12 +160,12 @@ export default function SecondTutorial(props) {
   };
 
   useEffect(() => {
-    let textVal = feederArray[itterator2];
+    let textVal = feederArray[itterator3];
     setTextRead(textVal);
 
-    console.log(itterator2, feederArray.length);
+    console.log(itterator3, feederArray.length);
 
-    if (itterator2 === 0) {
+    if (itterator3 === 0) {
       setTimeout(() => {
         startCharacterAnimation();
       }, 1700);
@@ -196,62 +176,59 @@ export default function SecondTutorial(props) {
       }, 1900);
     }
 
-    if (itterator2 === 2) {
-      moveMap({ lat: 50.03312260000001, lng: -125.2733354 });
-      setTimeout(() => {
-        startDsSearchButtonAnimation();
-      }, 1000);
+    // if (itterator2 === 2) {
+    //   moveMap({ lat: 50.03312260000001, lng: -125.2733354 });
+    //   setTimeout(() => {
+    //     startDsSearchButtonAnimation();
+    //   }, 1000);
+    // }
+
+    if (itterator3 === 3) {
+      startPhotoButtonAnimation();
     }
 
-    if (itterator2 === 3) {
-      startDsSearchButtonAnimation();
-      setSecondGuideModal(!secondGuideModal);
+    if (itterator3 === 5) {
+      startPhotoButtonAnimation();
+      setThirdGuideModal(!thirdGuideModal);
     }
 
-    if (itterator2 === 4) {
-      setSecondGuideModal(!secondGuideModal);
-    }
+    // if (itterator2 === 6) {
+    //   setSecondGuideModal(!secondGuideModal);
+    // }
 
-    if (itterator2 === 5) {
-      setSecondGuideModal(!secondGuideModal);
-    }
+    // if (itterator2 === 8) {
+    //   startDiveSiteAnimation();
+    // }
 
-    if (itterator2 === 6) {
-      setSecondGuideModal(!secondGuideModal);
-    }
+    // if (itterator2 === 9) {
+    //   startDiveSiteAnimation();
+    //   setSecondGuideModal(!secondGuideModal);
+    // }
 
-    if (itterator2 === 8) {
-      startDiveSiteAnimation();
-    }
+    // if (itterator2 === 16) {
+    //   setSecondGuideModal(!secondGuideModal);
+    // }
 
-    if (itterator2 === 9) {
-      startDiveSiteAnimation();
-      setSecondGuideModal(!secondGuideModal);
-    }
+    // if (itterator2 === 19) {
+    //   setAddSiteVals({
+    //     Site: "",
+    //     Latitude: "",
+    //     Longitude: "",
+    //     UserID: null,
+    //   });
+    //    setDiveSiteAdderModal(!diveSiteAdderModal);
+    //    setTutorialRunning(false);
+    // }
 
-    if (itterator2 === 16) {
-      setSecondGuideModal(!secondGuideModal);
-    }
-
-    if (itterator2 === 19) {
-      setAddSiteVals({
-        Site: "",
-        Latitude: "",
-        Longitude: "",
-        UserID: null,
-      });
-       setDiveSiteAdderModal(!diveSiteAdderModal);
-       setTutorialRunning(false);
-    }
-
-    if (itterator2 === feederArray.length - 1) {
+    if (itterator3 === feederArray.length - 1) {
       setTutorialRunning(false);
-      setItterator2(null);
-      setSecondGuideModal(!secondGuideModal);
+      setItterator3(null);
+      setThirdGuideModal(!thirdGuideModal);
       startCharacterAnimation();
       startTextBoxAnimation();
+      console.log("what", tutorialRunning)
     }
-  }, [itterator2]);
+  }, [itterator3]);
 
   const characterSlide = useAnimatedStyle(() => {
     return {
@@ -265,15 +242,33 @@ export default function SecondTutorial(props) {
     };
   });
 
-  const DsSearchButtonSlide = useAnimatedStyle(() => {
+  const photoButtonSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: DsSearchY.value }],
+      transform: [{ translateY: photoY.value }],
     };
   });
 
   const diveSiteSlide = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: diveSiteY.value }],
+    };
+  });
+
+  const heatPointSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: heatPotintY.value }],
+    };
+  });
+
+  const arrowSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: arrowY.value }],
+    };
+  });
+
+  const userBoxSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: userBoxX.value }],
     };
   });
 
@@ -293,11 +288,11 @@ export default function SecondTutorial(props) {
     }
   };
 
-  const startDsSearchButtonAnimation = () => {
-    if (DsSearchY.value === -1000) {
-      DsSearchY.value = withTiming(windowHeight * 0.4);
+  const startPhotoButtonAnimation = () => {
+    if (photoY.value === -1000) {
+      photoY.value = withTiming(windowHeight * 0.4);
     } else {
-      DsSearchY.value = withTiming(-1000);
+      photoY.value = withTiming(-1000);
     }
   };
 
@@ -309,14 +304,38 @@ export default function SecondTutorial(props) {
     }
   };
 
+  const startHeatPointAnimation = () => {
+    if (heatPotintY.value === -1200) {
+      heatPotintY.value = withTiming(windowHeight * 0.3);
+    } else {
+      heatPotintY.value = withTiming(-1200);
+    }
+  };
+
+  const startArrowAnimation = () => {
+    if (arrowY.value === -1200) {
+      arrowY.value = withTiming(windowHeight * 0.06);
+    } else {
+      arrowY.value = withTiming(-1200);
+    }
+  };
+
+  const startUserBoxAnimation = () => {
+    if (userBoxX.value === -300) {
+      userBoxX.value = withSpring(windowWidth * 0.2);
+    } else {
+      userBoxX.value = withTiming(-500);
+    }
+  };
+
   useEffect(() => {
     if(tutorialRunning){
-      if (itterator2 === null) {
-        setItterator2(0);
+      if (itterator3 === null) {
+        setItterator3(0);
       }
     }
 
-  }, [secondGuideModal]);
+  }, [thirdGuideModal]);
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
@@ -345,9 +364,9 @@ export default function SecondTutorial(props) {
           <Text style={styles.textContain}>{textRead}</Text>
         </Animated.View>
 
-        <Animated.View style={[styles.buttonwrapper, DsSearchButtonSlide]}>
-          <MaterialCommunityIcons
-            name="map-search-outline"
+        <Animated.View style={[styles.buttonwrapper, photoButtonSlide]}>
+        <MaterialIcons
+            name="photo-camera"
             color="aquamarine"
             size={32}
           />
@@ -357,6 +376,36 @@ export default function SecondTutorial(props) {
           <MaterialIcons name="add-location-alt" color="aquamarine" size={32} />
         </Animated.View>
 
+        {/* new one  */}
+        <Animated.View style={[styles.userContainer, userBoxSlide]}>
+          <UserNamer></UserNamer>
+        </Animated.View>
+
+        <Animated.View style={[styles.heatPointWrapper, heatPointSlide]}>
+          <Image
+            source={heatIconIOS}
+            style={[
+              styles.anchor4,
+              {
+                height: 50,
+                width: 50,
+              },
+            ]}
+          />
+        </Animated.View>
+
+        <Animated.View style={[styles.arrowWrapper, arrowSlide]}>
+          <Image
+            source={arrowIOS}
+            style={[
+              styles.anchor4,
+              {
+                height: 90,
+                width: 200,
+              },
+            ]}
+          />
+        </Animated.View>
       </View>
     </TouchableWithoutFeedback>
   );
