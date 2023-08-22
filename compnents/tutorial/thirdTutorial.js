@@ -93,9 +93,10 @@ export default function ThirdTutorial(props) {
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
   const photoY = useSharedValue(-1000);
+  const imageY = useSharedValue(-1000);
+  const calendarY = useSharedValue(-1000);
 
 
-  const diveSiteY = useSharedValue(-1000);
   const clusterAnchorY = useSharedValue(-1200);
   const heatPotintY = useSharedValue(-1200);
   const arrowY = useSharedValue(-1200);
@@ -111,7 +112,17 @@ export default function ThirdTutorial(props) {
   const text4 =
     "Open it up and let's take a look!";
   const text5 = "";
- 
+  const text6 = "This is the photo adding form, as you can see there's a lot here, so let's start from the top and work our way down.";
+  const text7 = "At the top you can see this big empty field and just below is the 'Choose an image' button, tap it to go into your device's photo's and select one (preferably a sea creature of course!)";
+  const text8 = "";
+  const text9 = "As you can see, the photo you chose is now in the big empty field and, depending on the photo you may have seen that the date, lat and lng fields populated. SEAsons will pull that data off your photo if it carries that info. If not, don't worry we can add them manually.";
+  const text10 = "In any case, let's assume you need to add in that info. First let's take care of the date, you'll see a calendar icon just to the right of the date field (looks like this) tap in and set the date the photo was taken for us";
+  const text11 = "";
+  const text12 = "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one you can tap right on it and a dropdown will pop up, start entering the name of the sea creature in your picture, if it already exists in SEAsons it will show up and an option to help speed things along, if it's completely new you will need to type it out.";
+  const text13 = "";
+  const text14 = "";
+  const text15 = "";
+
   const [textRead, setTextRead] = useState("");
 
   const feederArray = [
@@ -121,7 +132,17 @@ export default function ThirdTutorial(props) {
     text3,
     text4,
     text5,
+    text6,
+    text7,
+    text8,
+    text9,
+    text10,
+    text11,
+    text12,
+    text13,
+    text14,
   ];
+
 
   //  var interval;
 
@@ -185,18 +206,27 @@ export default function ThirdTutorial(props) {
       setThirdGuideModal(!thirdGuideModal);
     }
 
-    // if (itterator2 === 6) {
-    //   setSecondGuideModal(!secondGuideModal);
-    // }
+    if (itterator3 === 7) {
+      startImageButtonAnimation();
+    }
+  
+    if (itterator3 === 8) {
+      startImageButtonAnimation();
+      setThirdGuideModal(!thirdGuideModal);
+    }
 
-    // if (itterator2 === 8) {
-    //   startDiveSiteAnimation();
-    // }
+    if (itterator3 === 10) {
+      startCalendarAnimation();
+    }
 
-    // if (itterator2 === 9) {
-    //   startDiveSiteAnimation();
-    //   setSecondGuideModal(!secondGuideModal);
-    // }
+    if (itterator3 === 11) {
+      startCalendarAnimation();
+      setThirdGuideModal(!thirdGuideModal);
+    }
+
+    if (itterator3 === 12) {
+      setThirdGuideModal(!thirdGuideModal);
+    }
 
     // if (itterator2 === 16) {
     //   setSecondGuideModal(!secondGuideModal);
@@ -240,10 +270,16 @@ export default function ThirdTutorial(props) {
       transform: [{ translateY: photoY.value }],
     };
   });
-
-  const diveSiteSlide = useAnimatedStyle(() => {
+  
+  const imageButtonSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: diveSiteY.value }],
+      transform: [{ translateY: imageY.value }],
+    };
+  });
+
+  const calendarSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: calendarY.value }],
     };
   });
 
@@ -289,11 +325,19 @@ export default function ThirdTutorial(props) {
     }
   };
 
-  const startDiveSiteAnimation = () => {
-    if (diveSiteY.value === -1000) {
-      diveSiteY.value = withTiming(windowHeight * 0.4);
+  const startImageButtonAnimation = () => {
+    if (imageY.value === -1000) {
+      imageY.value = withTiming(windowHeight * 0.4);
     } else {
-      diveSiteY.value = withTiming(-1000);
+      imageY.value = withTiming(-1000);
+    }
+  };
+
+  const startCalendarAnimation = () => {
+    if (calendarY.value === -1000) {
+      calendarY.value = withTiming(windowHeight * 0.4);
+    } else {
+      calendarY.value = withTiming(-1000);
     }
   };
 
@@ -365,8 +409,16 @@ export default function ThirdTutorial(props) {
           />
         </Animated.View>
 
-        <Animated.View style={[styles.buttonwrapper, diveSiteSlide]}>
-          <MaterialIcons name="add-location-alt" color="aquamarine" size={32} />
+        <Animated.View style={[styles.buttonwrapper, imageButtonSlide]}>
+        <FontAwesome name="picture-o" color="gold" size={32} />
+        </Animated.View>
+
+        <Animated.View style={[styles.buttonwrapper, calendarSlide]}>
+        <FontAwesome
+                  name="calendar"
+                  color="gold"
+                  size={32}
+                />
         </Animated.View>
 
         {/* new one  */}

@@ -28,6 +28,9 @@ import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import InsetShadow from "react-native-inset-shadow";
+import { TutorialContext } from "../contexts/tutorialContext";
+import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
 
 let PicVar = false;
 let DateVar = false;
@@ -38,6 +41,13 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PicUploadModal() {
+  const { thirdGuideModal, setThirdGuideModal } = useContext(
+    ThirdTutorialModalContext
+  );
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+
+
   const { setMasterSwitch } = useContext(MasterContext);
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const [picCloseState, setPicCloseState] = useState(false);
@@ -58,6 +68,20 @@ export default function PicUploadModal() {
     LatVal: false,
     LngVal: false,
   });
+
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator3 > 0) {
+        setItterator3(itterator3 + 1);
+      }
+    }
+  }, [picAdderModal]);
+
+  useEffect(() => {
+    if (itterator3 === 6 || itterator3 === 9) {
+      setThirdGuideModal(true);
+    }
+  }, [itterator3]);
 
   const onNavigate = () => {
     setMasterSwitch(false);
@@ -132,6 +156,11 @@ export default function PicUploadModal() {
   const handleConfirm = (date) => {
     let formattedDate = moment(date).format("YYYY-MM-DD");
     setPinValues({ ...pinValues, PicDate: formattedDate });
+    if (tutorialRunning) {
+      if (itterator3 === 11) {
+        setItterator3(itterator3 + 1);
+      }
+    }
     hideDatePicker();
   };
 
@@ -194,7 +223,11 @@ export default function PicUploadModal() {
     ) {
       return;
     } else {
-      console.log("wha?", pinValues);
+      if (tutorialRunning) {
+        if (itterator3 > 0) {
+          setItterator3(itterator3 + 1);
+        }
+      } else {
       insertPhotoWaits(pinValues);
       setPinValues({
         PicFile: null,
@@ -207,6 +240,7 @@ export default function PicUploadModal() {
       setUploadedFile(null);
       setPicAdderModal(!picAdderModal);
     }
+  }
   };
 
   const handleImageUpload = async () => {
@@ -266,6 +300,13 @@ export default function PicUploadModal() {
           LatVal: LatVar,
           LngVal: LngVar,
         });
+
+        if (tutorialRunning) {
+          if (itterator3 === 8) {
+            setItterator3(itterator3 + 1);
+          }
+        }
+
       }
     } catch (e) {
       console.log("error: Photo Selection Cancelled", e.message);
@@ -273,6 +314,11 @@ export default function PicUploadModal() {
   };
 
   const togglePicModal = () => {
+    if (tutorialRunning) {
+      if (itterator3 === 9) {
+        setItterator3(itterator3 + 1);
+      }
+    } else {
     setPicAdderModal(!picAdderModal);
 
     if (pinValues.PicFile !== null) {
@@ -294,6 +340,7 @@ export default function PicUploadModal() {
         DDVal: "0",
       });
     }
+  }
   };
 
   const [imgButState, setImgButState] = useState(false);

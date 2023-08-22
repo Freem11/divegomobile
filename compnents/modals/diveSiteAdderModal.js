@@ -19,7 +19,6 @@ import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
-import { IterratorContext } from "../contexts/iterratorContext";
 
 let SiteNameVar = false;
 let LatVar = false;
@@ -162,7 +161,6 @@ export default function DiveSiteModal() {
   };
 
   const toggleDiveModal = () => {
-console.log("hey", tutorialRunning)
     if (tutorialRunning) {
       if (itterator2 === 9) {
         setItterator2(itterator2 + 1);
