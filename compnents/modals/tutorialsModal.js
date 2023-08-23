@@ -22,6 +22,7 @@ import { IterratorContext } from "../contexts/iterratorContext";
 import InsetShadow from "react-native-inset-shadow";
 import { scale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -67,11 +68,6 @@ export default function TutorialLaunchPadModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>DiveGo Guides</Text>
-        <TouchableWithoutFeedback
-          onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
-          onPressIn={() => setTutorialsCloseState(true)}
-          onPressOut={() => setTutorialsCloseState(false)}
-        >
           <View
             style={
               tutorialsCloseState
@@ -79,9 +75,19 @@ export default function TutorialLaunchPadModal() {
                 : styles.closeButton
             }
           >
+            <TouchableOpacity
+            onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
+            onPressIn={() => setTutorialsCloseState(true)}
+            onPressOut={() => setTutorialsCloseState(false)}
+            style={{
+              width: 30,
+              height: 30,
+              alignItems: "center",
+            }}
+          >
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.inputContainer}>

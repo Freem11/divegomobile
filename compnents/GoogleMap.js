@@ -85,7 +85,8 @@ export default function Map() {
       );
       setZoomLev(zoom);
 
-      let currentMapPosition = await mapRef.getCamera();
+      if(mapRef){
+        let currentMapPosition = await mapRef.getCamera();
       setRegion({
         latitude: currentMapPosition.center.latitude,
         longitude: currentMapPosition.center.longitude,
@@ -99,6 +100,8 @@ export default function Map() {
         lat: currentMapPosition.center.latitude,
         lng: currentMapPosition.center.longitude,
       });
+      }
+      
 
       // console.log("map is at", mapCenter)
     }
@@ -177,6 +180,7 @@ export default function Map() {
   return (
     <View style={styles.container}>
       <MapView
+        key={masterSwitch+1}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         provider="google"

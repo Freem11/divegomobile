@@ -8,6 +8,7 @@ import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function DiveSiteAutoComplete() {
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -95,6 +96,7 @@ export default function DiveSiteAutoComplete() {
   
   return (
     <View style={styles.container}>
+      
       <AutocompleteDropdown
         // initialValue={'1'}
         textInputProps={{

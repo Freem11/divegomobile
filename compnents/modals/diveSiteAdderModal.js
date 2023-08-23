@@ -10,7 +10,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
-// import { insertDiveSiteWaits } from "../../axiosCalls/diveSiteWaitAxiosCalls";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import InsetShadow from "react-native-inset-shadow";
@@ -148,6 +148,7 @@ export default function DiveSiteModal() {
           setItterator2(itterator2 + 1);
         }
       } else {
+        //  console.log("pinnies!", addSiteVals)
         insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
           Site: "",
@@ -166,17 +167,17 @@ export default function DiveSiteModal() {
         setItterator2(itterator2 + 1);
       }
     } else {
-    setDiveSiteAdderModal(!diveSiteAdderModal)
+      setDiveSiteAdderModal(!diveSiteAdderModal);
 
-    if (diveSiteAdderModal) {
-      setAddSiteVals({
-        Site: "",
-        Latitude: "",
-        Longitude: "",
-        UserID: null,
-      });
+      if (diveSiteAdderModal) {
+        setAddSiteVals({
+          Site: "",
+          Latitude: "",
+          Longitude: "",
+          UserID: null,
+        });
+      }
     }
-  }
   };
   const [imaButState, setImaButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
@@ -185,19 +186,24 @@ export default function DiveSiteModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Dive Site</Text>
-        <TouchableWithoutFeedback
-          onPress={toggleDiveModal}
-          onPressIn={() => setDiveCloseState(true)}
-          onPressOut={() => setDiveCloseState(false)}
+        <View
+          style={
+            diveCloseState ? styles.closeButtonPressed : styles.closeButton
+          }
         >
-          <View
-            style={
-              diveCloseState ? styles.closeButtonPressed : styles.closeButton
-            }
+          <TouchableOpacity
+            onPress={toggleDiveModal}
+            onPressIn={() => setDiveCloseState(true)}
+            onPressOut={() => setDiveCloseState(false)}
+            style={{
+              width: 30,
+              height: 30,
+              alignItems: "center",
+            }}
           >
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.inputContainer}>
         <InsetShadow
@@ -280,12 +286,19 @@ export default function DiveSiteModal() {
         </InsetShadow>
       </View>
 
-      <TouchableWithoutFeedback
-        onPress={getCurrentLocation}
-        onPressIn={() => setImaButState(true)}
-        onPressOut={() => setImaButState(false)}
-      >
-        <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
+      <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
+        <TouchableOpacity
+          onPress={getCurrentLocation}
+          onPressIn={() => setImaButState(true)}
+          onPressOut={() => setImaButState(false)}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: 130,
+            height: 30,
+            alignItems: "center",
+          }}
+        >
           <FontAwesome5 name="map" color="gold" size={28} />
           <Text
             style={{
@@ -296,17 +309,26 @@ export default function DiveSiteModal() {
           >
             I'm at the dive site
           </Text>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </View>
 
       <View
         style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
       >
-        <TouchableWithoutFeedback
+        {/* <TouchableWithoutFeedback
           onPress={handleSubmit}
           onPressIn={() => setSubButState(true)}
           onPressOut={() => setSubButState(false)}
-        >
+        > */}
+             <TouchableOpacity
+                onPress={handleSubmit}
+                onPressIn={() => setSubButState(true)}
+                onPressOut={() => setSubButState(false)}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
           <Text
             style={{
               color: "gold",
@@ -322,7 +344,8 @@ export default function DiveSiteModal() {
           >
             Submit Dive Site
           </Text>
-        </TouchableWithoutFeedback>
+          </TouchableOpacity>
+        {/* </TouchableWithoutFeedback> */}
       </View>
     </View>
   );

@@ -11,6 +11,7 @@ import { PinContext } from "./contexts/staticPinContext";
 import { PictureContext } from "./contexts/pictureContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SessionContext } from "./contexts/sessionContext";
+import { MapCenterContext } from "./contexts/mapCenterContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   StyleSheet,
@@ -48,6 +49,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function FABButtons() {
+  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { diveSitesTog, setDiveSitesTog } = useContext(DiveSitesContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);

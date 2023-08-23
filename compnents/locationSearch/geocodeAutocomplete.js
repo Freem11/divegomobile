@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
-import { StyleSheet, View} from "react-native";
+import React, { useContext, useEffect } from "react";
+import { StyleSheet, View, Dimensions} from "react-native";
 import PlacesInput from "react-native-places-input";
 import config from '../../config';
 import { MapCenterContext } from "../contexts/mapCenterContext";
 
 export default function GeocodeAutoComplete() {
-  const { setMapCenter} = useContext(MapCenterContext);
+  const { mapCenter, setMapCenter} = useContext(MapCenterContext);
 
 return(
-    <View style={styles.container}>
+    <View style={styles.container}>  
         <PlacesInput 
         googleApiKey={config.GOOGLE_MAPS_API_KEY}
         placeholder={"Go to..."}
