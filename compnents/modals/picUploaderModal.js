@@ -86,6 +86,11 @@ export default function PicUploadModal() {
   const onNavigate = () => {
     setMasterSwitch(false);
     setPicAdderModal(!picAdderModal);
+    // if (tutorialRunning) {
+    //   if (itterator3 > 0) {
+    //     setItterator3(itterator3 + 1);
+    //   }
+    // }
   };
 
   useEffect(() => {

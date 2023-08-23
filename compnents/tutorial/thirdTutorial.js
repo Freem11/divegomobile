@@ -29,17 +29,15 @@ import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
+import { PinContext } from "../contexts/staticPinContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
 import {
   MaterialIcons,
   FontAwesome5,
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import anchorClustIOS from "../png/ClusterAnchor24.png";
-import anchorIconIOS from "../png/SiteAnchor20.png";
-import heatIconIOS from "../png/heatpoint.png";
-import arrowIOS from "../png/arrow.png";
-import UserNamer from "./usernamer";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -48,6 +46,8 @@ export default function ThirdTutorial(props) {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { tutorialModalY } = props;
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  const { pinValues, setPinValues } = useContext(PinContext);
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
 
   const { thirdGuideModal, setThirdGuideModal } = useContext(
     ThirdTutorialModalContext
@@ -95,34 +95,50 @@ export default function ThirdTutorial(props) {
   const photoY = useSharedValue(-1000);
   const imageY = useSharedValue(-1000);
   const calendarY = useSharedValue(-1000);
-
-
-  const clusterAnchorY = useSharedValue(-1200);
-  const heatPotintY = useSharedValue(-1200);
-  const arrowY = useSharedValue(-1200);
-  const userBoxX = useSharedValue(-300);
-
+  const pinY = useSharedValue(-1000);
+  const mantaY = useSharedValue(-1200);
+  
   const text0 =
     "Hey welcome back again! Let's continue with the guide to how you can contribute to SEAsons!";
   const text1 =
     "This time, let's look at working with your sea creature sightings, in other word the photos of sea creatures you have taken on your dives ";
   const text2 =
     "At this point you have already seen that diver's photos make up the heat map and show up when you open a dive site that is near to a sighting";
-  const text3 = "Now it's time for you to join your fellow divers! To add a photo, we first need to open up the photo adding form, it's under the photo icon it looks like this";
-  const text4 =
-    "Open it up and let's take a look!";
+  const text3 =
+    "Now it's time for you to join your fellow divers! To add a photo, we first need to open up the photo adding form, it's under the photo icon it looks like this";
+  const text4 = "Open it up and let's take a look!";
   const text5 = "";
-  const text6 = "This is the photo adding form, as you can see there's a lot here, so let's start from the top and work our way down.";
-  const text7 = "At the top you can see this big empty field and just below is the 'Choose an image' button, tap it to go into your device's photo's and select one (preferably a sea creature of course!)";
+  const text6 =
+    "This is the photo adding form, as you can see there's a lot here, so let's start from the top and work our way down.";
+  const text7 =
+    "At the top you can see this big empty field and just below is the 'Choose an image' button, tap it to go into your device's photo's and select one (preferably a sea creature of course!)";
   const text8 = "";
-  const text9 = "As you can see, the photo you chose is now in the big empty field and, depending on the photo you may have seen that the date, lat and lng fields populated. SEAsons will pull that data off your photo if it carries that info. If not, don't worry we can add them manually.";
-  const text10 = "In any case, let's assume you need to add in that info. First let's take care of the date, you'll see a calendar icon just to the right of the date field (looks like this) tap in and set the date the photo was taken for us";
+  const text9 =
+    "As you can see, the photo you chose is now in the big empty field and, depending on the photo you may have seen that the date, lat and lng fields populated. SEAsons will pull that data off your photo if it carries that info. If not, don't worry we can add them manually.";
+  const text10 =
+    "In any case, let's assume you need to add in that info. First let's take care of the date, you'll see a calendar icon just to the right of the date field (looks like this) tap in and set the date the photo was taken for us";
   const text11 = "";
-  const text12 = "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one you can tap right on it and a dropdown will pop up, start entering the name of the sea creature in your picture, if it already exists in SEAsons it will show up and an option to help speed things along, if it's completely new you will need to type it out.";
+  const text12 =
+    "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one you can tap right on it and a dropdown will pop up, start entering the name of the sea creature in your picture, if it already exists in SEAsons it will show up and an option to help speed things along, if it's completely new you will need to type it out.";
   const text13 = "";
-  const text14 = "Wonderful! Now that the sea creature has it's name, the only piece left is the GPS, since we are assuming that we don't have them use the Pin Dropper icon to open up the map so we can drop a pin!";
+  const text14 =
+    "Wonderful! Now that the sea creature has it's name, the only piece left is the GPS, since we are assuming that we don't have them use the Pin Dropper button to open up the map so we can drop a pin!";
   const text15 = "";
-  const text16 = "";
+  const text16 =
+    "And here we are! As you can see there is a new icon that looks like roughly like a manta ray, this is our draggable pin. It's also why we add dive sites (to give you points to drag the pin too)";
+  const text17 =
+    "Let's pretend that one of the dive sites on the map is where your sea creature sighting took place, drag the manta pin to be on top of it's anchor and then tap the 'set pin' button at the bottom";
+  const text18 = "";
+  const text19 =
+    "As you can see SEAsons has taken the location of the pin you set and has given us it's GPS coordiantes!";
+  const text20 =
+    "You sighting is now ready! All you need to do now is tap the 'submit photo' button at the bottom to finish up!";
+  const text21 = "";
+  const text22 =
+    "Bam! That's how you add a new sea creature sighting to SEAsons! As we did with the dive site guide, this entry was not submitted since it's a dry run, but you can from now on in the same way.";
+  const text23 =
+    "That's it for adding sea creature sightings to the app! This is currnelty the last guide so tap anywhere else to close, and thanks for being a member of SEAsons, I look forward to seeing what amazing sea creatures you encounter on your dives!";
+  const text24 = "";
 
   const [textRead, setTextRead] = useState("");
 
@@ -144,8 +160,15 @@ export default function ThirdTutorial(props) {
     text14,
     text15,
     text16,
+    text17,
+    text18,
+    text19,
+    text20,
+    text21,
+    text22,
+    text23,
+    text24,
   ];
-
 
   //  var interval;
 
@@ -155,11 +178,11 @@ export default function ThirdTutorial(props) {
     // } else {
     if (pushVal === 1 && itterator3 < feederArray.length - 1) {
       setItterator3((prev) => prev + pushVal);
-    // }
+      // }
 
-    if (pushVal === 1 && itterator3 === feederArray.length - 1) {
-      setThirdGuideModal(!thirdGuideModal);
-    }
+      if (pushVal === 1 && itterator3 === feederArray.length - 1) {
+        setThirdGuideModal(!thirdGuideModal);
+      }
     }
 
     // setTextRead("");
@@ -212,7 +235,7 @@ export default function ThirdTutorial(props) {
     if (itterator3 === 7) {
       startImageButtonAnimation();
     }
-  
+
     if (itterator3 === 8) {
       startImageButtonAnimation();
       setThirdGuideModal(!thirdGuideModal);
@@ -227,28 +250,46 @@ export default function ThirdTutorial(props) {
       setThirdGuideModal(!thirdGuideModal);
     }
 
-    if (itterator3 === 12 || itterator3 === 13) {
+    if (itterator3 === 12 || itterator3 === 13 || itterator3 === 16 || itterator3 === 18 || itterator3 === 19 || itterator3 === 21 || itterator3 === 22) {
       setThirdGuideModal(!thirdGuideModal);
     }
 
     if (itterator3 === 14) {
       setThirdGuideModal(!thirdGuideModal);
+      setTimeout(() => {
+        startPinAnimation();
+      }, 1000);
     }
 
-    // if (itterator2 === 16) {
-    //   setSecondGuideModal(!secondGuideModal);
-    // }
+    if (itterator3 === 15) {
+      setThirdGuideModal(!thirdGuideModal);
+      startPinAnimation();
+    }
 
-    // if (itterator2 === 19) {
-    //   setAddSiteVals({
-    //     Site: "",
-    //     Latitude: "",
-    //     Longitude: "",
-    //     UserID: null,
-    //   });
-    //    setDiveSiteAdderModal(!diveSiteAdderModal);
-    //    setTutorialRunning(false);
-    // }
+    if (itterator3 === 16) {
+      setTimeout(() => {
+        startMantaAnimation();
+      }, 1000);
+      
+    }
+
+    if (itterator3 === 18) {
+        startMantaAnimation();
+    }
+
+    if (itterator3 === 24) {
+      setPinValues({
+        PicFile: null,
+        Animal: "",
+        PicDate: "",
+        Latitude: "",
+        Longitude: "",
+        DDVal: "0",
+        UserId: null,
+      });
+       setPicAdderModal(!picAdderModal);
+       setTutorialRunning(false);
+    }
 
     if (itterator3 === feederArray.length - 1) {
       setTutorialRunning(false);
@@ -256,7 +297,6 @@ export default function ThirdTutorial(props) {
       setThirdGuideModal(!thirdGuideModal);
       startCharacterAnimation();
       startTextBoxAnimation();
-      console.log("what", tutorialRunning)
     }
   }, [itterator3]);
 
@@ -277,7 +317,7 @@ export default function ThirdTutorial(props) {
       transform: [{ translateY: photoY.value }],
     };
   });
-  
+
   const imageButtonSlide = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: imageY.value }],
@@ -290,21 +330,15 @@ export default function ThirdTutorial(props) {
     };
   });
 
-  const heatPointSlide = useAnimatedStyle(() => {
+  const pinSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: heatPotintY.value }],
+      transform: [{ translateY: pinY.value }],
     };
   });
 
-  const arrowSlide = useAnimatedStyle(() => {
+  const mantaSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: arrowY.value }],
-    };
-  });
-
-  const userBoxSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: userBoxX.value }],
+      transform: [{ translateY: mantaY.value }],
     };
   });
 
@@ -348,37 +382,31 @@ export default function ThirdTutorial(props) {
     }
   };
 
-  const startHeatPointAnimation = () => {
-    if (heatPotintY.value === -1200) {
-      heatPotintY.value = withTiming(windowHeight * 0.3);
+  const startPinAnimation = () => {
+    if (pinY.value === -1000) {
+      pinY.value = withTiming(windowHeight * 0.4);
     } else {
-      heatPotintY.value = withTiming(-1200);
+      pinY.value = withTiming(-1000);
     }
   };
 
-  const startArrowAnimation = () => {
-    if (arrowY.value === -1200) {
-      arrowY.value = withTiming(windowHeight * 0.06);
+  const startMantaAnimation = () => {
+    if (mantaY.value === -1200) {
+      mantaY.value = withTiming(windowHeight * 0.4);
     } else {
-      arrowY.value = withTiming(-1200);
+      mantaY.value = withTiming(-1200);
     }
   };
 
-  const startUserBoxAnimation = () => {
-    if (userBoxX.value === -300) {
-      userBoxX.value = withSpring(windowWidth * 0.2);
-    } else {
-      userBoxX.value = withTiming(-500);
-    }
-  };
+
+  
 
   useEffect(() => {
-    if(tutorialRunning){
+    if (tutorialRunning) {
       if (itterator3 === null) {
         setItterator3(0);
       }
     }
-
   }, [thirdGuideModal]);
 
   const moveMap = (values) => {
@@ -409,51 +437,29 @@ export default function ThirdTutorial(props) {
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, photoButtonSlide]}>
-        <MaterialIcons
-            name="photo-camera"
-            color="aquamarine"
-            size={32}
-          />
+          <MaterialIcons name="photo-camera" color="aquamarine" size={32} />
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, imageButtonSlide]}>
-        <FontAwesome name="picture-o" color="gold" size={32} />
+          <FontAwesome name="picture-o" color="gold" size={32} />
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, calendarSlide]}>
-        <FontAwesome
-                  name="calendar"
-                  color="gold"
-                  size={32}
-                />
+          <FontAwesome name="calendar" color="gold" size={32} />
         </Animated.View>
 
-        {/* new one  */}
-        <Animated.View style={[styles.userContainer, userBoxSlide]}>
-          <UserNamer></UserNamer>
+        <Animated.View style={[styles.buttonwrapper, pinSlide]}>
+          <MaterialIcons name="location-pin" color="gold" size={32} />
         </Animated.View>
 
-        <Animated.View style={[styles.heatPointWrapper, heatPointSlide]}>
+        <Animated.View style={[styles.mantaWrapper, mantaSlide]}>
           <Image
-            source={heatIconIOS}
+            source={mantaIOS}
             style={[
-              styles.anchor4,
+              styles.mantaWrapper,
               {
-                height: 50,
+                height: 60,
                 width: 50,
-              },
-            ]}
-          />
-        </Animated.View>
-
-        <Animated.View style={[styles.arrowWrapper, arrowSlide]}>
-          <Image
-            source={arrowIOS}
-            style={[
-              styles.anchor4,
-              {
-                height: 90,
-                width: 200,
               },
             ]}
           />
@@ -568,11 +574,10 @@ const styles = StyleSheet.create({
     opacity: 1,
     backgroundColor: "black",
   },
-  anchorClusterWrapper: {
+  mantaWrapper: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
     position: "absolute",
     left: "20%",
     height: 50,
