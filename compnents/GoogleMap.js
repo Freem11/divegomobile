@@ -127,7 +127,7 @@ export default function Map() {
 
   useEffect(() => {
     handleMapChange();
-  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection]);
+  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection, dragPin]);
 
   useEffect(() => {
     setDragPin(mapCenter);
@@ -217,7 +217,7 @@ export default function Map() {
                 lat: e.nativeEvent.coordinate.latitude,
                 lng: e.nativeEvent.coordinate.longitude,
               });
-            }}
+            },() => handleMapChange()}
           />
         )}
 
@@ -261,28 +261,6 @@ export default function Map() {
           );
         })}
       </MapView>
-
-      {/* <Modal visible={siteModal} animationType="slide" transparent={true}>
-        <View style={styles.modalStyle}>
-          <View style={styles.titleAlt}>
-            <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
-            <TouchableWithoutFeedback
-              onPress={() => setSiteModal(!siteModal)}
-              onPressIn={() => setSiteCloseState(true)}
-              onPressOut={() => setSiteCloseState(false)}
-            >
-              <View style={siteCloseState ? styles.closeButtonAltPressed : styles.closeButtonAlt}>
-                <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-          <AnchorModal
-            SiteName={selectedDiveSite.SiteName}
-            Lat={selectedDiveSite.Latitude}
-            Lng={selectedDiveSite.Longitude}
-          />
-        </View>
-      </Modal> */}
     </View>
   );
 }

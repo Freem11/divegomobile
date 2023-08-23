@@ -19,6 +19,7 @@ import { SessionContext } from "../contexts/sessionContext";
 import { getToday } from "../helpers/picUploaderHelpers";
 import { formatDate, createFile } from "../helpers/imageUploadHelpers";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
@@ -85,7 +86,7 @@ export default function PicUploadModal() {
 
   const onNavigate = () => {
     setMasterSwitch(false);
-    setPicAdderModal(!picAdderModal);
+    setPicAdderModal(false);
     // if (tutorialRunning) {
     //   if (itterator3 > 0) {
     //     setItterator3(itterator3 + 1);
@@ -233,6 +234,7 @@ export default function PicUploadModal() {
           setItterator3(itterator3 + 1);
         }
       } else {
+        // console.log("pinnies!", pinValues)
       insertPhotoWaits(pinValues);
       setPinValues({
         PicFile: null,
@@ -357,19 +359,24 @@ export default function PicUploadModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Picture</Text>
-        <TouchableWithoutFeedback
-          onPress={togglePicModal}
-          onPressIn={() => setPicCloseState(true)}
-          onPressOut={() => setPicCloseState(false)}
-        >
           <View
             style={
               picCloseState ? styles.closeButtonPressed : styles.closeButton
             }
           >
+            <TouchableOpacity
+                onPress={togglePicModal}
+                onPressIn={() => setPicCloseState(true)}
+                onPressOut={() => setPicCloseState(false)}
+                style={{
+                  width: 30,
+                  height: 30,
+                  alignItems: 'center'
+                }}
+              >
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
       </View>
       <View style={styles.picContainer}>
         <Image
@@ -382,18 +389,25 @@ export default function PicUploadModal() {
         />
       </View>
 
-      <TouchableWithoutFeedback
-        onPress={handleImageUpload}
-        onPressIn={() => setImgButState(true)}
-        onPressOut={() => setImgButState(false)}
-      >
         <View
           style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
         >
+           <TouchableOpacity
+                onPress={handleImageUpload}
+                onPressIn={() => setImgButState(true)}
+                onPressOut={() => setImgButState(false)}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  width: 150,
+                  height: 28,
+                }}
+              >
           <FontAwesome name="picture-o" color="gold" size={28} />
           <Text
             style={{
               marginLeft: scale(5),
+              marginTop: scale(2),
               color: "gold",
               fontFamily: "IndieFlower_400Regular",
               fontSize: scale(14),
@@ -401,8 +415,8 @@ export default function PicUploadModal() {
           >
             Choose an Image
           </Text>
+          </TouchableOpacity>
         </View>
-      </TouchableWithoutFeedback>
 
       <View style={styles.lowerZone}>
         <View style={styles.fields}>
@@ -507,13 +521,17 @@ export default function PicUploadModal() {
 
         <View style={styles.smallButtons}>
           <View style={styles.dateButton}>
-            <TouchableWithoutFeedback
-              onPress={showDatePicker}
-              onPressIn={() => setDatButState(true)}
-              onPressOut={() => setDatButState(false)}
-            >
               <View
                 style={datButState ? styles.dateIconPressed : styles.dateIcon}
+              >
+                <TouchableOpacity
+                onPress={showDatePicker}
+                onPressIn={() => setDatButState(true)}
+                onPressOut={() => setDatButState(false)}
+                style={{
+                  width: 28,
+                  height: 32,
+                }}
               >
                 <FontAwesome
                   name="calendar"
@@ -528,20 +546,24 @@ export default function PicUploadModal() {
                   onConfirm={handleConfirm}
                   onCancel={hideDatePicker}
                 />
+                </TouchableOpacity>
               </View>
-            </TouchableWithoutFeedback>
           </View>
 
           <View style={styles.animalButton}></View>
 
           <View style={styles.latLngButton}>
-            <TouchableWithoutFeedback
-              onPress={onNavigate}
-              onPressIn={() => setCorButState(true)}
-              onPressOut={() => setCorButState(false)}
-            >
               <View
                 style={corButState ? styles.LocButtonPressed : styles.LocButton}
+              >
+                  <TouchableOpacity
+                onPress={onNavigate}
+                onPressIn={() => setCorButState(true)}
+              onPressOut={() => setCorButState(false)}
+                style={{
+                  width: 38,
+                  height: 38,
+                }}
               >
                 <MaterialIcons
                   name="location-pin"
@@ -549,8 +571,8 @@ export default function PicUploadModal() {
                   size={38}
                   style={{ zIndex: -1 }}
                 />
+                </TouchableOpacity>
               </View>
-            </TouchableWithoutFeedback>
           </View>
         </View>
       </View>
@@ -558,11 +580,15 @@ export default function PicUploadModal() {
       <View
         style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
       >
-        <TouchableWithoutFeedback
-          onPress={handleSubmit}
-          onPressIn={() => setSubButState(true)}
-          onPressOut={() => setSubButState(false)}
-        >
+            <TouchableOpacity
+                onPress={handleSubmit}
+                onPressIn={() => setSubButState(true)}
+                onPressOut={() => setSubButState(false)}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
           <Text
             style={{
               color: "gold",
@@ -579,7 +605,8 @@ export default function PicUploadModal() {
           >
             Submit Photo
           </Text>
-        </TouchableWithoutFeedback>
+          </TouchableOpacity>
+        {/* </TouchableWithoutFeedback> */}
       </View>
     </View>
   );

@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, Keyboard } from "react-native";
 import { useState, useEffect, useContext } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const AutoSuggestListItem = (props) => {
   const { setList, setPin, pin, name, handleList, setTextSource } = props;
@@ -13,12 +14,20 @@ const AutoSuggestListItem = (props) => {
   return (
     <View id={name} style={styles.suggestion}>
       <View style={{zIndex: 100}}>
+      <TouchableOpacity
+                onPress={() => handleSelect(name)}
+                style={{
+                  width: 170,
+                  height: 30,
+                }}
+              >
         <Text
           style={{ fontFamily: "IndieFlower_400Regular", textAlign: "center", color:"#F0EEEB", zIndex: 100 }}
           onPress={() => handleSelect(name)}
         >
           {name}
         </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

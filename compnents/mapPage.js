@@ -8,6 +8,7 @@ import {
   Platform,
   Dimensions,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 // import Device from "expo-device";
 import Map from "./GoogleMap";
@@ -29,7 +30,7 @@ import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContex
 import { ThirdTutorialModalContext } from "./contexts/thirdTutorialModalContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
-import { AnchorModalContext } from "./contexts/anchorModalContext";;
+import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
@@ -63,11 +64,13 @@ export default function MapPage() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
- 
+
   //Tutorial Launch Pad Model Animation
   const tutorialLaunchpadModalY = useSharedValue(windowHeight);
-  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
- 
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
+    TutorialLaunchPadContext
+  );
+
   const tutorialLaunchpadModalReveal = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: tutorialLaunchpadModalY.value }],
@@ -112,10 +115,9 @@ export default function MapPage() {
 
   useEffect(() => {
     startAnchorModalAnimations();
-    if (itterator > 0){
-      setItterator(itterator + 1); 
+    if (itterator > 0) {
+      setItterator(itterator + 1);
     }
-    
   }, [siteModal]);
 
   //Dive Site Modal Animation
@@ -141,9 +143,8 @@ export default function MapPage() {
   useEffect(() => {
     startDiveSiteModalAnimations();
     // if (itterator > 0){
-    //   setItterator(itterator + 1); 
+    //   setItterator(itterator + 1);
     // }
-    
   }, [diveSiteAdderModal]);
 
   //Picture Adder Modal
@@ -167,88 +168,91 @@ export default function MapPage() {
   useEffect(() => {
     startPictureModalAnimations();
     // if (itterator > 0){
-    //   setItterator(itterator + 1); 
+    //   setItterator(itterator + 1);
     // }
-    
   }, [picAdderModal]);
 
-//Intro Tutorial Animations
-    const tutorialModalY = useSharedValue(windowHeight);
-    const { guideModal, setGuideModal } = useContext(TutorialModelContext);
-    const { itterator, setItterator } = useContext(IterratorContext);
+  //Intro Tutorial Animations
+  const tutorialModalY = useSharedValue(windowHeight);
+  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+  const { itterator, setItterator } = useContext(IterratorContext);
 
-    const tutorialModalReveal = useAnimatedStyle(() => {
-      return {
-        transform: [{ translateY: tutorialModalY.value }],
-      };
-    });
-  
-    const startGuideModalAnimations = () => {
-      if (guideModal) {
-        tutorialModalY.value = withTiming(0);
-      } else {
-        tutorialModalY.value = withTiming(windowHeight);
-      }
+  const tutorialModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: tutorialModalY.value }],
     };
-  
-    useEffect(() => {
-      startGuideModalAnimations();
-      // if (!itterator && guideModal) {
-      //   setItterator(0);
-      // }
-    }, [guideModal]);
+  });
 
-//Second Tutorial Animations
-const tutorial2ModalY = useSharedValue(windowHeight);
-const { secondGuideModal, setSecondGuideModal } = useContext(SecondTutorialModalContext);
-const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-
-const tutorial2ModalReveal = useAnimatedStyle(() => {
-  return {
-    transform: [{ translateY: tutorial2ModalY.value }],
+  const startGuideModalAnimations = () => {
+    if (guideModal) {
+      tutorialModalY.value = withTiming(0);
+    } else {
+      tutorialModalY.value = withTiming(windowHeight);
+    }
   };
-});
 
-const startSecondGuideModalAnimations = () => {
-  if (secondGuideModal) {
-    tutorial2ModalY.value = withTiming(0);
-  } else {
-    tutorial2ModalY.value = withTiming(windowHeight);
-  }
-};
+  useEffect(() => {
+    startGuideModalAnimations();
+    // if (!itterator && guideModal) {
+    //   setItterator(0);
+    // }
+  }, [guideModal]);
 
-useEffect(() => {
-  startSecondGuideModalAnimations();
-  // if (!itterator && guideModal) {
-  //   setItterator(0);
-  // }
-}, [secondGuideModal]);
+  //Second Tutorial Animations
+  const tutorial2ModalY = useSharedValue(windowHeight);
+  const { secondGuideModal, setSecondGuideModal } = useContext(
+    SecondTutorialModalContext
+  );
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
 
-//Third Tutorial Animations
-const tutorial3ModalY = useSharedValue(windowHeight);
-const { thirdGuideModal, setThirdGuideModal } = useContext(ThirdTutorialModalContext);
-const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+  const tutorial2ModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: tutorial2ModalY.value }],
+    };
+  });
 
-const tutorial3ModalReveal = useAnimatedStyle(() => {
-  return {
-    transform: [{ translateY: tutorial3ModalY.value }],
+  const startSecondGuideModalAnimations = () => {
+    if (secondGuideModal) {
+      tutorial2ModalY.value = withTiming(0);
+    } else {
+      tutorial2ModalY.value = withTiming(windowHeight);
+    }
   };
-});
 
-const startThirdGuideModalAnimations = () => {
-  if (thirdGuideModal) {
-    tutorial3ModalY.value = withTiming(0);
-  } else {
-    tutorial3ModalY.value = withTiming(windowHeight);
-  }
-};
+  useEffect(() => {
+    startSecondGuideModalAnimations();
+    // if (!itterator && guideModal) {
+    //   setItterator(0);
+    // }
+  }, [secondGuideModal]);
 
-useEffect(() => {
-  startThirdGuideModalAnimations();
-  // if (!itterator && guideModal) {
-  //   setItterator(0);
-  // }
-}, [thirdGuideModal]);
+  //Third Tutorial Animations
+  const tutorial3ModalY = useSharedValue(windowHeight);
+  const { thirdGuideModal, setThirdGuideModal } = useContext(
+    ThirdTutorialModalContext
+  );
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+
+  const tutorial3ModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: tutorial3ModalY.value }],
+    };
+  });
+
+  const startThirdGuideModalAnimations = () => {
+    if (thirdGuideModal) {
+      tutorial3ModalY.value = withTiming(0);
+    } else {
+      tutorial3ModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startThirdGuideModalAnimations();
+    // if (!itterator && guideModal) {
+    //   setItterator(0);
+    // }
+  }, [thirdGuideModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -274,6 +278,7 @@ useEffect(() => {
   };
 
   const onNavigate = () => {
+    console.log("tapped?");
     setPinValues({
       ...pinValues,
       Latitude: dragPin.lat.toString(),
@@ -293,17 +298,16 @@ useEffect(() => {
 
   const [subButState, setSubButState] = useState(false);
 
-
   useEffect(() => {
     const getProfile = async () => {
       let sessionUserId = activeSession.user.id;
       try {
         const success = await grabProfileById(sessionUserId);
         if (success) {
-          let bully = success[0].UserName
-          console.log("juummi", bully)
-          if(bully == null){
-            setGuideModal(!guideModal)
+          let bully = success[0].UserName;
+          console.log("juummi", bully);
+          if (bully == null) {
+            setGuideModal(!guideModal);
           }
         }
       } catch (e) {
@@ -311,7 +315,6 @@ useEffect(() => {
       }
     };
     getProfile();
- 
   }, []);
 
   return (
@@ -349,30 +352,40 @@ useEffect(() => {
             )}
 
             {!masterSwitch && (
-              <View
-                style={subButState ? styles.PinButtonPressed : styles.PinButton}
-              >
-                <TouchableWithoutFeedback
-                  onPress={onNavigate}
-                  onPressIn={() => setSubButState(true)}
-                  onPressOut={() => setSubButState(false)}
+              
+                <View
+                  style={
+                    subButState ? styles.PinButtonPressed : styles.PinButton
+                  }
                 >
+                  <TouchableOpacity
+                style={{
+                  // backgroundColor: "orange",
+                  width: 200,
+                  height: 30,
+                  
+                }}
+                onPress={onNavigate}
+                onPressIn={() => setSubButState(true)}
+                onPressOut={() => setSubButState(false)}
+              >
                   <Text
                     style={{
                       color: "gold",
                       fontFamily: "PermanentMarker_400Regular",
                       fontSize: scale(15),
-                      width: "90%",
+                      width: "100%",
                       height: "100%",
                       textAlign: "center",
-                      backgroundColor: "transparent",
+                      // backgroundColor: "green",
                       borderRadius: scale(15),
                     }}
                   >
                     Set Pin
                   </Text>
-                </TouchableWithoutFeedback>
-              </View>
+                  </TouchableOpacity>
+                </View>
+              
             )}
 
             {masterSwitch && (
@@ -384,17 +397,21 @@ useEffect(() => {
             <Logo style={styles.Logo} pointerEvents={"none"} />
 
             {/* modals go here? */}
-            <Animated.View style={[styles.anchorModal, tutorialLaunchpadModalReveal]}>
-              <TutorialLaunchPadModal tutorialLaunchpadModalY={tutorialLaunchpadModalY} />
+            <Animated.View
+              style={[styles.anchorModal, tutorialLaunchpadModalReveal]}
+            >
+              <TutorialLaunchPadModal
+                tutorialLaunchpadModalY={tutorialLaunchpadModalY}
+              />
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
-              <AnchorModal 
-            anchorModalY={anchorModalY}
-            SiteName={selectedDiveSite.SiteName}
-            Lat={selectedDiveSite.Latitude}
-            Lng={selectedDiveSite.Longitude}
-             />
+              <AnchorModal
+                anchorModalY={anchorModalY}
+                SiteName={selectedDiveSite.SiteName}
+                Lat={selectedDiveSite.Latitude}
+                Lng={selectedDiveSite.Longitude}
+              />
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, diveSiteModalReveal]}>
@@ -405,24 +422,17 @@ useEffect(() => {
               <PicUploadModal pictureModalY={pictureModalY} />
             </Animated.View>
 
-            <Animated.View
-            style={[styles.tutorialModal, tutorialModalReveal]}
-          >
-            <IntroTutorial tutorialModalY={tutorialModalY} />
-          </Animated.View>
+            <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
+              <IntroTutorial tutorialModalY={tutorialModalY} />
+            </Animated.View>
 
-          <Animated.View
-            style={[styles.tutorialModal, tutorial2ModalReveal]}
-          >
-            <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
-          </Animated.View>
+            <Animated.View style={[styles.tutorialModal, tutorial2ModalReveal]}>
+              <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
+            </Animated.View>
 
-          <Animated.View
-            style={[styles.tutorialModal, tutorial3ModalReveal]}
-          >
-            <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
-          </Animated.View>
-
+            <Animated.View style={[styles.tutorialModal, tutorial3ModalReveal]}>
+              <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
+            </Animated.View>
 
             <Map style={{ zIndex: 1 }} />
           </KeyboardAvoidingView>
@@ -567,13 +577,12 @@ const styles = StyleSheet.create({
   },
   anchorModal: {
     position: "absolute",
-    height: windowHeight - (windowHeight*0.14),
-    width: windowWidth - (windowWidth*0.1),
+    height: windowHeight - windowHeight * 0.14,
+    width: windowWidth - windowWidth * 0.1,
     marginLeft: "5%",
     backgroundColor: "#538bdb",
     borderRadius: 15,
     zIndex: 25,
     left: 0,
   },
-
 });

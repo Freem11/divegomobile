@@ -16,6 +16,7 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { PictureAdderContext } from "../contexts/picModalContext";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 let waiter;
 
@@ -54,13 +55,17 @@ useEffect(() => {
 
 }, [picAdderModal])
 
+// useEffect(() => {
+//     setTextSource(false)
+//  }, [pin])
+ 
 
 const handleList = async (values) => {
 
   if (values.value === 1){
     setPin({ ...pin, Animal: values.animal });
     SetFormValidation({ ...formValidation, AnimalVal: false });
-  
+
     if (values.animal.length > 0) {
       let newfilteredList = await getAnimalNamesThatFit(values.animal);
       let animalArray = [];
@@ -84,8 +89,7 @@ const handleList = async (values) => {
   const handleChange = async (text) => {
     if(!textSource){
       handleList({animal: text, value : 1})
-    }
-    
+    } 
   };
 
   const handleClear = () => {
@@ -122,15 +126,21 @@ const handleList = async (values) => {
           ></TextInput>
         </InsetShadow>
         {pin.Animal.length > 1 && (
-          <TouchableWithoutFeedback onPress={handleClear}>
             <View style={styles.xButton}>
+            <TouchableOpacity
+                onPress={handleClear}
+                style={{
+                  width: 18,
+                  height: 18,
+                }}
+              >
               <MaterialIcons
                 name="highlight-remove"
                 size={18}
                 color="lightgrey"
               />
+                </TouchableOpacity>
             </View>
-          </TouchableWithoutFeedback>
         )}
       </View>
 

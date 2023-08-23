@@ -11,6 +11,7 @@ import { PinContext } from "./contexts/staticPinContext";
 import { PictureContext } from "./contexts/pictureContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SessionContext } from "./contexts/sessionContext";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   StyleSheet,
   View,
@@ -241,17 +242,22 @@ export default function FABButtons() {
           transGearY,
         ]}
       >
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() => setGearModal(!gearModal)}
           onPressIn={() => setSettButState(true)}
           onPressOut={() => setSettButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <MaterialIcons
             name="settings"
             color={settButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </Animated.View>
 
       <Animated.View
@@ -261,138 +267,173 @@ export default function FABButtons() {
           transInfoY,
         ]}
       >
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
           onPressIn={() => setHow2ButState(true)}
           onPressOut={() => setHow2ButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <FontAwesome5
             name="question"
             color={how2ButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </Animated.View>
 
-      <TouchableWithoutFeedback
-        onPress={startGeoCodeButtonAnimations}
-        onPressIn={() => setNaviButState(true)}
-        onPressOut={() => setNaviButState(false)}
+      <Animated.View
+        style={[
+          naviButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transGeoY,
+        ]}
       >
-        <Animated.View
-          style={[
-            naviButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
-            styles.optionWrapper,
-            transGeoY,
-          ]}
+        <TouchableOpacity
+          onPress={startGeoCodeButtonAnimations}
+          onPressIn={() => setNaviButState(true)}
+          onPressOut={() => setNaviButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <MaterialIcons
             name="explore"
             color={naviButState ? "black" : "aquamarine"}
             size={32}
           />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Animated.View>
 
-      <TouchableWithoutFeedback
-        onPress={() => setPicAdderModal(!picAdderModal)}
-        onPressIn={() => setPhotButState(true)}
-        onPressOut={() => setPhotButState(false)}
+      <Animated.View
+        style={[
+          photButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transPhotoY,
+        ]}
       >
-        <Animated.View
-          style={[
-            photButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
-            styles.optionWrapper,
-            transPhotoY,
-          ]}
+        <TouchableOpacity
+          onPress={() => setPicAdderModal(!picAdderModal)}
+          onPressIn={() => setPhotButState(true)}
+          onPressOut={() => setPhotButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <MaterialIcons
             name="photo-camera"
             color={photButState ? "black" : "aquamarine"}
             size={32}
           />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Animated.View>
 
-      <TouchableWithoutFeedback
-        onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
-        onPressIn={() => setSiteButState(true)}
-        onPressOut={() => setSiteButState(false)}
+      <Animated.View
+        style={[
+          siteButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transSiteY,
+        ]}
       >
-        <Animated.View
-          style={[
-            siteButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
-            styles.optionWrapper,
-            transSiteY,
-          ]}
+        <TouchableOpacity
+          onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
+          onPressIn={() => setSiteButState(true)}
+          onPressOut={() => setSiteButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <MaterialIcons
             name="add-location-alt"
             color={siteButState ? "black" : "aquamarine"}
             size={32}
           />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Animated.View>
 
-      <TouchableWithoutFeedback
-        onPress={startAnimalButtonAnimations}
-        onPressIn={() => setSearButState(true)}
-        onPressOut={() => setSearButState(false)}
+      <Animated.View
+        style={[
+          searButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transSearchY,
+        ]}
       >
-        <Animated.View
-          style={[
-            searButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
-            styles.optionWrapper,
-            transSearchY,
-          ]}
+        <TouchableOpacity
+          onPress={startAnimalButtonAnimations}
+          onPressIn={() => setSearButState(true)}
+          onPressOut={() => setSearButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <MaterialCommunityIcons
             name="map-search-outline"
             color={searButState ? "black" : "aquamarine"}
             size={32}
           />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Animated.View>
 
-      <TouchableWithoutFeedback
-        onPress={() => setDiveSitesTog(!diveSitesTog)}
-        onPressIn={() => setAnchButState(true)}
-        onPressOut={() => setAnchButState(false)}
+      <Animated.View
+        style={[
+          anchButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transAnchorY,
+        ]}
       >
-        <Animated.View
-          style={[
-            anchButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
-            styles.optionWrapper,
-            transAnchorY,
-          ]}
+        <TouchableOpacity
+          onPress={() => setDiveSitesTog(!diveSitesTog)}
+          onPressIn={() => setAnchButState(true)}
+          onPressOut={() => setAnchButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <MaterialIcons
             name="anchor"
             color={anchButState ? "black" : "aquamarine"}
             size={32}
           />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Animated.View>
 
-      <TouchableWithoutFeedback
-        onPress={startButtonAnimations}
-        onPressIn={() => setMenuButState(true)}
-        onPressOut={() => setMenuButState(false)}
+      <Animated.View
+        style={[
+          styles.topbuttonwrapper,
+          animatedRotation,
+          menuButState ? styles.menuWrapperPressed : styles.menuWrapper,
+        ]}
       >
-        <Animated.View
-          style={[
-            styles.topbuttonwrapper,
-            animatedRotation,
-            menuButState ? styles.menuWrapperPressed : styles.menuWrapper,
-          ]}
+        <TouchableOpacity
+          onPress={startButtonAnimations}
+          onPressIn={() => setMenuButState(true)}
+          onPressOut={() => setMenuButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
         >
           <FontAwesome5
             name="plus"
             color={menuButState ? "aquamarine" : "black"}
             size={32}
           />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Animated.View>
 
       <KeyboardAvoidingView
         behavior="position"
