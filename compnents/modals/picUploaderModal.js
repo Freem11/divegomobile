@@ -48,7 +48,6 @@ export default function PicUploadModal() {
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
 
-
   const { setMasterSwitch } = useContext(MasterContext);
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const [picCloseState, setPicCloseState] = useState(false);
@@ -235,19 +234,19 @@ export default function PicUploadModal() {
         }
       } else {
         // console.log("pinnies!", pinValues)
-      insertPhotoWaits(pinValues);
-      setPinValues({
-        PicFile: null,
-        Animal: "",
-        PicDate: "",
-        Latitude: "",
-        Longitude: "",
-        DDVal: "0",
-      });
-      setUploadedFile(null);
-      setPicAdderModal(!picAdderModal);
+        insertPhotoWaits(pinValues);
+        setPinValues({
+          PicFile: null,
+          Animal: "",
+          PicDate: "",
+          Latitude: "",
+          Longitude: "",
+          DDVal: "0",
+        });
+        setUploadedFile(null);
+        setPicAdderModal(!picAdderModal);
+      }
     }
-  }
   };
 
   const handleImageUpload = async () => {
@@ -313,7 +312,6 @@ export default function PicUploadModal() {
             setItterator3(itterator3 + 1);
           }
         }
-
       }
     } catch (e) {
       console.log("error: Photo Selection Cancelled", e.message);
@@ -324,30 +322,54 @@ export default function PicUploadModal() {
     if (tutorialRunning) {
       if (itterator3 === 9) {
         setItterator3(itterator3 + 1);
+      } else if (itterator3 === 8 || itterator3 === 11 || itterator3 === 13 || itterator3 === 15 || itterator3 === 18 || itterator3 === 21) {
+        return;
+      } else {
+        setPicAdderModal(!picAdderModal);
+
+        if (pinValues.PicFile !== null) {
+          removePhoto({
+            filePath: "./wetmap/src/components/uploads/",
+            fileName: uploadedFile,
+          });
+        }
+
+        setUploadedFile(null);
+
+        if (picAdderModal) {
+          setPinValues({
+            PicFile: null,
+            Animal: "",
+            PicDate: "",
+            Latitude: "",
+            Longitude: "",
+            DDVal: "0",
+          });
+        }
       }
     } else {
-    setPicAdderModal(!picAdderModal);
+      setPicAdderModal(!picAdderModal);
 
-    if (pinValues.PicFile !== null) {
-      removePhoto({
-        filePath: "./wetmap/src/components/uploads/",
-        fileName: uploadedFile,
-      });
+      if (pinValues.PicFile !== null) {
+        removePhoto({
+          filePath: "./wetmap/src/components/uploads/",
+          fileName: uploadedFile,
+        });
+      }
+
+      setUploadedFile(null);
+
+      if (picAdderModal) {
+        setPinValues({
+          PicFile: null,
+          Animal: "",
+          PicDate: "",
+          Latitude: "",
+          Longitude: "",
+          DDVal: "0",
+        });
+      }
     }
-
-    setUploadedFile(null);
-
-    if (picAdderModal) {
-      setPinValues({
-        PicFile: null,
-        Animal: "",
-        PicDate: "",
-        Latitude: "",
-        Longitude: "",
-        DDVal: "0",
-      });
-    }
-  }
   };
 
   const [imgButState, setImgButState] = useState(false);
@@ -359,24 +381,22 @@ export default function PicUploadModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Picture</Text>
-          <View
-            style={
-              picCloseState ? styles.closeButtonPressed : styles.closeButton
-            }
+        <View
+          style={picCloseState ? styles.closeButtonPressed : styles.closeButton}
+        >
+          <TouchableOpacity
+            onPress={togglePicModal}
+            onPressIn={() => setPicCloseState(true)}
+            onPressOut={() => setPicCloseState(false)}
+            style={{
+              width: 30,
+              height: 30,
+              alignItems: "center",
+            }}
           >
-            <TouchableOpacity
-                onPress={togglePicModal}
-                onPressIn={() => setPicCloseState(true)}
-                onPressOut={() => setPicCloseState(false)}
-                style={{
-                  width: 30,
-                  height: 30,
-                  alignItems: 'center'
-                }}
-              >
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.picContainer}>
         <Image
@@ -389,20 +409,20 @@ export default function PicUploadModal() {
         />
       </View>
 
-        <View
-          style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
+      <View
+        style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
+      >
+        <TouchableOpacity
+          onPress={handleImageUpload}
+          onPressIn={() => setImgButState(true)}
+          onPressOut={() => setImgButState(false)}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: 150,
+            height: 28,
+          }}
         >
-           <TouchableOpacity
-                onPress={handleImageUpload}
-                onPressIn={() => setImgButState(true)}
-                onPressOut={() => setImgButState(false)}
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  width: 150,
-                  height: 28,
-                }}
-              >
           <FontAwesome name="picture-o" color="gold" size={28} />
           <Text
             style={{
@@ -415,8 +435,8 @@ export default function PicUploadModal() {
           >
             Choose an Image
           </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.lowerZone}>
         <View style={styles.fields}>
@@ -521,10 +541,10 @@ export default function PicUploadModal() {
 
         <View style={styles.smallButtons}>
           <View style={styles.dateButton}>
-              <View
-                style={datButState ? styles.dateIconPressed : styles.dateIcon}
-              >
-                <TouchableOpacity
+            <View
+              style={datButState ? styles.dateIconPressed : styles.dateIcon}
+            >
+              <TouchableOpacity
                 onPress={showDatePicker}
                 onPressIn={() => setDatButState(true)}
                 onPressOut={() => setDatButState(false)}
@@ -546,20 +566,20 @@ export default function PicUploadModal() {
                   onConfirm={handleConfirm}
                   onCancel={hideDatePicker}
                 />
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.animalButton}></View>
 
           <View style={styles.latLngButton}>
-              <View
-                style={corButState ? styles.LocButtonPressed : styles.LocButton}
-              >
-                  <TouchableOpacity
+            <View
+              style={corButState ? styles.LocButtonPressed : styles.LocButton}
+            >
+              <TouchableOpacity
                 onPress={onNavigate}
                 onPressIn={() => setCorButState(true)}
-              onPressOut={() => setCorButState(false)}
+                onPressOut={() => setCorButState(false)}
                 style={{
                   width: 38,
                   height: 38,
@@ -571,8 +591,8 @@ export default function PicUploadModal() {
                   size={38}
                   style={{ zIndex: -1 }}
                 />
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -580,15 +600,15 @@ export default function PicUploadModal() {
       <View
         style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
       >
-            <TouchableOpacity
-                onPress={handleSubmit}
-                onPressIn={() => setSubButState(true)}
-                onPressOut={() => setSubButState(false)}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
+        <TouchableOpacity
+          onPress={handleSubmit}
+          onPressIn={() => setSubButState(true)}
+          onPressOut={() => setSubButState(false)}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        >
           <Text
             style={{
               color: "gold",
@@ -605,7 +625,7 @@ export default function PicUploadModal() {
           >
             Submit Photo
           </Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
         {/* </TouchableWithoutFeedback> */}
       </View>
     </View>

@@ -67,7 +67,7 @@ export default function DiveSiteModal() {
 
   useEffect(() => {
     if (tutorialRunning) {
-      if (itterator2 > 0) {
+      if (itterator2 === 9) {
         setItterator2(itterator2 + 1);
       }
     }
@@ -165,6 +165,19 @@ export default function DiveSiteModal() {
     if (tutorialRunning) {
       if (itterator2 === 9) {
         setItterator2(itterator2 + 1);
+      } else if ( itterator2 === 16) {
+          return
+      } else {
+        setDiveSiteAdderModal(!diveSiteAdderModal);
+
+        if (diveSiteAdderModal) {
+          setAddSiteVals({
+            Site: "",
+            Latitude: "",
+            Longitude: "",
+            UserID: null,
+          });
+        }
       }
     } else {
       setDiveSiteAdderModal(!diveSiteAdderModal);
@@ -320,15 +333,15 @@ export default function DiveSiteModal() {
           onPressIn={() => setSubButState(true)}
           onPressOut={() => setSubButState(false)}
         > */}
-             <TouchableOpacity
-                onPress={handleSubmit}
-                onPressIn={() => setSubButState(true)}
-                onPressOut={() => setSubButState(false)}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
+        <TouchableOpacity
+          onPress={handleSubmit}
+          onPressIn={() => setSubButState(true)}
+          onPressOut={() => setSubButState(false)}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        >
           <Text
             style={{
               color: "gold",
@@ -344,7 +357,7 @@ export default function DiveSiteModal() {
           >
             Submit Dive Site
           </Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
         {/* </TouchableWithoutFeedback> */}
       </View>
     </View>

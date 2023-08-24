@@ -11,9 +11,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
   useSharedValue,
-  interpolate,
   useAnimatedStyle,
-  useDerivedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
@@ -27,11 +25,9 @@ import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { AnchorModalContext } from "../contexts/anchorModalContext";
 import {
   MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
-  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import anchorClustIOS from "../png/ClusterAnchor24.png";
 import anchorIconIOS from "../png/SiteAnchor20.png";
@@ -42,10 +38,9 @@ import UserNamer from "./usernamer";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function IntroTutorial(props) {
+export default function IntroTutorial() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
-  const { tutorialModalY } = props;
-
+  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
@@ -146,7 +141,7 @@ export default function IntroTutorial(props) {
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator === 2 || itterator == 15) {
+    if (itterator === 2 || itterator == 7 || itterator == 10 || itterator == 12 || itterator == 15 || itterator >= 17) {
       return;
     } else {
       if (pushVal === 1 && itterator < feederArray.length - 1) {
@@ -154,7 +149,7 @@ export default function IntroTutorial(props) {
       }
 
       if (pushVal === 1 && itterator === feederArray.length - 1) {
-        setGuideModal(!guideModal);
+        setGuideModal(false);
       }
     }
 
@@ -182,8 +177,6 @@ export default function IntroTutorial(props) {
   useEffect(() => {
     let textVal = feederArray[itterator];
     setTextRead(textVal);
-
-    console.log(itterator, feederArray.length);
 
     if (itterator === 0) {
       setTimeout(() => {
@@ -240,10 +233,14 @@ export default function IntroTutorial(props) {
       startUserBoxAnimation();
     }
 
+    if (itterator === 17) {
+      setSiteModal(!(siteModal))
+    }
+
     if (itterator === feederArray.length - 1) {
       setItterator(null);
       setTutorialRunning(false);
-      setGuideModal(!guideModal);
+      setGuideModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
     }
@@ -372,16 +369,6 @@ export default function IntroTutorial(props) {
     let formattedDate = moment(today).format("YYYY-MM-DD");
     getPhotos(formattedDate);
 
-    // if(itterator === 0){
-    //   setTimeout(() => {
-    //     startCharacterAnimation();
-    //   }, 200);
-
-    //   setTimeout(() => {
-    //     startTextBoxAnimation();
-    //     setupText(0);
-    //   }, 400);
-    // }
   }, [guideModal]);
 
   const moveMap = (values) => {
@@ -442,36 +429,6 @@ export default function IntroTutorial(props) {
             })}
         </View>
 
-        {
-          /* <View style={styles.container3}>
-           {pics &&
-            pics.map((pic) => {
-              return(
-                <Text>HI</Text>
-              // <View key={pic.id} style={styles.picContainer3}>
-                /* <View style={styles.micro}>
-                  <Text style={styles.titleText}>{pic.label}</Text>
-                </View> */
-          /* <View style={styles.shadowbox}>
-                  <Image
-                    source={{
-                      uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
-                    }}
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      borderRadius: 15,
-                      borderColor: "grey",
-                    }}
-                  />
-                </View> */
-          // </View>
-          //     )
-          //   })}
-          // )}
-          /* </View> */
-        }
-
         <Animated.View style={[characterSlide, styles.character]}>
           <Image
             source={mantaIOS}
@@ -490,7 +447,6 @@ export default function IntroTutorial(props) {
           <MaterialIcons name="explore" color="aquamarine" size={32} />
         </Animated.View>
 
-        {/* new one  */}
         <Animated.View style={[styles.userContainer, userBoxSlide]}>
           <UserNamer></UserNamer>
         </Animated.View>

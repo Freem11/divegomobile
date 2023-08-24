@@ -50,7 +50,6 @@ export default function UserNamer() {
           id: sessionUserId,
           username: formVal.userName,
         });
-        console.log("hmmmm", success)
         if (success.length > 0) {
           setItterator(itterator + 1);
           setFormVal({ userName: "" });

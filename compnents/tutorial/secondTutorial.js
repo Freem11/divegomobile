@@ -6,23 +6,17 @@ import {
   Image,
   Dimensions,
   TouchableWithoutFeedback,
-  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
   useSharedValue,
-  interpolate,
   useAnimatedStyle,
-  useDerivedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
-import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
-import moment from "moment";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
@@ -31,23 +25,15 @@ import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import {
   MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import anchorClustIOS from "../png/ClusterAnchor24.png";
-import anchorIconIOS from "../png/SiteAnchor20.png";
-import heatIconIOS from "../png/heatpoint.png";
-import arrowIOS from "../png/arrow.png";
-import UserNamer from "./usernamer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function SecondTutorial(props) {
-  const { activeSession, setActiveSession } = useContext(SessionContext);
-  const { tutorialModalY } = props;
-  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+export default function SecondTutorial() {
+  const { activeSession } = useContext(SessionContext);
+  const { setAddSiteVals } = useContext(DiveSpotContext);
 
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
@@ -60,7 +46,6 @@ export default function SecondTutorial(props) {
     DSAdderContext
   );
 
-  const [pics, setPics] = useState([]);
   const [profile, setProfile] = useState([]);
 
   useEffect(() => {
@@ -146,7 +131,7 @@ export default function SecondTutorial(props) {
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator2 === 3) {
+    if (itterator2 === 3 || itterator2 === 5 || itterator2 === 9 || itterator2 === 16 || itterator2 >= 19) {
       return;
     } else {
     if (pushVal === 1 && itterator2 < feederArray.length - 1) {
@@ -154,7 +139,7 @@ export default function SecondTutorial(props) {
     }
 
     if (pushVal === 1 && itterator2 === feederArray.length - 1) {
-      setSecondGuideModal(!secondGuideModal);
+      setSecondGuideModal(false);
     }
     }
 
@@ -182,8 +167,6 @@ export default function SecondTutorial(props) {
   useEffect(() => {
     let textVal = feederArray[itterator2];
     setTextRead(textVal);
-
-    console.log(itterator2, feederArray.length);
 
     if (itterator2 === 0) {
       setTimeout(() => {
@@ -247,7 +230,7 @@ export default function SecondTutorial(props) {
     if (itterator2 === feederArray.length - 1) {
       setTutorialRunning(false);
       setItterator2(null);
-      setSecondGuideModal(!secondGuideModal);
+      setSecondGuideModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
     }
@@ -391,70 +374,6 @@ const styles = StyleSheet.create({
     fontFamily: "SanFran",
     fontSize: scale(10),
   },
-  container3: {
-    // flex: 1,
-    position: "absolute",
-    top: Platform.OS === "ios" ? "9%" : "6%",
-    backgroundColor: "transparent",
-    alignItems: "center",
-    // marginTop: "-3%",
-    height: "90%",
-    marginRight: scale(10),
-    marginLeft: scale(10),
-    borderRadius: 15,
-    // backgroundColor: "green"
-  },
-  picContainer3: {
-    width: scale(225),
-    height: scale(100),
-    marginBottom: scale(5),
-    // backgroundColor: "538bdb",
-    marginTop: "-0%",
-    borderRadius: 15,
-    zIndex: 10,
-  },
-  userContainer: {
-    position: "absolute",
-    top: Platform.OS === "ios" ? "20%" : "20%",
-    backgroundColor: "transparent",
-    alignItems: "center",
-    // marginTop: "-3%",
-    height: "90%",
-    marginRight: scale(10),
-    marginLeft: scale(10),
-    borderRadius: 15,
-    // backgroundColor: "green"
-  },
-  shadowbox: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  micro: {
-    display: "flex",
-    flexDirection: "row",
-    position: "relative",
-    backgroundColor: "black",
-    opacity: 0.6,
-    width: "96%",
-    borderRadius: 5,
-    zIndex: 2,
-    left: "5%",
-    top: Platform.OS === "ios" ? "11%" : "11%",
-  },
-  titleText: {
-    textAlign: "center",
-    fontFamily: "IndieFlower_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(15),
-    marginLeft: scale(10),
-  },
   buttonwrapper: {
     flex: 1,
     alignItems: "center",
@@ -467,89 +386,5 @@ const styles = StyleSheet.create({
     opacity: 1,
     backgroundColor: "black",
   },
-  anchorClusterWrapper: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    position: "absolute",
-    left: "20%",
-    height: 50,
-    width: 50,
-    opacity: 1,
-  },
-  anchor1: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    position: "absolute",
-    left: windowWidth * 0.13,
-    top: -40,
-    height: 45,
-    width: 45,
-    opacity: 1,
-    marginBottom: 15,
-  },
-  anchor2: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    position: "absolute",
-    left: windowWidth * -0.09,
-    top: -40,
-    height: 45,
-    width: 45,
-    opacity: 1,
-    marginBottom: 15,
-  },
-  anchor3: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    position: "absolute",
-    left: windowWidth * -0.09,
-    top: 60,
-    height: 45,
-    width: 45,
-    opacity: 1,
-    marginBottom: 15,
-  },
-  anchor4: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    position: "absolute",
-    left: windowWidth * 0.13,
-    top: 60,
-    height: 45,
-    width: 45,
-    opacity: 1,
-    marginBottom: 15,
-  },
-  heatPointWrapper: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    position: "absolute",
-    left: "50%",
-    height: 50,
-    width: 50,
-    opacity: 1,
-  },
-  arrowWrapper: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-    position: "absolute",
-    left: "2%",
-    height: 110,
-    width: 160,
-    opacity: 1,
-  },
+  
 });

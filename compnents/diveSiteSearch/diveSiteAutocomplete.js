@@ -75,7 +75,7 @@ export default function DiveSiteAutoComplete() {
           setSelectedDiveSite({SiteName: site.name, Latitude: site.lat, Longitude: site.lng});
           
           if (tutorialRunning) {
-            if (itterator2 > 0) {
+            if (itterator2 === 5) {
               setItterator2(itterator2 + 1);
             }
           }

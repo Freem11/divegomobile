@@ -125,7 +125,7 @@ export default function FABButtons() {
     if (animalWidth.value === 1000) {
       animalWidth.value = withTiming(-200);
       if (tutorialRunning) {
-        if (itterator2 > 0) {
+        if (itterator2 === 3) {
           setItterator2(itterator2 + 1);
         }
       }

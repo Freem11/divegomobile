@@ -207,7 +207,6 @@ if (data) {
 
     export const getRecentPhotos = async (today) => {
 
-      console.log("supa got", today)
       const { data, error } = await supabase
       .from("photos")
       .select()

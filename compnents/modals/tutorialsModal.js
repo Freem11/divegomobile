@@ -146,7 +146,7 @@ export default function TutorialLaunchPadModal() {
         >
           <View
             style={
-              tutPad2CloseState
+              tutPad3CloseState
                 ? styles.openTutorialButtonPressed
                 : styles.openTutorialButton
             }
