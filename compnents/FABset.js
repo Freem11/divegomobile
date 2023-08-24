@@ -13,6 +13,7 @@ import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SessionContext } from "./contexts/sessionContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
+import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { TutorialContext } from "./contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
@@ -61,12 +62,14 @@ export default function FABButtons() {
   );
 
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
 
   const [gearModal, setGearModal] = useState(false);
 
   let counter = 0;
   let counter1 = 0;
+  let counter2 = 0;
   let blinker;
 
   function diveSiteSearch() {
@@ -87,8 +90,16 @@ export default function FABButtons() {
     }
   }
 
+  function photoAdd() {
+    counter2++;
+    if (counter2 % 2 == 0) {
+      setPhotButState(false);
+    } else {
+      setPhotButState(true);
+    }
+  }
+
   useEffect(() => {
-    console.log("itterator2", itterator2, tutorialRunning);
     if (tutorialRunning) {
       if (itterator2 === 3) {
         blinker = setInterval(diveSiteSearch, 1000);
@@ -97,6 +108,14 @@ export default function FABButtons() {
       }
     } return () => clearInterval(blinker)
   }, [itterator2]);
+
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator3 === 5) {
+        blinker = setInterval(photoAdd, 1000);
+      }
+    } return () => clearInterval(blinker)
+  }, [itterator3]);
 
   const rotationVal = useSharedValue(0);
   const transYanchor = useSharedValue(0);
