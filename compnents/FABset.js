@@ -12,6 +12,8 @@ import { PictureContext } from "./contexts/pictureContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SessionContext } from "./contexts/sessionContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
+import { Iterrator2Context } from "./contexts/iterrator2Context";
+import { TutorialContext } from "./contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   StyleSheet,
@@ -41,9 +43,6 @@ import DiveSiteAutoComplete from "./diveSiteSearch/diveSiteAutocomplete";
 import GeocodeAutocomplete from "./locationSearch/geocodeAutocomplete";
 import { removePhoto } from "../supabaseCalls/uploadSupabaseCalls";
 import { scale } from "react-native-size-matters";
-import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContext";
-import { Iterrator2Context } from "./contexts/iterrator2Context";
-import { TutorialContext } from "./contexts/tutorialContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -61,13 +60,43 @@ export default function FABButtons() {
     TutorialLaunchPadContext
   );
 
-  const { secondGuideModal, setSecondGuideModal } = useContext(
-    SecondTutorialModalContext
-  );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
 
   const [gearModal, setGearModal] = useState(false);
+
+  let counter = 0;
+  let counter1 = 0;
+  let blinker;
+
+  function diveSiteSearch() {
+    counter++;
+    if (counter % 2 == 0) {
+      setSearButState(false);
+    } else {
+      setSearButState(true);
+    }
+  }
+
+  function diveSiteAdd() {
+    counter1++;
+    if (counter1 % 2 == 0) {
+      setSiteButState(false);
+    } else {
+      setSiteButState(true);
+    }
+  }
+
+  useEffect(() => {
+    console.log("itterator2", itterator2, tutorialRunning);
+    if (tutorialRunning) {
+      if (itterator2 === 3) {
+        blinker = setInterval(diveSiteSearch, 1000);
+      } else if (itterator2 === 9) {
+        blinker = setInterval(diveSiteAdd, 1000);
+      }
+    } return () => clearInterval(blinker)
+  }, [itterator2]);
 
   const rotationVal = useSharedValue(0);
   const transYanchor = useSharedValue(0);
