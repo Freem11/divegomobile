@@ -32,7 +32,7 @@ export default function TutorialLaunchPadModal() {
   const [tutPadCloseState, setTutPadCloseState] = useState(false);
   const [tutPad2CloseState, setTutPad2CloseState] = useState(false);
   const [tutPad3CloseState, setTutPad3CloseState] = useState(false);
-  
+
   const [tutorialsCloseState, setTutorialsCloseState] = useState(false);
 
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
@@ -47,19 +47,19 @@ export default function TutorialLaunchPadModal() {
   );
 
   const handleTutorialStartup = () => {
-    setTutorialRunning(true)
+    setTutorialRunning(true);
     setTutorialLaunchpadModal(!tutorialLaunchpadModal);
     setGuideModal(!guideModal);
   };
 
   const handleSecondTutorialStartup = () => {
-    setTutorialRunning(true)
+    setTutorialRunning(true);
     setTutorialLaunchpadModal(!tutorialLaunchpadModal);
     setSecondGuideModal(!secondGuideModal);
   };
 
   const handleThirdTutorialStartup = () => {
-    setTutorialRunning(true)
+    setTutorialRunning(true);
     setTutorialLaunchpadModal(!tutorialLaunchpadModal);
     setThirdGuideModal(!thirdGuideModal);
   };
@@ -68,14 +68,12 @@ export default function TutorialLaunchPadModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>DiveGo Guides</Text>
-          <View
-            style={
-              tutorialsCloseState
-                ? styles.closeButtonPressed
-                : styles.closeButton
-            }
-          >
-            <TouchableOpacity
+        <View
+          style={
+            tutorialsCloseState ? styles.closeButtonPressed : styles.closeButton
+          }
+        >
+          <TouchableOpacity
             onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
             onPressIn={() => setTutorialsCloseState(true)}
             onPressOut={() => setTutorialsCloseState(false)}
@@ -86,22 +84,28 @@ export default function TutorialLaunchPadModal() {
             }}
           >
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.inputContainer}>
-        <TouchableWithoutFeedback
-          onPress={handleTutorialStartup}
-          onPressIn={() => setTutPadCloseState(true)}
-          onPressOut={() => setTutPadCloseState(false)}
+        <View
+          style={
+            tutPadCloseState
+              ? styles.openTutorialButtonPressed
+              : styles.openTutorialButton
+          }
         >
-          <View
-            style={
-              tutPadCloseState
-                ? styles.openTutorialButtonPressed
-                : styles.openTutorialButton
-            }
+          <TouchableOpacity
+            onPress={handleTutorialStartup}
+            onPressIn={() => setTutPadCloseState(true)}
+            onPressOut={() => setTutPadCloseState(false)}
+            disabled={tutorialRunning}
+            style={{
+              width: 200,
+              height: 15,
+              alignItems: "center",
+            }}
           >
             <Text
               style={{
@@ -112,20 +116,26 @@ export default function TutorialLaunchPadModal() {
             >
               Intro Guide
             </Text>
-          </View>
-        </TouchableWithoutFeedback>
-
-        <TouchableWithoutFeedback
-          onPress={handleSecondTutorialStartup}
-          onPressIn={() => setTutPad2CloseState(true)}
-          onPressOut={() => setTutPad2CloseState(false)}
-        >
+          </TouchableOpacity>
+        </View>
+     
           <View
             style={
               tutPad2CloseState
                 ? styles.openTutorialButtonPressed
                 : styles.openTutorialButton
             }
+          >
+            <TouchableOpacity
+            onPress={handleSecondTutorialStartup}
+            onPressIn={() => setTutPad2CloseState(true)}
+            onPressOut={() => setTutPad2CloseState(false)}
+            disabled={tutorialRunning}
+            style={{
+              width: 200,
+              height: 15,
+              alignItems: "center",
+            }}
           >
             <Text
               style={{
@@ -136,20 +146,26 @@ export default function TutorialLaunchPadModal() {
             >
               Fun With Dive Sites
             </Text>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
-
-        <TouchableWithoutFeedback
-          onPress={handleThirdTutorialStartup}
-          onPressIn={() => setTutPad3CloseState(true)}
-          onPressOut={() => setTutPad3CloseState(false)}
-        >
+      
           <View
             style={
               tutPad3CloseState
                 ? styles.openTutorialButtonPressed
                 : styles.openTutorialButton
             }
+          >
+             <TouchableOpacity
+            onPress={handleThirdTutorialStartup}
+            onPressIn={() => setTutPad3CloseState(true)}
+            onPressOut={() => setTutPad3CloseState(false)}
+            disabled={tutorialRunning}
+            style={{
+              width: 200,
+              height: 15,
+              alignItems: "center",
+            }}
           >
             <Text
               style={{
@@ -160,9 +176,8 @@ export default function TutorialLaunchPadModal() {
             >
               Photogenics
             </Text>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
-
       </View>
     </View>
   );
@@ -220,13 +235,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 5,
   },
-  // tutorialModal: {
-  //   position: "absolute",
-  //   height: windowHeight,
-  //   width: windowWidth,
-  //   zIndex: 50,
-  //   left: 0,
-  // },
   title: {
     position: "absolute",
     top: "-1%",
