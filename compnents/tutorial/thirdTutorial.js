@@ -19,6 +19,7 @@ import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
+import { PictureContext } from "../contexts/pictureContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { PinContext } from "../contexts/staticPinContext";
@@ -35,6 +36,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function ThirdTutorial() {
   const { activeSession } = useContext(SessionContext);
   const { setPinValues } = useContext(PinContext);
+  const { uploadedFile, setUploadedFile } = useContext(PictureContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
 
   const { thirdGuideModal, setThirdGuideModal } = useContext(
@@ -91,26 +93,27 @@ export default function ThirdTutorial() {
     "In any case, let's assume you need to add in that info. First let's take care of the date, you'll see a calendar icon just to the right of the date field (looks like this) tap in and set the date the photo was taken for us";
   const text11 = "";
   const text12 =
-    "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one you can tap right on it and a dropdown will pop up, start entering the name of the sea creature in your picture, if it already exists in SEAsons it will show up and an option to help speed things along, if it's completely new you will need to type it out.";
-  const text13 = "";
-  const text14 =
+    "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one you can tap right on it and a dropdown will pop up.";
+  const text13 = "Start entering the name of the sea creature in your picture, if it already exists in SEAsons it will show up as a selectable option to help speed things along, but if it's completely new you will need to type it out.";
+  const text14 = "";
+  const text15 =
     "Wonderful! Now that the sea creature has it's name, the only piece left is the GPS, since we are assuming that we don't have them use the Pin Dropper button to open up the map so we can drop a pin!";
-  const text15 = "";
-  const text16 =
-    "And here we are! As you can see there is a new icon that looks like roughly like a manta ray, this is our draggable pin. It's also why we add dive sites (to give you points to drag the pin too)";
+  const text16 = "";
   const text17 =
+    "And here we are! As you can see there is a new icon that looks like roughly like a manta ray, this is our draggable pin. It's also why we add dive sites (to give you points to drag the pin too)";
+  const text18 =
     "Let's pretend that one of the dive sites on the map is where your sea creature sighting took place, drag the manta pin to be on top of it's anchor and then tap the 'set pin' button at the bottom";
-  const text18 = "";
-  const text19 =
-    "As you can see SEAsons has taken the location of the pin you set and has given us it's GPS coordiantes!";
+  const text19 = "";
   const text20 =
+    "As you can see SEAsons has taken the location of the pin you set and has given us it's GPS coordiantes!";
+  const text21 =
     "You sighting is now ready! All you need to do now is tap the 'submit photo' button at the bottom to finish up!";
-  const text21 = "";
-  const text22 =
-    "Bam! That's how you add a new sea creature sighting to SEAsons! As we did with the dive site guide, this entry was not submitted since it's a dry run, but you can from now on in the same way.";
+  const text22 = "";
   const text23 =
+    "Bam! That's how you add a new sea creature sighting to SEAsons! As we did with the dive site guide, this entry was not submitted since it's a dry run, but you can from now on in the same way.";
+  const text24 =
     "That's it for adding sea creature sightings to the app! This is currnelty the last guide so tap anywhere else to close, and thanks for being a member of SEAsons, I look forward to seeing what amazing sea creatures you encounter on your dives!";
-  const text24 = "";
+  const text25 = "";
 
   const [textRead, setTextRead] = useState("");
 
@@ -140,12 +143,13 @@ export default function ThirdTutorial() {
     text22,
     text23,
     text24,
+    text25,
   ];
 
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator3 === 5 || itterator3 === 8 || itterator3 === 11 || itterator3 === 13 || itterator3 === 15 || itterator3 === 18 || itterator3 === 21 || itterator3 >= 24){
+    if (itterator3 === 5 || itterator3 === 8 || itterator3 === 11 || itterator3 === 14 || itterator3 === 16 || itterator3 === 19 || itterator3 === 22 || itterator3 >= 25){
       return;
     } else {
     if (pushVal === 1 && itterator3 < feederArray.length - 1) {
@@ -220,34 +224,34 @@ export default function ThirdTutorial() {
       setThirdGuideModal(!thirdGuideModal);
     }
 
-    if (itterator3 === 12 || itterator3 === 13 || itterator3 === 16 || itterator3 === 18 || itterator3 === 19 || itterator3 === 21 || itterator3 === 22) {
+    if (itterator3 === 12 || itterator3 === 14 || itterator3 === 17 || itterator3 === 19 || itterator3 === 20 || itterator3 === 22 || itterator3 === 23) {
       setThirdGuideModal(!thirdGuideModal);
     }
 
-    if (itterator3 === 14) {
+    if (itterator3 === 15) {
       setThirdGuideModal(!thirdGuideModal);
       setTimeout(() => {
         startPinAnimation();
       }, 1000);
     }
 
-    if (itterator3 === 15) {
+    if (itterator3 === 16) {
       setThirdGuideModal(!thirdGuideModal);
       startPinAnimation();
     }
 
-    if (itterator3 === 16) {
+    if (itterator3 === 17) {
       setTimeout(() => {
         startMantaAnimation();
       }, 1000);
       
     }
 
-    if (itterator3 === 18) {
+    if (itterator3 === 19) {
         startMantaAnimation();
     }
 
-    if (itterator3 === 24) {
+    if (itterator3 === 25) {
       setPinValues({
         PicFile: null,
         Animal: "",
@@ -257,6 +261,7 @@ export default function ThirdTutorial() {
         DDVal: "0",
         UserId: null,
       });
+       setUploadedFile(null);
        setPicAdderModal(!picAdderModal);
        setTutorialRunning(false);
     }
@@ -415,7 +420,7 @@ export default function ThirdTutorial() {
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, calendarSlide]}>
-          <FontAwesome name="calendar" color="gold" size={32} />
+          <FontAwesome name="calendar" color="gold" size={32} style={{marginBottom: 2.5}}/>
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, pinSlide]}>
@@ -457,7 +462,7 @@ const styles = StyleSheet.create({
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "10%",
+    height: "14%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
@@ -466,7 +471,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "SanFran",
-    fontSize: scale(10),
+    fontSize: scale(12),
   },
   buttonwrapper: {
     flex: 1,

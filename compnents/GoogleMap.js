@@ -85,27 +85,38 @@ export default function Map() {
       );
       setZoomLev(zoom);
 
-      if(mapRef){
-        let currentMapPosition = await mapRef.getCamera();
-      setRegion({
-        latitude: currentMapPosition.center.latitude,
-        longitude: currentMapPosition.center.longitude,
-        latitudeDelta:
-          boundaries.northEast.latitude - boundaries.southWest.latitude,
-        longitudeDelta:
-          boundaries.northEast.longitude - boundaries.southWest.longitude,
-      });
-
-      setMapCenter({
-        lat: currentMapPosition.center.latitude,
-        lng: currentMapPosition.center.longitude,
-      });
-      }
-      
-
-      // console.log("map is at", mapCenter)
     }
   };
+
+  const handleMapShift = async () => {
+    if (mapRef) {
+      let boundaros = await mapRef.getMapBoundaries();
+
+      try {
+        let currentMapPosition = await mapRef.getCamera();
+
+        setRegion({
+          latitude: currentMapPosition.center.latitude,
+          longitude: currentMapPosition.center.longitude,
+          latitudeDelta:
+            boundaros.northEast.latitude - boundaros.southWest.latitude,
+          longitudeDelta:
+            boundaros.northEast.longitude - boundaros.southWest.longitude,
+        });
+
+        setMapCenter({
+          lat: currentMapPosition.center.latitude,
+          lng: currentMapPosition.center.longitude,
+        });
+      } catch (e) {
+        console.log({ title: "Map Hasn't moved", message: e.message });
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleMapShift();
+  }, [boundaries]);
 
   useEffect(() => {
     if (mapRef) {
@@ -180,7 +191,7 @@ export default function Map() {
   return (
     <View style={styles.container}>
       <MapView
-        key={masterSwitch+1}
+        key={masterSwitch + 1}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         provider="google"
@@ -216,12 +227,15 @@ export default function Map() {
               longitude: dragPin.lng,
             }}
             image={mantaIOS}
-            onDragEnd={(e) => {
-              setDragPin({
-                lat: e.nativeEvent.coordinate.latitude,
-                lng: e.nativeEvent.coordinate.longitude,
-              });
-            },() => handleMapChange()}
+            onDragEnd={
+              ((e) => {
+                setDragPin({
+                  lat: e.nativeEvent.coordinate.latitude,
+                  lng: e.nativeEvent.coordinate.longitude,
+                });
+              },
+              () => handleMapChange())
+            }
           />
         )}
 
@@ -309,7 +323,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "lightgrey",
-    opacity: 0.3
+    opacity: 0.3,
   },
   headerAlt: {
     // alignItems: "center",

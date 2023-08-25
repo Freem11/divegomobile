@@ -142,11 +142,11 @@ export default function PicUploadModal() {
         blinker = setInterval(imageBut, 1000);
       } else if (itterator3 === 11) {
         blinker = setInterval(calendarBut, 1000);
-      } else if (itterator3 === 13) {
+      } else if (itterator3 === 14) {
         blinker = setInterval(animalField, 1000);
-      } else if (itterator3 === 15) {
+      } else if (itterator3 === 16) {
         blinker = setInterval(pinBut, 1000);
-      } else if (itterator3 === 21) {
+      } else if (itterator3 === 22) {
         blinker = setInterval(subBut, 1000);
       }
 
@@ -406,7 +406,7 @@ export default function PicUploadModal() {
     if (tutorialRunning) {
       if (itterator3 === 9) {
         setItterator3(itterator3 + 1);
-      } else if (itterator3 === 8 || itterator3 === 11 || itterator3 === 13 || itterator3 === 15 || itterator3 === 18 || itterator3 === 21) {
+      } else if (itterator3 === 8 || itterator3 === 11 || itterator3 === 14 || itterator3 === 16 || itterator3 === 19 || itterator3 === 22) {
         return;
       } else {
         setPicAdderModal(!picAdderModal);

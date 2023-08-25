@@ -37,7 +37,7 @@ useEffect(() => {
   clearTimeout(waiter)
   
   if (tutorialRunning) {
-    if (itterator3 === 13) {
+    if (itterator3 === 14) {
       waiter = setTimeout(() => {
         setItterator3(itterator3 + 1);
       }, 2000);
