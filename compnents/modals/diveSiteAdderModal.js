@@ -37,18 +37,85 @@ export default function DiveSiteModal() {
   const [diveCloseState, setDiveCloseState] = useState(false);
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
-  // const [formVals, setFormVals] = useState({
-  //   Site: "",
-  //   Latitude: "",
-  //   Longitude: "",
-  //   UserID: null,
-  // });
 
   const [formValidation, SetFormValidation] = useState({
     SiteNameVal: false,
     LatVal: false,
     LngVal: false,
   });
+
+  let counter1 = 0;
+  let counter2 = 0;
+  let counter3 = 0;
+  let blinker1;
+  let blinker2;
+  let blinker3;
+  let timer2;
+  let timer3;
+
+  function siteField() {
+    counter1++;
+    if (counter1 % 2 == 0) {
+      SetFormValidation({
+        ...formValidation,
+        SiteNameVal: false,
+      });
+    } else {
+      SetFormValidation({
+        ...formValidation,
+        SiteNameVal: true,
+      });
+    }
+  }
+
+  function atSite() {
+    counter2++;
+    if (counter2 % 2 == 0) {
+      setImaButState(false);
+    } else {
+      setImaButState(true);
+    }
+  }
+
+  function siteTimeout() {
+    blinker2 = setInterval(atSite, 1000)
+  }
+
+  function subBut() {
+    counter3++;
+    if (counter3 % 2 == 0) {
+      setSubButState(false);
+    } else {
+      setSubButState(true);
+    }
+  }
+
+  function subTimeout() {
+    blinker3 = setInterval(subBut, 1000)
+  }
+
+  function cleanUp() {
+    clearInterval(blinker1)
+    clearInterval(blinker2)
+    clearInterval(blinker3)
+    clearTimeout(timer2)
+    clearTimeout(timer3)
+    SetFormValidation({
+      ...formValidation,
+      SiteNameVal: false,
+    });
+    setImaButState(false);
+    setSubButState(false);
+  }
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator2 === 16) {
+        blinker1 = setInterval(siteField, 1000);
+        timer2 = setTimeout(siteTimeout,300);
+        timer3 = setTimeout(subTimeout,600); 
+      }
+    } return () => cleanUp()
+  }, [itterator2]);
 
   let UserId;
 
@@ -328,11 +395,6 @@ export default function DiveSiteModal() {
       <View
         style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
       >
-        {/* <TouchableWithoutFeedback
-          onPress={handleSubmit}
-          onPressIn={() => setSubButState(true)}
-          onPressOut={() => setSubButState(false)}
-        > */}
         <TouchableOpacity
           onPress={handleSubmit}
           onPressIn={() => setSubButState(true)}
@@ -358,7 +420,6 @@ export default function DiveSiteModal() {
             Submit Dive Site
           </Text>
         </TouchableOpacity>
-        {/* </TouchableWithoutFeedback> */}
       </View>
     </View>
   );
