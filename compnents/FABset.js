@@ -99,6 +99,13 @@ export default function FABButtons() {
     }
   }
 
+  function cleanUp() {
+    clearInterval(blinker)
+    setSearButState(false);
+    setSiteButState(false);
+    setPhotButState(false);
+  }
+
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator2 === 3) {
@@ -106,7 +113,7 @@ export default function FABButtons() {
       } else if (itterator2 === 9) {
         blinker = setInterval(diveSiteAdd, 1000);
       }
-    } return () => clearInterval(blinker)
+    } return () => cleanUp()
   }, [itterator2]);
 
   useEffect(() => {
@@ -114,7 +121,7 @@ export default function FABButtons() {
       if (itterator3 === 5) {
         blinker = setInterval(photoAdd, 1000);
       }
-    } return () => clearInterval(blinker)
+    } return () => cleanUp()
   }, [itterator3]);
 
   const rotationVal = useSharedValue(0);

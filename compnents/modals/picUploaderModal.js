@@ -69,6 +69,90 @@ export default function PicUploadModal() {
     LngVal: false,
   });
 
+
+  let counter = 0;
+  let blinker;
+
+  function imageBut() {
+    counter++;
+    if (counter % 2 == 0) {
+      setImgButState(false);
+    } else {
+      setImgButState(true);
+    }
+  }
+
+  function calendarBut() {
+    counter++;
+    if (counter % 2 == 0) {
+      setDatButState(false);
+    } else {
+      setDatButState(true);
+    }
+  }
+
+  function animalField() {
+    counter++;
+    if (counter % 2 == 0) {
+      SetFormValidation({
+        ...formValidation,
+        AnimalVal: false,
+      });
+    } else {
+      SetFormValidation({
+        ...formValidation,
+        AnimalVal: true,
+      });
+    }
+  }
+
+  function pinBut() {
+    counter++;
+    if (counter % 2 == 0) {
+      setCorButState(false);
+    } else {
+      setCorButState(true);
+    }
+  }
+
+  function subBut() {
+    counter++;
+    if (counter % 2 == 0) {
+      setSubButState(false);
+    } else {
+      setSubButState(true);
+    }
+  }
+
+  function cleanUp() {
+    clearInterval(blinker)
+    setImgButState(false);
+    setDatButState(false);
+    SetFormValidation({
+      ...formValidation,
+      AnimalVal: false,
+    });
+    setCorButState(false);
+    setSubButState(false);
+  }
+
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator3 === 8) {
+        blinker = setInterval(imageBut, 1000);
+      } else if (itterator3 === 11) {
+        blinker = setInterval(calendarBut, 1000);
+      } else if (itterator3 === 13) {
+        blinker = setInterval(animalField, 1000);
+      } else if (itterator3 === 15) {
+        blinker = setInterval(pinBut, 1000);
+      } else if (itterator3 === 21) {
+        blinker = setInterval(subBut, 1000);
+      }
+
+    } return () => cleanUp()
+  }, [itterator3]);
+
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator3 > 0) {
