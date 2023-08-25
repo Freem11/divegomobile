@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "10%",
+    height: "14%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "SanFran",
-    fontSize: scale(10),
+    fontSize: scale(12),
   },
   buttonwrapper: {
     flex: 1,

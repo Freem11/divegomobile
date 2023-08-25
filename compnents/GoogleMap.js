@@ -12,6 +12,8 @@ import { SliderContext } from "./contexts/sliderContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
+import { MapHelperContext } from "./contexts/mapHelperContext"; 
+
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
 import {
   StyleSheet,
@@ -39,6 +41,7 @@ import { FontAwesome } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
 export default function Map() {
+  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { region, setRegion } = useContext(MapRegionContext);
@@ -58,65 +61,95 @@ export default function Map() {
   const [mapRef, setMapRef] = useState(null);
   const [newSites, setnewSites] = useState([]);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
-
+  
+  
   const handleMapChange = async () => {
     if (mapRef) {
-      let boundaries = await mapRef.getMapBoundaries();
-      setBoundaries([
-        boundaries.southWest.longitude,
-        boundaries.southWest.latitude,
-        boundaries.northEast.longitude,
-        boundaries.northEast.latitude,
-      ]);
+      let newBoundaries = await mapRef.getMapBoundaries();
 
-      let filteredDiveSites = await diveSites(boundaries);
-      !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
+          setBoundaries([
+            newBoundaries.southWest.longitude,
+            newBoundaries.southWest.latitude,
+            newBoundaries.northEast.longitude,
+            newBoundaries.northEast.latitude,
+          ]);
+        
 
-      let filteredHeatPoints = await multiHeatPoints(
-        boundaries,
-        animalMultiSelection
-      );
-      setNewHeat(formatHeatVals(filteredHeatPoints));
+          let filteredDiveSites = await diveSites(newBoundaries);
+          !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
+    
+          let filteredHeatPoints = await multiHeatPoints(
+            newBoundaries,
+            animalMultiSelection
+          );
+          setNewHeat(formatHeatVals(filteredHeatPoints));
+    
+          let zoom = calculateZoom(
+            width,
+            newBoundaries.northEast.longitude,
+            newBoundaries.southWest.longitude
+          );
+          setZoomLev(zoom);
+         
+          try {
+            
+            let currentMapPosition = await mapRef.getCamera();
+    
+            if (currentMapPosition){
+              setRegion({
+                latitude: currentMapPosition.center.latitude,
+                longitude: currentMapPosition.center.longitude,
+                latitudeDelta:
+                   newBoundaries.northEast.latitude - newBoundaries.southWest.latitude,
+                longitudeDelta:
+                   newBoundaries.northEast.longitude - newBoundaries.southWest.longitude,
+              });
+              setMapCenter({
+                lat: currentMapPosition.center.latitude,
+                lng: currentMapPosition.center.longitude,
+              });
+            }
 
-      let zoom = calculateZoom(
-        width,
-        boundaries.northEast.longitude,
-        boundaries.southWest.longitude
-      );
-      setZoomLev(zoom);
 
+          } catch (e) {
+            console.log({ title: "Map Flipped", message: e.message });
+          }
+            
+         
+
+  
     }
   };
 
-  const handleMapShift = async () => {
+  const handleMapFlip = async () => {
     if (mapRef) {
-      let boundaros = await mapRef.getMapBoundaries();
-
-      try {
-        let currentMapPosition = await mapRef.getCamera();
-
-        setRegion({
-          latitude: currentMapPosition.center.latitude,
-          longitude: currentMapPosition.center.longitude,
-          latitudeDelta:
-            boundaros.northEast.latitude - boundaros.southWest.latitude,
-          longitudeDelta:
-            boundaros.northEast.longitude - boundaros.southWest.longitude,
-        });
-
-        setMapCenter({
-          lat: currentMapPosition.center.latitude,
-          lng: currentMapPosition.center.longitude,
-        });
-      } catch (e) {
-        console.log({ title: "Map Hasn't moved", message: e.message });
-      }
+      
+          // let filteredDiveSites = await diveSites(boundaries);
+          // !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
+    
+          // let filteredHeatPoints = await multiHeatPoints(
+          //   boundaries,
+          //   animalMultiSelection
+          // );
+          // setNewHeat(formatHeatVals(filteredHeatPoints));
+    
+          let zoom = calculateZoom(
+            width,
+            boundaries[2],
+            boundaries[0]
+          );
+          setZoomLev(zoom);
+  
+          setRegion({
+            latitude: mapCenter.lat,
+            longitude: mapCenter.lng,
+            latitudeDelta:
+                boundaries[3] - boundaries[1],
+            longitudeDelta:
+                boundaries[2] - boundaries[0],
+          });
     }
   };
-
-  useEffect(() => {
-    handleMapShift();
-  }, [boundaries]);
 
   useEffect(() => {
     if (mapRef) {
@@ -136,12 +169,18 @@ export default function Map() {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    handleMapChange();
+    if(mapHelper){
+      handleMapFlip()
+      setMapHelper(false)
+    } else {
+      handleMapChange();
+    }
+    
   }, []);
 
   useEffect(() => {
     handleMapChange();
-  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection, dragPin]);
+  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection]);
 
   useEffect(() => {
     setDragPin(mapCenter);
@@ -233,8 +272,7 @@ export default function Map() {
                   lat: e.nativeEvent.coordinate.latitude,
                   lng: e.nativeEvent.coordinate.longitude,
                 });
-              },
-              () => handleMapChange())
+              })
             }
           />
         )}

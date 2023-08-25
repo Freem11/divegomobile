@@ -35,6 +35,8 @@ import { DSAdderContext } from "./contexts/DSModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { Iterrator3Context } from "./contexts/iterrator3Context";
+import { MapHelperContext } from "./contexts/mapHelperContext"; 
+
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -64,6 +66,9 @@ export default function MapPage() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
+  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
+
+
 
   //Tutorial Launch Pad Model Animation
   const tutorialLaunchpadModalY = useSharedValue(windowHeight);
@@ -278,12 +283,12 @@ export default function MapPage() {
   };
 
   const onNavigate = () => {
-    console.log("tapped?");
     setPinValues({
       ...pinValues,
       Latitude: dragPin.lat.toString(),
       Longitude: dragPin.lng.toString(),
     });
+    setMapHelper(true)
     setMasterSwitch(true);
     setPicAdderModal(!picAdderModal);
   };

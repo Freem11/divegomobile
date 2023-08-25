@@ -112,7 +112,7 @@ export default function IntroTutorial() {
   const text15 =
     "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
   const text16 =
-    "Great thanks! If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thanks for joining SEAsons!";
+    "Thanks! And if you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining SEAsons!";
   const text17 = "";
 
   const [textRead, setTextRead] = useState("");
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "10%",
+    height: "14%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
@@ -564,7 +564,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "SanFran",
-    fontSize: scale(10),
+    fontSize: scale(12),
   },
   container3: {
     // flex: 1,

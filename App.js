@@ -47,6 +47,7 @@ import { ThirdTutorialModalContext } from "./compnents/contexts/thirdTutorialMod
 import { IterratorContext } from "./compnents/contexts/iterratorContext";
 import { Iterrator2Context } from "./compnents/contexts/iterrator2Context";
 import { Iterrator3Context } from "./compnents/contexts/iterrator3Context";
+import { MapHelperContext } from "./compnents/contexts/mapHelperContext"; 
 
 import MapPage from "./compnents/mapPage";
 import AuthenticationPage from "./compnents/authenticationPage";
@@ -69,7 +70,7 @@ export default function App() {
   const [tutorialLaunchpadModal, setTutorialLaunchpadModal] = useState(false);
 
   const [uploadedFile, setUploadedFile] = useState(null);
-
+  const [mapHelper, setMapHelper] = useState(false);
   const [activeSession, setActiveSession] = useState(null);
 
   const [itterator, setItterator] = useState(null);
@@ -135,6 +136,10 @@ export default function App() {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         });
+        setDragPin({  
+          lat: location.coords.latitude,
+          lng: location.coords.longitude
+        })
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -205,6 +210,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <MapHelperContext.Provider value={{ mapHelper, setMapHelper }}>
       <TutorialLaunchPadContext.Provider
         value={{ tutorialLaunchpadModal, setTutorialLaunchpadModal }}
       >
@@ -341,6 +347,7 @@ export default function App() {
           </TutorialContext.Provider>
         </AnchorModalContext.Provider>
       </TutorialLaunchPadContext.Provider>
+      </MapHelperContext.Provider>
     </GestureHandlerRootView>
   );
 }

@@ -111,9 +111,10 @@ export default function ThirdTutorial() {
   const text22 = "";
   const text23 =
     "Bam! That's how you add a new sea creature sighting to SEAsons! As we did with the dive site guide, this entry was not submitted since it's a dry run, but you can from now on in the same way.";
-  const text24 =
+  const text24= "Just like with the Dive site submissions your sea creature sighting won't automatically be added to the map, the SEAsons team will verify your submisison before committing to the map, but after that your it will go in and be credited to you with your diver name that we setup back in the intro guide!";
+  const text25 =
     "That's it for adding sea creature sightings to the app! This is currnelty the last guide so tap anywhere else to close, and thanks for being a member of SEAsons, I look forward to seeing what amazing sea creatures you encounter on your dives!";
-  const text25 = "";
+  const text26 = "";
 
   const [textRead, setTextRead] = useState("");
 
@@ -144,12 +145,13 @@ export default function ThirdTutorial() {
     text23,
     text24,
     text25,
+    text26,
   ];
 
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator3 === 5 || itterator3 === 8 || itterator3 === 11 || itterator3 === 14 || itterator3 === 16 || itterator3 === 19 || itterator3 === 22 || itterator3 >= 25){
+    if (itterator3 === 5 || itterator3 === 8 || itterator3 === 11 || itterator3 === 14 || itterator3 === 16 || itterator3 === 19 || itterator3 === 22 || itterator3 >= 26){
       return;
     } else {
     if (pushVal === 1 && itterator3 < feederArray.length - 1) {
@@ -251,7 +253,7 @@ export default function ThirdTutorial() {
         startMantaAnimation();
     }
 
-    if (itterator3 === 25) {
+    if (itterator3 === 26) {
       setPinValues({
         PicFile: null,
         Animal: "",

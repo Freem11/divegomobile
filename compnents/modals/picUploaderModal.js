@@ -32,6 +32,8 @@ import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { MapHelperContext } from "../contexts/mapHelperContext"; 
+
 
 let PicVar = false;
 let DateVar = false;
@@ -47,6 +49,8 @@ export default function PicUploadModal() {
   );
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
+
 
   const { setMasterSwitch } = useContext(MasterContext);
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -168,6 +172,7 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   const onNavigate = () => {
+    setMapHelper(true)
     setMasterSwitch(false);
     setPicAdderModal(false);
     // if (tutorialRunning) {
