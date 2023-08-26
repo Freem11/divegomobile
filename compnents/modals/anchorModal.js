@@ -55,7 +55,6 @@ export default function AnchorModal(lat, lng) {
       selectedDiveSite.Longitude
     );
 
-    console.log("map bounds", minLat, maxLat, minLng, maxLng)
     try {
       const photos = await getPhotosforAnchorMulti({
         animalMultiSelection,

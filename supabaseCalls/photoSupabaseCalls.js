@@ -222,3 +222,18 @@ if (data) {
       return data;
     }
     }; 
+
+
+    export const getMostRecentPhoto = async () => {
+
+      const { data, error } = await supabase.rpc("maximum_value")
+
+      if (error) {
+        console.log("couldn't do it,", error);
+        return [];
+      }
+    
+      if (data) {
+        return data;
+      }
+    }; 

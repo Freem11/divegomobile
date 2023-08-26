@@ -310,7 +310,6 @@ export default function MapPage() {
         const success = await grabProfileById(sessionUserId);
         if (success) {
           let bully = success[0].UserName;
-          console.log("juummi", bully);
           if (bully == null) {
             setGuideModal(!guideModal);
           }

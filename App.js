@@ -53,6 +53,8 @@ import MapPage from "./compnents/mapPage";
 import AuthenticationPage from "./compnents/authenticationPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
+import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
+
 // import 'expo-dev-client';
 
 const { width, height } = Dimensions.get("window");
@@ -129,16 +131,16 @@ export default function App() {
 
   const getCurrentLocation = async () => {
     try {
-      const location = await getCurrentCoordinates();
-      if (location) {
+      const photoLocation = await getMostRecentPhoto();
+      if (photoLocation) {
         setRegion({
           ...region,
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
+          latitude: photoLocation[0].latitude,
+          longitude: photoLocation[0].longitude,
         });
         setDragPin({  
-          lat: location.coords.latitude,
-          lng: location.coords.longitude
+          lat: photoLocation[0].latitude,
+          lng: photoLocation[0].longitude
         })
       }
     } catch (e) {
@@ -165,9 +167,11 @@ export default function App() {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
+      console.log("got location")
       try {
         const asyncData = JSON.parse(await AsyncStorage.getItem("token"));
         if (asyncData === null) {
+          console.log("got token?")
           setAppIsReady(true);
         } else {
           if (asyncData.session.refresh_token) {
