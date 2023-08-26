@@ -14,6 +14,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
+import seaLionGuy from "../png/seaLion.png";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
@@ -423,7 +424,7 @@ export default function ThirdTutorial() {
 
         <Animated.View style={[characterSlide, styles.character]}>
           <Image
-            source={mantaIOS}
+            source={seaLionGuy}
             style={{
               height: "100%",
               width: "100%",
@@ -479,8 +480,8 @@ const styles = StyleSheet.create({
   character: {
     position: "absolute",
     bottom: "7%",
-    height: "51%",
-    width: "60%",
+    height: "45%",
+    width: "100%",
     opacity: 1,
   },
   textBox: {
