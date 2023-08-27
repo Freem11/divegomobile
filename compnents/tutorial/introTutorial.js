@@ -16,6 +16,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
+import seaLionGuy from "../png/seaLion.png";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
@@ -26,9 +27,7 @@ import { MapCenterContext } from "../contexts/mapCenterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
-import {
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import anchorClustIOS from "../png/ClusterAnchor24.png";
 import anchorIconIOS from "../png/SiteAnchor20.png";
 import heatIconIOS from "../png/heatpoint.png";
@@ -116,6 +115,7 @@ export default function IntroTutorial() {
   const text17 = "";
 
   const [textRead, setTextRead] = useState("");
+  const [textPrinting, setTextPrinting] = useState(true);
 
   const feederArray = [
     text0,
@@ -141,42 +141,73 @@ export default function IntroTutorial() {
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator === 2 || itterator == 7 || itterator == 10 || itterator == 12 || itterator == 15 || itterator >= 17) {
+    if (
+      itterator === 2 ||
+      itterator == 7 ||
+      itterator == 10 ||
+      itterator == 12 ||
+      itterator == 15 ||
+      itterator >= 17
+    ) {
       return;
     } else {
       if (pushVal === 1 && itterator < feederArray.length - 1) {
-        setItterator((prev) => prev + pushVal);
+        if (textPrinting) {
+          setTextPrinting(false);
+          textArray= ""
+          setTextRead("")
+          setTextRead(feederArray[itterator]);
+        } else {
+          setItterator((prev) => prev + pushVal);
+          setTextPrinting(true);
+        }
       }
 
       if (pushVal === 1 && itterator === feederArray.length - 1) {
         setGuideModal(false);
       }
     }
-
-    // setTextRead("");
-    // clearInterval(interval);
-    // let textArray = textVal.split("");
-
-    //   interval = setInterval(() => {
-
-    //     setTextRead((prev) => prev + textArray[0]);
-    //     textArray = textArray.slice(1);
-
-    //     if(pushVal === 1){
-    //       clearInterval(interval);
-    //       setTextRead(textVal);
-    //     }
-
-    //     if (!textArray.length) {
-    //       clearInterval(interval);
-    //     }
-
-    //   }, 50);
   };
 
+  let textArray;
+
+  function printOutText() {
+
+      if (textArray.length > 0){
+        setTextRead((prev) => prev + textArray[0]);
+        textArray = textArray.slice(1);
+      } else {
+        setTextPrinting(false)
+      }
+    
+  }
+
+  function cleanUp() {
+    clearInterval(textPrinter);
+  }
+
+  let textPrinter 
   useEffect(() => {
-    let textVal = feederArray[itterator];
-    setTextRead(textVal);
+    setTextRead("");
+    
+      let textVal = feederArray[itterator];
+      if (textVal){
+        textArray = textVal.split("");
+        if (textPrinting) {
+         textPrinter = setInterval(printOutText, 40);
+        } else {
+          setTextRead(textVal);
+        }
+      
+      }
+     
+
+    return () => cleanUp();
+  }, [itterator, textPrinting]);
+
+  useEffect(() => {
+    // let textVal = feederArray[itterator];
+    // setTextRead(textVal);
 
     if (itterator === 0) {
       setTimeout(() => {
@@ -234,7 +265,7 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 17) {
-      setSiteModal(!(siteModal))
+      setSiteModal(!siteModal);
     }
 
     if (itterator === feederArray.length - 1) {
@@ -359,7 +390,7 @@ export default function IntroTutorial() {
   };
 
   useEffect(() => {
-    if(tutorialRunning){
+    if (tutorialRunning) {
       if (itterator === null) {
         setItterator(0);
       }
@@ -368,7 +399,6 @@ export default function IntroTutorial() {
     let today = new Date();
     let formattedDate = moment(today).format("YYYY-MM-DD");
     getPhotos(formattedDate);
-
   }, [guideModal]);
 
   const moveMap = (values) => {
@@ -431,7 +461,7 @@ export default function IntroTutorial() {
 
         <Animated.View style={[characterSlide, styles.character]}>
           <Image
-            source={mantaIOS}
+            source={seaLionGuy}
             style={{
               height: "100%",
               width: "100%",
@@ -548,14 +578,14 @@ const styles = StyleSheet.create({
   character: {
     position: "absolute",
     bottom: "7%",
-    height: "51%",
-    width: "60%",
+    height: "45%",
+    width: "100%",
     opacity: 1,
   },
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "14%",
+    height: "15%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
@@ -564,7 +594,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "SanFran",
-    fontSize: scale(12),
+    fontSize: 13,
   },
   container3: {
     // flex: 1,

@@ -2,7 +2,6 @@ import { supabase } from "../supabase";
 
 export const addDeletedAccountInfo = async (values) => {
 
-  console.log("passing", values)
   const { data, error } = await supabase
   .from("deletedUsers")
   .insert([
@@ -45,7 +44,6 @@ if (data) {
 
 export const updateProfile = async (values) => {
 
-  console.log("supabase gets", values)
   const { data, error } = await supabase
     .from("UserProfiles")
     .update({ UserName: values.username })

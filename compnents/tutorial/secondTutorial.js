@@ -14,6 +14,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
+import seaLionGuy from "../png/seaLion.png";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
@@ -23,10 +24,7 @@ import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
-import {
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -42,9 +40,8 @@ export default function SecondTutorial() {
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { setMapCenter } = useContext(MapCenterContext);
 
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
+  const { diveSiteAdderModal, setDiveSiteAdderModal } =
+    useContext(DSAdderContext);
 
   const [profile, setProfile] = useState([]);
 
@@ -96,14 +93,17 @@ export default function SecondTutorial() {
     "Once you have your site name and GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submited for review";
   const text14 =
     "Please note your new site won't automatically be added to the map, the SEAsons team will verify your submisison before committing to the map, but after that your site will go in and be credited to you with your diver name that we setup earlier!";
-  const text15 = "Give it a try for yourself add a name and GPS using the 'I'm at the dive site' button and submit!";
+  const text15 =
+    "Give it a try for yourself add a name and GPS using the 'I'm at the dive site' button and submit!";
   const text16 = "";
-  const text17 = "Nice Job, That's how you add a new dive site to SEAsons! In this case since this is a guide, this entry was not submitted, but you can from now on in the same way.";
+  const text17 =
+    "Nice Job, That's how you add a new dive site to SEAsons! In this case since this is a guide, this entry was not submitted, but you can from now on in the same way.";
   const text18 =
     "That's it for adding dive sites to the app!, in the next guide we will look at adding sea creature sighting photos! Tap on this button to go to that guide next, otherwise tap anywhere else to close, and thanks for joining me again!";
   const text19 = "";
 
   const [textRead, setTextRead] = useState("");
+  const [textPrinting, setTextPrinting] = useState(true);
 
   const feederArray = [
     text0,
@@ -131,42 +131,68 @@ export default function SecondTutorial() {
   //  var interval;
 
   const setupText = (pushVal) => {
-    if (itterator2 === 3 || itterator2 === 5 || itterator2 === 9 || itterator2 === 16 || itterator2 >= 19) {
+    if (
+      itterator2 === 3 ||
+      itterator2 === 5 ||
+      itterator2 === 9 ||
+      itterator2 === 16 ||
+      itterator2 >= 19
+    ) {
       return;
     } else {
-    if (pushVal === 1 && itterator2 < feederArray.length - 1) {
-      setItterator2((prev) => prev + pushVal);
+      if (pushVal === 1 && itterator2 < feederArray.length - 1) {
+        if (textPrinting) {
+          setTextPrinting(false);
+          textArray = "";
+          setTextRead("");
+          setTextRead(feederArray[itterator2]);
+        } else {
+          setItterator2((prev) => prev + pushVal);
+          setTextPrinting(true);
+        }
+      }
+
+      if (pushVal === 1 && itterator2 === feederArray.length - 1) {
+        setSecondGuideModal(false);
+      }
     }
-
-    if (pushVal === 1 && itterator2 === feederArray.length - 1) {
-      setSecondGuideModal(false);
-    }
-    }
-
-    // setTextRead("");
-    // clearInterval(interval);
-    // let textArray = textVal.split("");
-
-    //   interval = setInterval(() => {
-
-    //     setTextRead((prev) => prev + textArray[0]);
-    //     textArray = textArray.slice(1);
-
-    //     if(pushVal === 1){
-    //       clearInterval(interval);
-    //       setTextRead(textVal);
-    //     }
-
-    //     if (!textArray.length) {
-    //       clearInterval(interval);
-    //     }
-
-    //   }, 50);
   };
 
+  let textArray;
+
+  function printOutText() {
+    if (textArray.length > 0) {
+      setTextRead((prev) => prev + textArray[0]);
+      textArray = textArray.slice(1);
+    } else {
+      setTextPrinting(false);
+    }
+  }
+
+  function cleanUp() {
+    clearInterval(textPrinter);
+  }
+
+  let textPrinter;
   useEffect(() => {
+    setTextRead("");
+
     let textVal = feederArray[itterator2];
-    setTextRead(textVal);
+    if (textVal) {
+      textArray = textVal.split("");
+      if (textPrinting) {
+        textPrinter = setInterval(printOutText, 40);
+      } else {
+        setTextRead(textVal);
+      }
+    }
+
+    return () => cleanUp();
+  }, [itterator2, textPrinting]);
+
+  useEffect(() => {
+    // let textVal = feederArray[itterator2];
+    // setTextRead(textVal);
 
     if (itterator2 === 0) {
       setTimeout(() => {
@@ -223,8 +249,8 @@ export default function SecondTutorial() {
         Longitude: "",
         UserID: null,
       });
-       setDiveSiteAdderModal(!diveSiteAdderModal);
-       setTutorialRunning(false);
+      setDiveSiteAdderModal(!diveSiteAdderModal);
+      setTutorialRunning(false);
     }
 
     if (itterator2 === feederArray.length - 1) {
@@ -293,12 +319,11 @@ export default function SecondTutorial() {
   };
 
   useEffect(() => {
-    if(tutorialRunning){
+    if (tutorialRunning) {
       if (itterator2 === null) {
         setItterator2(0);
       }
     }
-
   }, [secondGuideModal]);
 
   const moveMap = (values) => {
@@ -316,7 +341,7 @@ export default function SecondTutorial() {
 
         <Animated.View style={[characterSlide, styles.character]}>
           <Image
-            source={mantaIOS}
+            source={seaLionGuy}
             style={{
               height: "100%",
               width: "100%",
@@ -339,7 +364,6 @@ export default function SecondTutorial() {
         <Animated.View style={[styles.buttonwrapper, diveSiteSlide]}>
           <MaterialIcons name="add-location-alt" color="aquamarine" size={32} />
         </Animated.View>
-
       </View>
     </TouchableWithoutFeedback>
   );
@@ -356,14 +380,14 @@ const styles = StyleSheet.create({
   character: {
     position: "absolute",
     bottom: "7%",
-    height: "51%",
-    width: "60%",
+    height: "45%",
+    width: "100%",
     opacity: 1,
   },
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "14%",
+    height: "15%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
@@ -372,7 +396,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "SanFran",
-    fontSize: scale(12),
+    fontSize: 13,
   },
   buttonwrapper: {
     flex: 1,
@@ -386,5 +410,4 @@ const styles = StyleSheet.create({
     opacity: 1,
     backgroundColor: "black",
   },
-  
 });

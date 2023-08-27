@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 // import GuideModal from "./modals/howToGuideModal";
+import { getCurrentCoordinates } from "./helpers/permissionsHelpers";
 import IntroTutorial from "./tutorial/introTutorial";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
@@ -54,9 +55,8 @@ export default function FABButtons() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
+  const { diveSiteAdderModal, setDiveSiteAdderModal } =
+    useContext(DSAdderContext);
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
@@ -66,6 +66,21 @@ export default function FABButtons() {
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
 
   const [gearModal, setGearModal] = useState(false);
+
+  const getCurrentLocation = async () => {
+    try {
+      const location = await getCurrentCoordinates();
+      if (location) {
+        setMapCenter({
+          lat: location.coords.latitude,
+          lng: location.coords.longitude,
+        });
+
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   let counter = 0;
   let counter1 = 0;
@@ -100,7 +115,7 @@ export default function FABButtons() {
   }
 
   function cleanUp() {
-    clearInterval(blinker)
+    clearInterval(blinker);
     setSearButState(false);
     setSiteButState(false);
     setPhotButState(false);
@@ -113,7 +128,8 @@ export default function FABButtons() {
       } else if (itterator2 === 9) {
         blinker = setInterval(diveSiteAdd, 1000);
       }
-    } return () => cleanUp()
+    }
+    return () => cleanUp();
   }, [itterator2]);
 
   useEffect(() => {
@@ -121,11 +137,13 @@ export default function FABButtons() {
       if (itterator3 === 5) {
         blinker = setInterval(photoAdd, 1000);
       }
-    } return () => cleanUp()
+    }
+    return () => cleanUp();
   }, [itterator3]);
 
   const rotationVal = useSharedValue(0);
   const transYanchor = useSharedValue(0);
+  const transYMyLoc = useSharedValue(0);
   const transYsearch = useSharedValue(0);
   const transYsite = useSharedValue(0);
   const transYphoto = useSharedValue(0);
@@ -148,25 +166,29 @@ export default function FABButtons() {
 
   const startButtonAnimations = () => {
     if (rotationVal.value === 45) {
-      rotationVal.value = withSpring(0);
-      transYanchor.value = withTiming(0);
-      transYsearch.value = withTiming(0);
-      transYsite.value = withTiming(0);
-      transYphoto.value = withTiming(0);
-      transYgeo.value = withTiming(0);
-      transYinfo.value = withTiming(0);
       transYgear.value = withTiming(0);
+      transYinfo.value = withTiming(0);
+      transYgeo.value = withTiming(0);
+      transYsearch.value = withTiming(0);
+      transYphoto.value = withTiming(0);
+      transYsite.value = withTiming(0);
+      transYMyLoc.value = withTiming(0);
+      transYanchor.value = withTiming(0);
+      rotationVal.value = withSpring(0);
+     
       animalWidth.value = withTiming(1000);
       geocodeWidth.value = withTiming(1000);
+
     } else {
-      rotationVal.value = withSpring(45);
+      transYgear.value = withSpring(-415);
+      transYinfo.value = withSpring(-365);
+      transYgeo.value = withSpring(-315);
+      transYsearch.value = withSpring(-265);
+      transYphoto.value = withSpring(-215);
+      transYsite.value = withSpring(-165);
+      transYMyLoc.value = withSpring(-115);
       transYanchor.value = withSpring(-65);
-      transYsearch.value = withSpring(-215);
-      transYsite.value = withSpring(-115);
-      transYphoto.value = withSpring(-165);
-      transYgeo.value = withSpring(-265);
-      transYinfo.value = withSpring(-315);
-      transYgear.value = withSpring(-365);
+      rotationVal.value = withSpring(45);
     }
   };
 
@@ -206,6 +228,12 @@ export default function FABButtons() {
   const transAnchorY = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: transYanchor.value }],
+    };
+  });
+
+  const transMyLocY = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: transYMyLoc.value }],
     };
   });
 
@@ -277,6 +305,7 @@ export default function FABButtons() {
   }
 
   const [menuButState, setMenuButState] = useState(false);
+  const [myLocButState, setMyLocButState] = useState(false);
   const [anchButState, setAnchButState] = useState(false);
   const [siteButState, setSiteButState] = useState(false);
   const [photButState, setPhotButState] = useState(false);
@@ -299,7 +328,7 @@ export default function FABButtons() {
           transGearY,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={() => setGearModal(!gearModal)}
           onPressIn={() => setSettButState(true)}
           onPressOut={() => setSettButState(false)}
@@ -314,7 +343,7 @@ export default function FABButtons() {
             color={settButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
@@ -324,7 +353,7 @@ export default function FABButtons() {
           transInfoY,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
           onPressIn={() => setHow2ButState(true)}
           onPressOut={() => setHow2ButState(false)}
@@ -339,7 +368,7 @@ export default function FABButtons() {
             color={how2ButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
@@ -349,7 +378,7 @@ export default function FABButtons() {
           transGeoY,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={startGeoCodeButtonAnimations}
           onPressIn={() => setNaviButState(true)}
           onPressOut={() => setNaviButState(false)}
@@ -364,7 +393,7 @@ export default function FABButtons() {
             color={naviButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
@@ -374,7 +403,7 @@ export default function FABButtons() {
           transPhotoY,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={() => setPicAdderModal(!picAdderModal)}
           onPressIn={() => setPhotButState(true)}
           onPressOut={() => setPhotButState(false)}
@@ -389,7 +418,7 @@ export default function FABButtons() {
             color={photButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
@@ -399,7 +428,7 @@ export default function FABButtons() {
           transSiteY,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
           onPressIn={() => setSiteButState(true)}
           onPressOut={() => setSiteButState(false)}
@@ -414,7 +443,7 @@ export default function FABButtons() {
             color={siteButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
@@ -424,7 +453,7 @@ export default function FABButtons() {
           transSearchY,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={startAnimalButtonAnimations}
           onPressIn={() => setSearButState(true)}
           onPressOut={() => setSearButState(false)}
@@ -439,7 +468,32 @@ export default function FABButtons() {
             color={searButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
+      </Animated.View>
+
+      <Animated.View
+        style={[
+          myLocButState ? styles.buttonwrapperPressed : styles.buttonwrapper,
+          styles.optionWrapper,
+          transMyLocY,
+        ]}
+      >
+        <TouchableWithoutFeedback
+          onPress={getCurrentLocation}
+          onPressIn={() => setMyLocButState(true)}
+          onPressOut={() => setMyLocButState(false)}
+          style={{
+            alignItems: "center",
+            width: 32,
+            height: 32,
+          }}
+        >
+          <MaterialIcons
+            name="my-location"
+            size={32}
+            color={myLocButState ? "black" : "aquamarine"}
+          />
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
@@ -449,7 +503,7 @@ export default function FABButtons() {
           transAnchorY,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={() => setDiveSitesTog(!diveSitesTog)}
           onPressIn={() => setAnchButState(true)}
           onPressOut={() => setAnchButState(false)}
@@ -464,7 +518,7 @@ export default function FABButtons() {
             color={anchButState ? "black" : "aquamarine"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <Animated.View
@@ -474,7 +528,7 @@ export default function FABButtons() {
           menuButState ? styles.menuWrapperPressed : styles.menuWrapper,
         ]}
       >
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={startButtonAnimations}
           onPressIn={() => setMenuButState(true)}
           onPressOut={() => setMenuButState(false)}
@@ -489,7 +543,7 @@ export default function FABButtons() {
             color={menuButState ? "aquamarine" : "black"}
             size={32}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
 
       <KeyboardAvoidingView
@@ -595,14 +649,14 @@ const styles = StyleSheet.create({
     bottom: 5,
   },
   animal: {
-    bottom: 253,
+    bottom: 303,
     width: 0,
     right: 30,
     borderRadius: 10,
     zIndex: 2,
   },
   geoCoder: {
-    bottom: 313,
+    bottom: 363,
     width: 0,
     right: 40,
     borderRadius: 10,
