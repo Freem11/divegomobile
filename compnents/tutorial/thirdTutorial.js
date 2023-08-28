@@ -18,6 +18,7 @@ import seaLionGuy from "../png/seaLion.png";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { PictureContext } from "../contexts/pictureContext";
@@ -36,6 +37,8 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function ThirdTutorial() {
   const { activeSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
   const { setPinValues } = useContext(PinContext);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
@@ -46,8 +49,6 @@ export default function ThirdTutorial() {
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { setMapCenter } = useContext(MapCenterContext);
-
-  const [profile, setProfile] = useState([]);
 
   useEffect(() => {
     getProfile();

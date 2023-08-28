@@ -28,7 +28,8 @@ if (data) {
         latitude: values.latitude,
         longitude: values.longitude,
         month: monthID,
-        UserID: values.UserID
+        UserID: values.UserID,
+        userName: values.UserName
       },
     ]);
 

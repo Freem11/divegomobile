@@ -16,6 +16,7 @@ import { PictureAdderContext } from "../contexts/picModalContext";
 import { MasterContext } from "../contexts/masterContext";
 import { PictureContext } from "../contexts/pictureContext";
 import { SessionContext } from "../contexts/sessionContext";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import { getToday } from "../helpers/picUploaderHelpers";
 import { formatDate, createFile } from "../helpers/imageUploadHelpers";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -26,8 +27,8 @@ import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import { uploadphoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import { removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
+import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls"
 import { scale } from "react-native-size-matters";
-import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
@@ -54,6 +55,8 @@ export default function PicUploadModal() {
 
   const { setMasterSwitch } = useContext(MasterContext);
   const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
   const [picCloseState, setPicCloseState] = useState(false);
 
   const { pinValues, setPinValues } = useContext(PinContext);
@@ -227,17 +230,8 @@ export default function PicUploadModal() {
       setPinValues(pinValues);
     }
 
-    const getUser = async () => {
-      try {
-        let UserID = await userCheck();
-        setPinValues({ ...pinValues, UserId: UserID.id });
-      } catch (e) {
-        console.log({ title: "Error", message: e.message });
-      }
-    };
-
-    getUser();
   }, []);
+
 
   const showDatePicker = () => {
     setDatePickerVisible(true);

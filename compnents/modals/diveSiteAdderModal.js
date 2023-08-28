@@ -117,20 +117,9 @@ export default function DiveSiteModal() {
     } return () => cleanUp()
   }, [itterator2]);
 
-  let UserId;
+  
+  console.log("divesite is", addSiteVals)
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        UserId = await userCheck();
-        setAddSiteVals({ ...addSiteVals, UserID: UserId.id });
-      } catch (e) {
-        console.log({ title: "Error", message: e.message });
-      }
-    };
-
-    getUser();
-  }, []);
 
   useEffect(() => {
     if (tutorialRunning) {

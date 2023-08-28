@@ -21,6 +21,7 @@ import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import moment from "moment";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
@@ -38,7 +39,9 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function IntroTutorial() {
-  const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { activeSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { itterator, setItterator } = useContext(IterratorContext);
@@ -46,7 +49,6 @@ export default function IntroTutorial() {
   const { setMapCenter } = useContext(MapCenterContext);
 
   const [pics, setPics] = useState([]);
-  const [profile, setProfile] = useState([]);
 
   useEffect(() => {
     getProfile();

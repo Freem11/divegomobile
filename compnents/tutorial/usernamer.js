@@ -10,12 +10,15 @@ import { scale, s } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { SessionContext } from "../contexts/sessionContext";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 
 let userVar = false;
 
 export default function UserNamer() {
-  const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { activeSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
   const { itterator, setItterator } = useContext(IterratorContext);
   const [userFail, setUserFail] = useState(null);
   const [subButState, setSubButState] = useState(false);
@@ -53,6 +56,8 @@ export default function UserNamer() {
         if (success.length > 0) {
           setItterator(itterator + 1);
           setFormVal({ userName: "" });
+          setProfile([{...profile, UserName: formVal.userName}])
+
         } else {
           setUserFail("Sorry that username has already been taken")
         }

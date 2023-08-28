@@ -18,6 +18,7 @@ import seaLionGuy from "../png/seaLion.png";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
@@ -31,6 +32,8 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function SecondTutorial() {
   const { activeSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
   const { setAddSiteVals } = useContext(DiveSpotContext);
 
   const { secondGuideModal, setSecondGuideModal } = useContext(
@@ -42,8 +45,6 @@ export default function SecondTutorial() {
 
   const { diveSiteAdderModal, setDiveSiteAdderModal } =
     useContext(DSAdderContext);
-
-  const [profile, setProfile] = useState([]);
 
   useEffect(() => {
     getProfile();

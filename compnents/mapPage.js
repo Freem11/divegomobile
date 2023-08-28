@@ -15,6 +15,8 @@ import Map from "./GoogleMap";
 import FABButtons from "./FABset";
 import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
+import { grabProfileById } from "./../supabaseCalls/accountSupabaseCalls";
+import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
@@ -23,6 +25,7 @@ import { PictureAdderContext } from "./contexts/picModalContext";
 import { MasterContext } from "./contexts/masterContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
+import { DiveSpotContext } from "./contexts/diveSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { TutorialModelContext } from "./contexts/tutorialModalContext";
@@ -36,6 +39,8 @@ import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { MapHelperContext } from "./contexts/mapHelperContext"; 
+import { UserProfileContext } from "./contexts/userProfileContext";
+import { SessionContext } from "./contexts/sessionContext";
 
 
 import { scale } from "react-native-size-matters";
@@ -53,17 +58,19 @@ import IntroTutorial from "./tutorial/introTutorial";
 import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 
-import { grabProfileById } from "../supabaseCalls/accountSupabaseCalls";
-import { SessionContext } from "./contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function MapPage() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
+  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
@@ -310,6 +317,9 @@ export default function MapPage() {
         const success = await grabProfileById(sessionUserId);
         if (success) {
           let bully = success[0].UserName;
+          setProfile(success)
+          setPinValues({ ...pinValues, UserId: success[0].UserID, UserName: success[0].UserName });
+          setAddSiteVals({ ...addSiteVals, UserID: success[0].UserID, UserName: success[0].UserName });
           if (bully == null) {
             setGuideModal(!guideModal);
           }
@@ -318,6 +328,7 @@ export default function MapPage() {
         console.log({ title: "Error", message: e.message });
       }
     };
+
     getProfile();
   }, []);
 
