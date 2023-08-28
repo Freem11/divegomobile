@@ -460,6 +460,9 @@ export default function PicUploadModal() {
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
 
+
+  console.log("pinvals is", pinValues)
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>

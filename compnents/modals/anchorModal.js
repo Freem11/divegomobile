@@ -4,6 +4,7 @@ import {
   getPhotosforAnchor,
   getPhotosforAnchorMulti,
 } from "../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSiteByName } from "../../supabaseCalls/diveSiteSupabaseCalls";
 // import { getPhotosforAnchor } from "../../axiosCalls/photoAxiosCalls";
 import { SliderContext } from "../contexts/sliderContext";
 import { MonthSelectContext } from "../contexts/monthSelectContext";
@@ -49,6 +50,9 @@ export default function AnchorModal(lat, lng) {
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
 
+  const [site, setSite] = useState('');
+
+
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
@@ -74,6 +78,7 @@ export default function AnchorModal(lat, lng) {
 
   useEffect(() => {
     filterAnchorPhotos();
+    getDiveSite(selectedDiveSite.SiteName);
 
       if (tutorialRunning){
         if(itterator > 0){
@@ -89,8 +94,16 @@ export default function AnchorModal(lat, lng) {
     } 
   }, [itterator]);
 
-  
- 
+  const getDiveSite = async (site) => {
+    try {
+      const selectedSite = await getDiveSiteByName(site);
+      if (selectedSite) {
+        setSite(selectedSite[0].userName)
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
 
   const handleEmail = (pic) => {
@@ -143,7 +156,11 @@ export default function AnchorModal(lat, lng) {
           onLongPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
-            <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
+        <View style={{width: 300}}>
+        <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
+            <Text style={styles.dsCredit}>Added by: {site}</Text>
+        </View>
+            
             <TouchableWithoutFeedback
               onPress={handleAnchorModalClose}
               onPressIn={() => setSiteCloseState(true)}
@@ -294,6 +311,14 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
     marginRight: "5%",
     // backgroundColor: 'pink'
+  },
+  dsCredit:{
+    // backgroundColor: 'pink',
+    fontFamily: "GothamBold",
+    color: "#F0EEEB",
+    fontSize: scale(9),
+    width: 200,
+    marginLeft: 15
   },
   titleAlt: {
     display: "flex",
