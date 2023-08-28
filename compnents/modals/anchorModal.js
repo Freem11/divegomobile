@@ -137,6 +137,7 @@ export default function AnchorModal(lat, lng) {
     
   };
 
+console.log(anchorPics)
 
   return (
     <View
@@ -172,7 +173,7 @@ export default function AnchorModal(lat, lng) {
             </TouchableWithoutFeedback>
           </View>
        
-      <ScrollView style={{marginTop: "-5%", height: "100%", borderRadius: 15}}>
+      <ScrollView style={{marginTop: "0%", height: "100%", borderRadius: 15}}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {
@@ -203,6 +204,9 @@ export default function AnchorModal(lat, lng) {
                       />
                     </View>
                   </Lightbox>
+                  <View style={styles.microLow}>
+                    <Text style={styles.titleTextLow}>Added by: {pic.userName}</Text>
+                  </View>
                 </View>
               );
             })}
@@ -289,6 +293,26 @@ const styles = StyleSheet.create({
     left: "4%",
     top: Platform.OS === "ios" ? "8%": "9%",
   },
+  microLow: {
+    display: "flex",
+    flexDirection: "row",
+    position: "absolute",
+    backgroundColor: "black",
+    opacity: 0.6,
+    // width: "54%",
+    borderRadius: 5,
+    zIndex: 2,
+    right: "3%",
+    bottom: Platform.OS === "ios" ? "-7%": "-7%",
+  },
+  titleTextLow: {
+    textAlign: "center",
+    fontFamily: "GothamBlack",
+    color: "#F0EEEB",
+    fontSize: scale(10),
+    paddingLeft: scale(5),
+    paddingRight: scale(7),
+  },
   flagger: {
     height: scale(30),
     width: "10%",
@@ -304,7 +328,7 @@ const styles = StyleSheet.create({
   headerAlt: {
     // alignItems: "center",
     // alignContent: "center",
-    fontFamily: "GothamBold",
+    fontFamily: "PermanentMarker_400Regular",
     color: "#F0EEEB",
     fontSize: scale(17),
     width: "80%",
