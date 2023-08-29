@@ -70,10 +70,10 @@ Automated animal ID from photo machine learning
 
 
 # ScreenShots
-!["Screenshot of Sign In Screen"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/PermissionLocation.png)
-!["Screenshot of Main Map"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/Overview.png)
-!["Screenshot of FABs Open"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/OverviewMenu.png)
-!["Screenshot of Dive Site Form"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/DiveSiteNew.png)
-!["Screenshot of Photo Upload Form"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/PhotoSubmit.png)
-!["Screenshot of Site Photos"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/DiveSitePhotos.png)
-!["Screenshot of Intro Guide"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/DiveSiteSearch.png)
+!["Screenshot of Sign In Screen"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/signIns.png)
+!["Screenshot of Main Map"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/mainMap.png)
+!["Screenshot of FABs Open"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/FABs.png)
+!["Screenshot of Dive Site Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/newSite.png)
+!["Screenshot of Photo Upload Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/photoAdd.png)
+!["Screenshot of Site Photos"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/DiveSite.png)
+!["Screenshot of Intro Guide"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/Guide.png)
