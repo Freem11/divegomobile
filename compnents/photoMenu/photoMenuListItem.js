@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     paddingTop: 3,
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
   },
   photolabelSelected: {
     fontSize: 11,

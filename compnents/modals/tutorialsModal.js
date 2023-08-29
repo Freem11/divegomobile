@@ -103,14 +103,14 @@ export default function TutorialLaunchPadModal() {
             disabled={tutorialRunning}
             style={{
               width: 200,
-              height: 15,
+              height: 22,
               alignItems: "center",
             }}
           >
             <Text
               style={{
                 marginLeft: 5,
-                fontFamily: "BubblegumSans_400Regular",
+                fontFamily: "PermanentMarker_400Regular",
                 color: "gold",
               }}
             >
@@ -133,14 +133,14 @@ export default function TutorialLaunchPadModal() {
             disabled={tutorialRunning}
             style={{
               width: 200,
-              height: 15,
+              height: 22,
               alignItems: "center",
             }}
           >
             <Text
               style={{
                 marginLeft: 5,
-                fontFamily: "BubblegumSans_400Regular",
+                fontFamily: "PermanentMarker_400Regular",
                 color: "gold",
               }}
             >
@@ -163,14 +163,14 @@ export default function TutorialLaunchPadModal() {
             disabled={tutorialRunning}
             style={{
               width: 200,
-              height: 15,
+              height: 22,
               alignItems: "center",
             }}
           >
             <Text
               style={{
                 marginLeft: 5,
-                fontFamily: "BubblegumSans_400Regular",
+                fontFamily: "PermanentMarker_400Regular",
                 color: "gold",
               }}
             >
@@ -254,8 +254,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#F0EEEB",
     width: "80%",
-    marginLeft: "0%",
-    marginRight: "18%",
+    marginLeft: "7%",
+    marginRight: "15%",
     // backgroundColor: "green"
   },
   closeButton: {

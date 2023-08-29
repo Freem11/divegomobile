@@ -729,7 +729,7 @@ const styles = StyleSheet.create({
     fontFamily: "PermanentMarker_400Regular",
     fontSize: scale(17),
     marginTop: scale(-15),
-    marginLeft: "-20%",
+    marginLeft: "-40%",
     color: "#F0EEEB",
   },
   title: {
@@ -750,6 +750,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     justifyContent: "center",
     marginTop: scale(20),
+    // backgroundColor: "green",
     width: "100%",
     height: 50,
     color: "#F0EEEB",

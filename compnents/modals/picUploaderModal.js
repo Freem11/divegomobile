@@ -460,9 +460,6 @@ export default function PicUploadModal() {
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
 
-
-  console.log("pinvals is", pinValues)
-
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -507,16 +504,17 @@ export default function PicUploadModal() {
             flexDirection: "row",
             width: 150,
             height: 28,
+            marginTop: 2
           }}
         >
-          <FontAwesome name="picture-o" color="gold" size={28} />
+          <FontAwesome name="picture-o" color="gold" size={24} />
           <Text
             style={{
               marginLeft: scale(5),
               marginTop: scale(2),
               color: "gold",
-              fontFamily: "IndieFlower_400Regular",
-              fontSize: scale(14),
+              fontFamily: "PermanentMarker_400Regular",
+              fontSize: scale(12),
             }}
           >
             Choose an Image
@@ -547,7 +545,7 @@ export default function PicUploadModal() {
                 placeholderTextColor="darkgrey"
                 editable={false}
                 color={colorDate}
-                fontSize={21}
+                fontSize={17}
                 placeholderTextColor={colorDate}
                 onChangeText={(text) =>
                   setPinValues({ ...pinValues, Animal: text })
@@ -589,7 +587,7 @@ export default function PicUploadModal() {
                 placeholder={"Latitude"}
                 editable={false}
                 placeholderTextColor="darkgrey"
-                fontSize={18}
+                fontSize={16}
                 color="#F0EEEB"
                 onChangeText={(text) =>
                   setPinValues({ ...pinValues, Latitude: text })
@@ -615,7 +613,7 @@ export default function PicUploadModal() {
                 placeholder={"Longitude"}
                 editable={false}
                 placeholderTextColor="darkgrey"
-                fontSize={18}
+                fontSize={16}
                 color="#F0EEEB"
                 onChangeText={(text) =>
                   setPinValues({ ...pinValues, Longitude: text })
@@ -731,7 +729,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
   },
   input: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
     width: 200,
@@ -745,7 +743,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
   inputRed: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
     width: 200,
@@ -759,7 +757,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
   inputCal: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
     width: 200,
@@ -768,7 +766,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   inputCalRed: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
     width: 200,
@@ -1088,8 +1086,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#F0EEEB",
     width: "80%",
-    marginLeft: "3%",
-    marginRight: "18%",
+    marginLeft: "7%",
+    marginRight: "15%",
     // backgroundColor: "green"
   },
   closeButton: {

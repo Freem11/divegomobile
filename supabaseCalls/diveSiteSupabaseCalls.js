@@ -60,7 +60,6 @@ if (data) {
 
 export const getDiveSiteByName = async (value) => {
 
-  console.log("yoo", value)
   const { data, error } = await supabase
   .from("diveSites")
   .select()

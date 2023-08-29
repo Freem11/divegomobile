@@ -124,10 +124,10 @@ export default function SettingsModal() {
           >
             <Text
               style={{
-                paddingBottom: 5,
-                fontFamily: "Caveat_700Bold",
+                paddingBottom: 3,
+                fontFamily: "PermanentMarker_400Regular",
                 color: "gold",
-                fontSize: 22,
+                fontSize: 16,
               }}
             >
               Sign Out
@@ -163,10 +163,10 @@ export default function SettingsModal() {
           >
             <Text
               style={{
-                paddingBottom: 5,
-                fontFamily: "Caveat_700Bold",
+                paddingBottom: 3,
+                fontFamily: "PermanentMarker_400Regular",
                 color: "maroon",
-                fontSize: 22,
+                fontSize: 16,
               }}
             >
               Delete Account
@@ -255,6 +255,8 @@ const styles = StyleSheet.create({
   },
   dangerText: {
     color: "maroon",
+    fontFamily: "Itim_400Regular",
+    fontSize: 18
   },
   deleteAccountButton: {
     backgroundColor: "pink",

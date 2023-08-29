@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Platform } from "react-native";
 import { scale } from "react-native-size-matters";
 
 export default function AxisBar() {
@@ -44,11 +44,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginLeft: scale(10),
-    marginBottom : 3,
-    marginTop: 10,
+    marginBottom : Platform.OS === "android" ? 0 : 3,
     color: "white",
     backgroundColor: "black",
-    opacity: 0.6,
+    opacity: 0.7,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5
   },
@@ -57,8 +56,7 @@ const styles = StyleSheet.create({
     marginRight: 1,
     width: 13,
     color: "white",
-    fontWeight: "bold",
-    fontFamily: "BubblegumSans_400Regular",
+    fontFamily: "Itim_400Regular",
     opacity: 1   
   }
 });

@@ -117,10 +117,6 @@ export default function DiveSiteModal() {
     } return () => cleanUp()
   }, [itterator2]);
 
-  
-  console.log("divesite is", addSiteVals)
-
-
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator2 === 9) {
@@ -368,12 +364,13 @@ export default function DiveSiteModal() {
             alignItems: "center",
           }}
         >
-          <FontAwesome5 name="map" color="gold" size={28} />
+          <FontAwesome5 name="map" color="gold" size={16} />
           <Text
             style={{
               marginLeft: 5,
-              fontFamily: "BubblegumSans_400Regular",
+              fontFamily: "PermanentMarker_400Regular",
               color: "gold",
+              fontSize: 11
             }}
           >
             I'm at the dive site
@@ -434,7 +431,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
   },
   input: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
     width: 200,
@@ -445,7 +442,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   inputRed: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
     width: 200,
@@ -553,8 +550,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#F0EEEB",
     width: "80%",
-    marginLeft: "0%",
-    marginRight: "18%",
+    marginLeft: "7%",
+    marginRight: "15%",
     // backgroundColor: "green"
   },
   closeButton: {

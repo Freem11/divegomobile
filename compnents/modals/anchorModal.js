@@ -129,15 +129,13 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleAnchorModalClose = () => {
-    console.log("at close", itterator)
+
     if (itterator === 10) {
       setGuideModal(true);
     } 
     setSiteModal(!siteModal)
     
   };
-
-console.log(anchorPics)
 
   return (
     <View
@@ -157,7 +155,7 @@ console.log(anchorPics)
           onLongPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
-        <View style={{width: 300}}>
+        <View style={{width: scale(250)}}>
         <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
             <Text style={styles.dsCredit}>Added by: {site}</Text>
         </View>
@@ -254,7 +252,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     textAlign: "center",
-    fontFamily: "GothamBlack",
+    fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(15),
     marginLeft: scale(-10),
@@ -276,7 +274,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     marginTop: "40%",
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     fontSize: scale(18),
     color: "#F0EEEB",
     // backgroundColor: "green"
@@ -307,7 +305,7 @@ const styles = StyleSheet.create({
   },
   titleTextLow: {
     textAlign: "center",
-    fontFamily: "GothamBlack",
+    fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(10),
     paddingLeft: scale(5),
@@ -338,7 +336,7 @@ const styles = StyleSheet.create({
   },
   dsCredit:{
     // backgroundColor: 'pink',
-    fontFamily: "GothamBold",
+    fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(9),
     width: 200,

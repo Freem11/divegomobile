@@ -22,7 +22,7 @@ const AutoSuggestListItem = (props) => {
                 }}
               >
         <Text
-          style={{ fontFamily: "IndieFlower_400Regular", textAlign: "center", color:"#F0EEEB", zIndex: 100 }}
+          style={{ fontFamily: "Itim_400Regular", fontSize: 15, textAlign: "center", color:"#F0EEEB", zIndex: 100 }}
           onPress={() => handleSelect(name)}
         >
           {name}

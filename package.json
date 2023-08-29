@@ -11,6 +11,7 @@
     "@expo-google-fonts/bubblegum-sans": "^0.2.3",
     "@expo-google-fonts/caveat": "^0.2.3",
     "@expo-google-fonts/indie-flower": "^0.2.3",
+    "@expo-google-fonts/itim": "^0.2.3",
     "@expo-google-fonts/permanent-marker": "^0.2.3",
     "@expo-google-fonts/roboto": "^0.2.3",
     "@expo/config-plugins": "~6.0.0",

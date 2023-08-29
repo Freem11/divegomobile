@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "15%",
+    height: "15.5%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
@@ -496,8 +496,8 @@ const styles = StyleSheet.create({
   },
   textContain: {
     padding: 10,
-    fontFamily: "SanFran",
-    fontSize: 13,
+    fontFamily: "Itim_400Regular",
+    fontSize: 14,
   },
   buttonwrapper: {
     flex: 1,
