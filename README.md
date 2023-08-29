@@ -26,13 +26,13 @@ Apple App Store: https://apps.apple.com/us/app/divego/id6450968950
 
 Map Interface that Displays Anchor Icons to represent dive sites and heat map points to show location and number of sea creature sightings 
 
-Map will load to user's/device current location (once permission is granted) if not granted it will load to BC Canada as default
+Map will load to the location of the most recently submitted sea creature sighting.
 
 Icon Clustering to maintain map performance when large amount of data are on screen.
 
 Google Places API integration to allow users to jump the map to other places in the world by inputting a town/city name.
 
-Dive Site search tool, list will auto filter to dive sites in the maps current view, upon selecting a dive site the map will pan and zoom to that dive site and place a yeloow indicator for 2 seconds to help users find it.
+Dive Site search tool, list will auto filter to dive sites in the maps current view, upon selecting a dive site the map will pan and zoom to that dive site and place a yellow indicator for 2 seconds to help users find it.
 
 Animal Photo Carrousel that users can use to select which animals they would like the heatmap and dive sites to show. Photos diplayed will update as the map moves to show animals that have been sighted in the maps area.
 
@@ -46,17 +46,22 @@ Pin drop feature, for photos with no GPS EXIF data, place the draggable pin anyw
 
 Dive site animal photo gallery, animal sightings within a pre-determined GPS radius are displayed when tapping on a specific dive site anchor icon.
 
-Photo flagging feature allowing users to ID incorrectly identifued sea creature photos or to make copy write claims on submitted photos
+One tap map centering feature to bring the map to the location of the user.
 
-Dive Site flagging feature allowing users to report incorrect dive site names or GPS locations
+Photo flagging feature allowing users to ID incorrectly identifued sea creature photos or to make copy write claims on submitted photos.
 
-How to Guide, explains most features of the app for new users. 
+Dive Site flagging feature allowing users to report incorrect dive site names or GPS locations.
 
-Backend integration with Supabase 
+Login/Logout/Register system with persistent login (user stays logged in even after closing browser, unless they deliberately log out) with OAuth integratrions for Google, Facebook and Apple(iOS only).
+
+Backend integration with Supabase.
 
 # In Progress Features:
 
-Login/Logout/Register system with persistent login (user stays logged in even after closing browser, unless they deliberately log out)
+Three Interactive User guides designed to get users acclimated to how to use the app fast:
+Intro Guide - map navigation and how to find active areas, also completes user profile.
+Dive Sites - how to use the search tool to check if a site is in the app and add a new site if not.
+Sighting Submissions - how to add a sea creature sighting, inclduing how to make use of all submission features.
 
 # Planned Features:
 
@@ -65,13 +70,10 @@ Automated animal ID from photo machine learning
 
 
 # ScreenShots
-!["Screenshot of App"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/Overview.png)
-!["Screenshot of FABs"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/OverviewMenu.png)
+!["Screenshot of Sign In Screen"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/PermissionLocation.png)
+!["Screenshot of Main Map"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/Overview.png)
+!["Screenshot of FABs Open"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/OverviewMenu.png)
 !["Screenshot of Dive Site Form"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/DiveSiteNew.png)
 !["Screenshot of Photo Upload Form"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/PhotoSubmit.png)
-!["Screenshot of Pin Drop"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/PInDrop.PNG)
 !["Screenshot of Site Photos"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/DiveSitePhotos.png)
-!["Screenshot of Site Photos"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/DiveSiteSearch.png)
-!["Screenshot of Site Photos"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/PermissionLocation.png)
-!["Screenshot of Site Photos"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/PermissionPhotos.png)
-!["Screenshot of Site Photos"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/HowToGuide.png)
+!["Screenshot of Intro Guide"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/DiveSiteSearch.png)
