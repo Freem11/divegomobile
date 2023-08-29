@@ -13,11 +13,11 @@ use-supercluster
 exifr
 
 # Available at
-Google Play Store: https://play.google.com/store/apps/details?id=com.DiveGo
+Google Play Store: https://play.google.com/store/apps/details?id=com.freem11.divegomobile
 
 !["Google Play QR"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/GooglePlay.png)
 
-Apple App Store: https://apps.apple.com/ca/app/divego/id6443680026
+Apple App Store: https://apps.apple.com/us/app/divego/id6450968950
 
 !["Apple App Store QR"](https://github.com/Freem11/divego-mobile/blob/master/frontend/DiveGoMobile/compnents/png/AppleAppStore.png)
 

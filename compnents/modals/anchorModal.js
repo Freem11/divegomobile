@@ -324,12 +324,12 @@ const styles = StyleSheet.create({
     // left: Platform.OS === "ios" ? "-8%" :"-5%",
   },
   headerAlt: {
-    // alignItems: "center",
-    // alignContent: "center",
+    flexWrap: "wrap",
     fontFamily: "PermanentMarker_400Regular",
     color: "#F0EEEB",
-    fontSize: scale(17),
+    fontSize: scale(14),
     width: "80%",
+    // height: 70,
     marginLeft: "5%",
     marginRight: "5%",
     // backgroundColor: 'pink'
@@ -345,10 +345,11 @@ const styles = StyleSheet.create({
   titleAlt: {
     display: "flex",
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    marginTop: "3%",
+    marginTop: "4%",
     marginLeft: "5%",
     marginRight: "5%",
     marginBottom:"3%",
