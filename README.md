@@ -52,7 +52,7 @@ Photo flagging feature allowing users to ID incorrectly identifued sea creature 
 
 Dive Site flagging feature allowing users to report incorrect dive site names or GPS locations.
 
-Login/Logout/Register system with persistent login (user stays logged in even after closing browser, unless they deliberately log out) with OAuth integratrions for Google, Facebook and Apple(iOS only).
+Login/Logout/Register system with persistent login (user stays logged in even after closing browser, unless they deliberately log out) with OAuth integrations for Google, Facebook and Apple(iOS only).
 
 Backend integration with Supabase.
 

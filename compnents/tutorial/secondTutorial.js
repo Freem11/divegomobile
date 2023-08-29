@@ -12,10 +12,12 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withSpring,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
 import seaLionGuy from "../png/seaLion.png";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
+import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -25,7 +27,7 @@ import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -38,6 +40,9 @@ export default function SecondTutorial() {
 
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
+  );
+  const { thirdGuideModal, setThirdGuideModal } = useContext(
+    ThirdTutorialModalContext
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
@@ -62,10 +67,19 @@ export default function SecondTutorial() {
     }
   };
 
+  const handleThirdTutorialStartup = () => {
+    setItterator2(null);
+    setDiveSiteAdderModal(false);
+    setTutorialRunning(true);
+    setSecondGuideModal(false);
+    setThirdGuideModal(true);
+  };
+
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
   const DsSearchY = useSharedValue(-1000);
   const diveSiteY = useSharedValue(-1000);
+  const nextTutX = useSharedValue(-300);
 
   const text0 =
     "Hey welcome back! Now that you have a Diver Name, I can show you how you can contribute to SEAsons!";
@@ -243,6 +257,10 @@ export default function SecondTutorial() {
       setSecondGuideModal(!secondGuideModal);
     }
 
+    if (itterator2 === 18) {
+      startNextTutAnimation();
+    }
+
     if (itterator2 === 19) {
       setAddSiteVals({
         Site: "",
@@ -250,6 +268,7 @@ export default function SecondTutorial() {
         Longitude: "",
         UserID: null,
       });
+      startNextTutAnimation();
       setDiveSiteAdderModal(!diveSiteAdderModal);
       setTutorialRunning(false);
     }
@@ -287,6 +306,12 @@ export default function SecondTutorial() {
     };
   });
 
+  const nextTutSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: nextTutX.value }],
+    };
+  });
+
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
       characterX.value = withTiming(190);
@@ -316,6 +341,14 @@ export default function SecondTutorial() {
       diveSiteY.value = withTiming(windowHeight * 0.4);
     } else {
       diveSiteY.value = withTiming(-1000);
+    }
+  };
+
+  const startNextTutAnimation = () => {
+    if (nextTutX.value === -300) {
+      nextTutX.value = withSpring(windowWidth * 0.3);
+    } else {
+      nextTutX.value = withTiming(-300);
     }
   };
 
@@ -365,6 +398,12 @@ export default function SecondTutorial() {
         <Animated.View style={[styles.buttonwrapper, diveSiteSlide]}>
           <MaterialIcons name="add-location-alt" color="aquamarine" size={32} />
         </Animated.View>
+
+        <Animated.View style={[styles.nextTutButton, nextTutSlide]} onPress={handleThirdTutorialStartup}>
+          <Text onPress={handleThirdTutorialStartup} style={styles.nextTutText}>Photogenics</Text>
+          <FontAwesome name="arrow-right" size={24} color="white" onPress={handleThirdTutorialStartup} />
+        </Animated.View>
+
       </View>
     </TouchableWithoutFeedback>
   );
@@ -410,5 +449,25 @@ const styles = StyleSheet.create({
     width: 45,
     opacity: 1,
     backgroundColor: "black",
+  },
+  nextTutButton: {
+    position: "absolute",
+    flexDirection: "row",
+    top: Platform.OS === "ios" ? "25%" : "25%",
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    paddingRight: 10,
+    paddingLeft: 2,
+    height: "5%",
+    marginRight: scale(10),
+    marginLeft: scale(10),
+    borderRadius: 15,
+
+  },
+  nextTutText:{
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    fontSize: 18,
+    margin: 10
   },
 });

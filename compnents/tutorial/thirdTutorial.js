@@ -22,8 +22,10 @@ import { UserProfileContext } from "../contexts/userProfileContext";
 import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { PictureContext } from "../contexts/pictureContext";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
 import {
@@ -41,6 +43,9 @@ export default function ThirdTutorial() {
 
   const { setPinValues } = useContext(PinContext);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
 
   const { thirdGuideModal, setThirdGuideModal } = useContext(
@@ -73,7 +78,7 @@ export default function ThirdTutorial() {
   const calendarY = useSharedValue(-1000);
   const pinY = useSharedValue(-1000);
   const mantaY = useSharedValue(-1200);
-  
+ 
   const text0 =
     "Hey welcome back again! Let's continue with the guide to how you can contribute to SEAsons!";
   const text1 =
@@ -398,9 +403,6 @@ export default function ThirdTutorial() {
       mantaY.value = withTiming(-1200);
     }
   };
-
-
-  
 
   useEffect(() => {
     if (tutorialRunning) {

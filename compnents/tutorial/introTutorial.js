@@ -18,6 +18,7 @@ import Animated, {
 import mantaIOS from "../png/Manta32.png";
 import seaLionGuy from "../png/seaLion.png";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
+import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
@@ -28,7 +29,7 @@ import { MapCenterContext } from "../contexts/mapCenterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import anchorClustIOS from "../png/ClusterAnchor24.png";
 import anchorIconIOS from "../png/SiteAnchor20.png";
 import heatIconIOS from "../png/heatpoint.png";
@@ -44,6 +45,9 @@ export default function IntroTutorial() {
 
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
+  const { secondGuideModal, setSecondGuideModal } = useContext(
+    SecondTutorialModalContext
+  );
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { setMapCenter } = useContext(MapCenterContext);
@@ -77,6 +81,14 @@ export default function IntroTutorial() {
     }
   };
 
+  const handleSecondTutorialStartup = () => {
+    setItterator(null)
+    setSiteModal(false)
+    setTutorialRunning(true);
+    setGuideModal(false);
+    setSecondGuideModal(true);
+  };
+
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
   const picX = useSharedValue(-300);
@@ -85,6 +97,7 @@ export default function IntroTutorial() {
   const heatPotintY = useSharedValue(-1200);
   const arrowY = useSharedValue(-1200);
   const userBoxX = useSharedValue(-300);
+  const nextTutX = useSharedValue(-300);
 
   const text0 = "Hi, welcome to SEAsons, I'm XXX, I'm here to show you around.";
   const text1 =
@@ -156,8 +169,8 @@ export default function IntroTutorial() {
       if (pushVal === 1 && itterator < feederArray.length - 1) {
         if (textPrinting) {
           setTextPrinting(false);
-          textArray= ""
-          setTextRead("")
+          textArray = "";
+          setTextRead("");
           setTextRead(feederArray[itterator]);
         } else {
           setItterator((prev) => prev + pushVal);
@@ -174,35 +187,31 @@ export default function IntroTutorial() {
   let textArray;
 
   function printOutText() {
-
-      if (textArray.length > 0){
-        setTextRead((prev) => prev + textArray[0]);
-        textArray = textArray.slice(1);
-      } else {
-        setTextPrinting(false)
-      }
-    
+    if (textArray.length > 0) {
+      setTextRead((prev) => prev + textArray[0]);
+      textArray = textArray.slice(1);
+    } else {
+      setTextPrinting(false);
+    }
   }
 
   function cleanUp() {
     clearInterval(textPrinter);
   }
 
-  let textPrinter 
+  let textPrinter;
   useEffect(() => {
     setTextRead("");
-    
-      let textVal = feederArray[itterator];
-      if (textVal){
-        textArray = textVal.split("");
-        if (textPrinting) {
-         textPrinter = setInterval(printOutText, 40);
-        } else {
-          setTextRead(textVal);
-        }
-      
+
+    let textVal = feederArray[itterator];
+    if (textVal) {
+      textArray = textVal.split("");
+      if (textPrinting) {
+        textPrinter = setInterval(printOutText, 40);
+      } else {
+        setTextRead(textVal);
       }
-     
+    }
 
     return () => cleanUp();
   }, [itterator, textPrinting]);
@@ -257,17 +266,23 @@ export default function IntroTutorial() {
       startArrowAnimation();
     }
 
-    if (itterator === 15 || itterator === 16) {
+    if (itterator === 15) {
       getProfile();
       if (profile[0].UserName) {
-        setItterator(16);
+        setItterator((prev) => prev + 1);
         return;
       }
       startUserBoxAnimation();
     }
 
+    if (itterator === 16) {
+       startNextTutAnimation();
+    
+    }
+
     if (itterator === 17) {
       setSiteModal(!siteModal);
+      startNextTutAnimation();
     }
 
     if (itterator === feederArray.length - 1) {
@@ -278,7 +293,7 @@ export default function IntroTutorial() {
       startTextBoxAnimation();
     }
   }, [itterator]);
-
+ 
   const characterSlide = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: characterX.value }],
@@ -326,6 +341,14 @@ export default function IntroTutorial() {
       transform: [{ translateX: userBoxX.value }],
     };
   });
+
+  const nextTutSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: nextTutX.value }],
+    };
+  });
+
+  
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
@@ -390,6 +413,16 @@ export default function IntroTutorial() {
       userBoxX.value = withTiming(-500);
     }
   };
+
+  const startNextTutAnimation = () => {
+    if (nextTutX.value === -300) {
+      nextTutX.value = withSpring(windowWidth * 0.3);
+    } else {
+      nextTutX.value = withTiming(-300);
+    }
+  };
+
+  
 
   useEffect(() => {
     if (tutorialRunning) {
@@ -564,6 +597,12 @@ export default function IntroTutorial() {
             ]}
           />
         </Animated.View>
+
+        <Animated.View style={[styles.nextTutButton, nextTutSlide]} onPress={handleSecondTutorialStartup}>
+          <Text onPress={handleSecondTutorialStartup} style={styles.nextTutText}>Fun With Dive Sites</Text>
+          <FontAwesome name="arrow-right" size={24} color="white" onPress={handleSecondTutorialStartup} />
+        </Animated.View>
+
       </View>
     </TouchableWithoutFeedback>
   );
@@ -631,6 +670,26 @@ const styles = StyleSheet.create({
     marginLeft: scale(10),
     borderRadius: 15,
     // backgroundColor: "green"
+  },
+  nextTutButton: {
+    position: "absolute",
+    flexDirection: "row",
+    top: Platform.OS === "ios" ? "25%" : "25%",
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    paddingRight: 10,
+    paddingLeft: 2,
+    height: "5%",
+    marginRight: scale(10),
+    marginLeft: scale(10),
+    borderRadius: 15,
+
+  },
+  nextTutText:{
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    fontSize: 18,
+    margin: 10
   },
   shadowbox: {
     shadowColor: "#000",
