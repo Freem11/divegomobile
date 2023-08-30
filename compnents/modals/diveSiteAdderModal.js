@@ -368,9 +368,9 @@ export default function DiveSiteModal() {
           <Text
             style={{
               marginLeft: 5,
-              fontFamily: "PermanentMarker_400Regular",
+              fontFamily: "PatrickHand_400Regular",
               color: "gold",
-              fontSize: 11
+              fontSize: 16
             }}
           >
             I'm at the dive site
@@ -393,9 +393,10 @@ export default function DiveSiteModal() {
           <Text
             style={{
               color: "gold",
-              fontSize: 17,
-              marginTop: 8,
-              fontFamily: "PermanentMarker_400Regular",
+              fontSize: 26,
+              marginTop: 4,
+              marginBottom: -6,
+              fontFamily: "PatrickHand_400Regular",
               width: "100%",
               alignSelf: "center",
               justifyContent: "center",
@@ -545,11 +546,12 @@ const styles = StyleSheet.create({
     height: scale(30),
   },
   header2: {
-    fontFamily: "PermanentMarker_400Regular",
-    fontSize: scale(17),
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(26),
     alignSelf: "center",
     color: "#F0EEEB",
     width: "80%",
+    marginTop: "-1%",
     marginLeft: "7%",
     marginRight: "15%",
     // backgroundColor: "green"

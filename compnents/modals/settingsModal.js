@@ -125,9 +125,9 @@ export default function SettingsModal() {
             <Text
               style={{
                 paddingBottom: 3,
-                fontFamily: "PermanentMarker_400Regular",
+                fontFamily: "PatrickHand_400Regular",
                 color: "gold",
-                fontSize: 16,
+                fontSize: 24,
               }}
             >
               Sign Out
@@ -164,9 +164,9 @@ export default function SettingsModal() {
             <Text
               style={{
                 paddingBottom: 3,
-                fontFamily: "PermanentMarker_400Regular",
+                fontFamily: "PatrickHand_400Regular",
                 color: "maroon",
-                fontSize: 16,
+                fontSize: 24,
               }}
             >
               Delete Account

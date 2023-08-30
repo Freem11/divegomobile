@@ -726,10 +726,10 @@ const styles = StyleSheet.create({
   headerAlt: {
     alignItems: "center",
     alignContent: "center",
-    fontFamily: "PermanentMarker_400Regular",
-    fontSize: scale(17),
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(26),
     marginTop: scale(-15),
-    marginLeft: "-40%",
+    marginLeft: "-39%",
     color: "#F0EEEB",
   },
   title: {

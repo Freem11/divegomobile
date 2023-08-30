@@ -506,14 +506,14 @@ export default function PicUploadModal() {
             marginTop: 2
           }}
         >
-          <FontAwesome name="picture-o" color="gold" size={24} />
+          <FontAwesome name="picture-o" color="gold" size={24} style={{marginLeft: Platform.OS === "android" ? 0 : -6}}/>
           <Text
             style={{
               marginLeft: scale(5),
-              marginTop: scale(2),
+              marginTop: scale(-2),
               color: "gold",
-              fontFamily: "PermanentMarker_400Regular",
-              fontSize: scale(12),
+              fontFamily: "PatrickHand_400Regular",
+              fontSize: scale(17),
             }}
           >
             Choose an Image
@@ -695,9 +695,10 @@ export default function PicUploadModal() {
           <Text
             style={{
               color: "gold",
-              fontSize: 17,
-              marginTop: 8,
-              fontFamily: "PermanentMarker_400Regular",
+              fontSize: 26,
+              marginTop: 4,
+              marginBottom: -6,
+              fontFamily: "PatrickHand_400Regular",
               borderColor: "transparent",
               width: "100%",
               alignSelf: "center",
@@ -1080,11 +1081,12 @@ const styles = StyleSheet.create({
     // backgroundColor: "green"
   },
   header2: {
-    fontFamily: "PermanentMarker_400Regular",
-    fontSize: scale(17),
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(26),
     alignSelf: "center",
     color: "#F0EEEB",
     width: "80%",
+    marginTop: "-1%",
     marginLeft: "7%",
     marginRight: "15%",
     // backgroundColor: "green"

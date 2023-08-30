@@ -109,9 +109,11 @@ export default function TutorialLaunchPadModal() {
           >
             <Text
               style={{
-                marginLeft: 5,
-                fontFamily: "PermanentMarker_400Regular",
+                marginLeft: 3,
+                marginTop: -4,
+                fontFamily: "PatrickHand_400Regular",
                 color: "gold",
+                fontSize: 19
               }}
             >
               Intro Guide
@@ -139,9 +141,11 @@ export default function TutorialLaunchPadModal() {
           >
             <Text
               style={{
-                marginLeft: 5,
-                fontFamily: "PermanentMarker_400Regular",
+                marginLeft: 3,
+                marginTop: -4,
+                fontFamily: "PatrickHand_400Regular",
                 color: "gold",
+                fontSize: 19
               }}
             >
               Fun With Dive Sites
@@ -169,9 +173,12 @@ export default function TutorialLaunchPadModal() {
           >
             <Text
               style={{
-                marginLeft: 5,
-                fontFamily: "PermanentMarker_400Regular",
+                marginLeft: 3,
+                marginTop: -5,
+                fontFamily: "PatrickHand_400Regular",
                 color: "gold",
+                fontSize: 19,
+                height: "200%"
               }}
             >
               Photogenics
@@ -249,11 +256,12 @@ const styles = StyleSheet.create({
     height: scale(30),
   },
   header2: {
-    fontFamily: "PermanentMarker_400Regular",
-    fontSize: scale(17),
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(26),
     alignSelf: "center",
     color: "#F0EEEB",
     width: "80%",
+    marginTop: "-1%",
     marginLeft: "7%",
     marginRight: "15%",
     // backgroundColor: "green"

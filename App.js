@@ -15,6 +15,7 @@ import { IndieFlower_400Regular } from "@expo-google-fonts/indie-flower";
 import { PermanentMarker_400Regular } from "@expo-google-fonts/permanent-marker";
 import { BubblegumSans_400Regular } from "@expo-google-fonts/bubblegum-sans";
 import { Itim_400Regular } from "@expo-google-fonts/itim";
+import { PatrickHand_400Regular } from "@expo-google-fonts/patrick-hand";
 import {
   Caveat_400Regular,
   Caveat_500Medium,
@@ -163,6 +164,7 @@ export default function App() {
     Caveat_700Bold,
     Roboto_700Bold,
     Itim_400Regular,
+    PatrickHand_400Regular,
     GothamBlack: require("./assets/Gotham-Black.otf"),
     GothamBold: require("./assets/Gotham-Bold.otf"),
     SanFran: require("./assets/SFNSText-RegularG1.otf"),

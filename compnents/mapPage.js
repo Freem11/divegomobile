@@ -392,12 +392,12 @@ export default function MapPage() {
                   <Text
                     style={{
                       color: "gold",
-                      fontFamily: "PermanentMarker_400Regular",
-                      fontSize: scale(15),
+                      fontFamily: "PatrickHand_400Regular",
+                      fontSize: scale(22),
                       width: "100%",
-                      height: "100%",
+                      height: "120%",
                       textAlign: "center",
-                      // backgroundColor: "green",
+                      marginTop: -5,
                       borderRadius: scale(15),
                     }}
                   >
