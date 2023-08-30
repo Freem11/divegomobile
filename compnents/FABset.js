@@ -582,7 +582,7 @@ export default function FABButtons() {
                     : styles.closeButtonAlt
                 }
               >
-                <FontAwesome name="close" color="#BD9F9F" size={28} />
+                <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -697,9 +697,9 @@ const styles = StyleSheet.create({
   closeButtonAlt: {
     position: "absolute",
     borderRadius: scale(42 / 2),
-    height: 42,
-    width: 42,
-    top: scale(-5),
+    height: scale(42),
+    width: scale(42),
+    top: windowWidth > 600 ? scale(-15) : scale(-5),
     right: "5%",
     justifyContent: "center",
     alignItems: "center",
@@ -707,9 +707,9 @@ const styles = StyleSheet.create({
   closeButtonAltPressed: {
     position: "absolute",
     borderRadius: scale(42 / 2),
-    height: 42,
-    width: 42,
-    top: scale(-5),
+    height: scale(42),
+    width: scale(42),
+    top: windowWidth > 600 ? scale(-15) : scale(-5),
     right: "5%",
     justifyContent: "center",
     alignItems: "center",

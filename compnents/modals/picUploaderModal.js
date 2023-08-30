@@ -27,14 +27,13 @@ import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import { uploadphoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import { removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
-import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls"
+import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
-import { MapHelperContext } from "../contexts/mapHelperContext"; 
-
+import { MapHelperContext } from "../contexts/mapHelperContext";
 
 let PicVar = false;
 let DateVar = false;
@@ -51,7 +50,6 @@ export default function PicUploadModal() {
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-
 
   const { setMasterSwitch } = useContext(MasterContext);
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -131,7 +129,7 @@ export default function PicUploadModal() {
   }
 
   function cleanUp() {
-    clearInterval(blinker)
+    clearInterval(blinker);
     setImgButState(false);
     setDatButState(false);
     SetFormValidation({
@@ -155,8 +153,8 @@ export default function PicUploadModal() {
       } else if (itterator3 === 22) {
         blinker = setInterval(subBut, 1000);
       }
-
-    } return () => cleanUp()
+    }
+    return () => cleanUp();
   }, [itterator3]);
 
   useEffect(() => {
@@ -174,7 +172,7 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   const onNavigate = () => {
-    setMapHelper(true)
+    setMapHelper(true);
     setMasterSwitch(false);
     setPicAdderModal(false);
     // if (tutorialRunning) {
@@ -228,9 +226,7 @@ export default function PicUploadModal() {
     } else {
       setPinValues(pinValues);
     }
-
   }, []);
-
 
   const showDatePicker = () => {
     setDatePickerVisible(true);
@@ -404,7 +400,14 @@ export default function PicUploadModal() {
     if (tutorialRunning) {
       if (itterator3 === 9) {
         setItterator3(itterator3 + 1);
-      } else if (itterator3 === 8 || itterator3 === 11 || itterator3 === 14 || itterator3 === 16 || itterator3 === 19 || itterator3 === 22) {
+      } else if (
+        itterator3 === 8 ||
+        itterator3 === 11 ||
+        itterator3 === 14 ||
+        itterator3 === 16 ||
+        itterator3 === 19 ||
+        itterator3 === 22
+      ) {
         return;
       } else {
         setPicAdderModal(!picAdderModal);
@@ -471,8 +474,8 @@ export default function PicUploadModal() {
             onPressIn={() => setPicCloseState(true)}
             onPressOut={() => setPicCloseState(false)}
             style={{
-              width: 30,
-              height: 30,
+              width: scale(30),
+              height: scale(30),
               alignItems: "center",
             }}
           >
@@ -501,12 +504,17 @@ export default function PicUploadModal() {
           style={{
             display: "flex",
             flexDirection: "row",
-            width: 150,
-            height: 28,
-            marginTop: 2
+            width: scale(150),
+            height: scale(24),
+            marginTop: 2,
           }}
         >
-          <FontAwesome name="picture-o" color="gold" size={24} style={{marginLeft: Platform.OS === "android" ? 0 : -6}}/>
+          <FontAwesome
+            name="picture-o"
+            color="gold"
+            size={scale(24)}
+            style={{ marginLeft: Platform.OS === "android" ? scale(10) : scale(10) }}
+          />
           <Text
             style={{
               marginLeft: scale(5),
@@ -855,10 +863,10 @@ const styles = StyleSheet.create({
   },
   lowerZone: {
     flexDirection: "row",
-    marginTop: "5%",
+    marginTop:  windowWidth > 700 ? scale(5) : scale(20),
     width: windowWidth > 700 ? "50%" : "100%",
     // backgroundColor: "green",
-    height: "35%",
+    height: "32%",
   },
   fields: {
     flexDirection: "column",

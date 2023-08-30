@@ -261,8 +261,8 @@ export default function DiveSiteModal() {
             onPressIn={() => setDiveCloseState(true)}
             onPressOut={() => setDiveCloseState(false)}
             style={{
-              width: 30,
-              height: 30,
+              width: scale(30),
+              height: scale(30),
               alignItems: "center",
             }}
           >

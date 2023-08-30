@@ -78,8 +78,8 @@ export default function TutorialLaunchPadModal() {
             onPressIn={() => setTutorialsCloseState(true)}
             onPressOut={() => setTutorialsCloseState(false)}
             style={{
-              width: 30,
-              height: 30,
+              width: scale(30),
+              height: scale(30),
               alignItems: "center",
             }}
           >
