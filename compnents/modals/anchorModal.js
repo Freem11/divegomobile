@@ -325,14 +325,17 @@ const styles = StyleSheet.create({
   },
   headerAlt: {
     flexWrap: "wrap",
-    fontFamily: "PermanentMarker_400Regular",
+    fontFamily: "PatrickHand_400Regular",
     color: "#F0EEEB",
-    fontSize: scale(14),
-    width: "80%",
-    // height: 70,
+    fontSize: scale(22),
+    width: "90%",
+    height: "120%",
     marginLeft: "5%",
     marginRight: "5%",
-    // backgroundColor: 'pink'
+    marginTop: 0,
+    marginBottom: -10,
+    flexWrap: "wrap",
+    // backgroundColor: "pink"
   },
   dsCredit:{
     // backgroundColor: 'pink',
