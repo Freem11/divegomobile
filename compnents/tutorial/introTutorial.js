@@ -82,8 +82,8 @@ export default function IntroTutorial() {
   };
 
   const handleSecondTutorialStartup = () => {
-    setItterator(null)
-    setSiteModal(false)
+    setItterator(null);
+    setSiteModal(false);
     setTutorialRunning(true);
     setGuideModal(false);
     setSecondGuideModal(true);
@@ -99,7 +99,8 @@ export default function IntroTutorial() {
   const userBoxX = useSharedValue(-300);
   const nextTutX = useSharedValue(-300);
 
-  const text0 = "Hi, welcome to SEAsons, I'm XXX, I'm here to show you around.";
+  const text0 =
+    "Hi, welcome to DiveGo, I'm Emilio, I'm here to show you around.";
   const text1 =
     "First let's find a spot with some action. Here are 3 of the most recent sightings by other divers.";
   const text2 = "Choose one and let's see what else is there!";
@@ -126,7 +127,7 @@ export default function IntroTutorial() {
   const text15 =
     "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
   const text16 =
-    "Thanks! And if you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining SEAsons!";
+    "Thanks! And if you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining DiveGo!";
   const text17 = "";
 
   const [textRead, setTextRead] = useState("");
@@ -217,8 +218,6 @@ export default function IntroTutorial() {
   }, [itterator, textPrinting]);
 
   useEffect(() => {
-    // let textVal = feederArray[itterator];
-    // setTextRead(textVal);
 
     if (itterator === 0) {
       setTimeout(() => {
@@ -268,6 +267,7 @@ export default function IntroTutorial() {
 
     if (itterator === 15) {
       getProfile();
+
       if (profile[0].UserName) {
         setItterator((prev) => prev + 1);
         return;
@@ -276,8 +276,12 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 16) {
-       startNextTutAnimation();
-    
+      getProfile();
+      if (userBoxX.value !== -300){
+        startUserBoxAnimation();
+      }
+
+      startNextTutAnimation();
     }
 
     if (itterator === 17) {
@@ -293,7 +297,7 @@ export default function IntroTutorial() {
       startTextBoxAnimation();
     }
   }, [itterator]);
- 
+
   const characterSlide = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: characterX.value }],
@@ -347,8 +351,6 @@ export default function IntroTutorial() {
       transform: [{ translateX: nextTutX.value }],
     };
   });
-
-  
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
@@ -410,7 +412,7 @@ export default function IntroTutorial() {
     if (userBoxX.value === -300) {
       userBoxX.value = withSpring(windowWidth * 0.2);
     } else {
-      userBoxX.value = withTiming(-500);
+      userBoxX.value = withTiming(-300);
     }
   };
 
@@ -421,8 +423,6 @@ export default function IntroTutorial() {
       nextTutX.value = withTiming(-300);
     }
   };
-
-  
 
   useEffect(() => {
     if (tutorialRunning) {
@@ -598,11 +598,23 @@ export default function IntroTutorial() {
           />
         </Animated.View>
 
-        <Animated.View style={[styles.nextTutButton, nextTutSlide]} onPress={handleSecondTutorialStartup}>
-          <Text onPress={handleSecondTutorialStartup} style={styles.nextTutText}>Fun With Dive Sites</Text>
-          <FontAwesome name="arrow-right" size={24} color="white" onPress={handleSecondTutorialStartup} />
+        <Animated.View
+          style={[styles.nextTutButton, nextTutSlide]}
+          onPress={handleSecondTutorialStartup}
+        >
+          <Text
+            onPress={handleSecondTutorialStartup}
+            style={styles.nextTutText}
+          >
+            Fun With Dive Sites
+          </Text>
+          <FontAwesome
+            name="arrow-right"
+            size={24}
+            color="white"
+            onPress={handleSecondTutorialStartup}
+          />
         </Animated.View>
-
       </View>
     </TouchableWithoutFeedback>
   );
@@ -683,13 +695,14 @@ const styles = StyleSheet.create({
     marginRight: scale(10),
     marginLeft: scale(10),
     borderRadius: 15,
-
+    borderColor: "lightgrey",
+    borderWidth: 2,
   },
-  nextTutText:{
+  nextTutText: {
     color: "white",
     fontFamily: "Itim_400Regular",
     fontSize: 18,
-    margin: 10
+    margin: 10,
   },
   shadowbox: {
     shadowColor: "#000",

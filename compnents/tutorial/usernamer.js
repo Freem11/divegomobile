@@ -10,6 +10,8 @@ import { scale, s } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { SessionContext } from "../contexts/sessionContext";
+import { PinContext } from "../contexts/staticPinContext";
+import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 
@@ -18,6 +20,9 @@ let userVar = false;
 export default function UserNamer() {
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
+
+  const { pinValues, setPinValues } = useContext(PinContext);
+  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
   const { itterator, setItterator } = useContext(IterratorContext);
   const [userFail, setUserFail] = useState(null);
@@ -57,7 +62,16 @@ export default function UserNamer() {
           setItterator(itterator + 1);
           setFormVal({ userName: "" });
           setProfile([{...profile, UserName: formVal.userName}])
-
+          setPinValues({
+            ...pinValues,
+            UserId: success[0].UserID,
+            UserName: success[0].UserName,
+          });
+          setAddSiteVals({
+            ...addSiteVals,
+            UserID: success[0].UserID,
+            UserName: success[0].UserName,
+          });
         } else {
           setUserFail("Sorry that username has already been taken")
         }

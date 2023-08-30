@@ -76,7 +76,6 @@ export default function PicUploadModal() {
     LngVal: false,
   });
 
-
   let counter = 0;
   let blinker;
 

@@ -38,10 +38,10 @@ import { DSAdderContext } from "./contexts/DSModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { Iterrator3Context } from "./contexts/iterrator3Context";
-import { MapHelperContext } from "./contexts/mapHelperContext"; 
+import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
-
+import { TutorialContext } from "./contexts/tutorialContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -58,7 +58,6 @@ import IntroTutorial from "./tutorial/introTutorial";
 import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 
-
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -74,9 +73,8 @@ export default function MapPage() {
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-
-
-
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  
   //Tutorial Launch Pad Model Animation
   const tutorialLaunchpadModalY = useSharedValue(windowHeight);
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
@@ -295,7 +293,7 @@ export default function MapPage() {
       Latitude: dragPin.lat.toString(),
       Longitude: dragPin.lng.toString(),
     });
-    setMapHelper(true)
+    setMapHelper(true);
     setMasterSwitch(true);
     setPicAdderModal(!picAdderModal);
   };
@@ -317,11 +315,22 @@ export default function MapPage() {
         const success = await grabProfileById(sessionUserId);
         if (success) {
           let bully = success[0].UserName;
-          setProfile(success)
-          setPinValues({ ...pinValues, UserId: success[0].UserID, UserName: success[0].UserName });
-          setAddSiteVals({ ...addSiteVals, UserID: success[0].UserID, UserName: success[0].UserName });
-          if (bully == null) {
+          if (bully == null || bully === "") {
             setGuideModal(!guideModal);
+            setTutorialRunning(true)
+            setItterator(0)
+          } else {
+            setProfile(success);
+            setPinValues({
+              ...pinValues,
+              UserId: success[0].UserID,
+              UserName: success[0].UserName,
+            });
+            setAddSiteVals({
+              ...addSiteVals,
+              UserID: success[0].UserID,
+              UserName: success[0].UserName,
+            });
           }
         }
       } catch (e) {
@@ -367,23 +376,19 @@ export default function MapPage() {
             )}
 
             {!masterSwitch && (
-              
-                <View
-                  style={
-                    subButState ? styles.PinButtonPressed : styles.PinButton
-                  }
-                >
-                  <TouchableOpacity
-                style={{
-                  // backgroundColor: "orange",
-                  width: 200,
-                  height: 30,
-                  
-                }}
-                onPress={onNavigate}
-                onPressIn={() => setSubButState(true)}
-                onPressOut={() => setSubButState(false)}
+              <View
+                style={subButState ? styles.PinButtonPressed : styles.PinButton}
               >
+                <TouchableOpacity
+                  style={{
+                    // backgroundColor: "orange",
+                    width: 200,
+                    height: 30,
+                  }}
+                  onPress={onNavigate}
+                  onPressIn={() => setSubButState(true)}
+                  onPressOut={() => setSubButState(false)}
+                >
                   <Text
                     style={{
                       color: "gold",
@@ -398,9 +403,8 @@ export default function MapPage() {
                   >
                     Set Pin
                   </Text>
-                  </TouchableOpacity>
-                </View>
-              
+                </TouchableOpacity>
+              </View>
             )}
 
             {masterSwitch && (
