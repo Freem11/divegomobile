@@ -500,7 +500,6 @@ export default function IntroTutorial() {
             style={{
               height: windowWidth > 600 ? 700 : 400,
               width: windowWidth > 600 ? 700 : 400,
-              // backgroundColor: "green"
             }}
           />
         </Animated.View>

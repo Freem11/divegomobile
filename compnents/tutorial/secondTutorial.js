@@ -377,8 +377,8 @@ export default function SecondTutorial() {
           <Image
             source={seaLionGuy}
             style={{
-              height: "100%",
-              width: "100%",
+              height: windowWidth > 600 ? 700 : 400,
+              width: windowWidth > 600 ? 700 : 400,
             }}
           />
         </Animated.View>
@@ -391,12 +391,12 @@ export default function SecondTutorial() {
           <MaterialCommunityIcons
             name="map-search-outline"
             color="aquamarine"
-            size={32}
+            size={scale(42)}
           />
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, diveSiteSlide]}>
-          <MaterialIcons name="add-location-alt" color="aquamarine" size={32} />
+          <MaterialIcons name="add-location-alt" color="aquamarine" size={scale(42)} />
         </Animated.View>
 
         <Animated.View style={[styles.nextTutButton, nextTutSlide]} onPress={handleThirdTutorialStartup}>
@@ -419,8 +419,9 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: "7%",
-    height: "45%",
+    bottom: windowWidth > 600 ? scale(-210): scale(-300),
+    left: windowWidth > 600 ? scale(120) : scale(0),
+    height: "100%",
     width: "100%",
     opacity: 1,
   },
@@ -442,11 +443,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
+    borderRadius: scale(50),
     position: "absolute",
     left: "20%",
-    height: 45,
-    width: 45,
+    height: scale(50),
+    width: scale(50),
     opacity: 1,
     backgroundColor: "black",
   },
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   nextTutText:{
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: 18,
+    fontSize: scale(12),
     margin: 10
   },
 });
