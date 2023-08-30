@@ -77,8 +77,8 @@ export default function SecondTutorial() {
 
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
-  const DsSearchY = useSharedValue(-1000);
-  const diveSiteY = useSharedValue(-1000);
+  const DsSearchY = useSharedValue(scale(-1000));
+  const diveSiteY = useSharedValue(scale(-1000));
   const nextTutX = useSharedValue(-300);
 
   const text0 =
@@ -329,18 +329,18 @@ export default function SecondTutorial() {
   };
 
   const startDsSearchButtonAnimation = () => {
-    if (DsSearchY.value === -1000) {
+    if (DsSearchY.value === scale(-1000)) {
       DsSearchY.value = withTiming(windowHeight * 0.4);
     } else {
-      DsSearchY.value = withTiming(-1000);
+      DsSearchY.value = withTiming(scale(-1000));
     }
   };
 
   const startDiveSiteAnimation = () => {
-    if (diveSiteY.value === -1000) {
+    if (diveSiteY.value === scale(-1000)) {
       diveSiteY.value = withTiming(windowHeight * 0.4);
     } else {
-      diveSiteY.value = withTiming(-1000);
+      diveSiteY.value = withTiming(scale(-1000));
     }
   };
 

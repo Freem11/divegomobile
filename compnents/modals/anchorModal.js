@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   flagMajor: {
     width: "10%",
-    height: 30,
+    height: scale(30),
     marginRight: "-5%"
     // backgroundColor: 'blue'
   },
@@ -342,8 +342,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(9),
-    width: 200,
-    marginLeft: 15
+    width: scale(200),
+    marginLeft: scale(12)
   },
   titleAlt: {
     display: "flex",

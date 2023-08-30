@@ -89,15 +89,15 @@ export default function IntroTutorial() {
     setSecondGuideModal(true);
   };
 
-  const characterX = useSharedValue(1000);
-  const textBoxY = useSharedValue(1000);
-  const picX = useSharedValue(-300);
-  const exploreButtonY = useSharedValue(-1000);
-  const clusterAnchorY = useSharedValue(-1200);
-  const heatPotintY = useSharedValue(-1200);
-  const arrowY = useSharedValue(-1200);
-  const userBoxX = useSharedValue(-300);
-  const nextTutX = useSharedValue(-300);
+  const characterX = useSharedValue(scale(1000));
+  const textBoxY = useSharedValue(scale(1000));
+  const picX = useSharedValue(scale(-300));
+  const exploreButtonY = useSharedValue(scale(-1000));
+  const clusterAnchorY = useSharedValue(scale(-1200));
+  const heatPotintY = useSharedValue(scale(-1200));
+  const arrowY = useSharedValue(scale(-1200));
+  const userBoxX = useSharedValue(scale(-300));
+  const nextTutX = useSharedValue(scale(-300));
 
   const text0 =
     "Hi, welcome to DiveGo, I'm Emilio, I'm here to show you around.";
@@ -277,7 +277,7 @@ export default function IntroTutorial() {
 
     if (itterator === 16) {
       getProfile();
-      if (userBoxX.value !== -300){
+      if (userBoxX.value !== scale(-300)){
         startUserBoxAnimation();
       }
 
@@ -353,74 +353,74 @@ export default function IntroTutorial() {
   });
 
   const startCharacterAnimation = () => {
-    if (characterX.value === 1000) {
+    if (characterX.value === scale(1000)) {
       characterX.value = withTiming(190);
     } else {
-      characterX.value = withTiming(1000);
+      characterX.value = withTiming(scale(1000));
     }
   };
 
   const startTextBoxAnimation = () => {
-    if (textBoxY.value === 1000) {
+    if (textBoxY.value === scale(1000)) {
       textBoxY.value = withTiming(windowHeight * 0.8);
     } else {
-      textBoxY.value = withTiming(1000);
+      textBoxY.value = withTiming(scale(1000));
     }
   };
 
   const startPicAnimation = () => {
-    if (picX.value === -300) {
+    if (picX.value === scale(-300)) {
       picX.value = withSpring(0);
     } else {
-      picX.value = withTiming(-300);
+      picX.value = withTiming(scale(-300));
     }
   };
 
   const startExploreButtonAnimation = () => {
-    if (exploreButtonY.value === -1000) {
+    if (exploreButtonY.value === scale(-1000)) {
       exploreButtonY.value = withTiming(windowHeight * 0.4);
     } else {
-      exploreButtonY.value = withTiming(-1000);
+      exploreButtonY.value = withTiming(scale(-1000));
     }
   };
 
   const startClusterAnchorAnimation = () => {
-    if (clusterAnchorY.value === -1200) {
+    if (clusterAnchorY.value === scale(-1200)) {
       clusterAnchorY.value = withTiming(windowHeight * 0.4);
     } else {
-      clusterAnchorY.value = withTiming(-1200);
+      clusterAnchorY.value = withTiming(scale(-1200));
     }
   };
 
   const startHeatPointAnimation = () => {
-    if (heatPotintY.value === -1200) {
-      heatPotintY.value = withTiming(windowHeight * 0.3);
+    if (heatPotintY.value === scale(-1200)) {
+      heatPotintY.value = withTiming(windowHeight * 0.25);
     } else {
-      heatPotintY.value = withTiming(-1200);
+      heatPotintY.value = withTiming(scale(-1200));
     }
   };
 
   const startArrowAnimation = () => {
-    if (arrowY.value === -1200) {
-      arrowY.value = withTiming(windowHeight * 0.06);
+    if (arrowY.value === scale(-1200)) {
+      arrowY.value = withTiming(windowWidth > 600 ? -50 : 40);
     } else {
-      arrowY.value = withTiming(-1200);
+      arrowY.value = withTiming(scale(-1200));
     }
   };
 
   const startUserBoxAnimation = () => {
-    if (userBoxX.value === -300) {
+    if (userBoxX.value === scale(-300)) {
       userBoxX.value = withSpring(windowWidth * 0.2);
     } else {
-      userBoxX.value = withTiming(-300);
+      userBoxX.value = withTiming(scale(-300));
     }
   };
 
   const startNextTutAnimation = () => {
-    if (nextTutX.value === -300) {
+    if (nextTutX.value === scale(-300)) {
       nextTutX.value = withSpring(windowWidth * 0.3);
     } else {
-      nextTutX.value = withTiming(-300);
+      nextTutX.value = withTiming(scale(-300));
     }
   };
 
@@ -498,8 +498,9 @@ export default function IntroTutorial() {
           <Image
             source={seaLionGuy}
             style={{
-              height: "100%",
-              width: "100%",
+              height: windowWidth > 600 ? 700 : 400,
+              width: windowWidth > 600 ? 700 : 400,
+              // backgroundColor: "green"
             }}
           />
         </Animated.View>
@@ -509,7 +510,7 @@ export default function IntroTutorial() {
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, exporeButtonSlide]}>
-          <MaterialIcons name="explore" color="aquamarine" size={32} />
+          <MaterialIcons name="explore" color="aquamarine" size={scale(42)} />
         </Animated.View>
 
         <Animated.View style={[styles.userContainer, userBoxSlide]}>
@@ -521,10 +522,13 @@ export default function IntroTutorial() {
         >
           <Image
             source={anchorClustIOS}
-            style={{
-              height: 30,
-              width: 30,
-            }}
+            style={[
+              styles.anchorclust,
+              {
+              height: scale(30),
+              width: scale(30),
+            },
+            ]}
           />
 
           <Image
@@ -532,8 +536,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor1,
               {
-                height: 30,
-                width: 30,
+                height: scale(30),
+                width: scale(30),
               },
             ]}
           />
@@ -543,8 +547,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor2,
               {
-                height: 30,
-                width: 30,
+                height: scale(30),
+                width: scale(30),
               },
             ]}
           />
@@ -554,8 +558,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor3,
               {
-                height: 30,
-                width: 30,
+                height: scale(30),
+                width: scale(30),
               },
             ]}
           />
@@ -565,8 +569,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor4,
               {
-                height: 30,
-                width: 30,
+                height: scale(30),
+                width: scale(30),
               },
             ]}
           />
@@ -578,8 +582,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor4,
               {
-                height: 50,
-                width: 50,
+                height: scale(50),
+                width: scale(50),
               },
             ]}
           />
@@ -591,8 +595,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor4,
               {
-                height: 90,
-                width: 200,
+                height: scale(90),
+                width: scale(200),
               },
             ]}
           />
@@ -630,8 +634,9 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: "7%",
-    height: "45%",
+    bottom: windowWidth > 600 ? scale(-210): scale(-300),
+    left: windowWidth > 600 ? scale(120) : scale(0),
+    height: "100%",
     width: "100%",
     opacity: 1,
   },
@@ -663,8 +668,8 @@ const styles = StyleSheet.create({
     // backgroundColor: "green"
   },
   picContainer3: {
-    width: scale(225),
-    height: scale(100),
+    width: windowWidth > 600 ? scale(160) : scale(200),
+    height: windowWidth > 600 ? scale(80) : scale(100),
     marginBottom: scale(5),
     // backgroundColor: "538bdb",
     marginTop: "-0%",
@@ -701,7 +706,7 @@ const styles = StyleSheet.create({
   nextTutText: {
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: 18,
+    fontSize: scale(12),
     margin: 10,
   },
   shadowbox: {
@@ -725,7 +730,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 2,
     left: "5%",
-    top: Platform.OS === "ios" ? "11%" : "11%",
+    top: Platform.OS === "ios" ? "15%" : "13%",
   },
   titleText: {
     textAlign: "center",
@@ -738,11 +743,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
+    borderRadius: scale(50),
     position: "absolute",
     left: "20%",
-    height: 45,
-    width: 45,
+    height: scale(45),
+    width: scale(45),
     opacity: 1,
     backgroundColor: "black",
   },
@@ -750,12 +755,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
+    borderRadius: scale(50),
     position: "absolute",
     left: "20%",
-    height: 50,
-    width: 50,
+    height: scale(50),
+    width: scale(50),
     opacity: 1,
+  },
+  anchorclust: {
+    position: "absolute",
+    left: windowWidth * 0.025,
   },
   anchor1: {
     flex: 1,
@@ -764,9 +773,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     position: "absolute",
     left: windowWidth * 0.13,
-    top: -40,
-    height: 45,
-    width: 45,
+    top: scale(-40),
+    height: scale(45),
+    width: scale(45),
     opacity: 1,
     marginBottom: 15,
   },
@@ -777,9 +786,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     position: "absolute",
     left: windowWidth * -0.09,
-    top: -40,
-    height: 45,
-    width: 45,
+    top: scale(-40),
+    height: scale(45),
+    width: scale(45),
     opacity: 1,
     marginBottom: 15,
   },
@@ -790,9 +799,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     position: "absolute",
     left: windowWidth * -0.09,
-    top: 60,
-    height: 45,
-    width: 45,
+    top: scale(60),
+    height: scale(45),
+    width: scale(45),
     opacity: 1,
     marginBottom: 15,
   },
@@ -803,9 +812,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     position: "absolute",
     left: windowWidth * 0.13,
-    top: 60,
-    height: 45,
-    width: 45,
+    top: scale(60),
+    height: scale(45),
+    width: scale(45),
     opacity: 1,
     marginBottom: 15,
   },
@@ -813,11 +822,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
+    borderRadius: scale(50),
     position: "absolute",
     left: "50%",
-    height: 50,
-    width: 50,
+    height: scale(50),
+    width: scale(50),
     opacity: 1,
   },
   arrowWrapper: {
@@ -826,9 +835,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     position: "absolute",
-    left: "2%",
-    height: 110,
-    width: 160,
+    left:  windowWidth > 600 ? "-20%" : "2%",
+    height: scale(110),
+    width: scale(160),
     opacity: 1,
   },
 });

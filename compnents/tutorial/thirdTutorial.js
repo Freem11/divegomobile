@@ -73,11 +73,11 @@ export default function ThirdTutorial() {
 
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
-  const photoY = useSharedValue(-1000);
-  const imageY = useSharedValue(-1000);
-  const calendarY = useSharedValue(-1000);
-  const pinY = useSharedValue(-1000);
-  const mantaY = useSharedValue(-1200);
+  const photoY = useSharedValue(scale(-1000));
+  const imageY = useSharedValue(scale(-1000));
+  const calendarY = useSharedValue(scale(-1000));
+  const pinY = useSharedValue(scale(-1000));
+  const mantaY = useSharedValue(scale(-1200));
  
   const text0 =
     "Hey welcome back again! Let's continue with the guide to how you can contribute to DiveGo!";
@@ -365,42 +365,42 @@ export default function ThirdTutorial() {
   };
 
   const startPhotoButtonAnimation = () => {
-    if (photoY.value === -1000) {
+    if (photoY.value === scale(-1000)) {
       photoY.value = withTiming(windowHeight * 0.4);
     } else {
-      photoY.value = withTiming(-1000);
+      photoY.value = withTiming(sclae(-1000));
     }
   };
 
   const startImageButtonAnimation = () => {
-    if (imageY.value === -1000) {
+    if (imageY.value === scale(-1000)) {
       imageY.value = withTiming(windowHeight * 0.4);
     } else {
-      imageY.value = withTiming(-1000);
+      imageY.value = withTiming(scale(-1000));
     }
   };
 
   const startCalendarAnimation = () => {
-    if (calendarY.value === -1000) {
+    if (calendarY.value === scale(-1000)) {
       calendarY.value = withTiming(windowHeight * 0.4);
     } else {
-      calendarY.value = withTiming(-1000);
+      calendarY.value = withTiming(scale(-1000));
     }
   };
 
   const startPinAnimation = () => {
-    if (pinY.value === -1000) {
+    if (pinY.value === scale(-1000)) {
       pinY.value = withTiming(windowHeight * 0.4);
     } else {
-      pinY.value = withTiming(-1000);
+      pinY.value = withTiming(scale(-1000));
     }
   };
 
   const startMantaAnimation = () => {
-    if (mantaY.value === -1200) {
+    if (mantaY.value === scale(-1200)) {
       mantaY.value = withTiming(windowHeight * 0.4);
     } else {
-      mantaY.value = withTiming(-1200);
+      mantaY.value = withTiming(scale(-1200));
     }
   };
 
