@@ -99,7 +99,7 @@ export default function IntroTutorial() {
   const userBoxX = useSharedValue(scale(-300));
   const nextTutX = useSharedValue(scale(-300));
 
-  const text0 =
+const text0 =
   "Hi, welcome to DiveGo, I'm Emilio, I'm here to show you around.";
 const text1 =
   "First let's find a spot with some action. Here are 3 of the most recent sightings by other divers.";
@@ -107,23 +107,23 @@ const text2 = "Choose one and let's see what else is there!";
 const text3 =
   "Great! We've moved the map, as you can see there is a lot more action here!";
 const text4 =
-  "Normally to move the Map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
+  "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
 const text5 =
   "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
 const text6 =
-  "The blue anchors are dive sites try tapping on one and lets take a closer look! But make sure it has a heat point nearby, they look like this, that means sea creatures have been spotted on that dive site.";
+  "The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this, that means sea creatures have been spotted on that dive site.";
 const text7 = "";
 const text8 =
-  "Wow, cool! look at all the neat sea creatures divers have already seen here by other divers!";
+  "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
 const text9 =
-  "Now try closing the dive site and chose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
+  "Now try closing the dive site and choose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
 const text10 = "";
 const text11 = "Select one or more sea creatures using the menu at the top.";
 const text12 = "";
 const text13 =
-  "As you can see the photos have filtered to show only those creatures you have selected";
+  "As you can see, the photos have filtered to show only those creatures you have selected";
 const text14 =
-  "Ok well that's all for this guide, in the next one i'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+  "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
 const text15 =
   "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
 const text16 =
