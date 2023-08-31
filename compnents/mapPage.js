@@ -382,8 +382,8 @@ export default function MapPage() {
                 <TouchableOpacity
                   style={{
                     // backgroundColor: "orange",
-                    width: 200,
-                    height: 30,
+                    width: scale(200),
+                    height: scale(30),
                   }}
                   onPress={onNavigate}
                   onPressIn={() => setSubButState(true)}

@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: windowWidth > 600 ? scale(-210): scale(-300),
+    bottom: windowWidth > 600 ? scale(-220): scale(-350),
     left: windowWidth > 600 ? scale(120) : scale(0),
     height: "100%",
     width: "100%",

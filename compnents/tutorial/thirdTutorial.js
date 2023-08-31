@@ -368,7 +368,7 @@ export default function ThirdTutorial() {
     if (photoY.value === scale(-1000)) {
       photoY.value = withTiming(windowHeight * 0.4);
     } else {
-      photoY.value = withTiming(sclae(-1000));
+      photoY.value = withTiming(scale(-1000));
     }
   };
 
@@ -429,8 +429,8 @@ export default function ThirdTutorial() {
           <Image
             source={seaLionGuy}
             style={{
-              height: "100%",
-              width: "100%",
+              height: windowWidth > 600 ? 700 : 400,
+              width: windowWidth > 600 ? 700 : 400,
             }}
           />
         </Animated.View>
@@ -440,19 +440,19 @@ export default function ThirdTutorial() {
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, photoButtonSlide]}>
-          <MaterialIcons name="photo-camera" color="aquamarine" size={32} />
+          <MaterialIcons name="photo-camera" color="aquamarine" size={scale(42)} />
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, imageButtonSlide]}>
-          <FontAwesome name="picture-o" color="gold" size={32} />
+          <FontAwesome name="picture-o" color="gold" size={scale(34)} />
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, calendarSlide]}>
-          <FontAwesome name="calendar" color="gold" size={32} style={{marginBottom: 2.5}}/>
+          <FontAwesome name="calendar" color="gold" size={scale(34)} style={{marginBottom: 2.5}}/>
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, pinSlide]}>
-          <MaterialIcons name="location-pin" color="gold" size={32} />
+          <MaterialIcons name="location-pin" color="gold" size={scale(42)} />
         </Animated.View>
 
         <Animated.View style={[styles.mantaWrapper, mantaSlide]}>
@@ -461,8 +461,8 @@ export default function ThirdTutorial() {
             style={[
               styles.mantaWrapper,
               {
-                height: 60,
-                width: 50,
+                height: scale(60),
+                width: scale(50),
               },
             ]}
           />
@@ -482,8 +482,9 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: "7%",
-    height: "45%",
+    bottom: windowWidth > 600 ? scale(-220): scale(-350),
+    left: windowWidth > 600 ? scale(120) : scale(0),
+    height: "100%",
     width: "100%",
     opacity: 1,
   },
@@ -505,11 +506,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
+    borderRadius: scale(50),
     position: "absolute",
     left: "20%",
-    height: 45,
-    width: 45,
+    height: scale(50),
+    width: scale(50),
     opacity: 1,
     backgroundColor: "black",
   },
