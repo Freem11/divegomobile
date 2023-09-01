@@ -234,7 +234,7 @@ export default function Map() {
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         provider="google"
-        mapType="satellite"
+        mapType="hybrid"
         initialRegion={region}
         mapType={"satellite"}
         maxZoomLevel={16}

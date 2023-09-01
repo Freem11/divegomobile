@@ -168,7 +168,6 @@ export default function AnchorModal(lat, lng) {
 
 
   const togglePhotoBoxModal = (photo) => {
-    console.log("doing it?")
     startPhotoBoxModalAnimations();
     setSelectedPhoto(photo)
     setPhotoBoxModel(!photoBoxModel)
@@ -178,9 +177,6 @@ export default function AnchorModal(lat, lng) {
     <View
       style={{
         height: "96%",
-        // maxHeight: Platform.OS === "android" ? "93%" : "89%",
-        // marginTop: Platform.OS === "android" ? "-10%" : "-8%",
-        // backgroundColor: "pink"
       }}
     >
       <View style={styles.titleAlt}>

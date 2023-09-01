@@ -111,7 +111,7 @@ const text4 =
 const text5 =
   "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
 const text6 =
-  "The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this, that means sea creatures have been spotted on that dive site.";
+  `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this, that means sea creatures have been spotted on that dive site.`;
 const text7 = "";
 const text8 =
   "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
@@ -362,7 +362,7 @@ const text17 = "";
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === scale(1000)) {
-      textBoxY.value = withTiming(windowHeight * 0.8);
+      textBoxY.value = withTiming(windowHeight * 0.85);
     } else {
       textBoxY.value = withTiming(scale(1000));
     }
@@ -499,7 +499,7 @@ const text17 = "";
             source={seaLionGuy}
             style={{
               height: windowWidth > 600 ? 700 : 400,
-              width: windowWidth > 600 ? 700 : 400,
+              width: windowWidth > 600 ? 740 : 420,
             }}
           />
         </Animated.View>
@@ -633,8 +633,8 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: windowWidth > 600 ? scale(-220): scale(-350),
-    left: windowWidth > 600 ? scale(120) : scale(0),
+    bottom: windowWidth > 600 ? scale(-240): Platform.OS === "ios" ? scale(-440) : scale(-370),
+    left: windowWidth > 600 ? scale(160) : Platform.OS === "ios" ? scale(30) : scale(0),
     height: "100%",
     width: "100%",
     opacity: 1,
@@ -642,7 +642,6 @@ const styles = StyleSheet.create({
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "15.5%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
@@ -651,7 +650,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "Itim_400Regular",
-    fontSize: 14,
+    fontSize: 16,
   },
   container3: {
     // flex: 1,

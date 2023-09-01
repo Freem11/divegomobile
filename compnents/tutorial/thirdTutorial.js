@@ -358,7 +358,7 @@ const text26 = "";
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === 1000) {
-      textBoxY.value = withTiming(windowHeight * 0.8);
+      textBoxY.value = withTiming(windowHeight * 0.85);
     } else {
       textBoxY.value = withTiming(1000);
     }
@@ -430,7 +430,7 @@ const text26 = "";
             source={seaLionGuy}
             style={{
               height: windowWidth > 600 ? 700 : 400,
-              width: windowWidth > 600 ? 700 : 400,
+              width: windowWidth > 600 ? 740 : 420,
             }}
           />
         </Animated.View>
@@ -482,8 +482,8 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: windowWidth > 600 ? scale(-220): scale(-350),
-    left: windowWidth > 600 ? scale(120) : scale(0),
+    bottom: windowWidth > 600 ? scale(-240): Platform.OS === "ios" ? scale(-440) : scale(-370),
+    left: windowWidth > 600 ? scale(160) : Platform.OS === "ios" ? scale(30) : scale(0),
     height: "100%",
     width: "100%",
     opacity: 1,
