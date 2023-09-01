@@ -53,7 +53,7 @@ import { MapHelperContext } from "./compnents/contexts/mapHelperContext";
 import { UserProfileContext } from "./compnents/contexts/userProfileContext";
 
 import MapPage from "./compnents/mapPage";
-import AuthenticationPage from "./compnents/authenticationPage";
+// import AuthenticationPage from "./compnents/authenticationPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
@@ -342,12 +342,12 @@ export default function App() {
                                                                   setActiveSession,
                                                                 }}
                                                               >
-                                                                {/* <MapPage /> */}
-                                                                {activeSession ? (
+                                                                <MapPage />
+                                                                {/* {activeSession ? (
                                                                   <MapPage />
                                                                 ) : (
                                                                   <AuthenticationPage />
-                                                                )}
+                                                                )} */}
                                                               </SessionContext.Provider>
                                                             </MapCenterContext.Provider>
                                                           </DSAdderContext.Provider>

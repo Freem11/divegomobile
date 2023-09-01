@@ -1,24 +1,68 @@
 import {
   StyleSheet,
-  Text,
   View,
-  TextInput,
   TouchableWithoutFeedback,
   Platform,
   Image,
   Dimensions,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import React, { useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal(props) {
   const { picData, togglePhotoBoxModal } = props;
 
   const [photoCloseState, setPhotoCloseState] = useState(false);
+
+  const scaleValue = useSharedValue(1);
+  const focalX = useSharedValue(0);
+  const focalY = useSharedValue(0);
+ 
+  const animatePicPinch = Gesture.Pinch()
+    .onUpdate((event) => {
+      scaleValue.value = event.scale;
+      focalX.value = event.focalX
+      focalY.value = event.focalY
+    })
+    .onEnd((event) => {
+      scaleValue.value = withTiming(1);
+    });
+
+  const animatedPictureStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: focalX.value },
+        { translateY: focalY.value },
+        { translateX: -windowHeight / 2},
+        { translateY: -windowWidth},
+        { scale: scaleValue.value },
+        { translateX: -focalX.value },
+        { translateY: -focalY.value },
+        { translateX: windowHeight / 2},
+        { translateY: windowWidth},
+      ],
+    };
+  });
+
+  const animatedPictureFocalStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: focalX.value },
+        { translateY: focalY.value },
+      ],
+    };
+  });
 
   return (
     <View style={styles.container}>
@@ -33,28 +77,34 @@ export default function PhotoBoxModal(props) {
             onPressIn={() => setPhotoCloseState(true)}
             onPressOut={() => setPhotoCloseState(false)}
             style={{
-              width: scale(30),
-              height: scale(30),
+              width: scale(40),
+              height: scale(40),
               alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
           </TouchableOpacity>
         </View>
       </View>
-      {/* <View style={styles.photoContainer}> */}
-        <Image
+      <GestureDetector gesture={animatePicPinch}>
+        <Animated.View style={{flex: 1, transform: [{ rotate: '90deg'}], justifyContent: "center", alignSelf: "center"}}>
+        <Animated.Image
           source={{
             uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${picData}`,
           }}
-          style={{
-            height: windowWidth/2,
-            width: windowWidth,
-            borderRadius: 15,
-            borderColor: "grey",
-          }}
+          style={[
+            animatedPictureStyle, 
+            {
+              height: windowWidth - windowWidth * 0.15,
+              width: windowHeight - windowHeight * 0.15,
+              borderRadius: 15,
+            },
+          ]}
         />
-      {/* </View> */}
+        <Animated.View style={[styles.focalPoint, animatedPictureFocalStyle]}/>
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
 }
@@ -63,14 +113,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
     marginTop: scale(-70),
-    marginLeft: scale(-35)
+    marginLeft: scale(-35),
   },
   title: {
     position: "absolute",
-    top: "4%",
+    top: "6%",
     left: "60%",
     display: "flex",
     flexDirection: "row",
@@ -100,4 +150,10 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     opacity: 0.3,
   },
+  focalPoint: {
+    ...StyleSheet.absoluteFillObject,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+  }
 });
