@@ -247,7 +247,7 @@ export default function PicUploadModal() {
     hideDatePicker();
   };
 
-  const AnimalKeboardOffset = Platform.OS === "ios" ? 800 : 0;
+  const AnimalKeboardOffset = Platform.OS === "ios" ? 300 : 0;
 
   let colorDate;
   if (pinValues.PicDate === "") {

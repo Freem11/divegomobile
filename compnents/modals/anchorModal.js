@@ -1,11 +1,24 @@
-import { StyleSheet, Text, View, Image, ScrollView, Platform, TouchableWithoutFeedback } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+  Platform,
+  TouchableWithoutFeedback,
+  Dimensions,
+} from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import {
   getPhotosforAnchor,
   getPhotosforAnchorMulti,
 } from "../../supabaseCalls/photoSupabaseCalls";
 import { getDiveSiteByName } from "../../supabaseCalls/diveSiteSupabaseCalls";
-// import { getPhotosforAnchor } from "../../axiosCalls/photoAxiosCalls";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 import { SliderContext } from "../contexts/sliderContext";
 import { MonthSelectContext } from "../contexts/monthSelectContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
@@ -20,6 +33,7 @@ import { scale } from "react-native-size-matters";
 import Lightbox from "react-native-lightbox-v2";
 import { FontAwesome } from "@expo/vector-icons";
 import email from "react-native-email";
+import PhotoBoxModel from "./photoBoxModal";
 
 let IPSetter = 2;
 let IP;
@@ -37,6 +51,9 @@ if (IPSetter === 1) {
 
 let filePath = `/Users/matthewfreeman/divego/wetmap/src/components/uploads/`;
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
 export default function AnchorModal(lat, lng) {
   const { sliderVal } = useContext(SliderContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -49,9 +66,25 @@ export default function AnchorModal(lat, lng) {
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [site, setSite] = useState("");
+  const [photoBoxModel, setPhotoBoxModel] = useState(false);
 
-  const [site, setSite] = useState('');
+  const photoBoxModalY = useSharedValue(windowHeight);
 
+  const photoBoxModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: photoBoxModalY.value }],
+    };
+  });
+
+  const startPhotoBoxModalAnimations = () => {
+    if (photoBoxModel) {
+      photoBoxModalY.value = withTiming(0);
+    } else {
+      photoBoxModalY.value = withTiming(windowHeight);
+    }
+  };
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -80,31 +113,29 @@ export default function AnchorModal(lat, lng) {
     filterAnchorPhotos();
     getDiveSite(selectedDiveSite.SiteName);
 
-      if (tutorialRunning){
-        if(itterator > 0){
-          setItterator(itterator + 1)
-        } 
+    if (tutorialRunning) {
+      if (itterator > 0) {
+        setItterator(itterator + 1);
       }
-  
+    }
   }, [selectedDiveSite]);
 
   useEffect(() => {
     if (itterator === 8 || itterator === 13) {
       setGuideModal(true);
-    } 
+    }
   }, [itterator]);
 
   const getDiveSite = async (site) => {
     try {
       const selectedSite = await getDiveSiteByName(site);
       if (selectedSite) {
-        setSite(selectedSite[0].userName)
+        setSite(selectedSite[0].userName);
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
   };
-
 
   const handleEmail = (pic) => {
     const to = ["DiveGo2022@gmail.com"];
@@ -129,49 +160,60 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleAnchorModalClose = () => {
-
     if (itterator === 10) {
       setGuideModal(true);
-    } 
-    setSiteModal(!siteModal)
-    
+    }
+    setSiteModal(!siteModal);
+  };
+
+
+  const togglePhotoBoxModal = (photo) => {
+    console.log("doing it?")
+    startPhotoBoxModalAnimations();
+    setSelectedPhoto(photo)
+    setPhotoBoxModel(!photoBoxModel)
   };
 
   return (
     <View
       style={{
-        height:"96%",
+        height: "96%",
         // maxHeight: Platform.OS === "android" ? "93%" : "89%",
         // marginTop: Platform.OS === "android" ? "-10%" : "-8%",
         // backgroundColor: "pink"
       }}
     >
-
-<View style={styles.titleAlt}>
-<FontAwesome
+      <View style={styles.titleAlt}>
+        <FontAwesome
           name="flag"
           color="maroon"
           size={scale(20)}
           onLongPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
-        <View style={{width: scale(250)}}>
-        <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
-            <Text style={styles.dsCredit}>Added by: {site}</Text>
+        <View style={{ width: scale(250) }}>
+          <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
+          <Text style={styles.dsCredit}>Added by: {site}</Text>
         </View>
-            
-            <TouchableWithoutFeedback
-              onPress={handleAnchorModalClose}
-              onPressIn={() => setSiteCloseState(true)}
-              onPressOut={() => setSiteCloseState(false)}
-            >
-              <View style={siteCloseState ? styles.closeButtonAltPressed : styles.closeButtonAlt}>
-                <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
-              </View>
-            </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback
+          onPress={handleAnchorModalClose}
+          onPressIn={() => setSiteCloseState(true)}
+          onPressOut={() => setSiteCloseState(false)}
+        >
+          <View
+            style={
+              siteCloseState
+                ? styles.closeButtonAltPressed
+                : styles.closeButtonAlt
+            }
+          >
+            <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
           </View>
-       
-      <ScrollView style={{marginTop: "0%", height: "100%", borderRadius: 15}}>
+        </TouchableWithoutFeedback>
+      </View>
+
+      <ScrollView style={{ marginTop: "0%", height: "100%", borderRadius: 15 }}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {
@@ -187,7 +229,7 @@ export default function AnchorModal(lat, lng) {
                     />
                     <Text style={styles.titleText}>{pic.label}</Text>
                   </View>
-                  <Lightbox activeProps={{ height: "30%" }}>
+                  <TouchableWithoutFeedback onPress={() => togglePhotoBoxModal(pic.photoFile)}>
                     <View style={styles.shadowbox}>
                       <Image
                         source={{
@@ -201,9 +243,11 @@ export default function AnchorModal(lat, lng) {
                         }}
                       />
                     </View>
-                  </Lightbox>
+                    </TouchableWithoutFeedback>
                   <View style={styles.microLow}>
-                    <Text style={styles.titleTextLow}>Added by: {pic.userName}</Text>
+                    <Text style={styles.titleTextLow}>
+                      Added by: {pic.userName}
+                    </Text>
                   </View>
                 </View>
               );
@@ -215,6 +259,13 @@ export default function AnchorModal(lat, lng) {
           )}
         </View>
       </ScrollView>
+
+      <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
+        <PhotoBoxModel
+          picData={selectedPhoto}
+          togglePhotoBoxModal={togglePhotoBoxModal}
+        />
+      </Animated.View>
     </View>
   );
 }
@@ -260,7 +311,7 @@ const styles = StyleSheet.create({
   flagMajor: {
     width: "10%",
     height: scale(30),
-    marginRight: "-5%"
+    marginRight: "-5%",
     // backgroundColor: 'blue'
   },
   flag: {
@@ -289,7 +340,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 2,
     left: "4%",
-    top: Platform.OS === "ios" ? "8%": "9%",
+    top: Platform.OS === "ios" ? "8%" : "9%",
   },
   microLow: {
     display: "flex",
@@ -301,7 +352,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 2,
     right: "3%",
-    bottom: Platform.OS === "ios" ? "-7%": "-7%",
+    bottom: Platform.OS === "ios" ? "-7%" : "-7%",
   },
   titleTextLow: {
     textAlign: "center",
@@ -337,13 +388,13 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     // backgroundColor: "pink"
   },
-  dsCredit:{
+  dsCredit: {
     // backgroundColor: 'pink',
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(9),
     width: scale(200),
-    marginLeft: scale(12)
+    marginLeft: scale(12),
   },
   titleAlt: {
     display: "flex",
@@ -355,7 +406,7 @@ const styles = StyleSheet.create({
     marginTop: "4%",
     marginLeft: "5%",
     marginRight: "5%",
-    marginBottom:"3%",
+    marginBottom: "3%",
     width: "92%",
     height: scale(30),
     // backgroundColor: 'pink'
@@ -367,7 +418,7 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: "-4%"
+    marginLeft: "-4%",
     // backgroundColor: "green"
   },
   closeButtonAltPressed: {
@@ -379,7 +430,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: "-4%",
     backgroundColor: "lightgrey",
-    opacity: 0.3
+    opacity: 0.3,
   },
-
+  photoBoxModal: {
+    position: "absolute",
+    height: windowHeight,
+    width: windowWidth,
+    zIndex: 55,
+    left: 0,
+    backgroundColor: "green"
+  },
 });
