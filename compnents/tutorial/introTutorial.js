@@ -99,38 +99,38 @@ export default function IntroTutorial() {
   const userBoxX = useSharedValue(scale(-300));
   const nextTutX = useSharedValue(scale(-300));
 
-const text0 =
-  "Hi, welcome to DiveGo, I'm Emilio, I'm here to show you around.";
-const text1 =
-  "First let's find a spot with some action. Here are 3 of the most recent sightings by other divers.";
-const text2 = "Choose one and let's see what else is there!";
-const text3 =
-  "Great! We've moved the map, as you can see there is a lot more action here!";
-const text4 =
-  "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
-const text5 =
-  "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
-const text6 =
-  `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this, that means sea creatures have been spotted on that dive site.`;
-const text7 = "";
-const text8 =
-  "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
-const text9 =
-  "Now try closing the dive site and choose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
-const text10 = "";
-const text11 = "Select one or more sea creatures using the menu at the top.";
-const text12 = "";
-const text13 =
-  "As you can see, the photos have filtered to show only those creatures you have selected";
-const text14 =
-  "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
-const text15 =
-  "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
-const text16 =
-  "Thanks! And if you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining DiveGo!";
-const text17 = "";
+  const text0 =
+    "Hi, welcome to DiveGo, I'm Emilio, I'm here to show you around.";
+  const text1 =
+    "First let's find a spot with some action. Here are 3 of the most recent sightings by other divers.";
+  const text2 = "Choose one and let's see what else is there!";
+  const text3 =
+    "Great! We've moved the map, as you can see there is a lot more action here!";
+  const text4 =
+    "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
+  const text5 =
+    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
+  const text6 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,     that means sea creatures have been spotted on that dive site.`;
+  const text7 = "";
+  const text8 =
+    "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
+  const text9 =
+    "Now try closing the dive site and choose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
+  const text10 = "";
+  const text11 = "Select one or more sea creatures using the menu at the top.";
+  const text12 = "";
+  const text13 =
+    "As you can see, the photos have filtered to show only those creatures you have selected";
+  const text14 =
+    "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+  const text15 =
+    "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
+  const text16 =
+    "Thanks! And if you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining DiveGo!";
+  const text17 = "";
 
   const [textRead, setTextRead] = useState("");
+  const [textRead2, setTextRead2] = useState("  ");
   const [textPrinting, setTextPrinting] = useState(true);
 
   const feederArray = [
@@ -189,7 +189,11 @@ const text17 = "";
 
   function printOutText() {
     if (textArray.length > 0) {
-      setTextRead((prev) => prev + textArray[0]);
+      if (itterator === 6 && textArray.length <= 63) {
+        setTextRead2((prev) => prev + textArray[0]);
+      } else {
+        setTextRead((prev) => prev + textArray[0]);
+      }
       textArray = textArray.slice(1);
     } else {
       setTextPrinting(false);
@@ -209,6 +213,11 @@ const text17 = "";
       textArray = textVal.split("");
       if (textPrinting) {
         textPrinter = setInterval(printOutText, 40);
+      } else if (itterator === 6 && !textPrinting) {
+        let val1 = textVal.slice(0, 147);
+        let val2 = textVal.slice(-65);
+        setTextRead(val1);
+        setTextRead2(val2);
       } else {
         setTextRead(textVal);
       }
@@ -218,7 +227,6 @@ const text17 = "";
   }, [itterator, textPrinting]);
 
   useEffect(() => {
-
     if (itterator === 0) {
       setTimeout(() => {
         startCharacterAnimation();
@@ -277,7 +285,7 @@ const text17 = "";
 
     if (itterator === 16) {
       getProfile();
-      if (userBoxX.value !== scale(-300)){
+      if (userBoxX.value !== scale(-300)) {
         startUserBoxAnimation();
       }
 
@@ -449,6 +457,8 @@ const text17 = "";
     startPicAnimation();
   };
 
+  console.log(textRead2.length, itterator);
+
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
       <View style={styles.wrapper}>
@@ -505,7 +515,20 @@ const text17 = "";
         </Animated.View>
 
         <Animated.View style={[textBoxSlide, styles.textBox]}>
-          <Text style={styles.textContain}>{textRead}</Text>
+          <Text style={styles.textContain}>
+            {textRead}{" "}
+            <View
+              style={{
+                opacity: textRead2.length > 2 ? 1 : 0,
+                marginRight: -10,
+                marginBottom: -15,
+                // backgroundColor: "green",
+              }}
+            >
+              <Image source={heatIconIOS} style={styles.honkCon} />
+            </View>
+            {textRead2}
+          </Text>
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, exporeButtonSlide]}>
@@ -524,9 +547,9 @@ const text17 = "";
             style={[
               styles.anchorclust,
               {
-              height: scale(30),
-              width: scale(30),
-            },
+                height: scale(30),
+                width: scale(30),
+              },
             ]}
           />
 
@@ -633,8 +656,18 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: windowWidth > 600 ? scale(-240): Platform.OS === "ios" ? scale(-440) : scale(-370),
-    left: windowWidth > 600 ? scale(160) : Platform.OS === "ios" ? scale(30) : scale(0),
+    bottom:
+      windowWidth > 600
+        ? scale(-240)
+        : Platform.OS === "ios"
+        ? scale(-440)
+        : scale(-370),
+    left:
+      windowWidth > 600
+        ? scale(160)
+        : Platform.OS === "ios"
+        ? scale(30)
+        : scale(0),
     height: "100%",
     width: "100%",
     opacity: 1,
@@ -816,6 +849,19 @@ const styles = StyleSheet.create({
     opacity: 1,
     marginBottom: 15,
   },
+  anchorSpec: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    position: "absolute",
+    // left: windowWidth * 0.13,
+    top: scale(-10),
+    height: scale(25),
+    width: scale(25),
+    opacity: 1,
+    marginTop: -25,
+  },
   heatPointWrapper: {
     flex: 1,
     alignItems: "center",
@@ -833,9 +879,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     position: "absolute",
-    left:  windowWidth > 600 ? "-20%" : "2%",
+    left: windowWidth > 600 ? "-20%" : "2%",
     height: scale(110),
     width: scale(160),
     opacity: 1,
+  },
+  honkCon: {
+    height: 25,
+    width: 25,
+    borderRadius: 10,
+    // backgroundColor: "blue",
+    marginRight: -10,
+    marginBottom: -2,
+
   },
 });
