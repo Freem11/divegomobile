@@ -28,6 +28,7 @@ import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { ReverseContext } from "../contexts/reverseContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
 import Lightbox from "react-native-lightbox-v2";
@@ -63,6 +64,7 @@ export default function AnchorModal(lat, lng) {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { movingBack, setMovingBack } = useContext(ReverseContext);
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
@@ -103,6 +105,14 @@ export default function AnchorModal(lat, lng) {
       });
       if (photos) {
         setAnchorPics(photos);
+        let count = 0;
+        photos.forEach((obj) => {
+           count ++
+        });
+
+        if(tutorialRunning && count > 0) {
+          setItterator(itterator + 2);
+        }
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -110,9 +120,9 @@ export default function AnchorModal(lat, lng) {
   };
 
   useEffect(() => {
-    filterAnchorPhotos();
     getDiveSite(selectedDiveSite.SiteName);
-
+    filterAnchorPhotos()
+ // -----------------------------------------------------------------------------
     if (tutorialRunning) {
       if (itterator > 0) {
         setItterator(itterator + 1);
@@ -121,7 +131,7 @@ export default function AnchorModal(lat, lng) {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (itterator === 8 || itterator === 13) {
+    if (itterator === 9 || itterator === 13) {
       setGuideModal(true);
     }
   }, [itterator]);
@@ -160,17 +170,20 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleAnchorModalClose = () => {
-    if (itterator === 10) {
+    if (itterator === 11) {
       setGuideModal(true);
+    } 
+
+    if (itterator === 7) {
+      setGuideModal(false);
     }
     setSiteModal(!siteModal);
   };
 
-
   const togglePhotoBoxModal = (photo) => {
     startPhotoBoxModalAnimations();
-    setSelectedPhoto(photo)
-    setPhotoBoxModel(!photoBoxModel)
+    setSelectedPhoto(photo);
+    setPhotoBoxModel(!photoBoxModel);
   };
 
   return (
@@ -225,7 +238,9 @@ export default function AnchorModal(lat, lng) {
                     />
                     <Text style={styles.titleText}>{pic.label}</Text>
                   </View>
-                  <TouchableWithoutFeedback onPress={() => togglePhotoBoxModal(pic.photoFile)}>
+                  <TouchableWithoutFeedback
+                    onPress={() => togglePhotoBoxModal(pic.photoFile)}
+                  >
                     <View style={styles.shadowbox}>
                       <Image
                         source={{
@@ -239,7 +254,7 @@ export default function AnchorModal(lat, lng) {
                         }}
                       />
                     </View>
-                    </TouchableWithoutFeedback>
+                  </TouchableWithoutFeedback>
                   <View style={styles.microLow}>
                     <Text style={styles.titleTextLow}>
                       Added by: {pic.userName}
@@ -434,6 +449,6 @@ const styles = StyleSheet.create({
     width: windowWidth,
     zIndex: 55,
     left: 0,
-    backgroundColor: "green"
+    backgroundColor: "green",
   },
 });

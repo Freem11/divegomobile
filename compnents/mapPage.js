@@ -16,7 +16,9 @@ import FABButtons from "./FABset";
 import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import { grabProfileById } from "./../supabaseCalls/accountSupabaseCalls";
+import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
+import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
@@ -42,6 +44,7 @@ import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
 import { TutorialContext } from "./contexts/tutorialContext";
+import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -74,7 +77,41 @@ export default function MapPage() {
   const [monthVal, setMonthVal] = useState("");
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  
+  const [anchPhotos, setAnchPhotos] = useState(null);
+  const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+
+  useEffect(() => {
+    filterAnchorPhotos();
+  }, [selectedDiveSite]);
+
+  const filterAnchorPhotos = async () => {
+    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
+      selectedDiveSite.Latitude,
+      selectedDiveSite.Longitude
+    );
+
+    try {
+      const photos = await getPhotosforAnchorMulti({
+        animalMultiSelection,
+        // sliderVal,
+        minLat,
+        maxLat,
+        minLng,
+        maxLng,
+      });
+      if (photos) {
+        let count = 0;
+        photos.forEach((obj) => {
+           count ++
+        });
+        setAnchPhotos(count);
+        console.log ("i happened",)
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
   //Tutorial Launch Pad Model Animation
   const tutorialLaunchpadModalY = useSharedValue(windowHeight);
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
@@ -122,11 +159,15 @@ export default function MapPage() {
       anchorModalY.value = withTiming(windowHeight);
     }
   };
-
+console.log("WHAT", anchPhotos)
   useEffect(() => {
     startAnchorModalAnimations();
-    if (itterator > 0) {
+    filterAnchorPhotos()
+    console.log("hmmm", anchPhotos)
+    if (itterator > 0 && itterator !== 7) {
       setItterator(itterator + 1);
+    } else if (itterator === 7 && anchPhotos > 0) {
+      setItterator(itterator + 2);
     }
   }, [siteModal]);
 

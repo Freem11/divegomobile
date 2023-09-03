@@ -22,6 +22,8 @@ import { SecondTutorialModalContext } from "../contexts/secondTutorialModalConte
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { newGPSBoundaries } from "../helpers/mapHelpers";
+import { getPhotosforAnchorMulti } from "../../supabaseCalls/photoSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import moment from "moment";
 import { scale } from "react-native-size-matters";
@@ -29,6 +31,9 @@ import { MapCenterContext } from "../contexts/mapCenterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
+import { ReverseContext } from "../contexts/reverseContext";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import anchorClustIOS from "../png/ClusterAnchor24.png";
 import anchorIconIOS from "../png/SiteAnchor20.png";
@@ -42,6 +47,10 @@ const windowHeight = Dimensions.get("window").height;
 export default function IntroTutorial() {
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
+  const { selectedDiveSite, setSelectedDiveSite } = useContext(
+    SelectedDiveSiteContext
+  );
+  const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
@@ -50,6 +59,8 @@ export default function IntroTutorial() {
   );
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { movingBack, setMovingBack } = useContext(ReverseContext);
+
   const { setMapCenter } = useContext(MapCenterContext);
 
   const [pics, setPics] = useState([]);
@@ -113,25 +124,30 @@ export default function IntroTutorial() {
   const text6 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,     that means sea creatures have been spotted on that dive site.`;
   const text7 = "";
   const text8 =
-    "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
+    "Oops looks like you have chosen a dive site that doesn't have any sightings yet! Remember you want a dive site with a heat point       nearby. Close the form and try to find one with heatpoints.";
   const text9 =
+    "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
+  const text10 =
     "Now try closing the dive site and choose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
-  const text10 = "";
-  const text11 = "Select one or more sea creatures using the menu at the top.";
-  const text12 = "";
-  const text13 =
-    "As you can see, the photos have filtered to show only those creatures you have selected";
+  const text11 = "";
+  const text12 = "Select one or more sea creatures using the menu at the top.";
+  const text13 = "";
   const text14 =
-    "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+    "As you can see, the photos have filtered to show only those creatures you have selected";
   const text15 =
-    "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
+    "Hey this isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
   const text16 =
+    "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+  const text17 =
+    "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
+  const text18 =
     "Thanks! And if you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining DiveGo!";
-  const text17 = "";
+  const text19 = "";
 
   const [textRead, setTextRead] = useState("");
   const [textRead2, setTextRead2] = useState("  ");
   const [textPrinting, setTextPrinting] = useState(true);
+  const [anchPhotos, setAnchPhotos] = useState(null);
 
   const feederArray = [
     text0,
@@ -152,18 +168,27 @@ export default function IntroTutorial() {
     text15,
     text16,
     text17,
+    text18,
+    text19,
   ];
 
   //  var interval;
 
   const setupText = (pushVal) => {
+    console.log("getting", itterator, textPrinting, movingBack);
+    if (itterator === 8 && !textPrinting) {
+      //   setMovingBack(true)
+      setItterator(7);
+        setGuideModal(false)
+      return;
+    }
     if (
       itterator === 2 ||
-      itterator == 7 ||
-      itterator == 10 ||
-      itterator == 12 ||
-      itterator == 15 ||
-      itterator >= 17
+      itterator === 7 ||
+      itterator === 11 ||
+      itterator === 13 ||
+      itterator === 16 ||
+      itterator >= 18
     ) {
       return;
     } else {
@@ -189,7 +214,9 @@ export default function IntroTutorial() {
 
   function printOutText() {
     if (textArray.length > 0) {
-      if (itterator === 6 && textArray.length <= 63) {
+      if (itterator === 6 && textArray.length <= 65) {
+        setTextRead2((prev) => prev + textArray[0]);
+      } else if (itterator === 8 && textArray.length <= 63) {
         setTextRead2((prev) => prev + textArray[0]);
       } else {
         setTextRead((prev) => prev + textArray[0]);
@@ -207,7 +234,7 @@ export default function IntroTutorial() {
   let textPrinter;
   useEffect(() => {
     setTextRead("");
-
+    setTextRead2("");
     let textVal = feederArray[itterator];
     if (textVal) {
       textArray = textVal.split("");
@@ -216,6 +243,11 @@ export default function IntroTutorial() {
       } else if (itterator === 6 && !textPrinting) {
         let val1 = textVal.slice(0, 147);
         let val2 = textVal.slice(-65);
+        setTextRead(val1);
+        setTextRead2(val2);
+      } else if (itterator === 8 && !textPrinting) {
+        let val1 = textVal.slice(0, 131);
+        let val2 = textVal.slice(-63);
         setTextRead(val1);
         setTextRead2(val2);
       } else {
@@ -227,6 +259,8 @@ export default function IntroTutorial() {
   }, [itterator, textPrinting]);
 
   useEffect(() => {
+
+
     if (itterator === 0) {
       setTimeout(() => {
         startCharacterAnimation();
@@ -246,34 +280,48 @@ export default function IntroTutorial() {
       startExploreButtonAnimation();
     }
 
-    if (itterator === 5 || itterator === 7) {
+    if (itterator === 5) {
       startClusterAnchorAnimation();
-    }
+      }
 
-    if (itterator === 6 || itterator === 7) {
-      startHeatPointAnimation();
-    }
+    if (itterator === 6 ) {
+        startHeatPointAnimation();
+      }
+
 
     if (itterator === 7) {
-      startCharacterAnimation();
-      startTextBoxAnimation();
-      setGuideModal(!guideModal);
+      if (movingBack) {
+        setMovingBack(false);
+        setGuideModal(false);
+        return;
+      } else {
+        setGuideModal(false);
+        startHeatPointAnimation();
+        startClusterAnchorAnimation();
+      }
+     
     }
 
     if (itterator === 8) {
-      startCharacterAnimation();
-      startTextBoxAnimation();
+      setTextPrinting(true)
+      setMovingBack(true);
+      setGuideModal(true)
     }
 
-    if (itterator === 10 || itterator === 12) {
+    if (itterator === 9) {
+      setTextRead("")
+      setTextPrinting(true)
+    }
+
+    if (itterator === 11 || itterator === 13) {
       setGuideModal(!guideModal);
     }
 
-    if (itterator === 11 || itterator === 12) {
+    if (itterator === 12 || itterator === 13) {
       startArrowAnimation();
     }
 
-    if (itterator === 15) {
+    if (itterator === 17) {
       getProfile();
 
       if (profile[0].UserName) {
@@ -283,7 +331,7 @@ export default function IntroTutorial() {
       startUserBoxAnimation();
     }
 
-    if (itterator === 16) {
+    if (itterator === 18) {
       getProfile();
       if (userBoxX.value !== scale(-300)) {
         startUserBoxAnimation();
@@ -292,7 +340,7 @@ export default function IntroTutorial() {
       startNextTutAnimation();
     }
 
-    if (itterator === 17) {
+    if (itterator === 19) {
       setSiteModal(!siteModal);
       startNextTutAnimation();
     }
@@ -433,6 +481,37 @@ export default function IntroTutorial() {
   };
 
   useEffect(() => {
+    filterAnchorPhotos();
+  }, [selectedDiveSite]);
+
+  const filterAnchorPhotos = async () => {
+    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
+      selectedDiveSite.Latitude,
+      selectedDiveSite.Longitude
+    );
+
+    try {
+      const photos = await getPhotosforAnchorMulti({
+        animalMultiSelection,
+        // sliderVal,
+        minLat,
+        maxLat,
+        minLng,
+        maxLng,
+      });
+      if (photos) {
+        let count = 0;
+        photos.forEach((obj) => {
+           count ++
+        });
+        setAnchPhotos(count);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
+  useEffect(() => {
     if (tutorialRunning) {
       if (itterator === null) {
         setItterator(0);
@@ -456,8 +535,6 @@ export default function IntroTutorial() {
     setItterator((prev) => prev + hopper);
     startPicAnimation();
   };
-
-  console.log(textRead2.length, itterator);
 
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
@@ -891,6 +968,5 @@ const styles = StyleSheet.create({
     // backgroundColor: "blue",
     marginRight: -10,
     marginBottom: -2,
-
   },
 });

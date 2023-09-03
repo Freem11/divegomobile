@@ -10,6 +10,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withDelay,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState } from "react";
@@ -28,15 +29,16 @@ export default function PhotoBoxModal(props) {
   const scaleValue = useSharedValue(1);
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
- 
+  
   const animatePicPinch = Gesture.Pinch()
+  
     .onUpdate((event) => {
-      scaleValue.value = event.scale;
-      focalX.value = event.focalX
-      focalY.value = event.focalY
+      scaleValue.value = event.scale
+      focalX.value = event.focalX 
+      focalY.value = event.focalY 
     })
     .onEnd((event) => {
-      scaleValue.value = withTiming(1);
+      scaleValue.value = withDelay(1500,withTiming(1));
     });
 
   const animatedPictureStyle = useAnimatedStyle(() => {

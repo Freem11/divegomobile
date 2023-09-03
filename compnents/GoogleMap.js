@@ -10,9 +10,12 @@ import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SliderContext } from "./contexts/sliderContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";
+import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
 import { MapHelperContext } from "./contexts/mapHelperContext"; 
+import { newGPSBoundaries } from "./helpers/mapHelpers";
+import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
 import {
@@ -62,6 +65,31 @@ export default function Map() {
   const [newSites, setnewSites] = useState([]);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   
+  const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
+  
+  const filterAnchorPhotos = async () => {
+    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
+      selectedDiveSite.Latitude,
+      selectedDiveSite.Longitude
+    );
+
+    try {
+      const photos = await getPhotosforAnchorMulti({
+        animalMultiSelection,
+        // sliderVal,
+        minLat,
+        maxLat,
+        minLng,
+        maxLng,
+      });
+      if (photos) {
+        setAnchPhotos(photos);
+        console.log ("i happened", photos)
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
   
   const handleMapChange = async () => {
     if (mapRef) {
@@ -222,6 +250,8 @@ export default function Map() {
       Latitude: lat,
       Longitude: lng,
     });
+    filterAnchorPhotos()
+    // -----------------------------------------------------------------------------
     setSiteModal(!siteModal);
   };
 
