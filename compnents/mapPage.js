@@ -105,7 +105,6 @@ export default function MapPage() {
            count ++
         });
         setAnchPhotos(count);
-        console.log ("i happened",)
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -159,14 +158,14 @@ export default function MapPage() {
       anchorModalY.value = withTiming(windowHeight);
     }
   };
-console.log("WHAT", anchPhotos)
+
   useEffect(() => {
     startAnchorModalAnimations();
     filterAnchorPhotos()
     console.log("hmmm", anchPhotos)
-    if (itterator > 0 && itterator !== 7) {
+    if (itterator > 0 && itterator !== 7 && itterator !== 13 ) {
       setItterator(itterator + 1);
-    } else if (itterator === 7 && anchPhotos > 0) {
+    } else if (itterator === 7 && itterator === 13 && anchPhotos > 0) {
       setItterator(itterator + 2);
     }
   }, [siteModal]);

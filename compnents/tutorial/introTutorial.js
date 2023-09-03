@@ -60,6 +60,7 @@ export default function IntroTutorial() {
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { movingBack, setMovingBack } = useContext(ReverseContext);
+  const [backHappened, setBackHappened] = useState(false);
 
   const { setMapCenter } = useContext(MapCenterContext);
 
@@ -133,9 +134,9 @@ export default function IntroTutorial() {
   const text12 = "Select one or more sea creatures using the menu at the top.";
   const text13 = "";
   const text14 =
-    "As you can see, the photos have filtered to show only those creatures you have selected";
-  const text15 =
     "Hey this isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
+  const text15 =
+    "As you can see, the photos have filtered to show only those creatures you have selected";
   const text16 =
     "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
   const text17 =
@@ -148,6 +149,7 @@ export default function IntroTutorial() {
   const [textRead2, setTextRead2] = useState("  ");
   const [textPrinting, setTextPrinting] = useState(true);
   const [anchPhotos, setAnchPhotos] = useState(null);
+  const [cuck, setCuck] = useState(0);
 
   const feederArray = [
     text0,
@@ -177,9 +179,12 @@ export default function IntroTutorial() {
   const setupText = (pushVal) => {
     console.log("getting", itterator, textPrinting, movingBack);
     if (itterator === 8 && !textPrinting) {
-      //   setMovingBack(true)
       setItterator(7);
-        setGuideModal(false)
+      setGuideModal(false);
+      return;
+    } else if (itterator === 14 && !textPrinting) {
+      setItterator(13);
+      setGuideModal(false);
       return;
     }
     if (
@@ -187,8 +192,8 @@ export default function IntroTutorial() {
       itterator === 7 ||
       itterator === 11 ||
       itterator === 13 ||
-      itterator === 16 ||
-      itterator >= 18
+      itterator === 17 ||
+      itterator >= 19
     ) {
       return;
     } else {
@@ -206,6 +211,9 @@ export default function IntroTutorial() {
 
       if (pushVal === 1 && itterator === feederArray.length - 1) {
         setGuideModal(false);
+        startClusterAnchorAnimation();
+        startHeatPointAnimation();
+        startArrowAnimation();
       }
     }
   };
@@ -258,9 +266,8 @@ export default function IntroTutorial() {
     return () => cleanUp();
   }, [itterator, textPrinting]);
 
+  let county = 0;
   useEffect(() => {
-
-
     if (itterator === 0) {
       setTimeout(() => {
         startCharacterAnimation();
@@ -282,12 +289,11 @@ export default function IntroTutorial() {
 
     if (itterator === 5) {
       startClusterAnchorAnimation();
-      }
+    }
 
-    if (itterator === 6 ) {
-        startHeatPointAnimation();
-      }
-
+    if (itterator === 6) {
+      startHeatPointAnimation();
+    }
 
     if (itterator === 7) {
       if (movingBack) {
@@ -299,26 +305,55 @@ export default function IntroTutorial() {
         startHeatPointAnimation();
         startClusterAnchorAnimation();
       }
-     
     }
 
     if (itterator === 8) {
-      setTextPrinting(true)
+      setTextPrinting(true);
       setMovingBack(true);
-      setGuideModal(true)
+      setGuideModal(true);
     }
 
     if (itterator === 9) {
-      setTextRead("")
-      setTextPrinting(true)
+      setTextRead("");
+      setTextPrinting(true);
     }
 
-    if (itterator === 11 || itterator === 13) {
+    if (itterator === 11) {
       setGuideModal(!guideModal);
     }
 
-    if (itterator === 12 || itterator === 13) {
+    if (itterator === 12) {
       startArrowAnimation();
+    }
+
+    console.log("itty", itterator, backHappened, cuck);
+    if (itterator === 13) {
+      if (movingBack) {
+        setMovingBack(false);
+        setGuideModal(false);
+        setBackHappened(false);
+        return;
+      } else {
+        setGuideModal(false);
+        startArrowAnimation();
+      }
+    }
+
+    if (itterator === 14) {
+      if (cuck === 0) {
+        startArrowAnimation();
+        setCuck((prev) => prev + 1);
+      }
+      if (backHappened) {
+        setTextPrinting(true);
+        setMovingBack(true);
+        setGuideModal(true);
+      } else {
+        setTextPrinting(true);
+        setMovingBack(true);
+        setGuideModal(true);
+        setBackHappened(true);
+      }
     }
 
     if (itterator === 17) {
@@ -502,7 +537,7 @@ export default function IntroTutorial() {
       if (photos) {
         let count = 0;
         photos.forEach((obj) => {
-           count ++
+          count++;
         });
         setAnchPhotos(count);
       }

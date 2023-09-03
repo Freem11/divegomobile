@@ -84,7 +84,6 @@ export default function Map() {
       });
       if (photos) {
         setAnchPhotos(photos);
-        console.log ("i happened", photos)
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
