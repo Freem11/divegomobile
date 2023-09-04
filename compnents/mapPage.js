@@ -162,7 +162,6 @@ export default function MapPage() {
   useEffect(() => {
     startAnchorModalAnimations();
     filterAnchorPhotos()
-    console.log("hmmm", anchPhotos)
     if (itterator > 0 && itterator !== 7 && itterator !== 13 ) {
       setItterator(itterator + 1);
     } else if (itterator === 7 && itterator === 13 && anchPhotos > 0) {

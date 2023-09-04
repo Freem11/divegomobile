@@ -211,9 +211,6 @@ export default function IntroTutorial() {
 
       if (pushVal === 1 && itterator === feederArray.length - 1) {
         setGuideModal(false);
-        startClusterAnchorAnimation();
-        startHeatPointAnimation();
-        startArrowAnimation();
       }
     }
   };
@@ -266,7 +263,6 @@ export default function IntroTutorial() {
     return () => cleanUp();
   }, [itterator, textPrinting]);
 
-  let county = 0;
   useEffect(() => {
     if (itterator === 0) {
       setTimeout(() => {
@@ -347,6 +343,7 @@ export default function IntroTutorial() {
       if (backHappened) {
         setTextPrinting(true);
         setMovingBack(true);
+        // -------------------------
         setGuideModal(true);
       } else {
         setTextPrinting(true);
@@ -386,6 +383,9 @@ export default function IntroTutorial() {
       setGuideModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
+      setBackHappened(false);
+      setMovingBack(false)
+      setCuck(0);
     }
   }, [itterator]);
 
