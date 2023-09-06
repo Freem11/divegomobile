@@ -53,7 +53,7 @@ import { Iterrator3Context } from "./compnents/contexts/iterrator3Context";
 import { MapHelperContext } from "./compnents/contexts/mapHelperContext";
 import { UserProfileContext } from "./compnents/contexts/userProfileContext";
 import { ReverseContext } from "./compnents/contexts/reverseContext";
-// import AuthenticationPage from "./compnents/authenticationPage";
+import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
@@ -350,12 +350,12 @@ export default function App() {
                                                                     setActiveSession,
                                                                   }}
                                                                 >
-                                                                  <MapPage />
-                                                                  {/* {activeSession ? (
+                                                                  {/* <MapPage /> */}
+                                                                  {activeSession ? (
                                                                   <MapPage />
                                                                 ) : (
                                                                   <AuthenticationPage />
-                                                                )} */}
+                                                                )}
                                                                 </SessionContext.Provider>
                                                               </MapCenterContext.Provider>
                                                             </DSAdderContext.Provider>

@@ -122,10 +122,10 @@ export default function IntroTutorial() {
     "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
   const text5 =
     "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
-  const text6 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,     that means sea creatures have been spotted on that dive site.`;
+  const text6 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,      that means sea creatures have been spotted on that dive site.`;
   const text7 = "";
   const text8 =
-    "Oops looks like you have chosen a dive site that doesn't have any sightings yet! Remember you want a dive site with a heat point       nearby. Close the form and try to find one with heatpoints.";
+    "Oops! Looks like you have chosen a dive site that doesn't have any sightings yet! Remember you want a dive site with a heat point       nearby. Close the form and try to find one with heat points.";
   const text9 =
     "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
   const text10 =
@@ -134,7 +134,7 @@ export default function IntroTutorial() {
   const text12 = "Select one or more sea creatures using the menu at the top.";
   const text13 = "";
   const text14 =
-    "Hey this isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
+    "Uh-oh! This isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
   const text15 =
     "As you can see, the photos have filtered to show only those creatures you have selected";
   const text16 =
@@ -149,7 +149,7 @@ export default function IntroTutorial() {
   const [textRead2, setTextRead2] = useState("  ");
   const [textPrinting, setTextPrinting] = useState(true);
   const [anchPhotos, setAnchPhotos] = useState(null);
-  const [cuck, setCuck] = useState(0);
+  const [backCount, setBackCount] = useState(0);
 
   const feederArray = [
     text0,
@@ -174,10 +174,7 @@ export default function IntroTutorial() {
     text19,
   ];
 
-  //  var interval;
-
   const setupText = (pushVal) => {
-    console.log("getting", itterator, textPrinting, movingBack);
     if (itterator === 8 && !textPrinting) {
       setItterator(7);
       setGuideModal(false);
@@ -219,7 +216,7 @@ export default function IntroTutorial() {
 
   function printOutText() {
     if (textArray.length > 0) {
-      if (itterator === 6 && textArray.length <= 65) {
+      if (itterator === 6 && textArray.length <= 64) {
         setTextRead2((prev) => prev + textArray[0]);
       } else if (itterator === 8 && textArray.length <= 63) {
         setTextRead2((prev) => prev + textArray[0]);
@@ -246,13 +243,13 @@ export default function IntroTutorial() {
       if (textPrinting) {
         textPrinter = setInterval(printOutText, 40);
       } else if (itterator === 6 && !textPrinting) {
-        let val1 = textVal.slice(0, 147);
-        let val2 = textVal.slice(-65);
+        let val1 = Platform.OS === "ios" ? textVal.slice(0, 147) : textVal.slice(0, 145);
+        let val2 = Platform.OS === "ios" ? textVal.slice(-64) : textVal.slice(-68);
         setTextRead(val1);
         setTextRead2(val2);
       } else if (itterator === 8 && !textPrinting) {
-        let val1 = textVal.slice(0, 131);
-        let val2 = textVal.slice(-63);
+        let val1 = Platform.OS === "ios" ? textVal.slice(0, 133) : textVal.slice(0, 131);
+        let val2 = Platform.OS === "ios" ? textVal.slice(-62) : textVal.slice(-65);
         setTextRead(val1);
         setTextRead2(val2);
       } else {
@@ -322,7 +319,6 @@ export default function IntroTutorial() {
       startArrowAnimation();
     }
 
-    console.log("itty", itterator, backHappened, cuck);
     if (itterator === 13) {
       if (movingBack) {
         setMovingBack(false);
@@ -336,9 +332,9 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 14) {
-      if (cuck === 0) {
+      if (backCount === 0) {
         startArrowAnimation();
-        setCuck((prev) => prev + 1);
+        setBackCount((prev) => prev + 1);
       }
       if (backHappened) {
         setTextPrinting(true);
@@ -385,7 +381,7 @@ export default function IntroTutorial() {
       startTextBoxAnimation();
       setBackHappened(false);
       setMovingBack(false)
-      setCuck(0);
+      setBackCount(0);
     }
   }, [itterator]);
 
@@ -628,7 +624,7 @@ export default function IntroTutorial() {
 
         <Animated.View style={[textBoxSlide, styles.textBox]}>
           <Text style={styles.textContain}>
-            {textRead}{" "}
+            {textRead}
             <View
               style={{
                 opacity: textRead2.length > 2 ? 1 : 0,
