@@ -25,6 +25,7 @@ import { PictureContext } from "../contexts/pictureContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { TutorialResetContext } from "../contexts/tutorialResetContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
@@ -53,11 +54,38 @@ export default function ThirdTutorial() {
   );
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { setMapCenter } = useContext(MapCenterContext);
 
   useEffect(() => {
     getProfile();
   }, []);
+
+  useEffect(() => {
+    if (tutorialReset) {
+      setItterator3(null);
+      setPicAdderModal(false);
+      setTutorialRunning(false);
+      setThirdGuideModal(false);
+      characterX.value = 1000;
+      textBoxY.value = 1000;
+      photoY.value = scale(-1000);
+      imageY.value = scale(-1000);
+      pinY.value = scale(-1000);
+      mantaY.value = scale(-1200);
+      setUploadedFile(null)
+      setPinValues({
+        PicFile: null,
+        Animal: "",
+        PicDate: "",
+        Latitude: "",
+        Longitude: "",
+        DDVal: "0",
+      });
+      setTutorialReset(false);
+    }
+  }, [tutorialReset]);
+
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
@@ -491,7 +519,6 @@ const styles = StyleSheet.create({
   textBox: {
     position: "absolute",
     width: "90%",
-    height: "15.5%",
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",

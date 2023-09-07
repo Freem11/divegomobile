@@ -206,7 +206,6 @@ export default function DiveSiteModal() {
           Site: "",
           Latitude: "",
           Longitude: "",
-          UserID: null,
         });
         setDiveSiteAdderModal(!diveSiteAdderModal);
       }
@@ -227,7 +226,6 @@ export default function DiveSiteModal() {
             Site: "",
             Latitude: "",
             Longitude: "",
-            UserID: null,
           });
         }
       }
@@ -239,7 +237,6 @@ export default function DiveSiteModal() {
           Site: "",
           Latitude: "",
           Longitude: "",
-          UserID: null,
         });
       }
     }

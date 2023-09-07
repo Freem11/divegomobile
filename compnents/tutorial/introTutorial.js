@@ -73,7 +73,7 @@ export default function IntroTutorial() {
   }, []);
 
   useEffect(() => {
-    if (tutorialReset){
+    if (tutorialReset && profile[0].UserName){
     setItterator(null);
     setSiteModal(false);
     setTutorialRunning(false);

@@ -26,9 +26,14 @@ import { MapRegionContext } from "../contexts/mapRegionContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { TutorialResetContext } from "../contexts/tutorialResetContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
-import { MaterialIcons, MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  MaterialCommunityIcons,
+  FontAwesome,
+} from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -47,15 +52,37 @@ export default function SecondTutorial() {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { setRegion } = useContext(MapRegionContext);
 
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
 
   useEffect(() => {
     getProfile();
   }, []);
+
+  useEffect(() => {
+    if (tutorialReset) {
+      setItterator2(null);
+      setDiveSiteAdderModal(false);
+      setTutorialRunning(false);
+      setSecondGuideModal(false);
+      characterX.value = 1000;
+      textBoxY.value = 1000;
+      DsSearchY.value = scale(-1000);
+      diveSiteY.value = scale(-1000);
+      nextTutX.value = -300;
+      setAddSiteVals({
+        Site: "",
+        Latitude: "",
+        Longitude: "",
+      });
+      setTutorialReset(false);
+    }
+  }, [tutorialReset]);
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
@@ -83,41 +110,41 @@ export default function SecondTutorial() {
   const diveSiteY = useSharedValue(scale(-1000));
   const nextTutX = useSharedValue(-300);
 
-const text0 =
-  "Hey welcome back! Now that you have a Diver Name, I can show you how you can contribute to DiveGo!";
-const text1 =
-  "First, let's look at working with Dive sites, let's move to a spot with known dive sites";
-const text2 =
-  "Now that the map is positioned, let's check for a dive site by tapping on the dive site search tool option, it looks like this";
-const text3 = "";
-const text4 =
-  "Now that the options are open, it will show you a list of dive sites in the area, try searching for 'Copper Cliffs' and select it, once you have found it";
-const text5 = "";
-const text6 =
-  "Nice! As you can see when you selected the dive site, the map zoomed to it and put that yellow indicator over it to highlight it, this means the site is in the app and ready for you to add your sightings to it later!";
-const text7 =
-  "Next, let's say the site you were looking for was NOT in the app, no problem adding them is very easy!";
-const text8 =
-  "To add a dive site we need to click on the dive site adding button, it's under this option, pop it open and I'll walk you through how it works";
-const text9 = "";
-const text10 =
-  "This is the dive site adding form, here, you can see 3 fields and a button. First is the site name, add the dive site name in this spot";
-const text11 =
-  "Next are the GPS lat and lng fields. The easiest way to get them is to be AT the dive site and simply tap the 'I'm at the dive site button'. It will take your current location and use them as the coordinates for the dive site!";
-const text12 =
-  "If you are at home, and have the name of the site as well as the decimal format GPS coordinates, you can add them manually as well";
-const text13 =
-  "Once you have your site name and GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submitted for review";
-const text14 =
-  "Please note your new site won't automatically be added to the map, the DiveGo team will verify your submission before committing to the map, but after that your site will go in and be credited to you with your diver name that we setup earlier!";
-const text15 =
-  "Give it a try for yourself: add a name and GPS using the 'I'm at the dive site' button and submit!";
-const text16 = "";
-const text17 =
-  "Nice Job, That's how you add a new dive site to DiveGo! In this case, since this is a guide, the entry was not submitted, but you can add from now on, in the same way.";
-const text18 =
-  "That's it for adding dive sites to the app! In the next guide we will look at adding sea creature sighting photos! Tap on this button to go to that guide next, otherwise tap anywhere else to close, and thanks for joining me again!";
-const text19 = "";
+  const text0 =
+    "Hey welcome back! Now that you have a Diver Name, I can show you how you can contribute to DiveGo!";
+  const text1 =
+    "First, let's look at working with Dive sites, let's move to a spot with known dive sites";
+  const text2 =
+    "Now that the map is positioned, let's check for a dive site by tapping on the dive site search tool option, it looks like this";
+  const text3 = "";
+  const text4 =
+    "Now that the options are open, it will show you a list of dive sites in the area, try searching for 'Copper Cliffs' and select it, once you have found it";
+  const text5 = "";
+  const text6 =
+    "Nice! As you can see when you selected the dive site, the map zoomed to it and put that yellow indicator over it to highlight it, this means the site is in the app and ready for you to add your sightings to it later!";
+  const text7 =
+    "Next, let's say the site you were looking for was NOT in the app, no problem adding them is very easy!";
+  const text8 =
+    "To add a dive site we need to click on the dive site adding button, it's under this option, pop it open and I'll walk you through how it works";
+  const text9 = "";
+  const text10 =
+    "This is the dive site adding form, here, you can see 3 fields and a button. First is the site name, add the dive site name in this spot";
+  const text11 =
+    "Next are the GPS lat and lng fields. The easiest way to get them is to be AT the dive site and simply tap the 'I'm at the dive site button'. It will take your current location and use them as the coordinates for the dive site!";
+  const text12 =
+    "If you are at home, and have the name of the site as well as the decimal format GPS coordinates, you can add them manually as well";
+  const text13 =
+    "Once you have your site name and GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submitted for review";
+  const text14 =
+    "Please note your new site won't automatically be added to the map, the DiveGo team will verify your submission before committing to the map, but after that your site will go in and be credited to you with your diver name that we setup earlier!";
+  const text15 =
+    "Give it a try for yourself: add a name and GPS using the 'I'm at the dive site' button and submit!";
+  const text16 = "";
+  const text17 =
+    "Nice Job, That's how you add a new dive site to DiveGo! In this case, since this is a guide, the entry was not submitted, but you can add from now on, in the same way.";
+  const text18 =
+    "That's it for adding dive sites to the app! In the next guide we will look at adding sea creature sighting photos! Tap on this button to go to that guide next, otherwise tap anywhere else to close, and thanks for joining me again!";
+  const text19 = "";
 
   const [textRead, setTextRead] = useState("");
   const [textPrinting, setTextPrinting] = useState(true);
@@ -211,7 +238,11 @@ const text19 = "";
     // let textVal = feederArray[itterator2];
     // setTextRead(textVal);
 
+    console.log("huh", itterator2, characterX.value, textBoxY.value)
+
+
     if (itterator2 === 0) {
+      console.log("YOOOO!")
       setTimeout(() => {
         startCharacterAnimation();
       }, 400);
@@ -364,9 +395,8 @@ const text19 = "";
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
-   
   };
-  
+
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
       <View style={styles.wrapper}>
@@ -399,14 +429,27 @@ const text19 = "";
         </Animated.View>
 
         <Animated.View style={[styles.buttonwrapper, diveSiteSlide]}>
-          <MaterialIcons name="add-location-alt" color="aquamarine" size={scale(42)} />
+          <MaterialIcons
+            name="add-location-alt"
+            color="aquamarine"
+            size={scale(42)}
+          />
         </Animated.View>
 
-        <Animated.View style={[styles.nextTutButton, nextTutSlide]} onPress={handleThirdTutorialStartup}>
-          <Text onPress={handleThirdTutorialStartup} style={styles.nextTutText}>Photogenics</Text>
-          <FontAwesome name="arrow-right" size={24} color="white" onPress={handleThirdTutorialStartup} />
+        <Animated.View
+          style={[styles.nextTutButton, nextTutSlide]}
+          onPress={handleThirdTutorialStartup}
+        >
+          <Text onPress={handleThirdTutorialStartup} style={styles.nextTutText}>
+            Photogenics
+          </Text>
+          <FontAwesome
+            name="arrow-right"
+            size={24}
+            color="white"
+            onPress={handleThirdTutorialStartup}
+          />
         </Animated.View>
-
       </View>
     </TouchableWithoutFeedback>
   );
@@ -422,8 +465,18 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: windowWidth > 600 ? scale(-240): Platform.OS === "ios" ? scale(-440) : scale(-370),
-    left: windowWidth > 600 ? scale(160) : Platform.OS === "ios" ? scale(30) : scale(0),
+    bottom:
+      windowWidth > 600
+        ? scale(-240)
+        : Platform.OS === "ios"
+        ? scale(-440)
+        : scale(-370),
+    left:
+      windowWidth > 600
+        ? scale(160)
+        : Platform.OS === "ios"
+        ? scale(30)
+        : scale(0),
     height: "100%",
     width: "100%",
     opacity: 1,
@@ -466,13 +519,12 @@ const styles = StyleSheet.create({
     marginLeft: scale(10),
     borderRadius: 15,
     borderColor: "lightgrey",
-    borderWidth: 2
-
+    borderWidth: 2,
   },
-  nextTutText:{
+  nextTutText: {
     color: "white",
     fontFamily: "Itim_400Regular",
     fontSize: scale(12),
-    margin: 10
+    margin: 10,
   },
 });
