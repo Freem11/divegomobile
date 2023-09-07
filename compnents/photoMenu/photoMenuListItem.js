@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from "react-native";
+import { scale } from "react-native-size-matters";
 
 const PhotoMenuListItem = (props) => {
   const { pic, setAnimalMultiSelection, animalMultiSelection } = props;
@@ -24,6 +25,7 @@ const PhotoMenuListItem = (props) => {
       }
       key={pic.id}
     >
+      <View style={{justifyContent: "center", height: 33}}>
       <Text
         style={
           animalMultiSelection.includes(pic.label)
@@ -33,13 +35,14 @@ const PhotoMenuListItem = (props) => {
       >
         {pic.label}
       </Text>
+      </View>
       <Image
         source={{
           uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
         }}
         style={{
-          height: 60,
-          width: 120,
+          height: 70,
+          minWidth: 120,
           borderBottomRightRadius: 15,
           borderBottomLeftRadius: 15,
           resizeMode: "cover",
@@ -55,33 +58,45 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "white",
     textAlign: "center",
-    height: 20,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: 120,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     paddingTop: 3,
     fontFamily: "Itim_400Regular",
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   photolabelSelected: {
     fontSize: 11,
     color: "black",
     textAlign: "center",
-    height: 20,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: 120,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     paddingTop: 3,
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
+    paddingLeft: 5,
+    paddingRight: 5
   },
   shadowbox: {
     borderRadius: 15,
     borderWidth: 1,
     borderColor: "darkgrey",
     backgroundColor: "darkblue",
+    height: 105
   },
   shadowboxSelected: {
     borderRadius: 15,
     borderWidth: 1,
     borderColor: "darkgrey",
     backgroundColor: "gold",
+    height: 105
   },
 });
 

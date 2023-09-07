@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
+import { TutorialContext } from "./contexts/tutorialContext";
 import { MapBoundariesContext } from "./contexts/mapBoundariesContext";
 import { MapRegionContext } from "./contexts/mapRegionContext";
 import { MapZoomContext } from "./contexts/mapZoomContext";
@@ -47,6 +48,7 @@ export default function Map() {
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { region, setRegion } = useContext(MapRegionContext);
   const { boundaries, setBoundaries } = useContext(MapBoundariesContext);
   const { zoomlev, setZoomLev } = useContext(MapZoomContext);
@@ -137,7 +139,6 @@ export default function Map() {
               });
             }
 
-
           } catch (e) {
             console.log({ title: "Map Flipped", message: e.message });
           }
@@ -214,12 +215,18 @@ export default function Map() {
   }, [masterSwitch]);
 
   useEffect(() => {
+    let zoomHelp
+    if (tutorialRunning){
+      zoomHelp = 8
+    }
+
     if (mapRef) {
       mapRef.animateCamera({
         center: {
           latitude: mapCenter.lat,
           longitude: mapCenter.lng,
         },
+        zoom : zoomHelp
       });
       Keyboard.dismiss();
     }

@@ -22,6 +22,7 @@ import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { scale } from "react-native-size-matters";
+import { MapRegionContext } from "../contexts/mapRegionContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
@@ -47,6 +48,7 @@ export default function SecondTutorial() {
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { setMapCenter } = useContext(MapCenterContext);
+  const { setRegion } = useContext(MapRegionContext);
 
   const { diveSiteAdderModal, setDiveSiteAdderModal } =
     useContext(DSAdderContext);
@@ -221,7 +223,7 @@ const text19 = "";
     }
 
     if (itterator2 === 2) {
-      moveMap({ lat: 50.03312260000001, lng: -125.2733354 });
+      moveMap({ lat: 50.03312256836453, lng: -125.27333546429873 });
       setTimeout(() => {
         startDsSearchButtonAnimation();
       }, 1000);
@@ -362,8 +364,9 @@ const text19 = "";
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
+   
   };
-
+  
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
       <View style={styles.wrapper}>

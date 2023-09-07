@@ -60,6 +60,7 @@ import PicUploadModal from "./modals/picUploaderModal";
 import IntroTutorial from "./tutorial/introTutorial";
 import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
+import TutorialBar from "./tutorialBar/tutorialBarContainer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -385,6 +386,13 @@ export default function MapPage() {
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
           <KeyboardAvoidingView style={styles.container} behavior="height">
+
+          {tutorialRunning && (
+              <View style={styles.tutorialBar}>
+                <TutorialBar style={{ zIndex: 55 }} />
+              </View>
+            )}
+
             {masterSwitch && (
               <View style={styles.carrousel}>
                 <PhotoMenu style={{ zIndex: 3 }} />
@@ -613,6 +621,15 @@ const styles = StyleSheet.create({
     //Constants.statusBarHeight +
     top: Platform.OS === "ios" ? "3%" : "0%",
     zIndex: 2,
+  },
+  tutorialBar: {
+    width: "95%",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "space-between",
+    top: Platform.OS === "ios" ? "6%" : "2%",
+    zIndex: 55,
   },
   Hist: {
     alignItems: "center",

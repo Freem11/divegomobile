@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    top: 20,
+    top: 25,
   },
   picContainer2: {
     alignItems: "center",

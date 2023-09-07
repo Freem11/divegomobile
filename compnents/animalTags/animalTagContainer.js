@@ -17,7 +17,7 @@ export default function AnimalTopAutoSuggest(props) {
   );
  
   return (
-    <View style={{flex: 1, alignSelf: "center", justifyContent: "center", marginTop: Platform.OS === "ios" ? 0 : "5%"}}>
+    <View style={{flex: 1, alignSelf: "center", justifyContent: "center", marginTop: Platform.OS === "ios" ? "1%" : "9%"}}>
         <Animated.View
         style={[transTagsY]} pointerEvents={'box-none'}>
           <View style={styles.tagContainer} pointerEvents={'box-none'}>
