@@ -3,8 +3,14 @@ import { useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale } from "react-native-size-matters";
 import { MaterialIcons } from "@expo/vector-icons";
+import { TutorialResetContext } from "../contexts/tutorialResetContext";
 
 export default function TutorialBar() {
+  const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
+
+  const handleClearTutorial = async () => {
+    setTutorialReset(true);
+  };
   return (
     <View style={styles.container} pointerEvents={"box-none"}>
       <TouchableWithoutFeedback
@@ -21,12 +27,12 @@ export default function TutorialBar() {
             padding: 2,
           }}
         >
-          <MaterialIcons name="menu" size={26} color="white"/>
+          <MaterialIcons name="menu" size={26} color="white" />
         </View>
       </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback
-        onPress={() => console.log("cancel tapped")}
+        onPress={handleClearTutorial}
         style={{
           width: 50,
           height: 32,

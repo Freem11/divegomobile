@@ -30,6 +30,7 @@ import { scale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { TutorialResetContext } from "../contexts/tutorialResetContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
@@ -59,6 +60,7 @@ export default function IntroTutorial() {
   );
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { movingBack, setMovingBack } = useContext(ReverseContext);
   const [backHappened, setBackHappened] = useState(false);
 
@@ -69,6 +71,26 @@ export default function IntroTutorial() {
   useEffect(() => {
     getProfile();
   }, []);
+
+  useEffect(() => {
+    if (tutorialReset){
+    setItterator(null);
+    setSiteModal(false);
+    setTutorialRunning(false);
+    setGuideModal(false);
+    characterX.value = scale(1000);
+    textBoxY.value = scale(1000);
+    picX.value = scale(-300);
+    exploreButtonY.value = scale(-1000);
+    clusterAnchorY.value = scale(-1200);
+    heatPotintY.value = scale(-1200);
+    arrowY.value = scale(-1200);
+    userBoxX.value = scale(-300);
+    nextTutX.value = scale(-300);
+    setTutorialReset(false)
+    }
+  }, [tutorialReset]);
+
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
