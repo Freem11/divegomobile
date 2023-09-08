@@ -88,12 +88,12 @@ export default function IntroTutorial() {
 
   useEffect(() => {
     console.log(chapter);
-    setSiteModal(false);
     setMovingBack(false)
-    resetTutorial();
-
+    
     switch (chapter) {
       case "Getting around the map":
+        resetTutorial();
+        setSiteModal(false);
         setItterator(1);
         setGuideModal(true);
         characterX.value = withTiming(190)
@@ -102,6 +102,8 @@ export default function IntroTutorial() {
         break;
 
       case "Dive sites":
+        resetTutorial();
+        setSiteModal(false);
         setItterator(6);
         setGuideModal(true);
         characterX.value = withTiming(190)
@@ -112,6 +114,8 @@ export default function IntroTutorial() {
         break;
 
       case "Changed dive site":
+        resetTutorial();
+        setSiteModal(false);
         setItterator(12);
         setGuideModal(true);
         characterX.value = withTiming(190)
@@ -365,14 +369,15 @@ export default function IntroTutorial() {
       // startHeatPointAnimation();
     }
 
+    console.log("at all?", itterator, movingBack)
+
     if (itterator === 7) {
-      console.log("& at all?", movingBack)
+     
       if (movingBack) {
         setMovingBack(false);
         setGuideModal(false);
         return;
       } else {
-        console.log("triggered 7?")
         setGuideModal(false);
         heatPotintY.value = withTiming(scale(-1200));
         // startHeatPointAnimation();
@@ -392,11 +397,16 @@ export default function IntroTutorial() {
       setTextPrinting(true);
     }
 
+    if (itterator === 10) {
+      setChapter(null)
+    }
+
     if (itterator === 11) {
-      setGuideModal(!guideModal);
+      setGuideModal(false); 
     }
 
     if (itterator === 12) {
+      setGuideModal(true); 
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
       // startArrowAnimation();
     }
@@ -431,6 +441,10 @@ export default function IntroTutorial() {
         setGuideModal(true);
         setBackHappened(true);
       }
+    }
+
+    if (itterator === 15) {
+      setGuideModal(true)
     }
 
     if (itterator === 17) {

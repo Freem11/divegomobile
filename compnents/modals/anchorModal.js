@@ -114,6 +114,8 @@ export default function AnchorModal(lat, lng) {
 
         if(tutorialRunning && count > 0) {
           setItterator(itterator + 2);
+        } else if (tutorialRunning){
+          setItterator(itterator + 1);
         }
       }
     } catch (e) {
@@ -125,11 +127,11 @@ export default function AnchorModal(lat, lng) {
     getDiveSite(selectedDiveSite.SiteName);
     filterAnchorPhotos()
  // -----------------------------------------------------------------------------
-    if (tutorialRunning) {
-      if (itterator > 0) {
-        setItterator(itterator + 1);
-      }
-    }
+    // if (tutorialRunning) {
+    //   if (itterator > 0) {
+    //     setItterator(itterator + 1);
+    //   }
+    // }
   }, [selectedDiveSite]);
 
   useEffect(() => {
@@ -174,7 +176,8 @@ export default function AnchorModal(lat, lng) {
   const handleAnchorModalClose = () => {
 
       if (itterator === 11) {
-        setGuideModal(true);
+        // setItterator((prev) => prev + 1)
+        // setGuideModal(true);
       } 
   
       if (itterator === 7) {
@@ -182,6 +185,7 @@ export default function AnchorModal(lat, lng) {
       }
   
       if (itterator === 13) {
+        // setItterator((prev) => prev + 1)
         setGuideModal(false);
       }
   
