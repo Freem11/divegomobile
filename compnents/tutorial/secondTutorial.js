@@ -53,7 +53,7 @@ export default function SecondTutorial() {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { chapter, setChapter} = useContext(ChapterContext);
+  const { chapter, setChapter } = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { setRegion } = useContext(MapRegionContext);
@@ -72,19 +72,45 @@ export default function SecondTutorial() {
       setDiveSiteAdderModal(false);
       setTutorialRunning(false);
       setSecondGuideModal(false);
-      characterX.value = 1000;
-      textBoxY.value = 1000;
-      DsSearchY.value = scale(-1000);
-      diveSiteY.value = scale(-1000);
-      nextTutX.value = -300;
-      setAddSiteVals({
-        Site: "",
-        Latitude: "",
-        Longitude: "",
-      });
       setTutorialReset(false);
+      resetTutorial();
     }
   }, [tutorialReset]);
+
+  useEffect(() => {
+    console.log(chapter);
+    setDiveSiteAdderModal(false);
+    resetTutorial();
+
+    switch (chapter) {
+      case "Checking for a dive site":
+        setItterator2(1);
+        setSecondGuideModal(true);
+        characterX.value = withTiming(190);
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        break;
+
+      case "Adding your dive sites":
+        setItterator2(8);
+        setSecondGuideModal(true);
+        characterX.value = withTiming(190);
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        break;
+    }
+  }, [chapter]);
+
+  const resetTutorial = async () => {
+    characterX.value = 1000;
+    textBoxY.value = 1000;
+    DsSearchY.value = scale(-1000);
+    diveSiteY.value = scale(-1000);
+    nextTutX.value = -300;
+    setAddSiteVals({
+      Site: "",
+      Latitude: "",
+      Longitude: "",
+    });
+  };
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
@@ -240,11 +266,9 @@ export default function SecondTutorial() {
     // let textVal = feederArray[itterator2];
     // setTextRead(textVal);
 
-    console.log("huh", itterator2, characterX.value, textBoxY.value)
-
+    console.log("huh", itterator2, characterX.value, textBoxY.value);
 
     if (itterator2 === 0) {
-      console.log("YOOOO!")
       setTimeout(() => {
         startCharacterAnimation();
       }, 400);
@@ -258,42 +282,48 @@ export default function SecondTutorial() {
     if (itterator2 === 2) {
       moveMap({ lat: 50.03312256836453, lng: -125.27333546429873 });
       setTimeout(() => {
-        startDsSearchButtonAnimation();
+        DsSearchY.value = withTiming(windowHeight * 0.4);
+        // startDsSearchButtonAnimation();
       }, 1000);
     }
 
     if (itterator2 === 3) {
-      startDsSearchButtonAnimation();
-      setSecondGuideModal(!secondGuideModal);
+      DsSearchY.value = withTiming(scale(-1000));
+      // startDsSearchButtonAnimation();
+      setSecondGuideModal(false);
     }
 
     if (itterator2 === 4) {
-      setSecondGuideModal(!secondGuideModal);
+      setSecondGuideModal(true);
     }
 
     if (itterator2 === 5) {
-      setSecondGuideModal(!secondGuideModal);
+      setSecondGuideModal(false);
     }
 
     if (itterator2 === 6) {
-      setSecondGuideModal(!secondGuideModal);
+      setSecondGuideModal(true);
     }
 
     if (itterator2 === 8) {
-      startDiveSiteAnimation();
+      diveSiteY.value = withTiming(windowHeight * 0.4);
+      // startDiveSiteAnimation();
     }
 
+    console.log(itterator2)
     if (itterator2 === 9) {
-      startDiveSiteAnimation();
-      setSecondGuideModal(!secondGuideModal);
+      diveSiteY.value = withTiming(scale(-1000));
+      // startDiveSiteAnimation();
+      setSecondGuideModal(false);
     }
 
     if (itterator2 === 16) {
-      setSecondGuideModal(!secondGuideModal);
+      setSecondGuideModal(false);
     }
 
     if (itterator2 === 18) {
-      startNextTutAnimation();
+      nextTutX.value = withSpring(windowWidth * 0.3);
+      // startNextTutAnimation();
     }
 
     if (itterator2 === 19) {
@@ -303,8 +333,9 @@ export default function SecondTutorial() {
         Longitude: "",
         UserID: null,
       });
-      startNextTutAnimation();
-      setDiveSiteAdderModal(!diveSiteAdderModal);
+      nextTutX.value = withTiming(-300);
+      // startNextTutAnimation();
+      setDiveSiteAdderModal(false);
       setTutorialRunning(false);
     }
 

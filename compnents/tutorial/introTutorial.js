@@ -119,7 +119,7 @@ export default function IntroTutorial() {
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
         break;
     }
-    // setChapter(null)
+
   }, [chapter]);
 
   const getProfile = async () => {
