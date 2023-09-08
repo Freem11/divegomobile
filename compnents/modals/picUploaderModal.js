@@ -33,6 +33,7 @@ import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 
 let PicVar = false;
@@ -49,6 +50,7 @@ export default function PicUploadModal() {
   );
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { chapter, setChapter } = useContext(ChapterContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
 
   const { setMasterSwitch } = useContext(MasterContext);
@@ -158,11 +160,13 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   useEffect(() => {
+    if(chapter === null){
     if (tutorialRunning) {
       if (itterator3 > 0) {
         setItterator3(itterator3 + 1);
       }
     }
+  }
   }, [picAdderModal]);
 
   useEffect(() => {

@@ -82,6 +82,7 @@ export default function IntroTutorial() {
       setTutorialReset(false);
       setSiteModal(false);
       resetTutorial();
+      setChapter(null)
     }
   }, [tutorialReset]);
 
@@ -469,6 +470,7 @@ export default function IntroTutorial() {
       // startCharacterAnimation();
       textBoxY.value = withTiming(scale(1000));
       // startTextBoxAnimation();
+      setChapter(null)
       setBackHappened(false);
       setMovingBack(false);
       setBackCount(0);

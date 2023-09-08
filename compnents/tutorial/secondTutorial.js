@@ -74,6 +74,7 @@ export default function SecondTutorial() {
       setSecondGuideModal(false);
       setTutorialReset(false);
       resetTutorial();
+      setChapter(null)
     }
   }, [tutorialReset]);
 
@@ -345,6 +346,7 @@ export default function SecondTutorial() {
       setSecondGuideModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
+      setChapter(null)
     }
   }, [itterator2]);
 

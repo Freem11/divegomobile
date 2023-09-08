@@ -18,6 +18,7 @@ import { scale } from "react-native-size-matters";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { ChapterContext } from "../contexts/chapterContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 
 let SiteNameVar = false;
@@ -30,6 +31,7 @@ export default function DiveSiteModal() {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { chapter, setChapter } = useContext(ChapterContext);
 
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
@@ -118,11 +120,13 @@ export default function DiveSiteModal() {
   }, [itterator2]);
 
   useEffect(() => {
+    if(chapter === null){
     if (tutorialRunning) {
       if (itterator2 === 9) {
         setItterator2(itterator2 + 1);
       }
     }
+  }
   }, [diveSiteAdderModal]);
 
   useEffect(() => {

@@ -165,7 +165,6 @@ export default function MapPage() {
   useEffect(() => {
     startAnchorModalAnimations();
     filterAnchorPhotos()
-    console.log("common", chapter)
     if(chapter === null){
       if (itterator > 0 && itterator !== 7 && itterator !== 13 ) {
         setItterator(itterator + 1);

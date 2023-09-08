@@ -70,25 +70,68 @@ export default function ThirdTutorial() {
       setPicAdderModal(false);
       setTutorialRunning(false);
       setThirdGuideModal(false);
-      characterX.value = 1000;
-      textBoxY.value = 1000;
-      photoY.value = scale(-1000);
-      imageY.value = scale(-1000);
-      pinY.value = scale(-1000);
-      mantaY.value = scale(-1200);
-      setUploadedFile(null)
-      setPinValues({
-        PicFile: null,
-        Animal: "",
-        PicDate: "",
-        Latitude: "",
-        Longitude: "",
-        DDVal: "0",
-      });
-      setTutorialReset(false);
+      resetTutorial();
+      setChapter(null)
     }
   }, [tutorialReset]);
 
+  useEffect(() => {
+    console.log(chapter);
+    setPicAdderModal(false);
+    resetTutorial();
+
+    switch (chapter) {
+      case "Contributing photos overview":
+        setItterator3(3);
+        setThirdGuideModal(true);
+        characterX.value = withTiming(190);
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        break;
+
+      case "Adding your photo":
+        setItterator3(6);
+        setThirdGuideModal(true);
+        characterX.value = withTiming(190);
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setPicAdderModal(true);
+        break;
+
+      case "Name that sea creature!":
+        setItterator3(12);
+        setThirdGuideModal(true);
+        characterX.value = withTiming(190);
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setPicAdderModal(true);
+        break;
+
+      case "Dropping the pin":
+        setItterator3(15);
+        setThirdGuideModal(true);
+        characterX.value = withTiming(190);
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setPicAdderModal(true);
+        break;
+    }
+  }, [chapter]);
+
+  const resetTutorial = async () => {
+    characterX.value = 1000;
+    textBoxY.value = 1000;
+    photoY.value = scale(-1000);
+    imageY.value = scale(-1000);
+    pinY.value = scale(-1000);
+    mantaY.value = scale(-1200);
+    setUploadedFile(null)
+    setPinValues({
+      PicFile: null,
+      Animal: "",
+      PicDate: "",
+      Latitude: "",
+      Longitude: "",
+      DDVal: "0",
+    });
+    setTutorialReset(false);
+  };
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
@@ -260,57 +303,86 @@ const text26 = "";
     }
 
     if (itterator3 === 3) {
-      startPhotoButtonAnimation();
+      photoY.value = withTiming(windowHeight * 0.4);
+      // startPhotoButtonAnimation();
     }
 
     if (itterator3 === 5) {
-      startPhotoButtonAnimation();
-      setThirdGuideModal(!thirdGuideModal);
+      photoY.value = withTiming(scale(-1000));
+      // startPhotoButtonAnimation();
+      setThirdGuideModal(false);
     }
 
     if (itterator3 === 7) {
-      startImageButtonAnimation();
+      imageY.value = withTiming(windowHeight * 0.4);
+      // startImageButtonAnimation();
     }
 
     if (itterator3 === 8) {
-      startImageButtonAnimation();
-      setThirdGuideModal(!thirdGuideModal);
+      imageY.value = withTiming(scale(-1000));
+      // startImageButtonAnimation();
+      setThirdGuideModal(false);
     }
 
     if (itterator3 === 10) {
-      startCalendarAnimation();
+      calendarY.value = withTiming(windowHeight * 0.4);
+      //  startCalendarAnimation();
     }
 
     if (itterator3 === 11) {
-      startCalendarAnimation();
-      setThirdGuideModal(!thirdGuideModal);
+      calendarY.value = withTiming(scale(-1000));
+      // startCalendarAnimation();
+      setThirdGuideModal(false);
     }
 
-    if (itterator3 === 12 || itterator3 === 14 || itterator3 === 17 || itterator3 === 19 || itterator3 === 20 || itterator3 === 22 || itterator3 === 23) {
-      setThirdGuideModal(!thirdGuideModal);
+    console.log(itterator3)
+    if (itterator3 === 12) {
+      setThirdGuideModal(true);
+    }
+
+    if (itterator3 === 14) {
+      setThirdGuideModal(false);
     }
 
     if (itterator3 === 15) {
-      setThirdGuideModal(!thirdGuideModal);
+      setThirdGuideModal(true);
       setTimeout(() => {
-        startPinAnimation();
+        pinY.value = withTiming(windowHeight * 0.4);
+        // startPinAnimation();
       }, 1000);
     }
 
     if (itterator3 === 16) {
-      setThirdGuideModal(!thirdGuideModal);
-      startPinAnimation();
+      setThirdGuideModal(false);
+      pinY.value = withTiming(scale(-1000));
+      // startPinAnimation();
     }
-
+   
     if (itterator3 === 17) {
+      setThirdGuideModal(true);
       setTimeout(() => {
-        startMantaAnimation();
+        mantaY.value = withTiming(windowHeight * 0.4);
+        // startMantaAnimation();
       }, 1000);
       
     }
 
     if (itterator3 === 19) {
-        startMantaAnimation();
+      setThirdGuideModal(false);
+        mantaY.value = withTiming(scale(-1200));
+        // startMantaAnimation();
+    }
+
+    if (itterator3 === 20) {
+      setThirdGuideModal(true);
+    }
+
+    if (itterator3 === 22) {
+      setThirdGuideModal(false);
+    }
+
+    if (itterator3 === 23) {
+      setThirdGuideModal(true);
     }
 
     if (itterator3 === 26) {
@@ -324,7 +396,7 @@ const text26 = "";
         UserId: null,
       });
        setUploadedFile(null);
-       setPicAdderModal(!picAdderModal);
+       setPicAdderModal(false);
        setTutorialRunning(false);
     }
 
@@ -334,6 +406,7 @@ const text26 = "";
       setThirdGuideModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
+      setChapter(null)
     }
   }, [itterator3]);
 
