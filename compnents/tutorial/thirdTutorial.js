@@ -29,6 +29,8 @@ import { TutorialResetContext } from "../contexts/tutorialResetContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
+import { ChapterContext } from "../contexts/chapterContext";
+
 import {
   MaterialIcons,
   FontAwesome,
@@ -54,6 +56,7 @@ export default function ThirdTutorial() {
   );
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { chapter, setChapter} = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { setMapCenter } = useContext(MapCenterContext);
 

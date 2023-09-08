@@ -31,6 +31,7 @@ import { DiveSpotContext } from "./contexts/diveSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { TutorialModelContext } from "./contexts/tutorialModalContext";
+import { ChapterContext } from "./contexts/chapterContext";
 import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContext";
 import { ThirdTutorialModalContext } from "./contexts/thirdTutorialModalContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
@@ -78,6 +79,7 @@ export default function MapPage() {
   const [monthVal, setMonthVal] = useState("");
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { chapter, setChapter } = useContext(ChapterContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
@@ -163,11 +165,16 @@ export default function MapPage() {
   useEffect(() => {
     startAnchorModalAnimations();
     filterAnchorPhotos()
-    if (itterator > 0 && itterator !== 7 && itterator !== 13 ) {
-      setItterator(itterator + 1);
-    } else if (itterator === 7 && itterator === 13 && anchPhotos > 0) {
-      setItterator(itterator + 2);
+    console.log("common", chapter)
+    if(chapter === null){
+      if (itterator > 0 && itterator !== 7 && itterator !== 13 ) {
+        setItterator(itterator + 1);
+      } else if (itterator === 7 && itterator === 13 && anchPhotos > 0) {
+        setItterator(itterator + 2);
+      }
     }
+    // setChapter(null)
+   
   }, [siteModal]);
 
   //Dive Site Modal Animation
@@ -356,7 +363,7 @@ export default function MapPage() {
         if (success) {
           let bully = success[0].UserName;
           if (bully == null || bully === "") {
-            setGuideModal(!guideModal);
+            setGuideModal(true);
             setTutorialRunning(true)
             setItterator(0)
           } else {

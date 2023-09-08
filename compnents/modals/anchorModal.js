@@ -26,6 +26,7 @@ import { AnimalSelectContext } from "../contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { ChapterContext } from "../contexts/chapterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ReverseContext } from "../contexts/reverseContext";
@@ -64,6 +65,7 @@ export default function AnchorModal(lat, lng) {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { chapter, setChapter } = useContext(ChapterContext);
   const { movingBack, setMovingBack } = useContext(ReverseContext);
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
@@ -170,19 +172,21 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleAnchorModalClose = () => {
-    if (itterator === 11) {
-      setGuideModal(true);
-    } 
 
-    if (itterator === 7) {
-      setGuideModal(false);
-    }
-
-    if (itterator === 13) {
-      setGuideModal(false);
-    }
-
-    setSiteModal(!siteModal);
+      if (itterator === 11) {
+        setGuideModal(true);
+      } 
+  
+      if (itterator === 7) {
+        setGuideModal(false);
+      }
+  
+      if (itterator === 13) {
+        setGuideModal(false);
+      }
+  
+      setSiteModal(false);
+    
   };
 
   const togglePhotoBoxModal = (photo) => {

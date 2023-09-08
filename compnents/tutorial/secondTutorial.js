@@ -29,6 +29,7 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { TutorialResetContext } from "../contexts/tutorialResetContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
+import { ChapterContext } from "../contexts/chapterContext";
 import {
   MaterialIcons,
   MaterialCommunityIcons,
@@ -52,6 +53,7 @@ export default function SecondTutorial() {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { chapter, setChapter} = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { setRegion } = useContext(MapRegionContext);

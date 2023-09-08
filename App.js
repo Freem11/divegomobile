@@ -54,6 +54,7 @@ import { Iterrator3Context } from "./compnents/contexts/iterrator3Context";
 import { MapHelperContext } from "./compnents/contexts/mapHelperContext";
 import { UserProfileContext } from "./compnents/contexts/userProfileContext";
 import { ReverseContext } from "./compnents/contexts/reverseContext";
+import { ChapterContext } from "./compnents/contexts/chapterContext";
 import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
@@ -88,6 +89,7 @@ export default function App() {
   const [itterator3, setItterator3] = useState(null);
   const [tutorialRunning, setTutorialRunning] = useState(false);
   const [tutorialReset, setTutorialReset] = useState(false);
+  const [chapter, setChapter] = useState(null);
 
   let currentMonth = new Date().getMonth() + 1;
   const [sliderVal, setSliderVal] = useState(currentMonth);
@@ -227,6 +229,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <ChapterContext.Provider value={{ chapter, setChapter }}>
       <AnchorPhotosContext.Provider value={{ anchPhotos, setAnchPhotos }}>
         <ReverseContext.Provider value={{ movingBack, setMovingBack }}>
           <UserProfileContext.Provider value={{ profile, setProfile }}>
@@ -404,6 +407,7 @@ export default function App() {
           </UserProfileContext.Provider>
         </ReverseContext.Provider>
       </AnchorPhotosContext.Provider>
+      </ChapterContext.Provider>
     </GestureHandlerRootView>
   );
 }

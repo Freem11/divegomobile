@@ -35,6 +35,7 @@ import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { ReverseContext } from "../contexts/reverseContext";
+import { ChapterContext } from "../contexts/chapterContext";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import anchorClustIOS from "../png/ClusterAnchor24.png";
 import anchorIconIOS from "../png/SiteAnchor20.png";
@@ -60,6 +61,7 @@ export default function IntroTutorial() {
   );
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { chapter, setChapter } = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { movingBack, setMovingBack } = useContext(ReverseContext);
   const [backHappened, setBackHappened] = useState(false);
@@ -73,24 +75,52 @@ export default function IntroTutorial() {
   }, []);
 
   useEffect(() => {
-    if (tutorialReset && profile[0].UserName){
-    setItterator(null);
-    setSiteModal(false);
-    setTutorialRunning(false);
-    setGuideModal(false);
-    characterX.value = scale(1000);
-    textBoxY.value = scale(1000);
-    picX.value = scale(-300);
-    exploreButtonY.value = scale(-1000);
-    clusterAnchorY.value = scale(-1200);
-    heatPotintY.value = scale(-1200);
-    arrowY.value = scale(-1200);
-    userBoxX.value = scale(-300);
-    nextTutX.value = scale(-300);
-    setTutorialReset(false)
+    if (tutorialReset && profile[0].UserName) {
+      setItterator(null);
+      setTutorialRunning(false);
+      setGuideModal(false);
+      setTutorialReset(false);
+      setSiteModal(false);
+      resetTutorial();
     }
   }, [tutorialReset]);
 
+  useEffect(() => {
+    console.log(chapter);
+    setSiteModal(false);
+    setMovingBack(false)
+    resetTutorial();
+
+    switch (chapter) {
+      case "Getting around the map":
+        setItterator(1);
+        setGuideModal(true);
+        characterX.value = withTiming(190)
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        picX.value = withSpring(0);
+        break;
+
+      case "Dive sites":
+        setItterator(6);
+        setGuideModal(true);
+        characterX.value = withTiming(190)
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        clusterAnchorY.value = withTiming(windowHeight * 0.4);
+        heatPotintY.value = withTiming(windowHeight * 0.25);
+        nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
+        break;
+
+      case "Changed dive site":
+        setItterator(12);
+        setGuideModal(true);
+        characterX.value = withTiming(190)
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
+        nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
+        break;
+    }
+    // setChapter(null)
+  }, [chapter]);
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
@@ -113,6 +143,18 @@ export default function IntroTutorial() {
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
+  };
+
+  const resetTutorial = async () => {
+    characterX.value = scale(1000);
+    textBoxY.value = scale(1000);
+    picX.value = scale(-300);
+    exploreButtonY.value = scale(-1000);
+    clusterAnchorY.value = scale(-1200);
+    heatPotintY.value = scale(-1200);
+    arrowY.value = scale(-1200);
+    userBoxX.value = scale(-300);
+    nextTutX.value = scale(-300);
   };
 
   const handleSecondTutorialStartup = () => {
@@ -265,13 +307,17 @@ export default function IntroTutorial() {
       if (textPrinting) {
         textPrinter = setInterval(printOutText, 40);
       } else if (itterator === 6 && !textPrinting) {
-        let val1 = Platform.OS === "ios" ? textVal.slice(0, 147) : textVal.slice(0, 145);
-        let val2 = Platform.OS === "ios" ? textVal.slice(-64) : textVal.slice(-68);
+        let val1 =
+          Platform.OS === "ios" ? textVal.slice(0, 147) : textVal.slice(0, 145);
+        let val2 =
+          Platform.OS === "ios" ? textVal.slice(-64) : textVal.slice(-68);
         setTextRead(val1);
         setTextRead2(val2);
       } else if (itterator === 8 && !textPrinting) {
-        let val1 = Platform.OS === "ios" ? textVal.slice(0, 133) : textVal.slice(0, 131);
-        let val2 = Platform.OS === "ios" ? textVal.slice(-62) : textVal.slice(-65);
+        let val1 =
+          Platform.OS === "ios" ? textVal.slice(0, 133) : textVal.slice(0, 131);
+        let val2 =
+          Platform.OS === "ios" ? textVal.slice(-62) : textVal.slice(-65);
         setTextRead(val1);
         setTextRead2(val2);
       } else {
@@ -285,40 +331,52 @@ export default function IntroTutorial() {
   useEffect(() => {
     if (itterator === 0) {
       setTimeout(() => {
-        startCharacterAnimation();
+        characterX.value = withTiming(190);
+        // startCharacterAnimation();
       }, 400);
 
       setTimeout(() => {
-        startTextBoxAnimation();
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        // startTextBoxAnimation();
         setupText(0);
       }, 600);
     }
 
+    console.log(itterator)
     if (itterator === 1) {
-      startPicAnimation();
+      picX.value = withSpring(0);
+      // startPicAnimation();
     }
 
-    if (itterator === 4 || itterator === 5) {
-      startExploreButtonAnimation();
+    if (itterator === 4) {
+      exploreButtonY.value = withTiming(windowHeight * 0.4);
+      // startExploreButtonAnimation();
     }
 
     if (itterator === 5) {
-      startClusterAnchorAnimation();
+      exploreButtonY.value = withTiming(scale(-1000));
+      clusterAnchorY.value = withTiming(windowHeight * 0.4);
+      // startClusterAnchorAnimation();
     }
 
     if (itterator === 6) {
-      startHeatPointAnimation();
+      heatPotintY.value = withTiming(windowHeight * 0.25);
+      // startHeatPointAnimation();
     }
 
     if (itterator === 7) {
+      console.log("& at all?", movingBack)
       if (movingBack) {
         setMovingBack(false);
         setGuideModal(false);
         return;
       } else {
+        console.log("triggered 7?")
         setGuideModal(false);
-        startHeatPointAnimation();
-        startClusterAnchorAnimation();
+        heatPotintY.value = withTiming(scale(-1200));
+        // startHeatPointAnimation();
+        clusterAnchorY.value = withTiming(scale(-1200));
+        // startClusterAnchorAnimation();
       }
     }
 
@@ -338,7 +396,8 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 12) {
-      startArrowAnimation();
+      arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
+      // startArrowAnimation();
     }
 
     if (itterator === 13) {
@@ -349,13 +408,15 @@ export default function IntroTutorial() {
         return;
       } else {
         setGuideModal(false);
-        startArrowAnimation();
+        arrowY.value = withTiming(scale(-1200));
+        // startArrowAnimation();
       }
     }
 
     if (itterator === 14) {
       if (backCount === 0) {
-        startArrowAnimation();
+        arrowY.value = withTiming(scale(-1200));
+        // startArrowAnimation();
         setBackCount((prev) => prev + 1);
       }
       if (backHappened) {
@@ -378,31 +439,38 @@ export default function IntroTutorial() {
         setItterator((prev) => prev + 1);
         return;
       }
-      startUserBoxAnimation();
+      userBoxX.value = withSpring(windowWidth * 0.2);
+      // startUserBoxAnimation();
     }
 
     if (itterator === 18) {
       getProfile();
-      if (userBoxX.value !== scale(-300)) {
-        startUserBoxAnimation();
-      }
+      // if (userBoxX.value !== scale(-300)) {
+        userBoxX.value = withTiming(scale(-300));
+        // startUserBoxAnimation();
+      // }
 
-      startNextTutAnimation();
+      nextTutX.value = withSpring(windowWidth * 0.3);
+      // startNextTutAnimation();
     }
 
     if (itterator === 19) {
-      setSiteModal(!siteModal);
-      startNextTutAnimation();
+      setSiteModal(false);
+      
+      nextTutX.value = withTiming(scale(-300));
+      // startNextTutAnimation();
     }
 
     if (itterator === feederArray.length - 1) {
       setItterator(null);
       setTutorialRunning(false);
       setGuideModal(false);
-      startCharacterAnimation();
-      startTextBoxAnimation();
+      characterX.value = withTiming(scale(1000));
+      // startCharacterAnimation();
+      textBoxY.value = withTiming(scale(1000));
+      // startTextBoxAnimation();
       setBackHappened(false);
-      setMovingBack(false)
+      setMovingBack(false);
       setBackCount(0);
     }
   }, [itterator]);
@@ -586,9 +654,13 @@ export default function IntroTutorial() {
       hopper = 1;
     }
     setItterator((prev) => prev + hopper);
-    startPicAnimation();
+    picX.value = withTiming(scale(-300));
+    // startPicAnimation();
   };
 
+  const nudgeMap = (values) => {
+    setMapCenter({ lat: values.lat, lng: values.lng });
+  };
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
       <View style={styles.wrapper}>

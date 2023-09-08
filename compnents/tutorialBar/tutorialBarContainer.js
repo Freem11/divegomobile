@@ -1,41 +1,117 @@
 import React from "react";
-import { useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale } from "react-native-size-matters";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TutorialResetContext } from "../contexts/tutorialResetContext";
+import { IterratorContext } from "../contexts/iterratorContext";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { ChapterContext } from "../contexts/chapterContext";
 
 export default function TutorialBar() {
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
+  const { itterator, setItterator } = useContext(IterratorContext);
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+
+  const { chapter, setChapter } = useContext(ChapterContext);
+  const [tutorialList, setTutorialList] = useState(null);
+  const [count, setCount] = useState(0);
+
+  const Tut1List = [
+    "Getting around the map",
+    "Dive sites",
+    "Changed dive site",
+  ];
+  const Tut2List = ["Checking for a dive site", "Adding your dive sites"];
+  const Tut3List = [
+    "Contributing photos overview",
+    "Adding your photo",
+    "Name that sea creature!",
+    "Dropping the pin",
+  ];
 
   const handleClearTutorial = async () => {
     setTutorialReset(true);
   };
+
+  const handleList = async () => {
+    setCount((prev) => prev + 1);
+
+    if (count % 2 !== 0) {
+      setTutorialList(null);
+    } else {
+      if (itterator !== null) {
+        setTutorialList(Tut1List);
+      }
+      if (itterator2 !== null) {
+        setTutorialList(Tut2List);
+      }
+      if (itterator3 !== null) {
+        setTutorialList(Tut3List);
+      }
+    }
+  };
+
+  const handleShift = async (listItem) => {
+    setChapter(listItem);
+    setTutorialList(null)
+  };
+
   return (
     <View style={styles.container} pointerEvents={"box-none"}>
-      <TouchableWithoutFeedback
-        onPress={() => console.log("menu tapped")}
-        style={{
-          width: 28,
-          height: 32,
-        }}
-      >
-        <View
+      <View style={{ flexDirection: "column" }}>
+        <TouchableWithoutFeedback
+          onPress={handleList}
           style={{
-            backgroundColor: "lightgrey",
-            borderRadius: 10,
-            padding: 2,
+            width: scale(28),
+            height: scale(32),
           }}
         >
-          <MaterialIcons name="menu" size={26} color="white" />
+          <View
+            style={{
+              backgroundColor: "lightgrey",
+              borderRadius: 10,
+              padding: scale(2),
+              width: scale(30),
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <MaterialIcons name="menu" size={scale(26)} color="white" />
+          </View>
+        </TouchableWithoutFeedback>
+
+        <View style={styles.library}>
+          {tutorialList &&
+            tutorialList.length > 0 &&
+            tutorialList.map((listItem) => {
+              return (
+                <TouchableWithoutFeedback key={listItem} onPress={() => handleShift(listItem)}>
+                <View key={listItem} style={styles.chapter} onPress={() => handleShift(listItem)}>
+                  <Text
+                  onPress={() =>  handleShift(listItem)}
+                    style={{
+                      fontFamily: "PatrickHand_400Regular",
+                      fontSize: scale(15),
+                      color: "white",
+                    }}
+                  >
+                    {listItem}
+                  </Text>
+                </View>
+                </TouchableWithoutFeedback>
+              );
+            })}
         </View>
-      </TouchableWithoutFeedback>
+      </View>
 
       <TouchableWithoutFeedback
         onPress={handleClearTutorial}
         style={{
           width: 50,
-          height: 32,
+          height: scale(32),
           borderRadius: 15,
           alignItems: "center",
           justifyContent: "center",
@@ -45,12 +121,12 @@ export default function TutorialBar() {
           style={{
             position: "absolute",
             right: 0,
-            height: 30,
+            height: scale(30),
             width: "25%",
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "maroon",
-            borderRadius: 15,
+            borderRadius: scale(15),
             paddingRight: 5,
             paddingLeft: 5,
           }}
@@ -74,5 +150,19 @@ const styles = StyleSheet.create({
   container: {
     width: "95%",
     flexDirection: "row",
+  },
+  library: {
+    zIndex: 60,
+    height: "auto",
+    width: "auto",
+    borderRadius: 15,
+    backgroundColor: "#538dbd",
+  },
+  chapter: {
+    justifyContent: "center",
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
 });

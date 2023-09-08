@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { TutorialContext } from "./contexts/tutorialContext";
+import { IterratorContext } from "./contexts/iterratorContext";
 import { MapBoundariesContext } from "./contexts/mapBoundariesContext";
 import { MapRegionContext } from "./contexts/mapRegionContext";
 import { MapZoomContext } from "./contexts/mapZoomContext";
@@ -49,6 +50,7 @@ export default function Map() {
   const { masterSwitch } = useContext(MasterContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { itterator, setItterator } = useContext(IterratorContext);
   const { region, setRegion } = useContext(MapRegionContext);
   const { boundaries, setBoundaries } = useContext(MapBoundariesContext);
   const { zoomlev, setZoomLev } = useContext(MapZoomContext);
@@ -216,7 +218,7 @@ export default function Map() {
 
   useEffect(() => {
     let zoomHelp
-    if (tutorialRunning){
+    if (tutorialRunning && itterator === 6 || itterator === 12){
       zoomHelp = 8
     }
 
@@ -258,7 +260,7 @@ export default function Map() {
     });
     filterAnchorPhotos()
     // -----------------------------------------------------------------------------
-    setSiteModal(!siteModal);
+    setSiteModal(true);
   };
 
   const [siteCloseState, setSiteCloseState] = useState(false);
