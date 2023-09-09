@@ -162,7 +162,7 @@ export default function PicUploadModal() {
   useEffect(() => {
     if(chapter === null){
     if (tutorialRunning) {
-      if (itterator3 > 0) {
+      if (itterator3 > 0 && itterator3 !== 17) {
         setItterator3(itterator3 + 1);
       }
     }
@@ -178,12 +178,12 @@ export default function PicUploadModal() {
   const onNavigate = () => {
     setMapHelper(true);
     setMasterSwitch(false);
-    setPicAdderModal(false);
-    // if (tutorialRunning) {
-    //   if (itterator3 > 0) {
-    //     setItterator3(itterator3 + 1);
-    //   }
-    // }
+    // setPicAdderModal(false);
+    if (tutorialRunning) {
+      if (itterator3 === 16) {
+        setItterator3(itterator3 + 1);
+      }
+    }
   };
 
   useEffect(() => {

@@ -299,6 +299,15 @@ export default function SecondTutorial() {
     }
 
     if (itterator2 === 5) {
+      setChapter(null)
+      setTimeout(() => {
+        characterX.value = withTiming(190);
+      }, 400);
+
+      setTimeout(() => {
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setupText(0);
+      }, 600);
       setSecondGuideModal(false);
     }
 
@@ -313,6 +322,15 @@ export default function SecondTutorial() {
 
     console.log(itterator2)
     if (itterator2 === 9) {
+      setChapter(null)
+      setTimeout(() => {
+        characterX.value = withTiming(190);
+      }, 400);
+
+      setTimeout(() => {
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setupText(0);
+      }, 600);
       diveSiteY.value = withTiming(scale(-1000));
       // startDiveSiteAnimation();
       setSecondGuideModal(false);

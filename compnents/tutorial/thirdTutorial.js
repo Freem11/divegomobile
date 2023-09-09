@@ -30,6 +30,7 @@ import { DSAdderContext } from "../contexts/DSModalContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
 import { ChapterContext } from "../contexts/chapterContext";
+import { MasterContext } from "../contexts/masterContext";
 
 import {
   MaterialIcons,
@@ -59,6 +60,7 @@ export default function ThirdTutorial() {
   const { chapter, setChapter} = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { setMapCenter } = useContext(MapCenterContext);
+  const { setMasterSwitch } = useContext(MasterContext);
 
   useEffect(() => {
     getProfile();
@@ -70,6 +72,7 @@ export default function ThirdTutorial() {
       setPicAdderModal(false);
       setTutorialRunning(false);
       setThirdGuideModal(false);
+      setMasterSwitch(true)
       resetTutorial();
       setChapter(null)
     }
@@ -77,12 +80,14 @@ export default function ThirdTutorial() {
 
   useEffect(() => {
     console.log(chapter);
-    setPicAdderModal(false);
+  
+    setMasterSwitch(true);
     resetTutorial();
 
     switch (chapter) {
       case "Contributing photos overview":
         setItterator3(3);
+        setPicAdderModal(false);
         setThirdGuideModal(true);
         characterX.value = withTiming(190);
         textBoxY.value = withTiming(windowHeight * 0.85);
@@ -308,6 +313,15 @@ const text26 = "";
     }
 
     if (itterator3 === 5) {
+      setChapter(null)
+      setTimeout(() => {
+        characterX.value = withTiming(190);
+      }, 400);
+
+      setTimeout(() => {
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setupText(0);
+      }, 600);
       photoY.value = withTiming(scale(-1000));
       // startPhotoButtonAnimation();
       setThirdGuideModal(false);
@@ -339,12 +353,24 @@ const text26 = "";
     if (itterator3 === 12) {
       setThirdGuideModal(true);
     }
+    if (itterator3 === 13) {
+      setChapter(null)
+      setTimeout(() => {
+        characterX.value = withTiming(190);
+      }, 400);
+
+      setTimeout(() => {
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setupText(0);
+      }, 600);
+    }
 
     if (itterator3 === 14) {
       setThirdGuideModal(false);
     }
 
     if (itterator3 === 15) {
+      
       setThirdGuideModal(true);
       setTimeout(() => {
         pinY.value = withTiming(windowHeight * 0.4);
@@ -353,12 +379,22 @@ const text26 = "";
     }
 
     if (itterator3 === 16) {
+      setChapter(null)
+      setTimeout(() => {
+        characterX.value = withTiming(190);
+      }, 400);
+
+      setTimeout(() => {
+        textBoxY.value = withTiming(windowHeight * 0.85);
+        setupText(0);
+      }, 600);
       setThirdGuideModal(false);
       pinY.value = withTiming(scale(-1000));
       // startPinAnimation();
     }
    
     if (itterator3 === 17) {
+      setPicAdderModal(false)
       setThirdGuideModal(true);
       setTimeout(() => {
         mantaY.value = withTiming(windowHeight * 0.4);
