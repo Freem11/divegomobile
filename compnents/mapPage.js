@@ -629,13 +629,15 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   tutorialBar: {
-    width: "95%",
+    width: "25%",
     position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "space-between",
+    left: "5%",
+    // justifyContent: "center",
+    // alignItems: "center",
+    // alignContent: "space-between",
     top: Platform.OS === "ios" ? "6%" : "2%",
     zIndex: 55,
+    // backgroundColor:"pink"
   },
   Hist: {
     alignItems: "center",

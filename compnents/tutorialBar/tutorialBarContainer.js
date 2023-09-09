@@ -76,7 +76,8 @@ export default function TutorialBar() {
               padding: scale(2),
               width: scale(30),
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
+              marginBottom: "5%"
             }}
           >
             <MaterialIcons name="menu" size={scale(26)} color="white" />
@@ -120,9 +121,9 @@ export default function TutorialBar() {
         <View
           style={{
             position: "absolute",
-            right: 0,
+            left: scale(50),
             height: scale(30),
-            width: "25%",
+            width: "100%",
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "maroon",
@@ -148,13 +149,13 @@ export default function TutorialBar() {
 
 const styles = StyleSheet.create({
   container: {
-    width: "95%",
-    flexDirection: "row",
+    width: "100%",
+    // backgroundColor: 'blue'
   },
   library: {
     zIndex: 60,
     height: "auto",
-    width: "auto",
+    width: "210%",
     borderRadius: 15,
     backgroundColor: "#538dbd",
   },
@@ -164,5 +165,6 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 2,
     paddingBottom: 2,
+    // backgroundColor: "#538dbd",
   },
 });
