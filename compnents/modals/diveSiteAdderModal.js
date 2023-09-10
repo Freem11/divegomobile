@@ -207,6 +207,7 @@ export default function DiveSiteModal() {
         //  console.log("pinnies!", addSiteVals)
         insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
+          ...addSiteVals,
           Site: "",
           Latitude: "",
           Longitude: "",
@@ -227,6 +228,7 @@ export default function DiveSiteModal() {
 
         if (diveSiteAdderModal) {
           setAddSiteVals({
+            ...addSiteVals,
             Site: "",
             Latitude: "",
             Longitude: "",
@@ -238,6 +240,7 @@ export default function DiveSiteModal() {
 
       if (diveSiteAdderModal) {
         setAddSiteVals({
+          ...addSiteVals,
           Site: "",
           Latitude: "",
           Longitude: "",

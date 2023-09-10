@@ -43,7 +43,7 @@ export default function SecondTutorial() {
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
-  const { setAddSiteVals } = useContext(DiveSpotContext);
+  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
@@ -107,6 +107,7 @@ export default function SecondTutorial() {
     diveSiteY.value = scale(-1000);
     nextTutX.value = -300;
     setAddSiteVals({
+      ...addSiteVals,
       Site: "",
       Latitude: "",
       Longitude: "",
@@ -347,10 +348,10 @@ export default function SecondTutorial() {
 
     if (itterator2 === 19) {
       setAddSiteVals({
+        ...addSiteVals,
         Site: "",
         Latitude: "",
         Longitude: "",
-        UserID: null,
       });
       nextTutX.value = withTiming(-300);
       // startNextTutAnimation();

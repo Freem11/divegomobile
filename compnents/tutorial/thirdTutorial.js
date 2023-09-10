@@ -41,7 +41,7 @@ export default function ThirdTutorial() {
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
-  const { setPinValues } = useContext(PinContext);
+  const { pinValues, setPinValues } = useContext(PinContext);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
@@ -71,6 +71,7 @@ export default function ThirdTutorial() {
       setMasterSwitch(true);
       setUploadedFile(null);
       setPinValues({
+        ...pinValues,
         PicFile: null,
         Animal: "",
         PicDate: "",
@@ -98,6 +99,7 @@ export default function ThirdTutorial() {
         textBoxY.value = withTiming(windowHeight * 0.85);
         setUploadedFile(null);
         setPinValues({
+          ...pinValues,
           PicFile: null,
           Animal: "",
           PicDate: "",
@@ -436,13 +438,13 @@ export default function ThirdTutorial() {
 
     if (itterator3 === 26) {
       setPinValues({
+        ...pinValues,
         PicFile: null,
         Animal: "",
         PicDate: "",
         Latitude: "",
         Longitude: "",
         DDVal: "0",
-        UserId: null,
       });
       setUploadedFile(null);
       setPicAdderModal(false);

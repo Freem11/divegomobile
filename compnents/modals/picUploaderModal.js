@@ -319,7 +319,8 @@ export default function PicUploadModal() {
       } else {
         // console.log("pinnies!", pinValues)
         insertPhotoWaits(pinValues);
-        setPinValues({
+        setPinValues({ 
+          ...pinValues,
           PicFile: null,
           Animal: "",
           PicDate: "",
@@ -429,6 +430,7 @@ export default function PicUploadModal() {
 
         if (picAdderModal) {
           setPinValues({
+            ...pinValues,
             PicFile: null,
             Animal: "",
             PicDate: "",
@@ -452,6 +454,7 @@ export default function PicUploadModal() {
 
       if (picAdderModal) {
         setPinValues({
+          ...pinValues,
           PicFile: null,
           Animal: "",
           PicDate: "",
