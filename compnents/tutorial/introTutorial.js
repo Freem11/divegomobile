@@ -983,7 +983,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     textAlign: "center",
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(15),
     marginLeft: scale(10),
