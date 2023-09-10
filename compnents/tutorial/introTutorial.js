@@ -985,7 +985,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
-    fontSize: scale(15),
+    fontSize: scale(13),
     marginLeft: scale(10),
   },
   buttonwrapper: {
