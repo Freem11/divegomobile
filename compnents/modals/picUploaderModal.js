@@ -160,13 +160,13 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   useEffect(() => {
-    if(chapter === null){
-    if (tutorialRunning) {
-      if (itterator3 > 0 && itterator3 !== 17) {
-        setItterator3(itterator3 + 1);
+    if (chapter === null) {
+      if (tutorialRunning) {
+        if (itterator3 > 0 && itterator3 !== 17) {
+          setItterator3(itterator3 + 1);
+        }
       }
     }
-  }
   }, [picAdderModal]);
 
   useEffect(() => {
@@ -178,7 +178,9 @@ export default function PicUploadModal() {
   const onNavigate = () => {
     setMapHelper(true);
     setMasterSwitch(false);
-    // setPicAdderModal(false);
+    if (!tutorialRunning) {
+      setPicAdderModal(false);
+    }
     if (tutorialRunning) {
       if (itterator3 === 16) {
         setItterator3(itterator3 + 1);
@@ -517,7 +519,9 @@ export default function PicUploadModal() {
             name="picture-o"
             color="gold"
             size={scale(24)}
-            style={{ marginLeft: Platform.OS === "android" ? scale(10) : scale(10) }}
+            style={{
+              marginLeft: Platform.OS === "android" ? scale(10) : scale(10),
+            }}
           />
           <Text
             style={{
@@ -867,7 +871,7 @@ const styles = StyleSheet.create({
   },
   lowerZone: {
     flexDirection: "row",
-    marginTop:  windowWidth > 700 ? scale(5) : scale(20),
+    marginTop: windowWidth > 700 ? scale(5) : scale(20),
     width: windowWidth > 700 ? "50%" : "100%",
     // backgroundColor: "green",
     height: "32%",
