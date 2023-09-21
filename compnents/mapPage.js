@@ -21,6 +21,7 @@ import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
+import PhotoFilterer from "./photoMenu/photoFilter";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { PictureAdderContext } from "./contexts/picModalContext";
@@ -105,7 +106,7 @@ export default function MapPage() {
       if (photos) {
         let count = 0;
         photos.forEach((obj) => {
-           count ++
+          count++;
         });
         setAnchPhotos(count);
       }
@@ -164,16 +165,15 @@ export default function MapPage() {
 
   useEffect(() => {
     startAnchorModalAnimations();
-    filterAnchorPhotos()
-    if(chapter === null){
-      if (itterator > 0 && itterator !== 7 && itterator !== 13 ) {
+    filterAnchorPhotos();
+    if (chapter === null) {
+      if (itterator > 0 && itterator !== 7 && itterator !== 13) {
         setItterator(itterator + 1);
       } else if (itterator === 7 && itterator === 13 && anchPhotos > 0) {
         setItterator(itterator + 2);
       }
     }
     // setChapter(null)
-   
   }, [siteModal]);
 
   //Dive Site Modal Animation
@@ -363,8 +363,8 @@ export default function MapPage() {
           let bully = success[0].UserName;
           if (bully == null || bully === "") {
             setGuideModal(true);
-            setTutorialRunning(true)
-            setItterator(0)
+            setTutorialRunning(true);
+            setItterator(0);
           } else {
             setProfile(success);
             setPinValues({
@@ -392,8 +392,7 @@ export default function MapPage() {
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
           <KeyboardAvoidingView style={styles.container} behavior="height">
-
-          {tutorialRunning && (
+            {tutorialRunning && (
               <View style={styles.tutorialBar}>
                 <TutorialBar style={{ zIndex: 55 }} />
               </View>
@@ -402,6 +401,12 @@ export default function MapPage() {
             {masterSwitch && (
               <View style={styles.carrousel}>
                 <PhotoMenu style={{ zIndex: 3 }} />
+              </View>
+            )}
+
+            {masterSwitch && (
+              <View style={styles.carrousel}>
+                <PhotoFilterer style={{ zIndex: 3 }} />
               </View>
             )}
 
@@ -417,7 +422,7 @@ export default function MapPage() {
                   name="tags"
                   color="#355D71"
                   size={24}
-                  style={{ position: "absolute", left: "87.5%", top: "13%" }}
+                  // style={{ position: "absolute", left: "87.5%", top: "13%" }}
                 />
               </TouchableWithoutFeedback>
             )}
@@ -625,6 +630,17 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     //Constants.statusBarHeight +
+    top: Platform.OS === "ios" ? "3%" : "0%",
+    zIndex: 2,
+  },
+  carrousel: {
+    flex: 1,
+    position: "absolute",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignContent: "center",
+    alignItems: "center",
+    width: "50%",
     top: Platform.OS === "ios" ? "3%" : "0%",
     zIndex: 2,
   },

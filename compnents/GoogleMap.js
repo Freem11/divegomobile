@@ -188,7 +188,7 @@ export default function Map() {
           latitude: selectedDiveSite.Latitude,
           longitude: selectedDiveSite.Longitude,
         },
-        zoom: 12,
+        zoom: 16,
       });
       setTempMarker([selectedDiveSite.Latitude, selectedDiveSite.Longitude]);
 

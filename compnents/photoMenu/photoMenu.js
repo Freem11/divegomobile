@@ -12,6 +12,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { HeatPointsContext } from "../contexts/heatPointsContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
+import { SearchTextContext } from "../contexts/searchTextContext";
 import { scale } from "react-native-size-matters";
 import { formatHeatVals } from "../helpers/mapHelpers";
 import PhotoMenuListItem from "./photoMenuListItem";
@@ -23,6 +24,7 @@ export default function PhotoMenu() {
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
   const [areaPics, setAreaPics] = useState([]);
+  const { textvalue, setTextValue } = useContext(SearchTextContext);
 
   const [picMenuSize, setPicMenuSize] = useState(0);
 
@@ -86,12 +88,14 @@ export default function PhotoMenu() {
     if (boundaries[0] > boundaries[2]) {
       try {
         const AmericanPhotos = await getPhotosforMapArea({
+          animal: textvalue,
           minLat: boundaries[1],
           maxLat: boundaries[3],
           minLng: -180,
           maxLng: boundaries[2],
         });
         const AsianPhotos = await getPhotosforMapArea({
+          animal: textvalue,
           minLat: boundaries[1],
           maxLat: boundaries[3],
           minLng: boundaries[0],
@@ -115,6 +119,7 @@ export default function PhotoMenu() {
     } else {
       try {
         const photos = await getPhotosforMapArea({
+          animal: textvalue,
           minLat: boundaries[1],
           maxLat: boundaries[3],
           minLng: boundaries[0],
@@ -169,7 +174,7 @@ export default function PhotoMenu() {
 
   useEffect(() => {
     filterPhotosForMapArea();
-  }, [boundaries]);
+  }, [boundaries, textvalue]);
 
   return (
     <GestureDetector gesture={animatePicMenu}>

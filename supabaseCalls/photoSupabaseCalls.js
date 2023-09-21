@@ -176,6 +176,7 @@ if (data) {
     const { data, error } = await supabase
     .from("photos")
     .select()
+    .ilike("label", "%" + value.animal + "%")
     .gte("latitude", value.minLat)
     .gte("longitude", value.minLng)
     .lte("latitude", value.maxLat)
