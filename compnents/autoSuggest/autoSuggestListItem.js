@@ -35,7 +35,7 @@ const AutoSuggestListItem = (props) => {
 
 const styles = StyleSheet.create({
   suggestion: {
-    zIndex: 100,
+    zIndex: 2,
     width: 165,
     height: 25,
     marginTop: 1,

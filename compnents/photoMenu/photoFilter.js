@@ -29,9 +29,9 @@ const { textvalue, setTextValue } = useContext(SearchTextContext);
       ></TextInput>
           <TouchableOpacity
           style={{
-            width: 18,
-            height: 18,
-            zIndex: 10
+            width: "100%",
+            height: "350%",
+            zIndex: 3
           }}
         >
       <View style={[styles.xButton,  {opacity: textvalue.length > 0 ? 1 : 0}]}>
@@ -47,27 +47,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    position: "absolute",
     backgroundColor: "white",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
     zIndex: 2,
-    top: scale(120),
-    height: scale(25),
+    height: "100%",
     width: "100%",
     borderRadius: scale(10),
-    padding: 10,
+    paddingRight: 5,
     paddingLeft: 12,
     fontSize: "2rem",
   },
   suggestInput: {
     height: "100%",
-    width: "90%",
-    height: 30
+    width: "86%",
+    height: "350%"
   },
   xButton: {
-    marginTop: "0%",
-    marginLeft: "0%",
+    marginTop: "190%",
   },
 });

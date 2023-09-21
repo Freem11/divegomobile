@@ -13,6 +13,8 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { HeatPointsContext } from "../contexts/heatPointsContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SearchTextContext } from "../contexts/searchTextContext";
+import { AreaPicsContext } from "../contexts/areaPicsContext";
+
 import { scale } from "react-native-size-matters";
 import { formatHeatVals } from "../helpers/mapHelpers";
 import PhotoMenuListItem from "./photoMenuListItem";
@@ -23,7 +25,10 @@ export default function PhotoMenu() {
   );
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
-  const [areaPics, setAreaPics] = useState([]);
+  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
+
+  // const [areaPics, setAreaPics] = useState([]);
+
   const { textvalue, setTextValue } = useContext(SearchTextContext);
 
   const [picMenuSize, setPicMenuSize] = useState(0);

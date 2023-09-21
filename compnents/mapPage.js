@@ -47,13 +47,17 @@ import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
 import { TutorialContext } from "./contexts/tutorialContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
+import { SearchTextContext } from "./contexts/searchTextContext";
+import { AreaPicsContext } from "./contexts/areaPicsContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useDerivedValue,
   withTiming,
+  interpolate,
 } from "react-native-reanimated";
 import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
@@ -75,6 +79,9 @@ export default function MapPage() {
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+
+  const { textvalue, setTextValue } = useContext(SearchTextContext);
+  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
 
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
@@ -333,6 +340,27 @@ export default function MapPage() {
     }
   };
 
+  const pullTabHeight = useSharedValue(0);
+
+  const tabPullHeigth = useDerivedValue(() => {
+    return interpolate(pullTabHeight.value, [0, 1], [0, 25]);
+  });
+
+  const tabPull = useAnimatedStyle(() => {
+    return {
+      height: tabPullHeigth.value,
+    };
+  });
+
+  const startPullTabAnimation = () => {
+    if (pullTabHeight.value === 0) {
+      pullTabHeight.value = withTiming(1);
+    } else {
+      pullTabHeight.value = withTiming(0);
+      setTextValue("");
+    }
+  };
+
   const onNavigate = () => {
     setPinValues({
       ...pinValues,
@@ -391,7 +419,7 @@ export default function MapPage() {
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
-          <KeyboardAvoidingView style={styles.container} behavior="height">
+          <View style={styles.container}>
             {tutorialRunning && (
               <View style={styles.tutorialBar}>
                 <TutorialBar style={{ zIndex: 55 }} />
@@ -405,15 +433,24 @@ export default function MapPage() {
             )}
 
             {masterSwitch && (
-              <View style={styles.carrousel}>
-                <PhotoFilterer style={{ zIndex: 3 }} />
+              //  <KeyboardAvoidingView behavior="height" enabled={false}>
+              <View style={styles.filterer}>
+                {areaPics && areaPics.length > 0 && (
+                  <View style={styles.emptyBox}>
+                  <Animated.View style={[tabPull, styles.closer]}>
+                  <PhotoFilterer />
+                </Animated.View>
+             
+                <TouchableWithoutFeedback onPress={startPullTabAnimation}>
+                  <View style={styles.pullTab}></View>
+                </TouchableWithoutFeedback>
+                </View>
+   )}
+                <View style={styles.animalSelect}>
+                  <AnimalTopAutoSuggest transTagsY={transTagsY} />
+                </View>
               </View>
-            )}
-
-            {masterSwitch && (
-              <View style={styles.animalSelect}>
-                <AnimalTopAutoSuggest transTagsY={transTagsY} />
-              </View>
+              // {/* </KeyboardAvoidingView> */}
             )}
 
             {masterSwitch && (
@@ -422,7 +459,7 @@ export default function MapPage() {
                   name="tags"
                   color="#355D71"
                   size={24}
-                  // style={{ position: "absolute", left: "87.5%", top: "13%" }}
+                  style={{ position: "absolute", left: "87.5%", top: "13%" }}
                 />
               </TouchableWithoutFeedback>
             )}
@@ -512,7 +549,7 @@ export default function MapPage() {
             </Animated.View>
 
             <Map style={{ zIndex: 1 }} />
-          </KeyboardAvoidingView>
+          </View>
         </DiveSitesContext.Provider>
       </MapCenterContext.Provider>
     </MonthSelectContext.Provider>
@@ -561,11 +598,8 @@ const styles = StyleSheet.create({
   animalSelect: {
     display: "flex",
     flexDirection: "row",
-    position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    //Constants.statusBarHeight + 100 +
-    top: Platform.OS === "ios" ? 160 : 100,
     zIndex: 1,
   },
   Fbuttons: {
@@ -633,15 +667,27 @@ const styles = StyleSheet.create({
     top: Platform.OS === "ios" ? "3%" : "0%",
     zIndex: 2,
   },
-  carrousel: {
+  filterer: {
     flex: 1,
+    alignSelf: "center",
+    flexDirection: "column",
     position: "absolute",
     justifyContent: "center",
     flexDirection: "column",
     alignContent: "center",
     alignItems: "center",
     width: "50%",
-    top: Platform.OS === "ios" ? "3%" : "0%",
+    top: "16.8%",
+    zIndex: 2,
+  },
+  emptyBox: {
+    flex: 1,
+    alignSelf: "center",
+    flexDirection: "column",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignContent: "center",
+    alignItems: "center",
     zIndex: 2,
   },
   tutorialBar: {
@@ -683,5 +729,16 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     zIndex: 25,
     left: 0,
+  },
+  pullTab: {
+    height: 10,
+    width: 100,
+    backgroundColor: "gold",
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
+  },
+  closer: {
+    width: "100%",
+    // zIndex: 2
   },
 });
