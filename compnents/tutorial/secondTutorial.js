@@ -88,14 +88,14 @@ export default function SecondTutorial() {
         setItterator2(1);
         setSecondGuideModal(true);
         characterX.value = withTiming(190);
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         break;
 
       case "Adding your dive sites":
         setItterator2(8);
         setSecondGuideModal(true);
         characterX.value = withTiming(190);
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         break;
     }
   }, [chapter]);
@@ -306,7 +306,7 @@ export default function SecondTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setupText(0);
       }, 600);
       setSecondGuideModal(false);
@@ -329,7 +329,7 @@ export default function SecondTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setupText(0);
       }, 600);
       diveSiteY.value = withTiming(scale(-1000));
@@ -409,7 +409,7 @@ export default function SecondTutorial() {
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === 1000) {
-      textBoxY.value = withTiming(windowHeight * 0.85);
+      textBoxY.value = withTiming(windowHeight * 0.80);
     } else {
       textBoxY.value = withTiming(1000);
     }

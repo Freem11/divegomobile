@@ -97,7 +97,7 @@ export default function IntroTutorial() {
         setItterator(1);
         setGuideModal(true);
         characterX.value = withTiming(190)
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         picX.value = withSpring(0);
         break;
 
@@ -107,7 +107,7 @@ export default function IntroTutorial() {
         setItterator(6);
         setGuideModal(true);
         characterX.value = withTiming(190)
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         clusterAnchorY.value = withTiming(windowHeight * 0.4);
         heatPotintY.value = withTiming(windowHeight * 0.25);
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
@@ -119,7 +119,7 @@ export default function IntroTutorial() {
         setItterator(12);
         setGuideModal(true);
         characterX.value = withTiming(190)
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
         break;
@@ -341,7 +341,7 @@ export default function IntroTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.8);
         // startTextBoxAnimation();
         setupText(0);
       }, 600);
@@ -555,7 +555,7 @@ export default function IntroTutorial() {
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === scale(1000)) {
-      textBoxY.value = withTiming(windowHeight * 0.85);
+      textBoxY.value = withTiming(windowHeight * 0.80);
     } else {
       textBoxY.value = withTiming(scale(1000));
     }

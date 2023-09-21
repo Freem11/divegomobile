@@ -96,7 +96,7 @@ export default function ThirdTutorial() {
         setPicAdderModal(false);
         setThirdGuideModal(true);
         characterX.value = withTiming(190);
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setUploadedFile(null);
         setPinValues({
           ...pinValues,
@@ -113,7 +113,7 @@ export default function ThirdTutorial() {
         setItterator3(6);
         setThirdGuideModal(true);
         characterX.value = withTiming(190);
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
 
@@ -121,7 +121,7 @@ export default function ThirdTutorial() {
         setItterator3(12);
         setThirdGuideModal(true);
         characterX.value = withTiming(190);
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
 
@@ -129,7 +129,7 @@ export default function ThirdTutorial() {
         setItterator3(15);
         setThirdGuideModal(true);
         characterX.value = withTiming(190);
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
     }
@@ -336,7 +336,7 @@ export default function ThirdTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setupText(0);
       }, 600);
       photoY.value = withTiming(scale(-1000));
@@ -377,7 +377,7 @@ export default function ThirdTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setupText(0);
       }, 600);
     }
@@ -401,7 +401,7 @@ export default function ThirdTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.85);
+        textBoxY.value = withTiming(windowHeight * 0.80);
         setupText(0);
       }, 600);
       setThirdGuideModal(false);
@@ -513,7 +513,7 @@ export default function ThirdTutorial() {
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === 1000) {
-      textBoxY.value = withTiming(windowHeight * 0.85);
+      textBoxY.value = withTiming(windowHeight * 0.80);
     } else {
       textBoxY.value = withTiming(1000);
     }
