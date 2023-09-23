@@ -677,7 +677,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     width: "50%",
-    top: "16.8%",
+    top: Platform.OS === "ios" ? "18.5%" : "16.8%",
     zIndex: 2,
   },
   emptyBox: {
@@ -688,6 +688,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "center",
     alignItems: "center",
+    marginBottom: Platform.OS === "ios" ? "5%" : "2%",
     zIndex: 2,
   },
   tutorialBar: {

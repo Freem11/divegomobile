@@ -283,7 +283,7 @@ export default function Map() {
         toolbarEnabled={false}
       >
         {masterSwitch && newHeat.length > 0 && (
-          <Heatmap points={newHeat} radius={scale(20)} />
+          <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
         )}
 
         {tempMarker.length > 0 && (
