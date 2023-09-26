@@ -87,14 +87,14 @@ export default function SecondTutorial() {
       case "Checking for a dive site":
         setItterator2(1);
         setSecondGuideModal(true);
-        characterX.value = withTiming(190);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         break;
 
       case "Adding your dive sites":
         setItterator2(8);
         setSecondGuideModal(true);
-        characterX.value = withTiming(190);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         break;
     }
@@ -268,7 +268,7 @@ export default function SecondTutorial() {
     // let textVal = feederArray[itterator2];
     // setTextRead(textVal);
 
-    console.log("huh", itterator2, characterX.value, textBoxY.value);
+    // console.log("huh", itterator2, characterX.value, textBoxY.value);
 
     if (itterator2 === 0) {
       setTimeout(() => {
@@ -302,7 +302,7 @@ export default function SecondTutorial() {
     if (itterator2 === 5) {
       setChapter(null)
       setTimeout(() => {
-        characterX.value = withTiming(190);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
       }, 400);
 
       setTimeout(() => {
@@ -325,7 +325,7 @@ export default function SecondTutorial() {
     if (itterator2 === 9) {
       setChapter(null)
       setTimeout(() => {
-        characterX.value = withTiming(190);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
       }, 400);
 
       setTimeout(() => {
@@ -401,7 +401,7 @@ export default function SecondTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(190);
+      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
     } else {
       characterX.value = withTiming(1000);
     }
