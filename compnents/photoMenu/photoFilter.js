@@ -5,11 +5,13 @@ import { scale } from "react-native-size-matters";
 import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchTextContext } from "../contexts/searchTextContext";
+import { AreaPicsContext } from "../contexts/areaPicsContext";
 
 export default function PhotoFilterer() {
 const { textvalue, setTextValue } = useContext(SearchTextContext);
+const { areaPics, setAreaPics } = useContext(AreaPicsContext);
 
-  const handleChange = async (text) => {
+  const handleChange = async (text) => { 
     setTextValue(text);
   };
 
@@ -28,13 +30,14 @@ const { textvalue, setTextValue } = useContext(SearchTextContext);
         onChangeText={handleChange}
       ></TextInput>
           <TouchableOpacity
+          onPress={handleClear}
           style={{
             width: "100%",
             height: "350%",
             zIndex: 3
           }}
         >
-      <View style={[styles.xButton,  {opacity: textvalue.length > 0 ? 1 : 0}]}>
+      <View style={[styles.xButton,  {opacity: textvalue.length > 0 ? 1 : 0}]} onPress={handleClear}>
     
           <MaterialIcons name="highlight-remove" size={18} color="lightgrey" onPress={handleClear} />
       </View>
@@ -66,5 +69,6 @@ const styles = StyleSheet.create({
   },
   xButton: {
     marginTop: "190%",
+    zIndex: 3
   },
 });
