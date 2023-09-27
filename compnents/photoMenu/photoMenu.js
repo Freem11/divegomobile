@@ -181,11 +181,6 @@ export default function PhotoMenu() {
     filterPhotosForMapArea();
   }, [boundaries, textvalue]);
 
-  useEffect(() => {
-    if(areaPics.length === 0){
-      setTextValue("")
-    }
-  }, [areaPics, textvalue]);
 
   return (
     <GestureDetector gesture={animatePicMenu}>

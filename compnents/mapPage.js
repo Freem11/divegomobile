@@ -91,6 +91,8 @@ export default function MapPage() {
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
+  const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
@@ -355,9 +357,11 @@ export default function MapPage() {
   const startPullTabAnimation = () => {
     if (pullTabHeight.value === 0) {
       pullTabHeight.value = withTiming(1);
+      setIsOpen(true)
     } else {
       pullTabHeight.value = withTiming(0);
       setTextValue("");
+      setIsOpen(false)
     }
   };
 
@@ -435,7 +439,7 @@ export default function MapPage() {
             {masterSwitch && (
               //  <KeyboardAvoidingView behavior="height" enabled={false}>
               <View style={styles.filterer}>
-                {areaPics && areaPics.length > 0 && (
+                {(areaPics && areaPics.length > 0 || isOpen) && (
                   <View style={styles.emptyBox}>
                   <Animated.View style={[tabPull, styles.closer]}>
                   <PhotoFilterer />
