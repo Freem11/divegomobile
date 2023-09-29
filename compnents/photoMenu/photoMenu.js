@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { multiHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { getPhotosforMapArea } from "../../supabaseCalls/photoSupabaseCalls";
@@ -202,6 +202,9 @@ export default function PhotoMenu() {
               />
             );
           })}
+          {areaPics.length === 0 && (
+            <View style={styles.noSightings}></View>
+          )}
       </Animated.View>
     </GestureDetector>
   );
@@ -218,7 +221,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginLeft: 0,
-    marginTop: scale(10),
+    // marginTop: scale(10),
   },
 
   titleText: {

@@ -433,14 +433,9 @@ export default function MapPage() {
             {masterSwitch && (
               <View style={styles.carrousel}>
                 <PhotoMenu style={{ zIndex: 3 }} />
-              </View>
-            )}
-
-            {masterSwitch && (
-              //  <KeyboardAvoidingView behavior="height" enabled={false}>
-              <View style={styles.filterer}>
+                   <View style={styles.filterer} pointerEvents={"box-none"}>
                 {(areaPics && areaPics.length > 0 || isOpen) && (
-                  <View style={styles.emptyBox}>
+                  <View style={styles.emptyBox} pointerEvents={"box-none"}>
                   <Animated.View style={[tabPull, styles.closer]}>
                   <PhotoFilterer />
                 </Animated.View>
@@ -454,8 +449,14 @@ export default function MapPage() {
                   <AnimalTopAutoSuggest transTagsY={transTagsY} />
                 </View>
               </View>
-              // {/* </KeyboardAvoidingView> */}
+              </View>
             )}
+{/* 
+           {masterSwitch && ( 
+               <KeyboardAvoidingView behavior="height" enabled={false}>
+           
+               </KeyboardAvoidingView>
+           )} */}
 
             {masterSwitch && (
               <TouchableWithoutFeedback onPress={startTagAnimations}>
@@ -663,11 +664,11 @@ const styles = StyleSheet.create({
   carrousel: {
     flex: 1,
     position: "absolute",
-    justifyContent: "center",
+    // justifyContent: "center",
     flexDirection: "column",
     alignContent: "center",
-    alignItems: "center",
-    //Constants.statusBarHeight +
+    // alignItems: "center",
+    height: 105,
     top: Platform.OS === "ios" ? "3%" : "0%",
     zIndex: 2,
   },
@@ -680,9 +681,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "center",
     alignItems: "center",
+    // height: 30,
     width: "50%",
-    top: Platform.OS === "ios" ? "18.5%" : "16.8%",
+    top: Platform.OS === "ios" ? "124%" : "124%",
     zIndex: 2,
+    // backgroundColor: "blue"
   },
   emptyBox: {
     flex: 1,
@@ -692,8 +695,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "center",
     alignItems: "center",
-    marginBottom: Platform.OS === "ios" ? "5%" : "2%",
+    height: "100%",
+    width: "100%",
     zIndex: 2,
+    // backgroundColor: "green"
   },
   tutorialBar: {
     width: "25%",
@@ -743,7 +748,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
   },
   closer: {
-    width: "100%",
-    // zIndex: 2
+    width: 150,
+    // height: 10
   },
 });
