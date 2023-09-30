@@ -95,7 +95,7 @@ export default function ThirdTutorial() {
         setItterator3(3);
         setPicAdderModal(false);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setUploadedFile(null);
         setPinValues({
@@ -112,7 +112,7 @@ export default function ThirdTutorial() {
       case "Adding your photo":
         setItterator3(6);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
@@ -120,7 +120,7 @@ export default function ThirdTutorial() {
       case "Name that sea creature!":
         setItterator3(12);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
@@ -128,7 +128,7 @@ export default function ThirdTutorial() {
       case "Dropping the pin":
         setItterator3(15);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
@@ -332,7 +332,7 @@ export default function ThirdTutorial() {
     if (itterator3 === 5) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
       }, 400);
 
       setTimeout(() => {
@@ -373,7 +373,7 @@ export default function ThirdTutorial() {
     if (itterator3 === 13) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
       }, 400);
 
       setTimeout(() => {
@@ -397,7 +397,7 @@ export default function ThirdTutorial() {
     if (itterator3 === 16) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
       }, 400);
 
       setTimeout(() => {
@@ -505,7 +505,7 @@ export default function ThirdTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
     } else {
       characterX.value = withTiming(1000);
     }
@@ -648,16 +648,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom:
       windowWidth > 600
-        ? scale(-240)
+        ? scale(-220)
         : Platform.OS === "ios"
         ? scale(-350)
-        : scale(-370),
+        : scale(-330),
     left:
       windowWidth > 600
-        ? scale(160)
+        ? scale(100)
         : Platform.OS === "ios"
         ? scale(0)
-        : scale(0),
+        : scale(-20),
     height: "100%",
     width: "100%",
     opacity: 1,

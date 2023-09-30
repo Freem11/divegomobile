@@ -1,14 +1,20 @@
-import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { scale } from "react-native-size-matters";
 import React, { useContext } from "react";
 import { DevelopmentModeContext } from "../contexts/developementModeContext";
+import ImageCasher from "../helpers/imageCashing";
 
 const PhotoMenuListItem = (props) => {
   const { pic, setAnimalMultiSelection, animalMultiSelection } = props;
   const { developmentMode } = useContext(DevelopmentModeContext);
 
   const handleSelect = (name) => {
-
     if (animalMultiSelection.includes(name)) {
       setAnimalMultiSelection(
         animalMultiSelection.filter((item) => item !== name)
@@ -19,39 +25,31 @@ const PhotoMenuListItem = (props) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => handleSelect(pic.label)} key={pic.id}>
-    <View
-      style={
-        animalMultiSelection.includes(pic.label)
-          ? styles.shadowboxSelected
-          : styles.shadowbox
-      }
+    <TouchableWithoutFeedback
+      onPress={() => handleSelect(pic.label)}
       key={pic.id}
     >
-      <View style={{justifyContent: "center", height: 33}}>
-      <Text
+      <View
         style={
           animalMultiSelection.includes(pic.label)
-            ? styles.photolabelSelected
-            : styles.photolabel
+            ? styles.shadowboxSelected
+            : styles.shadowbox
         }
+        key={pic.id}
       >
-        {pic.label}
-      </Text>
+        <View style={{ justifyContent: "center", height: 33 }}>
+          <Text
+            style={
+              animalMultiSelection.includes(pic.label)
+                ? styles.photolabelSelected
+                : styles.photolabel
+            }
+          >
+            {pic.label}
+          </Text>
+        </View>
+        <ImageCasher photoFile={pic.photoFile} id={pic.id} />
       </View>
-      <Image
-        source={{
-          uri: developmentMode ? `https://localhost:8081/matthewfreeman/Desktop/Spring2023UpdateThumb.jpg` : `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
-        }}
-        style={{
-          height: 70,
-          minWidth: 120,
-          borderBottomRightRadius: 15,
-          borderBottomLeftRadius: 15,
-          resizeMode: "cover",
-        }}
-      />
-    </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -85,21 +83,21 @@ const styles = StyleSheet.create({
     paddingTop: 3,
     fontFamily: "Itim_400Regular",
     paddingLeft: 5,
-    paddingRight: 5
+    paddingRight: 5,
   },
   shadowbox: {
     borderRadius: 15,
     borderWidth: 1,
     borderColor: "darkgrey",
     backgroundColor: "darkblue",
-    height: 105
+    height: 105,
   },
   shadowboxSelected: {
     borderRadius: 15,
     borderWidth: 1,
     borderColor: "darkgrey",
     backgroundColor: "gold",
-    height: 105
+    height: 105,
   },
 });
 
