@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import * as FileSystem from "expo-file-system";
 
 export default function ImageCasher(Props) {
-  const { photoFile, id } = Props;
+  const { photoFile, id, style } = Props;
   let fileName = photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
 
@@ -81,13 +81,7 @@ export default function ImageCasher(Props) {
   return ( 
     <Image
       source={{ uri: picUri }}
-      style={{
-        height: 70,
-        minWidth: 120,
-        borderBottomRightRadius: 15,
-        borderBottomLeftRadius: 15,
-        resizeMode: "cover",
-      }}
+      style={{ ...style}}
     ></Image>
   );
 }

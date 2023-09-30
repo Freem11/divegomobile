@@ -48,7 +48,17 @@ const PhotoMenuListItem = (props) => {
             {pic.label}
           </Text>
         </View>
-        <ImageCasher photoFile={pic.photoFile} id={pic.id} />
+        <ImageCasher
+          photoFile={pic.photoFile}
+          id={pic.id}
+          style={{
+            height: 70,
+            minWidth: 120,
+            borderBottomRightRadius: 15,
+            borderBottomLeftRadius: 15,
+            resizeMode: "cover",
+          }}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

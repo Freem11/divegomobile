@@ -17,6 +17,8 @@ import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
+import ImageCasher from "../helpers/imageCashing";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
