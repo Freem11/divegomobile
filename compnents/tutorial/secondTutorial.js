@@ -15,7 +15,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/seaLion.png";
+import seaLionGuy from "../png/EmilioNeutral.png";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
@@ -87,14 +87,14 @@ export default function SecondTutorial() {
       case "Checking for a dive site":
         setItterator2(1);
         setSecondGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         break;
 
       case "Adding your dive sites":
         setItterator2(8);
         setSecondGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         break;
     }
@@ -302,7 +302,7 @@ export default function SecondTutorial() {
     if (itterator2 === 5) {
       setChapter(null)
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
       }, 400);
 
       setTimeout(() => {
@@ -325,7 +325,7 @@ export default function SecondTutorial() {
     if (itterator2 === 9) {
       setChapter(null)
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
       }, 400);
 
       setTimeout(() => {
@@ -401,7 +401,7 @@ export default function SecondTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
     } else {
       characterX.value = withTiming(1000);
     }
@@ -464,8 +464,8 @@ export default function SecondTutorial() {
           <Image
             source={seaLionGuy}
             style={{
-              height: windowWidth > 600 ? 700 : 400,
-              width: windowWidth > 600 ? 740 : 420,
+              height: windowWidth > 600 ? 800 : 500,
+              width: windowWidth > 600 ? 840 : 520,
             }}
           />
         </Animated.View>
@@ -523,13 +523,13 @@ const styles = StyleSheet.create({
       windowWidth > 600
         ? scale(-240)
         : Platform.OS === "ios"
-        ? scale(-440)
+        ? scale(-350)
         : scale(-370),
     left:
       windowWidth > 600
         ? scale(160)
         : Platform.OS === "ios"
-        ? scale(30)
+        ? scale(0)
         : scale(0),
     height: "100%",
     width: "100%",

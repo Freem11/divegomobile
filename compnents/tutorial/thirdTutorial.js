@@ -14,7 +14,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/seaLion.png";
+import seaLionGuy from "../png/EmilioNeutral.png";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
@@ -95,7 +95,7 @@ export default function ThirdTutorial() {
         setItterator3(3);
         setPicAdderModal(false);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setUploadedFile(null);
         setPinValues({
@@ -112,7 +112,7 @@ export default function ThirdTutorial() {
       case "Adding your photo":
         setItterator3(6);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
@@ -120,7 +120,7 @@ export default function ThirdTutorial() {
       case "Name that sea creature!":
         setItterator3(12);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
@@ -128,7 +128,7 @@ export default function ThirdTutorial() {
       case "Dropping the pin":
         setItterator3(15);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
         textBoxY.value = withTiming(windowHeight * 0.80);
         setPicAdderModal(true);
         break;
@@ -332,7 +332,7 @@ export default function ThirdTutorial() {
     if (itterator3 === 5) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
       }, 400);
 
       setTimeout(() => {
@@ -373,7 +373,7 @@ export default function ThirdTutorial() {
     if (itterator3 === 13) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
       }, 400);
 
       setTimeout(() => {
@@ -397,7 +397,7 @@ export default function ThirdTutorial() {
     if (itterator3 === 16) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
       }, 400);
 
       setTimeout(() => {
@@ -505,7 +505,7 @@ export default function ThirdTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
     } else {
       characterX.value = withTiming(1000);
     }
@@ -584,8 +584,8 @@ export default function ThirdTutorial() {
           <Image
             source={seaLionGuy}
             style={{
-              height: windowWidth > 600 ? 700 : 400,
-              width: windowWidth > 600 ? 740 : 420,
+              height: windowWidth > 600 ? 800 : 500,
+              width: windowWidth > 600 ? 840 : 520,
             }}
           />
         </Animated.View>
@@ -650,13 +650,13 @@ const styles = StyleSheet.create({
       windowWidth > 600
         ? scale(-240)
         : Platform.OS === "ios"
-        ? scale(-440)
+        ? scale(-350)
         : scale(-370),
     left:
       windowWidth > 600
         ? scale(160)
         : Platform.OS === "ios"
-        ? scale(30)
+        ? scale(0)
         : scale(0),
     height: "100%",
     width: "100%",

@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from "react-native";
 import { scale } from "react-native-size-matters";
+import React, { useContext } from "react";
+import { DevelopmentModeContext } from "../contexts/developementModeContext";
 
 const PhotoMenuListItem = (props) => {
   const { pic, setAnimalMultiSelection, animalMultiSelection } = props;
+  const { developmentMode } = useContext(DevelopmentModeContext);
 
   const handleSelect = (name) => {
 
@@ -38,7 +41,7 @@ const PhotoMenuListItem = (props) => {
       </View>
       <Image
         source={{
-          uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
+          uri: developmentMode ? `https://localhost:8081/matthewfreeman/Desktop/Spring2023UpdateThumb.jpg` : `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
         }}
         style={{
           height: 70,

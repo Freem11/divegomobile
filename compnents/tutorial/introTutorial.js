@@ -16,7 +16,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/seaLion.png";
+import seaLionGuy from "../png/EmilioNeutral.png";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
@@ -96,7 +96,7 @@ export default function IntroTutorial() {
         setSiteModal(false);
         setItterator(1);
         setGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45)
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45)
         textBoxY.value = withTiming(windowHeight * 0.80);
         picX.value = withSpring(0);
         break;
@@ -106,7 +106,7 @@ export default function IntroTutorial() {
         setSiteModal(false);
         setItterator(6);
         setGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45)
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45)
         textBoxY.value = withTiming(windowHeight * 0.80);
         clusterAnchorY.value = withTiming(windowHeight * 0.4);
         heatPotintY.value = withTiming(windowHeight * 0.25);
@@ -118,7 +118,7 @@ export default function IntroTutorial() {
         setSiteModal(false);
         setItterator(12);
         setGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45)
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45)
         textBoxY.value = withTiming(windowHeight * 0.80);
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
@@ -336,7 +336,7 @@ export default function IntroTutorial() {
   useEffect(() => {
     if (itterator === 0) {
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
         // startCharacterAnimation();
       }, 400);
 
@@ -480,7 +480,7 @@ export default function IntroTutorial() {
       setItterator(null);
       setTutorialRunning(false);
       setGuideModal(false);
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
       // startCharacterAnimation();
       textBoxY.value = withTiming(scale(1000));
       // startTextBoxAnimation();
@@ -547,7 +547,7 @@ export default function IntroTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === scale(1000)) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.37 : windowWidth* 0.45);
+      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
     } else {
       characterX.value = withTiming(1000);
     }
@@ -726,8 +726,8 @@ export default function IntroTutorial() {
           <Image
             source={seaLionGuy}
             style={{
-              height: windowWidth > 600 ? 700 : 400,
-              width: windowWidth > 600 ? 740 : 420,
+              height: windowWidth > 600 ? 800 : 500,
+              width: windowWidth > 600 ? 840 : 520,
             }}
           />
         </Animated.View>
@@ -878,13 +878,13 @@ const styles = StyleSheet.create({
       windowWidth > 600
         ? scale(-240)
         : Platform.OS === "ios"
-        ? scale(-440)
+        ? scale(-350)
         : scale(-370),
     left:
       windowWidth > 600
         ? scale(160)
         : Platform.OS === "ios"
-        ? scale(30)
+        ? scale(0)
         : scale(0),
     height: "100%",
     width: "100%",
