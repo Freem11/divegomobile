@@ -36,6 +36,7 @@ import Lightbox from "react-native-lightbox-v2";
 import { FontAwesome } from "@expo/vector-icons";
 import email from "react-native-email";
 import PhotoBoxModel from "./photoBoxModal";
+import ImageCasher from "../helpers/imageCashing";
 
 let IPSetter = 2;
 let IP;
@@ -109,12 +110,12 @@ export default function AnchorModal(lat, lng) {
         setAnchorPics(photos);
         let count = 0;
         photos.forEach((obj) => {
-           count ++
+          count++;
         });
 
-        if(tutorialRunning && count > 0) {
+        if (tutorialRunning && count > 0) {
           setItterator(itterator + 2);
-        } else if (tutorialRunning){
+        } else if (tutorialRunning) {
           setItterator(itterator + 1);
         }
       }
@@ -125,8 +126,8 @@ export default function AnchorModal(lat, lng) {
 
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
-    filterAnchorPhotos()
- // -----------------------------------------------------------------------------
+    filterAnchorPhotos();
+    // -----------------------------------------------------------------------------
     // if (tutorialRunning) {
     //   if (itterator > 0) {
     //     setItterator(itterator + 1);
@@ -135,7 +136,7 @@ export default function AnchorModal(lat, lng) {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (itterator === 9 ) {
+    if (itterator === 9) {
       setGuideModal(true);
     }
   }, [itterator]);
@@ -156,8 +157,7 @@ export default function AnchorModal(lat, lng) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
-      body:
-        "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
+      body: "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -167,30 +167,27 @@ export default function AnchorModal(lat, lng) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${lat.SiteName}" at Latitude: ${lat.Lat} Longitude: ${lat.Lng} `,
-      body:
-        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
 
   const handleAnchorModalClose = () => {
+    if (itterator === 11) {
+      // setItterator((prev) => prev + 1)
+      // setGuideModal(true);
+    }
 
-      if (itterator === 11) {
-        // setItterator((prev) => prev + 1)
-        // setGuideModal(true);
-      } 
-  
-      if (itterator === 7) {
-        setGuideModal(false);
-      }
-  
-      if (itterator === 13) {
-        // setItterator((prev) => prev + 1)
-        setGuideModal(false);
-      }
-  
-      setSiteModal(false);
-    
+    if (itterator === 7) {
+      setGuideModal(false);
+    }
+
+    if (itterator === 13) {
+      // setItterator((prev) => prev + 1)
+      setGuideModal(false);
+    }
+
+    setSiteModal(false);
   };
 
   const togglePhotoBoxModal = (photo) => {
@@ -255,10 +252,9 @@ export default function AnchorModal(lat, lng) {
                     onPress={() => togglePhotoBoxModal(pic.photoFile)}
                   >
                     <View style={styles.shadowbox}>
-                      <Image
-                        source={{
-                          uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
-                        }}
+                      <ImageCasher
+                        photoFile={pic.photoFile}
+                        id={pic.id}
                         style={{
                           height: "100%",
                           width: "100%",
@@ -300,9 +296,10 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignItems: "center",
     marginTop: "-3%",
-    height: "90%",
+    height: "100%",
     marginRight: scale(10),
     marginLeft: scale(10),
+    marginBottom: scale(16),
     borderRadius: 15,
     // backgroundColor: "green"
   },

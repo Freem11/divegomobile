@@ -87,14 +87,14 @@ export default function SecondTutorial() {
       case "Checking for a dive site":
         setItterator2(1);
         setSecondGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
         textBoxY.value = withTiming(windowHeight * 0.80);
         break;
 
       case "Adding your dive sites":
         setItterator2(8);
         setSecondGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
         textBoxY.value = withTiming(windowHeight * 0.80);
         break;
     }
@@ -302,7 +302,7 @@ export default function SecondTutorial() {
     if (itterator2 === 5) {
       setChapter(null)
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
       }, 400);
 
       setTimeout(() => {
@@ -325,7 +325,7 @@ export default function SecondTutorial() {
     if (itterator2 === 9) {
       setChapter(null)
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
       }, 400);
 
       setTimeout(() => {
@@ -401,7 +401,7 @@ export default function SecondTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.45);
+      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
     } else {
       characterX.value = withTiming(1000);
     }
@@ -521,16 +521,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom:
       windowWidth > 600
-        ? scale(-240)
+        ? scale(-220)
         : Platform.OS === "ios"
         ? scale(-350)
-        : scale(-370),
+        : scale(-330),
     left:
       windowWidth > 600
-        ? scale(160)
+        ? scale(100)
         : Platform.OS === "ios"
         ? scale(0)
-        : scale(0),
+        : scale(-20),
     height: "100%",
     width: "100%",
     opacity: 1,

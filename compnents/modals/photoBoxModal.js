@@ -17,12 +17,17 @@ import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
+import * as FileSystem from "expo-file-system";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal(props) {
   const { picData, togglePhotoBoxModal } = props;
+
+  let fileName = picData && picData.split("/").pop();
+  let cacheDir = FileSystem.cacheDirectory + fileName;
 
   const [photoCloseState, setPhotoCloseState] = useState(false);
 
@@ -93,7 +98,7 @@ export default function PhotoBoxModal(props) {
         <Animated.View style={{flex: 1, transform: [{ rotate: '90deg'}], justifyContent: "center", alignSelf: "center"}}>
         <Animated.Image
           source={{
-            uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${picData}`,
+            uri: cacheDir,
           }}
           style={[
             animatedPictureStyle, 

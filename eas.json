@@ -7,7 +7,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "resourceClass": "large"
+      "resourceClass": "default"
     },
     "sim": {
       "extends": "development",
@@ -18,7 +18,10 @@
     "preview": {
       "channel": "preview",
       "distribution": "internal",
-      "resourceClass": "large"
+      "resourceClass": "default",
+      "ios": {
+        "simulator": true
+      }
     },
     "production": {
       "channel": "production",
