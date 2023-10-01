@@ -42,6 +42,7 @@ import anchorIconIOS from "../png/SiteAnchor20.png";
 import heatIconIOS from "../png/heatpoint.png";
 import arrowIOS from "../png/arrow.png";
 import UserNamer from "./usernamer";
+import ImageCasher from "../helpers/imageCashing";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -82,22 +83,24 @@ export default function IntroTutorial() {
       setTutorialReset(false);
       setSiteModal(false);
       resetTutorial();
-      setChapter(null)
+      setChapter(null);
     }
   }, [tutorialReset]);
 
   useEffect(() => {
     console.log(chapter);
-    setMovingBack(false)
-    
+    setMovingBack(false);
+
     switch (chapter) {
       case "Getting around the map":
         resetTutorial();
         setSiteModal(false);
         setItterator(1);
         setGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26)
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
+        textBoxY.value = withTiming(windowHeight * 0.8);
         picX.value = withSpring(0);
         break;
 
@@ -106,11 +109,13 @@ export default function IntroTutorial() {
         setSiteModal(false);
         setItterator(6);
         setGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26)
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
+        textBoxY.value = withTiming(windowHeight * 0.8);
         clusterAnchorY.value = withTiming(windowHeight * 0.4);
         heatPotintY.value = withTiming(windowHeight * 0.25);
-        nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
+        nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 });
         break;
 
       case "Changed dive site":
@@ -118,13 +123,14 @@ export default function IntroTutorial() {
         setSiteModal(false);
         setItterator(12);
         setGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26)
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
+        textBoxY.value = withTiming(windowHeight * 0.8);
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
-        nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 })
+        nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 });
         break;
     }
-
   }, [chapter]);
 
   const getProfile = async () => {
@@ -336,7 +342,9 @@ export default function IntroTutorial() {
   useEffect(() => {
     if (itterator === 0) {
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
         // startCharacterAnimation();
       }, 400);
 
@@ -347,7 +355,7 @@ export default function IntroTutorial() {
       }, 600);
     }
 
-    console.log(itterator)
+    console.log(itterator);
     if (itterator === 1) {
       picX.value = withSpring(0);
       // startPicAnimation();
@@ -369,10 +377,9 @@ export default function IntroTutorial() {
       // startHeatPointAnimation();
     }
 
-    console.log("at all?", itterator, movingBack)
+    console.log("at all?", itterator, movingBack);
 
     if (itterator === 7) {
-     
       if (movingBack) {
         setMovingBack(false);
         setGuideModal(false);
@@ -398,15 +405,15 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 10) {
-      setChapter(null)
+      setChapter(null);
     }
 
     if (itterator === 11) {
-      setGuideModal(false); 
+      setGuideModal(false);
     }
 
     if (itterator === 12) {
-      setGuideModal(true); 
+      setGuideModal(true);
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
       // startArrowAnimation();
     }
@@ -444,7 +451,7 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 15) {
-      setGuideModal(true)
+      setGuideModal(true);
     }
 
     if (itterator === 17) {
@@ -461,8 +468,8 @@ export default function IntroTutorial() {
     if (itterator === 18) {
       getProfile();
       // if (userBoxX.value !== scale(-300)) {
-        userBoxX.value = withTiming(scale(-300));
-        // startUserBoxAnimation();
+      userBoxX.value = withTiming(scale(-300));
+      // startUserBoxAnimation();
       // }
 
       nextTutX.value = withSpring(windowWidth * 0.3);
@@ -471,7 +478,7 @@ export default function IntroTutorial() {
 
     if (itterator === 19) {
       setSiteModal(false);
-      
+
       nextTutX.value = withTiming(scale(-300));
       // startNextTutAnimation();
     }
@@ -480,11 +487,13 @@ export default function IntroTutorial() {
       setItterator(null);
       setTutorialRunning(false);
       setGuideModal(false);
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+      characterX.value = withTiming(
+        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+      );
       // startCharacterAnimation();
       textBoxY.value = withTiming(scale(1000));
       // startTextBoxAnimation();
-      setChapter(null)
+      setChapter(null);
       setBackHappened(false);
       setMovingBack(false);
       setBackCount(0);
@@ -547,7 +556,9 @@ export default function IntroTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === scale(1000)) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+      characterX.value = withTiming(
+        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+      );
     } else {
       characterX.value = withTiming(1000);
     }
@@ -555,7 +566,7 @@ export default function IntroTutorial() {
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === scale(1000)) {
-      textBoxY.value = withTiming(windowHeight * 0.80);
+      textBoxY.value = withTiming(windowHeight * 0.8);
     } else {
       textBoxY.value = withTiming(scale(1000));
     }
@@ -704,10 +715,9 @@ export default function IntroTutorial() {
                       <Text style={styles.titleText}>{pic.label}</Text>
                     </View>
                     <View style={styles.shadowbox}>
-                      <Image
-                        source={{
-                          uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${pic.photoFile}`,
-                        }}
+                      <ImageCasher
+                        photoFile={pic.photoFile}
+                        id={pic.id}
                         style={{
                           height: "100%",
                           width: "100%",
