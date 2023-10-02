@@ -254,6 +254,7 @@ export default function AnchorModal(lat, lng) {
                       <ImageCasher
                         photoFile={pic.photoFile}
                         id={pic.id}
+                        anchorPics={anchorPics}
                         style={{
                           height: "100%",
                           width: "100%",

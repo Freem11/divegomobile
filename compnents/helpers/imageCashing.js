@@ -4,12 +4,14 @@ import * as FileSystem from "expo-file-system";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
+import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 
 export default function ImageCasher(Props) {
-  const { photoFile, id, style } = Props;
+  const { photoFile, id, style, anchorPics } = Props;
   const { areaPics } = useContext(AreaPicsContext);
   const { siteModal } = useContext(AnchorModalContext);
   const { boundaries } = useContext(MapBoundariesContext);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   let fileName = photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
 
@@ -84,13 +86,15 @@ export default function ImageCasher(Props) {
 
   useEffect(() => {
     async function loadImage() {
+      console.log("triggered?")
       let imageExisitsInCache = await findImageInCache(cacheDir);
 
       if (imageExisitsInCache.exists) {
-        setPicUri(cacheDir);
+        console.log("found1", imageExisitsInCache)
+        setPicUri(imageExisitsInCache.uri);
       } else {
         let cashing = await cacheImage(image.uri, cacheDir, () => {});
-        // console.log("found2", cashing.cached)
+        console.log("found2", cashing.cached)
         if (cashing.cached) {
           setPicUri(cashing.path);
         } else {
@@ -101,7 +105,7 @@ export default function ImageCasher(Props) {
     }
 
     loadImage();
-  }, [areaPics.length, siteModal, boundaries]);
+  }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
 
   return <Image source={{ uri: picUri }} style={{ ...style }}></Image>;
 }
