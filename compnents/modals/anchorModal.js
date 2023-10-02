@@ -32,7 +32,6 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { ReverseContext } from "../contexts/reverseContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
-import Lightbox from "react-native-lightbox-v2";
 import { FontAwesome } from "@expo/vector-icons";
 import email from "react-native-email";
 import PhotoBoxModel from "./photoBoxModal";

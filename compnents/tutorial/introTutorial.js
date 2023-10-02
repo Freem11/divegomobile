@@ -888,7 +888,7 @@ const styles = StyleSheet.create({
       windowWidth > 600
         ? scale(-220)
         : Platform.OS === "ios"
-        ? scale(-350)
+        ? windowHeight * -0.5
         : scale(-330),
     left:
       windowWidth > 600

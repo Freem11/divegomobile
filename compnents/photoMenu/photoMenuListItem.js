@@ -5,14 +5,11 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import { scale } from "react-native-size-matters";
 import React, { useContext } from "react";
-import { DevelopmentModeContext } from "../contexts/developementModeContext";
 import ImageCasher from "../helpers/imageCashing";
 
 const PhotoMenuListItem = (props) => {
   const { pic, setAnimalMultiSelection, animalMultiSelection } = props;
-  const { developmentMode } = useContext(DevelopmentModeContext);
 
   const handleSelect = (name) => {
     if (animalMultiSelection.includes(name)) {
