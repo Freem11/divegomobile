@@ -71,7 +71,7 @@ export default function ImageCasher(Props) {
         setPicUri(cacheDir);
       } else {
         let cashing = await cacheImage(image.uri, cacheDir, () => {});
-        // console.log("found", cashing)
+        console.log("this?", image.uri)
         if (cashing.cached) {
           setPicUri(cashing.path);
         } else {
@@ -107,7 +107,7 @@ export default function ImageCasher(Props) {
     loadImage();
   }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
 
-  return <Image source={{ uri: picUri }} style={{ ...style }}></Image>;
+ return (<Image source={{ uri: picUri }} style={{ ...style }}></Image>)   
 }
 
 const styles = StyleSheet.create({

@@ -94,6 +94,7 @@ export default function PhotoBoxModal(props) {
           </TouchableOpacity>
         </View>
       </View>
+
       <GestureDetector gesture={animatePicPinch}>
         <Animated.View
           style={{
@@ -103,19 +104,22 @@ export default function PhotoBoxModal(props) {
             alignSelf: "center",
           }}
         >
-          <Animated.Image
-            source={{
-              uri: cacheDir,
-            }}
-            style={[
-              animatedPictureStyle,
-              {
-                height: windowWidth - windowWidth * 0.15,
-                width: windowHeight - windowHeight * 0.15,
-                borderRadius: 15,
-              },
-            ]}
-          />
+          {cacheDir && (
+            <Animated.Image
+              source={{
+                uri: cacheDir,
+              }}
+              style={[
+                animatedPictureStyle,
+                {
+                  height: windowWidth - windowWidth * 0.15,
+                  width: windowHeight - windowHeight * 0.15,
+                  borderRadius: 15,
+                },
+              ]}
+            />
+          )}
+
           <Animated.View
             style={[styles.focalPoint, animatedPictureFocalStyle]}
           />

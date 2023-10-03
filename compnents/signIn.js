@@ -22,7 +22,6 @@ import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebookblue.png";
 import googleLogo from "../compnents/png/google-logo-9822.png";
-import * as WebBrowser from "expo-web-browser";
 import config from "../config";
 import Headliner from "../compnents/png/Headliner.png";
 import {
@@ -39,7 +38,6 @@ import {
 } from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
 
-WebBrowser.maybeCompleteAuthSession();
 Settings.initializeSDK();
 
 let emailVar = false;
