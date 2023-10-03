@@ -126,12 +126,6 @@ export default function AnchorModal(lat, lng) {
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
     filterAnchorPhotos();
-    // -----------------------------------------------------------------------------
-    // if (tutorialRunning) {
-    //   if (itterator > 0) {
-    //     setItterator(itterator + 1);
-    //   }
-    // }
   }, [selectedDiveSite]);
 
   useEffect(() => {
@@ -143,7 +137,7 @@ export default function AnchorModal(lat, lng) {
   const getDiveSite = async (site) => {
     try {
       const selectedSite = await getDiveSiteByName(site);
-      if (selectedSite) {
+      if (selectedSite.length > 0) {
         setSite(selectedSite[0].userName);
       }
     } catch (e) {

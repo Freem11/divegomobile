@@ -71,7 +71,7 @@ export default function ImageCasher(Props) {
         setPicUri(cacheDir);
       } else {
         let cashing = await cacheImage(image.uri, cacheDir, () => {});
-        console.log("this?", image.uri)
+        // console.log("this?", image.uri)
         if (cashing.cached) {
           setPicUri(cashing.path);
         } else {
