@@ -79,7 +79,6 @@ export default function SecondTutorial() {
   }, [tutorialReset]);
 
   useEffect(() => {
-    console.log(chapter);
     setDiveSiteAdderModal(false);
     resetTutorial();
 
@@ -265,10 +264,6 @@ export default function SecondTutorial() {
   }, [itterator2, textPrinting]);
 
   useEffect(() => {
-    // let textVal = feederArray[itterator2];
-    // setTextRead(textVal);
-
-    // console.log("huh", itterator2, characterX.value, textBoxY.value);
 
     if (itterator2 === 0) {
       setTimeout(() => {
@@ -321,7 +316,6 @@ export default function SecondTutorial() {
       // startDiveSiteAnimation();
     }
 
-    console.log(itterator2)
     if (itterator2 === 9) {
       setChapter(null)
       setTimeout(() => {
@@ -523,7 +517,7 @@ const styles = StyleSheet.create({
       windowWidth > 600
         ? scale(-220)
         : Platform.OS === "ios"
-        ? -330
+        ? windowHeight * -0.5
         : scale(-330),
     left:
       windowWidth > 600

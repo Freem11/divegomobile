@@ -86,15 +86,15 @@ export default function ImageCasher(Props) {
 
   useEffect(() => {
     async function loadImage() {
-      console.log("triggered?")
+      // console.log("triggered?")
       let imageExisitsInCache = await findImageInCache(cacheDir);
 
       if (imageExisitsInCache.exists) {
-        console.log("found1", imageExisitsInCache)
+        // console.log("found1", imageExisitsInCache)
         setPicUri(imageExisitsInCache.uri);
       } else {
         let cashing = await cacheImage(image.uri, cacheDir, () => {});
-        console.log("found2", cashing.cached)
+        // console.log("found2", cashing.cached)
         if (cashing.cached) {
           setPicUri(cashing.path);
         } else {
