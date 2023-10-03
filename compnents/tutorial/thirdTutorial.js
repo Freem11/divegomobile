@@ -85,8 +85,6 @@ export default function ThirdTutorial() {
   }, [tutorialReset]);
 
   useEffect(() => {
-    console.log(chapter);
-
     setMasterSwitch(true);
     resetTutorial();
 
@@ -366,7 +364,6 @@ export default function ThirdTutorial() {
       setThirdGuideModal(false);
     }
 
-    console.log(itterator3);
     if (itterator3 === 12) {
       setThirdGuideModal(true);
     }
@@ -650,7 +647,7 @@ const styles = StyleSheet.create({
       windowWidth > 600
         ? scale(-220)
         : Platform.OS === "ios"
-        ? scale(-350)
+        ? windowHeight * -0.5
         : scale(-330),
     left:
       windowWidth > 600

@@ -11,9 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Roboto_700Bold } from "@expo-google-fonts/roboto";
-import { IndieFlower_400Regular } from "@expo-google-fonts/indie-flower";
 import { PermanentMarker_400Regular } from "@expo-google-fonts/permanent-marker";
-import { BubblegumSans_400Regular } from "@expo-google-fonts/bubblegum-sans";
 import { Itim_400Regular } from "@expo-google-fonts/itim";
 import { PatrickHand_400Regular } from "@expo-google-fonts/patrick-hand";
 import {
@@ -63,8 +61,6 @@ import MapPage from "./compnents/mapPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
-
-// import 'expo-dev-client';
 
 const { width, height } = Dimensions.get("window");
 
@@ -172,8 +168,6 @@ export default function App() {
 
   let [fontsLoaded] = useFonts({
     PermanentMarker_400Regular,
-    IndieFlower_400Regular,
-    BubblegumSans_400Regular,
     Caveat_400Regular,
     Caveat_500Medium,
     Caveat_600SemiBold,
@@ -191,11 +185,11 @@ export default function App() {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
-      console.log("got location");
+      // console.log("got location");
       try {
         const asyncData = JSON.parse(await AsyncStorage.getItem("token"));
         if (asyncData === null) {
-          console.log("got token?");
+          // console.log("got token?");
           setAppIsReady(true);
         } else {
           if (asyncData.session.refresh_token) {

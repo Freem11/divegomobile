@@ -19,7 +19,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
 import * as FileSystem from "expo-file-system";
 
-
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -27,23 +26,27 @@ export default function PhotoBoxModal(props) {
   const { picData, togglePhotoBoxModal } = props;
 
   let fileName = picData && picData.split("/").pop();
-  let cacheDir = FileSystem.cacheDirectory + fileName;
+  let cacheDir = null;
+
+  if (fileName) {
+    cacheDir = FileSystem.cacheDirectory + fileName;
+  }
 
   const [photoCloseState, setPhotoCloseState] = useState(false);
 
   const scaleValue = useSharedValue(1);
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
-  
+
   const animatePicPinch = Gesture.Pinch()
-  
+
     .onUpdate((event) => {
-      scaleValue.value = event.scale
-      focalX.value = event.focalX 
-      focalY.value = event.focalY 
+      scaleValue.value = event.scale;
+      focalX.value = event.focalX;
+      focalY.value = event.focalY;
     })
     .onEnd((event) => {
-      scaleValue.value = withDelay(1500,withTiming(1));
+      scaleValue.value = withDelay(1500, withTiming(1));
     });
 
   const animatedPictureStyle = useAnimatedStyle(() => {
@@ -51,23 +54,20 @@ export default function PhotoBoxModal(props) {
       transform: [
         { translateX: focalX.value },
         { translateY: focalY.value },
-        { translateX: -windowHeight / 2},
-        { translateY: -windowWidth},
+        { translateX: -windowHeight / 2 },
+        { translateY: -windowWidth },
         { scale: scaleValue.value },
         { translateX: -focalX.value },
         { translateY: -focalY.value },
-        { translateX: windowHeight / 2},
-        { translateY: windowWidth},
+        { translateX: windowHeight / 2 },
+        { translateY: windowWidth },
       ],
     };
   });
 
   const animatedPictureFocalStyle = useAnimatedStyle(() => {
     return {
-      transform: [
-        { translateX: focalX.value },
-        { translateY: focalY.value },
-      ],
+      transform: [{ translateX: focalX.value }, { translateY: focalY.value }],
     };
   });
 
@@ -94,22 +94,35 @@ export default function PhotoBoxModal(props) {
           </TouchableOpacity>
         </View>
       </View>
+
       <GestureDetector gesture={animatePicPinch}>
-        <Animated.View style={{flex: 1, transform: [{ rotate: '90deg'}], justifyContent: "center", alignSelf: "center"}}>
-        <Animated.Image
-          source={{
-            uri: cacheDir,
+        <Animated.View
+          style={{
+            flex: 1,
+            transform: [{ rotate: "90deg" }],
+            justifyContent: "center",
+            alignSelf: "center",
           }}
-          style={[
-            animatedPictureStyle, 
-            {
-              height: windowWidth - windowWidth * 0.15,
-              width: windowHeight - windowHeight * 0.15,
-              borderRadius: 15,
-            },
-          ]}
-        />
-        <Animated.View style={[styles.focalPoint, animatedPictureFocalStyle]}/>
+        >
+          {cacheDir && (
+            <Animated.Image
+              source={{
+                uri: cacheDir,
+              }}
+              style={[
+                animatedPictureStyle,
+                {
+                  height: windowWidth - windowWidth * 0.15,
+                  width: windowHeight - windowHeight * 0.15,
+                  borderRadius: 15,
+                },
+              ]}
+            />
+          )}
+
+          <Animated.View
+            style={[styles.focalPoint, animatedPictureFocalStyle]}
+          />
         </Animated.View>
       </GestureDetector>
     </View>
@@ -160,5 +173,5 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-  }
+  },
 });

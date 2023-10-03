@@ -26,7 +26,7 @@ export default function PhotoMenu() {
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-
+  
   // const [areaPics, setAreaPics] = useState([]);
 
   const { textvalue, setTextValue } = useContext(SearchTextContext);

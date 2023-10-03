@@ -88,7 +88,6 @@ export default function IntroTutorial() {
   }, [tutorialReset]);
 
   useEffect(() => {
-    console.log(chapter);
     setMovingBack(false);
 
     switch (chapter) {
@@ -355,7 +354,6 @@ export default function IntroTutorial() {
       }, 600);
     }
 
-    console.log(itterator);
     if (itterator === 1) {
       picX.value = withSpring(0);
       // startPicAnimation();
@@ -376,8 +374,6 @@ export default function IntroTutorial() {
       heatPotintY.value = withTiming(windowHeight * 0.25);
       // startHeatPointAnimation();
     }
-
-    console.log("at all?", itterator, movingBack);
 
     if (itterator === 7) {
       if (movingBack) {
@@ -888,7 +884,7 @@ const styles = StyleSheet.create({
       windowWidth > 600
         ? scale(-220)
         : Platform.OS === "ios"
-        ? scale(-350)
+        ? windowHeight * -0.5
         : scale(-330),
     left:
       windowWidth > 600

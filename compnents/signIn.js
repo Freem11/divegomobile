@@ -22,11 +22,6 @@ import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebookblue.png";
 import googleLogo from "../compnents/png/google-logo-9822.png";
-import * as Linking from "expo-linking";
-import * as WebBrowser from "expo-web-browser";
-// import * as AuthSession from "expo-auth-session";
-// import * as Google from "expo-auth-session/providers/google";
-// import * as Facebook from "expo-auth-session/providers/facebook";
 import config from "../config";
 import Headliner from "../compnents/png/Headliner.png";
 import {
@@ -43,7 +38,6 @@ import {
 } from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
 
-WebBrowser.maybeCompleteAuthSession();
 Settings.initializeSDK();
 
 let emailVar = false;
