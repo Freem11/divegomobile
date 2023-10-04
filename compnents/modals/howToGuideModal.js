@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   textSt: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     marginBottom: 10,
     color: "#F0EEEB",
   },
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   blurb: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     height: "100%",
     width: "80%",
     color: "#F0EEEB",

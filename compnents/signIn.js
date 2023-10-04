@@ -457,7 +457,7 @@ const styles = StyleSheet.create({
     marginTop: scale(0),
   },
   input: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "#538dbd",
     borderRadius: 10,
     width: scale(200),
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   inputRed: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
     width: scale(200),
@@ -624,7 +624,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 7,
     color: "pink",
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     borderStyle: "dashed",
     borderRadius: 10,
     borderColor: "darkblue",

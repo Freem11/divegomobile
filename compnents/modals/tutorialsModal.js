@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
   },
   input: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
     width: 200,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   inputRed: {
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
     width: 200,

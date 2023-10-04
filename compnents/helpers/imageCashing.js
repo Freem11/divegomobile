@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, memo } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
@@ -6,7 +6,7 @@ import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 
-export default function ImageCasher(Props) {
+function ImageCasher(Props) {
   const { photoFile, id, style, anchorPics } = Props;
   const { areaPics } = useContext(AreaPicsContext);
   const { siteModal } = useContext(AnchorModalContext);
@@ -24,7 +24,14 @@ export default function ImageCasher(Props) {
     uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/MantaWhite.jpg`,
   };
 
-  const [picUri, setPicUri] = useState(test.uri);
+  const [picUri, setPicUri] = useState(null);
+  const [dowloadComplete, setDowloadComplete] = useState(0);
+
+  const callback = downloadProgress => {
+    const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+      console.log("callback?", progress)
+      setDowloadComplete(progress)
+  };
 
   async function findImageInCache(fileName) {
     try {
@@ -48,12 +55,15 @@ export default function ImageCasher(Props) {
         callback
       );
 
-      const downloaded = await downloadImage.downloadAsync();
-      return {
-        cached: true,
-        err: false,
-        path: downloaded.uri,
-      };
+        const downloaded = await downloadImage.downloadAsync();
+        return {
+          cached: true,
+          err: false,
+          path: downloaded.uri,
+        };
+      
+
+    
     } catch (error) {
       return {
         cached: false,
@@ -63,6 +73,8 @@ export default function ImageCasher(Props) {
     }
   }
 
+  
+
   useEffect(() => {
     async function loadImage() {
       let imageExisitsInCache = await findImageInCache(cacheDir);
@@ -70,7 +82,7 @@ export default function ImageCasher(Props) {
       if (imageExisitsInCache.exists) {
         setPicUri(cacheDir);
       } else {
-        let cashing = await cacheImage(image.uri, cacheDir, () => {});
+        let cashing = await cacheImage(image.uri, cacheDir, callback);
         // console.log("this?", image.uri)
         if (cashing.cached) {
           setPicUri(cashing.path);
@@ -84,28 +96,30 @@ export default function ImageCasher(Props) {
     loadImage();
   }, []);
 
-  useEffect(() => {
-    async function loadImage() {
-      // console.log("triggered?")
-      let imageExisitsInCache = await findImageInCache(cacheDir);
+  // useEffect(() => {
+  //   async function loadImage() {
+  //     // console.log("triggered?")
+  //     let imageExisitsInCache = await findImageInCache(cacheDir);
 
-      if (imageExisitsInCache.exists) {
-        // console.log("found1", imageExisitsInCache)
-        setPicUri(imageExisitsInCache.uri);
-      } else {
-        let cashing = await cacheImage(image.uri, cacheDir, () => {});
-        // console.log("found2", cashing.cached)
-        if (cashing.cached) {
-          setPicUri(cashing.path);
-        } else {
-          // console.log("pic change", cashing.cached)
-          setPicUri(test.uri);
-        }
-      }
-    }
+  //     if (imageExisitsInCache.exists) {
+  //       // console.log("found1", imageExisitsInCache)
+  //       setPicUri(imageExisitsInCache.uri);
+  //     } else {
+  //       let cashing = await cacheImage(image.uri, cacheDir, () => {});
+  //       // console.log("found2", cashing.cached)
+  //       if (cashing.cached) {
+  //         setPicUri(cashing.path);
+  //       } else {
+  //         // console.log("pic change", cashing.cached)
+  //         setPicUri(test.uri);
+  //       }
+  //     }
+  //   }
 
-    loadImage();
-  }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
+  //   loadImage();
+  // }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
+
+  // console.log("loaded", picUri)
 
  return (<Image source={{ uri: picUri }} style={{ ...style }}></Image>)   
 }
@@ -115,3 +129,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default memo(ImageCasher);
