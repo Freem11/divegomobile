@@ -24,7 +24,20 @@ export default function ImageCasher(Props) {
     uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/MantaWhite.jpg`,
   };
 
-  const [picUri, setPicUri] = useState(test.uri);
+  const [isDownloaded, setIsDownloaded] = useState(false);
+
+
+  const callback = downloadProgress => {
+    console.log("used at all?")
+    const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+    console.log("hmm", progress)
+    if (progress === 1){
+      console.log("diditwork?",progress)
+      setIsDownloaded(true)
+    }
+  };
+
+  const [picUri, setPicUri] = useState(null);
 
   async function findImageInCache(fileName) {
     try {
@@ -67,18 +80,21 @@ export default function ImageCasher(Props) {
     async function loadImage() {
       let imageExisitsInCache = await findImageInCache(cacheDir);
 
-      if (imageExisitsInCache.exists) {
-        setPicUri(cacheDir);
-      } else {
-        let cashing = await cacheImage(image.uri, cacheDir, () => {});
-        // console.log("this?", image.uri)
-        if (cashing.cached) {
-          setPicUri(cashing.path);
+      if (isDownloaded){
+        if (imageExisitsInCache.exists) {
+          setPicUri(cacheDir);
         } else {
-          // console.log("main", cashing.cached)
-          setPicUri(test.uri);
+          let cashing = await cacheImage(image.uri, cacheDir, callback);
+          // console.log("this?", image.uri)
+          if (cashing.cached) {
+            setPicUri(cashing.path);
+          } else {
+            // console.log("main", cashing.cached)
+            setPicUri(test.uri);
+          }
         }
       }
+   
     }
 
     loadImage();
@@ -107,7 +123,8 @@ export default function ImageCasher(Props) {
     loadImage();
   }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
 
- return (<Image source={{ uri: picUri }} style={{ ...style }}></Image>)   
+  if(picUri) {return <Image source={{ uri: picUri }} style={{ ...style }}></Image>  }
+ 
 }
 
 const styles = StyleSheet.create({
