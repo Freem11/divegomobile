@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 15,
     textAlign: "center",
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     overflow: "hidden",
   },
   listcont: {

@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
 
   titleText: {
     textAlign: "center",
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(15),
     marginLeft: scale(12),
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     marginTop: scale(15),
-    fontFamily: "IndieFlower_400Regular",
+    fontFamily: "Itim_400Regular",
     fontSize: scale(15),
     color: "#F0EEEB",
   },

@@ -5,7 +5,7 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, memo } from "react";
 import ImageCasher from "../helpers/imageCashing";
 
 const PhotoMenuListItem = (props) => {
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PhotoMenuListItem;
+export default memo(PhotoMenuListItem);
