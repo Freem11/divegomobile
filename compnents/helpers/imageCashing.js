@@ -24,20 +24,15 @@ export default function ImageCasher(Props) {
     uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/MantaWhite.jpg`,
   };
 
-  const [isDownloaded, setIsDownloaded] = useState(false);
-
+  const [picUri, setPicUri] = useState(null);
+  const [isDownloaded, setIsDownloaded] = useState(0);
 
   const callback = downloadProgress => {
-    console.log("used at all?")
     const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
-    console.log("hmm", progress)
-    if (progress === 1){
-      console.log("diditwork?",progress)
-      setIsDownloaded(true)
-    }
+      console.log("callback?", progress)
+      setIsDownloaded(progress)
   };
 
-  const [picUri, setPicUri] = useState(null);
 
   async function findImageInCache(fileName) {
     try {
@@ -79,13 +74,12 @@ export default function ImageCasher(Props) {
   useEffect(() => {
     async function loadImage() {
       let imageExisitsInCache = await findImageInCache(cacheDir);
-
-      if (isDownloaded){
+      // console.log("this?", imageExisitsInCache)
         if (imageExisitsInCache.exists) {
           setPicUri(cacheDir);
         } else {
           let cashing = await cacheImage(image.uri, cacheDir, callback);
-          // console.log("this?", image.uri)
+          // console.log("that?", cashing)
           if (cashing.cached) {
             setPicUri(cashing.path);
           } else {
@@ -93,35 +87,33 @@ export default function ImageCasher(Props) {
             setPicUri(test.uri);
           }
         }
-      }
-   
     }
 
     loadImage();
   }, []);
 
-  useEffect(() => {
-    async function loadImage() {
-      // console.log("triggered?")
-      let imageExisitsInCache = await findImageInCache(cacheDir);
+  // useEffect(() => {
+  //   async function loadImage() {
+  //     // console.log("triggered?")
+  //     let imageExisitsInCache = await findImageInCache(cacheDir);
 
-      if (imageExisitsInCache.exists) {
-        // console.log("found1", imageExisitsInCache)
-        setPicUri(imageExisitsInCache.uri);
-      } else {
-        let cashing = await cacheImage(image.uri, cacheDir, () => {});
-        // console.log("found2", cashing.cached)
-        if (cashing.cached) {
-          setPicUri(cashing.path);
-        } else {
-          // console.log("pic change", cashing.cached)
-          setPicUri(test.uri);
-        }
-      }
-    }
+  //     if (imageExisitsInCache.exists) {
+  //       // console.log("found1", imageExisitsInCache)
+  //       setPicUri(imageExisitsInCache.uri);
+  //     } else {
+  //       let cashing = await cacheImage(image.uri, cacheDir, () => {});
+  //       // console.log("found2", cashing.cached)
+  //       if (cashing.cached) {
+  //         setPicUri(cashing.path);
+  //       } else {
+  //         // console.log("pic change", cashing.cached)
+  //         setPicUri(test.uri);
+  //       }
+  //     }
+  //   }
 
-    loadImage();
-  }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
+  //   loadImage();
+  // }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
 
   if(picUri) {return <Image source={{ uri: picUri }} style={{ ...style }}></Image>  }
  
