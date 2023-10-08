@@ -389,6 +389,7 @@ export default function MapPage() {
   useEffect(() => {
     const getProfile = async () => {
       let sessionUserId = activeSession.user.id;
+      // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
       try {
         const success = await grabProfileById(sessionUserId);
         if (success) {
@@ -670,7 +671,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // alignItems: "center",
     height: 105,
-    top: Platform.OS === "ios" ? "3%" : "0%",
+    top: Platform.OS === "ios" ? "3%" : "2%",
     zIndex: 2,
   },
   filterer: {
@@ -708,7 +709,7 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
     // alignContent: "space-between",
-    top: Platform.OS === "ios" ? "6%" : "2%",
+    top: Platform.OS === "ios" ? "6%" : "6%",
     zIndex: 55,
     // backgroundColor:"pink"
   },

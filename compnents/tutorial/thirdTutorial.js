@@ -145,6 +145,7 @@ export default function ThirdTutorial() {
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
+    // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {

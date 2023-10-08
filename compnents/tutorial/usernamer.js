@@ -51,7 +51,8 @@ export default function UserNamer() {
     if (formVal.userName === "") {
       setUserFail("Your Username cannot be blank!");  
     } else {
-      let sessionUserId = activeSession.user.id;
+      let sessionUserId = activeSession.user.id
+      // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13';
       console.log(sessionUserId, formVal.userName)
       try {
         const success = await updateProfile({
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     bottom: 0,
     left: 0,
-    height: scale(53),
+    // height: scale(53),
     borderRadius: scale(15),
     width: "120%",
     minHeight: "30%",
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
     height: 35,
     width: 150,
     // marginLeft: "30%",
-    marginTop: scale(20),
+    marginTop: scale(10),
     marginBottom: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     height: 35,
     width: 150,
     // marginLeft: "30%",
-    marginTop: scale(20),
+    marginTop: scale(10),
     marginBottom: scale(15),
     shadowColor: "#000",
     shadowOffset: {

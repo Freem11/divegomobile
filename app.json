@@ -27,6 +27,7 @@
     "ios": {
       "buildNumber": "21",
       "supportsTablet": true,
+      "orientation": "portrait",
       "bundleIdentifier": "com.freem11.divegomobile",
       "infoPlist": {
         "UIBackgroundModes": ["fetch"],

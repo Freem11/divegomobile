@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Alert,
+  Dimensions,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -21,11 +22,18 @@ import {
   signOut,
   userDelete,
 } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { addDeletedAccountInfo, deleteProfile } from "../../supabaseCalls/accountSupabaseCalls";
+import {
+  addDeletedAccountInfo,
+  deleteProfile,
+} from "../../supabaseCalls/accountSupabaseCalls";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { scale } from "react-native-size-matters";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
 
 export default function SettingsModal() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -74,34 +82,37 @@ export default function SettingsModal() {
     );
   };
 
-  let first = activeSession.user.user_metadata.firstName || "";
-  let last = activeSession.user.user_metadata.lastName || "";
-  let blurb = `:${activeSession.user.id}`;
+  if (activeSession) {
+    let first = activeSession.user.user_metadata.firstName || "";
+    let last = activeSession.user.user_metadata.lastName || "";
+    let blurb = `:${activeSession.user.id}`;
+  }
 
   const handleAccountDelete = async () => {
-    await addDeletedAccountInfo({
-      firstName: first,
-      lastName: last,
-      email: activeSession.user.email,
-      UserID: activeSession.user.id,
-    });
+    if (blurb) {
+      await addDeletedAccountInfo({
+        firstName: first,
+        lastName: last,
+        email: activeSession.user.email,
+        UserID: activeSession.user.id,
+      });
 
-    //test me
-    await deleteProfile(activeSession.user.id)
-    /////
+      //test me
+      await deleteProfile(activeSession.user.id);
+      /////
 
-    await userDelete(activeSession.user.id);
-    await setActiveSession(null);
-    await AsyncStorage.removeItem("token");
-    await signOut();
+      await userDelete(activeSession.user.id);
+      await setActiveSession(null);
+      await AsyncStorage.removeItem("token");
+      await signOut();
+    }
   };
 
   const handleEmail = () => {
     const to = ["DiveGo2022@gmail.com"];
     email(to, {
       subject: `Delete Account Request ${blurb}`,
-      body:
-        "Hello I am deleting my DiveGo account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with DiveGo to allow these to stay in the app? (Y/N)",
+      body: "Hello I am deleting my DiveGo account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with DiveGo to allow these to stay in the app? (Y/N)",
       checkCanOpen: false,
     }).catch(console.error);
   };
@@ -240,7 +251,7 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     opacity: 0.65,
     borderRadius: 10,
-    marginTop: "85%",
+    marginTop: windowWidth > 600 ? windowHeight * 0.1 : windowHeight * 0.3,
     paddingLeft: 5,
     paddingRight: 5,
   },
@@ -256,7 +267,7 @@ const styles = StyleSheet.create({
   dangerText: {
     color: "maroon",
     fontFamily: "Itim_400Regular",
-    fontSize: 18
+    fontSize: 18,
   },
   deleteAccountButton: {
     backgroundColor: "pink",

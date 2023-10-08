@@ -115,6 +115,7 @@ export default function SecondTutorial() {
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
+    // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {
@@ -573,6 +574,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "Itim_400Regular",
     fontSize: scale(12),
+    height: scale(15),
     margin: 10,
   },
 });

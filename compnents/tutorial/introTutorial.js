@@ -134,6 +134,7 @@ export default function IntroTutorial() {
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
+    // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {
@@ -882,15 +883,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom:
       windowWidth > 600
-        ? scale(-220)
+        ? scale(-165)
         : Platform.OS === "ios"
         ? windowHeight * -0.5
         : scale(-330),
     left:
       windowWidth > 600
-        ? scale(100)
+        ? scale(60)
         : Platform.OS === "ios"
-        ? scale(0)
+        ? scale(20)
         : scale(-20),
     height: "100%",
     width: "100%",
@@ -912,7 +913,7 @@ const styles = StyleSheet.create({
   container3: {
     // flex: 1,
     position: "absolute",
-    top: Platform.OS === "ios" ? "9%" : "6%",
+    top: Platform.OS === "ios" ? "12%" : "9%",
     backgroundColor: "transparent",
     alignItems: "center",
     // marginTop: "-3%",
@@ -962,6 +963,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "Itim_400Regular",
     fontSize: scale(12),
+    height: scale(15),
     margin: 10,
   },
   shadowbox: {
@@ -985,7 +987,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 2,
     left: "5%",
-    top: Platform.OS === "ios" ? "15%" : "13%",
+    top: Platform.OS === "ios" ? windowWidth > 600 ? "12%" : "10%" : "13%",
   },
   titleText: {
     textAlign: "center",
