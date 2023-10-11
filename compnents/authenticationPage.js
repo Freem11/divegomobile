@@ -3,8 +3,13 @@ import React, { useState } from "react";
 import SignInRoute from "./signIn";
 import SignUpRoute from "./signUp";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 export default function AuthenticationPage() {
+
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+
+
   const FirstRoute = React.memo(() => <SignInRoute />);
 
   const SecondRoute = () => <SignUpRoute />;

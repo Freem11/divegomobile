@@ -9,6 +9,12 @@
     "userInterfaceStyle": "light",
     "plugins": [
       "expo-image-picker",
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "PORTRAIT"
+        }
+      ],
       "@react-native-google-signin/google-signin",
       ["react-native-fbsdk-next",
       {
@@ -27,6 +33,7 @@
     "ios": {
       "buildNumber": "21",
       "supportsTablet": true,
+      "requireFullScreen": true,
       "orientation": "portrait",
       "bundleIdentifier": "com.freem11.divegomobile",
       "infoPlist": {
@@ -40,7 +47,13 @@
         ],
         "NSLocationUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location, 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of DiveGo’s functionality",
         "NSLocationWhenInUseUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location. 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of DiveGo’s functionality",
-        "NSPhotoLibraryUsageDescription": "We would like access to your photos so that you can upload your photo as proof of the animal sighting you are submitting, we will use this to validate that it is correct before it is added to the app for others to view. Also in a planned future feature we would like to use submitted photos for machine learning so that future photos submissions can be identified by the system and dive users the extra effort of manually typing in the animal's name"
+        "NSPhotoLibraryUsageDescription": "We would like access to your photos so that you can upload your photo as proof of the animal sighting you are submitting, we will use this to validate that it is correct before it is added to the app for others to view. Also in a planned future feature we would like to use submitted photos for machine learning so that future photos submissions can be identified by the system and dive users the extra effort of manually typing in the animal's name",
+        "UISupportedInterfaceOrientations": [
+          "UIInterfaceOrientationPortrait"
+        ],
+        "UISupportedInterfaceOrientations~ipad": [
+          "UIDeviceOrientationPortrait"
+        ]
       },
       "config": {
         "googleMapsApiKey": "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg"

@@ -91,22 +91,8 @@ export default function TutorialBar() {
   };
 
   const handleShift = async (listItem) => {
-    let profileCheck = await getProfile();
-    let bully
-
-    if (profile) {
-      bully  = profile[0].UserName;
-    } else {
-      bully = ""
-    }
-   
-    if (bully == null || bully === "") {
-      setTutorialList(null);
-      return;
-    } else {
       setChapter(listItem);
-      
-    }
+      setTutorialList(null);
   };
 
   return (
