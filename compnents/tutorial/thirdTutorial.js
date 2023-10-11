@@ -646,13 +646,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom:
       windowWidth > 600
-        ? scale(-220)
+        ? scale(-165)
         : Platform.OS === "ios"
         ? windowHeight * -0.5
         : scale(-330),
     left:
       windowWidth > 600
-        ? scale(100)
+        ? scale(60)
         : Platform.OS === "ios"
         ? scale(0)
         : scale(-20),
