@@ -517,6 +517,7 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "1%" : "1%",
+
   },
   SubmitButtonPressed: {
     position: "absolute",

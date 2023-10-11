@@ -61,10 +61,14 @@ import MapPage from "./compnents/mapPage";
 import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const { width, height } = Dimensions.get("window");
 
 export default function App() {
+
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+
   const [developmentMode, setDevelopmentMode] = useState(false);
 
   const [appIsReady, setAppIsReady] = useState(false);
@@ -185,6 +189,8 @@ export default function App() {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+
       // console.log("got location");
       try {
         const asyncData = JSON.parse(await AsyncStorage.getItem("token"));

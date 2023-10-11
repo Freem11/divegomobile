@@ -18,7 +18,6 @@ import { HeatPointsContext } from "./contexts/heatPointsContext";
 import { MapHelperContext } from "./contexts/mapHelperContext"; 
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
-
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
 import {
   StyleSheet,
@@ -42,10 +41,15 @@ import { multiHeatPoints } from "../supabaseCalls/heatPointSupabaseCalls";
 import AnchorModal from "./modals/anchorModal";
 import { scale } from "react-native-size-matters";
 import { FontAwesome } from "@expo/vector-icons";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const { width, height } = Dimensions.get("window");
 
 export default function Map() {
+
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+
+
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);

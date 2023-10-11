@@ -8,12 +8,17 @@ import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
+import { SessionContext } from "../contexts/sessionContext";
+import { UserProfileContext } from "../contexts/userProfileContext";
+import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 
 export default function TutorialBar() {
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+  const { activeSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
 
   const { chapter, setChapter } = useContext(ChapterContext);
   const [tutorialList, setTutorialList] = useState(null);
@@ -32,8 +37,39 @@ export default function TutorialBar() {
     "Dropping the pin",
   ];
 
+  const getProfile = async () => {
+    // let sessionUserId = activeSession.user.id;
+    let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
+    try {
+      const success = await grabProfileById(sessionUserId);
+      if (success) {
+        let bully = success[0].UserName;
+        if (bully == null || bully === "") {
+          setProfile(false);
+        } else {
+          setProfile(success);
+        }
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: "e.message" });
+    }
+  };
+
   const handleClearTutorial = async () => {
-    setTutorialReset(true);
+    let profileCheck = await getProfile();
+    let bully
+    
+    if (profile) {
+      bully  = profile[0].UserName;
+    } else {
+      bully = ""
+    }
+
+    if (bully == null || bully === "") {
+      return;
+    } else {
+      setTutorialReset(true);
+    }
   };
 
   const handleList = async () => {
@@ -55,8 +91,8 @@ export default function TutorialBar() {
   };
 
   const handleShift = async (listItem) => {
-    setChapter(listItem);
-    setTutorialList(null)
+      setChapter(listItem);
+      setTutorialList(null);
   };
 
   return (
@@ -77,7 +113,7 @@ export default function TutorialBar() {
               width: scale(30),
               justifyContent: "center",
               alignItems: "center",
-              marginBottom: "5%"
+              marginBottom: "5%",
             }}
           >
             <MaterialIcons name="menu" size={scale(26)} color="white" />
@@ -89,19 +125,26 @@ export default function TutorialBar() {
             tutorialList.length > 0 &&
             tutorialList.map((listItem) => {
               return (
-                <TouchableWithoutFeedback key={listItem} onPress={() => handleShift(listItem)}>
-                <View key={listItem} style={styles.chapter} onPress={() => handleShift(listItem)}>
-                  <Text
-                  onPress={() =>  handleShift(listItem)}
-                    style={{
-                      fontFamily: "PatrickHand_400Regular",
-                      fontSize: scale(15),
-                      color: "white",
-                    }}
+                <TouchableWithoutFeedback
+                  key={listItem}
+                  onPress={() => handleShift(listItem)}
+                >
+                  <View
+                    key={listItem}
+                    style={styles.chapter}
+                    onPress={() => handleShift(listItem)}
                   >
-                    {listItem}
-                  </Text>
-                </View>
+                    <Text
+                      onPress={() => handleShift(listItem)}
+                      style={{
+                        fontFamily: "PatrickHand_400Regular",
+                        fontSize: scale(15),
+                        color: "white",
+                      }}
+                    >
+                      {listItem}
+                    </Text>
+                  </View>
                 </TouchableWithoutFeedback>
               );
             })}

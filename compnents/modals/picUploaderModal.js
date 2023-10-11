@@ -918,7 +918,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "80%",
     height: "25%",
-    // backgroundColor: "green"
+    marginTop: Platform.OS == "android" ? 7 : 0,
+    marginBottom: Platform.OS == "android" ? -4 : 0
   },
   animalButton: {
     flexDirection: "row",
@@ -926,7 +927,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "lightblue"
   },
   latField: {
     flexDirection: "row",
