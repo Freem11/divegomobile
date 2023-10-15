@@ -234,7 +234,7 @@ export default function Map() {
         },
         zoom : zoomHelp
       });
-      Keyboard.dismiss();
+      // Keyboard.dismiss();
     }
   }, [mapCenter]);
 
