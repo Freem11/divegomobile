@@ -23,6 +23,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: scale(35),
     marginLeft: 1,
     marginRight: 1,
-    width: 13,
+    width: scale(13),
   },
 });

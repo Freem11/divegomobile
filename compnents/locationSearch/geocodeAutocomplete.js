@@ -16,7 +16,7 @@ export default function GeocodeAutoComplete() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} pointerEvents={"box-none"}>
       <PlacesInput
         googleApiKey={config.GOOGLE_MAPS_API_KEY}
         placeholder={"Go to..."}

@@ -317,7 +317,7 @@ export default function SignInRoute() {
                 color: googleButState ? "#ffffff" : "#2d2d2d",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: 14,
+                fontSize: scale(14),
                 opacity: 0.8,
               }}
             >
@@ -340,7 +340,7 @@ export default function SignInRoute() {
                 color: "#FFFFFF",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: 14,
+                fontSize: scale(14),
                 opacity: 1,
               }}
             >
@@ -375,7 +375,7 @@ export default function SignInRoute() {
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
-              fontSize={18}
+              fontSize={scale(18)}
               onChangeText={(emailsText) =>
                 setFormVals({ ...formVals, email: emailsText })
               }
@@ -401,7 +401,7 @@ export default function SignInRoute() {
               }
               value={formVals.password}
               placeholder={"Password"}
-              fontSize={18}
+              fontSize={scale(18)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
@@ -424,7 +424,7 @@ export default function SignInRoute() {
           <Text
             style={{
               color: "gold",
-              fontSize: 17,
+              fontSize: scale(17),
               marginTop: 8,
               fontFamily: "PermanentMarker_400Regular",
               width: "100%",

@@ -96,7 +96,7 @@ export default function DiveSiteAutoComplete() {
   
   
   return (
-    <View style={styles.container}>
+    <View style={styles.container} pointerEvents={"box-none"}>
       
       <AutocompleteDropdown
         // initialValue={'1'}
