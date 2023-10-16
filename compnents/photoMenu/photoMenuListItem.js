@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React, { useContext, memo } from "react";
 import ImageCasher from "../helpers/imageCashing";
+import { scale } from "react-native-size-matters";
 
 const PhotoMenuListItem = (props) => {
   const { pic, setAnimalMultiSelection, animalMultiSelection } = props;
@@ -63,7 +64,7 @@ const PhotoMenuListItem = (props) => {
 
 const styles = StyleSheet.create({
   photolabel: {
-    fontSize: 11,
+    fontSize: 14,
     color: "white",
     textAlign: "center",
     justifyContent: "center",
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     paddingRight: 5,
   },
   photolabelSelected: {
-    fontSize: 11,
+    fontSize: 14,
     color: "black",
     textAlign: "center",
     justifyContent: "center",

@@ -32,14 +32,15 @@ const { areaPics, setAreaPics } = useContext(AreaPicsContext);
           <TouchableOpacity
           onPress={handleClear}
           style={{
-            width: "100%",
-            height: "350%",
-            zIndex: 3
+            width: scale(20),
+            height: scale(20),
+            zIndex: 10,
+            // backgroundColor: "pink"
           }}
         >
       <View style={[styles.xButton,  {opacity: textvalue.length > 0 ? 1 : 0}]} onPress={handleClear}>
     
-          <MaterialIcons name="highlight-remove" size={18} color="lightgrey" onPress={handleClear} />
+          <MaterialIcons name="highlight-remove" size={scale(14)} color="lightgrey" onPress={handleClear} />
       </View>
       </TouchableOpacity>
     </View>
@@ -54,21 +55,23 @@ const styles = StyleSheet.create({
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 2,
-    height: "100%",
-    width: "100%",
+    alignSelf: "center",
+    zIndex: 1,
+    // height: scale(25),
+    width: scale(150),
     borderRadius: scale(10),
     paddingRight: 5,
     paddingLeft: 12,
     fontSize: "2rem",
   },
   suggestInput: {
-    height: "100%",
-    width: "86%",
-    height: "350%"
+    fontSize: scale(12),
+    width: "75%"
   },
   xButton: {
-    marginTop: "190%",
-    zIndex: 3
+    // position: "absolute",
+    marginTop: scale(3),
+    marginLeft: scale(5),
+    zIndex: 10
   },
 });

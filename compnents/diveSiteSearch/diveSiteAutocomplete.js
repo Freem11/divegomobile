@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { diveSites } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
@@ -83,6 +83,7 @@ export default function DiveSiteAutoComplete() {
       }
      
     }
+    Keyboard.dismiss()
   };
 
   const handleClear = () => {
@@ -95,7 +96,7 @@ export default function DiveSiteAutoComplete() {
   
   
   return (
-    <View style={styles.container}>
+    <View style={styles.container} pointerEvents={"box-none"}>
       
       <AutocompleteDropdown
         // initialValue={'1'}

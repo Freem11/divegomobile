@@ -26,7 +26,7 @@ const AnimalTag = (props) => {
               style={{
                 color: "#355D71",
                 fontFamily: "PermanentMarker_400Regular",
-                fontSize: 12,
+                fontSize: scale(11),
                 marginBottom: 2,
                 marginLeft: 4,
                 marginRight: 2
@@ -37,7 +37,7 @@ const AnimalTag = (props) => {
             <View style={styles.xButton}>
               <MaterialIcons
                 name="highlight-remove"
-                size={18}
+                size={scale(10)}
                 color="#355D71"
               />
             </View>
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
   tagBody:{
     flexDirection: "row",
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: scale(10),
     borderColor: "gold",
     backgroundColor: "white",
-    height: 25,
-    marginRight: 5,
-    marginBottom: 5,
+    height: scale(20),
+    marginRight: scale(5),
+    marginBottom: scale(5),
   },
   animalTag:{
     flexDirection: "row",
@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   xButton:{
-    marginTop: 1,
-    marginRight: 3,
-    marginBottom: 4
+    marginTop: scale(4),
+    marginRight: scale(3),
+    marginBottom: scale(4)
   }
 });
 

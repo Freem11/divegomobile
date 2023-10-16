@@ -127,7 +127,7 @@ export default function SignUpRoute() {
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
-              fontSize={18}
+              fontSize={scale(18)}
               onChangeText={(emailText) =>
                 setFormVals({ ...formVals, email: emailText })
               }
@@ -153,7 +153,7 @@ export default function SignUpRoute() {
               }
               value={formVals.password}
               placeholder={"Password"}
-              fontSize={18}
+              fontSize={scale(18)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
@@ -182,7 +182,7 @@ export default function SignUpRoute() {
               }
               value={formVals.firstName}
               placeholder={"First Name"}
-              fontSize={18}
+              fontSize={scale(18)}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
               onChangeText={(firstText) =>
@@ -210,7 +210,7 @@ export default function SignUpRoute() {
               }
               value={formVals.lastName}
               placeholder={"Last Name"}
-              fontSize={18}
+              fontSize={scale(18)}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
               onChangeText={(lastText) =>
@@ -231,7 +231,7 @@ export default function SignUpRoute() {
           <Text
             style={{
               color: "gold",
-              fontSize: 17,
+              fontSize: scale(17),
               marginTop: 8,
               fontFamily: "PermanentMarker_400Regular",
               width: "100%",

@@ -115,7 +115,7 @@ export default function SecondTutorial() {
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
-    // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
+    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {
@@ -515,17 +515,17 @@ const styles = StyleSheet.create({
   character: {
     position: "absolute",
     bottom:
-      windowWidth > 600
-        ? scale(-165)
-        : Platform.OS === "ios"
-        ? windowHeight * -0.5
-        : scale(-330),
-    left:
-      windowWidth > 600
-        ? scale(60)
-        : Platform.OS === "ios"
-        ? scale(0)
-        : scale(-20),
+    windowWidth > 600
+      ? windowHeight * -0.47
+      : Platform.OS === "ios"
+      ? windowHeight * -0.47
+      : scale(-330),
+  left:
+    windowWidth > 600
+      ? windowWidth * 0.3
+      : Platform.OS === "ios"
+      ? windowWidth * 0.01
+      : scale(-20),
     height: "100%",
     width: "100%",
     opacity: 1,
@@ -541,7 +541,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "Itim_400Regular",
-    fontSize: 14,
+    fontSize: scale(14),
   },
   buttonwrapper: {
     flex: 1,

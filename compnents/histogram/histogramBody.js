@@ -90,6 +90,6 @@ const styles = StyleSheet.create({
     height: "70%",
     width: "90%",
     marginLeft: scale(10),
-    marginTop: 10,
+    // backgroundColor: "pink",
   }
 });

@@ -348,8 +348,10 @@ export default function MapPage() {
 
   const pullTabHeight = useSharedValue(0);
 
+  const toVal = scale(25)
+
   const tabPullHeigth = useDerivedValue(() => {
-    return interpolate(pullTabHeight.value, [0, 1], [0, 25]);
+    return interpolate(pullTabHeight.value, [0, 1], [0, toVal]);
   });
 
   const tabPull = useAnimatedStyle(() => {
@@ -393,7 +395,7 @@ export default function MapPage() {
   useEffect(() => {
     const getProfile = async () => {
       let sessionUserId = activeSession.user.id;
-      // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
+      // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
       try {
         const success = await grabProfileById(sessionUserId);
         if (success) {
@@ -694,14 +696,13 @@ const styles = StyleSheet.create({
     // backgroundColor: "blue"
   },
   emptyBox: {
-    flex: 1,
+    // flex: 1,
     alignSelf: "center",
     flexDirection: "column",
-    justifyContent: "center",
-    flexDirection: "column",
+    // justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    height: "100%",
+    height: "auto",
     width: "100%",
     zIndex: 2,
     // backgroundColor: "green"
@@ -747,14 +748,14 @@ const styles = StyleSheet.create({
     left: 0,
   },
   pullTab: {
-    height: 10,
-    width: 100,
+    height: scale(15),
+    width: scale(100),
     backgroundColor: "gold",
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: scale(7),
+    borderBottomLeftRadius: scale(7),
+    zIndex: 10
   },
   closer: {
-    width: 150,
-    // height: 10
+    zIndex: 5
   },
 });

@@ -38,8 +38,8 @@ export default function TutorialBar() {
   ];
 
   const getProfile = async () => {
-    // let sessionUserId = activeSession.user.id;
-    let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13'
+    let sessionUserId = activeSession.user.id;
+    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {
@@ -166,7 +166,7 @@ export default function TutorialBar() {
             position: "absolute",
             left: scale(50),
             height: scale(30),
-            width: "100%",
+            width: scale(80),
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "maroon",
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     width: "210%",
     borderRadius: 15,
     backgroundColor: "#538dbd",
+    // paddingBottom: scale(5),
   },
   chapter: {
     justifyContent: "center",

@@ -1,6 +1,9 @@
 import React from "react";
-import { StyleSheet, View, Text, Platform } from "react-native";
+import { StyleSheet, View, Text, Platform, Dimensions } from "react-native";
 import { scale } from "react-native-size-matters";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function AxisBar() {
   return (
@@ -32,19 +35,20 @@ const styles = StyleSheet.create({
   },
   axisLine: {
     position: "absolute",
-    bottom: 20,
+    bottom: windowWidth > 600 ? 30 : 27,
     alignSelf: "center",
-    height: 2,
+    height: scale(2),
     backgroundColor: "blue",
-    width: "92%",
-    zIndex: 2
+    width: "90%",
+    zIndex: 2,
+    marginRight: -5
   },
   months: {
     width: "90%",
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginLeft: scale(10),
-    marginBottom : Platform.OS === "android" ? 0 : 3,
+    marginBottom : windowWidth > 600 ? -10 : 10,
     color: "white",
     backgroundColor: "black",
     opacity: 0.7,
@@ -54,9 +58,10 @@ const styles = StyleSheet.create({
   letter: {
     marginLeft: 1,
     marginRight: 1,
-    width: 13,
+    width: scale(13),
     color: "white",
     fontFamily: "Itim_400Regular",
-    opacity: 1   
+    opacity: 1   ,
+    fontSize: scale(13)
   }
 });

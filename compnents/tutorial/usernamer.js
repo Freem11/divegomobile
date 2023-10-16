@@ -91,7 +91,7 @@ export default function UserNamer() {
           borderRadius: 25,
           height: 40,
           width: 200,
-          marginLeft: 9,
+          marginLeft: 0,
           marginTop: 15,
         }}
         elevation={20}
@@ -102,7 +102,7 @@ export default function UserNamer() {
           style={formValidation.userName ? styles.inputRed : styles.input}
           value={formVal.userName}
           placeholder={"User Name"}
-          fontSize={18}
+          fontSize={16}
           placeholderTextColor="darkgrey"
           color="#F0EEEB"
           onChangeText={(InputText) =>
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
   container: {
     // position: "absolute",
     backgroundColor: "#538bdb",
+    // backgroundColor: "pink",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     width: "120%",
     minHeight: "30%",
     // paddingRight: 10,
-    paddingTop: -10,
+    paddingTop: scale(-10),
     fontSize: "2rem",
   },
   titleText: {
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     width: scale(200),
     height: 40,
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: scale(20),
     textAlign: "center",
     overflow: "hidden",
     shadowColor: "#000",
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     width: scale(200),
     height: 40,
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: scale(20),
     textAlign: "center",
     overflow: "hidden",
     shadowColor: "#000",
@@ -212,6 +213,7 @@ const styles = StyleSheet.create({
     padding: 7,
     color: "pink",
     fontFamily: "Itim_400Regular",
+    fontSize: 14,
     borderStyle: "dashed",
     borderRadius: 10,
     borderColor: "darkblue",
@@ -245,8 +247,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    height: 35,
-    width: 150,
+    height: scale(35),
+    width: scale(150),
     // marginLeft: "30%",
     marginTop: scale(10),
     marginBottom: scale(15),
