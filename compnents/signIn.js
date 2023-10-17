@@ -300,7 +300,8 @@ export default function SignInRoute() {
 
       <View
         style={{
-          marginTop: Platform.OS === "ios" ? "6%" : "15%",
+          marginTop: Platform.OS === "ios" ? scale(15) : "15%",
+          alignItems: "center",
           
         }}
       >
@@ -317,8 +318,9 @@ export default function SignInRoute() {
                 color: googleButState ? "#ffffff" : "#2d2d2d",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: scale(14),
+                fontSize: scale(12),
                 opacity: 0.8,
+                marginLeft: scale(0),
               }}
             >
               Sign in with Google
@@ -336,11 +338,11 @@ export default function SignInRoute() {
             <Image source={facebookLogo} style={[styles.fbLogo]} />
             <Text
               style={{
-                marginLeft: scale(5),
+                marginLeft: scale(10),
                 color: "#FFFFFF",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: scale(14),
+                fontSize: scale(12),
                 opacity: 1,
               }}
             >
@@ -375,7 +377,7 @@ export default function SignInRoute() {
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
-              fontSize={scale(18)}
+              fontSize={scale(16)}
               onChangeText={(emailsText) =>
                 setFormVals({ ...formVals, email: emailsText })
               }
@@ -401,7 +403,7 @@ export default function SignInRoute() {
               }
               value={formVals.password}
               placeholder={"Password"}
-              fontSize={scale(18)}
+              fontSize={scale(16)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
@@ -536,6 +538,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 2,
     height: 30,
     width: 200,
@@ -554,6 +557,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2d2d2d",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 2,
     height: 30,
     width: 200,
@@ -572,6 +576,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0165E1",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 2,
     height: 30,
     width: 200,
@@ -590,6 +595,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#4267b2",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 2,
     height: 30,
     width: 200,
@@ -607,18 +613,18 @@ const styles = StyleSheet.create({
   fbLogo: {
     backgroundColor: "white",
     borderRadius: 16 / 2,
-    height: 18,
-    width: 18,
+    height: scale(16),
+    width: scale(16),
     opacity: 1,
-    marginRight: Platform.OS === "ios" ? 2 : 8,
-    marginLeft: 10,
+    marginRight: -2,
+    // marginLeft: 10,
   },
   gLogo: {
-    height: 24,
-    width: 24,
+    height: scale(20),
+    width: scale(20),
     opacity: 1,
-    marginRight: 12,
-    marginLeft: 7,
+    marginRight: 2,
+    // marginLeft: 7,
   },
   erroMsg: {
     margin: 5,
@@ -635,7 +641,7 @@ const styles = StyleSheet.create({
     height: scale(250),
     width: "100%",
     marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? "-10%" : "-20%",
+    marginTop: Platform.OS === "ios" ? scale(-50) : "-20%",
   },
   appleButton: {
     width: 201,

@@ -691,7 +691,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // height: 30,
     width: "50%",
-    top: Platform.OS === "ios" ? "124%" : "124%",
+    top: Platform.OS === "ios" ? "113%" : "113%",
     zIndex: 2,
     // backgroundColor: "blue"
   },

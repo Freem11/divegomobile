@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   axisLine: {
     position: "absolute",
-    bottom: windowWidth > 600 ? 30 : 27,
+    bottom: windowWidth > 600 ? scale(11) : Platform.OS === "ios" ? scale(24) : scale(26),
     alignSelf: "center",
     height: scale(2),
     backgroundColor: "blue",

@@ -56,9 +56,9 @@ import { ReverseContext } from "./compnents/contexts/reverseContext";
 import { ChapterContext } from "./compnents/contexts/chapterContext";
 import { AreaPicsContext } from "./compnents/contexts/areaPicsContext";
 import { DevelopmentModeContext } from "./compnents/contexts/developementModeContext";
-import AuthenticationPage from "./compnents/authenticationPage";
+// import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
-import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
+import { getCurrentCoordinates, requestPermissions } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -153,6 +153,7 @@ export default function App() {
 
   const getCurrentLocation = async () => {
     try {
+      await requestPermissions()
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
         setRegion({
@@ -396,12 +397,12 @@ export default function App() {
                                                                                 setActiveSession,
                                                                               }}
                                                                             >
-                                                                              {/* <MapPage /> */}
-                                                                              {activeSession ? (
+                                                                              <MapPage />
+                                                                              {/* {activeSession ? (
                                                                                 <MapPage />
                                                                               ) : (
                                                                                 <AuthenticationPage />
-                                                                              )}
+                                                                              )} */}
                                                                             </SessionContext.Provider>
                                                                           </MapCenterContext.Provider>
                                                                         </DSAdderContext.Provider>

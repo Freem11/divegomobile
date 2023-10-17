@@ -34,7 +34,6 @@ import { scale } from "react-native-size-matters";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-
 export default function SettingsModal() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
 
@@ -112,7 +111,8 @@ export default function SettingsModal() {
     const to = ["DiveGo2022@gmail.com"];
     email(to, {
       subject: `Delete Account Request ${blurb}`,
-      body: "Hello I am deleting my DiveGo account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with DiveGo to allow these to stay in the app? (Y/N)",
+      body:
+        "Hello I am deleting my DiveGo account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with DiveGo to allow these to stay in the app? (Y/N)",
       checkCanOpen: false,
     }).catch(console.error);
   };
@@ -121,86 +121,106 @@ export default function SettingsModal() {
   const [dangerButState, setDangerButState] = useState(false);
 
   return (
-    <ScrollView style={{ height: "100%", width: "86%" }}>
+    // <ScrollView style={{ width: "86%" }}>
       <View style={styles.container}>
-        <TouchableWithoutFeedback
-          onPress={handleLogout}
-          onPressIn={() => setSignButState(true)}
-          onPressOut={() => setSignButState(false)}
-        >
-          <View
-            style={
-              signButState ? styles.logoutButtonpressed : styles.logoutButton
-            }
+        <View style={styles.first}>
+          <TouchableWithoutFeedback
+            onPress={handleLogout}
+            onPressIn={() => setSignButState(true)}
+            onPressOut={() => setSignButState(false)}
           >
-            <Text
-              style={{
-                paddingBottom: 3,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: 24,
-              }}
+            <View
+              style={
+                signButState ? styles.logoutButtonpressed : styles.logoutButton
+              }
             >
-              Sign Out
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-
-      <TouchableWithoutFeedback
-        onLongPress={startDangerZoneAnimations}
-        style={{ backgroundColor: "purple" }}
-      >
-        <View style={styles.dangerZonebar}>
-          <AntDesign name="exclamationcircleo" size={20} color="maroon" />
-          <Text style={styles.dangerText}>Danger Zone</Text>
-          <AntDesign name="exclamationcircleo" size={20} color="maroon" />
+              <Text
+                style={{
+                  paddingBottom: 3,
+                  fontFamily: "PatrickHand_400Regular",
+                  color: "gold",
+                  fontSize: 24,
+                }}
+              >
+                Sign Out
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
 
-      <Animated.View style={[dangerZoneReveal, styles.dangerZone]}>
+        <View style={styles.second}></View>
+
+        <View style={styles.third}>
         <TouchableWithoutFeedback
-          disabled={dangerZoneEnabled}
-          onPressIn={() => setDangerButState(true)}
-          onPressOut={() => setDangerButState(false)}
-          onLongPress={alertHandler}
+          onLongPress={startDangerZoneAnimations}
+          style={{ backgroundColor: "purple" }}
         >
-          <View
-            style={
-              dangerButState
-                ? styles.deleteAccountButtonPressed
-                : styles.deleteAccountButton
-            }
-          >
-            <Text
-              style={{
-                paddingBottom: 3,
-                fontFamily: "PatrickHand_400Regular",
-                color: "maroon",
-                fontSize: 24,
-              }}
-            >
-              Delete Account
-            </Text>
+          <View style={styles.dangerZonebar}>
+            <AntDesign name="exclamationcircleo" size={20} color="maroon" />
+            <Text style={styles.dangerText}>Danger Zone</Text>
+            <AntDesign name="exclamationcircleo" size={20} color="maroon" />
           </View>
         </TouchableWithoutFeedback>
-      </Animated.View>
-    </ScrollView>
+
+        <Animated.View style={[dangerZoneReveal, styles.dangerZone]}>
+          <TouchableWithoutFeedback
+            disabled={dangerZoneEnabled}
+            onPressIn={() => setDangerButState(true)}
+            onPressOut={() => setDangerButState(false)}
+            onLongPress={alertHandler}
+          >
+            <View
+              style={
+                dangerButState
+                  ? styles.deleteAccountButtonPressed
+                  : styles.deleteAccountButton
+              }
+            >
+              <Text
+                style={{
+                  paddingBottom: 3,
+                  fontFamily: "PatrickHand_400Regular",
+                  color: "maroon",
+                  fontSize: 24,
+                }}
+              >
+                Delete Account
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </Animated.View>
+      </View>
+      </View>
+    // </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    // backgroundColor: 'green',
+    height: windowHeight* 0.5,
+    width: "86%"
+    
+  },
+  first: {
+    // position: "absolute",
+    height: 50,
+    // backgroundColor: "pink",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: "30%",
-    marginTop: "5%",
-    marginBottom: "80%",
-    height: "100%",
-    marginRight: 20,
-    marginLeft: 10,
-    // backgroundColor: "green"
+    marginTop: "10%"
+  },
+  second: {
+    height: "60%"
+  },
+  third: {
+    // position: "absolute",
+    height: 200,
+    // backgroundColor: "yellow",
+    alignItems: "center",
+    // justifyContent: "center",
+    marginTop: windowHeight * 0.1
   },
   logoutButton: {
     backgroundColor: "#538bdb",
@@ -210,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 35,
     width: 150,
-    marginTop: 5,
+    // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -229,7 +249,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 35,
     width: 150,
-    marginTop: 5,
+    // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -241,7 +261,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   dangerZonebar: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignSelf: "center",
@@ -251,7 +271,7 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     opacity: 0.65,
     borderRadius: 10,
-    marginTop: windowWidth > 600 ? windowHeight * 0.1 : windowHeight * 0.3,
+    marginTop: "10%",
     paddingLeft: 5,
     paddingRight: 5,
   },

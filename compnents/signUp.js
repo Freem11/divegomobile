@@ -127,7 +127,7 @@ export default function SignUpRoute() {
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
-              fontSize={scale(18)}
+              fontSize={scale(16)}
               onChangeText={(emailText) =>
                 setFormVals({ ...formVals, email: emailText })
               }
@@ -153,7 +153,7 @@ export default function SignUpRoute() {
               }
               value={formVals.password}
               placeholder={"Password"}
-              fontSize={scale(18)}
+              fontSize={scale(16)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
@@ -182,7 +182,7 @@ export default function SignUpRoute() {
               }
               value={formVals.firstName}
               placeholder={"First Name"}
-              fontSize={scale(18)}
+              fontSize={scale(16)}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
               onChangeText={(firstText) =>
@@ -210,7 +210,7 @@ export default function SignUpRoute() {
               }
               value={formVals.lastName}
               placeholder={"Last Name"}
-              fontSize={scale(18)}
+              fontSize={scale(16)}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
               onChangeText={(lastText) =>
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "20%",
+    marginTop: scale(10),
   },
   input: {
     fontFamily: "Itim_400Regular",
@@ -367,6 +367,6 @@ const styles = StyleSheet.create({
     height: scale(250),
     width: "100%",
     marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? "0%" : "-12%",
+    marginTop: Platform.OS === "ios" ? scale(-50) : "-12%",
   },
 });

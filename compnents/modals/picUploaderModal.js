@@ -574,20 +574,20 @@ export default function PicUploadModal() {
             </InsetShadow>
           </View>
 
-          <View style={styles.animalField}>
-            <KeyboardAvoidingView
+          {/* <View style={styles.animalField}> */}
+            {/* <KeyboardAvoidingView
               behavior="position"
               keyboardVerticalOffset={AnimalKeboardOffset}
               style={styles.autocomplete}
-            >
+            > */}
               <AnimalAutoSuggest
                 pin={pinValues}
                 setPin={setPinValues}
                 formValidation={formValidation}
                 SetFormValidation={SetFormValidation}
               />
-            </KeyboardAvoidingView>
-          </View>
+            {/* </KeyboardAvoidingView> */}
+          {/* </View> */}
 
           <View style={styles.latField}>
             <InsetShadow
@@ -905,23 +905,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "lightblue"
+    // backgroundColor: "yellow"
   },
   dateButton: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "green"
+    // backgroundColor: "yellow"
   },
   animalField: {
     flexDirection: "row",
     justifyContent: "space-between",
+    // backgroundColor: "pink",
     width: "80%",
     height: "25%",
-    marginTop: Platform.OS == "android" ? 7 : 0,
-    marginBottom: Platform.OS == "android" ? -4 : 0
+    // marginTop: scale(-40),
+    // marginTop: Platform.OS == "android" ? 7 : scale(-40),
+    // marginBottom: Platform.OS == "android" ? -4 : scale(-20)
   },
   animalButton: {
     flexDirection: "row",
@@ -929,6 +932,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
+    zIndex: -1,
+    // backgroundColor: "maroon"
   },
   latField: {
     flexDirection: "row",
@@ -946,7 +951,7 @@ const styles = StyleSheet.create({
     width: "80%",
     height: "25%",
     zIndex: -1,
-    // backgroundColor: "pink"
+    // backgroundColor: "green"
   },
   latLngButton: {
     flexDirection: "row",
@@ -1015,10 +1020,13 @@ const styles = StyleSheet.create({
   },
   autocomplete: {
     width: 200,
-    height: 30,
+    height: "100%",
     alignSelf: "center",
     justifyContent: "center",
-    zIndex: 20,
+    alignItems: "center",
+    // backgroundColor: "maroon",
+    zIndex: 1,
+    // marginTop: scale(130)
   },
   SubmitButton: {
     position: "absolute",
