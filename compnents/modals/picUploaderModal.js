@@ -67,6 +67,7 @@ export default function PicUploadModal() {
   const [date, setDate] = useState(new Date());
 
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
+  const [pinChecker, setPinChecker] = useState(null);
 
   const [formValidation, SetFormValidation] = useState({
     PictureVal: false,
@@ -302,6 +303,8 @@ export default function PicUploadModal() {
       LngVal: LngVar,
     });
 
+    console.log("pins", pinValues)
+
     if (
       pinValues.PicFile === "" ||
       pinValues.PicFile === null ||
@@ -338,15 +341,28 @@ export default function PicUploadModal() {
     try {
       const image = await chooseImageHandler();
       if (image) {
+        setUploadedFile(image.assets[0].uri);
+
+        let fileToUpload = createFile(image.assets[0].uri);
+        const data = new FormData();
+        data.append("image", fileToUpload);
+
+        let extension =  image.assets[0].uri.split('.').pop();
+        const fileName = Date.now() + "." + extension
+    
+        uploadphoto(data, fileName);
+      
         let formattedDate;
         let newLatitude;
         let newLongitude;
 
         if (image.assets[0].exif.DateTimeOriginal) {
           formattedDate = formatDate(image.assets[0].exif.DateTimeOriginal);
+          console.log("pic with date?",formattedDate)
           DateVar = false;
         } else {
           formattedDate = pinValues.PicDate;
+          console.log("no date?", formattedDate)
         }
 
         if (image.assets[0].exif.GPSLatitude) {
@@ -356,6 +372,14 @@ export default function PicUploadModal() {
           newLatitude = pinValues.Latitude;
           newLongitude = pinValues.Longitude;
         }
+
+        setPinValues({
+          ...pinValues,
+          PicFile: `animalphotos/public/${fileName}`,
+          PicDate: formattedDate,
+          Latitude: newLatitude,
+          Longitude: newLongitude,
+        });
 
         if (pinValues.PicFile !== null) {
           removePhoto({
@@ -368,22 +392,13 @@ export default function PicUploadModal() {
         LngVar = false;
         LatVar = false;
 
-        let fileToUpload = createFile(image.assets[0].uri);
-        const data = new FormData();
-        data.append("image", fileToUpload);
-
-        /// !!!!!!!!!!!!!!! cache image here !!!!!!!!!!!!!!!!!! ////
-
-        const newFilePath = await uploadphoto(data, image.assets[0].uri);
-        setUploadedFile(newFilePath);
-
-        setPinValues({
-          ...pinValues,
-          PicFile: newFilePath,
-          PicDate: formattedDate,
-          Latitude: newLatitude,
-          Longitude: newLongitude,
-        });
+        // setPinValues({
+        //   ...pinValues,
+        //   PicFile: newFilePath,
+        //   PicDate: formattedDate,
+        //   Latitude: newLatitude,
+        //   Longitude: newLongitude,
+        // });
 
         SetFormValidation({
           ...formValidation,
@@ -473,6 +488,7 @@ export default function PicUploadModal() {
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
 
+  console.log("after?",pinValues)
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -495,14 +511,15 @@ export default function PicUploadModal() {
         </View>
       </View>
       <View style={styles.picContainer}>
-        <Image
+        {uploadedFile && (<Image
           source={{
-            uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+            uri: `${uploadedFile}`,
+            // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
           }}
           style={
             formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
           }
-        />
+        />)}
       </View>
 
       <View

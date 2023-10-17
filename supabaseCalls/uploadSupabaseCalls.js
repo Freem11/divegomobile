@@ -1,9 +1,9 @@
 import { supabase } from "../supabase";
 
-  export const uploadphoto = async (file, oldFileName) => {
+  export const uploadphoto = async (file, fileName) => {
 
-    let extension =  oldFileName.split('.').pop();
-    const fileName = Date.now() + "." + extension
+    // let extension =  oldFileName.split('.').pop();
+    // const fileName = Date.now() + "." + extension
 
     const { data, error } = await supabase.storage
     .from("animalphotos")
