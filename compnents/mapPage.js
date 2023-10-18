@@ -390,6 +390,13 @@ export default function MapPage() {
     }
   }, [animalSelection]);
 
+  useEffect(() => {
+    if (areaPics.length === 0 && !isOpen){
+      pullTabHeight.value = withTiming(0)
+    }
+ 
+  }, [areaPics]);
+
   const [subButState, setSubButState] = useState(false);
 
   useEffect(() => {
@@ -439,7 +446,7 @@ export default function MapPage() {
             )}
 
             {masterSwitch && (
-              <View style={styles.carrousel}>
+              <View style={styles.carrousel} pointerEvents={"box-none"}>
                 <PhotoMenu style={{ zIndex: 3 }} />
                    <View style={styles.filterer} pointerEvents={"box-none"}>
                 {(areaPics && areaPics.length > 0 || isOpen) && (
@@ -453,11 +460,15 @@ export default function MapPage() {
                 </TouchableWithoutFeedback>
                 </View>
    )}
-                <View style={styles.animalSelect}>
+
+
+   
+                <View style={styles.animalSelect} pointerEvents={"box-none"}>
                   <AnimalTopAutoSuggest transTagsY={transTagsY} />
                 </View>
               </View>
               </View>
+              
             )}
 {/* 
            {masterSwitch && ( 
@@ -613,7 +624,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 5,
     zIndex: 1,
+    // backgroundColor: "pink"
   },
   Fbuttons: {
     alignItems: "center",
@@ -676,7 +689,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "center",
     // backgroundColor: "blue",
-    // height: 105,
+    height: 105,
     top: Platform.OS === "ios" ? "5%" : "4%",
     zIndex: 2,
   },
@@ -685,25 +698,25 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "column",
     position: "absolute",
-    justifyContent: "center",
+    // justifyContent: "center",
     flexDirection: "column",
-    alignContent: "center",
-    alignItems: "center",
-    height: 30,
+    // alignContent: "center",
+    // alignItems: "center",
+    // height: 25,
     width: "50%",
-    top: Platform.OS === "ios" ? "113%" : "113%",
+    top: Platform.OS === "ios" ? "100%" : "100%",
     zIndex: 2,
     // backgroundColor: "green"
   },
   emptyBox: {
-    position: "absolute",
-    top: -15,
+    // position: "absolute",
+    // top: -15,
     alignSelf: "center",
     flexDirection: "column",
     // justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    // height: 105,
+    // height: scale(55),
     width: "100%",
     zIndex: 2,
     // backgroundColor: "grey"
