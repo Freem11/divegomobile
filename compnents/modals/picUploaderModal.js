@@ -338,6 +338,14 @@ export default function PicUploadModal() {
   };
 
   const handleImageUpload = async () => {
+
+    if (pinValues.PicFile !== null) {
+      removePhoto({
+        filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+        fileName: `${pinValues.PicFile}`,
+      });
+    }
+
     try {
       const image = await chooseImageHandler();
       if (image) {
@@ -358,11 +366,9 @@ export default function PicUploadModal() {
 
         if (image.assets[0].exif.DateTimeOriginal) {
           formattedDate = formatDate(image.assets[0].exif.DateTimeOriginal);
-          console.log("pic with date?",formattedDate)
           DateVar = false;
         } else {
           formattedDate = pinValues.PicDate;
-          console.log("no date?", formattedDate)
         }
 
         if (image.assets[0].exif.GPSLatitude) {
@@ -381,24 +387,9 @@ export default function PicUploadModal() {
           Longitude: newLongitude,
         });
 
-        if (pinValues.PicFile !== null) {
-          removePhoto({
-            filePath: "./wetmap/src/components/uploads/",
-            fileName: uploadedFile,
-          });
-        }
-
         AnimalVar = false;
         LngVar = false;
         LatVar = false;
-
-        // setPinValues({
-        //   ...pinValues,
-        //   PicFile: newFilePath,
-        //   PicDate: formattedDate,
-        //   Latitude: newLatitude,
-        //   Longitude: newLongitude,
-        // });
 
         SetFormValidation({
           ...formValidation,
@@ -438,8 +429,8 @@ export default function PicUploadModal() {
 
         if (pinValues.PicFile !== null) {
           removePhoto({
-            filePath: "./wetmap/src/components/uploads/",
-            fileName: uploadedFile,
+            filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+            fileName: pinValues.PicFile,
           });
         }
 
@@ -462,8 +453,8 @@ export default function PicUploadModal() {
 
       if (pinValues.PicFile !== null) {
         removePhoto({
-          filePath: "./wetmap/src/components/uploads/",
-          fileName: uploadedFile,
+          filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+          fileName: pinValues.PicFile,
         });
       }
 
@@ -487,8 +478,7 @@ export default function PicUploadModal() {
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-
-  console.log("after?",pinValues)
+  
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -514,6 +504,15 @@ export default function PicUploadModal() {
         {uploadedFile && (<Image
           source={{
             uri: `${uploadedFile}`,
+            // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+          }}
+          style={
+            formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+          }
+        />)}
+         {!uploadedFile && (<Image
+          source={{
+            uri: null,
             // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
           }}
           style={

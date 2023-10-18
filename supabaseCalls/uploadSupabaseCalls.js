@@ -10,12 +10,11 @@ import { supabase } from "../supabase";
     .upload(`public/${fileName}`, file)
 
     if (error) {
-      console.log("couldn't upload,", error);
+      console.log("couldn't upload photo,", error);
     }
   
     if (data) {
-      console.log(data)
-      return data.Key
+      console.log(`Upload of photo: ${fileName} was sucessful`)
     }
   };
 
@@ -28,11 +27,11 @@ import { supabase } from "../supabase";
     .remove(`public/${shortPath}`)
 
     if (error) {
-      console.log("couldn't delete,", error);
+      console.log("couldn't delete photo,", error);
     }
   
     if (data) {
-      console.log(data)
+      console.log(`Deletion of photo: ${shortPath} was sucessful`)
     }
 
     };
