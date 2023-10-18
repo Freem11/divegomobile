@@ -670,14 +670,14 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   carrousel: {
-    flex: 1,
+    // flex: 1,
     position: "absolute",
     // justifyContent: "center",
     flexDirection: "column",
     alignContent: "center",
-    // alignItems: "center",
-    height: 105,
-    top: Platform.OS === "ios" ? "3%" : "2%",
+    // backgroundColor: "blue",
+    // height: 105,
+    top: Platform.OS === "ios" ? "5%" : "4%",
     zIndex: 2,
   },
   filterer: {
@@ -689,23 +689,24 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "center",
     alignItems: "center",
-    // height: 30,
+    height: 30,
     width: "50%",
     top: Platform.OS === "ios" ? "113%" : "113%",
     zIndex: 2,
-    // backgroundColor: "blue"
+    // backgroundColor: "green"
   },
   emptyBox: {
-    // flex: 1,
+    position: "absolute",
+    top: -15,
     alignSelf: "center",
     flexDirection: "column",
     // justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    height: "auto",
+    // height: 105,
     width: "100%",
     zIndex: 2,
-    // backgroundColor: "green"
+    // backgroundColor: "grey"
   },
   tutorialBar: {
     width: "25%",
