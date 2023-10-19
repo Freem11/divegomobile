@@ -26,7 +26,7 @@ export default function PhotoBoxModal(props) {
   const { picData, togglePhotoBoxModal } = props;
 
   let fileName = picData && picData.split("/").pop();
-  let cacheDir = null;
+  let cacheDir = false;
 
   if (fileName) {
     cacheDir = FileSystem.cacheDirectory + fileName;

@@ -548,7 +548,7 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 800}
+        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 800 -140}
       >
         <Animated.View style={[styles.animal, animalReveal]}>
           <DiveSiteAutoComplete />
@@ -557,7 +557,7 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 800}
+        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 800 -140}
       >
         <Animated.View style={[styles.geoCoder, geocodeReveal]} >
           <GeocodeAutocomplete />

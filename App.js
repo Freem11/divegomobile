@@ -153,7 +153,7 @@ export default function App() {
 
   const getCurrentLocation = async () => {
     try {
-      await requestPermissions()
+      // await requestPermissions()
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
         setRegion({

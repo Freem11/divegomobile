@@ -9,6 +9,7 @@ import { SecondTutorialModalContext } from "../contexts/secondTutorialModalConte
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { scale } from "react-native-size-matters";
 
 export default function DiveSiteAutoComplete() {
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -104,14 +105,15 @@ export default function DiveSiteAutoComplete() {
           style: {
             justifyContent: "center",
             alignItems: "center",
+            alignContent: "center",
             borderRadius: 25,
             width: 200,
             opacity: 1,
             height: 40,
-            marginBottom: 5
           },
         }}
         inputContainerStyle={{
+          alignItems: "center",
           height: 40,
           borderRadius: 30,
           backgroundColor: "white",

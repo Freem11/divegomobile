@@ -7,7 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  Alert,
+  Dimensions,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useContext, useEffect } from "react";
@@ -51,6 +51,9 @@ const facebookAppId = config.FACEBOOK_APP_ID;
 const googleAndroidClientId2 = config.ANDROID_CLIENT_ID_2;
 const googleAndroidClientId3 = config.ANDROID_CLIENT_ID_3;
 const googleAndroidClientId4 = config.ANDROID_CLIENT_ID_4;
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function SignInRoute() {
   const [token, setToken] = useState("");
@@ -318,7 +321,7 @@ export default function SignInRoute() {
                 color: googleButState ? "#ffffff" : "#2d2d2d",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: scale(12),
+                fontSize: windowWidth > 600 ? scale(5) : scale(12),
                 opacity: 0.8,
                 marginLeft: scale(0),
               }}
@@ -338,11 +341,11 @@ export default function SignInRoute() {
             <Image source={facebookLogo} style={[styles.fbLogo]} />
             <Text
               style={{
-                marginLeft: scale(10),
+                marginLeft: windowWidth > 600 ? scale(5) : scale(10),
                 color: "#FFFFFF",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: scale(12),
+                fontSize: windowWidth > 600 ? scale(5) : scale(12),
                 opacity: 1,
               }}
             >
@@ -377,7 +380,7 @@ export default function SignInRoute() {
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
-              fontSize={scale(16)}
+              fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               onChangeText={(emailsText) =>
                 setFormVals({ ...formVals, email: emailsText })
               }
@@ -403,7 +406,7 @@ export default function SignInRoute() {
               }
               value={formVals.password}
               placeholder={"Password"}
-              fontSize={scale(16)}
+              fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
               color="#F0EEEB"
@@ -426,7 +429,7 @@ export default function SignInRoute() {
           <Text
             style={{
               color: "gold",
-              fontSize: scale(17),
+              fontSize: windowWidth > 600 ? scale(10) : scale(17),
               marginTop: 8,
               fontFamily: "PermanentMarker_400Regular",
               width: "100%",
@@ -509,11 +512,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     bottom: "3%",
     marginLeft: 70,
-    borderWidth: 0.3,
     zIndex: 2,
     width: "85%",
     borderTopColor: "darkgrey",
-    borderColor: "transparent",
+    borderTopWidth: 0.3,
     borderBottomColor: "transparent",
   },
   SubmitButton2Pressed: {
@@ -522,11 +524,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     bottom: "3%",
     marginLeft: 70,
-    borderWidth: 0.3,
+    borderTopWidth: 0.3,
     zIndex: 2,
     width: "85%",
     borderTopColor: "darkgrey",
-    borderColor: "transparent",
     borderBottomColor: "transparent",
     backgroundColor: "#538aaa",
   },
@@ -612,16 +613,16 @@ const styles = StyleSheet.create({
   },
   fbLogo: {
     backgroundColor: "white",
-    borderRadius: 16 / 2,
-    height: scale(16),
-    width: scale(16),
+    borderRadius: windowWidth > 600 ? 24/2 : 16/2,
+    height: windowWidth > 600 ? scale(8) : scale(16),
+    width: windowWidth > 600 ? scale(8) : scale(16),
     opacity: 1,
     marginRight: -2,
     // marginLeft: 10,
   },
   gLogo: {
-    height: scale(20),
-    width: scale(20),
+    height: windowWidth > 600 ? scale(10) : scale(20),
+    width: windowWidth > 600 ? scale(10) : scale(20),
     opacity: 1,
     marginRight: 2,
     // marginLeft: 7,
@@ -636,6 +637,7 @@ const styles = StyleSheet.create({
     borderColor: "darkblue",
     borderWidth: 1,
     marginTop: scale(10),
+    alignSelf: "center"
   },
   Headliner: {
     height: scale(250),

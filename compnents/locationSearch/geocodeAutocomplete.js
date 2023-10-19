@@ -24,6 +24,7 @@ export default function GeocodeAutoComplete() {
         onSelect={((place) => handleConfirm(place))}
         stylesList={{ borderRadius: 10 }}
         stylesInput={{ borderRadius: 25, height: 40, width: 200 }}
+        textInputProps={{ backgroundColor: "white", width: 200, marginRight: 4}}
         clearQueryOnSelect={true}
       />
     </View>

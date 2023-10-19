@@ -762,8 +762,8 @@ const styles = StyleSheet.create({
     left: 0,
   },
   pullTab: {
-    height: scale(15),
-    width: scale(100),
+    height: windowWidth > 600 ? scale(10) : scale(15),
+    width: windowWidth > 600 ? scale(80) : scale(100),
     backgroundColor: "gold",
     borderBottomRightRadius: scale(7),
     borderBottomLeftRadius: scale(7),
