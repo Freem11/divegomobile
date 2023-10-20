@@ -26,7 +26,7 @@ import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "../../supabaseCalls/photoSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import moment from "moment";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
@@ -729,12 +729,12 @@ export default function IntroTutorial() {
             })}
         </View>
 
-        <Animated.View style={[characterSlide, styles.character]}>
+        <Animated.View style={[characterSlide, styles.character]} pointerEvents={"box-none"}>
           <Image
             source={seaLionGuy}
             style={{
-              height: windowWidth > 600 ? 800 : 500,
-              width: windowWidth > 600 ? 840 : 520,
+              height: "100%",
+              width: "100%",
             }}
           />
         </Animated.View>
@@ -873,29 +873,23 @@ export default function IntroTutorial() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
+    width: "100%",
+    height: "100%",
+    // backgroundColor: "pink"
   },
   container: {
-    flex: 1,
+    width: "100%",
+    height: "100%",
     opacity: 0.9,
   },
   character: {
     position: "absolute",
-    bottom:
-      windowWidth > 600
-        ? windowHeight * -0.47
-        : Platform.OS === "ios"
-        ? windowHeight * -0.47
-        : scale(-330),
-    left:
-      windowWidth > 600
-        ? windowWidth * 0.3
-        : Platform.OS === "ios"
-        ? windowWidth * 0.01
-        : scale(-20),
-    height: "100%",
-    width: "100%",
+    bottom: Platform.OS === "ios" ? "-10%" : "-7%",
+    right: Platform.OS === "ios" ? "-10%" : "-4%",
+    height: scale(400),
+    width: scale(300),
     opacity: 1,
+    // backgroundColor: "green"
   },
   textBox: {
     position: "absolute",
@@ -908,7 +902,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "Itim_400Regular",
-    fontSize: scale(14),
+    fontSize: moderateScale(14),
   },
   container3: {
     // flex: 1,

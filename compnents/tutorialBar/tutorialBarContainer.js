@@ -74,20 +74,20 @@ export default function TutorialBar() {
 
   const handleList = async () => {
     setCount((prev) => prev + 1);
-
-    if (count % 2 !== 0) {
-      setTutorialList(null);
-    } else {
-      if (itterator !== null) {
+  
+    // if (count % 2 !== 0) {
+    //   setTutorialList(null);
+    // } else {
+      if (typeof(itterator) === "number") {
         setTutorialList(Tut1List);
       }
-      if (itterator2 !== null) {
+      if (typeof(itterator2) === "number") {
         setTutorialList(Tut2List);
       }
-      if (itterator3 !== null) {
+      if (typeof(itterator3) === "number") {
         setTutorialList(Tut3List);
       }
-    }
+    // }
   };
 
   const handleShift = async (listItem) => {

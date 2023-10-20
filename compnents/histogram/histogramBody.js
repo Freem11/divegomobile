@@ -1,11 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Dimensions, Platform } from "react-native";
 import { scale } from "react-native-size-matters";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { getHistoData } from "../../supabaseCalls/photoSupabaseCalls";
 import AxisBar from "./histogramAxis";
 import DataBar from "./histogramBar";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function Historgram() {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
@@ -83,13 +86,15 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   barBox: {
+    position: "absolute",
     flexDirection: "row",
     alignContent: "flex-end",
     justifyContent: "space-evenly",
     verticalAlign: "bottom",
-    height: "70%",
+    height: windowWidth > 600 ? "120%" :"70%",
     width: "90%",
     marginLeft: scale(10),
+    bottom: windowWidth > 600 ? scale(13) : Platform.OS === "ios" ? scale(24) : scale(26),
     // backgroundColor: "pink",
   }
 });

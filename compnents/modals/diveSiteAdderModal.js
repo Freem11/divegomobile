@@ -511,10 +511,9 @@ const styles = StyleSheet.create({
   SubmitButton: {
     position: "absolute",
     marginBottom: "0%",
-    borderWidth: 1,
+    borderTopWidth: 0.5,
     width: "85%",
     borderTopColor: "darkgrey",
-    borderColor: "transparent",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "1%" : "1%",
 
@@ -522,10 +521,9 @@ const styles = StyleSheet.create({
   SubmitButtonPressed: {
     position: "absolute",
     marginBottom: "0%",
-    borderWidth: 1,
+    borderTopWidth: 0.5,
     width: "85%",
     borderTopColor: "darkgrey",
-    borderColor: "transparent",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "1%" : "1%",
     backgroundColor: "#538dbd",

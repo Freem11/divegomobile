@@ -58,7 +58,7 @@ import { AreaPicsContext } from "./compnents/contexts/areaPicsContext";
 import { DevelopmentModeContext } from "./compnents/contexts/developementModeContext";
 import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
-import { getCurrentCoordinates } from "./compnents/helpers/permissionsHelpers";
+import { getCurrentCoordinates, requestPermissions } from "./compnents/helpers/permissionsHelpers";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -153,6 +153,7 @@ export default function App() {
 
   const getCurrentLocation = async () => {
     try {
+      // await requestPermissions()
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
         setRegion({

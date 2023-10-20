@@ -8,10 +8,13 @@ function formatDate(dateTaken) {
 
 function createFile(dateTaken) {
 
+ 
     let fileName = dateTaken.substring(
         dateTaken.lastIndexOf("/") + 1,
         dateTaken.length
       );
+      console.log("hmmm", fileName)
+      console.log("ahhh", dateTaken)
 
       const fileToUpload = {
         uri: dateTaken,

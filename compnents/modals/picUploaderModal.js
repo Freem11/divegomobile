@@ -67,6 +67,7 @@ export default function PicUploadModal() {
   const [date, setDate] = useState(new Date());
 
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
+  const [pinChecker, setPinChecker] = useState(null);
 
   const [formValidation, SetFormValidation] = useState({
     PictureVal: false,
@@ -302,6 +303,8 @@ export default function PicUploadModal() {
       LngVal: LngVar,
     });
 
+    console.log("pins", pinValues)
+
     if (
       pinValues.PicFile === "" ||
       pinValues.PicFile === null ||
@@ -335,9 +338,28 @@ export default function PicUploadModal() {
   };
 
   const handleImageUpload = async () => {
+
+    if (pinValues.PicFile !== null) {
+      removePhoto({
+        filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+        fileName: `${pinValues.PicFile}`,
+      });
+    }
+
     try {
       const image = await chooseImageHandler();
       if (image) {
+        setUploadedFile(image.assets[0].uri);
+
+        let fileToUpload = createFile(image.assets[0].uri);
+        const data = new FormData();
+        data.append("image", fileToUpload);
+
+        let extension =  image.assets[0].uri.split('.').pop();
+        const fileName = Date.now() + "." + extension
+    
+        uploadphoto(data, fileName);
+      
         let formattedDate;
         let newLatitude;
         let newLongitude;
@@ -357,33 +379,17 @@ export default function PicUploadModal() {
           newLongitude = pinValues.Longitude;
         }
 
-        if (pinValues.PicFile !== null) {
-          removePhoto({
-            filePath: "./wetmap/src/components/uploads/",
-            fileName: uploadedFile,
-          });
-        }
-
-        AnimalVar = false;
-        LngVar = false;
-        LatVar = false;
-
-        let fileToUpload = createFile(image.assets[0].uri);
-        const data = new FormData();
-        data.append("image", fileToUpload);
-
-        /// !!!!!!!!!!!!!!! cache image here !!!!!!!!!!!!!!!!!! ////
-
-        const newFilePath = await uploadphoto(data, image.assets[0].uri);
-        setUploadedFile(newFilePath);
-
         setPinValues({
           ...pinValues,
-          PicFile: newFilePath,
+          PicFile: `animalphotos/public/${fileName}`,
           PicDate: formattedDate,
           Latitude: newLatitude,
           Longitude: newLongitude,
         });
+
+        AnimalVar = false;
+        LngVar = false;
+        LatVar = false;
 
         SetFormValidation({
           ...formValidation,
@@ -423,8 +429,8 @@ export default function PicUploadModal() {
 
         if (pinValues.PicFile !== null) {
           removePhoto({
-            filePath: "./wetmap/src/components/uploads/",
-            fileName: uploadedFile,
+            filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+            fileName: pinValues.PicFile,
           });
         }
 
@@ -447,8 +453,8 @@ export default function PicUploadModal() {
 
       if (pinValues.PicFile !== null) {
         removePhoto({
-          filePath: "./wetmap/src/components/uploads/",
-          fileName: uploadedFile,
+          filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+          fileName: pinValues.PicFile,
         });
       }
 
@@ -472,7 +478,7 @@ export default function PicUploadModal() {
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -495,14 +501,20 @@ export default function PicUploadModal() {
         </View>
       </View>
       <View style={styles.picContainer}>
-        <Image
+        {uploadedFile && (<Image
           source={{
-            uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+            uri: `${uploadedFile}`,
+            // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
           }}
           style={
             formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
           }
-        />
+        />)}
+         {!uploadedFile && (<View
+          style={
+            formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+          }
+        />)}
       </View>
 
       <View
@@ -574,20 +586,20 @@ export default function PicUploadModal() {
             </InsetShadow>
           </View>
 
-          <View style={styles.animalField}>
-            <KeyboardAvoidingView
+          {/* <View style={styles.animalField}> */}
+            {/* <KeyboardAvoidingView
               behavior="position"
               keyboardVerticalOffset={AnimalKeboardOffset}
               style={styles.autocomplete}
-            >
+            > */}
               <AnimalAutoSuggest
                 pin={pinValues}
                 setPin={setPinValues}
                 formValidation={formValidation}
                 SetFormValidation={SetFormValidation}
               />
-            </KeyboardAvoidingView>
-          </View>
+            {/* </KeyboardAvoidingView> */}
+          {/* </View> */}
 
           <View style={styles.latField}>
             <InsetShadow
@@ -905,23 +917,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "lightblue"
+    // backgroundColor: "yellow"
   },
   dateButton: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "green"
+    // backgroundColor: "yellow"
   },
   animalField: {
     flexDirection: "row",
     justifyContent: "space-between",
+    // backgroundColor: "pink",
     width: "80%",
     height: "25%",
-    marginTop: Platform.OS == "android" ? 7 : 0,
-    marginBottom: Platform.OS == "android" ? -4 : 0
+    // marginTop: scale(-40),
+    // marginTop: Platform.OS == "android" ? 7 : scale(-40),
+    // marginBottom: Platform.OS == "android" ? -4 : scale(-20)
   },
   animalButton: {
     flexDirection: "row",
@@ -929,6 +944,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
+    zIndex: -1,
+    // backgroundColor: "maroon"
   },
   latField: {
     flexDirection: "row",
@@ -946,7 +963,7 @@ const styles = StyleSheet.create({
     width: "80%",
     height: "25%",
     zIndex: -1,
-    // backgroundColor: "pink"
+    // backgroundColor: "green"
   },
   latLngButton: {
     flexDirection: "row",
@@ -1015,28 +1032,29 @@ const styles = StyleSheet.create({
   },
   autocomplete: {
     width: 200,
-    height: 30,
+    height: "100%",
     alignSelf: "center",
     justifyContent: "center",
-    zIndex: 20,
+    alignItems: "center",
+    // backgroundColor: "maroon",
+    zIndex: 1,
+    // marginTop: scale(130)
   },
   SubmitButton: {
     position: "absolute",
     marginBottom: "0%",
-    borderWidth: 1,
+    borderTopWidth: 0.5,
     width: "85%",
     borderTopColor: "darkgrey",
-    borderColor: "transparent",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "2%" : "2%",
   },
   SubmitButtonPressed: {
     position: "absolute",
     marginBottom: "0%",
-    borderWidth: 1,
+    borderTopWidth: 0.5,
     width: "85%",
     borderTopColor: "darkgrey",
-    borderColor: "transparent",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "2%" : "2%",
     backgroundColor: "#538dbd",

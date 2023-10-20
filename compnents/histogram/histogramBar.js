@@ -1,8 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { scale } from 'react-native-size-matters';
 
 let heightVal
+
+
 export default function DataBar(props) {
 
   const { moddedVal } = props;
@@ -24,5 +26,6 @@ const styles = StyleSheet.create({
     marginLeft: 1,
     marginRight: 1,
     width: scale(13),
+    
   },
 });

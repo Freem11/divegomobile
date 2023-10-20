@@ -19,7 +19,7 @@ import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { PictureContext } from "../contexts/pictureContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
@@ -94,7 +94,7 @@ export default function ThirdTutorial() {
         setPicAdderModal(false);
         setThirdGuideModal(true);
         characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.77);
         setUploadedFile(null);
         setPinValues({
           ...pinValues,
@@ -111,7 +111,7 @@ export default function ThirdTutorial() {
         setItterator3(6);
         setThirdGuideModal(true);
         characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
         break;
 
@@ -119,7 +119,7 @@ export default function ThirdTutorial() {
         setItterator3(12);
         setThirdGuideModal(true);
         characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
         break;
 
@@ -127,7 +127,7 @@ export default function ThirdTutorial() {
         setItterator3(15);
         setThirdGuideModal(true);
         characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
         break;
     }
@@ -335,7 +335,7 @@ export default function ThirdTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.77);
         setupText(0);
       }, 600);
       photoY.value = withTiming(scale(-1000));
@@ -375,7 +375,7 @@ export default function ThirdTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.77);
         setupText(0);
       }, 600);
     }
@@ -399,7 +399,7 @@ export default function ThirdTutorial() {
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.77);
         setupText(0);
       }, 600);
       setThirdGuideModal(false);
@@ -511,7 +511,7 @@ export default function ThirdTutorial() {
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === 1000) {
-      textBoxY.value = withTiming(windowHeight * 0.80);
+      textBoxY.value = withTiming(windowHeight * 0.77);
     } else {
       textBoxY.value = withTiming(1000);
     }
@@ -578,12 +578,12 @@ export default function ThirdTutorial() {
           start={{ x: 0, y: 0 }}
         ></LinearGradient>
 
-        <Animated.View style={[characterSlide, styles.character]}>
+        <Animated.View style={[characterSlide, styles.character]} pointerEvents={"box-none"}>
           <Image
             source={seaLionGuy}
             style={{
-              height: windowWidth > 600 ? 800 : 500,
-              width: windowWidth > 600 ? 840 : 520,
+              height: "100%",
+              width: "100%",
             }}
           />
         </Animated.View>
@@ -644,20 +644,10 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-        bottom:
-      windowWidth > 600
-        ? windowHeight * -0.47
-        : Platform.OS === "ios"
-        ? windowHeight * -0.47
-        : scale(-330),
-    left:
-      windowWidth > 600
-        ? windowWidth * 0.3
-        : Platform.OS === "ios"
-        ? windowWidth * 0.01
-        : scale(-20),
-    height: "100%",
-    width: "100%",
+    bottom: Platform.OS === "ios" ? "-10%" : "-7%",
+    right: Platform.OS === "ios" ? "-10%" : "-4%",
+    height: scale(400),
+    width: scale(300),
     opacity: 1,
   },
   textBox: {
@@ -671,7 +661,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "Itim_400Regular",
-    fontSize: scale(14),
+    fontSize: moderateScale(14),
   },
   buttonwrapper: {
     flex: 1,
