@@ -510,11 +510,7 @@ export default function PicUploadModal() {
             formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
           }
         />)}
-         {!uploadedFile && (<Image
-          source={{
-            uri: null,
-            // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
-          }}
+         {!uploadedFile && (<View
           style={
             formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
           }

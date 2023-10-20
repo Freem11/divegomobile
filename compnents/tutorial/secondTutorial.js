@@ -21,7 +21,7 @@ import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { MapRegionContext } from "../contexts/mapRegionContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
@@ -455,12 +455,12 @@ export default function SecondTutorial() {
           start={{ x: 0, y: 0 }}
         ></LinearGradient>
 
-        <Animated.View style={[characterSlide, styles.character]}>
+        <Animated.View style={[characterSlide, styles.character]} pointerEvents={"box-none"}>
           <Image
             source={seaLionGuy}
             style={{
-              height: windowWidth > 600 ? 800 : 500,
-              width: windowWidth > 600 ? 840 : 520,
+              height: "100%",
+              width: "100%",
             }}
           />
         </Animated.View>
@@ -514,20 +514,10 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom:
-    windowWidth > 600
-      ? windowHeight * -0.47
-      : Platform.OS === "ios"
-      ? windowHeight * -0.47
-      : scale(-330),
-  left:
-    windowWidth > 600
-      ? windowWidth * 0.3
-      : Platform.OS === "ios"
-      ? windowWidth * 0.01
-      : scale(-20),
-    height: "100%",
-    width: "100%",
+    bottom: Platform.OS === "ios" ? "-10%" : "-7%",
+    right: Platform.OS === "ios" ? "-10%" : "-4%",
+    height: scale(400),
+    width: scale(300),
     opacity: 1,
   },
   textBox: {
@@ -541,7 +531,7 @@ const styles = StyleSheet.create({
   textContain: {
     padding: 10,
     fontFamily: "Itim_400Regular",
-    fontSize: scale(14),
+    fontSize: moderateScale(14),
   },
   buttonwrapper: {
     flex: 1,
