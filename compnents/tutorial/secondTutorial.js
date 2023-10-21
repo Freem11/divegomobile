@@ -74,7 +74,7 @@ export default function SecondTutorial() {
       setSecondGuideModal(false);
       setTutorialReset(false);
       resetTutorial();
-      setChapter(null)
+      setChapter(null);
     }
   }, [tutorialReset]);
 
@@ -86,19 +86,44 @@ export default function SecondTutorial() {
       case "Checking for a dive site":
         setItterator2(1);
         setSecondGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
+        textBoxY.value = withTiming(windowHeight * 0.8);
         break;
 
       case "Adding your dive sites":
         setItterator2(8);
         setSecondGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
+        textBoxY.value = withTiming(windowHeight * 0.8);
+        break;
+
+      case "Exit Guide":
+        handleClearTutorial();
         break;
     }
   }, [chapter]);
 
+  const handleClearTutorial = async () => {
+    let profileCheck = await getProfile();
+    let bully;
+
+    if (profile) {
+      bully = profile[0].UserName;
+    } else {
+      bully = "";
+    }
+
+    if (bully == null || bully === "") {
+      return;
+    } else {
+      setTutorialReset(true);
+    }
+  };
+  
   const resetTutorial = async () => {
     characterX.value = 1000;
     textBoxY.value = 1000;
@@ -265,7 +290,6 @@ export default function SecondTutorial() {
   }, [itterator2, textPrinting]);
 
   useEffect(() => {
-
     if (itterator2 === 0) {
       setTimeout(() => {
         startCharacterAnimation();
@@ -296,13 +320,15 @@ export default function SecondTutorial() {
     }
 
     if (itterator2 === 5) {
-      setChapter(null)
+      setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.8);
         setupText(0);
       }, 600);
       setSecondGuideModal(false);
@@ -318,13 +344,15 @@ export default function SecondTutorial() {
     }
 
     if (itterator2 === 9) {
-      setChapter(null)
+      setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
       }, 400);
 
       setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.80);
+        textBoxY.value = withTiming(windowHeight * 0.8);
         setupText(0);
       }, 600);
       diveSiteY.value = withTiming(scale(-1000));
@@ -360,7 +388,7 @@ export default function SecondTutorial() {
       setSecondGuideModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
-      setChapter(null)
+      setChapter(null);
     }
   }, [itterator2]);
 
@@ -396,7 +424,9 @@ export default function SecondTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+      characterX.value = withTiming(
+        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+      );
     } else {
       characterX.value = withTiming(1000);
     }
@@ -404,7 +434,7 @@ export default function SecondTutorial() {
 
   const startTextBoxAnimation = () => {
     if (textBoxY.value === 1000) {
-      textBoxY.value = withTiming(windowHeight * 0.80);
+      textBoxY.value = withTiming(windowHeight * 0.8);
     } else {
       textBoxY.value = withTiming(1000);
     }
@@ -455,7 +485,10 @@ export default function SecondTutorial() {
           start={{ x: 0, y: 0 }}
         ></LinearGradient>
 
-        <Animated.View style={[characterSlide, styles.character]} pointerEvents={"box-none"}>
+        <Animated.View
+          style={[characterSlide, styles.character]}
+          pointerEvents={"box-none"}
+        >
           <Image
             source={seaLionGuy}
             style={{

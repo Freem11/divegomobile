@@ -129,8 +129,29 @@ export default function IntroTutorial() {
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 });
         break;
+
+        case "Exit Guide":
+        handleClearTutorial()
+        break;
     }
   }, [chapter]);
+
+  const handleClearTutorial = async () => {
+    let profileCheck = await getProfile();
+    let bully;
+
+    if (profile) {
+      bully = profile[0].UserName;
+    } else {
+      bully = "";
+    }
+
+    if (bully == null || bully === "") {
+      return;
+    } else {
+      setTutorialReset(true);
+    }
+  };
 
   const getProfile = async () => {
     let sessionUserId = activeSession.user.id;
@@ -189,7 +210,7 @@ export default function IntroTutorial() {
   const text0 =
     "Hi, welcome to DiveGo, I'm Emilio, I'm here to show you around.";
   const text1 = "First, what should I call you? This way, when you add a dive site or contribute a sea creature sighting we can put your name on it! ";
-  const text2 = "Thanks! Nice to meet you! now that we are friends, let's find a spot with some action. Here are 3 of the most recent sightings by other divers. "
+  const text2 = "Nice to meet you! Now that we are buddied up, let's find a spot with some action. Here are 3 of the most recent sightings by other divers. "
   const text3 = "Choose one and let's see what else is there!";
   const text4 =
     "Great! We've moved the map, as you can see there is a lot more action here!";
@@ -258,11 +279,11 @@ export default function IntroTutorial() {
       return;
     }
     if (
+      itterator === 1 ||
       itterator === 3 ||
       itterator === 8 ||
       itterator === 12 ||
       itterator === 14 ||
-      itterator === 18 ||
       itterator >= 19
     ) {
       return;
@@ -307,7 +328,10 @@ export default function IntroTutorial() {
   }
 
   let textPrinter;
+
   useEffect(() => {
+
+    console.log("value", itterator)
     setTextRead("");
     setTextRead2("");
     let textVal = feederArray[itterator];
@@ -671,7 +695,7 @@ export default function IntroTutorial() {
     setMapCenter({ lat: values.lat, lng: values.lng });
 
     let hopper = 0;
-    if (itterator === 1) {
+    if (itterator === 2) {
       hopper = 2;
     } else {
       hopper = 1;
