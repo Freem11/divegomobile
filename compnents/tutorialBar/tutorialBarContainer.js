@@ -28,13 +28,19 @@ export default function TutorialBar() {
     "Getting around the map",
     "Dive sites",
     "Changed dive site",
+    "Exit Guide",
   ];
-  const Tut2List = ["Checking for a dive site", "Adding your dive sites"];
+  const Tut2List = [
+    "Checking for a dive site",
+    "Adding your dive sites",
+    "Exit Guide",
+  ];
   const Tut3List = [
     "Contributing photos overview",
     "Adding your photo",
     "Name that sea creature!",
     "Dropping the pin",
+    "Exit Guide",
   ];
 
   const getProfile = async () => {
@@ -55,38 +61,21 @@ export default function TutorialBar() {
     }
   };
 
-  const handleClearTutorial = async () => {
-    let profileCheck = await getProfile();
-    let bully;
-
-    if (profile) {
-      bully = profile[0].UserName;
-    } else {
-      bully = "";
-    }
-
-    if (bully == null || bully === "") {
-      return;
-    } else {
-      setTutorialReset(true);
-    }
-  };
-
   const handleList = async () => {
     setCount((prev) => prev + 1);
 
     if (count % 2 !== 0) {
       setTutorialList(null);
     } else {
-    if (typeof itterator === "number") {
-      setTutorialList(Tut1List);
-    }
-    if (typeof itterator2 === "number") {
-      setTutorialList(Tut2List);
-    }
-    if (typeof itterator3 === "number") {
-      setTutorialList(Tut3List);
-    }
+      if (typeof itterator === "number") {
+        setTutorialList(Tut1List);
+      }
+      if (typeof itterator2 === "number") {
+        setTutorialList(Tut2List);
+      }
+      if (typeof itterator3 === "number") {
+        setTutorialList(Tut3List);
+      }
     }
   };
 
@@ -110,28 +99,42 @@ export default function TutorialBar() {
 
   return (
     <View style={styles.container} pointerEvents={"box-none"}>
-      <View style={{ flexDirection: "column" }}>
-        <TouchableWithoutFeedback
-          onPress={handleList}
+      {/* <View style={{ flexDirection: "column" }}> */}
+      <TouchableWithoutFeedback
+        onPress={handleList}
+        style={{
+          width: 50,
+          height: scale(32),
+          borderRadius: 15,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <View
           style={{
-            width: scale(28),
-            height: scale(32),
+            position: "absolute",
+            left: scale(-10),
+            height: scale(30),
+            width: scale(80),
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "maroon",
+            borderRadius: scale(15),
+            paddingRight: 5,
+            paddingLeft: 5,
           }}
         >
-          <View
+          <Text
             style={{
-              backgroundColor: "lightgrey",
-              borderRadius: 10,
-              padding: scale(2),
-              width: scale(30),
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: "5%",
+              color: "darkgrey",
+              fontFamily: "PatrickHand_400Regular",
+              fontSize: scale(14),
             }}
           >
-            <MaterialIcons name="menu" size={scale(26)} color="white" />
-          </View>
-        </TouchableWithoutFeedback>
+            Guide Active
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
 
         <View style={styles.library}>
           {tutorialList &&
@@ -162,43 +165,7 @@ export default function TutorialBar() {
               );
             })}
         </View>
-      </View>
-
-      <TouchableWithoutFeedback
-        onPress={handleClearTutorial}
-        style={{
-          width: 50,
-          height: scale(32),
-          borderRadius: 15,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <View
-          style={{
-            position: "absolute",
-            left: scale(50),
-            height: scale(30),
-            width: scale(80),
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "maroon",
-            borderRadius: scale(15),
-            paddingRight: 5,
-            paddingLeft: 5,
-          }}
-        >
-          <Text
-            style={{
-              color: "darkgrey",
-              fontFamily: "PatrickHand_400Regular",
-              fontSize: scale(14),
-            }}
-          >
-            Guide Active
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
+      {/* </View> */}
     </View>
   );
 }
@@ -206,12 +173,15 @@ export default function TutorialBar() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    // backgroundColor: 'blue'
+    // backgroundColor: 'blue',
+    marginTop: scale(-10)
   },
   library: {
     zIndex: 60,
     height: "auto",
     width: "210%",
+    marginTop: scale(35),
+    marginLeft: scale(-10),
     borderRadius: 15,
     backgroundColor: "#538dbd",
     // paddingBottom: scale(5),

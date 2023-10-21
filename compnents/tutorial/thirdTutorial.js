@@ -93,7 +93,9 @@ export default function ThirdTutorial() {
         setItterator3(3);
         setPicAdderModal(false);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setUploadedFile(null);
         setPinValues({
@@ -110,7 +112,9 @@ export default function ThirdTutorial() {
       case "Adding your photo":
         setItterator3(6);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
         break;
@@ -118,7 +122,9 @@ export default function ThirdTutorial() {
       case "Name that sea creature!":
         setItterator3(12);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
         break;
@@ -126,12 +132,35 @@ export default function ThirdTutorial() {
       case "Dropping the pin":
         setItterator3(15);
         setThirdGuideModal(true);
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
         break;
+
+      case "Exit Guide":
+        handleClearTutorial();
+        break;
     }
   }, [chapter]);
+
+  const handleClearTutorial = async () => {
+    let profileCheck = await getProfile();
+    let bully;
+
+    if (profile) {
+      bully = profile[0].UserName;
+    } else {
+      bully = "";
+    }
+
+    if (bully == null || bully === "") {
+      return;
+    } else {
+      setTutorialReset(true);
+    }
+  };
 
   const resetTutorial = async () => {
     characterX.value = 1000;
@@ -331,7 +360,9 @@ export default function ThirdTutorial() {
     if (itterator3 === 5) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
       }, 400);
 
       setTimeout(() => {
@@ -371,7 +402,9 @@ export default function ThirdTutorial() {
     if (itterator3 === 13) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
       }, 400);
 
       setTimeout(() => {
@@ -395,7 +428,9 @@ export default function ThirdTutorial() {
     if (itterator3 === 16) {
       setChapter(null);
       setTimeout(() => {
-        characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
       }, 400);
 
       setTimeout(() => {
@@ -503,7 +538,9 @@ export default function ThirdTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(Platform.OS === "ios" ? windowWidth* 0.20 : windowWidth* 0.26);
+      characterX.value = withTiming(
+        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+      );
     } else {
       characterX.value = withTiming(1000);
     }
@@ -578,7 +615,10 @@ export default function ThirdTutorial() {
           start={{ x: 0, y: 0 }}
         ></LinearGradient>
 
-        <Animated.View style={[characterSlide, styles.character]} pointerEvents={"box-none"}>
+        <Animated.View
+          style={[characterSlide, styles.character]}
+          pointerEvents={"box-none"}
+        >
           <Image
             source={seaLionGuy}
             style={{
