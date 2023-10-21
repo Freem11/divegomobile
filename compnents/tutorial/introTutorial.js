@@ -106,7 +106,7 @@ export default function IntroTutorial() {
       case "Dive sites":
         resetTutorial();
         setSiteModal(false);
-        setItterator(6);
+        setItterator(7);
         setGuideModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
@@ -120,7 +120,7 @@ export default function IntroTutorial() {
       case "Changed dive site":
         resetTutorial();
         setSiteModal(false);
-        setItterator(12);
+        setItterator(13);
         setGuideModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
@@ -188,36 +188,34 @@ export default function IntroTutorial() {
 
   const text0 =
     "Hi, welcome to DiveGo, I'm Emilio, I'm here to show you around.";
-  const text1 =
-    "First let's find a spot with some action. Here are 3 of the most recent sightings by other divers.";
-  const text2 = "Choose one and let's see what else is there!";
-  const text3 =
-    "Great! We've moved the map, as you can see there is a lot more action here!";
+  const text1 = "First, what should I call you? This way, when you add a dive site or contribute a sea creature sighting we can put your name on it! ";
+  const text2 = "Thanks! Nice to meet you! now that we are friends, let's find a spot with some action. Here are 3 of the most recent sightings by other divers. "
+  const text3 = "Choose one and let's see what else is there!";
   const text4 =
-    "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
+    "Great! We've moved the map, as you can see there is a lot more action here!";
   const text5 =
+    "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
+  const text6 =
     "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
-  const text6 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,      that means sea creatures have been spotted on that dive site.`;
-  const text7 = "";
-  const text8 =
-    "Oops! Looks like you have chosen a dive site that doesn't have any sightings yet! Remember you want a dive site with a heat point       nearby. Close the form and try to find one with heat points.";
+  const text7 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,      that means sea creatures have been spotted on that dive site.`;
+  const text8 = "";
   const text9 =
-    "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
+    "Oops! Looks like you have chosen a dive site that doesn't have any sightings yet! Remember you want a dive site with a heat point       nearby. Close the form and try to find one with heat points.";
   const text10 =
+    "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
+  const text11 =
     "Now try closing the dive site and choose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
-  const text11 = "";
-  const text12 = "Select one or more sea creatures using the menu at the top.";
-  const text13 = "";
-  const text14 =
-    "Uh-oh! This isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
+  const text12 = "";
+  const text13 = "Select one or more sea creatures using the menu at the top.";
+  const text14 = "";
   const text15 =
-    "As you can see, the photos have filtered to show only those creatures you have selected";
+    "Uh-oh! This isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
   const text16 =
-    "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+    "As you can see, the photos have filtered to show only those creatures you have selected";
   const text17 =
-    "In order to do that we will need to setup the rest of your profile, so can I ask you to choose your diver name before we go?";
+    "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
   const text18 =
-    "Thanks! And if you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining DiveGo!";
+    "If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining DiveGo!";
   const text19 = "";
 
   const [textRead, setTextRead] = useState("");
@@ -250,21 +248,21 @@ export default function IntroTutorial() {
   ];
 
   const setupText = (pushVal) => {
-    if (itterator === 8 && !textPrinting) {
-      setItterator(7);
+    if (itterator === 9 && !textPrinting) {
+      setItterator(8);
       setGuideModal(false);
       return;
-    } else if (itterator === 14 && !textPrinting) {
-      setItterator(13);
+    } else if (itterator === 15 && !textPrinting) {
+      setItterator(14);
       setGuideModal(false);
       return;
     }
     if (
-      itterator === 2 ||
-      itterator === 7 ||
-      itterator === 11 ||
-      itterator === 13 ||
-      itterator === 17 ||
+      itterator === 3 ||
+      itterator === 8 ||
+      itterator === 12 ||
+      itterator === 14 ||
+      itterator === 18 ||
       itterator >= 19
     ) {
       return;
@@ -291,9 +289,9 @@ export default function IntroTutorial() {
 
   function printOutText() {
     if (textArray.length > 0) {
-      if (itterator === 6 && textArray.length <= 64) {
+      if (itterator === 7 && textArray.length <= 64) {
         setTextRead2((prev) => prev + textArray[0]);
-      } else if (itterator === 8 && textArray.length <= 63) {
+      } else if (itterator === 9 && textArray.length <= 63) {
         setTextRead2((prev) => prev + textArray[0]);
       } else {
         setTextRead((prev) => prev + textArray[0]);
@@ -317,14 +315,14 @@ export default function IntroTutorial() {
       textArray = textVal.split("");
       if (textPrinting) {
         textPrinter = setInterval(printOutText, 40);
-      } else if (itterator === 6 && !textPrinting) {
+      } else if (itterator === 7 && !textPrinting) {
         let val1 =
           Platform.OS === "ios" ? textVal.slice(0, 147) : textVal.slice(0, 145);
         let val2 =
           Platform.OS === "ios" ? textVal.slice(-64) : textVal.slice(-68);
         setTextRead(val1);
         setTextRead2(val2);
-      } else if (itterator === 8 && !textPrinting) {
+      } else if (itterator === 9 && !textPrinting) {
         let val1 =
           Platform.OS === "ios" ? textVal.slice(0, 133) : textVal.slice(0, 131);
         let val2 =
@@ -356,27 +354,45 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 1) {
+      getProfile();
+
+      if (profile[0].UserName) {
+        setItterator((prev) => prev + 1);
+        return;
+      }
+      userBoxX.value = withSpring(windowWidth * 0.2);
+      // startUserBoxAnimation();
+    }
+
+    if (itterator === 2) {
+
+      getProfile();
+      // if (userBoxX.value !== scale(-300)) {
+      userBoxX.value = withTiming(scale(-300));
+      // startUserBoxAnimation();
+      // }
+
       picX.value = withSpring(0);
       // startPicAnimation();
     }
 
-    if (itterator === 4) {
+    if (itterator === 5) {
       exploreButtonY.value = withTiming(windowHeight * 0.4);
       // startExploreButtonAnimation();
     }
 
-    if (itterator === 5) {
+    if (itterator === 6) {
       exploreButtonY.value = withTiming(scale(-1000));
       clusterAnchorY.value = withTiming(windowHeight * 0.4);
       // startClusterAnchorAnimation();
     }
 
-    if (itterator === 6) {
+    if (itterator === 7) {
       heatPotintY.value = withTiming(windowHeight * 0.25);
       // startHeatPointAnimation();
     }
 
-    if (itterator === 7) {
+    if (itterator === 8) {
       if (movingBack) {
         setMovingBack(false);
         setGuideModal(false);
@@ -390,32 +406,32 @@ export default function IntroTutorial() {
       }
     }
 
-    if (itterator === 8) {
+    if (itterator === 9) {
       setTextPrinting(true);
       setMovingBack(true);
       setGuideModal(true);
     }
 
-    if (itterator === 9) {
+    if (itterator === 10) {
       setTextRead("");
       setTextPrinting(true);
     }
 
-    if (itterator === 10) {
+    if (itterator === 11) {
       setChapter(null);
     }
 
-    if (itterator === 11) {
+    if (itterator === 12) {
       setGuideModal(false);
     }
 
-    if (itterator === 12) {
+    if (itterator === 13) {
       setGuideModal(true);
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
       // startArrowAnimation();
     }
 
-    if (itterator === 13) {
+    if (itterator === 14) {
       if (movingBack) {
         setMovingBack(false);
         setGuideModal(false);
@@ -428,7 +444,7 @@ export default function IntroTutorial() {
       }
     }
 
-    if (itterator === 14) {
+    if (itterator === 15) {
       if (backCount === 0) {
         arrowY.value = withTiming(scale(-1200));
         // startArrowAnimation();
@@ -447,35 +463,18 @@ export default function IntroTutorial() {
       }
     }
 
-    if (itterator === 15) {
+    if (itterator === 16) {
       setGuideModal(true);
     }
 
-    if (itterator === 17) {
-      getProfile();
-
-      if (profile[0].UserName) {
-        setItterator((prev) => prev + 1);
-        return;
-      }
-      userBoxX.value = withSpring(windowWidth * 0.2);
-      // startUserBoxAnimation();
-    }
 
     if (itterator === 18) {
-      getProfile();
-      // if (userBoxX.value !== scale(-300)) {
-      userBoxX.value = withTiming(scale(-300));
-      // startUserBoxAnimation();
-      // }
-
       nextTutX.value = withSpring(windowWidth * 0.3);
       // startNextTutAnimation();
     }
 
     if (itterator === 19) {
       setSiteModal(false);
-
       nextTutX.value = withTiming(scale(-300));
       // startNextTutAnimation();
     }
