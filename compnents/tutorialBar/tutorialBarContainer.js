@@ -57,12 +57,12 @@ export default function TutorialBar() {
 
   const handleClearTutorial = async () => {
     let profileCheck = await getProfile();
-    let bully
-    
+    let bully;
+
     if (profile) {
-      bully  = profile[0].UserName;
+      bully = profile[0].UserName;
     } else {
-      bully = ""
+      bully = "";
     }
 
     if (bully == null || bully === "") {
@@ -74,25 +74,38 @@ export default function TutorialBar() {
 
   const handleList = async () => {
     setCount((prev) => prev + 1);
-  
-    // if (count % 2 !== 0) {
-    //   setTutorialList(null);
-    // } else {
-      if (typeof(itterator) === "number") {
-        setTutorialList(Tut1List);
-      }
-      if (typeof(itterator2) === "number") {
-        setTutorialList(Tut2List);
-      }
-      if (typeof(itterator3) === "number") {
-        setTutorialList(Tut3List);
-      }
-    // }
+
+    if (count % 2 !== 0) {
+      setTutorialList(null);
+    } else {
+    if (typeof itterator === "number") {
+      setTutorialList(Tut1List);
+    }
+    if (typeof itterator2 === "number") {
+      setTutorialList(Tut2List);
+    }
+    if (typeof itterator3 === "number") {
+      setTutorialList(Tut3List);
+    }
+    }
   };
 
   const handleShift = async (listItem) => {
+    let profileCheck = await getProfile();
+    let bully;
+
+    if (profile) {
+      bully = profile[0].UserName;
+    } else {
+      bully = "";
+    }
+
+    if (bully == null || bully === "") {
+      return;
+    } else {
       setChapter(listItem);
       setTutorialList(null);
+    }
   };
 
   return (
