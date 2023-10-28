@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { scale } from 'react-native-size-matters';
+import { ProfileModalContext } from "../contexts/profileModalContext";
 
 export default function Logo() {
+
+  const { profileModal, setProfileModal } = useContext(
+    ProfileModalContext
+  );
+
+  console.log(profileModal)
+
   return (
-    <View style={styles.container} pointerEvents={"none"}>
-      <Text pointerEvents={"none"} style={{ fontFamily: "Caveat_400Regular", fontSize: scale(20) }}>DiveGo</Text>
+    <View style={styles.container}>
+      <Text style={{ fontFamily: "Caveat_400Regular", fontSize: scale(20) }} onPress={() => setProfileModal(true)}>DiveGo</Text>
     </View>
   );
 }

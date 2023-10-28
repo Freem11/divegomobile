@@ -50,6 +50,7 @@ import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
 
+
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
@@ -67,7 +68,10 @@ import IntroTutorial from "./tutorial/introTutorial";
 import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
+import UserProfileModal from "./modals/userProfileModal";
+
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { ProfileModalContext } from "./contexts/profileModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -323,6 +327,33 @@ export default function MapPage() {
     // }
   }, [thirdGuideModal]);
 
+  //Profile Modal Animation
+    const profileModalY = useSharedValue(windowHeight);
+    const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+  
+    const profileModalReveal = useAnimatedStyle(() => {
+      return {
+        transform: [{ translateY: profileModalY.value }],
+      };
+    });
+  
+    const startProfileModalAnimations = () => {
+      if (profileModal) {
+        profileModalY.value = withTiming(0);
+      } else {
+        profileModalY.value = withTiming(windowHeight);
+      }
+    };
+    
+    useEffect(() => {
+      startProfileModalAnimations();
+      // if (!itterator && guideModal) {
+      //   setItterator(0);
+      // }
+    }, [profileModal]);
+
+
+
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
   const [mapCenter, setMapCenter] = useState({
@@ -401,8 +432,8 @@ export default function MapPage() {
 
   useEffect(() => {
     const getProfile = async () => {
-      let sessionUserId = activeSession.user.id;
-      // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
+      // let sessionUserId = activeSession.user.id;
+      let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
       try {
         const success = await grabProfileById(sessionUserId);
         if (success) {
@@ -570,6 +601,10 @@ export default function MapPage() {
 
             <Animated.View style={[styles.tutorialModal, tutorial3ModalReveal]}>
               <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, profileModalReveal]}>
+              <UserProfileModal/>
             </Animated.View>
 
             <Map style={{ zIndex: 1 }} />
