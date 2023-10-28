@@ -684,7 +684,7 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: Platform.OS === "ios" ? "-10%" : "-7%",
+    bottom: Platform.OS === "ios" ? "-7%" : "-4%",
     right: Platform.OS === "ios" ? "-10%" : "-4%",
     height: scale(400),
     width: scale(300),
