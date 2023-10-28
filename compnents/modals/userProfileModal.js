@@ -6,15 +6,11 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
+  Share
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
+import * as FileSystem from "expo-file-system";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import InsetShadow from "react-native-inset-shadow";
 import { scale } from "react-native-size-matters";
@@ -28,9 +24,8 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function UserProfileModal() {
   const { profile, setProfile } = useContext(UserProfileContext);
-  const [tutorialsCloseState, setTutorialsCloseState] = useState(false);
   const [profileCloseState, setProfileCloseState] = useState(false);
-
+  const [imaButState, setImaButState] = useState(false);
 
   const { profileModal, setProfileModal } = useContext(
     ProfileModalContext
@@ -65,6 +60,34 @@ export default function UserProfileModal() {
     email = profile[0].Email
   }
 
+let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/details?id=com.freem11.divegomobile` : `https://apps.apple.com/us/app/divego/id6450968950`
+  
+ let fileName = `/1672707032477.jpg`
+ let cacheDir = FileSystem.cacheDirectory + fileName;
+
+    const onShare = async () => {
+      try {
+        const result = await Share.share({
+          title: "Checkout DiveGo! A great app to help divers find the best place and time of year to dive with ANY sea creature! \n\n Download it at : " + localUri,
+          url: cacheDir,
+          message:
+            `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature! \n\n Download it at : \n  ${localUri}`,
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+        }
+      } catch (error) {
+        Alert.alert(error.message);
+      }
+    };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -84,6 +107,7 @@ export default function UserProfileModal() {
               alignItems: "center",
             }}
           >
+           
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
           </TouchableOpacity>
         </View>
@@ -144,7 +168,38 @@ export default function UserProfileModal() {
             // }
           ></TextInput>
         </InsetShadow>
-  
+
+        <View style={imaButState ? styles.ShareButtonPressed : styles.ShareButton}>
+        <TouchableOpacity
+          onPress={onShare}
+          onPressIn={() => setImaButState(true)}
+          onPressOut={() => setImaButState(false)}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            // width: scale(100),
+            height: scale(35),
+            alignItems: "center",
+            marginLeft: scale(10),
+            marginRight: scale(10)
+          }}
+        >
+          <FontAwesome name="share-square-o" size={24} color="gold" />
+          <Text
+            style={{
+              marginLeft: 5,
+              fontFamily: "PatrickHand_400Regular",
+              color: "gold",
+              fontSize: 16
+            }}
+          >
+            Share DiveGo!
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       </View>
     </View>
   );
@@ -238,4 +293,42 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     opacity: 0.3,
   }, 
+  ShareButton: {
+    backgroundColor: "#538bdb",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    marginLeft: "30%",
+    marginTop: scale(30),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
+  ShareButtonPressed: {
+    backgroundColor: "#538dbd",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    marginLeft: "30%",
+    marginTop: scale(30),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
 });
