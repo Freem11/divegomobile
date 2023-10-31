@@ -40,6 +40,7 @@ import Animated, {
   useDerivedValue,
   withSpring,
   withTiming,
+  Easing,
 } from "react-native-reanimated";
 import DiveSiteAutoComplete from "./diveSiteSearch/diveSiteAutocomplete";
 import GeocodeAutocomplete from "./locationSearch/geocodeAutocomplete";
@@ -166,29 +167,29 @@ export default function FABButtons() {
 
   const startButtonAnimations = () => {
     if (rotationVal.value === 45) {
-      transYgear.value = withTiming(0);
-      transYinfo.value = withTiming(0);
-      transYgeo.value = withTiming(0);
-      transYsearch.value = withTiming(0);
-      transYphoto.value = withTiming(0);
-      transYsite.value = withTiming(0);
-      transYMyLoc.value = withTiming(0);
-      transYanchor.value = withTiming(0);
-      rotationVal.value = withSpring(0);
+      transYgear.value = withTiming(0, {duration: 200});
+      transYinfo.value = withTiming(0, {duration: 200});
+      transYgeo.value = withTiming(0, {duration: 200});
+      transYsearch.value = withTiming(0, {duration: 200});
+      transYphoto.value = withTiming(0, {duration: 200});
+      transYsite.value = withTiming(0, {duration: 200});
+      transYMyLoc.value = withTiming(0, {duration: 200});
+      transYanchor.value = withTiming(0, {duration: 200});
+      rotationVal.value = withSpring(0, {duration: 2000});
      
-      animalWidth.value = withTiming(1000);
-      geocodeWidth.value = withTiming(1000);
+      animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
+      geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
 
     } else {
-      transYgear.value = withSpring(-415);
-      transYinfo.value = withSpring(-365);
-      transYgeo.value = withSpring(-315);
-      transYsearch.value = withSpring(-265);
-      transYphoto.value = withSpring(-215);
-      transYsite.value = withSpring(-165);
-      transYMyLoc.value = withSpring(-115);
-      transYanchor.value = withSpring(-65);
-      rotationVal.value = withSpring(45);
+      transYgear.value = withSpring(-415, {duration: 2000});
+      transYinfo.value = withSpring(-365, {duration: 2000});
+      transYgeo.value = withSpring(-315, {duration: 2000});
+      transYsearch.value = withSpring(-265, {duration: 2000});
+      transYphoto.value = withSpring(-215, {duration: 2000});
+      transYsite.value = withSpring(-165, {duration: 2000});
+      transYMyLoc.value = withSpring(-115, {duration: 2000});
+      transYanchor.value = withSpring(-65, {duration: 2000});
+      rotationVal.value = withSpring(45, {duration: 2000});
     }
   };
 
@@ -200,14 +201,14 @@ export default function FABButtons() {
 
   const startAnimalButtonAnimations = () => {
     if (animalWidth.value === 1000) {
-      animalWidth.value = withTiming(-200);
+      animalWidth.value = withTiming(-200, {duration: 250, easing: Easing.in(Easing.linear)});
       if (tutorialRunning) {
         if (itterator2 === 3) {
           setItterator2(itterator2 + 1);
         }
       }
     } else {
-      animalWidth.value = withTiming(1000);
+      animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
     }
   };
 
@@ -219,9 +220,9 @@ export default function FABButtons() {
 
   const startGeoCodeButtonAnimations = () => {
     if (geocodeWidth.value === 1000) {
-      geocodeWidth.value = withTiming(-200);
+      geocodeWidth.value = withTiming(-200, {duration: 250, easing: Easing.in(Easing.linear)});
     } else {
-      geocodeWidth.value = withTiming(1000);
+      geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
     }
   };
 

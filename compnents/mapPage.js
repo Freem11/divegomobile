@@ -59,6 +59,7 @@ import Animated, {
   useDerivedValue,
   withTiming,
   interpolate,
+  Easing,
 } from "react-native-reanimated";
 import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
@@ -146,9 +147,9 @@ export default function MapPage() {
 
   const startTutorialLaunchPadModalAnimations = () => {
     if (tutorialLaunchpadModal) {
-      tutorialLaunchpadModalY.value = withTiming(0);
+      tutorialLaunchpadModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorialLaunchpadModalY.value = withTiming(windowHeight);
+      tutorialLaunchpadModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -174,9 +175,9 @@ export default function MapPage() {
 
   const startAnchorModalAnimations = () => {
     if (siteModal) {
-      anchorModalY.value = withTiming(0);
+      anchorModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      anchorModalY.value = withTiming(windowHeight);
+      anchorModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -207,9 +208,9 @@ export default function MapPage() {
 
   const startDiveSiteModalAnimations = () => {
     if (diveSiteAdderModal) {
-      diveSiteModalY.value = withTiming(0);
+      diveSiteModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      diveSiteModalY.value = withTiming(windowHeight);
+      diveSiteModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -232,9 +233,9 @@ export default function MapPage() {
 
   const startPictureModalAnimations = () => {
     if (picAdderModal) {
-      pictureModalY.value = withTiming(0);
+      pictureModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      pictureModalY.value = withTiming(windowHeight);
+      pictureModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -258,9 +259,9 @@ export default function MapPage() {
 
   const startGuideModalAnimations = () => {
     if (guideModal) {
-      tutorialModalY.value = withTiming(0);
+      tutorialModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorialModalY.value = withTiming(windowHeight);
+      tutorialModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -286,9 +287,9 @@ export default function MapPage() {
 
   const startSecondGuideModalAnimations = () => {
     if (secondGuideModal) {
-      tutorial2ModalY.value = withTiming(0);
+      tutorial2ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorial2ModalY.value = withTiming(windowHeight);
+      tutorial2ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -314,9 +315,9 @@ export default function MapPage() {
 
   const startThirdGuideModalAnimations = () => {
     if (thirdGuideModal) {
-      tutorial3ModalY.value = withTiming(0);
+      tutorial3ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorial3ModalY.value = withTiming(windowHeight);
+      tutorial3ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -339,9 +340,9 @@ export default function MapPage() {
   
     const startProfileModalAnimations = () => {
       if (profileModal) {
-        profileModalY.value = withTiming(0);
+        profileModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
       } else {
-        profileModalY.value = withTiming(windowHeight);
+        profileModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
       }
     };
     
