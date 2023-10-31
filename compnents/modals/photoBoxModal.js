@@ -5,6 +5,7 @@ import {
   Platform,
   Image,
   Dimensions,
+  Alert,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -13,7 +14,7 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
@@ -23,6 +24,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal(props) {
+
   const { picData, togglePhotoBoxModal } = props;
 
   let fileName = picData && picData.split("/").pop();
@@ -34,20 +36,70 @@ export default function PhotoBoxModal(props) {
 
   const [photoCloseState, setPhotoCloseState] = useState(false);
 
+  useEffect(() => {
+      scaleValue.value = 1
+      focalX.value = 0
+      focalY.value = 0
+  }, [picData])
+
   const scaleValue = useSharedValue(1);
+  const lastScaleValue = useSharedValue(1);
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
+  const context = useSharedValue({ x: 0, y: 0 });
+  
+  const animateTaps = Gesture.Tap().numberOfTaps(2).onEnd((event, success) => {
+     if (success){
+       scaleValue.value = 1
+       focalX.value = 0
+       focalY.value = 0
+     }
+});
+
+  const animatePan = Gesture.Pan()
+  // .onBegin(() => {
+  //   if (xValue.value > picMenuSize / 2 - 180) {
+  //     xValue.value = picMenuSize / 2 - 175;
+  //   } else if (xValue.value < -picMenuSize / 2 + 180) {
+  //     xValue.value = -picMenuSize / 2 + 175;
+  //   }
+  // })
+  .onStart(() => {
+    context.value = { x: focalX.value, y: focalY.value };
+  })
+  .onUpdate((event) => {
+      focalX.value = (-event.translationY + context.value.x);
+      focalY.value = (event.translationX + context.value.y);
+  })
+  // .onEnd((event) => {
+  //   if (xValue.value > picMenuSize / 2 - 180) {
+  //     xValue.value = picMenuSize / 2 - 175;
+  //   } else if (xValue.value < -picMenuSize / 2 + 180) {
+  //     xValue.value = -picMenuSize / 2 + 175;
+  //   }
+  // });
 
   const animatePicPinch = Gesture.Pinch()
-
+    .onBegin(() => {
+      // scaleValue.value = lastScaleValue.value
+    })
+    .onStart(() => {
+      context.value = { x: focalX.value, y: focalX.value };
+      // scaleValue.value = lastScaleValue.value
+    })
     .onUpdate((event) => {
+      if (event.numberOfPointers === 2){
       scaleValue.value = event.scale;
       focalX.value = event.focalX;
       focalY.value = event.focalY;
+      }
+      
     })
     .onEnd((event) => {
-      scaleValue.value = withDelay(1500, withTiming(1));
+      lastScaleValue.value = scaleValue.value
     });
+
+  const combinedAnimations = Gesture.Simultaneous(animatePicPinch, animatePan, animateTaps)
 
   const animatedPictureStyle = useAnimatedStyle(() => {
     return {
@@ -95,7 +147,7 @@ export default function PhotoBoxModal(props) {
         </View>
       </View>
 
-      <GestureDetector gesture={animatePicPinch}>
+      <GestureDetector gesture={combinedAnimations}>
         <Animated.View
           style={{
             flex: 1,
@@ -149,6 +201,7 @@ const styles = StyleSheet.create({
     marginLeft: "12%",
     width: "20%",
     height: scale(30),
+    zIndex: 5
   },
   closeButton: {
     position: "relative",
