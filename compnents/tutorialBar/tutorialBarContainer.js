@@ -44,8 +44,8 @@ export default function TutorialBar() {
   ];
 
   const getProfile = async () => {
-    let sessionUserId = activeSession.user.id;
-    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
+    // let sessionUserId = activeSession.user.id;
+    let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {

@@ -2,7 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
+  Share,
   ScrollView,
   Platform,
   TouchableWithoutFeedback,
@@ -19,6 +19,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import * as FileSystem from "expo-file-system";
 import { SliderContext } from "../contexts/sliderContext";
 import { MonthSelectContext } from "../contexts/monthSelectContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
@@ -189,6 +190,34 @@ export default function AnchorModal(lat, lng) {
     setPhotoBoxModel(!photoBoxModel);
   };
 
+     const onShare = async (photoFile, userN, seaCreature) => {
+
+      let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/details?id=com.freem11.divegomobile` : `https://apps.apple.com/us/app/divego/id6450968950`
+  
+      let temp = photoFile.split("/")
+      let fileName = temp[2]
+      let cacheDir = FileSystem.cacheDirectory + fileName;
+     
+       try {
+         const result = await Share.share({
+           title: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
+           url: cacheDir,
+           message: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
+         });
+         if (result.action === Share.sharedAction) {
+           if (result.activityType) {
+             // shared with activity type of result.activityType
+           } else {
+             // shared
+           }
+         } else if (result.action === Share.dismissedAction) {
+           // dismissed
+         }
+       } catch (error) {
+         Alert.alert(error.message);
+       }
+     };
+
   return (
     <View
       style={{
@@ -232,6 +261,13 @@ export default function AnchorModal(lat, lng) {
               return (
                 <View key={pic.id} style={styles.picContainer3}>
                   <View style={styles.micro}>
+                    <FontAwesome 
+                    name="share" 
+                    color="white" 
+                    size={scale(19)}
+                    onPress={() => onShare(pic.photoFile, pic.userName, pic.label)}
+                    style={styles.share}
+                    />
                     <FontAwesome
                       name="flag"
                       color="maroon"
@@ -321,7 +357,7 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(15),
-    marginLeft: scale(-10),
+    marginLeft: scale(-27),
   },
   flagMajor: {
     width: "10%",
@@ -329,9 +365,14 @@ const styles = StyleSheet.create({
     marginRight: "-5%",
     // backgroundColor: 'blue'
   },
+  share: {
+    left: scale(232),
+    top: scale(1),
+    opacity: 0.8
+  },
   flag: {
-    left: scale(257),
-    top: scale(2),
+    left: scale(237),
+    top: scale(1),
   },
   noSightings: {
     flex: 1,

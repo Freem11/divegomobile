@@ -50,6 +50,7 @@ import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
 
+
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
@@ -58,6 +59,7 @@ import Animated, {
   useDerivedValue,
   withTiming,
   interpolate,
+  Easing,
 } from "react-native-reanimated";
 import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
@@ -67,7 +69,10 @@ import IntroTutorial from "./tutorial/introTutorial";
 import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
+import UserProfileModal from "./modals/userProfileModal";
+
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { ProfileModalContext } from "./contexts/profileModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -142,9 +147,9 @@ export default function MapPage() {
 
   const startTutorialLaunchPadModalAnimations = () => {
     if (tutorialLaunchpadModal) {
-      tutorialLaunchpadModalY.value = withTiming(0);
+      tutorialLaunchpadModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorialLaunchpadModalY.value = withTiming(windowHeight);
+      tutorialLaunchpadModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -170,9 +175,9 @@ export default function MapPage() {
 
   const startAnchorModalAnimations = () => {
     if (siteModal) {
-      anchorModalY.value = withTiming(0);
+      anchorModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      anchorModalY.value = withTiming(windowHeight);
+      anchorModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -203,9 +208,9 @@ export default function MapPage() {
 
   const startDiveSiteModalAnimations = () => {
     if (diveSiteAdderModal) {
-      diveSiteModalY.value = withTiming(0);
+      diveSiteModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      diveSiteModalY.value = withTiming(windowHeight);
+      diveSiteModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -228,9 +233,9 @@ export default function MapPage() {
 
   const startPictureModalAnimations = () => {
     if (picAdderModal) {
-      pictureModalY.value = withTiming(0);
+      pictureModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      pictureModalY.value = withTiming(windowHeight);
+      pictureModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -254,9 +259,9 @@ export default function MapPage() {
 
   const startGuideModalAnimations = () => {
     if (guideModal) {
-      tutorialModalY.value = withTiming(0);
+      tutorialModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorialModalY.value = withTiming(windowHeight);
+      tutorialModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -282,9 +287,9 @@ export default function MapPage() {
 
   const startSecondGuideModalAnimations = () => {
     if (secondGuideModal) {
-      tutorial2ModalY.value = withTiming(0);
+      tutorial2ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorial2ModalY.value = withTiming(windowHeight);
+      tutorial2ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -310,9 +315,9 @@ export default function MapPage() {
 
   const startThirdGuideModalAnimations = () => {
     if (thirdGuideModal) {
-      tutorial3ModalY.value = withTiming(0);
+      tutorial3ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
     } else {
-      tutorial3ModalY.value = withTiming(windowHeight);
+      tutorial3ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
     }
   };
 
@@ -322,6 +327,33 @@ export default function MapPage() {
     //   setItterator(0);
     // }
   }, [thirdGuideModal]);
+
+  //Profile Modal Animation
+    const profileModalY = useSharedValue(windowHeight);
+    const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+  
+    const profileModalReveal = useAnimatedStyle(() => {
+      return {
+        transform: [{ translateY: profileModalY.value }],
+      };
+    });
+  
+    const startProfileModalAnimations = () => {
+      if (profileModal) {
+        profileModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      } else {
+        profileModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      }
+    };
+    
+    useEffect(() => {
+      startProfileModalAnimations();
+      // if (!itterator && guideModal) {
+      //   setItterator(0);
+      // }
+    }, [profileModal]);
+
+
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -401,8 +433,8 @@ export default function MapPage() {
 
   useEffect(() => {
     const getProfile = async () => {
-      let sessionUserId = activeSession.user.id;
-      // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
+      // let sessionUserId = activeSession.user.id;
+      let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
       try {
         const success = await grabProfileById(sessionUserId);
         if (success) {
@@ -570,6 +602,10 @@ export default function MapPage() {
 
             <Animated.View style={[styles.tutorialModal, tutorial3ModalReveal]}>
               <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, profileModalReveal]}>
+              <UserProfileModal/>
             </Animated.View>
 
             <Map style={{ zIndex: 1 }} />

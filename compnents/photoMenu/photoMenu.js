@@ -57,10 +57,10 @@ export default function PhotoMenu() {
       context.value = { x: xValue.value };
     })
     .onUpdate((event) => {
-      if (event.velocityX > 500 || event.velocityX < -500) {
-        xValue.value = event.translationX * 2 + context.value.x;
-      } else if (event.velocityX > 700 || event.velocityX < -700) {
+      if (event.velocityX > 400 || event.velocityX < -400) {
         xValue.value = event.translationX * 3 + context.value.x;
+      } else if (event.velocityX > 600 || event.velocityX < -600) {
+        xValue.value = event.translationX * 5 + context.value.x;
       } else {
         xValue.value = event.translationX + context.value.x;
       }
@@ -78,7 +78,7 @@ export default function PhotoMenu() {
       transform: [
         {
           translateX: withTiming(xValue.value, {
-            duration: 400,
+            duration: 500,
             easing: Easing.inOut(Easing.linear),
           }),
         },
