@@ -12,28 +12,67 @@ import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { findImageInCache, cacheImage } from "../helpers/imageCashingHelper";
 import InsetShadow from "react-native-inset-shadow";
 import { scale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ImageCasher from "../helpers/imageCashing";
 
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+
 export default function UserProfileModal() {
   const { profile, setProfile } = useContext(UserProfileContext);
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [imaButState, setImaButState] = useState(false);
-
+  const [picUri, setPicUri] = useState(null);
   const { profileModal, setProfileModal } = useContext(
     ProfileModalContext
   );
 
+  let fileName = `/Headliner.jpg`
+  let cacheDir = FileSystem.cacheDirectory + fileName;
+
+  let image = {
+    uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/Headliner.jpg`,
+    id : fileName
+  };
+
+  const callback = downloadProgress => {
+    const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+      // console.log("callback?", progress)
+      // setIsDownloaded(progress)
+  };
+
   useEffect(() => {
     getProfile();
+
+    async function loadImage() {
+      let imageExisitsInCache = await findImageInCache(cacheDir);
+      // console.log("this?", imageExisitsInCache)
+        if (imageExisitsInCache.exists) {
+          setPicUri(cacheDir);
+        } else {
+          let cashing = await cacheImage(image.uri, cacheDir, callback);
+          // console.log("that?", cashing)
+          if (cashing.cached) {
+            setPicUri(cashing.path);
+          } else {
+            // console.log("main", cashing.cached)
+            setPicUri(test.uri);
+          }
+        }
+    }
+
+    loadImage();
+
   }, []);
+
+
 
   const getProfile = async () => {
     // let sessionUserId = activeSession.user.id;
@@ -62,16 +101,13 @@ export default function UserProfileModal() {
 
 let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/details?id=com.freem11.divegomobile` : `https://apps.apple.com/us/app/divego/id6450968950`
   
- let fileName = `/1672707032477.jpg`
- let cacheDir = FileSystem.cacheDirectory + fileName;
-
     const onShare = async () => {
       try {
         const result = await Share.share({
-          title: "Checkout DiveGo! A great app to help divers find the best place and time of year to dive with ANY sea creature! \n\n Download it at : " + localUri,
+          title: `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature! \n\nDownload it at : \n${localUri} \n`,
           url: cacheDir,
           message:
-            `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature! \n\n Download it at : \n  ${localUri}`,
+            `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature! \n\nDownload it at : \n${localUri} \n`,
         });
         if (result.action === Share.sharedAction) {
           if (result.activityType) {
