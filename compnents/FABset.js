@@ -26,6 +26,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import {
   MaterialIcons,
@@ -68,7 +69,25 @@ export default function FABButtons() {
 
   const [gearModal, setGearModal] = useState(false);
 
+  const [geoHide, setGeoHide] = useState(false);
+  const [diveSearchHide, setDiveSearchHide] = useState(false);
+
+  useEffect(() => {
+    if (geoHide){
+      geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
+    }
+  }, [geoHide]);
+
+  useEffect(() => {
+    if (diveSearchHide){
+      console.log("yo")
+      animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});  
+    }
+  }, [diveSearchHide]);
+
   const getCurrentLocation = async () => {
+    geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
+    animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});  
     try {
       const location = await getCurrentCoordinates();
       if (location) {
@@ -193,6 +212,41 @@ export default function FABButtons() {
     }
   };
 
+  const menuHide = () => {
+    animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
+    geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
+  }
+
+  const diveSiteHide = () => {
+    Keyboard.dismiss()
+    setDiveSitesTog(!diveSitesTog)
+    menuHide()
+  }
+
+  const diveSiteModalHide = () => {
+    Keyboard.dismiss()
+    setDiveSiteAdderModal(!diveSiteAdderModal)
+    menuHide()
+  }
+
+  const photoModalHide = () => {
+    Keyboard.dismiss()
+    setPicAdderModal(!picAdderModal)
+    menuHide()
+  }
+
+  const launchPadHide = () => {
+    Keyboard.dismiss()
+    setTutorialLaunchpadModal(!tutorialLaunchpadModal)
+    menuHide()
+  }
+
+  const settingsHide = () => {
+    Keyboard.dismiss()
+    setGearModal(!gearModal)
+    menuHide()
+  }
+
   const animalReveal = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: animalWidth.value }],
@@ -200,6 +254,8 @@ export default function FABButtons() {
   });
 
   const startAnimalButtonAnimations = () => {
+    setDiveSearchHide(false)
+    geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
     if (animalWidth.value === 1000) {
       animalWidth.value = withTiming(-200, {duration: 250, easing: Easing.in(Easing.linear)});
       if (tutorialRunning) {
@@ -219,6 +275,8 @@ export default function FABButtons() {
   });
 
   const startGeoCodeButtonAnimations = () => {
+    setGeoHide(false)
+    animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
     if (geocodeWidth.value === 1000) {
       geocodeWidth.value = withTiming(-200, {duration: 250, easing: Easing.in(Easing.linear)});
     } else {
@@ -330,7 +388,7 @@ export default function FABButtons() {
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => setGearModal(!gearModal)}
+          onPress={() => settingsHide()}
           onPressIn={() => setSettButState(true)}
           onPressOut={() => setSettButState(false)}
           style={{
@@ -355,7 +413,7 @@ export default function FABButtons() {
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
+          onPress={() => launchPadHide()}
           onPressIn={() => setHow2ButState(true)}
           onPressOut={() => setHow2ButState(false)}
           style={{
@@ -405,7 +463,7 @@ export default function FABButtons() {
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => setPicAdderModal(!picAdderModal)}
+          onPress={() => photoModalHide()}
           onPressIn={() => setPhotButState(true)}
           onPressOut={() => setPhotButState(false)}
           style={{
@@ -430,7 +488,7 @@ export default function FABButtons() {
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => setDiveSiteAdderModal(!diveSiteAdderModal)}
+          onPress={() => diveSiteModalHide()}
           onPressIn={() => setSiteButState(true)}
           onPressOut={() => setSiteButState(false)}
           style={{
@@ -505,7 +563,7 @@ export default function FABButtons() {
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => setDiveSitesTog(!diveSitesTog)}
+          onPress={() => diveSiteHide()}
           onPressIn={() => setAnchButState(true)}
           onPressOut={() => setAnchButState(false)}
           style={{
@@ -549,19 +607,19 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 800 -140}
+        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 1000 -160}
       >
         <Animated.View style={[styles.animal, animalReveal]}>
-          <DiveSiteAutoComplete />
+          <DiveSiteAutoComplete setDiveSearchHide={setDiveSearchHide}/>
         </Animated.View>
       </KeyboardAvoidingView>
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 800 -140}
+        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 1000 -160}
       >
         <Animated.View style={[styles.geoCoder, geocodeReveal]} >
-          <GeocodeAutocomplete />
+          <GeocodeAutocomplete setGeoHide={setGeoHide}/>
         </Animated.View>
       </KeyboardAvoidingView>
 
@@ -572,7 +630,7 @@ export default function FABButtons() {
               <Text style={styles.headerAlt}>Settings</Text>
             </View>
             <TouchableWithoutFeedback
-              onPress={() => setGearModal(!gearModal)}
+              onPress={() => settingsHide()}
               onPressIn={() => setSettCloseState(true)}
               onPressOut={() => setSettCloseState(false)}
             >

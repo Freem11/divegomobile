@@ -11,7 +11,8 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
 
-export default function DiveSiteAutoComplete() {
+export default function DiveSiteAutoComplete(props) {
+  const { setDiveSearchHide } = props;
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
@@ -84,6 +85,8 @@ export default function DiveSiteAutoComplete() {
       }
      
     }
+    console.log("hey")
+    setDiveSearchHide(true)
     Keyboard.dismiss()
   };
 
@@ -127,8 +130,9 @@ export default function DiveSiteAutoComplete() {
         onChangeText={() => handleChangeText}
         onFocus={() => handleChangeText}
         onBlur={() => handleChangeText}
+        clearOnFocus={true}
         showChevron={false}
-        showClear={true}
+        showClear={false}
         closeOnBlur={true}
         onClear={(text) => handleClear(text)}
       />

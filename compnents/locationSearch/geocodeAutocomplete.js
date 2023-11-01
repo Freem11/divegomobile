@@ -4,7 +4,9 @@ import PlacesInput from "react-native-places-input";
 import config from "../../config";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 
-export default function GeocodeAutoComplete() {
+export default function GeocodeAutoComplete(props) {
+  const { setGeoHide } = props;
+
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
 
   const handleConfirm = async (place) => {
@@ -12,6 +14,7 @@ export default function GeocodeAutoComplete() {
       lat: place.result.geometry.location.lat,
       lng: place.result.geometry.location.lng,
     });
+    setGeoHide(true)
     Keyboard.dismiss();
   };
 

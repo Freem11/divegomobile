@@ -168,7 +168,7 @@ let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/d
             value={username}
             placeholder={"DiverName"}
             keyboardType="numbers-and-punctuation"
-            // editable={false}
+            editable={false}
             fontSize={18}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
@@ -195,7 +195,7 @@ let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/d
             value={email}
             placeholder={"Email"}
             keyboardType="numbers-and-punctuation"
-            // editable={false}
+            editable={false}
             fontSize={18}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"

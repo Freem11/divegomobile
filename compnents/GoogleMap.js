@@ -331,7 +331,6 @@ export default function Map() {
               <Marker
                 key={cluster.id}
                 coordinate={{ latitude: latitude, longitude: longitude }}
-                // title={pointCount.toString() + " sites"}
                 image={anchorClustIOS}
                 onPress={() => {
                   const expansionZoom = Math.min(
@@ -351,7 +350,6 @@ export default function Map() {
               key={cluster.properties.siteID}
               coordinate={{ latitude: latitude, longitude: longitude }}
               image={anchorIconIOS}
-              // title={cluster.properties.siteID}
               onPress={() =>
                 setupAnchorModal(cluster.properties.siteID, latitude, longitude)
               }
