@@ -66,6 +66,7 @@ import {
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
+import config from "./config";
 
 const { width, height } = Dimensions.get("window");
 
@@ -155,6 +156,30 @@ export default function App() {
 
   const [dragPin, setDragPin] = useState({});
 
+  21.281493, -157.885560
+  20.319362, -87.018466
+
+  async function getPlaceID() {
+    try {
+      const res = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=20.319362,-87.018466&sensor=true&rankby=distance&key=${config.GOOGLE_MAPS_API_KEY}&types=tourist_attraction`);
+      const placeInfo = await res.json();
+      console.log("helloG?", placeInfo.results[0]);
+      const placeID = placeInfo.results[0].place_id
+
+      const resPhotoDeets = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?fields=photos,geometry,type&place_id=${placeID}&key=${config.GOOGLE_MAPS_API_KEY}`);
+      const photoInfo = await resPhotoDeets.json();
+      const photoID = photoInfo.result.photos[1].photo_reference
+      console.log("helloF?", photoInfo.result, photoInfo.result.geometry.location);
+
+      const resPhoto = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoID}&key=${config.GOOGLE_MAPS_API_KEY}`);
+      // console.log("helloE?", resPhoto.headers.map.date, resPhoto.url);
+      console.log("helloE?", resPhoto);
+
+    } catch (err) {
+      console.log("error", err);
+    }
+  }
+
   const getCurrentLocation = async () => {
     try {
       // await requestPermissions()
@@ -194,6 +219,7 @@ export default function App() {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
+      await getPlaceID();
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );

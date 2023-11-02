@@ -80,7 +80,6 @@ export default function FABButtons() {
 
   useEffect(() => {
     if (diveSearchHide){
-      console.log("yo")
       animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});  
     }
   }, [diveSearchHide]);
@@ -607,7 +606,7 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 1000 -160}
+        keyboardVerticalOffset={Platform.OS === "android" ? 700 : scale(1000) - scale(250)}
       >
         <Animated.View style={[styles.animal, animalReveal]}>
           <DiveSiteAutoComplete setDiveSearchHide={setDiveSearchHide}/>
@@ -616,7 +615,7 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : 1000 -160}
+        keyboardVerticalOffset={Platform.OS === "android" ? 700 : scale(1000) - scale(250)}
       >
         <Animated.View style={[styles.geoCoder, geocodeReveal]} >
           <GeocodeAutocomplete setGeoHide={setGeoHide}/>

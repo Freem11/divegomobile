@@ -24,7 +24,6 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal(props) {
-
   const { picData, togglePhotoBoxModal } = props;
 
   let fileName = picData && picData.split("/").pop();
@@ -37,82 +36,100 @@ export default function PhotoBoxModal(props) {
   const [photoCloseState, setPhotoCloseState] = useState(false);
 
   useEffect(() => {
-      scaleValue.value = 1
-      focalX.value = 0
-      focalY.value = 0
-  }, [picData])
+    scaleCurrent.value = 1;
+    scalePrevious.value = 1;
+    focalX.value = 0;
+    focalY.value = 0;
+    xCurrent.value = 0;
+    xPrevious.value = 0;
+    yCurrent.value = 0;
+    yPrevious.value = 0;
+  }, [picData]);
 
-  const scaleValue = useSharedValue(1);
-  const lastScaleValue = useSharedValue(1);
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
-  const context = useSharedValue({ x: 0, y: 0 });
-  
-  const animateTaps = Gesture.Tap().numberOfTaps(2).onEnd((event, success) => {
-     if (success){
-       scaleValue.value = 1
-       focalX.value = 0
-       focalY.value = 0
-     }
-});
+  const xCurrent = useSharedValue(0);
+  const yCurrent = useSharedValue(0);
+  const xPrevious = useSharedValue(0);
+  const yPrevious = useSharedValue(0);
+  const scaleCurrent = useSharedValue(1);
+  const scalePrevious = useSharedValue(1);
 
-  const animatePan = Gesture.Pan()
-  // .onBegin(() => {
-  //   if (xValue.value > picMenuSize / 2 - 180) {
-  //     xValue.value = picMenuSize / 2 - 175;
-  //   } else if (xValue.value < -picMenuSize / 2 + 180) {
-  //     xValue.value = -picMenuSize / 2 + 175;
-  //   }
-  // })
-  .onStart(() => {
-    context.value = { x: focalX.value, y: focalY.value };
-  })
-  .onUpdate((event) => {
-      focalX.value = (-event.translationY + context.value.x);
-      focalY.value = (event.translationX + context.value.y);
-  })
-  // .onEnd((event) => {
-  //   if (xValue.value > picMenuSize / 2 - 180) {
-  //     xValue.value = picMenuSize / 2 - 175;
-  //   } else if (xValue.value < -picMenuSize / 2 + 180) {
-  //     xValue.value = -picMenuSize / 2 + 175;
-  //   }
-  // });
+  const context = useSharedValue({ x: 0, y: 0, fx: 0, fy: 0})
 
-  const animatePicPinch = Gesture.Pinch()
-    .onBegin(() => {
-      // scaleValue.value = lastScaleValue.value
-    })
-    .onStart(() => {
-      context.value = { x: focalX.value, y: focalX.value };
-      // scaleValue.value = lastScaleValue.value
-    })
-    .onUpdate((event) => {
-      if (event.numberOfPointers === 2){
-      scaleValue.value = event.scale;
-      focalX.value = event.focalX;
-      focalY.value = event.focalY;
+  const animateTaps = Gesture.Tap()
+    .maxDistance(10)
+    .numberOfTaps(2)
+    .onEnd((event, success) => {
+      if (success) {
+        scaleCurrent.value = 1;
+        scalePrevious.value = 1;
+        focalX.value = 0;
+        focalY.value = 0;
+        xCurrent.value = 0;
+        xPrevious.value = 0;
+        yCurrent.value = 0;
+        yPrevious.value = 0;
       }
-      
-    })
-    .onEnd((event) => {
-      lastScaleValue.value = scaleValue.value
     });
 
-  const combinedAnimations = Gesture.Simultaneous(animatePicPinch, animatePan, animateTaps)
+  const animatePan = Gesture.Pan()
+    .onStart(() => {
+      context.value = { x: xCurrent.value, y: yCurrent.value, fx: focalX.value, fy: focalY.value };
+    })
+    .onUpdate((event) => {
+      xCurrent.value = event.translationY + context.value.x;
+      yCurrent.value = -event.translationX + context.value.y;
+    });
+
+  const animatePicPinch = Gesture.Pinch()
+    .onStart((event) => {
+      if (event.numberOfPointers == 2) {
+        focalX.value = event.focalX;
+        focalY.value = event.focalY;
+      }
+    })
+    .onUpdate((event) => {
+      if (event.numberOfPointers == 2) {
+        // On Android, the onStart event gives 0,0 for the focal
+        // values, so we set them here instead too.
+        if (event.oldState === 2) {
+          focalX.value = event.focalX;
+          focalY.value = event.focalY;
+        }
+        scaleCurrent.value = event.scale;
+
+        xCurrent.value = (1 - scaleCurrent.value) * (focalX.value - windowWidth / 2);
+        yCurrent.value = (1 - scaleCurrent.value) * (focalY.value - windowHeight / 2);
+      }
+    })
+    .onEnd(() => {
+      scalePrevious.value = scalePrevious.value * scaleCurrent.value;
+
+      xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
+      yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
+
+      xCurrent.value = 0;
+      yCurrent.value = 0;
+
+      scaleCurrent.value = 1;
+    });
+
+  const combinedAnimations = Gesture.Simultaneous(
+    animatePicPinch,
+    animatePan,
+    animateTaps
+  );
 
   const animatedPictureStyle = useAnimatedStyle(() => {
     return {
       transform: [
-        { translateX: focalX.value },
-        { translateY: focalY.value },
-        { translateX: -windowHeight / 2 },
-        { translateY: -windowWidth },
-        { scale: scaleValue.value },
-        { translateX: -focalX.value },
-        { translateY: -focalY.value },
-        { translateX: windowHeight / 2 },
-        { translateY: windowWidth },
+        { translateX: xCurrent.value },
+        { translateY: yCurrent.value },
+        { scale: scaleCurrent.value },
+        { translateX: xPrevious.value },
+        { translateY: yPrevious.value },
+        { scale: scalePrevious.value },
       ],
     };
   });
@@ -201,7 +218,7 @@ const styles = StyleSheet.create({
     marginLeft: "12%",
     width: "20%",
     height: scale(30),
-    zIndex: 5
+    zIndex: 5,
   },
   closeButton: {
     position: "relative",

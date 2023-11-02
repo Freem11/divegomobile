@@ -134,7 +134,6 @@ export const multiHeatPoints = async (GPSBubble, animalArray) => {
     .lte("lng", maxLng);
 
   if (error) {
-    console.log("its me")
     console.log("couldn't do it,", error);
     return [];
   }

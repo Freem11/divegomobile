@@ -9,8 +9,6 @@ export default function Logo() {
     ProfileModalContext
   );
 
-  console.log(profileModal)
-
   return (
     <View style={styles.container}>
       <Text style={{ fontFamily: "Caveat_400Regular", fontSize: scale(20) }} onPress={() => setProfileModal(true)}>DiveGo</Text>

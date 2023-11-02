@@ -85,7 +85,6 @@ export default function DiveSiteAutoComplete(props) {
       }
      
     }
-    console.log("hey")
     setDiveSearchHide(true)
     Keyboard.dismiss()
   };
