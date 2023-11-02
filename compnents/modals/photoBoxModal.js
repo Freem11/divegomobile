@@ -54,6 +54,8 @@ export default function PhotoBoxModal(props) {
   const yPrevious = useSharedValue(0);
   const scaleCurrent = useSharedValue(1);
   const scalePrevious = useSharedValue(1);
+  const xOffset = useSharedValue(0);
+  const yOffset = useSharedValue(0);
 
   const context = useSharedValue({ x: 0, y: 0, fx: 0, fy: 0})
 
@@ -80,6 +82,9 @@ export default function PhotoBoxModal(props) {
     .onUpdate((event) => {
       xCurrent.value = event.translationY + context.value.x;
       yCurrent.value = -event.translationX + context.value.y;
+
+      xOffset.value = event.translationY + context.value.x;
+      yOffset.value = -event.translationX + context.value.y;
     });
 
   const animatePicPinch = Gesture.Pinch()
@@ -99,8 +104,8 @@ export default function PhotoBoxModal(props) {
         }
         scaleCurrent.value = event.scale;
 
-        xCurrent.value = (1 - scaleCurrent.value) * (focalX.value - windowWidth / 2);
-        yCurrent.value = (1 - scaleCurrent.value) * (focalY.value - windowHeight / 2);
+        xCurrent.value = (1 - scaleCurrent.value) * (focalX.value - windowWidth / 2) + xOffset.value;
+        yCurrent.value = (1 - scaleCurrent.value) * (focalY.value - windowHeight / 2) + yOffset.value;
       }
     })
     .onEnd(() => {
@@ -243,5 +248,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
+    backgroundColor: "blue"
   },
 });
