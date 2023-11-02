@@ -161,19 +161,17 @@ export default function App() {
 
   async function getPlaceID() {
     try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=20.319362,-87.018466&sensor=true&rankby=distance&key=${config.GOOGLE_MAPS_API_KEY}&types=tourist_attraction`);
+      const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?location=20.319362,-87.018466&query='underwater'&radius=1000&type=point_of_interest&key=${config.GOOGLE_MAPS_API_KEY}`);
       const placeInfo = await res.json();
       console.log("helloG?", placeInfo.results[0]);
-      const placeID = placeInfo.results[0].place_id
-
-      const resPhotoDeets = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?fields=photos,geometry,type&place_id=${placeID}&key=${config.GOOGLE_MAPS_API_KEY}`);
-      const photoInfo = await resPhotoDeets.json();
-      const photoID = photoInfo.result.photos[1].photo_reference
-      console.log("helloF?", photoInfo.result, photoInfo.result.geometry.location);
+      const placeID = placeInfo.results[0].place_id;
+      const photoID = placeInfo.results[0].photos[0].photo_reference;
 
       const resPhoto = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoID}&key=${config.GOOGLE_MAPS_API_KEY}`);
       // console.log("helloE?", resPhoto.headers.map.date, resPhoto.url);
       console.log("helloE?", resPhoto);
+      console.log("url", resPhoto.url);
+      console.log("date", resPhoto.headers.map.date);
 
     } catch (err) {
       console.log("error", err);
