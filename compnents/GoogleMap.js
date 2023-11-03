@@ -23,24 +23,18 @@ import {
   StyleSheet,
   View,
   Dimensions,
-  Keyboard,
-  Modal,
-  Text,
-  TouchableWithoutFeedback,
   Platform,
 } from "react-native";
 import mantaIOS from "../compnents/png/Manta32.png";
-import anchorGold from "../compnents/png/icons8-anchor-24.png";
-import anchorClustIOS from "../compnents/png/ClusterAnchor24.png";
-import anchorIconIOS from "../compnents/png/SiteAnchor20.png";
+import anchorGold from "../compnents/png/markerAnchor48.png";
+import anchorClustIOS from "../compnents/png/clusterAnchor65.png";
+import anchorIconIOS from "../compnents/png/anchor48.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
 import { diveSites } from "../supabaseCalls/diveSiteSupabaseCalls";
 import { multiHeatPoints } from "../supabaseCalls/heatPointSupabaseCalls";
-import AnchorModal from "./modals/anchorModal";
 import { scale } from "react-native-size-matters";
-import { FontAwesome } from "@expo/vector-icons";
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const { width, height } = Dimensions.get("window");
@@ -287,7 +281,7 @@ export default function Map() {
         toolbarEnabled={false}
       >
         {masterSwitch && newHeat.length > 0 && (
-          <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
+          <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 50 : 20}/>
         )}
 
         {tempMarker.length > 0 && (

@@ -37,8 +37,8 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { ReverseContext } from "../contexts/reverseContext";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
-import anchorClustIOS from "../png/ClusterAnchor24.png";
-import anchorIconIOS from "../png/SiteAnchor20.png";
+import anchorClustIOS from "../png/clusterAnchor75.png";
+import anchorIconIOS from "../png/anchor36.png";
 import heatIconIOS from "../png/heatpoint.png";
 import arrowIOS from "../png/arrow.png";
 import UserNamer from "./usernamer";
@@ -795,8 +795,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchorclust,
               {
-                height: scale(30),
-                width: scale(30),
+                height: scale(31),
+                width: scale(31),
               },
             ]}
           />
@@ -806,8 +806,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor1,
               {
-                height: scale(30),
-                width: scale(30),
+                height: scale(28),
+                width: scale(28),
               },
             ]}
           />
@@ -817,8 +817,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor2,
               {
-                height: scale(30),
-                width: scale(30),
+                height: scale(28),
+                width: scale(28),
               },
             ]}
           />
@@ -828,8 +828,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor3,
               {
-                height: scale(30),
-                width: scale(30),
+                height: scale(28),
+                width: scale(28),
               },
             ]}
           />
@@ -839,8 +839,8 @@ export default function IntroTutorial() {
             style={[
               styles.anchor4,
               {
-                height: scale(30),
-                width: scale(30),
+                height: scale(28),
+                width: scale(28),
               },
             ]}
           />

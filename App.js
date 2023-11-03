@@ -163,7 +163,7 @@ export default function App() {
     try {
       const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?location=20.319362,-87.018466&query='underwater'&radius=1000&type=point_of_interest&key=${config.GOOGLE_MAPS_API_KEY}`);
       const placeInfo = await res.json();
-      console.log("helloG?", placeInfo.results[0]);
+      console.log("helloG?", placeInfo.results[0].photos);
       const placeID = placeInfo.results[0].place_id;
       const photoID = placeInfo.results[0].photos[0].photo_reference;
 

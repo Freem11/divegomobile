@@ -44,6 +44,8 @@ export default function PhotoBoxModal(props) {
     xPrevious.value = 0;
     yCurrent.value = 0;
     yPrevious.value = 0;
+    xOffset.value = 0;
+    yOffset.value = 0;
   }, [picData]);
 
   const focalX = useSharedValue(0);
@@ -72,6 +74,8 @@ export default function PhotoBoxModal(props) {
         xPrevious.value = 0;
         yCurrent.value = 0;
         yPrevious.value = 0;
+        xOffset.value = 0;
+        yOffset.value = 0;
       }
     });
 
@@ -248,6 +252,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: "blue"
+    // backgroundColor: "blue"
   },
 });
