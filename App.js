@@ -156,22 +156,37 @@ export default function App() {
 
   const [dragPin, setDragPin] = useState({});
 
-  21.281493, -157.885560
-  20.319362, -87.018466
+  // Oahu -21.281493, -157.885560
+  // Cozumel - 20.334094, -87.030347
+  // Hawaii - 19.736754, -156.063195
+  // campbell river - 50.064541, -125.245750
+
+
 
   async function getPlaceID() {
     try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?location=20.319362,-87.018466&query='underwater'&radius=1000&type=point_of_interest&key=${config.GOOGLE_MAPS_API_KEY}`);
+      const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?location=50.064541,-125.245750&query=['dive_site','reef']&radius=1&type=tourist_attraction&key=${config.GOOGLE_MAPS_API_KEY}`);
       const placeInfo = await res.json();
-      console.log("helloG?", placeInfo.results[0].photos);
+
+      if(placeInfo){
+        placeInfo.results.forEach((place) => {
+          if(place.name){
+            console.log("me", place.name)
+          }
+          
+      })
+      }
+      
+
+      // console.log("helloG?", placeInfo);
       const placeID = placeInfo.results[0].place_id;
       const photoID = placeInfo.results[0].photos[0].photo_reference;
 
       const resPhoto = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoID}&key=${config.GOOGLE_MAPS_API_KEY}`);
       // console.log("helloE?", resPhoto.headers.map.date, resPhoto.url);
-      console.log("helloE?", resPhoto);
-      console.log("url", resPhoto.url);
-      console.log("date", resPhoto.headers.map.date);
+      // console.log("helloE?", resPhoto);
+      // console.log("url", resPhoto.url);
+      // console.log("date", resPhoto.headers.map.date);
 
     } catch (err) {
       console.log("error", err);
