@@ -13,8 +13,6 @@ function createFile(dateTaken) {
         dateTaken.lastIndexOf("/") + 1,
         dateTaken.length
       );
-      console.log("hmmm", fileName)
-      console.log("ahhh", dateTaken)
 
       const fileToUpload = {
         uri: dateTaken,

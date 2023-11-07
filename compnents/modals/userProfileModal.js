@@ -6,8 +6,9 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  Share
+  // Share
 } from "react-native";
+import Share from "react-native-share";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
@@ -168,7 +169,7 @@ let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/d
             value={username}
             placeholder={"DiverName"}
             keyboardType="numbers-and-punctuation"
-            // editable={false}
+            editable={false}
             fontSize={18}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
@@ -195,7 +196,7 @@ let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/d
             value={email}
             placeholder={"Email"}
             keyboardType="numbers-and-punctuation"
-            // editable={false}
+            editable={false}
             fontSize={18}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"

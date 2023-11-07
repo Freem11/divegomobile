@@ -2,12 +2,13 @@ import {
   StyleSheet,
   Text,
   View,
-  Share,
+  // Share,
   ScrollView,
   Platform,
   TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
+import Share from "react-native-share";
 import React, { useState, useContext, useEffect } from "react";
 import {
   getPhotosforAnchor,
@@ -37,6 +38,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import email from "react-native-email";
 import PhotoBoxModel from "./photoBoxModal";
 import ImageCasher from "../helpers/imageCashing";
+import imageToBase64 from "image-to-base64/browser";
 
 let IPSetter = 2;
 let IP;
@@ -190,33 +192,56 @@ export default function AnchorModal(lat, lng) {
     setPhotoBoxModel(!photoBoxModel);
   };
 
-     const onShare = async (photoFile, userN, seaCreature) => {
+  const onShare = async (photoFile, userN, seaCreature) => {
+    let localUri =
+      Platform.OS === "android"
+        ? `https://play.google.com/store/apps/details?id=com.freem11.divegomobile`
+        : `https://apps.apple.com/us/app/divego/id6450968950`;
 
-      let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/details?id=com.freem11.divegomobile` : `https://apps.apple.com/us/app/divego/id6450968950`
-  
-      let temp = photoFile.split("/")
-      let fileName = temp[2]
-      let cacheDir = FileSystem.cacheDirectory + fileName;
-     
-       try {
-         const result = await Share.share({
-           title: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
-           url: cacheDir,
-           message: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
-         });
-         if (result.action === Share.sharedAction) {
-           if (result.activityType) {
-             // shared with activity type of result.activityType
-           } else {
-             // shared
-           }
-         } else if (result.action === Share.dismissedAction) {
-           // dismissed
-         }
-       } catch (error) {
-         Alert.alert(error.message);
-       }
-     };
+    let temp = photoFile.split("/");
+    let fileName = temp[2];
+    let cacheDir = FileSystem.cacheDirectory + fileName;
+    let base64Url
+
+    imageToBase64(cacheDir) // Path to the image
+      .then((response) => {
+        base64Url = response
+        console.log("success", response); // "cGF0aC90by9maWxlLmpwZw=="
+      })
+      .catch((error) => {
+        console.log("error", error); // Logs an error if there was one
+      });
+
+    const shareOptions = {
+      message: "testing 123",
+      url: base64Url,
+    };
+
+    try {
+      const response = Share.open(shareOptions);
+    } catch (error) {
+      console.log(error);
+    }
+
+    //  try {
+    //    const result = await Share.share({
+    //      title: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
+    //      url: cacheDir,
+    //      message: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
+    //    });
+    //    if (result.action === Share.sharedAction) {
+    //      if (result.activityType) {
+    //        // shared with activity type of result.activityType
+    //      } else {
+    //        // shared
+    //      }
+    //    } else if (result.action === Share.dismissedAction) {
+    //      // dismissed
+    //    }
+    //  } catch (error) {
+    //    Alert.alert(error.message);
+    //  }
+  };
 
   return (
     <View
@@ -261,12 +286,14 @@ export default function AnchorModal(lat, lng) {
               return (
                 <View key={pic.id} style={styles.picContainer3}>
                   <View style={styles.micro}>
-                    <FontAwesome 
-                    name="share" 
-                    color="white" 
-                    size={scale(19)}
-                    onPress={() => onShare(pic.photoFile, pic.userName, pic.label)}
-                    style={styles.share}
+                    <FontAwesome
+                      name="share"
+                      color="white"
+                      size={scale(19)}
+                      onPress={() =>
+                        onShare(pic.photoFile, pic.userName, pic.label)
+                      }
+                      style={styles.share}
                     />
                     <FontAwesome
                       name="flag"
@@ -368,7 +395,7 @@ const styles = StyleSheet.create({
   share: {
     left: scale(232),
     top: scale(1),
-    opacity: 0.8
+    opacity: 0.8,
   },
   flag: {
     left: scale(237),
