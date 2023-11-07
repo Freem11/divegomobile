@@ -6,8 +6,9 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  Share
+  // Share
 } from "react-native";
+import Share from "react-native-share";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
