@@ -34,7 +34,7 @@ export const heatPoints = async (GPSBubble, slider, animal) => {
     .lte("lng", maxLng)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 12,", error);
     return [];
   }
 
@@ -56,7 +56,7 @@ export const getLoneHeatPoint = async (values) => {
     .limit(1)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 13,", error);
     return [];
   }
 
@@ -77,7 +77,7 @@ export const insertHeatPoint = async (values) => {
   ]);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 14,", error);
   }
 
   if (data) {
@@ -95,7 +95,7 @@ export const updateHeatPoint = async (values) => {
     .eq("id", values.id);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 15,", error);
     return [];
   }
 
@@ -134,7 +134,7 @@ export const multiHeatPoints = async (GPSBubble, animalArray) => {
     .lte("lng", maxLng);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 16,", error);
     return [];
   }
 
@@ -168,7 +168,7 @@ export const multiHeatPoints = async (GPSBubble, animalArray) => {
     .lte("lng", maxLng);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 17,", error);
     return [];
   }
 
@@ -200,7 +200,7 @@ export const picClickheatPoints = async (GPSBubble, animal) => {
     .lte("lng", GPSBubble.maxLng);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 18,", error);
     return [];
   }
 

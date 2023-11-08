@@ -14,7 +14,7 @@ export const addDeletedAccountInfo = async (values) => {
   ]);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 0,", error);
   }
 
   if (data) {
@@ -34,7 +34,7 @@ export const createProfile = async (values) => {
   ]);
 
 if (error) {
-  console.log("couldn't do it,", error);
+  console.log("couldn't do it 1,", error);
 }
 
 if (data) {
@@ -50,7 +50,7 @@ export const updateProfile = async (values) => {
     .eq("UserID", values.id);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 2,", error);
     return [];
   }
 
@@ -66,7 +66,7 @@ export const deleteProfile = async (id) => {
     .eq("UserID", id);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 3,", error);
     return [];
   }
 
@@ -82,7 +82,7 @@ export const grabProfileById = async (id) => {
     .eq("UserID", id)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 4,", error);
     return [];
   }
 

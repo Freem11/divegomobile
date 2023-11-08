@@ -39,6 +39,7 @@ import email from "react-native-email";
 import PhotoBoxModel from "./photoBoxModal";
 import ImageCasher from "../helpers/imageCashing";
 import imageToBase64 from "image-to-base64/browser";
+import ImgToBase64 from "react-native-image-base64";
 
 let IPSetter = 2;
 let IP;
@@ -153,7 +154,8 @@ export default function AnchorModal(lat, lng) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
-      body: "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
+      body:
+        "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -163,7 +165,8 @@ export default function AnchorModal(lat, lng) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${lat.SiteName}" at Latitude: ${lat.Lat} Longitude: ${lat.Lng} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body:
+        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -192,6 +195,48 @@ export default function AnchorModal(lat, lng) {
     setPhotoBoxModel(!photoBoxModel);
   };
 
+  // const convert = () => {
+  //   ReactNativeBlobUtil.fetch(
+  //     'GET',
+  //     'https://cdn.pixabay.com/photo/2016/03/23/20/49/music-note-1275650_1280.png',
+  //   )
+  //     .then(res => {
+  //       let status = res.info().status;
+
+  //       if (status === 200) {
+  //         let base64Str = res.base64();
+  //         console.log(base64Str);
+  //       } else {
+  //         // handle other status codes
+  //       }
+  //     })
+  //     // Something went wrong:
+  //     .catch(err => {
+  //       // error handling
+  //       console.log(err);
+  //     });
+
+  //   }
+
+  const [base64, setBase64] = useState(null);
+
+  const convertBase64 = (cacheDir) => {
+    let temp
+    ImgToBase64.getBase64String(cacheDir)
+      .then((base64String) => {
+        setBase64(base64String)
+      })
+      .catch((err) => {console.log(err)});
+  }
+
+  const doShare = async(shareOptions) => {
+    try {
+      const response = await Share.open(shareOptions);
+    } catch (error) {
+      console.log(error);
+    } 
+  }
+
   const onShare = async (photoFile, userN, seaCreature) => {
     let localUri =
       Platform.OS === "android"
@@ -201,47 +246,25 @@ export default function AnchorModal(lat, lng) {
     let temp = photoFile.split("/");
     let fileName = temp[2];
     let cacheDir = FileSystem.cacheDirectory + fileName;
-    let base64Url
+    convertBase64(cacheDir)
 
-    imageToBase64(cacheDir) // Path to the image
-      .then((response) => {
-        base64Url = response
-        console.log("success", response); // "cGF0aC90by9maWxlLmpwZw=="
-      })
-      .catch((error) => {
-        console.log("error", error); // Logs an error if there was one
-      });
+  };
+
+
+  useEffect(() => {
 
     const shareOptions = {
       message: "testing 123",
-      url: base64Url,
+      url: "",
     };
-
-    try {
-      const response = Share.open(shareOptions);
-    } catch (error) {
-      console.log(error);
+    if(base64){
+        shareOptions.url = `data:image/jpg;base64,${base64}` 
+        doShare(shareOptions)
     }
+ 
+  }, [base64]);
 
-    //  try {
-    //    const result = await Share.share({
-    //      title: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
-    //      url: cacheDir,
-    //      message: `Checkout this pic of a ${seaCreature} on DiveGo! \nIt was contributed by ${userN}, maybe we should contribute our pics too! \n\n${localUri} \n\n`,
-    //    });
-    //    if (result.action === Share.sharedAction) {
-    //      if (result.activityType) {
-    //        // shared with activity type of result.activityType
-    //      } else {
-    //        // shared
-    //      }
-    //    } else if (result.action === Share.dismissedAction) {
-    //      // dismissed
-    //    }
-    //  } catch (error) {
-    //    Alert.alert(error.message);
-    //  }
-  };
+
 
   return (
     <View

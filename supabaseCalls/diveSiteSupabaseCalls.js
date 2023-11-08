@@ -25,7 +25,7 @@ export const diveSites = async (GPSBubble) => {
   .lte('lng', maxLng)
 
 if (error) {
-  console.log("couldn't do it,", error)
+  console.log("couldn't do it 5,", error)
   return([])
 }
 
@@ -50,7 +50,7 @@ export const insertDiveSite = async (values) => {
   ]);
 
 if (error) {
-  console.log("couldn't do it,", error);
+  console.log("couldn't do it 6,", error);
 }
 
 if (data) {
@@ -66,7 +66,7 @@ export const getDiveSiteByName = async (value) => {
   .eq("name", value)
 
 if (error) {
-  console.log("couldn't do it,", error);
+  console.log("couldn't do it 7,", error);
   return [];
 }
 
