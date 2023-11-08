@@ -7,7 +7,7 @@ export const getAnimalNames = async () => {
   .select("label")
 
 if (error) {
-  console.log("couldn't do it,", error);
+  console.log("couldn't do it 19,", error);
   return [];
 }
 
@@ -34,7 +34,7 @@ if (data) {
     ]);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 20,", error);
   }
 
   if (data) {
@@ -51,7 +51,7 @@ if (data) {
   .limit(10)
 
 if (error) {
-  console.log("couldn't do it,", error);
+  console.log("couldn't do it 21,", error);
   return [];
 }
 
@@ -74,7 +74,7 @@ if (data) {
     .lte("longitude", value.maxLng)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 22,", error);
     return [];
   }
 
@@ -92,7 +92,7 @@ if (data) {
     .limit(10)
   
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 23,", error);
     return [];
   }
   
@@ -140,7 +140,7 @@ if (data) {
       .lte("longitude", value.maxLng)
   
     if (error) {
-      console.log("couldn't do it,", error);
+      console.log("couldn't do it 24,", error);
       return [];
     }
   
@@ -160,7 +160,7 @@ if (data) {
     .lte("longitude", value.maxLng)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 25,", error);
     return [];
   }
 
@@ -183,7 +183,7 @@ if (data) {
     .lte("longitude", value.maxLng)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 26,", error);
     return [];
   }
 
@@ -197,7 +197,7 @@ if (data) {
     const { data, error } = await supabase.rpc("histogram3", {animals: values.animals, max_lat: values.maxLat, min_lat: values.minLat, max_lng: values.maxLng, min_lng: values.minLng})
 
     if (error) {
-      console.log("couldn't do it,", error);
+      console.log("couldn't do it 27,", error);
       return [];
     }
   
@@ -216,7 +216,7 @@ if (data) {
       .limit(3)
   
     if (error) {
-      console.log("couldn't do it,", error);
+      console.log("couldn't do it 28,", error);
       return [];
     }
   
@@ -231,7 +231,7 @@ if (data) {
       const { data, error } = await supabase.rpc("maximum_value")
 
       if (error) {
-        console.log("couldn't do it,", error);
+        console.log("couldn't do it 29,", error);
         return [];
       }
     

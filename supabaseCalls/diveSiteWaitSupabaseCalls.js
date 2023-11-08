@@ -7,7 +7,7 @@ export const diveSiteWaits = async () => {
   .select();
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 8,", error);
     return [];
   }
 
@@ -33,7 +33,7 @@ export const insertDiveSiteWaits = async (values) => {
   ]);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 9,", error);
   }
 
   if (data) {
@@ -49,7 +49,7 @@ export const grabDiveSiteWaitById = async (id) => {
     .eq("id", id)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 10,", error);
     return [];
   }
 
@@ -66,7 +66,7 @@ export const deleteDiveSiteWait = async (id) => {
   .eq("id", id);
 
 if (error) {
-  console.log("couldn't do it,", error);
+  console.log("couldn't do it 11,", error);
   return [];
 }
 

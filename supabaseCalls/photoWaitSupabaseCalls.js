@@ -6,7 +6,7 @@ export const photoWaits = async () => {
   .select();
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 30,", error);
     return [];
   }
 
@@ -34,7 +34,7 @@ export const insertPhotoWaits = async (values) => {
   ]);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 31,", error);
   }
 
   if (data) {
@@ -49,7 +49,7 @@ export const grabPhotoWaitById = async (id) => {
     .eq("id", id)
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 32,", error);
     return [];
   }
 
@@ -65,7 +65,7 @@ export const deletePhotoWait = async (id) => {
     .eq("id", id);
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it 33,", error);
     return [];
   }
 
