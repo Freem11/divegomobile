@@ -21,7 +21,12 @@
         "appID": "692861552452156",
         "clientToken": "5fca59edd61f9c418917b4a8f6032a20",
         "displayName": "DiveGo",
-        "scheme": "fb692861552452156"
+        "scheme": "fb692861552452156",
+        "buildscript" : {
+          "ext" : {
+            "facebookSdkVersion": "13.1.0"
+          }
+        }
       }]
     ],
     "splash": {

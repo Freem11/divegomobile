@@ -19,8 +19,7 @@ import { scale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import ImageCasher from "../helpers/imageCashing";
-
+import ImgToBase64 from "react-native-image-base64";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -64,7 +63,7 @@ export default function UserProfileModal() {
             setPicUri(cashing.path);
           } else {
             // console.log("main", cashing.cached)
-            setPicUri(test.uri);
+            setPicUri(image.uri);
           }
         }
     }
@@ -100,30 +99,48 @@ export default function UserProfileModal() {
     email = profile[0].Email
   }
 
-let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/details?id=com.freem11.divegomobile` : `https://apps.apple.com/us/app/divego/id6450968950`
-  
-    const onShare = async () => {
-      try {
-        const result = await Share.share({
-          title: `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature! \n\nDownload it at : \n${localUri} \n`,
-          url: cacheDir,
-          message:
-            `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature! \n\nDownload it at : \n${localUri} \n`,
-        });
-        if (result.action === Share.sharedAction) {
-          if (result.activityType) {
-            // shared with activity type of result.activityType
-          } else {
-            // shared
-          }
-        } else if (result.action === Share.dismissedAction) {
-          // dismissed
-        }
-      } catch (error) {
-        Alert.alert(error.message);
-      }
-    };
+const [base64, setBase64] = useState(null);
 
+const convertBase64 = (cashed) => {
+  ImgToBase64.getBase64String(cashed)
+    .then((base64String) => {
+      setBase64(base64String);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const doShare = async (shareOptions) => {
+  try {
+    const response = await Share.open(shareOptions);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const onShare = async (photoFile) => {
+  let temp = photoFile.split("/");
+  let lastIndex = temp.length -1
+  let fileName = temp[lastIndex];
+  let cacheDirectory = FileSystem.cacheDirectory + fileName;
+  convertBase64(cacheDirectory);
+};
+
+useEffect(() => {
+  let localUri = `https://divegolanding.web.app`
+
+  const shareOptions = {
+    message: "",
+    url: "",
+  };
+  if (base64) {
+    shareOptions.message = `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature!\nRight now they are looking for contributors to add their dive sites and sea creature photos!\n\nLearn more about it here: ${localUri}`;
+    shareOptions.url = `data:image/jpg;base64,${base64}`;
+    doShare(shareOptions);
+  }
+  setBase64(null)
+}, [base64]);
 
   return (
     <View style={styles.container}>
@@ -208,7 +225,7 @@ let localUri = Platform.OS === "android" ? `https://play.google.com/store/apps/d
 
         <View style={imaButState ? styles.ShareButtonPressed : styles.ShareButton}>
         <TouchableOpacity
-          onPress={onShare}
+          onPress={() => onShare(picUri)}
           onPressIn={() => setImaButState(true)}
           onPressOut={() => setImaButState(false)}
           style={{
