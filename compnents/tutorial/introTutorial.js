@@ -37,8 +37,8 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { ReverseContext } from "../contexts/reverseContext";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
-import anchorClustIOS from "../png/clusterAnchor75.png";
-import anchorIconIOS from "../png/anchor36.png";
+import anchorClustIOS from "../png/ClusterAnchor24.png";
+import anchorIconIOS from "../png/SiteAnchor20.png";
 import heatIconIOS from "../png/heatpoint.png";
 import arrowIOS from "../png/arrow.png";
 import UserNamer from "./usernamer";
@@ -154,8 +154,8 @@ export default function IntroTutorial() {
   };
 
   const getProfile = async () => {
-    // let sessionUserId = activeSession.user.id;
-    let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
+    let sessionUserId = activeSession.user.id;
+    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {

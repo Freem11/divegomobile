@@ -87,6 +87,7 @@ export default function FABButtons() {
   const getCurrentLocation = async () => {
     geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
     animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});  
+    Keyboard.dismiss()
     try {
       const location = await getCurrentCoordinates();
       if (location) {
@@ -264,6 +265,7 @@ export default function FABButtons() {
       }
     } else {
       animalWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
+      Keyboard.dismiss()
     }
   };
 
@@ -280,6 +282,7 @@ export default function FABButtons() {
       geocodeWidth.value = withTiming(-200, {duration: 250, easing: Easing.in(Easing.linear)});
     } else {
       geocodeWidth.value = withTiming(1000, {duration: 250, easing: Easing.in(Easing.linear)});
+      Keyboard.dismiss()
     }
   };
 
