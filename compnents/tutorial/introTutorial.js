@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Platform,
+  Keyboard,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -392,6 +393,7 @@ export default function IntroTutorial() {
       getProfile();
       // if (userBoxX.value !== scale(-300)) {
       userBoxX.value = withTiming(scale(-300));
+      Keyboard.dismiss()
       // startUserBoxAnimation();
       // }
 
@@ -636,6 +638,7 @@ export default function IntroTutorial() {
       userBoxX.value = withSpring(windowWidth * 0.2);
     } else {
       userBoxX.value = withTiming(scale(-300));
+      Keyboard.dismiss()
     }
   };
 
