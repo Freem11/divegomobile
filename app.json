@@ -3,7 +3,7 @@
     "name": "divegomobile",
     "slug": "divegomobile",
     "scheme": ["divegomobile", "fb692861552452156"],
-    "version": "1.2.17",
+    "version": "1.2.18",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -36,7 +36,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "29",
+      "buildNumber": "30",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
@@ -65,7 +65,7 @@
       }
     },
     "android": {
-      "versionCode": 29,
+      "versionCode": 30,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
