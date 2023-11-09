@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
@@ -401,6 +402,7 @@ export default function MapPage() {
       pullTabHeight.value = withTiming(1);
       setIsOpen(true)
     } else {
+      Keyboard.dismiss()
       pullTabHeight.value = withTiming(0);
       setTextValue("");
       setIsOpen(false)
