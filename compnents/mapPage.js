@@ -78,8 +78,12 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function MapPage() {
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-
+  
+  if(Platform.OS ==="ios"){
+    ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT_UP
+    );
+  }
   
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);

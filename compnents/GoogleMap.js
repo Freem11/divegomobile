@@ -41,8 +41,11 @@ const { width, height } = Dimensions.get("window");
 
 export default function Map() {
 
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-
+  if(Platform.OS ==="ios"){
+    ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT_UP
+    );
+  }
 
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);

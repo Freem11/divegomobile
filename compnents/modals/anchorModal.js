@@ -2,11 +2,11 @@ import {
   StyleSheet,
   Text,
   View,
-  // Share,
   ScrollView,
   Platform,
   TouchableWithoutFeedback,
   Dimensions,
+  Linking,
 } from "react-native";
 import Share from "react-native-share";
 import React, { useState, useContext, useEffect } from "react";
@@ -38,8 +38,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import email from "react-native-email";
 import PhotoBoxModel from "./photoBoxModal";
 import ImageCasher from "../helpers/imageCashing";
-import imageToBase64 from "image-to-base64/browser";
 import ImgToBase64 from "react-native-image-base64";
+import config from  "../../config";
 
 let IPSetter = 2;
 let IP;
@@ -154,8 +154,7 @@ export default function AnchorModal(lat, lng) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
-      body:
-        "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
+      body: "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -165,8 +164,7 @@ export default function AnchorModal(lat, lng) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${lat.SiteName}" at Latitude: ${lat.Lat} Longitude: ${lat.Lng} `,
-      body:
-        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -195,76 +193,87 @@ export default function AnchorModal(lat, lng) {
     setPhotoBoxModel(!photoBoxModel);
   };
 
-  // const convert = () => {
-  //   ReactNativeBlobUtil.fetch(
-  //     'GET',
-  //     'https://cdn.pixabay.com/photo/2016/03/23/20/49/music-note-1275650_1280.png',
-  //   )
-  //     .then(res => {
-  //       let status = res.info().status;
-
-  //       if (status === 200) {
-  //         let base64Str = res.base64();
-  //         console.log(base64Str);
-  //       } else {
-  //         // handle other status codes
-  //       }
-  //     })
-  //     // Something went wrong:
-  //     .catch(err => {
-  //       // error handling
-  //       console.log(err);
-  //     });
-
-  //   }
-
   const [base64, setBase64] = useState(null);
+  const [userN, setUserN] = useState(null);
+  const [creastureN, setCreastureN] = useState(null);
+  const [photoDate, setPhotoDate] = useState(null);
+  const [mapLocal, setMapLocal] = useState(null);
 
   const convertBase64 = (cacheDir) => {
-    let temp
     ImgToBase64.getBase64String(cacheDir)
       .then((base64String) => {
-        setBase64(base64String)
+        setBase64(base64String);
       })
-      .catch((err) => {console.log(err)});
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const doShare = async(shareOptions) => {
+  const doShare = async (shareOptions) => {
     try {
       const response = await Share.open(shareOptions);
     } catch (error) {
       console.log(error);
-    } 
-  }
+    }
 
-  const onShare = async (photoFile, userN, seaCreature) => {
-    let localUri =
-      Platform.OS === "android"
-        ? `https://play.google.com/store/apps/details?id=com.freem11.divegomobile`
-        : `https://apps.apple.com/us/app/divego/id6450968950`;
-
-    let temp = photoFile.split("/");
-    let fileName = temp[2];
-    let cacheDir = FileSystem.cacheDirectory + fileName;
-    convertBase64(cacheDir)
-
+    setUserN(null);
+    setCreastureN(null);
+    setPhotoDate(null) 
+    setMapLocal(null)
   };
 
+  const onShare = async (photoFile, userN, seaCreature, picDate, lat, lng) => {
+
+    let local = await getPhotoLocation(lat, lng)
+    setMapLocal(local) 
+    setCreastureN(seaCreature);
+    setPhotoDate(picDate)
+    if (userN) {
+      setUserN(userN);
+    } else {
+      setUserN("an unnamed diver");
+    }
+
+    let temp = photoFile.split("/");
+    let lastIndex = temp.length -1
+    let fileName = temp[lastIndex];
+    let cacheDir = FileSystem.cacheDirectory + fileName;
+    convertBase64(cacheDir);
+  };
+
+  async function getPhotoLocation(photoLat, photoLng) {
+
+    let Lat = Number(photoLat)
+    let Lng = Number(photoLng)
+
+    try {
+      const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${config.GOOGLE_MAPS_API_KEY}`);
+      const placeInfo = await res.json();
+      let genAddress = placeInfo.results[1].formatted_address
+      let fudgedAddress = genAddress.split(",")
+      let bits = [fudgedAddress[fudgedAddress.length-2],fudgedAddress[fudgedAddress.length-1]].join()
+      return bits
+  
+    } catch (err) {
+      console.log("error", err);
+    }
+  }
 
   useEffect(() => {
 
+    let localUri = `https://divegolanding.web.app`
+
     const shareOptions = {
-      message: "testing 123",
+      message: "",
       url: "",
     };
-    if(base64){
-        shareOptions.url = `data:image/jpg;base64,${base64}` 
-        doShare(shareOptions)
+    if (base64) {
+      shareOptions.message = `Checkout this cool pic of a ${creastureN} on DiveGo! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing out pics as well!\n\nLearn more about it here:\n${localUri}`;
+      shareOptions.url = `data:image/jpg;base64,${base64}`;
+      doShare(shareOptions);
     }
- 
+    setBase64(null)
   }, [base64]);
-
-
 
   return (
     <View
@@ -314,7 +323,7 @@ export default function AnchorModal(lat, lng) {
                       color="white"
                       size={scale(19)}
                       onPress={() =>
-                        onShare(pic.photoFile, pic.userName, pic.label)
+                        onShare(pic.photoFile, pic.userName, pic.label, pic.dateTaken, pic.latitude, pic.longitude)
                       }
                       style={styles.share}
                     />

@@ -12,8 +12,11 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function AuthenticationPage() {
 
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-
+  if(Platform.OS ==="ios"){
+    ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT_UP
+    );
+  }
 
   const FirstRoute = React.memo(() => <SignInRoute />);
 

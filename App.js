@@ -6,6 +6,7 @@ import {
   View,
   Dimensions,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
@@ -57,7 +58,7 @@ import { ChapterContext } from "./compnents/contexts/chapterContext";
 import { AreaPicsContext } from "./compnents/contexts/areaPicsContext";
 import { DevelopmentModeContext } from "./compnents/contexts/developementModeContext";
 import { ProfileModalContext } from "./compnents/contexts/profileModalContext";
-// import AuthenticationPage from "./compnents/authenticationPage";
+import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
 import {
   getCurrentCoordinates,
@@ -71,8 +72,12 @@ import config from "./config";
 const { width, height } = Dimensions.get("window");
 
 export default function App() {
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-
+  
+  if(Platform.OS ==="ios"){
+    ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT_UP
+    );
+  }
   const [developmentMode, setDevelopmentMode] = useState(false);
 
   const [appIsReady, setAppIsReady] = useState(false);
@@ -255,17 +260,19 @@ export default function App() {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
       
-      const places = await findPlaces();
-      places.forEach((place) => {
-        if (place.name) {
-          getPlaceDetails(place);
-        }
-      });
+      // const places = await findPlaces();
+      // places.forEach((place) => {
+      //   if (place.name) {
+      //     getPlaceDetails(place);
+      //   }
+      // });
 
-      ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
-      );
-
+      if(Platform.OS ==="ios"){
+        ScreenOrientation.lockAsync(
+          ScreenOrientation.OrientationLock.PORTRAIT_UP
+        );
+      }
+     
       // console.log("got location");
       try {
         const asyncData = JSON.parse(await AsyncStorage.getItem("token"));
@@ -479,12 +486,12 @@ export default function App() {
                                                                                   setActiveSession,
                                                                                 }}
                                                                               >
-                                                                                <MapPage />
-                                                                                {/* {activeSession ? (
+                                                                                {/* <MapPage /> */}
+                                                                                {activeSession ? (
                                                                                 <MapPage />
                                                                               ) : (
                                                                                 <AuthenticationPage />
-                                                                              )} */}
+                                                                              )}
                                                                               </SessionContext.Provider>
                                                                             </MapCenterContext.Provider>
                                                                           </DSAdderContext.Provider>

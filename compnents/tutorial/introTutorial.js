@@ -331,7 +331,6 @@ export default function IntroTutorial() {
 
   useEffect(() => {
 
-    console.log("value", itterator)
     setTextRead("");
     setTextRead2("");
     let textVal = feederArray[itterator];
