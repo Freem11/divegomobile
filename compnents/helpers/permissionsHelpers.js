@@ -37,7 +37,7 @@ const getCurrentCoordinates = async() => {
   foregroundSubscription?.remove();
 
   try {
-    return await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low, maximumAge: 10000 });
+    return await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High, maximumAge: 10000 });
   } catch (e) {
     console.log("Location tracking error");
   }
