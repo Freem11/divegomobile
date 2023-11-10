@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { scale, s } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
@@ -37,6 +38,7 @@ export default function UserNamer() {
   });
 
   const handleSubmit = async () => {
+    Keyboard.dismiss()
     if (formVal.userName === "" || formVal.userName === null) {
       userVar = true;
     } else {
