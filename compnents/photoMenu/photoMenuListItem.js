@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef, memo } from "react";
 import ImageCasher from "../helpers/imageCashing";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -62,7 +62,7 @@ const PhotoMenuListItem = (props) => {
       let mover = (((windowWidth/2) - centererPress)/3)
   
       scaleStart.value = withSpring(3);
-      yPosition.value = withTiming(scale(80));
+      yPosition.value = withTiming(moderateScale(80));
       xPosition.value = withTiming(mover);
 
     } else {
