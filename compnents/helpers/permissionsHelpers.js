@@ -27,17 +27,31 @@ const requestPermissions = async () => {
   }
 };
 
+const requestHighAccuracy = async () => {
+  try {
+    const accurate = await Location.enableNetworkProviderAsync();
+    console.log("que?", accurate)
+    return accurate.status
+  } catch (e) {
+    console.log({ title: "Error", message: e.message });
+  }
+};
+
 const getCurrentCoordinates = async() => {
   
   const { granted } = await Location.getForegroundPermissionsAsync();
+
   if (!granted) {
     requestPermissions();
+    requestHighAccuracy();
     console.log("location tracking denied");
   }
   foregroundSubscription?.remove();
 
   try {
-    return await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High, maximumAge: 10000 });
+   const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High, maximumAge: 10000 });
+   console.log("accurate to:", location)
+   return location;
   } catch (e) {
     console.log("Location tracking error");
   }
