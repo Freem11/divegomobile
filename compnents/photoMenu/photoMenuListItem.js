@@ -9,6 +9,13 @@ import {
 import React, { useContext, memo } from "react";
 import ImageCasher from "../helpers/imageCashing";
 import { scale } from "react-native-size-matters";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+  withSpring,
+} from "react-native-reanimated";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -26,17 +33,58 @@ const PhotoMenuListItem = (props) => {
     }
   };
 
+  const scaleStart = useSharedValue(1);
+  const xPosition = useSharedValue(0);
+  const yPosition = useSharedValue(0);
+
+  const animatedPictureStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { scale: scaleStart.value },
+        { translateY: yPosition.value },
+        { translateX: xPosition.value },
+      ],
+    };
+  });
+
+  const pressInAnimations = (data) => {
+
+    if (xPosition.value === 0){
+      let distanceToItemMiddle = (60 - data.nativeEvent.locationX)
+      let centererPress = data.nativeEvent.pageX + distanceToItemMiddle
+      let mover = (((windowWidth/2) - centererPress)/3)
+  
+      scaleStart.value = withSpring(3);
+      yPosition.value = withTiming(scale(80));
+      xPosition.value = withTiming(mover);
+
+    } else {
+      scaleStart.value = withTiming(1);
+      yPosition.value = withTiming(0);
+      xPosition.value = withTiming(0);
+    }
+ 
+  };
+
+  const pressReleaseAnimations = () => {
+    scaleStart.value = withTiming(1);
+      yPosition.value = withTiming(0);
+      xPosition.value = withTiming(0);
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => handleSelect(pic.label)}
+      onLongPress={(data) => pressInAnimations(data)}
+      onBlur={() => pressReleaseAnimations}
       key={pic.id}
     >
-      <View
-        style={
+      <Animated.View
+        style={[
           animalMultiSelection.includes(pic.label)
             ? styles.shadowboxSelected
             : styles.shadowbox
-        }
+        ,animatedPictureStyle]}
         key={pic.id}
       >
         <View style={{ justifyContent: "center", height: 33 }}>
@@ -61,7 +109,7 @@ const PhotoMenuListItem = (props) => {
             resizeMode: "cover",
           }}
         />
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 };
@@ -103,6 +151,8 @@ const styles = StyleSheet.create({
     borderColor: "darkgrey",
     backgroundColor: "darkblue",
     height: 105,
+    zIndex: 20,
+    elevation: 20
   },
   shadowboxSelected: {
     borderRadius: 15,
@@ -110,6 +160,8 @@ const styles = StyleSheet.create({
     borderColor: "darkgrey",
     backgroundColor: "gold",
     height: 105,
+    zIndex: 20,
+    elevation: 20
   },
 });
 

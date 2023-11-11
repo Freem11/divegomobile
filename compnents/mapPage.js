@@ -733,7 +733,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "blue",
     height: 105,
     top: Platform.OS === "ios" ? "5%" : "4%",
-    zIndex: 2,
+    zIndex: 3,
   },
   filterer: {
     flex: 1,
@@ -747,7 +747,7 @@ const styles = StyleSheet.create({
     // height: 25,
     width: "50%",
     top: Platform.OS === "ios" ? "100%" : "100%",
-    zIndex: 2,
+    zIndex: 3,
     // backgroundColor: "green"
   },
   emptyBox: {
@@ -760,7 +760,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // height: scale(55),
     width: "100%",
-    zIndex: 2,
+    zIndex: 3,
     // backgroundColor: "grey"
   },
   tutorialBar: {

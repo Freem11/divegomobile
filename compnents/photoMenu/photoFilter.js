@@ -38,6 +38,7 @@ const { areaPics, setAreaPics } = useContext(AreaPicsContext);
             width: scale(20),
             height: scale(20),
             zIndex: 10,
+            elevation: 10
             // backgroundColor: "pink"
           }}
         >
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     // position: "absolute",
     marginTop: scale(3),
     marginLeft: scale(5),
-    zIndex: 10
+    zIndex: 10,
+    elevation: 10
   },
 });
