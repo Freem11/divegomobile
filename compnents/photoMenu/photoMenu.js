@@ -32,6 +32,8 @@ export default function PhotoMenu() {
   const { textvalue, setTextValue } = useContext(SearchTextContext);
 
   const [picMenuSize, setPicMenuSize] = useState(0);
+  const [selectedID, setSelectedID] = useState(null);
+
 
   useEffect(() => {
     setPicMenuSize(areaPics.length * 120);
@@ -199,6 +201,9 @@ export default function PhotoMenu() {
                 pic={pic}
                 setAnimalMultiSelection={setAnimalMultiSelection}
                 animalMultiSelection={animalMultiSelection}
+                setSelectedID={setSelectedID}
+                selectedID={selectedID}
+                // yPosition={yPosition}
               />
             );
           })}

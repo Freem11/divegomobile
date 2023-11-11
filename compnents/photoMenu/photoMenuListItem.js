@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Dimensions
 } from "react-native";
-import React, { useContext, memo } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import ImageCasher from "../helpers/imageCashing";
 import { scale } from "react-native-size-matters";
 import Animated, {
@@ -21,7 +21,10 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const PhotoMenuListItem = (props) => {
-  const { pic, setAnimalMultiSelection, animalMultiSelection } = props;
+  const { pic, setAnimalMultiSelection, animalMultiSelection, selectedID, setSelectedID } = props;
+
+  const [popped, setPopped] = useState(false);
+  const thisPopper = useRef();
 
   const handleSelect = (name) => {
     if (animalMultiSelection.includes(name)) {
@@ -37,6 +40,8 @@ const PhotoMenuListItem = (props) => {
   const xPosition = useSharedValue(0);
   const yPosition = useSharedValue(0);
 
+  const [popperRef, setPopperRef] = useState(null);
+
   const animatedPictureStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -47,7 +52,9 @@ const PhotoMenuListItem = (props) => {
     };
   });
 
-  const pressInAnimations = (data) => {
+  const pressInAnimations = (data, id) => {
+
+    setSelectedID(id)
 
     if (xPosition.value === 0){
       let distanceToItemMiddle = (60 - data.nativeEvent.locationX)
@@ -62,21 +69,31 @@ const PhotoMenuListItem = (props) => {
       scaleStart.value = withTiming(1);
       yPosition.value = withTiming(0);
       xPosition.value = withTiming(0);
+
     }
- 
+  
   };
 
   const pressReleaseAnimations = () => {
-    scaleStart.value = withTiming(1);
+
+      scaleStart.value = withTiming(1);
       yPosition.value = withTiming(0);
       xPosition.value = withTiming(0);
   };
 
+  useEffect(() => {
+    if(selectedID !== pic.id){
+      pressReleaseAnimations()
+    }
+  }, [selectedID]);
+
+
+
   return (
     <TouchableWithoutFeedback
       onPress={() => handleSelect(pic.label)}
-      onLongPress={(data) => pressInAnimations(data)}
-      onBlur={() => pressReleaseAnimations}
+      onLongPress={(data) => pressInAnimations(data, pic.id)}
+      onFocus={() => pressReleaseAnimations()}
       key={pic.id}
     >
       <Animated.View
