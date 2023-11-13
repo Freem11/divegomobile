@@ -618,7 +618,7 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : scale(1000) - scale(250)}
+        keyboardVerticalOffset={Platform.OS === "android" ? 700 : scale(950) - scale(250)}
       >
         <Animated.View style={[styles.geoCoder, geocodeReveal]} >
           <GeocodeAutocomplete setGeoHide={setGeoHide}/>
