@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
     width: 0,
     right: 40,
     borderRadius: 10,
-    zIndex: 2,
+    zIndex: 4,
   },
   modalStyle: {
     flex: 1,
