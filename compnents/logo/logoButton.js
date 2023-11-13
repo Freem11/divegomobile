@@ -11,7 +11,7 @@ export default function Logo() {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontFamily: "Caveat_400Regular", fontSize: scale(20) }} onPress={() => setProfileModal(true)}>DiveGo</Text>
+      <Text style={{ fontFamily: "Caveat_400Regular", fontSize: scale(16) }} onPress={() => setProfileModal(true)}>Scuba SEAsons</Text>
     </View>
   );
 }
@@ -27,11 +27,13 @@ const styles = StyleSheet.create({
     zIndex: 2,
     bottom: 0,
     left: 0,
-    height: scale(53),
+    height: scale(55),
     borderTopRightRadius: scale(15),
-    width: "20%",
-    paddingRight: 10,
+    width: "21%",
+    paddingRight: 2,
+    paddingLeft: -10,
     paddingTop: -10,
+    paddingBottom: -10,
     fontSize: "2rem"
   },
 });
