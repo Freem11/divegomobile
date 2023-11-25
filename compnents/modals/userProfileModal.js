@@ -135,7 +135,7 @@ useEffect(() => {
     url: "",
   };
   if (base64) {
-    shareOptions.message = `Checkout DiveGo! \nA great app to help divers find the best place and time of year to dive with ANY sea creature!\nRight now they are looking for contributors to add their dive sites and sea creature photos!\n\nLearn more about it here: ${localUri}`;
+    shareOptions.message = `Checkout Scuba SEAsons! \nA great app to help divers find the best place and time of year to dive with ANY sea creature!\nRight now they are looking for contributors to add their dive sites and sea creature photos!\n\nLearn more about it here: ${localUri}`;
     shareOptions.url = `data:image/jpg;base64,${base64}`;
     doShare(shareOptions);
   }
@@ -249,7 +249,7 @@ useEffect(() => {
               fontSize: 16
             }}
           >
-            Share DiveGo!
+            Share Scuba SEAsons!
           </Text>
         </TouchableOpacity>
       </View>

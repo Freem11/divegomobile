@@ -1,9 +1,12 @@
 {
   "expo": {
-    "name": "divegomobile",
+    "name": "Scuba SEAsons",
     "slug": "divegomobile",
-    "scheme": ["divegomobile", "fb692861552452156"],
-    "version": "1.2.18",
+    "scheme": [
+      "divegomobile",
+      "fb692861552452156"
+    ],
+    "version": "1.2.21",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,42 +19,49 @@
         }
       ],
       "@react-native-google-signin/google-signin",
-      ["react-native-fbsdk-next",
-      {
-        "appID": "692861552452156",
-        "clientToken": "5fca59edd61f9c418917b4a8f6032a20",
-        "displayName": "DiveGo",
-        "scheme": "fb692861552452156",
-        "buildscript" : {
-          "ext" : {
-            "facebookSdkVersion": "13.1.0"
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "692861552452156",
+          "clientToken": "5fca59edd61f9c418917b4a8f6032a20",
+          "displayName": "Scuba SEAsons",
+          "scheme": "fb692861552452156",
+          "buildscript": {
+            "ext": {
+              "facebookSdkVersion": "13.1.0"
+            }
           }
         }
-      }]
+      ],
+      "expo-build-properties"
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ADD8E6"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "buildNumber": "30",
+      "buildNumber": "33",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
       "bundleIdentifier": "com.freem11.divegomobile",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch"],
+        "UIBackgroundModes": [
+          "fetch"
+        ],
         "CFBundleURLTypes": [
-          {      
+          {
             "CFBundleURLSchemes": [
               "com.googleusercontent.apps.498754860675-jgnfsgnuelqn1o55or5585mdgicihfl2"
             ]
           }
         ],
-        "NSLocationUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location, 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of DiveGo’s functionality",
-        "NSLocationWhenInUseUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location. 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of DiveGo’s functionality",
+        "NSLocationUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location, 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of Scuba SEAsons' functionality",
+        "NSLocationWhenInUseUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location. 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of Scuba SEAsons' functionality",
         "NSPhotoLibraryUsageDescription": "We would like access to your photos so that you can upload your photo as proof of the animal sighting you are submitting, we will use this to validate that it is correct before it is added to the app for others to view. Also in a planned future feature we would like to use submitted photos for machine learning so that future photos submissions can be identified by the system and dive users the extra effort of manually typing in the animal's name",
         "UISupportedInterfaceOrientations": [
           "UIInterfaceOrientationPortrait"
@@ -65,7 +75,7 @@
       }
     },
     "android": {
-      "versionCode": 30,
+      "versionCode": 33,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

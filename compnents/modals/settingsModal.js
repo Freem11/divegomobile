@@ -68,7 +68,7 @@ export default function SettingsModal() {
 
   const alertHandler = async () => {
     Alert.alert(
-      "You Are About To Delete Your DiveGo Account",
+      "You Are About To Delete Your Scuba SEAsons Account",
       "Are you sure you want to delete your account?" +
         "\n" +
         "\n" +
@@ -76,7 +76,7 @@ export default function SettingsModal() {
       [
         { text: "Delete My Account", onPress: () => handleAccountDelete() },
         { text: "Cancel Request", onPress: () => console.log("no tapped") },
-        { text: "Contact DiveGo", onPress: () => handleEmail() },
+        { text: "Contact Scuba SEAsons", onPress: () => handleEmail() },
       ]
     );
   };
@@ -112,7 +112,7 @@ export default function SettingsModal() {
     email(to, {
       subject: `Delete Account Request ${blurb}`,
       body:
-        "Hello I am deleting my DiveGo account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with DiveGo to allow these to stay in the app? (Y/N)",
+        "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
       checkCanOpen: false,
     }).catch(console.error);
   };

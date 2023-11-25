@@ -166,7 +166,7 @@ export default function SecondTutorial() {
   const nextTutX = useSharedValue(-300);
 
   const text0 =
-    "Hey welcome back! Now that you have a Diver Name, I can show you how you can contribute to DiveGo!";
+    "Hey welcome back! Now that you have a Diver Name, I can show you how you can contribute to Scuba SEAsons!";
   const text1 =
     "First, let's look at working with Dive sites, let's move to a spot with known dive sites";
   const text2 =
@@ -191,12 +191,12 @@ export default function SecondTutorial() {
   const text13 =
     "Once you have your site name and GPS fields filled out, simply tap the 'Submit Dive Site' button at the bottom and your site will be submitted for review";
   const text14 =
-    "Please note your new site won't automatically be added to the map, the DiveGo team will verify your submission before committing to the map, but after that your site will go in and be credited to you with your diver name that we setup earlier!";
+    "Please note your new site won't automatically be added to the map, the Scuba SEAsons team will verify your submission before committing to the map, but after that your site will go in and be credited to you with your diver name that we setup earlier!";
   const text15 =
     "Give it a try for yourself: add a name and GPS using the 'I'm at the dive site' button and submit!";
   const text16 = "";
   const text17 =
-    "Nice Job, That's how you add a new dive site to DiveGo! In this case, since this is a guide, the entry was not submitted, but you can add from now on, in the same way.";
+    "Nice Job, That's how you add a new dive site to Scuba SEAsons! In this case, since this is a guide, the entry was not submitted, but you can add from now on, in the same way.";
   const text18 =
     "That's it for adding dive sites to the app! In the next guide we will look at adding sea creature sighting photos! Tap on this button to go to that guide next, otherwise tap anywhere else to close, and thanks for joining me again!";
   const text19 = "";

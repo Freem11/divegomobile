@@ -380,6 +380,18 @@ export default function FABButtons() {
   const [gearCloseState, setGearCloseState] = useState(false);
   const [settCloseState, setSettCloseState] = useState(false);
 
+  let bumpGeo
+  let bumpDss
+if (windowWidth > 600){
+  bumpGeo = windowHeight * 1.5
+  bumpDss = windowHeight * 1.5
+} else {
+  bumpGeo = windowHeight * 1.15
+  bumpDss = windowHeight * 1.25
+}
+
+  console.log(bumpGeo, bumpDss)
+
   return (
     <View style={styles.fab}>
       <Animated.View
@@ -609,7 +621,7 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : scale(1000) - scale(250)}
+        keyboardVerticalOffset={Platform.OS === "android" ? bumpDss - scale(250) :  bumpDss - scale(250)}
       >
         <Animated.View style={[styles.animal, animalReveal]}>
           <DiveSiteAutoComplete setDiveSearchHide={setDiveSearchHide}/>
@@ -618,7 +630,7 @@ export default function FABButtons() {
 
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={Platform.OS === "android" ? 700 : scale(1000) - scale(250)}
+        keyboardVerticalOffset={Platform.OS === "android" ? bumpGeo - scale(250) : bumpGeo - scale(250)}
       >
         <Animated.View style={[styles.geoCoder, geocodeReveal]} >
           <GeocodeAutocomplete setGeoHide={setGeoHide}/>
@@ -721,7 +733,7 @@ const styles = StyleSheet.create({
     width: 0,
     right: 40,
     borderRadius: 10,
-    zIndex: 2,
+    zIndex: 4,
   },
   modalStyle: {
     flex: 1,

@@ -67,7 +67,7 @@ export default function TutorialLaunchPadModal() {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.header2}>DiveGo Guides</Text>
+        <Text style={styles.header2}>Scuba SEAsons Guides</Text>
         <View
           style={
             tutorialsCloseState ? styles.closeButtonPressed : styles.closeButton

@@ -268,7 +268,7 @@ export default function AnchorModal(lat, lng) {
       url: "",
     };
     if (base64) {
-      shareOptions.message = `Checkout this cool pic of a ${creastureN} on DiveGo! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing out pics as well!\n\nLearn more about it here:\n${localUri}`;
+      shareOptions.message = `Checkout this cool pic of a ${creastureN} on Scuba SEAsons! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing out pics as well!\n\nLearn more about it here:\n${localUri}`;
       shareOptions.url = `data:image/jpg;base64,${base64}`;
       doShare(shareOptions);
     }
