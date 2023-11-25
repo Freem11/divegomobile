@@ -2,8 +2,11 @@
   "expo": {
     "name": "Scuba SEAsons",
     "slug": "divegomobile",
-    "scheme": ["divegomobile", "fb692861552452156"],
-    "version": "1.2.20",
+    "scheme": [
+      "divegomobile",
+      "fb692861552452156"
+    ],
+    "version": "1.2.21",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,35 +19,42 @@
         }
       ],
       "@react-native-google-signin/google-signin",
-      ["react-native-fbsdk-next",
-      {
-        "appID": "692861552452156",
-        "clientToken": "5fca59edd61f9c418917b4a8f6032a20",
-        "displayName": "Scuba SEAsons",
-        "scheme": "fb692861552452156",
-        "buildscript" : {
-          "ext" : {
-            "facebookSdkVersion": "13.1.0"
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "692861552452156",
+          "clientToken": "5fca59edd61f9c418917b4a8f6032a20",
+          "displayName": "Scuba SEAsons",
+          "scheme": "fb692861552452156",
+          "buildscript": {
+            "ext": {
+              "facebookSdkVersion": "13.1.0"
+            }
           }
         }
-      }]
+      ],
+      "expo-build-properties"
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ADD8E6"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "buildNumber": "32",
+      "buildNumber": "33",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
       "bundleIdentifier": "com.freem11.divegomobile",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch"],
+        "UIBackgroundModes": [
+          "fetch"
+        ],
         "CFBundleURLTypes": [
-          {      
+          {
             "CFBundleURLSchemes": [
               "com.googleusercontent.apps.498754860675-jgnfsgnuelqn1o55or5585mdgicihfl2"
             ]
@@ -65,7 +75,7 @@
       }
     },
     "android": {
-      "versionCode": 32,
+      "versionCode": 33,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

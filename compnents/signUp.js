@@ -87,12 +87,16 @@ export default function SignUpRoute() {
       setRegFail("Please fill out all fields");
       return;
     } else {
+
+      // need to handle for passowords of less than 6 characters
       let registrationToken = await register(formVals);
       console.log("reggie", registrationToken);
       if (registrationToken.session !== null) {
+        console.log("regstering?")
         await createProfile({id: registrationToken.session.user.id , email: formVals.email})
         await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
         setActiveSession(registrationToken);
+        
       } else {
         setRegFail(`You have already registered this account, please sign in`);
       }
