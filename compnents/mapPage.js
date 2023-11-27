@@ -464,7 +464,6 @@ export default function MapPage() {
           }
         }
       } catch (e) {
-        console.log("not me")
         console.log({ title: "Error", message: "e.message" });
       }
     };
