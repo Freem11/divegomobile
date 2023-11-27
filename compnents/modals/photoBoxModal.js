@@ -193,6 +193,7 @@ export default function PhotoBoxModal(props) {
           duration: 500,
           easing: Easing.inOut(Easing.ease),
         });
+        console.log("A", yCurrent.value)
         if (
           yCurrent.value > (photoWidth / 2) * scaleCurrent.value ||
           yCurrent.value < -(photoWidth / 2) * scaleCurrent.value
@@ -224,6 +225,7 @@ export default function PhotoBoxModal(props) {
           yCurrent.value = 0;
         }
 
+        console.log("B", xCurrent.value)
         if (
           -xCurrent.value >
             windowHeight * 0.75 + (scaleCurrent.value - 1) * 100 ||
@@ -250,6 +252,7 @@ export default function PhotoBoxModal(props) {
           duration: 500,
           easing: Easing.inOut(Easing.ease),
         });
+        console.log("C", yCurrent.value)
         if (
           yCurrent.value > (photoWidth / 2) * scaleCurrent.value ||
           yCurrent.value < -(photoWidth / 2) * scaleCurrent.value
@@ -280,7 +283,7 @@ export default function PhotoBoxModal(props) {
             scaleCurrent.value * yPrevious.value + yCurrent.value;
           yCurrent.value = 0;
         }
-
+        console.log("D", xCurrent.value)
         if (
           -xCurrent.value >
             windowHeight * 0.75 + (scaleCurrent.value - 1) * 100 ||
@@ -304,7 +307,7 @@ export default function PhotoBoxModal(props) {
         }
       } else {
         scalePrevious.value = scalePrevious.value * scaleCurrent.value;
-
+        console.log("E", yCurrent.value)
         if (
           yCurrent.value > (photoWidth / 2) * scaleCurrent.value ||
           yCurrent.value < -(photoWidth / 2) * scaleCurrent.value
@@ -328,18 +331,18 @@ export default function PhotoBoxModal(props) {
                 easing: Easing.inOut(Easing.ease),
               }
             );
-            yPrevious.value = 0;
+            // yPrevious.value = 0;
           }
         } else {
           yPrevious.value =
             scaleCurrent.value * yPrevious.value + yCurrent.value;
           yCurrent.value = 0;
         }
-
+        console.log("F", xCurrent.value, windowHeight * 0.75 + (scaleCurrent.value) * 100)
         if (
           -xCurrent.value >
-            windowHeight * 0.75 + (scaleCurrent.value - 1) * 100 ||
-          xCurrent.value > windowHeight * 0.75 + (scaleCurrent.value - 1) * 100
+            windowHeight * 0.75 - (scaleCurrent.value) * 100 ||
+          xCurrent.value > windowHeight * 0.75 - (scaleCurrent.value) * 100
         ) {
           if (xCurrent.value < 0) {
             xCurrent.value =
@@ -351,7 +354,7 @@ export default function PhotoBoxModal(props) {
               windowHeight * 0.7 +
               (scaleCurrent.value - 1) * 100;
           }
-          xPrevious.value = 0;
+          // xPrevious.value = 0;
         } else {
           xPrevious.value =
             scaleCurrent.value * xPrevious.value + xCurrent.value;
