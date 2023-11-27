@@ -193,11 +193,115 @@ export default function PhotoBoxModal(props) {
           duration: 500,
           easing: Easing.inOut(Easing.ease),
         });
+        if (
+          yCurrent.value > (photoWidth / 2) * scaleCurrent.value ||
+          yCurrent.value < -(photoWidth / 2) * scaleCurrent.value
+        ) {
+          if (yCurrent.value < 0) {
+            yCurrent.value = withTiming(
+              -windowWidth * scaleCurrent.value * 0.55 +
+                scaleCurrent.value * 100,
+              {
+                duration: 400,
+                easing: Easing.inOut(Easing.ease),
+              }
+            );
+            yPrevious.value = 0;
+          } else {
+            yCurrent.value = withTiming(
+              windowWidth * scaleCurrent.value * 0.55 -
+                scaleCurrent.value * 100,
+              {
+                duration: 400,
+                easing: Easing.inOut(Easing.ease),
+              }
+            );
+            yPrevious.value = 0;
+          }
+        } else {
+          yPrevious.value =
+            scaleCurrent.value * yPrevious.value + yCurrent.value;
+          yCurrent.value = 0;
+        }
+
+        if (
+          -xCurrent.value >
+            windowHeight * 0.75 + (scaleCurrent.value - 1) * 100 ||
+          xCurrent.value > windowHeight * 0.75 + (scaleCurrent.value - 1) * 100
+        ) {
+          if (xCurrent.value < 0) {
+            xCurrent.value =
+              scaleCurrent.value * xCurrent.value +
+              (-(windowHeight * 0.7) + (scaleCurrent.value - 1) * 100);
+          } else {
+            xCurrent.value =
+              scaleCurrent.value * xCurrent.value +
+              windowHeight * 0.7 +
+              (scaleCurrent.value - 1) * 100;
+          }
+          xPrevious.value = 0;
+        } else {
+          xPrevious.value =
+            scaleCurrent.value * xPrevious.value + xCurrent.value;
+          xCurrent.value = 0;
+        }
       } else if (scalePrevious.value * scaleCurrent.value > 4) {
         scalePrevious.value = withTiming(4, {
           duration: 500,
           easing: Easing.inOut(Easing.ease),
         });
+        if (
+          yCurrent.value > (photoWidth / 2) * scaleCurrent.value ||
+          yCurrent.value < -(photoWidth / 2) * scaleCurrent.value
+        ) {
+          if (yCurrent.value < 0) {
+            yCurrent.value = withTiming(
+              -windowWidth * scaleCurrent.value * 0.55 +
+                scaleCurrent.value * 100,
+              {
+                duration: 400,
+                easing: Easing.inOut(Easing.ease),
+              }
+            );
+            yPrevious.value = 0;
+          } else {
+            yCurrent.value = withTiming(
+              windowWidth * scaleCurrent.value * 0.55 -
+                scaleCurrent.value * 100,
+              {
+                duration: 400,
+                easing: Easing.inOut(Easing.ease),
+              }
+            );
+            yPrevious.value = 0;
+          }
+        } else {
+          yPrevious.value =
+            scaleCurrent.value * yPrevious.value + yCurrent.value;
+          yCurrent.value = 0;
+        }
+
+        if (
+          -xCurrent.value >
+            windowHeight * 0.75 + (scaleCurrent.value - 1) * 100 ||
+          xCurrent.value > windowHeight * 0.75 + (scaleCurrent.value - 1) * 100
+        ) {
+          if (xCurrent.value < 0) {
+            xCurrent.value =
+              scaleCurrent.value * xCurrent.value +
+              (-(windowHeight * 0.7) + (scaleCurrent.value - 1) * 100);
+          } else {
+            xCurrent.value =
+              scaleCurrent.value * xCurrent.value +
+              windowHeight * 0.7 +
+              (scaleCurrent.value - 1) * 100;
+          }
+          xPrevious.value = 0;
+        } else {
+          xPrevious.value =
+            scaleCurrent.value * xPrevious.value + xCurrent.value;
+          xCurrent.value = 0;
+        }
       } else {
         scalePrevious.value = scalePrevious.value * scaleCurrent.value;
 
