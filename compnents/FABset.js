@@ -390,8 +390,6 @@ if (windowWidth > 600){
   bumpDss = windowHeight * 1.25
 }
 
-  console.log(bumpGeo, bumpDss)
-
   return (
     <View style={styles.fab}>
       <Animated.View
