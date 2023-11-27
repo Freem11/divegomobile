@@ -228,8 +228,8 @@ export default function PhotoBoxModal(props) {
         console.log("B", xCurrent.value)
         if (
           -xCurrent.value >
-            windowHeight * 0.75 + (scaleCurrent.value - 1) * 100 ||
-          xCurrent.value > windowHeight * 0.75 + (scaleCurrent.value - 1) * 100
+            windowHeight * 0.5 + (scaleCurrent.value - 1) * 100 ||
+          xCurrent.value > windowHeight * 0.5 + (scaleCurrent.value - 1) * 100
         ) {
           if (xCurrent.value < 0) {
             xCurrent.value =
@@ -276,7 +276,7 @@ export default function PhotoBoxModal(props) {
                 easing: Easing.inOut(Easing.ease),
               }
             );
-            yPrevious.value = 0;
+            // yPrevious.value = 0;
           }
         } else {
           yPrevious.value =
@@ -299,7 +299,7 @@ export default function PhotoBoxModal(props) {
               windowHeight * 0.7 +
               (scaleCurrent.value - 1) * 100;
           }
-          xPrevious.value = 0;
+          // xPrevious.value = 0;
         } else {
           xPrevious.value =
             scaleCurrent.value * xPrevious.value + xCurrent.value;
@@ -338,21 +338,23 @@ export default function PhotoBoxModal(props) {
             scaleCurrent.value * yPrevious.value + yCurrent.value;
           yCurrent.value = 0;
         }
-        console.log("F", xCurrent.value, windowHeight * 0.75 + (scaleCurrent.value) * 100)
+        console.log("F", xCurrent.value, windowHeight * 0.5 + (scaleCurrent.value) * 100)
         if (
           -xCurrent.value >
-            windowHeight * 0.75 - (scaleCurrent.value) * 100 ||
-          xCurrent.value > windowHeight * 0.75 - (scaleCurrent.value) * 100
+            windowHeight * 0.5 - (scaleCurrent.value) * 100 ||
+          xCurrent.value > windowHeight * 0.5 - (scaleCurrent.value) * 100
         ) {
           if (xCurrent.value < 0) {
+            console.log("extra", scaleCurrent.value * xCurrent.value +
+            (-(windowHeight * 0.7) + (scaleCurrent.value) * 200))
             xCurrent.value =
               scaleCurrent.value * xCurrent.value +
-              (-(windowHeight * 0.7) + (scaleCurrent.value - 1) * 100);
+              (-(windowHeight * 0.7) + (scaleCurrent.value) * 200);
           } else {
             xCurrent.value =
               scaleCurrent.value * xCurrent.value +
               windowHeight * 0.7 +
-              (scaleCurrent.value - 1) * 100;
+              (scaleCurrent.value) * 100;
           }
           // xPrevious.value = 0;
         } else {
