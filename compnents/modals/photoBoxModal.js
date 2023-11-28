@@ -113,11 +113,23 @@ export default function PhotoBoxModal(props) {
       }
     })
     .onEnd(() => {
-      scalePrevious.value = scalePrevious.value * scaleCurrent.value;
+      if(scalePrevious.value * scaleCurrent.value < 1){
+      scalePrevious.value = 1 
+      xPrevious.value = xPrevious.value + xCurrent.value;
+      yPrevious.value = yPrevious.value + yCurrent.value;
 
+      } else if (scalePrevious.value * scaleCurrent.value > 4){
+      scalePrevious.value = 4 
+      xPrevious.value = xPrevious.value + xCurrent.value;
+      yPrevious.value = yPrevious.value + yCurrent.value;
+
+      } else {
+      scalePrevious.value = scalePrevious.value * scaleCurrent.value; 
       xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
       yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
 
+      }
+     
       xCurrent.value = 0;
       yCurrent.value = 0;
 
