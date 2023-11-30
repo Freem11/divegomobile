@@ -222,7 +222,7 @@ export default function ThirdTutorial() {
     "Wonderful! Now that the sea creature has its name, the only piece left is the GPS, since we are assuming that we don't have them, use the Pin Dropper button to open up the map so we can drop a pin!";
   const text16 = "";
   const text17 =
-    "And here we are! As you can see there is a new icon that looks like a manta ray, this is our draggable pin. It's also why we add dive sites (to give you points to drag the pin too)";
+    "And here we are! As you can see we have returned to the map page and the manta ray draggable pin is waiting for us once again.";
   const text18 =
     "Let's pretend that one of the dive sites on the map is where your sea creature sighting took place, drag the manta pin to be on top of it's anchor and then tap the 'set pin' button at the bottom";
   const text19 = "";

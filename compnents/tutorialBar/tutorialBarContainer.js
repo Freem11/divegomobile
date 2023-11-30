@@ -33,6 +33,7 @@ export default function TutorialBar() {
   const Tut2List = [
     "Checking for a dive site",
     "Adding your dive sites",
+    "Placing the pin",
     "Exit Guide",
   ];
   const Tut3List = [

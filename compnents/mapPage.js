@@ -422,6 +422,7 @@ export default function MapPage() {
       setMapHelper(true);
       setMasterSwitch(true);
       setDiveSiteAdderModal(!diveSiteAdderModal)
+      setItterator2(itterator2 + 1)
       setChosenModal(null);
     } else if (chosenModal === "Photos") {
       setPinValues({

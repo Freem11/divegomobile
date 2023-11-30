@@ -64,6 +64,24 @@ export default function DiveSiteModal() {
   let timer2;
   let timer3;
 
+  function locationBut() {
+    counter1++;
+    if (counter1 % 2 == 0) {
+      setLocButState(false);
+    } else {
+      setLocButState(true);
+    }
+  }
+
+  function pinBut() {
+    counter1++;
+    if (counter1 % 2 == 0) {
+      setPinButState(false);
+    } else {
+      setPinButState(true);
+    }
+  }
+
   function siteField() {
     counter1++;
     if (counter1 % 2 == 0) {
@@ -88,8 +106,8 @@ export default function DiveSiteModal() {
     }
   }
 
-  function siteTimeout() {
-    blinker2 = setInterval(atSite, 1000);
+  function subButTimeout() {
+    blinker2 = setInterval(subBut, 1000);
   }
 
   function subBut() {
@@ -115,15 +133,19 @@ export default function DiveSiteModal() {
       ...formValidation,
       SiteNameVal: false,
     });
-    setImaButState(false);
+    setLocButState(false);
+    setPinButState(false)
     setSubButState(false);
   }
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator2 === 16) {
+        blinker1 = setInterval(pinBut, 600);
+      } else if (itterator2 === 13){
+        blinker1 = setInterval(locationBut, 1000);
+      } else if (itterator2 === 23){
         blinker1 = setInterval(siteField, 1000);
-        timer2 = setTimeout(siteTimeout, 300);
-        timer3 = setTimeout(subTimeout, 600);
+        timer2 = setTimeout(subButTimeout, 300);
       }
     }
     return () => cleanUp();
@@ -163,6 +185,9 @@ export default function DiveSiteModal() {
           LngVal: false,
         });
       }
+      if (tutorialRunning && itterator2 === 13){
+        setItterator2( itterator2 + 1)
+      }
       setIsDisabled(true)
       setIsLoading(false)
     } catch (e) {
@@ -174,8 +199,9 @@ export default function DiveSiteModal() {
     setChosenModal("DiveSite");
     setMapHelper(true);
     setMasterSwitch(false);
-    if (!tutorialRunning) {
-      setDiveSiteAdderModal(false);
+    setDiveSiteAdderModal(false);
+    if (tutorialRunning) {
+      setItterator2(itterator2 + 1)
     }
   };
 
@@ -222,6 +248,7 @@ export default function DiveSiteModal() {
     ) {
       return;
     } else {
+      console.log("here?", tutorialRunning, itterator2)
       if (tutorialRunning) {
         if (itterator2 > 0) {
           setItterator2(itterator2 + 1);
@@ -271,7 +298,9 @@ export default function DiveSiteModal() {
       }
     }
   };
-  const [imaButState, setImaButState] = useState(false);
+
+  const [locButState, setLocButState] = useState(false);
+  const [pinButState, setPinButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
 
@@ -387,12 +416,12 @@ export default function DiveSiteModal() {
       )}
 
       <View style={styles.latLngButton}>
-        <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
+        <View style={locButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
           <TouchableOpacity
             // disabled={isDisabled}
             onPress={getCurrentLocation}
-            onPressIn={() => setImaButState(true)}
-            onPressOut={() => setImaButState(false)}
+            onPressIn={() => setLocButState(true)}
+            onPressOut={() => setLocButState(false)}
             style={{
               alignItems: "center",
               justifyContent: "center",
@@ -409,7 +438,7 @@ export default function DiveSiteModal() {
           </TouchableOpacity>
         </View>
 
-        <View style={corButState ? styles.LocButtonPressed : styles.LocButton}>
+        <View style={pinButState ? styles.LocButtonPressed : styles.LocButton}>
           <TouchableOpacity
             onPress={onNavigate}
             onPressIn={() => setCorButState(true)}
