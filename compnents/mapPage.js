@@ -418,11 +418,11 @@ export default function MapPage() {
         ...addSiteVals,
         Latitude: dragPin.lat.toString(),
         Longitude: dragPin.lng.toString(),
-      })
+      });
       setMapHelper(true);
       setMasterSwitch(true);
       setDiveSiteAdderModal(!diveSiteAdderModal)
-
+      setChosenModal(null);
     } else if (chosenModal === "Photos") {
       setPinValues({
         ...pinValues,
@@ -432,6 +432,7 @@ export default function MapPage() {
       setMapHelper(true);
       setMasterSwitch(true);
       setPicAdderModal(!picAdderModal);
+      setChosenModal(null);
     }
   };
 

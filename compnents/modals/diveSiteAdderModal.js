@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
@@ -41,6 +42,8 @@ export default function DiveSiteModal() {
     DSAdderContext
   );
   const [diveCloseState, setDiveCloseState] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
@@ -86,7 +89,7 @@ export default function DiveSiteModal() {
   }
 
   function siteTimeout() {
-    blinker2 = setInterval(atSite, 1000)
+    blinker2 = setInterval(atSite, 1000);
   }
 
   function subBut() {
@@ -99,15 +102,15 @@ export default function DiveSiteModal() {
   }
 
   function subTimeout() {
-    blinker3 = setInterval(subBut, 1000)
+    blinker3 = setInterval(subBut, 1000);
   }
 
   function cleanUp() {
-    clearInterval(blinker1)
-    clearInterval(blinker2)
-    clearInterval(blinker3)
-    clearTimeout(timer2)
-    clearTimeout(timer3)
+    clearInterval(blinker1);
+    clearInterval(blinker2);
+    clearInterval(blinker3);
+    clearTimeout(timer2);
+    clearTimeout(timer3);
     SetFormValidation({
       ...formValidation,
       SiteNameVal: false,
@@ -119,20 +122,21 @@ export default function DiveSiteModal() {
     if (tutorialRunning) {
       if (itterator2 === 16) {
         blinker1 = setInterval(siteField, 1000);
-        timer2 = setTimeout(siteTimeout,300);
-        timer3 = setTimeout(subTimeout,600); 
+        timer2 = setTimeout(siteTimeout, 300);
+        timer3 = setTimeout(subTimeout, 600);
       }
-    } return () => cleanUp()
+    }
+    return () => cleanUp();
   }, [itterator2]);
 
   useEffect(() => {
-    if(chapter === null){
-    if (tutorialRunning) {
-      if (itterator2 === 9) {
-        setItterator2(itterator2 + 1);
+    if (chapter === null) {
+      if (tutorialRunning) {
+        if (itterator2 === 9) {
+          setItterator2(itterator2 + 1);
+        }
       }
     }
-  }
   }, [diveSiteAdderModal]);
 
   useEffect(() => {
@@ -142,6 +146,8 @@ export default function DiveSiteModal() {
   }, [itterator2]);
 
   const getCurrentLocation = async () => {
+    setIsLoading(true)
+    setIsDisabled(true)
     try {
       const location = await getCurrentCoordinates();
       if (location) {
@@ -157,14 +163,15 @@ export default function DiveSiteModal() {
           LngVal: false,
         });
       }
+      setIsDisabled(true)
+      setIsLoading(false)
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
   };
 
-
   const onNavigate = () => {
-    setChosenModal("DiveSite")
+    setChosenModal("DiveSite");
     setMapHelper(true);
     setMasterSwitch(false);
     if (!tutorialRunning) {
@@ -237,8 +244,8 @@ export default function DiveSiteModal() {
     if (tutorialRunning) {
       if (itterator2 === 9) {
         setItterator2(itterator2 + 1);
-      } else if ( itterator2 === 16) {
-          return
+      } else if (itterator2 === 16) {
+        return;
       } else {
         setDiveSiteAdderModal(!diveSiteAdderModal);
 
@@ -372,50 +379,54 @@ export default function DiveSiteModal() {
         </InsetShadow>
       </View>
 
+      {isLoading && (
+        <ActivityIndicator
+          color="gold"
+          style={{ marginTop: "5%" }}
+        ></ActivityIndicator>
+      )}
+
       <View style={styles.latLngButton}>
+        <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
+          <TouchableOpacity
+            // disabled={isDisabled}
+            onPress={getCurrentLocation}
+            onPressIn={() => setImaButState(true)}
+            onPressOut={() => setImaButState(false)}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: 38,
+              height: 38,
+            }}
+          >
+            <MaterialIcons
+              name="my-location"
+              color="gold"
+              size={34}
+              style={{ zIndex: -1 }}
+            />
+          </TouchableOpacity>
+        </View>
 
-      <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
-        <TouchableOpacity
-          onPress={getCurrentLocation}
-          onPressIn={() => setImaButState(true)}
-          onPressOut={() => setImaButState(false)}
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            width: 38,
-            height: 38,
-          }}
-        >
-           <MaterialIcons
-            name="my-location"
-            color="gold" 
-            size={34}
-            style={{ zIndex: -1 }}
-          />
-        
-        </TouchableOpacity>
-      </View>
-
-            <View
-              style={corButState ? styles.LocButtonPressed : styles.LocButton}
-            >
-              <TouchableOpacity
-                onPress={onNavigate}
-                onPressIn={() => setCorButState(true)}
-                onPressOut={() => setCorButState(false)}
-                style={{
-                  width: 38,
-                  height: 38,
-                }}
-              >
-                <MaterialIcons
-                  name="location-pin"
-                  color="gold"
-                  size={38}
-                  style={{ zIndex: -1 }}
-                />
-              </TouchableOpacity>
-            </View>
+        <View style={corButState ? styles.LocButtonPressed : styles.LocButton}>
+          <TouchableOpacity
+            onPress={onNavigate}
+            onPressIn={() => setCorButState(true)}
+            onPressOut={() => setCorButState(false)}
+            style={{
+              width: 38,
+              height: 38,
+            }}
+          >
+            <MaterialIcons
+              name="location-pin"
+              color="gold"
+              size={38}
+              style={{ zIndex: -1 }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View
@@ -612,9 +623,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginLeft: "11%",
-    marginTop: scale(30),
-    width: "40%"
+    marginLeft: "10%",
+    marginTop: 35,
+    width: 140,
+    // backgroundColor: "pink"
   },
   LocButton: {
     backgroundColor: "#538bdb",

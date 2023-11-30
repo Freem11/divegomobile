@@ -8,6 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -68,6 +69,7 @@ export default function PicUploadModal() {
 
   const [date, setDate] = useState(new Date());
 
+  const [isLoading, setIsLoading] = useState(false);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
   const [pinChecker, setPinChecker] = useState(null);
 
@@ -179,7 +181,7 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   const onNavigate = () => {
-    setChosenModal("Photos")
+    setChosenModal("Photos");
     setMapHelper(true);
     setMasterSwitch(false);
     if (!tutorialRunning) {
@@ -306,7 +308,7 @@ export default function PicUploadModal() {
       LngVal: LngVar,
     });
 
-    console.log("pins", pinValues)
+    console.log("pins", pinValues);
 
     if (
       pinValues.PicFile === "" ||
@@ -325,7 +327,7 @@ export default function PicUploadModal() {
       } else {
         // console.log("pinnies!", pinValues)
         insertPhotoWaits(pinValues);
-        setPinValues({ 
+        setPinValues({
           ...pinValues,
           PicFile: null,
           Animal: "",
@@ -341,10 +343,11 @@ export default function PicUploadModal() {
   };
 
   const handleImageUpload = async () => {
-
+    setIsLoading(true);
     if (pinValues.PicFile !== null) {
       removePhoto({
-        filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+        filePath:
+          "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
         fileName: `${pinValues.PicFile}`,
       });
     }
@@ -353,16 +356,16 @@ export default function PicUploadModal() {
       const image = await chooseImageHandler();
       if (image) {
         setUploadedFile(image.assets[0].uri);
-
+        setIsLoading(false);
         let fileToUpload = createFile(image.assets[0].uri);
         const data = new FormData();
         data.append("image", fileToUpload);
 
-        let extension =  image.assets[0].uri.split('.').pop();
-        const fileName = Date.now() + "." + extension
-    
+        let extension = image.assets[0].uri.split(".").pop();
+        const fileName = Date.now() + "." + extension;
+
         uploadphoto(data, fileName);
-      
+
         let formattedDate;
         let newLatitude;
         let newLongitude;
@@ -410,6 +413,7 @@ export default function PicUploadModal() {
         }
       }
     } catch (e) {
+      setIsLoading(false);
       console.log("error: Photo Selection Cancelled", e.message);
     }
   };
@@ -432,7 +436,8 @@ export default function PicUploadModal() {
 
         if (pinValues.PicFile !== null) {
           removePhoto({
-            filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+            filePath:
+              "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
             fileName: pinValues.PicFile,
           });
         }
@@ -456,7 +461,8 @@ export default function PicUploadModal() {
 
       if (pinValues.PicFile !== null) {
         removePhoto({
-          filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+          filePath:
+            "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
           fileName: pinValues.PicFile,
         });
       }
@@ -481,7 +487,7 @@ export default function PicUploadModal() {
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -504,20 +510,31 @@ export default function PicUploadModal() {
         </View>
       </View>
       <View style={styles.picContainer}>
-        {uploadedFile && (<Image
-          source={{
-            uri: `${uploadedFile}`,
-            // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
-          }}
-          style={
-            formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
-          }
-        />)}
-         {!uploadedFile && (<View
-          style={
-            formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
-          }
-        />)}
+        {uploadedFile && (
+          <Image
+            source={{
+              uri: `${uploadedFile}`,
+              // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+            }}
+            style={
+              formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+            }
+          />
+        )}
+        {!uploadedFile && !isLoading && (
+          <View
+            style={
+              formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+            }
+          />
+        )}
+
+        {!uploadedFile && isLoading && (
+          <ActivityIndicator
+            color="gold"
+            style={{ marginTop: "5%", backgroundColor: "#538dbd" }}
+          ></ActivityIndicator>
+        )}
       </View>
 
       <View
@@ -590,18 +607,18 @@ export default function PicUploadModal() {
           </View>
 
           {/* <View style={styles.animalField}> */}
-            {/* <KeyboardAvoidingView
+          {/* <KeyboardAvoidingView
               behavior="position"
               keyboardVerticalOffset={AnimalKeboardOffset}
               style={styles.autocomplete}
             > */}
-              <AnimalAutoSuggest
-                pin={pinValues}
-                setPin={setPinValues}
-                formValidation={formValidation}
-                SetFormValidation={SetFormValidation}
-              />
-            {/* </KeyboardAvoidingView> */}
+          <AnimalAutoSuggest
+            pin={pinValues}
+            setPin={setPinValues}
+            formValidation={formValidation}
+            SetFormValidation={SetFormValidation}
+          />
+          {/* </KeyboardAvoidingView> */}
           {/* </View> */}
 
           <View style={styles.latField}>
@@ -868,7 +885,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   picContainer: {
-    backgroundColor: "#D8DBE2",
+    backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
     marginTop: "15%",

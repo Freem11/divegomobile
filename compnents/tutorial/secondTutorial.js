@@ -184,6 +184,7 @@ export default function SecondTutorial() {
   const text9 = "";
   const text10 =
     "This is the dive site adding form, here, you can see 3 fields and a button. First is the site name, add the dive site name in this spot";
+  
   const text11 =
     "Next are the GPS lat and lng fields. The easiest way to get them is to be AT the dive site and simply tap the 'I'm at the dive site button'. It will take your current location and use them as the coordinates for the dive site!";
   const text12 =
