@@ -50,7 +50,7 @@ import { TutorialContext } from "./contexts/tutorialContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
-
+import { ModalSelectContext } from "./contexts/modalSelectContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -86,6 +86,8 @@ export default function MapPage() {
     );
   }
   
+  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -410,14 +412,27 @@ export default function MapPage() {
   };
 
   const onNavigate = () => {
-    setPinValues({
-      ...pinValues,
-      Latitude: dragPin.lat.toString(),
-      Longitude: dragPin.lng.toString(),
-    });
-    setMapHelper(true);
-    setMasterSwitch(true);
-    setPicAdderModal(!picAdderModal);
+
+    if (chosenModal === "DiveSite"){
+      setAddSiteVals({
+        ...addSiteVals,
+        Latitude: dragPin.lat.toString(),
+        Longitude: dragPin.lng.toString(),
+      })
+      setMapHelper(true);
+      setMasterSwitch(true);
+      setDiveSiteAdderModal(!diveSiteAdderModal)
+
+    } else if (chosenModal === "Photos") {
+      setPinValues({
+        ...pinValues,
+        Latitude: dragPin.lat.toString(),
+        Longitude: dragPin.lng.toString(),
+      });
+      setMapHelper(true);
+      setMasterSwitch(true);
+      setPicAdderModal(!picAdderModal);
+    }
   };
 
   useEffect(() => {

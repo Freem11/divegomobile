@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -20,12 +20,16 @@ import { SecondTutorialModalContext } from "../contexts/secondTutorialModalConte
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { MapHelperContext } from "../contexts/mapHelperContext";
+import { MasterContext } from "../contexts/masterContext";
+import { ModalSelectContext } from "../contexts/modalSelectContext";
 
 let SiteNameVar = false;
 let LatVar = false;
 let LngVar = false;
 
 export default function DiveSiteModal() {
+  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
   );
@@ -39,6 +43,8 @@ export default function DiveSiteModal() {
   const [diveCloseState, setDiveCloseState] = useState(false);
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
+  const { setMasterSwitch } = useContext(MasterContext);
 
   const [formValidation, SetFormValidation] = useState({
     SiteNameVal: false,
@@ -156,6 +162,16 @@ export default function DiveSiteModal() {
     }
   };
 
+
+  const onNavigate = () => {
+    setChosenModal("DiveSite")
+    setMapHelper(true);
+    setMasterSwitch(false);
+    if (!tutorialRunning) {
+      setDiveSiteAdderModal(false);
+    }
+  };
+
   const handleSubmit = () => {
     if (addSiteVals.Site === "" || addSiteVals.Site === null) {
       SiteNameVar = true;
@@ -250,6 +266,7 @@ export default function DiveSiteModal() {
   };
   const [imaButState, setImaButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
+  const [corButState, setCorButState] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -355,31 +372,50 @@ export default function DiveSiteModal() {
         </InsetShadow>
       </View>
 
+      <View style={styles.latLngButton}>
+
       <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
         <TouchableOpacity
           onPress={getCurrentLocation}
           onPressIn={() => setImaButState(true)}
           onPressOut={() => setImaButState(false)}
           style={{
-            display: "flex",
-            flexDirection: "row",
-            width: 130,
-            height: 30,
             alignItems: "center",
+            justifyContent: "center",
+            width: 38,
+            height: 38,
           }}
         >
-          <FontAwesome5 name="map" color="gold" size={16} />
-          <Text
-            style={{
-              marginLeft: 5,
-              fontFamily: "PatrickHand_400Regular",
-              color: "gold",
-              fontSize: 16
-            }}
-          >
-            I'm at the dive site
-          </Text>
+           <MaterialIcons
+            name="my-location"
+            color="gold" 
+            size={34}
+            style={{ zIndex: -1 }}
+          />
+        
         </TouchableOpacity>
+      </View>
+
+            <View
+              style={corButState ? styles.LocButtonPressed : styles.LocButton}
+            >
+              <TouchableOpacity
+                onPress={onNavigate}
+                onPressIn={() => setCorButState(true)}
+                onPressOut={() => setCorButState(false)}
+                style={{
+                  width: 38,
+                  height: 38,
+                }}
+              >
+                <MaterialIcons
+                  name="location-pin"
+                  color="gold"
+                  size={38}
+                  style={{ zIndex: -1 }}
+                />
+              </TouchableOpacity>
+            </View>
       </View>
 
       <View
@@ -470,41 +506,37 @@ const styles = StyleSheet.create({
   },
   GPSbutton: {
     backgroundColor: "#538bdb",
-    flexDirection: "row",
     alignItems: "center",
+    alignSelf: "center",
     justifyContent: "center",
     borderRadius: 10,
-    height: 35,
-    width: 150,
-    marginLeft: "30%",
-    marginTop: scale(30),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  GPSbuttonPressed: {
-    backgroundColor: "#538dbd",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
-    marginLeft: "30%",
-    marginTop: scale(30),
+    height: 40,
+    width: 40,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 6.27,
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  GPSbuttonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
 
     elevation: 10,
   },
@@ -516,7 +548,6 @@ const styles = StyleSheet.create({
     borderTopColor: "darkgrey",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "1%" : "1%",
-
   },
   SubmitButtonPressed: {
     position: "absolute",
@@ -576,5 +607,49 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "lightgrey",
     opacity: 0.3,
+  },
+  latLngButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: "11%",
+    marginTop: scale(30),
+    width: "40%"
+  },
+  LocButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  LocButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+
+    elevation: 10,
   },
 });

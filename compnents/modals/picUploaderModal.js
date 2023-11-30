@@ -35,6 +35,7 @@ import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
+import { ModalSelectContext } from "../contexts/modalSelectContext";
 
 let PicVar = false;
 let DateVar = false;
@@ -45,6 +46,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PicUploadModal() {
+  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { thirdGuideModal, setThirdGuideModal } = useContext(
     ThirdTutorialModalContext
   );
@@ -177,6 +179,7 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   const onNavigate = () => {
+    setChosenModal("Photos")
     setMapHelper(true);
     setMasterSwitch(false);
     if (!tutorialRunning) {
