@@ -101,6 +101,17 @@ export default function SecondTutorial() {
         textBoxY.value = withTiming(windowHeight * 0.8);
         break;
 
+      case "DS Help":
+        setItterator2(10);
+        setSecondGuideModal(true);
+        setDiveSiteAdderModal(true);
+        setTutorialRunning(true)
+        characterX.value = withTiming(
+          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        );
+        textBoxY.value = withTiming(windowHeight * 0.8);
+        break;
+
       case "Placing the pin":
         setItterator2(15);
         setSecondGuideModal(true);

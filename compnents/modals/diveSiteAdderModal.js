@@ -299,15 +299,43 @@ export default function DiveSiteModal() {
     }
   };
 
+  const activateGuide = () => {
+      // setSecondGuideModal(true)
+      // setTutorialRunning(true)
+      setChapter("DS Help")
+  };
+
   const [locButState, setLocButState] = useState(false);
   const [pinButState, setPinButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
+  const [helpButState, setHelpButState] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Dive Site</Text>
+        <View style={helpButState ? styles.helpButtonPressed : styles.helpButton}>
+          <TouchableOpacity
+            // disabled={isDisabled}
+            onPress={activateGuide}
+            onPressIn={() => setHelpButState(true)}
+            onPressOut={() => setHelpButState(false)}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: 20,
+              height: 20,
+            }}
+          >
+            <FontAwesome5
+              name="question"
+              color="gold"
+              size={18}
+              style={{ zIndex: -1}}
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={
             diveCloseState ? styles.closeButtonPressed : styles.closeButton
@@ -637,6 +665,7 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
   },
   closeButtonPressed: {
     position: "relative",
@@ -645,6 +674,7 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
     backgroundColor: "lightgrey",
     opacity: 0.3,
   },
@@ -692,5 +722,29 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
 
     elevation: 10,
+  },
+  helpButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: 30,
+    width: 30,
+    marginTop: scale(1)
+  },
+  helpButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: 30,
+    width: 30,
+    marginTop: scale(1)
   },
 });
