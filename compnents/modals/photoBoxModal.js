@@ -113,13 +113,8 @@ export default function PhotoBoxModal(props) {
       }
     })
     .onEnd(() => {
-      if(scalePrevious.value * scaleCurrent.value < 1){
-      scalePrevious.value = 1 
-      } else if (scalePrevious.value * scaleCurrent.value > 4){
-      scalePrevious.value = 4 
-      } else {
+      
       scalePrevious.value = scalePrevious.value * scaleCurrent.value; 
-      }
       xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
       yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
 
