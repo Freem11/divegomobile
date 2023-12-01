@@ -112,6 +112,7 @@ export default function ThirdTutorial() {
       case "Adding your photo":
         setItterator3(6);
         setThirdGuideModal(true);
+        setTutorialRunning(true)
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );

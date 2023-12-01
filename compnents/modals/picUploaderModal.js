@@ -22,7 +22,7 @@ import { getToday } from "../helpers/picUploaderHelpers";
 import { formatDate, createFile } from "../helpers/imageUploadHelpers";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import { uploadphoto } from "../../supabaseCalls/uploadSupabaseCalls";
@@ -483,15 +483,41 @@ export default function PicUploadModal() {
     }
   };
 
+  const activateGuide = () => {
+    setChapter("Adding your photo")
+};
+
   const [imgButState, setImgButState] = useState(false);
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
+  const [helpButState, setHelpButState] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Picture</Text>
+        <View style={helpButState ? styles.helpButtonPressed : styles.helpButton}>
+          <TouchableOpacity
+            // disabled={isDisabled}
+            onPress={activateGuide}
+            onPressIn={() => setHelpButState(true)}
+            onPressOut={() => setHelpButState(false)}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: 20,
+              height: 20,
+            }}
+          >
+            <FontAwesome5
+              name="question"
+              color="gold"
+              size={18}
+              style={{ zIndex: -1}}
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={picCloseState ? styles.closeButtonPressed : styles.closeButton}
         >
@@ -1146,7 +1172,7 @@ const styles = StyleSheet.create({
     color: "#F0EEEB",
     width: "80%",
     marginTop: "-1%",
-    marginLeft: "7%",
+    marginLeft: "5%",
     marginRight: "15%",
     // backgroundColor: "green"
   },
@@ -1157,6 +1183,7 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
   },
   closeButtonPressed: {
     position: "relative",
@@ -1165,7 +1192,32 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
     backgroundColor: "lightgrey",
     opacity: 0.3,
+  },
+  helpButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: 30,
+    width: 30,
+    marginTop: scale(1)
+  },
+  helpButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: 30,
+    width: 30,
+    marginTop: scale(1)
   },
 });
