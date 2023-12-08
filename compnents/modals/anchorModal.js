@@ -150,7 +150,7 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleEmail = (pic) => {
-    const to = ["DiveGo2022@gmail.com"];
+    const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
@@ -160,7 +160,7 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleEmailDS = () => {
-    const to = ["DiveGo2022@gmail.com"];
+    const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${lat.SiteName}" at Latitude: ${lat.Lat} Longitude: ${lat.Lng} `,

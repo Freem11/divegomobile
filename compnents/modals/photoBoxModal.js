@@ -162,25 +162,28 @@ export default function PhotoBoxModal(props) {
         scalePrevious.value = withTiming(scalePrevious.value, {duration: 400, easing: Easing.inOut(Easing.ease)}); 
       }
 
-      if (tempX > windowWidth/2 || -tempX > windowWidth/2){
-        if(tempX < 0){
-          xPrevious.value = withTiming((((-windowHeight/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
-        } else {
-          xPrevious.value = withTiming((((windowHeight/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
-        } 
-      } else {
-        xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
-      }
+      // if (tempX > windowWidth/2 || -tempX > windowWidth/2){
+      //   if(tempX < 0){
+      //     xPrevious.value = withTiming((((-windowHeight/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+      //   } else {
+      //     xPrevious.value = withTiming((((windowHeight/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+      //   } 
+      // } else {
+      //   xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
+      // }
 
-      if (tempY > windowHeight/2 || -tempY > windowHeight/2){
-        if(tempY < 0){
-          yPrevious.value = withTiming((((-windowWidth/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
-        } else {
-          yPrevious.value = withTiming((((windowWidth/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
-        }      
-      } else {
-        yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
-      }
+      // if (tempY > windowHeight/2 || -tempY > windowHeight/2){
+      //   if(tempY < 0){
+      //     yPrevious.value = withTiming((((-windowWidth/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+      //   } else {
+      //     yPrevious.value = withTiming((((windowWidth/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+      //   }      
+      // } else {
+      //   yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
+      // }
+      
+      xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
+      yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
       
       xCurrent.value = 0;
       yCurrent.value = 0;

@@ -108,7 +108,7 @@ export default function SettingsModal() {
   };
 
   const handleEmail = () => {
-    const to = ["DiveGo2022@gmail.com"];
+    const to = ["scubaseasons@gmail.com"];
     email(to, {
       subject: `Delete Account Request ${blurb}`,
       body:
