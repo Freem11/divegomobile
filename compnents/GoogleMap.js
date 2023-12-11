@@ -219,7 +219,7 @@ export default function Map() {
 
   useEffect(() => {
     let zoomHelp
-    if (tutorialRunning && itterator === 7 || itterator === 13){
+    if (tutorialRunning && itterator === 10 || itterator === 16){
       zoomHelp = 8
     }
 

@@ -322,14 +322,14 @@ export default function DiveSiteModal() {
             style={{
               alignItems: "center",
               justifyContent: "center",
-              width: 20,
-              height: 20,
+              width: scale(20),
+              height: scale(20),
             }}
           >
             <FontAwesome5
               name="question"
               color="gold"
-              size={18}
+              size={scale(18)}
               style={{ zIndex: -1}}
             />
           </TouchableOpacity>
@@ -729,8 +729,8 @@ const styles = StyleSheet.create({
     marginRight: scale(5),
     marginLeft: scale(-20),
     borderRadius: 40,
-    height: 30,
-    width: 30,
+    height: scale(30),
+    width: scale(30),
     marginTop: scale(1)
   },
   helpButtonPressed: {
@@ -741,8 +741,8 @@ const styles = StyleSheet.create({
     marginRight: scale(5),
     marginLeft: scale(-20),
     borderRadius: 40,
-    height: 30,
-    width: 30,
+    height: scale(30),
+    width: scale(30),
     marginTop: scale(1)
   },
 });

@@ -192,9 +192,9 @@ export default function MapPage() {
     startAnchorModalAnimations();
     filterAnchorPhotos();
     if (chapter === null) {
-      if (itterator > 0 && itterator !== 8 && itterator !== 14) {
+      if (itterator > 0 && itterator !== 11 && itterator !== 18) {
         setItterator(itterator + 1);
-      } else if (itterator === 8 && itterator === 14 && anchPhotos > 0) {
+      } else if (itterator === 11 && itterator === 18 && anchPhotos > 0) {
         setItterator(itterator + 2);
       }
     }

@@ -133,7 +133,7 @@ export default function AnchorModal(lat, lng) {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (itterator === 10) {
+    if (itterator === 13) {
       setGuideModal(true);
     }
   }, [itterator]);
@@ -170,16 +170,16 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleAnchorModalClose = () => {
-    if (itterator === 12) {
+    if (itterator === 15) {
       // setItterator((prev) => prev + 1)
       // setGuideModal(true);
     }
 
-    if (itterator === 8) {
+    if (itterator === 11) {
       setGuideModal(false);
     }
 
-    if (itterator === 14) {
+    if (itterator === 18) {
       // setItterator((prev) => prev + 1)
       setGuideModal(false);
     }
