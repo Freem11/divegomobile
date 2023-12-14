@@ -2,6 +2,7 @@ import { StyleSheet, View } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { multiHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { getPhotosforMapArea } from "../../supabaseCalls/photoSupabaseCalls";
+import { getPhotosforAnchorMulti } from "../../supabaseCalls/photoSupabaseCalls";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,30 +10,82 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { AnchorPhotosContext } from "../contexts/anchorPhotosContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { HeatPointsContext } from "../contexts/heatPointsContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
-
+import { TutorialContext } from "../contexts/tutorialContext";
+import { IterratorContext } from "../contexts/iterratorContext";
 import { scale } from "react-native-size-matters";
 import { formatHeatVals } from "../helpers/mapHelpers";
+import { newGPSBoundaries } from "../helpers/mapHelpers";
 import PhotoMenuListItem from "./photoMenuListItem";
+
+let waiter2;
 
 export default function PhotoMenu() {
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
+  const { selectedDiveSite, setSelectedDiveSite } = useContext(
+    SelectedDiveSiteContext
+  );
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
   
-  // const [areaPics, setAreaPics] = useState([]);
-
+  const { itterator, setItterator } = useContext(IterratorContext);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { textvalue, setTextValue } = useContext(SearchTextContext);
 
+  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
+  const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
+  
   const [picMenuSize, setPicMenuSize] = useState(0);
   const [selectedID, setSelectedID] = useState(null);
+
+  const filterAnchorPhotos = async () => {
+
+    console.log("step 1", selectedDiveSite)
+    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
+      selectedDiveSite.Latitude,
+      selectedDiveSite.Longitude
+    );
+
+    console.log("step 2", animalMultiSelection, minLat, maxLat, minLng, maxLng)
+    try {
+      const photos = await getPhotosforAnchorMulti({
+        animalMultiSelection,
+        // sliderVal,
+        minLat,
+        maxLat,
+        minLng,
+        maxLng,
+      });
+      if (photos) {
+        setAnchPhotos(photos);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
+  useEffect(() => {
+    clearTimeout(waiter2);
+
+    if (tutorialRunning) {
+      if (itterator === 18) {
+        waiter2 = setTimeout(() => {
+          setItterator(itterator + 2);
+          setSiteModal(true)
+        }, 2000);
+      }
+    }
+  }, [animalMultiSelection]);
 
 
   useEffect(() => {

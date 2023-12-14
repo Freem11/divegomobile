@@ -219,7 +219,7 @@ export default function Map() {
 
   useEffect(() => {
     let zoomHelp
-    if (tutorialRunning && itterator === 10 || itterator === 16){
+    if (tutorialRunning && itterator === 7 || itterator === 10 || itterator === 16){
       zoomHelp = 8
     }
 
@@ -260,7 +260,6 @@ export default function Map() {
       Longitude: lng,
     });
     filterAnchorPhotos()
-    // -----------------------------------------------------------------------------
     setSiteModal(true);
   };
 

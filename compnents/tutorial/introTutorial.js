@@ -101,7 +101,7 @@ export default function IntroTutorial() {
       case "Getting around the map":
         resetTutorial();
         setSiteModal(false);
-        setItterator(1);
+        setItterator(6);
         setGuideModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
@@ -113,7 +113,7 @@ export default function IntroTutorial() {
       case "Dive sites":
         resetTutorial();
         setSiteModal(false);
-        setItterator(10);
+        setItterator(9);
         setGuideModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
@@ -134,6 +134,13 @@ export default function IntroTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
+        if (selectedDiveSite.SiteName === ""){
+          setSelectedDiveSite({
+            SiteName: "Madrona Point",
+            Latitude:  49.3134,
+            Longitude: -124.2424,
+          });
+        }
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 });
         break;
 
@@ -436,6 +443,7 @@ export default function IntroTutorial() {
       questionButtonY.value = withTiming(windowHeight * 0.4);
     }
 
+    console.log("i am", itterator)
     if (itterator === 6) {
       questionButtonY.value = withTiming(scale(-1000));
       picX.value = withSpring(0);

@@ -190,11 +190,22 @@ export default function MapPage() {
 
   useEffect(() => {
     startAnchorModalAnimations();
-    filterAnchorPhotos();
-    if (chapter === null) {
-      if (itterator > 0 && itterator !== 11 && itterator !== 18) {
+
+    // const filterAnchorPhotos = async () => {
+    //   let { minLat, maxLat, minLng, maxLng } =  newGPSBoundaries(
+    //     selectedDiveSite.Latitude,
+    //     selectedDiveSite.Longitude
+    //   );
+    // }
+
+    // filterAnchorPhotos();
+   
+    if (tutorialRunning && siteModal) {
+      if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
-      } else if (itterator === 11 && itterator === 18 && anchPhotos > 0) {
+      } else if (itterator === 11 && anchPhotos === 0 ) {
+        setItterator(itterator + 1);
+      } else if (itterator === 11 && anchPhotos > 0 ) {
         setItterator(itterator + 2);
       }
     }
