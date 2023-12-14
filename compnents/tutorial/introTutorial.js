@@ -134,10 +134,10 @@ export default function IntroTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
-        if (selectedDiveSite.SiteName === ""){
+        if (selectedDiveSite.SiteName === "") {
           setSelectedDiveSite({
             SiteName: "Madrona Point",
-            Latitude:  49.3134,
+            Latitude: 49.3134,
             Longitude: -124.2424,
           });
         }
@@ -245,7 +245,7 @@ export default function IntroTutorial() {
   const text8 =
     "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there";
   const text9 =
-    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
+    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites, tapping on one will zomm the map into it until the single dive sites split out from it";
   const text10 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,      that means sea creatures have been spotted on that dive site.`;
   const text11 = "";
   const text12 =
@@ -253,20 +253,24 @@ export default function IntroTutorial() {
   const text13 =
     "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
   const text14 =
-    "Now try closing the dive site and choose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
+    "Now try closing the dive site and choose a creature or two from the pictures along the top, then we will come back to the dive site and see what's changed!";
   const text15 = "";
-  const text16 = "Select one or more sea creatures using the menu at the top, a tap will highlight the selected sea creature yellow to indicate that it is selected but...";
-  const text17 = "If you LONG press on one, you will see that it pops out for a better look! You can long press on another to swap them or long press on the popped out one to put it back, and yes you can still tap to select while its popped out!"
+  const text16 =
+    "Select one or more sea creatures using the menu at the top, a tap will highlight the selected sea creature yellow to indicate that it is selected but...";
+  const text17 =
+    "If you LONG press on one, you will see that it pops out for a better look! You can long press on another to swap them or long press on the popped out one to put it back, and yes you can still tap to select while its popped out!";
   const text18 = "";
   const text19 =
     "Uh-oh! This isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
   const text20 =
     "As you can see, the photos have filtered to show only those creatures you have selected";
   const text21 =
-    "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+    "Ok well that's all for this guide, I hope I have helped to give you a feel for how to get around the Scuba SEAsons map.";
   const text22 =
+    "In the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+  const text23 =
     "If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining Scuba SEAsons!";
-  const text23 = "";
+  const text24 = "";
 
   const [textRead, setTextRead] = useState("");
   const [textRead2, setTextRead2] = useState("  ");
@@ -299,6 +303,7 @@ export default function IntroTutorial() {
     text21,
     text22,
     text23,
+    text24,
   ];
 
   const setupText = (pushVal) => {
@@ -317,7 +322,7 @@ export default function IntroTutorial() {
       itterator === 11 ||
       itterator === 15 ||
       itterator === 18 ||
-      itterator >= 23
+      itterator >= 24
     ) {
       return;
     } else {
@@ -439,11 +444,11 @@ export default function IntroTutorial() {
       clearUp();
     }
 
-    if (itterator === 5){
+    if (itterator === 5) {
       questionButtonY.value = withTiming(windowHeight * 0.4);
     }
 
-    console.log("i am", itterator)
+    console.log("i am", itterator);
     if (itterator === 6) {
       questionButtonY.value = withTiming(scale(-1000));
       picX.value = withSpring(0);
@@ -541,12 +546,12 @@ export default function IntroTutorial() {
       setGuideModal(true);
     }
 
-    if (itterator === 22) {
+    if (itterator === 23) {
       nextTutX.value = withSpring(windowWidth * 0.3);
       // startNextTutAnimation();
     }
 
-    if (itterator === 23) {
+    if (itterator === 24) {
       setSiteModal(false);
       nextTutX.value = withTiming(scale(-300));
       // startNextTutAnimation();
