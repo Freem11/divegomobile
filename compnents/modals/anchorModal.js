@@ -116,21 +116,25 @@ export default function AnchorModal(lat, lng) {
           count++;
         });
 
-        if (chapter === null){
-          if(itterator !== 20){
-            if (tutorialRunning && count > 0 ) {
-              setItterator(itterator + 2);
-            } else if (tutorialRunning) {
-              setItterator(itterator + 1);
-            }
-          }
-        } else {
-          if (tutorialRunning && count > 0 ) {
-            setItterator(itterator + 2);
-          } else if (tutorialRunning) {
-            setItterator(itterator + 1);
-          }
+        if (itterator === 11 && count > 0){
+          setItterator(itterator + 2)
         }
+
+        // if (chapter === null){
+        //   if(itterator !== 20){
+        //     if (tutorialRunning && count > 0 ) {
+        //       setItterator(itterator + 2);
+        //     } else if (tutorialRunning) {
+        //       setItterator(itterator + 1);
+        //     }
+        //   }
+        // } else {
+        //   if (tutorialRunning && count > 0 ) {
+        //     setItterator(itterator + 2);
+        //   } else if (tutorialRunning) {
+        //     setItterator(itterator + 1);
+        //   }
+        // }
       
       }
     } catch (e) {

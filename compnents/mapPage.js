@@ -205,7 +205,7 @@ export default function MapPage() {
         setItterator(itterator + 1);
       } else if (itterator === 11 && anchPhotos === 0 ) {
         setItterator(itterator + 1);
-      } else if (itterator === 11 && anchPhotos > 0 ) {
+      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0 ) {
         setItterator(itterator + 2);
       }
     }

@@ -537,6 +537,7 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 20) {
+      arrowY.value = withTiming(scale(-1200));
       setGuideModal(true);
     }
 
