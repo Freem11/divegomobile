@@ -245,7 +245,7 @@ export default function IntroTutorial() {
   const text8 =
     "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there";
   const text9 =
-    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites, tapping on one will zomm the map into it until the single dive sites split out from it";
+    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites, tapping on one will zoom the map into it until the single dive sites split out from it";
   const text10 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,      that means sea creatures have been spotted on that dive site.`;
   const text11 = "";
   const text12 =

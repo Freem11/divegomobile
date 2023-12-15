@@ -457,7 +457,7 @@ export default function DiveSiteModal() {
           >
             <MaterialIcons
               name="my-location"
-              color="gold"
+              color={locButState ? "#538dbd": "gold"}
               size={34}
               style={{ zIndex: -1 }}
             />
@@ -476,7 +476,7 @@ export default function DiveSiteModal() {
           >
             <MaterialIcons
               name="location-pin"
-              color="gold"
+              color={pinButState ? "#538dbd": "gold"}
               size={38}
               style={{ zIndex: -1 }}
             />
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   GPSbuttonPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
@@ -704,7 +704,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   LocButtonPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",

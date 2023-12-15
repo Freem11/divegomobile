@@ -575,12 +575,12 @@ export default function PicUploadModal() {
             flexDirection: "row",
             width: scale(150),
             height: scale(24),
-            marginTop: 2,
+            marginTop: 0,
           }}
         >
           <FontAwesome
             name="picture-o"
-            color="gold"
+            color={imgButState ? "#538dbd": "gold"}
             size={scale(24)}
             style={{
               marginLeft: Platform.OS === "android" ? scale(10) : scale(10),
@@ -589,8 +589,8 @@ export default function PicUploadModal() {
           <Text
             style={{
               marginLeft: scale(5),
-              marginTop: scale(-2),
-              color: "gold",
+              marginTop: scale(0),
+              color: imgButState ? "#538dbd": "gold",
               fontFamily: "PatrickHand_400Regular",
               fontSize: scale(17),
             }}
@@ -717,7 +717,7 @@ export default function PicUploadModal() {
               >
                 <FontAwesome
                   name="calendar"
-                  color="gold"
+                  color={datButState ? "#538dbd": "gold"}
                   size={28}
                   style={{ marginLeft: 1.5, marginTop: 2 }}
                 />
@@ -749,7 +749,7 @@ export default function PicUploadModal() {
               >
                 <MaterialIcons
                   name="location-pin"
-                  color="gold"
+                  color={corButState ? "#538dbd": "gold"}
                   size={38}
                   style={{ zIndex: -1 }}
                 />
@@ -890,7 +890,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   ImageButtonPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -1059,7 +1059,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   LocButtonPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
@@ -1123,7 +1123,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   dateIconPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,

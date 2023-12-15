@@ -505,7 +505,7 @@ export default function MapPage() {
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
           <View style={styles.container}>
             {tutorialRunning && (
-              <View style={styles.tutorialBar}>
+              <View style={styles.tutorialBar} pointerEvents={"box-none"}>
                 <TutorialBar style={{ zIndex: 55 }} />
               </View>
             )}
@@ -655,6 +655,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "green"
   },
   slider: {
     flex: 1,
@@ -793,11 +794,11 @@ const styles = StyleSheet.create({
   tutorialBar: {
     width: "25%",
     position: "absolute",
-    left: "5%",
+    left: "8%",
     // justifyContent: "center",
     // alignItems: "center",
     // alignContent: "space-between",
-    top: Platform.OS === "ios" ? "6%" : "6%",
+    top: Platform.OS === "ios" ? "14%" : "14%",
     zIndex: 55,
     // backgroundColor:"pink"
   },

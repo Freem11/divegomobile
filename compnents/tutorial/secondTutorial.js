@@ -411,6 +411,10 @@ export default function SecondTutorial() {
       setSecondGuideModal(false);
     }
 
+    if (itterator2 === 10) {
+      moveMap({ lat: 50.03312256836453, lng: -125.27333546429873 });
+    }
+
     if (itterator2 === 12) {
       locationY.value =  withTiming(windowHeight * 0.4);
     }
