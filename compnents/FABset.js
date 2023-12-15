@@ -13,6 +13,7 @@ import { PictureContext } from "./contexts/pictureContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SessionContext } from "./contexts/sessionContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
+import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { TutorialContext } from "./contexts/tutorialContext";
@@ -63,6 +64,7 @@ export default function FABButtons() {
     TutorialLaunchPadContext
   );
 
+  const { itterator, setItterator } = useContext(IterratorContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
@@ -400,7 +402,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => settingsHide()}
+          onPress={() => {tutorialRunning ? null : settingsHide()}}
           onPressIn={() => setSettButState(true)}
           onPressOut={() => setSettButState(false)}
           style={{
@@ -425,7 +427,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => launchPadHide()}
+          onPress={() => {tutorialRunning ? null : launchPadHide()}}
           onPressIn={() => setHow2ButState(true)}
           onPressOut={() => setHow2ButState(false)}
           style={{
@@ -450,7 +452,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={startGeoCodeButtonAnimations}
+          onPress={itterator === 11 || itterator === 18 || itterator2 === 3 || itterator2 === 5 || itterator2 === 9 || itterator3 === 5 ? null : startGeoCodeButtonAnimations}
           onPressIn={() => setNaviButState(true)}
           onPressOut={() => setNaviButState(false)}
           style={{
@@ -475,7 +477,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => photoModalHide()}
+          onPress={() => {itterator === 11 || itterator === 15 || itterator === 18 || itterator2 === 3 || itterator2 === 5 || itterator2 === 9 ? null : photoModalHide()}}
           onPressIn={() => setPhotButState(true)}
           onPressOut={() => setPhotButState(false)}
           style={{
@@ -500,7 +502,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => diveSiteModalHide()}
+          onPress={() => {itterator === 11 || itterator === 15 || itterator === 18 || itterator2 === 3 || itterator2 === 5 || itterator3 === 5 ? null : diveSiteModalHide()}}
           onPressIn={() => setSiteButState(true)}
           onPressOut={() => setSiteButState(false)}
           style={{
@@ -525,7 +527,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={startAnimalButtonAnimations}
+          onPress={itterator === 11 || itterator === 18 || itterator2 === 5 || itterator2 === 9 || itterator3 === 5 ? null : startAnimalButtonAnimations}
           onPressIn={() => setSearButState(true)}
           onPressOut={() => setSearButState(false)}
           style={{
@@ -550,7 +552,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={getCurrentLocation}
+          onPress={tutorialRunning ? null : getCurrentLocation}
           onPressIn={() => setMyLocButState(true)}
           onPressOut={() => setMyLocButState(false)}
           style={{
@@ -575,7 +577,7 @@ if (windowWidth > 600){
         ]}
       >
         <TouchableWithoutFeedback
-          onPress={() => diveSiteHide()}
+          onPress={() => {tutorialRunning ? null : diveSiteHide()}}
           onPressIn={() => setAnchButState(true)}
           onPressOut={() => setAnchButState(false)}
           style={{

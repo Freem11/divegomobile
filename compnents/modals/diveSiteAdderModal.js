@@ -134,16 +134,16 @@ export default function DiveSiteModal() {
       SiteNameVal: false,
     });
     setLocButState(false);
-    setPinButState(false)
+    setPinButState(false);
     setSubButState(false);
   }
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator2 === 16) {
         blinker1 = setInterval(pinBut, 600);
-      } else if (itterator2 === 13){
+      } else if (itterator2 === 13) {
         blinker1 = setInterval(locationBut, 1000);
-      } else if (itterator2 === 23){
+      } else if (itterator2 === 23) {
         blinker1 = setInterval(siteField, 1000);
         timer2 = setTimeout(subButTimeout, 300);
       }
@@ -168,8 +168,8 @@ export default function DiveSiteModal() {
   }, [itterator2]);
 
   const getCurrentLocation = async () => {
-    setIsLoading(true)
-    setIsDisabled(true)
+    setIsLoading(true);
+    setIsDisabled(true);
     try {
       const location = await getCurrentCoordinates();
       if (location) {
@@ -185,23 +185,26 @@ export default function DiveSiteModal() {
           LngVal: false,
         });
       }
-      if (tutorialRunning && itterator2 === 13){
-        setItterator2( itterator2 + 1)
+      if (tutorialRunning && itterator2 === 13) {
+        setItterator2(itterator2 + 1);
       }
-      setIsDisabled(true)
-      setIsLoading(false)
+      setIsDisabled(true);
+      setIsLoading(false);
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
   };
 
   const onNavigate = () => {
-    setChosenModal("DiveSite");
-    setMapHelper(true);
-    setMasterSwitch(false);
-    setDiveSiteAdderModal(false);
-    if (tutorialRunning) {
-      setItterator2(itterator2 + 1)
+    if (itterator2 === 13 || itterator2 === 23) {
+    } else {
+      setChosenModal("DiveSite");
+      setMapHelper(true);
+      setMasterSwitch(false);
+      setDiveSiteAdderModal(false);
+      if (tutorialRunning) {
+        setItterator2(itterator2 + 1);
+      }
     }
   };
 
@@ -248,7 +251,7 @@ export default function DiveSiteModal() {
     ) {
       return;
     } else {
-      console.log("here?", tutorialRunning, itterator2)
+      console.log("here?", tutorialRunning, itterator2);
       if (tutorialRunning) {
         if (itterator2 > 0) {
           setItterator2(itterator2 + 1);
@@ -274,16 +277,15 @@ export default function DiveSiteModal() {
       } else if (itterator2 === 16) {
         return;
       } else {
-        setDiveSiteAdderModal(!diveSiteAdderModal);
-
-        if (diveSiteAdderModal) {
-          setAddSiteVals({
-            ...addSiteVals,
-            Site: "",
-            Latitude: "",
-            Longitude: "",
-          });
-        }
+        // setDiveSiteAdderModal(!diveSiteAdderModal);
+        // if (diveSiteAdderModal) {
+        //   setAddSiteVals({
+        //     ...addSiteVals,
+        //     Site: "",
+        //     Latitude: "",
+        //     Longitude: "",
+        //   });
+        // }
       }
     } else {
       setDiveSiteAdderModal(!diveSiteAdderModal);
@@ -300,7 +302,10 @@ export default function DiveSiteModal() {
   };
 
   const activateGuide = () => {
-      setChapter("DS Help")
+    if (tutorialRunning) {
+    } else {
+      setChapter("DS Help");
+    }
   };
 
   const [locButState, setLocButState] = useState(false);
@@ -313,7 +318,9 @@ export default function DiveSiteModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Dive Site</Text>
-        <View style={helpButState ? styles.helpButtonPressed : styles.helpButton}>
+        <View
+          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
+        >
           <TouchableOpacity
             // disabled={isDisabled}
             onPress={activateGuide}
@@ -330,7 +337,7 @@ export default function DiveSiteModal() {
               name="question"
               color="gold"
               size={scale(18)}
-              style={{ zIndex: -1}}
+              style={{ zIndex: -1 }}
             />
           </TouchableOpacity>
         </View>
@@ -457,7 +464,7 @@ export default function DiveSiteModal() {
           >
             <MaterialIcons
               name="my-location"
-              color={locButState ? "#538dbd": "gold"}
+              color={locButState ? "#538dbd" : "gold"}
               size={34}
               style={{ zIndex: -1 }}
             />
@@ -476,7 +483,7 @@ export default function DiveSiteModal() {
           >
             <MaterialIcons
               name="location-pin"
-              color={pinButState ? "#538dbd": "gold"}
+              color={pinButState ? "#538dbd" : "gold"}
               size={38}
               style={{ zIndex: -1 }}
             />
@@ -731,7 +738,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     height: scale(30),
     width: scale(30),
-    marginTop: scale(1)
+    marginTop: scale(1),
   },
   helpButtonPressed: {
     backgroundColor: "#538dbd",
@@ -743,6 +750,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     height: scale(30),
     width: scale(30),
-    marginTop: scale(1)
+    marginTop: scale(1),
   },
 });

@@ -6,16 +6,15 @@ import { MapCenterContext } from "../contexts/mapCenterContext";
 
 export default function GeocodeAutoComplete(props) {
   const { setGeoHide } = props;
-
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
 
   const handleConfirm = async (place) => {
-    setMapCenter({
-      lat: place.result.geometry.location.lat,
-      lng: place.result.geometry.location.lng,
-    });
-    setGeoHide(true)
-    Keyboard.dismiss();
+      setMapCenter({
+        lat: place.result.geometry.location.lat,
+        lng: place.result.geometry.location.lng,
+      });
+      setGeoHide(true)
+      Keyboard.dismiss();
   };
 
   return (
