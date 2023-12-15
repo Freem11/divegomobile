@@ -55,7 +55,7 @@ export default function ThirdTutorial() {
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
-  const { setMapCenter } = useContext(MapCenterContext);
+  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { setMasterSwitch } = useContext(MasterContext);
 
   useEffect(() => {
@@ -419,6 +419,7 @@ export default function ThirdTutorial() {
     }
 
     if (itterator3 === 15) {
+      moveMap({ lat: mapCenter.lat, lng: mapCenter.lng });
       setThirdGuideModal(true);
       setTimeout(() => {
         pinY.value = withTiming(windowHeight * 0.4);
