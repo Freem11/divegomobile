@@ -18,6 +18,8 @@ import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
 import { MapHelperContext } from "./contexts/mapHelperContext"; 
+import { MyCreaturesContext } from "./contexts/myCreaturesContext";
+import { MyDiveSitesContext } from "./contexts/myDiveSitesContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -48,6 +50,8 @@ export default function Map() {
       ScreenOrientation.OrientationLock.PORTRAIT_UP
     );
   }
+  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
+  const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
 
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
@@ -110,13 +114,14 @@ export default function Map() {
             newBoundaries.northEast.latitude,
           ]);
         
-
-          let filteredDiveSites = await diveSites(newBoundaries);
+          
+          let filteredDiveSites = await diveSites(newBoundaries, myDiveSites);
           !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
     
           let filteredHeatPoints = await multiHeatPoints(
             newBoundaries,
-            animalMultiSelection
+            animalMultiSelection,
+            myCreatures
           );
           setNewHeat(formatHeatVals(filteredHeatPoints));
     

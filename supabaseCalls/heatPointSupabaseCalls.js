@@ -104,7 +104,7 @@ export const updateHeatPoint = async (values) => {
   }
 };
 
-export const multiHeatPoints = async (GPSBubble, animalArray) => {
+export const multiHeatPoints = async (GPSBubble, animalArray, myCreatures) => {
   let minLat, maxLat, minLng, maxLng;
 
   if (GPSBubble.maxLat) {
@@ -127,6 +127,7 @@ export const multiHeatPoints = async (GPSBubble, animalArray) => {
     .from("heatPoints")
     .select()
     .ilike("animal", "%" + creatureList + "%")
+    .ilike("userName", "%" + myCreatures + "%")
     // .eq("month", slider)
     .gte("lat", minLat)
     .gte("lng", minLng)

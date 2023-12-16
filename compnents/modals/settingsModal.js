@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   Platform,
   Alert,
   Dimensions,
+  Switch,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -26,7 +27,10 @@ import {
   addDeletedAccountInfo,
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
+import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
+import { MyCreaturesContext } from "../../compnents/contexts/myCreaturesContext";
+import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { scale } from "react-native-size-matters";
@@ -36,6 +40,10 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function SettingsModal() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
+  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
+  const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
 
   const dangerZoneHeight = useSharedValue(0);
   const dangerZoneOpacity = useSharedValue(0);
@@ -120,37 +128,103 @@ export default function SettingsModal() {
   const [signButState, setSignButState] = useState(false);
   const [dangerButState, setDangerButState] = useState(false);
 
+  const [diveSitesIsEnabled, setDiveSitesIsEnabled] = useState(false);
+  const [creaturesIsEnabled, setCreaturesIsEnabled] = useState(false);
+ 
+  useEffect(() => {
+    
+    if(myDiveSites.length > 0){
+      setDiveSitesIsEnabled(true)
+    }
+  
+    if(myCreatures.length > 0){
+      setCreaturesIsEnabled(true)
+    }
+  }, [])
+ 
+
+  const toggleDCSwitch = () =>
+    setDiveSitesIsEnabled((previousState) => !previousState);
+  const toggleCHSwitch = () =>
+    setCreaturesIsEnabled((previousState) => !previousState);
+
+  useEffect(() => {
+    if (diveSitesIsEnabled) {
+      setMyDiveSites(profile[0].UserName);
+      AsyncStorage.setItem("myDiveSites", JSON.stringify(profile[0].UserName));
+    } else {
+      setMyDiveSites("");
+      AsyncStorage.removeItem("myDiveSites");
+    }
+  }, [diveSitesIsEnabled]);
+
+  useEffect(() => {
+    if (creaturesIsEnabled) {
+      setMyCreatures(profile[0].UserName);
+      AsyncStorage.setItem("myCreatures", JSON.stringify(profile[0].UserName));
+    } else {
+      setMyCreatures("");
+      AsyncStorage.removeItem("myCreatures");
+    }
+  }, [creaturesIsEnabled]);
+
   return (
     // <ScrollView style={{ width: "86%" }}>
-      <View style={styles.container}>
-        <View style={styles.first}>
-          <TouchableWithoutFeedback
-            onPress={handleLogout}
-            onPressIn={() => setSignButState(true)}
-            onPressOut={() => setSignButState(false)}
+    <View style={styles.container}>
+      <View style={styles.first}>
+        <TouchableWithoutFeedback
+          onPress={handleLogout}
+          onPressIn={() => setSignButState(true)}
+          onPressOut={() => setSignButState(false)}
+        >
+          <View
+            style={
+              signButState ? styles.logoutButtonpressed : styles.logoutButton
+            }
           >
-            <View
-              style={
-                signButState ? styles.logoutButtonpressed : styles.logoutButton
-              }
+            <Text
+              style={{
+                paddingBottom: 3,
+                fontFamily: "PatrickHand_400Regular",
+                color: "gold",
+                fontSize: 24,
+              }}
             >
-              <Text
-                style={{
-                  paddingBottom: 3,
-                  fontFamily: "PatrickHand_400Regular",
-                  color: "gold",
-                  fontSize: 24,
-                }}
-              >
-                Sign Out
-              </Text>
-            </View>
-          </TouchableWithoutFeedback>
+              Sign Out
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+
+      <View style={styles.second}>
+        <View style={styles.switchBox}>
+          <Text style={styles.labelText}>My Dive Sites</Text>
+          <View style={styles.switches}>
+          <Switch
+            style={styles.switches}
+            trackColor={{ false: "#767577", true: "#f4f3f4" }}
+            thumbColor={diveSitesIsEnabled ? "#538bdb" : "#538bdb"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleDCSwitch}
+            value={diveSitesIsEnabled}
+          />
+          </View>
         </View>
+        <View style={styles.switchBox}>
+          <Text style={styles.labelText}>My Sea Creatures</Text>
+          <View style={styles.switches}>
+          <Switch
+            trackColor={{ false: "#767577", true: "#f4f3f4" }}
+            thumbColor={creaturesIsEnabled ? "#538bdb" : "#538bdb"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleCHSwitch}
+            value={creaturesIsEnabled}
+          />
+          </View>
+        </View>
+      </View>
 
-        <View style={styles.second}></View>
-
-        <View style={styles.third}>
+      <View style={styles.third}>
         <TouchableWithoutFeedback
           onLongPress={startDangerZoneAnimations}
           style={{ backgroundColor: "purple" }}
@@ -190,7 +264,7 @@ export default function SettingsModal() {
           </TouchableWithoutFeedback>
         </Animated.View>
       </View>
-      </View>
+    </View>
     // </ScrollView>
   );
 }
@@ -199,9 +273,8 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     // backgroundColor: 'green',
-    height: windowHeight* 0.5,
-    width: "86%"
-    
+    height: windowHeight * 0.5,
+    width: "86%",
   },
   first: {
     // position: "absolute",
@@ -209,10 +282,13 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "10%"
+    marginTop: "10%",
   },
   second: {
-    height: "60%"
+    height: "40%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    marginTop: "10%",
   },
   third: {
     // position: "absolute",
@@ -220,7 +296,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "yellow",
     alignItems: "center",
     // justifyContent: "center",
-    marginTop: windowHeight * 0.1
+    marginTop: windowHeight * 0.15,
   },
   logoutButton: {
     backgroundColor: "#538bdb",
@@ -330,4 +406,22 @@ const styles = StyleSheet.create({
     elevation: -1,
     zIndex: -1,
   },
+  labelText: {
+    color: "gold",
+    alignSelf: "center",
+    fontFamily: "Itim_400Regular",
+    fontSize: 18,
+    marginRight: 50,
+    marginLeft: 5
+  },
+  switchBox: {
+    minWidth: 250,
+    flexDirection: "row",
+    // backgroundColor: "green"
+  },
+  switches: {
+    // backgroundColor: "pink",
+    marginRight: 1,
+    marginLeft: 35
+  }
 });

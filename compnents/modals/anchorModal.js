@@ -32,6 +32,7 @@ import { ChapterContext } from "../contexts/chapterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ReverseContext } from "../contexts/reverseContext";
+import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
 import { FontAwesome } from "@expo/vector-icons";
@@ -66,6 +67,7 @@ export default function AnchorModal(lat, lng) {
   const [anchorPics, setAnchorPics] = useState([]);
   const { monthVal } = useContext(MonthSelectContext);
   const { animalSelection } = useContext(AnimalSelectContext);
+  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
@@ -103,7 +105,7 @@ export default function AnchorModal(lat, lng) {
     try {
       const photos = await getPhotosforAnchorMulti({
         animalMultiSelection,
-        // sliderVal,
+        myCreatures,
         minLat,
         maxLat,
         minLng,

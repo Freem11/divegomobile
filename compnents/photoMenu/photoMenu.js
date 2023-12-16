@@ -20,6 +20,7 @@ import { SearchTextContext } from "../contexts/searchTextContext";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { IterratorContext } from "../contexts/iterratorContext";
+import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { scale } from "react-native-size-matters";
 import { formatHeatVals } from "../helpers/mapHelpers";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
@@ -34,6 +35,7 @@ export default function PhotoMenu() {
   const { selectedDiveSite, setSelectedDiveSite } = useContext(
     SelectedDiveSiteContext
   );
+  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
@@ -60,7 +62,7 @@ export default function PhotoMenu() {
     try {
       const photos = await getPhotosforAnchorMulti({
         animalMultiSelection,
-        // sliderVal,
+        myCreatures,
         minLat,
         maxLat,
         minLng,
@@ -153,14 +155,14 @@ export default function PhotoMenu() {
           maxLat: boundaries[3],
           minLng: -180,
           maxLng: boundaries[2],
-        });
+        },myCreatures);
         const AsianPhotos = await getPhotosforMapArea({
           animal: textvalue,
           minLat: boundaries[1],
           maxLat: boundaries[3],
           minLng: boundaries[0],
           maxLng: 180,
-        });
+        },myCreatures);
 
         let photos = [...AsianPhotos, ...AmericanPhotos];
 
@@ -184,7 +186,7 @@ export default function PhotoMenu() {
           maxLat: boundaries[3],
           minLng: boundaries[0],
           maxLng: boundaries[2],
-        });
+        },myCreatures);
         if (photos) {
           const animalArray = Array.from(
             new Set(photos.map((a) => a.label))
