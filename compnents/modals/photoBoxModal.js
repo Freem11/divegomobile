@@ -12,6 +12,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   withDelay,
+  Easing,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
@@ -84,12 +85,42 @@ export default function PhotoBoxModal(props) {
       context.value = { x: xCurrent.value, y: yCurrent.value, fx: focalX.value, fy: focalY.value };
     })
     .onUpdate((event) => {
-      xCurrent.value = event.translationY + context.value.x;
-      yCurrent.value = -event.translationX + context.value.y;
+      xCurrent.value = withTiming(event.translationY + context.value.x, {easing: Easing.out(Easing.ease)});
+      yCurrent.value = withTiming(-event.translationX + context.value.y, {easing: Easing.out(Easing.ease)})
+      ;
+      
+      // xOffset.value = event.translationY + context.value.x;
+      // yOffset.value = -event.translationX + context.value.y;
+    })
+    .onEnd(() => {
 
-      xOffset.value = event.translationY + context.value.x;
-      yOffset.value = -event.translationX + context.value.y;
-    });
+      let tempX = xCurrent.value; //height
+      let tempY = yCurrent.value; //width
+ 
+      xOffset.value = xCurrent.value;
+      yOffset.value = yCurrent.value;
+
+
+      console.log("coord", tempY, tempX)
+      console.log("win", windowWidth/2, windowHeight/2)
+
+      if (tempX > (windowHeight*scalePrevious.value/2)*0.8){
+        xCurrent.value = withTiming(windowHeight/2-(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      }
+
+      if (-tempX > (windowHeight*scalePrevious.value/2)*0.8){
+        xCurrent.value = withTiming(-windowHeight/2+(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      }
+
+      if (tempY > (windowWidth*scalePrevious.value/2)*0.8){
+        yCurrent.value = withTiming(windowWidth/2-(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      }
+
+      if (-tempY > (windowWidth*scalePrevious.value/2)*0.8){
+        yCurrent.value = withTiming(-windowWidth/2+(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      }
+
+     });
 
   const animatePicPinch = Gesture.Pinch()
     .onStart((event) => {
@@ -111,13 +142,49 @@ export default function PhotoBoxModal(props) {
         xCurrent.value = (1 - scaleCurrent.value) * (focalX.value - windowWidth / 2) + xOffset.value;
         yCurrent.value = (1 - scaleCurrent.value) * (focalY.value - windowHeight / 2) + yOffset.value;
       }
+     
+      // xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
+      // yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
+
     })
     .onEnd(() => {
-      scalePrevious.value = scalePrevious.value * scaleCurrent.value;
+      
+     let tempScale = scalePrevious.value * scaleCurrent.value; 
+     scalePrevious.value = scalePrevious.value * scaleCurrent.value; 
+     let tempX = scaleCurrent.value * xPrevious.value + xCurrent.value;
+     let tempY = scaleCurrent.value * yPrevious.value + yCurrent.value;
 
-      xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
-      yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
+      if (tempScale > 4){
+        scalePrevious.value = withTiming(4, {duration: 400, easing: Easing.inOut(Easing.ease)})
+      } else if (tempScale < 1) {
+        scalePrevious.value = withTiming(1, {duration: 400, easing: Easing.inOut(Easing.ease)})
+      } else {
+        scalePrevious.value = withTiming(scalePrevious.value, {duration: 400, easing: Easing.inOut(Easing.ease)}); 
+      }
 
+      if (tempX > windowWidth/2 || -tempX > windowWidth/2){
+        if(tempX < 0){
+          xPrevious.value = withTiming((((-windowHeight/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+        } else {
+          xPrevious.value = withTiming((((windowHeight/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+        } 
+      } else {
+        xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
+      }
+
+      if (tempY > windowHeight/2 || -tempY > windowHeight/2){
+        if(tempY < 0){
+          yPrevious.value = withTiming((((-windowWidth/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+        } else {
+          yPrevious.value = withTiming((((windowWidth/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+        }      
+      } else {
+        yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
+      }
+      
+      // xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
+      // yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
+      
       xCurrent.value = 0;
       yCurrent.value = 0;
 

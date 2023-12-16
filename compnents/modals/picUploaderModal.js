@@ -8,6 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -21,7 +22,7 @@ import { getToday } from "../helpers/picUploaderHelpers";
 import { formatDate, createFile } from "../helpers/imageUploadHelpers";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import { uploadphoto } from "../../supabaseCalls/uploadSupabaseCalls";
@@ -35,6 +36,7 @@ import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
+import { ModalSelectContext } from "../contexts/modalSelectContext";
 
 let PicVar = false;
 let DateVar = false;
@@ -45,6 +47,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PicUploadModal() {
+  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { thirdGuideModal, setThirdGuideModal } = useContext(
     ThirdTutorialModalContext
   );
@@ -66,6 +69,7 @@ export default function PicUploadModal() {
 
   const [date, setDate] = useState(new Date());
 
+  const [isLoading, setIsLoading] = useState(false);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
   const [pinChecker, setPinChecker] = useState(null);
 
@@ -177,6 +181,7 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   const onNavigate = () => {
+    setChosenModal("Photos");
     setMapHelper(true);
     setMasterSwitch(false);
     if (!tutorialRunning) {
@@ -303,7 +308,7 @@ export default function PicUploadModal() {
       LngVal: LngVar,
     });
 
-    console.log("pins", pinValues)
+    console.log("pins", pinValues);
 
     if (
       pinValues.PicFile === "" ||
@@ -322,7 +327,7 @@ export default function PicUploadModal() {
       } else {
         // console.log("pinnies!", pinValues)
         insertPhotoWaits(pinValues);
-        setPinValues({ 
+        setPinValues({
           ...pinValues,
           PicFile: null,
           Animal: "",
@@ -338,10 +343,11 @@ export default function PicUploadModal() {
   };
 
   const handleImageUpload = async () => {
-
+    setIsLoading(true);
     if (pinValues.PicFile !== null) {
       removePhoto({
-        filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+        filePath:
+          "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
         fileName: `${pinValues.PicFile}`,
       });
     }
@@ -350,16 +356,16 @@ export default function PicUploadModal() {
       const image = await chooseImageHandler();
       if (image) {
         setUploadedFile(image.assets[0].uri);
-
+        setIsLoading(false);
         let fileToUpload = createFile(image.assets[0].uri);
         const data = new FormData();
         data.append("image", fileToUpload);
 
-        let extension =  image.assets[0].uri.split('.').pop();
-        const fileName = Date.now() + "." + extension
-    
+        let extension = image.assets[0].uri.split(".").pop();
+        const fileName = Date.now() + "." + extension;
+
         uploadphoto(data, fileName);
-      
+
         let formattedDate;
         let newLatitude;
         let newLongitude;
@@ -407,6 +413,7 @@ export default function PicUploadModal() {
         }
       }
     } catch (e) {
+      setIsLoading(false);
       console.log("error: Photo Selection Cancelled", e.message);
     }
   };
@@ -429,7 +436,8 @@ export default function PicUploadModal() {
 
         if (pinValues.PicFile !== null) {
           removePhoto({
-            filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+            filePath:
+              "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
             fileName: pinValues.PicFile,
           });
         }
@@ -453,7 +461,8 @@ export default function PicUploadModal() {
 
       if (pinValues.PicFile !== null) {
         removePhoto({
-          filePath: "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+          filePath:
+            "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
           fileName: pinValues.PicFile,
         });
       }
@@ -474,15 +483,41 @@ export default function PicUploadModal() {
     }
   };
 
+  const activateGuide = () => {
+    setChapter("Adding your photo")
+};
+
   const [imgButState, setImgButState] = useState(false);
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-  
+  const [helpButState, setHelpButState] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Picture</Text>
+        <View style={helpButState ? styles.helpButtonPressed : styles.helpButton}>
+          <TouchableOpacity
+            // disabled={isDisabled}
+            onPress={activateGuide}
+            onPressIn={() => setHelpButState(true)}
+            onPressOut={() => setHelpButState(false)}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: scale(20),
+              height: scale(20),
+            }}
+          >
+            <FontAwesome5
+              name="question"
+              color="gold"
+              size={scale(18)}
+              style={{ zIndex: -1}}
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={picCloseState ? styles.closeButtonPressed : styles.closeButton}
         >
@@ -501,20 +536,31 @@ export default function PicUploadModal() {
         </View>
       </View>
       <View style={styles.picContainer}>
-        {uploadedFile && (<Image
-          source={{
-            uri: `${uploadedFile}`,
-            // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
-          }}
-          style={
-            formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
-          }
-        />)}
-         {!uploadedFile && (<View
-          style={
-            formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
-          }
-        />)}
+        {uploadedFile && (
+          <Image
+            source={{
+              uri: `${uploadedFile}`,
+              // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+            }}
+            style={
+              formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+            }
+          />
+        )}
+        {!uploadedFile && !isLoading && (
+          <View
+            style={
+              formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+            }
+          />
+        )}
+
+        {!uploadedFile && isLoading && (
+          <ActivityIndicator
+            color="gold"
+            style={{ marginTop: "5%", backgroundColor: "#538dbd" }}
+          ></ActivityIndicator>
+        )}
       </View>
 
       <View
@@ -529,12 +575,12 @@ export default function PicUploadModal() {
             flexDirection: "row",
             width: scale(150),
             height: scale(24),
-            marginTop: 2,
+            marginTop: 0,
           }}
         >
           <FontAwesome
             name="picture-o"
-            color="gold"
+            color={imgButState ? "#538dbd": "gold"}
             size={scale(24)}
             style={{
               marginLeft: Platform.OS === "android" ? scale(10) : scale(10),
@@ -543,8 +589,8 @@ export default function PicUploadModal() {
           <Text
             style={{
               marginLeft: scale(5),
-              marginTop: scale(-2),
-              color: "gold",
+              marginTop: scale(0),
+              color: imgButState ? "#538dbd": "gold",
               fontFamily: "PatrickHand_400Regular",
               fontSize: scale(17),
             }}
@@ -587,18 +633,18 @@ export default function PicUploadModal() {
           </View>
 
           {/* <View style={styles.animalField}> */}
-            {/* <KeyboardAvoidingView
+          {/* <KeyboardAvoidingView
               behavior="position"
               keyboardVerticalOffset={AnimalKeboardOffset}
               style={styles.autocomplete}
             > */}
-              <AnimalAutoSuggest
-                pin={pinValues}
-                setPin={setPinValues}
-                formValidation={formValidation}
-                SetFormValidation={SetFormValidation}
-              />
-            {/* </KeyboardAvoidingView> */}
+          <AnimalAutoSuggest
+            pin={pinValues}
+            setPin={setPinValues}
+            formValidation={formValidation}
+            SetFormValidation={SetFormValidation}
+          />
+          {/* </KeyboardAvoidingView> */}
           {/* </View> */}
 
           <View style={styles.latField}>
@@ -671,7 +717,7 @@ export default function PicUploadModal() {
               >
                 <FontAwesome
                   name="calendar"
-                  color="gold"
+                  color={datButState ? "#538dbd": "gold"}
                   size={28}
                   style={{ marginLeft: 1.5, marginTop: 2 }}
                 />
@@ -703,7 +749,7 @@ export default function PicUploadModal() {
               >
                 <MaterialIcons
                   name="location-pin"
-                  color="gold"
+                  color={corButState ? "#538dbd": "gold"}
                   size={38}
                   style={{ zIndex: -1 }}
                 />
@@ -844,7 +890,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   ImageButtonPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -865,7 +911,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   picContainer: {
-    backgroundColor: "#D8DBE2",
+    backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
     marginTop: "15%",
@@ -1013,7 +1059,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   LocButtonPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
@@ -1077,7 +1123,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   dateIconPressed: {
-    backgroundColor: "#538dbd",
+    backgroundColor: "#FAF9F1",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
@@ -1126,7 +1172,7 @@ const styles = StyleSheet.create({
     color: "#F0EEEB",
     width: "80%",
     marginTop: "-1%",
-    marginLeft: "7%",
+    marginLeft: "5%",
     marginRight: "15%",
     // backgroundColor: "green"
   },
@@ -1137,6 +1183,7 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
   },
   closeButtonPressed: {
     position: "relative",
@@ -1145,7 +1192,32 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
     backgroundColor: "lightgrey",
     opacity: 0.3,
+  },
+  helpButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    marginTop: scale(1)
+  },
+  helpButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    marginTop: scale(1)
   },
 });

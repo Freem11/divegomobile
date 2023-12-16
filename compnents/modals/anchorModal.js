@@ -32,6 +32,7 @@ import { ChapterContext } from "../contexts/chapterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ReverseContext } from "../contexts/reverseContext";
+import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
 import { FontAwesome } from "@expo/vector-icons";
@@ -39,7 +40,7 @@ import email from "react-native-email";
 import PhotoBoxModel from "./photoBoxModal";
 import ImageCasher from "../helpers/imageCashing";
 import ImgToBase64 from "react-native-image-base64";
-import config from  "../../config";
+import config from "../../config";
 
 let IPSetter = 2;
 let IP;
@@ -66,6 +67,7 @@ export default function AnchorModal(lat, lng) {
   const [anchorPics, setAnchorPics] = useState([]);
   const { monthVal } = useContext(MonthSelectContext);
   const { animalSelection } = useContext(AnimalSelectContext);
+  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
@@ -103,7 +105,7 @@ export default function AnchorModal(lat, lng) {
     try {
       const photos = await getPhotosforAnchorMulti({
         animalMultiSelection,
-        // sliderVal,
+        myCreatures,
         minLat,
         maxLat,
         minLng,
@@ -116,11 +118,26 @@ export default function AnchorModal(lat, lng) {
           count++;
         });
 
-        if (tutorialRunning && count > 0) {
-          setItterator(itterator + 2);
-        } else if (tutorialRunning) {
-          setItterator(itterator + 1);
+        if (itterator === 11 && count > 0){
+          setItterator(itterator + 2)
         }
+
+        // if (chapter === null){
+        //   if(itterator !== 20){
+        //     if (tutorialRunning && count > 0 ) {
+        //       setItterator(itterator + 2);
+        //     } else if (tutorialRunning) {
+        //       setItterator(itterator + 1);
+        //     }
+        //   }
+        // } else {
+        //   if (tutorialRunning && count > 0 ) {
+        //     setItterator(itterator + 2);
+        //   } else if (tutorialRunning) {
+        //     setItterator(itterator + 1);
+        //   }
+        // }
+      
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -133,8 +150,11 @@ export default function AnchorModal(lat, lng) {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (itterator === 10) {
+    if (itterator === 13) {
       setGuideModal(true);
+    }
+    if (itterator === 20) {
+      filterAnchorPhotos();
     }
   }, [itterator]);
 
@@ -150,36 +170,38 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleEmail = (pic) => {
-    const to = ["DiveGo2022@gmail.com"];
+    const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
-      body: "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
+      body:
+        "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
 
   const handleEmailDS = () => {
-    const to = ["DiveGo2022@gmail.com"];
+    const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${lat.SiteName}" at Latitude: ${lat.Lat} Longitude: ${lat.Lng} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body:
+        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
 
   const handleAnchorModalClose = () => {
-    if (itterator === 12) {
-      // setItterator((prev) => prev + 1)
-      // setGuideModal(true);
+    if (itterator === 15) {
+      setItterator((prev) => prev + 1)
+      setGuideModal(true);
     }
 
-    if (itterator === 8) {
+    if (itterator === 11) {
       setGuideModal(false);
     }
 
-    if (itterator === 14) {
+    if (itterator === 18) {
       // setItterator((prev) => prev + 1)
       setGuideModal(false);
     }
@@ -218,16 +240,15 @@ export default function AnchorModal(lat, lng) {
 
     setUserN(null);
     setCreastureN(null);
-    setPhotoDate(null) 
-    setMapLocal(null)
+    setPhotoDate(null);
+    setMapLocal(null);
   };
 
   const onShare = async (photoFile, userN, seaCreature, picDate, lat, lng) => {
-
-    let local = await getPhotoLocation(lat, lng)
-    setMapLocal(local) 
+    let local = await getPhotoLocation(lat, lng);
+    setMapLocal(local);
     setCreastureN(seaCreature);
-    setPhotoDate(picDate)
+    setPhotoDate(picDate);
     if (userN) {
       setUserN(userN);
     } else {
@@ -235,33 +256,35 @@ export default function AnchorModal(lat, lng) {
     }
 
     let temp = photoFile.split("/");
-    let lastIndex = temp.length -1
+    let lastIndex = temp.length - 1;
     let fileName = temp[lastIndex];
     let cacheDir = FileSystem.cacheDirectory + fileName;
     convertBase64(cacheDir);
   };
 
   async function getPhotoLocation(photoLat, photoLng) {
-
-    let Lat = Number(photoLat)
-    let Lng = Number(photoLng)
+    let Lat = Number(photoLat);
+    let Lng = Number(photoLng);
 
     try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${config.GOOGLE_MAPS_API_KEY}`);
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${config.GOOGLE_MAPS_API_KEY}`
+      );
       const placeInfo = await res.json();
-      let genAddress = placeInfo.results[1].formatted_address
-      let fudgedAddress = genAddress.split(",")
-      let bits = [fudgedAddress[fudgedAddress.length-2],fudgedAddress[fudgedAddress.length-1]].join()
-      return bits
-  
+      let genAddress = placeInfo.results[1].formatted_address;
+      let fudgedAddress = genAddress.split(",");
+      let bits = [
+        fudgedAddress[fudgedAddress.length - 2],
+        fudgedAddress[fudgedAddress.length - 1],
+      ].join();
+      return bits;
     } catch (err) {
       console.log("error", err);
     }
   }
 
   useEffect(() => {
-
-    let localUri = `https://divegolanding.web.app`
+    let localUri = `https://divegolanding.web.app`;
 
     const shareOptions = {
       message: "",
@@ -272,7 +295,7 @@ export default function AnchorModal(lat, lng) {
       shareOptions.url = `data:image/jpg;base64,${base64}`;
       doShare(shareOptions);
     }
-    setBase64(null)
+    setBase64(null);
   }, [base64]);
 
   return (
@@ -323,7 +346,14 @@ export default function AnchorModal(lat, lng) {
                       color="white"
                       size={scale(19)}
                       onPress={() =>
-                        onShare(pic.photoFile, pic.userName, pic.label, pic.dateTaken, pic.latitude, pic.longitude)
+                        onShare(
+                          pic.photoFile,
+                          pic.userName,
+                          pic.label,
+                          pic.dateTaken,
+                          pic.latitude,
+                          pic.longitude
+                        )
                       }
                       style={styles.share}
                     />

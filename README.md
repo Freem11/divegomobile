@@ -1,4 +1,4 @@
-# DiveGo (Mobile Version) 
+# Scuba SEAsons (Mobile Version) 
 Built with the dream of making every dive hold the chance for an unforgettable encounter with a sea creature 
 
 # Built With

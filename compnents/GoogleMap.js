@@ -3,6 +3,8 @@ import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { TutorialContext } from "./contexts/tutorialContext";
 import { IterratorContext } from "./contexts/iterratorContext";
+import { Iterrator2Context } from "./contexts/iterrator2Context";
+import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { MapBoundariesContext } from "./contexts/mapBoundariesContext";
 import { MapRegionContext } from "./contexts/mapRegionContext";
 import { MapZoomContext } from "./contexts/mapZoomContext";
@@ -16,6 +18,8 @@ import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
 import { MapHelperContext } from "./contexts/mapHelperContext"; 
+import { MyCreaturesContext } from "./contexts/myCreaturesContext";
+import { MyDiveSitesContext } from "./contexts/myDiveSitesContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -46,12 +50,16 @@ export default function Map() {
       ScreenOrientation.OrientationLock.PORTRAIT_UP
     );
   }
+  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
+  const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
 
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { itterator, setItterator } = useContext(IterratorContext);
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { region, setRegion } = useContext(MapRegionContext);
   const { boundaries, setBoundaries } = useContext(MapBoundariesContext);
   const { zoomlev, setZoomLev } = useContext(MapZoomContext);
@@ -106,13 +114,14 @@ export default function Map() {
             newBoundaries.northEast.latitude,
           ]);
         
-
-          let filteredDiveSites = await diveSites(newBoundaries);
+          
+          let filteredDiveSites = await diveSites(newBoundaries, myDiveSites);
           !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
     
           let filteredHeatPoints = await multiHeatPoints(
             newBoundaries,
-            animalMultiSelection
+            animalMultiSelection,
+            myCreatures
           );
           setNewHeat(formatHeatVals(filteredHeatPoints));
     
@@ -219,8 +228,16 @@ export default function Map() {
 
   useEffect(() => {
     let zoomHelp
-    if (tutorialRunning && itterator === 7 || itterator === 13){
+    if (tutorialRunning && itterator === 7 || itterator === 9 || itterator === 10 || itterator === 16){
       zoomHelp = 8
+    } else if (tutorialRunning && itterator === 12){
+      zoomHelp = 12
+    } else if (tutorialRunning && itterator2 === 2){
+      zoomHelp = 8
+    } else if (tutorialRunning && itterator2 === 10){
+      zoomHelp = 10
+    } else if (tutorialRunning && itterator3 === 15){
+      zoomHelp = 10
     }
 
     if (mapRef) {
@@ -260,7 +277,6 @@ export default function Map() {
       Longitude: lng,
     });
     filterAnchorPhotos()
-    // -----------------------------------------------------------------------------
     setSiteModal(true);
   };
 

@@ -50,7 +50,7 @@ import { TutorialContext } from "./contexts/tutorialContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
-
+import { ModalSelectContext } from "./contexts/modalSelectContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -86,6 +86,8 @@ export default function MapPage() {
     );
   }
   
+  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -188,11 +190,22 @@ export default function MapPage() {
 
   useEffect(() => {
     startAnchorModalAnimations();
-    filterAnchorPhotos();
-    if (chapter === null) {
-      if (itterator > 0 && itterator !== 8 && itterator !== 14) {
+
+    // const filterAnchorPhotos = async () => {
+    //   let { minLat, maxLat, minLng, maxLng } =  newGPSBoundaries(
+    //     selectedDiveSite.Latitude,
+    //     selectedDiveSite.Longitude
+    //   );
+    // }
+
+    // filterAnchorPhotos();
+   
+    if (tutorialRunning && siteModal) {
+      if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
-      } else if (itterator === 8 && itterator === 14 && anchPhotos > 0) {
+      } else if (itterator === 11 && anchPhotos === 0 ) {
+        setItterator(itterator + 1);
+      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0 ) {
         setItterator(itterator + 2);
       }
     }
@@ -410,14 +423,29 @@ export default function MapPage() {
   };
 
   const onNavigate = () => {
-    setPinValues({
-      ...pinValues,
-      Latitude: dragPin.lat.toString(),
-      Longitude: dragPin.lng.toString(),
-    });
-    setMapHelper(true);
-    setMasterSwitch(true);
-    setPicAdderModal(!picAdderModal);
+
+    if (chosenModal === "DiveSite"){
+      setAddSiteVals({
+        ...addSiteVals,
+        Latitude: dragPin.lat.toString(),
+        Longitude: dragPin.lng.toString(),
+      });
+      setMapHelper(true);
+      setMasterSwitch(true);
+      setDiveSiteAdderModal(!diveSiteAdderModal)
+      setItterator2(itterator2 + 1)
+      setChosenModal(null);
+    } else if (chosenModal === "Photos") {
+      setPinValues({
+        ...pinValues,
+        Latitude: dragPin.lat.toString(),
+        Longitude: dragPin.lng.toString(),
+      });
+      setMapHelper(true);
+      setMasterSwitch(true);
+      setPicAdderModal(!picAdderModal);
+      setChosenModal(null);
+    }
   };
 
   useEffect(() => {
@@ -477,7 +505,7 @@ export default function MapPage() {
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
           <View style={styles.container}>
             {tutorialRunning && (
-              <View style={styles.tutorialBar}>
+              <View style={styles.tutorialBar} pointerEvents={"box-none"}>
                 <TutorialBar style={{ zIndex: 55 }} />
               </View>
             )}
@@ -627,6 +655,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "green"
   },
   slider: {
     flex: 1,
@@ -765,11 +794,11 @@ const styles = StyleSheet.create({
   tutorialBar: {
     width: "25%",
     position: "absolute",
-    left: "5%",
+    left: "8%",
     // justifyContent: "center",
     // alignItems: "center",
     // alignContent: "space-between",
-    top: Platform.OS === "ios" ? "6%" : "6%",
+    top: Platform.OS === "ios" ? "14%" : "14%",
     zIndex: 55,
     // backgroundColor:"pink"
   },

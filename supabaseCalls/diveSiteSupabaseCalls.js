@@ -1,6 +1,6 @@
 import { supabase } from "../supabase";
 
-export const diveSites = async (GPSBubble) => {
+export const diveSites = async (GPSBubble, myDiveSites) => {
 
   let minLat, maxLat, minLng, maxLng;
 
@@ -23,6 +23,7 @@ export const diveSites = async (GPSBubble) => {
   .gte('lng', minLng)
   .lte('lat', maxLat)
   .lte('lng', maxLng)
+  .ilike("userName", "%" + myDiveSites + "%")
 
 if (error) {
   console.log("couldn't do it 5,", error)

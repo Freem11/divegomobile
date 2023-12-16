@@ -86,6 +86,9 @@ export default function SignUpRoute() {
     ) {
       setRegFail("Please fill out all fields");
       return;
+    } else if (formVals.password.length < 6) {
+      setRegFail("Your password must be 6 characters or greater");
+      return;
     } else {
 
       // need to handle for passowords of less than 6 characters

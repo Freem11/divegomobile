@@ -5,9 +5,10 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -20,12 +21,16 @@ import { SecondTutorialModalContext } from "../contexts/secondTutorialModalConte
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { MapHelperContext } from "../contexts/mapHelperContext";
+import { MasterContext } from "../contexts/masterContext";
+import { ModalSelectContext } from "../contexts/modalSelectContext";
 
 let SiteNameVar = false;
 let LatVar = false;
 let LngVar = false;
 
 export default function DiveSiteModal() {
+  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
   );
@@ -37,8 +42,12 @@ export default function DiveSiteModal() {
     DSAdderContext
   );
   const [diveCloseState, setDiveCloseState] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
+  const { setMasterSwitch } = useContext(MasterContext);
 
   const [formValidation, SetFormValidation] = useState({
     SiteNameVal: false,
@@ -54,6 +63,24 @@ export default function DiveSiteModal() {
   let blinker3;
   let timer2;
   let timer3;
+
+  function locationBut() {
+    counter1++;
+    if (counter1 % 2 == 0) {
+      setLocButState(false);
+    } else {
+      setLocButState(true);
+    }
+  }
+
+  function pinBut() {
+    counter1++;
+    if (counter1 % 2 == 0) {
+      setPinButState(false);
+    } else {
+      setPinButState(true);
+    }
+  }
 
   function siteField() {
     counter1++;
@@ -79,8 +106,8 @@ export default function DiveSiteModal() {
     }
   }
 
-  function siteTimeout() {
-    blinker2 = setInterval(atSite, 1000)
+  function subButTimeout() {
+    blinker2 = setInterval(subBut, 1000);
   }
 
   function subBut() {
@@ -93,40 +120,45 @@ export default function DiveSiteModal() {
   }
 
   function subTimeout() {
-    blinker3 = setInterval(subBut, 1000)
+    blinker3 = setInterval(subBut, 1000);
   }
 
   function cleanUp() {
-    clearInterval(blinker1)
-    clearInterval(blinker2)
-    clearInterval(blinker3)
-    clearTimeout(timer2)
-    clearTimeout(timer3)
+    clearInterval(blinker1);
+    clearInterval(blinker2);
+    clearInterval(blinker3);
+    clearTimeout(timer2);
+    clearTimeout(timer3);
     SetFormValidation({
       ...formValidation,
       SiteNameVal: false,
     });
-    setImaButState(false);
+    setLocButState(false);
+    setPinButState(false);
     setSubButState(false);
   }
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator2 === 16) {
+        blinker1 = setInterval(pinBut, 600);
+      } else if (itterator2 === 13) {
+        blinker1 = setInterval(locationBut, 1000);
+      } else if (itterator2 === 23) {
         blinker1 = setInterval(siteField, 1000);
-        timer2 = setTimeout(siteTimeout,300);
-        timer3 = setTimeout(subTimeout,600); 
+        timer2 = setTimeout(subButTimeout, 300);
       }
-    } return () => cleanUp()
+    }
+    return () => cleanUp();
   }, [itterator2]);
 
   useEffect(() => {
-    if(chapter === null){
-    if (tutorialRunning) {
-      if (itterator2 === 9) {
-        setItterator2(itterator2 + 1);
+    if (chapter === null) {
+      if (tutorialRunning) {
+        if (itterator2 === 9) {
+          setItterator2(itterator2 + 1);
+        }
       }
     }
-  }
   }, [diveSiteAdderModal]);
 
   useEffect(() => {
@@ -136,6 +168,8 @@ export default function DiveSiteModal() {
   }, [itterator2]);
 
   const getCurrentLocation = async () => {
+    setIsLoading(true);
+    setIsDisabled(true);
     try {
       const location = await getCurrentCoordinates();
       if (location) {
@@ -151,8 +185,26 @@ export default function DiveSiteModal() {
           LngVal: false,
         });
       }
+      if (tutorialRunning && itterator2 === 13) {
+        setItterator2(itterator2 + 1);
+      }
+      setIsDisabled(true);
+      setIsLoading(false);
     } catch (e) {
       console.log({ title: "Error", message: e.message });
+    }
+  };
+
+  const onNavigate = () => {
+    if (itterator2 === 13 || itterator2 === 23) {
+    } else {
+      setChosenModal("DiveSite");
+      setMapHelper(true);
+      setMasterSwitch(false);
+      setDiveSiteAdderModal(false);
+      if (tutorialRunning) {
+        setItterator2(itterator2 + 1);
+      }
     }
   };
 
@@ -199,6 +251,7 @@ export default function DiveSiteModal() {
     ) {
       return;
     } else {
+      console.log("here?", tutorialRunning, itterator2);
       if (tutorialRunning) {
         if (itterator2 > 0) {
           setItterator2(itterator2 + 1);
@@ -221,19 +274,18 @@ export default function DiveSiteModal() {
     if (tutorialRunning) {
       if (itterator2 === 9) {
         setItterator2(itterator2 + 1);
-      } else if ( itterator2 === 16) {
-          return
+      } else if (itterator2 === 16) {
+        return;
       } else {
-        setDiveSiteAdderModal(!diveSiteAdderModal);
-
-        if (diveSiteAdderModal) {
-          setAddSiteVals({
-            ...addSiteVals,
-            Site: "",
-            Latitude: "",
-            Longitude: "",
-          });
-        }
+        // setDiveSiteAdderModal(!diveSiteAdderModal);
+        // if (diveSiteAdderModal) {
+        //   setAddSiteVals({
+        //     ...addSiteVals,
+        //     Site: "",
+        //     Latitude: "",
+        //     Longitude: "",
+        //   });
+        // }
       }
     } else {
       setDiveSiteAdderModal(!diveSiteAdderModal);
@@ -248,13 +300,47 @@ export default function DiveSiteModal() {
       }
     }
   };
-  const [imaButState, setImaButState] = useState(false);
+
+  const activateGuide = () => {
+    if (tutorialRunning) {
+    } else {
+      setChapter("DS Help");
+    }
+  };
+
+  const [locButState, setLocButState] = useState(false);
+  const [pinButState, setPinButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
+  const [corButState, setCorButState] = useState(false);
+  const [helpButState, setHelpButState] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Dive Site</Text>
+        <View
+          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
+        >
+          <TouchableOpacity
+            // disabled={isDisabled}
+            onPress={activateGuide}
+            onPressIn={() => setHelpButState(true)}
+            onPressOut={() => setHelpButState(false)}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: scale(20),
+              height: scale(20),
+            }}
+          >
+            <FontAwesome5
+              name="question"
+              color="gold"
+              size={scale(18)}
+              style={{ zIndex: -1 }}
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={
             diveCloseState ? styles.closeButtonPressed : styles.closeButton
@@ -355,31 +441,54 @@ export default function DiveSiteModal() {
         </InsetShadow>
       </View>
 
-      <View style={imaButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
-        <TouchableOpacity
-          onPress={getCurrentLocation}
-          onPressIn={() => setImaButState(true)}
-          onPressOut={() => setImaButState(false)}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: 130,
-            height: 30,
-            alignItems: "center",
-          }}
-        >
-          <FontAwesome5 name="map" color="gold" size={16} />
-          <Text
+      {isLoading && (
+        <ActivityIndicator
+          color="gold"
+          style={{ marginTop: "5%" }}
+        ></ActivityIndicator>
+      )}
+
+      <View style={styles.latLngButton}>
+        <View style={locButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
+          <TouchableOpacity
+            // disabled={isDisabled}
+            onPress={getCurrentLocation}
+            onPressIn={() => setLocButState(true)}
+            onPressOut={() => setLocButState(false)}
             style={{
-              marginLeft: 5,
-              fontFamily: "PatrickHand_400Regular",
-              color: "gold",
-              fontSize: 16
+              alignItems: "center",
+              justifyContent: "center",
+              width: 38,
+              height: 38,
             }}
           >
-            I'm at the dive site
-          </Text>
-        </TouchableOpacity>
+            <MaterialIcons
+              name="my-location"
+              color={locButState ? "#538dbd" : "gold"}
+              size={34}
+              style={{ zIndex: -1 }}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={pinButState ? styles.LocButtonPressed : styles.LocButton}>
+          <TouchableOpacity
+            onPress={onNavigate}
+            onPressIn={() => setCorButState(true)}
+            onPressOut={() => setCorButState(false)}
+            style={{
+              width: 38,
+              height: 38,
+            }}
+          >
+            <MaterialIcons
+              name="location-pin"
+              color={pinButState ? "#538dbd" : "gold"}
+              size={38}
+              style={{ zIndex: -1 }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View
@@ -470,41 +579,37 @@ const styles = StyleSheet.create({
   },
   GPSbutton: {
     backgroundColor: "#538bdb",
-    flexDirection: "row",
     alignItems: "center",
+    alignSelf: "center",
     justifyContent: "center",
     borderRadius: 10,
-    height: 35,
-    width: 150,
-    marginLeft: "30%",
-    marginTop: scale(30),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  GPSbuttonPressed: {
-    backgroundColor: "#538dbd",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
-    marginLeft: "30%",
-    marginTop: scale(30),
+    height: 40,
+    width: 40,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 6.27,
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  GPSbuttonPressed: {
+    backgroundColor: "#FAF9F1",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
 
     elevation: 10,
   },
@@ -516,7 +621,6 @@ const styles = StyleSheet.create({
     borderTopColor: "darkgrey",
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "1%" : "1%",
-
   },
   SubmitButtonPressed: {
     position: "absolute",
@@ -566,6 +670,7 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
   },
   closeButtonPressed: {
     position: "relative",
@@ -574,7 +679,77 @@ const styles = StyleSheet.create({
     width: scale(30),
     justifyContent: "center",
     alignItems: "center",
+    marginTop: scale(5),
     backgroundColor: "lightgrey",
     opacity: 0.3,
+  },
+  latLngButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: "10%",
+    marginTop: 35,
+    width: 140,
+    // backgroundColor: "pink"
+  },
+  LocButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  LocButtonPressed: {
+    backgroundColor: "#FAF9F1",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  helpButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    marginTop: scale(1),
+  },
+  helpButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(5),
+    marginLeft: scale(-20),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    marginTop: scale(1),
   },
 });

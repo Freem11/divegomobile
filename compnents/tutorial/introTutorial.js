@@ -13,6 +13,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useDerivedValue,
+  interpolateColor,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
@@ -37,7 +39,7 @@ import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { ReverseContext } from "../contexts/reverseContext";
 import { ChapterContext } from "../contexts/chapterContext";
-import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import anchorClustIOS from "../png/ClusterAnchor24.png";
 import anchorIconIOS from "../png/SiteAnchor20.png";
 import heatIconIOS from "../png/heatpoint.png";
@@ -72,6 +74,10 @@ export default function IntroTutorial() {
 
   const [pics, setPics] = useState([]);
 
+  const [guideState, setGuideState] = useState(false);
+  let counter = 0;
+  let blinker;
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -95,7 +101,7 @@ export default function IntroTutorial() {
       case "Getting around the map":
         resetTutorial();
         setSiteModal(false);
-        setItterator(1);
+        setItterator(6);
         setGuideModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
@@ -107,7 +113,7 @@ export default function IntroTutorial() {
       case "Dive sites":
         resetTutorial();
         setSiteModal(false);
-        setItterator(7);
+        setItterator(9);
         setGuideModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
@@ -121,18 +127,25 @@ export default function IntroTutorial() {
       case "Changed dive site":
         resetTutorial();
         setSiteModal(false);
-        setItterator(13);
+        setItterator(16);
         setGuideModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
+        if (selectedDiveSite.SiteName === "") {
+          setSelectedDiveSite({
+            SiteName: "Madrona Point",
+            Latitude: 49.3134,
+            Longitude: -124.2424,
+          });
+        }
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 });
         break;
 
-        case "Exit Guide":
-        handleClearTutorial()
+      case "Exit Guide":
+        handleClearTutorial();
         break;
     }
   }, [chapter]);
@@ -181,6 +194,8 @@ export default function IntroTutorial() {
   const resetTutorial = async () => {
     characterX.value = scale(1000);
     textBoxY.value = scale(1000);
+    guideButtonY.value = scale(-1200);
+    questionButtonY.value = scale(-1000);
     picX.value = scale(-300);
     exploreButtonY.value = scale(-1000);
     clusterAnchorY.value = scale(-1200);
@@ -188,6 +203,7 @@ export default function IntroTutorial() {
     arrowY.value = scale(-1200);
     userBoxX.value = scale(-300);
     nextTutX.value = scale(-300);
+    clearUp();
   };
 
   const handleSecondTutorialStartup = () => {
@@ -202,43 +218,59 @@ export default function IntroTutorial() {
   const textBoxY = useSharedValue(scale(1000));
   const picX = useSharedValue(scale(-300));
   const exploreButtonY = useSharedValue(scale(-1000));
+  const questionButtonY = useSharedValue(scale(-1000));
   const clusterAnchorY = useSharedValue(scale(-1200));
   const heatPotintY = useSharedValue(scale(-1200));
+  const guideButtonY = useSharedValue(scale(-1200));
   const arrowY = useSharedValue(scale(-1200));
   const userBoxX = useSharedValue(scale(-300));
   const nextTutX = useSharedValue(scale(-300));
 
   const text0 =
     "Hi, welcome to Scuba SEAsons, I'm Emilio, I'm here to show you around.";
-  const text1 = "First, what should I call you? This way, when you add a dive site or contribute a sea creature sighting we can put your name on it! ";
-  const text2 = "Nice to meet you! Now that we are buddied up, let's find a spot with some action. Here are 3 of the most recent sightings by other divers. "
-  const text3 = "Choose one and let's see what else is there!";
+  const text1 =
+    "First, what should I call you? This way, when you add a dive site or contribute a sea creature sighting we can put your name on it! ";
+  const text2 =
+    "Nice to meet you! Now that we are buddied up, let me first explain how my guide system works";
+  const text3 =
+    "In the top left you may have noticed this 'Guide Active' button, as long as you are in a guide it will be on screen if you tap on it a menu will open giving you the option to chapter skip to different parts of the guide you are currently in";
   const text4 =
-    "Great! We've moved the map, as you can see there is a lot more action here!";
+    "The last option in the list on any of the guides is the 'Exit Guide' option which will let you jump out and explore on your own at any time";
   const text5 =
-    "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there.";
+    "If you ever want to refer back to a guide (or miss me!) you can find me under this question mark button in the menu, from there you can open any of the guides";
   const text6 =
-    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites...";
-  const text7 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,      that means sea creatures have been spotted on that dive site.`;
-  const text8 = "";
+    "Ok thats the guide system, now let's find a spot with some action! Here are 3 recent sightings by other divers. Choose one and let's see what else is there!";
+  const text7 =
+    "Great! We've moved the map, as you can see there is a lot more action here!";
+  const text8 =
+    "Normally to move the map, you can use the location search under this icon. Enter in the name of the location you want to hop over to and it will take you there";
   const text9 =
+    "Looking at the map you can now see a few things, namely these grey and blue anchors, the grey anchors are a cluster of dive sites, tapping on one will zoom the map into it until the single dive sites split out from it";
+  const text10 = `The blue anchors are dive sites, try tapping on one and let's take a closer look! But make sure it has a heat point nearby, they look like this,      that means sea creatures have been spotted on that dive site.`;
+  const text11 = "";
+  const text12 =
     "Oops! Looks like you have chosen a dive site that doesn't have any sightings yet! Remember you want a dive site with a heat point       nearby. Close the form and try to find one with heat points.";
-  const text10 =
+  const text13 =
     "Wow, cool! look at all the neat sea creatures divers have already seen at this site!";
-  const text11 =
-    "Now try closing the dive site and choose a creature or two from the pictures along the top, then come back to the dive site and see what's changed!";
-  const text12 = "";
-  const text13 = "Select one or more sea creatures using the menu at the top.";
-  const text14 = "";
-  const text15 =
-    "Uh-oh! This isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
+  const text14 =
+    "Now try closing the dive site and choose a creature or two from the pictures along the top, then we will come back to the dive site and see what's changed!";
+  const text15 = "";
   const text16 =
-    "As you can see, the photos have filtered to show only those creatures you have selected";
+    "Select one or more sea creatures using the menu at the top, a tap will highlight the selected sea creature yellow to indicate that it is selected but...";
   const text17 =
-    "Ok well that's all for this guide, in the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
-  const text18 =
+    "If you LONG press on one, you will see that it pops out for a better look! You can long press on another to swap them or long press on the popped out one to put it back, and yes you can still tap to select while its popped out!";
+  const text18 = "";
+  const text19 =
+    "Uh-oh! This isn't the dive site we were looking at before! Try to find the one we were looking at so we can see how it has changed.";
+  const text20 =
+    "As you can see, the photos have filtered to show only those creatures you have selected";
+  const text21 =
+    "Ok well that's all for this guide, I hope I have helped to give you a feel for how to get around the Scuba SEAsons map.";
+  const text22 =
+    "In the next one I'll show you how to check if a dive site is in the app and if not, enable you to add it yourself!";
+  const text23 =
     "If you want to continue to the next guide please tap this button, if not tap anywhere else to exit, and thank you for joining Scuba SEAsons!";
-  const text19 = "";
+  const text24 = "";
 
   const [textRead, setTextRead] = useState("");
   const [textRead2, setTextRead2] = useState("  ");
@@ -267,25 +299,30 @@ export default function IntroTutorial() {
     text17,
     text18,
     text19,
+    text20,
+    text21,
+    text22,
+    text23,
+    text24,
   ];
 
   const setupText = (pushVal) => {
-    if (itterator === 9 && !textPrinting) {
-      setItterator(8);
+    if (itterator === 12 && !textPrinting) {
+      setItterator(11);
       setGuideModal(false);
       return;
-    } else if (itterator === 15 && !textPrinting) {
-      setItterator(14);
+    } else if (itterator === 19 && !textPrinting) {
+      setItterator(18);
       setGuideModal(false);
       return;
     }
     if (
       itterator === 1 ||
-      itterator === 3 ||
-      itterator === 8 ||
-      itterator === 12 ||
-      itterator === 14 ||
-      itterator >= 19
+      itterator === 6 ||
+      itterator === 11 ||
+      itterator === 15 ||
+      itterator === 18 ||
+      itterator >= 24
     ) {
       return;
     } else {
@@ -311,9 +348,9 @@ export default function IntroTutorial() {
 
   function printOutText() {
     if (textArray.length > 0) {
-      if (itterator === 7 && textArray.length <= 64) {
+      if (itterator === 10 && textArray.length <= 64) {
         setTextRead2((prev) => prev + textArray[0]);
-      } else if (itterator === 9 && textArray.length <= 63) {
+      } else if (itterator === 12 && textArray.length <= 63) {
         setTextRead2((prev) => prev + textArray[0]);
       } else {
         setTextRead((prev) => prev + textArray[0]);
@@ -331,7 +368,6 @@ export default function IntroTutorial() {
   let textPrinter;
 
   useEffect(() => {
-
     setTextRead("");
     setTextRead2("");
     let textVal = feederArray[itterator];
@@ -339,14 +375,14 @@ export default function IntroTutorial() {
       textArray = textVal.split("");
       if (textPrinting) {
         textPrinter = setInterval(printOutText, 40);
-      } else if (itterator === 7 && !textPrinting) {
+      } else if (itterator === 10 && !textPrinting) {
         let val1 =
           Platform.OS === "ios" ? textVal.slice(0, 147) : textVal.slice(0, 145);
         let val2 =
           Platform.OS === "ios" ? textVal.slice(-64) : textVal.slice(-68);
         setTextRead(val1);
         setTextRead2(val2);
-      } else if (itterator === 9 && !textPrinting) {
+      } else if (itterator === 12 && !textPrinting) {
         let val1 =
           Platform.OS === "ios" ? textVal.slice(0, 133) : textVal.slice(0, 131);
         let val2 =
@@ -389,35 +425,52 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 2) {
-
       getProfile();
       // if (userBoxX.value !== scale(-300)) {
       userBoxX.value = withTiming(scale(-300));
-      Keyboard.dismiss()
+      Keyboard.dismiss();
       // startUserBoxAnimation();
       // }
-
-      picX.value = withSpring(0);
       // startPicAnimation();
     }
 
+    if (itterator === 3) {
+      blinker = setInterval(guideBut, 1500);
+      guideButtonY.value = withTiming(windowHeight * 0.4);
+    }
+
+    if (itterator === 4) {
+      guideButtonY.value = withTiming(scale(-1000));
+      clearUp();
+    }
+
     if (itterator === 5) {
+      questionButtonY.value = withTiming(windowHeight * 0.4);
+    }
+
+    console.log("i am", itterator);
+    if (itterator === 6) {
+      questionButtonY.value = withTiming(scale(-1000));
+      picX.value = withSpring(0);
+    }
+
+    if (itterator === 8) {
       exploreButtonY.value = withTiming(windowHeight * 0.4);
       // startExploreButtonAnimation();
     }
 
-    if (itterator === 6) {
+    if (itterator === 9) {
       exploreButtonY.value = withTiming(scale(-1000));
       clusterAnchorY.value = withTiming(windowHeight * 0.4);
       // startClusterAnchorAnimation();
     }
 
-    if (itterator === 7) {
+    if (itterator === 10) {
       heatPotintY.value = withTiming(windowHeight * 0.25);
       // startHeatPointAnimation();
     }
 
-    if (itterator === 8) {
+    if (itterator === 11) {
       if (movingBack) {
         setMovingBack(false);
         setGuideModal(false);
@@ -431,32 +484,32 @@ export default function IntroTutorial() {
       }
     }
 
-    if (itterator === 9) {
+    if (itterator === 12) {
       setTextPrinting(true);
       setMovingBack(true);
       setGuideModal(true);
     }
 
-    if (itterator === 10) {
+    if (itterator === 13) {
       setTextRead("");
       setTextPrinting(true);
     }
 
-    if (itterator === 11) {
+    if (itterator === 14) {
       setChapter(null);
     }
 
-    if (itterator === 12) {
+    if (itterator === 15) {
       setGuideModal(false);
     }
 
-    if (itterator === 13) {
+    if (itterator === 16) {
       setGuideModal(true);
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
       // startArrowAnimation();
     }
 
-    if (itterator === 14) {
+    if (itterator === 18) {
       if (movingBack) {
         setMovingBack(false);
         setGuideModal(false);
@@ -469,7 +522,7 @@ export default function IntroTutorial() {
       }
     }
 
-    if (itterator === 15) {
+    if (itterator === 19) {
       if (backCount === 0) {
         arrowY.value = withTiming(scale(-1200));
         // startArrowAnimation();
@@ -488,17 +541,17 @@ export default function IntroTutorial() {
       }
     }
 
-    if (itterator === 16) {
+    if (itterator === 20) {
+      arrowY.value = withTiming(scale(-1200));
       setGuideModal(true);
     }
 
-
-    if (itterator === 18) {
+    if (itterator === 23) {
       nextTutX.value = withSpring(windowWidth * 0.3);
       // startNextTutAnimation();
     }
 
-    if (itterator === 19) {
+    if (itterator === 24) {
       setSiteModal(false);
       nextTutX.value = withTiming(scale(-300));
       // startNextTutAnimation();
@@ -530,6 +583,18 @@ export default function IntroTutorial() {
   const textBoxSlide = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: textBoxY.value }],
+    };
+  });
+
+  const guideButtonSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: guideButtonY.value }],
+    };
+  });
+
+  const questionButtonSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: questionButtonY.value }],
     };
   });
 
@@ -638,7 +703,7 @@ export default function IntroTutorial() {
       userBoxX.value = withSpring(windowWidth * 0.2);
     } else {
       userBoxX.value = withTiming(scale(-300));
-      Keyboard.dismiss()
+      Keyboard.dismiss();
     }
   };
 
@@ -710,6 +775,39 @@ export default function IntroTutorial() {
   const nudgeMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
   };
+
+  const progress = useDerivedValue(() => {
+    return withTiming(guideState === true ? 1 : 0);
+  });
+
+  const guideButtonPulse = useAnimatedStyle(() => {
+    const backgroundColor = interpolateColor(
+      progress.value,
+      [0, 1],
+      [
+        styles.guideButton.backgroundColor,
+        styles.guideButtonAlt.backgroundColor,
+      ]
+    );
+    return {
+      backgroundColor,
+    };
+  });
+
+  function guideBut() {
+    counter++;
+    if (counter % 2 == 0) {
+      setGuideState(false);
+    } else {
+      setGuideState(true);
+    }
+  }
+
+  function clearUp() {
+    clearInterval(blinker);
+    setGuideState(false);
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
       <View style={styles.wrapper}>
@@ -754,7 +852,10 @@ export default function IntroTutorial() {
             })}
         </View>
 
-        <Animated.View style={[characterSlide, styles.character]} pointerEvents={"box-none"}>
+        <Animated.View
+          style={[characterSlide, styles.character]}
+          pointerEvents={"box-none"}
+        >
           <Image
             source={seaLionGuy}
             style={{
@@ -783,6 +884,10 @@ export default function IntroTutorial() {
 
         <Animated.View style={[styles.buttonwrapper, exporeButtonSlide]}>
           <MaterialIcons name="explore" color="aquamarine" size={scale(42)} />
+        </Animated.View>
+
+        <Animated.View style={[styles.buttonwrapper, questionButtonSlide]}>
+          <FontAwesome5 name="question" color="aquamarine" size={scale(31)} />
         </Animated.View>
 
         <Animated.View style={[styles.userContainer, userBoxSlide]}>
@@ -890,6 +995,14 @@ export default function IntroTutorial() {
             color="white"
             onPress={handleSecondTutorialStartup}
           />
+        </Animated.View>
+
+        <Animated.View
+          style={[styles.guideButton, guideButtonPulse, guideButtonSlide]}
+        >
+          <Text style={guideState ? styles.guideTextAlt : styles.guideText}>
+            Guide Active
+          </Text>
         </Animated.View>
       </View>
     </TouchableWithoutFeedback>
@@ -1006,7 +1119,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 2,
     left: "5%",
-    top: Platform.OS === "ios" ? windowWidth > 600 ? "12%" : "10%" : "13%",
+    top: Platform.OS === "ios" ? (windowWidth > 600 ? "12%" : "10%") : "13%",
   },
   titleText: {
     textAlign: "center",
@@ -1136,5 +1249,39 @@ const styles = StyleSheet.create({
     // backgroundColor: "blue",
     marginRight: -10,
     marginBottom: -2,
+  },
+  guideButton: {
+    position: "absolute",
+    left: scale(50),
+    height: scale(35),
+    width: scale(90),
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "maroon",
+    borderRadius: scale(15),
+    paddingRight: 5,
+    paddingLeft: 5,
+  },
+  guideButtonAlt: {
+    position: "absolute",
+    left: scale(50),
+    height: scale(30),
+    width: scale(80),
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#C49102",
+    borderRadius: scale(15),
+    paddingRight: 5,
+    paddingLeft: 5,
+  },
+  guideText: {
+    color: "darkgrey",
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(15),
+  },
+  guideTextAlt: {
+    color: "black",
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(15),
   },
 });
