@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     margin: scale(35),
   },
   OKbutton: {
-    backgroundColor: "#74b72e",
+    backgroundColor: "#79bace",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
