@@ -9,14 +9,15 @@ import {
   Dimensions,
   Keyboard,
 } from "react-native";
+import { Octicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-// import Device from "expo-device";
+import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABButtons from "./FABset";
 import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
-import { grabProfileById } from "./../supabaseCalls/accountSupabaseCalls";
+import { grabProfileById, updateProfileFeeback } from "./../supabaseCalls/accountSupabaseCalls";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
@@ -61,6 +62,7 @@ import Animated, {
   withTiming,
   interpolate,
   Easing,
+  withSpring,
 } from "react-native-reanimated";
 import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
@@ -72,20 +74,18 @@ import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import UserProfileModal from "./modals/userProfileModal";
 
-import * as ScreenOrientation from 'expo-screen-orientation';
+import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+let feedbackRequest;
 
 export default function MapPage() {
-  
-  if(Platform.OS ==="ios"){
-    ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT_UP
-    );
+  if (Platform.OS === "ios") {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-  
+
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -154,9 +154,15 @@ export default function MapPage() {
 
   const startTutorialLaunchPadModalAnimations = () => {
     if (tutorialLaunchpadModal) {
-      tutorialLaunchpadModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialLaunchpadModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorialLaunchpadModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialLaunchpadModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -182,9 +188,15 @@ export default function MapPage() {
 
   const startAnchorModalAnimations = () => {
     if (siteModal) {
-      anchorModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      anchorModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      anchorModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      anchorModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -199,13 +211,13 @@ export default function MapPage() {
     // }
 
     // filterAnchorPhotos();
-   
+
     if (tutorialRunning && siteModal) {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
-      } else if (itterator === 11 && anchPhotos === 0 ) {
+      } else if (itterator === 11 && anchPhotos === 0) {
         setItterator(itterator + 1);
-      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0 ) {
+      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0) {
         setItterator(itterator + 2);
       }
     }
@@ -226,9 +238,15 @@ export default function MapPage() {
 
   const startDiveSiteModalAnimations = () => {
     if (diveSiteAdderModal) {
-      diveSiteModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      diveSiteModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      diveSiteModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      diveSiteModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -251,9 +269,15 @@ export default function MapPage() {
 
   const startPictureModalAnimations = () => {
     if (picAdderModal) {
-      pictureModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      pictureModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      pictureModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      pictureModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -277,9 +301,15 @@ export default function MapPage() {
 
   const startGuideModalAnimations = () => {
     if (guideModal) {
-      tutorialModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorialModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -305,9 +335,15 @@ export default function MapPage() {
 
   const startSecondGuideModalAnimations = () => {
     if (secondGuideModal) {
-      tutorial2ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial2ModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorial2ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial2ModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -333,9 +369,15 @@ export default function MapPage() {
 
   const startThirdGuideModalAnimations = () => {
     if (thirdGuideModal) {
-      tutorial3ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial3ModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorial3ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial3ModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -347,31 +389,51 @@ export default function MapPage() {
   }, [thirdGuideModal]);
 
   //Profile Modal Animation
-    const profileModalY = useSharedValue(windowHeight);
-    const { profileModal, setProfileModal } = useContext(ProfileModalContext);
-  
-    const profileModalReveal = useAnimatedStyle(() => {
-      return {
-        transform: [{ translateY: profileModalY.value }],
-      };
-    });
-  
-    const startProfileModalAnimations = () => {
-      if (profileModal) {
-        profileModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
-      } else {
-        profileModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
-      }
+  const profileModalY = useSharedValue(windowHeight);
+  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+
+  const profileModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: profileModalY.value }],
     };
-    
-    useEffect(() => {
-      startProfileModalAnimations();
-      // if (!itterator && guideModal) {
-      //   setItterator(0);
-      // }
-    }, [profileModal]);
+  });
 
+  const startProfileModalAnimations = () => {
+    if (profileModal) {
+      profileModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      profileModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
 
+  const feedbackX = useSharedValue(0);
+ 
+  const feedbackReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: feedbackX.value }],
+    };
+  });
+
+  const startFeedbackAnimations = () => {
+    if (feedbackX.value === 0) {
+      feedbackX.value = withSpring(250);
+    } else {
+      feedbackX.value = withTiming(0);
+    }
+  };
+
+  useEffect(() => {
+    startProfileModalAnimations();
+    // if (!itterator && guideModal) {
+    //   setItterator(0);
+    // }
+  }, [profileModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -398,7 +460,7 @@ export default function MapPage() {
 
   const pullTabHeight = useSharedValue(0);
 
-  const toVal = scale(25)
+  const toVal = scale(25);
 
   const tabPullHeigth = useDerivedValue(() => {
     return interpolate(pullTabHeight.value, [0, 1], [0, toVal]);
@@ -413,18 +475,17 @@ export default function MapPage() {
   const startPullTabAnimation = () => {
     if (pullTabHeight.value === 0) {
       pullTabHeight.value = withTiming(1);
-      setIsOpen(true)
+      setIsOpen(true);
     } else {
-      Keyboard.dismiss()
+      Keyboard.dismiss();
       pullTabHeight.value = withTiming(0);
       setTextValue("");
-      setIsOpen(false)
+      setIsOpen(false);
     }
   };
 
   const onNavigate = () => {
-
-    if (chosenModal === "DiveSite"){
+    if (chosenModal === "DiveSite") {
       setAddSiteVals({
         ...addSiteVals,
         Latitude: dragPin.lat.toString(),
@@ -432,8 +493,8 @@ export default function MapPage() {
       });
       setMapHelper(true);
       setMasterSwitch(true);
-      setDiveSiteAdderModal(!diveSiteAdderModal)
-      setItterator2(itterator2 + 1)
+      setDiveSiteAdderModal(!diveSiteAdderModal);
+      setItterator2(itterator2 + 1);
       setChosenModal(null);
     } else if (chosenModal === "Photos") {
       setPinValues({
@@ -457,10 +518,9 @@ export default function MapPage() {
   }, [animalSelection]);
 
   useEffect(() => {
-    if (areaPics.length === 0 && !isOpen){
-      pullTabHeight.value = withTiming(0)
+    if (areaPics.length === 0 && !isOpen) {
+      pullTabHeight.value = withTiming(0);
     }
- 
   }, [areaPics]);
 
   const [subButState, setSubButState] = useState(false);
@@ -495,9 +555,39 @@ export default function MapPage() {
         console.log({ title: "Error", message: "e.message" });
       }
     };
-
     getProfile();
+
+    if(!profile.feedackRequest){
+      feedackRequest = setTimeout(() => {
+        startFeedbackAnimations();
+        updateProfileFeeback(profile)
+      }, 180000);
+    }
+   
   }, []);
+
+
+  useEffect(() => {
+    clearTimeout(feedackRequest)
+
+    if(!profile.feedackRequest){
+    feedackRequest = setTimeout(() => {
+      startFeedbackAnimations();
+      updateProfileFeeback(profile)
+    }, 180000);
+  }
+
+  }, [tutorialRunning])
+
+  const handleEmail = () => {
+    const to = ["scubaseasons@gmail.com"];
+    email(to, {
+      // Optional additional arguments
+      subject: 'Scuba SEAsons Feedback Submission',
+      body: "",
+      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
+    }).catch(console.error);
+  };
 
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
@@ -513,29 +603,26 @@ export default function MapPage() {
             {masterSwitch && (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
                 <PhotoMenu style={{ zIndex: 3 }} />
-                   <View style={styles.filterer} pointerEvents={"box-none"}>
-                {(areaPics && areaPics.length > 0 || isOpen) && (
-                  <View style={styles.emptyBox} pointerEvents={"box-none"}>
-                  <Animated.View style={[tabPull, styles.closer]}>
-                  <PhotoFilterer />
-                </Animated.View>
-             
-                <TouchableWithoutFeedback onPress={startPullTabAnimation}>
-                  <View style={styles.pullTab}></View>
-                </TouchableWithoutFeedback>
-                </View>
-   )}
+                <View style={styles.filterer} pointerEvents={"box-none"}>
+                  {((areaPics && areaPics.length > 0) || isOpen) && (
+                    <View style={styles.emptyBox} pointerEvents={"box-none"}>
+                      <Animated.View style={[tabPull, styles.closer]}>
+                        <PhotoFilterer />
+                      </Animated.View>
 
+                      <TouchableWithoutFeedback onPress={startPullTabAnimation}>
+                        <View style={styles.pullTab}></View>
+                      </TouchableWithoutFeedback>
+                    </View>
+                  )}
 
-   
-                <View style={styles.animalSelect} pointerEvents={"box-none"}>
-                  <AnimalTopAutoSuggest transTagsY={transTagsY} />
+                  <View style={styles.animalSelect} pointerEvents={"box-none"}>
+                    <AnimalTopAutoSuggest transTagsY={transTagsY} />
+                  </View>
                 </View>
               </View>
-              </View>
-              
             )}
-{/* 
+            {/* 
            {masterSwitch && ( 
                <KeyboardAvoidingView behavior="height" enabled={false}>
            
@@ -638,7 +725,20 @@ export default function MapPage() {
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, profileModalReveal]}>
-              <UserProfileModal/>
+              <UserProfileModal />
+            </Animated.View>
+
+            <Animated.View style={[styles.feedback, feedbackReveal]}>
+              <Text style={styles.feedRequest} onPress={() => handleEmail()}>Send Scuba SEAsons feedback</Text>
+              <TouchableOpacity
+                  style={{
+                    width: scale(30),
+                    height: scale(23),
+                  }}
+                  onPress={startFeedbackAnimations}
+                >
+              <Octicons name="paper-airplane" size={24} color="white" />
+              </TouchableOpacity>
             </Animated.View>
 
             <Map style={{ zIndex: 1 }} />
@@ -655,7 +755,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "green"
+    backgroundColor: "green",
   },
   slider: {
     flex: 1,
@@ -837,9 +937,30 @@ const styles = StyleSheet.create({
     backgroundColor: "gold",
     borderBottomRightRadius: scale(7),
     borderBottomLeftRadius: scale(7),
-    zIndex: 10
+    zIndex: 10,
   },
   closer: {
-    zIndex: 5
+    zIndex: 5,
   },
+  feedback: {
+    zIndex: 20,
+    opacity: 0.8,
+    flexDirection: "row",
+    backgroundColor: "#538bdb",
+    position: 'absolute',
+    top: windowHeight* 0.83,
+    left: -315,
+    padding: 5,
+    borderTopRightRadius: 15,
+    borderBottomRightRadius: 15,
+    width: 350
+  },
+  feedRequest: {
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    fontSize: 18,
+    marginRight: 15,
+    marginLeft: 14,
+    paddingLeft: 50
+  }
 });

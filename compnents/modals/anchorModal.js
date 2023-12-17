@@ -309,7 +309,7 @@ export default function AnchorModal(lat, lng) {
           name="flag"
           color="maroon"
           size={scale(20)}
-          onLongPress={() => handleEmailDS()}
+          onPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
         <View style={{ width: scale(250) }}>
@@ -361,7 +361,7 @@ export default function AnchorModal(lat, lng) {
                       name="flag"
                       color="maroon"
                       size={scale(19)}
-                      onLongPress={() => handleEmail(pic)}
+                      onPress={() => handleEmail(pic)}
                       style={styles.flag}
                     />
                     <Text style={styles.titleText}>{pic.label}</Text>

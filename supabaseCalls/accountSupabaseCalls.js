@@ -59,6 +59,25 @@ export const updateProfile = async (values) => {
   }
 };
 
+export const updateProfileFeeback = async (values) => {
+
+  console.log(values)
+
+  const { data, error } = await supabase
+    .from("UserProfiles")
+    .update({ feedbackRequested: true })
+    .eq("UserID", values.id);
+
+  if (error) {
+    console.log("couldn't do it 2,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
 export const deleteProfile = async (id) => {
   const { data, error } = await supabase
     .from("UserProfiles")
