@@ -6,7 +6,14 @@ import {
   TouchableWithoutFeedback,
   Platform,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
 import React, { useState, useContext, useEffect } from "react";
 import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
@@ -24,10 +31,13 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import SuccessModal from "./confirmationSuccessModal";
 
 let SiteNameVar = false;
 let LatVar = false;
 let LngVar = false;
+
+const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteModal() {
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
@@ -251,13 +261,9 @@ export default function DiveSiteModal() {
     ) {
       return;
     } else {
-      console.log("here?", tutorialRunning, itterator2);
       if (tutorialRunning) {
-        if (itterator2 > 0) {
-          setItterator2(itterator2 + 1);
-        }
+        successBoxY.value = withTiming(scale(-50));
       } else {
-        //  console.log("pinnies!", addSiteVals)
         insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
           ...addSiteVals,
@@ -265,7 +271,10 @@ export default function DiveSiteModal() {
           Latitude: "",
           Longitude: "",
         });
-        setDiveSiteAdderModal(!diveSiteAdderModal);
+
+        successBoxY.value = withTiming(scale(-50));
+
+        // setDiveSiteAdderModal(!diveSiteAdderModal);
       }
     }
   };
@@ -313,6 +322,18 @@ export default function DiveSiteModal() {
   const [subButState, setSubButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [helpButState, setHelpButState] = useState(false);
+
+  const successBoxY = useSharedValue(scale(1200));
+
+  const sucessModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: successBoxY.value }],
+    };
+  });
+
+  const confirmationClose = () => {
+    successBoxY.value = withTiming(scale(1200));
+  };
 
   return (
     <View style={styles.container}>
@@ -521,6 +542,16 @@ export default function DiveSiteModal() {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+        <SuccessModal
+          submissionItem="dive site"
+          toggleDiveModal={toggleDiveModal}
+          confirmationClose={confirmationClose}
+          itterator2={itterator2}
+          setItterator2={setItterator2}
+        ></SuccessModal>
+      </Animated.View>
     </View>
   );
 }
@@ -751,5 +782,8 @@ const styles = StyleSheet.create({
     height: scale(30),
     width: scale(30),
     marginTop: scale(1),
+  },
+  confirmationBox: {
+    position: "absolute",
   },
 });

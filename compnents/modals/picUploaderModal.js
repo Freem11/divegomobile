@@ -10,6 +10,12 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { PinContext } from "../contexts/staticPinContext";
@@ -37,6 +43,7 @@ import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import SuccessModal from "./confirmationSuccessModal";
 
 let PicVar = false;
 let DateVar = false;
@@ -308,8 +315,6 @@ export default function PicUploadModal() {
       LngVal: LngVar,
     });
 
-    console.log("pins", pinValues);
-
     if (
       pinValues.PicFile === "" ||
       pinValues.PicFile === null ||
@@ -321,11 +326,9 @@ export default function PicUploadModal() {
       return;
     } else {
       if (tutorialRunning) {
-        if (itterator3 > 0) {
-          setItterator3(itterator3 + 1);
-        }
+        successBoxY.value = withTiming(scale(70));
       } else {
-        // console.log("pinnies!", pinValues)
+       
         insertPhotoWaits(pinValues);
         setPinValues({
           ...pinValues,
@@ -337,7 +340,10 @@ export default function PicUploadModal() {
           DDVal: "0",
         });
         setUploadedFile(null);
-        setPicAdderModal(!picAdderModal);
+
+        successBoxY.value = withTiming(scale(70));
+
+        // setPicAdderModal(!picAdderModal);
       }
     }
   };
@@ -492,6 +498,18 @@ export default function PicUploadModal() {
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
   const [helpButState, setHelpButState] = useState(false);
+
+  const successBoxY = useSharedValue(scale(1200));
+
+  const sucessModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: successBoxY.value }],
+    };
+  });
+
+  const confirmationClose = () => {
+    successBoxY.value = withTiming(scale(1200));
+  };
 
   return (
     <View style={styles.container}>
@@ -791,6 +809,17 @@ export default function PicUploadModal() {
         </TouchableOpacity>
         {/* </TouchableWithoutFeedback> */}
       </View>
+
+      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+        <SuccessModal
+          submissionItem="sea creature submission"
+          togglePicModal={togglePicModal}
+          confirmationClose={confirmationClose}
+          itterator3={itterator3}
+          setItterator3={setItterator3}
+        ></SuccessModal>
+      </Animated.View>
+
     </View>
   );
 }
@@ -1219,5 +1248,8 @@ const styles = StyleSheet.create({
     height: scale(30),
     width: scale(30),
     marginTop: scale(1)
+  },
+  confirmationBox: {
+    position: "absolute",
   },
 });
