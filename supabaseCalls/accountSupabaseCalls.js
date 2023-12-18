@@ -66,7 +66,7 @@ export const updateProfileFeeback = async (values) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .update({ feedbackRequested: true })
-    .eq("UserID", values.id);
+    .eq("UserID", values.UserID);
 
   if (error) {
     console.log("couldn't do it 2,", error);

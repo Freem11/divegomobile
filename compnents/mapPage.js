@@ -17,7 +17,10 @@ import Map from "./GoogleMap";
 import FABButtons from "./FABset";
 import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
-import { grabProfileById, updateProfileFeeback } from "./../supabaseCalls/accountSupabaseCalls";
+import {
+  grabProfileById,
+  updateProfileFeeback,
+} from "./../supabaseCalls/accountSupabaseCalls";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
@@ -79,7 +82,8 @@ import { ProfileModalContext } from "./contexts/profileModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-let feedbackRequest;
+let feedbackRequest = null;
+let feedbackRequest2 = null;
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -413,7 +417,7 @@ export default function MapPage() {
   };
 
   const feedbackX = useSharedValue(0);
- 
+
   const feedbackReveal = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: feedbackX.value }],
@@ -557,33 +561,33 @@ export default function MapPage() {
     };
     getProfile();
 
-    if(!profile.feedackRequest){
-      feedackRequest = setTimeout(() => {
+    if (!profile && !profile[0].feedbackRequested) {
+      feedbackRequest = setTimeout(() => {
         startFeedbackAnimations();
-        updateProfileFeeback(profile)
+        updateProfileFeeback(profile[0]);
       }, 180000);
     }
-   
   }, []);
 
-
   useEffect(() => {
-    clearTimeout(feedackRequest)
+    clearTimeout(feedbackRequest2);
+    clearTimeout(feedbackRequest);
 
-    if(!profile.feedackRequest){
-    feedackRequest = setTimeout(() => {
-      startFeedbackAnimations();
-      updateProfileFeeback(profile)
-    }, 180000);
-  }
-
-  }, [tutorialRunning])
+    if (!tutorialRunning) {
+      if (!profile && !profile[0].feedbackRequested) {
+        feedbackRequest2 = setTimeout(() => {
+          startFeedbackAnimations();
+          updateProfileFeeback(profile[0]);
+        }, 180000);
+      }
+    }
+  }, [tutorialRunning]);
 
   const handleEmail = () => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
-      subject: 'Scuba SEAsons Feedback Submission',
+      subject: "Scuba SEAsons Feedback Submission",
       body: "",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
@@ -729,15 +733,17 @@ export default function MapPage() {
             </Animated.View>
 
             <Animated.View style={[styles.feedback, feedbackReveal]}>
-              <Text style={styles.feedRequest} onPress={() => handleEmail()}>Send Scuba SEAsons feedback</Text>
+              <Text style={styles.feedRequest} onPress={() => handleEmail()}>
+                Send Scuba SEAsons feedback
+              </Text>
               <TouchableOpacity
-                  style={{
-                    width: scale(30),
-                    height: scale(23),
-                  }}
-                  onPress={startFeedbackAnimations}
-                >
-              <Octicons name="paper-airplane" size={24} color="white" />
+                style={{
+                  width: scale(30),
+                  height: scale(23),
+                }}
+                onPress={startFeedbackAnimations}
+              >
+                <Octicons name="paper-airplane" size={24} color="white" />
               </TouchableOpacity>
             </Animated.View>
 
@@ -947,13 +953,13 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     flexDirection: "row",
     backgroundColor: "#538bdb",
-    position: 'absolute',
-    top: windowHeight* 0.83,
+    position: "absolute",
+    top: windowHeight * 0.83,
     left: -315,
     padding: 5,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
-    width: 350
+    width: 350,
   },
   feedRequest: {
     color: "white",
@@ -961,6 +967,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginRight: 15,
     marginLeft: 14,
-    paddingLeft: 50
-  }
+    paddingLeft: 50,
+  },
 });
