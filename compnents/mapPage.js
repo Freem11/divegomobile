@@ -554,6 +554,14 @@ export default function MapPage() {
               UserName: success[0].UserName,
             });
           }
+
+          if (success[0].feedbackRequested === false) {
+            feedbackRequest = setTimeout(() => {
+              startFeedbackAnimations();
+              updateProfileFeeback(success[0]);
+            }, 180000);
+          }
+
         }
       } catch (e) {
         console.log({ title: "Error", message: "e.message" });
@@ -561,20 +569,15 @@ export default function MapPage() {
     };
     getProfile();
 
-    if (!profile && !profile[0].feedbackRequested) {
-      feedbackRequest = setTimeout(() => {
-        startFeedbackAnimations();
-        updateProfileFeeback(profile[0]);
-      }, 180000);
-    }
+ 
   }, []);
 
   useEffect(() => {
     clearTimeout(feedbackRequest2);
     clearTimeout(feedbackRequest);
 
-    if (!tutorialRunning) {
-      if (!profile && !profile[0].feedbackRequested) {
+    if (tutorialRunning === false) {
+      if (!profile && profile[0].feedbackRequested === false) {
         feedbackRequest2 = setTimeout(() => {
           startFeedbackAnimations();
           updateProfileFeeback(profile[0]);
