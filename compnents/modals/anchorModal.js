@@ -214,7 +214,9 @@ export default function AnchorModal(lat, lng) {
   };
 
   const handleSwitch = () => {
-    // let lati = 
+    if (itterator === 11 || itterator == 15){
+      return
+    }
     setPinValues({
       ...pinValues,
       Latitude: String(selectedDiveSite.Latitude),
@@ -338,7 +340,6 @@ export default function AnchorModal(lat, lng) {
           style={helpButState ? styles.helpButtonPressed : styles.helpButton}
         >
           <TouchableWithoutFeedback
-            // disabled={isDisabled}
             onPress={handleSwitch}
             onPressIn={() => setHelpButState(true)}
             onPressOut={() => setHelpButState(false)}
