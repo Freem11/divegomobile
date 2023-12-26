@@ -44,6 +44,7 @@ import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import SuccessModal from "./confirmationSuccessModal";
+import FailModal from "./confirmationCautionModal";
 
 let PicVar = false;
 let DateVar = false;
@@ -68,6 +69,7 @@ export default function PicUploadModal() {
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const [picCloseState, setPicCloseState] = useState(false);
+  const [indicatorState, setIndicatorState] = useState(false);
 
   const { pinValues, setPinValues } = useContext(PinContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
@@ -323,12 +325,12 @@ export default function PicUploadModal() {
       pinValues.Latitude === "" ||
       pinValues.Animal === ""
     ) {
+      failBoxY.value = withTiming(scale(70));
       return;
     } else {
       if (tutorialRunning) {
         successBoxY.value = withTiming(scale(70));
       } else {
-       
         insertPhotoWaits(pinValues);
         setPinValues({
           ...pinValues,
@@ -490,8 +492,8 @@ export default function PicUploadModal() {
   };
 
   const activateGuide = () => {
-    setChapter("Adding your photo")
-};
+    setChapter("Adding your photo");
+  };
 
   const [imgButState, setImgButState] = useState(false);
   const [datButState, setDatButState] = useState(false);
@@ -500,6 +502,7 @@ export default function PicUploadModal() {
   const [helpButState, setHelpButState] = useState(false);
 
   const successBoxY = useSharedValue(scale(1200));
+  const failBoxY = useSharedValue(scale(1200));
 
   const sucessModalSlide = useAnimatedStyle(() => {
     return {
@@ -507,15 +510,42 @@ export default function PicUploadModal() {
     };
   });
 
-  const confirmationClose = () => {
+  const cautionModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: failBoxY.value }],
+    };
+  });
+
+  const confirmationSucessClose = () => {
     successBoxY.value = withTiming(scale(1200));
   };
+
+  const confirmationFailClose = () => {
+    failBoxY.value = withTiming(scale(1200));
+  };
+
+  useEffect(() => {
+    if (
+      pinValues.PicFile === "" ||
+      pinValues.PicFile === null ||
+      pinValues.PicDate === "" ||
+      pinValues.Longitude === "" ||
+      pinValues.Latitude === "" ||
+      pinValues.Animal === ""
+    ) {
+      setIndicatorState(false);
+    } else {
+      setIndicatorState(true);
+    }
+  }, [pinValues]);
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Picture</Text>
-        <View style={helpButState ? styles.helpButtonPressed : styles.helpButton}>
+        <View
+          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
+        >
           <TouchableOpacity
             // disabled={isDisabled}
             onPress={activateGuide}
@@ -532,7 +562,7 @@ export default function PicUploadModal() {
               name="question"
               color="gold"
               size={scale(18)}
-              style={{ zIndex: -1}}
+              style={{ zIndex: -1 }}
             />
           </TouchableOpacity>
         </View>
@@ -581,43 +611,52 @@ export default function PicUploadModal() {
         )}
       </View>
 
-      <View
-        style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
-      >
-        <TouchableOpacity
-          onPress={handleImageUpload}
-          onPressIn={() => setImgButState(true)}
-          onPressOut={() => setImgButState(false)}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: scale(150),
-            height: scale(24),
-            marginTop: 0,
-          }}
+      <View style={{ flexDirection: "row", marginTop: scale(0), marginBottom: scale(-6)}}>
+        <View
+          style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
         >
-          <FontAwesome
-            name="picture-o"
-            color={imgButState ? "#538dbd": "gold"}
-            size={scale(24)}
+          <TouchableOpacity
+            onPress={handleImageUpload}
+            onPressIn={() => setImgButState(true)}
+            onPressOut={() => setImgButState(false)}
             style={{
-              marginLeft: Platform.OS === "android" ? scale(10) : scale(10),
-            }}
-          />
-          <Text
-            style={{
-              marginLeft: scale(5),
-              marginTop: scale(0),
-              color: imgButState ? "#538dbd": "gold",
-              fontFamily: "PatrickHand_400Regular",
-              fontSize: scale(17),
+              display: "flex",
+              flexDirection: "row",
+              width: scale(150),
+              height: scale(24),
+              marginTop: 0,
             }}
           >
-            Choose an Image
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <FontAwesome
+              name="picture-o"
+              color={imgButState ? "#538dbd" : "gold"}
+              size={scale(24)}
+              style={{
+                marginLeft: Platform.OS === "android" ? scale(10) : scale(10),
+              }}
+            />
+            <Text
+              style={{
+                marginLeft: scale(5),
+                marginTop: scale(0),
+                color: imgButState ? "#538dbd" : "gold",
+                fontFamily: "PatrickHand_400Regular",
+                fontSize: scale(17),
+              }}
+            >
+              Choose an Image
+            </Text>
+          </TouchableOpacity>
+        </View>
 
+        <View
+          style={
+            indicatorState
+              ? styles.ImageUploadIndicatorGreen
+              : styles.ImageUploadIndicatorRed
+          }
+        ></View>
+      </View>
       <View style={styles.lowerZone}>
         <View style={styles.fields}>
           <View style={styles.dateField}>
@@ -735,7 +774,7 @@ export default function PicUploadModal() {
               >
                 <FontAwesome
                   name="calendar"
-                  color={datButState ? "#538dbd": "gold"}
+                  color={datButState ? "#538dbd" : "gold"}
                   size={28}
                   style={{ marginLeft: 1.5, marginTop: 2 }}
                 />
@@ -767,7 +806,7 @@ export default function PicUploadModal() {
               >
                 <MaterialIcons
                   name="location-pin"
-                  color={corButState ? "#538dbd": "gold"}
+                  color={corButState ? "#538dbd" : "gold"}
                   size={38}
                   style={{ zIndex: -1 }}
                 />
@@ -814,12 +853,18 @@ export default function PicUploadModal() {
         <SuccessModal
           submissionItem="sea creature submission"
           togglePicModal={togglePicModal}
-          confirmationClose={confirmationClose}
+          confirmationSucessClose={confirmationSucessClose}
           itterator3={itterator3}
           setItterator3={setItterator3}
         ></SuccessModal>
       </Animated.View>
 
+      <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+        <FailModal
+          submissionItem="sea creature submission"
+          confirmationFailClose={confirmationFailClose}
+        ></FailModal>
+      </Animated.View>
     </View>
   );
 }
@@ -903,17 +948,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: scale(15),
-    height: "7%",
+    height: scale(40),
     width: "50%",
     marginLeft: 0,
     marginTop: Platform.OS === "ios" ? "2%" : "3%",
     // marginBottom: Platform.OS === "ios" ? "3%" : "6%",
     shadowColor: "#000",
     shadowOffset: {
-      width: 1,
-      height: 1,
+      width: 2,
+      height: 2,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 5,
     shadowRadius: 6,
 
     elevation: 10,
@@ -924,7 +969,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: scale(15),
-    height: "7%",
+    height: scale(40),
     width: "50%",
     marginLeft: 0,
     marginTop: Platform.OS === "ios" ? "2%" : "3%",
@@ -1235,7 +1280,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     height: scale(30),
     width: scale(30),
-    marginTop: scale(1)
+    marginTop: scale(1),
   },
   helpButtonPressed: {
     backgroundColor: "#538dbd",
@@ -1247,9 +1292,25 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     height: scale(30),
     width: scale(30),
-    marginTop: scale(1)
+    marginTop: scale(1),
   },
   confirmationBox: {
     position: "absolute",
+  },
+  ImageUploadIndicatorGreen: {
+    backgroundColor: "lightgreen",
+    height: 15,
+    width: 15,
+    borderRadius: 15,
+    marginLeft: scale(20),
+    marginTop: scale(19)
+  },
+  ImageUploadIndicatorRed: {
+    backgroundColor: "red",
+    height: 15,
+    width: 15,
+    borderRadius: 15,
+    marginLeft: scale(20),
+    marginTop: scale(19)
   },
 });

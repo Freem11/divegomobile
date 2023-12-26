@@ -13,44 +13,26 @@ import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function SuccessModal(props) {
+export default function FailModal(props) {
   const {
     submissionItem,
-    toggleDiveModal,
-    togglePicModal,
-    confirmationSucessClose,
-    itterator2,
-    setItterator2,
-    itterator3,
-    setItterator3,
+    confirmationFailClose,
   } = props;
 
   const [profileCloseState, setProfileCloseState] = useState(false);
 
   const tidyUp = () => {
-    if (submissionItem === "dive site") {
-      toggleDiveModal();
-      if (itterator2 > 0) {
-        setItterator2(itterator2 + 1);
-      }
-    } else if (submissionItem === "sea creature submission") {
-      togglePicModal();
-      if (itterator3 > 0) {
-        setItterator3(itterator3 + 1);
-      }
-    }
-
-    confirmationSucessClose();
+    confirmationFailClose();
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.text}>
-          Your {submissionItem} was successully submitted!
+          Your {submissionItem} cannot be completed just yet.
         </Text>
         <Text style={styles.text2}>
-          Please allow up to 24 hours for it to be reviewed and approved.
+          The Image has not yet completed processing, please wait for the indicator to turn green and try again.
         </Text>
         <View
           style={profileCloseState ? styles.OKbuttonPressed : styles.OKbutton}
@@ -85,7 +67,7 @@ export default function SuccessModal(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#99edc3",
+    backgroundColor: "pink",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: scale(15),
@@ -115,7 +97,7 @@ const styles = StyleSheet.create({
     margin: scale(35),
   },
   OKbutton: {
-    backgroundColor: "#79bace",
+    backgroundColor: "#fa8072",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
