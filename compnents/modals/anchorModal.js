@@ -33,9 +33,11 @@ import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ReverseContext } from "../contexts/reverseContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
+import { PinContext } from "../contexts/staticPinContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import email from "react-native-email";
 import PhotoBoxModel from "./photoBoxModal";
 import ImageCasher from "../helpers/imageCashing";
@@ -79,6 +81,8 @@ export default function AnchorModal(lat, lng) {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [site, setSite] = useState("");
   const [photoBoxModel, setPhotoBoxModel] = useState(false);
+  const { pinValues, setPinValues } = useContext(PinContext);
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
 
   const photoBoxModalY = useSharedValue(windowHeight);
 
@@ -88,6 +92,7 @@ export default function AnchorModal(lat, lng) {
     };
   });
 
+  
   const startPhotoBoxModalAnimations = () => {
     if (photoBoxModel) {
       photoBoxModalY.value = withTiming(0);
@@ -118,8 +123,8 @@ export default function AnchorModal(lat, lng) {
           count++;
         });
 
-        if (itterator === 11 && count > 0){
-          setItterator(itterator + 2)
+        if (itterator === 11 && count > 0) {
+          setItterator(itterator + 2);
         }
 
         // if (chapter === null){
@@ -137,7 +142,6 @@ export default function AnchorModal(lat, lng) {
         //     setItterator(itterator + 1);
         //   }
         // }
-      
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -193,7 +197,7 @@ export default function AnchorModal(lat, lng) {
 
   const handleAnchorModalClose = () => {
     if (itterator === 15) {
-      setItterator((prev) => prev + 1)
+      setItterator((prev) => prev + 1);
       setGuideModal(true);
     }
 
@@ -209,12 +213,24 @@ export default function AnchorModal(lat, lng) {
     setSiteModal(false);
   };
 
+  const handleSwitch = () => {
+    // let lati = 
+    setPinValues({
+      ...pinValues,
+      Latitude: String(selectedDiveSite.Latitude),
+      Longitude: String(selectedDiveSite.Longitude),
+    });
+    setSiteModal(false);
+    setPicAdderModal(true);
+  }
+
   const togglePhotoBoxModal = (photo) => {
     startPhotoBoxModalAnimations();
     setSelectedPhoto(photo);
     setPhotoBoxModel(!photoBoxModel);
   };
-
+  
+ 
   const [base64, setBase64] = useState(null);
   const [userN, setUserN] = useState(null);
   const [creastureN, setCreastureN] = useState(null);
@@ -298,6 +314,8 @@ export default function AnchorModal(lat, lng) {
     setBase64(null);
   }, [base64]);
 
+  const [helpButState, setHelpButState] = useState(false);
+
   return (
     <View
       style={{
@@ -315,6 +333,29 @@ export default function AnchorModal(lat, lng) {
         <View style={{ width: scale(250) }}>
           <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
           <Text style={styles.dsCredit}>Added by: {site}</Text>
+        </View>
+        <View
+          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
+        >
+          <TouchableWithoutFeedback
+            // disabled={isDisabled}
+            onPress={handleSwitch}
+            onPressIn={() => setHelpButState(true)}
+            onPressOut={() => setHelpButState(false)}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: scale(20),
+              height: scale(20),
+            }}
+          >
+            <FontAwesome5
+              name="plus"
+              color="gold"
+              size={scale(18)}
+              style={{ zIndex: -1 }}
+            />
+          </TouchableWithoutFeedback>
         </View>
 
         <TouchableWithoutFeedback
@@ -392,9 +433,40 @@ export default function AnchorModal(lat, lng) {
               );
             })}
           {anchorPics.length === 0 && (
-            <Text style={styles.noSightings}>
-              No Sightings At This Site Yet!
-            </Text>
+            <View>
+              <Text style={styles.noSightings}>
+                No Sightings At This Site Yet!
+              </Text>
+              <Text style={styles.noSightings2}>
+                Be the first to add one here.
+              </Text>
+
+              <TouchableWithoutFeedback
+                onPress={() => handleSwitch()}
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: scale(32),
+                  height: scale(32),
+                  borderRadius: scale(32),
+                  backgroundColor: "black"
+                }}
+              >
+                <View
+                  style={{
+                    borderRadius: scale(32),
+                    backgroundColor: "palegreen",
+                    width: scale(38),
+                    height: scale(38),
+                    alignSelf: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FontAwesome5 name="plus" color={"black"} size={scale(32)} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
           )}
         </View>
       </ScrollView>
@@ -470,6 +542,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     marginTop: "40%",
+    fontFamily: "Itim_400Regular",
+    fontSize: scale(18),
+    color: "#F0EEEB",
+    // backgroundColor: "green"
+  },
+  noSightings2: {
+    flex: 1,
+    width: "60%",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    marginTop: "-6%",
     fontFamily: "Itim_400Regular",
     fontSize: scale(18),
     color: "#F0EEEB",
@@ -584,5 +668,29 @@ const styles = StyleSheet.create({
     zIndex: 55,
     left: 0,
     backgroundColor: "green",
+  },
+  helpButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(15),
+    marginLeft: scale(-50),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    paddingTop: scale(2),
+  },
+  helpButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(15),
+    marginLeft: scale(-50),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    paddingTop: scale(2),
   },
 });
