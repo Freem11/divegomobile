@@ -37,7 +37,7 @@ import {
   LoginManager,
 } from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
-
+import { Buffer } from "buffer";
 Settings.initializeSDK();
 
 let emailVar = false;
@@ -93,6 +93,14 @@ export default function SignInRoute() {
     checkApple();
   }, []);
 
+  function parseJwt(token) {
+    var base64Url = token.split(".")[1];
+    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    var jsonPayload = Buffer.from(base64, 'base64').toString('ascii')
+    console.log("basic", jsonPayload)
+    return JSON.parse(jsonPayload);
+  }
+
   const getAppleAuth = () => {
     return (
       <AppleAuthentication.AppleAuthenticationButton
@@ -115,6 +123,7 @@ export default function SignInRoute() {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
+      const decoded = parseJwt(creds.identityToken);
       if (
         (creds.email !== null) &
         (creds.fullName.familyName !== null) &
@@ -125,18 +134,23 @@ export default function SignInRoute() {
           email: creds.email,
           id: creds.user,
         };
-        await AsyncStorage.setItem("appleCreds", JSON.stringify(appleObject));
+        // await AsyncStorage.setItem("appleCreds", JSON.stringify(appleObject));
         handleOAuthSubmit(appleObject);
         setIsSignedIn(false);
       } else {
-        let reUsedApple = JSON.parse(await AsyncStorage.getItem("appleCreds"));
-        if (reUsedApple && reUsedApple.id === creds.user) {
-          handleOAuthSubmit(reUsedApple);
-          setIsSignedIn(false);
-        } else {
-          setIsSignedIn(false);
-          setLoginFail("Invalid Credentials (email and name required for sign in)");
-        }
+        let reUsedApple = {
+          email: decoded.email,
+          id: decoded.sub,
+        };
+        handleOAuthSubmit(reUsedApple);
+        // let reUsedApple = JSON.parse(await AsyncStorage.getItem("appleCreds"));
+        // if (reUsedApple && reUsedApple.email === decoded.email) {
+        //   handleOAuthSubmit(reUsedApple);
+        //   setIsSignedIn(false);
+        // } else {
+        //   setIsSignedIn(false);
+        //   setLoginFail("Invalid Credentials (email and name required for sign in)");
+        // }
       }
 
     } catch (e) {
@@ -208,6 +222,7 @@ export default function SignInRoute() {
     let Fname;
     let Lname;
     let Pword;
+    let MailE = user.email;
 
     if (user.name) {
       Fname = user.name.split(" ").slice(0, 1);
@@ -219,8 +234,6 @@ export default function SignInRoute() {
     } else if (user.id) {
       Pword = user.id;
     }
-
-    let MailE = user.email;
 
     let accessToken = await OAuthSignIn({
       password: Pword,
