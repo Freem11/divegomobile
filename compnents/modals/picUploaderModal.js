@@ -441,7 +441,6 @@ export default function PicUploadModal() {
         return;
       } else {
         setPicAdderModal(!picAdderModal);
-
         if (pinValues.PicFile !== null) {
           removePhoto({
             filePath:
@@ -466,7 +465,15 @@ export default function PicUploadModal() {
       }
     } else {
       setPicAdderModal(!picAdderModal);
-
+      failBoxY.value = withTiming(scale(1200));
+      successBoxY.value = withTiming(scale(1200));
+      SetFormValidation({
+        PictureVal: false,
+        DateVal: false,
+        AnimalVal: false,
+        LatVal: false,
+        LngVal: false,
+      });
       if (pinValues.PicFile !== null) {
         removePhoto({
           filePath:

@@ -25,6 +25,13 @@ export default function FailModal(props) {
     confirmationFailClose();
   };
 
+  let blurb;
+  if (submissionItem === "sea creature submission"){
+      blurb = "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again."
+  } else if (submissionItem === "dive site"){
+      blurb = "You dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit."
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -32,7 +39,7 @@ export default function FailModal(props) {
           Your {submissionItem} cannot be completed just yet.
         </Text>
         <Text style={styles.text2}>
-          The Image has not yet completed processing, please wait for the indicator to turn green and try again.
+          {blurb}
         </Text>
         <View
           style={profileCloseState ? styles.OKbuttonPressed : styles.OKbutton}

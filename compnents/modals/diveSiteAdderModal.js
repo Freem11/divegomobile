@@ -32,6 +32,7 @@ import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import SuccessModal from "./confirmationSuccessModal";
+import FailModal from "./confirmationCautionModal";
 
 let SiteNameVar = false;
 let LatVar = false;
@@ -54,6 +55,9 @@ export default function DiveSiteModal() {
   const [diveCloseState, setDiveCloseState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const [indicatorState, setIndicatorState] = useState(false);
+
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
@@ -259,6 +263,7 @@ export default function DiveSiteModal() {
       addSiteVals.Longitude == "" ||
       isNaN(addSiteVals.Longitude)
     ) {
+      failBoxY.value = withTiming(scale(-50));
       return;
     } else {
       if (tutorialRunning) {
@@ -298,7 +303,13 @@ export default function DiveSiteModal() {
       }
     } else {
       setDiveSiteAdderModal(!diveSiteAdderModal);
-
+      failBoxY.value = withTiming(scale(1200));
+      successBoxY.value = withTiming(scale(1200)); 
+      SetFormValidation({
+        SiteNameVal: false,
+        LatVal: false,
+        LngVal: false,
+      });
       if (diveSiteAdderModal) {
         setAddSiteVals({
           ...addSiteVals,
@@ -324,6 +335,7 @@ export default function DiveSiteModal() {
   const [helpButState, setHelpButState] = useState(false);
 
   const successBoxY = useSharedValue(scale(1200));
+  const failBoxY = useSharedValue(scale(1200));
 
   const sucessModalSlide = useAnimatedStyle(() => {
     return {
@@ -331,9 +343,31 @@ export default function DiveSiteModal() {
     };
   });
 
-  const confirmationClose = () => {
+  const cautionModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: failBoxY.value }],
+    };
+  });
+
+  const confirmationSucessClose = () => {
     successBoxY.value = withTiming(scale(1200));
   };
+
+  const confirmationFailClose = () => {
+    failBoxY.value = withTiming(scale(1200));
+  };
+
+  useEffect(() => {
+    if (
+      addSiteVals.Site === "" ||
+      addSiteVals.Latitude === "" ||
+      addSiteVals.Longitude === ""
+    ) {
+      setIndicatorState(false);
+    } else {
+      setIndicatorState(true);
+    }
+  }, [addSiteVals]);
 
   return (
     <View style={styles.container}>
@@ -510,6 +544,14 @@ export default function DiveSiteModal() {
             />
           </TouchableOpacity>
         </View>
+
+        <View
+          style={
+            indicatorState
+              ? styles.ImageUploadIndicatorGreen
+              : styles.ImageUploadIndicatorRed
+          }
+        ></View>
       </View>
 
       <View
@@ -547,10 +589,17 @@ export default function DiveSiteModal() {
         <SuccessModal
           submissionItem="dive site"
           toggleDiveModal={toggleDiveModal}
-          confirmationClose={confirmationClose}
+          confirmationSucessClose={confirmationSucessClose}
           itterator2={itterator2}
           setItterator2={setItterator2}
         ></SuccessModal>
+      </Animated.View>
+
+      <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+        <FailModal
+          submissionItem="dive site"
+          confirmationFailClose={confirmationFailClose}
+        ></FailModal>
       </Animated.View>
     </View>
   );
@@ -616,6 +665,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
+    marginLeft: scale(-20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -634,6 +684,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
+    marginLeft: scale(-20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -731,6 +782,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
+    marginLeft: scale(20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -749,6 +801,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
+    marginLeft: scale(20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -785,5 +838,23 @@ const styles = StyleSheet.create({
   },
   confirmationBox: {
     position: "absolute",
+  },
+  ImageUploadIndicatorGreen: {
+    backgroundColor: "lightgreen",
+    height: 15,
+    width: 15,
+    borderRadius: 15,
+    marginLeft: scale(20),
+    marginRight: scale(10),
+    marginTop: scale(0)
+  },
+  ImageUploadIndicatorRed: {
+    backgroundColor: "red",
+    height: 15,
+    width: 15,
+    borderRadius: 15,
+    marginLeft: scale(20),
+    marginRight: scale(10),
+    marginTop: scale(0)
   },
 });
