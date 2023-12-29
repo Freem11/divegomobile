@@ -39,9 +39,9 @@ export default function DiveSiteAutoComplete(props) {
     diveSiteArray = []
 
     if (boundaries.length > 0 ){
-      diveSiteData = await diveSites({minLat, maxLat, minLng, maxLng});
+      diveSiteData = await diveSites({minLat, maxLat, minLng, maxLng},"");
     }
-   
+
     if (diveSiteData){
     diveSiteData.forEach((diveSite) => {
       if (!diveSiteArray.includes(diveSite.name)){
@@ -68,7 +68,7 @@ export default function DiveSiteAutoComplete(props) {
       let minLng2 = boundaries[0] 
       let maxLng2 = boundaries[2]
 
-      let diveSiteSet = await diveSites({minLat: minLat2, maxLat: maxLat2, minLng: minLng2, maxLng: maxLng2});
+      let diveSiteSet = await diveSites({minLat: minLat2, maxLat: maxLat2, minLng: minLng2, maxLng: maxLng2},"");
 
       if(diveSiteSet){
        
