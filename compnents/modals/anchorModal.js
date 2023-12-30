@@ -39,10 +39,10 @@ import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import email from "react-native-email";
-import PhotoBoxModel from "./photoBoxModal";
 import ImageCasher from "../helpers/imageCashing";
 import ImgToBase64 from "react-native-image-base64";
 import config from "../../config";
+import Picture from "./picture";
 
 let IPSetter = 2;
 let IP;
@@ -63,7 +63,8 @@ let filePath = `/Users/matthewfreeman/divego/wetmap/src/components/uploads/`;
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function AnchorModal(lat, lng) {
+export default function AnchorModal(props) {
+  const {lat, lng, setSelectedPhoto, setPhotoBoxModel } = props
   const { sliderVal } = useContext(SliderContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
@@ -78,28 +79,9 @@ export default function AnchorModal(lat, lng) {
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [site, setSite] = useState("");
-  const [photoBoxModel, setPhotoBoxModel] = useState(false);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-
-  const photoBoxModalY = useSharedValue(windowHeight);
-
-  const photoBoxModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: photoBoxModalY.value }],
-    };
-  });
-
-  
-  const startPhotoBoxModalAnimations = () => {
-    if (photoBoxModel) {
-      photoBoxModalY.value = withTiming(0);
-    } else {
-      photoBoxModalY.value = withTiming(windowHeight);
-    }
-  };
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -227,9 +209,8 @@ export default function AnchorModal(lat, lng) {
   }
 
   const togglePhotoBoxModal = (photo) => {
-    startPhotoBoxModalAnimations();
     setSelectedPhoto(photo);
-    setPhotoBoxModel(!photoBoxModel);
+    setPhotoBoxModel(true);
   };
   
  
@@ -321,7 +302,9 @@ export default function AnchorModal(lat, lng) {
   return (
     <View
       style={{
-        height: "96%",
+        height: "98%",
+        // backgroundColor: "orange",
+        overflow: "hidden"
       }}
     >
       <View style={styles.titleAlt}>
@@ -376,61 +359,16 @@ export default function AnchorModal(lat, lng) {
         </TouchableWithoutFeedback>
       </View>
 
-      <ScrollView style={{ marginTop: "0%", height: "100%", borderRadius: 15 }}>
+      <ScrollView style={{ marginTop: "0%", width: "100%", borderRadius: 15 }}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {
               return (
-                <View key={pic.id} style={styles.picContainer3}>
-                  <View style={styles.micro}>
-                    <FontAwesome
-                      name="share"
-                      color="white"
-                      size={scale(19)}
-                      onPress={() =>
-                        onShare(
-                          pic.photoFile,
-                          pic.userName,
-                          pic.label,
-                          pic.dateTaken,
-                          pic.latitude,
-                          pic.longitude
-                        )
-                      }
-                      style={styles.share}
-                    />
-                    <FontAwesome
-                      name="flag"
-                      color="maroon"
-                      size={scale(19)}
-                      onPress={() => handleEmail(pic)}
-                      style={styles.flag}
-                    />
-                    <Text style={styles.titleText}>{pic.label}</Text>
-                  </View>
-                  <TouchableWithoutFeedback
-                    onPress={() => togglePhotoBoxModal(pic.photoFile)}
-                  >
-                    <View style={styles.shadowbox}>
-                      <ImageCasher
-                        photoFile={pic.photoFile}
-                        id={pic.id}
-                        anchorPics={anchorPics}
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          borderRadius: 15,
-                          borderColor: "grey",
-                        }}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <View style={styles.microLow}>
-                    <Text style={styles.titleTextLow}>
-                      Added by: {pic.userName}
-                    </Text>
-                  </View>
+                <TouchableWithoutFeedback key={pic.id} onPress={() => togglePhotoBoxModal(pic.photoFile)}>
+                <View style={styles.shadowbox}>
+                <Picture key={pic.id} pic={pic}></Picture>
                 </View>
+                </TouchableWithoutFeedback>
               );
             })}
           {anchorPics.length === 0 && (
@@ -472,12 +410,6 @@ export default function AnchorModal(lat, lng) {
         </View>
       </ScrollView>
 
-      <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
-        <PhotoBoxModel
-          picData={selectedPhoto}
-          togglePhotoBoxModal={togglePhotoBoxModal}
-        />
-      </Animated.View>
     </View>
   );
 }
@@ -485,25 +417,28 @@ export default function AnchorModal(lat, lng) {
 const styles = StyleSheet.create({
   container3: {
     // flex: 1,
-    backgroundColor: "transparent",
+    // backgroundColor: "blue",
     alignItems: "center",
-    marginTop: "-3%",
-    height: "100%",
+    // marginTop: "-3%",
+    // height: "100%",
+    width: scale(300),
     marginRight: scale(10),
     marginLeft: scale(10),
-    marginBottom: scale(16),
+    // marginBottom: scale(16),
     borderRadius: 15,
     // backgroundColor: "green"
   },
   picContainer3: {
-    width: scale(300),
-    height: scale(200),
+    width: "100%",
+    // height: scale(200),
     marginBottom: scale(5),
+    // backgroundColor: "pink",
     backgroundColor: "538bdb",
-    marginTop: "-0%",
+    // marginTop: "-0%",
     borderRadius: 15,
   },
   shadowbox: {
+    flex: 1,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -661,14 +596,6 @@ const styles = StyleSheet.create({
     marginLeft: "-4%",
     backgroundColor: "lightgrey",
     opacity: 0.3,
-  },
-  photoBoxModal: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    zIndex: 55,
-    left: 0,
-    backgroundColor: "green",
   },
   helpButton: {
     backgroundColor: "#538bdb",

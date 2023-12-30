@@ -363,34 +363,20 @@ export default function PicUploadModal() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        setUploadedFile(image.assets[0].uri);
-        setIsLoading(false);
-        let fileToUpload = createFile(image.assets[0].uri);
-        const data = new FormData();
-        data.append("image", fileToUpload);
-
+        //scrape off photo info 
+        let formattedDate = pinValues.PicDate;
+        let newLatitude = pinValues.Latitude;
+        let newLongitude = pinValues.Longitude;
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
-        uploadphoto(data, fileName);
-
-        let formattedDate;
-        let newLatitude;
-        let newLongitude;
-
         if (image.assets[0].exif.DateTimeOriginal) {
           formattedDate = formatDate(image.assets[0].exif.DateTimeOriginal);
-          DateVar = false;
-        } else {
-          formattedDate = pinValues.PicDate;
         }
 
         if (image.assets[0].exif.GPSLatitude) {
           newLatitude = image.assets[0].exif.GPSLatitude.toString();
           newLongitude = image.assets[0].exif.GPSLongitude.toString();
-        } else {
-          newLatitude = pinValues.Latitude;
-          newLongitude = pinValues.Longitude;
         }
 
         setPinValues({
@@ -401,6 +387,15 @@ export default function PicUploadModal() {
           Longitude: newLongitude,
         });
 
+        //create new photo file and upload 
+        setUploadedFile(image.assets[0].uri);
+        setIsLoading(false);
+        let fileToUpload = createFile(image.assets[0].uri);
+        const data = new FormData();
+        data.append("image", fileToUpload);
+        uploadphoto(data, fileName);
+
+        DateVar = false;
         AnimalVar = false;
         LngVar = false;
         LatVar = false;

@@ -69,6 +69,7 @@ import Animated, {
 } from "react-native-reanimated";
 import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
+import PhotoBoxModel from "./modals/photoBoxModal";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
 import IntroTutorial from "./tutorial/introTutorial";
@@ -89,7 +90,7 @@ export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -227,6 +228,27 @@ export default function MapPage() {
     }
     // setChapter(null)
   }, [siteModal]);
+
+  //PhotoBox Modal Animation
+  const photoBoxModalY = useSharedValue(windowHeight);
+  const [photoBoxModel, setPhotoBoxModel] = useState(false);
+  const photoBoxModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: photoBoxModalY.value }],
+    };
+  });
+
+  const startPhotoBoxModalAnimations = () => {
+    if (photoBoxModel) {
+      photoBoxModalY.value = withTiming(-windowHeight);
+    } else {
+      photoBoxModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startPhotoBoxModalAnimations();
+  }, [photoBoxModel]);
 
   //Dive Site Modal Animation
   const diveSiteModalY = useSharedValue(windowHeight);
@@ -561,15 +583,12 @@ export default function MapPage() {
               updateProfileFeeback(success[0]);
             }, 180000);
           }
-
         }
       } catch (e) {
         console.log({ title: "Error", message: "e.message" });
       }
     };
     getProfile();
-
- 
   }, []);
 
   useEffect(() => {
@@ -706,8 +725,18 @@ export default function MapPage() {
               <AnchorModal
                 anchorModalY={anchorModalY}
                 SiteName={selectedDiveSite.SiteName}
+                setSelectedPhoto={setSelectedPhoto}
+                setPhotoBoxModel={setPhotoBoxModel}
                 Lat={selectedDiveSite.Latitude}
                 Lng={selectedDiveSite.Longitude}
+              />
+            </Animated.View>
+
+              <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
+              <PhotoBoxModel
+                picData={selectedPhoto}
+                photoBoxModel={photoBoxModel}
+                setPhotoBoxModel={setPhotoBoxModel}
               />
             </Animated.View>
 
@@ -971,5 +1000,15 @@ const styles = StyleSheet.create({
     marginRight: 15,
     marginLeft: 14,
     paddingLeft: 50,
+  },
+  photoBoxModal: {
+    position: "absolute",
+    height: windowHeight,
+    width: windowWidth,
+    zIndex: 55,
+    left: "5%",
+    top: windowHeight,
+    marginTop: "10%",
+    backgroundColor: "green",
   },
 });

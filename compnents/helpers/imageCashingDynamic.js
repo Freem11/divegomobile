@@ -7,7 +7,7 @@ import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 
-export default function ImageCasher(Props) {
+export default function ImageCasherDynamic(Props) {
   const { photoFile, id, style, anchorPics } = Props;
   const { areaPics } = useContext(AreaPicsContext);
   const { siteModal } = useContext(AnchorModalContext);
@@ -96,6 +96,14 @@ export default function ImageCasher(Props) {
     loadImage();
   }, []);
 
+  if (picUri){
+    Image.getSize(picUri, (width, height) => {
+      let ratio = height/width
+      setPicWidth(scale(300))
+      setPicHeigth(scale(300)* ratio)
+    })
+  }
+ 
   // useEffect(() => {
   //   async function loadImage() {
   //     // console.log("triggered?")
@@ -119,7 +127,7 @@ export default function ImageCasher(Props) {
   //   loadImage();
   // }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
 
-  if(picUri) {return <Image source={{ uri: picUri }} style={{ ...style }}></Image>  }
+  if(picUri) {return <Image source={{ uri: picUri }} style={{ ...style, height: picHeigth, width: picWidth }}></Image>  }
  
 }
 
