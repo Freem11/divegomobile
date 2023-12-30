@@ -144,6 +144,9 @@ export default function Picture(props) {
           // backgroundColor: "pink",
         }}
       />
+      <View style={styles.microLow}>
+      <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
+      </View>
     </View>
   );
 }
@@ -183,11 +186,41 @@ const styles = StyleSheet.create({
     width: "120%",
     borderRadius: 5,
     zIndex: 2,
-    left: "4%",
+    left: scale(8),
     top: Platform.OS === "ios" ? "8%" : "9%",
   },
   flag: {
     left: scale(237),
     top: scale(1),
+  },
+  microLow: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    position: "absolute",
+    backgroundColor: "black",
+    height: scale(18),
+    opacity: 0.6,
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    padding: 1,
+    paddingLeft: 6,
+    paddingRight: 7,
+    zIndex: 2,
+    right: "3%",
+    bottom: Platform.OS === "ios" ? "2%" : "2%",
+    borderRadius: 5
+  }, 
+  microLow2: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    opacity: 1,
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    zIndex: 2,
   },
 });
