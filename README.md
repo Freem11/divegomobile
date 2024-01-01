@@ -71,8 +71,8 @@ Automated animal ID from photo machine learning
 
 
 # ScreenShots
-!["Screenshot of Sign In Screen"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/shots1.png)
-!["Screenshot of Main Map"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/shots2.png)
+!["Screenshot of Sign In Screen"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/shots2.png)
+!["Screenshot of Main Map"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/shots1.png)
 <!-- !["Screenshot of Dive Site Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/DiveSiteSubmit.png)
 !["Screenshot of Photo Upload Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/PhotoSubmit.png)
 !["Screenshot of Site Photos"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/AnchorPhotos.png)
