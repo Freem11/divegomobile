@@ -992,6 +992,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
     width: 350,
+    height: 35
   },
   feedRequest: {
     color: "white",

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import email from "react-native-email";
@@ -200,17 +200,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     backgroundColor: "black",
-    height: scale(18),
+    height: moderateScale(18),
     opacity: 0.6,
     color: "white",
     fontFamily: "Itim_400Regular",
     padding: 1,
-    paddingLeft: 6,
-    paddingRight: 7,
+    paddingLeft: scale(6),
+    paddingRight: scale(7),
     zIndex: 2,
     right: "3%",
     bottom: Platform.OS === "ios" ? "2%" : "2%",
-    borderRadius: 5
+    borderRadius: scale(5)
   }, 
   microLow2: {
     display: "flex",

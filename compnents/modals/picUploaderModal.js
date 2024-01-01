@@ -35,7 +35,7 @@ import { uploadphoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import { removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale} from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
@@ -1301,18 +1301,18 @@ const styles = StyleSheet.create({
   },
   ImageUploadIndicatorGreen: {
     backgroundColor: "lightgreen",
-    height: 15,
-    width: 15,
-    borderRadius: 15,
-    marginLeft: scale(20),
-    marginTop: scale(19)
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: 20,
+    marginTop: scale(20),
   },
   ImageUploadIndicatorRed: {
     backgroundColor: "red",
-    height: 15,
-    width: 15,
-    borderRadius: 15,
-    marginLeft: scale(20),
-    marginTop: scale(19)
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: 20,
+    marginTop: scale(20),
   },
 });

@@ -22,7 +22,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import InsetShadow from "react-native-inset-shadow";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
@@ -665,7 +665,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
-    marginLeft: scale(-20),
+    marginLeft: -20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -684,7 +684,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
-    marginLeft: scale(-20),
+    marginLeft: -20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -769,7 +769,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginLeft: "10%",
+    marginLeft: 20,
     marginTop: 35,
     width: 140,
     // backgroundColor: "pink"
@@ -782,7 +782,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
-    marginLeft: scale(20),
+    marginLeft: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -801,7 +801,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 40,
     width: 40,
-    marginLeft: scale(20),
+    marginLeft: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -841,20 +841,18 @@ const styles = StyleSheet.create({
   },
   ImageUploadIndicatorGreen: {
     backgroundColor: "lightgreen",
-    height: 15,
-    width: 15,
-    borderRadius: 15,
-    marginLeft: scale(20),
-    marginRight: scale(10),
-    marginTop: scale(0)
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: 20,
+    marginTop: scale(-2),
   },
   ImageUploadIndicatorRed: {
     backgroundColor: "red",
-    height: 15,
-    width: 15,
-    borderRadius: 15,
-    marginLeft: scale(20),
-    marginRight: scale(10),
-    marginTop: scale(0)
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: 20,
+    marginTop: scale(-2),
   },
 });
