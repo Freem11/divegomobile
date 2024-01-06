@@ -2,9 +2,13 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
+import * as FileSystem from "expo-file-system";
+import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
+import config from "../../config";
 
 export default function Picture(props) {
   const { pic } = props;
@@ -26,6 +30,7 @@ export default function Picture(props) {
   const [creastureN, setCreastureN] = useState(null);
   const [photoDate, setPhotoDate] = useState(null);
   const [mapLocal, setMapLocal] = useState(null);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   const convertBase64 = (cacheDir) => {
     ImgToBase64.getBase64String(cacheDir)
@@ -176,6 +181,7 @@ const styles = StyleSheet.create({
     left: scale(232),
     top: scale(1),
     opacity: 0.8,
+    zIndex: 2
   },
   micro: {
     flex: 1,
@@ -192,6 +198,7 @@ const styles = StyleSheet.create({
   flag: {
     left: scale(237),
     top: scale(1),
+    zIndex: 2
   },
   microLow: {
     display: "flex",

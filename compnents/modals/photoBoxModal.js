@@ -14,12 +14,12 @@ import Animated, {
   withDelay,
   Easing,
 } from "react-native-reanimated";
+import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
-import * as FileSystem from "expo-file-system";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -295,8 +295,8 @@ const styles = StyleSheet.create({
   },
   title: {
     position: "absolute",
-    top: "6%",
-    left: "60%",
+    top: "12%",
+    left: "62%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -313,16 +313,17 @@ const styles = StyleSheet.create({
     borderRadius: scale(42 / 2),
     height: scale(30),
     width: scale(30),
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    borderBottomColor: "pink",
+    justifyContent: "center",
+    alignItems: "center",
   },
   closeButtonPressed: {
     position: "relative",
     borderRadius: scale(42 / 2),
     height: scale(30),
     width: scale(30),
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "lightgrey",
     opacity: 0.3,
   },
