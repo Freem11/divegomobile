@@ -31,8 +31,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
-import { uploadphoto } from "../../supabaseCalls/uploadSupabaseCalls";
-import { removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
+// import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
+import { uploadphoto, removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { scale, moderateScale} from "react-native-size-matters";
@@ -355,7 +355,7 @@ export default function PicUploadModal() {
     if (pinValues.PicFile !== null) {
       removePhoto({
         filePath:
-          "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+        `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
         fileName: `${pinValues.PicFile}`,
       });
     }
@@ -386,14 +386,14 @@ export default function PicUploadModal() {
           Latitude: newLatitude,
           Longitude: newLongitude,
         });
-
+        
         //create new photo file and upload 
         setUploadedFile(image.assets[0].uri);
         setIsLoading(false);
         let fileToUpload = createFile(image.assets[0].uri);
         const data = new FormData();
         data.append("image", fileToUpload);
-        uploadphoto(data, fileName);
+        uploadphoto(image.assets[0], fileName);
 
         DateVar = false;
         AnimalVar = false;
@@ -439,8 +439,8 @@ export default function PicUploadModal() {
         if (pinValues.PicFile !== null) {
           removePhoto({
             filePath:
-              "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
-            fileName: pinValues.PicFile,
+            `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+            fileName: `${pinValues.PicFile}`,
           });
         }
 
@@ -472,8 +472,8 @@ export default function PicUploadModal() {
       if (pinValues.PicFile !== null) {
         removePhoto({
           filePath:
-            "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
-          fileName: pinValues.PicFile,
+          `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+          fileName: `${pinValues.PicFile}`,
         });
       }
 
@@ -722,7 +722,8 @@ export default function PicUploadModal() {
                 style={formValidation.LatVal ? styles.inputRed : styles.input}
                 value={pinValues.Latitude}
                 placeholder={"Latitude"}
-                editable={false}
+                keyboardType="numbers-and-punctuation"
+                // editable={false}
                 placeholderTextColor="darkgrey"
                 fontSize={16}
                 color="#F0EEEB"
@@ -748,7 +749,8 @@ export default function PicUploadModal() {
                 style={formValidation.LngVal ? styles.inputRed : styles.input}
                 value={pinValues.Longitude}
                 placeholder={"Longitude"}
-                editable={false}
+                keyboardType="numbers-and-punctuation"
+                // editable={false}
                 placeholderTextColor="darkgrey"
                 fontSize={16}
                 color="#F0EEEB"

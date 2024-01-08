@@ -15,14 +15,17 @@ export default function ImageCasherDynamic(Props) {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   let fileName = photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
+  let photoName =  photoFile.split('/').pop();
 
   let image = {
-    uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${photoFile}`,
+    uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`,
+    // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${photoFile}`,
     id : fileName
   };
 
   let test = {
-    uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/MantaWhite.jpg`,
+    uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/MantaWhite.jpg`,
+    // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/MantaWhite.jpg`,
   };
 
   const [picUri, setPicUri] = useState(null);

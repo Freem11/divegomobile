@@ -25,7 +25,10 @@
         "ANDROID_HOME": "/Users/matthewfreeman/Library/Android/sdk",
         "ANDROID_CLIENT_ID_2": "498754860675-cvqvd5ekfvgcqdjcalu7h8u04url84i7.apps.googleusercontent.com",
         "ANDROID_CLIENT_ID_3": "498754860675-99g71935k8idcmvqup3o24olade6j1mu.apps.googleusercontent.com",
-        "ANDROID_CLIENT_ID_4": "498754860675-kqdq5e0u58rlh93m8p8bnsgkv3suevbl.apps.googleusercontent.com"
+        "ANDROID_CLIENT_ID_4": "498754860675-kqdq5e0u58rlh93m8p8bnsgkv3suevbl.apps.googleusercontent.com",
+        "AWS_R2_ACCESS_KEY_ID":"b75fc20106366e1d8eb6d17c566274d2",
+        "AWS_R2_SECRET_KEY":"8c267662180254cc4fe91eff8e56ae69d15d7059023f38302a77fa27971e3bf5",
+        "AWS_R2_ACCOUNT_ID":"bca075819c975f1f381667bcdff15b92"
       }
     },
     "preview": {
@@ -46,7 +49,10 @@
         "ANDROID_HOME": "/Users/matthewfreeman/Library/Android/sdk",
         "ANDROID_CLIENT_ID_2": "498754860675-cvqvd5ekfvgcqdjcalu7h8u04url84i7.apps.googleusercontent.com",
         "ANDROID_CLIENT_ID_3": "498754860675-99g71935k8idcmvqup3o24olade6j1mu.apps.googleusercontent.com",
-        "ANDROID_CLIENT_ID_4": "498754860675-kqdq5e0u58rlh93m8p8bnsgkv3suevbl.apps.googleusercontent.com"
+        "ANDROID_CLIENT_ID_4": "498754860675-kqdq5e0u58rlh93m8p8bnsgkv3suevbl.apps.googleusercontent.com",
+        "AWS_R2_ACCESS_KEY_ID":"b75fc20106366e1d8eb6d17c566274d2",
+        "AWS_R2_SECRET_KEY":"8c267662180254cc4fe91eff8e56ae69d15d7059023f38302a77fa27971e3bf5",
+        "AWS_R2_ACCOUNT_ID":"bca075819c975f1f381667bcdff15b92"
       }
     },
     "production": {
@@ -62,7 +68,10 @@
         "ANDROID_HOME": "/Users/matthewfreeman/Library/Android/sdk",
         "ANDROID_CLIENT_ID_2": "498754860675-cvqvd5ekfvgcqdjcalu7h8u04url84i7.apps.googleusercontent.com",
         "ANDROID_CLIENT_ID_3": "498754860675-99g71935k8idcmvqup3o24olade6j1mu.apps.googleusercontent.com",
-        "ANDROID_CLIENT_ID_4": "498754860675-kqdq5e0u58rlh93m8p8bnsgkv3suevbl.apps.googleusercontent.com"
+        "ANDROID_CLIENT_ID_4": "498754860675-kqdq5e0u58rlh93m8p8bnsgkv3suevbl.apps.googleusercontent.com",
+        "AWS_R2_ACCESS_KEY_ID":"b75fc20106366e1d8eb6d17c566274d2",
+        "AWS_R2_SECRET_KEY":"8c267662180254cc4fe91eff8e56ae69d15d7059023f38302a77fa27971e3bf5",
+        "AWS_R2_ACCOUNT_ID":"bca075819c975f1f381667bcdff15b92"
       }
     }
   },

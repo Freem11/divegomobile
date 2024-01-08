@@ -6,7 +6,7 @@ function formatDate(dateTaken) {
   return formattedDate;
 }
 
-function createFile(dateTaken) {
+function createFile(dateTaken, fileSize) {
 
  
     let fileName = dateTaken.substring(
@@ -18,6 +18,7 @@ function createFile(dateTaken) {
         uri: dateTaken,
         name: fileName,
         type: "image/jpg",
+        fileSize: fileSize,
       };
       return fileToUpload
 }
