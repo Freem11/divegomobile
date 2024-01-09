@@ -18,6 +18,7 @@ export const uploadphoto = async (file, fileName) => {
         "Bucket": "scubaseasons",
         "Key": fileName,
         "ContentType": "image/jpeg",
+        // "Content-Length": fileSize
     }
 
     const command = new PutObjectCommand(input)
@@ -34,21 +35,23 @@ export const uploadphoto = async (file, fileName) => {
 
     let shortPath = values.fileName.split('/').pop();
 
-    const input = {
-        "Bucket": "scubaseasons",
-        "Key": shortPath
-    }
-
-    const command = new DeleteObjectCommand(input)
-    const response = await aws3.send(command)
-   
-    // if (error) {
-    //   console.log("couldn't upload,", error);
-    // }
-  
-    if (response) {
-        // console.log("cloudFlare", response)
-        console.log(`Deletion of photo: ${shortPath} was sucessful`)
+    if(shortPath){
+        const input = {
+            "Bucket": "scubaseasons",
+            "Key": shortPath
+        }
+    
+        const command = new DeleteObjectCommand(input)
+        const response = await aws3.send(command)
+       
+        // if (error) {
+        //   console.log("couldn't upload,", error);
+        // }
+      
+        if (response) {
+            // console.log("cloudFlare", response)
+            console.log(`Deletion of photo: ${shortPath} was sucessful`)
+        }
     }
 
     };

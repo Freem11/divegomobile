@@ -390,10 +390,9 @@ export default function PicUploadModal() {
         //create new photo file and upload 
         setUploadedFile(image.assets[0].uri);
         setIsLoading(false);
-        let fileToUpload = createFile(image.assets[0].uri);
-        const data = new FormData();
-        data.append("image", fileToUpload);
-        uploadphoto(image.assets[0], fileName);
+        let picture = await fetch(image.assets[0].uri)
+        picture = await picture.blob()
+        uploadphoto(picture, fileName);
 
         DateVar = false;
         AnimalVar = false;
