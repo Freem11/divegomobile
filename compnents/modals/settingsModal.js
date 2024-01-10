@@ -241,7 +241,7 @@ export default function SettingsModal() {
             disabled={dangerZoneEnabled}
             onPressIn={() => setDangerButState(true)}
             onPressOut={() => setDangerButState(false)}
-            onLongPress={alertHandler}
+            onPress={alertHandler}
           >
             <View
               style={
