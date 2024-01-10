@@ -106,7 +106,7 @@ export default function UserNamer() {
           placeholder={"User Name"}
           fontSize={16}
           placeholderTextColor="darkgrey"
-          color="#F0EEEB"
+          color={formValidation.userName ? "black" : "#F0EEEB"}
           onChangeText={(InputText) =>
             setFormVal({ ...formVal, userName: InputText })
           }

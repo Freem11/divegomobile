@@ -634,6 +634,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
     alignSelf: "center",
+    marginTop: 2,
     marginBottom: 20,
     textAlign: "center",
     // overflow: "hidden",

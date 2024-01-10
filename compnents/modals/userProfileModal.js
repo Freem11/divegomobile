@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
     textAlign: "center",
-    verticalAlign: "center",
+    verticalAlign: "middle",
     alignSelf: "center",
     marginTop: 3,
     marginBottom: 20,
