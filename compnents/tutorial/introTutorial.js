@@ -420,7 +420,7 @@ export default function IntroTutorial() {
         setItterator((prev) => prev + 1);
         return;
       }
-      userBoxX.value = withSpring(windowWidth * 0.2);
+      userBoxX.value = withSpring(windowWidth*0.18);
       // startUserBoxAnimation();
     }
 
@@ -1066,7 +1066,7 @@ const styles = StyleSheet.create({
   },
   userContainer: {
     position: "absolute",
-    top: Platform.OS === "ios" ? "20%" : "20%",
+    top: Platform.OS === "ios" ? "28%" : "28%",
     backgroundColor: "transparent",
     alignItems: "center",
     // marginTop: "-3%",
