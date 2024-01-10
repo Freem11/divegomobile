@@ -176,6 +176,7 @@ useEffect(() => {
             width: 200,
             marginRight: 18,
             marginTop: 10,
+            paddingTop: 3
           }}
           elevation={20}
           shadowRadius={15}
@@ -187,9 +188,10 @@ useEffect(() => {
             placeholder={"DiverName"}
             keyboardType="numbers-and-punctuation"
             editable={false}
-            fontSize={18}
+            fontSize={14}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
+            multiline
             // onChangeText={(text) =>
             //   setAddSiteVals({ ...addSiteVals, Latitude: text })
             // }
@@ -203,6 +205,8 @@ useEffect(() => {
             width: 200,
             marginRight: 18,
             marginTop: 10,
+            paddingTop: 3
+
           }}
           elevation={20}
           shadowRadius={15}
@@ -214,9 +218,10 @@ useEffect(() => {
             placeholder={"Email"}
             keyboardType="numbers-and-punctuation"
             editable={false}
-            fontSize={18}
+            fontSize={14}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
+            multiline
             // onChangeText={(text) =>
             //   setAddSiteVals({ ...addSiteVals, Latitude: text })
             // }
@@ -284,10 +289,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 200,
     height: 40,
+    textAlign: "center",
+    verticalAlign: "center",
     alignSelf: "center",
+    marginTop: 3,
     marginBottom: 20,
     textAlign: "center",
-    overflow: "hidden",
+    overflow: "scroll"
   },
   inputRed: {
     fontFamily: "Itim_400Regular",

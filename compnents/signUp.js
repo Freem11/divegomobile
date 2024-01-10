@@ -137,7 +137,7 @@ export default function SignUpRoute() {
               value={formVals.email}
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
-              color="#F0EEEB"
+              color={formValidation.emailVal ? "black" : "#F0EEEB"}
               fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               onChangeText={(emailText) =>
                 setFormVals({ ...formVals, email: emailText })
@@ -167,7 +167,7 @@ export default function SignUpRoute() {
               fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
-              color="#F0EEEB"
+              color={formValidation.passwordVal ? "black" : "#F0EEEB"}
               onChangeText={(passwordText) =>
                 setFormVals({ ...formVals, password: passwordText })
               }
@@ -195,7 +195,7 @@ export default function SignUpRoute() {
               placeholder={"First Name"}
               fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               placeholderTextColor="darkgrey"
-              color="#F0EEEB"
+              color={formValidation.firstNameVal ? "black" : "#F0EEEB"}
               onChangeText={(firstText) =>
                 setFormVals({ ...formVals, firstName: firstText })
               }
@@ -223,7 +223,7 @@ export default function SignUpRoute() {
               placeholder={"Last Name"}
               fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               placeholderTextColor="darkgrey"
-              color="#F0EEEB"
+              color={formValidation.lastNameVal ? "black" : "#F0EEEB"}
               onChangeText={(lastText) =>
                 setFormVals({ ...formVals, lastName: lastText })
               }

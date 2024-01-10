@@ -123,7 +123,7 @@ export default function AnimalAutoSuggest(props) {
               placeholder={"Animal"}
               value={pin.Animal}
               placeholderTextColor="darkgrey"
-              color="#F0EEEB"
+              color={formValidation.AnimalVal ? "black" : "#F0EEEB"}
               onChangeText={handleChange}
             ></TextInput>
           </InsetShadow>

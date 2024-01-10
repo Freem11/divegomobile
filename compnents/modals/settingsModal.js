@@ -226,7 +226,7 @@ export default function SettingsModal() {
 
       <View style={styles.third}>
         <TouchableWithoutFeedback
-          onLongPress={startDangerZoneAnimations}
+          onPress={startDangerZoneAnimations}
           style={{ backgroundColor: "purple" }}
         >
           <View style={styles.dangerZonebar}>

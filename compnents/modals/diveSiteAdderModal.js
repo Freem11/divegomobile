@@ -433,8 +433,9 @@ export default function DiveSiteModal() {
             value={addSiteVals.Site}
             placeholder={"Site Name"}
             placeholderTextColor="darkgrey"
-            color="#F0EEEB"
+            color={formValidation.SiteNameVal ? "black" : "#F0EEEB"}
             fontSize={18}
+            multiline
             onChangeText={(siteText) =>
               setAddSiteVals({ ...addSiteVals, Site: siteText })
             }
@@ -461,7 +462,8 @@ export default function DiveSiteModal() {
             // editable={false}
             fontSize={18}
             placeholderTextColor="darkgrey"
-            color="#F0EEEB"
+            color={formValidation.LatVal ? "black" : "#F0EEEB"}
+            multiline
             onChangeText={(text) =>
               setAddSiteVals({ ...addSiteVals, Latitude: text })
             }
@@ -488,7 +490,8 @@ export default function DiveSiteModal() {
             // editable={false}
             fontSize={18}
             placeholderTextColor="darkgrey"
-            color="#F0EEEB"
+            color={formValidation.LngVal ? "black" : "#F0EEEB"}
+            multiline
             onChangeText={(text) =>
               setAddSiteVals({ ...addSiteVals, Longitude: text })
             }
@@ -633,7 +636,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 20,
     textAlign: "center",
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   inputRed: {
     fontFamily: "Itim_400Regular",

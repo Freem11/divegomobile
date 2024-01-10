@@ -680,7 +680,7 @@ export default function PicUploadModal() {
                 placeholder={"Date"}
                 placeholderTextColor="darkgrey"
                 editable={false}
-                color={colorDate}
+                color={formValidation.DateVal ? "black" : "#F0EEEB"}
                 fontSize={17}
                 placeholderTextColor={colorDate}
                 onChangeText={(text) =>
@@ -725,7 +725,7 @@ export default function PicUploadModal() {
                 // editable={false}
                 placeholderTextColor="darkgrey"
                 fontSize={16}
-                color="#F0EEEB"
+                color={formValidation.LatVal ? "black" : "#F0EEEB"}
                 onChangeText={(text) =>
                   setPinValues({ ...pinValues, Latitude: text })
                 }
@@ -752,7 +752,7 @@ export default function PicUploadModal() {
                 // editable={false}
                 placeholderTextColor="darkgrey"
                 fontSize={16}
-                color="#F0EEEB"
+                color={formValidation.LngVal ? "black" : "#F0EEEB"}
                 onChangeText={(text) =>
                   setPinValues({ ...pinValues, Longitude: text })
                 }

@@ -392,7 +392,7 @@ export default function SignInRoute() {
               value={formVals.email}
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
-              color="#F0EEEB"
+              color={formValidation.emailVal ? "black" : "#F0EEEB"}
               fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               onChangeText={(emailsText) =>
                 setFormVals({ ...formVals, email: emailsText })
@@ -422,7 +422,7 @@ export default function SignInRoute() {
               fontSize={windowWidth > 600 ? scale(9) : scale(16)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
-              color="#F0EEEB"
+              color={formValidation.passwordVal ? "black" : "#F0EEEB"}
               onChangeText={(passwordsText) =>
                 setFormVals({ ...formVals, password: passwordsText })
               }
