@@ -87,7 +87,8 @@ const PhotoMenuListItem = (props) => {
     }
   }, [selectedID]);
 
-
+  let labelLength = pic.label.length
+  let labelFont = (120)/labelLength + 6
 
   return (
     <TouchableWithoutFeedback
@@ -106,11 +107,11 @@ const PhotoMenuListItem = (props) => {
       >
         <View style={{ justifyContent: "center", height: 33 }}>
           <Text
-            style={
+            style={[
               animalMultiSelection.includes(pic.label)
                 ? styles.photolabelSelected
-                : styles.photolabel
-            }
+                : styles.photolabel, {fontSize: labelFont}
+            ]}
           >
             {pic.label}
           </Text>
@@ -133,7 +134,7 @@ const PhotoMenuListItem = (props) => {
 
 const styles = StyleSheet.create({
   photolabel: {
-    fontSize: windowWidth > 600 ? scale(5) : scale(11),
+    // fontSize: windowWidth > 600 ? {labelFont} : scale(11),
     color: "white",
     textAlign: "center",
     justifyContent: "center",
