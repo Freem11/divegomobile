@@ -268,7 +268,8 @@ export default function PicUploadModal() {
     hideDatePicker();
   };
 
-  const AnimalKeboardOffset = Platform.OS === "ios" ? 700 : 700;
+  const GPSKeyBoardOffset1 = Platform.OS === "ios" ? 750-240 : 750-240;
+  const GPSKeyBoardOffset2 = Platform.OS === "ios" ? 700-240 : 700-240;
 
   let colorDate;
   if (pinValues.PicDate === "") {
@@ -691,20 +692,21 @@ export default function PicUploadModal() {
           </View>
 
           {/* <View style={styles.animalField}> */}
-          {/* <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={AnimalKeboardOffset}
-              style={styles.autocomplete}
-            > */}
+        
           <AnimalAutoSuggest
             pin={pinValues}
             setPin={setPinValues}
             formValidation={formValidation}
             SetFormValidation={SetFormValidation}
           />
-          {/* </KeyboardAvoidingView> */}
+         
           {/* </View> */}
 
+  <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={GPSKeyBoardOffset1}
+              style={styles.autocompleteA}
+            >
           <View style={styles.latField}>
             <InsetShadow
               containerStyle={{
@@ -732,6 +734,13 @@ export default function PicUploadModal() {
               ></TextInput>
             </InsetShadow>
           </View>
+          </KeyboardAvoidingView>
+
+          <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={GPSKeyBoardOffset2}
+              style={styles.autocompleteB}
+            >
           <View style={styles.lngField}>
             <InsetShadow
               containerStyle={{
@@ -759,6 +768,8 @@ export default function PicUploadModal() {
               ></TextInput>
             </InsetShadow>
           </View>
+          </KeyboardAvoidingView>
+
         </View>
 
         <View style={styles.smallButtons}>
@@ -1040,7 +1051,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "yellow"
+    // backgroundColor: "yellow",
+    marginBottom: scale(5)
   },
   dateButton: {
     flexDirection: "row",
@@ -1074,19 +1086,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "80%",
-    height: "25%",
-    zIndex: -1,
-    // backgroundColor: "blue"
+    width: "100%",
+    // height: "25%",
+    // zIndex: -1,
+    // backgroundColor: "blue",
   },
   lngField: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "80%",
-    height: "25%",
-    zIndex: -1,
-    // backgroundColor: "green"
+    width: "100%",
+    // height: "25%",
+    // zIndex: 2,
+    // backgroundColor: "green",
   },
   latLngButton: {
     flexDirection: "row",
@@ -1094,7 +1106,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "50%",
-    // backgroundColor: "green"
+    // backgroundColor: "green",
   },
   modalStyle: {
     flex: 1,
@@ -1153,15 +1165,27 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  autocomplete: {
-    width: 200,
-    height: "100%",
+  autocompleteA: {
+    width: "80%",
+    height: "25%",
     alignSelf: "center",
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
     // backgroundColor: "maroon",
-    zIndex: 1,
-    // marginTop: scale(130)
+    // marginLeft: scale(-10),
+    marginTop: scale(5),
+    // zIndex: 1
+  },
+  autocompleteB: {
+    width: "80%",
+    height: "25%",
+    alignSelf: "center",
+    justifyContent: "center",
+    // alignItems: "center",
+    // backgroundColor: "pink",
+    // marginLeft: scale(-10),
+    marginTop: scale(5),
+    //zIndex: 1
   },
   SubmitButton: {
     position: "absolute",

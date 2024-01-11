@@ -23,7 +23,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 let waiter;
 
 const windowHeight = Dimensions.get("window").height;
-const AnimalKeboardOffset = Platform.OS === "ios" ? 700 - 140 : 700;
+const AnimalKeboardOffset = Platform.OS === "ios" ? 700 - 140 : 700-140;
 
 export default function AnimalAutoSuggest(props) {
   const { setPin, pin, formValidation, SetFormValidation } = props;
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     overflow: "hidden",
-    // backgroundColor: "green"
+    // backgroundColor: "orange"
   },
   mainBox: {
     height: "10%",
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     height: "25%",
     alignSelf: "center",
     justifyContent: "center",
-    // backgroundColor: "maroon",
+    // backgroundColor: "green",
     zIndex: 1,
   },
 });
