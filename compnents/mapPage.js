@@ -55,6 +55,8 @@ import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
+import { SelectedShopContext } from "./contexts/selectedShopContext";
+import { ShopModalContext } from "./contexts/shopModalContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -77,7 +79,7 @@ import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import UserProfileModal from "./modals/userProfileModal";
-
+import ShopModal from "./modals/shopModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 
@@ -208,15 +210,6 @@ export default function MapPage() {
   useEffect(() => {
     startAnchorModalAnimations();
 
-    // const filterAnchorPhotos = async () => {
-    //   let { minLat, maxLat, minLng, maxLng } =  newGPSBoundaries(
-    //     selectedDiveSite.Latitude,
-    //     selectedDiveSite.Longitude
-    //   );
-    // }
-
-    // filterAnchorPhotos();
-
     if (tutorialRunning && siteModal) {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
@@ -226,8 +219,36 @@ export default function MapPage() {
         setItterator(itterator + 2);
       }
     }
-    // setChapter(null)
   }, [siteModal]);
+
+   //Shop Modal Animation
+   const shopModalY = useSharedValue(windowHeight);
+   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
+   const { shopModal, setShopModal } = useContext(ShopModalContext);
+ 
+   const shopModalReveal = useAnimatedStyle(() => {
+     return {
+       transform: [{ translateY: shopModalY.value }],
+     };
+   });
+ 
+   const startShopModalAnimations = () => {
+     if (shopModal) {
+      shopModalY.value = withTiming(0, {
+         duration: 150,
+         easing: Easing.out(Easing.linear),
+       });
+     } else {
+      shopModalY.value = withTiming(windowHeight, {
+         duration: 150,
+         easing: Easing.out(Easing.linear),
+       });
+     }
+   };
+ 
+   useEffect(() => {
+    startShopModalAnimations();
+   }, [shopModal]);
 
   //PhotoBox Modal Animation
   const photoBoxModalY = useSharedValue(windowHeight);
@@ -730,6 +751,10 @@ export default function MapPage() {
                 Lat={selectedDiveSite.Latitude}
                 Lng={selectedDiveSite.Longitude}
               />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, shopModalReveal]}>
+              <ShopModal />
             </Animated.View>
 
               <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>

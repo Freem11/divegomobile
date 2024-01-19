@@ -12,4 +12,17 @@ function setupClusters(diveSiteData) {
   return points;
 }
 
-export { setupClusters };
+function setupShopClusters(shopData) {
+  let points = shopData.map((shop) => ({
+    type: "Feature",
+    properties: {
+      cluster: false,
+      siteID: shop.orgName,
+      category: "Shop",
+    },
+    geometry: { type: "Point", coordinates: [shop.lng, shop.lat] },
+  }));
+
+  return points;
+}
+export { setupClusters, setupShopClusters };

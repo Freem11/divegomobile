@@ -17,38 +17,35 @@ import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
-import { MapHelperContext } from "./contexts/mapHelperContext"; 
+import { MapHelperContext } from "./contexts/mapHelperContext";
 import { MyCreaturesContext } from "./contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "./contexts/myDiveSitesContext";
+import { SelectedShopContext } from "./contexts/selectedShopContext";
+import { ShopModalContext } from "./contexts/shopModalContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Platform,
-} from "react-native";
+import { StyleSheet, View, Dimensions, Platform } from "react-native";
 import mantaIOS from "../compnents/png/Manta32.png";
 import anchorGold from "../compnents/png/markerAnchor48.png";
 import anchorClustIOS from "../compnents/png/ClusterAnchor24.png";
 import anchorIconIOS from "../compnents/png/SiteAnchor20.png";
+import shopIOS from "../compnents/png/scuba.png";
+import shopClustIOS from "../compnents/png/face-mask.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
-import { setupClusters } from "./helpers/clusterHelpers";
+import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
 import { diveSites } from "../supabaseCalls/diveSiteSupabaseCalls";
 import { multiHeatPoints } from "../supabaseCalls/heatPointSupabaseCalls";
+import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { scale } from "react-native-size-matters";
-import * as ScreenOrientation from 'expo-screen-orientation';
+import * as ScreenOrientation from "expo-screen-orientation";
 
 const { width, height } = Dimensions.get("window");
 
 export default function Map() {
-
-  if(Platform.OS ==="ios"){
-    ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT_UP
-    );
+  if (Platform.OS === "ios") {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
@@ -76,10 +73,14 @@ export default function Map() {
   const [tempMarker, setTempMarker] = useState([]);
   const [mapRef, setMapRef] = useState(null);
   const [newSites, setnewSites] = useState([]);
+  const [newShops, setnewShops] = useState([]);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
-  
+
+  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
+  const { shopModal, setShopModal } = useContext(ShopModalContext);
+
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
-  
+
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
@@ -102,92 +103,83 @@ export default function Map() {
       console.log({ title: "Error", message: e.message });
     }
   };
-  
+
   const handleMapChange = async () => {
     if (mapRef) {
       let newBoundaries = await mapRef.getMapBoundaries();
 
-          setBoundaries([
-            newBoundaries.southWest.longitude,
-            newBoundaries.southWest.latitude,
-            newBoundaries.northEast.longitude,
-            newBoundaries.northEast.latitude,
-          ]);
-        
-          
-          let filteredDiveSites = await diveSites(newBoundaries, myDiveSites);
-          !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
-    
-          let filteredHeatPoints = await multiHeatPoints(
-            newBoundaries,
-            animalMultiSelection,
-            myCreatures
-          );
-          setNewHeat(formatHeatVals(filteredHeatPoints));
-    
-          let zoom = calculateZoom(
-            width,
-            newBoundaries.northEast.longitude,
-            newBoundaries.southWest.longitude
-          );
-          setZoomLev(zoom);
-         
-          try {
-            
-            let currentMapPosition = await mapRef.getCamera();
-    
-            if (currentMapPosition){
-              setRegion({
-                latitude: currentMapPosition.center.latitude,
-                longitude: currentMapPosition.center.longitude,
-                latitudeDelta:
-                   newBoundaries.northEast.latitude - newBoundaries.southWest.latitude,
-                longitudeDelta:
-                   newBoundaries.northEast.longitude - newBoundaries.southWest.longitude,
-              });
-              setMapCenter({
-                lat: currentMapPosition.center.latitude,
-                lng: currentMapPosition.center.longitude,
-              });
-            }
+      setBoundaries([
+        newBoundaries.southWest.longitude,
+        newBoundaries.southWest.latitude,
+        newBoundaries.northEast.longitude,
+        newBoundaries.northEast.latitude,
+      ]);
 
-          } catch (e) {
-            console.log({ title: "Map Flipped", message: e.message });
-          }
-            
-         
+      let filteredShops = await shops(newBoundaries);
+      !diveSitesTog ? setnewShops([]) : setnewShops(filteredShops);
 
-  
+      let filteredDiveSites = await diveSites(newBoundaries, myDiveSites);
+      !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
+
+      let filteredHeatPoints = await multiHeatPoints(
+        newBoundaries,
+        animalMultiSelection,
+        myCreatures
+      );
+      setNewHeat(formatHeatVals(filteredHeatPoints));
+
+      let zoom = calculateZoom(
+        width,
+        newBoundaries.northEast.longitude,
+        newBoundaries.southWest.longitude
+      );
+      setZoomLev(zoom);
+
+      try {
+        let currentMapPosition = await mapRef.getCamera();
+
+        if (currentMapPosition) {
+          setRegion({
+            latitude: currentMapPosition.center.latitude,
+            longitude: currentMapPosition.center.longitude,
+            latitudeDelta:
+              newBoundaries.northEast.latitude -
+              newBoundaries.southWest.latitude,
+            longitudeDelta:
+              newBoundaries.northEast.longitude -
+              newBoundaries.southWest.longitude,
+          });
+          setMapCenter({
+            lat: currentMapPosition.center.latitude,
+            lng: currentMapPosition.center.longitude,
+          });
+        }
+      } catch (e) {
+        console.log({ title: "Map Flipped", message: e.message });
+      }
     }
   };
 
   const handleMapFlip = async () => {
     if (mapRef) {
-      
-          // let filteredDiveSites = await diveSites(boundaries);
-          // !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
-    
-          // let filteredHeatPoints = await multiHeatPoints(
-          //   boundaries,
-          //   animalMultiSelection
-          // );
-          // setNewHeat(formatHeatVals(filteredHeatPoints));
-    
-          let zoom = calculateZoom(
-            width,
-            boundaries[2],
-            boundaries[0]
-          );
-          setZoomLev(zoom);
-  
-          setRegion({
-            latitude: mapCenter.lat,
-            longitude: mapCenter.lng,
-            latitudeDelta:
-                boundaries[3] - boundaries[1],
-            longitudeDelta:
-                boundaries[2] - boundaries[0],
-          });
+      // let filteredDiveSites = await diveSites(boundaries);
+      // !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
+
+      // let filteredHeatPoints = await multiHeatPoints(
+      //   boundaries,
+      //   animalMultiSelection
+      // );
+      // setNewHeat(formatHeatVals(filteredHeatPoints));
+
+      let zoom = calculateZoom(width, boundaries[2], boundaries[0]);
+      setZoomLev(zoom);
+
+      setRegion({
+        latitude: mapCenter.lat,
+        longitude: mapCenter.lng,
+        latitudeDelta: boundaries[3] - boundaries[1],
+        longitudeDelta: boundaries[2] - boundaries[0],
+      });
     }
   };
 
@@ -209,13 +201,24 @@ export default function Map() {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if(mapHelper){
-      handleMapFlip()
-      setMapHelper(false)
+    if (mapRef) {
+      mapRef.animateCamera({
+        center: {
+          latitude: selectedShop[0].lat,
+          longitude: selectedShop[0].lng,
+        },
+        zoom: 16,
+      });
+    }
+  }, [selectedShop]);
+
+  useEffect(() => {
+    if (mapHelper) {
+      handleMapFlip();
+      setMapHelper(false);
     } else {
       handleMapChange();
     }
-    
   }, []);
 
   useEffect(() => {
@@ -227,17 +230,22 @@ export default function Map() {
   }, [masterSwitch]);
 
   useEffect(() => {
-    let zoomHelp
-    if (tutorialRunning && itterator === 7 || itterator === 9 || itterator === 10 || itterator === 16){
-      zoomHelp = 8
-    } else if (tutorialRunning && itterator === 12){
-      zoomHelp = 12
-    } else if (tutorialRunning && itterator2 === 2){
-      zoomHelp = 8
-    } else if (tutorialRunning && itterator2 === 10){
-      zoomHelp = 10
-    } else if (tutorialRunning && itterator3 === 15){
-      zoomHelp = 10
+    let zoomHelp;
+    if (
+      (tutorialRunning && itterator === 7) ||
+      itterator === 9 ||
+      itterator === 10 ||
+      itterator === 16
+    ) {
+      zoomHelp = 8;
+    } else if (tutorialRunning && itterator === 12) {
+      zoomHelp = 12;
+    } else if (tutorialRunning && itterator2 === 2) {
+      zoomHelp = 8;
+    } else if (tutorialRunning && itterator2 === 10) {
+      zoomHelp = 10;
+    } else if (tutorialRunning && itterator3 === 15) {
+      zoomHelp = 10;
     }
 
     if (mapRef) {
@@ -246,7 +254,7 @@ export default function Map() {
           latitude: mapCenter.lat,
           longitude: mapCenter.lng,
         },
-        zoom : zoomHelp
+        zoom: zoomHelp,
       });
       // Keyboard.dismiss();
     }
@@ -260,8 +268,14 @@ export default function Map() {
       zoom: 2,
     });
   }
+  
+  const shopPoints = setupShopClusters(newShops);
+  const sitePoints = setupClusters(newSites);
+  const points = sitePoints
 
-  const points = setupClusters(newSites);
+  shopPoints.forEach((entity) => {
+      points.push(entity)
+  })
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -276,8 +290,14 @@ export default function Map() {
       Latitude: lat,
       Longitude: lng,
     });
-    filterAnchorPhotos()
+    filterAnchorPhotos();
     setSiteModal(true);
+  };
+
+  const setupShopModal = async(shopName) => {
+     let chosenShop = await getShopByName(shopName)
+     setSelectedShop(chosenShop);
+     setShopModal(true);
   };
 
   const [siteCloseState, setSiteCloseState] = useState(false);
@@ -300,7 +320,7 @@ export default function Map() {
         toolbarEnabled={false}
       >
         {masterSwitch && newHeat.length > 0 && (
-          <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10}/>
+          <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
         )}
 
         {tempMarker.length > 0 && (
@@ -321,14 +341,12 @@ export default function Map() {
               longitude: dragPin.lng,
             }}
             image={mantaIOS}
-            onDragEnd={
-              ((e) => {
-                setDragPin({
-                  lat: e.nativeEvent.coordinate.latitude,
-                  lng: e.nativeEvent.coordinate.longitude,
-                });
-              })
-            }
+            onDragEnd={(e) => {
+              setDragPin({
+                lat: e.nativeEvent.coordinate.latitude,
+                lng: e.nativeEvent.coordinate.longitude,
+              });
+            }}
           />
         )}
 
@@ -358,17 +376,69 @@ export default function Map() {
               ></Marker>
             );
           }
+          if( cluster.properties.category === "Dive Site"){
+            return (
+              <Marker
+                key={cluster.properties.siteID}
+                coordinate={{ latitude: latitude, longitude: longitude }}
+                image={anchorIconIOS}
+                onPress={() =>
+                  setupAnchorModal(cluster.properties.siteID, latitude, longitude)
+                }
+              ></Marker>
+            );
+          } else {
+            return (
+              <Marker
+                key={cluster.properties.siteID}
+                coordinate={{ latitude: latitude, longitude: longitude }}
+                image={shopClustIOS}
+                onPress={() =>
+                  setupShopModal(cluster.properties.siteID)
+                }
+              ></Marker>
+            );
+          }
+         
+        })}
+
+        {/* {shopClusters.map((cluster) => {
+          const [longitude, latitude] = cluster.geometry.coordinates;
+          const {
+            cluster: isCluster,
+            point_count: pointCount,
+          } = cluster.properties;
+
+          if (isCluster) {
+            return (
+              <Marker
+                key={cluster.id}
+                coordinate={{ latitude: latitude, longitude: longitude }}
+                image={shopClustIOS}
+                onPress={() => {
+                  const expansionZoom = Math.min(
+                    supercluster2.getClusterExpansionZoom(cluster.id),
+                    16
+                  );
+                  mapRef.animateCamera({
+                    center: { latitude, longitude },
+                    zoom: expansionZoom,
+                  });
+                }}
+              ></Marker>
+            );
+          }
           return (
             <Marker
               key={cluster.properties.siteID}
               coordinate={{ latitude: latitude, longitude: longitude }}
-              image={anchorIconIOS}
-              onPress={() =>
-                setupAnchorModal(cluster.properties.siteID, latitude, longitude)
-              }
+              image={shopIOS}
+              // onPress={() =>
+              //   setupAnchorModal(cluster.properties.siteID, latitude, longitude)
+              // }
             ></Marker>
           );
-        })}
+        })} */}
       </MapView>
     </View>
   );

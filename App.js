@@ -61,6 +61,8 @@ import { ProfileModalContext } from "./compnents/contexts/profileModalContext";
 import { ModalSelectContext } from "./compnents/contexts/modalSelectContext";
 import { MyCreaturesContext } from "./compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "./compnents/contexts/myDiveSitesContext";
+import { SelectedShopContext } from "./compnents/contexts/selectedShopContext";
+import { ShopModalContext } from "./compnents/contexts/shopModalContext";
 import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
 import {
@@ -90,6 +92,7 @@ export default function App() {
   const [thirdGuideModal, setThirdGuideModal] = useState(false);
   const [gearModal, setGearModal] = useState(false);
   const [siteModal, setSiteModal] = useState(false);
+  const [shopModal, setShopModal] = useState(false);
   const [tutorialLaunchpadModal, setTutorialLaunchpadModal] = useState(false);
 
   const [textvalue, setTextValue] = useState("");
@@ -141,6 +144,13 @@ export default function App() {
     SiteName: "",
     Latitude: "",
     Longitude: "",
+  });
+  const [selectedShop, setSelectedShop] = useState({
+    id: 0,
+    orgName: "",
+    lat: null,
+    lng: null
+
   });
 
   const [animalSelection, setAnimalSelection] = useState("");
@@ -337,6 +347,8 @@ export default function App() {
 
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <ShopModalContext.Provider value={{ shopModal, setShopModal }}>
+      <SelectedShopContext.Provider value={{ selectedShop, setSelectedShop }}>
       <MyCreaturesContext.Provider value={{ myCreatures, setMyCreatures }}>
         <MyDiveSitesContext.Provider value={{ myDiveSites, setMyDiveSites }}>
           <ModalSelectContext.Provider value={{ chosenModal, setChosenModal }}>
@@ -562,6 +574,8 @@ export default function App() {
           </ModalSelectContext.Provider>
         </MyDiveSitesContext.Provider>
       </MyCreaturesContext.Provider>
+      </SelectedShopContext.Provider>
+      </ShopModalContext.Provider>
     </GestureHandlerRootView>
   );
 }
