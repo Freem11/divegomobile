@@ -100,6 +100,7 @@ export default function ShopModal(props) {
                   itinerary={itinerary}
                   setSelectedID={setSelectedID}
                   selectedID={selectedID}
+                  setShopModal={setShopModal}
                 />
               );
             })}

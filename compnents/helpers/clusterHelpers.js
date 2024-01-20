@@ -1,10 +1,10 @@
-function setupClusters(diveSiteData) {
+function setupClusters(diveSiteData, sitesArray) {
   let points = diveSiteData.map((site) => ({
     type: "Feature",
     properties: {
       cluster: false,
       siteID: site.name,
-      category: "Dive Site",
+      category: sitesArray.includes(site.id) ? "Dive Site Selected" : "Dive Site",
     },
     geometry: { type: "Point", coordinates: [site.lng, site.lat] },
   }));

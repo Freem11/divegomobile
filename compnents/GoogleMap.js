@@ -22,6 +22,8 @@ import { MyCreaturesContext } from "./contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "./contexts/myDiveSitesContext";
 import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
+import { SitesArrayContext } from "./contexts/sitesArrayContext";
+import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -60,6 +62,7 @@ export default function Map() {
   const { region, setRegion } = useContext(MapRegionContext);
   const { boundaries, setBoundaries } = useContext(MapBoundariesContext);
   const { zoomlev, setZoomLev } = useContext(MapZoomContext);
+  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { diveSitesTog } = useContext(DiveSitesContext);
   const { sliderVal } = useContext(SliderContext);
   const { animalSelection } = useContext(AnimalSelectContext);
@@ -80,6 +83,7 @@ export default function Map() {
   const { shopModal, setShopModal } = useContext(ShopModalContext);
 
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -248,6 +252,11 @@ export default function Map() {
       zoomHelp = 10;
     }
 
+    if(zoomHelper){
+      setZoomHelper(false)
+      zoomHelp = 12
+    }
+
     if (mapRef) {
       mapRef.animateCamera({
         center: {
@@ -268,14 +277,14 @@ export default function Map() {
       zoom: 2,
     });
   }
-  
+
   const shopPoints = setupShopClusters(newShops);
-  const sitePoints = setupClusters(newSites);
-  const points = sitePoints
+  const sitePoints = setupClusters(newSites, sitesArray);
+  const points = sitePoints;
 
   shopPoints.forEach((entity) => {
-      points.push(entity)
-  })
+    points.push(entity);
+  });
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -294,10 +303,10 @@ export default function Map() {
     setSiteModal(true);
   };
 
-  const setupShopModal = async(shopName) => {
-     let chosenShop = await getShopByName(shopName)
-     setSelectedShop(chosenShop);
-     setShopModal(true);
+  const setupShopModal = async (shopName) => {
+    let chosenShop = await getShopByName(shopName);
+    setSelectedShop(chosenShop);
+    setShopModal(true);
   };
 
   const [siteCloseState, setSiteCloseState] = useState(false);
@@ -376,14 +385,33 @@ export default function Map() {
               ></Marker>
             );
           }
-          if( cluster.properties.category === "Dive Site"){
+          if (cluster.properties.category === "Dive Site") {
             return (
               <Marker
                 key={cluster.properties.siteID}
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={anchorIconIOS}
                 onPress={() =>
-                  setupAnchorModal(cluster.properties.siteID, latitude, longitude)
+                  setupAnchorModal(
+                    cluster.properties.siteID,
+                    latitude,
+                    longitude
+                  )
+                }
+              ></Marker>
+            );
+          } else if (cluster.properties.category === "Dive Site Selected") {
+            return (
+              <Marker
+                key={cluster.properties.siteID}
+                coordinate={{ latitude: latitude, longitude: longitude }}
+                image={anchorGold}
+                onPress={() =>
+                  setupAnchorModal(
+                    cluster.properties.siteID,
+                    latitude,
+                    longitude
+                  )
                 }
               ></Marker>
             );
@@ -393,13 +421,10 @@ export default function Map() {
                 key={cluster.properties.siteID}
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={shopClustIOS}
-                onPress={() =>
-                  setupShopModal(cluster.properties.siteID)
-                }
+                onPress={() => setupShopModal(cluster.properties.siteID)}
               ></Marker>
             );
           }
-         
         })}
 
         {/* {shopClusters.map((cluster) => {
