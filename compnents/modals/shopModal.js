@@ -13,7 +13,11 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  useDerivedValue,
+  interpolate,
 } from "react-native-reanimated";
+import Itinerary from "../itineraries/itinerary";
+import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { scale } from "react-native-size-matters";
@@ -24,29 +28,34 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function ShopModal(props) {
   // const {lat, lng, setSelectedPhoto, setPhotoBoxModel } = props
-  const { shopModal, setShopModal  } = useContext(ShopModalContext);
+  const { shopModal, setShopModal } = useContext(ShopModalContext);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
- 
+  const [itineraryList, setItineraryList] = useState("");
+  const [selectedID, setSelectedID] = useState(null);
 
-  // useEffect(() => {
-  //   getDiveSite(selectedDiveSite.SiteName);
-  //   filterAnchorPhotos();
-  // }, [selectedDiveSite]);
+  useEffect(() => {
+    console.log("trigger");
+    if (selectedShop[0]) {
+      getItineraries(selectedShop[0].id);
+    }
+  }, [selectedShop]);
 
- 
-  // const getDiveSite = async (site) => {
-  //   try {
-  //     const selectedSite = await getDiveSiteByName(site);
-  //     if (selectedSite.length > 0) {
-  //       setSite(selectedSite[0].userName);
-  //     }
-  //   } catch (e) {
-  //     console.log({ title: "Error", message: e.message });
-  //   }
-  // };
+  const getItineraries = async (IdNum) => {
+    try {
+      console.log(IdNum);
+      const itins = await itineraries(IdNum);
+      if (itins.length > 0) {
+        setItineraryList(itins);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   const handleShopModalClose = () => {
+    setSelectedShop({ ...selectedShop, id: 0, orgName: "" });
+    setItineraryList("");
     setShopModal(false);
   };
 
@@ -55,12 +64,14 @@ export default function ShopModal(props) {
       style={{
         height: "98%",
         // backgroundColor: "orange",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <View style={styles.titleAlt}>
         <View style={{ width: scale(250) }}>
-          <Text style={styles.headerAlt}>{selectedShop[0].orgName}</Text>
+          <Text style={styles.headerAlt}>
+            {selectedShop[0] && selectedShop[0].orgName}
+          </Text>
         </View>
         <TouchableWithoutFeedback
           onPress={handleShopModalClose}
@@ -79,28 +90,28 @@ export default function ShopModal(props) {
         </TouchableWithoutFeedback>
       </View>
 
-      <ScrollView style={{ marginTop: "0%", width: "100%", borderRadius: 15 }}>
-        {/* <View style={styles.container3}>
-          {anchorPics &&
-            anchorPics.map((pic) => {
+      <ScrollView style={{ marginTop: "3%", width: "100%", borderRadius: 15 }}>
+        <View style={styles.container3}>
+          {itineraryList &&
+            itineraryList.map((itinerary) => {
               return (
-                <TouchableWithoutFeedback key={pic.id} onPress={() => togglePhotoBoxModal(pic.photoFile)}>
-                <View style={styles.shadowbox}>
-                <Picture key={pic.id} pic={pic}></Picture>
-                </View>
-                </TouchableWithoutFeedback>
+                <Itinerary
+                  key={itinerary.id}
+                  itinerary={itinerary}
+                  setSelectedID={setSelectedID}
+                  selectedID={selectedID}
+                />
               );
             })}
-          {anchorPics.length === 0 && (
+          {itineraryList.length === 0 && (
             <View>
               <Text style={styles.noSightings}>
-                No Trips are currnetly being offered.
+                No Trips are currently being offered.
               </Text>
             </View>
           )}
-        </View> */}
+        </View>
       </ScrollView>
-
     </View>
   );
 }
@@ -127,25 +138,6 @@ const styles = StyleSheet.create({
     backgroundColor: "538bdb",
     // marginTop: "-0%",
     borderRadius: 15,
-  },
-  shadowbox: {
-    flex: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  titleText: {
-    textAlign: "center",
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(15),
-    marginLeft: scale(-27),
   },
   flagMajor: {
     width: "10%",

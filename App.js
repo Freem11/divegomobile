@@ -150,7 +150,6 @@ export default function App() {
     orgName: "",
     lat: null,
     lng: null
-
   });
 
   const [animalSelection, setAnimalSelection] = useState("");
