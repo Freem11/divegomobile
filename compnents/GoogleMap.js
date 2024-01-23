@@ -255,14 +255,18 @@ export default function Map() {
       zoomHelp = 10;
     }
 
+    console.log("make sense", zoomHelper, shopModal)
     if(zoomHelper){
+      console.log("fire")
       if(shopModal){
         zoomHelp = 16
-      } else {
+        setMinorSwitch(true)
+      } else if (!shopModal) {
         zoomHelp = 12
+        setMinorSwitch(false)
       }
       setZoomHelper(false)
-      setMinorSwitch(false)
+      
     }
 
     if (mapRef) {
@@ -350,7 +354,7 @@ export default function Map() {
           />
         )}
 
-        {!masterSwitch && (
+        {!masterSwitch && minorSwitch && (
           <Marker
             draggable={true}
             coordinate={{

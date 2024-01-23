@@ -24,6 +24,8 @@ import { scale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
+import { ZoomHelperContext } from "../contexts/zoomHelperContext";
+
 import { shops } from "../../supabaseCalls/shopsSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
@@ -38,6 +40,7 @@ export default function ShopModal(props) {
   const [selectedID, setSelectedID] = useState(null);
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
+  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
 
   useEffect(() => {
     if (selectedShop[0]) {
@@ -48,8 +51,7 @@ export default function ShopModal(props) {
 
 
   useEffect(() => {
-    console.log("what", shopModal)
-    if (shopModal) {
+    if (shopModal && zoomHelper) {
       setMapCenter({
       lat: selectedShop[0].lat,
       lng: selectedShop[0].lng,
