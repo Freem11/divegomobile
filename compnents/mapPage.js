@@ -31,6 +31,7 @@ import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { PictureAdderContext } from "./contexts/picModalContext";
 import { MasterContext } from "./contexts/masterContext";
+import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
@@ -57,6 +58,7 @@ import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
 import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
+import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -98,13 +100,16 @@ export default function MapPage() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
+  
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
+  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
   const { textvalue, setTextValue } = useContext(SearchTextContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
+  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
 
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
@@ -119,6 +124,10 @@ export default function MapPage() {
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
+
+  // useEffect(() => {
+  //   zoomHelper ? setMasterSwitch(false) : setMasterSwitch(true);
+  // }, [zoomHelper]);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -221,34 +230,34 @@ export default function MapPage() {
     }
   }, [siteModal]);
 
-   //Shop Modal Animation
-   const shopModalY = useSharedValue(windowHeight);
-   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-   const { shopModal, setShopModal } = useContext(ShopModalContext);
- 
-   const shopModalReveal = useAnimatedStyle(() => {
-     return {
-       transform: [{ translateY: shopModalY.value }],
-     };
-   });
- 
-   const startShopModalAnimations = () => {
-     if (shopModal) {
+  //Shop Modal Animation
+  const shopModalY = useSharedValue(windowHeight);
+  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
+  const { shopModal, setShopModal } = useContext(ShopModalContext);
+
+  const shopModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: shopModalY.value }],
+    };
+  });
+
+  const startShopModalAnimations = () => {
+    if (shopModal) {
       shopModalY.value = withTiming(0, {
-         duration: 150,
-         easing: Easing.out(Easing.linear),
-       });
-     } else {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
       shopModalY.value = withTiming(windowHeight, {
-         duration: 150,
-         easing: Easing.out(Easing.linear),
-       });
-     }
-   };
- 
-   useEffect(() => {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  useEffect(() => {
     startShopModalAnimations();
-   }, [shopModal]);
+  }, [shopModal]);
 
   //PhotoBox Modal Animation
   const photoBoxModalY = useSharedValue(windowHeight);
@@ -556,6 +565,15 @@ export default function MapPage() {
     }
   };
 
+
+  const onShopNavigate = () => {
+    setMapHelper(true);
+    setMasterSwitch(true);
+    setMinorSwitch(true);
+    setShopModal(true);
+    setZoomHelper(true);
+  };
+
   useEffect(() => {
     if (animalSelection.length > 0) {
       setToken(true);
@@ -693,7 +711,7 @@ export default function MapPage() {
               </View>
             )}
 
-            {!masterSwitch && (
+            {!masterSwitch && minorSwitch && (
               <View
                 style={subButState ? styles.PinButtonPressed : styles.PinButton}
               >
@@ -720,6 +738,38 @@ export default function MapPage() {
                     }}
                   >
                     Set Pin
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {!masterSwitch && !minorSwitch && (
+              <View
+                style={subButState ? styles.PinButtonPressed : styles.PinButton}
+              >
+                <TouchableOpacity
+                  style={{
+                    // backgroundColor: "orange",
+                    width: scale(200),
+                    height: scale(30),
+                  }}
+                  onPress={onShopNavigate}
+                  onPressIn={() => setSubButState(true)}
+                  onPressOut={() => setSubButState(false)}
+                >
+                  <Text
+                    style={{
+                      color: "gold",
+                      fontFamily: "PatrickHand_400Regular",
+                      fontSize: scale(22),
+                      width: "100%",
+                      height: "120%",
+                      textAlign: "center",
+                      marginTop: -5,
+                      borderRadius: scale(15),
+                    }}
+                  >
+                    Return to Shop
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -757,7 +807,7 @@ export default function MapPage() {
               <ShopModal />
             </Animated.View>
 
-              <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
+            <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
               <PhotoBoxModel
                 picData={selectedPhoto}
                 photoBoxModel={photoBoxModel}
@@ -1017,7 +1067,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
     width: 350,
-    height: 35
+    height: 35,
   },
   feedRequest: {
     color: "white",

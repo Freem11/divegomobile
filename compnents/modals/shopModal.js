@@ -22,6 +22,9 @@ import { SelectedShopContext } from "../contexts/selectedShopContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { scale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { MasterContext } from "../contexts/masterContext";
+import { MapCenterContext } from "../contexts/mapCenterContext";
+import { shops } from "../../supabaseCalls/shopsSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -33,13 +36,26 @@ export default function ShopModal(props) {
   const [siteCloseState, setSiteCloseState] = useState(false);
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
+  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
+  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
 
   useEffect(() => {
-    console.log("trigger");
     if (selectedShop[0]) {
       getItineraries(selectedShop[0].id);
+      setMasterSwitch(true)
     }
   }, [selectedShop]);
+
+
+  useEffect(() => {
+    console.log("what", shopModal)
+    if (shopModal) {
+      setMapCenter({
+      lat: selectedShop[0].lat,
+      lng: selectedShop[0].lng,
+    });
+    }
+  }, [shopModal]);
 
   const getItineraries = async (IdNum) => {
     try {

@@ -4,6 +4,8 @@ import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
+import { MinorContext } from "../contexts/minorContext";
+import { MasterContext } from "../contexts/masterContext";
 
 import { scale } from "react-native-size-matters";
 import Animated, {
@@ -21,6 +23,8 @@ export default function Itinerary(props) {
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
+  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
 
   const moreInfoHeight = useSharedValue(0);
 
@@ -69,12 +73,15 @@ export default function Itinerary(props) {
     })
     let moveLat = lats.reduce((acc, curr) => acc + curr, 0) / lats.length
     let moveLng = lngs.reduce((acc, curr) => acc + curr, 0) / lngs.length
+    setZoomHelper(true)
+    setShopModal(false)
+    setMasterSwitch(false)
     setMapCenter({
       lat: moveLat,
       lng: moveLng,
     });
-    setZoomHelper(true)
-    setShopModal(false)
+   
+    
   };
 
   return (
