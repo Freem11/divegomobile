@@ -62,7 +62,7 @@ import { ShopModalContext } from "./contexts/shopModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
@@ -923,9 +923,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     flexDirection: "column",
     alignContent: "center",
-    // backgroundColor: "darkblue",
-    height: 70,
-    bottom: scale(10),
+    backgroundColor: "darkblue",
+    width: "100%",
+    height: moderateScale(70),
+    bottom: moderateScale(15),
     zIndex: 3,
   },
   Fbuttons: {

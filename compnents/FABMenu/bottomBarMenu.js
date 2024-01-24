@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import Animated, {
   useSharedValue,
@@ -7,7 +7,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import PhotoButton from "./photoButton";
 import DiveSiteButton from "./diveSiteButton";
 import SiteSearchButton from "./siteSearchButton";
@@ -15,23 +15,29 @@ import LocationSearchButton from "./locationSearchButton";
 import SettingsButton from "./settingsButton";
 import GuidesButton from "./guidesButton";
 
+let numbButtons = 0;
+
 export default function FABMenu() {
-  let numbButtons = 6;
+  const windowWidth = Dimensions.get("window").width;
   const [fabMenuSize, setFabMenuSize] = useState(0);
 
+  numbButtons = 6
+
   useEffect(() => {
-    setFabMenuSize(numbButtons * 70);
+    setFabMenuSize(numbButtons * moderateScale(80));
   }, []);
 
-  const xValue = useSharedValue(0);
+  const xValue = useSharedValue((windowWidth/2)-(numbButtons * moderateScale(80)/2));
   const context = useSharedValue({ x: 0 });
+  let bounds = moderateScale(180)
+  let startBounce = moderateScale(175)
 
   const animateFabMenu = Gesture.Pan()
     .onBegin(() => {
-      if (xValue.value > fabMenuSize / 2 - 180) {
-        xValue.value = fabMenuSize / 2 - 175;
-      } else if (xValue.value < -fabMenuSize / 2 + 180) {
-        xValue.value = -fabMenuSize / 2 + 175;
+      if (xValue.value > fabMenuSize / 2 - bounds) {
+        xValue.value = fabMenuSize / 2 - startBounce;
+      } else if (xValue.value < -fabMenuSize / 2 + bounds) {
+        xValue.value = -fabMenuSize / 2 + startBounce;
       }
     })
     .onStart(() => {
@@ -47,11 +53,20 @@ export default function FABMenu() {
       }
     })
     .onEnd((event) => {
-      if (xValue.value > fabMenuSize / 2 - 180) {
-        xValue.value = fabMenuSize / 2 - 145;
-      } else if (xValue.value < -fabMenuSize / 2 + 180) {
-        xValue.value = -fabMenuSize / 2 + 145;
+      if(fabMenuSize > windowWidth) {
+        if (xValue.value > (0)) {
+          xValue.value = (0);
+        } else if (xValue.value < -(fabMenuSize/2)) {
+          xValue.value = windowWidth - fabMenuSize;
+        }
+      } else {
+        if (xValue.value > (0)) {
+          xValue.value = ((windowWidth - fabMenuSize) /2);
+        } else if (xValue.value < -(fabMenuSize/2)) {
+          xValue.value = windowWidth - fabMenuSize - (windowWidth - fabMenuSize) /2;
+        }
       }
+   
     });
 
   const animatedFabBarStyle = useAnimatedStyle(() => {
@@ -73,7 +88,7 @@ export default function FABMenu() {
         style={[
           styles.container2,
           animatedFabBarStyle,
-          { minWidth: numbButtons * 90 },
+          { minWidth: numbButtons * moderateScale(80) },
         ]}
       >
               <SettingsButton/>
@@ -94,7 +109,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     zIndex: 90,
-    elevation: 90
+    elevation: 90,
+    // backgroundColor: 'pink',
+    width: numbButtons * moderateScale(80)
   },
   picContainer2: {
     alignItems: "center",

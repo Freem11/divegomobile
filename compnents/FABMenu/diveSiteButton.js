@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { scale } from 'react-native-size-matters';
+import { scale, moderateScale } from 'react-native-size-matters';
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import {
   MaterialIcons,
@@ -20,15 +20,15 @@ export default function DiveSiteButton() {
           onPressOut={() => setButState(false)}
           style={{
             alignItems: "center",
-            width: 32,
-            height: 32,
+            width: moderateScale(32),
+            height: moderateScale(32),
           }}
         >
         <View style={styles.buttonBox}>
           <MaterialIcons
             name="add-location-alt"
             color={butState ? "gold" : "white"}
-            size={32}
+            size={moderateScale(32)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Site Add</Text>
           </View>
@@ -40,7 +40,7 @@ export default function DiveSiteButton() {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "white",
+    // backgroundColor: "green",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -52,19 +52,23 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "darkgrey",
-    borderRadius: 10,
+    // borderWidth: 1,
+    // borderColor: "darkgrey",
+    // borderRadius: 10,
     backgroundColor: "darkblue",
-    width: 90,
-    height: "100%"
+    width: moderateScale(80),
+    height: moderateScale(70)
   },
   buttonlabel: {
     fontFamily: "Itim_400Regular",
-    color: "white"
+    color: "white",
+    fontSize: moderateScale(11),
+    marginTop: moderateScale(5)
   },
   buttonlabelAlt: {
     fontFamily: "Itim_400Regular",
-    color: "gold"
+    color: "gold",
+    fontSize: moderateScale(11),
+    marginTop: moderateScale(5)
   },
 });
