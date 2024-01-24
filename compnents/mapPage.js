@@ -14,6 +14,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import email from "react-native-email";
 import Map from "./GoogleMap";
+import FABMenu from "./FABMenu/bottomBarMenu";
 import FABButtons from "./FABset";
 import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
@@ -59,6 +60,7 @@ import { ModalSelectContext } from "./contexts/modalSelectContext";
 import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
+import { SitesArrayContext } from "./contexts/sitesArrayContext";
 
 import { scale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -100,12 +102,12 @@ export default function MapPage() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
-  
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
   const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const { textvalue, setTextValue } = useContext(SearchTextContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
@@ -565,13 +567,13 @@ export default function MapPage() {
     }
   };
 
-
   const onShopNavigate = () => {
     setMapHelper(true);
     setMasterSwitch(true);
     setMinorSwitch(true);
     setShopModal(true);
     setZoomHelper(true);
+    setSitesArray([]);
   };
 
   useEffect(() => {
@@ -708,6 +710,12 @@ export default function MapPage() {
             {masterSwitch && (
               <View style={styles.Fbuttons}>
                 <FABButtons style={{ zIndex: 2 }} />
+              </View>
+            )}
+
+            {masterSwitch && (
+              <View style={styles.FMenu}>
+                <FABMenu style={{ zIndex: 2 }} />
               </View>
             )}
 
@@ -910,6 +918,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     zIndex: 1,
     // backgroundColor: "pink"
+  },
+  FMenu: {
+    position: "absolute",
+    flexDirection: "column",
+    alignContent: "center",
+    // backgroundColor: "darkblue",
+    height: 70,
+    bottom: scale(10),
+    zIndex: 3,
   },
   Fbuttons: {
     alignItems: "center",
