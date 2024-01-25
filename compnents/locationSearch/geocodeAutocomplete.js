@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     zIndex: 1,
-    marginTop: moderateScale(60)
+    marginTop: moderateScale(10)
   },
 });

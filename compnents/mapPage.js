@@ -1214,7 +1214,7 @@ const styles = StyleSheet.create({
   },
   searchModal: {
     position: "absolute",
-    height: moderateScale(130),
+    height: moderateScale(160),
     width: "60%",
     marginLeft: "19%",
     backgroundColor: "#538bdb",
