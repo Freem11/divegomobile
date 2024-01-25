@@ -556,7 +556,7 @@ export default function MapPage() {
   const startFTabAnimation = () => {
     console.log("fire")
     if (fTabY.value === 0) {
-      fTabY.value = withTiming(moderateScale(-70));
+      fTabY.value = windowWidth > 700 ? withTiming(moderateScale(-60)) : withTiming(moderateScale(-70));
       setLabel("Hide Menu")
       setDirection("down")
     } else {
@@ -738,13 +738,11 @@ export default function MapPage() {
             )}
 
             {masterSwitch && (
-              <Animated.View style={[styles.FMenuAnimate, tabFY]}>
-                {/* <Text style={styles.FText}>Show</Text>
-                <AntDesign name="up" size={24} color="white" /> */}
+              <Animated.View style={[styles.FMenuAnimate, tabFY]} pointerEvents={'box-none'}>
                 <TouchableWithoutFeedback onPress={startFTabAnimation}>
                 <View style={styles.FBox}>
                 <Text style={styles.FText}>{label}</Text>
-                <AntDesign name={direction} size={24} color="white" style={{marginBottom: scale(5)}}/>
+                <AntDesign name={direction} size={moderateScale(14)} color="white" style={{marginBottom: 5}}/>
                 </View>
                 </TouchableWithoutFeedback>
               <View style={styles.FMenu}>
@@ -971,7 +969,7 @@ const styles = StyleSheet.create({
   FText: {
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(14)
+    fontSize: moderateScale(12)
   },
   FMenu: {
     flexDirection: "column",
@@ -1044,7 +1042,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: windowWidth > 700 ? moderateScale(20) : moderateScale(40),
+    top: windowWidth > 700 ? moderateScale(12) : moderateScale(40),
     zIndex: 3,
   },
   filterer: {

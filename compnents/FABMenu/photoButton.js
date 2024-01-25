@@ -28,7 +28,7 @@ export default function PhotoButton() {
           <MaterialIcons
             name="photo-camera"
             color={butState ? "gold" : "white"}
-            size={moderateScale(32)}
+            size={moderateScale(30)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Photo Add</Text>
           </View>

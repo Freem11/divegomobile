@@ -28,7 +28,7 @@ export default function LocationSearchButton() {
           <MaterialIcons
             name="explore"
             color={butState ? "gold" : "white"}
-            size={moderateScale(32)}
+            size={moderateScale(30)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Map Search</Text>
           </View>

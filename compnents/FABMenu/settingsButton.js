@@ -28,7 +28,7 @@ export default function SettingsButton() {
           <MaterialIcons
             name="settings"
             color={butState ? "gold" : "white"}
-            size={moderateScale(32)}
+            size={moderateScale(30)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Settings</Text>
           </View>
