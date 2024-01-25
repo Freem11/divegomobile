@@ -61,7 +61,8 @@ import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
-
+import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
+import { MapSearchModalContext } from "./contexts/mapSearchContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
@@ -85,6 +86,7 @@ import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import UserProfileModal from "./modals/userProfileModal";
 import SettingsModal from "./modals/settingsModal";
 import ShopModal from "./modals/shopModal";
+import MapSearchModal from "./modals/mapSearchModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 import { SettingsContext } from "./contexts/gearModalContext";
@@ -496,6 +498,54 @@ export default function MapPage() {
     }
   };
 
+    //MapSearch Modal Animation
+    const mapSearchModalY = useSharedValue(windowHeight);
+    const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
+  
+    const mapSearchModalReveal = useAnimatedStyle(() => {
+      return {
+        transform: [{ translateY: mapSearchModalY.value }],
+      };
+    });
+  
+    const startMapSearchModalAnimations = () => {
+      if (mapSearchModal) {
+        mapSearchModalY.value = withTiming(-windowHeight*0.1, {
+          duration: 150,
+          easing: Easing.out(Easing.linear),
+        });
+      } else {
+        mapSearchModalY.value = withTiming(windowHeight, {
+          duration: 150,
+          easing: Easing.out(Easing.linear),
+        });
+      }
+    };
+
+    //DiveSiteSearch Modal Animation
+    const diveSiteSearchModalY = useSharedValue(windowHeight);
+    const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  
+    const diveSiteSearchModalReveal = useAnimatedStyle(() => {
+      return {
+        transform: [{ translateY: diveSiteSearchModalY.value }],
+      };
+    });
+  
+    const startdiveSiteSearchModalAnimations = () => {
+      if (diveSiteSearchModal) {
+        diveSiteSearchModalY.value = withTiming(0, {
+          duration: 150,
+          easing: Easing.out(Easing.linear),
+        });
+      } else {
+        diveSiteSearchModalY.value = withTiming(windowHeight, {
+          duration: 150,
+          easing: Easing.out(Easing.linear),
+        });
+      }
+    };
+
   const feedbackX = useSharedValue(0);
 
   const feedbackReveal = useAnimatedStyle(() => {
@@ -519,6 +569,14 @@ export default function MapPage() {
   useEffect(() => {
     startSettingsModalAnimations();
   }, [gearModal]);
+
+  useEffect(() => {
+    startMapSearchModalAnimations();
+  }, [mapSearchModal]);
+
+  useEffect(() => {
+    startdiveSiteSearchModalAnimations();
+  }, [diveSiteSearchModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -910,6 +968,14 @@ export default function MapPage() {
               <SettingsModal />
             </Animated.View>
 
+            <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
+              <MapSearchModal />
+            </Animated.View>
+
+            <Animated.View style={[styles.searchModal, diveSiteSearchModalReveal]}>
+              {/* <SettingsModal /> */}
+            </Animated.View>
+
             <Animated.View style={[styles.feedback, feedbackReveal]}>
               <Text style={styles.feedRequest} onPress={() => handleEmail()}>
                 Send Scuba SEAsons feedback
@@ -1139,6 +1205,18 @@ const styles = StyleSheet.create({
     height: windowHeight - windowHeight * 0.14,
     width: windowWidth - windowWidth * 0.1,
     marginLeft: "5%",
+    backgroundColor: "#538bdb",
+    borderRadius: 15,
+    zIndex: 25,
+    left: 0,
+    borderWidth: 1,
+    borderColor: "darkgrey",
+  },
+  searchModal: {
+    position: "absolute",
+    height: moderateScale(130),
+    width: "60%",
+    marginLeft: "19%",
     backgroundColor: "#538bdb",
     borderRadius: 15,
     zIndex: 25,
