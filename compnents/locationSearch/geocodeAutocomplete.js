@@ -4,7 +4,6 @@ import PlacesInput from "react-native-places-input";
 import config from "../../config";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { MapSearchModalContext } from "../contexts/mapSearchContext";
-
 import { scale, moderateScale } from "react-native-size-matters";
 
 export default function GeocodeAutoComplete(props) {

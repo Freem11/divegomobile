@@ -5,11 +5,12 @@ import { diveSites } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 
 export default function DiveSiteAutoComplete(props) {
   const { setDiveSearchHide } = props;
@@ -22,7 +23,8 @@ export default function DiveSiteAutoComplete(props) {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  
 
   let diveSiteData
 
@@ -85,7 +87,7 @@ export default function DiveSiteAutoComplete(props) {
       }
      
     }
-    setDiveSearchHide(true)
+    setDiveSiteSearchModal(false)
     Keyboard.dismiss()
   };
 
@@ -108,18 +110,18 @@ export default function DiveSiteAutoComplete(props) {
             justifyContent: "center",
             alignItems: "center",
             alignContent: "center",
-            borderRadius: 25,
-            width: 200,
+            borderRadius: moderateScale(25),
+            width: moderateScale(200),
             opacity: 1,
-            height: 40,
+            height: moderateScale(40),
           },
         }}
         inputContainerStyle={{
           alignItems: "center",
-          height: 40,
-          borderRadius: 30,
+          height: moderateScale(35),
+          borderRadius: moderateScale(30),
           backgroundColor: "white",
-          width: 200,
+          width: moderateScale(200),
           zIndex: 2,
          
         }}
@@ -145,8 +147,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignContent: "center",
-    width: 200,
+    width: moderateScale(200),
     borderRadius: 10,
     zIndex: 1,
+    marginTop: moderateScale(70)
   },
 });

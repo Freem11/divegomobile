@@ -87,6 +87,7 @@ import UserProfileModal from "./modals/userProfileModal";
 import SettingsModal from "./modals/settingsModal";
 import ShopModal from "./modals/shopModal";
 import MapSearchModal from "./modals/mapSearchModal";
+import DiveSiteSearchModal from "./modals/diveSiteSearchModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 import { SettingsContext } from "./contexts/gearModalContext";
@@ -534,7 +535,7 @@ export default function MapPage() {
   
     const startdiveSiteSearchModalAnimations = () => {
       if (diveSiteSearchModal) {
-        diveSiteSearchModalY.value = withTiming(0, {
+        diveSiteSearchModalY.value = withTiming(-windowHeight*0.1, {
           duration: 150,
           easing: Easing.out(Easing.linear),
         });
@@ -972,8 +973,8 @@ export default function MapPage() {
               <MapSearchModal />
             </Animated.View>
 
-            <Animated.View style={[styles.searchModal, diveSiteSearchModalReveal]}>
-              {/* <SettingsModal /> */}
+            <Animated.View style={[styles.diveSearchModal, diveSiteSearchModalReveal]}>
+              <DiveSiteSearchModal />
             </Animated.View>
 
             <Animated.View style={[styles.feedback, feedbackReveal]}>
@@ -1215,6 +1216,18 @@ const styles = StyleSheet.create({
   searchModal: {
     position: "absolute",
     height: moderateScale(160),
+    width: "60%",
+    marginLeft: "19%",
+    backgroundColor: "#538bdb",
+    borderRadius: 15,
+    zIndex: 25,
+    left: 0,
+    borderWidth: 1,
+    borderColor: "darkgrey",
+  },
+  diveSearchModal: {
+    position: "absolute",
+    height: moderateScale(130),
     width: "60%",
     marginLeft: "19%",
     backgroundColor: "#538bdb",

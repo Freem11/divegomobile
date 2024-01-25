@@ -1,7 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale, moderateScale } from 'react-native-size-matters';
-import { ProfileModalContext } from "../contexts/profileModalContext";
+import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
+import { IterratorContext } from "../contexts/iterratorContext";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -11,11 +14,15 @@ import {
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  const { itterator } = useContext(IterratorContext);
+  const { itterator2 } = useContext(Iterrator2Context);
+  const { itterator3 } = useContext(Iterrator3Context);
 
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          //  onPress={itterator === 11 || itterator === 18 || itterator2 === 5 || itterator2 === 9 || itterator3 === 5 ? null : startAnimalButtonAnimations}
+          onPress={itterator === 11 || itterator === 18 || itterator2 === 5 || itterator2 === 9 || itterator3 === 5 ? null : () => setDiveSiteSearchModal(!diveSiteSearchModal)}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{

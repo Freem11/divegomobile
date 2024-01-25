@@ -10,47 +10,29 @@ import {
 import React, { useState, useContext, useEffect } from "react";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
-import GeocodeAutoComplete from "../locationSearch/geocodeAutocomplete";
-import { MapSearchModalContext } from "../../compnents/contexts/mapSearchContext";
-import { MapCenterContext } from "../../compnents/contexts/mapCenterContext";
-import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
+import DiveSiteAutoComplete from "../diveSiteSearch/diveSiteAutocomplete";
+import { DiveSiteSearchModalContext } from "../../compnents/contexts/diveSiteSearchContext";
 
-export default function MapSearchModal() {
+export default function DiveSiteSearchModal() {
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [myLocButState, setMyLocButState] = useState(false);
-  const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
-  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
   
-  const toggleMapSearchModal = () => {
-    setMapSearchModal(false)
+  const toggleDiveSiteSearchModal = () => {
+    setDiveSiteSearchModal(false)
   }
-
-  const getCurrentLocation = async () => {
-    try {
-      const location = await getCurrentCoordinates();
-      if (location) {
-        setMapCenter({
-          lat: location.coords.latitude,
-          lng: location.coords.longitude,
-        });
-        setMapSearchModal(false)
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
 
   return (
     <View style={styles.container}>
        <View style={styles.title}>
-        <Text style={styles.header}>Map Search</Text>
+        <Text style={styles.header}>Dive Site Search</Text>
         <View
           style={
             profileCloseState ? styles.closeButtonPressed : styles.closeButton
           }
         >
           <TouchableWithoutFeedback
-            onPress={toggleMapSearchModal}
+            onPress={toggleDiveSiteSearchModal}
             onPressIn={() => setProfileCloseState(true)}
             onPressOut={() => setProfileCloseState(false)}
             style={{
@@ -64,26 +46,7 @@ export default function MapSearchModal() {
           </TouchableWithoutFeedback>
         </View>
       </View>
-      <Text style={styles.buttonlabel}>My Current Location:</Text>
-      <View style={myLocButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
-      <TouchableWithoutFeedback
-          onPress={getCurrentLocation}
-          onPressIn={() => setMyLocButState(true)}
-          onPressOut={() => setMyLocButState(false)}
-          style={{
-            alignItems: "center",
-            width: moderateScale(26),
-            height: moderateScale(26),
-          }}
-        >
-          <MaterialIcons
-            name="my-location"
-            size={moderateScale(26)}
-            color={myLocButState ? "lightblue" : "gold"}
-          />
-        </TouchableWithoutFeedback>
-        </View>
-      <GeocodeAutoComplete />
+         <DiveSiteAutoComplete />
     </View>
   );
 }
@@ -105,7 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: moderateScale(7),
     marginLeft: "8%",
-    width: "70%",
+    width: "85%",
     height: scale(40),
     // backgroundColor:"pink"
   },
@@ -116,8 +79,8 @@ const styles = StyleSheet.create({
     color: "#F0EEEB",
     width: "80%",
     marginTop: "-1%",
-    marginLeft: "7%",
-    marginRight: "15%",
+    marginLeft: "5%",
+    marginRight: "5%",
     // backgroundColor: "green"
   },
   text: {
