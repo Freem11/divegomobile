@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { multiHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { getPhotosforMapArea } from "../../supabaseCalls/photoSupabaseCalls";
@@ -21,14 +21,16 @@ import { AreaPicsContext } from "../contexts/areaPicsContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { formatHeatVals } from "../helpers/mapHelpers";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import PhotoMenuListItem from "./photoMenuListItem";
 
 let waiter2;
+let numbPhotos = 0;
 
 export default function PhotoMenu() {
+  const windowWidth = Dimensions.get("window").width;
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
@@ -89,25 +91,34 @@ export default function PhotoMenu() {
     }
   }, [animalMultiSelection]);
 
+  numbPhotos = areaPics.length
 
   useEffect(() => {
-    setPicMenuSize(areaPics.length * 120);
+    setPicMenuSize(areaPics.length * moderateScale(120));
   }, []);
 
   useEffect(() => {
-    setPicMenuSize(areaPics.length * 120);
+    console.log("fire")
+    setPicMenuSize(areaPics.length * moderateScale(120));
+    // numbPhotos = areaPics.length
+    // context.value.x = 0
     xValue.value = 0;
   }, [areaPics.length]);
 
+  console.log(numbPhotos)
+  // numbPhotos = areaPics.length
+
   const xValue = useSharedValue(0);
   const context = useSharedValue({ x: 0 });
+  let bounds = scale(175)
+  let startBounce = scale(170)
 
   const animatePicMenu = Gesture.Pan()
     .onBegin(() => {
-      if (xValue.value > picMenuSize / 2 - 180) {
-        xValue.value = picMenuSize / 2 - 175;
-      } else if (xValue.value < -picMenuSize / 2 + 180) {
-        xValue.value = -picMenuSize / 2 + 175;
+      if (xValue.value > picMenuSize / 2 - bounds) {
+        xValue.value = picMenuSize / 2 - startBounce;
+      } else if (xValue.value < -picMenuSize / 2 + bounds) {
+        xValue.value = -picMenuSize / 2 + startBounce;
       }
     })
     .onStart(() => {
@@ -123,12 +134,16 @@ export default function PhotoMenu() {
       }
     })
     .onEnd((event) => {
-      if (xValue.value > picMenuSize / 2 - 180) {
-        xValue.value = picMenuSize / 2 - 175;
-      } else if (xValue.value < -picMenuSize / 2 + 180) {
-        xValue.value = -picMenuSize / 2 + 175;
+      console.log("x", xValue.value, picMenuSize, windowWidth)
+      if(xValue.value > picMenuSize/2 - bounds) {
+        xValue.value = picMenuSize/2 - startBounce
+      } else if (xValue.value < - picMenuSize/2 + bounds){
+        xValue.value = -picMenuSize/2 + startBounce
       }
+   
     });
+
+    console.log("starts", xValue.value)
 
   const animatedPictureStyle = useAnimatedStyle(() => {
     return {
@@ -245,7 +260,7 @@ export default function PhotoMenu() {
         style={[
           styles.container2,
           animatedPictureStyle,
-          { minWidth: areaPics.length * 120 },
+          { minWidth: areaPics.length * moderateScale(120) },
         ]}
       >
         {areaPics &&
@@ -276,7 +291,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     zIndex: 90,
-    elevation: 90
+    elevation: 90,
+    width: numbPhotos * moderateScale(120)
   },
   picContainer2: {
     alignItems: "center",

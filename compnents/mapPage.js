@@ -542,6 +542,30 @@ export default function MapPage() {
     }
   };
 
+  const fTabY = useSharedValue(0);
+
+  const tabFY = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: fTabY.value }],
+    };
+  });
+
+  const [label, setLabel] = useState("Show Menu");
+  const [direction, setDirection] = useState("up");
+
+  const startFTabAnimation = () => {
+    console.log("fire")
+    if (fTabY.value === 0) {
+      fTabY.value = withTiming(moderateScale(-70));
+      setLabel("Hide Menu")
+      setDirection("down")
+    } else {
+      fTabY.value = withTiming(0);
+      setLabel("Show Menu")
+      setDirection("up")
+    }
+  };
+
   const onNavigate = () => {
     if (chosenModal === "DiveSite") {
       setAddSiteVals({
@@ -714,9 +738,19 @@ export default function MapPage() {
             )}
 
             {masterSwitch && (
+              <Animated.View style={[styles.FMenuAnimate, tabFY]}>
+                {/* <Text style={styles.FText}>Show</Text>
+                <AntDesign name="up" size={24} color="white" /> */}
+                <TouchableWithoutFeedback onPress={startFTabAnimation}>
+                <View style={styles.FBox}>
+                <Text style={styles.FText}>{label}</Text>
+                <AntDesign name={direction} size={24} color="white" style={{marginBottom: scale(5)}}/>
+                </View>
+                </TouchableWithoutFeedback>
               <View style={styles.FMenu}>
                 <FABMenu style={{ zIndex: 2 }} />
               </View>
+              </Animated.View>
             )}
 
             {!masterSwitch && minorSwitch && (
@@ -919,14 +953,33 @@ const styles = StyleSheet.create({
     zIndex: 1,
     // backgroundColor: "pink"
   },
-  FMenu: {
+  FMenuAnimate: {
     position: "absolute",
+    bottom: moderateScale(-55),
+    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12), 
+    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    zIndex: 3,
+    // backgroundColor: 'pink'
+  },
+  FBox: {
+    alignItems: "center",
+  },
+  FText: {
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    fontSize: moderateScale(14)
+  },
+  FMenu: {
     flexDirection: "column",
     alignContent: "center",
-    backgroundColor: "darkblue",
+    backgroundColor: "#536bdb",
     width: "100%",
-    height: moderateScale(70),
-    bottom: moderateScale(15),
+    height: moderateScale(55),
+    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     zIndex: 3,
   },
   Fbuttons: {
@@ -991,7 +1044,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: Platform.OS === "ios" ? "5%" : "4%",
+    top: windowWidth > 700 ? moderateScale(20) : moderateScale(40),
     zIndex: 3,
   },
   filterer: {
@@ -1005,7 +1058,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     // height: 25,
     width: "50%",
-    top: Platform.OS === "ios" ? "100%" : "100%",
+    top: moderateScale(105),
     zIndex: 3,
     // backgroundColor: "green"
   },

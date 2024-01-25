@@ -25,9 +25,9 @@ const AnimalTag = (props) => {
             <Text
               style={{
                 color: "#355D71",
-                fontFamily: "PermanentMarker_400Regular",
+                fontFamily: "Itim_400Regular",
                 fontSize: scale(11),
-                marginBottom: 2,
+                marginTop: scale(1.5),
                 marginLeft: 4,
                 marginRight: 2
               }}

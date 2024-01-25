@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     bottom: windowWidth > 600 ? scale(11) : Platform.OS === "ios" ? scale(24) : scale(26),
     alignSelf: "center",
     height: scale(2),
-    backgroundColor: "blue",
+    backgroundColor: "#536bdb",
     width: "90%",
     zIndex: 2,
     marginRight: -5

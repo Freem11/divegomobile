@@ -55,20 +55,20 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: "darkgrey",
     // borderRadius: 10,
-    backgroundColor: "darkblue",
+    backgroundColor: "#536bdb",
     width: moderateScale(80),
-    height: moderateScale(70)
+    height: moderateScale(55)
   },
   buttonlabel: {
     fontFamily: "Itim_400Regular",
     color: "white",
     fontSize: moderateScale(11),
-    marginTop: moderateScale(5)
+    marginTop: moderateScale(0)
   },
   buttonlabelAlt: {
     fontFamily: "Itim_400Regular",
     color: "gold",
     fontSize: moderateScale(11),
-    marginTop: moderateScale(5)
+    marginTop: moderateScale(0)
   },
 });
