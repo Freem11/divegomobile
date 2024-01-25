@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale, moderateScale } from 'react-native-size-matters';
 import { ProfileModalContext } from "../contexts/profileModalContext";
+import { TutorialContext } from "../contexts/tutorialContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -9,13 +10,17 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
-export default function DiveSiteButton() {
+export default function ProfileButton() {
   const [butState, setButState] = useState(false);
-
+  const { profileModal, setProfileModal } = useContext(
+    ProfileModalContext
+  );
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          // onPress={() => {itterator === 11 || itterator === 15 || itterator === 18 || itterator2 === 3 || itterator2 === 5 || itterator3 === 5 ? null : diveSiteModalHide()}}
+          onPress={() => {tutorialRunning ? null : setProfileModal(!profileModal)}}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{
@@ -25,12 +30,12 @@ export default function DiveSiteButton() {
           }}
         >
         <View style={styles.buttonBox}>
-          <MaterialIcons
-            name="add-location-alt"
+          <MaterialCommunityIcons
+            name="account"
             color={butState ? "gold" : "white"}
-            size={moderateScale(30)}
+            size={moderateScale(33)}
           />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Site Add</Text>
+          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Profile</Text>
           </View>
         </TouchableWithoutFeedback>
       
@@ -47,7 +52,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     bottom: 0,
     left: 0,
-    fontSize: "2rem"
+    fontSize: "2rem",
   },
   buttonBox: {
     alignItems: "center",
@@ -57,7 +62,8 @@ const styles = StyleSheet.create({
     // borderRadius: 10,
     backgroundColor: "#538bdb",
     width: moderateScale(80),
-    height: moderateScale(55)
+    height: moderateScale(53),
+    marginTop: moderateScale(-2)
   },
   buttonlabel: {
     fontFamily: "Itim_400Regular",

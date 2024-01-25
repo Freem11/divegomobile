@@ -14,6 +14,7 @@ import SiteSearchButton from "./siteSearchButton";
 import LocationSearchButton from "./locationSearchButton";
 import SettingsButton from "./settingsButton";
 import GuidesButton from "./guidesButton";
+import ProfileButton from "./profileButton";
 
 let numbButtons = 0;
 
@@ -91,6 +92,7 @@ export default function FABMenu() {
           { minWidth: numbButtons * moderateScale(80) },
         ]}
       >
+              <ProfileButton/>
               <SettingsButton/>
               <LocationSearchButton/>
               <PhotoButton/>

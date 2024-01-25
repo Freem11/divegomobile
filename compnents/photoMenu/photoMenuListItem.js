@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(15),
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
-    backgroundColor: "#536bdb",
+    backgroundColor: "#538bdb",
     height: moderateScale(105),
     zIndex: 20,
     elevation: 20

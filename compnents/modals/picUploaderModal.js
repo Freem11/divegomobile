@@ -892,6 +892,8 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
     minHeight: Platform.OS === "android" ? 490 : 0,
     // backgroundColor: "pink",
   },

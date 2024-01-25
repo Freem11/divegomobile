@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale, moderateScale } from 'react-native-size-matters';
-import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SettingsContext } from "../contexts/gearModalContext";
+import { TutorialContext } from "../contexts/tutorialContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -11,11 +12,13 @@ import {
 
 export default function SettingsButton() {
   const [butState, setButState] = useState(false);
-
+  const { gearModal, setGearModal } = useContext(SettingsContext);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          // onPress={() => {tutorialRunning ? null : settingsHide()}}
+          onPress={() => {tutorialRunning ? null : setGearModal(!gearModal)}}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: "darkgrey",
     // borderRadius: 10,
-    backgroundColor: "#536bdb",
+    backgroundColor: "#538bdb",
     width: moderateScale(80),
     height: moderateScale(55)
   },

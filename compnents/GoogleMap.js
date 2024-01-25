@@ -255,9 +255,7 @@ export default function Map() {
       zoomHelp = 10;
     }
 
-    console.log("make sense", zoomHelper, shopModal)
     if(zoomHelper){
-      console.log("fire")
       if(shopModal){
         zoomHelp = 16
         setMinorSwitch(true)

@@ -98,15 +98,9 @@ export default function PhotoMenu() {
   }, []);
 
   useEffect(() => {
-    console.log("fire")
     setPicMenuSize(areaPics.length * moderateScale(120));
-    // numbPhotos = areaPics.length
-    // context.value.x = 0
     xValue.value = 0;
   }, [areaPics.length]);
-
-  console.log(numbPhotos)
-  // numbPhotos = areaPics.length
 
   const xValue = useSharedValue(0);
   const context = useSharedValue({ x: 0 });
@@ -134,7 +128,6 @@ export default function PhotoMenu() {
       }
     })
     .onEnd((event) => {
-      console.log("x", xValue.value, picMenuSize, windowWidth)
       if(xValue.value > picMenuSize/2 - bounds) {
         xValue.value = picMenuSize/2 - startBounce
       } else if (xValue.value < - picMenuSize/2 + bounds){
@@ -142,8 +135,6 @@ export default function PhotoMenu() {
       }
    
     });
-
-    console.log("starts", xValue.value)
 
   const animatedPictureStyle = useAnimatedStyle(() => {
     return {

@@ -83,9 +83,11 @@ import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import UserProfileModal from "./modals/userProfileModal";
+import SettingsModal from "./modals/settingsModal";
 import ShopModal from "./modals/shopModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
+import { SettingsContext } from "./contexts/gearModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -470,6 +472,30 @@ export default function MapPage() {
     }
   };
 
+  //Settings Modal Animation
+  const settingsModalY = useSharedValue(windowHeight);
+  const { gearModal, setGearModal } = useContext(SettingsContext);
+
+  const settingsModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: settingsModalY.value }],
+    };
+  });
+
+  const startSettingsModalAnimations = () => {
+    if (gearModal) {
+      settingsModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      settingsModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
   const feedbackX = useSharedValue(0);
 
   const feedbackReveal = useAnimatedStyle(() => {
@@ -488,10 +514,11 @@ export default function MapPage() {
 
   useEffect(() => {
     startProfileModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
   }, [profileModal]);
+
+  useEffect(() => {
+    startSettingsModalAnimations();
+  }, [gearModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -821,7 +848,7 @@ export default function MapPage() {
               </View>
             )}
 
-            <Logo style={styles.Logo} pointerEvents={"none"} />
+            {/* <Logo style={styles.Logo} pointerEvents={"none"} /> */}
 
             {/* modals go here? */}
             <Animated.View
@@ -877,6 +904,10 @@ export default function MapPage() {
 
             <Animated.View style={[styles.anchorModal, profileModalReveal]}>
               <UserProfileModal />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, settingsModalReveal]}>
+              <SettingsModal />
             </Animated.View>
 
             <Animated.View style={[styles.feedback, feedbackReveal]}>
@@ -974,7 +1005,7 @@ const styles = StyleSheet.create({
   FMenu: {
     flexDirection: "column",
     alignContent: "center",
-    backgroundColor: "#536bdb",
+    backgroundColor: "#538bdb",
     width: "100%",
     height: moderateScale(55),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
@@ -1087,7 +1118,7 @@ const styles = StyleSheet.create({
   Hist: {
     alignItems: "center",
     position: "absolute",
-    bottom: scale(30),
+    bottom: windowWidth > 700 ? scale(27) : scale(30),
     left: scale(75),
     width: scale(190),
     height: 100,
@@ -1112,6 +1143,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     zIndex: 25,
     left: 0,
+    borderWidth: 1,
+    borderColor: "darkgrey",
   },
   pullTab: {
     height: windowWidth > 600 ? scale(10) : scale(15),

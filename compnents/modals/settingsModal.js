@@ -27,10 +27,12 @@ import {
   addDeletedAccountInfo,
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import { MyCreaturesContext } from "../../compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext";
+import { SettingsContext } from "../../compnents/contexts/gearModalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { scale } from "react-native-size-matters";
@@ -41,6 +43,8 @@ const windowHeight = Dimensions.get("window").height;
 export default function SettingsModal() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
+  const [settingsCloseState, setSettingsCloseState] = useState(false);
+  const { gearModal, setGearModal } = useContext(SettingsContext);
 
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
@@ -141,6 +145,10 @@ export default function SettingsModal() {
       setCreaturesIsEnabled(true)
     }
   }, [])
+
+  const toggleSettingsModal = () => {
+    setGearModal(false)
+  }
  
 
   const toggleDCSwitch = () =>
@@ -171,6 +179,28 @@ export default function SettingsModal() {
   return (
     // <ScrollView style={{ width: "86%" }}>
     <View style={styles.container}>
+      <View style={styles.title}>
+        <Text style={styles.header}>Settings</Text>
+        <View
+          style={
+            settingsCloseState ? styles.closeButtonPressed : styles.closeButton
+          }
+        >
+          <TouchableWithoutFeedback
+            onPress={toggleSettingsModal}
+            onPressIn={() => setSettingsCloseState(true)}
+            onPressOut={() => setSettingsCloseState(false)}
+            style={{
+              width: scale(30),
+              height: scale(30),
+              alignItems: "center",
+            }}
+          >
+           
+            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
       <View style={styles.first}>
         <TouchableWithoutFeedback
           onPress={handleLogout}
@@ -271,18 +301,19 @@ export default function SettingsModal() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     // backgroundColor: 'green',
     height: windowHeight * 0.5,
-    width: "86%",
+    // alignItems: "center",
+    width: "100%",
   },
   first: {
     // position: "absolute",
     height: 50,
     // backgroundColor: "pink",
+    alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "10%",
+    marginTop: "30%",
   },
   second: {
     height: "40%",
@@ -423,5 +454,48 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     marginRight: 1,
     marginLeft: 35
-  }
+  },
+  title: {
+    position: "absolute",
+    top: "-1%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    marginTop: "4%",
+    marginLeft: "8%",
+    width: "80%",
+    height: scale(40),
+    // backgroundColor:"pink"
+  },
+  header: {
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(26),
+    alignSelf: "center",
+    color: "#F0EEEB",
+    width: "80%",
+    marginTop: "-1%",
+    marginLeft: "7%",
+    marginRight: "15%",
+    // backgroundColor: "green"
+  },
+  closeButton: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButtonPressed: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    opacity: 0.3,
+  }, 
 });
