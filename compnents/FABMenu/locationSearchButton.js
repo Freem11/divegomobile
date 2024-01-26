@@ -1,7 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale, moderateScale } from 'react-native-size-matters';
+import { ShopModalContext } from "../contexts/shopModalContext";
+import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
+import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
+import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SettingsContext } from "../contexts/gearModalContext";
+import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
@@ -15,9 +23,31 @@ import {
 export default function LocationSearchButton() {
   const [butState, setButState] = useState(false);
   const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
+  const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
+  const { setDiveSiteAdderModal } = useContext(DSAdderContext);
+  const { setPicAdderModal } = useContext(PictureAdderContext);
+  const { setProfileModal } = useContext(ProfileModalContext);
+  const { setGearModal } = useContext(SettingsContext);
+  const { setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  const { setSiteModal } = useContext(AnchorModalContext);
+  const { setShopModal } = useContext(ShopModalContext);
+
   const { itterator } = useContext(IterratorContext);
   const { itterator2 } = useContext(Iterrator2Context);
   const { itterator3 } = useContext(Iterrator3Context);
+
+  useEffect(() => {
+    if(mapSearchModal) {
+      setDiveSiteAdderModal(false)
+      setTutorialLaunchpadModal(false)
+      setPicAdderModal(false)
+      setProfileModal(false)
+      setGearModal(false)
+      setDiveSiteSearchModal(false)
+      setSiteModal(false)
+      setShopModal(false)
+    } 
+  }, [mapSearchModal]);
 
   return (
     <View style={styles.container}>

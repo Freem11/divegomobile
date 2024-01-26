@@ -22,7 +22,7 @@ export default function FABMenu() {
   const windowWidth = Dimensions.get("window").width;
   const [fabMenuSize, setFabMenuSize] = useState(0);
 
-  numbButtons = 6
+  numbButtons = 7
 
   useEffect(() => {
     setFabMenuSize(numbButtons * moderateScale(80));

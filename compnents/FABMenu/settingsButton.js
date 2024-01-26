@@ -1,7 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale, moderateScale } from 'react-native-size-matters';
+import { ShopModalContext } from "../contexts/shopModalContext";
+import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
+import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
+import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
+import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SettingsContext } from "../contexts/gearModalContext";
+import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import {
   MaterialIcons,
@@ -13,8 +21,29 @@ import {
 export default function SettingsButton() {
   const [butState, setButState] = useState(false);
   const { gearModal, setGearModal } = useContext(SettingsContext);
+  const { setProfileModal } = useContext(ProfileModalContext);
+  const { setPicAdderModal } = useContext(PictureAdderContext);
+  const { setMapSearchModal } = useContext(MapSearchModalContext);
+  const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
+  const { setDiveSiteAdderModal } = useContext(DSAdderContext);
+  const { setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  const { setSiteModal } = useContext(AnchorModalContext);
+  const { setShopModal } = useContext(ShopModalContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   
+  useEffect(() => {
+    if(gearModal){
+      setDiveSiteAdderModal(false)
+      setTutorialLaunchpadModal(false)
+      setMapSearchModal(false)
+      setPicAdderModal(false)
+      setProfileModal(false)
+      setDiveSiteSearchModal(false)
+      setSiteModal(false)
+      setShopModal(false)
+    }
+  }, [gearModal]);
+
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback

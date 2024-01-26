@@ -1,6 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { scale, moderateScale } from 'react-native-size-matters';
+import { scale, moderateScale } from "react-native-size-matters";
+import { ShopModalContext } from "../contexts/shopModalContext";
+import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
+import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
+import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
+import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SettingsContext } from "../contexts/gearModalContext";
 import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
@@ -15,12 +23,23 @@ import {
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
+    DiveSiteSearchModalContext
+  );
+  const { setGearModal } = useContext(SettingsContext);
+  const { setProfileModal } = useContext(ProfileModalContext);
+  const { setPicAdderModal } = useContext(PictureAdderContext);
+  const { setMapSearchModal } = useContext(MapSearchModalContext);
+  const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
+  const { setDiveSiteAdderModal } = useContext(DSAdderContext);
+  const { setSiteModal } = useContext(AnchorModalContext);
+  const { setShopModal } = useContext(ShopModalContext);
+ 
   const { itterator } = useContext(IterratorContext);
   const { itterator2 } = useContext(Iterrator2Context);
   const { itterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  
+
   let counter = 0;
   let blinker;
 
@@ -47,29 +66,50 @@ export default function SiteSearchButton() {
     return () => cleanUp();
   }, [itterator2]);
 
+  useEffect(() => {
+    if (diveSiteSearchModal) {
+      setDiveSiteAdderModal(false);
+      setTutorialLaunchpadModal(false);
+      setMapSearchModal(false);
+      setPicAdderModal(false);
+      setProfileModal(false);
+      setGearModal(false);
+      setSiteModal(false)
+      setShopModal(false)
+    }
+  }, [diveSiteSearchModal]);
 
   return (
     <View style={styles.container}>
-     <TouchableWithoutFeedback
-          onPress={itterator === 11 || itterator === 18 || itterator2 === 5 || itterator2 === 9 || itterator3 === 5 ? null : () => setDiveSiteSearchModal(!diveSiteSearchModal)}
-          onPressIn={() => setButState(true)}
-          onPressOut={() => setButState(false)}
-          style={{
-            alignItems: "center",
-            width: moderateScale(32),
-            height: moderateScale(32),
-          }}
-        >
+      <TouchableWithoutFeedback
+        onPress={
+          itterator === 11 ||
+          itterator === 18 ||
+          itterator2 === 5 ||
+          itterator2 === 9 ||
+          itterator3 === 5
+            ? null
+            : () => setDiveSiteSearchModal(!diveSiteSearchModal)
+        }
+        onPressIn={() => setButState(true)}
+        onPressOut={() => setButState(false)}
+        style={{
+          alignItems: "center",
+          width: moderateScale(32),
+          height: moderateScale(32),
+        }}
+      >
         <View style={styles.buttonBox}>
           <MaterialCommunityIcons
             name="map-search-outline"
             color={butState ? "gold" : "white"}
             size={moderateScale(30)}
           />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Site Search</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      
+          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
+            Site Search
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
@@ -83,7 +123,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     bottom: 0,
     left: 0,
-    fontSize: "2rem"
+    fontSize: "2rem",
   },
   buttonBox: {
     alignItems: "center",
@@ -93,18 +133,18 @@ const styles = StyleSheet.create({
     // borderRadius: 10,
     backgroundColor: "#538bdb",
     width: moderateScale(80),
-    height: moderateScale(55)
+    height: moderateScale(55),
   },
   buttonlabel: {
     fontFamily: "Itim_400Regular",
     color: "white",
     fontSize: moderateScale(11),
-    marginTop: moderateScale(0)
+    marginTop: moderateScale(0),
   },
   buttonlabelAlt: {
     fontFamily: "Itim_400Regular",
     color: "gold",
     fontSize: moderateScale(11),
-    marginTop: moderateScale(0)
+    marginTop: moderateScale(0),
   },
 });

@@ -97,7 +97,7 @@ const windowHeight = Dimensions.get("window").height;
 let feedbackRequest = null;
 let feedbackRequest2 = null;
 let FbWidth = moderateScale(350)
-console.log(FbWidth,windowWidth)
+
 export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
