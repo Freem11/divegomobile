@@ -826,8 +826,54 @@ export default function MapPage() {
               </TouchableWithoutFeedback>
             )}
 
+            {/* {masterSwitch && (
+             
+            )} */}
+
+            {/* {masterSwitch && (
+              <View style={styles.Fbuttons}>
+                <FABButtons style={{ zIndex: 2 }} />
+              </View>
+            )} */}
+
             {masterSwitch && (
-              <View
+              <Animated.View
+                style={[styles.FMenuAnimate, tabFY]}
+                pointerEvents={"box-none"}
+              >
+                <TouchableWithoutFeedback onPress={startFTabAnimation}>
+                  <View style={styles.FBox}>
+                    <Text style={styles.FText}>{label}</Text>
+                    <AntDesign
+                      name={direction}
+                      size={moderateScale(14)}
+                      color="white"
+                      style={{ marginBottom: 5 }}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+
+                <Animated.View style={[styles.feedback, feedbackReveal]}>
+              <Text style={styles.feedRequest} onPress={() => handleEmail()}>
+                Send Scuba SEAsons feedback
+              </Text>
+              <TouchableOpacity
+                style={{
+                  width: moderateScale(30),
+                  height: moderateScale(23),
+                  marginTop: moderateScale(3),
+                }}
+                onPress={startFeedbackAnimations}
+              >
+                <Octicons
+                  name="paper-airplane"
+                  size={moderateScale(24)}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </Animated.View>
+
+                <View
                 style={
                   anchButState
                     ? styles.buttonwrapperPressed
@@ -853,30 +899,8 @@ export default function MapPage() {
                   />
                 </TouchableWithoutFeedback>
               </View>
-            )}
 
-            {/* {masterSwitch && (
-              <View style={styles.Fbuttons}>
-                <FABButtons style={{ zIndex: 2 }} />
-              </View>
-            )} */}
 
-            {masterSwitch && (
-              <Animated.View
-                style={[styles.FMenuAnimate, tabFY]}
-                pointerEvents={"box-none"}
-              >
-                <TouchableWithoutFeedback onPress={startFTabAnimation}>
-                  <View style={styles.FBox}>
-                    <Text style={styles.FText}>{label}</Text>
-                    <AntDesign
-                      name={direction}
-                      size={moderateScale(14)}
-                      color="white"
-                      style={{ marginBottom: 5 }}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
                 <View style={styles.FMenu}>
                   <FABMenu style={{ zIndex: 2 }} />
                 </View>
@@ -1023,26 +1047,6 @@ export default function MapPage() {
               style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
             >
               <DiveSiteSearchModal />
-            </Animated.View>
-
-            <Animated.View style={[styles.feedback, feedbackReveal]}>
-              <Text style={styles.feedRequest} onPress={() => handleEmail()}>
-                Send Scuba SEAsons feedback
-              </Text>
-              <TouchableOpacity
-                style={{
-                  width: moderateScale(30),
-                  height: moderateScale(23),
-                  marginTop: moderateScale(3),
-                }}
-                onPress={startFeedbackAnimations}
-              >
-                <Octicons
-                  name="paper-airplane"
-                  size={moderateScale(24)}
-                  color="white"
-                />
-              </TouchableOpacity>
             </Animated.View>
 
             <Map style={{ zIndex: 1 }} />
@@ -1303,11 +1307,11 @@ const styles = StyleSheet.create({
   },
   feedback: {
     zIndex: 20,
-    opacity: 0.8,
+    // opacity: 0.8,
     flexDirection: "row",
     backgroundColor: "#538bdb",
     position: "absolute",
-    top: windowHeight * 0.83,
+    top: -moderateScale(35),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),
@@ -1345,7 +1349,7 @@ const styles = StyleSheet.create({
   },
   buttonwrapper: {
     position: "absolute",
-    top: windowHeight * 0.83,
+    top: -moderateScale(35),
     right: moderateScale(30),
     alignItems: "center",
     justifyContent: "center",
