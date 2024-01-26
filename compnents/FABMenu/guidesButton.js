@@ -1,21 +1,27 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale, moderateScale } from 'react-native-size-matters';
-import { ProfileModalContext } from "../contexts/profileModalContext";
+import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
+import { TutorialContext } from "../contexts/tutorialContext";
 import {
   MaterialIcons,
   FontAwesome5,
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import TutorialLaunchPadModal from "../modals/tutorialsModal";
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
-
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
+    TutorialLaunchPadContext
+  );
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          // onPress={() => {tutorialRunning ? null : launchPadHide()}}
+          onPress={() => {tutorialRunning ? null : setTutorialLaunchpadModal(!tutorialLaunchpadModal)}}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{
