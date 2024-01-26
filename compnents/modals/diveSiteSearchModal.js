@@ -12,15 +12,27 @@ import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
 import DiveSiteAutoComplete from "../diveSiteSearch/diveSiteAutocomplete";
 import { DiveSiteSearchModalContext } from "../../compnents/contexts/diveSiteSearchContext";
+import { TutorialContext } from "../../compnents/contexts/tutorialContext";
+import { Iterrator2Context } from "../../compnents/contexts/iterrator2Context";
 
 export default function DiveSiteSearchModal() {
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [myLocButState, setMyLocButState] = useState(false);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   
   const toggleDiveSiteSearchModal = () => {
     setDiveSiteSearchModal(false)
   }
+
+  useEffect(() => {
+    if (tutorialRunning) {
+        if (itterator2 === 3) {
+          setItterator2(itterator2 + 1);
+        }
+    }
+  }, [diveSiteSearchModal]);
 
   return (
     <View style={styles.container}>

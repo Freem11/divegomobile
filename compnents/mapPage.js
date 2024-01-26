@@ -96,7 +96,8 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 let feedbackRequest = null;
 let feedbackRequest2 = null;
-
+let FbWidth = moderateScale(350)
+console.log(FbWidth,windowWidth)
 export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -557,7 +558,7 @@ export default function MapPage() {
 
   const startFeedbackAnimations = () => {
     if (feedbackX.value === 0) {
-      feedbackX.value = withSpring(250);
+      feedbackX.value = withSpring(moderateScale(250));
     } else {
       feedbackX.value = withTiming(0);
     }
@@ -983,12 +984,12 @@ export default function MapPage() {
               </Text>
               <TouchableOpacity
                 style={{
-                  width: scale(30),
-                  height: scale(23),
+                  width: moderateScale(30),
+                  height: moderateScale(23),
                 }}
                 onPress={startFeedbackAnimations}
               >
-                <Octicons name="paper-airplane" size={24} color="white" />
+                <Octicons name="paper-airplane" size={moderateScale(24)} color="white" />
               </TouchableOpacity>
             </Animated.View>
 
@@ -1255,20 +1256,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     position: "absolute",
     top: windowHeight * 0.83,
-    left: -315,
-    padding: 5,
-    borderTopRightRadius: 15,
-    borderBottomRightRadius: 15,
-    width: 350,
-    height: 35,
+    left: -(0.88)*FbWidth,
+    padding: moderateScale(5),
+    borderTopRightRadius: moderateScale(15),
+    borderBottomRightRadius: moderateScale(15),
+    width: FbWidth,
+    height: moderateScale(35),
   },
   feedRequest: {
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: 18,
-    marginRight: 15,
-    marginLeft: 14,
-    paddingLeft: 50,
+    fontSize: moderateScale(18),
+    marginRight: moderateScale(15),
+    marginLeft: moderateScale(14),
+    paddingLeft: moderateScale(50),
   },
   photoBoxModal: {
     position: "absolute",

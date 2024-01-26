@@ -5,6 +5,7 @@ import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { TutorialContext } from "../contexts/tutorialContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -18,6 +19,34 @@ export default function SiteSearchButton() {
   const { itterator } = useContext(IterratorContext);
   const { itterator2 } = useContext(Iterrator2Context);
   const { itterator3 } = useContext(Iterrator3Context);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  
+  let counter = 0;
+  let blinker;
+
+  function diveSiteSearch() {
+    counter++;
+    if (counter % 2 == 0) {
+      setButState(false);
+    } else {
+      setButState(true);
+    }
+  }
+
+  function cleanUp() {
+    clearInterval(blinker);
+    setButState(false);
+  }
+
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator2 === 3) {
+        blinker = setInterval(diveSiteSearch, 1000);
+      }
+    }
+    return () => cleanUp();
+  }, [itterator2]);
+
 
   return (
     <View style={styles.container}>

@@ -5,6 +5,7 @@ import { PictureAdderContext } from "../contexts/picModalContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { TutorialContext } from "../contexts/tutorialContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -18,6 +19,33 @@ export default function PhotoButton() {
   const { itterator, setItterator } = useContext(IterratorContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  
+  let counter = 0;
+  let blinker;
+
+  function photoAdd() {
+    counter++;
+    if (counter % 2 == 0) {
+      setButState(false);
+    } else {
+      setButState(true);
+    }
+  }
+
+  function cleanUp() {
+    clearInterval(blinker);
+    setButState(false);
+  }
+
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator3 === 5) {
+        blinker = setInterval(photoAdd, 1000);
+      }
+    }
+    return () => cleanUp();
+  }, [itterator3]);
 
   return (
     <View style={styles.container}>
