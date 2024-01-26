@@ -38,6 +38,7 @@ let SiteNameVar = false;
 let LatVar = false;
 let LngVar = false;
 
+const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteModal() {
@@ -734,7 +735,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    marginTop: "2%",
+    marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(10),
     marginLeft: "12%",
     width: "80%",
     height: scale(30),

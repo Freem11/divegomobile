@@ -15,7 +15,7 @@ import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { findImageInCache, cacheImage } from "../helpers/imageCashingHelper";
 import InsetShadow from "react-native-inset-shadow";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -171,12 +171,12 @@ useEffect(() => {
 
       <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
             marginRight: 18,
-            marginTop: 10,
-            paddingTop: 3
+            marginTop: moderateScale(10),
+            // paddingTop: 3
           }}
           elevation={20}
           shadowRadius={15}
@@ -188,7 +188,7 @@ useEffect(() => {
             placeholder={"DiverName"}
             keyboardType="numbers-and-punctuation"
             editable={false}
-            fontSize={14}
+            fontSize={moderateScale(14)}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
             multiline
@@ -200,12 +200,12 @@ useEffect(() => {
 
         <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
             marginRight: 18,
-            marginTop: 10,
-            paddingTop: 3
+            marginTop: moderateScale(10),
+            // paddingTop: 3
 
           }}
           elevation={20}
@@ -218,7 +218,7 @@ useEffect(() => {
             placeholder={"Email"}
             keyboardType="numbers-and-punctuation"
             editable={false}
-            fontSize={14}
+            fontSize={moderateScale(14)}
             placeholderTextColor="darkgrey"
             color="#F0EEEB"
             multiline
@@ -245,13 +245,13 @@ useEffect(() => {
             marginRight: scale(10)
           }}
         >
-          <FontAwesome name="share-square-o" size={24} color="gold" />
+          <FontAwesome name="share-square-o" size={moderateScale(24)} color="gold" />
           <Text
             style={{
               marginLeft: 5,
               fontFamily: "PatrickHand_400Regular",
               color: "gold",
-              fontSize: 16
+              fontSize: moderateScale(14)
             }}
           >
             Share Scuba SEAsons!
@@ -286,27 +286,26 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
-    borderRadius: 10,
-    width: 200,
-    height: 40,
+    borderRadius: moderateScale(10),
+    width: moderateScale(180),
+    height: moderateScale(27),
+    marginTop: scale(6),
     textAlign: "center",
-    verticalAlign: "middle",
     alignSelf: "center",
-    marginTop: 3,
-    marginBottom: 20,
-    textAlign: "center",
-    overflow: "scroll"
+    justifyContent: "center",
+    overflow: "scroll",
   },
   inputRed: {
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
-    borderRadius: 10,
-    width: 200,
-    height: 40,
-    alignSelf: "center",
-    marginBottom: 20,
+    borderRadius: moderateScale(10),
+    width: moderateScale(180),
+    height: moderateScale(27),
+    marginTop: scale(6),
     textAlign: "center",
-    overflow: "hidden",
+    alignSelf: "center",
+    justifyContent: "center",
+    overflow: "scroll",
   },
   text: {
     fontSize: 18,
@@ -360,10 +359,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
     marginLeft: "30%",
-    marginTop: scale(30),
+    marginTop: moderateScale(30),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -379,10 +378,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
     marginLeft: "30%",
-    marginTop: scale(30),
+    marginTop: moderateScale(30),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

@@ -20,7 +20,7 @@ import { SecondTutorialModalContext } from "../contexts/secondTutorialModalConte
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import InsetShadow from "react-native-inset-shadow";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -102,8 +102,8 @@ export default function TutorialLaunchPadModal() {
             onPressOut={() => setTutPadCloseState(false)}
             disabled={tutorialRunning}
             style={{
-              width: 200,
-              height: 22,
+              width: moderateScale(200),
+              height: moderateScale(22),
               alignItems: "center",
             }}
           >
@@ -113,7 +113,7 @@ export default function TutorialLaunchPadModal() {
                 marginTop: -4,
                 fontFamily: "PatrickHand_400Regular",
                 color: "gold",
-                fontSize: 19
+                fontSize: moderateScale(19)
               }}
             >
               Intro Guide
@@ -134,8 +134,8 @@ export default function TutorialLaunchPadModal() {
             onPressOut={() => setTutPad2CloseState(false)}
             disabled={tutorialRunning}
             style={{
-              width: 200,
-              height: 22,
+              width: moderateScale(200),
+              height: moderateScale(22),
               alignItems: "center",
             }}
           >
@@ -145,7 +145,7 @@ export default function TutorialLaunchPadModal() {
                 marginTop: -4,
                 fontFamily: "PatrickHand_400Regular",
                 color: "gold",
-                fontSize: 19
+                fontSize: moderateScale(19)
               }}
             >
               Fun With Dive Sites
@@ -166,8 +166,8 @@ export default function TutorialLaunchPadModal() {
             onPressOut={() => setTutPad3CloseState(false)}
             disabled={tutorialRunning}
             style={{
-              width: 200,
-              height: 22,
+              width: moderateScale(200),
+              height: moderateScale(22),
               alignItems: "center",
             }}
           >
@@ -177,7 +177,7 @@ export default function TutorialLaunchPadModal() {
                 marginTop: -5,
                 fontFamily: "PatrickHand_400Regular",
                 color: "gold",
-                fontSize: 19,
+                fontSize: moderateScale(19),
                 height: "200%"
               }}
             >
@@ -260,10 +260,10 @@ const styles = StyleSheet.create({
     fontSize: scale(26),
     alignSelf: "center",
     color: "#F0EEEB",
-    width: "80%",
+    width: "85%",
     marginTop: "-1%",
     marginLeft: "7%",
-    marginRight: "15%",
+    marginRight: "10%",
     // backgroundColor: "green"
   },
   closeButton: {
@@ -289,9 +289,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     // marginLeft: "30%",
     marginTop: scale(30),
     shadowColor: "#000",
@@ -309,9 +309,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     // marginLeft: "30%",
     marginTop: scale(30),
     shadowColor: "#000",

@@ -35,7 +35,7 @@ import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext"
 import { SettingsContext } from "../../compnents/contexts/gearModalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -62,7 +62,7 @@ export default function SettingsModal() {
 
   const startDangerZoneAnimations = () => {
     if (dangerZoneHeight.value === 0) {
-      dangerZoneHeight.value = withSpring(80);
+      dangerZoneHeight.value = withSpring(moderateScale(80));
       dangerZoneOpacity.value = withTiming(1);
       setDangerZoneEnabled(false);
     } else {
@@ -217,7 +217,7 @@ export default function SettingsModal() {
                 paddingBottom: 3,
                 fontFamily: "PatrickHand_400Regular",
                 color: "gold",
-                fontSize: 24,
+                fontSize: moderateScale(24),
               }}
             >
               Sign Out
@@ -244,6 +244,7 @@ export default function SettingsModal() {
           <Text style={styles.labelText}>My Sea Creatures</Text>
           <View style={styles.switches}>
           <Switch
+            // style={styles.switches}
             trackColor={{ false: "#767577", true: "#f4f3f4" }}
             thumbColor={creaturesIsEnabled ? "#538bdb" : "#538bdb"}
             ios_backgroundColor="#3e3e3e"
@@ -260,9 +261,9 @@ export default function SettingsModal() {
           style={{ backgroundColor: "purple" }}
         >
           <View style={styles.dangerZonebar}>
-            <AntDesign name="exclamationcircleo" size={20} color="maroon" />
+            <AntDesign name="exclamationcircleo" size={moderateScale(20)} color="maroon" />
             <Text style={styles.dangerText}>Danger Zone</Text>
-            <AntDesign name="exclamationcircleo" size={20} color="maroon" />
+            <AntDesign name="exclamationcircleo" size={moderateScale(20)} color="maroon" />
           </View>
         </TouchableWithoutFeedback>
 
@@ -285,7 +286,7 @@ export default function SettingsModal() {
                   paddingBottom: 3,
                   fontFamily: "PatrickHand_400Regular",
                   color: "maroon",
-                  fontSize: 24,
+                  fontSize: moderateScale(24),
                 }}
               >
                 Delete Account
@@ -323,20 +324,20 @@ const styles = StyleSheet.create({
   },
   third: {
     // position: "absolute",
-    height: 200,
+    height: moderateScale(200),
     // backgroundColor: "yellow",
     alignItems: "center",
     // justifyContent: "center",
-    marginTop: windowHeight * 0.15,
+    marginTop: windowWidth > 700 ? moderateScale(70) : moderateScale(170),
   },
   logoutButton: {
     backgroundColor: "#538bdb",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -353,9 +354,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -374,18 +375,19 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     width: "80%",
-    height: 25,
+    height: moderateScale(25),
     backgroundColor: "pink",
     opacity: 0.65,
-    borderRadius: 10,
+    borderRadius: moderateScale(10),
     marginTop: "10%",
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: moderateScale(10),
+    paddingRight: moderateScale(10),
   },
   dangerZone: {
     width: "75%",
+    height: moderateScale(75),
     borderWidth: 0.5,
-    marginBottom: "15%",
+    marginBottom: moderateScale(100),
     borderColor: "darkgrey",
     alignSelf: "center",
     alignItems: "center",
@@ -394,17 +396,17 @@ const styles = StyleSheet.create({
   dangerText: {
     color: "maroon",
     fontFamily: "Itim_400Regular",
-    fontSize: 18,
+    fontSize: moderateScale(18),
   },
   deleteAccountButton: {
     backgroundColor: "pink",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
-    marginTop: 20,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
+    marginTop: moderateScale(20),
     zIndex: -1,
     shadowColor: "#000",
     shadowOffset: {
@@ -422,9 +424,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {
@@ -441,19 +443,20 @@ const styles = StyleSheet.create({
     color: "gold",
     alignSelf: "center",
     fontFamily: "Itim_400Regular",
-    fontSize: 18,
-    marginRight: 50,
-    marginLeft: 5
+    fontSize: moderateScale(18),
+    marginRight: moderateScale(50),
+    marginLeft: moderateScale(5)
   },
   switchBox: {
-    minWidth: 250,
+    minWidth: moderateScale(250),
     flexDirection: "row",
     // backgroundColor: "green"
   },
   switches: {
     // backgroundColor: "pink",
-    marginRight: 1,
-    marginLeft: 35
+    marginRight: moderateScale(1),
+    marginLeft: moderateScale(35),
+    // backgroundColor: "pink",
   },
   title: {
     position: "absolute",
