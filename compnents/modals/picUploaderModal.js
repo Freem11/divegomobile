@@ -32,10 +32,13 @@ import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 // import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
-import { uploadphoto, removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import {
+  uploadphoto,
+  removePhoto,
+} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { scale, moderateScale} from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
@@ -268,8 +271,8 @@ export default function PicUploadModal() {
     hideDatePicker();
   };
 
-  const GPSKeyBoardOffset1 = Platform.OS === "ios" ? 750-240 : 750-240;
-  const GPSKeyBoardOffset2 = Platform.OS === "ios" ? 700-240 : 700-240;
+  const GPSKeyBoardOffset1 = Platform.OS === "ios" ? 750 - 240 : 750 - 240;
+  const GPSKeyBoardOffset2 = Platform.OS === "ios" ? 700 - 240 : 700 - 240;
 
   let colorDate;
   if (pinValues.PicDate === "") {
@@ -355,8 +358,7 @@ export default function PicUploadModal() {
     setIsLoading(true);
     if (pinValues.PicFile !== null) {
       removePhoto({
-        filePath:
-        `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+        filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
         fileName: `${pinValues.PicFile}`,
       });
     }
@@ -364,7 +366,7 @@ export default function PicUploadModal() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        //scrape off photo info 
+        //scrape off photo info
         let formattedDate = pinValues.PicDate;
         let newLatitude = pinValues.Latitude;
         let newLongitude = pinValues.Longitude;
@@ -387,12 +389,12 @@ export default function PicUploadModal() {
           Latitude: newLatitude,
           Longitude: newLongitude,
         });
-        
-        //create new photo file and upload 
+
+        //create new photo file and upload
         setUploadedFile(image.assets[0].uri);
         setIsLoading(false);
-        let picture = await fetch(image.assets[0].uri)
-        picture = await picture.blob()
+        let picture = await fetch(image.assets[0].uri);
+        picture = await picture.blob();
         uploadphoto(picture, fileName);
 
         DateVar = false;
@@ -438,8 +440,7 @@ export default function PicUploadModal() {
         setPicAdderModal(!picAdderModal);
         if (pinValues.PicFile !== null) {
           removePhoto({
-            filePath:
-            `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
             fileName: `${pinValues.PicFile}`,
           });
         }
@@ -471,8 +472,7 @@ export default function PicUploadModal() {
       });
       if (pinValues.PicFile !== null) {
         removePhoto({
-          filePath:
-          `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+          filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
           fileName: `${pinValues.PicFile}`,
         });
       }
@@ -613,7 +613,13 @@ export default function PicUploadModal() {
         )}
       </View>
 
-      <View style={{ flexDirection: "row", marginTop: moderateScale(0), marginBottom: moderateScale(0)}}>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: moderateScale(0),
+          marginBottom: moderateScale(0),
+        }}
+      >
         <View
           style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
         >
@@ -634,7 +640,10 @@ export default function PicUploadModal() {
               color={imgButState ? "#538dbd" : "gold"}
               size={moderateScale(24)}
               style={{
-                marginLeft: Platform.OS === "android" ? moderateScale(10) : moderateScale(10),
+                marginLeft:
+                  Platform.OS === "android"
+                    ? moderateScale(10)
+                    : moderateScale(10),
               }}
             />
             <Text
@@ -664,9 +673,9 @@ export default function PicUploadModal() {
           <View style={styles.dateField}>
             <InsetShadow
               containerStyle={{
-                borderRadius: 25,
-                height: 40,
-                width: 200,
+                borderRadius: moderateScale(25),
+                height: moderateScale(40),
+                width: moderateScale(200),
               }}
               elevation={20}
               shadowColor={"black"}
@@ -682,7 +691,7 @@ export default function PicUploadModal() {
                 placeholderTextColor="darkgrey"
                 editable={false}
                 color={formValidation.DateVal ? "black" : "#F0EEEB"}
-                fontSize={17}
+                fontSize={moderateScale(17)}
                 placeholderTextColor={colorDate}
                 onChangeText={(text) =>
                   setPinValues({ ...pinValues, Animal: text })
@@ -692,84 +701,83 @@ export default function PicUploadModal() {
           </View>
 
           {/* <View style={styles.animalField}> */}
-        
+
           <AnimalAutoSuggest
             pin={pinValues}
             setPin={setPinValues}
             formValidation={formValidation}
             SetFormValidation={SetFormValidation}
           />
-         
+
           {/* </View> */}
 
-  <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={GPSKeyBoardOffset1}
-              style={styles.autocompleteA}
-            >
-          <View style={styles.latField}>
-            <InsetShadow
-              containerStyle={{
-                borderRadius: 25,
-                height: 40,
-                width: 200,
-              }}
-              elevation={20}
-              shadowColor={"black"}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <TextInput
-                style={formValidation.LatVal ? styles.inputRed : styles.input}
-                value={pinValues.Latitude}
-                placeholder={"Latitude"}
-                keyboardType="numbers-and-punctuation"
-                // editable={false}
-                placeholderTextColor="darkgrey"
-                fontSize={16}
-                color={formValidation.LatVal ? "black" : "#F0EEEB"}
-                onChangeText={(text) =>
-                  setPinValues({ ...pinValues, Latitude: text })
-                }
-              ></TextInput>
-            </InsetShadow>
-          </View>
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={GPSKeyBoardOffset1}
+            style={styles.autocompleteA}
+          >
+            <View style={styles.latField}>
+              <InsetShadow
+                containerStyle={{
+                  borderRadius: moderateScale(25),
+                  height: moderateScale(40),
+                  width: moderateScale(200),
+                }}
+                elevation={20}
+                shadowColor={"black"}
+                shadowRadius={15}
+                shadowOpacity={0.3}
+              >
+                <TextInput
+                  style={formValidation.LatVal ? styles.inputRed : styles.input}
+                  value={pinValues.Latitude}
+                  placeholder={"Latitude"}
+                  keyboardType="numbers-and-punctuation"
+                  // editable={false}
+                  placeholderTextColor="darkgrey"
+                  fontSize={moderateScale(16)}
+                  color={formValidation.LatVal ? "black" : "#F0EEEB"}
+                  onChangeText={(text) =>
+                    setPinValues({ ...pinValues, Latitude: text })
+                  }
+                ></TextInput>
+              </InsetShadow>
+            </View>
           </KeyboardAvoidingView>
 
           <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={GPSKeyBoardOffset2}
-              style={styles.autocompleteB}
-            >
-          <View style={styles.lngField}>
-            <InsetShadow
-              containerStyle={{
-                borderRadius: 25,
-                height: 40,
-                width: 200,
-              }}
-              elevation={20}
-              shadowColor={"black"}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <TextInput
-                style={formValidation.LngVal ? styles.inputRed : styles.input}
-                value={pinValues.Longitude}
-                placeholder={"Longitude"}
-                keyboardType="numbers-and-punctuation"
-                // editable={false}
-                placeholderTextColor="darkgrey"
-                fontSize={16}
-                color={formValidation.LngVal ? "black" : "#F0EEEB"}
-                onChangeText={(text) =>
-                  setPinValues({ ...pinValues, Longitude: text })
-                }
-              ></TextInput>
-            </InsetShadow>
-          </View>
+            behavior="position"
+            keyboardVerticalOffset={GPSKeyBoardOffset2}
+            style={styles.autocompleteB}
+          >
+            <View style={styles.lngField}>
+              <InsetShadow
+                containerStyle={{
+                  borderRadius: moderateScale(25),
+                  height: moderateScale(40),
+                  width: moderateScale(200),
+                }}
+                elevation={20}
+                shadowColor={"black"}
+                shadowRadius={15}
+                shadowOpacity={0.3}
+              >
+                <TextInput
+                  style={formValidation.LngVal ? styles.inputRed : styles.input}
+                  value={pinValues.Longitude}
+                  placeholder={"Longitude"}
+                  keyboardType="numbers-and-punctuation"
+                  // editable={false}
+                  placeholderTextColor="darkgrey"
+                  fontSize={moderateScale(16)}
+                  color={formValidation.LngVal ? "black" : "#F0EEEB"}
+                  onChangeText={(text) =>
+                    setPinValues({ ...pinValues, Longitude: text })
+                  }
+                ></TextInput>
+              </InsetShadow>
+            </View>
           </KeyboardAvoidingView>
-
         </View>
 
         <View style={styles.smallButtons}>
@@ -782,14 +790,14 @@ export default function PicUploadModal() {
                 onPressIn={() => setDatButState(true)}
                 onPressOut={() => setDatButState(false)}
                 style={{
-                  width: 28,
-                  height: 32,
+                  width: moderateScale(28),
+                  height: moderateScale(32),
                 }}
               >
                 <FontAwesome
                   name="calendar"
                   color={datButState ? "#538dbd" : "gold"}
-                  size={28}
+                  size={moderateScale(28)}
                   style={{ marginLeft: 1.5, marginTop: 2 }}
                 />
                 <DateTimePickerModal
@@ -814,14 +822,14 @@ export default function PicUploadModal() {
                 onPressIn={() => setCorButState(true)}
                 onPressOut={() => setCorButState(false)}
                 style={{
-                  width: 38,
-                  height: 38,
+                  width: moderateScale(38),
+                  height: moderateScale(38),
                 }}
               >
                 <MaterialIcons
                   name="location-pin"
                   color={corButState ? "#538dbd" : "gold"}
-                  size={38}
+                  size={moderateScale(38)}
                   style={{ zIndex: -1 }}
                 />
               </TouchableOpacity>
@@ -845,7 +853,7 @@ export default function PicUploadModal() {
           <Text
             style={{
               color: "gold",
-              fontSize: 26,
+              fontSize: moderateScale(26),
               marginTop: 4,
               marginBottom: -6,
               fontFamily: "PatrickHand_400Regular",
@@ -901,8 +909,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
     overflow: "hidden",
@@ -915,8 +923,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
     overflow: "hidden",
@@ -929,8 +937,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
   },
@@ -938,8 +946,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
     shadowOpacity: 0.3,
@@ -1004,7 +1012,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "15%",
+    marginTop: moderateScale(50),
     marginBottom: Platform.OS === "ios" ? moderateScale(10) : "2%",
     borderWidth: 0.3,
     borderRadius: scale(15),
@@ -1025,7 +1033,7 @@ const styles = StyleSheet.create({
   lowerZone: {
     flexDirection: "row",
     marginTop: windowWidth > 700 ? moderateScale(15) : moderateScale(20),
-    width: windowWidth > 700 ? "50%" : "100%",
+    width: windowWidth > 700 ? "80%" : "100%",
     // backgroundColor: "green",
     height: "32%",
   },
@@ -1054,7 +1062,7 @@ const styles = StyleSheet.create({
     width: "80%",
     height: "25%",
     // backgroundColor: "yellow",
-    marginBottom: scale(5)
+    marginBottom: scale(5),
   },
   dateButton: {
     flexDirection: "row",
@@ -1136,9 +1144,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1154,9 +1162,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1212,9 +1220,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1229,9 +1237,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAF9F1",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1262,7 +1270,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    marginTop: "2%",
+    marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(10),
     // marginLeft: "32%",
     width: "80%",
     height: scale(30),

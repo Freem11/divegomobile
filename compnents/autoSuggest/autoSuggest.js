@@ -12,7 +12,7 @@ import {
 import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
 import AutoSuggestListItem from "./autoSuggestListItem";
 import { MaterialIcons } from "@expo/vector-icons";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
@@ -23,7 +23,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 let waiter;
 
 const windowHeight = Dimensions.get("window").height;
-const AnimalKeboardOffset = Platform.OS === "ios" ? 700 - 140 : 700-140;
+const AnimalKeboardOffset = Platform.OS === "ios" ? 700 - 140 : 700 - 140;
 
 export default function AnimalAutoSuggest(props) {
   const { setPin, pin, formValidation, SetFormValidation } = props;
@@ -106,9 +106,9 @@ export default function AnimalAutoSuggest(props) {
         <View style={styles.container}>
           <InsetShadow
             containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
             }}
             elevation={20}
             shadowRadius={15}
@@ -132,13 +132,13 @@ export default function AnimalAutoSuggest(props) {
               <TouchableOpacity
                 onPress={handleClear}
                 style={{
-                  width: 18,
-                  height: 18,
+                  width: moderateScale(18),
+                  height: moderateScale(18),
                 }}
               >
                 <MaterialIcons
                   name="highlight-remove"
-                  size={18}
+                  size={moderateScale(18)}
                   color="lightgrey"
                 />
               </TouchableOpacity>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   mainBox: {
     height: "10%",
-    width: 200,
+    width: moderateScale(200),
     alignItems: "center",
     justifyContent: "center",
     // backgroundColor: "yellow",
@@ -186,11 +186,12 @@ const styles = StyleSheet.create({
     marginLeft: -30,
   },
   suggestInput: {
-    width: 200,
-    height: 40,
+    borderRadius: moderateScale(25),
+    height: moderateScale(40),
+    width: moderateScale(200),
     backgroundColor: "#538bdb",
-    borderRadius: 10,
-    fontSize: 16,
+    // borderRadius: 10,
+    fontSize: moderateScale(16),
     textAlign: "center",
     fontFamily: "Itim_400Regular",
     overflow: "hidden",
@@ -199,11 +200,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
   suggestInputRed: {
-    width: 200,
-    height: 40,
+    borderRadius: moderateScale(25),
+    height: moderateScale(40),
+    width: moderateScale(200),
     backgroundColor: "pink",
-    borderRadius: 10,
-    fontSize: 16,
+    // borderRadius: 10,
+    fontSize: moderateScale(16),
     textAlign: "center",
     fontFamily: "Itim_400Regular",
     overflow: "hidden",

@@ -418,11 +418,11 @@ export default function DiveSiteModal() {
       <View style={styles.inputContainer}>
         <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 18,
-            marginTop: 1,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
+            // marginRight: 18,
+            marginTop: moderateScale(1),
           }}
           elevation={20}
           shadowRadius={15}
@@ -434,7 +434,7 @@ export default function DiveSiteModal() {
             placeholder={"Site Name"}
             placeholderTextColor="darkgrey"
             color={formValidation.SiteNameVal ? "black" : "#F0EEEB"}
-            fontSize={18}
+            fontSize={moderateScale(18)}
             multiline
             onChangeText={(siteText) =>
               setAddSiteVals({ ...addSiteVals, Site: siteText })
@@ -444,11 +444,11 @@ export default function DiveSiteModal() {
 
         <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 18,
-            marginTop: 10,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
+            // marginRight: 18,
+            marginTop: moderateScale(10),
           }}
           elevation={20}
           shadowRadius={15}
@@ -460,7 +460,7 @@ export default function DiveSiteModal() {
             placeholder={"Latitude"}
             keyboardType="numbers-and-punctuation"
             // editable={false}
-            fontSize={18}
+            fontSize={moderateScale(18)}
             placeholderTextColor="darkgrey"
             color={formValidation.LatVal ? "black" : "#F0EEEB"}
             multiline
@@ -472,11 +472,11 @@ export default function DiveSiteModal() {
 
         <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 18,
-            marginTop: 12,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
+            // marginRight: 18,
+            marginTop: moderateScale(10),
           }}
           elevation={20}
           shadowRadius={15}
@@ -488,7 +488,7 @@ export default function DiveSiteModal() {
             placeholder={"Longitude"}
             keyboardType="numbers-and-punctuation"
             // editable={false}
-            fontSize={18}
+            fontSize={moderateScale(18)}
             placeholderTextColor="darkgrey"
             color={formValidation.LngVal ? "black" : "#F0EEEB"}
             multiline
@@ -516,14 +516,14 @@ export default function DiveSiteModal() {
             style={{
               alignItems: "center",
               justifyContent: "center",
-              width: 38,
-              height: 38,
+              width: moderateScale(38),
+              height: moderateScale(38),
             }}
           >
             <MaterialIcons
               name="my-location"
               color={locButState ? "#538dbd" : "gold"}
-              size={34}
+              size={moderateScale(34)}
               style={{ zIndex: -1 }}
             />
           </TouchableOpacity>
@@ -535,14 +535,14 @@ export default function DiveSiteModal() {
             onPressIn={() => setCorButState(true)}
             onPressOut={() => setCorButState(false)}
             style={{
-              width: 38,
-              height: 38,
+              width: moderateScale(38),
+              height: moderateScale(38),
             }}
           >
             <MaterialIcons
               name="location-pin"
               color={pinButState ? "#538dbd" : "gold"}
-              size={38}
+              size={moderateScale(38)}
               style={{ zIndex: -1 }}
             />
           </TouchableOpacity>
@@ -572,7 +572,7 @@ export default function DiveSiteModal() {
           <Text
             style={{
               color: "gold",
-              fontSize: 26,
+              fontSize: moderateScale(26),
               marginTop: 4,
               marginBottom: -6,
               fontFamily: "PatrickHand_400Regular",
@@ -631,11 +631,11 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(30),
     alignSelf: "center",
-    marginTop: 2,
-    marginBottom: 20,
+    marginTop: moderateScale(5),
+    marginBottom: moderateScale(20),
     textAlign: "center",
     // overflow: "hidden",
   },
@@ -643,10 +643,11 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(30),
     alignSelf: "center",
-    marginBottom: 20,
+    marginTop: moderateScale(5),
+    marginBottom: moderateScale(20),
     textAlign: "center",
     overflow: "hidden",
   },
@@ -666,10 +667,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
-    marginLeft: -20,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(-20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -685,10 +686,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
-    marginLeft: -20,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(-20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -783,10 +784,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
-    marginLeft: 20,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -802,10 +803,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
-    marginLeft: 20,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -848,7 +849,7 @@ const styles = StyleSheet.create({
     height: moderateScale(15),
     width: moderateScale(15),
     borderRadius: moderateScale(15),
-    marginLeft: 20,
+    marginLeft: moderateScale(20),
     marginTop: scale(-2),
   },
   ImageUploadIndicatorRed: {
@@ -856,7 +857,7 @@ const styles = StyleSheet.create({
     height: moderateScale(15),
     width: moderateScale(15),
     borderRadius: moderateScale(15),
-    marginLeft: 20,
+    marginLeft: moderateScale(20),
     marginTop: scale(-2),
   },
 });
