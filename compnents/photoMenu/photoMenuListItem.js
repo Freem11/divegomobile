@@ -57,7 +57,7 @@ const PhotoMenuListItem = (props) => {
     setSelectedID(id)
 
     if (xPosition.value === 0){
-      let distanceToItemMiddle = (60 - data.nativeEvent.locationX)
+      let distanceToItemMiddle = (moderateScale(60) - data.nativeEvent.locationX)
       let centererPress = data.nativeEvent.pageX + distanceToItemMiddle
       let mover = (((windowWidth/2) - centererPress)/3)
   
@@ -87,7 +87,8 @@ const PhotoMenuListItem = (props) => {
     }
   }, [selectedID]);
 
-
+  let labelLength = pic.label.length
+  let labelFont = (moderateScale(120))/labelLength + 6
 
   return (
     <TouchableWithoutFeedback
@@ -104,13 +105,13 @@ const PhotoMenuListItem = (props) => {
         ,animatedPictureStyle]}
         key={pic.id}
       >
-        <View style={{ justifyContent: "center", height: 33 }}>
+        <View style={{ justifyContent: "center", height: moderateScale(33) }}>
           <Text
-            style={
+            style={[
               animalMultiSelection.includes(pic.label)
                 ? styles.photolabelSelected
-                : styles.photolabel
-            }
+                : styles.photolabel, {fontSize: labelFont}
+            ]}
           >
             {pic.label}
           </Text>
@@ -119,10 +120,10 @@ const PhotoMenuListItem = (props) => {
           photoFile={pic.photoFile}
           id={pic.id}
           style={{
-            height: 70,
-            minWidth: 120,
-            borderBottomRightRadius: 15,
-            borderBottomLeftRadius: 15,
+            height: moderateScale(70),
+            minWidth: moderateScale(120),
+            borderBottomRightRadius: moderateScale(14),
+            borderBottomLeftRadius: moderateScale(14),
             resizeMode: "cover",
           }}
         />
@@ -133,19 +134,19 @@ const PhotoMenuListItem = (props) => {
 
 const styles = StyleSheet.create({
   photolabel: {
-    fontSize: windowWidth > 600 ? scale(5) : scale(11),
+    // fontSize: windowWidth > 600 ? {labelFont} : scale(11),
     color: "white",
     textAlign: "center",
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    width: 120,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    paddingTop: 3,
+    width: moderateScale(120),
+    borderTopLeftRadius: moderateScale(15),
+    borderTopRightRadius: moderateScale(15),
+    paddingTop: moderateScale(3),
     fontFamily: "Itim_400Regular",
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: moderateScale(5),
+    paddingRight: moderateScale(5),
   },
   photolabelSelected: {
     fontSize: windowWidth > 600 ? scale(5) : scale(11),
@@ -154,29 +155,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    width: 120,
+    width: moderateScale(120),
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    paddingTop: 3,
+    paddingTop: moderateScale(3),
     fontFamily: "Itim_400Regular",
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: moderateScale(5),
+    paddingRight: moderateScale(5),
   },
   shadowbox: {
-    borderRadius: 15,
-    borderWidth: 1,
+    borderRadius: moderateScale(15),
+    borderWidth: moderateScale(1),
     borderColor: "darkgrey",
-    backgroundColor: "darkblue",
-    height: 105,
+    backgroundColor: "#538bdb",
+    height: moderateScale(105),
     zIndex: 20,
     elevation: 20
   },
   shadowboxSelected: {
-    borderRadius: 15,
-    borderWidth: 1,
+    borderRadius: moderateScale(15),
+    borderWidth: moderateScale(1),
     borderColor: "darkgrey",
     backgroundColor: "gold",
-    height: 105,
+    height: moderateScale(105),
     zIndex: 20,
     elevation: 20
   },

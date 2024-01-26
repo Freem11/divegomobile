@@ -27,13 +27,15 @@ import {
   addDeletedAccountInfo,
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import { MyCreaturesContext } from "../../compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext";
+import { SettingsContext } from "../../compnents/contexts/gearModalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -41,6 +43,8 @@ const windowHeight = Dimensions.get("window").height;
 export default function SettingsModal() {
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
+  const [settingsCloseState, setSettingsCloseState] = useState(false);
+  const { gearModal, setGearModal } = useContext(SettingsContext);
 
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
@@ -58,7 +62,7 @@ export default function SettingsModal() {
 
   const startDangerZoneAnimations = () => {
     if (dangerZoneHeight.value === 0) {
-      dangerZoneHeight.value = withSpring(80);
+      dangerZoneHeight.value = withSpring(moderateScale(80));
       dangerZoneOpacity.value = withTiming(1);
       setDangerZoneEnabled(false);
     } else {
@@ -141,6 +145,10 @@ export default function SettingsModal() {
       setCreaturesIsEnabled(true)
     }
   }, [])
+
+  const toggleSettingsModal = () => {
+    setGearModal(false)
+  }
  
 
   const toggleDCSwitch = () =>
@@ -171,6 +179,28 @@ export default function SettingsModal() {
   return (
     // <ScrollView style={{ width: "86%" }}>
     <View style={styles.container}>
+      <View style={styles.title}>
+        <Text style={styles.header}>Settings</Text>
+        <View
+          style={
+            settingsCloseState ? styles.closeButtonPressed : styles.closeButton
+          }
+        >
+          <TouchableWithoutFeedback
+            onPress={toggleSettingsModal}
+            onPressIn={() => setSettingsCloseState(true)}
+            onPressOut={() => setSettingsCloseState(false)}
+            style={{
+              width: scale(30),
+              height: scale(30),
+              alignItems: "center",
+            }}
+          >
+           
+            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
       <View style={styles.first}>
         <TouchableWithoutFeedback
           onPress={handleLogout}
@@ -187,7 +217,7 @@ export default function SettingsModal() {
                 paddingBottom: 3,
                 fontFamily: "PatrickHand_400Regular",
                 color: "gold",
-                fontSize: 24,
+                fontSize: moderateScale(24),
               }}
             >
               Sign Out
@@ -214,6 +244,7 @@ export default function SettingsModal() {
           <Text style={styles.labelText}>My Sea Creatures</Text>
           <View style={styles.switches}>
           <Switch
+            // style={styles.switches}
             trackColor={{ false: "#767577", true: "#f4f3f4" }}
             thumbColor={creaturesIsEnabled ? "#538bdb" : "#538bdb"}
             ios_backgroundColor="#3e3e3e"
@@ -226,13 +257,13 @@ export default function SettingsModal() {
 
       <View style={styles.third}>
         <TouchableWithoutFeedback
-          onLongPress={startDangerZoneAnimations}
+          onPress={startDangerZoneAnimations}
           style={{ backgroundColor: "purple" }}
         >
           <View style={styles.dangerZonebar}>
-            <AntDesign name="exclamationcircleo" size={20} color="maroon" />
+            <AntDesign name="exclamationcircleo" size={moderateScale(20)} color="maroon" />
             <Text style={styles.dangerText}>Danger Zone</Text>
-            <AntDesign name="exclamationcircleo" size={20} color="maroon" />
+            <AntDesign name="exclamationcircleo" size={moderateScale(20)} color="maroon" />
           </View>
         </TouchableWithoutFeedback>
 
@@ -241,7 +272,7 @@ export default function SettingsModal() {
             disabled={dangerZoneEnabled}
             onPressIn={() => setDangerButState(true)}
             onPressOut={() => setDangerButState(false)}
-            onLongPress={alertHandler}
+            onPress={alertHandler}
           >
             <View
               style={
@@ -255,7 +286,7 @@ export default function SettingsModal() {
                   paddingBottom: 3,
                   fontFamily: "PatrickHand_400Regular",
                   color: "maroon",
-                  fontSize: 24,
+                  fontSize: moderateScale(24),
                 }}
               >
                 Delete Account
@@ -271,18 +302,19 @@ export default function SettingsModal() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     // backgroundColor: 'green',
     height: windowHeight * 0.5,
-    width: "86%",
+    // alignItems: "center",
+    width: "100%",
   },
   first: {
     // position: "absolute",
     height: 50,
     // backgroundColor: "pink",
+    alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "10%",
+    marginTop: "30%",
   },
   second: {
     height: "40%",
@@ -292,20 +324,20 @@ const styles = StyleSheet.create({
   },
   third: {
     // position: "absolute",
-    height: 200,
+    height: moderateScale(200),
     // backgroundColor: "yellow",
     alignItems: "center",
     // justifyContent: "center",
-    marginTop: windowHeight * 0.15,
+    marginTop: windowWidth > 700 ? moderateScale(70) : moderateScale(170),
   },
   logoutButton: {
     backgroundColor: "#538bdb",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -322,9 +354,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -343,18 +375,19 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     width: "80%",
-    height: 25,
+    height: moderateScale(25),
     backgroundColor: "pink",
     opacity: 0.65,
-    borderRadius: 10,
+    borderRadius: moderateScale(10),
     marginTop: "10%",
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: moderateScale(10),
+    paddingRight: moderateScale(10),
   },
   dangerZone: {
     width: "75%",
+    height: moderateScale(75),
     borderWidth: 0.5,
-    marginBottom: "15%",
+    marginBottom: moderateScale(100),
     borderColor: "darkgrey",
     alignSelf: "center",
     alignItems: "center",
@@ -363,17 +396,17 @@ const styles = StyleSheet.create({
   dangerText: {
     color: "maroon",
     fontFamily: "Itim_400Regular",
-    fontSize: 18,
+    fontSize: moderateScale(18),
   },
   deleteAccountButton: {
     backgroundColor: "pink",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
-    marginTop: 20,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
+    marginTop: moderateScale(20),
     zIndex: -1,
     shadowColor: "#000",
     shadowOffset: {
@@ -391,9 +424,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
+    borderRadius: moderateScale(10),
+    height: moderateScale(35),
+    width: moderateScale(150),
     marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {
@@ -410,18 +443,62 @@ const styles = StyleSheet.create({
     color: "gold",
     alignSelf: "center",
     fontFamily: "Itim_400Regular",
-    fontSize: 18,
-    marginRight: 50,
-    marginLeft: 5
+    fontSize: moderateScale(18),
+    marginRight: moderateScale(50),
+    marginLeft: moderateScale(5)
   },
   switchBox: {
-    minWidth: 250,
+    minWidth: moderateScale(250),
     flexDirection: "row",
     // backgroundColor: "green"
   },
   switches: {
     // backgroundColor: "pink",
-    marginRight: 1,
-    marginLeft: 35
-  }
+    marginRight: moderateScale(1),
+    marginLeft: moderateScale(35),
+    // backgroundColor: "pink",
+  },
+  title: {
+    position: "absolute",
+    top: "-1%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    marginTop: "4%",
+    marginLeft: "8%",
+    width: "80%",
+    height: scale(40),
+    // backgroundColor:"pink"
+  },
+  header: {
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(26),
+    alignSelf: "center",
+    color: "#F0EEEB",
+    width: "80%",
+    marginTop: "-1%",
+    marginLeft: "7%",
+    marginRight: "15%",
+    // backgroundColor: "green"
+  },
+  closeButton: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButtonPressed: {
+    position: "relative",
+    borderRadius: scale(42 / 2),
+    height: scale(30),
+    width: scale(30),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    opacity: 0.3,
+  }, 
 });

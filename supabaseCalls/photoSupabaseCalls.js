@@ -139,6 +139,7 @@ if (data) {
       .gte("longitude", value.minLng)
       .lte("latitude", value.maxLat)
       .lte("longitude", value.maxLng)
+      .order("id", {ascending: false})
   
     if (error) {
       console.log("couldn't do it 24,", error);
@@ -160,6 +161,7 @@ if (data) {
     .gte("longitude", value.minLng)
     .lte("latitude", value.maxLat)
     .lte("longitude", value.maxLng)
+    .order("id", {ascending: false})
 
   if (error) {
     console.log("couldn't do it 25,", error);
@@ -184,6 +186,7 @@ if (data) {
     .gte("longitude", value.minLng)
     .lte("latitude", value.maxLat)
     .lte("longitude", value.maxLng)
+    .order("id", {ascending: false})
 
   if (error) {
     console.log("couldn't do it 26,", error);

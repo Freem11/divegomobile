@@ -6,7 +6,14 @@ import {
   TouchableWithoutFeedback,
   Platform,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
 import React, { useState, useContext, useEffect } from "react";
 import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
@@ -15,7 +22,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import InsetShadow from "react-native-inset-shadow";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
@@ -24,10 +31,15 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import SuccessModal from "./confirmationSuccessModal";
+import FailModal from "./confirmationCautionModal";
 
 let SiteNameVar = false;
 let LatVar = false;
 let LngVar = false;
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteModal() {
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
@@ -44,6 +56,9 @@ export default function DiveSiteModal() {
   const [diveCloseState, setDiveCloseState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const [indicatorState, setIndicatorState] = useState(false);
+
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
@@ -249,15 +264,12 @@ export default function DiveSiteModal() {
       addSiteVals.Longitude == "" ||
       isNaN(addSiteVals.Longitude)
     ) {
+      failBoxY.value = withTiming(scale(-50));
       return;
     } else {
-      console.log("here?", tutorialRunning, itterator2);
       if (tutorialRunning) {
-        if (itterator2 > 0) {
-          setItterator2(itterator2 + 1);
-        }
+        successBoxY.value = withTiming(scale(-50));
       } else {
-        //  console.log("pinnies!", addSiteVals)
         insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
           ...addSiteVals,
@@ -265,7 +277,10 @@ export default function DiveSiteModal() {
           Latitude: "",
           Longitude: "",
         });
-        setDiveSiteAdderModal(!diveSiteAdderModal);
+
+        successBoxY.value = withTiming(scale(-50));
+
+        // setDiveSiteAdderModal(!diveSiteAdderModal);
       }
     }
   };
@@ -289,7 +304,13 @@ export default function DiveSiteModal() {
       }
     } else {
       setDiveSiteAdderModal(!diveSiteAdderModal);
-
+      failBoxY.value = withTiming(scale(1200));
+      successBoxY.value = withTiming(scale(1200)); 
+      SetFormValidation({
+        SiteNameVal: false,
+        LatVal: false,
+        LngVal: false,
+      });
       if (diveSiteAdderModal) {
         setAddSiteVals({
           ...addSiteVals,
@@ -313,6 +334,41 @@ export default function DiveSiteModal() {
   const [subButState, setSubButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [helpButState, setHelpButState] = useState(false);
+
+  const successBoxY = useSharedValue(scale(1200));
+  const failBoxY = useSharedValue(scale(1200));
+
+  const sucessModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: successBoxY.value }],
+    };
+  });
+
+  const cautionModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: failBoxY.value }],
+    };
+  });
+
+  const confirmationSucessClose = () => {
+    successBoxY.value = withTiming(scale(1200));
+  };
+
+  const confirmationFailClose = () => {
+    failBoxY.value = withTiming(scale(1200));
+  };
+
+  useEffect(() => {
+    if (
+      addSiteVals.Site === "" ||
+      addSiteVals.Latitude === "" ||
+      addSiteVals.Longitude === ""
+    ) {
+      setIndicatorState(false);
+    } else {
+      setIndicatorState(true);
+    }
+  }, [addSiteVals]);
 
   return (
     <View style={styles.container}>
@@ -363,11 +419,11 @@ export default function DiveSiteModal() {
       <View style={styles.inputContainer}>
         <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 18,
-            marginTop: 1,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
+            // marginRight: 18,
+            marginTop: moderateScale(1),
           }}
           elevation={20}
           shadowRadius={15}
@@ -378,8 +434,9 @@ export default function DiveSiteModal() {
             value={addSiteVals.Site}
             placeholder={"Site Name"}
             placeholderTextColor="darkgrey"
-            color="#F0EEEB"
-            fontSize={18}
+            color={formValidation.SiteNameVal ? "black" : "#F0EEEB"}
+            fontSize={moderateScale(18)}
+            multiline
             onChangeText={(siteText) =>
               setAddSiteVals({ ...addSiteVals, Site: siteText })
             }
@@ -388,11 +445,11 @@ export default function DiveSiteModal() {
 
         <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 18,
-            marginTop: 10,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
+            // marginRight: 18,
+            marginTop: moderateScale(10),
           }}
           elevation={20}
           shadowRadius={15}
@@ -404,9 +461,10 @@ export default function DiveSiteModal() {
             placeholder={"Latitude"}
             keyboardType="numbers-and-punctuation"
             // editable={false}
-            fontSize={18}
+            fontSize={moderateScale(18)}
             placeholderTextColor="darkgrey"
-            color="#F0EEEB"
+            color={formValidation.LatVal ? "black" : "#F0EEEB"}
+            multiline
             onChangeText={(text) =>
               setAddSiteVals({ ...addSiteVals, Latitude: text })
             }
@@ -415,11 +473,11 @@ export default function DiveSiteModal() {
 
         <InsetShadow
           containerStyle={{
-            borderRadius: 25,
-            height: 40,
-            width: 200,
-            marginRight: 18,
-            marginTop: 12,
+            borderRadius: moderateScale(25),
+            height: moderateScale(40),
+            width: moderateScale(200),
+            // marginRight: 18,
+            marginTop: moderateScale(10),
           }}
           elevation={20}
           shadowRadius={15}
@@ -431,9 +489,10 @@ export default function DiveSiteModal() {
             placeholder={"Longitude"}
             keyboardType="numbers-and-punctuation"
             // editable={false}
-            fontSize={18}
+            fontSize={moderateScale(18)}
             placeholderTextColor="darkgrey"
-            color="#F0EEEB"
+            color={formValidation.LngVal ? "black" : "#F0EEEB"}
+            multiline
             onChangeText={(text) =>
               setAddSiteVals({ ...addSiteVals, Longitude: text })
             }
@@ -458,14 +517,14 @@ export default function DiveSiteModal() {
             style={{
               alignItems: "center",
               justifyContent: "center",
-              width: 38,
-              height: 38,
+              width: moderateScale(38),
+              height: moderateScale(38),
             }}
           >
             <MaterialIcons
               name="my-location"
               color={locButState ? "#538dbd" : "gold"}
-              size={34}
+              size={moderateScale(34)}
               style={{ zIndex: -1 }}
             />
           </TouchableOpacity>
@@ -477,18 +536,26 @@ export default function DiveSiteModal() {
             onPressIn={() => setCorButState(true)}
             onPressOut={() => setCorButState(false)}
             style={{
-              width: 38,
-              height: 38,
+              width: moderateScale(38),
+              height: moderateScale(38),
             }}
           >
             <MaterialIcons
               name="location-pin"
               color={pinButState ? "#538dbd" : "gold"}
-              size={38}
+              size={moderateScale(38)}
               style={{ zIndex: -1 }}
             />
           </TouchableOpacity>
         </View>
+
+        <View
+          style={
+            indicatorState
+              ? styles.ImageUploadIndicatorGreen
+              : styles.ImageUploadIndicatorRed
+          }
+        ></View>
       </View>
 
       <View
@@ -506,7 +573,7 @@ export default function DiveSiteModal() {
           <Text
             style={{
               color: "gold",
-              fontSize: 26,
+              fontSize: moderateScale(26),
               marginTop: 4,
               marginBottom: -6,
               fontFamily: "PatrickHand_400Regular",
@@ -521,6 +588,23 @@ export default function DiveSiteModal() {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+        <SuccessModal
+          submissionItem="dive site"
+          toggleDiveModal={toggleDiveModal}
+          confirmationSucessClose={confirmationSucessClose}
+          itterator2={itterator2}
+          setItterator2={setItterator2}
+        ></SuccessModal>
+      </Animated.View>
+
+      <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+        <FailModal
+          submissionItem="dive site"
+          confirmationFailClose={confirmationFailClose}
+        ></FailModal>
+      </Animated.View>
     </View>
   );
 }
@@ -548,21 +632,23 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(30),
     alignSelf: "center",
-    marginBottom: 20,
+    marginTop: moderateScale(5),
+    marginBottom: moderateScale(20),
     textAlign: "center",
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   inputRed: {
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(30),
     alignSelf: "center",
-    marginBottom: 20,
+    marginTop: moderateScale(5),
+    marginBottom: moderateScale(20),
     textAlign: "center",
     overflow: "hidden",
   },
@@ -582,9 +668,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(-20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -600,9 +687,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(-20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -647,7 +735,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    marginTop: "2%",
+    marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(10),
     marginLeft: "12%",
     width: "80%",
     height: scale(30),
@@ -687,7 +775,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginLeft: "10%",
+    marginLeft: 20,
     marginTop: 35,
     width: 140,
     // backgroundColor: "pink"
@@ -697,9 +785,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -715,9 +804,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
+    marginLeft: moderateScale(20),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -751,5 +841,24 @@ const styles = StyleSheet.create({
     height: scale(30),
     width: scale(30),
     marginTop: scale(1),
+  },
+  confirmationBox: {
+    position: "absolute",
+  },
+  ImageUploadIndicatorGreen: {
+    backgroundColor: "lightgreen",
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: moderateScale(20),
+    marginTop: scale(-2),
+  },
+  ImageUploadIndicatorRed: {
+    backgroundColor: "red",
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: moderateScale(20),
+    marginTop: scale(-2),
   },
 });

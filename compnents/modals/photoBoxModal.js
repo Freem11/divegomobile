@@ -14,24 +14,34 @@ import Animated, {
   withDelay,
   Easing,
 } from "react-native-reanimated";
+import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
-import * as FileSystem from "expo-file-system";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal(props) {
-  const { picData, togglePhotoBoxModal } = props;
+  const { picData, setPhotoBoxModel, photoBoxModel } = props;
+  const [picHeigth, setPicHeigth] = useState(0);
+  const [picWidth, setPicWidth] = useState(0);
 
   let fileName = picData && picData.split("/").pop();
   let cacheDir = false;
 
   if (fileName) {
     cacheDir = FileSystem.cacheDirectory + fileName;
+  }
+
+  if (cacheDir){
+    Image.getSize(cacheDir, (width, height) => {
+      let ratio = height/width
+      setPicWidth(windowHeight * 0.85)
+      setPicHeigth((windowHeight * ratio) * 0.85)
+    })
   }
 
   const [photoCloseState, setPhotoCloseState] = useState(false);
@@ -47,7 +57,7 @@ export default function PhotoBoxModal(props) {
     yPrevious.value = 0;
     xOffset.value = 0;
     yOffset.value = 0;
-  }, [picData]);
+  }, [picData, photoBoxModel]);
 
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
@@ -101,8 +111,8 @@ export default function PhotoBoxModal(props) {
       yOffset.value = yCurrent.value;
 
 
-      console.log("coord", tempY, tempX)
-      console.log("win", windowWidth/2, windowHeight/2)
+      // console.log("coord", tempY, tempX)
+      // console.log("win", windowWidth/2, windowHeight/2)
 
       if (tempX > (windowHeight*scalePrevious.value/2)*0.8){
         xCurrent.value = withTiming(windowHeight/2-(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
@@ -225,7 +235,7 @@ export default function PhotoBoxModal(props) {
           }
         >
           <TouchableOpacity
-            onPress={() => togglePhotoBoxModal()}
+            onPress={() => setPhotoBoxModel(false)}
             onPressIn={() => setPhotoCloseState(true)}
             onPressOut={() => setPhotoCloseState(false)}
             style={{
@@ -257,8 +267,10 @@ export default function PhotoBoxModal(props) {
               style={[
                 animatedPictureStyle,
                 {
-                  height: windowWidth - windowWidth * 0.15,
-                  width: windowHeight - windowHeight * 0.15,
+                  height: picHeigth,
+                  width: picWidth,
+                  // height: windowWidth - windowWidth * 0.15,
+                  // width: windowHeight - windowHeight * 0.15,
                   borderRadius: 15,
                 },
               ]}
@@ -283,8 +295,8 @@ const styles = StyleSheet.create({
   },
   title: {
     position: "absolute",
-    top: "6%",
-    left: "60%",
+    top: "12%",
+    left: "62%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -301,16 +313,17 @@ const styles = StyleSheet.create({
     borderRadius: scale(42 / 2),
     height: scale(30),
     width: scale(30),
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    borderBottomColor: "pink",
+    justifyContent: "center",
+    alignItems: "center",
   },
   closeButtonPressed: {
     position: "relative",
     borderRadius: scale(42 / 2),
     height: scale(30),
     width: scale(30),
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "lightgrey",
     opacity: 0.3,
   },

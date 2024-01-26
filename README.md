@@ -15,11 +15,9 @@ exifr
 # Available at
 Google Play Store: https://play.google.com/store/apps/details?id=com.freem11.divegomobile
 
-!["Google Play QR"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/Android.png)
-
 Apple App Store: https://apps.apple.com/us/app/divego/id6450968950
 
-!["Apple App Store QR"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/IOS.png)
+!["App Store QR Codes"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/QRCombo.png)
 
 
 # Current Features:
@@ -54,14 +52,15 @@ Dive Site flagging feature allowing users to report incorrect dive site names or
 
 Login/Logout/Register system with persistent login (user stays logged in even after closing browser, unless they deliberately log out) with OAuth integrations for Google, Facebook and Apple(iOS only).
 
-Backend integration with Supabase.
-
-# In Progress Features:
-
 Three Interactive User guides designed to get users acclimated to how to use the app fast:
 Intro Guide - map navigation and how to find active areas, also completes user profile.
 Dive Sites - how to use the search tool to check if a site is in the app and add a new site if not.
 Sighting Submissions - how to add a sea creature sighting, inclduing how to make use of all submission features.
+Backend integration with Supabase.
+
+# In Progress Features:
+
+New Features are being created based on user suggestion / request
 
 # Planned Features:
 
@@ -70,10 +69,9 @@ Automated animal ID from photo machine learning
 
 
 # ScreenShots
-!["Screenshot of Sign In Screen"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/signIns.png)
-!["Screenshot of Main Map"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/mainMap.png)
-!["Screenshot of FABs Open"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/FABs.png)
-!["Screenshot of Dive Site Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/newSite.png)
-!["Screenshot of Photo Upload Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/photoAdd.png)
-!["Screenshot of Site Photos"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/DiveSite.png)
-!["Screenshot of Intro Guide"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/Guide.png)
+!["Screenshot of Sign In Screen"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/shots2.png)
+!["Screenshot of Main Map"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/shots1.png)
+<!-- !["Screenshot of Dive Site Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/DiveSiteSubmit.png)
+!["Screenshot of Photo Upload Form"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/PhotoSubmit.png)
+!["Screenshot of Site Photos"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/AnchorPhotos.png)
+!["Screenshot of Guide"](https://github.com/Freem11/divegomobile/blob/main/compnents/png/screenshots/Guide.png) -->

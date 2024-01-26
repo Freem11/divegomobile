@@ -5,11 +5,12 @@ import { diveSites } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 
 export default function DiveSiteAutoComplete(props) {
   const { setDiveSearchHide } = props;
@@ -22,7 +23,8 @@ export default function DiveSiteAutoComplete(props) {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  
 
   let diveSiteData
 
@@ -39,9 +41,11 @@ export default function DiveSiteAutoComplete(props) {
     diveSiteArray = []
 
     if (boundaries.length > 0 ){
-      diveSiteData = await diveSites({minLat, maxLat, minLng, maxLng});
+      diveSiteData = await diveSites({minLat, maxLat, minLng, maxLng},"");
+    } else {
+      diveSiteData = null
     }
-   
+
     if (diveSiteData){
     diveSiteData.forEach((diveSite) => {
       if (!diveSiteArray.includes(diveSite.name)){
@@ -49,6 +53,8 @@ export default function DiveSiteAutoComplete(props) {
       }
     })
     setList(addIndexNumber(diveSiteArray));
+  } else {
+    setList([])
   }
   }
 
@@ -68,7 +74,7 @@ export default function DiveSiteAutoComplete(props) {
       let minLng2 = boundaries[0] 
       let maxLng2 = boundaries[2]
 
-      let diveSiteSet = await diveSites({minLat: minLat2, maxLat: maxLat2, minLng: minLng2, maxLng: maxLng2});
+      let diveSiteSet = await diveSites({minLat: minLat2, maxLat: maxLat2, minLng: minLng2, maxLng: maxLng2},"");
 
       if(diveSiteSet){
        
@@ -85,7 +91,7 @@ export default function DiveSiteAutoComplete(props) {
       }
      
     }
-    setDiveSearchHide(true)
+    setDiveSiteSearchModal(false)
     Keyboard.dismiss()
   };
 
@@ -104,22 +110,24 @@ export default function DiveSiteAutoComplete(props) {
       <AutocompleteDropdown
         // initialValue={'1'}
         textInputProps={{
+          placeholder: "Search dive sites...",
           style: {
             justifyContent: "center",
             alignItems: "center",
             alignContent: "center",
-            borderRadius: 25,
-            width: 200,
+            borderRadius: moderateScale(25),
+            width: moderateScale(200),
             opacity: 1,
-            height: 40,
+            height: moderateScale(40),
+            fontSize: moderateScale(12),
           },
         }}
         inputContainerStyle={{
           alignItems: "center",
-          height: 40,
-          borderRadius: 30,
+          height: moderateScale(30),
+          borderRadius: moderateScale(10),
           backgroundColor: "white",
-          width: 200,
+          width: moderateScale(200),
           zIndex: 2,
          
         }}
@@ -145,8 +153,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignContent: "center",
-    width: 200,
-    borderRadius: 10,
+    width: moderateScale(200),
+    borderRadius: moderateScale(10),
     zIndex: 1,
+    marginTop: moderateScale(70)
   },
 });

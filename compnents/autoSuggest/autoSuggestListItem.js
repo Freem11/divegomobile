@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, Keyboard } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { scale, moderateScale } from "react-native-size-matters";
 
 const AutoSuggestListItem = (props) => {
   const { setList, setPin, pin, name, handleList, setTextSource } = props;
@@ -17,12 +18,12 @@ const AutoSuggestListItem = (props) => {
       <TouchableOpacity
                 onPress={() => handleSelect(name)}
                 style={{
-                  width: 170,
-                  height: 30,
+                  width: moderateScale(170),
+                  height: moderateScale(30),
                 }}
               >
         <Text
-          style={{ fontFamily: "Itim_400Regular", fontSize: 15, textAlign: "center", color:"#F0EEEB", zIndex: 100 }}
+          style={{ fontFamily: "Itim_400Regular", fontSize: moderateScale(15), textAlign: "center", color:"#F0EEEB", zIndex: 100 }}
           onPress={() => handleSelect(name)}
         >
           {name}
@@ -36,8 +37,8 @@ const AutoSuggestListItem = (props) => {
 const styles = StyleSheet.create({
   suggestion: {
     zIndex: 2,
-    width: 165,
-    height: 25,
+    width: moderateScale(165),
+    height: moderateScale(25),
     marginTop: 1,
     paddingTop: 3,
     backgroundColor: "#538bdb",

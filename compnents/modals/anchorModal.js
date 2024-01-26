@@ -33,14 +33,16 @@ import { IterratorContext } from "../contexts/iterratorContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ReverseContext } from "../contexts/reverseContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
+import { PinContext } from "../contexts/staticPinContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import email from "react-native-email";
-import PhotoBoxModel from "./photoBoxModal";
 import ImageCasher from "../helpers/imageCashing";
 import ImgToBase64 from "react-native-image-base64";
 import config from "../../config";
+import Picture from "./picture";
 
 let IPSetter = 2;
 let IP;
@@ -61,7 +63,8 @@ let filePath = `/Users/matthewfreeman/divego/wetmap/src/components/uploads/`;
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function AnchorModal(lat, lng) {
+export default function AnchorModal(props) {
+  const {lat, lng, setSelectedPhoto, setPhotoBoxModel } = props
   const { sliderVal } = useContext(SliderContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
@@ -76,25 +79,9 @@ export default function AnchorModal(lat, lng) {
   const { guideModal, setGuideModal } = useContext(TutorialModelContext);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [site, setSite] = useState("");
-  const [photoBoxModel, setPhotoBoxModel] = useState(false);
-
-  const photoBoxModalY = useSharedValue(windowHeight);
-
-  const photoBoxModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: photoBoxModalY.value }],
-    };
-  });
-
-  const startPhotoBoxModalAnimations = () => {
-    if (photoBoxModel) {
-      photoBoxModalY.value = withTiming(0);
-    } else {
-      photoBoxModalY.value = withTiming(windowHeight);
-    }
-  };
+  const { pinValues, setPinValues } = useContext(PinContext);
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -118,8 +105,8 @@ export default function AnchorModal(lat, lng) {
           count++;
         });
 
-        if (itterator === 11 && count > 0){
-          setItterator(itterator + 2)
+        if (itterator === 11 && count > 0) {
+          setItterator(itterator + 2);
         }
 
         // if (chapter === null){
@@ -137,7 +124,6 @@ export default function AnchorModal(lat, lng) {
         //     setItterator(itterator + 1);
         //   }
         // }
-      
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -184,16 +170,16 @@ export default function AnchorModal(lat, lng) {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
-      subject: `Reporting issue with Dive Site: "${lat.SiteName}" at Latitude: ${lat.Lat} Longitude: ${lat.Lng} `,
+      subject: `Reporting issue with Dive Site: "${selectedDiveSite.SiteName}" at Latitude: ${selectedDiveSite.Latitude} Longitude: ${selectedDiveSite.Longitude} `,
       body:
-        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordiantes are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
 
   const handleAnchorModalClose = () => {
     if (itterator === 15) {
-      setItterator((prev) => prev + 1)
+      setItterator((prev) => prev + 1);
       setGuideModal(true);
     }
 
@@ -209,12 +195,25 @@ export default function AnchorModal(lat, lng) {
     setSiteModal(false);
   };
 
-  const togglePhotoBoxModal = (photo) => {
-    startPhotoBoxModalAnimations();
-    setSelectedPhoto(photo);
-    setPhotoBoxModel(!photoBoxModel);
-  };
+  const handleSwitch = () => {
+    if (itterator === 11 || itterator == 15){
+      return
+    }
+    setPinValues({
+      ...pinValues,
+      Latitude: String(selectedDiveSite.Latitude),
+      Longitude: String(selectedDiveSite.Longitude),
+    });
+    setSiteModal(false);
+    setPicAdderModal(true);
+  }
 
+  const togglePhotoBoxModal = (photo) => {
+    setSelectedPhoto(photo);
+    setPhotoBoxModel(true);
+  };
+  
+ 
   const [base64, setBase64] = useState(null);
   const [userN, setUserN] = useState(null);
   const [creastureN, setCreastureN] = useState(null);
@@ -298,10 +297,14 @@ export default function AnchorModal(lat, lng) {
     setBase64(null);
   }, [base64]);
 
+  const [helpButState, setHelpButState] = useState(false);
+
   return (
     <View
       style={{
-        height: "96%",
+        height: "98%",
+        // backgroundColor: "orange",
+        overflow: "hidden"
       }}
     >
       <View style={styles.titleAlt}>
@@ -309,12 +312,34 @@ export default function AnchorModal(lat, lng) {
           name="flag"
           color="maroon"
           size={scale(20)}
-          onLongPress={() => handleEmailDS()}
+          onPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
         <View style={{ width: scale(250) }}>
           <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
           <Text style={styles.dsCredit}>Added by: {site}</Text>
+        </View>
+        <View
+          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
+        >
+          <TouchableWithoutFeedback
+            onPress={handleSwitch}
+            onPressIn={() => setHelpButState(true)}
+            onPressOut={() => setHelpButState(false)}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: scale(20),
+              height: scale(20),
+            }}
+          >
+            <FontAwesome5
+              name="plus"
+              color="gold"
+              size={scale(18)}
+              style={{ zIndex: -1 }}
+            />
+          </TouchableWithoutFeedback>
         </View>
 
         <TouchableWithoutFeedback
@@ -334,77 +359,57 @@ export default function AnchorModal(lat, lng) {
         </TouchableWithoutFeedback>
       </View>
 
-      <ScrollView style={{ marginTop: "0%", height: "100%", borderRadius: 15 }}>
+      <ScrollView style={{ marginTop: "0%", width: "100%", borderRadius: 15 }}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {
               return (
-                <View key={pic.id} style={styles.picContainer3}>
-                  <View style={styles.micro}>
-                    <FontAwesome
-                      name="share"
-                      color="white"
-                      size={scale(19)}
-                      onPress={() =>
-                        onShare(
-                          pic.photoFile,
-                          pic.userName,
-                          pic.label,
-                          pic.dateTaken,
-                          pic.latitude,
-                          pic.longitude
-                        )
-                      }
-                      style={styles.share}
-                    />
-                    <FontAwesome
-                      name="flag"
-                      color="maroon"
-                      size={scale(19)}
-                      onLongPress={() => handleEmail(pic)}
-                      style={styles.flag}
-                    />
-                    <Text style={styles.titleText}>{pic.label}</Text>
-                  </View>
-                  <TouchableWithoutFeedback
-                    onPress={() => togglePhotoBoxModal(pic.photoFile)}
-                  >
-                    <View style={styles.shadowbox}>
-                      <ImageCasher
-                        photoFile={pic.photoFile}
-                        id={pic.id}
-                        anchorPics={anchorPics}
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          borderRadius: 15,
-                          borderColor: "grey",
-                        }}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <View style={styles.microLow}>
-                    <Text style={styles.titleTextLow}>
-                      Added by: {pic.userName}
-                    </Text>
-                  </View>
+                <TouchableWithoutFeedback key={pic.id} onPress={() => togglePhotoBoxModal(pic.photoFile)}>
+                <View style={styles.shadowbox}>
+                <Picture key={pic.id} pic={pic}></Picture>
                 </View>
+                </TouchableWithoutFeedback>
               );
             })}
           {anchorPics.length === 0 && (
-            <Text style={styles.noSightings}>
-              No Sightings At This Site Yet!
-            </Text>
+            <View>
+              <Text style={styles.noSightings}>
+                No Sightings At This Site Yet!
+              </Text>
+              <Text style={styles.noSightings2}>
+                Be the first to add one here.
+              </Text>
+
+              <TouchableWithoutFeedback
+                onPress={() => handleSwitch()}
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: scale(32),
+                  height: scale(32),
+                  borderRadius: scale(32),
+                  backgroundColor: "black"
+                }}
+              >
+                <View
+                  style={{
+                    borderRadius: scale(32),
+                    backgroundColor: "palegreen",
+                    width: scale(38),
+                    height: scale(38),
+                    alignSelf: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FontAwesome5 name="plus" color={"black"} size={scale(32)} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
           )}
         </View>
       </ScrollView>
 
-      <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
-        <PhotoBoxModel
-          picData={selectedPhoto}
-          togglePhotoBoxModal={togglePhotoBoxModal}
-        />
-      </Animated.View>
     </View>
   );
 }
@@ -412,25 +417,28 @@ export default function AnchorModal(lat, lng) {
 const styles = StyleSheet.create({
   container3: {
     // flex: 1,
-    backgroundColor: "transparent",
+    // backgroundColor: "blue",
     alignItems: "center",
-    marginTop: "-3%",
-    height: "100%",
+    // marginTop: "-3%",
+    // height: "100%",
+    width: scale(300),
     marginRight: scale(10),
     marginLeft: scale(10),
-    marginBottom: scale(16),
+    // marginBottom: scale(16),
     borderRadius: 15,
     // backgroundColor: "green"
   },
   picContainer3: {
-    width: scale(300),
-    height: scale(200),
+    width: "100%",
+    // height: scale(200),
     marginBottom: scale(5),
+    // backgroundColor: "pink",
     backgroundColor: "538bdb",
-    marginTop: "-0%",
+    // marginTop: "-0%",
     borderRadius: 15,
   },
   shadowbox: {
+    flex: 1,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -470,6 +478,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     marginTop: "40%",
+    fontFamily: "Itim_400Regular",
+    fontSize: scale(18),
+    color: "#F0EEEB",
+    // backgroundColor: "green"
+  },
+  noSightings2: {
+    flex: 1,
+    width: "60%",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    marginTop: "-6%",
     fontFamily: "Itim_400Regular",
     fontSize: scale(18),
     color: "#F0EEEB",
@@ -577,12 +597,28 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     opacity: 0.3,
   },
-  photoBoxModal: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    zIndex: 55,
-    left: 0,
-    backgroundColor: "green",
+  helpButton: {
+    backgroundColor: "#538bdb",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(15),
+    marginLeft: scale(-50),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    paddingTop: scale(2),
+  },
+  helpButtonPressed: {
+    backgroundColor: "#538dbd",
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginRight: scale(15),
+    marginLeft: scale(-50),
+    borderRadius: 40,
+    height: scale(30),
+    width: scale(30),
+    paddingTop: scale(2),
   },
 });

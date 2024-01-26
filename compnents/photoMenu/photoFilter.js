@@ -62,19 +62,23 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     zIndex: 1,
     width: windowWidth > 600 ? scale(130) : scale(150),
-    borderRadius: scale(10),
+    borderBottomRightRadius: scale(10),
+    borderBottomLeftRadius: scale(10),
     paddingRight: 5,
     paddingLeft: 12,
     fontSize: "2rem",
   },
   suggestInput: {
     fontSize: windowWidth > 600 ? scale(10) : scale(12),
-    width: "75%"
+    marginLeft: scale(5),
+    width: "85%",
+    textAlign: "center",
+    // backgroundColor: "green"
   },
   xButton: {
     // position: "absolute",
     marginTop: scale(3),
-    marginLeft: scale(5),
+    marginLeft: 2,
     zIndex: 10,
     elevation: 10
   },

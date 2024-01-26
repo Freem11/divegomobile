@@ -748,6 +748,8 @@ const styles = StyleSheet.create({
     marginBottom: "15%",
     shadowOpacity: 0.2,
     shadowRadius: 50,
+    borderWidth: 1,
+    borderColor: "darkgrey",
   },
   closeButton: {
     position: "relative",

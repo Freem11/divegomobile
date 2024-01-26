@@ -3,17 +3,20 @@ import { StyleSheet, View, Dimensions, Keyboard } from "react-native";
 import PlacesInput from "react-native-places-input";
 import config from "../../config";
 import { MapCenterContext } from "../contexts/mapCenterContext";
+import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { scale, moderateScale } from "react-native-size-matters";
 
 export default function GeocodeAutoComplete(props) {
   const { setGeoHide } = props;
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
-
+  const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
+  
   const handleConfirm = async (place) => {
       setMapCenter({
         lat: place.result.geometry.location.lat,
         lng: place.result.geometry.location.lng,
       });
-      setGeoHide(true)
+      setMapSearchModal(false)
       Keyboard.dismiss();
   };
 
@@ -25,8 +28,8 @@ export default function GeocodeAutoComplete(props) {
         language={"en-US"}
         onSelect={((place) => handleConfirm(place))}
         stylesList={{ borderRadius: 10 }}
-        stylesInput={{ borderRadius: 25, height: 40, width: 200 }}
-        textInputProps={{ backgroundColor: "white", width: 200, marginRight: 4}}
+        stylesInput={{ borderRadius: moderateScale(10), height: moderateScale(30), width: moderateScale(200) }}
+        textInputProps={{ backgroundColor: "white", width: moderateScale(200), fontSize: moderateScale(12)}}
         clearQueryOnSelect={true}
       />
     </View>
@@ -36,12 +39,13 @@ export default function GeocodeAutoComplete(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 200,
-    height: 500,
+    // alignItems: "center",
+    // justifyContent: "center",
+    width: moderateScale(220),
+    // height: scale(500),
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: 10,
     zIndex: 1,
+    marginTop: moderateScale(10)
   },
 });

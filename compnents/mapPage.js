@@ -9,14 +9,19 @@ import {
   Dimensions,
   Keyboard,
 } from "react-native";
+import { Octicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-// import Device from "expo-device";
+import email from "react-native-email";
 import Map from "./GoogleMap";
+import FABMenu from "./FABMenu/bottomBarMenu";
 import FABButtons from "./FABset";
 import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
-import { grabProfileById } from "./../supabaseCalls/accountSupabaseCalls";
+import {
+  grabProfileById,
+  updateProfileFeeback,
+} from "./../supabaseCalls/accountSupabaseCalls";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
@@ -27,6 +32,7 @@ import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { PictureAdderContext } from "./contexts/picModalContext";
 import { MasterContext } from "./contexts/masterContext";
+import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
@@ -51,8 +57,13 @@ import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
-
-import { scale } from "react-native-size-matters";
+import { SelectedShopContext } from "./contexts/selectedShopContext";
+import { ShopModalContext } from "./contexts/shopModalContext";
+import { ZoomHelperContext } from "./contexts/zoomHelperContext";
+import { SitesArrayContext } from "./contexts/sitesArrayContext";
+import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
+import { MapSearchModalContext } from "./contexts/mapSearchContext";
+import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
@@ -61,9 +72,11 @@ import Animated, {
   withTiming,
   interpolate,
   Easing,
+  withSpring,
 } from "react-native-reanimated";
 import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
+import PhotoBoxModel from "./modals/photoBoxModal";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
 import IntroTutorial from "./tutorial/introTutorial";
@@ -71,33 +84,40 @@ import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import UserProfileModal from "./modals/userProfileModal";
-
-import * as ScreenOrientation from 'expo-screen-orientation';
+import SettingsModal from "./modals/settingsModal";
+import ShopModal from "./modals/shopModal";
+import MapSearchModal from "./modals/mapSearchModal";
+import DiveSiteSearchModal from "./modals/diveSiteSearchModal";
+import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
-
+import { SettingsContext } from "./contexts/gearModalContext";
+import { MaterialIcons } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+let feedbackRequest = null;
+let feedbackRequest2 = null;
+let FbWidth = moderateScale(350);
 
 export default function MapPage() {
-  
-  if(Platform.OS ==="ios"){
-    ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT_UP
-    );
+  if (Platform.OS === "ios") {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-  
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
-
+ 
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
+  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const { textvalue, setTextValue } = useContext(SearchTextContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
+  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
 
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
@@ -108,10 +128,15 @@ export default function MapPage() {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [anchButState, setAnchButState] = useState(false);
 
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
+
+  // useEffect(() => {
+  //   zoomHelper ? setMasterSwitch(false) : setMasterSwitch(true);
+  // }, [zoomHelper]);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -154,9 +179,15 @@ export default function MapPage() {
 
   const startTutorialLaunchPadModalAnimations = () => {
     if (tutorialLaunchpadModal) {
-      tutorialLaunchpadModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialLaunchpadModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorialLaunchpadModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialLaunchpadModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -182,35 +213,81 @@ export default function MapPage() {
 
   const startAnchorModalAnimations = () => {
     if (siteModal) {
-      anchorModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      anchorModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      anchorModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      anchorModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
   useEffect(() => {
     startAnchorModalAnimations();
 
-    // const filterAnchorPhotos = async () => {
-    //   let { minLat, maxLat, minLng, maxLng } =  newGPSBoundaries(
-    //     selectedDiveSite.Latitude,
-    //     selectedDiveSite.Longitude
-    //   );
-    // }
-
-    // filterAnchorPhotos();
-   
     if (tutorialRunning && siteModal) {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
-      } else if (itterator === 11 && anchPhotos === 0 ) {
+      } else if (itterator === 11 && anchPhotos === 0) {
         setItterator(itterator + 1);
-      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0 ) {
+      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0) {
         setItterator(itterator + 2);
       }
     }
-    // setChapter(null)
   }, [siteModal]);
+
+  //Shop Modal Animation
+  const shopModalY = useSharedValue(windowHeight);
+  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
+  const { shopModal, setShopModal } = useContext(ShopModalContext);
+
+  const shopModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: shopModalY.value }],
+    };
+  });
+
+  const startShopModalAnimations = () => {
+    if (shopModal) {
+      shopModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      shopModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  useEffect(() => {
+    startShopModalAnimations();
+  }, [shopModal]);
+
+  //PhotoBox Modal Animation
+  const photoBoxModalY = useSharedValue(windowHeight);
+  const [photoBoxModel, setPhotoBoxModel] = useState(false);
+  const photoBoxModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: photoBoxModalY.value }],
+    };
+  });
+
+  const startPhotoBoxModalAnimations = () => {
+    if (photoBoxModel) {
+      photoBoxModalY.value = withTiming(-windowHeight);
+    } else {
+      photoBoxModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startPhotoBoxModalAnimations();
+  }, [photoBoxModel]);
 
   //Dive Site Modal Animation
   const diveSiteModalY = useSharedValue(windowHeight);
@@ -226,9 +303,15 @@ export default function MapPage() {
 
   const startDiveSiteModalAnimations = () => {
     if (diveSiteAdderModal) {
-      diveSiteModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      diveSiteModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      diveSiteModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      diveSiteModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -251,9 +334,15 @@ export default function MapPage() {
 
   const startPictureModalAnimations = () => {
     if (picAdderModal) {
-      pictureModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      pictureModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      pictureModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      pictureModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -277,9 +366,15 @@ export default function MapPage() {
 
   const startGuideModalAnimations = () => {
     if (guideModal) {
-      tutorialModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorialModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorialModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -305,9 +400,15 @@ export default function MapPage() {
 
   const startSecondGuideModalAnimations = () => {
     if (secondGuideModal) {
-      tutorial2ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial2ModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorial2ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial2ModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -333,9 +434,15 @@ export default function MapPage() {
 
   const startThirdGuideModalAnimations = () => {
     if (thirdGuideModal) {
-      tutorial3ModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial3ModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     } else {
-      tutorial3ModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
+      tutorial3ModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
     }
   };
 
@@ -347,31 +454,136 @@ export default function MapPage() {
   }, [thirdGuideModal]);
 
   //Profile Modal Animation
-    const profileModalY = useSharedValue(windowHeight);
-    const { profileModal, setProfileModal } = useContext(ProfileModalContext);
-  
-    const profileModalReveal = useAnimatedStyle(() => {
-      return {
-        transform: [{ translateY: profileModalY.value }],
-      };
-    });
-  
-    const startProfileModalAnimations = () => {
-      if (profileModal) {
-        profileModalY.value = withTiming(0, {duration: 150, easing: Easing.out(Easing.linear)});
-      } else {
-        profileModalY.value = withTiming(windowHeight, {duration: 150, easing: Easing.out(Easing.linear)});
-      }
+  const profileModalY = useSharedValue(windowHeight);
+  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+
+  const profileModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: profileModalY.value }],
     };
-    
-    useEffect(() => {
-      startProfileModalAnimations();
-      // if (!itterator && guideModal) {
-      //   setItterator(0);
-      // }
-    }, [profileModal]);
+  });
 
+  const startProfileModalAnimations = () => {
+    if (profileModal) {
+      profileModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      profileModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
 
+  //Settings Modal Animation
+  const settingsModalY = useSharedValue(windowHeight);
+  const { gearModal, setGearModal } = useContext(SettingsContext);
+
+  const settingsModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: settingsModalY.value }],
+    };
+  });
+
+  const startSettingsModalAnimations = () => {
+    if (gearModal) {
+      settingsModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      settingsModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  //MapSearch Modal Animation
+  const mapSearchModalY = useSharedValue(windowHeight);
+  const { mapSearchModal, setMapSearchModal } = useContext(
+    MapSearchModalContext
+  );
+
+  const mapSearchModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: mapSearchModalY.value }],
+    };
+  });
+
+  const startMapSearchModalAnimations = () => {
+    if (mapSearchModal) {
+      mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      mapSearchModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  //DiveSiteSearch Modal Animation
+  const diveSiteSearchModalY = useSharedValue(windowHeight);
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
+    DiveSiteSearchModalContext
+  );
+
+  const diveSiteSearchModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: diveSiteSearchModalY.value }],
+    };
+  });
+
+  const startdiveSiteSearchModalAnimations = () => {
+    if (diveSiteSearchModal) {
+      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      diveSiteSearchModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  const feedbackX = useSharedValue(0);
+
+  const feedbackReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: feedbackX.value }],
+    };
+  });
+
+  const startFeedbackAnimations = () => {
+    if (feedbackX.value === 0) {
+      feedbackX.value = withSpring(moderateScale(250));
+    } else {
+      feedbackX.value = withTiming(0);
+    }
+  };
+
+  useEffect(() => {
+    startProfileModalAnimations();
+  }, [profileModal]);
+
+  useEffect(() => {
+    startSettingsModalAnimations();
+  }, [gearModal]);
+
+  useEffect(() => {
+    startMapSearchModalAnimations();
+  }, [mapSearchModal]);
+
+  useEffect(() => {
+    startdiveSiteSearchModalAnimations();
+  }, [diveSiteSearchModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -398,7 +610,7 @@ export default function MapPage() {
 
   const pullTabHeight = useSharedValue(0);
 
-  const toVal = scale(25)
+  const toVal = scale(25);
 
   const tabPullHeigth = useDerivedValue(() => {
     return interpolate(pullTabHeight.value, [0, 1], [0, toVal]);
@@ -413,18 +625,44 @@ export default function MapPage() {
   const startPullTabAnimation = () => {
     if (pullTabHeight.value === 0) {
       pullTabHeight.value = withTiming(1);
-      setIsOpen(true)
+      setIsOpen(true);
     } else {
-      Keyboard.dismiss()
+      Keyboard.dismiss();
       pullTabHeight.value = withTiming(0);
       setTextValue("");
-      setIsOpen(false)
+      setIsOpen(false);
+    }
+  };
+
+  const fTabY = useSharedValue(0);
+
+  const tabFY = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: fTabY.value }],
+    };
+  });
+
+  const [label, setLabel] = useState("Show Menu");
+  const [direction, setDirection] = useState("up");
+
+  const startFTabAnimation = () => {
+    console.log("fire");
+    if (fTabY.value === 0) {
+      fTabY.value =
+        windowWidth > 700
+          ? withTiming(moderateScale(-60))
+          : withTiming(moderateScale(-70));
+      setLabel("Hide Menu");
+      setDirection("down");
+    } else {
+      fTabY.value = withTiming(0);
+      setLabel("Show Menu");
+      setDirection("up");
     }
   };
 
   const onNavigate = () => {
-
-    if (chosenModal === "DiveSite"){
+    if (chosenModal === "DiveSite") {
       setAddSiteVals({
         ...addSiteVals,
         Latitude: dragPin.lat.toString(),
@@ -432,8 +670,8 @@ export default function MapPage() {
       });
       setMapHelper(true);
       setMasterSwitch(true);
-      setDiveSiteAdderModal(!diveSiteAdderModal)
-      setItterator2(itterator2 + 1)
+      setDiveSiteAdderModal(!diveSiteAdderModal);
+      setItterator2(itterator2 + 1);
       setChosenModal(null);
     } else if (chosenModal === "Photos") {
       setPinValues({
@@ -448,6 +686,15 @@ export default function MapPage() {
     }
   };
 
+  const onShopNavigate = () => {
+    setMapHelper(true);
+    setMasterSwitch(true);
+    setMinorSwitch(true);
+    setShopModal(true);
+    setZoomHelper(true);
+    setSitesArray([]);
+  };
+
   useEffect(() => {
     if (animalSelection.length > 0) {
       setToken(true);
@@ -457,10 +704,9 @@ export default function MapPage() {
   }, [animalSelection]);
 
   useEffect(() => {
-    if (areaPics.length === 0 && !isOpen){
-      pullTabHeight.value = withTiming(0)
+    if (areaPics.length === 0 && !isOpen) {
+      pullTabHeight.value = withTiming(0);
     }
- 
   }, [areaPics]);
 
   const [subButState, setSubButState] = useState(false);
@@ -490,14 +736,44 @@ export default function MapPage() {
               UserName: success[0].UserName,
             });
           }
+
+          if (success[0].feedbackRequested === false) {
+            feedbackRequest = setTimeout(() => {
+              startFeedbackAnimations();
+              updateProfileFeeback(success[0]);
+            }, 180000);
+          }
         }
       } catch (e) {
         console.log({ title: "Error", message: "e.message" });
       }
     };
-
     getProfile();
   }, []);
+
+  useEffect(() => {
+    clearTimeout(feedbackRequest2);
+    clearTimeout(feedbackRequest);
+
+    if (tutorialRunning === false) {
+      if (!profile && profile[0].feedbackRequested === false) {
+        feedbackRequest2 = setTimeout(() => {
+          startFeedbackAnimations();
+          updateProfileFeeback(profile[0]);
+        }, 180000);
+      }
+    }
+  }, [tutorialRunning]);
+
+  const handleEmail = () => {
+    const to = ["scubaseasons@gmail.com"];
+    email(to, {
+      // Optional additional arguments
+      subject: "Scuba SEAsons Feedback Submission",
+      body: "",
+      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
+    }).catch(console.error);
+  };
 
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
@@ -513,29 +789,26 @@ export default function MapPage() {
             {masterSwitch && (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
                 <PhotoMenu style={{ zIndex: 3 }} />
-                   <View style={styles.filterer} pointerEvents={"box-none"}>
-                {(areaPics && areaPics.length > 0 || isOpen) && (
-                  <View style={styles.emptyBox} pointerEvents={"box-none"}>
-                  <Animated.View style={[tabPull, styles.closer]}>
-                  <PhotoFilterer />
-                </Animated.View>
-             
-                <TouchableWithoutFeedback onPress={startPullTabAnimation}>
-                  <View style={styles.pullTab}></View>
-                </TouchableWithoutFeedback>
-                </View>
-   )}
+                <View style={styles.filterer} pointerEvents={"box-none"}>
+                  {((areaPics && areaPics.length > 0) || isOpen) && (
+                    <View style={styles.emptyBox} pointerEvents={"box-none"}>
+                      <Animated.View style={[tabPull, styles.closer]}>
+                        <PhotoFilterer />
+                      </Animated.View>
 
+                      <TouchableWithoutFeedback onPress={startPullTabAnimation}>
+                        <View style={styles.pullTab}></View>
+                      </TouchableWithoutFeedback>
+                    </View>
+                  )}
 
-   
-                <View style={styles.animalSelect} pointerEvents={"box-none"}>
-                  <AnimalTopAutoSuggest transTagsY={transTagsY} />
+                  <View style={styles.animalSelect} pointerEvents={"box-none"}>
+                    <AnimalTopAutoSuggest transTagsY={transTagsY} />
+                  </View>
                 </View>
               </View>
-              </View>
-              
             )}
-{/* 
+            {/* 
            {masterSwitch && ( 
                <KeyboardAvoidingView behavior="height" enabled={false}>
            
@@ -553,13 +826,88 @@ export default function MapPage() {
               </TouchableWithoutFeedback>
             )}
 
-            {masterSwitch && (
+            {/* {masterSwitch && (
+             
+            )} */}
+
+            {/* {masterSwitch && (
               <View style={styles.Fbuttons}>
                 <FABButtons style={{ zIndex: 2 }} />
               </View>
+            )} */}
+
+            {masterSwitch && (
+              <Animated.View
+                style={[styles.FMenuAnimate, tabFY]}
+                pointerEvents={"box-none"}
+              >
+                <TouchableWithoutFeedback onPress={startFTabAnimation}>
+                  <View style={styles.FBox}>
+                    <Text style={styles.FText}>{label}</Text>
+                    <AntDesign
+                      name={direction}
+                      size={moderateScale(14)}
+                      color="white"
+                      style={{ marginBottom: 5 }}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+
+                <Animated.View style={[styles.feedback, feedbackReveal]}>
+              <Text style={styles.feedRequest} onPress={() => handleEmail()}>
+                Send Scuba SEAsons feedback
+              </Text>
+              <TouchableOpacity
+                style={{
+                  width: moderateScale(30),
+                  height: moderateScale(23),
+                  marginTop: moderateScale(3),
+                }}
+                onPress={startFeedbackAnimations}
+              >
+                <Octicons
+                  name="paper-airplane"
+                  size={moderateScale(24)}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </Animated.View>
+
+                <View
+                style={
+                  anchButState
+                    ? styles.buttonwrapperPressed
+                    : styles.buttonwrapper
+                }
+              >
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    tutorialRunning ? null : setDiveSitesTog(!diveSitesTog);
+                  }}
+                  onPressIn={() => setAnchButState(true)}
+                  onPressOut={() => setAnchButState(false)}
+                  style={{
+                    alignItems: "center",
+                    width: moderateScale(30),
+                    height: moderateScale(30),
+                  }}
+                >
+                  <MaterialIcons
+                    name="anchor"
+                    color={anchButState ? "gold" : "white"}
+                    size={moderateScale(30)}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
+
+
+                <View style={styles.FMenu}>
+                  <FABMenu style={{ zIndex: 2 }} />
+                </View>
+              </Animated.View>
             )}
 
-            {!masterSwitch && (
+            {!masterSwitch && minorSwitch && (
               <View
                 style={subButState ? styles.PinButtonPressed : styles.PinButton}
               >
@@ -591,13 +939,45 @@ export default function MapPage() {
               </View>
             )}
 
+            {!masterSwitch && !minorSwitch && (
+              <View
+                style={subButState ? styles.PinButtonPressed : styles.PinButton}
+              >
+                <TouchableOpacity
+                  style={{
+                    // backgroundColor: "orange",
+                    width: scale(200),
+                    height: scale(30),
+                  }}
+                  onPress={onShopNavigate}
+                  onPressIn={() => setSubButState(true)}
+                  onPressOut={() => setSubButState(false)}
+                >
+                  <Text
+                    style={{
+                      color: "gold",
+                      fontFamily: "PatrickHand_400Regular",
+                      fontSize: scale(22),
+                      width: "100%",
+                      height: "120%",
+                      textAlign: "center",
+                      marginTop: -5,
+                      borderRadius: scale(15),
+                    }}
+                  >
+                    Return to Shop
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
             {masterSwitch && (
               <View style={styles.Hist} pointerEvents={"none"}>
                 <Historgram style={{ zIndex: 2 }} />
               </View>
             )}
 
-            <Logo style={styles.Logo} pointerEvents={"none"} />
+            {/* <Logo style={styles.Logo} pointerEvents={"none"} /> */}
 
             {/* modals go here? */}
             <Animated.View
@@ -612,8 +992,22 @@ export default function MapPage() {
               <AnchorModal
                 anchorModalY={anchorModalY}
                 SiteName={selectedDiveSite.SiteName}
+                setSelectedPhoto={setSelectedPhoto}
+                setPhotoBoxModel={setPhotoBoxModel}
                 Lat={selectedDiveSite.Latitude}
                 Lng={selectedDiveSite.Longitude}
+              />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, shopModalReveal]}>
+              <ShopModal />
+            </Animated.View>
+
+            <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
+              <PhotoBoxModel
+                picData={selectedPhoto}
+                photoBoxModel={photoBoxModel}
+                setPhotoBoxModel={setPhotoBoxModel}
               />
             </Animated.View>
 
@@ -638,7 +1032,21 @@ export default function MapPage() {
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, profileModalReveal]}>
-              <UserProfileModal/>
+              <UserProfileModal />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, settingsModalReveal]}>
+              <SettingsModal />
+            </Animated.View>
+
+            <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
+              <MapSearchModal />
+            </Animated.View>
+
+            <Animated.View
+              style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
+            >
+              <DiveSiteSearchModal />
             </Animated.View>
 
             <Map style={{ zIndex: 1 }} />
@@ -655,7 +1063,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "green"
+    backgroundColor: "green",
   },
   slider: {
     flex: 1,
@@ -697,6 +1105,35 @@ const styles = StyleSheet.create({
     marginTop: 5,
     zIndex: 1,
     // backgroundColor: "pink"
+  },
+  FMenuAnimate: {
+    position: "absolute",
+    bottom: moderateScale(-55),
+    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
+    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    zIndex: 3,
+    // backgroundColor: 'pink'
+  },
+  FBox: {
+    alignItems: "center",
+  },
+  FText: {
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    fontSize: moderateScale(12),
+  },
+  FMenu: {
+    flexDirection: "column",
+    alignContent: "center",
+    backgroundColor: "#538bdb",
+    width: "100%",
+    height: moderateScale(55),
+    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
+    zIndex: 3,
   },
   Fbuttons: {
     alignItems: "center",
@@ -760,7 +1197,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: Platform.OS === "ios" ? "5%" : "4%",
+    top: windowWidth > 700 ? moderateScale(12) : moderateScale(40),
     zIndex: 3,
   },
   filterer: {
@@ -774,7 +1211,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     // height: 25,
     width: "50%",
-    top: Platform.OS === "ios" ? "100%" : "100%",
+    top: moderateScale(105),
     zIndex: 3,
     // backgroundColor: "green"
   },
@@ -805,7 +1242,7 @@ const styles = StyleSheet.create({
   Hist: {
     alignItems: "center",
     position: "absolute",
-    bottom: scale(30),
+    bottom: windowWidth > 700 ? scale(27) : scale(30),
     left: scale(75),
     width: scale(190),
     height: 100,
@@ -830,6 +1267,32 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     zIndex: 25,
     left: 0,
+    borderWidth: 1,
+    borderColor: "darkgrey",
+  },
+  searchModal: {
+    position: "absolute",
+    height: moderateScale(160),
+    width: "60%",
+    marginLeft: "19%",
+    backgroundColor: "#538bdb",
+    borderRadius: 15,
+    zIndex: 25,
+    left: 0,
+    borderWidth: 1,
+    borderColor: "darkgrey",
+  },
+  diveSearchModal: {
+    position: "absolute",
+    height: moderateScale(130),
+    width: "60%",
+    marginLeft: "19%",
+    backgroundColor: "#538bdb",
+    borderRadius: 15,
+    zIndex: 25,
+    left: 0,
+    borderWidth: 1,
+    borderColor: "darkgrey",
   },
   pullTab: {
     height: windowWidth > 600 ? scale(10) : scale(15),
@@ -837,9 +1300,93 @@ const styles = StyleSheet.create({
     backgroundColor: "gold",
     borderBottomRightRadius: scale(7),
     borderBottomLeftRadius: scale(7),
-    zIndex: 10
+    zIndex: 10,
   },
   closer: {
-    zIndex: 5
+    zIndex: 5,
+  },
+  feedback: {
+    zIndex: 20,
+    // opacity: 0.8,
+    flexDirection: "row",
+    backgroundColor: "#538bdb",
+    position: "absolute",
+    top: -moderateScale(35),
+    left: -0.88 * FbWidth,
+    padding: moderateScale(5),
+    borderTopRightRadius: moderateScale(15),
+    borderBottomRightRadius: moderateScale(15),
+    width: FbWidth,
+    height: moderateScale(39),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  feedRequest: {
+    color: "white",
+    fontFamily: "Itim_400Regular",
+    fontSize: moderateScale(18),
+    marginTop: moderateScale(3),
+    marginRight: moderateScale(10),
+    marginLeft: moderateScale(14),
+    paddingLeft: moderateScale(50),
+  },
+  photoBoxModal: {
+    position: "absolute",
+    height: windowHeight,
+    width: windowWidth,
+    zIndex: 55,
+    left: "5%",
+    top: windowHeight,
+    marginTop: "10%",
+    backgroundColor: "green",
+  },
+  buttonwrapper: {
+    position: "absolute",
+    top: -moderateScale(35),
+    right: moderateScale(30),
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: moderateScale(50),
+    height: moderateScale(39),
+    width: moderateScale(39),
+    backgroundColor: "#538bdb",
+    zIndex: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  buttonwrapperPressed: {
+    position: "absolute",
+    top: windowHeight * 0.83,
+    right: moderateScale(30),
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: moderateScale(50),
+    height: moderateScale(39),
+    width: moderateScale(39),
+    backgroundColor: "white",
+    zIndex: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+
+    elevation: 10,
   },
 });

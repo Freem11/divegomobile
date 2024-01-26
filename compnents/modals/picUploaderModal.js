@@ -10,6 +10,12 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { PinContext } from "../contexts/staticPinContext";
@@ -25,11 +31,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
-import { uploadphoto } from "../../supabaseCalls/uploadSupabaseCalls";
-import { removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
+// import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
+import {
+  uploadphoto,
+  removePhoto,
+} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
@@ -37,6 +46,8 @@ import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import SuccessModal from "./confirmationSuccessModal";
+import FailModal from "./confirmationCautionModal";
 
 let PicVar = false;
 let DateVar = false;
@@ -61,6 +72,7 @@ export default function PicUploadModal() {
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const [picCloseState, setPicCloseState] = useState(false);
+  const [indicatorState, setIndicatorState] = useState(false);
 
   const { pinValues, setPinValues } = useContext(PinContext);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
@@ -259,7 +271,8 @@ export default function PicUploadModal() {
     hideDatePicker();
   };
 
-  const AnimalKeboardOffset = Platform.OS === "ios" ? 700 : 700;
+  const GPSKeyBoardOffset1 = Platform.OS === "ios" ? 750 - 240 : 750 - 240;
+  const GPSKeyBoardOffset2 = Platform.OS === "ios" ? 700 - 240 : 700 - 240;
 
   let colorDate;
   if (pinValues.PicDate === "") {
@@ -308,8 +321,6 @@ export default function PicUploadModal() {
       LngVal: LngVar,
     });
 
-    console.log("pins", pinValues);
-
     if (
       pinValues.PicFile === "" ||
       pinValues.PicFile === null ||
@@ -318,14 +329,12 @@ export default function PicUploadModal() {
       pinValues.Latitude === "" ||
       pinValues.Animal === ""
     ) {
+      failBoxY.value = withTiming(scale(70));
       return;
     } else {
       if (tutorialRunning) {
-        if (itterator3 > 0) {
-          setItterator3(itterator3 + 1);
-        }
+        successBoxY.value = withTiming(scale(70));
       } else {
-        // console.log("pinnies!", pinValues)
         insertPhotoWaits(pinValues);
         setPinValues({
           ...pinValues,
@@ -337,7 +346,10 @@ export default function PicUploadModal() {
           DDVal: "0",
         });
         setUploadedFile(null);
-        setPicAdderModal(!picAdderModal);
+
+        successBoxY.value = withTiming(scale(70));
+
+        // setPicAdderModal(!picAdderModal);
       }
     }
   };
@@ -346,8 +358,7 @@ export default function PicUploadModal() {
     setIsLoading(true);
     if (pinValues.PicFile !== null) {
       removePhoto({
-        filePath:
-          "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
+        filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
         fileName: `${pinValues.PicFile}`,
       });
     }
@@ -355,34 +366,20 @@ export default function PicUploadModal() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        setUploadedFile(image.assets[0].uri);
-        setIsLoading(false);
-        let fileToUpload = createFile(image.assets[0].uri);
-        const data = new FormData();
-        data.append("image", fileToUpload);
-
+        //scrape off photo info
+        let formattedDate = pinValues.PicDate;
+        let newLatitude = pinValues.Latitude;
+        let newLongitude = pinValues.Longitude;
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
-        uploadphoto(data, fileName);
-
-        let formattedDate;
-        let newLatitude;
-        let newLongitude;
-
         if (image.assets[0].exif.DateTimeOriginal) {
           formattedDate = formatDate(image.assets[0].exif.DateTimeOriginal);
-          DateVar = false;
-        } else {
-          formattedDate = pinValues.PicDate;
         }
 
         if (image.assets[0].exif.GPSLatitude) {
           newLatitude = image.assets[0].exif.GPSLatitude.toString();
           newLongitude = image.assets[0].exif.GPSLongitude.toString();
-        } else {
-          newLatitude = pinValues.Latitude;
-          newLongitude = pinValues.Longitude;
         }
 
         setPinValues({
@@ -393,6 +390,14 @@ export default function PicUploadModal() {
           Longitude: newLongitude,
         });
 
+        //create new photo file and upload
+        setUploadedFile(image.assets[0].uri);
+        setIsLoading(false);
+        let picture = await fetch(image.assets[0].uri);
+        picture = await picture.blob();
+        uploadphoto(picture, fileName);
+
+        DateVar = false;
         AnimalVar = false;
         LngVar = false;
         LatVar = false;
@@ -433,12 +438,10 @@ export default function PicUploadModal() {
         return;
       } else {
         setPicAdderModal(!picAdderModal);
-
         if (pinValues.PicFile !== null) {
           removePhoto({
-            filePath:
-              "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
-            fileName: pinValues.PicFile,
+            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+            fileName: `${pinValues.PicFile}`,
           });
         }
 
@@ -458,12 +461,19 @@ export default function PicUploadModal() {
       }
     } else {
       setPicAdderModal(!picAdderModal);
-
+      failBoxY.value = withTiming(scale(1200));
+      successBoxY.value = withTiming(scale(1200));
+      SetFormValidation({
+        PictureVal: false,
+        DateVal: false,
+        AnimalVal: false,
+        LatVal: false,
+        LngVal: false,
+      });
       if (pinValues.PicFile !== null) {
         removePhoto({
-          filePath:
-            "https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/",
-          fileName: pinValues.PicFile,
+          filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+          fileName: `${pinValues.PicFile}`,
         });
       }
 
@@ -484,8 +494,8 @@ export default function PicUploadModal() {
   };
 
   const activateGuide = () => {
-    setChapter("Adding your photo")
-};
+    setChapter("Adding your photo");
+  };
 
   const [imgButState, setImgButState] = useState(false);
   const [datButState, setDatButState] = useState(false);
@@ -493,11 +503,51 @@ export default function PicUploadModal() {
   const [subButState, setSubButState] = useState(false);
   const [helpButState, setHelpButState] = useState(false);
 
+  const successBoxY = useSharedValue(scale(1200));
+  const failBoxY = useSharedValue(scale(1200));
+
+  const sucessModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: successBoxY.value }],
+    };
+  });
+
+  const cautionModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: failBoxY.value }],
+    };
+  });
+
+  const confirmationSucessClose = () => {
+    successBoxY.value = withTiming(scale(1200));
+  };
+
+  const confirmationFailClose = () => {
+    failBoxY.value = withTiming(scale(1200));
+  };
+
+  useEffect(() => {
+    if (
+      pinValues.PicFile === "" ||
+      pinValues.PicFile === null ||
+      pinValues.PicDate === "" ||
+      pinValues.Longitude === "" ||
+      pinValues.Latitude === "" ||
+      pinValues.Animal === ""
+    ) {
+      setIndicatorState(false);
+    } else {
+      setIndicatorState(true);
+    }
+  }, [pinValues]);
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Picture</Text>
-        <View style={helpButState ? styles.helpButtonPressed : styles.helpButton}>
+        <View
+          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
+        >
           <TouchableOpacity
             // disabled={isDisabled}
             onPress={activateGuide}
@@ -514,7 +564,7 @@ export default function PicUploadModal() {
               name="question"
               color="gold"
               size={scale(18)}
-              style={{ zIndex: -1}}
+              style={{ zIndex: -1 }}
             />
           </TouchableOpacity>
         </View>
@@ -564,50 +614,68 @@ export default function PicUploadModal() {
       </View>
 
       <View
-        style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
+        style={{
+          flexDirection: "row",
+          marginTop: moderateScale(0),
+          marginBottom: moderateScale(0),
+        }}
       >
-        <TouchableOpacity
-          onPress={handleImageUpload}
-          onPressIn={() => setImgButState(true)}
-          onPressOut={() => setImgButState(false)}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: scale(150),
-            height: scale(24),
-            marginTop: 0,
-          }}
+        <View
+          style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
         >
-          <FontAwesome
-            name="picture-o"
-            color={imgButState ? "#538dbd": "gold"}
-            size={scale(24)}
+          <TouchableOpacity
+            onPress={handleImageUpload}
+            onPressIn={() => setImgButState(true)}
+            onPressOut={() => setImgButState(false)}
             style={{
-              marginLeft: Platform.OS === "android" ? scale(10) : scale(10),
-            }}
-          />
-          <Text
-            style={{
-              marginLeft: scale(5),
-              marginTop: scale(0),
-              color: imgButState ? "#538dbd": "gold",
-              fontFamily: "PatrickHand_400Regular",
-              fontSize: scale(17),
+              display: "flex",
+              flexDirection: "row",
+              width: moderateScale(150),
+              height: moderateScale(24),
+              marginTop: 0,
             }}
           >
-            Choose an Image
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <FontAwesome
+              name="picture-o"
+              color={imgButState ? "#538dbd" : "gold"}
+              size={moderateScale(24)}
+              style={{
+                marginLeft:
+                  Platform.OS === "android"
+                    ? moderateScale(10)
+                    : moderateScale(10),
+              }}
+            />
+            <Text
+              style={{
+                marginLeft: scale(5),
+                marginTop: scale(0),
+                color: imgButState ? "#538dbd" : "gold",
+                fontFamily: "PatrickHand_400Regular",
+                fontSize: moderateScale(17),
+              }}
+            >
+              Choose an Image
+            </Text>
+          </TouchableOpacity>
+        </View>
 
+        <View
+          style={
+            indicatorState
+              ? styles.ImageUploadIndicatorGreen
+              : styles.ImageUploadIndicatorRed
+          }
+        ></View>
+      </View>
       <View style={styles.lowerZone}>
         <View style={styles.fields}>
           <View style={styles.dateField}>
             <InsetShadow
               containerStyle={{
-                borderRadius: 25,
-                height: 40,
-                width: 200,
+                borderRadius: moderateScale(25),
+                height: moderateScale(40),
+                width: moderateScale(200),
               }}
               elevation={20}
               shadowColor={"black"}
@@ -622,8 +690,8 @@ export default function PicUploadModal() {
                 placeholder={"Date"}
                 placeholderTextColor="darkgrey"
                 editable={false}
-                color={colorDate}
-                fontSize={17}
+                color={formValidation.DateVal ? "black" : "#F0EEEB"}
+                fontSize={moderateScale(17)}
                 placeholderTextColor={colorDate}
                 onChangeText={(text) =>
                   setPinValues({ ...pinValues, Animal: text })
@@ -633,72 +701,83 @@ export default function PicUploadModal() {
           </View>
 
           {/* <View style={styles.animalField}> */}
-          {/* <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={AnimalKeboardOffset}
-              style={styles.autocomplete}
-            > */}
+
           <AnimalAutoSuggest
             pin={pinValues}
             setPin={setPinValues}
             formValidation={formValidation}
             SetFormValidation={SetFormValidation}
           />
-          {/* </KeyboardAvoidingView> */}
+
           {/* </View> */}
 
-          <View style={styles.latField}>
-            <InsetShadow
-              containerStyle={{
-                borderRadius: 25,
-                height: 40,
-                width: 200,
-              }}
-              elevation={20}
-              shadowColor={"black"}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <TextInput
-                style={formValidation.LatVal ? styles.inputRed : styles.input}
-                value={pinValues.Latitude}
-                placeholder={"Latitude"}
-                editable={false}
-                placeholderTextColor="darkgrey"
-                fontSize={16}
-                color="#F0EEEB"
-                onChangeText={(text) =>
-                  setPinValues({ ...pinValues, Latitude: text })
-                }
-              ></TextInput>
-            </InsetShadow>
-          </View>
-          <View style={styles.lngField}>
-            <InsetShadow
-              containerStyle={{
-                borderRadius: 25,
-                height: 40,
-                width: 200,
-              }}
-              elevation={20}
-              shadowColor={"black"}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <TextInput
-                style={formValidation.LngVal ? styles.inputRed : styles.input}
-                value={pinValues.Longitude}
-                placeholder={"Longitude"}
-                editable={false}
-                placeholderTextColor="darkgrey"
-                fontSize={16}
-                color="#F0EEEB"
-                onChangeText={(text) =>
-                  setPinValues({ ...pinValues, Longitude: text })
-                }
-              ></TextInput>
-            </InsetShadow>
-          </View>
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={GPSKeyBoardOffset1}
+            style={styles.autocompleteA}
+          >
+            <View style={styles.latField}>
+              <InsetShadow
+                containerStyle={{
+                  borderRadius: moderateScale(25),
+                  height: moderateScale(40),
+                  width: moderateScale(200),
+                }}
+                elevation={20}
+                shadowColor={"black"}
+                shadowRadius={15}
+                shadowOpacity={0.3}
+              >
+                <TextInput
+                  style={formValidation.LatVal ? styles.inputRed : styles.input}
+                  value={pinValues.Latitude}
+                  placeholder={"Latitude"}
+                  keyboardType="numbers-and-punctuation"
+                  // editable={false}
+                  placeholderTextColor="darkgrey"
+                  fontSize={moderateScale(16)}
+                  color={formValidation.LatVal ? "black" : "#F0EEEB"}
+                  onChangeText={(text) =>
+                    setPinValues({ ...pinValues, Latitude: text })
+                  }
+                ></TextInput>
+              </InsetShadow>
+            </View>
+          </KeyboardAvoidingView>
+
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={GPSKeyBoardOffset2}
+            style={styles.autocompleteB}
+          >
+            <View style={styles.lngField}>
+              <InsetShadow
+                containerStyle={{
+                  borderRadius: moderateScale(25),
+                  height: moderateScale(40),
+                  width: moderateScale(200),
+                }}
+                elevation={20}
+                shadowColor={"black"}
+                shadowRadius={15}
+                shadowOpacity={0.3}
+              >
+                <TextInput
+                  style={formValidation.LngVal ? styles.inputRed : styles.input}
+                  value={pinValues.Longitude}
+                  placeholder={"Longitude"}
+                  keyboardType="numbers-and-punctuation"
+                  // editable={false}
+                  placeholderTextColor="darkgrey"
+                  fontSize={moderateScale(16)}
+                  color={formValidation.LngVal ? "black" : "#F0EEEB"}
+                  onChangeText={(text) =>
+                    setPinValues({ ...pinValues, Longitude: text })
+                  }
+                ></TextInput>
+              </InsetShadow>
+            </View>
+          </KeyboardAvoidingView>
         </View>
 
         <View style={styles.smallButtons}>
@@ -711,14 +790,14 @@ export default function PicUploadModal() {
                 onPressIn={() => setDatButState(true)}
                 onPressOut={() => setDatButState(false)}
                 style={{
-                  width: 28,
-                  height: 32,
+                  width: moderateScale(28),
+                  height: moderateScale(32),
                 }}
               >
                 <FontAwesome
                   name="calendar"
-                  color={datButState ? "#538dbd": "gold"}
-                  size={28}
+                  color={datButState ? "#538dbd" : "gold"}
+                  size={moderateScale(28)}
                   style={{ marginLeft: 1.5, marginTop: 2 }}
                 />
                 <DateTimePickerModal
@@ -743,14 +822,14 @@ export default function PicUploadModal() {
                 onPressIn={() => setCorButState(true)}
                 onPressOut={() => setCorButState(false)}
                 style={{
-                  width: 38,
-                  height: 38,
+                  width: moderateScale(38),
+                  height: moderateScale(38),
                 }}
               >
                 <MaterialIcons
                   name="location-pin"
-                  color={corButState ? "#538dbd": "gold"}
-                  size={38}
+                  color={corButState ? "#538dbd" : "gold"}
+                  size={moderateScale(38)}
                   style={{ zIndex: -1 }}
                 />
               </TouchableOpacity>
@@ -774,7 +853,7 @@ export default function PicUploadModal() {
           <Text
             style={{
               color: "gold",
-              fontSize: 26,
+              fontSize: moderateScale(26),
               marginTop: 4,
               marginBottom: -6,
               fontFamily: "PatrickHand_400Regular",
@@ -791,6 +870,23 @@ export default function PicUploadModal() {
         </TouchableOpacity>
         {/* </TouchableWithoutFeedback> */}
       </View>
+
+      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+        <SuccessModal
+          submissionItem="sea creature submission"
+          togglePicModal={togglePicModal}
+          confirmationSucessClose={confirmationSucessClose}
+          itterator3={itterator3}
+          setItterator3={setItterator3}
+        ></SuccessModal>
+      </Animated.View>
+
+      <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+        <FailModal
+          submissionItem="sea creature submission"
+          confirmationFailClose={confirmationFailClose}
+        ></FailModal>
+      </Animated.View>
     </View>
   );
 }
@@ -804,6 +900,8 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
     minHeight: Platform.OS === "android" ? 490 : 0,
     // backgroundColor: "pink",
   },
@@ -811,8 +909,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
     overflow: "hidden",
@@ -825,8 +923,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
     overflow: "hidden",
@@ -839,8 +937,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
   },
@@ -848,8 +946,8 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 200,
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
     textAlign: "center",
     shadowOpacity: 0.3,
@@ -873,18 +971,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: scale(15),
-    height: "7%",
-    width: "50%",
+    borderRadius: moderateScale(15),
+    height: moderateScale(40),
+    width: moderateScale(170),
     marginLeft: 0,
     marginTop: Platform.OS === "ios" ? "2%" : "3%",
     // marginBottom: Platform.OS === "ios" ? "3%" : "6%",
     shadowColor: "#000",
     shadowOffset: {
-      width: 1,
-      height: 1,
+      width: 2,
+      height: 2,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 5,
     shadowRadius: 6,
 
     elevation: 10,
@@ -894,9 +992,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: scale(15),
-    height: "7%",
-    width: "50%",
+    borderRadius: moderateScale(15),
+    height: moderateScale(40),
+    width: moderateScale(170),
     marginLeft: 0,
     marginTop: Platform.OS === "ios" ? "2%" : "3%",
     // marginBottom: Platform.OS === "ios" ? "3%" : "6%",
@@ -914,8 +1012,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "15%",
-    marginBottom: Platform.OS === "ios" ? "3%" : "2%",
+    marginTop: moderateScale(50),
+    marginBottom: Platform.OS === "ios" ? moderateScale(10) : "2%",
     borderWidth: 0.3,
     borderRadius: scale(15),
     borderColor: "darkgrey",
@@ -934,8 +1032,8 @@ const styles = StyleSheet.create({
   },
   lowerZone: {
     flexDirection: "row",
-    marginTop: windowWidth > 700 ? scale(5) : scale(20),
-    width: windowWidth > 700 ? "50%" : "100%",
+    marginTop: windowWidth > 700 ? moderateScale(15) : moderateScale(20),
+    width: windowWidth > 700 ? "80%" : "100%",
     // backgroundColor: "green",
     height: "32%",
   },
@@ -963,7 +1061,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "yellow"
+    // backgroundColor: "yellow",
+    marginBottom: scale(5),
   },
   dateButton: {
     flexDirection: "row",
@@ -997,19 +1096,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "80%",
-    height: "25%",
-    zIndex: -1,
-    // backgroundColor: "blue"
+    width: "100%",
+    // height: "25%",
+    // zIndex: -1,
+    // backgroundColor: "blue",
   },
   lngField: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "80%",
-    height: "25%",
-    zIndex: -1,
-    // backgroundColor: "green"
+    width: "100%",
+    // height: "25%",
+    // zIndex: 2,
+    // backgroundColor: "green",
   },
   latLngButton: {
     flexDirection: "row",
@@ -1017,7 +1116,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "50%",
-    // backgroundColor: "green"
+    // backgroundColor: "green",
   },
   modalStyle: {
     flex: 1,
@@ -1045,9 +1144,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1063,9 +1162,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1076,15 +1175,27 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  autocomplete: {
-    width: 200,
-    height: "100%",
+  autocompleteA: {
+    width: "80%",
+    height: "25%",
     alignSelf: "center",
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
     // backgroundColor: "maroon",
-    zIndex: 1,
-    // marginTop: scale(130)
+    // marginLeft: scale(-10),
+    marginTop: scale(5),
+    // zIndex: 1
+  },
+  autocompleteB: {
+    width: "80%",
+    height: "25%",
+    alignSelf: "center",
+    justifyContent: "center",
+    // alignItems: "center",
+    // backgroundColor: "pink",
+    // marginLeft: scale(-10),
+    marginTop: scale(5),
+    //zIndex: 1
   },
   SubmitButton: {
     position: "absolute",
@@ -1109,9 +1220,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1126,9 +1237,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAF9F1",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: 40,
+    borderRadius: moderateScale(10),
+    height: moderateScale(40),
+    width: moderateScale(40),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -1159,7 +1270,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    marginTop: "2%",
+    marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(10),
     // marginLeft: "32%",
     width: "80%",
     height: scale(30),
@@ -1206,7 +1317,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     height: scale(30),
     width: scale(30),
-    marginTop: scale(1)
+    marginTop: scale(1),
   },
   helpButtonPressed: {
     backgroundColor: "#538dbd",
@@ -1218,6 +1329,25 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     height: scale(30),
     width: scale(30),
-    marginTop: scale(1)
+    marginTop: scale(1),
+  },
+  confirmationBox: {
+    position: "absolute",
+  },
+  ImageUploadIndicatorGreen: {
+    backgroundColor: "lightgreen",
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: moderateScale(20),
+    marginTop: windowWidth > 700 ? moderateScale(23) : moderateScale(20),
+  },
+  ImageUploadIndicatorRed: {
+    backgroundColor: "red",
+    height: moderateScale(15),
+    width: moderateScale(15),
+    borderRadius: moderateScale(15),
+    marginLeft: moderateScale(20),
+    marginTop: windowWidth > 700 ? moderateScale(23) : moderateScale(20),
   },
 });
