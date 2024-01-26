@@ -613,7 +613,7 @@ export default function PicUploadModal() {
         )}
       </View>
 
-      <View style={{ flexDirection: "row", marginTop: scale(0), marginBottom: scale(-6)}}>
+      <View style={{ flexDirection: "row", marginTop: moderateScale(0), marginBottom: moderateScale(0)}}>
         <View
           style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
         >
@@ -624,17 +624,17 @@ export default function PicUploadModal() {
             style={{
               display: "flex",
               flexDirection: "row",
-              width: scale(150),
-              height: scale(24),
+              width: moderateScale(150),
+              height: moderateScale(24),
               marginTop: 0,
             }}
           >
             <FontAwesome
               name="picture-o"
               color={imgButState ? "#538dbd" : "gold"}
-              size={scale(24)}
+              size={moderateScale(24)}
               style={{
-                marginLeft: Platform.OS === "android" ? scale(10) : scale(10),
+                marginLeft: Platform.OS === "android" ? moderateScale(10) : moderateScale(10),
               }}
             />
             <Text
@@ -643,7 +643,7 @@ export default function PicUploadModal() {
                 marginTop: scale(0),
                 color: imgButState ? "#538dbd" : "gold",
                 fontFamily: "PatrickHand_400Regular",
-                fontSize: scale(17),
+                fontSize: moderateScale(17),
               }}
             >
               Choose an Image
@@ -963,9 +963,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: scale(15),
-    height: scale(40),
-    width: "50%",
+    borderRadius: moderateScale(15),
+    height: moderateScale(40),
+    width: moderateScale(170),
     marginLeft: 0,
     marginTop: Platform.OS === "ios" ? "2%" : "3%",
     // marginBottom: Platform.OS === "ios" ? "3%" : "6%",
@@ -984,9 +984,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: scale(15),
-    height: scale(40),
-    width: "50%",
+    borderRadius: moderateScale(15),
+    height: moderateScale(40),
+    width: moderateScale(170),
     marginLeft: 0,
     marginTop: Platform.OS === "ios" ? "2%" : "3%",
     // marginBottom: Platform.OS === "ios" ? "3%" : "6%",
@@ -1005,7 +1005,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: "15%",
-    marginBottom: Platform.OS === "ios" ? "3%" : "2%",
+    marginBottom: Platform.OS === "ios" ? moderateScale(10) : "2%",
     borderWidth: 0.3,
     borderRadius: scale(15),
     borderColor: "darkgrey",
@@ -1024,7 +1024,7 @@ const styles = StyleSheet.create({
   },
   lowerZone: {
     flexDirection: "row",
-    marginTop: windowWidth > 700 ? scale(5) : scale(20),
+    marginTop: windowWidth > 700 ? moderateScale(15) : moderateScale(20),
     width: windowWidth > 700 ? "50%" : "100%",
     // backgroundColor: "green",
     height: "32%",
@@ -1331,15 +1331,15 @@ const styles = StyleSheet.create({
     height: moderateScale(15),
     width: moderateScale(15),
     borderRadius: moderateScale(15),
-    marginLeft: 20,
-    marginTop: scale(20),
+    marginLeft: moderateScale(20),
+    marginTop: windowWidth > 700 ? moderateScale(23) : moderateScale(20),
   },
   ImageUploadIndicatorRed: {
     backgroundColor: "red",
     height: moderateScale(15),
     width: moderateScale(15),
     borderRadius: moderateScale(15),
-    marginLeft: 20,
-    marginTop: scale(20),
+    marginLeft: moderateScale(20),
+    marginTop: windowWidth > 700 ? moderateScale(23) : moderateScale(20),
   },
 });

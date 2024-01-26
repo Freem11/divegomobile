@@ -91,12 +91,12 @@ import DiveSiteSearchModal from "./modals/diveSiteSearchModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 import { SettingsContext } from "./contexts/gearModalContext";
-
+import { MaterialIcons } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 let feedbackRequest = null;
 let feedbackRequest2 = null;
-let FbWidth = moderateScale(350)
+let FbWidth = moderateScale(350);
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -104,7 +104,7 @@ export default function MapPage() {
   }
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
-
+ 
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -128,6 +128,7 @@ export default function MapPage() {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [anchButState, setAnchButState] = useState(false);
 
   useEffect(() => {
     filterAnchorPhotos();
@@ -500,53 +501,57 @@ export default function MapPage() {
     }
   };
 
-    //MapSearch Modal Animation
-    const mapSearchModalY = useSharedValue(windowHeight);
-    const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
-  
-    const mapSearchModalReveal = useAnimatedStyle(() => {
-      return {
-        transform: [{ translateY: mapSearchModalY.value }],
-      };
-    });
-  
-    const startMapSearchModalAnimations = () => {
-      if (mapSearchModal) {
-        mapSearchModalY.value = withTiming(-windowHeight*0.1, {
-          duration: 150,
-          easing: Easing.out(Easing.linear),
-        });
-      } else {
-        mapSearchModalY.value = withTiming(windowHeight, {
-          duration: 150,
-          easing: Easing.out(Easing.linear),
-        });
-      }
-    };
+  //MapSearch Modal Animation
+  const mapSearchModalY = useSharedValue(windowHeight);
+  const { mapSearchModal, setMapSearchModal } = useContext(
+    MapSearchModalContext
+  );
 
-    //DiveSiteSearch Modal Animation
-    const diveSiteSearchModalY = useSharedValue(windowHeight);
-    const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
-  
-    const diveSiteSearchModalReveal = useAnimatedStyle(() => {
-      return {
-        transform: [{ translateY: diveSiteSearchModalY.value }],
-      };
-    });
-  
-    const startdiveSiteSearchModalAnimations = () => {
-      if (diveSiteSearchModal) {
-        diveSiteSearchModalY.value = withTiming(-windowHeight*0.1, {
-          duration: 150,
-          easing: Easing.out(Easing.linear),
-        });
-      } else {
-        diveSiteSearchModalY.value = withTiming(windowHeight, {
-          duration: 150,
-          easing: Easing.out(Easing.linear),
-        });
-      }
+  const mapSearchModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: mapSearchModalY.value }],
     };
+  });
+
+  const startMapSearchModalAnimations = () => {
+    if (mapSearchModal) {
+      mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      mapSearchModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  //DiveSiteSearch Modal Animation
+  const diveSiteSearchModalY = useSharedValue(windowHeight);
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
+    DiveSiteSearchModalContext
+  );
+
+  const diveSiteSearchModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: diveSiteSearchModalY.value }],
+    };
+  });
+
+  const startdiveSiteSearchModalAnimations = () => {
+    if (diveSiteSearchModal) {
+      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      diveSiteSearchModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
 
   const feedbackX = useSharedValue(0);
 
@@ -641,15 +646,18 @@ export default function MapPage() {
   const [direction, setDirection] = useState("up");
 
   const startFTabAnimation = () => {
-    console.log("fire")
+    console.log("fire");
     if (fTabY.value === 0) {
-      fTabY.value = windowWidth > 700 ? withTiming(moderateScale(-60)) : withTiming(moderateScale(-70));
-      setLabel("Hide Menu")
-      setDirection("down")
+      fTabY.value =
+        windowWidth > 700
+          ? withTiming(moderateScale(-60))
+          : withTiming(moderateScale(-70));
+      setLabel("Hide Menu");
+      setDirection("down");
     } else {
       fTabY.value = withTiming(0);
-      setLabel("Show Menu")
-      setDirection("up")
+      setLabel("Show Menu");
+      setDirection("up");
     }
   };
 
@@ -819,22 +827,59 @@ export default function MapPage() {
             )}
 
             {masterSwitch && (
-              <View style={styles.Fbuttons}>
-                <FABButtons style={{ zIndex: 2 }} />
+              <View
+                style={
+                  anchButState
+                    ? styles.buttonwrapperPressed
+                    : styles.buttonwrapper
+                }
+              >
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    tutorialRunning ? null : setDiveSitesTog(!diveSitesTog);
+                  }}
+                  onPressIn={() => setAnchButState(true)}
+                  onPressOut={() => setAnchButState(false)}
+                  style={{
+                    alignItems: "center",
+                    width: moderateScale(30),
+                    height: moderateScale(30),
+                  }}
+                >
+                  <MaterialIcons
+                    name="anchor"
+                    color={anchButState ? "gold" : "white"}
+                    size={moderateScale(30)}
+                  />
+                </TouchableWithoutFeedback>
               </View>
             )}
 
-            {masterSwitch && (
-              <Animated.View style={[styles.FMenuAnimate, tabFY]} pointerEvents={'box-none'}>
-                <TouchableWithoutFeedback onPress={startFTabAnimation}>
-                <View style={styles.FBox}>
-                <Text style={styles.FText}>{label}</Text>
-                <AntDesign name={direction} size={moderateScale(14)} color="white" style={{marginBottom: 5}}/>
-                </View>
-                </TouchableWithoutFeedback>
-              <View style={styles.FMenu}>
-                <FABMenu style={{ zIndex: 2 }} />
+            {/* {masterSwitch && (
+              <View style={styles.Fbuttons}>
+                <FABButtons style={{ zIndex: 2 }} />
               </View>
+            )} */}
+
+            {masterSwitch && (
+              <Animated.View
+                style={[styles.FMenuAnimate, tabFY]}
+                pointerEvents={"box-none"}
+              >
+                <TouchableWithoutFeedback onPress={startFTabAnimation}>
+                  <View style={styles.FBox}>
+                    <Text style={styles.FText}>{label}</Text>
+                    <AntDesign
+                      name={direction}
+                      size={moderateScale(14)}
+                      color="white"
+                      style={{ marginBottom: 5 }}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+                <View style={styles.FMenu}>
+                  <FABMenu style={{ zIndex: 2 }} />
+                </View>
               </Animated.View>
             )}
 
@@ -974,7 +1019,9 @@ export default function MapPage() {
               <MapSearchModal />
             </Animated.View>
 
-            <Animated.View style={[styles.diveSearchModal, diveSiteSearchModalReveal]}>
+            <Animated.View
+              style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
+            >
               <DiveSiteSearchModal />
             </Animated.View>
 
@@ -986,10 +1033,15 @@ export default function MapPage() {
                 style={{
                   width: moderateScale(30),
                   height: moderateScale(23),
+                  marginTop: moderateScale(3),
                 }}
                 onPress={startFeedbackAnimations}
               >
-                <Octicons name="paper-airplane" size={moderateScale(24)} color="white" />
+                <Octicons
+                  name="paper-airplane"
+                  size={moderateScale(24)}
+                  color="white"
+                />
               </TouchableOpacity>
             </Animated.View>
 
@@ -1053,7 +1105,7 @@ const styles = StyleSheet.create({
   FMenuAnimate: {
     position: "absolute",
     bottom: moderateScale(-55),
-    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12), 
+    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     flexDirection: "column",
     alignItems: "center",
@@ -1068,7 +1120,7 @@ const styles = StyleSheet.create({
   FText: {
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(12)
+    fontSize: moderateScale(12),
   },
   FMenu: {
     flexDirection: "column",
@@ -1256,18 +1308,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     position: "absolute",
     top: windowHeight * 0.83,
-    left: -(0.88)*FbWidth,
+    left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),
     borderBottomRightRadius: moderateScale(15),
     width: FbWidth,
-    height: moderateScale(35),
+    height: moderateScale(39),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+
+    elevation: 10,
   },
   feedRequest: {
     color: "white",
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(18),
-    marginRight: moderateScale(15),
+    marginTop: moderateScale(3),
+    marginRight: moderateScale(10),
     marginLeft: moderateScale(14),
     paddingLeft: moderateScale(50),
   },
@@ -1280,5 +1342,47 @@ const styles = StyleSheet.create({
     top: windowHeight,
     marginTop: "10%",
     backgroundColor: "green",
+  },
+  buttonwrapper: {
+    position: "absolute",
+    top: windowHeight * 0.83,
+    right: moderateScale(30),
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: moderateScale(50),
+    height: moderateScale(39),
+    width: moderateScale(39),
+    backgroundColor: "#538bdb",
+    zIndex: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+
+    elevation: 10,
+  },
+  buttonwrapperPressed: {
+    position: "absolute",
+    top: windowHeight * 0.83,
+    right: moderateScale(30),
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: moderateScale(50),
+    height: moderateScale(39),
+    width: moderateScale(39),
+    backgroundColor: "white",
+    zIndex: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+
+    elevation: 10,
   },
 });

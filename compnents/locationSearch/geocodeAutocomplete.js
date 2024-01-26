@@ -29,7 +29,7 @@ export default function GeocodeAutoComplete(props) {
         onSelect={((place) => handleConfirm(place))}
         stylesList={{ borderRadius: 10 }}
         stylesInput={{ borderRadius: moderateScale(10), height: moderateScale(30), width: moderateScale(200) }}
-        textInputProps={{ backgroundColor: "white", width: moderateScale(200)}}
+        textInputProps={{ backgroundColor: "white", width: moderateScale(200), fontSize: moderateScale(12)}}
         clearQueryOnSelect={true}
       />
     </View>

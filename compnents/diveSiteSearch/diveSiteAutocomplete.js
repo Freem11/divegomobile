@@ -42,6 +42,8 @@ export default function DiveSiteAutoComplete(props) {
 
     if (boundaries.length > 0 ){
       diveSiteData = await diveSites({minLat, maxLat, minLng, maxLng},"");
+    } else {
+      diveSiteData = null
     }
 
     if (diveSiteData){
@@ -51,6 +53,8 @@ export default function DiveSiteAutoComplete(props) {
       }
     })
     setList(addIndexNumber(diveSiteArray));
+  } else {
+    setList([])
   }
   }
 
@@ -106,6 +110,7 @@ export default function DiveSiteAutoComplete(props) {
       <AutocompleteDropdown
         // initialValue={'1'}
         textInputProps={{
+          placeholder: "Search dive sites...",
           style: {
             justifyContent: "center",
             alignItems: "center",
@@ -114,12 +119,13 @@ export default function DiveSiteAutoComplete(props) {
             width: moderateScale(200),
             opacity: 1,
             height: moderateScale(40),
+            fontSize: moderateScale(12),
           },
         }}
         inputContainerStyle={{
           alignItems: "center",
-          height: moderateScale(35),
-          borderRadius: moderateScale(30),
+          height: moderateScale(30),
+          borderRadius: moderateScale(10),
           backgroundColor: "white",
           width: moderateScale(200),
           zIndex: 2,
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     width: moderateScale(200),
-    borderRadius: 10,
+    borderRadius: moderateScale(10),
     zIndex: 1,
     marginTop: moderateScale(70)
   },
