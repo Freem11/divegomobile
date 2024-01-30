@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, LogBox } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
@@ -100,12 +100,16 @@ export default function ImageCasherDynamic(Props) {
   }, []);
 
   if (picUri){
-    Image.getSize(picUri, (width, height) => {
+      Image.getSize(picUri, (width, height) => {
       let ratio = height/width
       setPicWidth(scale(300))
       setPicHeigth(scale(300)* ratio)
-    })
-  }
+  })
+}
+    
+
+   
+  
  
   // useEffect(() => {
   //   async function loadImage() {

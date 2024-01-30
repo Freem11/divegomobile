@@ -18,6 +18,7 @@ import {
 import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import Headliner from "../compnents/png/Headliner.png";
+import mantaIOS from "../compnents/png/Manta32.png";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 
 let emailVar = false;
@@ -113,7 +114,10 @@ export default function SignUpRoute() {
 
   return (
     <View style={styles.container}>
-      <Image source={Headliner} style={[styles.Headliner]} />
+      <View style={styles.Headliner}>
+      <Image source={mantaIOS} style={styles.manta}/>
+      <Text style={{ fontFamily: "Caveat_400Regular", fontSize: scale(25), color: "white" }}>Scuba SEAsons</Text>
+      </View>
 
       <KeyboardAvoidingView
         behavior="position"
@@ -376,9 +380,18 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   Headliner: {
-    height: scale(250),
-    width: "100%",
+    height: "20%",
+    width: "50%",
     marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? scale(-50) : "-12%",
+    marginTop: Platform.OS === "ios" ? "-60%": "-15%",
+    marginBottom: "20%",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  manta: {
+    //  backgroundColor: "pink",
+     height: scale(100),
+     width: scale(80),
+     marginBottom: scale(7)
   },
 });

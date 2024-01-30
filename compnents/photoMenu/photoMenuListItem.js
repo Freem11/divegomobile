@@ -56,7 +56,7 @@ const PhotoMenuListItem = (props) => {
 
     setSelectedID(id)
 
-    if (xPosition.value === 0){
+    if (scaleStart.value === 1){
       let distanceToItemMiddle = (moderateScale(60) - data.nativeEvent.locationX)
       let centererPress = data.nativeEvent.pageX + distanceToItemMiddle
       let mover = (((windowWidth/2) - centererPress)/3)
