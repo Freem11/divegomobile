@@ -646,7 +646,6 @@ export default function MapPage() {
   const [direction, setDirection] = useState("up");
 
   const startFTabAnimation = () => {
-    console.log("fire");
     if (fTabY.value === 0) {
       fTabY.value =
         windowWidth > 700
@@ -857,7 +856,7 @@ export default function MapPage() {
               <Text style={styles.feedRequest} onPress={() => handleEmail()}>
                 Send Scuba SEAsons feedback
               </Text>
-              <TouchableOpacity
+              <TouchableWithoutFeedback
                 style={{
                   width: moderateScale(30),
                   height: moderateScale(23),
@@ -870,7 +869,7 @@ export default function MapPage() {
                   size={moderateScale(24)}
                   color="white"
                 />
-              </TouchableOpacity>
+              </TouchableWithoutFeedback>
             </Animated.View>
 
                 <View
@@ -1197,7 +1196,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: windowWidth > 700 ? moderateScale(12) : moderateScale(40),
+    top: windowWidth > 700 || Platform.OS == "android" ? moderateScale(12) : moderateScale(40),
     zIndex: 3,
   },
   filterer: {

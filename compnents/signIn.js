@@ -24,6 +24,7 @@ import facebookLogo from "../compnents/png/facebookblue.png";
 import googleLogo from "../compnents/png/google-logo-9822.png";
 import config from "../config";
 import Headliner from "../compnents/png/Headliner.png";
+import mantaIOS from "../compnents/png/Manta32.png";
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -312,11 +313,14 @@ export default function SignInRoute() {
 
   return (
     <View style={styles.container}>
-      <Image source={Headliner} style={[styles.Headliner]} />
-
+      <View style={styles.Headliner}>
+      <Image source={mantaIOS} style={styles.manta}/>
+      <Text style={{ fontFamily: "Caveat_400Regular", fontSize: scale(25), color: "white" }}>Scuba SEAsons</Text>
+      </View>
       <View
         style={{
-          marginTop: Platform.OS === "ios" ? scale(15) : "15%",
+          marginTop: Platform.OS === "ios" ? scale(35) : scale(35) ,
+          marginBottom: scale(20),
           alignItems: "center",
           
         }}
@@ -368,6 +372,13 @@ export default function SignInRoute() {
         </TouchableWithoutFeedback>
 
         {appleAuthAvailable ? getAppleAuth() : null}
+      </View>
+
+      <View style={{flexDirection: "row", marginTop: scale(20), marginBottom: scale(10)}}> 
+              <View style={styles.leftLine}></View>
+              <Text style={styles.orTag}>or</Text>
+              <View style={styles.leftLine}></View>
+              <View></View>
       </View>
 
       <KeyboardAvoidingView
@@ -472,7 +483,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginLeft: "2%",
-    marginTop: scale(0),
+    marginTop: scale(20),
   },
   input: {
     fontFamily: "Itim_400Regular",
@@ -653,10 +664,19 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   Headliner: {
-    height: scale(250),
-    width: "100%",
+    height: "20%",
+    width: "50%",
     marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? scale(-50) : "-20%",
+    marginTop: Platform.OS === "ios" ? "-60%": "-15%",
+    marginBottom: "10%",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  manta: {
+    //  backgroundColor: "pink",
+     height: scale(100),
+     width: scale(80),
+     marginBottom: scale(7)
   },
   appleButton: {
     width: 201,
@@ -674,4 +694,17 @@ const styles = StyleSheet.create({
 
     elevation: 1,
   },
+  orTag: {
+    color: "white",
+    fontFamily: 'Itim_400Regular',
+    fontSize: scale(20),
+    marginLeft: "10%",
+    marginRight: "10%"
+  },
+  leftLine: {
+    height: 1,
+    width: scale(100),
+    backgroundColor: 'white',
+    marginTop: "4%"
+  }
 });

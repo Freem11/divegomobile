@@ -100,6 +100,14 @@ export default function ImageCasher(Props) {
     loadImage();
   }, []);
 
+
+  if (picUri){
+    Image.getSize(picUri, (width, height) => {
+    let ratio = height/width
+    setPicWidth(scale(300))
+    setPicHeigth(scale(300)* ratio)
+})
+}
   // useEffect(() => {
   //   async function loadImage() {
   //     // console.log("triggered?")
