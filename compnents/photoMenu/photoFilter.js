@@ -2,24 +2,64 @@ import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, TextInput, Dimensions } from "react-native";
 import { scale } from "react-native-size-matters";
-import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
+import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
+import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
+import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
+import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SettingsContext } from "../contexts/gearModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoFilterer() {
-const { textvalue, setTextValue } = useContext(SearchTextContext);
-const { areaPics, setAreaPics } = useContext(AreaPicsContext);
+  const { textvalue, setTextValue } = useContext(SearchTextContext);
+  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
 
-  const handleChange = async (text) => { 
+  const { gearModal, setGearModal } = useContext(SettingsContext);
+  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+  const { mapSearchModal, setMapSearchModal } = useContext(
+    MapSearchModalContext
+  );
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
+    DiveSiteSearchModalContext
+  );
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
+    TutorialLaunchPadContext
+  );
+
+  const handleChange = async (text) => {
     setTextValue(text);
+    setGearModal(false);
+    setProfileModal(false);
+    setMapSearchModal(false);
+    setDiveSiteSearchModal(false);
+    setPicAdderModal(false);
+    setDiveSiteAdderModal(false);
+    setTutorialLaunchpadModal(false);
   };
 
   const handleClear = () => {
-    setTextValue("")
+    setTextValue("");
+    setGearModal(false);
+    setProfileModal(false);
+    setMapSearchModal(false);
+    setDiveSiteSearchModal(false);
+    setPicAdderModal(false);
+    setDiveSiteAdderModal(false);
+    setTutorialLaunchpadModal(false);
   };
 
   return (
@@ -32,20 +72,27 @@ const { areaPics, setAreaPics } = useContext(AreaPicsContext);
         color="black"
         onChangeText={handleChange}
       ></TextInput>
-          <TouchableOpacity
+      <TouchableOpacity
+        onPress={handleClear}
+        style={{
+          width: scale(20),
+          height: scale(20),
+          zIndex: 10,
+          elevation: 10,
+          // backgroundColor: "pink"
+        }}
+      >
+        <View
+          style={[styles.xButton, { opacity: textvalue.length > 0 ? 1 : 0 }]}
           onPress={handleClear}
-          style={{
-            width: scale(20),
-            height: scale(20),
-            zIndex: 10,
-            elevation: 10
-            // backgroundColor: "pink"
-          }}
         >
-      <View style={[styles.xButton,  {opacity: textvalue.length > 0 ? 1 : 0}]} onPress={handleClear}>
-    
-          <MaterialIcons name="highlight-remove" size={scale(14)} color="lightgrey" onPress={handleClear} />
-      </View>
+          <MaterialIcons
+            name="highlight-remove"
+            size={scale(14)}
+            color="lightgrey"
+            onPress={handleClear}
+          />
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -80,6 +127,6 @@ const styles = StyleSheet.create({
     marginTop: scale(3),
     marginLeft: 2,
     zIndex: 10,
-    elevation: 10
+    elevation: 10,
   },
 });

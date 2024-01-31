@@ -104,7 +104,7 @@ export default function MapPage() {
   }
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
- 
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -632,6 +632,13 @@ export default function MapPage() {
       setTextValue("");
       setIsOpen(false);
     }
+    setGearModal(false);
+    setProfileModal(false);
+    setMapSearchModal(false);
+    setDiveSiteSearchModal(false);
+    setPicAdderModal(false);
+    setDiveSiteAdderModal(false);
+    setTutorialLaunchpadModal(false);
   };
 
   const fTabY = useSharedValue(0);
@@ -774,6 +781,17 @@ export default function MapPage() {
     }).catch(console.error);
   };
 
+  const toggleDiveSites = () => {
+    setDiveSitesTog(!diveSitesTog)
+    setGearModal(false);
+    setProfileModal(false);
+    setMapSearchModal(false);
+    setDiveSiteSearchModal(false);
+    setPicAdderModal(false);
+    setDiveSiteAdderModal(false);
+    setTutorialLaunchpadModal(false);
+  };
+
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
@@ -853,52 +871,55 @@ export default function MapPage() {
                 </TouchableWithoutFeedback>
 
                 <Animated.View style={[styles.feedback, feedbackReveal]}>
-              <Text style={styles.feedRequest} onPress={() => handleEmail()}>
-                Send Scuba SEAsons feedback
-              </Text>
-              <TouchableWithoutFeedback
-                style={{
-                  width: moderateScale(30),
-                  height: moderateScale(23),
-                  marginTop: moderateScale(3),
-                }}
-                onPress={startFeedbackAnimations}
-              >
-                <Octicons
-                  name="paper-airplane"
-                  size={moderateScale(24)}
-                  color="white"
-                />
-              </TouchableWithoutFeedback>
-            </Animated.View>
+                  <Text
+                    style={styles.feedRequest}
+                    onPress={() => handleEmail()}
+                  >
+                    Send Scuba SEAsons feedback
+                  </Text>
+                  <TouchableWithoutFeedback
+                    style={{
+                      width: moderateScale(30),
+                      height: moderateScale(23),
+                      marginTop: moderateScale(3),
+                    }}
+                    onPress={startFeedbackAnimations}
+                  >
+                    <Octicons
+                      name="paper-airplane"
+                      size={moderateScale(24)}
+                      color="white"
+                      style={{ marginTop: moderateScale(3) }}
+                    />
+                  </TouchableWithoutFeedback>
+                </Animated.View>
 
                 <View
-                style={
-                  anchButState
-                    ? styles.buttonwrapperPressed
-                    : styles.buttonwrapper
-                }
-              >
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    tutorialRunning ? null : setDiveSitesTog(!diveSitesTog);
-                  }}
-                  onPressIn={() => setAnchButState(true)}
-                  onPressOut={() => setAnchButState(false)}
-                  style={{
-                    alignItems: "center",
-                    width: moderateScale(30),
-                    height: moderateScale(30),
-                  }}
+                  style={
+                    anchButState
+                      ? styles.buttonwrapperPressed
+                      : styles.buttonwrapper
+                  }
                 >
-                  <MaterialIcons
-                    name="anchor"
-                    color={anchButState ? "gold" : "white"}
-                    size={moderateScale(30)}
-                  />
-                </TouchableWithoutFeedback>
-              </View>
-
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      tutorialRunning ? null : toggleDiveSites();
+                    }}
+                    onPressIn={() => setAnchButState(true)}
+                    onPressOut={() => setAnchButState(false)}
+                    style={{
+                      alignItems: "center",
+                      width: moderateScale(30),
+                      height: moderateScale(30),
+                    }}
+                  >
+                    <MaterialIcons
+                      name="anchor"
+                      color={anchButState ? "gold" : "white"}
+                      size={moderateScale(30)}
+                    />
+                  </TouchableWithoutFeedback>
+                </View>
 
                 <View style={styles.FMenu}>
                   <FABMenu style={{ zIndex: 2 }} />
@@ -1196,7 +1217,10 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: windowWidth > 700 || Platform.OS == "android" ? moderateScale(12) : moderateScale(40),
+    top:
+      windowWidth > 700 || Platform.OS == "android"
+        ? moderateScale(12)
+        : moderateScale(40),
     zIndex: 3,
   },
   filterer: {
