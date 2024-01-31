@@ -25,6 +25,13 @@ import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
+import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
+import { MapSearchModalContext } from "./contexts/mapSearchContext";
+import { DSAdderContext } from "./contexts/DSModalContext";
+import { PictureAdderContext } from "./contexts/picModalContext";
+import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
+import { ProfileModalContext } from "./contexts/profileModalContext";
+import { SettingsContext } from "./contexts/gearModalContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -85,6 +92,22 @@ export default function Map() {
 
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+
+  const { gearModal, setGearModal } = useContext(SettingsContext);
+  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+  const { mapSearchModal, setMapSearchModal } = useContext(
+    MapSearchModalContext
+  );
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
+    DiveSiteSearchModalContext
+  );
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
+    TutorialLaunchPadContext
+  );
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -288,13 +311,13 @@ export default function Map() {
     });
   }
 
-  const shopPoints = setupShopClusters(newShops);
+  // const shopPoints = setupShopClusters(newShops);
   const sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
-  shopPoints.forEach((entity) => {
-    points.push(entity);
-  });
+  // shopPoints.forEach((entity) => {
+  //   points.push(entity);
+  // });
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -319,6 +342,16 @@ export default function Map() {
     setShopModal(true);
   };
 
+  const clearModals = async () => {
+      setGearModal(false)
+      setProfileModal(false)
+      setMapSearchModal(false)
+      setDiveSiteSearchModal(false)
+      setPicAdderModal(false)
+      setDiveSiteAdderModal(false)
+      setTutorialLaunchpadModal(false)
+  };
+
   const [siteCloseState, setSiteCloseState] = useState(false);
 
   return (
@@ -337,6 +370,7 @@ export default function Map() {
         onMapReady={() => handleMapChange()}
         onRegionChangeComplete={() => handleMapChange()}
         toolbarEnabled={false}
+        onPress={clearModals}
       >
         {masterSwitch && newHeat.length > 0 && (
           <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />

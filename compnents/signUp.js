@@ -15,10 +15,10 @@ import {
   register,
   sessionCheck,
 } from "../supabaseCalls/authenticateSupabaseCalls";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import Headliner from "../compnents/png/Headliner.png";
-import mantaIOS from "../compnents/png/Manta32.png";
+import mantaIOS from "../compnents/png/Matt_Manta_White.png";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 
 let emailVar = false;
@@ -126,11 +126,10 @@ export default function SignUpRoute() {
         <View style={styles.inputContainer}>
           <InsetShadow
             containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 10,
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              marginTop: moderateScale(10),
             }}
             elevation={20}
             shadowRadius={15}
@@ -142,7 +141,7 @@ export default function SignUpRoute() {
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
               color={formValidation.emailVal ? "black" : "#F0EEEB"}
-              fontSize={windowWidth > 600 ? 16 : scale(16)}
+              fontSize={moderateScale(16)}
               onChangeText={(emailText) =>
                 setFormVals({ ...formVals, email: emailText })
               }
@@ -152,11 +151,10 @@ export default function SignUpRoute() {
 
           <InsetShadow
             containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 10,
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              marginTop: moderateScale(10),
             }}
             elevation={20}
             shadowRadius={15}
@@ -168,7 +166,7 @@ export default function SignUpRoute() {
               }
               value={formVals.password}
               placeholder={"Password"}
-              fontSize={windowWidth > 600 ? 16 : scale(16)}
+              fontSize={moderateScale(16)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
               color={formValidation.passwordVal ? "black" : "#F0EEEB"}
@@ -181,11 +179,10 @@ export default function SignUpRoute() {
 
           <InsetShadow
             containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 10,
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              marginTop: moderateScale(10),
             }}
             elevation={20}
             shadowRadius={15}
@@ -197,7 +194,7 @@ export default function SignUpRoute() {
               }
               value={formVals.firstName}
               placeholder={"First Name"}
-              fontSize={windowWidth > 600 ? 16 : scale(16)}
+              fontSize={moderateScale(16)}
               placeholderTextColor="darkgrey"
               color={formValidation.firstNameVal ? "black" : "#F0EEEB"}
               onChangeText={(firstText) =>
@@ -210,10 +207,10 @@ export default function SignUpRoute() {
           <InsetShadow
             containerStyle={{
               borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 10,
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              marginTop: moderateScale(10),
             }}
             elevation={20}
             shadowRadius={15}
@@ -225,7 +222,7 @@ export default function SignUpRoute() {
               }
               value={formVals.lastName}
               placeholder={"Last Name"}
-              fontSize={windowWidth > 600 ? 16 : scale(16)}
+              fontSize={moderateScale(16)}
               placeholderTextColor="darkgrey"
               color={formValidation.lastNameVal ? "black" : "#F0EEEB"}
               onChangeText={(lastText) =>
@@ -281,10 +278,10 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538dbd",
     borderRadius: 10,
-    width: scale(200),
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
     textAlign: "center",
     overflow: "hidden",
   },
@@ -292,10 +289,10 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: scale(200),
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
     textAlign: "center",
     overflow: "hidden",
   },
@@ -382,16 +379,15 @@ const styles = StyleSheet.create({
   Headliner: {
     height: "20%",
     width: "50%",
-    marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? "-60%": "-15%",
-    marginBottom: "20%",
+    marginTop: windowWidth > 700 ? moderateScale(10) : moderateScale(-50),
+    marginBottom: windowWidth > 700 ?  moderateScale(70) : moderateScale(30),
     alignItems: "center",
     justifyContent: "center"
   },
   manta: {
     //  backgroundColor: "pink",
-     height: scale(100),
-     width: scale(80),
-     marginBottom: scale(7)
+    height: scale(110),
+    width: scale(90),
+    marginBottom: scale(5)
   },
 });

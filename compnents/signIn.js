@@ -18,19 +18,19 @@ import {
   register,
 } from "../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebookblue.png";
 import googleLogo from "../compnents/png/google-logo-9822.png";
 import config from "../config";
 import Headliner from "../compnents/png/Headliner.png";
-import mantaIOS from "../compnents/png/Manta32.png";
+import mantaIOS from "../compnents/png/Matt_Manta_White.png";
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
- import {
+import {
   Settings,
   LoginButton,
   AccessToken,
@@ -97,8 +97,8 @@ export default function SignInRoute() {
   function parseJwt(token) {
     var base64Url = token.split(".")[1];
     var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    var jsonPayload = Buffer.from(base64, 'base64').toString('ascii')
-    console.log("basic", jsonPayload)
+    var jsonPayload = Buffer.from(base64, "base64").toString("ascii");
+    console.log("basic", jsonPayload);
     return JSON.parse(jsonPayload);
   }
 
@@ -153,7 +153,6 @@ export default function SignInRoute() {
         //   setLoginFail("Invalid Credentials (email and name required for sign in)");
         // }
       }
-
     } catch (e) {
       console.log(e);
     }
@@ -255,9 +254,12 @@ export default function SignInRoute() {
     } else {
       let registrationToken = await register(formVals);
       if (registrationToken.session !== null) {
-           //test me
-           await createProfile({id: registrationToken.session.user.id , email: formVals.email})
-           ////
+        //test me
+        await createProfile({
+          id: registrationToken.session.user.id,
+          email: formVals.email,
+        });
+        ////
         await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
         setActiveSession(registrationToken.session);
         // console.log("at oauth reg", registrationToken)
@@ -314,15 +316,22 @@ export default function SignInRoute() {
   return (
     <View style={styles.container}>
       <View style={styles.Headliner}>
-      <Image source={mantaIOS} style={styles.manta}/>
-      <Text style={{ fontFamily: "Caveat_400Regular", fontSize: scale(25), color: "white" }}>Scuba SEAsons</Text>
+        <Image source={mantaIOS} style={styles.manta} />
+        <Text
+          style={{
+            fontFamily: "Caveat_400Regular",
+            fontSize: scale(25),
+            color: "white",
+          }}
+        >
+          Scuba SEAsons
+        </Text>
       </View>
       <View
         style={{
-          marginTop: Platform.OS === "ios" ? scale(35) : scale(35) ,
+          marginTop: Platform.OS === "ios" ? scale(35) : scale(35),
           marginBottom: scale(20),
           alignItems: "center",
-          
         }}
       >
         <TouchableWithoutFeedback
@@ -331,14 +340,20 @@ export default function SignInRoute() {
           onPressOut={() => setGoogleButState(false)}
           disabled={isSignedIn}
         >
-          <View style={googleButState ? styles.SignUpWithGooglePressed : styles.SignUpWithGoogle}>
+          <View
+            style={
+              googleButState
+                ? styles.SignUpWithGooglePressed
+                : styles.SignUpWithGoogle
+            }
+          >
             <Image source={googleLogo} style={[styles.gLogo]} />
             <Text
               style={{
                 color: googleButState ? "#ffffff" : "#2d2d2d",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: windowWidth > 600 ? scale(5) : scale(12),
+                fontSize: moderateScale(12),
                 opacity: 0.8,
                 marginLeft: scale(0),
               }}
@@ -354,7 +369,13 @@ export default function SignInRoute() {
           onPressOut={() => setFacebookButState(false)}
           disabled={isSignedIn}
         >
-          <View style={facebookState ? styles.SignUpWithFacebookPressed : styles.SignUpWithFacebook }>
+          <View
+            style={
+              facebookState
+                ? styles.SignUpWithFacebookPressed
+                : styles.SignUpWithFacebook
+            }
+          >
             <Image source={facebookLogo} style={[styles.fbLogo]} />
             <Text
               style={{
@@ -362,7 +383,7 @@ export default function SignInRoute() {
                 color: "#FFFFFF",
                 fontFamily: "Roboto_700Bold",
                 fontWeight: "bold",
-                fontSize: windowWidth > 600 ? scale(5) : scale(12),
+                fontSize: moderateScale(12),
                 opacity: 1,
               }}
             >
@@ -374,11 +395,17 @@ export default function SignInRoute() {
         {appleAuthAvailable ? getAppleAuth() : null}
       </View>
 
-      <View style={{flexDirection: "row", marginTop: scale(20), marginBottom: scale(10)}}> 
-              <View style={styles.leftLine}></View>
-              <Text style={styles.orTag}>or</Text>
-              <View style={styles.leftLine}></View>
-              <View></View>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop:  windowWidth > 700 ?  moderateScale(0) : moderateScale(20),
+          marginBottom: windowWidth > 700 ?  moderateScale(20) : moderateScale(10),
+        }}
+      >
+        <View style={styles.leftLine}></View>
+        <Text style={styles.orTag}>or</Text>
+        <View style={styles.leftLine}></View>
+        <View></View>
       </View>
 
       <KeyboardAvoidingView
@@ -388,11 +415,10 @@ export default function SignInRoute() {
         <View style={styles.inputContainer}>
           <InsetShadow
             containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 10,
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              marginTop: moderateScale(10),
             }}
             elevation={20}
             shadowRadius={15}
@@ -404,7 +430,7 @@ export default function SignInRoute() {
               placeholder={"Email"}
               placeholderTextColor="darkgrey"
               color={formValidation.emailVal ? "black" : "#F0EEEB"}
-              fontSize={windowWidth > 600 ? 16 : scale(16)}
+              fontSize={moderateScale(16)}
               onChangeText={(emailsText) =>
                 setFormVals({ ...formVals, email: emailsText })
               }
@@ -414,11 +440,10 @@ export default function SignInRoute() {
 
           <InsetShadow
             containerStyle={{
-              borderRadius: 25,
-              height: 40,
-              width: 200,
-              marginRight: 7,
-              marginTop: 10,
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              marginTop: moderateScale(10),
             }}
             elevation={20}
             shadowRadius={15}
@@ -430,7 +455,7 @@ export default function SignInRoute() {
               }
               value={formVals.password}
               placeholder={"Password"}
-              fontSize={windowWidth > 600 ? 16 : scale(16)}
+              fontSize={moderateScale(16)}
               secureTextEntry={true}
               placeholderTextColor="darkgrey"
               color={formValidation.passwordVal ? "black" : "#F0EEEB"}
@@ -444,7 +469,9 @@ export default function SignInRoute() {
         </View>
       </KeyboardAvoidingView>
 
-      <View style={subButState ? styles.SubmitButton2Pressed : styles.SubmitButton2}>
+      <View
+        style={subButState ? styles.SubmitButton2Pressed : styles.SubmitButton2}
+      >
         <TouchableWithoutFeedback
           onPress={handleSignInSubmit}
           onPressIn={() => setSubButState(true)}
@@ -482,17 +509,17 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: "2%",
-    marginTop: scale(20),
+    // backgroundColor: "pink",
+    marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(20),
   },
   input: {
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538dbd",
     borderRadius: 10,
-    width: scale(200),
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
     textAlign: "center",
     overflow: "hidden",
     shadowColor: "#000",
@@ -509,10 +536,10 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: scale(200),
-    height: 40,
+    width: moderateScale(200),
+    height: moderateScale(40),
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
     textAlign: "center",
     overflow: "hidden",
     shadowColor: "#000",
@@ -564,17 +591,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 2,
-    height: 30,
-    width: 200,
-    marginTop: scale(0),
+    borderRadius: moderateScale(2),
+    height: moderateScale(30),
+    width: moderateScale(200),
+    marginTop: moderateScale(0),
     shadowColor: "#2d2d2d",
     shadowOffset: {
-      width: 1,
-      height: 1,
+      width: moderateScale(1),
+      height: moderateScale(1),
     },
-    shadowOpacity: 1,
-    shadowRadius: 2,
+    shadowOpacity: moderateScale(1),
+    shadowRadius: moderateScale(2),
 
     elevation: 10,
   },
@@ -583,17 +610,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 2,
-    height: 30,
-    width: 200,
-    marginTop: scale(0),
+    borderRadius: moderateScale(2),
+    height: moderateScale(30),
+    width: moderateScale(200),
     shadowColor: "#2d2d2d",
     shadowOffset: {
-      width: 1,
-      height: 1,
+      width: moderateScale(1),
+      height: moderateScale(1),
     },
     shadowOpacity: 0.3,
-    shadowRadius: 2,
+    shadowRadius: moderateScale(2),
 
     elevation: 10,
   },
@@ -602,42 +628,42 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 2,
-    height: 30,
-    width: 200,
-    marginTop: Platform.OS === "ios" ? scale(5) : scale(10),
+    borderRadius: moderateScale(2),
+    height: moderateScale(30),
+    width: moderateScale(200),
+    marginTop: Platform.OS === "ios" ? moderateScale(10) : scale(10),
     shadowColor: "#2d2d2d",
     shadowOffset: {
-      width: 1,
-      height: 1,
+      width: moderateScale(1),
+      height: moderateScale(1),
     },
     shadowOpacity: 1,
-    shadowRadius: 2,
+    shadowRadius: moderateScale(2),
 
-    elevation: 1,
+    elevation: 10,
   },
   SignUpWithFacebookPressed: {
     backgroundColor: "#4267b2",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 2,
-    height: 30,
-    width: 200,
-    marginTop: Platform.OS === "ios" ? scale(5) : scale(10),
+    borderRadius: moderateScale(2),
+    height: moderateScale(30),
+    width: moderateScale(200),
+    marginTop: Platform.OS === "ios" ? moderateScale(10) : scale(10),
     shadowColor: "#2d2d2d",
     shadowOffset: {
-      width: 1,
-      height: 1,
+      width: moderateScale(1),
+      height: moderateScale(1),
     },
     shadowOpacity: 1,
-    shadowRadius: 2,
+    shadowRadius: moderateScale(2),
 
-    elevation: 1,
+    elevation: 10,
   },
   fbLogo: {
     backgroundColor: "white",
-    borderRadius: windowWidth > 600 ? 24/2 : 16/2,
+    borderRadius: windowWidth > 600 ? 24 / 2 : 16 / 2,
     height: windowWidth > 600 ? scale(8) : scale(16),
     width: windowWidth > 600 ? scale(8) : scale(16),
     opacity: 1,
@@ -661,29 +687,28 @@ const styles = StyleSheet.create({
     borderColor: "darkblue",
     borderWidth: 1,
     marginTop: scale(10),
-    alignSelf: "center"
+    alignSelf: "center",
   },
   Headliner: {
     height: "20%",
     width: "50%",
-    marginLeft: "-3%",
-    marginTop: Platform.OS === "ios" ? "-60%": "-15%",
-    marginBottom: "10%",
+    marginTop: windowWidth > 700 ? moderateScale(-10) : moderateScale(-40),
+    marginBottom: windowWidth > 700 ? moderateScale(30) : moderateScale(10),
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   manta: {
     //  backgroundColor: "pink",
-     height: scale(100),
-     width: scale(80),
-     marginBottom: scale(7)
+    height: scale(110),
+    width: scale(90),
+    marginBottom: scale(5),
   },
   appleButton: {
-    width: 201,
-    height: 32,
+    width: moderateScale(201),
+    height: moderateScale(32),
     alignSelf: "center",
-    marginTop: scale(4),
-    marginBottom: scale(4),
+    marginTop: moderateScale(9),
+    marginBottom: scale(0),
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: 1,
@@ -696,15 +721,15 @@ const styles = StyleSheet.create({
   },
   orTag: {
     color: "white",
-    fontFamily: 'Itim_400Regular',
+    fontFamily: "Itim_400Regular",
     fontSize: scale(20),
     marginLeft: "10%",
-    marginRight: "10%"
+    marginRight: "10%",
   },
   leftLine: {
     height: 1,
     width: scale(100),
-    backgroundColor: 'white',
-    marginTop: "4%"
-  }
+    backgroundColor: "white",
+    marginTop: "4%",
+  },
 });

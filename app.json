@@ -6,7 +6,7 @@
       "divegomobile",
       "fb692861552452156"
     ],
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -44,7 +44,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "59",
+      "buildNumber": "60",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
@@ -75,7 +75,7 @@
       }
     },
     "android": {
-      "versionCode": 59,
+      "versionCode": 60,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
