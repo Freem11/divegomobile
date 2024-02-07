@@ -90,7 +90,7 @@ export default function SecondTutorial() {
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
-        setChapter(null);
+        // setChapter(null);
         break;
 
       case "Adding your dive sites":
@@ -100,7 +100,7 @@ export default function SecondTutorial() {
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
-        setChapter(null);
+        // setChapter(null);
         break;
 
       case "DS Help":
@@ -112,7 +112,7 @@ export default function SecondTutorial() {
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
-        setChapter(null);
+        // setChapter(null);
         break;
 
       case "Placing the pin":
@@ -123,7 +123,7 @@ export default function SecondTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setDiveSiteAdderModal(true);
-        setChapter(null);
+        // setChapter(null);
         break;
 
       case "Exit Guide":
