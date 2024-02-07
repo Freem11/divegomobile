@@ -108,6 +108,7 @@ export default function IntroTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         picX.value = withSpring(0);
+        setChapter(null);
         break;
 
       case "Dive sites":
@@ -122,6 +123,7 @@ export default function IntroTutorial() {
         clusterAnchorY.value = withTiming(windowHeight * 0.4);
         heatPotintY.value = withTiming(windowHeight * 0.25);
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 });
+        setChapter(null);
         break;
 
       case "Changed dive site":
@@ -142,6 +144,7 @@ export default function IntroTutorial() {
           });
         }
         nudgeMap({ lat: 49.3134161482923, lng: -124.242440499365 });
+        setChapter(null);
         break;
 
       case "Exit Guide":
@@ -758,6 +761,19 @@ export default function IntroTutorial() {
     getPhotos(formattedDate);
   }, [guideModal]);
 
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator === null) {
+        setItterator(0);
+      }
+    }
+
+    let today = new Date();
+    let formattedDate = moment(today).format("YYYY-MM-DD");
+    getPhotos(formattedDate);
+  }, [itterator]);
+
+
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
 
@@ -807,7 +823,7 @@ export default function IntroTutorial() {
     clearInterval(blinker);
     setGuideState(false);
   }
-
+ 
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
       <View style={styles.wrapper}>
@@ -836,7 +852,7 @@ export default function IntroTutorial() {
                     </View>
                     <View style={styles.shadowbox}>
                       <ImageCasher
-                        photoFile={pic.photoFile}
+                        photoFile={pic.photofile}
                         id={pic.id}
                         style={{
                           height: "100%",
@@ -1119,13 +1135,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 2,
     left: "5%",
-    top: Platform.OS === "ios" ? (windowWidth > 600 ? "12%" : "10%") : "13%",
+    top: Platform.OS === "ios" ? (windowWidth > 600 ? "9%" : "10%") : "13%",
   },
   titleText: {
     textAlign: "center",
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
-    fontSize: scale(13),
+    fontSize: moderateScale(13),
     marginLeft: scale(10),
   },
   buttonwrapper: {
