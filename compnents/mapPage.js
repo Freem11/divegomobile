@@ -656,8 +656,8 @@ export default function MapPage() {
     if (fTabY.value === 0) {
       fTabY.value =
         windowWidth > 700
-          ? withTiming(moderateScale(-60))
-          : withTiming(moderateScale(-70));
+          ? withTiming(moderateScale(-80))
+          : withTiming(moderateScale(-80));
       setLabel("Hide Menu");
       setDirection("down");
     } else {
@@ -1128,7 +1128,7 @@ const styles = StyleSheet.create({
   },
   FMenuAnimate: {
     position: "absolute",
-    bottom: moderateScale(-55),
+    bottom: moderateScale(-65),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     flexDirection: "column",
@@ -1149,9 +1149,10 @@ const styles = StyleSheet.create({
   FMenu: {
     flexDirection: "column",
     alignContent: "center",
+    justifyContent: "center",
     backgroundColor: "#538bdb",
     width: "100%",
-    height: moderateScale(55),
+    height: moderateScale(65),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     zIndex: 3,
   },
@@ -1335,7 +1336,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#538bdb",
     position: "absolute",
-    top: -moderateScale(35),
+    top: -moderateScale(30),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),
@@ -1373,7 +1374,7 @@ const styles = StyleSheet.create({
   },
   buttonwrapper: {
     position: "absolute",
-    top: -moderateScale(35),
+    top: -moderateScale(30),
     right: moderateScale(30),
     alignItems: "center",
     justifyContent: "center",

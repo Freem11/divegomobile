@@ -65,7 +65,7 @@ export default function LocationSearchButton() {
           <MaterialIcons
             name="explore"
             color={butState ? "gold" : "white"}
-            size={moderateScale(30)}
+            size={moderateScale(34)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Map Search</Text>
           </View>
@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
   buttonlabel: {
     fontFamily: "Itim_400Regular",
     color: "white",
-    fontSize: moderateScale(11),
+    fontSize: moderateScale(13),
     marginTop: moderateScale(0)
   },
   buttonlabelAlt: {
     fontFamily: "Itim_400Regular",
     color: "gold",
-    fontSize: moderateScale(11),
+    fontSize: moderateScale(13),
     marginTop: moderateScale(0)
   },
 });
