@@ -309,12 +309,16 @@ export default function MapPage() {
       });
     } else {
       Keyboard.dismiss()
-      setAddSiteVals({
-        ...addSiteVals,
-        Site: "",
-        Latitude: "",
-        Longitude: "",
-      });
+      console.log(masterSwitch)
+      if (masterSwitch){
+        setAddSiteVals({
+          ...addSiteVals,
+          Site: "",
+          Latitude: "",
+          Longitude: "",
+        });
+      }
+      
       diveSiteModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -346,16 +350,20 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      console.log(masterSwitch)
       Keyboard.dismiss()
-      setPinValues({
-        ...pinValues,
-        PicFile: null,
-        Animal: "",
-        PicDate: "",
-        Latitude: "",
-        Longitude: "",
-        DDVal: "0",
-      });
+      if(masterSwitch) {
+        setPinValues({
+          ...pinValues,
+          PicFile: null,
+          Animal: "",
+          PicDate: "",
+          Latitude: "",
+          Longitude: "",
+          DDVal: "0",
+        });
+      }
+      
       pictureModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
