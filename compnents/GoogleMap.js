@@ -35,7 +35,7 @@ import { SettingsContext } from "./contexts/gearModalContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Platform } from "react-native";
+import { StyleSheet, View, Dimensions, Platform, Keyboard } from "react-native";
 import mantaIOS from "../compnents/png/Manta32.png";
 import anchorGold from "../compnents/png/markerAnchor48.png";
 import anchorClustIOS from "../compnents/png/ClusterAnchor24.png";
@@ -355,7 +355,7 @@ export default function Map() {
   const [siteCloseState, setSiteCloseState] = useState(false);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onPress={Keyboard.dismiss()}>
       <MapView
         key={masterSwitch + 1}
         style={styles.map}
