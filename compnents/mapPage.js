@@ -687,6 +687,7 @@ export default function MapPage() {
   };
 
   const onNavigate = () => {
+    if (dragPin){
     if (chosenModal === "DiveSite") {
       setAddSiteVals({
         ...addSiteVals,
@@ -709,6 +710,7 @@ export default function MapPage() {
       setPicAdderModal(!picAdderModal);
       setChosenModal(null);
     }
+  }
   };
 
   const onShopNavigate = () => {
@@ -882,7 +884,7 @@ export default function MapPage() {
                     <Text style={styles.FText}>{label}</Text>
                     <AntDesign
                       name={direction}
-                      size={moderateScale(14)}
+                      size={moderateScale(18)}
                       color="white"
                       style={{ marginBottom: 5 }}
                     />
@@ -1159,11 +1161,12 @@ const styles = StyleSheet.create({
   },
   FBox: {
     alignItems: "center",
+    paddingBottom: "2%",
   },
   FText: {
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(12),
+    fontSize: moderateScale(15),
   },
   FMenu: {
     flexDirection: "column",

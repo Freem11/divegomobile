@@ -25,7 +25,7 @@ export default function FailModal(props) {
     confirmationFailClose();
   };
 
-  let blurb;
+  let blurb = null;
   if (submissionItem === "sea creature submission"){
       blurb = "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again."
   } else if (submissionItem === "dive site"){

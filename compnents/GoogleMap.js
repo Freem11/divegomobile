@@ -164,24 +164,27 @@ export default function Map() {
       setZoomLev(zoom);
 
       try {
-        let currentMapPosition = await mapRef.getCamera();
-
-        if (currentMapPosition) {
-          setRegion({
-            latitude: currentMapPosition.center.latitude,
-            longitude: currentMapPosition.center.longitude,
-            latitudeDelta:
-              newBoundaries.northEast.latitude -
-              newBoundaries.southWest.latitude,
-            longitudeDelta:
-              newBoundaries.northEast.longitude -
-              newBoundaries.southWest.longitude,
-          });
-          setMapCenter({
-            lat: currentMapPosition.center.latitude,
-            lng: currentMapPosition.center.longitude,
-          });
+        if(mapRef){
+          let currentMapPosition = await mapRef.getCamera();
+        
+          if (currentMapPosition) {
+            setRegion({
+              latitude: currentMapPosition.center.latitude,
+              longitude: currentMapPosition.center.longitude,
+              latitudeDelta:
+                newBoundaries.northEast.latitude -
+                newBoundaries.southWest.latitude,
+              longitudeDelta:
+                newBoundaries.northEast.longitude -
+                newBoundaries.southWest.longitude,
+            });
+            setMapCenter({
+              lat: currentMapPosition.center.latitude,
+              lng: currentMapPosition.center.longitude,
+            });
+          }
         }
+       
       } catch (e) {
         console.log({ title: "Map Flipped", message: e.message });
       }
@@ -190,19 +193,10 @@ export default function Map() {
 
   const handleMapFlip = async () => {
     if (mapRef) {
-      // let filteredDiveSites = await diveSites(boundaries);
-      // !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
-
-      // let filteredHeatPoints = await multiHeatPoints(
-      //   boundaries,
-      //   animalMultiSelection
-      // );
-      // setNewHeat(formatHeatVals(filteredHeatPoints));
-
       let zoom = calculateZoom(width, boundaries[2], boundaries[0]);
       setZoomLev(zoom);
 
-      setRegion({
+       await setRegion({
         latitude: mapCenter.lat,
         longitude: mapCenter.lng,
         latitudeDelta: boundaries[3] - boundaries[1],
@@ -213,30 +207,34 @@ export default function Map() {
 
   useEffect(() => {
     if (mapRef) {
-      mapRef.animateCamera({
-        center: {
-          latitude: selectedDiveSite.Latitude,
-          longitude: selectedDiveSite.Longitude,
-        },
-        zoom: 16,
-      });
-      setTempMarker([selectedDiveSite.Latitude, selectedDiveSite.Longitude]);
-
-      setTimeout(() => {
-        setTempMarker([]);
-      }, 2000);
+      if(selectedDiveSite.lat) {
+        mapRef.animateCamera({
+          center: {
+            latitude: selectedDiveSite.Latitude,
+            longitude: selectedDiveSite.Longitude,
+          },
+          zoom: 16,
+        });
+        setTempMarker([selectedDiveSite.Latitude, selectedDiveSite.Longitude]);
+  
+        setTimeout(() => {
+          setTempMarker([]);
+        }, 2000);
+      }
     }
   }, [selectedDiveSite]);
 
   useEffect(() => {
     if (mapRef) {
-      mapRef.animateCamera({
-        center: {
-          latitude: selectedShop[0].lat,
-          longitude: selectedShop[0].lng,
-        },
-        zoom: 16,
-      });
+      if(selectedShop.lat){
+        mapRef.animateCamera({
+          center: {
+            latitude: selectedShop[0].lat,
+            longitude: selectedShop[0].lng,
+          },
+          zoom: 16,
+        });
+      } 
     }
   }, [selectedShop]);
 
@@ -254,7 +252,7 @@ export default function Map() {
   }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection]);
 
   useEffect(() => {
-    if (minorSwitch){
+    if (minorSwitch && !masterSwitch){
       setDragPin(mapCenter);
     } 
   }, [masterSwitch]);
@@ -357,13 +355,13 @@ export default function Map() {
   return (
     <View style={styles.container}>
       <MapView
-        key={masterSwitch + 1}
+        key={1}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         provider="google"
         mapType="hybrid"
         initialRegion={region}
-        mapType={"satellite"}
+        mapType={"hybrid"}
         maxZoomLevel={16}
         minZoomLevel={1}
         ref={(ref) => setMapRef(ref)}
