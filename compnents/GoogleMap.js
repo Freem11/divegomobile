@@ -355,7 +355,7 @@ export default function Map() {
   const [siteCloseState, setSiteCloseState] = useState(false);
 
   return (
-    <View style={styles.container} onPress={Keyboard.dismiss()}>
+    <View style={styles.container}>
       <MapView
         key={masterSwitch + 1}
         style={styles.map}

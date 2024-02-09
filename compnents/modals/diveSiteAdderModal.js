@@ -372,6 +372,7 @@ export default function DiveSiteModal() {
     }
   }, [addSiteVals]);
 
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -419,6 +420,7 @@ export default function DiveSiteModal() {
             </TouchableOpacity>
           </View>
         </View>
+        
         <View style={styles.inputContainer}>
           <InsetShadow
             containerStyle={{
@@ -615,7 +617,7 @@ export default function DiveSiteModal() {
           ></FailModal>
         </Animated.View>
       </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
   );
 }
 

@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
+  Keyboard
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
@@ -35,6 +36,7 @@ export default function DiveSiteSearchModal() {
   }, [diveSiteSearchModal]);
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
        <View style={styles.title}>
         <Text style={styles.header}>Dive Site Search</Text>
@@ -60,6 +62,7 @@ export default function DiveSiteSearchModal() {
       </View>
          <DiveSiteAutoComplete />
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

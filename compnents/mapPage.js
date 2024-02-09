@@ -308,6 +308,13 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      Keyboard.dismiss()
+      setAddSiteVals({
+        ...addSiteVals,
+        Site: "",
+        Latitude: "",
+        Longitude: "",
+      });
       diveSiteModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -339,6 +346,16 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      Keyboard.dismiss()
+      setPinValues({
+        ...pinValues,
+        PicFile: null,
+        Animal: "",
+        PicDate: "",
+        Latitude: "",
+        Longitude: "",
+        DDVal: "0",
+      });
       pictureModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -520,6 +537,7 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      Keyboard.dismiss()
       mapSearchModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -546,6 +564,7 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      Keyboard.dismiss()
       diveSiteSearchModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
