@@ -207,7 +207,7 @@ export default function Map() {
 
   useEffect(() => {
     if (mapRef) {
-      if(selectedDiveSite.lat) {
+      if(selectedDiveSite.Latitude) {
         mapRef.animateCamera({
           center: {
             latitude: selectedDiveSite.Latitude,
