@@ -15,12 +15,12 @@ export default function ImageCasherDynamic(Props) {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   let fileName = photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
-  let photoName =  photoFile.split('/').pop();
+  let photoName = photoFile.split("/").pop();
 
   let image = {
     uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`,
     // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${photoFile}`,
-    id : fileName
+    id: fileName,
   };
 
   let test = {
@@ -34,12 +34,13 @@ export default function ImageCasherDynamic(Props) {
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
-  const callback = downloadProgress => {
-    const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
-      console.log("callback?", progress)
-      setIsDownloaded(progress)
-  };
-
+  // const callback = (downloadProgress) => {
+  //   const progress =
+  //     downloadProgress.totalBytesWritten /
+  //     downloadProgress.totalBytesExpectedToWrite;
+  //   console.log("callback?", progress);
+  //   setIsDownloaded(progress);
+  // };
 
   async function findImageInCache(fileName) {
     try {
@@ -54,13 +55,12 @@ export default function ImageCasherDynamic(Props) {
     }
   }
 
-  async function cacheImage(fileName, cacheDir, callback) {
+  async function cacheImage(fileName, cacheDir) {
     try {
       const downloadImage = FileSystem.createDownloadResumable(
         fileName,
         cacheDir,
-        {},
-        callback
+        {}
       );
 
       const downloaded = await downloadImage.downloadAsync();
@@ -82,60 +82,40 @@ export default function ImageCasherDynamic(Props) {
     async function loadImage() {
       let imageExisitsInCache = await findImageInCache(cacheDir);
       // console.log("this?", imageExisitsInCache)
-        if (imageExisitsInCache.exists) {
-          setPicUri(cacheDir);
+      if (imageExisitsInCache.exists) {
+        setPicUri(cacheDir);
+      } else {
+        let cashing = await cacheImage(image.uri, cacheDir);
+        // console.log("that?", cashing)
+        if (cashing.cached) {
+          setPicUri(cashing.path);
         } else {
-          let cashing = await cacheImage(image.uri, cacheDir, callback);
-          // console.log("that?", cashing)
-          if (cashing.cached) {
-            setPicUri(cashing.path);
-          } else {
-            // console.log("main", cashing.cached)
-            setPicUri(test.uri);
-          }
+          // console.log("main", cashing.cached)
+          setPicUri(test.uri);
         }
+      }
     }
 
     loadImage();
   }, []);
 
-  if (picUri){
-      Image.getSize(picUri, (width, height) => {
-      let ratio = height/width
-      setPicWidth(scale(300))
-      setPicHeigth(scale(300)* ratio)
-  })
-}
-    
+  if (picUri) {
+    Image.getSize(picUri, (width, height) => {
+      let ratio = height / width;
+      setPicWidth(scale(300));
+      setPicHeigth(scale(300) * ratio);
+    });
+  }
 
-   
-  
- 
-  // useEffect(() => {
-  //   async function loadImage() {
-  //     // console.log("triggered?")
-  //     let imageExisitsInCache = await findImageInCache(cacheDir);
 
-  //     if (imageExisitsInCache.exists) {
-  //       // console.log("found1", imageExisitsInCache)
-  //       setPicUri(imageExisitsInCache.uri);
-  //     } else {
-  //       let cashing = await cacheImage(image.uri, cacheDir, () => {});
-  //       // console.log("found2", cashing.cached)
-  //       if (cashing.cached) {
-  //         setPicUri(cashing.path);
-  //       } else {
-  //         // console.log("pic change", cashing.cached)
-  //         setPicUri(test.uri);
-  //       }
-  //     }
-  //   }
-
-  //   loadImage();
-  // }, [areaPics.length, siteModal, boundaries, anchorPics, selectedDiveSite]);
-
-  if(picUri) {return <Image source={{ uri: picUri }} style={{ ...style, height: picHeigth, width: picWidth }}></Image>  }
- 
+  if (picUri) {
+    return (
+      <Image
+        source={{ uri: picUri }}
+        style={{ ...style, height: picHeigth, width: picWidth }}
+      ></Image>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

@@ -142,7 +142,6 @@ export default function Picture(props) {
       <ImageCasherDynamic
         photoFile={pic.photoFile}
         id={pic.id}
-        // anchorPics={pic}
         style={{
           borderRadius: 15,
           resizeMode: "cover",

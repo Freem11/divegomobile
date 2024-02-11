@@ -13,13 +13,12 @@ async function findImageInCache(fileName) {
   }
 }
 
-async function cacheImage(fileName, cacheDir, callback) {
+async function cacheImage(fileName, cacheDir) {
   try {
     const downloadImage = FileSystem.createDownloadResumable(
       fileName,
       cacheDir,
-      {},
-      callback
+      {}
     );
 
     const downloaded = await downloadImage.downloadAsync();
