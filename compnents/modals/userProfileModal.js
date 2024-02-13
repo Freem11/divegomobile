@@ -38,7 +38,8 @@ export default function UserProfileModal() {
   let cacheDir = FileSystem.cacheDirectory + fileName;
 
   let image = {
-    uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/Headliner.jpg`,
+    uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/Headliner.jpg`,
+    // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/Headliner.jpg`,
     id : fileName
   };
 
