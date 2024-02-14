@@ -143,18 +143,95 @@ export default function Map() {
         newBoundaries.northEast.latitude,
       ]);
 
-      let filteredShops = await shops(newBoundaries);
-      !diveSitesTog ? setnewShops([]) : setnewShops(filteredShops);
+      if (boundaries) {
+        if (boundaries[0] > boundaries[2]) {
+          try {
+            const AmericanDiveSites = await diveSites({
+              minLat: boundaries[1],
+              maxLat: boundaries[3],
+              minLng: -180,
+              maxLng: boundaries[2],
+            },
+            myDiveSites
+            );
+            const AsianDiveSites = await diveSites({
+              minLat: boundaries[1],
+              maxLat: boundaries[3],
+              minLng: boundaries[0],
+              maxLng: 180,
+            },myDiveSites
+            );
 
-      let filteredDiveSites = await diveSites(newBoundaries, myDiveSites);
-      !diveSitesTog ? setnewSites([]) : setnewSites(filteredDiveSites);
+            let diveSiteList = [...AsianDiveSites, ...AmericanDiveSites];
+            !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
+          } catch (e) {
+            console.log({ title: "Error", message: e.message });
+          }
 
-      let filteredHeatPoints = await multiHeatPoints(
-        newBoundaries,
-        animalMultiSelection,
-        myCreatures
-      );
-      setNewHeat(formatHeatVals(filteredHeatPoints));
+          try {
+            const AmericanHeatPoints = await multiHeatPoints(
+              {
+                minLat: boundaries[1],
+                maxLat: boundaries[3],
+                minLng: -180,
+                maxLng: boundaries[2],
+              },
+              animalMultiSelection,
+              myCreatures
+            );
+            const AsianHeatPoints = await multiHeatPoints(
+              {
+                minLat: boundaries[1],
+                maxLat: boundaries[3],
+                minLng: boundaries[0],
+                maxLng: 180,
+              },
+              animalMultiSelection,
+              myCreatures
+            );
+
+            let heatPointList = [...AsianHeatPoints, ...AmericanHeatPoints];
+            setNewHeat(formatHeatVals(heatPointList));
+          } catch (e) {
+            console.log({ title: "Error", message: e.message });
+          }
+        } else {
+          try {
+            const diveSiteList = await diveSites({
+              minLat: boundaries[1],
+              maxLat: boundaries[3],
+              minLng: boundaries[0],
+              maxLng: boundaries[2],
+            },
+            myDiveSites
+            );
+
+            !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
+          } catch (e) {
+            console.log({ title: "Error", message: e.message });
+          }
+
+          try {
+            const heatPointList = await multiHeatPoints(
+              {
+                minLat: boundaries[1],
+                maxLat: boundaries[3],
+                minLng: boundaries[0],
+                maxLng: boundaries[2],
+              },
+              animalMultiSelection,
+              myCreatures
+            );
+
+            setNewHeat(formatHeatVals(heatPointList));
+          } catch (e) {
+            console.log({ title: "Error", message: e.message });
+          }
+        }
+      }
+
+      // let filteredShops = await shops(newBoundaries);
+      // !diveSitesTog ? setnewShops([]) : setnewShops(filteredShops);
 
       let zoom = calculateZoom(
         width,
@@ -164,9 +241,9 @@ export default function Map() {
       setZoomLev(zoom);
 
       try {
-        if(mapRef){
+        if (mapRef) {
           let currentMapPosition = await mapRef.getCamera();
-        
+
           if (currentMapPosition) {
             setRegion({
               latitude: currentMapPosition.center.latitude,
@@ -184,7 +261,6 @@ export default function Map() {
             });
           }
         }
-       
       } catch (e) {
         console.log({ title: "Map Flipped", message: e.message });
       }
@@ -196,7 +272,7 @@ export default function Map() {
       let zoom = calculateZoom(width, boundaries[2], boundaries[0]);
       setZoomLev(zoom);
 
-       await setRegion({
+      await setRegion({
         latitude: mapCenter.lat,
         longitude: mapCenter.lng,
         latitudeDelta: boundaries[3] - boundaries[1],
@@ -207,7 +283,7 @@ export default function Map() {
 
   useEffect(() => {
     if (mapRef) {
-      if(selectedDiveSite.Latitude) {
+      if (selectedDiveSite.Latitude) {
         mapRef.animateCamera({
           center: {
             latitude: selectedDiveSite.Latitude,
@@ -216,7 +292,7 @@ export default function Map() {
           zoom: 16,
         });
         setTempMarker([selectedDiveSite.Latitude, selectedDiveSite.Longitude]);
-  
+
         setTimeout(() => {
           setTempMarker([]);
         }, 2000);
@@ -226,7 +302,7 @@ export default function Map() {
 
   useEffect(() => {
     if (mapRef) {
-      if(selectedShop.lat){
+      if (selectedShop.lat) {
         mapRef.animateCamera({
           center: {
             latitude: selectedShop[0].lat,
@@ -234,7 +310,7 @@ export default function Map() {
           },
           zoom: 16,
         });
-      } 
+      }
     }
   }, [selectedShop]);
 
@@ -252,9 +328,9 @@ export default function Map() {
   }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection]);
 
   useEffect(() => {
-    if (minorSwitch && !masterSwitch){
+    if (minorSwitch && !masterSwitch) {
       setDragPin(mapCenter);
-    } 
+    }
   }, [masterSwitch]);
 
   useEffect(() => {
@@ -276,16 +352,15 @@ export default function Map() {
       zoomHelp = 10;
     }
 
-    if(zoomHelper){
-      if(shopModal){
-        zoomHelp = 16
-        setMinorSwitch(true)
+    if (zoomHelper) {
+      if (shopModal) {
+        zoomHelp = 16;
+        setMinorSwitch(true);
       } else if (!shopModal) {
-        zoomHelp = 12
-        setMinorSwitch(false)
+        zoomHelp = 12;
+        setMinorSwitch(false);
       }
-      setZoomHelper(false)
-      
+      setZoomHelper(false);
     }
 
     if (mapRef) {
@@ -298,6 +373,7 @@ export default function Map() {
       });
       // Keyboard.dismiss();
     }
+
   }, [mapCenter]);
 
   let zoomier = calculateZoom(width, boundaries[2], boundaries[0]);
@@ -341,13 +417,13 @@ export default function Map() {
   };
 
   const clearModals = async () => {
-      setGearModal(false)
-      setProfileModal(false)
-      setMapSearchModal(false)
-      setDiveSiteSearchModal(false)
-      setPicAdderModal(false)
-      setDiveSiteAdderModal(false)
-      setTutorialLaunchpadModal(false)
+    setGearModal(false);
+    setProfileModal(false);
+    setMapSearchModal(false);
+    setDiveSiteSearchModal(false);
+    setPicAdderModal(false);
+    setDiveSiteAdderModal(false);
+    setTutorialLaunchpadModal(false);
   };
 
   const [siteCloseState, setSiteCloseState] = useState(false);
