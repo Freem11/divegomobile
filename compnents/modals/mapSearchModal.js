@@ -2,10 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
   Keyboard,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";

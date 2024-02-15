@@ -325,7 +325,7 @@ export default function Map() {
 
   useEffect(() => {
     handleMapChange();
-  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection]);
+  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection, mapCenter]);
 
   useEffect(() => {
     if (minorSwitch && !masterSwitch) {
@@ -373,7 +373,6 @@ export default function Map() {
       });
       // Keyboard.dismiss();
     }
-
   }, [mapCenter]);
 
   let zoomier = calculateZoom(width, boundaries[2], boundaries[0]);
@@ -434,10 +433,8 @@ export default function Map() {
         key={1}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
-        provider="google"
         mapType="hybrid"
         initialRegion={region}
-        mapType={"hybrid"}
         maxZoomLevel={16}
         minZoomLevel={1}
         ref={(ref) => setMapRef(ref)}
