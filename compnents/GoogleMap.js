@@ -136,28 +136,29 @@ export default function Map() {
     if (mapRef) {
       let newBoundaries = await mapRef.getMapBoundaries();
 
-      setBoundaries([
+      let settedBoundaries = [
         newBoundaries.southWest.longitude,
         newBoundaries.southWest.latitude,
         newBoundaries.northEast.longitude,
         newBoundaries.northEast.latitude,
-      ]);
+      ]
+      setBoundaries(settedBoundaries);
 
-      if (boundaries) {
-        if (boundaries[0] > boundaries[2]) {
+      if (settedBoundaries) {
+        if (settedBoundaries[0] > settedBoundaries[2]) {
           try {
             const AmericanDiveSites = await diveSites({
-              minLat: boundaries[1],
-              maxLat: boundaries[3],
+              minLat: settedBoundaries[1],
+              maxLat: settedBoundaries[3],
               minLng: -180,
-              maxLng: boundaries[2],
+              maxLng: settedBoundaries[2],
             },
             myDiveSites
             );
             const AsianDiveSites = await diveSites({
-              minLat: boundaries[1],
-              maxLat: boundaries[3],
-              minLng: boundaries[0],
+              minLat: settedBoundaries[1],
+              maxLat: settedBoundaries[3],
+              minLng: settedBoundaries[0],
               maxLng: 180,
             },myDiveSites
             );
@@ -171,19 +172,19 @@ export default function Map() {
           try {
             const AmericanHeatPoints = await multiHeatPoints(
               {
-                minLat: boundaries[1],
-                maxLat: boundaries[3],
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
                 minLng: -180,
-                maxLng: boundaries[2],
+                maxLng: settedBoundaries[2],
               },
               animalMultiSelection,
               myCreatures
             );
             const AsianHeatPoints = await multiHeatPoints(
               {
-                minLat: boundaries[1],
-                maxLat: boundaries[3],
-                minLng: boundaries[0],
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
                 maxLng: 180,
               },
               animalMultiSelection,
@@ -198,10 +199,10 @@ export default function Map() {
         } else {
           try {
             const diveSiteList = await diveSites({
-              minLat: boundaries[1],
-              maxLat: boundaries[3],
-              minLng: boundaries[0],
-              maxLng: boundaries[2],
+              minLat: settedBoundaries[1],
+              maxLat: settedBoundaries[3],
+              minLng: settedBoundaries[0],
+              maxLng: settedBoundaries[2],
             },
             myDiveSites
             );
@@ -214,10 +215,10 @@ export default function Map() {
           try {
             const heatPointList = await multiHeatPoints(
               {
-                minLat: boundaries[1],
-                maxLat: boundaries[3],
-                minLng: boundaries[0],
-                maxLng: boundaries[2],
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
+                maxLng: settedBoundaries[2],
               },
               animalMultiSelection,
               myCreatures
@@ -255,10 +256,10 @@ export default function Map() {
                 newBoundaries.northEast.longitude -
                 newBoundaries.southWest.longitude,
             });
-            setMapCenter({
-              lat: currentMapPosition.center.latitude,
-              lng: currentMapPosition.center.longitude,
-            });
+            // setMapCenter({
+            //   lat: currentMapPosition.center.latitude,
+            //   lng: currentMapPosition.center.longitude,
+            // });
           }
         }
       } catch (e) {
@@ -266,6 +267,18 @@ export default function Map() {
       }
     }
   };
+
+  const updateMapCenter = async () => {
+    if (mapRef) {
+      let currentMapPosition = await mapRef.getCamera();
+      if (currentMapPosition) {
+        setMapCenter({
+          lat: currentMapPosition.center.latitude,
+          lng: currentMapPosition.center.longitude,
+        });
+      }
+    }
+  }
 
   const handleMapFlip = async () => {
     if (mapRef) {
@@ -324,8 +337,12 @@ export default function Map() {
   }, []);
 
   useEffect(() => {
+    updateMapCenter();
+  }, [shopModal, siteModal, diveSiteAdderModal, diveSiteSearchModal, picAdderModal])
+
+  useEffect(() => {
     handleMapChange();
-  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection]);
+  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection, mapCenter]);
 
   useEffect(() => {
     if (minorSwitch && !masterSwitch) {
@@ -373,7 +390,6 @@ export default function Map() {
       });
       // Keyboard.dismiss();
     }
-
   }, [mapCenter]);
 
   let zoomier = calculateZoom(width, boundaries[2], boundaries[0]);
@@ -434,10 +450,8 @@ export default function Map() {
         key={1}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
-        provider="google"
         mapType="hybrid"
         initialRegion={region}
-        mapType={"hybrid"}
         maxZoomLevel={16}
         minZoomLevel={1}
         ref={(ref) => setMapRef(ref)}
