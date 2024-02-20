@@ -297,6 +297,7 @@ export default function Map() {
   useEffect(() => {
     if (mapRef) {
       if (selectedDiveSite.Latitude) {
+        console.log("dive site change called", selectedDiveSite.Latitude, selectedDiveSite.Longitude)
         mapRef.animateCamera({
           center: {
             latitude: selectedDiveSite.Latitude,
@@ -380,16 +381,20 @@ export default function Map() {
       setZoomHelper(false);
     }
 
-    if (mapRef) {
-      mapRef.animateCamera({
-        center: {
-          latitude: mapCenter.lat,
-          longitude: mapCenter.lng,
-        },
-        zoom: zoomHelp,
-      });
-      // Keyboard.dismiss();
+    console.log("mapCenter change call", mapCenter.lat, mapCenter.lng)
+    if(tempMarker.length === 0){
+      if (mapRef) {
+        mapRef.animateCamera({
+          center: {
+            latitude: mapCenter.lat,
+            longitude: mapCenter.lng,
+          },
+          zoom: zoomHelp,
+        });
+        // Keyboard.dismiss();
+      }
     }
+  
   }, [mapCenter]);
 
   let zoomier = calculateZoom(width, boundaries[2], boundaries[0]);
