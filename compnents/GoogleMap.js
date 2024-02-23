@@ -451,6 +451,7 @@ export default function Map() {
   };
 
   const clearModals = async () => {
+    Keyboard.dismiss()
     setGearModal(false);
     setProfileModal(false);
     setMapSearchModal(false);
