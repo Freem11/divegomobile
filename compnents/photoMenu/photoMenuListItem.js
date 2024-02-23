@@ -51,6 +51,7 @@ const PhotoMenuListItem = (props) => {
   const thisPopper = useRef();
 
   const handleSelect = (name) => {
+    Keyboard.dismiss()
     if (animalMultiSelection.includes(name)) {
       setAnimalMultiSelection(
         animalMultiSelection.filter((item) => item !== name)
