@@ -141,26 +141,29 @@ export default function Map() {
         newBoundaries.southWest.latitude,
         newBoundaries.northEast.longitude,
         newBoundaries.northEast.latitude,
-      ]
+      ];
       setBoundaries(settedBoundaries);
 
       if (settedBoundaries) {
         if (settedBoundaries[0] > settedBoundaries[2]) {
           try {
-            const AmericanDiveSites = await diveSites({
-              minLat: settedBoundaries[1],
-              maxLat: settedBoundaries[3],
-              minLng: -180,
-              maxLng: settedBoundaries[2],
-            },
-            myDiveSites
+            const AmericanDiveSites = await diveSites(
+              {
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: -180,
+                maxLng: settedBoundaries[2],
+              },
+              myDiveSites
             );
-            const AsianDiveSites = await diveSites({
-              minLat: settedBoundaries[1],
-              maxLat: settedBoundaries[3],
-              minLng: settedBoundaries[0],
-              maxLng: 180,
-            },myDiveSites
+            const AsianDiveSites = await diveSites(
+              {
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
+                maxLng: 180,
+              },
+              myDiveSites
             );
 
             let diveSiteList = [...AsianDiveSites, ...AmericanDiveSites];
@@ -198,13 +201,14 @@ export default function Map() {
           }
         } else {
           try {
-            const diveSiteList = await diveSites({
-              minLat: settedBoundaries[1],
-              maxLat: settedBoundaries[3],
-              minLng: settedBoundaries[0],
-              maxLng: settedBoundaries[2],
-            },
-            myDiveSites
+            const diveSiteList = await diveSites(
+              {
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
+                maxLng: settedBoundaries[2],
+              },
+              myDiveSites
             );
 
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
@@ -278,7 +282,7 @@ export default function Map() {
         });
       }
     }
-  }
+  };
 
   const handleMapFlip = async () => {
     if (mapRef) {
@@ -297,7 +301,6 @@ export default function Map() {
   useEffect(() => {
     if (mapRef) {
       if (selectedDiveSite.Latitude) {
-        console.log("dive site change called", selectedDiveSite.Latitude, selectedDiveSite.Longitude)
         mapRef.animateCamera({
           center: {
             latitude: selectedDiveSite.Latitude,
@@ -339,11 +342,23 @@ export default function Map() {
 
   useEffect(() => {
     updateMapCenter();
-  }, [shopModal, siteModal, diveSiteAdderModal, diveSiteSearchModal, picAdderModal])
+  }, [
+    shopModal,
+    siteModal,
+    diveSiteAdderModal,
+    diveSiteSearchModal,
+    picAdderModal,
+  ]);
 
   useEffect(() => {
     handleMapChange();
-  }, [diveSitesTog, sliderVal, animalSelection, animalMultiSelection, mapCenter]);
+  }, [
+    diveSitesTog,
+    sliderVal,
+    animalSelection,
+    animalMultiSelection,
+    mapCenter,
+  ]);
 
   useEffect(() => {
     if (minorSwitch && !masterSwitch) {
@@ -381,8 +396,7 @@ export default function Map() {
       setZoomHelper(false);
     }
 
-    console.log("mapCenter change call", mapCenter.lat, mapCenter.lng)
-    if(tempMarker.length === 0){
+    if (tempMarker.length === 0) {
       if (mapRef) {
         mapRef.animateCamera({
           center: {
@@ -394,7 +408,6 @@ export default function Map() {
         // Keyboard.dismiss();
       }
     }
-  
   }, [mapCenter]);
 
   let zoomier = calculateZoom(width, boundaries[2], boundaries[0]);

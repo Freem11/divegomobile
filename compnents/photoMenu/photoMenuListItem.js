@@ -4,7 +4,8 @@ import {
   View,
   Image,
   TouchableWithoutFeedback,
-  Dimensions
+  Dimensions,
+  Keyboard
 } from "react-native";
 import React, { useState, useContext, useEffect, useRef, memo } from "react";
 import ImageCasher from "../helpers/imageCashing";
@@ -84,6 +85,7 @@ const PhotoMenuListItem = (props) => {
 
   const pressInAnimations = (data, id) => {
 
+    Keyboard.dismiss()
     setSelectedID(id)
     setGearModal(false)
     setProfileModal(false)
