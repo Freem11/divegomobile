@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
     marginTop: scale(3),
   },
   xButton: {
-    marginTop: 10,
-    marginLeft: -30,
+    marginTop: moderateScale(10),
+    marginLeft: moderateScale(-30),
   },
   suggestInput: {
     borderRadius: moderateScale(25),

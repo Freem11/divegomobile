@@ -6,6 +6,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Platform,
+  Keyboard,
   KeyboardAvoidingView,
   Dimensions,
   ActivityIndicator,
@@ -193,6 +194,7 @@ export default function PicUploadModal() {
   }, [itterator3]);
 
   const onNavigate = () => {
+    Keyboard.dismiss()
     setChosenModal("Photos");
     setMapHelper(true);
     setMasterSwitch(false);
@@ -253,6 +255,7 @@ export default function PicUploadModal() {
   }, []);
 
   const showDatePicker = () => {
+    Keyboard.dismiss()
     setDatePickerVisible(true);
   };
 
@@ -355,6 +358,7 @@ export default function PicUploadModal() {
   };
 
   const handleImageUpload = async () => {
+    Keyboard.dismiss()
     setIsLoading(true);
     if (pinValues.PicFile !== null) {
       removePhoto({
@@ -542,6 +546,7 @@ export default function PicUploadModal() {
   }, [pinValues]);
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.header2}>Submit Your Picture</Text>
@@ -888,6 +893,7 @@ export default function PicUploadModal() {
         ></FailModal>
       </Animated.View>
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

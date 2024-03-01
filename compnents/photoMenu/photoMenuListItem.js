@@ -4,9 +4,10 @@ import {
   View,
   Image,
   TouchableWithoutFeedback,
-  Dimensions
+  Dimensions,
+  Keyboard
 } from "react-native";
-import React, { useState, useEffect, useRef, memo } from "react";
+import React, { useState, useContext, useEffect, useRef, memo } from "react";
 import ImageCasher from "../helpers/imageCashing";
 import { scale, moderateScale } from "react-native-size-matters";
 import Animated, {
@@ -16,12 +17,35 @@ import Animated, {
   Easing,
   withSpring,
 } from "react-native-reanimated";
+import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
+import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
+import { PictureAdderContext } from "../contexts/picModalContext";
+import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
+import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SettingsContext } from "../contexts/gearModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const PhotoMenuListItem = (props) => {
   const { pic, setAnimalMultiSelection, animalMultiSelection, selectedID, setSelectedID } = props;
+
+  const { gearModal, setGearModal } = useContext(SettingsContext);
+  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+  const { mapSearchModal, setMapSearchModal } = useContext(
+    MapSearchModalContext
+  );
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
+    DiveSiteSearchModalContext
+  );
+  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
+  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
+    TutorialLaunchPadContext
+  );
 
   const [popped, setPopped] = useState(false);
   const thisPopper = useRef();
@@ -34,6 +58,13 @@ const PhotoMenuListItem = (props) => {
     } else {
       setAnimalMultiSelection([...animalMultiSelection, name]);
     }
+      setGearModal(false)
+      setProfileModal(false)
+      setMapSearchModal(false)
+      setDiveSiteSearchModal(false)
+      setPicAdderModal(false)
+      setDiveSiteAdderModal(false)
+      setTutorialLaunchpadModal(false)
   };
 
   const scaleStart = useSharedValue(1);
@@ -55,6 +86,13 @@ const PhotoMenuListItem = (props) => {
   const pressInAnimations = (data, id) => {
 
     setSelectedID(id)
+    setGearModal(false)
+    setProfileModal(false)
+    setMapSearchModal(false)
+    setDiveSiteSearchModal(false)
+    setPicAdderModal(false)
+    setDiveSiteAdderModal(false)
+    setTutorialLaunchpadModal(false)
 
     if (scaleStart.value === 1){
       let distanceToItemMiddle = (moderateScale(60) - data.nativeEvent.locationX)

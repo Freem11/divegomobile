@@ -31,7 +31,7 @@ export default function FABMenu() {
   const xValue = useSharedValue((windowWidth/2)-(numbButtons * moderateScale(80)/2));
   const context = useSharedValue({ x: 0 });
   let bounds = moderateScale(180)
-  let startBounce = moderateScale(175)
+  let startBounce = moderateScale(90)
 
   const animateFabMenu = Gesture.Pan()
     .onBegin(() => {

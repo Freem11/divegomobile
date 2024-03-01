@@ -2,10 +2,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
+  Keyboard,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
@@ -41,6 +39,7 @@ export default function MapSearchModal() {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
        <View style={styles.title}>
         <Text style={styles.header}>Map Search</Text>
@@ -85,6 +84,7 @@ export default function MapSearchModal() {
         </View>
       <GeocodeAutoComplete />
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

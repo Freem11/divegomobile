@@ -6,7 +6,7 @@
       "divegomobile",
       "fb692861552452156"
     ],
-    "version": "1.4.0",
+    "version": "1.4.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -44,7 +44,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "59",
+      "buildNumber": "67",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
@@ -68,6 +68,14 @@
         ],
         "UISupportedInterfaceOrientations~ipad": [
           "UIDeviceOrientationPortrait"
+        ],
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          }
         ]
       },
       "config": {
@@ -75,7 +83,7 @@
       }
     },
     "android": {
-      "versionCode": 59,
+      "versionCode": 67,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -89,7 +97,8 @@
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.permission.INTERNET"
       ],
       "package": "com.freem11.divegomobile"
     },
@@ -100,6 +109,12 @@
       "eas": {
         "projectId": "df1b7ca8-d86d-4667-859b-0330dad67126"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/df1b7ca8-d86d-4667-859b-0330dad67126"
     }
   }
 }

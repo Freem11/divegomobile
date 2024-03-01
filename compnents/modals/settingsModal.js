@@ -96,7 +96,7 @@ export default function SettingsModal() {
   if (activeSession) {
     let first = activeSession.user.user_metadata.firstName || "";
     let last = activeSession.user.user_metadata.lastName || "";
-    let blurb = `:${activeSession.user.id}`;
+    let blurb = `:${activeSession.user.id}` || null;
   }
 
   const handleAccountDelete = async () => {

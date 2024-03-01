@@ -107,6 +107,7 @@ export default function ThirdTutorial() {
           Longitude: "",
           DDVal: "0",
         });
+        // setChapter(null);
         break;
 
       case "Adding your photo":
@@ -118,6 +119,7 @@ export default function ThirdTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
+        // setChapter(null);
         break;
 
       case "Name that sea creature!":
@@ -128,6 +130,7 @@ export default function ThirdTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
+        // setChapter(null);
         break;
 
       case "Dropping the pin":
@@ -138,6 +141,7 @@ export default function ThirdTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setPicAdderModal(true);
+        // setChapter(null);
         break;
 
       case "Exit Guide":

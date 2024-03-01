@@ -104,7 +104,7 @@ export default function MapPage() {
   }
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
- 
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -308,6 +308,17 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      Keyboard.dismiss()
+      console.log(masterSwitch)
+      if (masterSwitch){
+        setAddSiteVals({
+          ...addSiteVals,
+          Site: "",
+          Latitude: "",
+          Longitude: "",
+        });
+      }
+      
       diveSiteModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -339,6 +350,20 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      console.log(masterSwitch)
+      Keyboard.dismiss()
+      if(masterSwitch) {
+        setPinValues({
+          ...pinValues,
+          PicFile: null,
+          Animal: "",
+          PicDate: "",
+          Latitude: "",
+          Longitude: "",
+          DDVal: "0",
+        });
+      }
+      
       pictureModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -520,6 +545,7 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      Keyboard.dismiss()
       mapSearchModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -546,6 +572,7 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
+      Keyboard.dismiss()
       diveSiteSearchModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -632,6 +659,13 @@ export default function MapPage() {
       setTextValue("");
       setIsOpen(false);
     }
+    setGearModal(false);
+    setProfileModal(false);
+    setMapSearchModal(false);
+    setDiveSiteSearchModal(false);
+    setPicAdderModal(false);
+    setDiveSiteAdderModal(false);
+    setTutorialLaunchpadModal(false);
   };
 
   const fTabY = useSharedValue(0);
@@ -649,8 +683,8 @@ export default function MapPage() {
     if (fTabY.value === 0) {
       fTabY.value =
         windowWidth > 700
-          ? withTiming(moderateScale(-60))
-          : withTiming(moderateScale(-70));
+          ? withTiming(moderateScale(-80))
+          : withTiming(moderateScale(-80));
       setLabel("Hide Menu");
       setDirection("down");
     } else {
@@ -661,6 +695,7 @@ export default function MapPage() {
   };
 
   const onNavigate = () => {
+    if (dragPin){
     if (chosenModal === "DiveSite") {
       setAddSiteVals({
         ...addSiteVals,
@@ -683,6 +718,7 @@ export default function MapPage() {
       setPicAdderModal(!picAdderModal);
       setChosenModal(null);
     }
+  }
   };
 
   const onShopNavigate = () => {
@@ -774,6 +810,17 @@ export default function MapPage() {
     }).catch(console.error);
   };
 
+  const toggleDiveSites = () => {
+    setDiveSitesTog(!diveSitesTog)
+    setGearModal(false);
+    setProfileModal(false);
+    setMapSearchModal(false);
+    setDiveSiteSearchModal(false);
+    setPicAdderModal(false);
+    setDiveSiteAdderModal(false);
+    setTutorialLaunchpadModal(false);
+  };
+
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
@@ -845,7 +892,7 @@ export default function MapPage() {
                     <Text style={styles.FText}>{label}</Text>
                     <AntDesign
                       name={direction}
-                      size={moderateScale(14)}
+                      size={moderateScale(18)}
                       color="white"
                       style={{ marginBottom: 5 }}
                     />
@@ -853,52 +900,55 @@ export default function MapPage() {
                 </TouchableWithoutFeedback>
 
                 <Animated.View style={[styles.feedback, feedbackReveal]}>
-              <Text style={styles.feedRequest} onPress={() => handleEmail()}>
-                Send Scuba SEAsons feedback
-              </Text>
-              <TouchableWithoutFeedback
-                style={{
-                  width: moderateScale(30),
-                  height: moderateScale(23),
-                  marginTop: moderateScale(3),
-                }}
-                onPress={startFeedbackAnimations}
-              >
-                <Octicons
-                  name="paper-airplane"
-                  size={moderateScale(24)}
-                  color="white"
-                />
-              </TouchableWithoutFeedback>
-            </Animated.View>
+                  <Text
+                    style={styles.feedRequest}
+                    onPress={() => handleEmail()}
+                  >
+                    Send Scuba SEAsons feedback
+                  </Text>
+                  <TouchableWithoutFeedback
+                    style={{
+                      width: moderateScale(30),
+                      height: moderateScale(23),
+                      marginTop: moderateScale(3),
+                    }}
+                    onPress={startFeedbackAnimations}
+                  >
+                    <Octicons
+                      name="paper-airplane"
+                      size={moderateScale(24)}
+                      color="white"
+                      style={{ marginTop: moderateScale(3) }}
+                    />
+                  </TouchableWithoutFeedback>
+                </Animated.View>
 
                 <View
-                style={
-                  anchButState
-                    ? styles.buttonwrapperPressed
-                    : styles.buttonwrapper
-                }
-              >
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    tutorialRunning ? null : setDiveSitesTog(!diveSitesTog);
-                  }}
-                  onPressIn={() => setAnchButState(true)}
-                  onPressOut={() => setAnchButState(false)}
-                  style={{
-                    alignItems: "center",
-                    width: moderateScale(30),
-                    height: moderateScale(30),
-                  }}
+                  style={
+                    anchButState
+                      ? styles.buttonwrapperPressed
+                      : styles.buttonwrapper
+                  }
                 >
-                  <MaterialIcons
-                    name="anchor"
-                    color={anchButState ? "gold" : "white"}
-                    size={moderateScale(30)}
-                  />
-                </TouchableWithoutFeedback>
-              </View>
-
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      tutorialRunning ? null : toggleDiveSites();
+                    }}
+                    onPressIn={() => setAnchButState(true)}
+                    onPressOut={() => setAnchButState(false)}
+                    style={{
+                      alignItems: "center",
+                      width: moderateScale(30),
+                      height: moderateScale(30),
+                    }}
+                  >
+                    <MaterialIcons
+                      name="anchor"
+                      color={anchButState ? "gold" : "white"}
+                      size={moderateScale(30)}
+                    />
+                  </TouchableWithoutFeedback>
+                </View>
 
                 <View style={styles.FMenu}>
                   <FABMenu style={{ zIndex: 2 }} />
@@ -1107,7 +1157,7 @@ const styles = StyleSheet.create({
   },
   FMenuAnimate: {
     position: "absolute",
-    bottom: moderateScale(-55),
+    bottom: moderateScale(-65),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     flexDirection: "column",
@@ -1119,18 +1169,20 @@ const styles = StyleSheet.create({
   },
   FBox: {
     alignItems: "center",
+    paddingBottom: "2%",
   },
   FText: {
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(12),
+    fontSize: moderateScale(15),
   },
   FMenu: {
     flexDirection: "column",
     alignContent: "center",
+    justifyContent: "center",
     backgroundColor: "#538bdb",
     width: "100%",
-    height: moderateScale(55),
+    height: moderateScale(65),
     // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     zIndex: 3,
   },
@@ -1196,7 +1248,10 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: windowWidth > 700 || Platform.OS == "android" ? moderateScale(12) : moderateScale(40),
+    top:
+      windowWidth > 700 || Platform.OS == "android"
+        ? moderateScale(12)
+        : moderateScale(40),
     zIndex: 3,
   },
   filterer: {
@@ -1261,11 +1316,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: windowHeight - windowHeight * 0.14,
     width: windowWidth - windowWidth * 0.1,
-    marginLeft: "5%",
+    marginLeft: windowWidth * 0.05,
     backgroundColor: "#538bdb",
     borderRadius: 15,
     zIndex: 25,
     left: 0,
+    bottom: windowHeight*0.09,
     borderWidth: 1,
     borderColor: "darkgrey",
   },
@@ -1310,7 +1366,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#538bdb",
     position: "absolute",
-    top: -moderateScale(35),
+    top: -moderateScale(30),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),
@@ -1348,7 +1404,7 @@ const styles = StyleSheet.create({
   },
   buttonwrapper: {
     position: "absolute",
-    top: -moderateScale(35),
+    top: -moderateScale(30),
     right: moderateScale(30),
     alignItems: "center",
     justifyContent: "center",

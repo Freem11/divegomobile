@@ -64,7 +64,7 @@ export default function GuidesButton() {
           <FontAwesome5
             name="question"
             color={butState ? "gold" : "white"}
-            size={moderateScale(28)}
+            size={moderateScale(32)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>User Guides</Text>
           </View>
@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
   buttonlabel: {
     fontFamily: "Itim_400Regular",
     color: "white",
-    fontSize: moderateScale(11),
+    fontSize: moderateScale(13),
     marginTop: moderateScale(2),
   },
   buttonlabelAlt: {
     fontFamily: "Itim_400Regular",
     color: "gold",
-    fontSize: moderateScale(11),
+    fontSize: moderateScale(13),
     marginTop: moderateScale(2)
   },
 });

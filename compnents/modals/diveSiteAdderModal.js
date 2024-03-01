@@ -7,6 +7,7 @@ import {
   Platform,
   ActivityIndicator,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -58,7 +59,6 @@ export default function DiveSiteModal() {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const [indicatorState, setIndicatorState] = useState(false);
-
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
@@ -183,6 +183,7 @@ export default function DiveSiteModal() {
   }, [itterator2]);
 
   const getCurrentLocation = async () => {
+    Keyboard.dismiss();
     setIsLoading(true);
     setIsDisabled(true);
     try {
@@ -211,6 +212,7 @@ export default function DiveSiteModal() {
   };
 
   const onNavigate = () => {
+    Keyboard.dismiss();
     if (itterator2 === 13 || itterator2 === 23) {
     } else {
       setChosenModal("DiveSite");
@@ -305,7 +307,7 @@ export default function DiveSiteModal() {
     } else {
       setDiveSiteAdderModal(!diveSiteAdderModal);
       failBoxY.value = withTiming(scale(1200));
-      successBoxY.value = withTiming(scale(1200)); 
+      successBoxY.value = withTiming(scale(1200));
       SetFormValidation({
         SiteNameVal: false,
         LatVal: false,
@@ -370,242 +372,252 @@ export default function DiveSiteModal() {
     }
   }, [addSiteVals]);
 
+
   return (
-    <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.header2}>Submit Your Dive Site</Text>
-        <View
-          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
-        >
-          <TouchableOpacity
-            // disabled={isDisabled}
-            onPress={activateGuide}
-            onPressIn={() => setHelpButState(true)}
-            onPressOut={() => setHelpButState(false)}
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              width: scale(20),
-              height: scale(20),
-            }}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <View style={styles.title}>
+          <Text style={styles.header2}>Submit Your Dive Site</Text>
+          <View
+            style={helpButState ? styles.helpButtonPressed : styles.helpButton}
           >
-            <FontAwesome5
-              name="question"
-              color="gold"
-              size={scale(18)}
-              style={{ zIndex: -1 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={
-            diveCloseState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableOpacity
-            onPress={toggleDiveModal}
-            onPressIn={() => setDiveCloseState(true)}
-            onPressOut={() => setDiveCloseState(false)}
-            style={{
-              width: scale(30),
-              height: scale(30),
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.inputContainer}>
-        <InsetShadow
-          containerStyle={{
-            borderRadius: moderateScale(25),
-            height: moderateScale(40),
-            width: moderateScale(200),
-            // marginRight: 18,
-            marginTop: moderateScale(1),
-          }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={formValidation.SiteNameVal ? styles.inputRed : styles.input}
-            value={addSiteVals.Site}
-            placeholder={"Site Name"}
-            placeholderTextColor="darkgrey"
-            color={formValidation.SiteNameVal ? "black" : "#F0EEEB"}
-            fontSize={moderateScale(18)}
-            multiline
-            onChangeText={(siteText) =>
-              setAddSiteVals({ ...addSiteVals, Site: siteText })
+            <TouchableOpacity
+              // disabled={isDisabled}
+              onPress={activateGuide}
+              onPressIn={() => setHelpButState(true)}
+              onPressOut={() => setHelpButState(false)}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: scale(20),
+                height: scale(20),
+              }}
+            >
+              <FontAwesome5
+                name="question"
+                color="gold"
+                size={scale(18)}
+                style={{ zIndex: -1 }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={
+              diveCloseState ? styles.closeButtonPressed : styles.closeButton
             }
-          ></TextInput>
-        </InsetShadow>
-
-        <InsetShadow
-          containerStyle={{
-            borderRadius: moderateScale(25),
-            height: moderateScale(40),
-            width: moderateScale(200),
-            // marginRight: 18,
-            marginTop: moderateScale(10),
-          }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={formValidation.LatVal ? styles.inputRed : styles.input}
-            value={addSiteVals.Latitude}
-            placeholder={"Latitude"}
-            keyboardType="numbers-and-punctuation"
-            // editable={false}
-            fontSize={moderateScale(18)}
-            placeholderTextColor="darkgrey"
-            color={formValidation.LatVal ? "black" : "#F0EEEB"}
-            multiline
-            onChangeText={(text) =>
-              setAddSiteVals({ ...addSiteVals, Latitude: text })
-            }
-          ></TextInput>
-        </InsetShadow>
-
-        <InsetShadow
-          containerStyle={{
-            borderRadius: moderateScale(25),
-            height: moderateScale(40),
-            width: moderateScale(200),
-            // marginRight: 18,
-            marginTop: moderateScale(10),
-          }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={formValidation.LngVal ? styles.inputRed : styles.input}
-            value={addSiteVals.Longitude}
-            placeholder={"Longitude"}
-            keyboardType="numbers-and-punctuation"
-            // editable={false}
-            fontSize={moderateScale(18)}
-            placeholderTextColor="darkgrey"
-            color={formValidation.LngVal ? "black" : "#F0EEEB"}
-            multiline
-            onChangeText={(text) =>
-              setAddSiteVals({ ...addSiteVals, Longitude: text })
-            }
-          ></TextInput>
-        </InsetShadow>
-      </View>
-
-      {isLoading && (
-        <ActivityIndicator
-          color="gold"
-          style={{ marginTop: "5%" }}
-        ></ActivityIndicator>
-      )}
-
-      <View style={styles.latLngButton}>
-        <View style={locButState ? styles.GPSbuttonPressed : styles.GPSbutton}>
-          <TouchableOpacity
-            // disabled={isDisabled}
-            onPress={getCurrentLocation}
-            onPressIn={() => setLocButState(true)}
-            onPressOut={() => setLocButState(false)}
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              width: moderateScale(38),
-              height: moderateScale(38),
-            }}
           >
-            <MaterialIcons
-              name="my-location"
-              color={locButState ? "#538dbd" : "gold"}
-              size={moderateScale(34)}
-              style={{ zIndex: -1 }}
-            />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={toggleDiveModal}
+              onPressIn={() => setDiveCloseState(true)}
+              onPressOut={() => setDiveCloseState(false)}
+              style={{
+                width: scale(30),
+                height: scale(30),
+                alignItems: "center",
+              }}
+            >
+              <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        
+        <View style={styles.inputContainer}>
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              // marginRight: 18,
+              marginTop: moderateScale(1),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <TextInput
+              style={
+                formValidation.SiteNameVal ? styles.inputRed : styles.input
+              }
+              value={addSiteVals.Site}
+              placeholder={"Site Name"}
+              placeholderTextColor="darkgrey"
+              color={formValidation.SiteNameVal ? "black" : "#F0EEEB"}
+              fontSize={moderateScale(18)}
+              multiline
+              onChangeText={(siteText) =>
+                setAddSiteVals({ ...addSiteVals, Site: siteText })
+              }
+            ></TextInput>
+          </InsetShadow>
+
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              // marginRight: 18,
+              marginTop: moderateScale(10),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <TextInput
+              style={formValidation.LatVal ? styles.inputRed : styles.input}
+              value={addSiteVals.Latitude}
+              placeholder={"Latitude"}
+              keyboardType="numbers-and-punctuation"
+              // editable={false}
+              fontSize={moderateScale(18)}
+              placeholderTextColor="darkgrey"
+              color={formValidation.LatVal ? "black" : "#F0EEEB"}
+              multiline
+              onChangeText={(text) =>
+                setAddSiteVals({ ...addSiteVals, Latitude: text })
+              }
+            ></TextInput>
+          </InsetShadow>
+
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              width: moderateScale(200),
+              // marginRight: 18,
+              marginTop: moderateScale(10),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <TextInput
+              style={formValidation.LngVal ? styles.inputRed : styles.input}
+              value={addSiteVals.Longitude}
+              placeholder={"Longitude"}
+              keyboardType="numbers-and-punctuation"
+              // editable={false}
+              fontSize={moderateScale(18)}
+              placeholderTextColor="darkgrey"
+              color={formValidation.LngVal ? "black" : "#F0EEEB"}
+              multiline
+              onChangeText={(text) =>
+                setAddSiteVals({ ...addSiteVals, Longitude: text })
+              }
+            ></TextInput>
+          </InsetShadow>
         </View>
 
-        <View style={pinButState ? styles.LocButtonPressed : styles.LocButton}>
-          <TouchableOpacity
-            onPress={onNavigate}
-            onPressIn={() => setCorButState(true)}
-            onPressOut={() => setCorButState(false)}
-            style={{
-              width: moderateScale(38),
-              height: moderateScale(38),
-            }}
+        {isLoading && (
+          <ActivityIndicator
+            color="gold"
+            style={{ marginTop: "5%" }}
+          ></ActivityIndicator>
+        )}
+
+        <View style={styles.latLngButton}>
+          <View
+            style={locButState ? styles.GPSbuttonPressed : styles.GPSbutton}
           >
-            <MaterialIcons
-              name="location-pin"
-              color={pinButState ? "#538dbd" : "gold"}
-              size={moderateScale(38)}
-              style={{ zIndex: -1 }}
-            />
-          </TouchableOpacity>
+            <TouchableOpacity
+              // disabled={isDisabled}
+              onPress={getCurrentLocation}
+              onPressIn={() => setLocButState(true)}
+              onPressOut={() => setLocButState(false)}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: moderateScale(38),
+                height: moderateScale(38),
+              }}
+            >
+              <MaterialIcons
+                name="my-location"
+                color={locButState ? "#538dbd" : "gold"}
+                size={moderateScale(34)}
+                style={{ zIndex: -1 }}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={pinButState ? styles.LocButtonPressed : styles.LocButton}
+          >
+            <TouchableOpacity
+              onPress={onNavigate}
+              onPressIn={() => setCorButState(true)}
+              onPressOut={() => setCorButState(false)}
+              style={{
+                width: moderateScale(38),
+                height: moderateScale(38),
+              }}
+            >
+              <MaterialIcons
+                name="location-pin"
+                color={pinButState ? "#538dbd" : "gold"}
+                size={moderateScale(38)}
+                style={{ zIndex: -1 }}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={
+              indicatorState
+                ? styles.ImageUploadIndicatorGreen
+                : styles.ImageUploadIndicatorRed
+            }
+          ></View>
         </View>
 
         <View
-          style={
-            indicatorState
-              ? styles.ImageUploadIndicatorGreen
-              : styles.ImageUploadIndicatorRed
-          }
-        ></View>
-      </View>
-
-      <View
-        style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
-      >
-        <TouchableOpacity
-          onPress={handleSubmit}
-          onPressIn={() => setSubButState(true)}
-          onPressOut={() => setSubButState(false)}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
+          style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
         >
-          <Text
+          <TouchableOpacity
+            onPress={handleSubmit}
+            onPressIn={() => setSubButState(true)}
+            onPressOut={() => setSubButState(false)}
             style={{
-              color: "gold",
-              fontSize: moderateScale(26),
-              marginTop: 4,
-              marginBottom: -6,
-              fontFamily: "PatrickHand_400Regular",
               width: "100%",
-              alignSelf: "center",
-              justifyContent: "center",
-              alignContent: "center",
-              textAlign: "center",
+              height: "100%",
             }}
           >
-            Submit Dive Site
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={{
+                color: "gold",
+                fontSize: moderateScale(26),
+                marginTop: 4,
+                marginBottom: -6,
+                fontFamily: "PatrickHand_400Regular",
+                width: "100%",
+                alignSelf: "center",
+                justifyContent: "center",
+                alignContent: "center",
+                textAlign: "center",
+              }}
+            >
+              Submit Dive Site
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+          <SuccessModal
+            submissionItem="dive site"
+            toggleDiveModal={toggleDiveModal}
+            confirmationSucessClose={confirmationSucessClose}
+            itterator2={itterator2}
+            setItterator2={setItterator2}
+          ></SuccessModal>
+        </Animated.View>
+
+        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+          <FailModal
+            submissionItem="dive site"
+            confirmationFailClose={confirmationFailClose}
+          ></FailModal>
+        </Animated.View>
       </View>
-
-      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-        <SuccessModal
-          submissionItem="dive site"
-          toggleDiveModal={toggleDiveModal}
-          confirmationSucessClose={confirmationSucessClose}
-          itterator2={itterator2}
-          setItterator2={setItterator2}
-        ></SuccessModal>
-      </Animated.View>
-
-      <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-        <FailModal
-          submissionItem="dive site"
-          confirmationFailClose={confirmationFailClose}
-        ></FailModal>
-      </Animated.View>
-    </View>
+      </TouchableWithoutFeedback>
   );
 }
 
