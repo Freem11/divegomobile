@@ -673,6 +673,7 @@ export default function MapPage() {
       setPicAdderModal(false);
       setDiveSiteAdderModal(false);
       setTutorialLaunchpadModal(false);
+      setSiteModal(false);
     } else {
       console.log("close!")
       Keyboard.dismiss();

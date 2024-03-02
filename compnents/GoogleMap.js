@@ -32,6 +32,7 @@ import { PictureAdderContext } from "./contexts/picModalContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 import { SettingsContext } from "./contexts/gearModalContext";
+import { PullTabContext } from "./contexts/pullTabContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -107,6 +108,9 @@ export default function Map() {
   );
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
+  );
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
   );
 
   const filterAnchorPhotos = async () => {
@@ -459,6 +463,7 @@ export default function Map() {
     setPicAdderModal(false);
     setDiveSiteAdderModal(false);
     setTutorialLaunchpadModal(false);
+    setShowFilterer(false);
   };
 
   const [siteCloseState, setSiteCloseState] = useState(false);
