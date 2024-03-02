@@ -14,6 +14,7 @@ import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { PullTabContext } from "../contexts/pullTabContext";
+import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -23,6 +24,7 @@ import {
 
 export default function LocationSearchButton() {
   const [butState, setButState] = useState(false);
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
   );
@@ -51,6 +53,7 @@ export default function LocationSearchButton() {
       setSiteModal(false);
       setShopModal(false);
       setShowFilterer(false);
+      setTiles(true);
     } 
   }, [mapSearchModal]);
 

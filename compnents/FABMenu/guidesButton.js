@@ -12,6 +12,7 @@ import { SettingsContext } from "../contexts/gearModalContext";
 import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
+import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -22,6 +23,7 @@ import TutorialLaunchPadModal from "../modals/tutorialsModal";
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
   );
@@ -50,6 +52,7 @@ export default function GuidesButton() {
       setSiteModal(false);
       setShopModal(false);
       setShowFilterer(false);
+      setTiles(true);
     }
   }, [tutorialLaunchpadModal]);
 
