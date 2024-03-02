@@ -42,6 +42,7 @@ import MapBoundariesContextProvider from './mapBoundariesContext';
 import PinContextProvider from './staticPinContext';
 import PictureAdderContextProvider from './picModalContext';
 import DSAdderContextProvider from './DSModalContext';
+import PullTabContextProvider from './pullTabContext';
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -84,6 +85,7 @@ const providers = [
     PinContextProvider,
     PictureAdderContextProvider,
     DSAdderContextProvider,
+    PullTabContextProvider,
 ]
 
 export const AppContextProvider = combineComponents(...providers);

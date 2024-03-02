@@ -14,6 +14,7 @@ import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { PullTabContext } from "../contexts/pullTabContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -23,6 +24,9 @@ import {
 
 export default function PhotoButton() {
   const [butState, setButState] = useState(false);
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
+  );
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
   const { setMapSearchModal } = useContext(MapSearchModalContext);
   const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
@@ -66,14 +70,15 @@ export default function PhotoButton() {
 
   useEffect(() => {
     if(picAdderModal) {
-      setDiveSiteAdderModal(false)
-      setTutorialLaunchpadModal(false)
-      setMapSearchModal(false)
-      setProfileModal(false)
-      setGearModal(false)
-      setDiveSiteSearchModal(false)
-      setSiteModal(false)
-      setShopModal(false)
+      setDiveSiteAdderModal(false);
+      setTutorialLaunchpadModal(false);
+      setMapSearchModal(false);
+      setProfileModal(false);
+      setGearModal(false);
+      setDiveSiteSearchModal(false);
+      setSiteModal(false);
+      setShopModal(false);
+      setShowFilterer(false);
     }
   }, [picAdderModal]);
 

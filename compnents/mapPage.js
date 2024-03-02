@@ -63,6 +63,7 @@ import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
 import { MapSearchModalContext } from "./contexts/mapSearchContext";
+import { PullTabContext } from "./contexts/pullTabContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
@@ -308,9 +309,9 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
-      Keyboard.dismiss()
-      console.log(masterSwitch)
-      if (masterSwitch){
+      Keyboard.dismiss();
+      console.log(masterSwitch);
+      if (masterSwitch) {
         setAddSiteVals({
           ...addSiteVals,
           Site: "",
@@ -318,7 +319,7 @@ export default function MapPage() {
           Longitude: "",
         });
       }
-      
+
       diveSiteModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -350,9 +351,9 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
-      console.log(masterSwitch)
-      Keyboard.dismiss()
-      if(masterSwitch) {
+      console.log(masterSwitch);
+      Keyboard.dismiss();
+      if (masterSwitch) {
         setPinValues({
           ...pinValues,
           PicFile: null,
@@ -363,7 +364,7 @@ export default function MapPage() {
           DDVal: "0",
         });
       }
-      
+
       pictureModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -489,6 +490,8 @@ export default function MapPage() {
   });
 
   const startProfileModalAnimations = () => {
+    
+
     if (profileModal) {
       profileModalY.value = withTiming(0, {
         duration: 150,
@@ -513,6 +516,8 @@ export default function MapPage() {
   });
 
   const startSettingsModalAnimations = () => {
+    
+
     if (gearModal) {
       settingsModalY.value = withTiming(0, {
         duration: 150,
@@ -539,13 +544,15 @@ export default function MapPage() {
   });
 
   const startMapSearchModalAnimations = () => {
+    
+
     if (mapSearchModal) {
       mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
     } else {
-      Keyboard.dismiss()
+      Keyboard.dismiss();
       mapSearchModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -566,13 +573,14 @@ export default function MapPage() {
   });
 
   const startdiveSiteSearchModalAnimations = () => {
+
     if (diveSiteSearchModal) {
       diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
     } else {
-      Keyboard.dismiss()
+      Keyboard.dismiss();
       diveSiteSearchModalY.value = withTiming(windowHeight, {
         duration: 150,
         easing: Easing.out(Easing.linear),
@@ -612,6 +620,7 @@ export default function MapPage() {
     startdiveSiteSearchModalAnimations();
   }, [diveSiteSearchModal]);
 
+
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
   const [mapCenter, setMapCenter] = useState({
@@ -635,8 +644,11 @@ export default function MapPage() {
     }
   };
 
+  //Pull tab animations
   const pullTabHeight = useSharedValue(0);
-
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
+  );
   const toVal = scale(25);
 
   const tabPullHeigth = useDerivedValue(() => {
@@ -650,23 +662,41 @@ export default function MapPage() {
   });
 
   const startPullTabAnimation = () => {
-    if (pullTabHeight.value === 0) {
+    if(showFilterer){
+      console.log("open!")
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
+      setGearModal(false);
+      setProfileModal(false);
+      setMapSearchModal(false);
+      setDiveSiteSearchModal(false);
+      setPicAdderModal(false);
+      setDiveSiteAdderModal(false);
+      setTutorialLaunchpadModal(false);
     } else {
+      console.log("close!")
       Keyboard.dismiss();
       pullTabHeight.value = withTiming(0);
       setTextValue("");
       setIsOpen(false);
     }
-    setGearModal(false);
-    setProfileModal(false);
-    setMapSearchModal(false);
-    setDiveSiteSearchModal(false);
-    setPicAdderModal(false);
-    setDiveSiteAdderModal(false);
-    setTutorialLaunchpadModal(false);
+    // if (pullTabHeight.value === 0) {
+    //   pullTabHeight.value = withTiming(1);
+    //   setIsOpen(true);
+    // } else {
+    //   Keyboard.dismiss();
+    //   pullTabHeight.value = withTiming(0);
+    //   setTextValue("");
+    //   setIsOpen(false);
+    // }
+   
   };
+
+
+  useEffect(() => {
+    console.log("work!")
+    startPullTabAnimation();
+  }, [showFilterer]);
 
   const fTabY = useSharedValue(0);
 
@@ -695,30 +725,30 @@ export default function MapPage() {
   };
 
   const onNavigate = () => {
-    if (dragPin){
-    if (chosenModal === "DiveSite") {
-      setAddSiteVals({
-        ...addSiteVals,
-        Latitude: dragPin.lat.toString(),
-        Longitude: dragPin.lng.toString(),
-      });
-      setMapHelper(true);
-      setMasterSwitch(true);
-      setDiveSiteAdderModal(!diveSiteAdderModal);
-      setItterator2(itterator2 + 1);
-      setChosenModal(null);
-    } else if (chosenModal === "Photos") {
-      setPinValues({
-        ...pinValues,
-        Latitude: dragPin.lat.toString(),
-        Longitude: dragPin.lng.toString(),
-      });
-      setMapHelper(true);
-      setMasterSwitch(true);
-      setPicAdderModal(!picAdderModal);
-      setChosenModal(null);
+    if (dragPin) {
+      if (chosenModal === "DiveSite") {
+        setAddSiteVals({
+          ...addSiteVals,
+          Latitude: dragPin.lat.toString(),
+          Longitude: dragPin.lng.toString(),
+        });
+        setMapHelper(true);
+        setMasterSwitch(true);
+        setDiveSiteAdderModal(!diveSiteAdderModal);
+        setItterator2(itterator2 + 1);
+        setChosenModal(null);
+      } else if (chosenModal === "Photos") {
+        setPinValues({
+          ...pinValues,
+          Latitude: dragPin.lat.toString(),
+          Longitude: dragPin.lng.toString(),
+        });
+        setMapHelper(true);
+        setMasterSwitch(true);
+        setPicAdderModal(!picAdderModal);
+        setChosenModal(null);
+      }
     }
-  }
   };
 
   const onShopNavigate = () => {
@@ -811,7 +841,7 @@ export default function MapPage() {
   };
 
   const toggleDiveSites = () => {
-    setDiveSitesTog(!diveSitesTog)
+    setDiveSitesTog(!diveSitesTog);
     setGearModal(false);
     setProfileModal(false);
     setMapSearchModal(false);
@@ -842,7 +872,7 @@ export default function MapPage() {
                         <PhotoFilterer />
                       </Animated.View>
 
-                      <TouchableWithoutFeedback onPress={startPullTabAnimation}>
+                      <TouchableWithoutFeedback onPress={() => setShowFilterer(!showFilterer)}>
                         <View style={styles.pullTab}></View>
                       </TouchableWithoutFeedback>
                     </View>
@@ -1321,7 +1351,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     zIndex: 25,
     left: 0,
-    bottom: windowHeight*0.09,
+    bottom: windowHeight * 0.09,
     borderWidth: 1,
     borderColor: "darkgrey",
   },

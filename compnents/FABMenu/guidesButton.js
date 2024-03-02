@@ -11,6 +11,7 @@ import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SettingsContext } from "../contexts/gearModalContext";
 import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { PullTabContext } from "../contexts/pullTabContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -21,6 +22,9 @@ import TutorialLaunchPadModal from "../modals/tutorialsModal";
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
+  );
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
@@ -37,14 +41,15 @@ export default function GuidesButton() {
   
   useEffect(() => {
     if(tutorialLaunchpadModal){
-      setDiveSiteAdderModal(false)
-      setMapSearchModal(false)
-      setPicAdderModal(false)
-      setProfileModal(false)
-      setGearModal(false)
-      setDiveSiteSearchModal(false)
-      setSiteModal(false)
-      setShopModal(false)
+      setDiveSiteAdderModal(false);
+      setMapSearchModal(false);
+      setPicAdderModal(false);
+      setProfileModal(false);
+      setGearModal(false);
+      setDiveSiteSearchModal(false);
+      setSiteModal(false);
+      setShopModal(false);
+      setShowFilterer(false);
     }
   }, [tutorialLaunchpadModal]);
 

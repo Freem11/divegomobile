@@ -11,6 +11,7 @@ import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SettingsContext } from "../contexts/gearModalContext";
 import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { PullTabContext } from "../contexts/pullTabContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -20,6 +21,9 @@ import {
 
 export default function SettingsButton() {
   const [butState, setButState] = useState(false);
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
+  );
   const { gearModal, setGearModal } = useContext(SettingsContext);
   const { setProfileModal } = useContext(ProfileModalContext);
   const { setPicAdderModal } = useContext(PictureAdderContext);
@@ -33,14 +37,15 @@ export default function SettingsButton() {
   
   useEffect(() => {
     if(gearModal){
-      setDiveSiteAdderModal(false)
-      setTutorialLaunchpadModal(false)
-      setMapSearchModal(false)
-      setPicAdderModal(false)
-      setProfileModal(false)
-      setDiveSiteSearchModal(false)
-      setSiteModal(false)
-      setShopModal(false)
+      setDiveSiteAdderModal(false);
+      setTutorialLaunchpadModal(false);
+      setMapSearchModal(false);
+      setPicAdderModal(false);
+      setProfileModal(false);
+      setDiveSiteSearchModal(false);
+      setSiteModal(false);
+      setShopModal(false);
+      setShowFilterer(false);
     }
   }, [gearModal]);
 
