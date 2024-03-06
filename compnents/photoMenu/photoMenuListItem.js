@@ -24,6 +24,8 @@ import { PictureAdderContext } from "../contexts/picModalContext";
 import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SettingsContext } from "../contexts/gearModalContext";
+import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -31,6 +33,7 @@ const windowHeight = Dimensions.get("window").height;
 const PhotoMenuListItem = (props) => {
   const { pic, setAnimalMultiSelection, animalMultiSelection, selectedID, setSelectedID } = props;
 
+  const { setSiteModal } = useContext(AnchorModalContext);
   const { gearModal, setGearModal } = useContext(SettingsContext);
   const { profileModal, setProfileModal } = useContext(ProfileModalContext);
   const { mapSearchModal, setMapSearchModal } = useContext(
@@ -46,6 +49,7 @@ const PhotoMenuListItem = (props) => {
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
   const [popped, setPopped] = useState(false);
   const thisPopper = useRef();
@@ -93,6 +97,7 @@ const PhotoMenuListItem = (props) => {
     setPicAdderModal(false)
     setDiveSiteAdderModal(false)
     setTutorialLaunchpadModal(false)
+    setSiteModal(false)
 
     if (scaleStart.value === 1){
       let distanceToItemMiddle = (moderateScale(60) - data.nativeEvent.locationX)
@@ -120,10 +125,19 @@ const PhotoMenuListItem = (props) => {
   };
 
   useEffect(() => {
+    if (tiles){
+      pressReleaseAnimations()
+      setTiles(false)
+    }
+  }, [tiles]);
+
+
+  useEffect(() => {
     if(selectedID !== pic.id){
       pressReleaseAnimations()
     }
   }, [selectedID]);
+  
 
   let labelLength = pic.label.length
   let labelFont = (moderateScale(120))/labelLength + 6

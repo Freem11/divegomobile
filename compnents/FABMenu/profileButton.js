@@ -11,6 +11,8 @@ import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SettingsContext } from "../contexts/gearModalContext";
 import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { PullTabContext } from "../contexts/pullTabContext";
+import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -20,6 +22,10 @@ import {
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
+  );
   const { profileModal, setProfileModal } = useContext(
     ProfileModalContext
   );
@@ -36,14 +42,16 @@ export default function ProfileButton() {
   
   useEffect(() => {
     if(profileModal){
-      setDiveSiteAdderModal(false)
-      setTutorialLaunchpadModal(false)
-      setMapSearchModal(false)
-      setPicAdderModal(false)
-      setGearModal(false)
-      setDiveSiteSearchModal(false)
-      setSiteModal(false)
-      setShopModal(false)
+      setDiveSiteAdderModal(false);
+      setTutorialLaunchpadModal(false);
+      setMapSearchModal(false);
+      setPicAdderModal(false);
+      setGearModal(false);
+      setDiveSiteSearchModal(false);
+      setSiteModal(false);
+      setShopModal(false);
+      setShowFilterer(false);
+      setTiles(true);
     }
   }, [profileModal]);
 

@@ -32,6 +32,8 @@ import { PictureAdderContext } from "./contexts/picModalContext";
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 import { SettingsContext } from "./contexts/gearModalContext";
+import { PullTabContext } from "./contexts/pullTabContext";
+import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -108,6 +110,10 @@ export default function Map() {
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
+  );
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -459,6 +465,8 @@ export default function Map() {
     setPicAdderModal(false);
     setDiveSiteAdderModal(false);
     setTutorialLaunchpadModal(false);
+    setShowFilterer(false);
+    setTiles(true);
   };
 
   const [siteCloseState, setSiteCloseState] = useState(false);

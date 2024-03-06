@@ -14,6 +14,8 @@ import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
+import { PullTabContext } from "../contexts/pullTabContext";
+import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -23,6 +25,10 @@ import {
 
 export default function DiveSiteButton() {
   const [butState, setButState] = useState(false);
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
+  const { showFilterer, setShowFilterer } = useContext(
+    PullTabContext
+  );
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
   );
@@ -68,15 +74,18 @@ export default function DiveSiteButton() {
 
   useEffect(() => {
     if (diveSiteAdderModal) {
+      console.log("triggering?")
       setTutorialLaunchpadModal(false);
       setMapSearchModal(false);
       setPicAdderModal(false);
       setProfileModal(false);
       setGearModal(false);
       setDiveSiteSearchModal(false);
-      setSiteModal(false)
-      setShopModal(false)
-    }
+      setSiteModal(false);
+      setShopModal(false);
+      setShowFilterer(false);
+      setTiles(true);
+    } 
   }, [diveSiteAdderModal]);
 
   return (
