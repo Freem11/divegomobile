@@ -1,14 +1,22 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+import {
+  insertPhotoLike,
+  deletePhotoLike,
+  grabPhotoLikeById
+} from "../../supabaseCalls/photoLikeSupabaseCalls";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
 import config from "../../config";
+import notLiked from "../png/Hand-Hollow.png";
+import liked from "../png/Hand-Filled.png";
 
 export default function Picture(props) {
   const { pic } = props;
@@ -31,6 +39,36 @@ export default function Picture(props) {
   const [photoDate, setPhotoDate] = useState(null);
   const [mapLocal, setMapLocal] = useState(null);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
+  const { profile } = useContext(UserProfileContext);
+  const [picLiked, setPicLiked] = useState(false);
+  const [likeData, setLikeData] = useState(null);
+
+  const handleLike = async(picId) => {
+    if(picLiked){
+      deletePhotoLike(likeData[0].id)
+      setPicLiked(false)
+    } else {
+      let newRecord = await insertPhotoLike(profile[0].UserID, pic.id)
+      setPicLiked(true)
+      setLikeData(newRecord)
+    }
+  };
+
+  useEffect(() => {
+    getLikeStatus(profile[0].UserID, pic.id)
+  }, []);
+
+  const getLikeStatus = async (userID, PicID) => {
+    try {
+      const likeStatus = await grabPhotoLikeById(userID, PicID);
+      setLikeData(likeStatus)
+      if(likeStatus.length > 0) {
+        setPicLiked(true)
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   const convertBase64 = (cacheDir) => {
     ImgToBase64.getBase64String(cacheDir)
@@ -109,35 +147,34 @@ export default function Picture(props) {
     setBase64(null);
   }, [base64]);
 
-  
   return (
     <View style={styles.container}>
       <View style={styles.micro}>
-                    <FontAwesome
-                      name="share"
-                      color="white"
-                      size={scale(19)}
-                      onPress={() =>
-                        onShare(
-                          pic.photoFile,
-                          pic.userName,
-                          pic.label,
-                          pic.dateTaken,
-                          pic.latitude,
-                          pic.longitude
-                        )
-                      }
-                      style={styles.share}
-                    />
-                    <FontAwesome
-                      name="flag"
-                      color="maroon"
-                      size={scale(19)}
-                      onPress={() => handleEmail(pic)}
-                      style={styles.flag}
-                    />
-                    <Text style={styles.titleText}>{pic.label}</Text>
-                  </View>
+        <FontAwesome
+          name="share"
+          color="white"
+          size={scale(19)}
+          onPress={() =>
+            onShare(
+              pic.photoFile,
+              pic.userName,
+              pic.label,
+              pic.dateTaken,
+              pic.latitude,
+              pic.longitude
+            )
+          }
+          style={styles.share}
+        />
+        <FontAwesome
+          name="flag"
+          color="maroon"
+          size={scale(19)}
+          onPress={() => handleEmail(pic)}
+          style={styles.flag}
+        />
+        <Text style={styles.titleText}>{pic.label}</Text>
+      </View>
 
       <ImageCasherDynamic
         photoFile={pic.photoFile}
@@ -148,8 +185,20 @@ export default function Picture(props) {
           // backgroundColor: "pink",
         }}
       />
+      <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
+        <Image
+          source={picLiked ? liked : notLiked}
+          style={[
+            styles.likeIcon,
+            {
+              height: scale(22),
+              width: scale(22),
+            },
+          ]}
+        />
+      </TouchableWithoutFeedback>
       <View style={styles.microLow}>
-      <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
+        <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
       </View>
     </View>
   );
@@ -164,7 +213,7 @@ const styles = StyleSheet.create({
     // borderTopRightRadius: scale(15),
     width: "100%",
     marginTop: scale(-15),
-    marginBottom: scale(10)
+    marginBottom: scale(10),
   },
   titleText: {
     // textAlign: "center",
@@ -180,7 +229,7 @@ const styles = StyleSheet.create({
     left: scale(232),
     top: scale(1),
     opacity: 0.8,
-    zIndex: 2
+    zIndex: 2,
   },
   micro: {
     flex: 1,
@@ -197,7 +246,17 @@ const styles = StyleSheet.create({
   flag: {
     left: scale(237),
     top: scale(1),
-    zIndex: 2
+    zIndex: 2,
+  },
+  likeIcon: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    zIndex: 4,
+    right: "3%",
+    bottom: Platform.OS === "ios" ? "3%" : "3%",
+    borderRadius: scale(5),
   },
   microLow: {
     display: "flex",
@@ -214,10 +273,10 @@ const styles = StyleSheet.create({
     paddingLeft: scale(6),
     paddingRight: scale(7),
     zIndex: 2,
-    right: "3%",
+    left: "2%",
     bottom: Platform.OS === "ios" ? "2%" : "2%",
-    borderRadius: scale(5)
-  }, 
+    borderRadius: scale(5),
+  },
   microLow2: {
     display: "flex",
     width: "100%",
