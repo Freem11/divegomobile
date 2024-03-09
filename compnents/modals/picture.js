@@ -6,7 +6,8 @@ import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import {
   insertPhotoLike,
   deletePhotoLike,
-  grabPhotoLikeById
+  grabPhotoLikeById,
+  countPhotoLikeById
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
@@ -42,22 +43,26 @@ export default function Picture(props) {
   const { profile } = useContext(UserProfileContext);
   const [picLiked, setPicLiked] = useState(false);
   const [likeData, setLikeData] = useState(null);
+  const [countOfLikes, setCountOfLikes] = useState(0);
 
   const handleLike = async(picId) => {
     if(picLiked){
       deletePhotoLike(likeData[0].id)
       setPicLiked(false)
+      setCountOfLikes(countOfLikes - 1)
     } else {
       let newRecord = await insertPhotoLike(profile[0].UserID, pic.id)
       setPicLiked(true)
       setLikeData(newRecord)
+      setCountOfLikes(countOfLikes + 1)
     }
   };
 
   useEffect(() => {
     getLikeStatus(profile[0].UserID, pic.id)
+    getLikeCount(profile[0].UserID, pic.id)
   }, []);
-
+  
   const getLikeStatus = async (userID, PicID) => {
     try {
       const likeStatus = await grabPhotoLikeById(userID, PicID);
@@ -65,6 +70,19 @@ export default function Picture(props) {
       if(likeStatus.length > 0) {
         setPicLiked(true)
       }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
+  const getLikeCount = async (userID, PicID) => {
+    try {
+      const likeCount = await countPhotoLikeById(userID, PicID);
+      if(!likeCount){
+        setCountOfLikes(0)
+      } else {
+        setCountOfLikes(likeCount)
+      }   
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
@@ -185,6 +203,11 @@ export default function Picture(props) {
           // backgroundColor: "pink",
         }}
       />
+      {countOfLikes > 0 ?
+      <View style={styles.countIndicator}>
+      <Text style={styles.countDisplay}>{countOfLikes}</Text> 
+      </View>
+      : null}
       <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
         <Image
           source={picLiked ? liked : notLiked}
@@ -255,8 +278,30 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 4,
     right: "3%",
-    bottom: Platform.OS === "ios" ? "3%" : "3%",
+    bottom: Platform.OS === "ios" ? "1.5%" : "1.5%",
     borderRadius: scale(5),
+  },
+  countIndicator: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "left",
+    position: "absolute",
+    zIndex: 4,
+    right: "9%",
+    backgroundColor: "black",
+    width: "10%",
+    height: scale(17),
+    paddingLeft: scale(5),
+    opacity: 0.6,
+    bottom: Platform.OS === "ios" ? "2%" : "2%",
+    borderTopLeftRadius: scale(5),
+    borderBottomLeftRadius: scale(5)
+  },
+  countDisplay: {
+    color: "white",
+    fontWeight: "700",
+    fontSize: scale(14),
+    fontFamily: "Itim_400Regular",
   },
   microLow: {
     display: "flex",

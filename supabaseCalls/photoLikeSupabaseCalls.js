@@ -54,3 +54,20 @@ export const grabPhotoLikeById = async (userId, picId) => {
     return data;
   }
 };
+
+export const countPhotoLikeById = async (userId, picId) => {
+  const { error, count } = await supabase
+    .from("photoLikes")
+    .select("*", {count: "exact"})
+    .eq("userId", userId)
+    .eq("photoId", picId)
+
+  if (error) {
+    console.log("couldn't do it 42,", error);
+    return [];
+  }
+
+  if (count) {
+    return count;
+  }
+};
