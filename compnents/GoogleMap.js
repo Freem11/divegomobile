@@ -465,7 +465,6 @@ export default function Map() {
     setPicAdderModal(false);
     setDiveSiteAdderModal(false);
     setTutorialLaunchpadModal(false);
-    setShowFilterer(false);
     setTiles(true);
   };
 
