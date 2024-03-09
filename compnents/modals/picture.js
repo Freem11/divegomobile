@@ -214,8 +214,8 @@ export default function Picture(props) {
           style={[
             styles.likeIcon,
             {
-              height: scale(22),
-              width: scale(22),
+              height: moderateScale(30),
+              width: moderateScale(30),
             },
           ]}
         />
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     zIndex: 4,
-    right: "3%",
+    right: "2%",
     bottom: Platform.OS === "ios" ? "1.5%" : "1.5%",
     borderRadius: scale(5),
   },
@@ -287,10 +287,10 @@ const styles = StyleSheet.create({
     alignItems: "left",
     position: "absolute",
     zIndex: 4,
-    right: "9%",
+    right: "7%",
     backgroundColor: "black",
     width: "10%",
-    height: scale(17),
+    height: moderateScale(18),
     paddingLeft: scale(5),
     opacity: 0.6,
     bottom: Platform.OS === "ios" ? "2%" : "2%",
@@ -299,8 +299,7 @@ const styles = StyleSheet.create({
   },
   countDisplay: {
     color: "white",
-    fontWeight: "700",
-    fontSize: scale(14),
+    fontSize: scale(8),
     fontFamily: "Itim_400Regular",
   },
   microLow: {
@@ -331,6 +330,7 @@ const styles = StyleSheet.create({
     opacity: 1,
     color: "white",
     fontFamily: "Itim_400Regular",
+    fontSize: scale(8),
     zIndex: 2,
   },
 });
