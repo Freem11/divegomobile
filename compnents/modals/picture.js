@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     alignItems: "left",
     position: "absolute",
     zIndex: 4,
-    right: "7%",
+    right: moderateScale(30),
     backgroundColor: "black",
     width: "10%",
     height: moderateScale(18),
