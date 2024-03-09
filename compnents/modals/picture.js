@@ -16,8 +16,8 @@ import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
 import config from "../../config";
-import notLiked from "../png/Hand-Hollow.png";
-import liked from "../png/Hand-Filled.png";
+import notLiked from "../png/Hand-Hollow-Blue.png";
+import liked from "../png/Hand-Filled-Blue.png";
 
 export default function Picture(props) {
   const { pic } = props;
