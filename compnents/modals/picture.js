@@ -2,6 +2,7 @@ import {
   StyleSheet,
   View,
   Text,
+  TextInput,
   Image,
   TouchableWithoutFeedback,
 } from "react-native";

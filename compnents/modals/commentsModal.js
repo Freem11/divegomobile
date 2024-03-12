@@ -36,6 +36,7 @@ export default function CommentsModal() {
           placeholderTextColor="darkgrey"
           fontSize={moderateScale(16)}
           color={"grey"}
+          multiline={true}
           // onChangeText={(text) =>
           //   setPinValues({ ...pinValues, Latitude: text })
           // }
@@ -85,18 +86,23 @@ const styles = StyleSheet.create({
     height: "15%",
   },
   input: {
+    flex: 1,
     fontFamily: "Itim_400Regular",
     backgroundColor: "white",
     borderRadius: moderateScale(20),
     width: moderateScale(280),
     height: moderateScale(40),
     alignSelf: "center",
+    justifyContent: "center",
     textAlign: "center",
     overflow: "hidden",
     shadowOpacity: 0.3,
     shadowRadius: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 0 },
+    paddingTop: moderateScale(10),
+    paddingRight: moderateScale(15),
+    paddingLeft: moderateScale(15),
     marginRight: moderateScale(5),
     marginLeft: moderateScale(-7)
   },
