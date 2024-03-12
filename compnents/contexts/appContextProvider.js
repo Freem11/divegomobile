@@ -44,6 +44,7 @@ import PictureAdderContextProvider from './picModalContext';
 import DSAdderContextProvider from './DSModalContext';
 import PullTabContextProvider from './pullTabContext';
 import CarrouselTilesContextProvider from './carrouselTilesContext';
+import CommentsModalContextProvider from './commentsModalContext';
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -88,6 +89,7 @@ const providers = [
     DSAdderContextProvider,
     PullTabContextProvider,
     CarrouselTilesContextProvider,
+    CommentsModalContextProvider,
 ]
 
 export const AppContextProvider = combineComponents(...providers);

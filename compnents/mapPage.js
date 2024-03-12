@@ -45,6 +45,7 @@ import { ThirdTutorialModalContext } from "./contexts/thirdTutorialModalContext"
 import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";
+import { CommentsModalContext } from "./contexts/commentsModalContext";
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
@@ -77,6 +78,7 @@ import Animated, {
 } from "react-native-reanimated";
 import TutorialLaunchPadModal from "./modals/tutorialsModal";
 import AnchorModal from "./modals/anchorModal";
+import CommentsModal from "./modals/commentsModal";
 import PhotoBoxModel from "./modals/photoBoxModal";
 import DiveSiteModal from "./modals/diveSiteAdderModal";
 import PicUploadModal from "./modals/picUploaderModal";
@@ -239,6 +241,35 @@ export default function MapPage() {
       }
     }
   }, [siteModal]);
+
+  //Comments Modal Animation
+  const commentsModalY = useSharedValue(windowHeight);
+  const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
+
+  const commentsModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: commentsModalY.value }],
+    };
+  });
+
+  const startCommentsModalAnimations = () => {
+    if (commentsModal) {
+      commentsModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      commentsModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  useEffect(() => {
+    startCommentsModalAnimations();
+  }, [commentsModal]);
+
 
   //Shop Modal Animation
   const shopModalY = useSharedValue(windowHeight);
@@ -490,8 +521,6 @@ export default function MapPage() {
   });
 
   const startProfileModalAnimations = () => {
-    
-
     if (profileModal) {
       profileModalY.value = withTiming(0, {
         duration: 150,
@@ -516,8 +545,6 @@ export default function MapPage() {
   });
 
   const startSettingsModalAnimations = () => {
-    
-
     if (gearModal) {
       settingsModalY.value = withTiming(0, {
         duration: 150,
@@ -544,8 +571,6 @@ export default function MapPage() {
   });
 
   const startMapSearchModalAnimations = () => {
-    
-
     if (mapSearchModal) {
       mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
@@ -573,7 +598,6 @@ export default function MapPage() {
   });
 
   const startdiveSiteSearchModalAnimations = () => {
-
     if (diveSiteSearchModal) {
       diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
@@ -620,7 +644,6 @@ export default function MapPage() {
     startdiveSiteSearchModalAnimations();
   }, [diveSiteSearchModal]);
 
-
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
   const [mapCenter, setMapCenter] = useState({
@@ -646,9 +669,7 @@ export default function MapPage() {
 
   //Pull tab animations
   const pullTabHeight = useSharedValue(0);
-  const { showFilterer, setShowFilterer } = useContext(
-    PullTabContext
-  );
+  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const toVal = scale(25);
 
   const tabPullHeigth = useDerivedValue(() => {
@@ -662,8 +683,8 @@ export default function MapPage() {
   });
 
   const startPullTabAnimation = () => {
-    if(showFilterer){
-      console.log("open!")
+    if (showFilterer) {
+      console.log("open!");
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
       setGearModal(false);
@@ -675,7 +696,7 @@ export default function MapPage() {
       setTutorialLaunchpadModal(false);
       setSiteModal(false);
     } else {
-      console.log("close!")
+      console.log("close!");
       Keyboard.dismiss();
       pullTabHeight.value = withTiming(0);
       setTextValue("");
@@ -690,12 +711,10 @@ export default function MapPage() {
     //   setTextValue("");
     //   setIsOpen(false);
     // }
-   
   };
 
-
   useEffect(() => {
-    console.log("work!")
+    console.log("work!");
     startPullTabAnimation();
   }, [showFilterer]);
 
@@ -873,7 +892,9 @@ export default function MapPage() {
                         <PhotoFilterer />
                       </Animated.View>
 
-                      <TouchableWithoutFeedback onPress={() => setShowFilterer(!showFilterer)}>
+                      <TouchableWithoutFeedback
+                        onPress={() => setShowFilterer(!showFilterer)}
+                      >
                         <View style={styles.pullTab}></View>
                       </TouchableWithoutFeedback>
                     </View>
@@ -1077,6 +1098,10 @@ export default function MapPage() {
                 Lat={selectedDiveSite.Latitude}
                 Lng={selectedDiveSite.Longitude}
               />
+            </Animated.View>
+
+            <Animated.View style={[styles.anchorModal, commentsModalReveal]}>
+              <CommentsModal />
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, shopModalReveal]}>

@@ -1,15 +1,22 @@
-import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import {
   insertPhotoLike,
   deletePhotoLike,
   grabPhotoLikeById,
-  countPhotoLikeById
+  countPhotoLikeById,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
+import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
+import { CommentsModalContext } from "../contexts/commentsModalContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
@@ -18,6 +25,7 @@ import Share from "react-native-share";
 import config from "../../config";
 import notLiked from "../png/Hand-Hollow-Blue.png";
 import liked from "../png/Hand-Filled-Blue.png";
+import bubbles from "../png/bubbles.png";
 
 export default function Picture(props) {
   const { pic } = props;
@@ -41,48 +49,54 @@ export default function Picture(props) {
   const [mapLocal, setMapLocal] = useState(null);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
+  const { setCommentsModal } = useContext(CommentsModalContext);
+
   const [picLiked, setPicLiked] = useState(false);
   const [likeData, setLikeData] = useState(null);
   const [countOfLikes, setCountOfLikes] = useState(0);
 
-  const handleLike = async(picId) => {
-    if(picLiked){
-      deletePhotoLike(likeData[0].id)
-      setPicLiked(false)
-      setCountOfLikes(countOfLikes - 1)
+  const handleCommentModal = () => {
+    setCommentsModal(true);
+  };
+
+  const handleLike = async (picId) => {
+    if (picLiked) {
+      deletePhotoLike(likeData[0].id);
+      setPicLiked(false);
+      setCountOfLikes(countOfLikes - 1);
     } else {
-      let newRecord = await insertPhotoLike(profile[0].UserID, pic.id)
-      setPicLiked(true)
-      setLikeData(newRecord)
-      setCountOfLikes(countOfLikes + 1)
+      let newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
+      setPicLiked(true);
+      setLikeData(newRecord);
+      setCountOfLikes(countOfLikes + 1);
     }
   };
 
   useEffect(() => {
-    getLikeStatus(profile[0].UserID, pic.id)
-    getLikeCount(profile[0].UserID, pic.id)
+    getLikeStatus(profile[0].UserID, pic.id);
+    getLikeCount(pic.id);
   }, []);
-  
+
   const getLikeStatus = async (userID, PicID) => {
     try {
       const likeStatus = await grabPhotoLikeById(userID, PicID);
-      setLikeData(likeStatus)
-      if(likeStatus.length > 0) {
-        setPicLiked(true)
+      setLikeData(likeStatus);
+      if (likeStatus.length > 0) {
+        setPicLiked(true);
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
   };
 
-  const getLikeCount = async (userID, PicID) => {
+  const getLikeCount = async (PicID) => {
     try {
-      const likeCount = await countPhotoLikeById(userID, PicID);
-      if(!likeCount){
-        setCountOfLikes(0)
+      const likeCount = await countPhotoLikeById(PicID);
+      if (!likeCount) {
+        setCountOfLikes(0);
       } else {
-        setCountOfLikes(likeCount)
-      }   
+        setCountOfLikes(likeCount);
+      }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
@@ -166,68 +180,88 @@ export default function Picture(props) {
   }, [base64]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.micro}>
-        <FontAwesome
-          name="share"
-          color="white"
-          size={scale(19)}
-          onPress={() =>
-            onShare(
-              pic.photoFile,
-              pic.userName,
-              pic.label,
-              pic.dateTaken,
-              pic.latitude,
-              pic.longitude
-            )
-          }
-          style={styles.share}
-        />
-        <FontAwesome
-          name="flag"
-          color="maroon"
-          size={scale(19)}
-          onPress={() => handleEmail(pic)}
-          style={styles.flag}
-        />
-        <Text style={styles.titleText}>{pic.label}</Text>
-      </View>
+    <View style={styles.outterBox}>
+      <View style={styles.container}>
+        <View style={styles.micro}>
+          <FontAwesome
+            name="share"
+            color="white"
+            size={scale(19)}
+            onPress={() =>
+              onShare(
+                pic.photoFile,
+                pic.userName,
+                pic.label,
+                pic.dateTaken,
+                pic.latitude,
+                pic.longitude
+              )
+            }
+            style={styles.share}
+          />
+          <FontAwesome
+            name="flag"
+            color="maroon"
+            size={scale(19)}
+            onPress={() => handleEmail(pic)}
+            style={styles.flag}
+          />
+          <Text style={styles.titleText}>{pic.label}</Text>
+        </View>
 
-      <ImageCasherDynamic
-        photoFile={pic.photoFile}
-        id={pic.id}
-        style={{
-          borderRadius: 15,
-          resizeMode: "cover",
-          // backgroundColor: "pink",
-        }}
-      />
-      {countOfLikes > 0 ?
-      <View style={styles.countIndicator}>
-      <Text style={styles.countDisplay}>{countOfLikes}</Text> 
-      </View>
-      : null}
-      <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
-        <Image
-          source={picLiked ? liked : notLiked}
-          style={[
-            styles.likeIcon,
-            {
-              height: moderateScale(30),
-              width: moderateScale(30),
-            },
-          ]}
+        <ImageCasherDynamic
+          photoFile={pic.photoFile}
+          id={pic.id}
+          style={{
+            borderRadius: 15,
+            resizeMode: "cover",
+            // backgroundColor: "pink",
+          }}
         />
-      </TouchableWithoutFeedback>
-      <View style={styles.microLow}>
-        <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
+        {countOfLikes > 0 ? (
+          <View style={styles.countIndicator}>
+            <Text style={styles.countDisplay}>{countOfLikes}</Text>
+          </View>
+        ) : null}
+        <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
+          <Image
+            source={picLiked ? liked : notLiked}
+            style={[
+              styles.likeIcon,
+              {
+                height: moderateScale(30),
+                width: moderateScale(30),
+              },
+            ]}
+          />
+        </TouchableWithoutFeedback>
+        <View style={styles.microLow}>
+          <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
+        </View>
       </View>
+      <TouchableWithoutFeedback onPress={() => handleCommentModal()}>
+        <View style={{flexDirection: "row", marginLeft: moderateScale(20)}}>
+        <Text style={styles.commentPrompt}> Be first to Comment</Text>
+          {/* <Image
+            source={bubbles}
+            style={[
+              {
+                height: moderateScale(16),
+                width: moderateScale(16),
+              },
+            ]}
+          /> */}
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  outterBox: {
+    width: "100%",
+    marginLeft: moderateScale(-10),
+  },
   container: {
     flex: 1,
     flexDirection: "column",
@@ -295,7 +329,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
     bottom: Platform.OS === "ios" ? "2%" : "2%",
     borderTopLeftRadius: scale(5),
-    borderBottomLeftRadius: scale(5)
+    borderBottomLeftRadius: scale(5),
   },
   countDisplay: {
     color: "white",
@@ -332,5 +366,24 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: scale(8),
     zIndex: 2,
+  },
+  commentPrompt: {
+    display: "flex",
+    width: moderateScale(115),
+    height: moderateScale(20),
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    opacity: 1,
+    color: "white",
+    // backgroundColor: "black",
+    fontFamily: "Itim_400Regular",
+    fontSize: scale(10),
+    zIndex: 4,
+    paddingLeft: moderateScale(10),
+    paddingRight: moderateScale(2),
+    marginTop: moderateScale(0),
+    marginBottom: moderateScale(10),
+    marginLeft: moderateScale(0),
   },
 });
