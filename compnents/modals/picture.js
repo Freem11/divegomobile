@@ -15,6 +15,7 @@ import {
   grabPhotoLikeById,
   countPhotoLikeById,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
+import { countPhotoCommentById } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { CommentsModalContext } from "../contexts/commentsModalContext";
@@ -57,10 +58,24 @@ export default function Picture(props) {
   const [picLiked, setPicLiked] = useState(false);
   const [likeData, setLikeData] = useState(null);
   const [countOfLikes, setCountOfLikes] = useState(0);
+  const [countOfComments, setCountOfComments] = useState(0);
 
   const handleCommentModal = () => {
     setCommentsModal(true);
     setSelectedPicture(pic);
+  };
+
+  const getCommentCount = async (PicID) => {
+    try {
+      const commentCount = await countPhotoCommentById(PicID);
+      if (!commentCount) {
+        setCountOfComments(0);
+      } else {
+        setCountOfComments(commentCount);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
   };
 
   const handleLike = async (picId) => {
@@ -79,6 +94,7 @@ export default function Picture(props) {
   useEffect(() => {
     getLikeStatus(profile[0].UserID, pic.id);
     getLikeCount(pic.id);
+    getCommentCount(pic.id);
   }, []);
 
   const getLikeStatus = async (userID, PicID) => {
@@ -253,7 +269,7 @@ export default function Picture(props) {
             zIndex: 4,
           }}
         >
-          <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}> Be first to Comment</Text>
+          <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}>{countOfComments < 1 ? 'Be first to Comment' : `Comment / View all ${countOfComments} Comments`} </Text>
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -372,7 +388,7 @@ const styles = StyleSheet.create({
   },
   commentPrompt: {
     display: "flex",
-    width: moderateScale(150),
+    width: moderateScale(200),
     height: scale(20),
     justifyContent: "center",
     alignItems: "center",
