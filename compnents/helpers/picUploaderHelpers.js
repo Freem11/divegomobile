@@ -17,10 +17,10 @@ function getToday(DateVal) {
 }
 
 function getDate(DateVal) {
-  
-  let yr0 = DateVal.substing(0, 4);
-  let mth0 = DateVal.substing(5, 8);
-  let dy0 = DateVal.substing(8, 11);
+
+  let yr0 = strDate.substing(0, 4);
+  let mth0 = strDate.substing(5, 8);
+  let dy0 = strDate.substing(8, 11);
 
   let formattedDate = yr0 + "-" + mth0 + "-" + dy0;
 

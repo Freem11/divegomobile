@@ -39,11 +39,10 @@ export const deletePhotoComment = async (id) => {
   }
 };
 
-export const grabPhotoCommentById = async (userId, picId) => {
+export const grabPhotoCommentsByPicId = async (picId) => {
   const { data, error } = await supabase
     .from("photoComments")
     .select()
-    .eq("userId", userId)
     .eq("photoId", picId)
 
   if (error) {

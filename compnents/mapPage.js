@@ -1100,8 +1100,11 @@ export default function MapPage() {
               />
             </Animated.View>
 
-            <Animated.View style={[styles.anchorModal, commentsModalReveal]}>
+            <Animated.View style={[styles.commentScreen, commentsModalReveal]}>
+              <View style={styles.commentsModal}>
               <CommentsModal />
+              </View>
+            
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, shopModalReveal]}>
@@ -1402,6 +1405,28 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     zIndex: 25,
     left: 0,
+    borderWidth: 1,
+    borderColor: "darkgrey",
+  },
+  commentScreen: {
+    position: "absolute",
+    height: windowHeight,
+    width: windowWidth,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 25,
+    left: 0,
+  },
+  commentsModal: {
+    position: "absolute",
+    height: windowHeight - windowHeight * 0.4,
+    width: windowWidth - windowWidth * 0.1,
+    marginLeft: windowWidth * 0.05,
+    backgroundColor: "#538bdb",
+    borderRadius: 15,
+    zIndex: 27,
+    left: 0,
+    opacity: 1,
+    bottom: windowHeight * 0.04,
     borderWidth: 1,
     borderColor: "darkgrey",
   },

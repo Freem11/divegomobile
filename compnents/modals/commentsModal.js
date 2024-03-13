@@ -17,31 +17,81 @@ import Animated, {
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
 import bubbles from "../png/bubbles.png";
+import { UserProfileContext } from "../contexts/userProfileContext";
+import { SelectedPictureContext } from "../contexts/selectedPictureContext";
+import { CommentsModalContext } from "../contexts/commentsModalContext";
+import {
+  insertPhotoComment,
+  grabPhotoCommentsByPicId,
+} from "../../supabaseCalls/photoCommentSupabaseCalls";
+import { ScrollView } from "react-native-gesture-handler";
+import CommentListItem from "../commentListItem/commentListItem";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function CommentsModal() {
-  const [tutorialsCloseState, setTutorialsCloseState] = useState(false);
+  const [commentContent, setCommentContent] = useState(null);
+  const [listOfComments, setListOfComments] = useState(null);
+  const { profile } = useContext(UserProfileContext);
+  const { selectedPicture, setSelectedPicture } = useContext(
+    SelectedPictureContext
+  );
+  const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
+
+  useEffect(() => {
+    if (selectedPicture) {
+      getAllPictureComments(selectedPicture.id);
+    }
+  }, [commentsModal]);
+
+  const getAllPictureComments = async (picId) => {
+    let picComments = await grabPhotoCommentsByPicId(picId);
+    setListOfComments(picComments);
+  };
+
+  console.log("comments?", listOfComments);
+
+  const handleCommentInsert = async () => {
+    if (commentContent !== null || commentContent !== " ") {
+      let newComment = await insertPhotoComment(
+        profile[0].UserID,
+        selectedPicture.id,
+        commentContent
+      );
+      setCommentContent(null);
+      getAllPictureComments(selectedPicture.id);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.commentListContainer}></View>
+      <View style={styles.commentHeader}>
+      <TouchableWithoutFeedback onPress={() => setCommentsModal(false)}>
+          <View style={styles.tab}></View>
+        </TouchableWithoutFeedback>
+        <Text style={styles.headerText}>Comments</Text>
+      </View>
+
+      <ScrollView style={styles.commentListContainer}>
+        {listOfComments &&
+          listOfComments.map((commentDeets) => {
+            return <CommentListItem commentDetails={commentDeets} />;
+          })}
+      </ScrollView>
 
       <View style={styles.commentEntryContainer}>
         <TextInput
           style={styles.input}
-          // value={pinValues.Latitude}
+          value={commentContent}
           placeholder={"Blow some bubbles"}
           placeholderTextColor="darkgrey"
           fontSize={moderateScale(16)}
           color={"grey"}
           multiline={true}
-          // onChangeText={(text) =>
-          //   setPinValues({ ...pinValues, Latitude: text })
-          // }
+          onChangeText={(text) => setCommentContent(text)}
         ></TextInput>
-        <TouchableWithoutFeedback onPress={() => null}>
+        <TouchableWithoutFeedback onPress={() => handleCommentInsert()}>
           <Image
             source={bubbles}
             style={[
@@ -70,12 +120,27 @@ const styles = StyleSheet.create({
     marginLeft: "1%",
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
+  commentHeader: {
+    alignItems: "center"
+  },
+  tab: {
+    backgroundColor: "white",
+    height: moderateScale(8),
+    width: moderateScale(70),
+    borderRadius: moderateScale(5)
+  },
+  headerText: {
+    color: "white",
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: 26,
+    marginBottom: "2%"
+  },
   commentListContainer: {
     // backgroundColor: "pink",
     width: "100%",
     height: "85%",
     borderBottomColor: "lightgrey",
-    borderBottomWidth: 0.2
+    borderBottomWidth: 0.2,
   },
   commentEntryContainer: {
     flexDirection: "row",
@@ -104,6 +169,6 @@ const styles = StyleSheet.create({
     paddingRight: moderateScale(15),
     paddingLeft: moderateScale(15),
     marginRight: moderateScale(5),
-    marginLeft: moderateScale(-7)
+    marginLeft: moderateScale(-7),
   },
 });

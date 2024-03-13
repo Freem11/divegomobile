@@ -18,6 +18,7 @@ import {
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { CommentsModalContext } from "../contexts/commentsModalContext";
+import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
@@ -51,6 +52,7 @@ export default function Picture(props) {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
   const { setCommentsModal } = useContext(CommentsModalContext);
+  const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const [picLiked, setPicLiked] = useState(false);
   const [likeData, setLikeData] = useState(null);
@@ -58,6 +60,7 @@ export default function Picture(props) {
 
   const handleCommentModal = () => {
     setCommentsModal(true);
+    setSelectedPicture(pic);
   };
 
   const handleLike = async (picId) => {
@@ -240,7 +243,7 @@ export default function Picture(props) {
           <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
         </View>
       </View>
-      <TouchableWithoutFeedback onPress={() => handleCommentModal()}>
+      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)}>
         <View style={{flexDirection: "row", marginLeft: moderateScale(20)}}>
         <Text style={styles.commentPrompt}> Be first to Comment</Text>
           {/* <Image

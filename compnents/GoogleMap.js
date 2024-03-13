@@ -35,6 +35,7 @@ import { SettingsContext } from "./contexts/gearModalContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
 import { CommentsModalContext } from "./contexts/commentsModalContext";
+import { SelectedPictureContext } from "./contexts/selectedPictureContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
@@ -92,6 +93,8 @@ export default function Map() {
 
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setCommentsModal } = useContext(CommentsModalContext);
+  const { setSelectedPicture } = useContext(SelectedPictureContext);
+
   const { shopModal, setShopModal } = useContext(ShopModalContext);
 
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
@@ -469,6 +472,7 @@ export default function Map() {
     setTutorialLaunchpadModal(false);
     setCommentsModal(false);
     setTiles(true);
+    setSelectedPicture(null);
   };
 
   const [siteCloseState, setSiteCloseState] = useState(false);
