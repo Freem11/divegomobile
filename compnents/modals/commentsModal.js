@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: "white",
     fontFamily: "PatrickHand_400Regular",
-    fontSize: 26,
+    fontSize: moderateScale(26),
     marginBottom: "2%"
   },
   commentListContainer: {

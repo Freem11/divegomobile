@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 // import { ProfileModalContext } from "../contexts/profileModalContext";
 
 export default function CommentListItem(props) {
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#537bdb",
     justifyContent: "center",
-    borderRadius: 10,
+    borderRadius: moderateScale(10),
     width: "98%",
     marginLeft: "1%",
     marginTop: "2%",
@@ -40,17 +40,17 @@ const styles = StyleSheet.create({
   },
   userTxt: {
     fontFamily: "Itim_400Regular",
-    fontSize: 13,
+    fontSize: moderateScale(13),
     color: "black"
   },
   dateTxt: {
     fontFamily: "Itim_400Regular",
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: "lightgrey"
   },
   contentTxt: {
     fontFamily: "Itim_400Regular",
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: "black"
   },
 });

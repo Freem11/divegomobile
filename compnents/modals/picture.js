@@ -59,6 +59,7 @@ export default function Picture(props) {
   const [countOfLikes, setCountOfLikes] = useState(0);
 
   const handleCommentModal = () => {
+    console.log("wtf");
     setCommentsModal(true);
     setSelectedPicture(pic);
   };
@@ -243,18 +244,17 @@ export default function Picture(props) {
           <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
         </View>
       </View>
-      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)}>
-        <View style={{flexDirection: "row", marginLeft: moderateScale(20)}}>
-        <Text style={styles.commentPrompt}> Be first to Comment</Text>
-          {/* <Image
-            source={bubbles}
-            style={[
-              {
-                height: moderateScale(16),
-                width: moderateScale(16),
-              },
-            ]}
-          /> */}
+      <TouchableWithoutFeedback
+        onPress={() => handleCommentModal(pic)}>
+        <View
+         onPress={() => handleCommentModal(pic)}
+          style={{
+            flexDirection: "row",
+            marginLeft: moderateScale(20),
+            zIndex: 4,
+          }}
+        >
+          <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}> Be first to Comment</Text>
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -373,8 +373,8 @@ const styles = StyleSheet.create({
   },
   commentPrompt: {
     display: "flex",
-    width: moderateScale(115),
-    height: moderateScale(20),
+    width: moderateScale(150),
+    height: scale(20),
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
