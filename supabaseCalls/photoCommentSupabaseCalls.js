@@ -44,6 +44,7 @@ export const grabPhotoCommentsByPicId = async (picId) => {
     .from("photoComments")
     .select()
     .eq("photoId", picId)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.log("couldn't do it 52,", error);

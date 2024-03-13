@@ -49,9 +49,7 @@ export default function CommentsModal() {
     let picComments = await grabPhotoCommentsByPicId(picId);
     setListOfComments(picComments);
   };
-
-  console.log("comments?", listOfComments);
-
+  
   const handleCommentInsert = async () => {
     if (commentContent !== null || commentContent !== " ") {
       let newComment = await insertPhotoComment(
@@ -76,7 +74,7 @@ export default function CommentsModal() {
       <ScrollView style={styles.commentListContainer}>
         {listOfComments &&
           listOfComments.map((commentDeets) => {
-            return <CommentListItem commentDetails={commentDeets} />;
+            return <CommentListItem commentDetails={commentDeets} key={commentDeets.id}/>;
           })}
       </ScrollView>
 

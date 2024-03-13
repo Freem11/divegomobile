@@ -59,7 +59,6 @@ export default function Picture(props) {
   const [countOfLikes, setCountOfLikes] = useState(0);
 
   const handleCommentModal = () => {
-    console.log("wtf");
     setCommentsModal(true);
     setSelectedPicture(pic);
   };
