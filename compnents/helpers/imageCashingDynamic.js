@@ -34,14 +34,6 @@ export default function ImageCasherDynamic(Props) {
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
-  // const callback = (downloadProgress) => {
-  //   const progress =
-  //     downloadProgress.totalBytesWritten /
-  //     downloadProgress.totalBytesExpectedToWrite;
-  //   console.log("callback?", progress);
-  //   setIsDownloaded(progress);
-  // };
-
   async function findImageInCache(fileName) {
     try {
       let info = await FileSystem.getInfoAsync(fileName);
@@ -81,16 +73,13 @@ export default function ImageCasherDynamic(Props) {
   useEffect(() => {
     async function loadImage() {
       let imageExisitsInCache = await findImageInCache(cacheDir);
-      // console.log("this?", imageExisitsInCache)
       if (imageExisitsInCache.exists) {
         setPicUri(cacheDir);
       } else {
         let cashing = await cacheImage(image.uri, cacheDir);
-        // console.log("that?", cashing)
         if (cashing.cached) {
           setPicUri(cashing.path);
         } else {
-          // console.log("main", cashing.cached)
           setPicUri(test.uri);
         }
       }

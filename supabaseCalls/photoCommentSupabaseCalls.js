@@ -1,9 +1,6 @@
 import { supabase } from "../supabase";
 
 export const insertPhotoComment = async (userId, photoId, comment) => {
-
-  // console.log("photo waits gets ", values)
-
   const { data, error } = await supabase
   .from("photoComments")
   .insert([
@@ -40,11 +37,9 @@ export const deletePhotoComment = async (id) => {
 };
 
 export const grabPhotoCommentsByPicId = async (picId) => {
-  const { data, error } = await supabase
-    .from("photoComments")
-    .select()
-    .eq("photoId", picId)
-    .order("created_at", { ascending: false });
+  const { data, error } = await supabase.rpc("get_comments_with_user", {
+    photoid: picId
+  });
 
   if (error) {
     console.log("couldn't do it 52,", error);

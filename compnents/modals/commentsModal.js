@@ -49,7 +49,7 @@ export default function CommentsModal() {
     let picComments = await grabPhotoCommentsByPicId(picId);
     setListOfComments(picComments);
   };
-  
+
   const handleCommentInsert = async () => {
     if (commentContent !== null || commentContent !== " ") {
       let newComment = await insertPhotoComment(
@@ -64,17 +64,21 @@ export default function CommentsModal() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.commentHeader}>
       <TouchableWithoutFeedback onPress={() => setCommentsModal(false)}>
+        <View style={styles.commentHeader}>
           <View style={styles.tab}></View>
-        </TouchableWithoutFeedback>
-        <Text style={styles.headerText}>Comments</Text>
-      </View>
-
+          <Text style={styles.headerText}>Comments</Text>
+        </View>
+      </TouchableWithoutFeedback>
       <ScrollView style={styles.commentListContainer}>
         {listOfComments &&
           listOfComments.map((commentDeets) => {
-            return <CommentListItem commentDetails={commentDeets} key={commentDeets.id}/>;
+            return (
+              <CommentListItem
+                commentDetails={commentDeets}
+                key={commentDeets.id}
+              />
+            );
           })}
       </ScrollView>
 
@@ -119,19 +123,19 @@ const styles = StyleSheet.create({
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
   commentHeader: {
-    alignItems: "center"
+    alignItems: "center",
   },
   tab: {
     backgroundColor: "white",
     height: moderateScale(8),
     width: moderateScale(70),
-    borderRadius: moderateScale(5)
+    borderRadius: moderateScale(5),
   },
   headerText: {
     color: "white",
     fontFamily: "PatrickHand_400Regular",
     fontSize: moderateScale(26),
-    marginBottom: "2%"
+    marginBottom: "2%",
   },
   commentListContainer: {
     // backgroundColor: "pink",
@@ -158,15 +162,16 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     textAlign: "center",
+    verticalAlign: "middle",
     overflow: "hidden",
     shadowOpacity: 0.3,
     shadowRadius: 5,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 0 },
-    paddingTop: moderateScale(10),
+    shadowOffset: { width: 2, height: 2 },
     paddingRight: moderateScale(15),
     paddingLeft: moderateScale(15),
     marginRight: moderateScale(5),
     marginLeft: moderateScale(-7),
+    paddingTop: Platform.OS === "ios" ? moderateScale(10) : moderateScale(0),
   },
 });

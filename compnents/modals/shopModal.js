@@ -61,7 +61,6 @@ export default function ShopModal(props) {
 
   const getItineraries = async (IdNum) => {
     try {
-      console.log(IdNum);
       const itins = await itineraries(IdNum);
       if (itins.length > 0) {
         setItineraryList(itins);

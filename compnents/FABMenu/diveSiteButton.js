@@ -74,7 +74,6 @@ export default function DiveSiteButton() {
 
   useEffect(() => {
     if (diveSiteAdderModal) {
-      console.log("triggering?")
       setTutorialLaunchpadModal(false);
       setMapSearchModal(false);
       setPicAdderModal(false);

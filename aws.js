@@ -7,8 +7,6 @@ const awsAccountId = config.AWS_R2_ACCOUNT_ID
 const awsAccessKeyId = config.AWS_R2_ACCESS_KEY_ID
 const awsSecretKey = config.AWS_R2_SECRET_KEY
 
-console.log("AWS?", "account", awsAccountId, "keyid", awsAccessKeyId, "secret", awsSecretKey)
-
 export const aws3 = new S3Client({
     region: "auto",
     endpoint: `https://${awsAccountId}.r2.cloudflarestorage.com`,

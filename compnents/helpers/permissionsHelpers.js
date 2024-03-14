@@ -6,15 +6,8 @@ let foregroundSubscription = null;
 
 TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
   if (error) {
-    console.log("error", error);
+    console.error("error", error);
     return;
-  }
-  if (data) {
-    const { locations } = data;
-    const location = locations[0];
-    if (location) {
-      console.log("location", location.coords);
-    }
   }
 });
 
@@ -30,7 +23,6 @@ const requestPermissions = async () => {
 const requestHighAccuracy = async () => {
   try {
     const accurate = await Location.enableNetworkProviderAsync();
-    // console.log("que?", accurate)
     return accurate.status
   } catch (e) {
     console.log({ title: "Error", message: e.message });
@@ -44,7 +36,7 @@ const getCurrentCoordinates = async() => {
   if (!granted) {
     requestPermissions();
     requestHighAccuracy();
-    console.log("location tracking denied");
+    console.warn("location tracking denied");
   }
   foregroundSubscription?.remove();
 
@@ -53,7 +45,7 @@ const getCurrentCoordinates = async() => {
   //  console.log("accurate to:", location)
    return location;
   } catch (e) {
-    console.log("Location tracking error");
+    console.warn("Location tracking error");
   }
 };
 

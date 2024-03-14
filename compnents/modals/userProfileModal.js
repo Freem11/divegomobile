@@ -45,8 +45,6 @@ export default function UserProfileModal() {
 
   const callback = downloadProgress => {
     const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
-      // console.log("callback?", progress)
-      // setIsDownloaded(progress)
   };
 
   useEffect(() => {
@@ -54,16 +52,13 @@ export default function UserProfileModal() {
 
     async function loadImage() {
       let imageExisitsInCache = await findImageInCache(cacheDir);
-      // console.log("this?", imageExisitsInCache)
         if (imageExisitsInCache.exists) {
           setPicUri(cacheDir);
         } else {
           let cashing = await cacheImage(image.uri, cacheDir, callback);
-          // console.log("that?", cashing)
           if (cashing.cached) {
             setPicUri(cashing.path);
           } else {
-            // console.log("main", cashing.cached)
             setPicUri(image.uri);
           }
         }

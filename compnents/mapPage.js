@@ -684,7 +684,6 @@ export default function MapPage() {
 
   const startPullTabAnimation = () => {
     if (showFilterer) {
-      console.log("open!");
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
       setGearModal(false);
@@ -696,7 +695,6 @@ export default function MapPage() {
       setTutorialLaunchpadModal(false);
       setSiteModal(false);
     } else {
-      console.log("close!");
       Keyboard.dismiss();
       pullTabHeight.value = withTiming(0);
       setTextValue("");
@@ -714,7 +712,6 @@ export default function MapPage() {
   };
 
   useEffect(() => {
-    console.log("work!");
     startPullTabAnimation();
   }, [showFilterer]);
 
