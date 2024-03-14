@@ -1,7 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { scale, moderateScale } from "react-native-size-matters";
-// import { ProfileModalContext } from "../contexts/profileModalContext";
+import { moderateScale } from "react-native-size-matters";
 
 export default function CommentListItem(props) {
   const { commentDetails } = props;
@@ -13,7 +12,7 @@ export default function CommentListItem(props) {
   return (
     <View style={styles.container} key={commentDetails.id}>
       <View style={styles.topBox}>
-        <Text style={styles.userTxt}>{commentDetails.userId}</Text>
+        <Text style={styles.userTxt}>{commentDetails.username}</Text>
         <Text style={styles.dateTxt}>{newDate}</Text>
       </View>
 
