@@ -5,8 +5,6 @@ import { moderateScale } from "react-native-size-matters";
 export default function CommentListItem(props) {
   const { commentDetails } = props;
 
-  console.log("stuff", commentDetails);
-
   let newDate = commentDetails.created_at.substring(0, 10);
 
   return (

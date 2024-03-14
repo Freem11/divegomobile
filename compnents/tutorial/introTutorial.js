@@ -451,7 +451,6 @@ export default function IntroTutorial() {
       questionButtonY.value = withTiming(windowHeight * 0.4);
     }
 
-    console.log("i am", itterator);
     if (itterator === 6) {
       questionButtonY.value = withTiming(scale(-1000));
       picX.value = withSpring(0);

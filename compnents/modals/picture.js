@@ -267,6 +267,7 @@ export default function Picture(props) {
             flexDirection: "row",
             marginLeft: moderateScale(20),
             zIndex: 4,
+
           }}
         >
           <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}>{countOfComments < 1 ? 'Be first to Comment' : `Comment / View all ${countOfComments} Comments`} </Text>
@@ -398,11 +399,11 @@ const styles = StyleSheet.create({
     // backgroundColor: "black",
     fontFamily: "Itim_400Regular",
     fontSize: scale(10),
-    zIndex: 4,
+    zIndex: 10,
     paddingLeft: moderateScale(10),
     paddingRight: moderateScale(2),
     marginTop: moderateScale(0),
-    marginBottom: moderateScale(10),
+    marginBottom: moderateScale(0),
     marginLeft: moderateScale(0),
   },
 });
