@@ -54,7 +54,11 @@ import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
 import { diveSites } from "../supabaseCalls/diveSiteSupabaseCalls";
-import { multiHeatPoints } from "../supabaseCalls/heatPointSupabaseCalls";
+import {
+  multiHeatPoints,
+  getHeatPointsWithUser,
+  getHeatPointsWithUserEmpty,
+} from "../supabaseCalls/heatPointSupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -197,26 +201,61 @@ export default function Map() {
           }
 
           try {
-            const AmericanHeatPoints = await multiHeatPoints(
-              {
+            let AmericanHeatPoints;
+            let AsianHeatPoints;
+            if (animalMultiSelection.length === 0) {
+              AmericanHeatPoints = await getHeatPointsWithUserEmpty({
+                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: -180,
                 maxLng: settedBoundaries[2],
-              },
-              animalMultiSelection,
-              myCreatures
-            );
-            const AsianHeatPoints = await multiHeatPoints(
-              {
+              });
+              AsianHeatPoints = await getHeatPointsWithUserEmpty({
+                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
                 maxLng: 180,
-              },
-              animalMultiSelection,
-              myCreatures
-            );
+              });
+            } else {
+              AmericanHeatPoints = await getHeatPointsWithUser({
+                myCreatures,
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: -180,
+                maxLng: settedBoundaries[2],
+                animalMultiSelection,
+              });
+              AsianHeatPoints = await getHeatPointsWithUser({
+                myCreatures,
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
+                maxLng: 180,
+                animalMultiSelection,
+              });
+            }
+            // const AmericanHeatPoints = await multiHeatPoints(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: -180,
+            //     maxLng: settedBoundaries[2],
+            //   },
+            //   animalMultiSelection,
+            //   myCreatures
+            // );
+            // const AsianHeatPoints = await multiHeatPoints(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: settedBoundaries[0],
+            //     maxLng: 180,
+            //   },
+            //   animalMultiSelection,
+            //   myCreatures
+            // );
 
             let heatPointList = [...AsianHeatPoints, ...AmericanHeatPoints];
             setNewHeat(formatHeatVals(heatPointList));
@@ -241,16 +280,35 @@ export default function Map() {
           }
 
           try {
-            const heatPointList = await multiHeatPoints(
-              {
+            let heatPointList;
+            if (animalMultiSelection.length === 0) {
+              heatPointList = await getHeatPointsWithUserEmpty({
+                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
                 maxLng: settedBoundaries[2],
-              },
-              animalMultiSelection,
-              myCreatures
-            );
+              });
+            } else {
+              heatPointList = await getPhotosWithUser({
+                animalMultiSelection,
+                myCreatures,
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
+                maxLng: settedBoundaries[2],
+              });
+            }
+            // const heatPointList = await multiHeatPoints(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: settedBoundaries[0],
+            //     maxLng: settedBoundaries[2],
+            //   },
+            //   animalMultiSelection,
+            //   myCreatures
+            // );
 
             setNewHeat(formatHeatVals(heatPointList));
           } catch (e) {

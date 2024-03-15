@@ -143,8 +143,6 @@ export default function AnchorModal(props) {
     }
   };
 
-  console.log("This", anchorPics)
-
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
     filterAnchorPhotos();

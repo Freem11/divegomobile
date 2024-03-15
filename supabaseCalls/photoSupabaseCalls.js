@@ -30,9 +30,9 @@ export const insertphoto = async (values, monthID) => {
     console.log("couldn't do it 20,", error);
   }
 
-  if (data) {
-    console.log(data);
-  }
+  // if (data) {
+  //   console.log(data);
+  // }
 };
 
 export const getAnimalNamesThatFit = async (value) => {
@@ -163,7 +163,7 @@ export const getPhotosforMapArea = async (value, myCreatures) => {
     .from("photos")
     .select()
     .ilike("label", "%" + value.animal + "%")
-    .ilike("userName", "%" + myCreatures + "%")
+    .ilike("UserID", "%" + myCreatures + "%")
     .gte("latitude", value.minLat)
     .gte("longitude", value.minLng)
     .lte("latitude", value.maxLat)
@@ -215,7 +215,6 @@ export const getPhotosWithUserEmpty = async (values) => {
   }
 
   if (data) {
-    console.log(data)
     return data;
   }
 };

@@ -31,9 +31,9 @@ export const deletePhotoComment = async (id) => {
     return [];
   }
 
-  if (data) {
-    console.log(data);
-  }
+  // if (data) {
+  //   console.log(data);
+  // }
 };
 
 export const grabPhotoCommentsByPicId = async (picId) => {

@@ -355,7 +355,7 @@ export default function MapPage() {
       });
     } else {
       Keyboard.dismiss();
-      console.log(masterSwitch);
+      // console.log(masterSwitch);
       if (masterSwitch) {
         setAddSiteVals({
           ...addSiteVals,
@@ -396,7 +396,7 @@ export default function MapPage() {
         easing: Easing.out(Easing.linear),
       });
     } else {
-      console.log(masterSwitch);
+      // console.log(masterSwitch);
       Keyboard.dismiss();
       if (masterSwitch) {
         setPinValues({

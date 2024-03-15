@@ -36,9 +36,9 @@ export const insertPhotoWaits = async (values) => {
     console.log("couldn't do it 31,", error);
   }
 
-  if (data) {
-    console.log(data);
-  }
+  // if (data) {
+  //   console.log(data);
+  // }
 };
 
 export const grabPhotoWaitById = async (id) => {
@@ -68,7 +68,7 @@ export const deletePhotoWait = async (id) => {
     return [];
   }
 
-  if (data) {
-    console.log(data);
-  }
+  // if (data) {
+  //   console.log(data);
+  // }
 };

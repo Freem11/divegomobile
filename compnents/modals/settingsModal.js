@@ -156,10 +156,11 @@ export default function SettingsModal() {
   const toggleCHSwitch = () =>
     setCreaturesIsEnabled((previousState) => !previousState);
 
+    
   useEffect(() => {
     if (diveSitesIsEnabled) {
-      setMyDiveSites(profile[0].UserName);
-      AsyncStorage.setItem("myDiveSites", JSON.stringify(profile[0].UserName));
+      setMyDiveSites(profile[0].UserID);
+      AsyncStorage.setItem("myDiveSites", JSON.stringify(profile[0].UserID));
     } else {
       setMyDiveSites("");
       AsyncStorage.removeItem("myDiveSites");
@@ -168,8 +169,8 @@ export default function SettingsModal() {
 
   useEffect(() => {
     if (creaturesIsEnabled) {
-      setMyCreatures(profile[0].UserName);
-      AsyncStorage.setItem("myCreatures", JSON.stringify(profile[0].UserName));
+      setMyCreatures(profile[0].UserID);
+      AsyncStorage.setItem("myCreatures", JSON.stringify(profile[0].UserID));
     } else {
       setMyCreatures("");
       AsyncStorage.removeItem("myCreatures");
