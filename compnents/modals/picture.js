@@ -37,7 +37,7 @@ export default function Picture(props) {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
-      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
+      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photofile} `,
       body:
         "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
@@ -156,7 +156,7 @@ export default function Picture(props) {
       setUserN("an unnamed diver");
     }
 
-    let temp = photoFile.split("/");
+    let temp = photofile.split("/");
     let lastIndex = temp.length - 1;
     let fileName = temp[lastIndex];
     let cacheDir = FileSystem.cacheDirectory + fileName;
@@ -209,8 +209,8 @@ export default function Picture(props) {
             size={scale(19)}
             onPress={() =>
               onShare(
-                pic.photoFile,
-                pic.userName,
+                pic.photofile,
+                pic.newuserame,
                 pic.label,
                 pic.dateTaken,
                 pic.latitude,
@@ -230,7 +230,7 @@ export default function Picture(props) {
         </View>
 
         <ImageCasherDynamic
-          photoFile={pic.photoFile}
+          photoFile={pic.photofile}
           id={pic.id}
           style={{
             borderRadius: 15,
@@ -256,7 +256,7 @@ export default function Picture(props) {
           />
         </TouchableWithoutFeedback>
         <View style={styles.microLow}>
-          <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
+          <Text style={styles.microLow2}> Added by: {pic.newusername}</Text>
         </View>
       </View>
       <TouchableWithoutFeedback

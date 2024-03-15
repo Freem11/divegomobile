@@ -13,6 +13,8 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   getPhotosforAnchor,
   getPhotosforAnchorMulti,
+  getPhotosWithUser,
+  getPhotosWithUserEmpty
 } from "../../supabaseCalls/photoSupabaseCalls";
 import { getDiveSiteByName } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import Animated, {
@@ -90,14 +92,25 @@ export default function AnchorModal(props) {
     );
 
     try {
-      const photos = await getPhotosforAnchorMulti({
-        animalMultiSelection,
-        myCreatures,
-        minLat,
-        maxLat,
-        minLng,
-        maxLng,
-      });
+      let photos;
+      if(animalMultiSelection.length === 0){
+         photos = await getPhotosWithUserEmpty({
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        })
+      } else {
+         photos = await getPhotosWithUser({
+          animalMultiSelection,
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        })
+      }
       if (photos) {
         setAnchorPics(photos);
         let count = 0;
@@ -129,6 +142,8 @@ export default function AnchorModal(props) {
       console.log({ title: "Error", message: e.message });
     }
   };
+
+  console.log("This", anchorPics)
 
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
@@ -364,7 +379,7 @@ export default function AnchorModal(props) {
           {anchorPics &&
             anchorPics.map((pic) => {
               return (
-                <TouchableWithoutFeedback key={pic.id} onPress={() => togglePhotoBoxModal(pic.photoFile)}>
+                <TouchableWithoutFeedback key={pic.id} onPress={() => togglePhotoBoxModal(pic.photofile)}>
                 <View style={styles.shadowbox}>
                 <Picture key={pic.id} pic={pic}></Picture>
                 </View>

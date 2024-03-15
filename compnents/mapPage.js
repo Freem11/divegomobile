@@ -22,7 +22,11 @@ import {
   grabProfileById,
   updateProfileFeeback,
 } from "./../supabaseCalls/accountSupabaseCalls";
-import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
+import {
+  getPhotosforAnchorMulti,
+  getPhotosWithUser,
+  getPhotosWithUserEmpty
+} from "./../supabaseCalls/photoSupabaseCalls";
 import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
@@ -148,14 +152,25 @@ export default function MapPage() {
     );
 
     try {
-      const photos = await getPhotosforAnchorMulti({
-        animalMultiSelection,
-        // sliderVal,
-        minLat,
-        maxLat,
-        minLng,
-        maxLng,
-      });
+      let photos;
+      if (animalMultiSelection.length === 0) {
+        photos = await getPhotosWithUserEmpty({
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      } else {
+        photos = await getPhotosWithUser({
+          animalMultiSelection,
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      }
       if (photos) {
         let count = 0;
         photos.forEach((obj) => {
@@ -269,7 +284,6 @@ export default function MapPage() {
   useEffect(() => {
     startCommentsModalAnimations();
   }, [commentsModal]);
-
 
   //Shop Modal Animation
   const shopModalY = useSharedValue(windowHeight);
@@ -1099,9 +1113,8 @@ export default function MapPage() {
 
             <Animated.View style={[styles.commentScreen, commentsModalReveal]}>
               <View style={styles.commentsModal}>
-              <CommentsModal />
+                <CommentsModal />
               </View>
-            
             </Animated.View>
 
             <Animated.View style={[styles.anchorModal, shopModalReveal]}>
@@ -1409,7 +1422,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
     zIndex: 25,
     left: 0,
   },

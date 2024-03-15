@@ -13,6 +13,8 @@ export default function ImageCasherDynamic(Props) {
   const { siteModal } = useContext(AnchorModalContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
+
+  console.log("what", Props)
   let fileName = photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
   let photoName = photoFile.split("/").pop();

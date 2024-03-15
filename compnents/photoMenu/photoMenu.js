@@ -2,7 +2,11 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { multiHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { getPhotosforMapArea } from "../../supabaseCalls/photoSupabaseCalls";
-import { getPhotosforAnchorMulti } from "../../supabaseCalls/photoSupabaseCalls";
+import {
+  getPhotosforAnchorMulti,
+  getPhotosWithUser,
+  getPhotosWithUserEmpty,
+} from "../../supabaseCalls/photoSupabaseCalls";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -41,35 +45,45 @@ export default function PhotoMenu() {
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-  
+
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { textvalue, setTextValue } = useContext(SearchTextContext);
 
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
-  
+
   const [picMenuSize, setPicMenuSize] = useState(0);
   const [selectedID, setSelectedID] = useState(null);
 
   const filterAnchorPhotos = async () => {
-
-    console.log("step 1", selectedDiveSite)
+    console.log("step 1", selectedDiveSite);
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
     );
 
-    console.log("step 2", animalMultiSelection, minLat, maxLat, minLng, maxLng)
+    console.log("step 2", animalMultiSelection, minLat, maxLat, minLng, maxLng);
     try {
-      const photos = await getPhotosforAnchorMulti({
-        animalMultiSelection,
-        myCreatures,
-        minLat,
-        maxLat,
-        minLng,
-        maxLng,
-      });
+      let photos;
+      if (animalMultiSelection.length === 0) {
+        photos = await getPhotosWithUserEmpty({
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      } else {
+        photos = await getPhotosWithUser({
+          animalMultiSelection,
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      }
       if (photos) {
         setAnchPhotos(photos);
       }
@@ -85,13 +99,13 @@ export default function PhotoMenu() {
       if (itterator === 18) {
         waiter2 = setTimeout(() => {
           setItterator(itterator + 2);
-          setSiteModal(true)
+          setSiteModal(true);
         }, 2000);
       }
     }
   }, [animalMultiSelection]);
 
-  numbPhotos = areaPics.length
+  numbPhotos = areaPics.length;
 
   useEffect(() => {
     setPicMenuSize(areaPics.length * moderateScale(120));
@@ -104,8 +118,8 @@ export default function PhotoMenu() {
 
   const xValue = useSharedValue(0);
   const context = useSharedValue({ x: 0 });
-  let bounds = scale(175)
-  let startBounce = scale(170)
+  let bounds = scale(175);
+  let startBounce = scale(170);
 
   const animatePicMenu = Gesture.Pan()
     .onBegin(() => {
@@ -128,12 +142,11 @@ export default function PhotoMenu() {
       }
     })
     .onEnd((event) => {
-      if(xValue.value > picMenuSize/2 - bounds) {
-        xValue.value = picMenuSize/2 - startBounce
-      } else if (xValue.value < - picMenuSize/2 + bounds){
-        xValue.value = -picMenuSize/2 + startBounce
+      if (xValue.value > picMenuSize / 2 - bounds) {
+        xValue.value = picMenuSize / 2 - startBounce;
+      } else if (xValue.value < -picMenuSize / 2 + bounds) {
+        xValue.value = -picMenuSize / 2 + startBounce;
       }
-   
     });
 
   const animatedPictureStyle = useAnimatedStyle(() => {
@@ -150,69 +163,74 @@ export default function PhotoMenu() {
   });
 
   const filterPhotosForMapArea = async () => {
-
     if (boundaries.length !== 0) {
+      if (boundaries[0] > boundaries[2]) {
+        try {
+          const AmericanPhotos = await getPhotosforMapArea(
+            {
+              animal: textvalue,
+              minLat: boundaries[1],
+              maxLat: boundaries[3],
+              minLng: -180,
+              maxLng: boundaries[2],
+            },
+            myCreatures
+          );
+          const AsianPhotos = await getPhotosforMapArea(
+            {
+              animal: textvalue,
+              minLat: boundaries[1],
+              maxLat: boundaries[3],
+              minLng: boundaries[0],
+              maxLng: 180,
+            },
+            myCreatures
+          );
 
-    if (boundaries[0] > boundaries[2]) {
-      try {
-        const AmericanPhotos = await getPhotosforMapArea({
-          animal: textvalue,
-          minLat: boundaries[1],
-          maxLat: boundaries[3],
-          minLng: -180,
-          maxLng: boundaries[2],
-        },myCreatures);
-        const AsianPhotos = await getPhotosforMapArea({
-          animal: textvalue,
-          minLat: boundaries[1],
-          maxLat: boundaries[3],
-          minLng: boundaries[0],
-          maxLng: 180,
-        },myCreatures);
+          let photos = [...AsianPhotos, ...AmericanPhotos];
 
-        let photos = [...AsianPhotos, ...AmericanPhotos];
+          if (photos) {
+            const animalArray = Array.from(
+              new Set(photos.map((a) => a.label))
+            ).map((label) => {
+              return photos.find((a) => a.label === label);
+            });
 
-        if (photos) {
-          const animalArray = Array.from(
-            new Set(photos.map((a) => a.label))
-          ).map((label) => {
-            return photos.find((a) => a.label === label);
-          });
-
-          setAreaPics(animalArray);
+            setAreaPics(animalArray);
+          }
+        } catch (e) {
+          console.log({ title: "Error", message: e.message });
         }
-      } catch (e) {
-        console.log({ title: "Error", message: e.message });
-      }
-    } else {
-      try {
-        const photos = await getPhotosforMapArea({
-          animal: textvalue,
-          minLat: boundaries[1],
-          maxLat: boundaries[3],
-          minLng: boundaries[0],
-          maxLng: boundaries[2],
-        },myCreatures);
-        if (photos) {
-          const animalArray = Array.from(
-            new Set(photos.map((a) => a.label))
-          ).map((label) => {
-            return photos.find((a) => a.label === label);
-          });
+      } else {
+        try {
+          const photos = await getPhotosforMapArea(
+            {
+              animal: textvalue,
+              minLat: boundaries[1],
+              maxLat: boundaries[3],
+              minLng: boundaries[0],
+              maxLng: boundaries[2],
+            },
+            myCreatures
+          );
+          if (photos) {
+            const animalArray = Array.from(
+              new Set(photos.map((a) => a.label))
+            ).map((label) => {
+              return photos.find((a) => a.label === label);
+            });
 
-          setAreaPics(animalArray);
+            setAreaPics(animalArray);
+          }
+        } catch (e) {
+          console.log({ title: "Error", message: e.message });
         }
-      } catch (e) {
-        console.log({ title: "Error", message: e.message });
       }
     }
-  }
   };
 
   const filterHeatPointsForMapArea = async () => {
-
     if (boundaries.length !== 0) {
-
       try {
         const localHeatPoints = await multiHeatPoints(
           {
@@ -229,7 +247,7 @@ export default function PhotoMenu() {
       } catch (e) {
         console.log({ title: "Error", message: e.message });
       }
-    } 
+    }
   };
 
   useEffect(() => {
@@ -243,7 +261,6 @@ export default function PhotoMenu() {
   useEffect(() => {
     filterPhotosForMapArea();
   }, [boundaries, textvalue]);
-
 
   return (
     <GestureDetector gesture={animatePicMenu}>
@@ -268,9 +285,7 @@ export default function PhotoMenu() {
               />
             );
           })}
-          {areaPics.length === 0 && (
-            <View style={styles.noSightings}></View>
-          )}
+        {areaPics.length === 0 && <View style={styles.noSightings}></View>}
       </Animated.View>
     </GestureDetector>
   );
@@ -283,7 +298,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     zIndex: 90,
     elevation: 90,
-    width: numbPhotos * moderateScale(120)
+    width: numbPhotos * moderateScale(120),
   },
   picContainer2: {
     alignItems: "center",

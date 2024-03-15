@@ -26,7 +26,11 @@ import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
-import { getPhotosforAnchorMulti } from "../../supabaseCalls/photoSupabaseCalls";
+import {
+  getPhotosforAnchorMulti,
+  getPhotosWithUser,
+  getPhotosWithUserEmpty,
+} from "../../supabaseCalls/photoSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import moment from "moment";
 import { scale, moderateScale } from "react-native-size-matters";
@@ -423,7 +427,7 @@ export default function IntroTutorial() {
         setItterator((prev) => prev + 1);
         return;
       }
-      userBoxX.value = withSpring(windowWidth*0.18);
+      userBoxX.value = withSpring(windowWidth * 0.18);
       // startUserBoxAnimation();
     }
 
@@ -728,14 +732,25 @@ export default function IntroTutorial() {
     );
 
     try {
-      const photos = await getPhotosforAnchorMulti({
-        animalMultiSelection,
-        // sliderVal,
-        minLat,
-        maxLat,
-        minLng,
-        maxLng,
-      });
+      let photos;
+      if (animalMultiSelection.length === 0) {
+        photos = await getPhotosWithUserEmpty({
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      } else {
+        photos = await getPhotosWithUser({
+          animalMultiSelection,
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      }
       if (photos) {
         let count = 0;
         photos.forEach((obj) => {
@@ -771,7 +786,6 @@ export default function IntroTutorial() {
     let formattedDate = moment(today).format("YYYY-MM-DD");
     getPhotos(formattedDate);
   }, [itterator]);
-
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
@@ -822,7 +836,7 @@ export default function IntroTutorial() {
     clearInterval(blinker);
     setGuideState(false);
   }
- 
+
   return (
     <TouchableWithoutFeedback onPress={() => setupText(1)}>
       <View style={styles.wrapper}>

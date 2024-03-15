@@ -37,7 +37,11 @@ import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
 import { CommentsModalContext } from "./contexts/commentsModalContext";
 import { SelectedPictureContext } from "./contexts/selectedPictureContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
-import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
+import {
+  getPhotosforAnchorMulti,
+  getPhotosWithUser,
+  getPhotosWithUserEmpty,
+} from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
 import { StyleSheet, View, Dimensions, Platform, Keyboard } from "react-native";
 import mantaIOS from "../compnents/png/Manta32.png";
@@ -115,9 +119,7 @@ export default function Map() {
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
-  const { showFilterer, setShowFilterer } = useContext(
-    PullTabContext
-  );
+  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
   const filterAnchorPhotos = async () => {
@@ -127,14 +129,25 @@ export default function Map() {
     );
 
     try {
-      const photos = await getPhotosforAnchorMulti({
-        animalMultiSelection,
-        // sliderVal,
-        minLat,
-        maxLat,
-        minLng,
-        maxLng,
-      });
+      let photos;
+      if (animalMultiSelection.length === 0) {
+        photos = await getPhotosWithUserEmpty({
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      } else {
+        photos = await getPhotosWithUser({
+          animalMultiSelection,
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      }
       if (photos) {
         setAnchPhotos(photos);
       }
@@ -462,7 +475,7 @@ export default function Map() {
   };
 
   const clearModals = async () => {
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     setGearModal(false);
     setProfileModal(false);
     setMapSearchModal(false);
