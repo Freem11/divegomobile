@@ -53,7 +53,7 @@ import shopClustIOS from "../compnents/png/face-mask.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
-import { diveSites } from "../supabaseCalls/diveSiteSupabaseCalls";
+import { diveSites, getDiveSitesWithUser } from "../supabaseCalls/diveSiteSupabaseCalls";
 import {
   multiHeatPoints,
   getHeatPointsWithUser,
@@ -175,24 +175,40 @@ export default function Map() {
       if (settedBoundaries) {
         if (settedBoundaries[0] > settedBoundaries[2]) {
           try {
-            const AmericanDiveSites = await diveSites(
-              {
+            let AmericanDiveSites;
+            let AsianDiveSites;
+              AmericanDiveSites = await getDiveSitesWithUser({
+                myDiveSites,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: -180,
                 maxLng: settedBoundaries[2],
-              },
-              myDiveSites
-            );
-            const AsianDiveSites = await diveSites(
-              {
+              });
+              AsianDiveSites = await getDiveSitesWithUser({
+                myDiveSites,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
                 maxLng: 180,
-              },
-              myDiveSites
-            );
+              });
+            // const AmericanDiveSites = await diveSites(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: -180,
+            //     maxLng: settedBoundaries[2],
+            //   },
+            //   myDiveSites
+            // );
+            // const AsianDiveSites = await diveSites(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: settedBoundaries[0],
+            //     maxLng: 180,
+            //   },
+            //   myDiveSites
+            // );
 
             let diveSiteList = [...AsianDiveSites, ...AmericanDiveSites];
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
@@ -264,15 +280,22 @@ export default function Map() {
           }
         } else {
           try {
-            const diveSiteList = await diveSites(
-              {
-                minLat: settedBoundaries[1],
-                maxLat: settedBoundaries[3],
-                minLng: settedBoundaries[0],
-                maxLng: settedBoundaries[2],
-              },
-              myDiveSites
-            );
+            const diveSiteList = await getDiveSitesWithUser({
+              myDiveSites,
+              minLat: settedBoundaries[1],
+              maxLat: settedBoundaries[3],
+              minLng: settedBoundaries[0],
+              maxLng: settedBoundaries[2],
+            });
+            // const diveSiteList = await diveSites(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: settedBoundaries[0],
+            //     maxLng: settedBoundaries[2],
+            //   },
+            //   myDiveSites
+            // );
 
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
           } catch (e) {
