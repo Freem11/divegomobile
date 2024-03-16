@@ -33,6 +33,7 @@ import { scale, moderateScale } from "react-native-size-matters";
 import { formatHeatVals } from "../helpers/mapHelpers";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import PhotoMenuListItem from "./photoMenuListItem";
+import { UserProfileContext } from "../contexts/userProfileContext";
 
 let waiter2;
 let numbPhotos = 0;
@@ -56,6 +57,7 @@ export default function PhotoMenu() {
 
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
+  const { profile } = useContext(UserProfileContext)
 
   const [picMenuSize, setPicMenuSize] = useState(0);
   const [selectedID, setSelectedID] = useState(null);
@@ -73,6 +75,7 @@ export default function PhotoMenu() {
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
           myCreatures,
+          userId: profile[0].UserID,
           minLat,
           maxLat,
           minLng,
@@ -81,6 +84,7 @@ export default function PhotoMenu() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
+          userId: profile[0].UserID,
           myCreatures,
           minLat,
           maxLat,

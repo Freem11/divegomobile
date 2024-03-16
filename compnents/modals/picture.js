@@ -55,9 +55,9 @@ export default function Picture(props) {
   const { setCommentsModal } = useContext(CommentsModalContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
 
-  const [picLiked, setPicLiked] = useState(false);
-  const [likeData, setLikeData] = useState(null);
-  const [countOfLikes, setCountOfLikes] = useState(0);
+  const [picLiked, setPicLiked] = useState(pic.likedbyuser);
+  const [likeData, setLikeData] = useState(pic.likeid);
+  const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
   const [countOfComments, setCountOfComments] = useState(0);
 
   const handleCommentModal = () => {
@@ -80,47 +80,20 @@ export default function Picture(props) {
 
   const handleLike = async (picId) => {
     if (picLiked) {
-      deletePhotoLike(likeData[0].id);
+      deletePhotoLike(likeData);
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
       let newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
       setPicLiked(true);
-      setLikeData(newRecord);
+      setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
     }
   };
 
   useEffect(() => {
-    getLikeStatus(profile[0].UserID, pic.id);
-    getLikeCount(pic.id);
     getCommentCount(pic.id);
   }, []);
-
-  const getLikeStatus = async (userID, PicID) => {
-    try {
-      const likeStatus = await grabPhotoLikeById(userID, PicID);
-      setLikeData(likeStatus);
-      if (likeStatus.length > 0) {
-        setPicLiked(true);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
-  const getLikeCount = async (PicID) => {
-    try {
-      const likeCount = await countPhotoLikeById(PicID);
-      if (!likeCount) {
-        setCountOfLikes(0);
-      } else {
-        setCountOfLikes(likeCount);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
 
   const convertBase64 = (cacheDir) => {
     ImgToBase64.getBase64String(cacheDir)

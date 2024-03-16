@@ -62,6 +62,7 @@ import {
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { UserProfileContext } from "./contexts/userProfileContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -70,6 +71,7 @@ export default function Map() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
+  
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
@@ -123,6 +125,7 @@ export default function Map() {
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
+  const {profile} = useContext(UserProfileContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
@@ -137,6 +140,7 @@ export default function Map() {
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
           myCreatures,
+          userId: profile[0].UserID,
           minLat,
           maxLat,
           minLng,
@@ -145,6 +149,7 @@ export default function Map() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
+          userId: profile[0].UserID,
           myCreatures,
           minLat,
           maxLat,
