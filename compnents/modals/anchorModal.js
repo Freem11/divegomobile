@@ -14,9 +14,12 @@ import {
   getPhotosforAnchor,
   getPhotosforAnchorMulti,
   getPhotosWithUser,
-  getPhotosWithUserEmpty
+  getPhotosWithUserEmpty,
 } from "../../supabaseCalls/photoSupabaseCalls";
-import { getDiveSiteByName } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import {
+  getDiveSiteByName,
+  getDiveSiteWithUserName,
+} from "../../supabaseCalls/diveSiteSupabaseCalls";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -67,7 +70,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function AnchorModal(props) {
-  const {lat, lng, setSelectedPhoto, setPhotoBoxModel } = props
+  const { lat, lng, setSelectedPhoto, setPhotoBoxModel } = props;
   const { sliderVal } = useContext(SliderContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
@@ -95,17 +98,17 @@ export default function AnchorModal(props) {
 
     try {
       let photos;
-      if(animalMultiSelection.length === 0){
-         photos = await getPhotosWithUserEmpty({
+      if (animalMultiSelection.length === 0) {
+        photos = await getPhotosWithUserEmpty({
           myCreatures,
           userId: profile[0].UserID,
           minLat,
           maxLat,
           minLng,
           maxLng,
-        })
+        });
       } else {
-         photos = await getPhotosWithUser({
+        photos = await getPhotosWithUser({
           animalMultiSelection,
           myCreatures,
           userId: profile[0].UserID,
@@ -113,7 +116,7 @@ export default function AnchorModal(props) {
           maxLat,
           minLng,
           maxLng,
-        })
+        });
       }
       if (photos) {
         setAnchorPics(photos);
@@ -161,11 +164,15 @@ export default function AnchorModal(props) {
     }
   }, [itterator]);
 
-  const getDiveSite = async (site) => {
+  const getDiveSite = async () => {
     try {
-      const selectedSite = await getDiveSiteByName(site);
+      const selectedSite = await getDiveSiteWithUserName({
+        siteName: selectedDiveSite.SiteName,
+        lat: selectedDiveSite.Latitude,
+        lng: selectedDiveSite.Longitude,
+      });
       if (selectedSite.length > 0) {
-        setSite(selectedSite[0].userName);
+        setSite(selectedSite[0].newusername);
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -213,8 +220,8 @@ export default function AnchorModal(props) {
   };
 
   const handleSwitch = () => {
-    if (itterator === 11 || itterator == 15){
-      return
+    if (itterator === 11 || itterator == 15) {
+      return;
     }
     setPinValues({
       ...pinValues,
@@ -223,14 +230,13 @@ export default function AnchorModal(props) {
     });
     setSiteModal(false);
     setPicAdderModal(true);
-  }
+  };
 
   const togglePhotoBoxModal = (photo) => {
     setSelectedPhoto(photo);
     setPhotoBoxModel(true);
   };
-  
- 
+
   const [base64, setBase64] = useState(null);
   const [userN, setUserN] = useState(null);
   const [creastureN, setCreastureN] = useState(null);
@@ -321,7 +327,7 @@ export default function AnchorModal(props) {
       style={{
         height: "98%",
         // backgroundColor: "orange",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <View style={styles.titleAlt}>
@@ -381,10 +387,13 @@ export default function AnchorModal(props) {
           {anchorPics &&
             anchorPics.map((pic) => {
               return (
-                <TouchableWithoutFeedback key={pic.id} onPress={() => togglePhotoBoxModal(pic.photofile)}>
-                <View style={styles.shadowbox}>
-                <Picture key={pic.id} pic={pic}></Picture>
-                </View>
+                <TouchableWithoutFeedback
+                  key={pic.id}
+                  onPress={() => togglePhotoBoxModal(pic.photofile)}
+                >
+                  <View style={styles.shadowbox}>
+                    <Picture key={pic.id} pic={pic}></Picture>
+                  </View>
                 </TouchableWithoutFeedback>
               );
             })}
@@ -405,7 +414,7 @@ export default function AnchorModal(props) {
                   width: scale(32),
                   height: scale(32),
                   borderRadius: scale(32),
-                  backgroundColor: "black"
+                  backgroundColor: "black",
                 }}
               >
                 <View
@@ -426,7 +435,6 @@ export default function AnchorModal(props) {
           )}
         </View>
       </ScrollView>
-
     </View>
   );
 }
