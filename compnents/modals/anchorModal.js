@@ -36,6 +36,7 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { ReverseContext } from "../contexts/reverseContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PinContext } from "../contexts/staticPinContext";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
@@ -73,6 +74,7 @@ export default function AnchorModal(props) {
   const { monthVal } = useContext(MonthSelectContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
+  const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
@@ -96,6 +98,7 @@ export default function AnchorModal(props) {
       if(animalMultiSelection.length === 0){
          photos = await getPhotosWithUserEmpty({
           myCreatures,
+          userId: profile[0].UserID,
           minLat,
           maxLat,
           minLng,
@@ -105,6 +108,7 @@ export default function AnchorModal(props) {
          photos = await getPhotosWithUser({
           animalMultiSelection,
           myCreatures,
+          userId: profile[0].UserID,
           minLat,
           maxLat,
           minLng,
