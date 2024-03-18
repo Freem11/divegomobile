@@ -5,8 +5,8 @@ export const SelectedDiveSiteContext = createContext('');
 const SelectedDiveSiteContextProvider = ({children}) => {
     const [selectedDiveSite, setSelectedDiveSite] = useState({
         SiteName: "",
-        Latitude: "",
-        Longitude: "",
+        Latitude: null,
+        Longitude: null,
       });
 
     return (

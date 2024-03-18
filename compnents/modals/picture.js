@@ -58,24 +58,10 @@ export default function Picture(props) {
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
-  const [countOfComments, setCountOfComments] = useState(0);
 
   const handleCommentModal = () => {
     setCommentsModal(true);
     setSelectedPicture(pic);
-  };
-
-  const getCommentCount = async (PicID) => {
-    try {
-      const commentCount = await countPhotoCommentById(PicID);
-      if (!commentCount) {
-        setCountOfComments(0);
-      } else {
-        setCountOfComments(commentCount);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
   };
 
   const handleLike = async (picId) => {
@@ -90,10 +76,6 @@ export default function Picture(props) {
       setCountOfLikes(countOfLikes + 1);
     }
   };
-
-  useEffect(() => {
-    getCommentCount(pic.id);
-  }, []);
 
   const convertBase64 = (cacheDir) => {
     ImgToBase64.getBase64String(cacheDir)
@@ -243,7 +225,7 @@ export default function Picture(props) {
 
           }}
         >
-          <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}>{countOfComments < 1 ? 'Be first to Comment' : `Comment / View all ${countOfComments} Comments`} </Text>
+          <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}>{pic.commentcount < 1 ? 'Be first to Comment' : `Comment / View all ${pic.commentcount} Comments`} </Text>
         </View>
       </TouchableWithoutFeedback>
     </View>

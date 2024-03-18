@@ -318,7 +318,7 @@ export default function Map() {
                 maxLng: settedBoundaries[2],
               });
             } else {
-              heatPointList = await getPhotosWithUser({
+              heatPointList = await getHeatPointsWithUser({
                 animalMultiSelection,
                 myCreatures,
                 minLat: settedBoundaries[1],
@@ -327,16 +327,6 @@ export default function Map() {
                 maxLng: settedBoundaries[2],
               });
             }
-            // const heatPointList = await multiHeatPoints(
-            //   {
-            //     minLat: settedBoundaries[1],
-            //     maxLat: settedBoundaries[3],
-            //     minLng: settedBoundaries[0],
-            //     maxLng: settedBoundaries[2],
-            //   },
-            //   animalMultiSelection,
-            //   myCreatures
-            // );
 
             setNewHeat(formatHeatVals(heatPointList));
           } catch (e) {
