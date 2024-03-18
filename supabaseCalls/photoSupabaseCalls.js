@@ -109,7 +109,6 @@ export const getPhotosforMapArea = async (value, myCreatures) => {
 };
 
 export const getPhotosWithUser = async (values) => {
-  console.log(values)
   const { data, error } = await supabase.rpc("get_photos_with_user", {
     animals: values.animalMultiSelection,
     max_lat: values.maxLat,

@@ -12,9 +12,12 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import {
   insertPhotoLike,
   deletePhotoLike,
-  grabPhotoLikeById,
-  countPhotoLikeById,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
+import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
+import {
+  insertUserFollow,
+  deleteUserFollow,
+} from "../../supabaseCalls/userFollowSupabaseCalls";
 import { countPhotoCommentById } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -59,12 +62,15 @@ export default function Picture(props) {
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
 
+  const [userFollows, setUserFollows] = useState(false);
+  const [followData, setFollowData] = useState(pic.followid);
+
   const handleCommentModal = () => {
     setCommentsModal(true);
     setSelectedPicture(pic);
   };
 
-  const handleLike = async (picId) => {
+  const handleLike = async () => {
     if (picLiked) {
       deletePhotoLike(likeData);
       setPicLiked(false);
@@ -75,6 +81,27 @@ export default function Picture(props) {
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
     }
+  };
+
+  const handleFollow = async (userName) => {
+    let picOwnerAccount = await grabProfileByUserName(userName);
+
+    if (profile[0].UserID === picOwnerAccount[0].UserID){
+      return
+    }
+
+    if (userFollows) {
+      deleteUserFollow(followData);
+      setUserFollows(false);
+    } else {
+      
+      if (picOwnerAccount) {
+        let newRecord = await insertUserFollow(profile[0].UserID, picOwnerAccount[0].UserID);
+        setFollowData(newRecord[0].id);
+        setUserFollows(true);
+      }
+    }
+
   };
 
   const convertBase64 = (cacheDir) => {
@@ -211,21 +238,32 @@ export default function Picture(props) {
           />
         </TouchableWithoutFeedback>
         <View style={styles.microLow}>
-          <Text style={styles.microLow2}> Added by: {pic.newusername}</Text>
+          <Text
+            style={userFollows ? styles.microLow2Alt : styles.microLow2}
+            onPress={() => handleFollow(pic.newusername)}
+          >
+            {" "}
+            Added by: {pic.newusername}{"  "} {profile[0].UserName === pic.newusername ? null : userFollows ? "(unfollow)" : "(follow)"}
+          </Text>
         </View>
       </View>
-      <TouchableWithoutFeedback
-        onPress={() => handleCommentModal(pic)}>
+      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)}>
         <View
-         onPress={() => handleCommentModal(pic)}
+          onPress={() => handleCommentModal(pic)}
           style={{
             flexDirection: "row",
             marginLeft: moderateScale(20),
             zIndex: 4,
-
           }}
         >
-          <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}>{pic.commentcount < 1 ? 'Be first to Comment' : `Comment / View all ${pic.commentcount} Comments`} </Text>
+          <Text
+            style={styles.commentPrompt}
+            onPress={() => handleCommentModal(pic)}
+          >
+            {pic.commentcount < 1
+              ? "Be first to Comment"
+              : `Comment / View all ${pic.commentcount} Comments`}{" "}
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -340,6 +378,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     opacity: 1,
     color: "white",
+    fontFamily: "Itim_400Regular",
+    fontSize: scale(8),
+    zIndex: 2,
+  },
+  microLow2Alt: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    opacity: 1,
+    color: "gold",
     fontFamily: "Itim_400Regular",
     fontSize: scale(8),
     zIndex: 2,
