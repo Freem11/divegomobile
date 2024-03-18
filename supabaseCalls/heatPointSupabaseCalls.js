@@ -191,7 +191,7 @@ export const getHeatPointsWithUser = async (values) => {
   });
 
   if (error) {
-    console.log("couldn't do it 27,", error);
+    console.log("couldn't do it heatpoint1,", error);
     return [];
   }
 
@@ -210,7 +210,7 @@ export const getHeatPointsWithUserEmpty = async (values) => {
   });
 
   if (error) {
-    console.log("couldn't do it 27,", error);
+    console.log("couldn't do it heatpoint2,", error);
     return [];
   }
 

@@ -45,7 +45,7 @@ export const getDiveSitesWithUser = async (values) => {
   });
 
   if (error) {
-    console.log("couldn't do it 27,", error);
+    console.log("couldn't do it divesite1,", error);
     return [];
   }
 
@@ -102,7 +102,7 @@ export const getDiveSiteWithUserName= async (values) => {
   });
 
   if (error) {
-    console.log("couldn't do it 27,", error);
+    console.log("couldn't do it divesite2,", error);
     return [];
   }
 
