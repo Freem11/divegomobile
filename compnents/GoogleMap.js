@@ -45,9 +45,9 @@ import {
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
 import { StyleSheet, View, Dimensions, Platform, Keyboard } from "react-native";
 import mantaIOS from "../compnents/png/Manta32.png";
-import anchorGold from "../compnents/png/markerAnchor48.png";
-import anchorClustIOS from "../compnents/png/ClusterAnchor24.png";
-import anchorIconIOS from "../compnents/png/SiteAnchor20.png";
+import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
+import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
+import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
 import shopIOS from "../compnents/png/scuba.png";
 import shopClustIOS from "../compnents/png/face-mask.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
