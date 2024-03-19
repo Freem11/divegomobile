@@ -63,7 +63,7 @@ export default function CommentsModal() {
     } else {
       let finalContent
       if (replyTo) {
-        finalContent = "@" + replyTo[0] + " " + commentContent
+        finalContent = "@" + replyTo[0] + " - " + commentContent
       } else {
         finalContent = commentContent
       }
@@ -120,7 +120,7 @@ export default function CommentsModal() {
           {replyTo ? (
             <View style={styles.replyLine}>
               <Text style={styles.userTxt}>@{replyTo[0]}</Text>
-              <FontAwesome name="close" color="#BD9F9F" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
+              <FontAwesome name="close" color="lightgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
             </View>
           ) : null}
           <View style={styles.replyBox}>
@@ -236,18 +236,21 @@ const styles = StyleSheet.create({
   replyLine: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // backgroundColor: 'pink',
-    width: "50%",
+    backgroundColor: '#537dbd',
+    marginLeft: moderateScale(10),
+    marginRight: moderateScale(55),
     marginBottom: moderateScale(-8),
-    marginTop: moderateScale(10)
+    marginTop: moderateScale(10),
+    borderTopRightRadius: moderateScale(15),
+    borderTopLeftRadius: moderateScale(15),
+    paddingLeft: moderateScale(10),
+    paddingRight: moderateScale(10)
   },
   userTxt: {
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(13),
-    color: "black",
-    height: moderateScale(20),
+    color: "lightgrey",
     // backgroundColor: 'pink',
-    // alignSelf: "flex-start",
     marginBottom: moderateScale(-15),
   },
 });
