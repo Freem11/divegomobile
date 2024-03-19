@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import { ReplyLevelContext } from "../contexts/replyLevelContext";
 
 export default function CommentListItem(props) {
   const { commentDetails, setReplyTo, replyTo } = props;
-
+  const { replyLevel, setReplyLevel} = useContext(
+    ReplyLevelContext
+  );
   let newDate = commentDetails.created_at.substring(0, 10);
+
+  // {replyInfo: null, replyLevel: 0}
+  
+  const handleReply = async () => {
+    if(replyTo){
+      setReplyTo(null)
+      setReplyLevel(replyLevel - 1)
+    } else {
+      setReplyTo([commentDetails.username, commentDetails.id])
+      setReplyLevel(replyLevel + 1)
+    }
+  }
 
   return (
     <View>
@@ -17,7 +32,7 @@ export default function CommentListItem(props) {
 
       <Text style={styles.contentTxt}>{commentDetails.content}</Text>
     </View>
-      <Text style={styles.replyTxt} onPress={() => {replyTo ? setReplyTo(null) : setReplyTo([commentDetails.username, commentDetails.id])}}>Reply</Text>
+      <Text style={styles.replyTxt} onPress={() => {handleReply}}>Reply</Text>
     </View>
   );
 }

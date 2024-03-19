@@ -35,7 +35,7 @@ export default function CommentsModal() {
   const entryRef = useRef(0);
   const [commentContent, setCommentContent] = useState(null);
   const [listOfComments, setListOfComments] = useState(null);
-  const [replyTo, setReplyTo] = useState(null);
+  const [replyTo, setReplyTo] = useState({replyInfo: null, replyLevel: 0});
   const { profile } = useContext(UserProfileContext);
   const { selectedPicture, setSelectedPicture } = useContext(
     SelectedPictureContext
@@ -74,14 +74,14 @@ export default function CommentsModal() {
         userIdentity
       );
       setCommentContent(null);
-      setReplyTo(null)
+      setReplyTo({replyInfo: null, replyLevel: 0})
       getAllPictureComments(selectedPicture.id);
     }
   };
 
 
   const handleCommentModalClose = async () => {
-    setReplyTo(null)
+    setReplyTo({replyInfo: null, replyLevel: 0})
     setCommentsModal(false)
   }
 
@@ -120,7 +120,7 @@ export default function CommentsModal() {
           {replyTo ? (
             <View style={styles.replyLine}>
               <Text style={styles.userTxt}>@{replyTo[0]}</Text>
-              <FontAwesome name="close" color="lightgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
+              <FontAwesome name="close" color="lightgrey" size={moderateScale(15)} onPress={() => setReplyTo({replyInfo: null, replyLevel: 0})}/>
             </View>
           ) : null}
           <View style={styles.replyBox}>
