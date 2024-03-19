@@ -163,10 +163,10 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
     width: "98%",
     marginLeft: "1%",
-    minHeight: Platform.OS === "android" ? 490 : 0,
   },
   commentHeader: {
     alignItems: "center",
+    // backgroundColor: 'orange'
   },
   tab: {
     backgroundColor: "white",
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
   },
   commentListContainer: {
-    // backgroundColor: "pink",
+    flex: 1,
+    // backgroundColor: "green",
     width: "100%",
     height: "85%",
     borderBottomColor: "lightgrey",
