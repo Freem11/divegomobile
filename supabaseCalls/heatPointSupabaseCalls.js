@@ -180,6 +180,46 @@ export const multiHeatPoints = async (GPSBubble, animalArray, myCreatures) => {
  
 };
 
+export const getHeatPointsWithUser = async (values) => {
+  const { data, error } = await supabase.rpc("get_heatpoints_with_user", {
+    animals: values.animalMultiSelection,
+    max_lat: values.maxLat,
+    min_lat: values.minLat,
+    max_lng: values.maxLng,
+    min_lng: values.minLng,
+    userid: values.myCreatures,
+  });
+
+  if (error) {
+    console.log("couldn't do it heatpoint1,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
+export const getHeatPointsWithUserEmpty = async (values) => {
+  const { data, error } = await supabase.rpc("get_heatpoints_with_username", {
+    max_lat: values.maxLat,
+    min_lat: values.minLat,
+    max_lng: values.maxLng,
+    min_lng: values.minLng,
+    userid: values.myCreatures,
+  });
+
+  if (error) {
+    console.log("couldn't do it heatpoint2,", error);
+    return [];
+  }
+
+  if (data) {
+    // console.log(data)
+    return data;
+  }
+};
+
 export const picClickheatPoints = async (GPSBubble, animal) => {
   // console.log("HIHIHIH", GPSBubble, animal)
   let animalVal;

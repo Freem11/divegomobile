@@ -8,7 +8,6 @@ const DiveSpotContextProvider = ({children}) => {
         Latitude: "",
         Longitude: "",
         UserID: null,
-        UserName: null,
       });
 
     return (

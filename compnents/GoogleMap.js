@@ -37,23 +37,32 @@ import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
 import { CommentsModalContext } from "./contexts/commentsModalContext";
 import { SelectedPictureContext } from "./contexts/selectedPictureContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
-import { getPhotosforAnchorMulti } from "./../supabaseCalls/photoSupabaseCalls";
+import {
+  getPhotosforAnchorMulti,
+  getPhotosWithUser,
+  getPhotosWithUserEmpty,
+} from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
 import { StyleSheet, View, Dimensions, Platform, Keyboard } from "react-native";
 import mantaIOS from "../compnents/png/Manta32.png";
-import anchorGold from "../compnents/png/markerAnchor48.png";
-import anchorClustIOS from "../compnents/png/ClusterAnchor24.png";
-import anchorIconIOS from "../compnents/png/SiteAnchor20.png";
+import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
+import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
+import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue1.png";
 import shopIOS from "../compnents/png/scuba.png";
 import shopClustIOS from "../compnents/png/face-mask.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
-import { diveSites } from "../supabaseCalls/diveSiteSupabaseCalls";
-import { multiHeatPoints } from "../supabaseCalls/heatPointSupabaseCalls";
+import { diveSites, getDiveSitesWithUser } from "../supabaseCalls/diveSiteSupabaseCalls";
+import {
+  multiHeatPoints,
+  getHeatPointsWithUser,
+  getHeatPointsWithUserEmpty,
+} from "../supabaseCalls/heatPointSupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { scale } from "react-native-size-matters";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { UserProfileContext } from "./contexts/userProfileContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -62,6 +71,7 @@ export default function Map() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
+  
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
@@ -115,9 +125,8 @@ export default function Map() {
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
-  const { showFilterer, setShowFilterer } = useContext(
-    PullTabContext
-  );
+  const {profile} = useContext(UserProfileContext);
+  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
   const filterAnchorPhotos = async () => {
@@ -127,14 +136,27 @@ export default function Map() {
     );
 
     try {
-      const photos = await getPhotosforAnchorMulti({
-        animalMultiSelection,
-        // sliderVal,
-        minLat,
-        maxLat,
-        minLng,
-        maxLng,
-      });
+      let photos;
+      if (animalMultiSelection.length === 0) {
+        photos = await getPhotosWithUserEmpty({
+          myCreatures,
+          userId: profile[0].UserID,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      } else {
+        photos = await getPhotosWithUser({
+          animalMultiSelection,
+          userId: profile[0].UserID,
+          myCreatures,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      }
       if (photos) {
         setAnchPhotos(photos);
       }
@@ -158,24 +180,40 @@ export default function Map() {
       if (settedBoundaries) {
         if (settedBoundaries[0] > settedBoundaries[2]) {
           try {
-            const AmericanDiveSites = await diveSites(
-              {
+            let AmericanDiveSites;
+            let AsianDiveSites;
+              AmericanDiveSites = await getDiveSitesWithUser({
+                myDiveSites,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: -180,
                 maxLng: settedBoundaries[2],
-              },
-              myDiveSites
-            );
-            const AsianDiveSites = await diveSites(
-              {
+              });
+              AsianDiveSites = await getDiveSitesWithUser({
+                myDiveSites,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
                 maxLng: 180,
-              },
-              myDiveSites
-            );
+              });
+            // const AmericanDiveSites = await diveSites(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: -180,
+            //     maxLng: settedBoundaries[2],
+            //   },
+            //   myDiveSites
+            // );
+            // const AsianDiveSites = await diveSites(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: settedBoundaries[0],
+            //     maxLng: 180,
+            //   },
+            //   myDiveSites
+            // );
 
             let diveSiteList = [...AsianDiveSites, ...AmericanDiveSites];
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
@@ -184,26 +222,61 @@ export default function Map() {
           }
 
           try {
-            const AmericanHeatPoints = await multiHeatPoints(
-              {
+            let AmericanHeatPoints;
+            let AsianHeatPoints;
+            if (animalMultiSelection.length === 0) {
+              AmericanHeatPoints = await getHeatPointsWithUserEmpty({
+                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: -180,
                 maxLng: settedBoundaries[2],
-              },
-              animalMultiSelection,
-              myCreatures
-            );
-            const AsianHeatPoints = await multiHeatPoints(
-              {
+              });
+              AsianHeatPoints = await getHeatPointsWithUserEmpty({
+                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
                 maxLng: 180,
-              },
-              animalMultiSelection,
-              myCreatures
-            );
+              });
+            } else {
+              AmericanHeatPoints = await getHeatPointsWithUser({
+                myCreatures,
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: -180,
+                maxLng: settedBoundaries[2],
+                animalMultiSelection,
+              });
+              AsianHeatPoints = await getHeatPointsWithUser({
+                myCreatures,
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
+                maxLng: 180,
+                animalMultiSelection,
+              });
+            }
+            // const AmericanHeatPoints = await multiHeatPoints(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: -180,
+            //     maxLng: settedBoundaries[2],
+            //   },
+            //   animalMultiSelection,
+            //   myCreatures
+            // );
+            // const AsianHeatPoints = await multiHeatPoints(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: settedBoundaries[0],
+            //     maxLng: 180,
+            //   },
+            //   animalMultiSelection,
+            //   myCreatures
+            // );
 
             let heatPointList = [...AsianHeatPoints, ...AmericanHeatPoints];
             setNewHeat(formatHeatVals(heatPointList));
@@ -212,15 +285,22 @@ export default function Map() {
           }
         } else {
           try {
-            const diveSiteList = await diveSites(
-              {
-                minLat: settedBoundaries[1],
-                maxLat: settedBoundaries[3],
-                minLng: settedBoundaries[0],
-                maxLng: settedBoundaries[2],
-              },
-              myDiveSites
-            );
+            const diveSiteList = await getDiveSitesWithUser({
+              myDiveSites,
+              minLat: settedBoundaries[1],
+              maxLat: settedBoundaries[3],
+              minLng: settedBoundaries[0],
+              maxLng: settedBoundaries[2],
+            });
+            // const diveSiteList = await diveSites(
+            //   {
+            //     minLat: settedBoundaries[1],
+            //     maxLat: settedBoundaries[3],
+            //     minLng: settedBoundaries[0],
+            //     maxLng: settedBoundaries[2],
+            //   },
+            //   myDiveSites
+            // );
 
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
           } catch (e) {
@@ -228,16 +308,25 @@ export default function Map() {
           }
 
           try {
-            const heatPointList = await multiHeatPoints(
-              {
+            let heatPointList;
+            if (animalMultiSelection.length === 0) {
+              heatPointList = await getHeatPointsWithUserEmpty({
+                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
                 maxLng: settedBoundaries[2],
-              },
-              animalMultiSelection,
-              myCreatures
-            );
+              });
+            } else {
+              heatPointList = await getHeatPointsWithUser({
+                animalMultiSelection,
+                myCreatures,
+                minLat: settedBoundaries[1],
+                maxLat: settedBoundaries[3],
+                minLng: settedBoundaries[0],
+                maxLng: settedBoundaries[2],
+              });
+            }
 
             setNewHeat(formatHeatVals(heatPointList));
           } catch (e) {
@@ -462,7 +551,7 @@ export default function Map() {
   };
 
   const clearModals = async () => {
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     setGearModal(false);
     setProfileModal(false);
     setMapSearchModal(false);

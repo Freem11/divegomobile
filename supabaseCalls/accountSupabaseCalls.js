@@ -109,3 +109,19 @@ export const grabProfileById = async (id) => {
     return data;
   }
 };
+
+export const grabProfileByUserName = async (userName) => {
+  const { data, error } = await supabase
+    .from("UserProfiles")
+    .select()
+    .eq("UserName", userName)
+
+  if (error) {
+    console.log("couldn't do it 5,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};

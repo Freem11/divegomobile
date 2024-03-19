@@ -6,82 +6,48 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Dimensions,
-  Linking,
 } from "react-native";
 import Share from "react-native-share";
 import React, { useState, useContext, useEffect } from "react";
 import {
-  getPhotosforAnchor,
-  getPhotosforAnchorMulti,
+  getPhotosWithUser,
+  getPhotosWithUserEmpty,
 } from "../../supabaseCalls/photoSupabaseCalls";
-import { getDiveSiteByName } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
+import {
+  getDiveSiteWithUserName,
+} from "../../supabaseCalls/diveSiteSupabaseCalls";
 import * as FileSystem from "expo-file-system";
-import { SliderContext } from "../contexts/sliderContext";
-import { MonthSelectContext } from "../contexts/monthSelectContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { AnimalSelectContext } from "../contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { ChapterContext } from "../contexts/chapterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
-import { TutorialContext } from "../contexts/tutorialContext";
-import { ReverseContext } from "../contexts/reverseContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PinContext } from "../contexts/staticPinContext";
+import { UserProfileContext } from "../contexts/userProfileContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import email from "react-native-email";
-import ImageCasher from "../helpers/imageCashing";
 import ImgToBase64 from "react-native-image-base64";
 import config from "../../config";
 import Picture from "./picture";
 
-let IPSetter = 2;
-let IP;
-//Desktop = 10.0.0.253
-//Laptop = 10.0.0.68
-//Library = 10.44.22.110
-
-if (IPSetter === 1) {
-  IP = "10.0.0.253";
-} else if (IPSetter === 2) {
-  IP = "10.0.0.68";
-} else if (IPSetter === 3) {
-  IP = "10.44.22.110";
-}
-
-let filePath = `/Users/matthewfreeman/divego/wetmap/src/components/uploads/`;
-
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
 export default function AnchorModal(props) {
-  const {lat, lng, setSelectedPhoto, setPhotoBoxModel } = props
-  const { sliderVal } = useContext(SliderContext);
+  const { setSelectedPhoto, setPhotoBoxModel } = props;
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
-  const { monthVal } = useContext(MonthSelectContext);
-  const { animalSelection } = useContext(AnimalSelectContext);
-  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
+  const { myCreatures } = useContext(MyCreaturesContext);
+  const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { chapter, setChapter } = useContext(ChapterContext);
-  const { movingBack, setMovingBack } = useContext(ReverseContext);
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
-  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
+  const { setGuideModal } = useContext(TutorialModelContext);
+  const { setSiteModal } = useContext(AnchorModalContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
   const [site, setSite] = useState("");
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
+  const { setPicAdderModal } = useContext(PictureAdderContext);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -90,14 +56,27 @@ export default function AnchorModal(props) {
     );
 
     try {
-      const photos = await getPhotosforAnchorMulti({
-        animalMultiSelection,
-        myCreatures,
-        minLat,
-        maxLat,
-        minLng,
-        maxLng,
-      });
+      let photos;
+      if (animalMultiSelection.length === 0) {
+        photos = await getPhotosWithUserEmpty({
+          myCreatures,
+          userId: profile[0].UserID,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      } else {
+        photos = await getPhotosWithUser({
+          animalMultiSelection,
+          myCreatures,
+          userId: profile[0].UserID,
+          minLat,
+          maxLat,
+          minLng,
+          maxLng,
+        });
+      }
       if (photos) {
         setAnchorPics(photos);
         let count = 0;
@@ -108,22 +87,6 @@ export default function AnchorModal(props) {
         if (itterator === 11 && count > 0) {
           setItterator(itterator + 2);
         }
-
-        // if (chapter === null){
-        //   if(itterator !== 20){
-        //     if (tutorialRunning && count > 0 ) {
-        //       setItterator(itterator + 2);
-        //     } else if (tutorialRunning) {
-        //       setItterator(itterator + 1);
-        //     }
-        //   }
-        // } else {
-        //   if (tutorialRunning && count > 0 ) {
-        //     setItterator(itterator + 2);
-        //   } else if (tutorialRunning) {
-        //     setItterator(itterator + 1);
-        //   }
-        // }
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -144,26 +107,20 @@ export default function AnchorModal(props) {
     }
   }, [itterator]);
 
-  const getDiveSite = async (site) => {
+  const getDiveSite = async () => {
     try {
-      const selectedSite = await getDiveSiteByName(site);
+      console.log(selectedDiveSite);
+      const selectedSite = await getDiveSiteWithUserName({
+        siteName: selectedDiveSite.SiteName,
+        lat: selectedDiveSite.Latitude,
+        lng: selectedDiveSite.Longitude,
+      });
       if (selectedSite.length > 0) {
-        setSite(selectedSite[0].userName);
+        setSite(selectedSite[0].newusername);
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
-  };
-
-  const handleEmail = (pic) => {
-    const to = ["scubaseasons@gmail.com"];
-    email(to, {
-      // Optional additional arguments
-      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
-      body:
-        "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
-      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
-    }).catch(console.error);
   };
 
   const handleEmailDS = () => {
@@ -188,7 +145,6 @@ export default function AnchorModal(props) {
     }
 
     if (itterator === 18) {
-      // setItterator((prev) => prev + 1)
       setGuideModal(false);
     }
 
@@ -196,8 +152,8 @@ export default function AnchorModal(props) {
   };
 
   const handleSwitch = () => {
-    if (itterator === 11 || itterator == 15){
-      return
+    if (itterator === 11 || itterator == 15) {
+      return;
     }
     setPinValues({
       ...pinValues,
@@ -206,14 +162,13 @@ export default function AnchorModal(props) {
     });
     setSiteModal(false);
     setPicAdderModal(true);
-  }
+  };
 
   const togglePhotoBoxModal = (photo) => {
     setSelectedPhoto(photo);
     setPhotoBoxModel(true);
   };
-  
- 
+
   const [base64, setBase64] = useState(null);
   const [userN, setUserN] = useState(null);
   const [creastureN, setCreastureN] = useState(null);
@@ -303,8 +258,7 @@ export default function AnchorModal(props) {
     <View
       style={{
         height: "98%",
-        // backgroundColor: "orange",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <View style={styles.titleAlt}>
@@ -364,10 +318,13 @@ export default function AnchorModal(props) {
           {anchorPics &&
             anchorPics.map((pic) => {
               return (
-                <TouchableWithoutFeedback key={pic.id} onPress={() => togglePhotoBoxModal(pic.photoFile)}>
-                <View style={styles.shadowbox}>
-                <Picture key={pic.id} pic={pic}></Picture>
-                </View>
+                <TouchableWithoutFeedback
+                  key={pic.id}
+                  onPress={() => togglePhotoBoxModal(pic.photofile)}
+                >
+                  <View style={styles.shadowbox}>
+                    <Picture key={pic.id} pic={pic}></Picture>
+                  </View>
                 </TouchableWithoutFeedback>
               );
             })}
@@ -388,7 +345,7 @@ export default function AnchorModal(props) {
                   width: scale(32),
                   height: scale(32),
                   borderRadius: scale(32),
-                  backgroundColor: "black"
+                  backgroundColor: "black",
                 }}
               >
                 <View
@@ -409,32 +366,22 @@ export default function AnchorModal(props) {
           )}
         </View>
       </ScrollView>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container3: {
-    // flex: 1,
-    // backgroundColor: "blue",
     alignItems: "center",
-    // marginTop: "-3%",
-    // height: "100%",
     width: scale(300),
     marginRight: scale(10),
     marginLeft: scale(10),
-    // marginBottom: scale(16),
     borderRadius: 15,
-    // backgroundColor: "green"
   },
   picContainer3: {
     width: "100%",
-    // height: scale(200),
     marginBottom: scale(5),
-    // backgroundColor: "pink",
     backgroundColor: "538bdb",
-    // marginTop: "-0%",
     borderRadius: 15,
   },
   shadowbox: {
@@ -460,7 +407,6 @@ const styles = StyleSheet.create({
     width: "10%",
     height: scale(30),
     marginRight: "-5%",
-    // backgroundColor: 'blue'
   },
   share: {
     left: scale(232),
@@ -481,7 +427,6 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: scale(18),
     color: "#F0EEEB",
-    // backgroundColor: "green"
   },
   noSightings2: {
     flex: 1,
@@ -493,7 +438,6 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: scale(18),
     color: "#F0EEEB",
-    // backgroundColor: "green"
   },
   micro: {
     display: "flex",
@@ -513,7 +457,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "black",
     opacity: 0.6,
-    // width: "54%",
     borderRadius: 5,
     zIndex: 2,
     right: "3%",
@@ -533,11 +476,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    // backgroundColor: 'green'
-    // flexDirection: "row",
-    // position: "absolute",
-    // top: Platform.OS === "ios" ? "-7%" :"-1.5%",
-    // left: Platform.OS === "ios" ? "-8%" :"-5%",
   },
   headerAlt: {
     flexWrap: "wrap",
@@ -551,10 +489,8 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: -10,
     flexWrap: "wrap",
-    // backgroundColor: "pink"
   },
   dsCredit: {
-    // backgroundColor: 'pink',
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(9),
@@ -574,7 +510,6 @@ const styles = StyleSheet.create({
     marginBottom: "3%",
     width: "92%",
     height: scale(30),
-    // backgroundColor: 'pink'
   },
   closeButtonAlt: {
     position: "relative",
@@ -584,7 +519,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: "-4%",
-    // backgroundColor: "green"
   },
   closeButtonAltPressed: {
     position: "relative",

@@ -3,11 +3,12 @@ import { StyleSheet, View, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 export default function CommentListItem(props) {
-  const { commentDetails } = props;
+  const { commentDetails, setReplyTo, replyTo } = props;
 
   let newDate = commentDetails.created_at.substring(0, 10);
 
   return (
+    <View>
     <View style={styles.container} key={commentDetails.id}>
       <View style={styles.topBox}>
         <Text style={styles.userTxt}>{commentDetails.username}</Text>
@@ -16,9 +17,10 @@ export default function CommentListItem(props) {
 
       <Text style={styles.contentTxt}>{commentDetails.content}</Text>
     </View>
+      <Text style={styles.replyTxt} onPress={() => {replyTo ? setReplyTo(null) : setReplyTo([commentDetails.username, commentDetails.id])}}>Reply</Text>
+    </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#537bdb",
@@ -50,4 +52,11 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     color: "black"
   },
+  replyTxt: {
+    fontFamily: "Itim_400Regular",
+    fontSize: moderateScale(14),
+    color: "white",
+    marginTop: moderateScale(5),
+    marginLeft: moderateScale(25)
+  }
 });

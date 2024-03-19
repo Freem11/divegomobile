@@ -12,9 +12,12 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import {
   insertPhotoLike,
   deletePhotoLike,
-  grabPhotoLikeById,
-  countPhotoLikeById,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
+import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
+import {
+  insertUserFollow,
+  deleteUserFollow,
+} from "../../supabaseCalls/userFollowSupabaseCalls";
 import { countPhotoCommentById } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -37,7 +40,7 @@ export default function Picture(props) {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
-      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
+      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photofile} `,
       body:
         "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
@@ -55,71 +58,50 @@ export default function Picture(props) {
   const { setCommentsModal } = useContext(CommentsModalContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
 
-  const [picLiked, setPicLiked] = useState(false);
-  const [likeData, setLikeData] = useState(null);
-  const [countOfLikes, setCountOfLikes] = useState(0);
-  const [countOfComments, setCountOfComments] = useState(0);
+  const [picLiked, setPicLiked] = useState(pic.likedbyuser);
+  const [likeData, setLikeData] = useState(pic.likeid);
+  const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
+
+  const [userFollows, setUserFollows] = useState(false);
+  const [followData, setFollowData] = useState(pic.followid);
 
   const handleCommentModal = () => {
     setCommentsModal(true);
     setSelectedPicture(pic);
   };
 
-  const getCommentCount = async (PicID) => {
-    try {
-      const commentCount = await countPhotoCommentById(PicID);
-      if (!commentCount) {
-        setCountOfComments(0);
-      } else {
-        setCountOfComments(commentCount);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
-  const handleLike = async (picId) => {
+  const handleLike = async () => {
     if (picLiked) {
-      deletePhotoLike(likeData[0].id);
+      deletePhotoLike(likeData);
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
       let newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
       setPicLiked(true);
-      setLikeData(newRecord);
+      setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
     }
   };
 
-  useEffect(() => {
-    getLikeStatus(profile[0].UserID, pic.id);
-    getLikeCount(pic.id);
-    getCommentCount(pic.id);
-  }, []);
+  const handleFollow = async (userName) => {
+    let picOwnerAccount = await grabProfileByUserName(userName);
 
-  const getLikeStatus = async (userID, PicID) => {
-    try {
-      const likeStatus = await grabPhotoLikeById(userID, PicID);
-      setLikeData(likeStatus);
-      if (likeStatus.length > 0) {
-        setPicLiked(true);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
+    if (profile[0].UserID === picOwnerAccount[0].UserID){
+      return
     }
-  };
 
-  const getLikeCount = async (PicID) => {
-    try {
-      const likeCount = await countPhotoLikeById(PicID);
-      if (!likeCount) {
-        setCountOfLikes(0);
-      } else {
-        setCountOfLikes(likeCount);
+    if (userFollows) {
+      deleteUserFollow(followData);
+      setUserFollows(false);
+    } else {
+      
+      if (picOwnerAccount) {
+        let newRecord = await insertUserFollow(profile[0].UserID, picOwnerAccount[0].UserID);
+        setFollowData(newRecord[0].id);
+        setUserFollows(true);
       }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
     }
+
   };
 
   const convertBase64 = (cacheDir) => {
@@ -156,7 +138,7 @@ export default function Picture(props) {
       setUserN("an unnamed diver");
     }
 
-    let temp = photoFile.split("/");
+    let temp = photofile.split("/");
     let lastIndex = temp.length - 1;
     let fileName = temp[lastIndex];
     let cacheDir = FileSystem.cacheDirectory + fileName;
@@ -209,8 +191,8 @@ export default function Picture(props) {
             size={scale(19)}
             onPress={() =>
               onShare(
-                pic.photoFile,
-                pic.userName,
+                pic.photofile,
+                pic.newuserame,
                 pic.label,
                 pic.dateTaken,
                 pic.latitude,
@@ -230,7 +212,7 @@ export default function Picture(props) {
         </View>
 
         <ImageCasherDynamic
-          photoFile={pic.photoFile}
+          photoFile={pic.photofile}
           id={pic.id}
           style={{
             borderRadius: 15,
@@ -256,21 +238,32 @@ export default function Picture(props) {
           />
         </TouchableWithoutFeedback>
         <View style={styles.microLow}>
-          <Text style={styles.microLow2}> Added by: {pic.userName}</Text>
+          <Text
+            style={userFollows ? styles.microLow2Alt : styles.microLow2}
+            onPress={() => handleFollow(pic.newusername)}
+          >
+            {" "}
+            Added by: {pic.newusername}{"  "} {profile[0].UserName === pic.newusername ? null : userFollows ? "(unfollow)" : "(follow)"}
+          </Text>
         </View>
       </View>
-      <TouchableWithoutFeedback
-        onPress={() => handleCommentModal(pic)}>
+      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)}>
         <View
-         onPress={() => handleCommentModal(pic)}
+          onPress={() => handleCommentModal(pic)}
           style={{
             flexDirection: "row",
             marginLeft: moderateScale(20),
             zIndex: 4,
-
           }}
         >
-          <Text style={styles.commentPrompt} onPress={() => handleCommentModal(pic)}>{countOfComments < 1 ? 'Be first to Comment' : `Comment / View all ${countOfComments} Comments`} </Text>
+          <Text
+            style={styles.commentPrompt}
+            onPress={() => handleCommentModal(pic)}
+          >
+            {pic.commentcount < 1
+              ? "Be first to Comment"
+              : `Comment / View all ${pic.commentcount} Comments`}{" "}
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -281,6 +274,8 @@ const styles = StyleSheet.create({
   outterBox: {
     width: "100%",
     marginLeft: moderateScale(-10),
+    marginBottom: moderateScale(5),
+    // backgroundColor: 'pink'
   },
   container: {
     flex: 1,
@@ -387,9 +382,21 @@ const styles = StyleSheet.create({
     fontSize: scale(8),
     zIndex: 2,
   },
+  microLow2Alt: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    opacity: 1,
+    color: "gold",
+    fontFamily: "Itim_400Regular",
+    fontSize: scale(8),
+    zIndex: 2,
+  },
   commentPrompt: {
     display: "flex",
-    width: moderateScale(200),
+    width: scale(200),
     height: scale(20),
     justifyContent: "center",
     alignItems: "center",
@@ -402,8 +409,5 @@ const styles = StyleSheet.create({
     zIndex: 10,
     paddingLeft: moderateScale(10),
     paddingRight: moderateScale(2),
-    marginTop: moderateScale(0),
-    marginBottom: moderateScale(0),
-    marginLeft: moderateScale(0),
   },
 });

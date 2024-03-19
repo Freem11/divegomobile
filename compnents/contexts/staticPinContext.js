@@ -11,7 +11,6 @@ const PinContextProvider = ({children}) => {
         Longitude: "",
         DDVal: "0",
         UserId: null,
-        UserName: null,
       });
 
     return (
