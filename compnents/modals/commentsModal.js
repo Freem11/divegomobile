@@ -61,10 +61,16 @@ export default function CommentsModal() {
     if (commentContent === null || commentContent === "") {
       return;
     } else {
+      let finalContent
+      if (replyTo) {
+        finalContent = "@" + replyTo[0] + " " + commentContent
+      } else {
+        finalContent = commentContent
+      }
       let newComment = await insertPhotoComment(
         profile[0].UserID,
         selectedPicture.id,
-        commentContent,
+        finalContent,
         userIdentity
       );
       setCommentContent(null);
