@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
   },
   commentPrompt: {
     display: "flex",
-    width: moderateScale(200),
+    width: scale(200),
     height: scale(20),
     justifyContent: "center",
     alignItems: "center",

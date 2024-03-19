@@ -7,8 +7,9 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
+  KeyboardAvoidingView,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -31,8 +32,10 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function CommentsModal() {
+  const entryRef = useRef(0);
   const [commentContent, setCommentContent] = useState(null);
   const [listOfComments, setListOfComments] = useState(null);
+  const [replyTo, setReplyTo] = useState(null);
   const { profile } = useContext(UserProfileContext);
   const { selectedPicture, setSelectedPicture } = useContext(
     SelectedPictureContext
@@ -51,20 +54,34 @@ export default function CommentsModal() {
   };
 
   const handleCommentInsert = async () => {
-    if (commentContent !== null || commentContent !== " ") {
+    let userIdentity = null
+    if(replyTo){
+      userIdentity = replyTo[1]
+    }
+    if (commentContent === null || commentContent === "") {
+      return;
+    } else {
       let newComment = await insertPhotoComment(
         profile[0].UserID,
         selectedPicture.id,
-        commentContent
+        commentContent,
+        userIdentity
       );
       setCommentContent(null);
+      setReplyTo(null)
       getAllPictureComments(selectedPicture.id);
     }
   };
 
+
+  const handleCommentModalClose = async () => {
+    setReplyTo(null)
+    setCommentsModal(false)
+  }
+
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => setCommentsModal(false)}>
+      <TouchableWithoutFeedback onPress={() => handleCommentModalClose()}>
         <View style={styles.commentHeader}>
           <View style={styles.tab}></View>
           <Text style={styles.headerText}>Comments</Text>
@@ -77,34 +94,54 @@ export default function CommentsModal() {
               <CommentListItem
                 commentDetails={commentDeets}
                 key={commentDeets.id}
+                setReplyTo={setReplyTo}
+                replyTo={replyTo}
               />
             );
           })}
       </ScrollView>
 
-      <View style={styles.commentEntryContainer}>
-        <TextInput
-          style={styles.input}
-          value={commentContent}
-          placeholder={"Blow some bubbles"}
-          placeholderTextColor="darkgrey"
-          fontSize={moderateScale(16)}
-          color={"grey"}
-          multiline={true}
-          onChangeText={(text) => setCommentContent(text)}
-        ></TextInput>
-        <TouchableWithoutFeedback onPress={() => handleCommentInsert()}>
-          <Image
-            source={bubbles}
-            style={[
-              {
-                height: moderateScale(36),
-                width: moderateScale(36),
-              },
-            ]}
-          />
-        </TouchableWithoutFeedback>
-      </View>
+      <KeyboardAvoidingView
+        behavior="position"
+        keyboardVerticalOffset={
+          Platform.OS === "ios"
+            ? moderateScale(650) - moderateScale(340)
+            : moderateScale(650) - moderateScale(340)
+        }
+        style={styles.keyboardAvoid}
+      >
+        <View style={styles.commentEntryContainer}>
+          {replyTo ? (
+            <View style={styles.replyLine}>
+              <Text style={styles.userTxt}>@{replyTo[0]}</Text>
+              <FontAwesome name="close" color="#BD9F9F" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
+            </View>
+          ) : null}
+          <View style={styles.replyBox}>
+            <TextInput
+              style={styles.input}
+              value={commentContent}
+              placeholder={"Blow some bubbles"}
+              placeholderTextColor="darkgrey"
+              fontSize={moderateScale(16)}
+              color={"grey"}
+              multiline={true}
+              onChangeText={(text) => setCommentContent(text)}
+            ></TextInput>
+            <TouchableWithoutFeedback onPress={() => handleCommentInsert()}>
+              <Image
+                source={bubbles}
+                style={[
+                  {
+                    height: moderateScale(36),
+                    width: moderateScale(36),
+                  },
+                ]}
+              />
+            </TouchableWithoutFeedback>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -142,15 +179,31 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "85%",
     borderBottomColor: "lightgrey",
-    borderBottomWidth: 0.2,
+    borderBottomWidth: moderateScale(0.2),
+  },
+  keyboardAvoid: {
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor: "pink",
+    width: "100%",
+    height: "15%",
   },
   commentEntryContainer: {
+    flexDirection: "column",
+    // alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: moderateScale(60),
+    // backgroundColor: "green",
+    backgroundColor: "#538bdb",
+    marginTop: moderateScale(5),
+  },
+  replyBox: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    // backgroundColor: "black",
     width: "90%",
-    height: "15%",
+    height: "100%",
   },
   input: {
     flex: 1,
@@ -173,5 +226,22 @@ const styles = StyleSheet.create({
     marginRight: moderateScale(5),
     marginLeft: moderateScale(-7),
     paddingTop: Platform.OS === "ios" ? moderateScale(10) : moderateScale(0),
+  },
+  replyLine: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // backgroundColor: 'pink',
+    width: "50%",
+    marginBottom: moderateScale(-8),
+    marginTop: moderateScale(10)
+  },
+  userTxt: {
+    fontFamily: "Itim_400Regular",
+    fontSize: moderateScale(13),
+    color: "black",
+    height: moderateScale(20),
+    // backgroundColor: 'pink',
+    // alignSelf: "flex-start",
+    marginBottom: moderateScale(-15),
   },
 });

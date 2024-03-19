@@ -1,13 +1,14 @@
 import { supabase } from "../supabase";
 
-export const insertPhotoComment = async (userId, photoId, comment) => {
+export const insertPhotoComment = async (userId, photoId, comment, userID) => {
   const { data, error } = await supabase
   .from("photoComments")
   .insert([
     {
       userId: userId,
       photoId: photoId,
-      content: comment
+      content: comment,
+      replied_to: userID
     },
   ]);
 
