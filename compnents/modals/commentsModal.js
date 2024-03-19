@@ -6,17 +6,11 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Platform,
-  Dimensions,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState, useContext, useEffect, useRef } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-import { scale, moderateScale } from "react-native-size-matters";
+import React, { useState, useContext, useEffect } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
 import bubbles from "../png/bubbles.png";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
@@ -28,18 +22,12 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import CommentListItem from "../commentListItem/commentListItem";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
 export default function CommentsModal() {
-  const entryRef = useRef(0);
   const [commentContent, setCommentContent] = useState(null);
   const [listOfComments, setListOfComments] = useState(null);
-  const [replyTo, setReplyTo] = useState({replyInfo: null, replyLevel: 0});
+  const [replyTo, setReplyTo] = useState(null);
   const { profile } = useContext(UserProfileContext);
-  const { selectedPicture, setSelectedPicture } = useContext(
-    SelectedPictureContext
-  );
+  const { selectedPicture } = useContext(SelectedPictureContext);
   const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
 
   useEffect(() => {
@@ -55,7 +43,7 @@ export default function CommentsModal() {
 
   const handleCommentInsert = async () => {
     let userIdentity = null
-    if(replyTo){
+    if (replyTo){
       userIdentity = replyTo[1]
     }
     if (commentContent === null || commentContent === "") {
@@ -74,15 +62,53 @@ export default function CommentsModal() {
         userIdentity
       );
       setCommentContent(null);
-      setReplyTo({replyInfo: null, replyLevel: 0})
+      setReplyTo(null);
       getAllPictureComments(selectedPicture.id);
     }
   };
 
 
   const handleCommentModalClose = async () => {
-    setReplyTo({replyInfo: null, replyLevel: 0})
+    setReplyTo(null)
     setCommentsModal(false)
+  }
+
+  const getCommentListView = (commentId, level=0) => {
+    let marginLeft = 5 * level; 
+    let width = 98 - marginLeft;
+    const marginStyle = StyleSheet.create({
+      commentLevelShift: {
+        marginLeft: `${marginLeft}%`, 
+        width: `${width}%`,
+      }
+    });
+    return (
+      <ScrollView key={`parent-${commentId}`} style={[styles.commentListContainer, marginStyle.commentLevelShift]}>
+        {listOfComments &&
+          listOfComments.map((commentDeets) => {
+            if (commentDeets.replied_to === commentId) {
+              let nbReplies = 0;
+              for (let comment of listOfComments) {
+                if (comment.replied_to === commentDeets.id) {
+                  nbReplies++;
+                }
+              }
+              return (
+                <>
+                  <CommentListItem
+                    commentDetails={commentDeets}
+                    key={commentDeets.id}
+                    setReplyTo={setReplyTo}
+                    replyTo={replyTo}
+                  />
+                  {getCommentListView(commentDeets.id, level+1)}
+                </>
+              );
+            }
+          }
+        )}
+      </ScrollView>
+    )
   }
 
   return (
@@ -93,19 +119,7 @@ export default function CommentsModal() {
           <Text style={styles.headerText}>Comments</Text>
         </View>
       </TouchableWithoutFeedback>
-      <ScrollView style={styles.commentListContainer}>
-        {listOfComments &&
-          listOfComments.map((commentDeets) => {
-            return (
-              <CommentListItem
-                commentDetails={commentDeets}
-                key={commentDeets.id}
-                setReplyTo={setReplyTo}
-                replyTo={replyTo}
-              />
-            );
-          })}
-      </ScrollView>
+      {getCommentListView(null)}
 
       <KeyboardAvoidingView
         behavior="position"
@@ -120,7 +134,7 @@ export default function CommentsModal() {
           {replyTo ? (
             <View style={styles.replyLine}>
               <Text style={styles.userTxt}>@{replyTo[0]}</Text>
-              <FontAwesome name="close" color="lightgrey" size={moderateScale(15)} onPress={() => setReplyTo({replyInfo: null, replyLevel: 0})}/>
+              <FontAwesome name="close" color="lightgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
             </View>
           ) : null}
           <View style={styles.replyBox}>
@@ -156,7 +170,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#538bdb",
-    // backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
     marginTop: "5%",
@@ -166,7 +179,6 @@ const styles = StyleSheet.create({
   },
   commentHeader: {
     alignItems: "center",
-    // backgroundColor: 'orange'
   },
   tab: {
     backgroundColor: "white",
@@ -182,7 +194,6 @@ const styles = StyleSheet.create({
   },
   commentListContainer: {
     flex: 1,
-    // backgroundColor: "green",
     width: "100%",
     height: "85%",
     borderBottomColor: "lightgrey",
@@ -191,17 +202,14 @@ const styles = StyleSheet.create({
   keyboardAvoid: {
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "pink",
     width: "100%",
     height: "15%",
   },
   commentEntryContainer: {
     flexDirection: "column",
-    // alignItems: "center",
     justifyContent: "center",
     width: "100%",
     height: moderateScale(60),
-    // backgroundColor: "green",
     backgroundColor: "#538bdb",
     marginTop: moderateScale(5),
   },
@@ -251,7 +259,6 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(13),
     color: "lightgrey",
-    // backgroundColor: 'pink',
     marginBottom: moderateScale(-15),
   },
 });

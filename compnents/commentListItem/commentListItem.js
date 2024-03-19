@@ -1,38 +1,24 @@
-import React, { useContext } from "react";
+import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { ReplyLevelContext } from "../contexts/replyLevelContext";
 
 export default function CommentListItem(props) {
   const { commentDetails, setReplyTo, replyTo } = props;
-  const { replyLevel, setReplyLevel} = useContext(
-    ReplyLevelContext
-  );
-  let newDate = commentDetails.created_at.substring(0, 10);
-
-  // {replyInfo: null, replyLevel: 0}
-  
-  const handleReply = async () => {
-    if(replyTo){
-      setReplyTo(null)
-      setReplyLevel(replyLevel - 1)
-    } else {
-      setReplyTo([commentDetails.username, commentDetails.id])
-      setReplyLevel(replyLevel + 1)
-    }
-  }
+  let newDate = new Date(commentDetails.created_at);
 
   return (
     <View>
     <View style={styles.container} key={commentDetails.id}>
       <View style={styles.topBox}>
         <Text style={styles.userTxt}>{commentDetails.username}</Text>
-        <Text style={styles.dateTxt}>{newDate}</Text>
+        <Text style={styles.dateTxt}>{newDate.toLocaleString()}</Text>
       </View>
 
       <Text style={styles.contentTxt}>{commentDetails.content}</Text>
     </View>
-      <Text style={styles.replyTxt} onPress={() => {handleReply}}>Reply</Text>
+      <Text style={styles.replyTxt} onPress={() => {
+        replyTo ? setReplyTo(null) : setReplyTo([commentDetails.username, commentDetails.id])
+      }}>Reply</Text>
     </View>
   );
 }
