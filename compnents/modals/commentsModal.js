@@ -6,17 +6,11 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Platform,
-  Dimensions,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState, useContext, useEffect, useRef } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-import { scale, moderateScale } from "react-native-size-matters";
+import React, { useState, useContext, useEffect } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
 import bubbles from "../png/bubbles.png";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
@@ -28,18 +22,13 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import CommentListItem from "../commentListItem/commentListItem";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
 export default function CommentsModal() {
-  const entryRef = useRef(0);
   const [commentContent, setCommentContent] = useState(null);
   const [listOfComments, setListOfComments] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
+  const [selectedReplyId, setSelectedReplyId] = useState([]);
   const { profile } = useContext(UserProfileContext);
-  const { selectedPicture, setSelectedPicture } = useContext(
-    SelectedPictureContext
-  );
+  const { selectedPicture } = useContext(SelectedPictureContext);
   const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
 
   useEffect(() => {
@@ -55,7 +44,7 @@ export default function CommentsModal() {
 
   const handleCommentInsert = async () => {
     let userIdentity = null
-    if(replyTo){
+    if (replyTo){
       userIdentity = replyTo[1]
     }
     if (commentContent === null || commentContent === "") {
@@ -74,7 +63,7 @@ export default function CommentsModal() {
         userIdentity
       );
       setCommentContent(null);
-      setReplyTo(null)
+      setReplyTo(null);
       getAllPictureComments(selectedPicture.id);
     }
   };
@@ -85,6 +74,48 @@ export default function CommentsModal() {
     setCommentsModal(false)
   }
 
+  const getCommentListView = (commentId, level=0) => {
+    let marginLeft = 5 * level; 
+    let width = 98 - marginLeft;
+    const marginStyle = StyleSheet.create({
+      commentLevelShift: {
+        marginLeft: `${marginLeft}%`, 
+        width: `${width}%`,
+      }
+    });
+
+    return (
+      <ScrollView key={`parent-${commentId}`} style={[styles.commentListContainer, marginStyle.commentLevelShift]}>
+        {listOfComments &&
+          listOfComments.map((commentDeets) => {
+            if (commentDeets.replied_to === commentId) {
+              let nbReplies = 0;
+              for (let comment of listOfComments) {
+                if (comment.replied_to === commentDeets.id) {
+                  nbReplies++;
+                }
+              }
+              return (
+                selectedReplyId.includes(commentDeets.replied_to) || commentDeets.replied_to === null ?
+                <>
+                  <CommentListItem
+                    commentDetails={commentDeets}
+                    key={commentDeets.id}
+                    setReplyTo={setReplyTo}
+                    replyTo={replyTo}
+                    setSelectedReplyId={setSelectedReplyId}
+                    selectedReplyId={selectedReplyId}
+                  />
+                  {getCommentListView(commentDeets.id, level+1)} 
+                </> : null
+              );
+            }
+          }
+        )}
+      </ScrollView>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={() => handleCommentModalClose()}>
@@ -93,19 +124,7 @@ export default function CommentsModal() {
           <Text style={styles.headerText}>Comments</Text>
         </View>
       </TouchableWithoutFeedback>
-      <ScrollView style={styles.commentListContainer}>
-        {listOfComments &&
-          listOfComments.map((commentDeets) => {
-            return (
-              <CommentListItem
-                commentDetails={commentDeets}
-                key={commentDeets.id}
-                setReplyTo={setReplyTo}
-                replyTo={replyTo}
-              />
-            );
-          })}
-      </ScrollView>
+      {getCommentListView(null)}
 
       <KeyboardAvoidingView
         behavior="position"
@@ -156,14 +175,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#538bdb",
-    // backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
     marginTop: "5%",
     marginBottom: "2%",
     width: "98%",
     marginLeft: "1%",
-    minHeight: Platform.OS === "android" ? 490 : 0,
   },
   commentHeader: {
     alignItems: "center",
@@ -181,7 +198,7 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
   },
   commentListContainer: {
-    // backgroundColor: "pink",
+    flex: 1,
     width: "100%",
     height: "85%",
     borderBottomColor: "lightgrey",
@@ -190,17 +207,14 @@ const styles = StyleSheet.create({
   keyboardAvoid: {
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "pink",
     width: "100%",
     height: "15%",
   },
   commentEntryContainer: {
     flexDirection: "column",
-    // alignItems: "center",
     justifyContent: "center",
     width: "100%",
     height: moderateScale(60),
-    // backgroundColor: "green",
     backgroundColor: "#538bdb",
     marginTop: moderateScale(5),
   },
@@ -250,7 +264,6 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(13),
     color: "lightgrey",
-    // backgroundColor: 'pink',
     marginBottom: moderateScale(-15),
   },
 });
