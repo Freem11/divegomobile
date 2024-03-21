@@ -51,14 +51,14 @@ export default function PhotoMenu() {
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-  const [areaPicsOffset, setAreaPicsOffset] = useState([0,10]);
+  const [areaPicsOffset, setAreaPicsOffset] = useState([0, 10]);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { textvalue, setTextValue } = useContext(SearchTextContext);
 
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
-  const { profile } = useContext(UserProfileContext)
+  const { profile } = useContext(UserProfileContext);
 
   const [picMenuSize, setPicMenuSize] = useState(0);
   const [selectedID, setSelectedID] = useState(null);
@@ -125,16 +125,16 @@ export default function PhotoMenu() {
     xValue.value = 0;
   }, [areaPics.length]);
 
-// const updatePicLimits = (direction) => {
-//   if(direction < 0) {
-//     setAreaPicsOffset([areaPicsOffset[0] + 5, areaPicsOffset[1] + 5])
-//   } else {
-//     setAreaPicsOffset([areaPicsOffset[0] - 5, areaPicsOffset[1] - 5])
-//   }
-//     console.log("hi", areaPicsOffset)
+  // const updatePicLimits = (direction) => {
+  //   if(direction < 0) {
+  //     setAreaPicsOffset([areaPicsOffset[0] + 5, areaPicsOffset[1] + 5])
+  //   } else {
+  //     setAreaPicsOffset([areaPicsOffset[0] - 5, areaPicsOffset[1] - 5])
+  //   }
+  //     console.log("hi", areaPicsOffset)
 
-//   }
-  
+  //   }
+
   const xValue = useSharedValue(0);
   const context = useSharedValue({ x: 0 });
   let bounds = scale(175);
@@ -249,75 +249,84 @@ export default function PhotoMenu() {
     }
   };
 
-  const filterHeatPointsForMapArea = async () => {
-    if (boundaries.length !== 0) {
-      try {
-        let AmericanHeatPoints;
-        let AsianHeatPoints;
-        if (animalMultiSelection.length === 0) {
-          AmericanHeatPoints = await getHeatPointsWithUserEmpty({
-            myCreatures,
-            minLat: boundaries[1],
-            maxLat: boundaries[3],
-            minLng: -180,
-            maxLng: boundaries[2],
-          });
-          AsianHeatPoints = await getHeatPointsWithUserEmpty({
-            myCreatures,
-            minLat: boundaries[1],
-            maxLat: boundaries[3],
-            minLng: boundaries[0],
-            maxLng: 180,
-          });
-        } else {
-          AmericanHeatPoints = await getHeatPointsWithUser({
-            myCreatures,
-            minLat: boundaries[1],
-            maxLat: boundaries[3],
-            minLng: -180,
-            maxLng: boundaries[2],
-            animalMultiSelection,
-          });
-          AsianHeatPoints = await getHeatPointsWithUser({
-            myCreatures,
-            minLat: boundaries[1],
-            maxLat: boundaries[3],
-            minLng: boundaries[0],
-            maxLng: 180,
-            animalMultiSelection,
-          });
-        }
-        // const localHeatPoints = await multiHeatPoints(
-        //   {
-        //     minLat: boundaries[1],
-        //     maxLat: boundaries[3],
-        //     minLng: boundaries[0],
-        //     maxLng: boundaries[2],
-        //   },
-        //   animalMultiSelection
-        // );
-        let localHeatPoints = [...AsianHeatPoints, ...AmericanHeatPoints];
-        if (localHeatPoints) {
-          setNewHeat(formatHeatVals(localHeatPoints));
-        }
-      } catch (e) {
-        console.log({ title: "Error", message: e.message });
-      }
-    }
-  };
+  // const filterHeatPointsForMapArea = async () => {
+  //   if (boundaries.length !== 0) {
+  //     if (boundaries[0] > boundaries[2]) {
+  //       try {
+  //         let AmericanHeatPoints;
+  //         let AsianHeatPoints;
+  //         if (animalMultiSelection.length === 0) {
+  //           AmericanHeatPoints = await getHeatPointsWithUserEmpty({
+  //             myCreatures,
+  //             minLat: boundaries[1],
+  //             maxLat: boundaries[3],
+  //             minLng: -180,
+  //             maxLng: boundaries[2],
+  //           });
+  //           AsianHeatPoints = await getHeatPointsWithUserEmpty({
+  //             myCreatures,
+  //             minLat: boundaries[1],
+  //             maxLat: boundaries[3],
+  //             minLng: boundaries[0],
+  //             maxLng: 180,
+  //           });
+  //         } else {
+  //           AmericanHeatPoints = await getHeatPointsWithUser({
+  //             myCreatures,
+  //             minLat: boundaries[1],
+  //             maxLat: boundaries[3],
+  //             minLng: -180,
+  //             maxLng: boundaries[2],
+  //             animalMultiSelection,
+  //           });
+  //           AsianHeatPoints = await getHeatPointsWithUser({
+  //             myCreatures,
+  //             minLat: boundaries[1],
+  //             maxLat: boundaries[3],
+  //             minLng: boundaries[0],
+  //             maxLng: 180,
+  //             animalMultiSelection,
+  //           });
+  //         }
+  //         let localHeatPoints = [...AsianHeatPoints, ...AmericanHeatPoints];
+  //         if (localHeatPoints) {
+  //           setNewHeat(formatHeatVals(localHeatPoints));
+  //         }
+  //       } catch (e) {
+  //         console.log({ title: "Error", message: e.message });
+  //       }
+  //     }
+  //   } else {
+  //     try {
+  //       const localHeatPoints = await getHeatPointsWithUser({
+  //         minLat: boundaries[1],
+  //         maxLat: boundaries[3],
+  //         minLng: boundaries[0],
+  //         maxLng: boundaries[2],
+  //         animalMultiSelection,
+  //       });
+
+  //       if (localHeatPoints) {
+  //         setNewHeat(formatHeatVals(localHeatPoints));
+  //       }
+  //     } catch (e) {
+  //       console.log({ title: "Error", message: e.message });
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     filterPhotosForMapArea();
-    filterHeatPointsForMapArea();
+    // filterHeatPointsForMapArea();
   }, []);
 
-  useEffect(() => {
-    filterHeatPointsForMapArea();
-  }, [setAnimalMultiSelection]);
+  // useEffect(() => {
+  //   filterHeatPointsForMapArea();
+  // }, [setAnimalMultiSelection]);
 
   useEffect(() => {
     filterPhotosForMapArea();
-    filterHeatPointsForMapArea();
+    // filterHeatPointsForMapArea();
   }, [boundaries, textvalue]);
 
   return (
