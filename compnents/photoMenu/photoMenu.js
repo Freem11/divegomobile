@@ -1,5 +1,5 @@
 import { StyleSheet, View, Dimensions } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   multiHeatPoints,
   getHeatPointsWithUser,
@@ -16,6 +16,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   Easing,
+  runOnJS,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
@@ -50,7 +51,7 @@ export default function PhotoMenu() {
   const { boundaries } = useContext(MapBoundariesContext);
   const { setNewHeat } = useContext(HeatPointsContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-
+  const [areaPicsOffset, setAreaPicsOffset] = useState([0,10]);
   const { itterator, setItterator } = useContext(IterratorContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { textvalue, setTextValue } = useContext(SearchTextContext);
@@ -124,6 +125,16 @@ export default function PhotoMenu() {
     xValue.value = 0;
   }, [areaPics.length]);
 
+// const updatePicLimits = (direction) => {
+//   if(direction < 0) {
+//     setAreaPicsOffset([areaPicsOffset[0] + 5, areaPicsOffset[1] + 5])
+//   } else {
+//     setAreaPicsOffset([areaPicsOffset[0] - 5, areaPicsOffset[1] - 5])
+//   }
+//     console.log("hi", areaPicsOffset)
+
+//   }
+  
   const xValue = useSharedValue(0);
   const context = useSharedValue({ x: 0 });
   let bounds = scale(175);
@@ -155,6 +166,7 @@ export default function PhotoMenu() {
       } else if (xValue.value < -picMenuSize / 2 + bounds) {
         xValue.value = -picMenuSize / 2 + startBounce;
       }
+      // runOnJS(updatePicLimits)(event.velocityX)
     });
 
   const animatedPictureStyle = useAnimatedStyle(() => {

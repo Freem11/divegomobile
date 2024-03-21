@@ -7,7 +7,6 @@ export default function CommentListItem(props) {
   let newDate = new Date(commentDetails.created_at);
   let finalDate = newDate.toLocaleString().substring(0, 9);
 
-  console.log("gaah", selectedReplyId, commentDetails.id)
   return (
     <View>
       <View style={styles.container} key={commentDetails.id}>

@@ -25,7 +25,7 @@ import {
 import {
   getPhotosforAnchorMulti,
   getPhotosWithUser,
-  getPhotosWithUserEmpty
+  getPhotosWithUserEmpty,
 } from "./../supabaseCalls/photoSupabaseCalls";
 import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
@@ -602,6 +602,7 @@ export default function MapPage() {
   };
 
   //DiveSiteSearch Modal Animation
+  
   const diveSiteSearchModalY = useSharedValue(windowHeight);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
     DiveSiteSearchModalContext
@@ -1094,80 +1095,117 @@ export default function MapPage() {
             {/* <Logo style={styles.Logo} pointerEvents={"none"} /> */}
 
             {/* modals go here? */}
-            <Animated.View
-              style={[styles.anchorModal, tutorialLaunchpadModalReveal]}
-            >
-              <TutorialLaunchPadModal
-                tutorialLaunchpadModalY={tutorialLaunchpadModalY}
-              />
-            </Animated.View>
 
-            <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
-              <AnchorModal
-                anchorModalY={anchorModalY}
-                SiteName={selectedDiveSite.SiteName}
-                setSelectedPhoto={setSelectedPhoto}
-                setPhotoBoxModel={setPhotoBoxModel}
-                Lat={selectedDiveSite.Latitude}
-                Lng={selectedDiveSite.Longitude}
-              />
-            </Animated.View>
+            {tutorialLaunchpadModal && (
+              <Animated.View
+                style={[styles.anchorModal, tutorialLaunchpadModalReveal]}
+              >
+                <TutorialLaunchPadModal
+                  tutorialLaunchpadModalY={tutorialLaunchpadModalY}
+                />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.commentScreen, commentsModalReveal]}>
-              <View style={styles.commentsModal}>
-                <CommentsModal />
-              </View>
-            </Animated.View>
+            {siteModal && (
+              <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
+                <AnchorModal
+                  anchorModalY={anchorModalY}
+                  SiteName={selectedDiveSite.SiteName}
+                  setSelectedPhoto={setSelectedPhoto}
+                  setPhotoBoxModel={setPhotoBoxModel}
+                  Lat={selectedDiveSite.Latitude}
+                  Lng={selectedDiveSite.Longitude}
+                />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.anchorModal, shopModalReveal]}>
-              <ShopModal />
-            </Animated.View>
+            {commentsModal && (
+              <Animated.View
+                style={[styles.commentScreen, commentsModalReveal]}
+              >
+                <View style={styles.commentsModal}>
+                  <CommentsModal />
+                </View>
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.photoBoxModal, photoBoxModalReveal]}>
-              <PhotoBoxModel
-                picData={selectedPhoto}
-                photoBoxModel={photoBoxModel}
-                setPhotoBoxModel={setPhotoBoxModel}
-              />
-            </Animated.View>
+            {shopModal && (
+              <Animated.View style={[styles.anchorModal, shopModalReveal]}>
+                <ShopModal />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.anchorModal, diveSiteModalReveal]}>
-              <DiveSiteModal diveSiteModalY={diveSiteModalY} />
-            </Animated.View>
+            {photoBoxModel && (
+              <Animated.View
+                style={[styles.photoBoxModal, photoBoxModalReveal]}
+              >
+                <PhotoBoxModel
+                  picData={selectedPhoto}
+                  photoBoxModel={photoBoxModel}
+                  setPhotoBoxModel={setPhotoBoxModel}
+                />
+              </Animated.View>
+            )}
+
+            {diveSiteAdderModal && (
+              <Animated.View style={[styles.anchorModal, diveSiteModalReveal]}>
+                <DiveSiteModal diveSiteModalY={diveSiteModalY} />
+              </Animated.View>
+            )}
 
             <Animated.View style={[styles.anchorModal, pictureModalReveal]}>
               <PicUploadModal pictureModalY={pictureModalY} />
             </Animated.View>
 
-            <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
-              <IntroTutorial tutorialModalY={tutorialModalY} />
-            </Animated.View>
+            {guideModal && (
+              <Animated.View
+                style={[styles.tutorialModal, tutorialModalReveal]}
+              >
+                <IntroTutorial tutorialModalY={tutorialModalY} />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.tutorialModal, tutorial2ModalReveal]}>
-              <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
-            </Animated.View>
+            {secondGuideModal && (
+              <Animated.View
+                style={[styles.tutorialModal, tutorial2ModalReveal]}
+              >
+                <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.tutorialModal, tutorial3ModalReveal]}>
-              <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
-            </Animated.View>
+            {thirdGuideModal && (
+              <Animated.View
+                style={[styles.tutorialModal, tutorial3ModalReveal]}
+              >
+                <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.anchorModal, profileModalReveal]}>
-              <UserProfileModal />
-            </Animated.View>
+            {profileModal && (
+              <Animated.View style={[styles.anchorModal, profileModalReveal]}>
+                <UserProfileModal />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.anchorModal, settingsModalReveal]}>
-              <SettingsModal />
-            </Animated.View>
+            {gearModal && (
+              <Animated.View style={[styles.anchorModal, settingsModalReveal]}>
+                <SettingsModal />
+              </Animated.View>
+            )}
 
-            <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
-              <MapSearchModal />
-            </Animated.View>
+            {mapSearchModal && (
+              <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
+                <MapSearchModal />
+              </Animated.View>
+            )}
 
-            <Animated.View
-              style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
-            >
-              <DiveSiteSearchModal />
-            </Animated.View>
+            {diveSiteSearchModal && (
+              <Animated.View
+                style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
+              >
+                <DiveSiteSearchModal />
+              </Animated.View>
+            )}
 
             <Map style={{ zIndex: 1 }} />
           </View>

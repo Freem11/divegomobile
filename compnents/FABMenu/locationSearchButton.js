@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { scale, moderateScale } from 'react-native-size-matters';
+import { scale, moderateScale } from "react-native-size-matters";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
@@ -25,10 +25,10 @@ import {
 export default function LocationSearchButton() {
   const [butState, setButState] = useState(false);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(
-    PullTabContext
+  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
+  const { mapSearchModal, setMapSearchModal } = useContext(
+    MapSearchModalContext
   );
-  const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
   const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
   const { setDiveSiteAdderModal } = useContext(DSAdderContext);
   const { setPicAdderModal } = useContext(PictureAdderContext);
@@ -43,7 +43,7 @@ export default function LocationSearchButton() {
   const { itterator3 } = useContext(Iterrator3Context);
 
   useEffect(() => {
-    if(mapSearchModal) {
+    if (mapSearchModal) {
       setDiveSiteAdderModal(false);
       setTutorialLaunchpadModal(false);
       setPicAdderModal(false);
@@ -54,31 +54,41 @@ export default function LocationSearchButton() {
       setShopModal(false);
       setShowFilterer(false);
       setTiles(true);
-    } 
+    }
   }, [mapSearchModal]);
 
   return (
     <View style={styles.container}>
-     <TouchableWithoutFeedback
-          onPress={itterator === 11 || itterator === 18 || itterator2 === 3 || itterator2 === 5 || itterator2 === 9 || itterator3 === 5 ? null : () => setMapSearchModal(!mapSearchModal)}
-          onPressIn={() => setButState(true)}
-          onPressOut={() => setButState(false)}
-          style={{
-            alignItems: "center",
-            width: moderateScale(32),
-            height: moderateScale(32),
-          }}
-        >
+      <TouchableWithoutFeedback
+        onPress={
+          itterator === 11 ||
+          itterator === 18 ||
+          itterator2 === 3 ||
+          itterator2 === 5 ||
+          itterator2 === 9 ||
+          itterator3 === 5
+            ? null
+            : () => setMapSearchModal(!mapSearchModal)
+        }
+        onPressIn={() => setButState(true)}
+        onPressOut={() => setButState(false)}
+        style={{
+          alignItems: "center",
+          width: moderateScale(32),
+          height: moderateScale(32),
+        }}
+      >
         <View style={styles.buttonBox}>
           <MaterialIcons
             name="explore"
             color={butState ? "gold" : "white"}
             size={moderateScale(34)}
           />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>Map Search</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      
+          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
+            Map Search
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
@@ -92,7 +102,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     bottom: 0,
     left: 0,
-    fontSize: "2rem"
+    fontSize: "2rem",
   },
   buttonBox: {
     alignItems: "center",
@@ -102,18 +112,18 @@ const styles = StyleSheet.create({
     // borderRadius: 10,
     backgroundColor: "#538bdb",
     width: moderateScale(80),
-    height: moderateScale(55)
+    height: moderateScale(55),
   },
   buttonlabel: {
     fontFamily: "Itim_400Regular",
     color: "white",
     fontSize: moderateScale(13),
-    marginTop: moderateScale(0)
+    marginTop: moderateScale(0),
   },
   buttonlabelAlt: {
     fontFamily: "Itim_400Regular",
     color: "gold",
     fontSize: moderateScale(13),
-    marginTop: moderateScale(0)
+    marginTop: moderateScale(0),
   },
 });
