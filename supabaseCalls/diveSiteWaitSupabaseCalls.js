@@ -36,7 +36,8 @@ export const insertDiveSiteWaits = async (values) => {
   }
 
   if (data) {
-    console.log(data);
+    return data
+    // console.log(data);
   }
 };
 
@@ -70,6 +71,7 @@ if (error) {
 }
 
 if (data) {
-  console.log(data);
+  return data
+  // console.log(data);
 }
 }
