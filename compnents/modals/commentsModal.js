@@ -8,7 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import bubbles from "../png/bubbles.png";
@@ -74,6 +74,26 @@ export default function CommentsModal() {
     setCommentsModal(false)
   }
 
+  const hideRepliesForChildren = (parentId, newSelectedReplyId) => {
+    newSelectedReplyId = [...newSelectedReplyId.filter((id) => parentId !== id)];
+    for (comment of listOfComments) {
+      if (comment.replied_to === parentId) {
+        newSelectedReplyId = hideRepliesForChildren(comment.id, newSelectedReplyId);  
+      }
+    }
+
+    return newSelectedReplyId;
+  }
+
+  const toggleShowReplies = (comment) => {
+    if (selectedReplyId.includes(comment.id)) {
+      let selectedReplyIdTemp = hideRepliesForChildren(comment.id, selectedReplyId);
+      setSelectedReplyId(selectedReplyIdTemp);
+    } else {
+      setSelectedReplyId([...selectedReplyId,comment.id]);
+    }
+  }
+
   const getCommentListView = (commentId, level=0) => {
     let marginLeft = 5 * level; 
     let width = 98 - marginLeft;
@@ -85,7 +105,7 @@ export default function CommentsModal() {
     });
 
     return (
-      <ScrollView key={`parent-${commentId}`} style={[styles.commentListContainer, marginStyle.commentLevelShift]}>
+      <ScrollView key={`parent-${commentId ? commentId : 0}`} style={[styles.commentListContainer, marginStyle.commentLevelShift]}>
         {listOfComments &&
           listOfComments.map((commentDeets) => {
             if (commentDeets.replied_to === commentId) {
@@ -97,17 +117,17 @@ export default function CommentsModal() {
               }
               return (
                 selectedReplyId.includes(commentDeets.replied_to) || commentDeets.replied_to === null ?
-                <>
+                <Fragment key={commentDeets.id}>
                   <CommentListItem
                     commentDetails={commentDeets}
-                    key={commentDeets.id}
                     setReplyTo={setReplyTo}
                     replyTo={replyTo}
-                    setSelectedReplyId={setSelectedReplyId}
+                    toggleShowReplies={toggleShowReplies}
                     selectedReplyId={selectedReplyId}
+                    nbReplies={nbReplies}
                   />
                   {getCommentListView(commentDeets.id, level+1)} 
-                </> : null
+                </Fragment> : null
               );
             }
           }

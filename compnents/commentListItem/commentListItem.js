@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 export default function CommentListItem(props) {
-  const { commentDetails, setReplyTo, replyTo, setSelectedReplyId, selectedReplyId } = props;
+  const { commentDetails, setReplyTo, replyTo, toggleShowReplies, selectedReplyId, nbReplies } = props;
   let newDate = new Date(commentDetails.created_at);
   let finalDate = newDate.toLocaleString().substring(0, 9);
 
@@ -27,16 +27,21 @@ export default function CommentListItem(props) {
       >
         Reply
       </Text>
-      <Text
-        style={styles.replyTxt}
-        onPress={() => {
-          selectedReplyId.includes(commentDetails.id)
-            ? setSelectedReplyId([...selectedReplyId.filter((id) => commentDetails.id !== id)])
-            : setSelectedReplyId([...selectedReplyId,commentDetails.id]);
-        }}
-      >
-        View Replies
-      </Text>
+      {
+        nbReplies > 0 ?
+        <Text
+          style={styles.replyTxt}
+          onPress={() => toggleShowReplies(commentDetails)}
+        >
+          {
+            selectedReplyId.includes(commentDetails.id)
+            ? `Hide replies`
+            : `View ${nbReplies} Replies`
+          }
+        </Text>
+        : ""
+      }
+      
     </View>
   );
 }
