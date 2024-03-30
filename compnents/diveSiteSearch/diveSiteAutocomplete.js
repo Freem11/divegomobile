@@ -89,10 +89,9 @@ export default function DiveSiteAutoComplete(props) {
           }
         })
       }
-     
-    }
-    setDiveSiteSearchModal(false)
-    Keyboard.dismiss()
+      setDiveSiteSearchModal(false)
+      Keyboard.dismiss()
+    }  
   };
 
   const handleClear = () => {

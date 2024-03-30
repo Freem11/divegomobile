@@ -318,6 +318,7 @@ export default function Map() {
                 maxLng: settedBoundaries[2],
               });
             } else {
+
               heatPointList = await getHeatPointsWithUser({
                 animalMultiSelection,
                 myCreatures,
@@ -327,7 +328,6 @@ export default function Map() {
                 maxLng: settedBoundaries[2],
               });
             }
-
             setNewHeat(formatHeatVals(heatPointList));
           } catch (e) {
             console.log({ title: "Error", message: e.message });

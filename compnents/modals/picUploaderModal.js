@@ -498,6 +498,7 @@ export default function PicUploadModal() {
   };
 
   const activateGuide = () => {
+    setThirdGuideModal(true);
     setChapter("Adding your photo");
   };
 

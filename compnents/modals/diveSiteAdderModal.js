@@ -327,6 +327,7 @@ export default function DiveSiteModal() {
   const activateGuide = () => {
     if (tutorialRunning) {
     } else {
+      setSecondGuideModal(true);
       setChapter("DS Help");
     }
   };
