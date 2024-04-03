@@ -63,7 +63,10 @@
     "react-native-url-polyfill": "^1.3.0",
     "react-native-webview": "13.2.2",
     "use-supercluster": "^0.4.0",
-    "web-streams-polyfill": "^3.3.2"
+    "web-streams-polyfill": "^3.3.2",
+    "expo-notifications": "~0.20.1",
+    "expo-device": "~5.4.0",
+    "expo-constants": "~14.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
