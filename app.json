@@ -89,6 +89,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#00FFFFFF"
       },
+      "googleServicesFile": "./google-service.json",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg"
