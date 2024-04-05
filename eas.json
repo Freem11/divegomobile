@@ -86,7 +86,9 @@
         "appleTeamId": "49629863XB"
       },
       "android": {
-        "serviceAccountKeyPath": "../../GoogleServiceAccount/pc-api-5892042463849694566-989-513525c2a557.json"
+        "serviceAccountKeyPath": "../../GoogleServiceAccount/pc-api-5892042463849694566-989-513525c2a557.json",
+        "googleServicesFile": "./google-service.json",
+        "useNextNotificationsApi": true
       }
     }
   }
