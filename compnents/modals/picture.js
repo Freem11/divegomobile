@@ -14,15 +14,13 @@ import {
   deletePhotoLike,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
 import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
-import {
-  insertUserFollow,
-  deleteUserFollow,
-} from "../../supabaseCalls/userFollowSupabaseCalls";
 import { countPhotoCommentById } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { CommentsModalContext } from "../contexts/commentsModalContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
+import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
@@ -57,13 +55,11 @@ export default function Picture(props) {
   const { profile } = useContext(UserProfileContext);
   const { setCommentsModal } = useContext(CommentsModalContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
-
+  const { setProfileModal } = useContext(ProfileModalContext);
+  const { selectedProfile, setSelectedProfile } =useContext(SelectedProfileContext);
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
-
-  const [userFollows, setUserFollows] = useState(false);
-  const [followData, setFollowData] = useState(pic.followid);
 
   const handleCommentModal = () => {
     setCommentsModal(true);
@@ -85,22 +81,25 @@ export default function Picture(props) {
 
   const handleFollow = async (userName) => {
     let picOwnerAccount = await grabProfileByUserName(userName);
+    setSelectedProfile(picOwnerAccount[0].UserID)
+    setProfileModal(true)
 
-    if (profile[0].UserID === picOwnerAccount[0].UserID){
-      return
-    }
 
-    if (userFollows) {
-      deleteUserFollow(followData);
-      setUserFollows(false);
-    } else {
+    // if (profile[0].UserID === picOwnerAccount[0].UserID){
+    //   return
+    // }
+
+    // if (userFollows) {
+    //   deleteUserFollow(followData);
+    //   setUserFollows(false);
+    // } else {
       
-      if (picOwnerAccount) {
-        let newRecord = await insertUserFollow(profile[0].UserID, picOwnerAccount[0].UserID);
-        setFollowData(newRecord[0].id);
-        setUserFollows(true);
-      }
-    }
+    //   if (picOwnerAccount) {
+    //     let newRecord = await insertUserFollow(profile[0].UserID, picOwnerAccount[0].UserID);
+    //     setFollowData(newRecord[0].id);
+        // setUserFollows(true);
+    //   }
+    // }
 
   };
 
@@ -239,11 +238,11 @@ export default function Picture(props) {
         </TouchableWithoutFeedback>
         <View style={styles.microLow}>
           <Text
-            style={userFollows ? styles.microLow2Alt : styles.microLow2}
+            style={styles.microLow2}
             onPress={() => handleFollow(pic.newusername)}
           >
             {" "}
-            Added by: {pic.newusername}{"  "} {profile[0].UserName === pic.newusername ? null : userFollows ? "(unfollow)" : "(follow)"}
+            Added by: {pic.newusername}
           </Text>
         </View>
       </View>

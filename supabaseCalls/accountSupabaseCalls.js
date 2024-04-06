@@ -125,3 +125,19 @@ export const grabProfileByUserName = async (userName) => {
     return data;
   }
 };
+
+export const getProfileWithStats = async (userId) => {
+  const { data, error } = await supabase.rpc("get_userprofile_with_stats", {
+    userid: userId,
+  });
+
+  if (error) {
+    console.error("couldn't do it 27,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
