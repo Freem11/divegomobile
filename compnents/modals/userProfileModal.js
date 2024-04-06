@@ -28,6 +28,7 @@ import ImgToBase64 from "react-native-image-base64";
 import {
   insertUserFollow,
   deleteUserFollow,
+  checkIfUserFollows,
 } from "../../supabaseCalls/userFollowSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
@@ -63,17 +64,13 @@ export default function UserProfileModal() {
       downloadProgress.totalBytesExpectedToWrite;
   };
 
+
+
   const handleFollow = async (userName) => {
 
     // if (profile[0].UserID === picOwnerAccount[0].UserID){
     //   return
     // }
-
-
-    //check if follow record already exists 
-    //if true button should be pressed and run delete follow when pressed
-    //if false button should be up and run insert follow when pressed 
-    console.log(userStats)
 
     if (userFollows) {
       deleteUserFollow(followData);
@@ -92,21 +89,15 @@ export default function UserProfileModal() {
   useEffect(() => {
     getProfile();
 
-    // async function loadImage() {
-    //   let imageExisitsInCache = await findImageInCache(cacheDir);
-    //   if (imageExisitsInCache.exists) {
-    //     setPicUri(cacheDir);
-    //   } else {
-    //     let cashing = await cacheImage(image.uri, cacheDir, callback);
-    //     if (cashing.cached) {
-    //       setPicUri(cashing.path);
-    //     } else {
-    //       setPicUri(image.uri);
-    //     }
-    //   }
-    // }
+    async function followCheck() {
+      let alreadyFollows = await checkIfUserFollows(profile[0].UserID, selectedProfile)
+      if (alreadyFollows.length > 0) {
+        setUserFollows(true)
+        setFollowData(alreadyFollows[0].id);
+      } 
+    }
 
-    // loadImage();
+    followCheck();
   }, []);
 
   const getProfile = async () => {
@@ -121,7 +112,6 @@ export default function UserProfileModal() {
       const success = await getProfileWithStats(userID);
       if (success) {
         setUserStats(success);
-        console.log("got it?", success);
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -211,7 +201,7 @@ export default function UserProfileModal() {
 
       {selectedProfile ? 
       <View
-          style={followButState ? styles.FollowButtonPressed : styles.FollowButton}
+          style={userFollows ? styles.FollowButtonPressed : styles.FollowButton}
         >
           <TouchableOpacity
             onPress={() => handleFollow()}
@@ -233,11 +223,11 @@ export default function UserProfileModal() {
               style={{
                 marginLeft: 5,
                 fontFamily: "Itim_400Regular",
-                color: followButState ? "black" : "pink",
+                color: userFollows ? "black" : "pink",
                 fontSize: moderateScale(20),
               }}
             >
-              {followButState ? "Following " + (userStats && userStats[0].username) : "Follow " + (userStats && userStats[0].username)}
+              {userFollows ? "Following " + (userStats && userStats[0].username) : "Follow " + (userStats && userStats[0].username)}
             </Text>
           </TouchableOpacity>
         </View>

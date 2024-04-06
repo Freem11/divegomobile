@@ -81,25 +81,13 @@ export default function Picture(props) {
 
   const handleFollow = async (userName) => {
     let picOwnerAccount = await grabProfileByUserName(userName);
+
+    if (profile[0].UserID === picOwnerAccount[0].UserID){
+      return
+    }
+
     setSelectedProfile(picOwnerAccount[0].UserID)
     setProfileModal(true)
-
-
-    // if (profile[0].UserID === picOwnerAccount[0].UserID){
-    //   return
-    // }
-
-    // if (userFollows) {
-    //   deleteUserFollow(followData);
-    //   setUserFollows(false);
-    // } else {
-      
-    //   if (picOwnerAccount) {
-    //     let newRecord = await insertUserFollow(profile[0].UserID, picOwnerAccount[0].UserID);
-    //     setFollowData(newRecord[0].id);
-        // setUserFollows(true);
-    //   }
-    // }
 
   };
 
