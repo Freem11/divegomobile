@@ -20,7 +20,7 @@ export default function CommentListItem(props) {
       <Text
         style={styles.replyTxt}
         onPress={() => {
-          replyTo
+          replyTo && replyTo[0] === commentDetails.username
             ? setReplyTo(null)
             : setReplyTo([commentDetails.username, commentDetails.id]);
         }}

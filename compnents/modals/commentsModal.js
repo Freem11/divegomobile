@@ -221,8 +221,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "85%",
-    borderBottomColor: "lightgrey",
-    borderBottomWidth: moderateScale(0.2),
+    // borderBottomColor: "lightgrey",
+    // borderBottomWidth: moderateScale(0.2),
   },
   keyboardAvoid: {
     alignItems: "center",
