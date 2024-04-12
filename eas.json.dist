@@ -1,0 +1,95 @@
+{
+  "cli": {
+    "version": ">= 3.13.2",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "resourceClass": "default"
+    },
+    "sim": {
+      "extends": "development",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "GOOGLE_MAPS_API_KEY": "",
+        "SUPABASE_URL": "",
+        "SUPABASE_API_KEY": "",
+        "WEB_CLIENT_ID":"",
+        "ANDROID_CLIENT_ID": "",
+        "IOS_CLIENT_ID": "",
+        "FACEBOOK_APP_ID": "",
+        "ANDROID_HOME": "",
+        "ANDROID_CLIENT_ID_2": "",
+        "ANDROID_CLIENT_ID_3": "",
+        "ANDROID_CLIENT_ID_4": "",
+        "AWS_R2_ACCESS_KEY_ID":"",
+        "AWS_R2_SECRET_KEY":"",
+        "AWS_R2_ACCOUNT_ID":"",
+        "EXPO_ACCESS_TOKEN":""
+      }
+    },
+    "preview": {
+      "channel": "preview",
+      "distribution": "internal",
+      "resourceClass": "default",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "GOOGLE_MAPS_API_KEY": "",
+        "SUPABASE_URL": "",
+        "SUPABASE_API_KEY": "",
+        "WEB_CLIENT_ID":"",
+        "ANDROID_CLIENT_ID": "",
+        "IOS_CLIENT_ID": "",
+        "FACEBOOK_APP_ID": "",
+        "ANDROID_HOME": "",
+        "ANDROID_CLIENT_ID_2": "",
+        "ANDROID_CLIENT_ID_3": "",
+        "ANDROID_CLIENT_ID_4": "",
+        "AWS_R2_ACCESS_KEY_ID":"",
+        "AWS_R2_SECRET_KEY":"",
+        "AWS_R2_ACCOUNT_ID":"",
+        "EXPO_ACCESS_TOKEN":""
+      }
+    },
+    "production": {
+      "channel": "production",
+      "env": {
+        "GOOGLE_MAPS_API_KEY": "",
+        "SUPABASE_URL": "",
+        "SUPABASE_API_KEY": "",
+        "WEB_CLIENT_ID":"",
+        "ANDROID_CLIENT_ID": "",
+        "IOS_CLIENT_ID": "",
+        "FACEBOOK_APP_ID": "",
+        "ANDROID_HOME": "",
+        "ANDROID_CLIENT_ID_2": "",
+        "ANDROID_CLIENT_ID_3": "",
+        "ANDROID_CLIENT_ID_4": "",
+        "AWS_R2_ACCESS_KEY_ID":"",
+        "AWS_R2_SECRET_KEY":"",
+        "AWS_R2_ACCOUNT_ID":"",
+        "EXPO_ACCESS_TOKEN":""
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "",
+        "ascAppId": "",
+        "appleTeamId": ""
+      },
+      "android": {
+        "serviceAccountKeyPath": "",
+        "googleServicesFile": "",
+        "useNextNotificationsApi": true
+      }
+    }
+  }
+}
