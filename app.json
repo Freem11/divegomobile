@@ -2,11 +2,8 @@
   "expo": {
     "name": "Scuba SEAsons",
     "slug": "divegomobile",
-    "scheme": [
-      "divegomobile",
-      "fb692861552452156"
-    ],
-    "version": "1.4.12",
+    "scheme": ["divegomobile", "fb692861552452156"],
+    "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -33,26 +30,31 @@
           }
         }
       ],
-      "expo-build-properties"
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ADD8E6"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "71",
+      "buildNumber": "72",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.freem11.divegomobile",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "fetch"
-        ],
+        "UIBackgroundModes": ["fetch"],
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": [
@@ -63,9 +65,7 @@
         "NSLocationUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location, 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of Scuba SEAsons' functionality",
         "NSLocationWhenInUseUsageDescription": "We would like to use your location for 2 features: 1) To set the map to your current location when it loads rather than the default location. 2) For the 'I am at the dive site' button to use your location as the location of the dive site you want to submit. These features will allow for a smoother user experience and access to all of Scuba SEAsons' functionality",
         "NSPhotoLibraryUsageDescription": "We would like access to your photos so that you can upload your photo as proof of the animal sighting you are submitting, we will use this to validate that it is correct before it is added to the app for others to view. Also in a planned future feature we would like to use submitted photos for machine learning so that future photos submissions can be identified by the system and dive users the extra effort of manually typing in the animal's name",
-        "UISupportedInterfaceOrientations": [
-          "UIInterfaceOrientationPortrait"
-        ],
+        "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
         "UISupportedInterfaceOrientations~ipad": [
           "UIDeviceOrientationPortrait"
         ],
@@ -83,12 +83,13 @@
       }
     },
     "android": {
-      "versionCode": 71,
+      "versionCode": 72,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#00FFFFFF"
       },
+      "googleServicesFile": "./google-service.json",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg"

@@ -1,0 +1,29 @@
+{
+    "project_info": {
+      "project_number": "600738476733",
+      "project_id": "scubaseasonmobile",
+      "storage_bucket": "scubaseasonmobile.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:600738476733:android:5a60fff7193ff1835a7dd4",
+          "android_client_info": {
+            "package_name": "com.freem11.divegomobile"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyCX2RItMqtxx2XC_mBD5RGivK6D9wXsXxg"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

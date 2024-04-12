@@ -59,6 +59,22 @@ export const updateProfile = async (values) => {
   }
 };
 
+export const updatePushToken = async (values) => {
+  const { data, error } = await supabase
+    .from("UserProfiles")
+    .update({expo_push_token: values.token})
+    .eq("UserID", values.UserID);
+
+  if (error) {
+    console.error("Error while saving the push token, ", error);
+    return [];
+  } else if (data) {
+    return data;
+  }
+
+  return []
+}
+
 export const updateProfileFeeback = async (values) => {
 
   console.log(values)
@@ -125,3 +141,19 @@ export const grabProfileByUserName = async (userName) => {
     return data;
   }
 };
+
+export const getProfileWithStats = async (userId) => {
+  const { data, error } = await supabase.rpc("get_userprofile_with_stats", {
+    userid: userId,
+  });
+
+  if (error) {
+    console.error("couldn't do it 27,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
