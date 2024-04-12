@@ -49,6 +49,7 @@ export default function UserProfileModal() {
   const { setSiteModal } = useContext(AnchorModalContext);
   const [followData, setFollowData] = useState(profile[0].UserID);
 
+  console.log("HMM", profile)
   let fileName = `/Headliner.jpg`;
   let cacheDir = FileSystem.cacheDirectory + fileName;
 
