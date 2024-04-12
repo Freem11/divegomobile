@@ -223,7 +223,7 @@ export default function App() {
     if (activeSession && activeSession.user) {
       const user = (await grabProfileById(activeSession.user.id));
       const activeToken = user[0].expo_push_token;
-      
+
       if (activeToken === null || !activeToken.includes(token)) {
         updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
       }

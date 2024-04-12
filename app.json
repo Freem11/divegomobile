@@ -3,7 +3,7 @@
     "name": "Scuba SEAsons",
     "slug": "divegomobile",
     "scheme": ["divegomobile", "fb692861552452156"],
-    "version": "1.5.0",
+    "version": "1.5.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -47,7 +47,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "72",
+      "buildNumber": "73",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
@@ -83,7 +83,7 @@
       }
     },
     "android": {
-      "versionCode": 72,
+      "versionCode": 73,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
