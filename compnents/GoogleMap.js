@@ -335,8 +335,8 @@ export default function Map() {
         }
       }
 
-      // let filteredShops = await shops(newBoundaries);
-      // !diveSitesTog ? setnewShops([]) : setnewShops(filteredShops);
+      let filteredShops = await shops(newBoundaries);
+      !diveSitesTog ? setnewShops([]) : setnewShops(filteredShops);
 
       let zoom = calculateZoom(
         width,
@@ -443,7 +443,6 @@ export default function Map() {
   useEffect(() => {
     updateMapCenter();
   }, [
-    shopModal,
     siteModal,
     diveSiteAdderModal,
     diveSiteSearchModal,
@@ -519,13 +518,13 @@ export default function Map() {
     });
   }
 
-  // const shopPoints = setupShopClusters(newShops);
+  const shopPoints = setupShopClusters(newShops);
   const sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
-  // shopPoints.forEach((entity) => {
-  //   points.push(entity);
-  // });
+  shopPoints.forEach((entity) => {
+    points.push(entity);
+  });
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -681,7 +680,7 @@ export default function Map() {
           }
         })}
 
-        {/* {shopClusters.map((cluster) => {
+        {shopPoints.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const {
             cluster: isCluster,
@@ -717,7 +716,7 @@ export default function Map() {
               // }
             ></Marker>
           );
-        })} */}
+        })}
       </MapView>
     </View>
   );
