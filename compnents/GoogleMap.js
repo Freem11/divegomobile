@@ -53,7 +53,10 @@ import shopClustIOS from "../compnents/png/face-mask.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
-import { diveSites, getDiveSitesWithUser } from "../supabaseCalls/diveSiteSupabaseCalls";
+import {
+  diveSites,
+  getDiveSitesWithUser,
+} from "../supabaseCalls/diveSiteSupabaseCalls";
 import {
   multiHeatPoints,
   getHeatPointsWithUser,
@@ -71,7 +74,7 @@ export default function Map() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
-  
+
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
   const { masterSwitch } = useContext(MasterContext);
@@ -125,7 +128,7 @@ export default function Map() {
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
-  const {profile} = useContext(UserProfileContext);
+  const { profile } = useContext(UserProfileContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
@@ -182,20 +185,20 @@ export default function Map() {
           try {
             let AmericanDiveSites;
             let AsianDiveSites;
-              AmericanDiveSites = await getDiveSitesWithUser({
-                myDiveSites,
-                minLat: settedBoundaries[1],
-                maxLat: settedBoundaries[3],
-                minLng: -180,
-                maxLng: settedBoundaries[2],
-              });
-              AsianDiveSites = await getDiveSitesWithUser({
-                myDiveSites,
-                minLat: settedBoundaries[1],
-                maxLat: settedBoundaries[3],
-                minLng: settedBoundaries[0],
-                maxLng: 180,
-              });
+            AmericanDiveSites = await getDiveSitesWithUser({
+              myDiveSites,
+              minLat: settedBoundaries[1],
+              maxLat: settedBoundaries[3],
+              minLng: -180,
+              maxLng: settedBoundaries[2],
+            });
+            AsianDiveSites = await getDiveSitesWithUser({
+              myDiveSites,
+              minLat: settedBoundaries[1],
+              maxLat: settedBoundaries[3],
+              minLng: settedBoundaries[0],
+              maxLng: 180,
+            });
             // const AmericanDiveSites = await diveSites(
             //   {
             //     minLat: settedBoundaries[1],
@@ -318,7 +321,6 @@ export default function Map() {
                 maxLng: settedBoundaries[2],
               });
             } else {
-
               heatPointList = await getHeatPointsWithUser({
                 animalMultiSelection,
                 myCreatures,
@@ -441,13 +443,11 @@ export default function Map() {
   }, []);
 
   useEffect(() => {
+    if(shopModal){
+      return
+    }
     updateMapCenter();
-  }, [
-    siteModal,
-    diveSiteAdderModal,
-    diveSiteSearchModal,
-    picAdderModal,
-  ]);
+  }, [siteModal, diveSiteAdderModal, diveSiteSearchModal, picAdderModal]);
 
   useEffect(() => {
     handleMapChange();
@@ -582,6 +582,10 @@ export default function Map() {
         onPress={clearModals}
       >
         {masterSwitch && newHeat.length > 0 && (
+          <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
+        )}
+
+        {!masterSwitch && !minorSwitch && newHeat.length > 0 && (
           <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
         )}
 

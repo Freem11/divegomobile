@@ -602,7 +602,7 @@ export default function MapPage() {
   };
 
   //DiveSiteSearch Modal Animation
-  
+
   const diveSiteSearchModalY = useSharedValue(windowHeight);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
     DiveSiteSearchModalContext
@@ -786,10 +786,11 @@ export default function MapPage() {
   };
 
   const onShopNavigate = () => {
+    setSiteModal(false);
+    setShopModal(true);
     setMapHelper(true);
     setMasterSwitch(true);
     setMinorSwitch(true);
-    setShopModal(true);
     setZoomHelper(true);
     setSitesArray([]);
   };
