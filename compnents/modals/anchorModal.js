@@ -313,7 +313,7 @@ export default function AnchorModal(props) {
         </TouchableWithoutFeedback>
       </View>
 
-      <ScrollView style={{ marginTop: "0%", width: "100%", borderRadius: 15 }}>
+      <ScrollView style={{ marginTop: "2%", width: "100%", borderRadius: 15 }}>
         <View style={styles.container3}>
           {anchorPics &&
             anchorPics.map((pic) => {

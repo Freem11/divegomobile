@@ -2,8 +2,8 @@
   "expo": {
     "name": "Scuba SEAsons",
     "slug": "divegomobile",
-    "scheme": ["divegomobile", "fb692861552452156"],
-    "version": "1.5.1",
+    "scheme": ["divegomobile", ""],
+    "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,10 +19,10 @@
       [
         "react-native-fbsdk-next",
         {
-          "appID": "692861552452156",
-          "clientToken": "5fca59edd61f9c418917b4a8f6032a20",
+          "appID": "",
+          "clientToken": "",
           "displayName": "Scuba SEAsons",
-          "scheme": "fb692861552452156",
+          "scheme": "",
           "buildscript": {
             "ext": {
               "facebookSdkVersion": "13.1.0"
@@ -47,7 +47,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "73",
+      "buildNumber": "72",
       "supportsTablet": true,
       "requireFullScreen": true,
       "orientation": "portrait",
@@ -71,19 +71,19 @@
         ],
         "SKAdNetworkItems": [
           {
-            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+            "SKAdNetworkIdentifier": ""
           },
           {
-            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+            "SKAdNetworkIdentifier": ""
           }
         ]
       },
       "config": {
-        "googleMapsApiKey": "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg"
+        "googleMapsApiKey": ""
       }
     },
     "android": {
-      "versionCode": 73,
+      "versionCode": 72,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -92,7 +92,7 @@
       "googleServicesFile": "./google-service.json",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg"
+          "apiKey": ""
         }
       },
       "permissions": [
@@ -108,14 +108,14 @@
     },
     "extra": {
       "eas": {
-        "projectId": "df1b7ca8-d86d-4667-859b-0330dad67126"
+        "projectId": ""
       }
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/df1b7ca8-d86d-4667-859b-0330dad67126"
+      "url": ""
     }
   }
 }

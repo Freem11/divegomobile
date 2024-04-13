@@ -59,6 +59,22 @@ export const updateProfile = async (values) => {
   }
 };
 
+export const updatePushToken = async (values) => {
+  const { data, error } = await supabase
+    .from("UserProfiles")
+    .update({expo_push_token: values.token})
+    .eq("UserID", values.UserID);
+
+  if (error) {
+    console.error("Error while saving the push token, ", error);
+    return [];
+  } else if (data) {
+    return data;
+  }
+
+  return []
+}
+
 export const updateProfileFeeback = async (values) => {
 
   console.log(values)

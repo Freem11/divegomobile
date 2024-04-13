@@ -31,6 +31,7 @@ import config from "./config";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import * as Notifications from 'expo-notifications';
 import Constants from "expo-constants";
+import { grabProfileById, updatePushToken } from "./supabaseCalls/accountSupabaseCalls";
 
 const { width, height } = Dimensions.get("window");
 
@@ -218,8 +219,16 @@ export default function App() {
     const token = (await Notifications.getExpoPushTokenAsync({
       'projectId': Constants.expoConfig.extra.eas.projectId,
     })).data;
-    console.log(token);
-    };
+
+    if (activeSession && activeSession.user) {
+      const user = (await grabProfileById(activeSession.user.id));
+      const activeToken = user[0].expo_push_token;
+
+      if (activeToken === null || !activeToken.includes(token)) {
+        updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
+      }
+    }
+  };
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {

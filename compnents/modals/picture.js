@@ -61,7 +61,7 @@ export default function Picture(props) {
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
 
-  const handleCommentModal = () => {
+  const handleCommentModal = (pic) => {
     setCommentsModal(true);
     setSelectedPicture(pic);
   };
@@ -204,6 +204,7 @@ export default function Picture(props) {
           style={{
             borderRadius: 15,
             resizeMode: "cover",
+            marginTop: moderateScale(-22),
             // backgroundColor: "pink",
           }}
         />
@@ -234,18 +235,23 @@ export default function Picture(props) {
           </Text>
         </View>
       </View>
-      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)}>
+      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)} style={{height: moderateScale(30), backgroundColor: 'pink'}}>
         <View
-          onPress={() => handleCommentModal(pic)}
+          // onPress={() => handleCommentModal(pic)}
           style={{
             flexDirection: "row",
             marginLeft: moderateScale(20),
-            zIndex: 4,
+            zIndex: 10,
+            height: moderateScale(25),
+            width: "80%",
+            borderRadius: moderateScale(10),
+            paddingBottom: moderateScale(5),
+            marginTop: moderateScale(5),
+            // backgroundColor: 'pink'
           }}
         >
           <Text
             style={styles.commentPrompt}
-            onPress={() => handleCommentModal(pic)}
           >
             {pic.commentcount < 1
               ? "Be first to Comment"
@@ -265,14 +271,14 @@ const styles = StyleSheet.create({
     // backgroundColor: 'pink'
   },
   container: {
-    flex: 1,
-    flexDirection: "column",
+    // flex: 1,
+    // justifyContent: "center",
+    // flexDirection: "column",
     overflow: "hidden",
     // backgroundColor: "white",
     // borderTopRightRadius: scale(15),
     width: "100%",
-    marginTop: scale(-15),
-    marginBottom: scale(10),
+    padding: moderateScale(2)
   },
   titleText: {
     // textAlign: "center",
@@ -300,7 +306,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 2,
     left: scale(8),
-    top: Platform.OS === "ios" ? "8%" : "9%",
+    top: Platform.OS === "ios" ? "2%" : "3%",
   },
   flag: {
     left: scale(237),
@@ -314,7 +320,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 4,
     right: "2%",
-    bottom: Platform.OS === "ios" ? "1.5%" : "1.5%",
+    bottom: Platform.OS === "ios" ? "2%" : "2%",
     borderRadius: scale(5),
   },
   countIndicator: {
@@ -329,7 +335,7 @@ const styles = StyleSheet.create({
     height: moderateScale(18),
     paddingLeft: scale(5),
     opacity: 0.6,
-    bottom: Platform.OS === "ios" ? "2%" : "2%",
+    bottom: Platform.OS === "ios" ? "3%" : "3%",
     borderTopLeftRadius: scale(5),
     borderBottomLeftRadius: scale(5),
   },
@@ -354,7 +360,7 @@ const styles = StyleSheet.create({
     paddingRight: scale(7),
     zIndex: 2,
     left: "2%",
-    bottom: Platform.OS === "ios" ? "2%" : "2%",
+    bottom: Platform.OS === "ios" ? "3%" : "3%",
     borderRadius: scale(5),
   },
   microLow2: {
@@ -384,7 +390,7 @@ const styles = StyleSheet.create({
   commentPrompt: {
     display: "flex",
     width: scale(200),
-    height: scale(20),
+    // height: scale(30),
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
@@ -394,6 +400,7 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: scale(10),
     zIndex: 10,
+    paddingTop: moderateScale(5),
     paddingLeft: moderateScale(10),
     paddingRight: moderateScale(2),
   },
