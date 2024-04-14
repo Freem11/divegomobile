@@ -152,7 +152,6 @@ export default function App() {
   });
 
   useLayoutEffect(() => {
-    registerForPushNotificationsAsync();
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
@@ -190,6 +189,7 @@ export default function App() {
               setAppIsReady(true);
             } else {
               setActiveSession(newSession);
+              registerForPushNotificationsAsync(newSession);
               setAppIsReady(true);
             }
           } else {
@@ -203,7 +203,7 @@ export default function App() {
     prepare();
   }, []);
 
-  const registerForPushNotificationsAsync = async () => {
+  const registerForPushNotificationsAsync = async (session) => {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     
@@ -220,13 +220,16 @@ export default function App() {
       'projectId': Constants.expoConfig.extra.eas.projectId,
     })).data;
 
-    if (activeSession && activeSession.user) {
-      const user = (await grabProfileById(activeSession.user.id));
+    if (session && session.user) {
+      console.log("yes")
+      const user = (await grabProfileById(session.user.id));
       const activeToken = user[0].expo_push_token;
 
       if (activeToken === null || !activeToken.includes(token)) {
-        updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
+        updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: session.user.id })
       }
+    } else {
+      console.log("no")
     }
   };
 
