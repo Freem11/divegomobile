@@ -48,7 +48,7 @@ import mantaIOS from "../compnents/png/Manta32.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
-import shopIOS from "../compnents/png/scuba.png";
+// import shopIOS from "../compnents/png/scuba.png";
 import shopClustIOS from "../compnents/png/face-mask.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
@@ -518,13 +518,13 @@ export default function Map() {
     });
   }
 
-  const shopPoints = setupShopClusters(newShops);
+  // const shopPoints = setupShopClusters(newShops);
   const sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
-  shopPoints.forEach((entity) => {
-    points.push(entity);
-  });
+  // shopPoints.forEach((entity) => {
+  //   points.push(entity);
+  // });
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -684,7 +684,7 @@ export default function Map() {
           }
         })}
 
-        {shopPoints.map((cluster) => {
+        {/* {shopPoints.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const {
             cluster: isCluster,
@@ -720,7 +720,7 @@ export default function Map() {
               // }
             ></Marker>
           );
-        })}
+        })} */}
       </MapView>
     </View>
   );

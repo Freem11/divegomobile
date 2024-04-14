@@ -17,7 +17,6 @@ import {
 } from "../supabaseCalls/authenticateSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
-import Headliner from "../compnents/png/Headliner.png";
 import mantaIOS from "../compnents/png/Matt_Manta_White.png";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 

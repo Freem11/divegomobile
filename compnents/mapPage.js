@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as Notifications from 'expo-notifications';
 import Constants from "expo-constants";
 import email from "react-native-email";
 import Map from "./GoogleMap";
@@ -21,6 +22,7 @@ import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import {
   grabProfileById,
   updateProfileFeeback,
+  updatePushToken,
 } from "./../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosforAnchorMulti,
@@ -104,6 +106,7 @@ const windowHeight = Dimensions.get("window").height;
 let feedbackRequest = null;
 let feedbackRequest2 = null;
 let FbWidth = moderateScale(350);
+
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -811,44 +814,80 @@ export default function MapPage() {
 
   const [subButState, setSubButState] = useState(false);
 
-  useEffect(() => {
-    const getProfile = async () => {
-      let sessionUserId = activeSession.user.id;
-      // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
-      try {
-        const success = await grabProfileById(sessionUserId);
-        if (success) {
-          let bully = success[0].UserName;
-          if (bully == null || bully === "") {
-            setGuideModal(true);
-            setTutorialRunning(true);
-            setItterator(0);
-          } else {
-            setProfile(success);
-            setPinValues({
-              ...pinValues,
-              UserId: success[0].UserID,
-              UserName: success[0].UserName,
-            });
-            setAddSiteVals({
-              ...addSiteVals,
-              UserID: success[0].UserID,
-              UserName: success[0].UserName,
-            });
-          }
-
-          if (success[0].feedbackRequested === false) {
-            feedbackRequest = setTimeout(() => {
-              startFeedbackAnimations();
-              updateProfileFeeback(success[0]);
-            }, 180000);
-          }
+  const getProfile = async () => {
+    let sessionUserId = activeSession.user.id;
+    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
+    try {
+      const success = await grabProfileById(sessionUserId);
+      if (success) {
+        let bully = success[0].UserName;
+        if (bully == null || bully === "") {
+          setGuideModal(true);
+          setTutorialRunning(true);
+          setItterator(0);
+        } else {
+          setProfile(success);
+          setPinValues({
+            ...pinValues,
+            UserId: success[0].UserID,
+            UserName: success[0].UserName,
+          });
+          setAddSiteVals({
+            ...addSiteVals,
+            UserID: success[0].UserID,
+            UserName: success[0].UserName,
+          });
         }
-      } catch (e) {
-        console.log({ title: "Error", message: "e.message" });
+
+        if (success[0].feedbackRequested === false) {
+          feedbackRequest = setTimeout(() => {
+            startFeedbackAnimations();
+            updateProfileFeeback(success[0]);
+          }, 180000);
+        }
       }
-    };
+    } catch (e) {
+      console.log({ title: "Error", message: "e.message" });
+    }
+  };
+
+  const registerForPushNotificationsAsync = async (sess) => {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    
+    if (existingStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+    return;
+    }
+    console.log("made it?", Constants.expoConfig.extra.eas.projectId)
+    let token
+    try {
+       token = (await Notifications.getExpoPushTokenAsync({
+        'projectId': Constants.expoConfig.extra.eas.projectId,
+      })).data;
+      console.log("called?", token)
+    } catch (err) {
+      console.log("error", err);
+    }
+
+    console.log("hmm one", token)
+    if (activeSession && activeSession.user) {
+      const user = (await grabProfileById(activeSession.user.id));
+      const activeToken = user[0].expo_push_token;
+      console.log("hmm two", activeToken)
+      if (activeToken === null || !activeToken.includes(token)) {
+        updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
+      }
+    }
+  };
+
+  useEffect(() => {
     getProfile();
+    registerForPushNotificationsAsync();
   }, []);
 
   useEffect(() => {
