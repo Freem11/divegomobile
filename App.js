@@ -186,6 +186,7 @@ export default function App() {
               setAppIsReady(true);
             } else {
               setActiveSession(newSession);
+              registerForPushNotificationsAsync(newSession);
               setAppIsReady(true);
             }
           } else {
@@ -198,7 +199,6 @@ export default function App() {
     }
     prepare();
   }, []);
-
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
