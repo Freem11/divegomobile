@@ -29,9 +29,6 @@ import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
 import config from "./config";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
-import * as Notifications from 'expo-notifications';
-import Constants from "expo-constants";
-import { grabProfileById, updatePushToken } from "./supabaseCalls/accountSupabaseCalls";
 
 const { width, height } = Dimensions.get("window");
 
@@ -152,7 +149,6 @@ export default function App() {
   });
 
   useLayoutEffect(() => {
-    registerForPushNotificationsAsync();
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
@@ -170,7 +166,7 @@ export default function App() {
         const creaturesData = JSON.parse(
           await AsyncStorage.getItem("myCreatures")
         );
-        console.log(diveSitesData, creaturesData);
+
         if (diveSitesData) {
           setMyDiveSites(diveSitesData);
         }
@@ -190,6 +186,7 @@ export default function App() {
               setAppIsReady(true);
             } else {
               setActiveSession(newSession);
+              registerForPushNotificationsAsync(newSession);
               setAppIsReady(true);
             }
           } else {
@@ -202,33 +199,6 @@ export default function App() {
     }
     prepare();
   }, []);
-
-  const registerForPushNotificationsAsync = async () => {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    
-    if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-    }
-    
-    if (finalStatus !== 'granted') {
-    return;
-    }
-    
-    const token = (await Notifications.getExpoPushTokenAsync({
-      'projectId': Constants.expoConfig.extra.eas.projectId,
-    })).data;
-
-    if (activeSession && activeSession.user) {
-      const user = (await grabProfileById(activeSession.user.id));
-      const activeToken = user[0].expo_push_token;
-
-      if (activeToken === null || !activeToken.includes(token)) {
-        updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
-      }
-    }
-  };
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {

@@ -23,7 +23,6 @@ import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebookblue.png";
 import googleLogo from "../compnents/png/google-logo-9822.png";
 import config from "../config";
-import Headliner from "../compnents/png/Headliner.png";
 import mantaIOS from "../compnents/png/Matt_Manta_White.png";
 import {
   GoogleSignin,
