@@ -863,22 +863,20 @@ export default function MapPage() {
     if (finalStatus !== 'granted') {
     return;
     }
-    console.log("made it?", Constants.expoConfig.extra.eas.projectId)
+
     let token
     try {
-       token = (await Notifications.getExpoPushTokenAsync({
+       token = (await Notifications.getDevicePushTokenAsync({
         'projectId': Constants.expoConfig.extra.eas.projectId,
       })).data;
-      console.log("called?", token)
+      alert("got", token)
     } catch (err) {
       console.log("error", err);
     }
 
-    console.log("hmm one", token)
     if (activeSession && activeSession.user) {
       const user = (await grabProfileById(activeSession.user.id));
       const activeToken = user[0].expo_push_token;
-      console.log("hmm two", activeToken)
       if (activeToken === null || !activeToken.includes(token)) {
         updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
       }
