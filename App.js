@@ -27,8 +27,8 @@ import MapPage from "./compnents/mapPage";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
-import config from "./config";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
+let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 const { width, height } = Dimensions.get("window");
 
@@ -62,7 +62,7 @@ export default function App() {
   async function findPlaces() {
     try {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?location=50.064541,-125.245750&query=['dive_site','reef']&radius=1&type=tourist_attraction&key=${config.GOOGLE_MAPS_API_KEY}`
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?location=50.064541,-125.245750&query=['dive_site','reef']&radius=1&type=tourist_attraction&key=${GoogleMapsApiKey}`
       );
       const placeInfo = await res.json();
 
@@ -77,7 +77,7 @@ export default function App() {
   async function getPlaceDetails(place) {
     try {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&&key=${config.GOOGLE_MAPS_API_KEY}`
+        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&&key=${GoogleMapsApiKey}`
       );
       const placeDetails = await res.json();
       const result = placeDetails.result;
@@ -186,7 +186,6 @@ export default function App() {
               setAppIsReady(true);
             } else {
               setActiveSession(newSession);
-              registerForPushNotificationsAsync(newSession);
               setAppIsReady(true);
             }
           } else {
