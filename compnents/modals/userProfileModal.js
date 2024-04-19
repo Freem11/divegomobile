@@ -49,7 +49,6 @@ export default function UserProfileModal() {
   const { setSiteModal } = useContext(AnchorModalContext);
   const [followData, setFollowData] = useState(profile[0].UserID);
 
-  console.log("HMM", profile)
   let fileName = `/Headliner.jpg`;
   let cacheDir = FileSystem.cacheDirectory + fileName;
 
@@ -92,7 +91,7 @@ export default function UserProfileModal() {
 
     async function followCheck() {
       let alreadyFollows = await checkIfUserFollows(profile[0].UserID, selectedProfile)
-      if (alreadyFollows.length > 0) {
+      if (alreadyFollows && alreadyFollows.length > 0) {
         setUserFollows(true)
         setFollowData(alreadyFollows[0].id);
       } 
@@ -100,13 +99,13 @@ export default function UserProfileModal() {
 
     followCheck();
   }, []);
-
+ 
   const getProfile = async () => {
     let userID;
     if (selectedProfile) {
       userID = selectedProfile;
     } else {
-      userID = activeSession.user.id;
+      userID = profile[0].UserID;
     }
 
     try {
@@ -120,9 +119,9 @@ export default function UserProfileModal() {
   };
 
   const toggleProfileModal = () => {
-
     setProfileModal(false);
-    setUserStats(null);
+    setUserStats(null)
+
     if (selectedProfile) {
       setSelectedProfile(null)
       setSiteModal(true)

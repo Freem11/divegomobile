@@ -522,9 +522,9 @@ export default function Map() {
   const sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
-  shopPoints.forEach((entity) => {
-    points.push(entity);
-  });
+  // shopPoints.forEach((entity) => {
+  //   points.push(entity);
+  // });
 
   const { clusters, supercluster } = useSupercluster({
     points,

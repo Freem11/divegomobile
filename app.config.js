@@ -2,7 +2,7 @@ export default {
   name: "Scuba SEAsons",
   slug: "divegomobile",
   scheme: ["divegomobile", "fb692861552452156"],
-  version: "1.5.4",
+  version: "1.5.6",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",
@@ -38,6 +38,8 @@ export default {
         },
       },
     ],
+    "@react-native-firebase/auth",
+    "@react-native-firebase/crashlytics",
   ],
   splash: {
     image: "./assets/splash.png",
@@ -46,13 +48,13 @@ export default {
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    buildNumber: "76",
+    buildNumber: "78",
     supportsTablet: true,
     requireFullScreen: true,
     orientation: "portrait",
+    googleServicesFile: process.env.EXPO_PUBLIC_GOOGLE_SERVICES_JSON_IOS,
     useNextNotificationsApi: true,
     bundleIdentifier: "com.freem11.divegomobile",
-    googleServicesFile: process.env.EXPO_PUBLIC_GOOGLE_SERVICES_JSON_IOS,
     infoPlist: {
       UIBackgroundModes: ["fetch"],
       CFBundleURLTypes: [
@@ -84,14 +86,13 @@ export default {
     },
   },
   android: {
-    versionCode: 76,
+    versionCode: 78,
     softwareKeyboardLayoutMode: "pan",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#00FFFFFF",
     },
-    googleServicesFile: process.env.EXPO_PUBLIC_GOOGLE_SERVICES_JSON_ANDROID,
-    useNextNotificationsApi: true,
+    googleServicesFile: "./google-service.json",
     config: {
       googleMaps: {
         apiKey: "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg",
