@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
   inputSmall: {
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(16),
-    color: "white",
+    color: "white"
   },
   text: {
     fontSize: 18,

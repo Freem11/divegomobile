@@ -2,7 +2,7 @@ export default {
   name: "Scuba SEAsons",
   slug: "divegomobile",
   scheme: ["divegomobile", "fb692861552452156"],
-  version: "1.5.6",
+  version: "1.5.7",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",
@@ -29,17 +29,6 @@ export default {
         },
       },
     ],
-    "@react-native-firebase/app",
-    [
-      "expo-build-properties",
-      {
-        ios: {
-          useFrameworks: "static",
-        },
-      },
-    ],
-    "@react-native-firebase/auth",
-    "@react-native-firebase/crashlytics",
   ],
   splash: {
     image: "./assets/splash.png",
@@ -48,12 +37,10 @@ export default {
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    buildNumber: "78",
+    buildNumber: "79",
     supportsTablet: true,
     requireFullScreen: true,
     orientation: "portrait",
-    googleServicesFile: process.env.EXPO_PUBLIC_GOOGLE_SERVICES_JSON_IOS,
-    useNextNotificationsApi: true,
     bundleIdentifier: "com.freem11.divegomobile",
     infoPlist: {
       UIBackgroundModes: ["fetch"],
@@ -86,7 +73,7 @@ export default {
     },
   },
   android: {
-    versionCode: 78,
+    versionCode: 79,
     softwareKeyboardLayoutMode: "pan",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
