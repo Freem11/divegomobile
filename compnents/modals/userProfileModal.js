@@ -53,7 +53,7 @@ export default function UserProfileModal() {
   let cacheDir = FileSystem.cacheDirectory + fileName;
 
   let image = {
-    uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/Headliner.jpg`,
+    uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/LogoIcon.jpg`,
     // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/Headliner.jpg`,
     id: fileName,
   };
@@ -150,11 +150,7 @@ export default function UserProfileModal() {
   };
 
   const onShare = async (photoFile) => {
-    let temp = photoFile.split("/");
-    let lastIndex = temp.length - 1;
-    let fileName = temp[lastIndex];
-    let cacheDirectory = FileSystem.cacheDirectory + fileName;
-    convertBase64(cacheDirectory);
+    convertBase64(photoFile);
   };
 
   useEffect(() => {
@@ -397,7 +393,7 @@ export default function UserProfileModal() {
           style={imaButState ? styles.ShareButtonPressed : styles.ShareButton}
         >
           <TouchableOpacity
-            onPress={() => onShare(picUri)}
+            onPress={() => onShare(image.uri)}
             onPressIn={() => setImaButState(true)}
             onPressOut={() => setImaButState(false)}
             style={{

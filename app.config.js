@@ -2,7 +2,7 @@ export default {
   name: "Scuba SEAsons",
   slug: "divegomobile",
   scheme: ["divegomobile", "fb692861552452156"],
-  version: "1.5.7",
+  version: "1.5.9",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",
@@ -37,7 +37,7 @@ export default {
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    buildNumber: "79",
+    buildNumber: "81",
     supportsTablet: true,
     requireFullScreen: true,
     orientation: "portrait",
@@ -73,7 +73,7 @@ export default {
     },
   },
   android: {
-    versionCode: 79,
+    versionCode: 81,
     softwareKeyboardLayoutMode: "pan",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",

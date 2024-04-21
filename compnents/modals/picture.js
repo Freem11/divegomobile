@@ -115,7 +115,8 @@ export default function Picture(props) {
     setMapLocal(null);
   };
 
-  const onShare = async (photoFile, userN, seaCreature, picDate, lat, lng) => {
+  const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
+
     let local = await getPhotoLocation(lat, lng);
     setMapLocal(local);
     setCreastureN(seaCreature);
@@ -168,6 +169,7 @@ export default function Picture(props) {
     }
     setBase64(null);
   }, [base64]);
+  console.log(pic)
 
   return (
     <View style={styles.outterBox}>
