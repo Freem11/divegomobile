@@ -1208,29 +1208,29 @@ export default function MapPage() {
               <PicUploadModal pictureModalY={pictureModalY} />
             </Animated.View>
 
-            {guideModal && (
+            {/* {guideModal && ( */}
               <Animated.View
                 style={[styles.tutorialModal, tutorialModalReveal]}
               >
                 <IntroTutorial tutorialModalY={tutorialModalY} />
               </Animated.View>
-            )}
+            {/* )} */}
 
-            {secondGuideModal && (
+            {/* {secondGuideModal && ( */}
               <Animated.View
                 style={[styles.tutorialModal, tutorial2ModalReveal]}
               >
                 <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
               </Animated.View>
-            )}
+            {/* )} */}
 
-            {thirdGuideModal && (
+            {/* {thirdGuideModal && ( */}
               <Animated.View
                 style={[styles.tutorialModal, tutorial3ModalReveal]}
               >
                 <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
               </Animated.View>
-            )}
+            {/* )} */}
 
             {profileModal && (
               <Animated.View style={[styles.anchorModal, profileModalReveal]}>
