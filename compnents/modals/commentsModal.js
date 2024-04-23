@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import { FontAwesome } from "@expo/vector-icons";
@@ -65,6 +66,7 @@ export default function CommentsModal() {
       setCommentContent(null);
       setReplyTo(null);
       getAllPictureComments(selectedPicture.id);
+      Keyboard.dismiss()
     }
   };
 
