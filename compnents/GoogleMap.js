@@ -518,7 +518,7 @@ export default function Map() {
     });
   }
 
-  // const shopPoints = setupShopClusters(newShops);
+  const shopPoints = setupShopClusters(newShops);
   const sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 

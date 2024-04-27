@@ -49,12 +49,11 @@ export default function UserProfileModal() {
   const { setSiteModal } = useContext(AnchorModalContext);
   const [followData, setFollowData] = useState(profile[0].UserID);
 
-  console.log("HMM", profile)
   let fileName = `/Headliner.jpg`;
   let cacheDir = FileSystem.cacheDirectory + fileName;
 
   let image = {
-    uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/Headliner.jpg`,
+    uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/LogoIcon.jpg`,
     // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/animalphotos/public/Headliner.jpg`,
     id: fileName,
   };
@@ -92,7 +91,7 @@ export default function UserProfileModal() {
 
     async function followCheck() {
       let alreadyFollows = await checkIfUserFollows(profile[0].UserID, selectedProfile)
-      if (alreadyFollows.length > 0) {
+      if (alreadyFollows && alreadyFollows.length > 0) {
         setUserFollows(true)
         setFollowData(alreadyFollows[0].id);
       } 
@@ -100,13 +99,13 @@ export default function UserProfileModal() {
 
     followCheck();
   }, []);
-
+ 
   const getProfile = async () => {
     let userID;
     if (selectedProfile) {
       userID = selectedProfile;
     } else {
-      userID = activeSession.user.id;
+      userID = profile[0].UserID;
     }
 
     try {
@@ -120,9 +119,9 @@ export default function UserProfileModal() {
   };
 
   const toggleProfileModal = () => {
-
     setProfileModal(false);
-    setUserStats(null);
+    setUserStats(null)
+
     if (selectedProfile) {
       setSelectedProfile(null)
       setSiteModal(true)
@@ -151,11 +150,7 @@ export default function UserProfileModal() {
   };
 
   const onShare = async (photoFile) => {
-    let temp = photoFile.split("/");
-    let lastIndex = temp.length - 1;
-    let fileName = temp[lastIndex];
-    let cacheDirectory = FileSystem.cacheDirectory + fileName;
-    convertBase64(cacheDirectory);
+    convertBase64(photoFile);
   };
 
   useEffect(() => {
@@ -398,7 +393,7 @@ export default function UserProfileModal() {
           style={imaButState ? styles.ShareButtonPressed : styles.ShareButton}
         >
           <TouchableOpacity
-            onPress={() => onShare(picUri)}
+            onPress={() => onShare(image.uri)}
             onPressIn={() => setImaButState(true)}
             onPressOut={() => setImaButState(false)}
             style={{
@@ -502,7 +497,7 @@ const styles = StyleSheet.create({
   inputSmall: {
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(16),
-    color: "white",
+    color: "white"
   },
   text: {
     fontSize: 18,

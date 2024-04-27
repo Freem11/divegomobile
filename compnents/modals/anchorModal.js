@@ -31,8 +31,9 @@ import { scale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import email from "react-native-email";
 import ImgToBase64 from "react-native-image-base64";
-import config from "../../config";
 import Picture from "./picture";
+
+let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 export default function AnchorModal(props) {
   const { setSelectedPhoto, setPhotoBoxModel } = props;
@@ -222,7 +223,7 @@ export default function AnchorModal(props) {
 
     try {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${config.GOOGLE_MAPS_API_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${GoogleMapsApiKey}`
       );
       const placeInfo = await res.json();
       let genAddress = placeInfo.results[1].formatted_address;

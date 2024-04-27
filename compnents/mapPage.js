@@ -863,24 +863,35 @@ export default function MapPage() {
     if (finalStatus !== 'granted') {
     return;
     }
-    console.log("made it?", Constants.expoConfig.extra.eas.projectId)
+
     let token
     try {
-       token = (await Notifications.getExpoPushTokenAsync({
+       token = (await Notifications.getDevicePushTokenAsync({
         'projectId': Constants.expoConfig.extra.eas.projectId,
       })).data;
-      console.log("called?", token)
+      
     } catch (err) {
       console.log("error", err);
     }
 
-    console.log("hmm one", token)
+    let tokenE
+    try {
+    tokenE = ( await Notifications.getExpoPushTokenAsync({
+      projectId: Constants.expoConfig.extra.eas.projectId,
+    })).data;
+      
+    } catch (err) {
+      console.log("error", err);
+    }
+   
     if (activeSession && activeSession.user) {
       const user = (await grabProfileById(activeSession.user.id));
       const activeToken = user[0].expo_push_token;
-      console.log("hmm two", activeToken)
       if (activeToken === null || !activeToken.includes(token)) {
         updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
+      }
+      if (activeToken === null || !activeToken.includes(tokenE)) {
+        updatePushToken({ token: activeToken ? [...activeToken, tokenE] : [tokenE], UserID: activeSession.user.id })
       }
     }
   };
@@ -1197,29 +1208,29 @@ export default function MapPage() {
               <PicUploadModal pictureModalY={pictureModalY} />
             </Animated.View>
 
-            {guideModal && (
+            {/* {guideModal && ( */}
               <Animated.View
                 style={[styles.tutorialModal, tutorialModalReveal]}
               >
                 <IntroTutorial tutorialModalY={tutorialModalY} />
               </Animated.View>
-            )}
+            {/* )} */}
 
-            {secondGuideModal && (
+            {/* {secondGuideModal && ( */}
               <Animated.View
                 style={[styles.tutorialModal, tutorial2ModalReveal]}
               >
                 <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
               </Animated.View>
-            )}
+            {/* )} */}
 
-            {thirdGuideModal && (
+            {/* {thirdGuideModal && ( */}
               <Animated.View
                 style={[styles.tutorialModal, tutorial3ModalReveal]}
               >
                 <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
               </Animated.View>
-            )}
+            {/* )} */}
 
             {profileModal && (
               <Animated.View style={[styles.anchorModal, profileModalReveal]}>

@@ -22,7 +22,6 @@ import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebookblue.png";
 import googleLogo from "../compnents/png/google-logo-9822.png";
-import config from "../config";
 import mantaIOS from "../compnents/png/Matt_Manta_White.png";
 import {
   GoogleSignin,
@@ -43,14 +42,14 @@ Settings.initializeSDK();
 let emailVar = false;
 let passwordVar = false;
 
-const googleWebClientId = config.WEB_CLIENT_ID;
-const googleAndroidClientId = config.ANDROID_CLIENT_ID;
-const googleIOSClientId = config.IOS_CLIENT_ID;
-const facebookAppId = config.FACEBOOK_APP_ID;
+const googleWebClientId = process.env.WEB_CLIENT_ID;
+const googleAndroidClientId = process.env.ANDROID_CLIENT_ID;
+const googleIOSClientId = process.env.IOS_CLIENT_ID;
+const facebookAppId = process.env.FACEBOOK_APP_ID;
 
-const googleAndroidClientId2 = config.ANDROID_CLIENT_ID_2;
-const googleAndroidClientId3 = config.ANDROID_CLIENT_ID_3;
-const googleAndroidClientId4 = config.ANDROID_CLIENT_ID_4;
+const googleAndroidClientId2 = process.env.ANDROID_CLIENT_ID_2;
+const googleAndroidClientId3 = process.env.ANDROID_CLIENT_ID_3;
+const googleAndroidClientId4 = process.env.ANDROID_CLIENT_ID_4;
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

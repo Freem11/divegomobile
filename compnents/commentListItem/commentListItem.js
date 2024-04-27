@@ -5,7 +5,11 @@ import { moderateScale } from "react-native-size-matters";
 export default function CommentListItem(props) {
   const { commentDetails, setReplyTo, replyTo, toggleShowReplies, selectedReplyId, nbReplies } = props;
   let newDate = new Date(commentDetails.created_at);
-  let finalDate = newDate.toLocaleString().substring(0, 9);
+  let finalDate = newDate.toLocaleString().substring(0, 10);
+  let lastChar = finalDate.slice(-1)
+  if (lastChar == ","){
+    finalDate = finalDate.slice(0,-1)
+  }
 
   return (
     <View>

@@ -26,10 +26,11 @@ import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
-import config from "../../config";
 import notLiked from "../png/Hand-Hollow-Blue.png";
 import liked from "../png/Hand-Filled-Blue.png";
 import bubbles from "../png/bubbles.png";
+
+let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 export default function Picture(props) {
   const { pic } = props;
@@ -114,7 +115,8 @@ export default function Picture(props) {
     setMapLocal(null);
   };
 
-  const onShare = async (photoFile, userN, seaCreature, picDate, lat, lng) => {
+  const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
+
     let local = await getPhotoLocation(lat, lng);
     setMapLocal(local);
     setCreastureN(seaCreature);
@@ -138,7 +140,7 @@ export default function Picture(props) {
 
     try {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${config.GOOGLE_MAPS_API_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${GoogleMapsApiKey}`
       );
       const placeInfo = await res.json();
       let genAddress = placeInfo.results[1].formatted_address;
@@ -167,6 +169,7 @@ export default function Picture(props) {
     }
     setBase64(null);
   }, [base64]);
+  console.log(pic)
 
   return (
     <View style={styles.outterBox}>

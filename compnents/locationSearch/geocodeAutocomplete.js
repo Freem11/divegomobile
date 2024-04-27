@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { StyleSheet, View, Dimensions, Keyboard } from "react-native";
 import PlacesInput from "react-native-places-input";
-import config from "../../config";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { MapSearchModalContext } from "../contexts/mapSearchContext";
 import { scale, moderateScale } from "react-native-size-matters";
+let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 export default function GeocodeAutoComplete(props) {
   const { setGeoHide } = props;
@@ -23,7 +23,7 @@ export default function GeocodeAutoComplete(props) {
   return (
     <View style={styles.container} pointerEvents={"box-none"}>
       <PlacesInput
-        googleApiKey={config.GOOGLE_MAPS_API_KEY}
+        googleApiKey={GoogleMapsApiKey}
         placeholder={"Go to..."}
         language={"en-US"}
         onSelect={((place) => handleConfirm(place))}
