@@ -10,7 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 
-app.json
+app.config.js
 eas.json
 google-service.json
 GoogleService-info.plist
