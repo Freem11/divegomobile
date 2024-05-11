@@ -5,6 +5,7 @@ import {
   TextInput,
   Image,
   TouchableWithoutFeedback,
+  Platform
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
@@ -169,7 +170,6 @@ export default function Picture(props) {
     }
     setBase64(null);
   }, [base64]);
-  console.log(pic)
 
   return (
     <View style={styles.outterBox}>

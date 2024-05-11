@@ -6,7 +6,8 @@ import {
   TouchableWithoutFeedback,
   Image,
   KeyboardAvoidingView,
-  Dimensions
+  Dimensions,
+  Platform
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useContext } from "react";
