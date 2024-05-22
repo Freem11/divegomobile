@@ -1,12 +1,15 @@
+import 'dotenv/config';
+
 export default {
   name: "Scuba SEAsons",
   slug: "divegomobile",
-  scheme: ["divegomobile", "fb692861552452156"],
+  scheme: ["divegomobile", process.env.EXPO_PUBLIC_FACEBOOK_SCHEME],
   version: "1.5.9",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",
   plugins: [
+    "expo-font",
     "expo-image-picker",
     [
       "expo-screen-orientation",
@@ -18,10 +21,10 @@ export default {
     [
       "react-native-fbsdk-next",
       {
-        appID: "692861552452156",
-        clientToken: "5fca59edd61f9c418917b4a8f6032a20",
+        appID: process.env.EXPO_PUBLIC_FACEBOOK_APP_ID,
+        clientToken: process.env.EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN,
         displayName: "Scuba SEAsons",
-        scheme: "fb692861552452156",
+        scheme: process.env.EXPO_PUBLIC_FACEBOOK_SCHEME,
         buildscript: {
           ext: {
             facebookSdkVersion: "13.1.0",
@@ -69,7 +72,7 @@ export default {
       ],
     },
     config: {
-      googleMapsApiKey: "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg",
+      googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
     },
   },
   android: {
@@ -79,10 +82,10 @@ export default {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#00FFFFFF",
     },
-    googleServicesFile: "./google-service.json",
+    googleServicesFile: process.env.EXPO_PUBLIC_GOOGLE_SERVICES_JSON_ANDROID,
     config: {
       googleMaps: {
-        apiKey: "AIzaSyCg8IOE5dVJg7ccSuMPJEaGL8Tm2yUDZZg",
+        apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
       },
     },
     permissions: [
@@ -98,7 +101,7 @@ export default {
   },
   extra: {
     eas: {
-      projectId: "df1b7ca8-d86d-4667-859b-0330dad67126",
+      projectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID,
     },
   },
   runtimeVersion: {

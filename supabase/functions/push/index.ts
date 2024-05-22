@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${Deno.env.get('EXPO_ACCESS_TOKEN')}`,
+      Authorization: `Bearer ${Deno.env.get('EXPO_PUBLIC_ACCESS_TOKEN')}`,
     },
     body: JSON.stringify({
       to: data?.expo_push_token,

@@ -42,14 +42,15 @@ Settings.initializeSDK();
 let emailVar = false;
 let passwordVar = false;
 
-const googleWebClientId = process.env.WEB_CLIENT_ID;
-const googleAndroidClientId = process.env.ANDROID_CLIENT_ID;
-const googleIOSClientId = process.env.IOS_CLIENT_ID;
+const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
+const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
+const googleAndroidClientId = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID;
+const googleAndroidClientId2 = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID_2;
+const googleAndroidClientId3 = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID_3;
+const googleAndroidClientId4 = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID_4;
+
 const facebookAppId = process.env.FACEBOOK_APP_ID;
 
-const googleAndroidClientId2 = process.env.ANDROID_CLIENT_ID_2;
-const googleAndroidClientId3 = process.env.ANDROID_CLIENT_ID_3;
-const googleAndroidClientId4 = process.env.ANDROID_CLIENT_ID_4;
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
