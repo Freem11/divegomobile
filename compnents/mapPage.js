@@ -826,7 +826,9 @@ export default function MapPage() {
           setTutorialRunning(true);
           setItterator(0);
         } else {
+          console.log("just before 2", profile)
           setProfile(success);
+          console.log("just after 2", profile)
           setPinValues({
             ...pinValues,
             UserId: success[0].UserID,

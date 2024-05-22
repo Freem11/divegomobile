@@ -427,7 +427,7 @@ export default function IntroTutorial() {
         setItterator((prev) => prev + 1);
         return;
       }
-      userBoxX.value = withSpring(windowWidth * 0.18);
+      userBoxX.value = withSpring(windowWidth * 0.09);
       // startUserBoxAnimation();
     }
 

@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { scale, s } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { SessionContext } from "../contexts/sessionContext";
@@ -18,7 +18,8 @@ import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 
 let userVar = false;
 
-export default function UserNamer() {
+export default function UserNamer(props) {
+  const { nameChangerState, setNameChangerState, currentUserName } = props;
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -28,6 +29,7 @@ export default function UserNamer() {
   const { itterator, setItterator } = useContext(IterratorContext);
   const [userFail, setUserFail] = useState(null);
   const [subButState, setSubButState] = useState(false);
+  const [cancelButState, setCancelButState] = useState(false);
 
   const [formVal, setFormVal] = useState({
     userName: "",
@@ -38,7 +40,7 @@ export default function UserNamer() {
   });
 
   const handleSubmit = async () => {
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     if (formVal.userName === "" || formVal.userName === null) {
       userVar = true;
     } else {
@@ -51,20 +53,27 @@ export default function UserNamer() {
     });
 
     if (formVal.userName === "") {
-      setUserFail("Your Username cannot be blank!");  
+      setUserFail("Your Username cannot be blank!");
     } else {
-      let sessionUserId = activeSession.user.id
+      let sessionUserId = activeSession.user.id;
       // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13';
-      console.log(sessionUserId, formVal.userName)
+      // console.log(sessionUserId, formVal.userName);
       try {
         const success = await updateProfile({
           id: sessionUserId,
           username: formVal.userName,
         });
+        if(nameChangerState){
+          setNameChangerState(false);
+        }
         if (success.length > 0) {
           setItterator(itterator + 1);
           setFormVal({ userName: "" });
-          setProfile([{...profile, UserName: formVal.userName}])
+          if(Array.isArray(success)){
+            setProfile(success);
+          }else {
+            setProfile([success]);
+          }
           setPinValues({
             ...pinValues,
             UserId: success[0].UserID,
@@ -76,18 +85,25 @@ export default function UserNamer() {
             UserName: success[0].UserName,
           });
         } else {
-          setUserFail("Sorry that username has already been taken")
+          setUserFail("Sorry that username has already been taken");
         }
       } catch (e) {
-        setUserFail("Sorry that username has already been taken")
+        setUserFail("Sorry that username has already been taken");
         console.log({ title: "Error", message: e.message });
       }
     }
   };
 
+  const handleCancel = async () => {
+    Keyboard.dismiss();
+    setNameChangerState(false);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>What is your diver name?</Text>
+      <Text style={styles.titleText}>
+        {nameChangerState ? "New Diver Name?" : "What is your diver name?"}
+      </Text>
       <InsetShadow
         containerStyle={{
           borderRadius: 25,
@@ -117,28 +133,58 @@ export default function UserNamer() {
 
       {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
 
-      <View style={subButState ? styles.OKbuttonPressed : styles.OKbutton}>
-        <TouchableWithoutFeedback
-          onPress={handleSubmit}
-          onPressIn={() => setSubButState(true)}
-          onPressOut={() => setSubButState(false)}
-        >
-          <Text
-            style={{
-              color: "gold",
-              fontSize: 17,
-              marginTop: 0,
-              fontFamily: "PermanentMarker_400Regular",
-              width: "100%",
-              alignSelf: "center",
-              justifyContent: "center",
-              alignContent: "center",
-              textAlign: "center",
-            }}
+      <View style={{flexDirection:"row", justifyContent: "space-between", width: "94%", marginTop: 10, marginBottom: 20}}>
+        <View style={subButState ? styles.OKbuttonPressed : styles.OKbutton}>
+          <TouchableWithoutFeedback
+            onPress={handleSubmit}
+            onPressIn={() => setSubButState(true)}
+            onPressOut={() => setSubButState(false)}
           >
-            Ok
-          </Text>
-        </TouchableWithoutFeedback>
+            <Text
+              style={{
+                color: "gold",
+                fontSize: 17,
+                marginTop: 0,
+                fontFamily: "PatrickHand_400Regular",
+                width: "100%",
+                alignSelf: "center",
+                justifyContent: "center",
+                alignContent: "center",
+                textAlign: "center",
+              }}
+            >
+              Ok
+            </Text>
+          </TouchableWithoutFeedback>
+        </View>
+        {nameChangerState &&
+        <View
+          style={
+            cancelButState ? styles.cancelButtonPressed : styles.cancelButton
+          }
+        >
+          <TouchableWithoutFeedback
+            onPress={handleCancel}
+            onPressIn={() => setCancelButState(true)}
+            onPressOut={() => setCancelButState(false)}
+          >
+            <Text
+              style={{
+                color: "#538bdb",
+                fontSize: 17,
+                marginTop: 0,
+                fontFamily: "PatrickHand_400Regular",
+                width: "100%",
+                alignSelf: "center",
+                justifyContent: "center",
+                alignContent: "center",
+                textAlign: "center",
+              }}
+            >
+              Cancel
+            </Text>
+          </TouchableWithoutFeedback>
+        </View>}
       </View>
     </View>
   );
@@ -157,17 +203,19 @@ const styles = StyleSheet.create({
     left: 0,
     // height: scale(53),
     borderRadius: scale(15),
-    width: "120%",
+    borderColor: "darkgrey",
+    borderWidth: 1,
     minHeight: "30%",
-    // paddingRight: 10,
+    paddingRight: 20,
+    paddingLeft: 20,
     paddingTop: scale(-10),
     fontSize: "2rem",
   },
   titleText: {
     textAlign: "center",
-    fontFamily: "PermanentMarker_400Regular",
+    fontFamily: "PatrickHand_400Regular",
     color: "#F0EEEB",
-    fontSize: scale(17),
+    fontSize: scale(26),
     marginTop: scale(20),
   },
   input: {
@@ -222,14 +270,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: scale(10),
   },
+
   OKbutton: {
     backgroundColor: "#538bdb",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    height: 35,
-    width: 150,
+    height: scale(25),
+    width: scale(100),
     // marginLeft: "30%",
     marginTop: scale(10),
     marginBottom: scale(15),
@@ -249,8 +298,50 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    height: scale(35),
-    width: scale(150),
+    height: scale(25),
+    width: scale(100),
+    // marginLeft: "30%",
+    marginTop: scale(10),
+    marginBottom: scale(15),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
+  cancelButton: {
+    backgroundColor: "pink",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: scale(25),
+    width: scale(100),
+    // marginLeft: "30%",
+    marginTop: scale(10),
+    marginBottom: scale(15),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
+  cancelButtonPressed: {
+    backgroundColor: "pink",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    height: scale(25),
+    width: scale(100),
     // marginLeft: "30%",
     marginTop: scale(10),
     marginBottom: scale(15),

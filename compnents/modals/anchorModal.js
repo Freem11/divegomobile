@@ -110,7 +110,6 @@ export default function AnchorModal(props) {
 
   const getDiveSite = async () => {
     try {
-      console.log(selectedDiveSite);
       const selectedSite = await getDiveSiteWithUserName({
         siteName: selectedDiveSite.SiteName,
         lat: selectedDiveSite.Latitude,

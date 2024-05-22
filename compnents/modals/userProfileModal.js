@@ -6,9 +6,17 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  // Share
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  useDerivedValue,
+  interpolateColor,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import Share from "react-native-share";
+import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
@@ -38,6 +46,8 @@ export default function UserProfileModal() {
   const { profile, setProfile } = useContext(UserProfileContext);
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [imaButState, setImaButState] = useState(false);
+  const [nameButState, setNameButState] = useState(false);
+  const [nameChangerState, setNameChangerState] = useState(false);
   const [followButState, setFollowButState] = useState(false);
   const [userFollows, setUserFollows] = useState(false);
   const [picUri, setPicUri] = useState(null);
@@ -64,10 +74,7 @@ export default function UserProfileModal() {
       downloadProgress.totalBytesExpectedToWrite;
   };
 
-
-
   const handleFollow = async (userName) => {
-
     // if (profile[0].UserID === picOwnerAccount[0].UserID){
     //   return
     // }
@@ -76,30 +83,34 @@ export default function UserProfileModal() {
       deleteUserFollow(followData);
       setUserFollows(false);
     } else {
-      
       if (userStats) {
-        let newRecord = await insertUserFollow(profile[0].UserID, userStats[0].userid);
+        let newRecord = await insertUserFollow(
+          profile[0].UserID,
+          userStats[0].userid
+        );
         setFollowData(newRecord[0].id);
         setUserFollows(true);
       }
     }
-
   };
 
   useEffect(() => {
     getProfile();
 
     async function followCheck() {
-      let alreadyFollows = await checkIfUserFollows(profile[0].UserID, selectedProfile)
+      let alreadyFollows = await checkIfUserFollows(
+        profile[0].UserID,
+        selectedProfile
+      );
       if (alreadyFollows && alreadyFollows.length > 0) {
-        setUserFollows(true)
+        setUserFollows(true);
         setFollowData(alreadyFollows[0].id);
-      } 
+      }
     }
 
     followCheck();
   }, []);
- 
+
   const getProfile = async () => {
     let userID;
     if (selectedProfile) {
@@ -120,13 +131,12 @@ export default function UserProfileModal() {
 
   const toggleProfileModal = () => {
     setProfileModal(false);
-    setUserStats(null)
+    // setUserStats(null);
 
     if (selectedProfile) {
-      setSelectedProfile(null)
-      setSiteModal(true)
-    } 
-    
+      setSelectedProfile(null);
+      setSiteModal(true);
+    }
   };
 
   const [base64, setBase64] = useState(null);
@@ -168,10 +178,39 @@ export default function UserProfileModal() {
     setBase64(null);
   }, [base64]);
 
+  const userBoxX = useSharedValue(scale(-450));
+
+  const userBoxSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: userBoxX.value }],
+    };
+  });
+
+  const handleUserBox = () => {
+    setNameChangerState(true);
+  };
+
+  useEffect(() => {
+    console.log(nameChangerState);
+
+    if (!nameChangerState) {
+      userBoxX.value = withTiming(scale(-450));
+      getProfile();
+    } else {
+      if (userBoxX.value === 0) {
+        userBoxX.value = withTiming(scale(-450));
+      } else {
+        userBoxX.value = withSpring(scale(0));
+      }
+    }
+  }, [nameChangerState]);
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.header}>{userStats ? userStats[0].username + "'s Diving" : "My Diver Profile"}</Text>
+        <Text style={styles.header}>
+          {userStats ? userStats[0].username + "'s Diving" : "My Diver Profile"}
+        </Text>
         <View
           style={
             profileCloseState ? styles.closeButtonPressed : styles.closeButton
@@ -192,240 +231,291 @@ export default function UserProfileModal() {
         </View>
       </View>
 
-
       <View style={styles.inputContainer}>
-
-      {selectedProfile ? 
-      <View
-          style={userFollows ? styles.FollowButtonPressed : styles.FollowButton}
-        >
-          <TouchableOpacity
-            onPress={() => handleFollow()}
-            onPressIn={() => setFollowButState(true)}
-            onPressOut={() => setFollowButState(false)}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              // width: scale(100),
-              height: scale(35),
-              alignItems: "center",
-              marginLeft: scale(10),
-              marginRight: scale(10),
-            }}
+        {selectedProfile ? (
+          <View
+            style={
+              userFollows ? styles.FollowButtonPressed : styles.FollowButton
+            }
           >
-            <Text
+            <TouchableOpacity
+              onPress={() => handleFollow()}
+              onPressIn={() => setFollowButState(true)}
+              onPressOut={() => setFollowButState(false)}
               style={{
-                marginLeft: 5,
-                fontFamily: "Itim_400Regular",
-                color: userFollows ? "black" : "pink",
-                fontSize: moderateScale(20),
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                // width: scale(100),
+                height: scale(35),
+                alignItems: "center",
+                marginLeft: scale(10),
+                marginRight: scale(10),
               }}
             >
-              {userFollows ? "Following " + (userStats && userStats[0].username) : "Follow " + (userStats && userStats[0].username)}
-            </Text>
-          </TouchableOpacity>
-        </View>
-:
-<>
-        <InsetShadow
-          containerStyle={{
-            borderRadius: moderateScale(25),
-            height: moderateScale(40),
-            width: moderateScale(200),
-            marginTop: moderateScale(10),
-          }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={styles.input}
-            value={userStats && userStats[0].username}
-            placeholder={"DiverName"}
-            keyboardType="numbers-and-punctuation"
-            editable={false}
-            fontSize={moderateScale(14)}
-            placeholderTextColor="darkgrey"
-            color="#F0EEEB"
-            multiline
-            // onChangeText={(text) =>
-            //   setAddSiteVals({ ...addSiteVals, Latitude: text })
-            // }
-          ></TextInput>
-        </InsetShadow>
+              <Text
+                style={{
+                  marginLeft: 5,
+                  fontFamily: "Itim_400Regular",
+                  color: userFollows ? "black" : "pink",
+                  fontSize: moderateScale(20),
+                }}
+              >
+                {userFollows
+                  ? "Following " + (userStats && userStats[0].username)
+                  : "Follow " + (userStats && userStats[0].username)}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <>
+            <InsetShadow
+              containerStyle={{
+                borderRadius: moderateScale(25),
+                height: moderateScale(40),
+                width: moderateScale(200),
+                marginTop: moderateScale(10),
+              }}
+              elevation={20}
+              shadowRadius={15}
+              shadowOpacity={0.3}
+            >
+              <TextInput
+                style={styles.input}
+                value={userStats && userStats[0].username}
+                placeholder={"DiverName"}
+                keyboardType="numbers-and-punctuation"
+                editable={false}
+                fontSize={moderateScale(14)}
+                placeholderTextColor="darkgrey"
+                color="#F0EEEB"
+                multiline
+                // onChangeText={(text) =>
+                //   setAddSiteVals({ ...addSiteVals, Latitude: text })
+                // }
+              ></TextInput>
+            </InsetShadow>
 
-        <InsetShadow
-          containerStyle={{
-            borderRadius: moderateScale(25),
-            height: moderateScale(40),
-            width: moderateScale(200),
-            marginTop: moderateScale(10),
-            // paddingTop: 3
-          }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
-        >
-          <TextInput
-            style={styles.input}
-            value={userStats && userStats[0].email}
-            placeholder={"Email"}
-            keyboardType="numbers-and-punctuation"
-            editable={false}
-            fontSize={moderateScale(14)}
-            placeholderTextColor="darkgrey"
-            color="#F0EEEB"
-            multiline
-            // onChangeText={(text) =>
-            //   setAddSiteVals({ ...addSiteVals, Latitude: text })
-            // }
-          ></TextInput>
-        </InsetShadow>
-        </>
-      }
+            <InsetShadow
+              containerStyle={{
+                borderRadius: moderateScale(25),
+                height: moderateScale(40),
+                width: moderateScale(200),
+                marginTop: moderateScale(10),
+                // paddingTop: 3
+              }}
+              elevation={20}
+              shadowRadius={15}
+              shadowOpacity={0.3}
+            >
+              <TextInput
+                style={styles.input}
+                value={userStats && userStats[0].email}
+                placeholder={"Email"}
+                keyboardType="numbers-and-punctuation"
+                editable={false}
+                fontSize={moderateScale(14)}
+                placeholderTextColor="darkgrey"
+                color="#F0EEEB"
+                multiline
+                // onChangeText={(text) =>
+                //   setAddSiteVals({ ...addSiteVals, Latitude: text })
+                // }
+              ></TextInput>
+            </InsetShadow>
+          </>
+        )}
 
         <View style={styles.statsContainer}>
-            <InsetShadow
-              containerStyle={{
-                borderRadius: moderateScale(25),
-                height: moderateScale(40),
-                marginTop: moderateScale(10),
-                alignItems: "center",
-                justifyContent: "center",
-                paddingLeft: moderateScale(10),
-                paddingRight: moderateScale(10),
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <Text style={styles.inputSmall}>
-                Sea Life: 
-                { userStats && " " + userStats[0].photocount}
-              </Text>
-            </InsetShadow>
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              marginTop: moderateScale(10),
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: moderateScale(10),
+              paddingRight: moderateScale(10),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <Text style={styles.inputSmall}>
+              Sea Life:
+              {userStats && " " + userStats[0].photocount}
+            </Text>
+          </InsetShadow>
 
-            <InsetShadow
-              containerStyle={{
-                borderRadius: moderateScale(25),
-                height: moderateScale(40),
-                marginTop: moderateScale(10),
-                alignItems: "center",
-                justifyContent: "center",
-                paddingLeft: moderateScale(10),
-                paddingRight: moderateScale(10),
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <Text style={styles.inputSmall}>
-                Dive Sites: 
-                { userStats && " " + userStats[0].divesitecount}
-              </Text>
-            </InsetShadow>
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              marginTop: moderateScale(10),
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: moderateScale(10),
+              paddingRight: moderateScale(10),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <Text style={styles.inputSmall}>
+              Dive Sites:
+              {userStats && " " + userStats[0].divesitecount}
+            </Text>
+          </InsetShadow>
 
-            <InsetShadow
-              containerStyle={{
-                borderRadius: moderateScale(25),
-                height: moderateScale(40),
-                marginTop: moderateScale(10),
-                alignItems: "center",
-                justifyContent: "center",
-                paddingLeft: moderateScale(10),
-                paddingRight: moderateScale(10),
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <Text style={styles.inputSmall}>
-                Followers: 
-                { userStats && " " + userStats[0].followercount}
-              </Text>
-            </InsetShadow>
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              marginTop: moderateScale(10),
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: moderateScale(10),
+              paddingRight: moderateScale(10),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <Text style={styles.inputSmall}>
+              Followers:
+              {userStats && " " + userStats[0].followercount}
+            </Text>
+          </InsetShadow>
 
-            <InsetShadow
-              containerStyle={{
-                borderRadius: moderateScale(25),
-                height: moderateScale(40),
-                marginTop: moderateScale(10),
-                alignItems: "center",
-                justifyContent: "center",
-                paddingLeft: moderateScale(10),
-                paddingRight: moderateScale(10),
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <Text style={styles.inputSmall}>
-                Comments: 
-                { userStats && " " + userStats[0].commentcount}
-              </Text>
-            </InsetShadow>
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              marginTop: moderateScale(10),
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: moderateScale(10),
+              paddingRight: moderateScale(10),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <Text style={styles.inputSmall}>
+              Comments:
+              {userStats && " " + userStats[0].commentcount}
+            </Text>
+          </InsetShadow>
 
-            <InsetShadow
-              containerStyle={{
-                borderRadius: moderateScale(25),
-                height: moderateScale(40),
-                marginTop: moderateScale(10),
-                alignItems: "center",
-                justifyContent: "center",
-                paddingLeft: moderateScale(10),
-                paddingRight: moderateScale(10),
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <Text style={styles.inputSmall}>
-                Likes: 
-                { userStats && " " + userStats[0].likecount}
-              </Text>
-            </InsetShadow>
-            
+          <InsetShadow
+            containerStyle={{
+              borderRadius: moderateScale(25),
+              height: moderateScale(40),
+              marginTop: moderateScale(10),
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: moderateScale(10),
+              paddingRight: moderateScale(10),
+            }}
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <Text style={styles.inputSmall}>
+              Likes:
+              {userStats && " " + userStats[0].likecount}
+            </Text>
+          </InsetShadow>
         </View>
 
         <View
-          style={imaButState ? styles.ShareButtonPressed : styles.ShareButton}
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "90%",
+          }}
         >
-          <TouchableOpacity
-            onPress={() => onShare(image.uri)}
-            onPressIn={() => setImaButState(true)}
-            onPressOut={() => setImaButState(false)}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              // width: scale(100),
-              height: scale(35),
-              alignItems: "center",
-              marginLeft: scale(10),
-              marginRight: scale(10),
-            }}
+          <View
+            style={
+              nameButState ? styles.ShareButtonPressed : styles.ShareButton
+            }
           >
-            <FontAwesome
-              name="share-square-o"
-              size={moderateScale(24)}
-              color="gold"
-            />
-            <Text
+            <TouchableOpacity
+              onPress={() => handleUserBox()}
+              onPressIn={() => setNameButState(true)}
+              onPressOut={() => setNameButState(false)}
               style={{
-                marginLeft: 5,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: moderateScale(14),
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                // width: scale(100),
+                height: scale(35),
+                alignItems: "center",
+                marginLeft: scale(10),
+                marginRight: scale(10),
               }}
             >
-              Share Scuba SEAsons!
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  marginLeft: 5,
+                  fontFamily: "PatrickHand_400Regular",
+                  color: "gold",
+                  fontSize: moderateScale(14),
+                }}
+              >
+                Change Diver Name
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={imaButState ? styles.ShareButtonPressed : styles.ShareButton}
+          >
+            <TouchableOpacity
+              onPress={() => onShare(image.uri)}
+              onPressIn={() => setImaButState(true)}
+              onPressOut={() => setImaButState(false)}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                // width: scale(100),
+                height: scale(35),
+                alignItems: "center",
+                marginLeft: scale(10),
+                marginRight: scale(10),
+              }}
+            >
+              <FontAwesome
+                name="share-square-o"
+                size={moderateScale(24)}
+                color="gold"
+              />
+              <Text
+                style={{
+                  marginLeft: 5,
+                  fontFamily: "PatrickHand_400Regular",
+                  color: "gold",
+                  fontSize: moderateScale(14),
+                }}
+              >
+                Share Scuba SEAsons!
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
+
+      <Animated.View style={[styles.userContainer, userBoxSlide]}>
+        <UserNamer
+          nameChangerState={nameChangerState}
+          setNameChangerState={setNameChangerState}
+          currentUserName={userStats && userStats[0].username}
+        ></UserNamer>
+      </Animated.View>
     </View>
   );
 }
@@ -446,20 +536,20 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "96%",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   labelBox: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: moderateScale(10),
-      width: "40%",
-      // backgroundColor: "pink"
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: moderateScale(10),
+    width: "40%",
+    // backgroundColor: "pink"
   },
   labelText: {
     marginTop: moderateScale(10),
     marginLeft: moderateScale(10),
     marginRight: moderateScale(10),
-    color: "white"
+    color: "white",
   },
   input: {
     fontFamily: "Itim_400Regular",
@@ -489,15 +579,15 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     marginTop: moderateScale(20),
     width: "80%",
-    flexDirection: 'row',
+    flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
   },
   inputSmall: {
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(16),
-    color: "white"
+    color: "white",
   },
   text: {
     fontSize: 18,
@@ -554,7 +644,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: moderateScale(10),
     height: moderateScale(40),
-    marginLeft: "30%",
+    // marginLeft: "30%",
     marginTop: moderateScale(30),
     shadowColor: "#000",
     shadowOffset: {
@@ -573,7 +663,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: moderateScale(10),
     height: moderateScale(40),
-    marginLeft: "30%",
+    // marginLeft: "30%",
     marginTop: moderateScale(30),
     shadowColor: "#000",
     shadowOffset: {
@@ -622,5 +712,17 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
 
     elevation: 10,
+  },
+  userContainer: {
+    position: "absolute",
+    top: Platform.OS === "ios" ? "18%" : "18%",
+    backgroundColor: "transparent",
+    alignItems: "center",
+    // marginTop: "-3%",
+    height: "90%",
+    marginRight: scale(10),
+    marginLeft: scale(10),
+    borderRadius: 15,
+    // backgroundColor: "green"
   },
 });
