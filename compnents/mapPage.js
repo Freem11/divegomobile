@@ -184,7 +184,7 @@ export default function MapPage() {
         setAnchPhotos(count);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error66", message: e.message });
     }
   };
 
@@ -849,7 +849,7 @@ export default function MapPage() {
         }
       }
     } catch (e) {
-      console.log({ title: "Error", message: "e.message" });
+      console.log({ title: "Error43", message: "e.message" });
     }
   };
 

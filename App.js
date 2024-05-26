@@ -123,7 +123,7 @@ export default function App() {
         });
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error65", message: e.message });
     }
   };
 

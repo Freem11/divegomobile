@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Keyboard, StyleSheet, View } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import { diveSites } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { diveSites, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
@@ -23,89 +23,94 @@ export default function DiveSiteAutoComplete(props) {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
-  
+  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
+    DiveSiteSearchModalContext
+  );
 
-  let diveSiteData
+  let diveSiteData;
 
   const handleDiveSiteList = async () => {
-    let diveSiteArray = []
+    let diveSiteArray = [];
 
-    let minLat = boundaries[1]
-    let maxLat = boundaries[3]
+    let minLat = boundaries[1];
+    let maxLat = boundaries[3];
 
-    let minLng = boundaries[0] 
-    let maxLng = boundaries[2]
+    let minLng = boundaries[0];
+    let maxLng = boundaries[2];
 
-    diveSiteData = null
-    diveSiteArray = []
+    diveSiteData = null;
+    diveSiteArray = [];
 
-    if (boundaries.length > 0 ){
-      diveSiteData = await diveSites({minLat, maxLat, minLng, maxLng},"");
+    if (boundaries.length > 0) {
+      diveSiteData = await diveSites();
     } else {
-      diveSiteData = null
+      diveSiteData = null;
     }
 
-    if (diveSiteData){
-    diveSiteData.forEach((diveSite) => {
-      if (!diveSiteArray.includes(diveSite.name)){
-        diveSiteArray.push(diveSite.name)
-      }
-    })
-    setList(addIndexNumber(diveSiteArray));
-  } else {
-    setList([])
-  }
-  }
+    if (diveSiteData) {
+      diveSiteData.forEach((diveSite) => {
+        if (!diveSiteArray.includes(diveSite.name)) {
+          let fullDSName;
+          if (diveSite.region) {
+            fullDSName = `${diveSite.name} ~ ${diveSite.region}`;
+          } else {
+            fullDSName = diveSite.name;
+          }
+          diveSiteArray.push(fullDSName);
+        }
+      });
+      setList(addIndexNumber(diveSiteArray));
+    } else {
+      setList([]);
+    }
+  };
 
   useEffect(() => {
-    handleDiveSiteList()
+    handleDiveSiteList();
   }, []);
 
   useEffect(() => {
-    handleDiveSiteList()
+    handleDiveSiteList();
   }, [boundaries]);
 
-  const handleConfirm = async(diveSite) => {
+  const handleConfirm = async (diveSite) => {
     if (diveSite !== null) {
-      let minLat2 = boundaries[1]
-      let maxLat2 = boundaries[3]
+
+      let nameOnly = diveSite.title.split(" ~ ");
+      let diveSiteSet = await getSingleDiveSiteByNameAndRegion({name: nameOnly[0],region:nameOnly[1]});
   
-      let minLng2 = boundaries[0] 
-      let maxLng2 = boundaries[2]
+      if (diveSiteSet) {
 
-      let diveSiteSet = await diveSites({minLat: minLat2, maxLat: maxLat2, minLng: minLng2, maxLng: maxLng2},"");
+        console.log("nowah", diveSiteSet)
+    
+            setSelectedDiveSite({
+              SiteName: diveSiteSet[0].name,
+              Latitude: diveSiteSet[0].lat,
+              Longitude: diveSiteSet[0].lng,
+            });
 
-      if(diveSiteSet){
-       
-        diveSiteSet.forEach((site) => {
-          if(site.name === diveSite.title)
-          setSelectedDiveSite({SiteName: site.name, Latitude: site.lat, Longitude: site.lng});
-          
-          if (tutorialRunning) {
-            if (itterator2 === 5) {
-              setItterator2(itterator2 + 1);
+            if (tutorialRunning) {
+              if (itterator2 === 5) {
+                setItterator2(itterator2 + 1);
+              }
             }
           }
-        })
-      }
-      setDiveSiteSearchModal(false)
-      Keyboard.dismiss()
-    }  
+
+      setDiveSiteSearchModal(false);
+      Keyboard.dismiss();
+    }
   };
 
   const handleClear = () => {
-    handleDiveSiteList()
+    handleDiveSiteList();
   };
 
   const handleChangeText = () => {
-    handleDiveSiteList()
+    handleDiveSiteList();
   };
-  
-  
+
   return (
     <View style={styles.container} pointerEvents={"box-none"}>
-      
       <AutocompleteDropdown
         // initialValue={'1'}
         textInputProps={{
@@ -128,7 +133,6 @@ export default function DiveSiteAutoComplete(props) {
           backgroundColor: "white",
           width: moderateScale(200),
           zIndex: 2,
-         
         }}
         direction={"down"}
         dataSet={list}
@@ -155,6 +159,6 @@ const styles = StyleSheet.create({
     width: moderateScale(200),
     borderRadius: moderateScale(10),
     zIndex: 1,
-    marginTop: moderateScale(70)
+    marginTop: moderateScale(70),
   },
 });
