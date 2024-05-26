@@ -176,7 +176,7 @@ export default function SecondTutorial() {
         setProfile(success);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error16", message: e.message });
     }
   };
 

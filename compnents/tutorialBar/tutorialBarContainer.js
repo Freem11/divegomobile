@@ -68,7 +68,7 @@ export default function TutorialBar() {
         }
       }
     } catch (e) {
-      console.log({ title: "Error", message: "e.message" });
+      console.log({ title: "Error19", message: "e.message" });
     }
   };
 

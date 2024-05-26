@@ -89,7 +89,7 @@ export default function UserNamer(props) {
         }
       } catch (e) {
         setUserFail("Sorry that username has already been taken");
-        console.log({ title: "Error", message: e.message });
+        console.log({ title: "Error18", message: e.message });
       }
     }
   };

@@ -183,7 +183,7 @@ export default function IntroTutorial() {
         setProfile(success);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error13", message: e.message });
     }
   };
 
@@ -194,7 +194,7 @@ export default function IntroTutorial() {
         setPics(photos);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error14", message: e.message });
     }
   };
 
@@ -761,7 +761,7 @@ export default function IntroTutorial() {
         setAnchPhotos(count);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error15", message: e.message });
     }
   };
 

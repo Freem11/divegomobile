@@ -38,7 +38,6 @@ import { CommentsModalContext } from "./contexts/commentsModalContext";
 import { SelectedPictureContext } from "./contexts/selectedPictureContext";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import {
-  getPhotosforAnchorMulti,
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "./../supabaseCalls/photoSupabaseCalls";
@@ -53,12 +52,8 @@ import shopClustIOS from "../compnents/png/face-mask.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
+import { getDiveSitesWithUser } from "../supabaseCalls/diveSiteSupabaseCalls";
 import {
-  diveSites,
-  getDiveSitesWithUser,
-} from "../supabaseCalls/diveSiteSupabaseCalls";
-import {
-  multiHeatPoints,
   getHeatPointsWithUser,
   getHeatPointsWithUserEmpty,
 } from "../supabaseCalls/heatPointSupabaseCalls";
@@ -164,7 +159,7 @@ export default function Map() {
         setAnchPhotos(photos);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error99", message: e.message });
     }
   };
 
@@ -221,7 +216,7 @@ export default function Map() {
             let diveSiteList = [...AsianDiveSites, ...AmericanDiveSites];
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
           } catch (e) {
-            console.log({ title: "Error", message: e.message });
+            console.log({ title: "Error21", message: e.message });
           }
 
           try {
@@ -284,7 +279,7 @@ export default function Map() {
             let heatPointList = [...AsianHeatPoints, ...AmericanHeatPoints];
             setNewHeat(formatHeatVals(heatPointList));
           } catch (e) {
-            console.log({ title: "Error", message: e.message });
+            console.log({ title: "Error88", message: e.message });
           }
         } else {
           try {
@@ -305,9 +300,11 @@ export default function Map() {
             //   myDiveSites
             // );
 
+            // console.log(diveSiteList)
+
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
           } catch (e) {
-            console.log({ title: "Error", message: e.message });
+            console.log({ title: "Error32", message: e.message });
           }
 
           try {
@@ -332,7 +329,7 @@ export default function Map() {
             }
             setNewHeat(formatHeatVals(heatPointList));
           } catch (e) {
-            console.log({ title: "Error", message: e.message });
+            console.log({ title: "Error77", message: e.message });
           }
         }
       }
@@ -534,6 +531,7 @@ export default function Map() {
   });
 
   const setupAnchorModal = (diveSiteName, lat, lng) => {
+    console.log("kididng", diveSiteName)
     setSelectedDiveSite({
       SiteName: diveSiteName,
       Latitude: lat,
@@ -650,7 +648,7 @@ export default function Map() {
                 image={anchorIconIOS}
                 onPress={() =>
                   setupAnchorModal(
-                    cluster.properties.siteID,
+                    cluster.properties.siteName,
                     latitude,
                     longitude
                   )
@@ -665,7 +663,7 @@ export default function Map() {
                 image={anchorGold}
                 onPress={() =>
                   setupAnchorModal(
-                    cluster.properties.siteID,
+                    cluster.properties.siteName,
                     latitude,
                     longitude
                   )

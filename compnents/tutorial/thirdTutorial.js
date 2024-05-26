@@ -187,7 +187,7 @@ export default function ThirdTutorial() {
         setProfile(success);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error17", message: e.message });
     }
   };
 

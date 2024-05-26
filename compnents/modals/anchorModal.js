@@ -90,7 +90,7 @@ export default function AnchorModal(props) {
         }
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error55", message: e.message });
     }
   };
 
@@ -119,7 +119,7 @@ export default function AnchorModal(props) {
         setSite(selectedSite[0].newusername);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error98", message: e.message });
     }
   };
 

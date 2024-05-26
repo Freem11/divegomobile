@@ -16,7 +16,7 @@ const requestPermissions = async () => {
     const forground = await Location.requestForegroundPermissionsAsync();
     return forground.status
   } catch (e) {
-    console.log({ title: "Error", message: e.message });
+    console.log({ title: "Error76", message: e.message });
   }
 };
 
@@ -25,7 +25,7 @@ const requestHighAccuracy = async () => {
     const accurate = await Location.enableNetworkProviderAsync();
     return accurate.status
   } catch (e) {
-    console.log({ title: "Error", message: e.message });
+    console.log({ title: "Error87", message: e.message });
   }
 };
 

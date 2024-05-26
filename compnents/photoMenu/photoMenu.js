@@ -97,7 +97,7 @@ export default function PhotoMenu() {
         setAnchPhotos(photos);
       }
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log({ title: "Error44", message: e.message });
     }
   };
 
@@ -219,7 +219,7 @@ export default function PhotoMenu() {
             setAreaPics(animalArray);
           }
         } catch (e) {
-          console.log({ title: "Error", message: e.message });
+          console.log({ title: "Error33", message: e.message });
         }
       } else {
         try {
@@ -243,7 +243,7 @@ export default function PhotoMenu() {
             setAreaPics(animalArray);
           }
         } catch (e) {
-          console.log({ title: "Error", message: e.message });
+          console.log({ title: "Error22", message: e.message });
         }
       }
     }

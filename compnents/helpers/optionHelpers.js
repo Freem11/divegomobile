@@ -4,7 +4,7 @@ export default function filterCreatures(array) {
   array &&
     array.forEach((animal) => {
       if (animal.id !== 0) {
-        newArr.push({ id: count, title: animal });
+        newArr.push({ id: count, title: animal});
       }
       count++;
     });
