@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Keyboard, StyleSheet, View } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import { diveSites, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { getSiteNamesThatFit, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
@@ -17,6 +17,7 @@ export default function DiveSiteAutoComplete(props) {
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
@@ -29,20 +30,14 @@ export default function DiveSiteAutoComplete(props) {
 
   let diveSiteData;
 
-  const handleDiveSiteList = async () => {
+  const handleDiveSiteList = async (value) => {
     let diveSiteArray = [];
-
-    let minLat = boundaries[1];
-    let maxLat = boundaries[3];
-
-    let minLng = boundaries[0];
-    let maxLng = boundaries[2];
 
     diveSiteData = null;
     diveSiteArray = [];
 
     if (boundaries.length > 0) {
-      diveSiteData = await diveSites();
+      diveSiteData = await getSiteNamesThatFit(value);
     } else {
       diveSiteData = null;
     }
@@ -77,11 +72,9 @@ export default function DiveSiteAutoComplete(props) {
     if (diveSite !== null) {
 
       let nameOnly = diveSite.title.split(" ~ ");
-      let diveSiteSet = await getSingleDiveSiteByNameAndRegion({name: nameOnly[0],region:nameOnly[1]});
+      let diveSiteSet = await getSingleDiveSiteByNameAndRegion({ name: nameOnly[0], region: nameOnly[1] });
   
       if (diveSiteSet) {
-
-        console.log("nowah", diveSiteSet)
     
             setSelectedDiveSite({
               SiteName: diveSiteSet[0].name,
@@ -105,8 +98,8 @@ export default function DiveSiteAutoComplete(props) {
     handleDiveSiteList();
   };
 
-  const handleChangeText = () => {
-    handleDiveSiteList();
+  const handleChangeText = (value) => {
+    handleDiveSiteList(value)
   };
 
   return (
@@ -137,7 +130,7 @@ export default function DiveSiteAutoComplete(props) {
         direction={"down"}
         dataSet={list}
         onSelectItem={(text) => handleConfirm(text)}
-        onChangeText={() => handleChangeText}
+        onChangeText={(text) => handleChangeText(text)}
         onFocus={() => handleChangeText}
         onBlur={() => handleChangeText}
         clearOnFocus={true}

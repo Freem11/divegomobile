@@ -14,7 +14,6 @@ export const diveSites = async () => {
 };
 
 export const getDiveSitesWithUser = async (values) => {
-  console.log("me?", values);
   const { data, error } = await supabase.rpc("get_divesites_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
@@ -30,6 +29,26 @@ export const getDiveSitesWithUser = async (values) => {
 
   if (data) {
     // console.log(data)
+    return data;
+  }
+};
+
+export const getSiteNamesThatFit = async (value) => {
+  if (value === "") {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("diveSites")
+    .select()
+    .ilike("name", "%" + value + "%");
+
+  if (error) {
+    console.log("couldn't do it,", error);
+    return [];
+  }
+
+  if (data) {
     return data;
   }
 };

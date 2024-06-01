@@ -274,7 +274,7 @@ export default function UserProfileModal() {
               containerStyle={{
                 borderRadius: moderateScale(25),
                 height: moderateScale(40),
-                width: moderateScale(200),
+                width: "90%",
                 marginTop: moderateScale(10),
               }}
               elevation={20}
@@ -287,7 +287,7 @@ export default function UserProfileModal() {
                 placeholder={"DiverName"}
                 keyboardType="numbers-and-punctuation"
                 editable={false}
-                fontSize={moderateScale(14)}
+                fontSize={moderateScale(16)}
                 placeholderTextColor="darkgrey"
                 color="#F0EEEB"
                 multiline
@@ -301,7 +301,7 @@ export default function UserProfileModal() {
               containerStyle={{
                 borderRadius: moderateScale(25),
                 height: moderateScale(40),
-                width: moderateScale(200),
+                width: "90%",
                 marginTop: moderateScale(10),
                 // paddingTop: 3
               }}
@@ -315,7 +315,7 @@ export default function UserProfileModal() {
                 placeholder={"Email"}
                 keyboardType="numbers-and-punctuation"
                 editable={false}
-                fontSize={moderateScale(14)}
+                fontSize={moderateScale(16)}
                 placeholderTextColor="darkgrey"
                 color="#F0EEEB"
                 multiline
@@ -332,6 +332,7 @@ export default function UserProfileModal() {
             containerStyle={{
               borderRadius: moderateScale(25),
               height: moderateScale(40),
+              width: "45%",
               marginTop: moderateScale(10),
               alignItems: "center",
               justifyContent: "center",
@@ -352,6 +353,7 @@ export default function UserProfileModal() {
             containerStyle={{
               borderRadius: moderateScale(25),
               height: moderateScale(40),
+              width: "45%",
               marginTop: moderateScale(10),
               alignItems: "center",
               justifyContent: "center",
@@ -372,6 +374,7 @@ export default function UserProfileModal() {
             containerStyle={{
               borderRadius: moderateScale(25),
               height: moderateScale(40),
+              width: "45%",
               marginTop: moderateScale(10),
               alignItems: "center",
               justifyContent: "center",
@@ -392,6 +395,7 @@ export default function UserProfileModal() {
             containerStyle={{
               borderRadius: moderateScale(25),
               height: moderateScale(40),
+              width: "45%",
               marginTop: moderateScale(10),
               alignItems: "center",
               justifyContent: "center",
@@ -412,6 +416,7 @@ export default function UserProfileModal() {
             containerStyle={{
               borderRadius: moderateScale(25),
               height: moderateScale(40),
+              width: "45%",
               marginTop: moderateScale(10),
               alignItems: "center",
               justifyContent: "center",
@@ -431,7 +436,7 @@ export default function UserProfileModal() {
 
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: "column-reverse",
             justifyContent: "space-between",
             width: "90%",
           }}
@@ -578,7 +583,7 @@ const styles = StyleSheet.create({
   statsContainer: {
     // backgroundColor: "pink",
     marginTop: moderateScale(20),
-    width: "80%",
+    width: "90%",
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
@@ -642,7 +647,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(20),
     height: moderateScale(40),
     // marginLeft: "30%",
     marginTop: moderateScale(30),
@@ -661,7 +666,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(20),
     height: moderateScale(40),
     // marginLeft: "30%",
     marginTop: moderateScale(30),
