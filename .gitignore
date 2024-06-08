@@ -13,6 +13,7 @@ web-build/
 app.config.js
 eas.json
 google-service.json
+google-services.json
 GoogleService-info.plist
 
 credentials.json
