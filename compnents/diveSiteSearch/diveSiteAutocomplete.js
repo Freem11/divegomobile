@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { Keyboard, StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, View, Dimensions } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { getSiteNamesThatFit, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
@@ -11,6 +11,8 @@ import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale, moderateScale } from "react-native-size-matters";
+
+const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteAutoComplete(props) {
   const { setDiveSearchHide } = props;
@@ -115,7 +117,7 @@ export default function DiveSiteAutoComplete(props) {
             borderRadius: moderateScale(25),
             width: moderateScale(200),
             opacity: 1,
-            height: moderateScale(40),
+            height: moderateScale(50),
             fontSize: moderateScale(12),
           },
         }}
@@ -127,12 +129,16 @@ export default function DiveSiteAutoComplete(props) {
           width: moderateScale(200),
           zIndex: 2,
         }}
+        suggestionsListContainerStyle={{
+          height: (windowHeight/2)
+        }}
         direction={"down"}
         dataSet={list}
         onSelectItem={(text) => handleConfirm(text)}
         onChangeText={(text) => handleChangeText(text)}
         onFocus={() => handleChangeText}
         onBlur={() => handleChangeText}
+        suggestionsListMaxHeight={1000}
         clearOnFocus={true}
         showChevron={false}
         showClear={false}
@@ -152,6 +158,6 @@ const styles = StyleSheet.create({
     width: moderateScale(200),
     borderRadius: moderateScale(10),
     zIndex: 1,
-    marginTop: moderateScale(70),
+    marginTop: moderateScale(70)
   },
 });
