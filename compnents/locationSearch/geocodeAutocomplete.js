@@ -4,7 +4,7 @@ import PlacesInput from "react-native-places-input";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { MapSearchModalContext } from "../contexts/mapSearchContext";
 import { scale, moderateScale } from "react-native-size-matters";
-let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function GeocodeAutoComplete(props) {
   const { setGeoHide } = props;

@@ -591,7 +591,7 @@ export default function MapPage() {
 
   const startMapSearchModalAnimations = () => {
     if (mapSearchModal) {
-      mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
+      mapSearchModalY.value = withTiming(-windowHeight * 0.3, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
@@ -619,7 +619,7 @@ export default function MapPage() {
 
   const startdiveSiteSearchModalAnimations = () => {
     if (diveSiteSearchModal) {
-      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
+      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.3, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
