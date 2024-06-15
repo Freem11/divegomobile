@@ -13,7 +13,8 @@ import { MapSearchModalContext } from "../../compnents/contexts/mapSearchContext
 import { MapCenterContext } from "../../compnents/contexts/mapCenterContext";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 
-export default function MapSearchModal() {
+export default function MapSearchModal(props) {
+  const { setMapSearchBump } = props;
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [myLocButState, setMyLocButState] = useState(false);
   const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
@@ -82,7 +83,8 @@ export default function MapSearchModal() {
           />
         </TouchableWithoutFeedback>
         </View>
-      <GeocodeAutoComplete />
+      <GeocodeAutoComplete 
+      setMapSearchBump={setMapSearchBump}/>
     </View>
     </TouchableWithoutFeedback>
   );

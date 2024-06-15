@@ -16,7 +16,8 @@ import { DiveSiteSearchModalContext } from "../../compnents/contexts/diveSiteSea
 import { TutorialContext } from "../../compnents/contexts/tutorialContext";
 import { Iterrator2Context } from "../../compnents/contexts/iterrator2Context";
 
-export default function DiveSiteSearchModal() {
+export default function DiveSiteSearchModal(props) {
+  const { setDiveSearchBump } = props;
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [myLocButState, setMyLocButState] = useState(false);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
@@ -60,7 +61,8 @@ export default function DiveSiteSearchModal() {
           </TouchableWithoutFeedback>
         </View>
       </View>
-         <DiveSiteAutoComplete />
+         <DiveSiteAutoComplete 
+         setDiveSearchBump={setDiveSearchBump}/>
     </View>
     </TouchableWithoutFeedback>
   );

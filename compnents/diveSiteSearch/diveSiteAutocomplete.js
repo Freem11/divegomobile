@@ -15,7 +15,7 @@ import { scale, moderateScale } from "react-native-size-matters";
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteAutoComplete(props) {
-  const { setDiveSearchHide } = props;
+  const { setDiveSearchBump } = props;
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
@@ -69,6 +69,12 @@ export default function DiveSiteAutoComplete(props) {
   useEffect(() => {
     handleDiveSiteList();
   }, [boundaries]);
+
+  useEffect(() => {
+    if ( list.length > 0){
+      setDiveSearchBump(true)
+    }
+  }, [list]);
 
   const handleConfirm = async (diveSite) => {
     if (diveSite !== null) {

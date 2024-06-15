@@ -579,6 +579,7 @@ export default function MapPage() {
 
   //MapSearch Modal Animation
   const mapSearchModalY = useSharedValue(windowHeight);
+  const [mapSearchBump, setMapSearchBump] = useState(false);
   const { mapSearchModal, setMapSearchModal } = useContext(
     MapSearchModalContext
   );
@@ -589,9 +590,20 @@ export default function MapPage() {
     };
   });
 
+  useEffect(() => {
+    if(mapSearchBump){
+      mapSearchModalY.value = withTiming(-windowHeight * 0.3, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+    setMapSearchBump(false)
+  }, [mapSearchBump]);
+
+
   const startMapSearchModalAnimations = () => {
     if (mapSearchModal) {
-      mapSearchModalY.value = withTiming(-windowHeight * 0.3, {
+      mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
@@ -607,6 +619,7 @@ export default function MapPage() {
   //DiveSiteSearch Modal Animation
 
   const diveSiteSearchModalY = useSharedValue(windowHeight);
+  const [diveSearchBump, setDiveSearchBump] = useState(false);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
     DiveSiteSearchModalContext
   );
@@ -617,9 +630,19 @@ export default function MapPage() {
     };
   });
 
+  useEffect(() => {
+    if(diveSearchBump){
+      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.3, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+    setDiveSearchBump(false)
+  }, [diveSearchBump]);
+
   const startdiveSiteSearchModalAnimations = () => {
     if (diveSiteSearchModal) {
-      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.3, {
+      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
@@ -1246,7 +1269,8 @@ export default function MapPage() {
 
             {mapSearchModal && (
               <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
-                <MapSearchModal />
+                <MapSearchModal 
+                setMapSearchBump={setMapSearchBump}/>
               </Animated.View>
             )}
 
@@ -1254,7 +1278,8 @@ export default function MapPage() {
               <Animated.View
                 style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
               >
-                <DiveSiteSearchModal />
+                <DiveSiteSearchModal 
+                setDiveSearchBump={setDiveSearchBump}/>
               </Animated.View>
             )}
 
