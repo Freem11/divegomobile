@@ -130,7 +130,7 @@ export default function DiveSiteAutoComplete(props) {
           zIndex: 2,
         }}
         suggestionsListContainerStyle={{
-          height: (windowHeight/2)
+          height: list.length > 0 ? (windowHeight/2) : 0
         }}
         direction={"down"}
         dataSet={list}
