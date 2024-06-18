@@ -38,14 +38,14 @@ export default function GeocodeAutoComplete(props) {
         onChangeText={(text) => handleText(text)}
         stylesList={{ borderRadius: 10 }}
         stylesInput={{
-          borderRadius: moderateScale(10),
-          height: moderateScale(30),
+          borderRadius: moderateScale(40),
+          height: moderateScale(40),
           width: moderateScale(200),
         }}
         textInputProps={{
           backgroundColor: "white",
           width: moderateScale(200),
-          fontSize: moderateScale(12),
+          fontSize: moderateScale(16),
         }}
         clearQueryOnSelect={true}
       />
@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     zIndex: 1,
-    marginTop: moderateScale(10),
+    marginTop: moderateScale(3),
   },
 });

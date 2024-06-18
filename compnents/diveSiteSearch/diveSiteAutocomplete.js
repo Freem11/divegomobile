@@ -120,17 +120,17 @@ export default function DiveSiteAutoComplete(props) {
             justifyContent: "center",
             alignItems: "center",
             alignContent: "center",
-            borderRadius: moderateScale(25),
+            borderRadius: moderateScale(50),
             width: moderateScale(200),
             opacity: 1,
             height: moderateScale(50),
-            fontSize: moderateScale(12),
+            fontSize: moderateScale(16),
           },
         }}
         inputContainerStyle={{
           alignItems: "center",
-          height: moderateScale(30),
-          borderRadius: moderateScale(10),
+          height: moderateScale(40),
+          borderRadius: moderateScale(40),
           backgroundColor: "white",
           width: moderateScale(200),
           zIndex: 2,
@@ -164,6 +164,6 @@ const styles = StyleSheet.create({
     width: moderateScale(200),
     borderRadius: moderateScale(10),
     zIndex: 1,
-    marginTop: moderateScale(70)
+    marginTop: moderateScale(67)
   },
 });

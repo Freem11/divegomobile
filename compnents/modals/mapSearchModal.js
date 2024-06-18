@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     color: "white",
     fontSize: moderateScale(14),
-    marginTop: moderateScale(70),
+    marginTop: moderateScale(65),
     marginLeft: moderateScale(-60)
   },
 });
