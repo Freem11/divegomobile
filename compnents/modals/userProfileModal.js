@@ -272,10 +272,9 @@ export default function UserProfileModal() {
           <>
             <InsetShadow
               containerStyle={{
-                borderRadius: moderateScale(25),
+                borderRadius: moderateScale(40),
                 height: moderateScale(40),
-                width: "90%",
-                marginTop: moderateScale(10),
+                width: moderateScale(270)
               }}
               elevation={20}
               shadowRadius={15}
@@ -299,9 +298,9 @@ export default function UserProfileModal() {
 
             <InsetShadow
               containerStyle={{
-                borderRadius: moderateScale(25),
+                borderRadius: moderateScale(40),
                 height: moderateScale(40),
-                width: "90%",
+                width: moderateScale(270),
                 marginTop: moderateScale(10),
                 // paddingTop: 3
               }}
@@ -438,6 +437,7 @@ export default function UserProfileModal() {
           style={{
             flexDirection: "column-reverse",
             justifyContent: "space-between",
+            alignItems: "center",
             width: "90%",
           }}
         >
@@ -455,7 +455,7 @@ export default function UserProfileModal() {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
-                // width: scale(100),
+                width: scale(100),
                 height: scale(35),
                 alignItems: "center",
                 marginLeft: scale(10),
@@ -647,9 +647,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(20),
+    borderRadius: moderateScale(40),
     height: moderateScale(40),
-    // marginLeft: "30%",
+    width: moderateScale(200),
     marginTop: moderateScale(30),
     shadowColor: "#000",
     shadowOffset: {
@@ -666,9 +666,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(20),
+    borderRadius: moderateScale(40),
     height: moderateScale(40),
-    // marginLeft: "30%",
+    width: moderateScale(200),
     marginTop: moderateScale(30),
     shadowColor: "#000",
     shadowOffset: {

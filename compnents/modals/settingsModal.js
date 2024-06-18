@@ -216,7 +216,7 @@ export default function SettingsModal() {
             <Text
               style={{
                 paddingBottom: 3,
-                fontFamily: "PatrickHand_400Regular",
+                fontFamily: "Itim_400Regular",
                 color: "gold",
                 fontSize: moderateScale(24),
               }}
@@ -285,9 +285,9 @@ export default function SettingsModal() {
               <Text
                 style={{
                   paddingBottom: 3,
-                  fontFamily: "PatrickHand_400Regular",
+                  fontFamily: "Itim_400Regular",
                   color: "maroon",
-                  fontSize: moderateScale(24),
+                  fontSize: moderateScale(22),
                 }}
               >
                 Delete Account
@@ -336,9 +336,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(35),
-    width: moderateScale(150),
+    borderRadius: moderateScale(40),
+    height: moderateScale(40),
+    width: moderateScale(200),
     // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -404,9 +404,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(35),
-    width: moderateScale(150),
+    borderRadius: moderateScale(40),
+    height: moderateScale(40),
+    width: moderateScale(200),
     marginTop: moderateScale(20),
     zIndex: -1,
     shadowColor: "#000",
@@ -425,9 +425,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(35),
-    width: moderateScale(150),
+    borderRadius: moderateScale(40),
+    height: moderateScale(40),
+    width: moderateScale(200),
     marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {

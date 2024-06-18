@@ -13,9 +13,7 @@ import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "../../supabaseCalls/photoSupabaseCalls";
-import {
-  getDiveSiteWithUserName,
-} from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { getDiveSiteWithUserName } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import * as FileSystem from "expo-file-system";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
@@ -28,7 +26,7 @@ import { UserProfileContext } from "../contexts/userProfileContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import ImgToBase64 from "react-native-image-base64";
 import Picture from "./picture";
@@ -265,11 +263,11 @@ export default function AnchorModal(props) {
         <FontAwesome
           name="flag"
           color="maroon"
-          size={scale(20)}
+          size={scale(26)}
           onPress={() => handleEmailDS()}
           style={styles.flagMajor}
         />
-        <View style={{ width: scale(250) }}>
+        <View style={{ width: "50%" }}>
           <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
           <Text style={styles.dsCredit}>Added by: {site}</Text>
         </View>
@@ -280,19 +278,35 @@ export default function AnchorModal(props) {
             onPress={handleSwitch}
             onPressIn={() => setHelpButState(true)}
             onPressOut={() => setHelpButState(false)}
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              width: scale(20),
-              height: scale(20),
-            }}
           >
-            <FontAwesome5
-              name="plus"
-              color="gold"
-              size={scale(18)}
-              style={{ zIndex: -1 }}
-            />
+            <View
+              style={{
+                borderRadius: scale(40),
+                backgroundColor: "#538dbd",
+                width: scale(75),
+                height: scale(35),
+                marginLeft: "90%",
+                alignSelf: "center",
+                alignItems: "center",
+                justifyContent: "center",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 0,
+                },
+                shadowOpacity: 0.5,
+                shadowRadius: 5,
+            
+                elevation: 10,
+              }}
+            >
+              <MaterialIcons
+                name="add-a-photo"
+                color="gold"
+                size={scale(30)}
+                style={{ }}
+              />
+            </View>
           </TouchableWithoutFeedback>
         </View>
 
@@ -350,16 +364,29 @@ export default function AnchorModal(props) {
               >
                 <View
                   style={{
-                    borderRadius: scale(32),
-                    backgroundColor: "palegreen",
-                    width: scale(38),
-                    height: scale(38),
+                    borderRadius: scale(40),
+                    backgroundColor: "white",
+                    width: scale(100),
+                    height: scale(40),
                     alignSelf: "center",
                     alignItems: "center",
                     justifyContent: "center",
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 0,
+                    },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 5,
+                
+                    elevation: 10,
                   }}
                 >
-                  <FontAwesome5 name="plus" color={"black"} size={scale(32)} />
+                  <MaterialIcons
+                    name="add-a-photo"
+                    size={scale(32)}
+                    color="#538dbd"
+                  />
                 </View>
               </TouchableWithoutFeedback>
             </View>
@@ -401,12 +428,10 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(15),
-    marginLeft: scale(-27),
   },
   flagMajor: {
-    width: "10%",
-    height: scale(30),
-    marginRight: "-5%",
+    // backgroundColor: "orange",
+    width: "10%"
   },
   share: {
     left: scale(232),
@@ -482,77 +507,62 @@ const styles = StyleSheet.create({
     fontFamily: "PatrickHand_400Regular",
     color: "#F0EEEB",
     fontSize: scale(22),
-    width: "90%",
-    height: "120%",
-    marginLeft: "5%",
-    marginRight: "5%",
-    marginTop: 0,
-    marginBottom: -10,
     flexWrap: "wrap",
+    width: "90%",
+    // backgroundColor: "green"
   },
   dsCredit: {
     fontFamily: "Itim_400Regular",
     color: "#F0EEEB",
     fontSize: scale(9),
-    width: scale(200),
-    marginLeft: scale(12),
+    // backgroundColor: "blue"
   },
   titleAlt: {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "4%",
-    marginLeft: "5%",
-    marginRight: "5%",
-    marginBottom: "3%",
-    width: "92%",
-    height: scale(30),
+    justifyContent: "space-around",
+    width: "100%",
+    marginTop: scale(10),
+    // backgroundColor: 'pink'
   },
   closeButtonAlt: {
     position: "relative",
+    alignItems: "center",
     borderRadius: scale(42 / 2),
     height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: "-4%",
+    width: "10%",
+    // backgroundColor: "yellow"
   },
   closeButtonAltPressed: {
     position: "relative",
+    alignItems: "center",
     borderRadius: scale(42 / 2),
     height: scale(30),
-    width: scale(30),
+    width: "10%",
     justifyContent: "center",
-    alignItems: "center",
-    marginLeft: "-4%",
     backgroundColor: "lightgrey",
     opacity: 0.3,
   },
   helpButton: {
-    backgroundColor: "#538bdb",
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    marginRight: scale(15),
+    marginRight: scale(25),
     marginLeft: scale(-50),
-    borderRadius: 40,
+    borderRadius: scale(40),
     height: scale(30),
-    width: scale(30),
-    paddingTop: scale(2),
+    width: "20%",
   },
   helpButtonPressed: {
-    backgroundColor: "#538dbd",
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    marginRight: scale(15),
+    marginRight: scale(25),
     marginLeft: scale(-50),
-    borderRadius: 40,
+    borderRadius: scale(40),
     height: scale(30),
-    width: scale(30),
-    paddingTop: scale(2),
+    width: "20%",
   },
 });
