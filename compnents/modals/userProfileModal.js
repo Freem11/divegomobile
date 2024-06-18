@@ -618,7 +618,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#F0EEEB",
     width: "80%",
-    height: moderateScale(42),
+    height: moderateScale(60),
     marginTop: "-1%",
     marginLeft: "7%",
     marginRight: "10%",

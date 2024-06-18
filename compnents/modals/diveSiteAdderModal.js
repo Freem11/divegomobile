@@ -758,7 +758,7 @@ const styles = StyleSheet.create({
     fontSize: scale(26),
     alignSelf: "center",
     color: "#F0EEEB",
-    width: "80%",
+    width: "81%",
     marginTop: "-1%",
     marginLeft: "7%",
     marginRight: "15%",

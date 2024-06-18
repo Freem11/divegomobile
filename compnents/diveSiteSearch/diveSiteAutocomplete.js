@@ -73,7 +73,7 @@ export default function DiveSiteAutoComplete(props) {
   useEffect(() => {
     if ( list.length > 0){
       setDiveSearchBump(true)
-    }
+    } 
   }, [list]);
 
   const handleConfirm = async (diveSite) => {

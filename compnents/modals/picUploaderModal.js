@@ -622,8 +622,8 @@ export default function PicUploadModal() {
       <View
         style={{
           flexDirection: "row",
-          marginTop: moderateScale(0),
-          marginBottom: moderateScale(0),
+          marginTop: "-1%",
+          marginBottom: "1%",
         }}
       >
         <View
