@@ -13,6 +13,7 @@ import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
 import DiveSiteAutoComplete from "../diveSiteSearch/diveSiteAutocomplete";
 import { DiveSiteSearchModalContext } from "../../compnents/contexts/diveSiteSearchContext";
+import { DSAdderContext } from "../contexts/DSModalContext";
 import { TutorialContext } from "../../compnents/contexts/tutorialContext";
 import { Iterrator2Context } from "../../compnents/contexts/iterrator2Context";
 
@@ -21,10 +22,18 @@ export default function DiveSiteSearchModal(props) {
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [myLocButState, setMyLocButState] = useState(false);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
+  const { setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   
   const toggleDiveSiteSearchModal = () => {
+    setDiveSiteSearchModal(false)
+  }
+
+  const swapToSiteAdd = () => {
+    setDiveSiteAdderModal(true)
     setDiveSiteSearchModal(false)
   }
 
@@ -62,7 +71,13 @@ export default function DiveSiteSearchModal(props) {
         </View>
       </View>
          <DiveSiteAutoComplete 
-         setDiveSearchBump={setDiveSearchBump}/>
+         setDiveSearchBump={setDiveSearchBump}
+         />
+         <TouchableWithoutFeedback onPress={swapToSiteAdd}>
+         {/* <View style={{position: "absolute", bottom: 10, right: 10, backgroundColor: "pink"}}> */}
+         <Text style={styles.siteAddPrompt}>Can't find your dive site? Tap here to add it!</Text> 
+         {/* </View> */}
+         </TouchableWithoutFeedback>
     </View>
     </TouchableWithoutFeedback>
   );
@@ -70,6 +85,7 @@ export default function DiveSiteSearchModal(props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
@@ -227,5 +243,16 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     marginTop: moderateScale(70),
     marginLeft: moderateScale(-60)
+  },
+  siteAddPrompt: {
+    fontFamily: "PatrickHand_400Regular",
+    fontSize: scale(12),
+    alignSelf: "center",
+    color: "#F0EEEB",
+    width: "100%",
+    position: "absolute",
+    bottom: scale(5),
+    left: scale(30)
+    // backgroundColor: "green"
   },
 });
