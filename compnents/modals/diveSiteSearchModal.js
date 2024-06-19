@@ -246,13 +246,12 @@ const styles = StyleSheet.create({
   },
   siteAddPrompt: {
     fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(12),
+    fontSize: moderateScale(12),
     alignSelf: "center",
     color: "#F0EEEB",
-    width: "100%",
     position: "absolute",
     bottom: scale(5),
-    left: scale(30)
+    right: scale(10)
     // backgroundColor: "green"
   },
 });
