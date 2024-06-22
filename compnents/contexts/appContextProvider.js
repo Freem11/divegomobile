@@ -10,6 +10,7 @@ import ShopModalContextProvider from './shopModalContext';
 import SelectedShopContextProvider from './selectedShopContext';
 import ModalSelectContextProvider from './modalSelectContext';
 import ProfileModalContextProvider from './profileModalContext';
+import PartnerModalContextProvider from './partnerAccountRequestModalContext';
 import DevelopmentModeContextProvider from './developementModeContext';
 import AreaPicsContextProvider from './areaPicsContext';
 import SearchTextContextProvider from './searchTextContext';
@@ -57,6 +58,7 @@ const providers = [
     SelectedShopContextProvider,
     ModalSelectContextProvider,
     ProfileModalContextProvider,
+    PartnerModalContextProvider,
     DevelopmentModeContextProvider,
     AreaPicsContextProvider,
     SearchTextContextProvider,
