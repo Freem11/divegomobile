@@ -23,18 +23,77 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PartnerAccountRequestModal() {
-  const { partnerModal, setPartnerModal } = useContext(
-    PartnerModalContext
-  );
+  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
   const [closeButtonState, setCloseButtonState] = useState(false);
   const [subButState, setSubButState] = useState(false);
 
-  const handleSubmit = () => {}
+  const [formValues, setFormValues] = useState({
+    WebsiteLink: "",
+    BusinessName: "",
+    Latitude: "",
+    Longitude: "",
+    UserId: null,
+  });
+
+  let WebsiteLinkVar = false
+  let BusinessNameVar=  false
+  let LatVar = false
+  let LngVar = false
+
+  const [formValidation, setFormValidation] = useState({
+    WebsiteLinkVal: false,
+    BusinessNameVal: false,
+    LatVal: false,
+    LngVal: false,
+  });
+
+  const handleSubmit = (formValues) => {
+
+    if (formValues.WebsiteLink === "" || formValues.WebsiteLink === null) {
+      WebsiteLinkVar = true
+    } else {
+      WebsiteLinkVar = false
+    }
+
+    if (formValues.BusinessName === "" || formValues.BusinessName === null) {
+      BusinessNameVar = true
+    } else {
+      BusinessNameVar = false
+    }
+
+    if (
+      formValues.Latitude === "" ||
+      formValues.Latitude === null ||
+      isNaN(formValues.Latitude)
+    ) {
+      LatVar = true
+    } else {
+      LatVar = false
+    }
+
+    if (
+      formValues.Longitude === "" ||
+      formValues.Longitude === null ||
+      isNaN(formValues.Longitude)
+    ) {
+      LngVar = true
+    } else {
+      LngVar = false
+    }
+
+    setFormValidation({
+      ...formValidation,
+      WebsiteLinkVal: WebsiteLinkVar,
+      BusinessNameVal: BusinessNameVar,
+      LatVal: LatVar,
+      LngVal: LngVar,
+    });
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.header2}>Partner Account Request Form</Text>
+        <Text style={styles.header2}>Partner Account Request</Text>
         <View
           style={
             closeButtonState ? styles.closeButtonPressed : styles.closeButton
@@ -55,36 +114,163 @@ export default function PartnerAccountRequestModal() {
         </View>
       </View>
 
+      <Text style={styles.explainer}>
+        To qualify for a "Partner Account" Your Account must represent a diving
+        business that takes divers out diving. {"\n"} Examples include: Dive
+        Shops, Dive Charters, Diver Centres and Liveaboards
+      </Text>
+
+      <InsetShadow
+        containerStyle={{
+          backgroundColor : formValidation.BusinessNameVal ? "pink": "transparent",
+          borderRadius: moderateScale(25),
+          height: moderateScale(40),
+          width: moderateScale(200),
+          marginTop: moderateScale(20),
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        elevation={20}
+        shadowRadius={15}
+        shadowOpacity={0.3}
+      >
+        <TextInput
+          style={
+            formValidation.BusinessNameVal ? styles.inputRed : styles.input
+          }
+          value={formValues.BusinessName}
+          placeholder={"Full Business Name"}
+          placeholderTextColor="darkgrey"
+          color={formValidation.BusinessNameVal ? "black" : "#F0EEEB"}
+          fontSize={moderateScale(18)}
+          multiline
+          onChangeText={(bus) =>
+            setFormValues({ ...formValues, BusinessName: bus })
+          }
+        ></TextInput>
+      </InsetShadow>
+      <Text style={styles.explainerMicro}>(For display purposes)</Text>
+
+
+      <InsetShadow
+        containerStyle={{
+          backgroundColor : formValidation.WebsiteLinkVal ? "pink": "transparent",
+          borderRadius: moderateScale(25),
+          height: moderateScale(40),
+          width: moderateScale(200),
+          marginTop: moderateScale(20),
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        elevation={20}
+        shadowRadius={15}
+        shadowOpacity={0.3}
+      >
+        <TextInput
+          style={formValidation.WebsiteLinkVal ? styles.inputRed : styles.input}
+          value={formValues.WebsiteLink}
+          placeholder={"Website URL"}
+          placeholderTextColor="darkgrey"
+          color={formValidation.WebsiteLinkVal ? "black" : "#F0EEEB"}
+          fontSize={moderateScale(18)}
+          multiline
+          onChangeText={(web) =>
+            setFormValues({ ...formValues, WebsiteLink: web })
+          }
+        ></TextInput>
+      </InsetShadow>
+      <Text style={styles.explainerMicro}>(To validate your business)</Text>
+
+      <InsetShadow
+        containerStyle={{
+          backgroundColor : formValidation.LatVal ? "pink": "transparent",
+          borderRadius: moderateScale(25),
+          height: moderateScale(40),
+          width: moderateScale(200),
+          marginTop: moderateScale(20),
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        elevation={20}
+        shadowRadius={15}
+        shadowOpacity={0.3}
+      >
+        <TextInput
+          style={formValidation.LatVal ? styles.inputRed : styles.input}
+          value={formValues.Latitude}
+          placeholder={"Latitude"}
+          keyboardType="numbers-and-punctuation"
+          fontSize={moderateScale(18)}
+          placeholderTextColor="darkgrey"
+          color={formValidation.LatVal ? "black" : "#F0EEEB"}
+          multiline
+          onChangeText={(lat) =>
+            setFormValues({ ...formValues, Latitude: lat })
+          }
+        ></TextInput>
+      </InsetShadow>
+
+      <InsetShadow
+        containerStyle={{
+          backgroundColor : formValidation.LngVal ? "pink": "transparent",
+          borderRadius: moderateScale(25),
+          height: moderateScale(40),
+          width: moderateScale(200),
+          marginTop: moderateScale(10),
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        elevation={20}
+        shadowRadius={15}
+        shadowOpacity={0.3}
+      >
+        <TextInput
+          style={formValidation.LngVal ? styles.inputRed : styles.input}
+          value={formValues.Longitude}
+          placeholder={"Longitude"}
+          keyboardType="numbers-and-punctuation"
+          fontSize={moderateScale(18)}
+          placeholderTextColor="darkgrey"
+          color={formValidation.LngVal ? "black" : "#F0EEEB"}
+          multiline
+          onChangeText={(lng) =>
+            setFormValues({ ...formValues, Longitude: lng })
+          }
+        ></TextInput>
+      </InsetShadow>
+      <Text style={styles.explainerMicro}>(For map placement)</Text>
+
+
       <View
-          style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
+        style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
+      >
+        <TouchableOpacity
+          onPress={() => handleSubmit(formValues)}
+          onPressIn={() => setSubButState(true)}
+          onPressOut={() => setSubButState(false)}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
         >
-          <TouchableOpacity
-            onPress={handleSubmit}
-            onPressIn={() => setSubButState(true)}
-            onPressOut={() => setSubButState(false)}
+          <Text
             style={{
+              color: "gold",
+              fontSize: moderateScale(26),
+              marginTop: 4,
+              marginBottom: -6,
+              fontFamily: "PatrickHand_400Regular",
               width: "100%",
-              height: "100%",
+              alignSelf: "center",
+              justifyContent: "center",
+              alignContent: "center",
+              textAlign: "center",
             }}
           >
-            <Text
-              style={{
-                color: "gold",
-                fontSize: moderateScale(26),
-                marginTop: 4,
-                marginBottom: -6,
-                fontFamily: "PatrickHand_400Regular",
-                width: "100%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                textAlign: "center",
-              }}
-            >
-              Generate Email Request
-            </Text>
-          </TouchableOpacity>
-        </View>
+            Generate Email Request
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -102,6 +288,18 @@ const styles = StyleSheet.create({
     marginLeft: 2,
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
+  explainer: {
+    color: "#F0EEEB",
+    fontSize: moderateScale(14),
+    textAlign: "center",
+    margin: moderateScale(20),
+    marginTop: windowWidth > 500 ? 0 : moderateScale(-60)
+  },
+  explainerMicro: {
+    color: "#F0EEEB",
+    fontSize: moderateScale(12),
+    textAlign: "center",
+  },
   inputContainer: {
     width: "96%",
     alignItems: "center",
@@ -112,10 +310,7 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "#538bdb",
     borderRadius: 10,
-    width: 200,
-    height: 40,
     alignSelf: "center",
-    marginBottom: 20,
     textAlign: "center",
     overflow: "hidden",
   },
@@ -123,10 +318,7 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     backgroundColor: "pink",
     borderRadius: 10,
-    width: 200,
-    height: 40,
     alignSelf: "center",
-    marginBottom: 20,
     textAlign: "center",
     overflow: "hidden",
   },
@@ -149,7 +341,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    marginTop: "2%",
+    marginTop: "5%",
     marginLeft: "12%",
     width: "85%",
     height: scale(30),

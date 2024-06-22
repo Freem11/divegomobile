@@ -178,7 +178,6 @@ export default function SettingsModal() {
   }, [creaturesIsEnabled]);
 
   const handlePartnerButton = () => {
-    console.log("canon")
     setPartnerModal(true);
     setGearModal(false);
   };

@@ -405,7 +405,6 @@ export default function MapPage() {
   };
 
   useEffect(() => {
-    console.log("fired")
     startPartnerModalAnimations();
   }, [partnerModal]);
 
