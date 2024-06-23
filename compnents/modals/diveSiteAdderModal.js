@@ -32,6 +32,7 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
 
@@ -373,7 +374,6 @@ export default function DiveSiteModal() {
     }
   }, [addSiteVals]);
 
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -421,91 +421,37 @@ export default function DiveSiteModal() {
             </TouchableOpacity>
           </View>
         </View>
-        
+
         <View style={styles.inputContainer}>
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              // marginRight: 18,
-              marginTop: moderateScale(1),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={
-                formValidation.SiteNameVal ? styles.inputRed : styles.input
-              }
-              value={addSiteVals.Site}
-              placeholder={"Site Name"}
-              placeholderTextColor="darkgrey"
-              color={formValidation.SiteNameVal ? "black" : "#F0EEEB"}
-              fontSize={moderateScale(18)}
-              multiline
-              onChangeText={(siteText) =>
-                setAddSiteVals({ ...addSiteVals, Site: siteText })
-              }
-            ></TextInput>
-          </InsetShadow>
+          <InputField
+            validationItem={formValidation.SiteNameVal}
+            placeHolderText={"Site Name"}
+            inputValue={addSiteVals.Site}
+            keyboardType={"default"}
+            onChangeText={(text) =>
+              setAddSiteVals({ ...addSiteVals, Site: text })
+            }
+          />
 
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              // marginRight: 18,
-              marginTop: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={formValidation.LatVal ? styles.inputRed : styles.input}
-              value={addSiteVals.Latitude}
-              placeholder={"Latitude"}
-              keyboardType="numbers-and-punctuation"
-              // editable={false}
-              fontSize={moderateScale(18)}
-              placeholderTextColor="darkgrey"
-              color={formValidation.LatVal ? "black" : "#F0EEEB"}
-              multiline
-              onChangeText={(text) =>
-                setAddSiteVals({ ...addSiteVals, Latitude: text })
-              }
-            ></TextInput>
-          </InsetShadow>
+          <InputField
+            validationItem={formValidation.LatVal}
+            placeHolderText={"Latitude"}
+            inputValue={addSiteVals.Latitude}
+            keyboardType={"numbers-and-punctuation"}
+            onChangeText={(text) =>
+              setAddSiteVals({ ...addSiteVals, Latitude: text })
+            }
+          />
 
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              // marginRight: 18,
-              marginTop: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={formValidation.LngVal ? styles.inputRed : styles.input}
-              value={addSiteVals.Longitude}
-              placeholder={"Longitude"}
-              keyboardType="numbers-and-punctuation"
-              // editable={false}
-              fontSize={moderateScale(18)}
-              placeholderTextColor="darkgrey"
-              color={formValidation.LngVal ? "black" : "#F0EEEB"}
-              multiline
-              onChangeText={(text) =>
-                setAddSiteVals({ ...addSiteVals, Longitude: text })
-              }
-            ></TextInput>
-          </InsetShadow>
+          <InputField
+            validationItem={formValidation.LngVal}
+            placeHolderText={"Longitude"}
+            inputValue={addSiteVals.Longitude}
+            keyboardType={"numbers-and-punctuation"}
+            onChangeText={(text) =>
+              setAddSiteVals({ ...addSiteVals, Longitude: text })
+            }
+          />
         </View>
 
         {isLoading && (
@@ -618,7 +564,7 @@ export default function DiveSiteModal() {
           ></FailModal>
         </Animated.View>
       </View>
-      </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback>
   );
 }
 
