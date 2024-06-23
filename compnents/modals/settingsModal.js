@@ -27,6 +27,8 @@ import {
   addDeletedAccountInfo,
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
+import { grabRequestById } from "../../supabaseCalls/partnerSupabaseCalls";
+
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
@@ -133,10 +135,12 @@ export default function SettingsModal() {
   };
 
   const [signButState, setSignButState] = useState(false);
+  const [reqButState, setReqButState] = useState(false);
   const [dangerButState, setDangerButState] = useState(false);
 
   const [diveSitesIsEnabled, setDiveSitesIsEnabled] = useState(false);
   const [creaturesIsEnabled, setCreaturesIsEnabled] = useState(false);
+  const [requestCheck, setRequestCheck] = useState([]);
 
   useEffect(() => {
     if (myDiveSites.length > 0) {
@@ -146,8 +150,17 @@ export default function SettingsModal() {
     if (myCreatures.length > 0) {
       setCreaturesIsEnabled(true);
     }
+
+    checkForRequest(profile[0].UserID)
+
   }, []);
 
+  const checkForRequest = async(id) => {
+    let returnedCheck = await grabRequestById(id)
+    setRequestCheck(returnedCheck)
+  }
+
+  console.log("8", requestCheck)
   const toggleSettingsModal = () => {
     setGearModal(false);
   };
@@ -262,24 +275,24 @@ export default function SettingsModal() {
 
       <View style={styles.partnerButton}>
         <TouchableWithoutFeedback
-          onPress={handlePartnerButton}
-          onPressIn={() => setSignButState(true)}
-          onPressOut={() => setSignButState(false)}
+          onPress={requestCheck.length > 0 ? null : handlePartnerButton}
+          onPressIn={() => setReqButState(true)}
+          onPressOut={() => setReqButState(false)}
         >
           <View
             style={
-              signButState ? styles.logoutButtonpressed : styles.logoutButton
+              reqButState ? styles.logoutButtonpressed : styles.logoutButton
             }
           >
             <Text
               style={{
                 paddingBottom: 3,
                 fontFamily: "Itim_400Regular",
-                color: "gold",
+                color: requestCheck.length > 0 ? "lightgrey" : "gold",
                 fontSize: moderateScale(16),
               }}
             >
-              Request Partner Account
+              {requestCheck.length > 0 ? "Request In Progress" : "Request Partner Account"}
             </Text>
           </View>
         </TouchableWithoutFeedback>

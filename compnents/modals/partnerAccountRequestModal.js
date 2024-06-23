@@ -18,14 +18,46 @@ import { scale, moderateScale } from "react-native-size-matters";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
+import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
+import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
+import SuccessModal from "./confirmationSuccessModal";
+import FailModal from "./confirmationCautionModal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PartnerAccountRequestModal() {
   const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
   const [closeButtonState, setCloseButtonState] = useState(false);
   const [subButState, setSubButState] = useState(false);
+
+  useEffect(() => {
+    setFormValues({ ...formValues, UserId: profile[0].UserID });
+  }, []);
+
+  const successBoxY = useSharedValue(scale(1200));
+  const failBoxY = useSharedValue(scale(1200));
+
+  const sucessModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: successBoxY.value }],
+    };
+  });
+
+  const cautionModalSlide = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: failBoxY.value }],
+    };
+  });
+
+  const confirmationSucessClose = () => {
+    successBoxY.value = withTiming(scale(1200));
+  };
+
+  const confirmationFailClose = () => {
+    failBoxY.value = withTiming(scale(1200));
+  };
 
   const [formValues, setFormValues] = useState({
     WebsiteLink: "",
@@ -35,10 +67,10 @@ export default function PartnerAccountRequestModal() {
     UserId: null,
   });
 
-  let WebsiteLinkVar = false
-  let BusinessNameVar=  false
-  let LatVar = false
-  let LngVar = false
+  let WebsiteLinkVar = false;
+  let BusinessNameVar = false;
+  let LatVar = false;
+  let LngVar = false;
 
   const [formValidation, setFormValidation] = useState({
     WebsiteLinkVal: false,
@@ -47,18 +79,28 @@ export default function PartnerAccountRequestModal() {
     LngVal: false,
   });
 
-  const handleSubmit = (formValues) => {
+  const handleClose = () => {
+    setFormValues({
+      ...formValues,
+      WebsiteLink: "",
+      BusinessName: "",
+      Latitude: "",
+      Longitude: "",
+    });
+    setPartnerModal(false)
+  };
 
+  const handleSubmit = (formValues) => {
     if (formValues.WebsiteLink === "" || formValues.WebsiteLink === null) {
-      WebsiteLinkVar = true
+      WebsiteLinkVar = true;
     } else {
-      WebsiteLinkVar = false
+      WebsiteLinkVar = false;
     }
 
     if (formValues.BusinessName === "" || formValues.BusinessName === null) {
-      BusinessNameVar = true
+      BusinessNameVar = true;
     } else {
-      BusinessNameVar = false
+      BusinessNameVar = false;
     }
 
     if (
@@ -66,9 +108,9 @@ export default function PartnerAccountRequestModal() {
       formValues.Latitude === null ||
       isNaN(formValues.Latitude)
     ) {
-      LatVar = true
+      LatVar = true;
     } else {
-      LatVar = false
+      LatVar = false;
     }
 
     if (
@@ -76,9 +118,9 @@ export default function PartnerAccountRequestModal() {
       formValues.Longitude === null ||
       isNaN(formValues.Longitude)
     ) {
-      LngVar = true
+      LngVar = true;
     } else {
-      LngVar = false
+      LngVar = false;
     }
 
     setFormValidation({
@@ -88,6 +130,21 @@ export default function PartnerAccountRequestModal() {
       LatVal: LatVar,
       LngVal: LngVar,
     });
+
+    if (
+      formValues.WebsiteLink === "" ||
+      formValues.BusinessName === "" ||
+      formValues.Latitude == "" ||
+      isNaN(formValues.Latitude) ||
+      formValues.Longitude == "" ||
+      isNaN(formValues.Longitude)
+    ) {
+      failBoxY.value = withTiming(scale(-50));
+      return;
+    } else {
+      createPartnerAccountRequest(formValues);
+      successBoxY.value = withTiming(scale(-50));
+    }
   };
 
   return (
@@ -100,7 +157,7 @@ export default function PartnerAccountRequestModal() {
           }
         >
           <TouchableOpacity
-            onPress={() => setPartnerModal(false)}
+            onPress={handleClose}
             onPressIn={() => setCloseButtonState(true)}
             onPressOut={() => setCloseButtonState(false)}
             style={{
@@ -122,7 +179,9 @@ export default function PartnerAccountRequestModal() {
 
       <InsetShadow
         containerStyle={{
-          backgroundColor : formValidation.BusinessNameVal ? "pink": "transparent",
+          backgroundColor: formValidation.BusinessNameVal
+            ? "pink"
+            : "transparent",
           borderRadius: moderateScale(25),
           height: moderateScale(40),
           width: moderateScale(200),
@@ -151,10 +210,11 @@ export default function PartnerAccountRequestModal() {
       </InsetShadow>
       <Text style={styles.explainerMicro}>(For display purposes)</Text>
 
-
       <InsetShadow
         containerStyle={{
-          backgroundColor : formValidation.WebsiteLinkVal ? "pink": "transparent",
+          backgroundColor: formValidation.WebsiteLinkVal
+            ? "pink"
+            : "transparent",
           borderRadius: moderateScale(25),
           height: moderateScale(40),
           width: moderateScale(200),
@@ -183,7 +243,7 @@ export default function PartnerAccountRequestModal() {
 
       <InsetShadow
         containerStyle={{
-          backgroundColor : formValidation.LatVal ? "pink": "transparent",
+          backgroundColor: formValidation.LatVal ? "pink" : "transparent",
           borderRadius: moderateScale(25),
           height: moderateScale(40),
           width: moderateScale(200),
@@ -212,7 +272,7 @@ export default function PartnerAccountRequestModal() {
 
       <InsetShadow
         containerStyle={{
-          backgroundColor : formValidation.LngVal ? "pink": "transparent",
+          backgroundColor: formValidation.LngVal ? "pink" : "transparent",
           borderRadius: moderateScale(25),
           height: moderateScale(40),
           width: moderateScale(200),
@@ -240,7 +300,6 @@ export default function PartnerAccountRequestModal() {
       </InsetShadow>
       <Text style={styles.explainerMicro}>(For map placement)</Text>
 
-
       <View
         style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
       >
@@ -267,10 +326,25 @@ export default function PartnerAccountRequestModal() {
               textAlign: "center",
             }}
           >
-            Generate Email Request
+            Submit Account Request
           </Text>
         </TouchableOpacity>
       </View>
+
+      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+        <SuccessModal
+          submissionItem="partner account creation request"
+          confirmationSucessClose={confirmationSucessClose}
+          setPartnerModal={setPartnerModal}
+        ></SuccessModal>
+      </Animated.View>
+
+      <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+        <FailModal
+          submissionItem="partner account creation request"
+          confirmationFailClose={confirmationFailClose}
+        ></FailModal>
+      </Animated.View>
     </View>
   );
 }
@@ -293,7 +367,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     textAlign: "center",
     margin: moderateScale(20),
-    marginTop: windowWidth > 500 ? 0 : moderateScale(-60)
+    marginTop: windowWidth > 500 ? 0 : moderateScale(-60),
   },
   explainerMicro: {
     color: "#F0EEEB",
@@ -394,5 +468,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "1%" : "1%",
     backgroundColor: "#538dbd",
+  },
+  confirmationBox: {
+    position: "absolute",
   },
 });

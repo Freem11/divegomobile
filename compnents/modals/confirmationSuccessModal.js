@@ -23,6 +23,7 @@ export default function SuccessModal(props) {
     setItterator2,
     itterator3,
     setItterator3,
+    setPartnerModal
   } = props;
 
   const [profileCloseState, setProfileCloseState] = useState(false);
@@ -38,10 +39,20 @@ export default function SuccessModal(props) {
       if (itterator3 > 0) {
         setItterator3(itterator3 + 1);
       }
+    } else if (submissionItem === "partner account creation request") {
+      setPartnerModal(false)
     }
 
     confirmationSucessClose();
   };
+
+  let blurb = null;
+  if (submissionItem === "partner account creation request") {
+    blurb =
+      `We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies.`;
+  } else {
+    blurb = "Please allow up to 24 hours for it to be reviewed and approved."
+  }
 
   return (
     <View style={styles.container}>
@@ -50,7 +61,7 @@ export default function SuccessModal(props) {
           Your {submissionItem} was successully submitted!
         </Text>
         <Text style={styles.text2}>
-          Please allow up to 24 hours for it to be reviewed and approved.
+          {blurb}
         </Text>
         <View
           style={profileCloseState ? styles.OKbuttonPressed : styles.OKbutton}
