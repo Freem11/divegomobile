@@ -160,7 +160,6 @@ export default function SettingsModal() {
     setRequestCheck(returnedCheck)
   }
 
-  console.log("8", requestCheck)
   const toggleSettingsModal = () => {
     setGearModal(false);
   };

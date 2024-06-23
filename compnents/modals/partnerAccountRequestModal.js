@@ -20,6 +20,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
+import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
 
@@ -87,7 +88,7 @@ export default function PartnerAccountRequestModal() {
       Latitude: "",
       Longitude: "",
     });
-    setPartnerModal(false)
+    setPartnerModal(false);
   };
 
   const handleSubmit = (formValues) => {
@@ -177,127 +178,46 @@ export default function PartnerAccountRequestModal() {
         Shops, Dive Charters, Diver Centres and Liveaboards
       </Text>
 
-      <InsetShadow
-        containerStyle={{
-          backgroundColor: formValidation.BusinessNameVal
-            ? "pink"
-            : "transparent",
-          borderRadius: moderateScale(25),
-          height: moderateScale(40),
-          width: moderateScale(200),
-          marginTop: moderateScale(20),
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        elevation={20}
-        shadowRadius={15}
-        shadowOpacity={0.3}
-      >
-        <TextInput
-          style={
-            formValidation.BusinessNameVal ? styles.inputRed : styles.input
-          }
-          value={formValues.BusinessName}
-          placeholder={"Full Business Name"}
-          placeholderTextColor="darkgrey"
-          color={formValidation.BusinessNameVal ? "black" : "#F0EEEB"}
-          fontSize={moderateScale(18)}
-          multiline
-          onChangeText={(bus) =>
-            setFormValues({ ...formValues, BusinessName: bus })
-          }
-        ></TextInput>
-      </InsetShadow>
+      <InputField
+        validationItem={formValidation.BusinessNameVal}
+        placeHolderText={"Full Business Name"}
+        inputValue={formValues.BusinessName}
+        keyboardType={"default"}
+        onChangeText={(text) =>
+          setFormValues({ ...formValues, BusinessName: text })
+        }
+      />
       <Text style={styles.explainerMicro}>(For display purposes)</Text>
 
-      <InsetShadow
-        containerStyle={{
-          backgroundColor: formValidation.WebsiteLinkVal
-            ? "pink"
-            : "transparent",
-          borderRadius: moderateScale(25),
-          height: moderateScale(40),
-          width: moderateScale(200),
-          marginTop: moderateScale(20),
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        elevation={20}
-        shadowRadius={15}
-        shadowOpacity={0.3}
-      >
-        <TextInput
-          style={formValidation.WebsiteLinkVal ? styles.inputRed : styles.input}
-          value={formValues.WebsiteLink}
-          placeholder={"Website URL"}
-          placeholderTextColor="darkgrey"
-          color={formValidation.WebsiteLinkVal ? "black" : "#F0EEEB"}
-          fontSize={moderateScale(18)}
-          multiline
-          onChangeText={(web) =>
-            setFormValues({ ...formValues, WebsiteLink: web })
-          }
-        ></TextInput>
-      </InsetShadow>
+      <InputField
+        validationItem={formValidation.WebsiteLinkVal}
+        placeHolderText={"Website URL"}
+        inputValue={formValues.WebsiteLink}
+        keyboardType={"default"}
+        onChangeText={(text) =>
+          setFormValues({ ...formValues, WebsiteLink: text })
+        }
+      />
       <Text style={styles.explainerMicro}>(To validate your business)</Text>
 
-      <InsetShadow
-        containerStyle={{
-          backgroundColor: formValidation.LatVal ? "pink" : "transparent",
-          borderRadius: moderateScale(25),
-          height: moderateScale(40),
-          width: moderateScale(200),
-          marginTop: moderateScale(20),
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        elevation={20}
-        shadowRadius={15}
-        shadowOpacity={0.3}
-      >
-        <TextInput
-          style={formValidation.LatVal ? styles.inputRed : styles.input}
-          value={formValues.Latitude}
-          placeholder={"Latitude"}
-          keyboardType="numbers-and-punctuation"
-          fontSize={moderateScale(18)}
-          placeholderTextColor="darkgrey"
-          color={formValidation.LatVal ? "black" : "#F0EEEB"}
-          multiline
-          onChangeText={(lat) =>
-            setFormValues({ ...formValues, Latitude: lat })
-          }
-        ></TextInput>
-      </InsetShadow>
-
-      <InsetShadow
-        containerStyle={{
-          backgroundColor: formValidation.LngVal ? "pink" : "transparent",
-          borderRadius: moderateScale(25),
-          height: moderateScale(40),
-          width: moderateScale(200),
-          marginTop: moderateScale(10),
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        elevation={20}
-        shadowRadius={15}
-        shadowOpacity={0.3}
-      >
-        <TextInput
-          style={formValidation.LngVal ? styles.inputRed : styles.input}
-          value={formValues.Longitude}
-          placeholder={"Longitude"}
-          keyboardType="numbers-and-punctuation"
-          fontSize={moderateScale(18)}
-          placeholderTextColor="darkgrey"
-          color={formValidation.LngVal ? "black" : "#F0EEEB"}
-          multiline
-          onChangeText={(lng) =>
-            setFormValues({ ...formValues, Longitude: lng })
-          }
-        ></TextInput>
-      </InsetShadow>
+      <InputField
+        validationItem={formValidation.LatVal}
+        placeHolderText={"Latitude"}
+        inputValue={formValues.Latitude}
+        keyboardType={"numbers-and-punctuation"}
+        onChangeText={(text) =>
+          setFormValues({ ...formValues, Latitude: text })
+        }
+      />
+        <InputField
+        validationItem={formValidation.LngVal}
+        placeHolderText={"Longitude"}
+        inputValue={formValues.Longitude}
+        keyboardType={"numbers-and-punctuation"}
+        onChangeText={(text) =>
+          setFormValues({ ...formValues, Longitude: text })
+        }
+      />
       <Text style={styles.explainerMicro}>(For map placement)</Text>
 
       <View
@@ -373,39 +293,6 @@ const styles = StyleSheet.create({
     color: "#F0EEEB",
     fontSize: moderateScale(12),
     textAlign: "center",
-  },
-  inputContainer: {
-    width: "96%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
-  },
-  input: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "#538bdb",
-    borderRadius: 10,
-    alignSelf: "center",
-    textAlign: "center",
-    overflow: "hidden",
-  },
-  inputRed: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "pink",
-    borderRadius: 10,
-    alignSelf: "center",
-    textAlign: "center",
-    overflow: "hidden",
-  },
-  header: {
-    fontSize: 20,
-    alignSelf: "center",
-    marginBottom: 25,
-    marginTop: -150,
-  },
-  text: {
-    fontSize: 18,
-    alignSelf: "center",
-    marginBottom: 5,
   },
   title: {
     position: "absolute",
