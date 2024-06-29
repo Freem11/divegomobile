@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import email from "react-native-email";
 import Map from "./GoogleMap";
@@ -53,6 +53,7 @@ import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { CommentsModalContext } from "./contexts/commentsModalContext";
 import { DSAdderContext } from "./contexts/DSModalContext";
+import { PartnerModalContext } from "./contexts/partnerAccountRequestModalContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { Iterrator3Context } from "./contexts/iterrator3Context";
@@ -97,6 +98,7 @@ import SettingsModal from "./modals/settingsModal";
 import ShopModal from "./modals/shopModal";
 import MapSearchModal from "./modals/mapSearchModal";
 import DiveSiteSearchModal from "./modals/diveSiteSearchModal";
+import PartnerAccountRequestModal from "./modals/partnerAccountRequestModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 import { SettingsContext } from "./contexts/gearModalContext";
@@ -106,7 +108,6 @@ const windowHeight = Dimensions.get("window").height;
 let feedbackRequest = null;
 let feedbackRequest2 = null;
 let FbWidth = moderateScale(350);
-
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -384,6 +385,29 @@ export default function MapPage() {
     // }
   }, [diveSiteAdderModal]);
 
+  //Partner Modal Animation
+  const partnerModalY = useSharedValue(windowHeight);
+  const { partnerModal, setPartnerModal } = useContext(
+    PartnerModalContext
+  );
+  const partnerModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: partnerModalY.value }],
+    };
+  });
+
+  const startPartnerModalAnimations = () => {
+    if (partnerModal) {
+      partnerModalY.value = withTiming(0);
+    } else {
+      partnerModalY.value = withTiming(windowHeight);
+    }
+  };
+
+  useEffect(() => {
+    startPartnerModalAnimations();
+  }, [partnerModal]);
+
   //Picture Adder Modal
   const pictureModalY = useSharedValue(windowHeight);
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
@@ -579,6 +603,7 @@ export default function MapPage() {
 
   //MapSearch Modal Animation
   const mapSearchModalY = useSharedValue(windowHeight);
+  const [mapSearchBump, setMapSearchBump] = useState(false);
   const { mapSearchModal, setMapSearchModal } = useContext(
     MapSearchModalContext
   );
@@ -589,9 +614,19 @@ export default function MapPage() {
     };
   });
 
+  useEffect(() => {
+    if (mapSearchBump) {
+      mapSearchModalY.value = withTiming(-windowHeight * 0.3, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+    setMapSearchBump(false);
+  }, [mapSearchBump]);
+
   const startMapSearchModalAnimations = () => {
     if (mapSearchModal) {
-      mapSearchModalY.value = withTiming(-windowHeight * 0.3, {
+      mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
@@ -607,6 +642,7 @@ export default function MapPage() {
   //DiveSiteSearch Modal Animation
 
   const diveSiteSearchModalY = useSharedValue(windowHeight);
+  const [diveSearchBump, setDiveSearchBump] = useState(false);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
     DiveSiteSearchModalContext
   );
@@ -617,9 +653,19 @@ export default function MapPage() {
     };
   });
 
+  useEffect(() => {
+    if (diveSearchBump) {
+      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.3, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+    setDiveSearchBump(false);
+  }, [diveSearchBump]);
+
   const startdiveSiteSearchModalAnimations = () => {
     if (diveSiteSearchModal) {
-      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.3, {
+      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
         duration: 150,
         easing: Easing.out(Easing.linear),
       });
@@ -852,46 +898,56 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    const {
+      status: existingStatus,
+    } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
-    
-    if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
     }
 
-    if (finalStatus !== 'granted') {
-    return;
+    if (finalStatus !== "granted") {
+      return;
     }
 
-    let token
+    let token;
     try {
-       token = (await Notifications.getDevicePushTokenAsync({
-        'projectId': Constants.expoConfig.extra.eas.projectId,
-      })).data;
-      
+      token = (
+        await Notifications.getDevicePushTokenAsync({
+          projectId: Constants.expoConfig.extra.eas.projectId,
+        })
+      ).data;
     } catch (err) {
       console.log("error", err);
     }
 
-    let tokenE
+    let tokenE;
     try {
-    tokenE = ( await Notifications.getExpoPushTokenAsync({
-      projectId: Constants.expoConfig.extra.eas.projectId,
-    })).data;
-      
+      tokenE = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId: Constants.expoConfig.extra.eas.projectId,
+        })
+      ).data;
     } catch (err) {
       console.log("error", err);
     }
-   
+
     if (activeSession && activeSession.user) {
-      const user = (await grabProfileById(activeSession.user.id));
+      const user = await grabProfileById(activeSession.user.id);
       const activeToken = user[0].expo_push_token;
       if (activeToken === null || !activeToken.includes(token)) {
-        updatePushToken({ token: activeToken ? [...activeToken, token] : [token], UserID: activeSession.user.id })
+        updatePushToken({
+          token: activeToken ? [...activeToken, token] : [token],
+          UserID: activeSession.user.id,
+        });
       }
       if (activeToken === null || !activeToken.includes(tokenE)) {
-        updatePushToken({ token: activeToken ? [...activeToken, tokenE] : [tokenE], UserID: activeSession.user.id })
+        updatePushToken({
+          token: activeToken ? [...activeToken, tokenE] : [tokenE],
+          UserID: activeSession.user.id,
+        });
       }
     }
   };
@@ -1209,27 +1265,21 @@ export default function MapPage() {
             </Animated.View>
 
             {/* {guideModal && ( */}
-              <Animated.View
-                style={[styles.tutorialModal, tutorialModalReveal]}
-              >
-                <IntroTutorial tutorialModalY={tutorialModalY} />
-              </Animated.View>
+            <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
+              <IntroTutorial tutorialModalY={tutorialModalY} />
+            </Animated.View>
             {/* )} */}
 
             {/* {secondGuideModal && ( */}
-              <Animated.View
-                style={[styles.tutorialModal, tutorial2ModalReveal]}
-              >
-                <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
-              </Animated.View>
+            <Animated.View style={[styles.tutorialModal, tutorial2ModalReveal]}>
+              <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
+            </Animated.View>
             {/* )} */}
 
             {/* {thirdGuideModal && ( */}
-              <Animated.View
-                style={[styles.tutorialModal, tutorial3ModalReveal]}
-              >
-                <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
-              </Animated.View>
+            <Animated.View style={[styles.tutorialModal, tutorial3ModalReveal]}>
+              <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
+            </Animated.View>
             {/* )} */}
 
             {profileModal && (
@@ -1246,7 +1296,7 @@ export default function MapPage() {
 
             {mapSearchModal && (
               <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
-                <MapSearchModal />
+                <MapSearchModal setMapSearchBump={setMapSearchBump} />
               </Animated.View>
             )}
 
@@ -1254,7 +1304,15 @@ export default function MapPage() {
               <Animated.View
                 style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
               >
-                <DiveSiteSearchModal />
+                <DiveSiteSearchModal setDiveSearchBump={setDiveSearchBump} />
+              </Animated.View>
+            )}
+
+            {partnerModal && (
+              <Animated.View
+                style={[styles.anchorModal, partnerModalReveal]}
+              >
+                <PartnerAccountRequestModal />
               </Animated.View>
             )}
 
@@ -1499,7 +1557,7 @@ const styles = StyleSheet.create({
   },
   diveSearchModal: {
     position: "absolute",
-    height: moderateScale(130),
+    height: moderateScale(160),
     width: "60%",
     marginLeft: "19%",
     backgroundColor: "#538bdb",

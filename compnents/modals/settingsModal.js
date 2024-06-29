@@ -27,12 +27,15 @@ import {
   addDeletedAccountInfo,
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
+import { grabRequestById } from "../../supabaseCalls/partnerSupabaseCalls";
+
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import { MyCreaturesContext } from "../../compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext";
 import { SettingsContext } from "../../compnents/contexts/gearModalContext";
+import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { scale, moderateScale } from "react-native-size-matters";
@@ -45,7 +48,9 @@ export default function SettingsModal() {
   const { profile, setProfile } = useContext(UserProfileContext);
   const [settingsCloseState, setSettingsCloseState] = useState(false);
   const { gearModal, setGearModal } = useContext(SettingsContext);
-
+  const { partnerModal, setPartnerModal } = useContext(
+    PartnerModalContext
+  );
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
 
@@ -130,33 +135,40 @@ export default function SettingsModal() {
   };
 
   const [signButState, setSignButState] = useState(false);
+  const [reqButState, setReqButState] = useState(false);
   const [dangerButState, setDangerButState] = useState(false);
 
   const [diveSitesIsEnabled, setDiveSitesIsEnabled] = useState(false);
   const [creaturesIsEnabled, setCreaturesIsEnabled] = useState(false);
- 
+  const [requestCheck, setRequestCheck] = useState([]);
+
   useEffect(() => {
-    
-    if(myDiveSites.length > 0){
-      setDiveSitesIsEnabled(true)
+    if (myDiveSites.length > 0) {
+      setDiveSitesIsEnabled(true);
     }
-  
-    if(myCreatures.length > 0){
-      setCreaturesIsEnabled(true)
+
+    if (myCreatures.length > 0) {
+      setCreaturesIsEnabled(true);
     }
-  }, [])
+
+    checkForRequest(profile[0].UserID)
+
+  }, []);
+
+  const checkForRequest = async(id) => {
+    let returnedCheck = await grabRequestById(id)
+    setRequestCheck(returnedCheck)
+  }
 
   const toggleSettingsModal = () => {
-    setGearModal(false)
-  }
- 
+    setGearModal(false);
+  };
 
   const toggleDCSwitch = () =>
     setDiveSitesIsEnabled((previousState) => !previousState);
   const toggleCHSwitch = () =>
     setCreaturesIsEnabled((previousState) => !previousState);
 
-    
   useEffect(() => {
     if (diveSitesIsEnabled) {
       setMyDiveSites(profile[0].UserID);
@@ -176,6 +188,11 @@ export default function SettingsModal() {
       AsyncStorage.removeItem("myCreatures");
     }
   }, [creaturesIsEnabled]);
+
+  const handlePartnerButton = () => {
+    setPartnerModal(true);
+    setGearModal(false);
+  };
 
   return (
     // <ScrollView style={{ width: "86%" }}>
@@ -197,7 +214,6 @@ export default function SettingsModal() {
               alignItems: "center",
             }}
           >
-           
             <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
           </TouchableWithoutFeedback>
         </View>
@@ -216,7 +232,7 @@ export default function SettingsModal() {
             <Text
               style={{
                 paddingBottom: 3,
-                fontFamily: "PatrickHand_400Regular",
+                fontFamily: "Itim_400Regular",
                 color: "gold",
                 fontSize: moderateScale(24),
               }}
@@ -231,29 +247,54 @@ export default function SettingsModal() {
         <View style={styles.switchBox}>
           <Text style={styles.labelText}>My Dive Sites</Text>
           <View style={styles.switches}>
-          <Switch
-            style={styles.switches}
-            trackColor={{ false: "#767577", true: "#f4f3f4" }}
-            thumbColor={diveSitesIsEnabled ? "#538bdb" : "#538bdb"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleDCSwitch}
-            value={diveSitesIsEnabled}
-          />
+            <Switch
+              style={styles.switches}
+              trackColor={{ false: "#767577", true: "#f4f3f4" }}
+              thumbColor={diveSitesIsEnabled ? "#538bdb" : "#538bdb"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleDCSwitch}
+              value={diveSitesIsEnabled}
+            />
           </View>
         </View>
         <View style={styles.switchBox}>
           <Text style={styles.labelText}>My Sea Creatures</Text>
           <View style={styles.switches}>
-          <Switch
-            // style={styles.switches}
-            trackColor={{ false: "#767577", true: "#f4f3f4" }}
-            thumbColor={creaturesIsEnabled ? "#538bdb" : "#538bdb"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleCHSwitch}
-            value={creaturesIsEnabled}
-          />
+            <Switch
+              // style={styles.switches}
+              trackColor={{ false: "#767577", true: "#f4f3f4" }}
+              thumbColor={creaturesIsEnabled ? "#538bdb" : "#538bdb"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleCHSwitch}
+              value={creaturesIsEnabled}
+            />
           </View>
         </View>
+      </View>
+
+      <View style={styles.partnerButton}>
+        <TouchableWithoutFeedback
+          onPress={requestCheck.length > 0 ? null : handlePartnerButton}
+          onPressIn={() => setReqButState(true)}
+          onPressOut={() => setReqButState(false)}
+        >
+          <View
+            style={
+              reqButState ? styles.logoutButtonpressed : styles.logoutButton
+            }
+          >
+            <Text
+              style={{
+                paddingBottom: 3,
+                fontFamily: "Itim_400Regular",
+                color: requestCheck.length > 0 ? "lightgrey" : "gold",
+                fontSize: moderateScale(16),
+              }}
+            >
+              {requestCheck.length > 0 ? "Request In Progress" : "Request Partner Account"}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.third}>
@@ -262,9 +303,17 @@ export default function SettingsModal() {
           style={{ backgroundColor: "purple" }}
         >
           <View style={styles.dangerZonebar}>
-            <AntDesign name="exclamationcircleo" size={moderateScale(20)} color="maroon" />
+            <AntDesign
+              name="exclamationcircleo"
+              size={moderateScale(20)}
+              color="maroon"
+            />
             <Text style={styles.dangerText}>Danger Zone</Text>
-            <AntDesign name="exclamationcircleo" size={moderateScale(20)} color="maroon" />
+            <AntDesign
+              name="exclamationcircleo"
+              size={moderateScale(20)}
+              color="maroon"
+            />
           </View>
         </TouchableWithoutFeedback>
 
@@ -285,9 +334,9 @@ export default function SettingsModal() {
               <Text
                 style={{
                   paddingBottom: 3,
-                  fontFamily: "PatrickHand_400Regular",
+                  fontFamily: "Itim_400Regular",
                   color: "maroon",
-                  fontSize: moderateScale(24),
+                  fontSize: moderateScale(22),
                 }}
               >
                 Delete Account
@@ -305,11 +354,9 @@ const styles = StyleSheet.create({
   container: {
     // backgroundColor: 'green',
     height: windowHeight * 0.5,
-    // alignItems: "center",
     width: "100%",
   },
   first: {
-    // position: "absolute",
     height: 50,
     // backgroundColor: "pink",
     alignContent: "center",
@@ -323,22 +370,23 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginTop: "10%",
   },
-  third: {
-    // position: "absolute",
-    height: moderateScale(200),
+  partnerButton: {
     // backgroundColor: "yellow",
     alignItems: "center",
-    // justifyContent: "center",
-    marginTop: windowWidth > 700 ? moderateScale(70) : moderateScale(170),
+  },
+  third: {
+    height: moderateScale(200),
+    alignItems: "center",
+    marginTop: windowWidth > 700 ? moderateScale(30) : moderateScale(160),
   },
   logoutButton: {
     backgroundColor: "#538bdb",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(35),
-    width: moderateScale(150),
+    borderRadius: moderateScale(40),
+    height: moderateScale(40),
+    width: moderateScale(200),
     // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -355,9 +403,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(35),
-    width: moderateScale(150),
+    borderRadius: moderateScale(40),
+    height: moderateScale(40),
+    width: moderateScale(200),
     // marginTop: scale(15),
     shadowColor: "#000",
     shadowOffset: {
@@ -404,9 +452,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(35),
-    width: moderateScale(150),
+    borderRadius: moderateScale(40),
+    height: moderateScale(40),
+    width: moderateScale(200),
     marginTop: moderateScale(20),
     zIndex: -1,
     shadowColor: "#000",
@@ -425,9 +473,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(35),
-    width: moderateScale(150),
+    borderRadius: moderateScale(40),
+    height: moderateScale(40),
+    width: moderateScale(200),
     marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {
@@ -446,7 +494,7 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(18),
     marginRight: moderateScale(50),
-    marginLeft: moderateScale(5)
+    marginLeft: moderateScale(5),
   },
   switchBox: {
     minWidth: moderateScale(250),
@@ -501,5 +549,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "lightgrey",
     opacity: 0.3,
-  }, 
+  },
 });

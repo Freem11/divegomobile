@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
 import AutoSuggestListItem from "./autoSuggestListItem";
+import InputField from "../reusables/textInputs";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
@@ -105,29 +106,14 @@ export default function AnimalAutoSuggest(props) {
     >
       <View style={styles.mainBox}>
         <View style={styles.container}>
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={
-                formValidation.AnimalVal
-                  ? styles.suggestInputRed
-                  : styles.suggestInput
-              }
-              placeholder={"Animal"}
-              value={pin.Animal}
-              placeholderTextColor="darkgrey"
-              color={formValidation.AnimalVal ? "black" : "#F0EEEB"}
-              onChangeText={handleChange}
-            ></TextInput>
-          </InsetShadow>
+          <InputField
+            validationItem={formValidation.AnimalVal}
+            placeHolderText={"Animal"}
+            inputValue={pin.Animal}
+            keyboardType={"default"}
+            onChangeText={handleChange}
+          />
+
           {pin.Animal.length > 1 && (
             <View style={styles.xButton}>
               <TouchableOpacity
@@ -183,7 +169,7 @@ const styles = StyleSheet.create({
     marginTop: scale(3),
   },
   xButton: {
-    marginTop: moderateScale(10),
+    marginTop: moderateScale(32),
     marginLeft: moderateScale(-30),
   },
   suggestInput: {

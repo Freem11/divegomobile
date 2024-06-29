@@ -15,7 +15,7 @@ import { scale, moderateScale } from "react-native-size-matters";
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteAutoComplete(props) {
-  const { setDiveSearchHide } = props;
+  const { setDiveSearchBump } = props;
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
@@ -70,6 +70,12 @@ export default function DiveSiteAutoComplete(props) {
     handleDiveSiteList();
   }, [boundaries]);
 
+  useEffect(() => {
+    if ( list.length > 0){
+      setDiveSearchBump(true)
+    } 
+  }, [list]);
+
   const handleConfirm = async (diveSite) => {
     if (diveSite !== null) {
 
@@ -114,23 +120,23 @@ export default function DiveSiteAutoComplete(props) {
             justifyContent: "center",
             alignItems: "center",
             alignContent: "center",
-            borderRadius: moderateScale(25),
+            borderRadius: moderateScale(50),
             width: moderateScale(200),
             opacity: 1,
             height: moderateScale(50),
-            fontSize: moderateScale(12),
+            fontSize: moderateScale(16),
           },
         }}
         inputContainerStyle={{
           alignItems: "center",
-          height: moderateScale(30),
-          borderRadius: moderateScale(10),
+          height: moderateScale(40),
+          borderRadius: moderateScale(40),
           backgroundColor: "white",
           width: moderateScale(200),
           zIndex: 2,
         }}
         suggestionsListContainerStyle={{
-          height: (windowHeight/2)
+          height: list.length > 0 ? (windowHeight/2) : 0
         }}
         direction={"down"}
         dataSet={list}
@@ -158,6 +164,6 @@ const styles = StyleSheet.create({
     width: moderateScale(200),
     borderRadius: moderateScale(10),
     zIndex: 1,
-    marginTop: moderateScale(70)
+    marginTop: moderateScale(30)
   },
 });

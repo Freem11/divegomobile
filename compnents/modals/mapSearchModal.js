@@ -13,7 +13,8 @@ import { MapSearchModalContext } from "../../compnents/contexts/mapSearchContext
 import { MapCenterContext } from "../../compnents/contexts/mapCenterContext";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 
-export default function MapSearchModal() {
+export default function MapSearchModal(props) {
+  const { setMapSearchBump } = props;
   const [profileCloseState, setProfileCloseState] = useState(false);
   const [myLocButState, setMyLocButState] = useState(false);
   const { mapSearchModal, setMapSearchModal } = useContext(MapSearchModalContext);
@@ -82,7 +83,8 @@ export default function MapSearchModal() {
           />
         </TouchableWithoutFeedback>
         </View>
-      <GeocodeAutoComplete />
+      <GeocodeAutoComplete 
+      setMapSearchBump={setMapSearchBump}/>
     </View>
     </TouchableWithoutFeedback>
   );
@@ -206,11 +208,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(40),
     height: moderateScale(30),
-    width: moderateScale(30),
-    marginTop: moderateScale(-25),
-    marginLeft: moderateScale(120),
+    width: moderateScale(50),
+    marginTop: moderateScale(-23),
+    marginLeft: moderateScale(140),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -226,11 +228,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(40),
     height: moderateScale(30),
-    width: moderateScale(30),
-    marginTop: moderateScale(-25),
-    marginLeft: moderateScale(120),
+    width: moderateScale(50),
+    marginTop: moderateScale(-23),
+    marginLeft: moderateScale(140),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -245,7 +247,7 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     color: "white",
     fontSize: moderateScale(14),
-    marginTop: moderateScale(70),
+    marginTop: moderateScale(65),
     marginLeft: moderateScale(-60)
   },
 });

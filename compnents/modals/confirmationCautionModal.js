@@ -14,10 +14,7 @@ import { scale } from "react-native-size-matters";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function FailModal(props) {
-  const {
-    submissionItem,
-    confirmationFailClose,
-  } = props;
+  const { submissionItem, confirmationFailClose } = props;
 
   const [profileCloseState, setProfileCloseState] = useState(false);
 
@@ -26,10 +23,15 @@ export default function FailModal(props) {
   };
 
   let blurb = null;
-  if (submissionItem === "sea creature submission"){
-      blurb = "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again."
-  } else if (submissionItem === "dive site"){
-      blurb = "You dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit."
+  if (submissionItem === "sea creature submission") {
+    blurb =
+      "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again.";
+  } else if (submissionItem === "dive site") {
+    blurb =
+      "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.";
+  } else if (submissionItem === "partner account creation request") {
+    blurb =
+      "Your request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete your request.";
   }
 
   return (
@@ -38,9 +40,7 @@ export default function FailModal(props) {
         <Text style={styles.text}>
           Your {submissionItem} cannot be completed just yet.
         </Text>
-        <Text style={styles.text2}>
-          {blurb}
-        </Text>
+        <Text style={styles.text2}>{blurb}</Text>
         <View
           style={profileCloseState ? styles.OKbuttonPressed : styles.OKbutton}
         >

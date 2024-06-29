@@ -32,6 +32,7 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
 
@@ -373,7 +374,6 @@ export default function DiveSiteModal() {
     }
   }, [addSiteVals]);
 
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -421,91 +421,37 @@ export default function DiveSiteModal() {
             </TouchableOpacity>
           </View>
         </View>
-        
+
         <View style={styles.inputContainer}>
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              // marginRight: 18,
-              marginTop: moderateScale(1),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={
-                formValidation.SiteNameVal ? styles.inputRed : styles.input
-              }
-              value={addSiteVals.Site}
-              placeholder={"Site Name"}
-              placeholderTextColor="darkgrey"
-              color={formValidation.SiteNameVal ? "black" : "#F0EEEB"}
-              fontSize={moderateScale(18)}
-              multiline
-              onChangeText={(siteText) =>
-                setAddSiteVals({ ...addSiteVals, Site: siteText })
-              }
-            ></TextInput>
-          </InsetShadow>
+          <InputField
+            validationItem={formValidation.SiteNameVal}
+            placeHolderText={"Site Name"}
+            inputValue={addSiteVals.Site}
+            keyboardType={"default"}
+            onChangeText={(text) =>
+              setAddSiteVals({ ...addSiteVals, Site: text })
+            }
+          />
 
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              // marginRight: 18,
-              marginTop: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={formValidation.LatVal ? styles.inputRed : styles.input}
-              value={addSiteVals.Latitude}
-              placeholder={"Latitude"}
-              keyboardType="numbers-and-punctuation"
-              // editable={false}
-              fontSize={moderateScale(18)}
-              placeholderTextColor="darkgrey"
-              color={formValidation.LatVal ? "black" : "#F0EEEB"}
-              multiline
-              onChangeText={(text) =>
-                setAddSiteVals({ ...addSiteVals, Latitude: text })
-              }
-            ></TextInput>
-          </InsetShadow>
+          <InputField
+            validationItem={formValidation.LatVal}
+            placeHolderText={"Latitude"}
+            inputValue={addSiteVals.Latitude}
+            keyboardType={"numbers-and-punctuation"}
+            onChangeText={(text) =>
+              setAddSiteVals({ ...addSiteVals, Latitude: text })
+            }
+          />
 
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              // marginRight: 18,
-              marginTop: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <TextInput
-              style={formValidation.LngVal ? styles.inputRed : styles.input}
-              value={addSiteVals.Longitude}
-              placeholder={"Longitude"}
-              keyboardType="numbers-and-punctuation"
-              // editable={false}
-              fontSize={moderateScale(18)}
-              placeholderTextColor="darkgrey"
-              color={formValidation.LngVal ? "black" : "#F0EEEB"}
-              multiline
-              onChangeText={(text) =>
-                setAddSiteVals({ ...addSiteVals, Longitude: text })
-              }
-            ></TextInput>
-          </InsetShadow>
+          <InputField
+            validationItem={formValidation.LngVal}
+            placeHolderText={"Longitude"}
+            inputValue={addSiteVals.Longitude}
+            keyboardType={"numbers-and-punctuation"}
+            onChangeText={(text) =>
+              setAddSiteVals({ ...addSiteVals, Longitude: text })
+            }
+          />
         </View>
 
         {isLoading && (
@@ -618,7 +564,7 @@ export default function DiveSiteModal() {
           ></FailModal>
         </Animated.View>
       </View>
-      </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -641,30 +587,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
   },
-  input: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "#538bdb",
-    borderRadius: 10,
-    width: moderateScale(200),
-    height: moderateScale(30),
-    alignSelf: "center",
-    marginTop: moderateScale(5),
-    marginBottom: moderateScale(20),
-    textAlign: "center",
-    // overflow: "hidden",
-  },
-  inputRed: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "pink",
-    borderRadius: 10,
-    width: moderateScale(200),
-    height: moderateScale(30),
-    alignSelf: "center",
-    marginTop: moderateScale(5),
-    marginBottom: moderateScale(20),
-    textAlign: "center",
-    overflow: "hidden",
-  },
   header: {
     fontSize: 20,
     alignSelf: "center",
@@ -681,9 +603,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(40),
     height: moderateScale(40),
-    width: moderateScale(40),
+    width: moderateScale(70),
     marginLeft: moderateScale(-20),
     shadowColor: "#000",
     shadowOffset: {
@@ -700,9 +622,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(40),
     height: moderateScale(40),
-    width: moderateScale(40),
+    width: moderateScale(70),
     marginLeft: moderateScale(-20),
     shadowColor: "#000",
     shadowOffset: {
@@ -758,7 +680,7 @@ const styles = StyleSheet.create({
     fontSize: scale(26),
     alignSelf: "center",
     color: "#F0EEEB",
-    width: "80%",
+    width: "81%",
     marginTop: "-1%",
     marginLeft: "7%",
     marginRight: "15%",
@@ -788,7 +710,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginLeft: 20,
+    marginLeft: scale(-25),
     marginTop: 35,
     width: 140,
     // backgroundColor: "pink"
@@ -798,9 +720,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(40),
     height: moderateScale(40),
-    width: moderateScale(40),
+    width: moderateScale(70),
     marginLeft: moderateScale(20),
     shadowColor: "#000",
     shadowOffset: {
@@ -817,9 +739,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(40),
     height: moderateScale(40),
-    width: moderateScale(40),
+    width: moderateScale(70),
     marginLeft: moderateScale(20),
     shadowColor: "#000",
     shadowOffset: {
