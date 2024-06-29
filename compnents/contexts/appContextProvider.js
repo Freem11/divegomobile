@@ -11,6 +11,8 @@ import SelectedShopContextProvider from './selectedShopContext';
 import ModalSelectContextProvider from './modalSelectContext';
 import ProfileModalContextProvider from './profileModalContext';
 import PartnerModalContextProvider from './partnerAccountRequestModalContext';
+import ItineraryCreatorModalContextProvider from './itineraryCreatorModalContext';
+import ItineraryListModalContextProvider from './itineraryListModalContext';
 import DevelopmentModeContextProvider from './developementModeContext';
 import AreaPicsContextProvider from './areaPicsContext';
 import SearchTextContextProvider from './searchTextContext';
@@ -59,6 +61,8 @@ const providers = [
     ModalSelectContextProvider,
     ProfileModalContextProvider,
     PartnerModalContextProvider,
+    ItineraryCreatorModalContextProvider,
+    ItineraryListModalContextProvider,
     DevelopmentModeContextProvider,
     AreaPicsContextProvider,
     SearchTextContextProvider,

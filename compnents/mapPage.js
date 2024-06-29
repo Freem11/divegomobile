@@ -67,6 +67,7 @@ import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
 import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
+import { ItineraryListModalContext } from "./contexts/itineraryListModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
@@ -96,6 +97,7 @@ import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import UserProfileModal from "./modals/userProfileModal";
 import SettingsModal from "./modals/settingsModal";
 import ShopModal from "./modals/shopModal";
+import ItineraryListModal from "./modals/itineraryListModal";
 import MapSearchModal from "./modals/mapSearchModal";
 import DiveSiteSearchModal from "./modals/diveSiteSearchModal";
 import PartnerAccountRequestModal from "./modals/partnerAccountRequestModal";
@@ -320,6 +322,37 @@ export default function MapPage() {
     startShopModalAnimations();
   }, [shopModal]);
 
+  //ItineraryList Modal Animation
+  const itineraryListModalY = useSharedValue(windowHeight);
+  // const { selectedItinerary, setSelectedItinerary} = useContext(SelectedItineraryContext);
+  const { itineraryListModal, setItineraryListModal } = useContext(
+    ItineraryListModalContext
+  );
+
+  const itineraryListModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: itineraryListModalY.value }],
+    };
+  });
+
+  const startItineraryListModalAnimations = () => {
+    if (itineraryListModal) {
+      itineraryListModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      itineraryListModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  useEffect(() => {
+    startItineraryListModalAnimations();
+  }, [ItineraryListModal]);
+
   //PhotoBox Modal Animation
   const photoBoxModalY = useSharedValue(windowHeight);
   const [photoBoxModel, setPhotoBoxModel] = useState(false);
@@ -343,9 +376,8 @@ export default function MapPage() {
 
   //Dive Site Modal Animation
   const diveSiteModalY = useSharedValue(windowHeight);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
+  const { diveSiteAdderModal, setDiveSiteAdderModal } =
+    useContext(DSAdderContext);
 
   const diveSiteModalReveal = useAnimatedStyle(() => {
     return {
@@ -387,9 +419,7 @@ export default function MapPage() {
 
   //Partner Modal Animation
   const partnerModalY = useSharedValue(windowHeight);
-  const { partnerModal, setPartnerModal } = useContext(
-    PartnerModalContext
-  );
+  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
   const partnerModalReveal = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: partnerModalY.value }],
@@ -898,9 +928,8 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const {
-      status: existingStatus,
-    } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
@@ -1309,10 +1338,19 @@ export default function MapPage() {
             )}
 
             {partnerModal && (
-              <Animated.View
-                style={[styles.anchorModal, partnerModalReveal]}
-              >
+              <Animated.View style={[styles.anchorModal, partnerModalReveal]}>
                 <PartnerAccountRequestModal />
+              </Animated.View>
+            )}
+
+            {itineraryListModal && (
+              <Animated.View
+                style={[styles.anchorModal, itineraryListModalReveal]}
+              >
+                <ItineraryListModal
+                  itineraryListModal={itineraryListModal}
+                  setItineraryListModal={setItineraryListModal}
+                />
               </Animated.View>
             )}
 
