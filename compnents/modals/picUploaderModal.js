@@ -32,6 +32,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
+import ModalHeader from "../reusables/modalHeader";
 // import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import {
   uploadphoto,
@@ -550,50 +551,12 @@ export default function PicUploadModal() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={styles.header2}>Submit Your Picture</Text>
-          <View
-            style={helpButState ? styles.helpButtonPressed : styles.helpButton}
-          >
-            <TouchableOpacity
-              // disabled={isDisabled}
-              onPress={activateGuide}
-              onPressIn={() => setHelpButState(true)}
-              onPressOut={() => setHelpButState(false)}
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: scale(20),
-                height: scale(20),
-              }}
-            >
-              <FontAwesome5
-                name="question"
-                color="gold"
-                size={scale(18)}
-                style={{ zIndex: -1 }}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={
-              picCloseState ? styles.closeButtonPressed : styles.closeButton
-            }
-          >
-            <TouchableOpacity
-              onPress={togglePicModal}
-              onPressIn={() => setPicCloseState(true)}
-              onPressOut={() => setPicCloseState(false)}
-              style={{
-                width: scale(30),
-                height: scale(30),
-                alignItems: "center",
-              }}
-            >
-              <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-            </TouchableOpacity>
-          </View>
-        </View>
+      <ModalHeader
+        titleText={"Submit Your Picture"}
+        onClose={togglePicModal}
+        icon={"question-mark"}
+        altButton={activateGuide}
+      />
         <View style={styles.picContainer}>
           {uploadedFile && (
             <Image
@@ -852,7 +815,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     alignItems: "center",
-    marginTop: "5%",
     width: "100%",
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
@@ -940,7 +902,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: moderateScale(50),
+    marginTop: moderateScale(15),
     marginBottom: Platform.OS === "ios" ? moderateScale(10) : "2%",
     borderWidth: 0.3,
     borderRadius: scale(15),

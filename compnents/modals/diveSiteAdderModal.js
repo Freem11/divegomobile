@@ -35,6 +35,7 @@ import { ModalSelectContext } from "../contexts/modalSelectContext";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
+import ModalHeader from "../reusables/modalHeader";
 
 let SiteNameVar = false;
 let LatVar = false;
@@ -377,51 +378,14 @@ export default function DiveSiteModal() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={styles.header2}>Submit Your Dive Site</Text>
-          <View
-            style={helpButState ? styles.helpButtonPressed : styles.helpButton}
-          >
-            <TouchableOpacity
-              // disabled={isDisabled}
-              onPress={activateGuide}
-              onPressIn={() => setHelpButState(true)}
-              onPressOut={() => setHelpButState(false)}
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: scale(20),
-                height: scale(20),
-              }}
-            >
-              <FontAwesome5
-                name="question"
-                color="gold"
-                size={scale(18)}
-                style={{ zIndex: -1 }}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={
-              diveCloseState ? styles.closeButtonPressed : styles.closeButton
-            }
-          >
-            <TouchableOpacity
-              onPress={toggleDiveModal}
-              onPressIn={() => setDiveCloseState(true)}
-              onPressOut={() => setDiveCloseState(false)}
-              style={{
-                width: scale(30),
-                height: scale(30),
-                alignItems: "center",
-              }}
-            >
-              <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-            </TouchableOpacity>
-          </View>
-        </View>
+      <ModalHeader
+        titleText={"Submit Your Dive Site"}
+        onClose={toggleDiveModal}
+        icon={"question-mark"}
+        altButton={activateGuide}
+      />
 
+<View style={styles.contentContainer}>
         <View style={styles.inputContainer}>
           <InputField
             validationItem={formValidation.SiteNameVal}
@@ -515,6 +479,7 @@ export default function DiveSiteModal() {
             }
           ></View>
         </View>
+       
 
         <View
           style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
@@ -563,6 +528,7 @@ export default function DiveSiteModal() {
             confirmationFailClose={confirmationFailClose}
           ></FailModal>
         </Animated.View>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -573,13 +539,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
     marginBottom: "2%",
     width: "98%",
     marginLeft: 2,
     minHeight: Platform.OS === "android" ? 490 : 0,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   inputContainer: {
     width: "96%",

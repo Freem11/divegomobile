@@ -21,17 +21,17 @@ import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { scale } from "react-native-size-matters";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 import { shops } from "../../supabaseCalls/shopsSupabaseCalls";
+import ModalHeader from "../reusables/modalHeader";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ItineraryListModal(props) {
-  const { itineraryListModal, setItineraryListModal } = props
+  const { itineraryListModal, setItineraryListModal } = props;
   const { shopModal, setShopModal } = useContext(ShopModalContext);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
@@ -44,17 +44,16 @@ export default function ItineraryListModal(props) {
   useEffect(() => {
     if (selectedShop[0]) {
       getItineraries(selectedShop[0].id);
-      setMasterSwitch(true)
+      setMasterSwitch(true);
     }
   }, [selectedShop]);
-
 
   useEffect(() => {
     if (shopModal && zoomHelper) {
       setMapCenter({
-      lat: selectedShop[0].lat,
-      lng: selectedShop[0].lng,
-    });
+        lat: selectedShop[0].lat,
+        lng: selectedShop[0].lng,
+      });
     }
   }, [shopModal]);
 
@@ -81,28 +80,12 @@ export default function ItineraryListModal(props) {
         overflow: "hidden",
       }}
     >
-      <View style={styles.titleAlt}>
-        <View style={{ width: scale(250) }}>
-          <Text style={styles.headerAlt}>
-            {selectedShop[0] && selectedShop[0].orgName}
-          </Text>
-        </View>
-        <TouchableWithoutFeedback
-          onPress={handleShopModalClose}
-          onPressIn={() => setSiteCloseState(true)}
-          onPressOut={() => setSiteCloseState(false)}
-        >
-          <View
-            style={
-              siteCloseState
-                ? styles.closeButtonAltPressed
-                : styles.closeButtonAlt
-            }
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+      <ModalHeader
+        titleText={"Your Trips"}
+        onClose={handleShopModalClose}
+        icon={"create-new-folder"}
+        altButton={null}
+      />
 
       <ScrollView style={{ marginTop: "3%", width: "100%", borderRadius: 15 }}>
         <View style={styles.container3}>

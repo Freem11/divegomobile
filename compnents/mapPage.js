@@ -351,7 +351,7 @@ export default function MapPage() {
 
   useEffect(() => {
     startItineraryListModalAnimations();
-  }, [ItineraryListModal]);
+  }, [itineraryListModal]);
 
   //PhotoBox Modal Animation
   const photoBoxModalY = useSharedValue(windowHeight);
