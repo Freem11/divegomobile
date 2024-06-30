@@ -270,11 +270,11 @@ export default function DiveSiteModal() {
       addSiteVals.Longitude == "" ||
       isNaN(addSiteVals.Longitude)
     ) {
-      failBoxY.value = withTiming(scale(-50));
+      failBoxY.value = withTiming(scale(70));
       return;
     } else {
       if (tutorialRunning) {
-        successBoxY.value = withTiming(scale(-50));
+        successBoxY.value = withTiming(scale(70));
       } else {
         insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
@@ -284,7 +284,7 @@ export default function DiveSiteModal() {
           Longitude: "",
         });
 
-        successBoxY.value = withTiming(scale(-50));
+        successBoxY.value = withTiming(scale(70));
       }
     }
   };
@@ -434,8 +434,8 @@ export default function DiveSiteModal() {
               buttonAction={onNavigate}
               icon={"location-pin"}
             />
-            <View style={{marginTop: moderateScale(-30)}}>
-            <CompletnessIndicator indicatorState={indicatorState} />
+            <View style={{ marginTop: moderateScale(-30) }}>
+              <CompletnessIndicator indicatorState={indicatorState} />
             </View>
           </View>
 
@@ -443,24 +443,23 @@ export default function DiveSiteModal() {
             buttonAction={handleSubmit}
             label={"Submit Dive Site"}
           />
-
-          <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-            <SuccessModal
-              submissionItem="dive site"
-              toggleDiveModal={toggleDiveModal}
-              confirmationSucessClose={confirmationSucessClose}
-              itterator2={itterator2}
-              setItterator2={setItterator2}
-            ></SuccessModal>
-          </Animated.View>
-
-          <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-            <FailModal
-              submissionItem="dive site"
-              confirmationFailClose={confirmationFailClose}
-            ></FailModal>
-          </Animated.View>
         </View>
+        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+          <SuccessModal
+            submissionItem="dive site"
+            toggleDiveModal={toggleDiveModal}
+            confirmationSucessClose={confirmationSucessClose}
+            itterator2={itterator2}
+            setItterator2={setItterator2}
+          ></SuccessModal>
+        </Animated.View>
+
+        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+          <FailModal
+            submissionItem="dive site"
+            confirmationFailClose={confirmationFailClose}
+          ></FailModal>
+        </Animated.View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -501,6 +500,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink"
   },
   confirmationBox: {
+    width: "100%",
     position: "absolute",
   },
   ImageUploadIndicatorGreen: {

@@ -143,11 +143,11 @@ export default function PartnerAccountRequestModal() {
       formValues.Longitude == "" ||
       isNaN(formValues.Longitude)
     ) {
-      failBoxY.value = withTiming(scale(-50));
+      failBoxY.value = withTiming(scale(70));
       return;
     } else {
       createPartnerAccountRequest(formValues);
-      successBoxY.value = withTiming(scale(-50));
+      successBoxY.value = withTiming(scale(70));
     }
   };
 
@@ -212,8 +212,8 @@ export default function PartnerAccountRequestModal() {
           buttonAction={() => handleSubmit(formValues)}
           label={"Submit Account Request"}
           />
-
-        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+      </View>
+      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
           <SuccessModal
             submissionItem="partner account creation request"
             confirmationSucessClose={confirmationSucessClose}
@@ -227,7 +227,6 @@ export default function PartnerAccountRequestModal() {
             confirmationFailClose={confirmationFailClose}
           ></FailModal>
         </Animated.View>
-      </View>
     </View>
   );
 }
@@ -239,7 +238,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green',
     marginBottom: "2%",
     width: "98%",
-    marginLeft: 2,
+    marginLeft: moderateScale(4),
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
   contentContainer: {
@@ -261,6 +260,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   confirmationBox: {
+    width: "100%",
     position: "absolute",
+    width: "100%",
   },
 });

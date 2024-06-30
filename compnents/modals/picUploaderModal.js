@@ -867,6 +867,7 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
   },
   confirmationBox: {
+    width: "100%",
     position: "absolute",
   },
   ImageUploadIndicatorGreen: {
