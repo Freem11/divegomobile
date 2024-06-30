@@ -24,6 +24,7 @@ import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ModalHeader from "../reusables/modalHeader";
+import PrimaryButton from "../reusables/primaryButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -66,114 +67,43 @@ export default function TutorialLaunchPadModal() {
   };
 
   const handleClose = () => {
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal)
+    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
   };
 
   return (
     <View style={styles.container}>
-        <ModalHeader
+      <ModalHeader
         titleText={"Scuba SEAsons Guides"}
         onClose={handleClose}
         icon={null}
         altButton={null}
       />
       <View style={styles.inputContainer}>
-        <View
-          style={
-            tutPadCloseState
-              ? styles.openTutorialButtonPressed
-              : styles.openTutorialButton
-          }
-        >
-          <TouchableOpacity
-            onPress={handleTutorialStartup}
-            onPressIn={() => setTutPadCloseState(true)}
-            onPressOut={() => setTutPadCloseState(false)}
-            disabled={tutorialRunning}
-            style={{
-              width: moderateScale(200),
-              height: moderateScale(22),
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginLeft: 3,
-                marginTop: -4,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: moderateScale(19)
-              }}
-            >
-              Intro Guide
-            </Text>
-          </TouchableOpacity>
-        </View>
-     
-          <View
-            style={
-              tutPad2CloseState
-                ? styles.openTutorialButtonPressed
-                : styles.openTutorialButton
-            }
-          >
-            <TouchableOpacity
-            onPress={handleSecondTutorialStartup}
-            onPressIn={() => setTutPad2CloseState(true)}
-            onPressOut={() => setTutPad2CloseState(false)}
-            disabled={tutorialRunning}
-            style={{
-              width: moderateScale(200),
-              height: moderateScale(22),
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginLeft: 3,
-                marginTop: -4,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: moderateScale(19)
-              }}
-            >
-              Fun With Dive Sites
-            </Text>
-            </TouchableOpacity>
-          </View>
-      
-          <View
-            style={
-              tutPad3CloseState
-                ? styles.openTutorialButtonPressed
-                : styles.openTutorialButton
-            }
-          >
-             <TouchableOpacity
-            onPress={handleThirdTutorialStartup}
-            onPressIn={() => setTutPad3CloseState(true)}
-            onPressOut={() => setTutPad3CloseState(false)}
-            disabled={tutorialRunning}
-            style={{
-              width: moderateScale(200),
-              height: moderateScale(22),
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginLeft: 3,
-                marginTop: -5,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: moderateScale(19),
-                height: "200%"
-              }}
-            >
-              Photogenics
-            </Text>
-            </TouchableOpacity>
-          </View>
+        <PrimaryButton
+          buttonAction={handleTutorialStartup}
+          label={"Intro Guide"}
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
+        <PrimaryButton
+          buttonAction={handleSecondTutorialStartup}
+          label={"Fun With Dive Sites"}
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
+
+        <PrimaryButton
+          buttonAction={handleThirdTutorialStartup}
+          label={"Photogenics"}
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
       </View>
     </View>
   );
@@ -191,10 +121,10 @@ const styles = StyleSheet.create({
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
   inputContainer: {
-    width: "96%",
+    height: "35%",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: moderateScale(90)
+    justifyContent: "space-between",
+    marginTop: moderateScale(120),
   },
   input: {
     fontFamily: "Itim_400Regular",
