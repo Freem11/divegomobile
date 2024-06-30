@@ -37,6 +37,8 @@ import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
 import ModalHeader from "../reusables/modalHeader";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
+import SubmitButton from "../reusables/submitButton";
+import CompletnessIndicator from "../reusables/completnessIndicator";
 
 let SiteNameVar = false;
 let LatVar = false;
@@ -430,51 +432,19 @@ export default function DiveSiteModal() {
               buttonAction={getCurrentLocation}
               icon={"my-location"}
             />
-             <ModalSecondaryButton
+            <ModalSecondaryButton
               buttonAction={onNavigate}
               icon={"location-pin"}
             />
-            <View
-              style={
-                indicatorState
-                  ? styles.ImageUploadIndicatorGreen
-                  : styles.ImageUploadIndicatorRed
-              }
-            ></View>
+            <View style={{marginTop: moderateScale(-30)}}>
+            <CompletnessIndicator indicatorState={indicatorState} />
+            </View>
           </View>
 
-          <View
-            style={
-              subButState ? styles.SubmitButtonPressed : styles.SubmitButton
-            }
-          >
-            <TouchableOpacity
-              onPress={handleSubmit}
-              onPressIn={() => setSubButState(true)}
-              onPressOut={() => setSubButState(false)}
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <Text
-                style={{
-                  color: "gold",
-                  fontSize: moderateScale(26),
-                  marginTop: 4,
-                  marginBottom: -6,
-                  fontFamily: "PatrickHand_400Regular",
-                  width: "100%",
-                  alignSelf: "center",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  textAlign: "center",
-                }}
-              >
-                Submit Dive Site
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <SubmitButton
+            buttonAction={handleSubmit}
+            label={"Submit Dive Site"}
+          />
 
           <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
             <SuccessModal
@@ -516,44 +486,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
   },
-  SubmitButton: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "1%" : "1%",
-  },
-  SubmitButtonPressed: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "1%" : "1%",
-    backgroundColor: "#538dbd",
-  },
   inputContainerLower: {
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
     bottom: 0,
     width: "45%",
-  },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(10),
-    marginLeft: "12%",
-    width: "80%",
-    height: scale(30),
   },
   latLngButton: {
     flexDirection: "row",

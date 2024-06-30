@@ -33,8 +33,10 @@ import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import ModalHeader from "../reusables/modalHeader";
+import CompletnessIndicator from "../reusables/completnessIndicator";
 import PrimaryButton from "../reusables/primaryButton";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
+import SubmitButton from "../reusables/submitButton";
 // import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import {
   uploadphoto,
@@ -605,13 +607,7 @@ export default function PicUploadModal() {
               icon={"picture-o"}
             />
 
-            <View
-              style={
-                indicatorState
-                  ? styles.ImageUploadIndicatorGreen
-                  : styles.ImageUploadIndicatorRed
-              }
-            ></View>
+            <CompletnessIndicator indicatorState={indicatorState} />
           </View>
           <View style={styles.lowerZone}>
             <View style={styles.fields}>
@@ -696,40 +692,7 @@ export default function PicUploadModal() {
             </View>
           </View>
 
-          <View
-            style={
-              subButState ? styles.SubmitButtonPressed : styles.SubmitButton
-            }
-          >
-            <TouchableOpacity
-              onPress={handleSubmit}
-              onPressIn={() => setSubButState(true)}
-              onPressOut={() => setSubButState(false)}
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <Text
-                style={{
-                  color: "gold",
-                  fontSize: moderateScale(26),
-                  marginTop: 4,
-                  marginBottom: -6,
-                  fontFamily: "PatrickHand_400Regular",
-                  borderColor: "transparent",
-                  width: "100%",
-                  alignSelf: "center",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  textAlign: "center",
-                }}
-              >
-                Submit Photo
-              </Text>
-            </TouchableOpacity>
-            {/* </TouchableWithoutFeedback> */}
-          </View>
+          <SubmitButton buttonAction={handleSubmit} label={"Submit Photo"} />
 
           <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
             <SuccessModal
@@ -766,48 +729,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // backgroundColor: "pink",
-  },
-  ImageButton: {
-    backgroundColor: "#538bdb",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(45),
-    width: moderateScale(190),
-    marginLeft: 0,
-    marginTop: windowWidth > 700 ? moderateScale(10) : moderateScale(15),
-    marginBottom: moderateScale(-15),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 5,
-    shadowRadius: 6,
-
-    elevation: 10,
-  },
-  ImageButtonPressed: {
-    backgroundColor: "#FAF9F1",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(170),
-    marginLeft: 0,
-    marginTop: Platform.OS === "ios" ? "4%" : "3%",
-    marginBottom: "-3%",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-
-    elevation: 10,
   },
   picContainer: {
     marginTop: moderateScale(-70),
@@ -935,25 +856,6 @@ const styles = StyleSheet.create({
     // marginLeft: scale(-10),
     marginTop: scale(5),
     //zIndex: 1
-  },
-  SubmitButton: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "2%" : "2%",
-  },
-  SubmitButtonPressed: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "2%" : "2%",
-    backgroundColor: "#538dbd",
   },
   imgStyle: {
     width: "101%",

@@ -24,6 +24,7 @@ import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
 import ModalHeader from "../reusables/modalHeader";
+import SubmitButton from "../reusables/submitButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -207,36 +208,10 @@ export default function PartnerAccountRequestModal() {
         />
         <Text style={styles.explainerMicro}>(For map placement)</Text>
 
-        <View
-          style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
-        >
-          <TouchableOpacity
-            onPress={() => handleSubmit(formValues)}
-            onPressIn={() => setSubButState(true)}
-            onPressOut={() => setSubButState(false)}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <Text
-              style={{
-                color: "gold",
-                fontSize: moderateScale(26),
-                marginTop: 4,
-                marginBottom: -6,
-                fontFamily: "PatrickHand_400Regular",
-                width: "100%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                textAlign: "center",
-              }}
-            >
-              Submit Account Request
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <SubmitButton 
+          buttonAction={() => handleSubmit(formValues)}
+          label={"Submit Account Request"}
+          />
 
         <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
           <SuccessModal
@@ -284,25 +259,6 @@ const styles = StyleSheet.create({
     color: "#F0EEEB",
     fontSize: moderateScale(12),
     textAlign: "center",
-  },
-  SubmitButton: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "1%" : "1%",
-  },
-  SubmitButtonPressed: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "1%" : "1%",
-    backgroundColor: "#538dbd",
   },
   confirmationBox: {
     position: "absolute",
