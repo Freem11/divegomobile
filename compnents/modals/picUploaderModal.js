@@ -356,8 +356,6 @@ export default function PicUploadModal() {
         setUploadedFile(null);
 
         successBoxY.value = withTiming(scale(70));
-
-        // setPicAdderModal(!picAdderModal);
       }
     }
   };
@@ -693,24 +691,23 @@ export default function PicUploadModal() {
           </View>
 
           <SubmitButton buttonAction={handleSubmit} label={"Submit Photo"} />
-
-          <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-            <SuccessModal
-              submissionItem="sea creature submission"
-              togglePicModal={togglePicModal}
-              confirmationSucessClose={confirmationSucessClose}
-              itterator3={itterator3}
-              setItterator3={setItterator3}
-            ></SuccessModal>
-          </Animated.View>
-
-          <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-            <FailModal
-              submissionItem="sea creature submission"
-              confirmationFailClose={confirmationFailClose}
-            ></FailModal>
-          </Animated.View>
         </View>
+        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+          <SuccessModal
+            submissionItem="sea creature submission"
+            togglePicModal={togglePicModal}
+            confirmationSucessClose={confirmationSucessClose}
+            itterator3={itterator3}
+            setItterator3={setItterator3}
+          ></SuccessModal>
+        </Animated.View>
+
+        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+          <FailModal
+            submissionItem="sea creature submission"
+            confirmationFailClose={confirmationFailClose}
+          ></FailModal>
+        </Animated.View>
       </View>
     </TouchableWithoutFeedback>
   );

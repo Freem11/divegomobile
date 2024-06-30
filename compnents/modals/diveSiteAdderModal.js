@@ -285,8 +285,6 @@ export default function DiveSiteModal() {
         });
 
         successBoxY.value = withTiming(scale(-50));
-
-        // setDiveSiteAdderModal(!diveSiteAdderModal);
       }
     }
   };

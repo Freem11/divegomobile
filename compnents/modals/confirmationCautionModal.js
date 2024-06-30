@@ -1,22 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
-} from "react-native";
-import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
-import { scale } from "react-native-size-matters";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { moderateScale, scale } from "react-native-size-matters";
+import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 
 export default function FailModal(props) {
   const { submissionItem, confirmationFailClose } = props;
-
-  const [profileCloseState, setProfileCloseState] = useState(false);
 
   const tidyUp = () => {
     confirmationFailClose();
@@ -41,30 +29,14 @@ export default function FailModal(props) {
           Your {submissionItem} cannot be completed just yet.
         </Text>
         <Text style={styles.text2}>{blurb}</Text>
-        <View
-          style={profileCloseState ? styles.OKbuttonPressed : styles.OKbutton}
-        >
-          <TouchableWithoutFeedback
-            onPress={() => tidyUp()}
-            onPressIn={() => setProfileCloseState(true)}
-            onPressOut={() => setProfileCloseState(false)}
-          >
-            <Text
-              style={{
-                color: "gold",
-                fontSize: 17,
-                opacity: 1,
-                fontFamily: "PermanentMarker_400Regular",
-                width: "100%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                textAlign: "center",
-              }}
-            >
-              Ok
-            </Text>
-          </TouchableWithoutFeedback>
+
+        <View style={{ marginRight: "24%", marginBottom: moderateScale(20) }}>
+          <ModalSecondaryButton
+            buttonAction={tidyUp}
+            icon={null}
+            buttonText={"Cancel"}
+            altStyle={true}
+          />
         </View>
       </View>
     </View>
@@ -102,48 +74,5 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     marginBottom: "7%",
     margin: scale(35),
-  },
-  OKbutton: {
-    backgroundColor: "#fa8072",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
-    // marginLeft: "30%",
-    // marginTop: scale(10),
-    marginBottom: scale(20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.55,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  OKbuttonPressed: {
-    opacity: 1,
-    backgroundColor: "white",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    height: scale(35),
-    width: scale(150),
-    // marginLeft: "30%",
-    // marginTop: scale(10),
-    marginBottom: scale(20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6.27,
-
-    elevation: 10,
   },
 });
