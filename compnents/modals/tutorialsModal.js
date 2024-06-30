@@ -23,6 +23,7 @@ import InsetShadow from "react-native-inset-shadow";
 import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ModalHeader from "../reusables/modalHeader";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -64,30 +65,18 @@ export default function TutorialLaunchPadModal() {
     setThirdGuideModal(!thirdGuideModal);
   };
 
+  const handleClose = () => {
+    setTutorialLaunchpadModal(!tutorialLaunchpadModal)
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.header2}>Scuba SEAsons Guides</Text>
-        <View
-          style={
-            tutorialsCloseState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableOpacity
-            onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
-            onPressIn={() => setTutorialsCloseState(true)}
-            onPressOut={() => setTutorialsCloseState(false)}
-            style={{
-              width: scale(30),
-              height: scale(30),
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
+        <ModalHeader
+        titleText={"Scuba SEAsons Guides"}
+        onClose={handleClose}
+        icon={null}
+        altButton={null}
+      />
       <View style={styles.inputContainer}>
         <View
           style={
@@ -195,8 +184,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
-    alignItems: "center",
-    justifyContent: "center",
     marginTop: "5%",
     marginBottom: "2%",
     width: "98%",
@@ -207,7 +194,7 @@ const styles = StyleSheet.create({
     width: "96%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
+    marginTop: moderateScale(90)
   },
   input: {
     fontFamily: "Itim_400Regular",
@@ -230,59 +217,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     overflow: "hidden",
-  },
-  header: {
-    fontSize: 20,
-    alignSelf: "center",
-    marginBottom: 25,
-    marginTop: -150,
-  },
-  text: {
-    fontSize: 18,
-    alignSelf: "center",
-    marginBottom: 5,
-  },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "2%",
-    marginLeft: "12%",
-    width: "80%",
-    height: scale(30),
-  },
-  header2: {
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(26),
-    alignSelf: "center",
-    color: "#F0EEEB",
-    width: "85%",
-    marginTop: "-1%",
-    marginLeft: "7%",
-    marginRight: "10%",
-    // backgroundColor: "green"
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
   },
   openTutorialButton: {
     backgroundColor: "#538bdb",

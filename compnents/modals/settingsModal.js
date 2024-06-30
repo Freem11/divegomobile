@@ -28,7 +28,6 @@ import {
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { grabRequestById } from "../../supabaseCalls/partnerSupabaseCalls";
-
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
@@ -39,6 +38,8 @@ import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequ
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { scale, moderateScale } from "react-native-size-matters";
+import ModalHeader from "../reusables/modalHeader";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -161,6 +162,7 @@ export default function SettingsModal() {
   }
 
   const toggleSettingsModal = () => {
+    console.log("hey")
     setGearModal(false);
   };
 
@@ -197,27 +199,12 @@ export default function SettingsModal() {
   return (
     // <ScrollView style={{ width: "86%" }}>
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.header}>Settings</Text>
-        <View
-          style={
-            settingsCloseState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableWithoutFeedback
-            onPress={toggleSettingsModal}
-            onPressIn={() => setSettingsCloseState(true)}
-            onPressOut={() => setSettingsCloseState(false)}
-            style={{
-              width: scale(30),
-              height: scale(30),
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
+        <ModalHeader
+        titleText={"Settings"}
+        onClose={toggleSettingsModal}
+        icon={null}
+        altButton={null}
+      />
       <View style={styles.first}>
         <TouchableWithoutFeedback
           onPress={handleLogout}
@@ -362,7 +349,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "30%",
+    marginTop: "15%",
   },
   second: {
     height: "40%",
@@ -506,48 +493,5 @@ const styles = StyleSheet.create({
     marginRight: moderateScale(1),
     marginLeft: moderateScale(35),
     // backgroundColor: "pink",
-  },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "4%",
-    marginLeft: "8%",
-    width: "80%",
-    height: scale(40),
-    // backgroundColor:"pink"
-  },
-  header: {
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(26),
-    alignSelf: "center",
-    color: "#F0EEEB",
-    width: "80%",
-    marginTop: "-1%",
-    marginLeft: "7%",
-    marginRight: "15%",
-    // backgroundColor: "green"
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
   },
 });

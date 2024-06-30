@@ -557,6 +557,8 @@ export default function PicUploadModal() {
         icon={"question-mark"}
         altButton={activateGuide}
       />
+
+<View style={styles.contentContainer}>
         <View style={styles.picContainer}>
           {uploadedFile && (
             <Image
@@ -806,6 +808,7 @@ export default function PicUploadModal() {
           ></FailModal>
         </Animated.View>
       </View>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -814,47 +817,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#538bdb",
-    alignItems: "center",
     width: "100%",
-    borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 15,
-    borderTopRightRadius: 15,
-    borderTopLeftRadius: 15,
     minHeight: Platform.OS === "android" ? 490 : 0,
     // backgroundColor: "pink",
   },
-  // inputCal: {
-  //   fontFamily: "Itim_400Regular",
-  //   backgroundColor: "#538bdb",
-  //   borderRadius: 10,
-  //   width: moderateScale(200),
-  //   height: moderateScale(40),
-  //   alignSelf: "center",
-  //   textAlign: "center",
-  // },
-  // inputCalRed: {
-  //   fontFamily: "Itim_400Regular",
-  //   backgroundColor: "pink",
-  //   borderRadius: 10,
-  //   width: moderateScale(200),
-  //   height: moderateScale(40),
-  //   alignSelf: "center",
-  //   textAlign: "center",
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: 5,
-  //   shadowColor: "#000",
-  //   shadowOffset: { width: 0, height: 0 },
-  // },
-  header: {
-    fontSize: 20,
-    alignSelf: "center",
-    marginBottom: 25,
-    marginTop: -150,
-  },
-  text: {
-    fontSize: 18,
-    alignSelf: "center",
-    marginBottom: 5,
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor: "pink",
   },
   ImageButton: {
     backgroundColor: "#538bdb",
@@ -899,17 +870,15 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   picContainer: {
-    backgroundColor: "#538bdb",
+    marginTop: moderateScale(-70),
     alignItems: "center",
     justifyContent: "center",
-    marginTop: moderateScale(15),
     marginBottom: Platform.OS === "ios" ? moderateScale(10) : "2%",
     borderWidth: 0.3,
     borderRadius: scale(15),
     borderColor: "darkgrey",
     width: Platform.OS === "ios" ? "80%" : "80%",
     height: Platform.OS === "ios" ? "35%" : "35%",
-    // marginTop: Platform.OS === "ios" ? "-5%" : "-30%",
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -1009,27 +978,7 @@ const styles = StyleSheet.create({
     height: "50%",
     // backgroundColor: "green",
   },
-  modalStyle: {
-    flex: 1,
-    backgroundColor: "#D8DBE2",
-    borderRadius: 20,
-    margin: 70,
-    marginTop: 300,
-    marginBottom: 300,
-    borderColor: "#D8DBE2",
-    borderWidth: 8,
-    opacity: 1,
-  },
-  closeButton: {
-    borderRadius: 42 / 2,
-    backgroundColor: "maroon",
-    height: 34,
-    width: 34,
-    marginLeft: 170,
-    marginTop: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   LocButton: {
     backgroundColor: "#538bdb",
     alignItems: "center",
@@ -1153,75 +1102,6 @@ const styles = StyleSheet.create({
     height: "101%",
     borderRadius: 15,
     backgroundColor: "pink",
-  },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(10),
-    // marginLeft: "32%",
-    width: "80%",
-    height: scale(30),
-    // backgroundColor: "green"
-  },
-  header2: {
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(26),
-    alignSelf: "center",
-    color: "#F0EEEB",
-    width: "80%",
-    marginTop: "-1%",
-    marginLeft: "5%",
-    marginRight: "15%",
-    // backgroundColor: "green"
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: scale(5),
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: scale(5),
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
-  },
-  helpButton: {
-    backgroundColor: "#538bdb",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    marginRight: scale(5),
-    marginLeft: scale(-20),
-    borderRadius: 40,
-    height: scale(30),
-    width: scale(30),
-    marginTop: scale(1),
-  },
-  helpButtonPressed: {
-    backgroundColor: "#538dbd",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    marginRight: scale(5),
-    marginLeft: scale(-20),
-    borderRadius: 40,
-    height: scale(30),
-    width: scale(30),
-    marginTop: scale(1),
   },
   confirmationBox: {
     position: "absolute",

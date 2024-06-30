@@ -30,6 +30,7 @@ import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import ImgToBase64 from "react-native-image-base64";
 import Picture from "./picture";
+import ModalHeader from "../reusables/modalHeader";
 
 let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
@@ -126,8 +127,7 @@ export default function AnchorModal(props) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${selectedDiveSite.SiteName}" at Latitude: ${selectedDiveSite.Latitude} Longitude: ${selectedDiveSite.Longitude} `,
-      body:
-        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -259,74 +259,14 @@ export default function AnchorModal(props) {
         overflow: "hidden",
       }}
     >
-      <View style={styles.titleAlt}>
-        <FontAwesome
-          name="flag"
-          color="maroon"
-          size={scale(26)}
-          onPress={() => handleEmailDS()}
-          style={styles.flagMajor}
-        />
-        <View style={{ width: "50%" }}>
-          <Text style={styles.headerAlt}>{selectedDiveSite.SiteName}</Text>
-          <Text style={styles.dsCredit}>Added by: {site}</Text>
-        </View>
-        <View
-          style={helpButState ? styles.helpButtonPressed : styles.helpButton}
-        >
-          <TouchableWithoutFeedback
-            onPress={handleSwitch}
-            onPressIn={() => setHelpButState(true)}
-            onPressOut={() => setHelpButState(false)}
-          >
-            <View
-              style={{
-                borderRadius: scale(40),
-                backgroundColor: "#538dbd",
-                width: scale(75),
-                height: scale(35),
-                marginLeft: "90%",
-                alignSelf: "center",
-                alignItems: "center",
-                justifyContent: "center",
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 0,
-                },
-                shadowOpacity: 0.5,
-                shadowRadius: 5,
-            
-                elevation: 10,
-              }}
-            >
-              <MaterialIcons
-                name="add-a-photo"
-                color="gold"
-                size={scale(30)}
-                style={{ }}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-
-        <TouchableWithoutFeedback
-          onPress={handleAnchorModalClose}
-          onPressIn={() => setSiteCloseState(true)}
-          onPressOut={() => setSiteCloseState(false)}
-        >
-          <View
-            style={
-              siteCloseState
-                ? styles.closeButtonAltPressed
-                : styles.closeButtonAlt
-            }
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(28)} />
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-
+      <ModalHeader
+        titleText={selectedDiveSite.SiteName}
+        subText={`Added by: ${site}`}
+        onClose={handleAnchorModalClose}
+        icon={"add-a-photo"}
+        altButton={handleSwitch}
+        tertButton={handleEmailDS}
+      />
       <ScrollView style={{ marginTop: "2%", width: "100%", borderRadius: 15 }}>
         <View style={styles.container3}>
           {anchorPics &&
@@ -378,7 +318,7 @@ export default function AnchorModal(props) {
                     },
                     shadowOpacity: 0.5,
                     shadowRadius: 5,
-                
+
                     elevation: 10,
                   }}
                 >
@@ -431,7 +371,7 @@ const styles = StyleSheet.create({
   },
   flagMajor: {
     // backgroundColor: "orange",
-    width: "10%"
+    width: "10%",
   },
   share: {
     left: scale(232),

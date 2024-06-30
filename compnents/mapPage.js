@@ -435,6 +435,7 @@ export default function MapPage() {
   };
 
   useEffect(() => {
+    console.log("!!!")
     startPartnerModalAnimations();
   }, [partnerModal]);
 

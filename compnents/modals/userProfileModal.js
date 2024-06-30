@@ -38,6 +38,7 @@ import {
   deleteUserFollow,
   checkIfUserFollows,
 } from "../../supabaseCalls/userFollowSupabaseCalls";
+import ModalHeader from "../reusables/modalHeader";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -207,30 +208,12 @@ export default function UserProfileModal() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.header}>
-          {userStats ? userStats[0].username + "'s Diving" : "My Diver Profile"}
-        </Text>
-        <View
-          style={
-            profileCloseState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableOpacity
-            onPress={toggleProfileModal}
-            onPressIn={() => setProfileCloseState(true)}
-            onPressOut={() => setProfileCloseState(false)}
-            style={{
-              width: scale(30),
-              height: scale(30),
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
+      <ModalHeader
+        titleText={userStats ? userStats[0].username + "'s Diving" : "My Diver Profile"}
+        onClose={toggleProfileModal}
+        icon={null}
+        altButton={null}
+      />
       <View style={styles.inputContainer}>
         {selectedProfile ? (
           <View
@@ -274,7 +257,7 @@ export default function UserProfileModal() {
               containerStyle={{
                 borderRadius: moderateScale(40),
                 height: moderateScale(40),
-                width: moderateScale(270)
+                width: moderateScale(270),
               }}
               elevation={20}
               shadowRadius={15}
@@ -530,18 +513,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
-    alignItems: "center",
-    justifyContent: "center",
     marginTop: "5%",
     marginBottom: "2%",
-    width: "98%",
+    width: "100%",
     marginLeft: 2,
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
   inputContainer: {
-    width: "96%",
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: moderateScale(60)
   },
   labelBox: {
     flexDirection: "row",
@@ -593,54 +575,6 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(16),
     color: "white",
-  },
-  text: {
-    fontSize: 18,
-    alignSelf: "center",
-    marginBottom: 5,
-  },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "2%",
-    marginLeft: "12%",
-    width: "80%",
-    height: scale(30),
-  },
-  header: {
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(26),
-    alignSelf: "center",
-    color: "#F0EEEB",
-    width: "80%",
-    height: moderateScale(60),
-    marginTop: "-1%",
-    marginLeft: "7%",
-    marginRight: "10%",
-    // backgroundColor: "green"
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
   },
   ShareButton: {
     backgroundColor: "#538bdb",

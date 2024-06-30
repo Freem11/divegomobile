@@ -164,6 +164,6 @@ const styles = StyleSheet.create({
     width: moderateScale(200),
     borderRadius: moderateScale(10),
     zIndex: 1,
-    marginTop: moderateScale(30)
+    marginTop: moderateScale(-30)
   },
 });
