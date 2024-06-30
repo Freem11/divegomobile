@@ -296,15 +296,14 @@ export default function DiveSiteModal() {
       } else if (itterator2 === 16) {
         return;
       } else {
-        // setDiveSiteAdderModal(!diveSiteAdderModal);
-        // if (diveSiteAdderModal) {
-        //   setAddSiteVals({
-        //     ...addSiteVals,
-        //     Site: "",
-        //     Latitude: "",
-        //     Longitude: "",
-        //   });
-        // }
+        if (diveSiteAdderModal) {
+          setAddSiteVals({
+            ...addSiteVals,
+            Site: "",
+            Latitude: "",
+            Longitude: "",
+          });
+        }
       }
     } else {
       setDiveSiteAdderModal(!diveSiteAdderModal);
