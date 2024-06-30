@@ -39,7 +39,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { scale, moderateScale } from "react-native-size-matters";
 import ModalHeader from "../reusables/modalHeader";
-
+import PrimaryButton from "../reusables/primaryButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -49,9 +49,7 @@ export default function SettingsModal() {
   const { profile, setProfile } = useContext(UserProfileContext);
   const [settingsCloseState, setSettingsCloseState] = useState(false);
   const { gearModal, setGearModal } = useContext(SettingsContext);
-  const { partnerModal, setPartnerModal } = useContext(
-    PartnerModalContext
-  );
+  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
 
@@ -129,8 +127,7 @@ export default function SettingsModal() {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       subject: `Delete Account Request ${blurb}`,
-      body:
-        "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
+      body: "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
       checkCanOpen: false,
     }).catch(console.error);
   };
@@ -152,17 +149,16 @@ export default function SettingsModal() {
       setCreaturesIsEnabled(true);
     }
 
-    checkForRequest(profile[0].UserID)
-
+    checkForRequest(profile[0].UserID);
   }, []);
 
-  const checkForRequest = async(id) => {
-    let returnedCheck = await grabRequestById(id)
-    setRequestCheck(returnedCheck)
-  }
+  const checkForRequest = async (id) => {
+    let returnedCheck = await grabRequestById(id);
+    setRequestCheck(returnedCheck);
+  };
 
   const toggleSettingsModal = () => {
-    console.log("hey")
+    console.log("hey");
     setGearModal(false);
   };
 
@@ -199,35 +195,21 @@ export default function SettingsModal() {
   return (
     // <ScrollView style={{ width: "86%" }}>
     <View style={styles.container}>
-        <ModalHeader
+      <ModalHeader
         titleText={"Settings"}
         onClose={toggleSettingsModal}
         icon={null}
         altButton={null}
       />
       <View style={styles.first}>
-        <TouchableWithoutFeedback
-          onPress={handleLogout}
-          onPressIn={() => setSignButState(true)}
-          onPressOut={() => setSignButState(false)}
-        >
-          <View
-            style={
-              signButState ? styles.logoutButtonpressed : styles.logoutButton
-            }
-          >
-            <Text
-              style={{
-                paddingBottom: 3,
-                fontFamily: "Itim_400Regular",
-                color: "gold",
-                fontSize: moderateScale(24),
-              }}
-            >
-              Sign Out
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <PrimaryButton
+          buttonAction={handleLogout}
+          label={"Sign Out"}
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
       </View>
 
       <View style={styles.second}>
@@ -260,28 +242,18 @@ export default function SettingsModal() {
       </View>
 
       <View style={styles.partnerButton}>
-        <TouchableWithoutFeedback
-          onPress={requestCheck.length > 0 ? null : handlePartnerButton}
-          onPressIn={() => setReqButState(true)}
-          onPressOut={() => setReqButState(false)}
-        >
-          <View
-            style={
-              reqButState ? styles.logoutButtonpressed : styles.logoutButton
-            }
-          >
-            <Text
-              style={{
-                paddingBottom: 3,
-                fontFamily: "Itim_400Regular",
-                color: requestCheck.length > 0 ? "lightgrey" : "gold",
-                fontSize: moderateScale(16),
-              }}
-            >
-              {requestCheck.length > 0 ? "Request In Progress" : "Request Partner Account"}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <PrimaryButton
+          buttonAction={requestCheck.length > 0 ? null : handlePartnerButton}
+          label={
+            requestCheck.length > 0
+              ? "Request In Progress"
+              : "Request Partner Account"
+          }
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
       </View>
 
       <View style={styles.third}>
@@ -305,31 +277,14 @@ export default function SettingsModal() {
         </TouchableWithoutFeedback>
 
         <Animated.View style={[dangerZoneReveal, styles.dangerZone]}>
-          <TouchableWithoutFeedback
-            disabled={dangerZoneEnabled}
-            onPressIn={() => setDangerButState(true)}
-            onPressOut={() => setDangerButState(false)}
-            onPress={alertHandler}
-          >
-            <View
-              style={
-                dangerButState
-                  ? styles.deleteAccountButtonPressed
-                  : styles.deleteAccountButton
-              }
-            >
-              <Text
-                style={{
-                  paddingBottom: 3,
-                  fontFamily: "Itim_400Regular",
-                  color: "maroon",
-                  fontSize: moderateScale(22),
-                }}
-              >
-                Delete Account
-              </Text>
-            </View>
-          </TouchableWithoutFeedback>
+        <PrimaryButton
+          buttonAction={alertHandler}
+          label={"Delete Account"}
+          textColor={true}
+          bgColor={true}
+          bgPressedColor={true}
+          icon={null}
+        />
         </Animated.View>
       </View>
     </View>

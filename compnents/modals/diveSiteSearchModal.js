@@ -2,15 +2,11 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
   Keyboard,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
-import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
-import { scale, moderateScale } from "react-native-size-matters";
+import React, { useContext, useEffect } from "react";
+import { moderateScale } from "react-native-size-matters";
 import DiveSiteAutoComplete from "../diveSiteSearch/diveSiteAutocomplete";
 import { DiveSiteSearchModalContext } from "../../compnents/contexts/diveSiteSearchContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
@@ -20,13 +16,11 @@ import ModalHeader from "../reusables/modalHeader";
 
 export default function DiveSiteSearchModal(props) {
   const { setDiveSearchBump } = props;
-  const [profileCloseState, setProfileCloseState] = useState(false);
-  const [myLocButState, setMyLocButState] = useState(false);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
     DiveSiteSearchModalContext
   );
   const { setDiveSiteAdderModal } = useContext(DSAdderContext);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { tutorialRunning } = useContext(TutorialContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
 
   const toggleDiveSiteSearchModal = () => {
@@ -69,11 +63,10 @@ export default function DiveSiteSearchModal(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: scale(15),
-    width: "98%"
+    borderRadius: moderateScale(15),
+    width: "98%",
   },
   siteAddPrompt: {
     fontFamily: "PatrickHand_400Regular",
@@ -81,8 +74,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#F0EEEB",
     position: "absolute",
-    bottom: scale(5),
-    right: scale(10),
-    // backgroundColor: "green"
+    bottom: moderateScale(7),
+    right: moderateScale(10),
   },
 });

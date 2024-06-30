@@ -5,8 +5,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useState, useContext } from "react";
-import { scale, moderateScale } from "react-native-size-matters";
+import React, { useContext } from "react";
+import { moderateScale } from "react-native-size-matters";
 import GeocodeAutoComplete from "../locationSearch/geocodeAutocomplete";
 import { MapSearchModalContext } from "../../compnents/contexts/mapSearchContext";
 import { MapCenterContext } from "../../compnents/contexts/mapCenterContext";
@@ -16,10 +16,8 @@ import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 
 export default function MapSearchModal(props) {
   const { setMapSearchBump } = props;
-  const { mapSearchModal, setMapSearchModal } = useContext(
-    MapSearchModalContext
-  );
-  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
+  const { setMapSearchModal } = useContext(MapSearchModalContext);
+  const { setMapCenter } = useContext(MapCenterContext);
 
   const toggleMapSearchModal = () => {
     setMapSearchModal(false);
@@ -64,15 +62,14 @@ export default function MapSearchModal(props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#538bdb",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: scale(15),
+    borderRadius: moderateScale(15),
     width: "98%",
   },
   content: {
     flexDirection: "row",
-    marginTop: moderateScale(-8)
+    marginTop: moderateScale(-8),
   },
   buttonlabel: {
     fontFamily: "Itim_400Regular",

@@ -33,6 +33,7 @@ import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import ModalHeader from "../reusables/modalHeader";
+import PrimaryButton from "../reusables/primaryButton";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 // import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import {
@@ -598,47 +599,11 @@ export default function PicUploadModal() {
               marginBottom: "1%",
             }}
           >
-            <View
-              style={
-                imgButState ? styles.ImageButtonPressed : styles.ImageButton
-              }
-            >
-              <TouchableOpacity
-                onPress={handleImageUpload}
-                onPressIn={() => setImgButState(true)}
-                onPressOut={() => setImgButState(false)}
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  width: moderateScale(150),
-                  height: moderateScale(24),
-                  marginTop: 0,
-                }}
-              >
-                <FontAwesome
-                  name="picture-o"
-                  color={imgButState ? "#538dbd" : "gold"}
-                  size={moderateScale(24)}
-                  style={{
-                    marginLeft:
-                      Platform.OS === "android"
-                        ? moderateScale(10)
-                        : moderateScale(10),
-                  }}
-                />
-                <Text
-                  style={{
-                    marginLeft: scale(5),
-                    marginTop: scale(0),
-                    color: imgButState ? "#538dbd" : "gold",
-                    fontFamily: "PatrickHand_400Regular",
-                    fontSize: moderateScale(17),
-                  }}
-                >
-                  Choose an Image
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <PrimaryButton
+              buttonAction={handleImageUpload}
+              label={"Choose an Image"}
+              icon={"picture-o"}
+            />
 
             <View
               style={
@@ -723,7 +688,7 @@ export default function PicUploadModal() {
               <View style={styles.animalButton}></View>
 
               <View style={styles.latLngButton}>
-              <ModalSecondaryButton
+                <ModalSecondaryButton
                   buttonAction={onNavigate}
                   icon={"location-pin"}
                 />
