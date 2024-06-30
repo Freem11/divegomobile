@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: scale(15),
+    width: "98%"
   },
   siteAddPrompt: {
     fontFamily: "PatrickHand_400Regular",
