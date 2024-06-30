@@ -1100,7 +1100,7 @@ const styles = StyleSheet.create({
     top: Platform.OS === "ios" ? "28%" : "28%",
     backgroundColor: "transparent",
     alignItems: "center",
-    // marginTop: "-3%",
+    width: "77%",
     height: "90%",
     marginRight: scale(10),
     marginLeft: scale(10),
