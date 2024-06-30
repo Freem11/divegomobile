@@ -20,6 +20,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
+import CloseButton from "../reusables/closeButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -36,12 +37,12 @@ export default function PhotoBoxModal(props) {
     cacheDir = FileSystem.cacheDirectory + fileName;
   }
 
-  if (cacheDir){
+  if (cacheDir) {
     Image.getSize(cacheDir, (width, height) => {
-      let ratio = height/width
-      setPicWidth(windowHeight * 0.85)
-      setPicHeigth((windowHeight * ratio) * 0.85)
-    })
+      let ratio = height / width;
+      setPicWidth(windowHeight * 0.85);
+      setPicHeigth(windowHeight * ratio * 0.85);
+    });
   }
 
   const [photoCloseState, setPhotoCloseState] = useState(false);
@@ -70,7 +71,7 @@ export default function PhotoBoxModal(props) {
   const xOffset = useSharedValue(0);
   const yOffset = useSharedValue(0);
 
-  const context = useSharedValue({ x: 0, y: 0, fx: 0, fy: 0})
+  const context = useSharedValue({ x: 0, y: 0, fx: 0, fy: 0 });
 
   const animateTaps = Gesture.Tap()
     .maxDistance(10)
@@ -92,45 +93,74 @@ export default function PhotoBoxModal(props) {
 
   const animatePan = Gesture.Pan()
     .onStart(() => {
-      context.value = { x: xCurrent.value, y: yCurrent.value, fx: focalX.value, fy: focalY.value };
+      context.value = {
+        x: xCurrent.value,
+        y: yCurrent.value,
+        fx: focalX.value,
+        fy: focalY.value,
+      };
     })
     .onUpdate((event) => {
-      xCurrent.value = withTiming(event.translationY + context.value.x, {easing: Easing.out(Easing.ease)});
-      yCurrent.value = withTiming(-event.translationX + context.value.y, {easing: Easing.out(Easing.ease)})
-      ;
-      
+      xCurrent.value = withTiming(event.translationY + context.value.x, {
+        easing: Easing.out(Easing.ease),
+      });
+      yCurrent.value = withTiming(-event.translationX + context.value.y, {
+        easing: Easing.out(Easing.ease),
+      });
+
       // xOffset.value = event.translationY + context.value.x;
       // yOffset.value = -event.translationX + context.value.y;
     })
     .onEnd(() => {
-
       let tempX = xCurrent.value; //height
       let tempY = yCurrent.value; //width
- 
+
       xOffset.value = xCurrent.value;
       yOffset.value = yCurrent.value;
-
 
       // console.log("coord", tempY, tempX)
       // console.log("win", windowWidth/2, windowHeight/2)
 
-      if (tempX > (windowHeight*scalePrevious.value/2)*0.8){
-        xCurrent.value = withTiming(windowHeight/2-(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      if (tempX > ((windowHeight * scalePrevious.value) / 2) * 0.8) {
+        xCurrent.value = withTiming(
+          windowHeight / 2 - 100 * scaleCurrent.value,
+          {
+            duration: 400 * scaleCurrent.value,
+            easing: Easing.out(Easing.ease),
+          }
+        );
       }
 
-      if (-tempX > (windowHeight*scalePrevious.value/2)*0.8){
-        xCurrent.value = withTiming(-windowHeight/2+(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      if (-tempX > ((windowHeight * scalePrevious.value) / 2) * 0.8) {
+        xCurrent.value = withTiming(
+          -windowHeight / 2 + 100 * scaleCurrent.value,
+          {
+            duration: 400 * scaleCurrent.value,
+            easing: Easing.out(Easing.ease),
+          }
+        );
       }
 
-      if (tempY > (windowWidth*scalePrevious.value/2)*0.8){
-        yCurrent.value = withTiming(windowWidth/2-(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      if (tempY > ((windowWidth * scalePrevious.value) / 2) * 0.8) {
+        yCurrent.value = withTiming(
+          windowWidth / 2 - 100 * scaleCurrent.value,
+          {
+            duration: 400 * scaleCurrent.value,
+            easing: Easing.out(Easing.ease),
+          }
+        );
       }
 
-      if (-tempY > (windowWidth*scalePrevious.value/2)*0.8){
-        yCurrent.value = withTiming(-windowWidth/2+(100*scaleCurrent.value), {duration: 400*scaleCurrent.value, easing: Easing.out(Easing.ease)})
+      if (-tempY > ((windowWidth * scalePrevious.value) / 2) * 0.8) {
+        yCurrent.value = withTiming(
+          -windowWidth / 2 + 100 * scaleCurrent.value,
+          {
+            duration: 400 * scaleCurrent.value,
+            easing: Easing.out(Easing.ease),
+          }
+        );
       }
-
-     });
+    });
 
   const animatePicPinch = Gesture.Pinch()
     .onStart((event) => {
@@ -149,52 +179,75 @@ export default function PhotoBoxModal(props) {
         }
         scaleCurrent.value = event.scale;
 
-        xCurrent.value = (1 - scaleCurrent.value) * (focalX.value - windowWidth / 2) + xOffset.value;
-        yCurrent.value = (1 - scaleCurrent.value) * (focalY.value - windowHeight / 2) + yOffset.value;
+        xCurrent.value =
+          (1 - scaleCurrent.value) * (focalX.value - windowWidth / 2) +
+          xOffset.value;
+        yCurrent.value =
+          (1 - scaleCurrent.value) * (focalY.value - windowHeight / 2) +
+          yOffset.value;
       }
-     
+
       // xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
       // yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
-
     })
     .onEnd(() => {
-      
-     let tempScale = scalePrevious.value * scaleCurrent.value; 
-     scalePrevious.value = scalePrevious.value * scaleCurrent.value; 
-     let tempX = scaleCurrent.value * xPrevious.value + xCurrent.value;
-     let tempY = scaleCurrent.value * yPrevious.value + yCurrent.value;
+      let tempScale = scalePrevious.value * scaleCurrent.value;
+      scalePrevious.value = scalePrevious.value * scaleCurrent.value;
+      let tempX = scaleCurrent.value * xPrevious.value + xCurrent.value;
+      let tempY = scaleCurrent.value * yPrevious.value + yCurrent.value;
 
-      if (tempScale > 4){
-        scalePrevious.value = withTiming(4, {duration: 400, easing: Easing.inOut(Easing.ease)})
+      if (tempScale > 4) {
+        scalePrevious.value = withTiming(4, {
+          duration: 400,
+          easing: Easing.inOut(Easing.ease),
+        });
       } else if (tempScale < 1) {
-        scalePrevious.value = withTiming(1, {duration: 400, easing: Easing.inOut(Easing.ease)})
+        scalePrevious.value = withTiming(1, {
+          duration: 400,
+          easing: Easing.inOut(Easing.ease),
+        });
       } else {
-        scalePrevious.value = withTiming(scalePrevious.value, {duration: 400, easing: Easing.inOut(Easing.ease)}); 
+        scalePrevious.value = withTiming(scalePrevious.value, {
+          duration: 400,
+          easing: Easing.inOut(Easing.ease),
+        });
       }
 
-      if (tempX > windowWidth/2 || -tempX > windowWidth/2){
-        if(tempX < 0){
-          xPrevious.value = withTiming((((-windowHeight/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+      if (tempX > windowWidth / 2 || -tempX > windowWidth / 2) {
+        if (tempX < 0) {
+          xPrevious.value = withTiming(
+            (-windowHeight / 2 + 100) * scaleCurrent.value,
+            { duration: 400, easing: Easing.inOut(Easing.ease) }
+          );
         } else {
-          xPrevious.value = withTiming((((windowHeight/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
-        } 
+          xPrevious.value = withTiming(
+            (windowHeight / 2 - 100) * scaleCurrent.value,
+            { duration: 400, easing: Easing.inOut(Easing.ease) }
+          );
+        }
       } else {
         xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
       }
 
-      if (tempY > windowHeight/2 || -tempY > windowHeight/2){
-        if(tempY < 0){
-          yPrevious.value = withTiming((((-windowWidth/2)+100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
+      if (tempY > windowHeight / 2 || -tempY > windowHeight / 2) {
+        if (tempY < 0) {
+          yPrevious.value = withTiming(
+            (-windowWidth / 2 + 100) * scaleCurrent.value,
+            { duration: 400, easing: Easing.inOut(Easing.ease) }
+          );
         } else {
-          yPrevious.value = withTiming((((windowWidth/2)-100)*scaleCurrent.value), {duration: 400, easing: Easing.inOut(Easing.ease)})
-        }      
+          yPrevious.value = withTiming(
+            (windowWidth / 2 - 100) * scaleCurrent.value,
+            { duration: 400, easing: Easing.inOut(Easing.ease) }
+          );
+        }
       } else {
         yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
       }
-      
+
       // xPrevious.value = scaleCurrent.value * xPrevious.value + xCurrent.value;
       // yPrevious.value = scaleCurrent.value * yPrevious.value + yCurrent.value;
-      
+
       xCurrent.value = 0;
       yCurrent.value = 0;
 
@@ -226,28 +279,14 @@ export default function PhotoBoxModal(props) {
     };
   });
 
+  const onCloseModal = () => {
+    setPhotoBoxModel(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <View
-          style={
-            photoCloseState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableOpacity
-            onPress={() => setPhotoBoxModel(false)}
-            onPressIn={() => setPhotoCloseState(true)}
-            onPressOut={() => setPhotoCloseState(false)}
-            style={{
-              width: scale(40),
-              height: scale(40),
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableOpacity>
-        </View>
+        <CloseButton onClose={onCloseModal} />
       </View>
 
       <GestureDetector gesture={combinedAnimations}>
@@ -307,25 +346,6 @@ const styles = StyleSheet.create({
     width: "20%",
     height: scale(30),
     zIndex: 5,
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    borderBottomColor: "pink",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
   },
   focalPoint: {
     ...StyleSheet.absoluteFillObject,

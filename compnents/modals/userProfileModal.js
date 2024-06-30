@@ -513,7 +513,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
-    marginTop: "5%",
     marginBottom: "2%",
     width: "100%",
     marginLeft: 2,
