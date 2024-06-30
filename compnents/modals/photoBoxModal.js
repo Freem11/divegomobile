@@ -1,24 +1,18 @@
 import {
   StyleSheet,
   View,
-  TouchableWithoutFeedback,
-  Platform,
   Image,
   Dimensions,
-  Alert,
 } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-  withDelay,
   Easing,
 } from "react-native-reanimated";
 import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale } from "react-native-size-matters";
 import CloseButton from "../reusables/closeButton";
 
@@ -285,7 +279,7 @@ export default function PhotoBoxModal(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
+      <View style={styles.closeButton}>
         <CloseButton onClose={onCloseModal} />
       </View>
 
@@ -308,8 +302,6 @@ export default function PhotoBoxModal(props) {
                 {
                   height: picHeigth,
                   width: picWidth,
-                  // height: windowWidth - windowWidth * 0.15,
-                  // width: windowHeight - windowHeight * 0.15,
                   borderRadius: 15,
                 },
               ]}
@@ -332,7 +324,7 @@ const styles = StyleSheet.create({
     marginTop: scale(-70),
     marginLeft: scale(-35),
   },
-  title: {
+  closeButton: {
     position: "absolute",
     top: "12%",
     left: "62%",

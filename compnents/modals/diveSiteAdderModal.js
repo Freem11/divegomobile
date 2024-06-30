@@ -36,6 +36,7 @@ import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
 import ModalHeader from "../reusables/modalHeader";
+import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 
 let SiteNameVar = false;
 let LatVar = false;
@@ -53,9 +54,8 @@ export default function DiveSiteModal() {
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
 
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
+  const { diveSiteAdderModal, setDiveSiteAdderModal } =
+    useContext(DSAdderContext);
   const [diveCloseState, setDiveCloseState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -378,156 +378,120 @@ export default function DiveSiteModal() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-      <ModalHeader
-        titleText={"Submit Your Dive Site"}
-        onClose={toggleDiveModal}
-        icon={"question-mark"}
-        altButton={activateGuide}
-      />
+        <ModalHeader
+          titleText={"Submit Your Dive Site"}
+          onClose={toggleDiveModal}
+          icon={"question-mark"}
+          altButton={activateGuide}
+        />
 
-<View style={styles.contentContainer}>
-        <View style={styles.inputContainer}>
-          <InputField
-            validationItem={formValidation.SiteNameVal}
-            placeHolderText={"Site Name"}
-            inputValue={addSiteVals.Site}
-            keyboardType={"default"}
-            onChangeText={(text) =>
-              setAddSiteVals({ ...addSiteVals, Site: text })
-            }
-          />
+        <View style={styles.contentContainer}>
+          <View style={styles.inputContainer}>
+            <InputField
+              validationItem={formValidation.SiteNameVal}
+              placeHolderText={"Site Name"}
+              inputValue={addSiteVals.Site}
+              keyboardType={"default"}
+              onChangeText={(text) =>
+                setAddSiteVals({ ...addSiteVals, Site: text })
+              }
+            />
 
-          <InputField
-            validationItem={formValidation.LatVal}
-            placeHolderText={"Latitude"}
-            inputValue={addSiteVals.Latitude}
-            keyboardType={"numbers-and-punctuation"}
-            onChangeText={(text) =>
-              setAddSiteVals({ ...addSiteVals, Latitude: text })
-            }
-          />
+            <InputField
+              validationItem={formValidation.LatVal}
+              placeHolderText={"Latitude"}
+              inputValue={addSiteVals.Latitude}
+              keyboardType={"numbers-and-punctuation"}
+              onChangeText={(text) =>
+                setAddSiteVals({ ...addSiteVals, Latitude: text })
+              }
+            />
 
-          <InputField
-            validationItem={formValidation.LngVal}
-            placeHolderText={"Longitude"}
-            inputValue={addSiteVals.Longitude}
-            keyboardType={"numbers-and-punctuation"}
-            onChangeText={(text) =>
-              setAddSiteVals({ ...addSiteVals, Longitude: text })
-            }
-          />
-        </View>
-
-        {isLoading && (
-          <ActivityIndicator
-            color="gold"
-            style={{ marginTop: "5%" }}
-          ></ActivityIndicator>
-        )}
-
-        <View style={styles.latLngButton}>
-          <View
-            style={locButState ? styles.GPSbuttonPressed : styles.GPSbutton}
-          >
-            <TouchableOpacity
-              // disabled={isDisabled}
-              onPress={getCurrentLocation}
-              onPressIn={() => setLocButState(true)}
-              onPressOut={() => setLocButState(false)}
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: moderateScale(38),
-                height: moderateScale(38),
-              }}
-            >
-              <MaterialIcons
-                name="my-location"
-                color={locButState ? "#538dbd" : "gold"}
-                size={moderateScale(34)}
-                style={{ zIndex: -1 }}
-              />
-            </TouchableOpacity>
+            <InputField
+              validationItem={formValidation.LngVal}
+              placeHolderText={"Longitude"}
+              inputValue={addSiteVals.Longitude}
+              keyboardType={"numbers-and-punctuation"}
+              onChangeText={(text) =>
+                setAddSiteVals({ ...addSiteVals, Longitude: text })
+              }
+            />
           </View>
 
-          <View
-            style={pinButState ? styles.LocButtonPressed : styles.LocButton}
-          >
-            <TouchableOpacity
-              onPress={onNavigate}
-              onPressIn={() => setCorButState(true)}
-              onPressOut={() => setCorButState(false)}
-              style={{
-                width: moderateScale(38),
-                height: moderateScale(38),
-              }}
-            >
-              <MaterialIcons
-                name="location-pin"
-                color={pinButState ? "#538dbd" : "gold"}
-                size={moderateScale(38)}
-                style={{ zIndex: -1 }}
-              />
-            </TouchableOpacity>
+          {isLoading && (
+            <ActivityIndicator
+              color="gold"
+              style={{ marginTop: "5%" }}
+            ></ActivityIndicator>
+          )}
+
+          <View style={styles.latLngButton}>
+            <ModalSecondaryButton
+              buttonAction={getCurrentLocation}
+              icon={"my-location"}
+            />
+             <ModalSecondaryButton
+              buttonAction={onNavigate}
+              icon={"location-pin"}
+            />
+            <View
+              style={
+                indicatorState
+                  ? styles.ImageUploadIndicatorGreen
+                  : styles.ImageUploadIndicatorRed
+              }
+            ></View>
           </View>
 
           <View
             style={
-              indicatorState
-                ? styles.ImageUploadIndicatorGreen
-                : styles.ImageUploadIndicatorRed
+              subButState ? styles.SubmitButtonPressed : styles.SubmitButton
             }
-          ></View>
-        </View>
-       
-
-        <View
-          style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
-        >
-          <TouchableOpacity
-            onPress={handleSubmit}
-            onPressIn={() => setSubButState(true)}
-            onPressOut={() => setSubButState(false)}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
           >
-            <Text
+            <TouchableOpacity
+              onPress={handleSubmit}
+              onPressIn={() => setSubButState(true)}
+              onPressOut={() => setSubButState(false)}
               style={{
-                color: "gold",
-                fontSize: moderateScale(26),
-                marginTop: 4,
-                marginBottom: -6,
-                fontFamily: "PatrickHand_400Regular",
                 width: "100%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                textAlign: "center",
+                height: "100%",
               }}
             >
-              Submit Dive Site
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={{
+                  color: "gold",
+                  fontSize: moderateScale(26),
+                  marginTop: 4,
+                  marginBottom: -6,
+                  fontFamily: "PatrickHand_400Regular",
+                  width: "100%",
+                  alignSelf: "center",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                Submit Dive Site
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-          <SuccessModal
-            submissionItem="dive site"
-            toggleDiveModal={toggleDiveModal}
-            confirmationSucessClose={confirmationSucessClose}
-            itterator2={itterator2}
-            setItterator2={setItterator2}
-          ></SuccessModal>
-        </Animated.View>
+          <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+            <SuccessModal
+              submissionItem="dive site"
+              toggleDiveModal={toggleDiveModal}
+              confirmationSucessClose={confirmationSucessClose}
+              itterator2={itterator2}
+              setItterator2={setItterator2}
+            ></SuccessModal>
+          </Animated.View>
 
-        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-          <FailModal
-            submissionItem="dive site"
-            confirmationFailClose={confirmationFailClose}
-          ></FailModal>
-        </Animated.View>
+          <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+            <FailModal
+              submissionItem="dive site"
+              confirmationFailClose={confirmationFailClose}
+            ></FailModal>
+          </Animated.View>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -551,44 +515,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
-  },
-  GPSbutton: {
-    backgroundColor: "#538bdb",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    marginLeft: moderateScale(-20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  GPSbuttonPressed: {
-    backgroundColor: "#FAF9F1",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    marginLeft: moderateScale(-20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-
-    elevation: 10,
   },
   SubmitButton: {
     position: "absolute",
@@ -633,48 +559,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginLeft: scale(-25),
+    marginLeft: scale(-90),
     marginTop: 35,
     width: 140,
     // backgroundColor: "pink"
-  },
-  LocButton: {
-    backgroundColor: "#538bdb",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    marginLeft: moderateScale(20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  LocButtonPressed: {
-    backgroundColor: "#FAF9F1",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    marginLeft: moderateScale(20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-
-    elevation: 10,
   },
   confirmationBox: {
     position: "absolute",

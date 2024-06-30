@@ -33,6 +33,7 @@ import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import ModalHeader from "../reusables/modalHeader";
+import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 // import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import {
   uploadphoto,
@@ -217,9 +218,8 @@ export default function PicUploadModal() {
 
   const chooseImageHandler = async () => {
     if (Platform.OS !== "web") {
-      const {
-        status,
-      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         console.log("image library permissions denied");
         return;
@@ -551,263 +551,238 @@ export default function PicUploadModal() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-      <ModalHeader
-        titleText={"Submit Your Picture"}
-        onClose={togglePicModal}
-        icon={"question-mark"}
-        altButton={activateGuide}
-      />
+        <ModalHeader
+          titleText={"Submit Your Picture"}
+          onClose={togglePicModal}
+          icon={"question-mark"}
+          altButton={activateGuide}
+        />
 
-<View style={styles.contentContainer}>
-        <View style={styles.picContainer}>
-          {uploadedFile && (
-            <Image
-              source={{
-                uri: `${uploadedFile}`,
-                // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
-              }}
-              style={
-                formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
-              }
-            />
-          )}
-          {!uploadedFile && !isLoading && (
+        <View style={styles.contentContainer}>
+          <View style={styles.picContainer}>
+            {uploadedFile && (
+              <Image
+                source={{
+                  uri: `${uploadedFile}`,
+                  // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+                }}
+                style={
+                  formValidation.PictureVal
+                    ? styles.imgStyleRed
+                    : styles.imgStyle
+                }
+              />
+            )}
+            {!uploadedFile && !isLoading && (
+              <View
+                style={
+                  formValidation.PictureVal
+                    ? styles.imgStyleRed
+                    : styles.imgStyle
+                }
+              />
+            )}
+
+            {!uploadedFile && isLoading && (
+              <ActivityIndicator
+                color="gold"
+                style={{ marginTop: "5%", backgroundColor: "#538dbd" }}
+              ></ActivityIndicator>
+            )}
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: "-1%",
+              marginBottom: "1%",
+            }}
+          >
             <View
               style={
-                formValidation.PictureVal ? styles.imgStyleRed : styles.imgStyle
+                imgButState ? styles.ImageButtonPressed : styles.ImageButton
               }
-            />
-          )}
-
-          {!uploadedFile && isLoading && (
-            <ActivityIndicator
-              color="gold"
-              style={{ marginTop: "5%", backgroundColor: "#538dbd" }}
-            ></ActivityIndicator>
-          )}
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: "-1%",
-            marginBottom: "1%",
-          }}
-        >
-          <View
-            style={imgButState ? styles.ImageButtonPressed : styles.ImageButton}
-          >
-            <TouchableOpacity
-              onPress={handleImageUpload}
-              onPressIn={() => setImgButState(true)}
-              onPressOut={() => setImgButState(false)}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                width: moderateScale(150),
-                height: moderateScale(24),
-                marginTop: 0,
-              }}
             >
-              <FontAwesome
-                name="picture-o"
-                color={imgButState ? "#538dbd" : "gold"}
-                size={moderateScale(24)}
+              <TouchableOpacity
+                onPress={handleImageUpload}
+                onPressIn={() => setImgButState(true)}
+                onPressOut={() => setImgButState(false)}
                 style={{
-                  marginLeft:
-                    Platform.OS === "android"
-                      ? moderateScale(10)
-                      : moderateScale(10),
-                }}
-              />
-              <Text
-                style={{
-                  marginLeft: scale(5),
-                  marginTop: scale(0),
-                  color: imgButState ? "#538dbd" : "gold",
-                  fontFamily: "PatrickHand_400Regular",
-                  fontSize: moderateScale(17),
+                  display: "flex",
+                  flexDirection: "row",
+                  width: moderateScale(150),
+                  height: moderateScale(24),
+                  marginTop: 0,
                 }}
               >
-                Choose an Image
-              </Text>
-            </TouchableOpacity>
+                <FontAwesome
+                  name="picture-o"
+                  color={imgButState ? "#538dbd" : "gold"}
+                  size={moderateScale(24)}
+                  style={{
+                    marginLeft:
+                      Platform.OS === "android"
+                        ? moderateScale(10)
+                        : moderateScale(10),
+                  }}
+                />
+                <Text
+                  style={{
+                    marginLeft: scale(5),
+                    marginTop: scale(0),
+                    color: imgButState ? "#538dbd" : "gold",
+                    fontFamily: "PatrickHand_400Regular",
+                    fontSize: moderateScale(17),
+                  }}
+                >
+                  Choose an Image
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={
+                indicatorState
+                  ? styles.ImageUploadIndicatorGreen
+                  : styles.ImageUploadIndicatorRed
+              }
+            ></View>
+          </View>
+          <View style={styles.lowerZone}>
+            <View style={styles.fields}>
+              <View style={styles.dateField}>
+                <InputField
+                  validationItem={formValidation.DateVal}
+                  placeHolderText={"Date"}
+                  inputValue={pinValues.PicDate}
+                  keyboardType={"default"}
+                  onChangeText={(text) =>
+                    setPinValues({ ...pinValues, PicDate: text })
+                  }
+                />
+              </View>
+
+              <AnimalAutoSuggest
+                pin={pinValues}
+                setPin={setPinValues}
+                formValidation={formValidation}
+                SetFormValidation={SetFormValidation}
+              />
+
+              <KeyboardAvoidingView
+                behavior="position"
+                keyboardVerticalOffset={GPSKeyBoardOffset1}
+                style={styles.autocompleteA}
+              >
+                <View style={styles.latField}>
+                  <InputField
+                    validationItem={formValidation.LatVal}
+                    placeHolderText={"Latitude"}
+                    inputValue={pinValues.Latitude}
+                    keyboardType={"numbers-and-punctuation"}
+                    onChangeText={(text) =>
+                      setPinValues({ ...pinValues, Latitude: text })
+                    }
+                  />
+                </View>
+              </KeyboardAvoidingView>
+
+              <KeyboardAvoidingView
+                behavior="position"
+                keyboardVerticalOffset={GPSKeyBoardOffset2}
+                style={styles.autocompleteB}
+              >
+                <View style={styles.lngField}>
+                  <InputField
+                    validationItem={formValidation.LngVal}
+                    placeHolderText={"Longitude"}
+                    inputValue={pinValues.Longitude}
+                    keyboardType={"numbers-and-punctuation"}
+                    onChangeText={(text) =>
+                      setPinValues({ ...pinValues, Longitude: text })
+                    }
+                  />
+                </View>
+              </KeyboardAvoidingView>
+            </View>
+
+            <View style={styles.smallButtons}>
+              <View style={styles.dateButton}>
+                <ModalSecondaryButton
+                  buttonAction={showDatePicker}
+                  icon={"calendar-month"}
+                />
+                <DateTimePickerModal
+                  isVisible={datePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+
+              <View style={styles.animalButton}></View>
+
+              <View style={styles.latLngButton}>
+              <ModalSecondaryButton
+                  buttonAction={onNavigate}
+                  icon={"location-pin"}
+                />
+              </View>
+            </View>
           </View>
 
           <View
             style={
-              indicatorState
-                ? styles.ImageUploadIndicatorGreen
-                : styles.ImageUploadIndicatorRed
+              subButState ? styles.SubmitButtonPressed : styles.SubmitButton
             }
-          ></View>
-        </View>
-        <View style={styles.lowerZone}>
-          <View style={styles.fields}>
-            <View style={styles.dateField}>
-              <InputField
-                validationItem={formValidation.DateVal}
-                placeHolderText={"Date"}
-                inputValue={pinValues.PicDate}
-                keyboardType={"default"}
-                onChangeText={(text) =>
-                  setPinValues({ ...pinValues, PicDate: text })
-                }
-              />
-            </View>
-
-            <AnimalAutoSuggest
-              pin={pinValues}
-              setPin={setPinValues}
-              formValidation={formValidation}
-              SetFormValidation={SetFormValidation}
-            />
-
-            <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={GPSKeyBoardOffset1}
-              style={styles.autocompleteA}
-            >
-              <View style={styles.latField}>
-                <InputField
-                  validationItem={formValidation.LatVal}
-                  placeHolderText={"Latitude"}
-                  inputValue={pinValues.Latitude}
-                  keyboardType={"numbers-and-punctuation"}
-                  onChangeText={(text) =>
-                    setPinValues({ ...pinValues, Latitude: text })
-                  }
-                />
-              </View>
-            </KeyboardAvoidingView>
-
-            <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={GPSKeyBoardOffset2}
-              style={styles.autocompleteB}
-            >
-              <View style={styles.lngField}>
-                <InputField
-                  validationItem={formValidation.LngVal}
-                  placeHolderText={"Longitude"}
-                  inputValue={pinValues.Longitude}
-                  keyboardType={"numbers-and-punctuation"}
-                  onChangeText={(text) =>
-                    setPinValues({ ...pinValues, Longitude: text })
-                  }
-                />
-              </View>
-            </KeyboardAvoidingView>
-          </View>
-
-          <View style={styles.smallButtons}>
-            <View style={styles.dateButton}>
-              <View
-                style={datButState ? styles.dateIconPressed : styles.dateIcon}
-              >
-                <TouchableOpacity
-                  onPress={showDatePicker}
-                  onPressIn={() => setDatButState(true)}
-                  onPressOut={() => setDatButState(false)}
-                  style={{
-                    width: moderateScale(28),
-                    height: moderateScale(32),
-                  }}
-                >
-                  <FontAwesome
-                    name="calendar"
-                    color={datButState ? "#538dbd" : "gold"}
-                    size={moderateScale(28)}
-                    style={{ marginLeft: 1.5, marginTop: 2 }}
-                  />
-                  <DateTimePickerModal
-                    // date={new Date(pinValues.PicDate)}
-                    isVisible={datePickerVisible}
-                    mode="date"
-                    onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.animalButton}></View>
-
-            <View style={styles.latLngButton}>
-              <View
-                style={corButState ? styles.LocButtonPressed : styles.LocButton}
-              >
-                <TouchableOpacity
-                  onPress={onNavigate}
-                  onPressIn={() => setCorButState(true)}
-                  onPressOut={() => setCorButState(false)}
-                  style={{
-                    width: moderateScale(38),
-                    height: moderateScale(38),
-                  }}
-                >
-                  <MaterialIcons
-                    name="location-pin"
-                    color={corButState ? "#538dbd" : "gold"}
-                    size={moderateScale(38)}
-                    style={{ zIndex: -1 }}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        <View
-          style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
-        >
-          <TouchableOpacity
-            onPress={handleSubmit}
-            onPressIn={() => setSubButState(true)}
-            onPressOut={() => setSubButState(false)}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
           >
-            <Text
+            <TouchableOpacity
+              onPress={handleSubmit}
+              onPressIn={() => setSubButState(true)}
+              onPressOut={() => setSubButState(false)}
               style={{
-                color: "gold",
-                fontSize: moderateScale(26),
-                marginTop: 4,
-                marginBottom: -6,
-                fontFamily: "PatrickHand_400Regular",
-                borderColor: "transparent",
                 width: "100%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                textAlign: "center",
+                height: "100%",
               }}
             >
-              Submit Photo
-            </Text>
-          </TouchableOpacity>
-          {/* </TouchableWithoutFeedback> */}
+              <Text
+                style={{
+                  color: "gold",
+                  fontSize: moderateScale(26),
+                  marginTop: 4,
+                  marginBottom: -6,
+                  fontFamily: "PatrickHand_400Regular",
+                  borderColor: "transparent",
+                  width: "100%",
+                  alignSelf: "center",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                Submit Photo
+              </Text>
+            </TouchableOpacity>
+            {/* </TouchableWithoutFeedback> */}
+          </View>
+
+          <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
+            <SuccessModal
+              submissionItem="sea creature submission"
+              togglePicModal={togglePicModal}
+              confirmationSucessClose={confirmationSucessClose}
+              itterator3={itterator3}
+              setItterator3={setItterator3}
+            ></SuccessModal>
+          </Animated.View>
+
+          <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+            <FailModal
+              submissionItem="sea creature submission"
+              confirmationFailClose={confirmationFailClose}
+            ></FailModal>
+          </Animated.View>
         </View>
-
-        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-          <SuccessModal
-            submissionItem="sea creature submission"
-            togglePicModal={togglePicModal}
-            confirmationSucessClose={confirmationSucessClose}
-            itterator3={itterator3}
-            setItterator3={setItterator3}
-          ></SuccessModal>
-        </Animated.View>
-
-        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-          <FailModal
-            submissionItem="sea creature submission"
-            confirmationFailClose={confirmationFailClose}
-          ></FailModal>
-        </Animated.View>
-      </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -910,7 +885,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "space-evenly",
-    marginTop:  windowWidth > 700 ?  scale(15) :scale(20),
+    marginTop: windowWidth > 700 ? scale(15) : scale(20),
     // backgroundColor: "pink",
     height: "100%",
     width: "25%",
@@ -925,10 +900,6 @@ const styles = StyleSheet.create({
     marginBottom: scale(5),
   },
   dateButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
     width: "80%",
     height: "25%",
     // backgroundColor: "yellow"
@@ -978,43 +949,6 @@ const styles = StyleSheet.create({
     height: "50%",
     // backgroundColor: "green",
   },
-
-  LocButton: {
-    backgroundColor: "#538bdb",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  LocButtonPressed: {
-    backgroundColor: "#FAF9F1",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
   autocompleteA: {
     width: "80%",
     height: "25%",
@@ -1055,41 +989,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
     bottom: Platform.OS === "android" ? "2%" : "2%",
     backgroundColor: "#538dbd",
-  },
-  dateIcon: {
-    backgroundColor: "#538bdb",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "-9%",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  dateIconPressed: {
-    backgroundColor: "#FAF9F1",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(70),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-
-    elevation: 10,
   },
   imgStyle: {
     width: "101%",
