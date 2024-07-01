@@ -34,7 +34,7 @@ export default function AnimatedModalSmall(props) {
 
   const startSmallModalAnimation = () => {
     if (smallModalY.value === windowHeight) {
-      smallModalY.value = withTiming(scale(-550));
+      smallModalY.value = withTiming(scale(-650));
     } else {
       smallModalY.value = withTiming(windowHeight);
     }
@@ -43,15 +43,15 @@ export default function AnimatedModalSmall(props) {
   useEffect(() => {
     // console.log(activeButtonID, previousButtonID, smallModalY.value)
     if (
-      smallModalY.value === (scale(-550))  &&
+      smallModalY.value === (scale(-650))  &&
       activeButtonID !== previousButtonID
     ) {
       // console.log('conditiion met')
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
-      }, 310);
-    } else if ( smallModalY.value === (scale(-650))  &&
+      }, 315);
+    } else if ( smallModalY.value === (scale(-750))  &&
     activeButtonID !== previousButtonID){
       // console.log('conditiion 2 met')
       startSmallModalAnimation();
@@ -66,14 +66,14 @@ export default function AnimatedModalSmall(props) {
 
   useEffect(() => {
     if (diveSearchBump) {
-      smallModalY.value = withTiming(scale(-650));
+      smallModalY.value = withTiming(scale(-750));
     }
     setDiveSearchBump(false);
   }, [diveSearchBump]);
 
   useEffect(() => {
     if (mapSearchBump) {
-      smallModalY.value = withTiming(scale(-650));
+      smallModalY.value = withTiming(scale(-750));
     }
     setMapSearchBump(false);
   }, [mapSearchBump]);
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   modalBody: {
     position: "absolute",
     bottom: -windowHeight + windowHeight * 0.3,
-    height: windowHeight - windowHeight * 0.6,
+    height: windowHeight - windowHeight * 0.75,
     width: windowWidth - windowWidth * 0.2,
     marginLeft: windowWidth * 0.05,
     backgroundColor: "#538bdb",
