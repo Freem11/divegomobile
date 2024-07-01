@@ -42,17 +42,24 @@ export default function AnimatedModalSmall(props) {
 
   useEffect(() => {
     if (
-      smallModalY.value === scale(-550) &&
+      smallModalY.value === (scale(-550))  &&
       activeButtonID !== previousButtonID
     ) {
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
       }, 300);
+    } else if ( smallModalY.value === (scale(-650))  &&
+    activeButtonID !== previousButtonID){
+      startSmallModalAnimation();
+      setTimeout(() => {
+        startSmallModalAnimation();
+      }, 400);
     } else {
       startSmallModalAnimation();
     }
   }, [smallModal]);
+
 
   useEffect(() => {
     if (diveSearchBump) {
