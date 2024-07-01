@@ -2,23 +2,27 @@ import React, { useContext } from "react";
 import { StyleSheet, View, Keyboard } from "react-native";
 import PlacesInput from "react-native-places-input";
 import { MapCenterContext } from "../contexts/mapCenterContext";
-import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { SmallModalContext } from '../contexts/smallModalContext';
 import { moderateScale } from "react-native-size-matters";
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function GeocodeAutoComplete(props) {
   const { setMapSearchBump } = props;
   const { setMapCenter } = useContext(MapCenterContext);
-  const { setMapSearchModal } = useContext(
-    MapSearchModalContext
-  );
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
 
   const handleConfirm = async (place) => {
     setMapCenter({
       lat: place.result.geometry.location.lat,
       lng: place.result.geometry.location.lng,
     });
-    setMapSearchModal(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID("MapSearchButton")
+    setSmallModal(!smallModal);
     Keyboard.dismiss();
   };
 

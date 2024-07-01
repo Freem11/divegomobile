@@ -38,6 +38,10 @@ import {
   deleteUserFollow,
   checkIfUserFollows,
 } from "../../supabaseCalls/userFollowSupabaseCalls";
+import InputFieldLg from "../reusables/textInputLarge";
+import InputField from "../reusables/textInputs";
+import ModalHeader from "../reusables/modalHeader";
+import PrimaryButton from "../reusables/primaryButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -191,8 +195,6 @@ export default function UserProfileModal() {
   };
 
   useEffect(() => {
-    console.log(nameChangerState);
-
     if (!nameChangerState) {
       userBoxX.value = withTiming(scale(-450));
       getProfile();
@@ -205,312 +207,93 @@ export default function UserProfileModal() {
     }
   }, [nameChangerState]);
 
+  let SeaLifeText, DiveSitesText, FollowersText, CommentsText, LikesText;
+
+  if (userStats) {
+    SeaLifeText = "Sea Life:  " + userStats[0].photocount;
+    DiveSitesText = "Dive Sites:  " + userStats[0].divesitecount;
+    FollowersText = "Followers:  " + userStats[0].followercount;
+    CommentsText = "Comments:  " + userStats[0].commentcount;
+    LikesText = "Likes:  " + userStats[0].likecount;
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.header}>
-          {userStats ? userStats[0].username + "'s Diving" : "My Diver Profile"}
-        </Text>
-        <View
-          style={
-            profileCloseState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableOpacity
-            onPress={toggleProfileModal}
-            onPressIn={() => setProfileCloseState(true)}
-            onPressOut={() => setProfileCloseState(false)}
-            style={{
-              width: scale(30),
-              height: scale(30),
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
+      <ModalHeader
+        titleText={
+          userStats ? userStats[0].username + "'s Diving" : "My Diver Profile"
+        }
+        onClose={toggleProfileModal}
+        icon={null}
+        altButton={null}
+      />
       <View style={styles.inputContainer}>
         {selectedProfile ? (
-          <View
-            style={
-              userFollows ? styles.FollowButtonPressed : styles.FollowButton
+          <PrimaryButton
+            buttonAction={handleFollow}
+            label={
+              userFollows
+                ? "Following " + (userStats && userStats[0].username)
+                : "Follow " + (userStats && userStats[0].username)
             }
-          >
-            <TouchableOpacity
-              onPress={() => handleFollow()}
-              onPressIn={() => setFollowButState(true)}
-              onPressOut={() => setFollowButState(false)}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                // width: scale(100),
-                height: scale(35),
-                alignItems: "center",
-                marginLeft: scale(10),
-                marginRight: scale(10),
-              }}
-            >
-              <Text
-                style={{
-                  marginLeft: 5,
-                  fontFamily: "Itim_400Regular",
-                  color: userFollows ? "black" : "pink",
-                  fontSize: moderateScale(20),
-                }}
-              >
-                {userFollows
-                  ? "Following " + (userStats && userStats[0].username)
-                  : "Follow " + (userStats && userStats[0].username)}
-              </Text>
-            </TouchableOpacity>
-          </View>
+            icon={null}
+            followed={userFollows ? true : false}
+          />
         ) : (
           <>
-            <InsetShadow
-              containerStyle={{
-                borderRadius: moderateScale(40),
-                height: moderateScale(40),
-                width: moderateScale(270)
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <TextInput
-                style={styles.input}
-                value={userStats && userStats[0].username}
-                placeholder={"DiverName"}
-                keyboardType="numbers-and-punctuation"
-                editable={false}
-                fontSize={moderateScale(16)}
-                placeholderTextColor="darkgrey"
-                color="#F0EEEB"
-                multiline
-                // onChangeText={(text) =>
-                //   setAddSiteVals({ ...addSiteVals, Latitude: text })
-                // }
-              ></TextInput>
-            </InsetShadow>
-
-            <InsetShadow
-              containerStyle={{
-                borderRadius: moderateScale(40),
-                height: moderateScale(40),
-                width: moderateScale(270),
-                marginTop: moderateScale(10),
-                // paddingTop: 3
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
-            >
-              <TextInput
-                style={styles.input}
-                value={userStats && userStats[0].email}
-                placeholder={"Email"}
-                keyboardType="numbers-and-punctuation"
-                editable={false}
-                fontSize={moderateScale(16)}
-                placeholderTextColor="darkgrey"
-                color="#F0EEEB"
-                multiline
-                // onChangeText={(text) =>
-                //   setAddSiteVals({ ...addSiteVals, Latitude: text })
-                // }
-              ></TextInput>
-            </InsetShadow>
+            <InputFieldLg
+              placeHolderText={"Diver Name"}
+              inputValue={userStats && userStats[0].username}
+              keyboardType={"default"}
+            />
+            <InputFieldLg
+              placeHolderText={"Email"}
+              inputValue={userStats && userStats[0].email}
+              keyboardType={"default"}
+            />
           </>
         )}
 
         <View style={styles.statsContainer}>
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: "45%",
-              marginTop: moderateScale(10),
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: moderateScale(10),
-              paddingRight: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <Text style={styles.inputSmall}>
-              Sea Life:
-              {userStats && " " + userStats[0].photocount}
-            </Text>
-          </InsetShadow>
-
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: "45%",
-              marginTop: moderateScale(10),
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: moderateScale(10),
-              paddingRight: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <Text style={styles.inputSmall}>
-              Dive Sites:
-              {userStats && " " + userStats[0].divesitecount}
-            </Text>
-          </InsetShadow>
-
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: "45%",
-              marginTop: moderateScale(10),
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: moderateScale(10),
-              paddingRight: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <Text style={styles.inputSmall}>
-              Followers:
-              {userStats && " " + userStats[0].followercount}
-            </Text>
-          </InsetShadow>
-
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: "45%",
-              marginTop: moderateScale(10),
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: moderateScale(10),
-              paddingRight: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <Text style={styles.inputSmall}>
-              Comments:
-              {userStats && " " + userStats[0].commentcount}
-            </Text>
-          </InsetShadow>
-
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: "45%",
-              marginTop: moderateScale(10),
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: moderateScale(10),
-              paddingRight: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.3}
-          >
-            <Text style={styles.inputSmall}>
-              Likes:
-              {userStats && " " + userStats[0].likecount}
-            </Text>
-          </InsetShadow>
+          <InputField
+            placeHolderText={"Sea Life"}
+            inputValue={SeaLifeText}
+            keyboardType={"default"}
+          />
+          <InputField
+            placeHolderText={"Dive Sites"}
+            inputValue={DiveSitesText}
+            keyboardType={"default"}
+          />
+          <InputField
+            placeHolderText={"Followers"}
+            inputValue={FollowersText}
+            keyboardType={"default"}
+          />
+          <InputField
+            placeHolderText={"Comments"}
+            inputValue={CommentsText}
+            keyboardType={"default"}
+          />
+          <InputField
+            placeHolderText={"Likes"}
+            inputValue={LikesText}
+            keyboardType={"default"}
+          />
         </View>
 
-        <View
-          style={{
-            flexDirection: "column-reverse",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "90%",
-          }}
-        >
-          <View
-            style={
-              nameButState ? styles.ShareButtonPressed : styles.ShareButton
-            }
-          >
-            <TouchableOpacity
-              onPress={() => handleUserBox()}
-              onPressIn={() => setNameButState(true)}
-              onPressOut={() => setNameButState(false)}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                width: scale(100),
-                height: scale(35),
-                alignItems: "center",
-                marginLeft: scale(10),
-                marginRight: scale(10),
-              }}
-            >
-              <Text
-                style={{
-                  marginLeft: 5,
-                  fontFamily: "PatrickHand_400Regular",
-                  color: "gold",
-                  fontSize: moderateScale(14),
-                }}
-              >
-                Change Diver Name
-              </Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton
+            buttonAction={handleUserBox}
+            label={"Change Diver Name"}
+            icon={null}
+          />
 
-          <View
-            style={imaButState ? styles.ShareButtonPressed : styles.ShareButton}
-          >
-            <TouchableOpacity
-              onPress={() => onShare(image.uri)}
-              onPressIn={() => setImaButState(true)}
-              onPressOut={() => setImaButState(false)}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                // width: scale(100),
-                height: scale(35),
-                alignItems: "center",
-                marginLeft: scale(10),
-                marginRight: scale(10),
-              }}
-            >
-              <FontAwesome
-                name="share-square-o"
-                size={moderateScale(24)}
-                color="gold"
-              />
-              <Text
-                style={{
-                  marginLeft: 5,
-                  fontFamily: "PatrickHand_400Regular",
-                  color: "gold",
-                  fontSize: moderateScale(14),
-                }}
-              >
-                Share Scuba SEAsons!
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <PrimaryButton
+            buttonAction={() => onShare(image.uri)}
+            label={"Share Scuba SEAsons!"}
+            icon={"share-square-o"}
+          />
         </View>
       </View>
 
@@ -530,18 +313,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
     marginBottom: "2%",
-    width: "98%",
+    width: "100%",
     marginLeft: 2,
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
   inputContainer: {
-    width: "96%",
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: moderateScale(30),
   },
   labelBox: {
     flexDirection: "row",
@@ -583,7 +364,6 @@ const styles = StyleSheet.create({
   statsContainer: {
     // backgroundColor: "pink",
     marginTop: moderateScale(20),
-    width: "90%",
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
@@ -593,54 +373,6 @@ const styles = StyleSheet.create({
     fontFamily: "Itim_400Regular",
     fontSize: moderateScale(16),
     color: "white",
-  },
-  text: {
-    fontSize: 18,
-    alignSelf: "center",
-    marginBottom: 5,
-  },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "2%",
-    marginLeft: "12%",
-    width: "80%",
-    height: scale(30),
-  },
-  header: {
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(26),
-    alignSelf: "center",
-    color: "#F0EEEB",
-    width: "80%",
-    height: moderateScale(60),
-    marginTop: "-1%",
-    marginLeft: "7%",
-    marginRight: "10%",
-    // backgroundColor: "green"
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
   },
   ShareButton: {
     backgroundColor: "#538bdb",
@@ -729,5 +461,13 @@ const styles = StyleSheet.create({
     marginLeft: scale(10),
     borderRadius: 15,
     // backgroundColor: "green"
+  },
+  buttonContainer: {
+    flexDirection: "column-reverse",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "90%",
+    height: moderateScale(110),
+    marginTop: moderateScale(15),
   },
 });

@@ -23,6 +23,8 @@ import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabase
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
+import ModalHeader from "../reusables/modalHeader";
+import SubmitButton from "../reusables/submitButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -140,131 +142,90 @@ export default function PartnerAccountRequestModal() {
       formValues.Longitude == "" ||
       isNaN(formValues.Longitude)
     ) {
-      failBoxY.value = withTiming(scale(-50));
+      failBoxY.value = withTiming(scale(70));
       return;
     } else {
       createPartnerAccountRequest(formValues);
-      successBoxY.value = withTiming(scale(-50));
+      successBoxY.value = withTiming(scale(70));
     }
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.header2}>Partner Account Request</Text>
-        <View
-          style={
-            closeButtonState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableOpacity
-            onPress={handleClose}
-            onPressIn={() => setCloseButtonState(true)}
-            onPressOut={() => setCloseButtonState(false)}
-            style={{
-              width: scale(30),
-              height: scale(30),
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Text style={styles.explainer}>
-        To qualify for a "Partner Account" Your Account must represent a diving
-        business that takes divers out diving. {"\n"} Examples include: Dive
-        Shops, Dive Charters, Diver Centres and Liveaboards
-      </Text>
-
-      <InputField
-        validationItem={formValidation.BusinessNameVal}
-        placeHolderText={"Full Business Name"}
-        inputValue={formValues.BusinessName}
-        keyboardType={"default"}
-        onChangeText={(text) =>
-          setFormValues({ ...formValues, BusinessName: text })
-        }
+      <ModalHeader
+        titleText={"Partner Account Request"}
+        onClose={handleClose}
+        icon={null}
+        altButton={null}
       />
-      <Text style={styles.explainerMicro}>(For display purposes)</Text>
+      <View style={styles.contentContainer}>
+        <Text style={styles.explainer}>
+          To qualify for a "Partner Account" Your Account must represent a
+          diving business that takes divers out diving. {"\n"} Examples include:
+          Dive Shops, Dive Charters, Diver Centres and Liveaboards
+        </Text>
 
-      <InputField
-        validationItem={formValidation.WebsiteLinkVal}
-        placeHolderText={"Website URL"}
-        inputValue={formValues.WebsiteLink}
-        keyboardType={"default"}
-        onChangeText={(text) =>
-          setFormValues({ ...formValues, WebsiteLink: text })
-        }
-      />
-      <Text style={styles.explainerMicro}>(To validate your business)</Text>
-
-      <InputField
-        validationItem={formValidation.LatVal}
-        placeHolderText={"Latitude"}
-        inputValue={formValues.Latitude}
-        keyboardType={"numbers-and-punctuation"}
-        onChangeText={(text) =>
-          setFormValues({ ...formValues, Latitude: text })
-        }
-      />
         <InputField
-        validationItem={formValidation.LngVal}
-        placeHolderText={"Longitude"}
-        inputValue={formValues.Longitude}
-        keyboardType={"numbers-and-punctuation"}
-        onChangeText={(text) =>
-          setFormValues({ ...formValues, Longitude: text })
-        }
-      />
-      <Text style={styles.explainerMicro}>(For map placement)</Text>
+          validationItem={formValidation.BusinessNameVal}
+          placeHolderText={"Full Business Name"}
+          inputValue={formValues.BusinessName}
+          keyboardType={"default"}
+          onChangeText={(text) =>
+            setFormValues({ ...formValues, BusinessName: text })
+          }
+        />
+        <Text style={styles.explainerMicro}>(For display purposes)</Text>
 
-      <View
-        style={subButState ? styles.SubmitButtonPressed : styles.SubmitButton}
-      >
-        <TouchableOpacity
-          onPress={() => handleSubmit(formValues)}
-          onPressIn={() => setSubButState(true)}
-          onPressOut={() => setSubButState(false)}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <Text
-            style={{
-              color: "gold",
-              fontSize: moderateScale(26),
-              marginTop: 4,
-              marginBottom: -6,
-              fontFamily: "PatrickHand_400Regular",
-              width: "100%",
-              alignSelf: "center",
-              justifyContent: "center",
-              alignContent: "center",
-              textAlign: "center",
-            }}
-          >
-            Submit Account Request
-          </Text>
-        </TouchableOpacity>
+        <InputField
+          validationItem={formValidation.WebsiteLinkVal}
+          placeHolderText={"Website URL"}
+          inputValue={formValues.WebsiteLink}
+          keyboardType={"default"}
+          onChangeText={(text) =>
+            setFormValues({ ...formValues, WebsiteLink: text })
+          }
+        />
+        <Text style={styles.explainerMicro}>(To validate your business)</Text>
+
+        <InputField
+          validationItem={formValidation.LatVal}
+          placeHolderText={"Latitude"}
+          inputValue={formValues.Latitude}
+          keyboardType={"numbers-and-punctuation"}
+          onChangeText={(text) =>
+            setFormValues({ ...formValues, Latitude: text })
+          }
+        />
+        <InputField
+          validationItem={formValidation.LngVal}
+          placeHolderText={"Longitude"}
+          inputValue={formValues.Longitude}
+          keyboardType={"numbers-and-punctuation"}
+          onChangeText={(text) =>
+            setFormValues({ ...formValues, Longitude: text })
+          }
+        />
+        <Text style={styles.explainerMicro}>(For map placement)</Text>
+
+        <SubmitButton 
+          buttonAction={() => handleSubmit(formValues)}
+          label={"Submit Account Request"}
+          />
       </View>
-
       <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-        <SuccessModal
-          submissionItem="partner account creation request"
-          confirmationSucessClose={confirmationSucessClose}
-          setPartnerModal={setPartnerModal}
-        ></SuccessModal>
-      </Animated.View>
+          <SuccessModal
+            submissionItem="partner account creation request"
+            confirmationSucessClose={confirmationSucessClose}
+            setPartnerModal={setPartnerModal}
+          ></SuccessModal>
+        </Animated.View>
 
-      <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-        <FailModal
-          submissionItem="partner account creation request"
-          confirmationFailClose={confirmationFailClose}
-        ></FailModal>
-      </Animated.View>
+        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
+          <FailModal
+            submissionItem="partner account creation request"
+            confirmationFailClose={confirmationFailClose}
+          ></FailModal>
+        </Animated.View>
     </View>
   );
 }
@@ -274,89 +235,32 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
     marginBottom: "2%",
     width: "98%",
-    marginLeft: 2,
+    marginLeft: moderateScale(4),
     minHeight: Platform.OS === "android" ? 490 : 0,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: moderateScale(-70),
+    zIndex: -1,
   },
   explainer: {
     color: "#F0EEEB",
     fontSize: moderateScale(14),
     textAlign: "center",
     margin: moderateScale(20),
-    marginTop: windowWidth > 500 ? 0 : moderateScale(-60),
   },
   explainerMicro: {
     color: "#F0EEEB",
     fontSize: moderateScale(12),
     textAlign: "center",
   },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "5%",
-    marginLeft: "12%",
-    width: "85%",
-    height: scale(30),
-  },
-  header2: {
-    flexWrap: "wrap",
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(24),
-    alignSelf: "center",
-    height: scale(70),
-    color: "#F0EEEB",
-    marginTop: "11%",
-    marginLeft: "7%",
-    marginRight: "10%",
-    // backgroundColor: "green"
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
-  },
-  SubmitButton: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "1%" : "1%",
-  },
-  SubmitButtonPressed: {
-    position: "absolute",
-    marginBottom: "0%",
-    borderTopWidth: 0.5,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    bottom: Platform.OS === "android" ? "1%" : "1%",
-    backgroundColor: "#538dbd",
-  },
   confirmationBox: {
+    width: "100%",
     position: "absolute",
+    width: "100%",
   },
 });

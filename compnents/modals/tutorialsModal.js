@@ -23,6 +23,8 @@ import InsetShadow from "react-native-inset-shadow";
 import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ModalHeader from "../reusables/modalHeader";
+import PrimaryButton from "../reusables/primaryButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -64,127 +66,44 @@ export default function TutorialLaunchPadModal() {
     setThirdGuideModal(!thirdGuideModal);
   };
 
+  const handleClose = () => {
+    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.header2}>Scuba SEAsons Guides</Text>
-        <View
-          style={
-            tutorialsCloseState ? styles.closeButtonPressed : styles.closeButton
-          }
-        >
-          <TouchableOpacity
-            onPress={() => setTutorialLaunchpadModal(!tutorialLaunchpadModal)}
-            onPressIn={() => setTutorialsCloseState(true)}
-            onPressOut={() => setTutorialsCloseState(false)}
-            style={{
-              width: scale(30),
-              height: scale(30),
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome name="close" color="#BD9F9F" size={scale(24)} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
+      <ModalHeader
+        titleText={"Scuba SEAsons Guides"}
+        onClose={handleClose}
+        icon={null}
+        altButton={null}
+      />
       <View style={styles.inputContainer}>
-        <View
-          style={
-            tutPadCloseState
-              ? styles.openTutorialButtonPressed
-              : styles.openTutorialButton
-          }
-        >
-          <TouchableOpacity
-            onPress={handleTutorialStartup}
-            onPressIn={() => setTutPadCloseState(true)}
-            onPressOut={() => setTutPadCloseState(false)}
-            disabled={tutorialRunning}
-            style={{
-              width: moderateScale(200),
-              height: moderateScale(22),
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginLeft: 3,
-                marginTop: -4,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: moderateScale(19)
-              }}
-            >
-              Intro Guide
-            </Text>
-          </TouchableOpacity>
-        </View>
-     
-          <View
-            style={
-              tutPad2CloseState
-                ? styles.openTutorialButtonPressed
-                : styles.openTutorialButton
-            }
-          >
-            <TouchableOpacity
-            onPress={handleSecondTutorialStartup}
-            onPressIn={() => setTutPad2CloseState(true)}
-            onPressOut={() => setTutPad2CloseState(false)}
-            disabled={tutorialRunning}
-            style={{
-              width: moderateScale(200),
-              height: moderateScale(22),
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginLeft: 3,
-                marginTop: -4,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: moderateScale(19)
-              }}
-            >
-              Fun With Dive Sites
-            </Text>
-            </TouchableOpacity>
-          </View>
-      
-          <View
-            style={
-              tutPad3CloseState
-                ? styles.openTutorialButtonPressed
-                : styles.openTutorialButton
-            }
-          >
-             <TouchableOpacity
-            onPress={handleThirdTutorialStartup}
-            onPressIn={() => setTutPad3CloseState(true)}
-            onPressOut={() => setTutPad3CloseState(false)}
-            disabled={tutorialRunning}
-            style={{
-              width: moderateScale(200),
-              height: moderateScale(22),
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginLeft: 3,
-                marginTop: -5,
-                fontFamily: "PatrickHand_400Regular",
-                color: "gold",
-                fontSize: moderateScale(19),
-                height: "200%"
-              }}
-            >
-              Photogenics
-            </Text>
-            </TouchableOpacity>
-          </View>
+        <PrimaryButton
+          buttonAction={handleTutorialStartup}
+          label={"Intro Guide"}
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
+        <PrimaryButton
+          buttonAction={handleSecondTutorialStartup}
+          label={"Fun With Dive Sites"}
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
+
+        <PrimaryButton
+          buttonAction={handleThirdTutorialStartup}
+          label={"Photogenics"}
+          icon={null}
+          textColor={null}
+          bgColor={null}
+          bgPressedColor={null}
+        />
       </View>
     </View>
   );
@@ -195,8 +114,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
-    alignItems: "center",
-    justifyContent: "center",
     marginTop: "5%",
     marginBottom: "2%",
     width: "98%",
@@ -204,10 +121,10 @@ const styles = StyleSheet.create({
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
   inputContainer: {
-    width: "96%",
+    height: "35%",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
+    justifyContent: "space-between",
+    marginTop: moderateScale(120),
   },
   input: {
     fontFamily: "Itim_400Regular",
@@ -230,59 +147,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     overflow: "hidden",
-  },
-  header: {
-    fontSize: 20,
-    alignSelf: "center",
-    marginBottom: 25,
-    marginTop: -150,
-  },
-  text: {
-    fontSize: 18,
-    alignSelf: "center",
-    marginBottom: 5,
-  },
-  title: {
-    position: "absolute",
-    top: "-1%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "2%",
-    marginLeft: "12%",
-    width: "80%",
-    height: scale(30),
-  },
-  header2: {
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: scale(26),
-    alignSelf: "center",
-    color: "#F0EEEB",
-    width: "85%",
-    marginTop: "-1%",
-    marginLeft: "7%",
-    marginRight: "10%",
-    // backgroundColor: "green"
-  },
-  closeButton: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
   },
   openTutorialButton: {
     backgroundColor: "#538bdb",

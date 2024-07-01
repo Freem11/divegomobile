@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableWithoutFeedback,
-  KeyboardAvoidingView,
   Platform,
   Dimensions,
   Keyboard,
@@ -16,20 +15,17 @@ import Constants from "expo-constants";
 import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
-import FABButtons from "./FABset";
-import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
+import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
 import {
   grabProfileById,
   updateProfileFeeback,
   updatePushToken,
 } from "./../supabaseCalls/accountSupabaseCalls";
 import {
-  getPhotosforAnchorMulti,
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "./../supabaseCalls/photoSupabaseCalls";
-import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
@@ -67,10 +63,9 @@ import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
 import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
+import { ItineraryListModalContext } from "./contexts/itineraryListModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
-import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
-import { MapSearchModalContext } from "./contexts/mapSearchContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -96,8 +91,7 @@ import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import UserProfileModal from "./modals/userProfileModal";
 import SettingsModal from "./modals/settingsModal";
 import ShopModal from "./modals/shopModal";
-import MapSearchModal from "./modals/mapSearchModal";
-import DiveSiteSearchModal from "./modals/diveSiteSearchModal";
+import ItineraryListModal from "./modals/itineraryListModal";
 import PartnerAccountRequestModal from "./modals/partnerAccountRequestModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
@@ -144,10 +138,6 @@ export default function MapPage() {
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
-
-  // useEffect(() => {
-  //   zoomHelper ? setMasterSwitch(false) : setMasterSwitch(true);
-  // }, [zoomHelper]);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -320,6 +310,37 @@ export default function MapPage() {
     startShopModalAnimations();
   }, [shopModal]);
 
+  //ItineraryList Modal Animation
+  const itineraryListModalY = useSharedValue(windowHeight);
+  // const { selectedItinerary, setSelectedItinerary} = useContext(SelectedItineraryContext);
+  const { itineraryListModal, setItineraryListModal } = useContext(
+    ItineraryListModalContext
+  );
+
+  const itineraryListModalReveal = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: itineraryListModalY.value }],
+    };
+  });
+
+  const startItineraryListModalAnimations = () => {
+    if (itineraryListModal) {
+      itineraryListModalY.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    } else {
+      itineraryListModalY.value = withTiming(windowHeight, {
+        duration: 150,
+        easing: Easing.out(Easing.linear),
+      });
+    }
+  };
+
+  useEffect(() => {
+    startItineraryListModalAnimations();
+  }, [itineraryListModal]);
+
   //PhotoBox Modal Animation
   const photoBoxModalY = useSharedValue(windowHeight);
   const [photoBoxModel, setPhotoBoxModel] = useState(false);
@@ -343,9 +364,8 @@ export default function MapPage() {
 
   //Dive Site Modal Animation
   const diveSiteModalY = useSharedValue(windowHeight);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
+  const { diveSiteAdderModal, setDiveSiteAdderModal } =
+    useContext(DSAdderContext);
 
   const diveSiteModalReveal = useAnimatedStyle(() => {
     return {
@@ -387,9 +407,7 @@ export default function MapPage() {
 
   //Partner Modal Animation
   const partnerModalY = useSharedValue(windowHeight);
-  const { partnerModal, setPartnerModal } = useContext(
-    PartnerModalContext
-  );
+  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
   const partnerModalReveal = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: partnerModalY.value }],
@@ -601,83 +619,6 @@ export default function MapPage() {
     }
   };
 
-  //MapSearch Modal Animation
-  const mapSearchModalY = useSharedValue(windowHeight);
-  const [mapSearchBump, setMapSearchBump] = useState(false);
-  const { mapSearchModal, setMapSearchModal } = useContext(
-    MapSearchModalContext
-  );
-
-  const mapSearchModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: mapSearchModalY.value }],
-    };
-  });
-
-  useEffect(() => {
-    if (mapSearchBump) {
-      mapSearchModalY.value = withTiming(-windowHeight * 0.3, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-    setMapSearchBump(false);
-  }, [mapSearchBump]);
-
-  const startMapSearchModalAnimations = () => {
-    if (mapSearchModal) {
-      mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      Keyboard.dismiss();
-      mapSearchModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  //DiveSiteSearch Modal Animation
-
-  const diveSiteSearchModalY = useSharedValue(windowHeight);
-  const [diveSearchBump, setDiveSearchBump] = useState(false);
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
-
-  const diveSiteSearchModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: diveSiteSearchModalY.value }],
-    };
-  });
-
-  useEffect(() => {
-    if (diveSearchBump) {
-      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.3, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-    setDiveSearchBump(false);
-  }, [diveSearchBump]);
-
-  const startdiveSiteSearchModalAnimations = () => {
-    if (diveSiteSearchModal) {
-      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      Keyboard.dismiss();
-      diveSiteSearchModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
   const feedbackX = useSharedValue(0);
 
   const feedbackReveal = useAnimatedStyle(() => {
@@ -701,14 +642,6 @@ export default function MapPage() {
   useEffect(() => {
     startSettingsModalAnimations();
   }, [gearModal]);
-
-  useEffect(() => {
-    startMapSearchModalAnimations();
-  }, [mapSearchModal]);
-
-  useEffect(() => {
-    startdiveSiteSearchModalAnimations();
-  }, [diveSiteSearchModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -766,15 +699,6 @@ export default function MapPage() {
       setTextValue("");
       setIsOpen(false);
     }
-    // if (pullTabHeight.value === 0) {
-    //   pullTabHeight.value = withTiming(1);
-    //   setIsOpen(true);
-    // } else {
-    //   Keyboard.dismiss();
-    //   pullTabHeight.value = withTiming(0);
-    //   setTextValue("");
-    //   setIsOpen(false);
-    // }
   };
 
   useEffect(() => {
@@ -898,9 +822,8 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const {
-      status: existingStatus,
-    } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
@@ -1294,27 +1217,24 @@ export default function MapPage() {
               </Animated.View>
             )}
 
-            {mapSearchModal && (
-              <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
-                <MapSearchModal setMapSearchBump={setMapSearchBump} />
-              </Animated.View>
-            )}
-
-            {diveSiteSearchModal && (
-              <Animated.View
-                style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
-              >
-                <DiveSiteSearchModal setDiveSearchBump={setDiveSearchBump} />
-              </Animated.View>
-            )}
-
             {partnerModal && (
-              <Animated.View
-                style={[styles.anchorModal, partnerModalReveal]}
-              >
+              <Animated.View style={[styles.anchorModal, partnerModalReveal]}>
                 <PartnerAccountRequestModal />
               </Animated.View>
             )}
+
+            {itineraryListModal && (
+              <Animated.View
+                style={[styles.anchorModal, itineraryListModalReveal]}
+              >
+                <ItineraryListModal
+                  itineraryListModal={itineraryListModal}
+                  setItineraryListModal={setItineraryListModal}
+                />
+              </Animated.View>
+            )}
+
+            <AnimatedModalSmall />
 
             <Map style={{ zIndex: 1 }} />
           </View>

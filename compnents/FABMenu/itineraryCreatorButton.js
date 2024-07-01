@@ -9,17 +9,13 @@ import { MapSearchModalContext } from "../contexts/mapSearchContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SettingsContext } from "../contexts/gearModalContext";
-import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
+import { ItineraryListModalContext } from "../contexts/itineraryListModalContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { SmallModalContext } from '../contexts/smallModalContext';
-
 import {
   MaterialIcons,
   FontAwesome5,
@@ -27,18 +23,11 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
-export default function SiteSearchButton() {
+export default function ItineraryListButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(
-    PullTabContext
-  );
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
+  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
+  const { itineraryListModal, setItineraryListModal } = useContext(ItineraryListModalContext);
   const { setGearModal } = useContext(SettingsContext);
   const { setProfileModal } = useContext(ProfileModalContext);
   const { setPicAdderModal } = useContext(PictureAdderContext);
@@ -47,7 +36,7 @@ export default function SiteSearchButton() {
   const { setDiveSiteAdderModal } = useContext(DSAdderContext);
   const { setSiteModal } = useContext(AnchorModalContext);
   const { setShopModal } = useContext(ShopModalContext);
- 
+
   const { itterator } = useContext(IterratorContext);
   const { itterator2 } = useContext(Iterrator2Context);
   const { itterator3 } = useContext(Iterrator3Context);
@@ -80,7 +69,7 @@ export default function SiteSearchButton() {
   }, [itterator2]);
 
   useEffect(() => {
-    if (diveSiteSearchModal) {
+    if (itineraryListModal) {
       setDiveSiteAdderModal(false);
       setTutorialLaunchpadModal(false);
       setMapSearchModal(false);
@@ -92,26 +81,12 @@ export default function SiteSearchButton() {
       setShowFilterer(false);
       setTiles(true);
     }
-  }, [diveSiteSearchModal]);
-
-  const handlePress = () => {
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID('DiveSiteSearchButton')
-    setSmallModal(!smallModal)
-  }
+  }, [itineraryListModal]);
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={
-          itterator === 11 ||
-          itterator === 18 ||
-          itterator2 === 5 ||
-          itterator2 === 9 ||
-          itterator3 === 5
-            ? null
-            : handlePress
-        }
+        onPress={() => setItineraryListModal(!itineraryListModal)}
         onPressIn={() => setButState(true)}
         onPressOut={() => setButState(false)}
         style={{
@@ -122,12 +97,12 @@ export default function SiteSearchButton() {
       >
         <View style={styles.buttonBox}>
           <MaterialCommunityIcons
-            name="map-search-outline"
-            color={butState ? "gold" : "white"}
+            name="diving-scuba-flag"
             size={moderateScale(34)}
+            color={butState ? "gold" : "white"}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Site Search
+            Trip Creator
           </Text>
         </View>
       </TouchableWithoutFeedback>

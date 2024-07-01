@@ -10,8 +10,9 @@ import {
 import React, { useState, useContext, useEffect } from "react";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
-import { scale } from "react-native-size-matters";
+import { moderateScale, scale } from "react-native-size-matters";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 
 export default function SuccessModal(props) {
   const {
@@ -63,30 +64,14 @@ export default function SuccessModal(props) {
         <Text style={styles.text2}>
           {blurb}
         </Text>
-        <View
-          style={profileCloseState ? styles.OKbuttonPressed : styles.OKbutton}
-        >
-          <TouchableWithoutFeedback
-            onPress={() => tidyUp()}
-            onPressIn={() => setProfileCloseState(true)}
-            onPressOut={() => setProfileCloseState(false)}
-          >
-            <Text
-              style={{
-                color: "gold",
-                fontSize: 17,
-                opacity: 1,
-                fontFamily: "PermanentMarker_400Regular",
-                width: "100%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                textAlign: "center",
-              }}
-            >
-              Ok
-            </Text>
-          </TouchableWithoutFeedback>
+
+        <View style={{ marginRight: "24%", marginBottom: moderateScale(20) }}>
+          <ModalSecondaryButton
+            buttonAction={tidyUp}
+            icon={null}
+            buttonText={"Ok"}
+            altStyle={false}
+          />
         </View>
       </View>
     </View>

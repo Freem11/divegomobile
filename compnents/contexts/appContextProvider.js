@@ -11,6 +11,8 @@ import SelectedShopContextProvider from './selectedShopContext';
 import ModalSelectContextProvider from './modalSelectContext';
 import ProfileModalContextProvider from './profileModalContext';
 import PartnerModalContextProvider from './partnerAccountRequestModalContext';
+import ItineraryCreatorModalContextProvider from './itineraryCreatorModalContext';
+import ItineraryListModalContextProvider from './itineraryListModalContext';
 import DevelopmentModeContextProvider from './developementModeContext';
 import AreaPicsContextProvider from './areaPicsContext';
 import SearchTextContextProvider from './searchTextContext';
@@ -48,6 +50,9 @@ import CarrouselTilesContextProvider from './carrouselTilesContext';
 import CommentsModalContextProvider from './commentsModalContext';
 import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
+import ActiveButtonIDContextProvider from './activeButtonIDContext';
+import PreviousButtonIDContextProvider from './previousButtonIDContext';
+import SmallModalContextProvider from "./smallModalContext";
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -59,6 +64,8 @@ const providers = [
     ModalSelectContextProvider,
     ProfileModalContextProvider,
     PartnerModalContextProvider,
+    ItineraryCreatorModalContextProvider,
+    ItineraryListModalContextProvider,
     DevelopmentModeContextProvider,
     AreaPicsContextProvider,
     SearchTextContextProvider,
@@ -96,6 +103,9 @@ const providers = [
     CommentsModalContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
+    ActiveButtonIDContextProvider,
+    PreviousButtonIDContextProvider,
+    SmallModalContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);
