@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Keyboard, StyleSheet, View, Dimensions } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import { getSiteNamesThatFit, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import {
+  getSiteNamesThatFit,
+  getSingleDiveSiteByNameAndRegion,
+} from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
-import { SmallModalContext } from '../contexts/smallModalContext';
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
@@ -18,6 +22,10 @@ export default function DiveSiteAutoComplete(props) {
   const { setDiveSearchBump } = props;
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -27,9 +35,6 @@ export default function DiveSiteAutoComplete(props) {
   );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
 
   let diveSiteData;
 
@@ -72,32 +77,34 @@ export default function DiveSiteAutoComplete(props) {
   }, [boundaries]);
 
   useEffect(() => {
-    if ( list.length > 0){
-      setDiveSearchBump(true)
-    } 
+    if (list.length > 0) {
+      setDiveSearchBump(true);
+    }
   }, [list]);
 
   const handleConfirm = async (diveSite) => {
     if (diveSite !== null) {
-
       let nameOnly = diveSite.title.split(" ~ ");
-      let diveSiteSet = await getSingleDiveSiteByNameAndRegion({ name: nameOnly[0], region: nameOnly[1] });
-  
+      let diveSiteSet = await getSingleDiveSiteByNameAndRegion({
+        name: nameOnly[0],
+        region: nameOnly[1],
+      });
+
       if (diveSiteSet) {
-    
-            setSelectedDiveSite({
-              SiteName: diveSiteSet[0].name,
-              Latitude: diveSiteSet[0].lat,
-              Longitude: diveSiteSet[0].lng,
-            });
+        setSelectedDiveSite({
+          SiteName: diveSiteSet[0].name,
+          Latitude: diveSiteSet[0].lat,
+          Longitude: diveSiteSet[0].lng,
+        });
 
-            if (tutorialRunning) {
-              if (itterator2 === 5) {
-                setItterator2(itterator2 + 1);
-              }
-            }
+        if (tutorialRunning) {
+          if (itterator2 === 5) {
+            setItterator2(itterator2 + 1);
           }
-
+        }
+      }
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("DiveSiteSearchButton");
       setSmallModal(!smallModal);
       Keyboard.dismiss();
     }
@@ -108,7 +115,7 @@ export default function DiveSiteAutoComplete(props) {
   };
 
   const handleChangeText = (value) => {
-    handleDiveSiteList(value)
+    handleDiveSiteList(value);
   };
 
   return (
@@ -137,7 +144,7 @@ export default function DiveSiteAutoComplete(props) {
           zIndex: 2,
         }}
         suggestionsListContainerStyle={{
-          height: list.length > 0 ? (windowHeight/2) : 0
+          height: list.length > 0 ? windowHeight / 2 : 0,
         }}
         direction={"down"}
         dataSet={list}
@@ -165,6 +172,6 @@ const styles = StyleSheet.create({
     width: moderateScale(200),
     borderRadius: moderateScale(10),
     zIndex: 1,
-    marginTop: moderateScale(-30)
+    marginTop: moderateScale(-30),
   },
 });

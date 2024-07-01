@@ -8,7 +8,9 @@ import {
 import React, { useContext, useEffect } from "react";
 import { moderateScale } from "react-native-size-matters";
 import DiveSiteAutoComplete from "../diveSiteSearch/diveSiteAutocomplete";
-import { DiveSiteSearchModalContext } from "../../compnents/contexts/diveSiteSearchContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { TutorialContext } from "../../compnents/contexts/tutorialContext";
 import { Iterrator2Context } from "../../compnents/contexts/iterrator2Context";
@@ -16,29 +18,37 @@ import ModalHeader from "../reusables/modalHeader";
 
 export default function DiveSiteSearchModal(props) {
   const { setDiveSearchBump } = props;
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+ 
   const { setDiveSiteAdderModal } = useContext(DSAdderContext);
   const { tutorialRunning } = useContext(TutorialContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
 
+
   const toggleDiveSiteSearchModal = () => {
-    setDiveSiteSearchModal(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID("DiveSiteSearchButton")
+    setSmallModal(!smallModal);
   };
 
   const swapToSiteAdd = () => {
     setDiveSiteAdderModal(true);
-    setDiveSiteSearchModal(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID("DiveSiteSearchButton")
+    setSmallModal(!smallModal);
   };
 
-  useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator2 === 3) {
-        setItterator2(itterator2 + 1);
-      }
-    }
-  }, [diveSiteSearchModal]);
+//////////// need to refactor for guide ////////////
+
+  // useEffect(() => {
+  //   if (tutorialRunning) {
+  //     if (itterator2 === 3) {
+  //       setItterator2(itterator2 + 1);
+  //     }
+  //   }
+  // }, [diveSiteSearchModal]);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

@@ -8,7 +8,9 @@ import {
 import React, { useContext } from "react";
 import { moderateScale } from "react-native-size-matters";
 import GeocodeAutoComplete from "../locationSearch/geocodeAutocomplete";
-import { MapSearchModalContext } from "../../compnents/contexts/mapSearchContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { MapCenterContext } from "../../compnents/contexts/mapCenterContext";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 import ModalHeader from "../reusables/modalHeader";
@@ -16,11 +18,15 @@ import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 
 export default function MapSearchModal(props) {
   const { setMapSearchBump } = props;
-  const { setMapSearchModal } = useContext(MapSearchModalContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
   const { setMapCenter } = useContext(MapCenterContext);
 
   const toggleMapSearchModal = () => {
-    setMapSearchModal(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID("MapSearchButton")
+    setSmallModal(!smallModal);
   };
 
   const getCurrentLocation = async () => {
@@ -31,7 +37,9 @@ export default function MapSearchModal(props) {
           lat: location.coords.latitude,
           lng: location.coords.longitude,
         });
-        setMapSearchModal(false);
+        setPreviousButtonID(activeButtonID)
+        setActiveButtonID("MapSearchButton")
+        setSmallModal(!smallModal);
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });

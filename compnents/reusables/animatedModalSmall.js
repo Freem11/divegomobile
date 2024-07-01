@@ -41,16 +41,19 @@ export default function AnimatedModalSmall(props) {
   };
 
   useEffect(() => {
+    // console.log(activeButtonID, previousButtonID, smallModalY.value)
     if (
       smallModalY.value === (scale(-550))  &&
       activeButtonID !== previousButtonID
     ) {
+      // console.log('conditiion met')
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
-      }, 300);
+      }, 310);
     } else if ( smallModalY.value === (scale(-650))  &&
     activeButtonID !== previousButtonID){
+      // console.log('conditiion 2 met')
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
