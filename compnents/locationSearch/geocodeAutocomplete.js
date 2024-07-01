@@ -3,12 +3,14 @@ import { StyleSheet, View, Keyboard } from "react-native";
 import PlacesInput from "react-native-places-input";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { MapSearchModalContext } from "../contexts/mapSearchContext";
+import { SmallModalContext } from '../contexts/smallModalContext';
 import { moderateScale } from "react-native-size-matters";
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function GeocodeAutoComplete(props) {
   const { setMapSearchBump } = props;
   const { setMapCenter } = useContext(MapCenterContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { setMapSearchModal } = useContext(
     MapSearchModalContext
   );
@@ -18,7 +20,7 @@ export default function GeocodeAutoComplete(props) {
       lat: place.result.geometry.location.lat,
       lng: place.result.geometry.location.lng,
     });
-    setMapSearchModal(false);
+    setSmallModal(!smallModal);
     Keyboard.dismiss();
   };
 

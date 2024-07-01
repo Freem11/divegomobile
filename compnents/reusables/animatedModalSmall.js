@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { scale } from "react-native-size-matters";
 import Animated, {
@@ -10,8 +10,8 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 
-import MapSearchModal from '../modals/mapSearchModal';
-import DiveSiteSearchModal from '../modals/diveSiteSearchModal'
+import MapSearchModal from "../modals/mapSearchModal";
+import DiveSiteSearchModal from "../modals/diveSiteSearchModal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -20,6 +20,9 @@ export default function AnimatedModalSmall(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
   const { previousButtonID } = useContext(PreviousButtonIDContext);
   const { smallModal } = useContext(SmallModalContext);
+
+  const [diveSearchBump, setDiveSearchBump] = useState(false);
+  const [mapSearchBump, setMapSearchBump] = useState(false);
 
   const smallModalY = useSharedValue(scale(1200));
 
@@ -51,10 +54,28 @@ export default function AnimatedModalSmall(props) {
     }
   }, [smallModal]);
 
+  useEffect(() => {
+    if (diveSearchBump) {
+      smallModalY.value = withTiming(scale(-650));
+    }
+    setDiveSearchBump(false);
+  }, [diveSearchBump]);
+
+  useEffect(() => {
+    if (mapSearchBump) {
+      smallModalY.value = withTiming(scale(-650));
+    }
+    setMapSearchBump(false);
+  }, [mapSearchBump]);
+
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeButtonID === "DiveSiteSearchButton" && <DiveSiteSearchModal />}
-      {activeButtonID === "MapSearchButton" && <MapSearchModal />}
+      {activeButtonID === "DiveSiteSearchButton" && (
+        <DiveSiteSearchModal setDiveSearchBump={setDiveSearchBump} />
+      )}
+      {activeButtonID === "MapSearchButton" && (
+        <MapSearchModal setMapSearchBump={setMapSearchBump} />
+      )}
     </Animated.View>
   );
 }

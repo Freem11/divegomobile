@@ -6,17 +6,18 @@ import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
+import { SmallModalContext } from '../contexts/smallModalContext';
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { scale, moderateScale } from "react-native-size-matters";
+import { moderateScale } from "react-native-size-matters";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteAutoComplete(props) {
   const { setDiveSearchBump } = props;
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -97,7 +98,7 @@ export default function DiveSiteAutoComplete(props) {
             }
           }
 
-      setDiveSiteSearchModal(false);
+      setSmallModal(!smallModal);
       Keyboard.dismiss();
     }
   };
