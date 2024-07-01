@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableWithoutFeedback,
-  KeyboardAvoidingView,
   Platform,
   Dimensions,
   Keyboard,
@@ -24,11 +23,9 @@ import {
   updatePushToken,
 } from "./../supabaseCalls/accountSupabaseCalls";
 import {
-  getPhotosforAnchorMulti,
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "./../supabaseCalls/photoSupabaseCalls";
-import { userCheck } from "./../supabaseCalls/authenticateSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
@@ -69,8 +66,6 @@ import { ShopModalContext } from "./contexts/shopModalContext";
 import { ItineraryListModalContext } from "./contexts/itineraryListModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
-import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
-import { MapSearchModalContext } from "./contexts/mapSearchContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -97,8 +92,6 @@ import UserProfileModal from "./modals/userProfileModal";
 import SettingsModal from "./modals/settingsModal";
 import ShopModal from "./modals/shopModal";
 import ItineraryListModal from "./modals/itineraryListModal";
-import MapSearchModal from "./modals/mapSearchModal";
-import DiveSiteSearchModal from "./modals/diveSiteSearchModal";
 import PartnerAccountRequestModal from "./modals/partnerAccountRequestModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { ProfileModalContext } from "./contexts/profileModalContext";
@@ -145,10 +138,6 @@ export default function MapPage() {
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
-
-  // useEffect(() => {
-  //   zoomHelper ? setMasterSwitch(false) : setMasterSwitch(true);
-  // }, [zoomHelper]);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -630,83 +619,6 @@ export default function MapPage() {
     }
   };
 
-  //MapSearch Modal Animation
-  const mapSearchModalY = useSharedValue(windowHeight);
-  const [mapSearchBump, setMapSearchBump] = useState(false);
-  const { mapSearchModal, setMapSearchModal } = useContext(
-    MapSearchModalContext
-  );
-
-  const mapSearchModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: mapSearchModalY.value }],
-    };
-  });
-
-  useEffect(() => {
-    if (mapSearchBump) {
-      mapSearchModalY.value = withTiming(-windowHeight * 0.3, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-    setMapSearchBump(false);
-  }, [mapSearchBump]);
-
-  const startMapSearchModalAnimations = () => {
-    if (mapSearchModal) {
-      mapSearchModalY.value = withTiming(-windowHeight * 0.1, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      Keyboard.dismiss();
-      mapSearchModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  //DiveSiteSearch Modal Animation
-
-  const diveSiteSearchModalY = useSharedValue(windowHeight);
-  const [diveSearchBump, setDiveSearchBump] = useState(false);
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
-
-  const diveSiteSearchModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: diveSiteSearchModalY.value }],
-    };
-  });
-
-  useEffect(() => {
-    if (diveSearchBump) {
-      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.3, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-    setDiveSearchBump(false);
-  }, [diveSearchBump]);
-
-  const startdiveSiteSearchModalAnimations = () => {
-    if (diveSiteSearchModal) {
-      diveSiteSearchModalY.value = withTiming(-windowHeight * 0.1, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      Keyboard.dismiss();
-      diveSiteSearchModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
   const feedbackX = useSharedValue(0);
 
   const feedbackReveal = useAnimatedStyle(() => {
@@ -730,14 +642,6 @@ export default function MapPage() {
   useEffect(() => {
     startSettingsModalAnimations();
   }, [gearModal]);
-
-  useEffect(() => {
-    startMapSearchModalAnimations();
-  }, [mapSearchModal]);
-
-  useEffect(() => {
-    startdiveSiteSearchModalAnimations();
-  }, [diveSiteSearchModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -795,15 +699,6 @@ export default function MapPage() {
       setTextValue("");
       setIsOpen(false);
     }
-    // if (pullTabHeight.value === 0) {
-    //   pullTabHeight.value = withTiming(1);
-    //   setIsOpen(true);
-    // } else {
-    //   Keyboard.dismiss();
-    //   pullTabHeight.value = withTiming(0);
-    //   setTextValue("");
-    //   setIsOpen(false);
-    // }
   };
 
   useEffect(() => {
@@ -1319,20 +1214,6 @@ export default function MapPage() {
             {gearModal && (
               <Animated.View style={[styles.anchorModal, settingsModalReveal]}>
                 <SettingsModal />
-              </Animated.View>
-            )}
-
-            {mapSearchModal && (
-              <Animated.View style={[styles.searchModal, mapSearchModalReveal]}>
-                <MapSearchModal setMapSearchBump={setMapSearchBump} />
-              </Animated.View>
-            )}
-
-            {diveSiteSearchModal && (
-              <Animated.View
-                style={[styles.diveSearchModal, diveSiteSearchModalReveal]}
-              >
-                <DiveSiteSearchModal setDiveSearchBump={setDiveSearchBump} />
               </Animated.View>
             )}
 
