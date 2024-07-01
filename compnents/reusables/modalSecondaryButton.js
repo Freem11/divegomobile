@@ -9,7 +9,7 @@ export default function ModalSecondaryButton(props) {
 
   let applyBgStyle;
   let applyFntStyle;
-  console.log(isPressed, buttonText);
+
   if (!isPressed && !altStyle) {
     applyBgStyle = styles.buttonBackground;
     applyFntStyle = styles.buttonText;

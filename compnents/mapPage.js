@@ -16,9 +16,8 @@ import Constants from "expo-constants";
 import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
-import FABButtons from "./FABset";
-import Logo from "./logo/logoButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
+import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -435,7 +434,6 @@ export default function MapPage() {
   };
 
   useEffect(() => {
-    console.log("!!!")
     startPartnerModalAnimations();
   }, [partnerModal]);
 
@@ -1354,6 +1352,8 @@ export default function MapPage() {
                 />
               </Animated.View>
             )}
+
+            <AnimatedModalSmall />
 
             <Map style={{ zIndex: 1 }} />
           </View>

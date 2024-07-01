@@ -158,7 +158,6 @@ export default function SettingsModal() {
   };
 
   const toggleSettingsModal = () => {
-    console.log("hey");
     setGearModal(false);
   };
 

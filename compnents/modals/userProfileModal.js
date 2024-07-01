@@ -195,8 +195,6 @@ export default function UserProfileModal() {
   };
 
   useEffect(() => {
-    console.log(nameChangerState);
-
     if (!nameChangerState) {
       userBoxX.value = withTiming(scale(-450));
       getProfile();

@@ -15,6 +15,9 @@ import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { SmallModalContext } from '../contexts/smallModalContext';
 import {
   MaterialIcons,
   FontAwesome5,
@@ -24,6 +27,9 @@ import {
 
 export default function LocationSearchButton() {
   const [butState, setButState] = useState(false);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { mapSearchModal, setMapSearchModal } = useContext(
@@ -57,6 +63,12 @@ export default function LocationSearchButton() {
     }
   }, [mapSearchModal]);
 
+  const handlePress = () => {
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('MapSearchButton')
+    setSmallModal(!smallModal)
+  }
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
@@ -68,7 +80,7 @@ export default function LocationSearchButton() {
           itterator2 === 9 ||
           itterator3 === 5
             ? null
-            : () => setMapSearchModal(!mapSearchModal)
+            : handlePress
         }
         onPressIn={() => setButState(true)}
         onPressOut={() => setButState(false)}

@@ -16,6 +16,10 @@ import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { SmallModalContext } from '../contexts/smallModalContext';
+
 import {
   MaterialIcons,
   FontAwesome5,
@@ -25,6 +29,9 @@ import {
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
@@ -87,6 +94,12 @@ export default function SiteSearchButton() {
     }
   }, [diveSiteSearchModal]);
 
+  const handlePress = () => {
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('DiveSiteSearchButton')
+    setSmallModal(!smallModal)
+  }
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
@@ -97,7 +110,7 @@ export default function SiteSearchButton() {
           itterator2 === 9 ||
           itterator3 === 5
             ? null
-            : () => setDiveSiteSearchModal(!diveSiteSearchModal)
+            : handlePress
         }
         onPressIn={() => setButState(true)}
         onPressOut={() => setButState(false)}

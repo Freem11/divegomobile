@@ -50,6 +50,9 @@ import CarrouselTilesContextProvider from './carrouselTilesContext';
 import CommentsModalContextProvider from './commentsModalContext';
 import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
+import ActiveButtonIDContextProvider from './activeButtonIDContext';
+import PreviousButtonIDContextProvider from './previousButtonIDContext';
+import SmallModalContextProvider from "./smallModalContext";
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -100,6 +103,9 @@ const providers = [
     CommentsModalContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
+    ActiveButtonIDContextProvider,
+    PreviousButtonIDContextProvider,
+    SmallModalContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

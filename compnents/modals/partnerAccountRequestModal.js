@@ -83,7 +83,6 @@ export default function PartnerAccountRequestModal() {
   });
 
   const handleClose = () => {
-    console.log("hey")
     setFormValues({
       ...formValues,
       WebsiteLink: "",
