@@ -1,17 +1,12 @@
 import {
   StyleSheet,
-  Text,
   View,
-  TextInput,
-  TouchableWithoutFeedback,
   Platform,
   Dimensions,
 } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  useDerivedValue,
-  interpolateColor,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
@@ -19,19 +14,14 @@ import Share from "react-native-share";
 import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import {
-  grabProfileById,
   getProfileWithStats,
 } from "../../supabaseCalls/accountSupabaseCalls";
-import { findImageInCache, cacheImage } from "../helpers/imageCashingHelper";
-import InsetShadow from "react-native-inset-shadow";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import ImgToBase64 from "react-native-image-base64";
 import {
   insertUserFollow,
@@ -39,23 +29,15 @@ import {
   checkIfUserFollows,
 } from "../../supabaseCalls/userFollowSupabaseCalls";
 import InputFieldLg from "../reusables/textInputLarge";
-import InputField from "../reusables/textInputs";
+import InputFieldSm from "../reusables/textInputSmall";
 import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
 export default function UserProfileModal() {
-  const { profile, setProfile } = useContext(UserProfileContext);
-  const [profileCloseState, setProfileCloseState] = useState(false);
-  const [imaButState, setImaButState] = useState(false);
-  const [nameButState, setNameButState] = useState(false);
+  const { profile } = useContext(UserProfileContext);
   const [nameChangerState, setNameChangerState] = useState(false);
-  const [followButState, setFollowButState] = useState(false);
   const [userFollows, setUserFollows] = useState(false);
-  const [picUri, setPicUri] = useState(null);
-  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
+  const { setProfileModal } = useContext(ProfileModalContext);
   const [userStats, setUserStats] = useState(null);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
@@ -255,27 +237,27 @@ export default function UserProfileModal() {
         )}
 
         <View style={styles.statsContainer}>
-          <InputField
+          <InputFieldSm
             placeHolderText={"Sea Life"}
             inputValue={SeaLifeText}
             keyboardType={"default"}
           />
-          <InputField
+          <InputFieldSm
             placeHolderText={"Dive Sites"}
             inputValue={DiveSitesText}
             keyboardType={"default"}
           />
-          <InputField
+          <InputFieldSm
             placeHolderText={"Followers"}
             inputValue={FollowersText}
             keyboardType={"default"}
           />
-          <InputField
+          <InputFieldSm
             placeHolderText={"Comments"}
             inputValue={CommentsText}
             keyboardType={"default"}
           />
-          <InputField
+          <InputFieldSm
             placeHolderText={"Likes"}
             inputValue={LikesText}
             keyboardType={"default"}

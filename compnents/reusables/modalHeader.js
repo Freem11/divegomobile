@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, scale } from "react-native-size-matters";
 import ModalSecondaryButton from "./modalSecondaryButton";
 import ModalTertiaryButton from "./modalTertiaryButton";
 import CloseButton from "./closeButton";
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     fontFamily: "PatrickHand_400Regular",
     color: "#F0EEEB",
-    fontSize: moderateScale(28),
+    fontSize: scale(20),
     // backgroundColor: "pink",
   },
   subText: {
