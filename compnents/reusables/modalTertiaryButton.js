@@ -20,7 +20,6 @@ export default function ModalTertiaryButton(props) {
 
 const styles = StyleSheet.create({
   flag: {
-    marginLeft: "10%",
-    marginRight: "-20%",
+    marginRight: moderateScale(20),
   },
 });

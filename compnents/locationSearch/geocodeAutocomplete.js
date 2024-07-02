@@ -23,6 +23,7 @@ export default function GeocodeAutoComplete(props) {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID("MapSearchButton")
     setSmallModal(!smallModal);
+    console.log("WHAT?", activeButtonID)
     Keyboard.dismiss();
   };
 

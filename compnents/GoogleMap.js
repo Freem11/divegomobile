@@ -48,7 +48,7 @@ import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
 // import shopIOS from "../compnents/png/scuba.png";
-import shopClustIOS from "../compnents/png/face-mask.png";
+import shopClustIOS from "../compnents/png/mapIcons/DiveCentre48x48.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
