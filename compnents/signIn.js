@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableWithoutFeedback,
   Image,
   KeyboardAvoidingView,
@@ -19,7 +18,6 @@ import {
 } from "../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
-import InsetShadow from "react-native-inset-shadow";
 import facebookLogo from "../compnents/png/facebookblue.png";
 import googleLogo from "../compnents/png/google-logo-9822.png";
 import mantaIOS from "../compnents/png/Matt_Manta_White.png";
@@ -37,6 +35,8 @@ import {
 } from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Buffer } from "buffer";
+import SubmitButton from "./reusables/submitButton";
+import InputField from "./reusables/textInputs";
 Settings.initializeSDK();
 
 let emailVar = false;
@@ -51,22 +51,12 @@ const googleAndroidClientId4 = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID_4;
 
 const facebookAppId = process.env.FACEBOOK_APP_ID;
 
-
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function SignInRoute() {
-  const [token, setToken] = useState("");
-  const [token2, setToken2] = useState("");
-
-  const [FBProfile, setFBProfile] = useState({});
-
   const [isSignedIn, setIsSignedIn] = useState(false);
-
-  const { activeSession, setActiveSession } = useContext(SessionContext);
-
+  const { setActiveSession } = useContext(SessionContext);
   const [loginFail, setLoginFail] = useState(null);
-
   const [formVals, setFormVals] = useState({
     email: "",
     password: "",
@@ -97,7 +87,6 @@ export default function SignInRoute() {
     var base64Url = token.split(".")[1];
     var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     var jsonPayload = Buffer.from(base64, "base64").toString("ascii");
-    console.log("basic", jsonPayload);
     return JSON.parse(jsonPayload);
   }
 
@@ -308,7 +297,6 @@ export default function SignInRoute() {
   };
 
   const keboardOffset = Platform.OS === "ios" ? 100 : 0;
-  const [subButState, setSubButState] = useState(false);
   const [googleButState, setGoogleButState] = useState(false);
   const [facebookState, setFacebookButState] = useState(false);
 
@@ -397,8 +385,9 @@ export default function SignInRoute() {
       <View
         style={{
           flexDirection: "row",
-          marginTop:  windowWidth > 700 ?  moderateScale(0) : moderateScale(20),
-          marginBottom: windowWidth > 700 ?  moderateScale(20) : moderateScale(10),
+          marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(20),
+          marginBottom:
+            windowWidth > 700 ? moderateScale(20) : moderateScale(10),
         }}
       >
         <View style={styles.leftLine}></View>
@@ -412,87 +401,31 @@ export default function SignInRoute() {
         keyboardVerticalOffset={keboardOffset}
       >
         <View style={styles.inputContainer}>
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              marginTop: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.5}
-          >
-            <TextInput
-              style={formValidation.emailVal ? styles.inputRed : styles.input}
-              value={formVals.email}
-              placeholder={"Email"}
-              placeholderTextColor="darkgrey"
-              color={formValidation.emailVal ? "black" : "#F0EEEB"}
-              fontSize={moderateScale(16)}
-              onChangeText={(emailsText) =>
-                setFormVals({ ...formVals, email: emailsText })
+          <InputField
+            validationItem={formValidation.emailVal}
+            placeHolderText={"Email"}
+            inputValue={formVals.email}
+            keyboardType={"default"}
+            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
+          />
+          <View style={styles.inputBox}>
+            <InputField
+              validationItem={formValidation.passwordVal}
+              placeHolderText={"Password"}
+              inputValue={formVals.password}
+              keyboardType={null}
+              onChangeText={(text) =>
+                setFormVals({ ...formVals, password: text })
               }
-              onFocus={() => setLoginFail(null)}
-            ></TextInput>
-          </InsetShadow>
+              secure={true}
+            />
+          </View>
 
-          <InsetShadow
-            containerStyle={{
-              borderRadius: moderateScale(25),
-              height: moderateScale(40),
-              width: moderateScale(200),
-              marginTop: moderateScale(10),
-            }}
-            elevation={20}
-            shadowRadius={15}
-            shadowOpacity={0.5}
-          >
-            <TextInput
-              style={
-                formValidation.passwordVal ? styles.inputRed : styles.input
-              }
-              value={formVals.password}
-              placeholder={"Password"}
-              fontSize={moderateScale(16)}
-              secureTextEntry={true}
-              placeholderTextColor="darkgrey"
-              color={formValidation.passwordVal ? "black" : "#F0EEEB"}
-              onChangeText={(passwordsText) =>
-                setFormVals({ ...formVals, password: passwordsText })
-              }
-              onFocus={() => setLoginFail(null)}
-            ></TextInput>
-          </InsetShadow>
           {loginFail && <Text style={styles.erroMsg}>{loginFail}</Text>}
         </View>
       </KeyboardAvoidingView>
 
-      <View
-        style={subButState ? styles.SubmitButton2Pressed : styles.SubmitButton2}
-      >
-        <TouchableWithoutFeedback
-          onPress={handleSignInSubmit}
-          onPressIn={() => setSubButState(true)}
-          onPressOut={() => setSubButState(false)}
-        >
-          <Text
-            style={{
-              color: "gold",
-              fontSize: windowWidth > 600 ? scale(10) : scale(17),
-              marginTop: 8,
-              fontFamily: "PermanentMarker_400Regular",
-              width: "100%",
-              alignSelf: "center",
-              justifyContent: "center",
-              alignContent: "center",
-              textAlign: "center",
-            }}
-          >
-            Sign In
-          </Text>
-        </TouchableWithoutFeedback>
-      </View>
+      <SubmitButton buttonAction={handleSignInSubmit} label={"Sign In"} />
     </View>
   );
 }
@@ -511,79 +444,8 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(20),
   },
-  input: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "#538dbd",
-    borderRadius: 10,
-    width: moderateScale(200),
-    height: moderateScale(40),
-    alignSelf: "center",
-    marginBottom: moderateScale(20),
-    textAlign: "center",
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 1,
-      height: 1,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 6,
-
-    elevation: 10,
-  },
-  inputRed: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "pink",
-    borderRadius: 10,
-    width: moderateScale(200),
-    height: moderateScale(40),
-    alignSelf: "center",
-    marginBottom: moderateScale(20),
-    textAlign: "center",
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 1,
-      height: 1,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 6,
-
-    elevation: 10,
-  },
-  text: {
-    fontSize: 18,
-    alignSelf: "center",
-    marginBottom: 5,
-  },
-  SubmitButton2: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: "3%",
-    marginLeft: 70,
-    zIndex: 2,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderTopWidth: 0.3,
-    borderBottomColor: "transparent",
-  },
-  SubmitButton2Pressed: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: "3%",
-    marginLeft: 70,
-    borderTopWidth: 0.3,
-    zIndex: 2,
-    width: "85%",
-    borderTopColor: "darkgrey",
-    borderBottomColor: "transparent",
-    backgroundColor: "#538aaa",
-  },
-  singups: {
-    marginTop: "25%",
-    marginBottom: "-23%",
+  inputBox: {
+    marginTop: moderateScale(-10),
   },
   SignUpWithGoogle: {
     backgroundColor: "#ffffff",

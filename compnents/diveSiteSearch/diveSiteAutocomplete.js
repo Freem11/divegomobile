@@ -103,6 +103,7 @@ export default function DiveSiteAutoComplete(props) {
           }
         }
       }
+      console.log("WHAT?", activeButtonID);
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("DiveSiteSearchButton");
       setSmallModal(!smallModal);
@@ -115,6 +116,8 @@ export default function DiveSiteAutoComplete(props) {
   };
 
   const handleChangeText = (value) => {
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("DiveSiteSearchButton");
     handleDiveSiteList(value);
   };
 

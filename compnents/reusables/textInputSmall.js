@@ -3,13 +3,9 @@ import { StyleSheet, TextInput } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 
-export default function InputField(props) {
-  const {validationItem, placeHolderText, inputValue, keyboardType, onChangeText, secure} = props
+export default function InputFieldSm(props) {
+  const {validationItem, placeHolderText, inputValue, keyboardType, onChangeText} = props
 
-  let multiLine = true
-  if(secure){
-    multiLine= false
-  }
   return (
     <InsetShadow
         containerStyle={{
@@ -18,7 +14,7 @@ export default function InputField(props) {
             : "transparent",
           borderRadius: moderateScale(25),
           height: moderateScale(40),
-          width: moderateScale(200),
+          width: moderateScale(140),
           marginTop: moderateScale(20),
           alignItems: "center",
           justifyContent: "center",
@@ -37,9 +33,8 @@ export default function InputField(props) {
           keyboardType={keyboardType}
           color={validationItem ? "black" : "#F0EEEB"}
           fontSize={moderateScale(18)}
-          multiline={multiLine}
+          multiline
           onChangeText={onChangeText}
-          secureTextEntry={secure}
         ></TextInput>
       </InsetShadow>
   );

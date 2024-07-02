@@ -24,7 +24,7 @@ export default function AnimatedModalSmall(props) {
   const [diveSearchBump, setDiveSearchBump] = useState(false);
   const [mapSearchBump, setMapSearchBump] = useState(false);
 
-  const smallModalY = useSharedValue(scale(1200));
+  const smallModalY = useSharedValue(-windowHeight);
 
   const modalSlide = useAnimatedStyle(() => {
     return {
@@ -34,46 +34,55 @@ export default function AnimatedModalSmall(props) {
 
   const startSmallModalAnimation = () => {
     if (smallModalY.value === windowHeight) {
-      smallModalY.value = withTiming(scale(-650));
+      smallModalY.value = withTiming(-windowHeight*1.1);
     } else {
       smallModalY.value = withTiming(windowHeight);
     }
   };
 
   useEffect(() => {
-    // console.log(activeButtonID, previousButtonID, smallModalY.value)
+    let timout
+    windowHeight > 1000 ? timout = 850 : timout = 400
     if (
-      smallModalY.value === (scale(-650))  &&
-      activeButtonID !== previousButtonID
+      (smallModalY.value === -windowHeight*1.1)  &&
+      (activeButtonID !== previousButtonID)
     ) {
       // console.log('conditiion met')
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
       }, 315);
-    } else if ( smallModalY.value === (scale(-750))  &&
-    activeButtonID !== previousButtonID){
+      return
+    } else if ( 
+      (smallModalY.value === -windowHeight*1.35)  &&
+    (activeButtonID !== previousButtonID)
+    ){
       // console.log('conditiion 2 met')
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
-      }, 400);
+      }, timout);
+      return
     } else {
-      startSmallModalAnimation();
+      // console.log('conditiion 3 met')
+      setTimeout(() => {
+        startSmallModalAnimation();
+      }, 100);
+      return
     }
   }, [smallModal]);
 
 
   useEffect(() => {
     if (diveSearchBump) {
-      smallModalY.value = withTiming(scale(-750));
+      smallModalY.value = withTiming(-windowHeight*1.35);
     }
     setDiveSearchBump(false);
   }, [diveSearchBump]);
 
   useEffect(() => {
     if (mapSearchBump) {
-      smallModalY.value = withTiming(scale(-750));
+      smallModalY.value = withTiming(-windowHeight*1.35);
     }
     setMapSearchBump(false);
   }, [mapSearchBump]);
