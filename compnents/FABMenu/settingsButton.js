@@ -19,9 +19,16 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { LargeModalContext } from '../contexts/largeModalContext';
 
 export default function SettingsButton() {
   const [butState, setButState] = useState(false);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
@@ -52,10 +59,16 @@ export default function SettingsButton() {
     }
   }, [gearModal]);
 
+  const handlePress = () => {
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('SettingsButton')
+    setLargeModal(!largeModal)
+  }
+
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          onPress={() => {tutorialRunning ? null : setGearModal(!gearModal)}}
+          onPress={tutorialRunning ? null : handlePress}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{

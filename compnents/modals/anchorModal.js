@@ -24,6 +24,9 @@ import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
 import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -35,6 +38,11 @@ import ModalHeader from "../reusables/modalHeader";
 let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 export default function AnchorModal(props) {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { setSelectedPhoto, setPhotoBoxModel } = props;
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
@@ -127,7 +135,8 @@ export default function AnchorModal(props) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${selectedDiveSite.SiteName}" at Latitude: ${selectedDiveSite.Latitude} Longitude: ${selectedDiveSite.Longitude} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body:
+        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -146,7 +155,9 @@ export default function AnchorModal(props) {
       setGuideModal(false);
     }
 
-    setSiteModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("SiteAnchorIcon");
+    setLargeModal(!largeModal);
   };
 
   const handleSwitch = () => {
@@ -158,7 +169,9 @@ export default function AnchorModal(props) {
       Latitude: String(selectedDiveSite.Latitude),
       Longitude: String(selectedDiveSite.Longitude),
     });
-    setSiteModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("SiteAnchorIcon");
+    setLargeModal(!largeModal);
     setPicAdderModal(true);
   };
 

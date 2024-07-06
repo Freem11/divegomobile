@@ -52,7 +52,8 @@ import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
 import ActiveButtonIDContextProvider from './activeButtonIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
-import SmallModalContextProvider from "./smallModalContext";
+import SmallModalContextProvider from './smallModalContext';
+import LargeModalContextProvider from './largeModalContext'
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -105,7 +106,8 @@ const providers = [
     SelectedProfileContextProvider,
     ActiveButtonIDContextProvider,
     PreviousButtonIDContextProvider,
-    SmallModalContextProvider
+    SmallModalContextProvider,
+    LargeModalContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

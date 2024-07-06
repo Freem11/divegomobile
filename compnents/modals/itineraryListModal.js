@@ -24,13 +24,20 @@ import { scale } from "react-native-size-matters";
 import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
-import { shops } from "../../supabaseCalls/shopsSupabaseCalls";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ModalHeader from "../reusables/modalHeader";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ItineraryListModal(props) {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { itineraryListModal, setItineraryListModal } = props;
   const { shopModal, setShopModal } = useContext(ShopModalContext);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
@@ -69,7 +76,9 @@ export default function ItineraryListModal(props) {
   };
 
   const handleShopModalClose = () => {
-    setItineraryListModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("ItineraryListButton");
+    setLargeModal(!largeModal);
   };
 
   return (

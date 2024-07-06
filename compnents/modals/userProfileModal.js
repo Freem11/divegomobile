@@ -22,6 +22,9 @@ import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ImgToBase64 from "react-native-image-base64";
 import {
   insertUserFollow,
@@ -34,6 +37,11 @@ import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
 
 export default function UserProfileModal() {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { profile } = useContext(UserProfileContext);
   const [nameChangerState, setNameChangerState] = useState(false);
   const [userFollows, setUserFollows] = useState(false);
@@ -116,8 +124,9 @@ export default function UserProfileModal() {
   };
 
   const toggleProfileModal = () => {
-    setProfileModal(false);
-    // setUserStats(null);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("UserProfileButton");
+    setLargeModal(!largeModal);
 
     if (selectedProfile) {
       setSelectedProfile(null);

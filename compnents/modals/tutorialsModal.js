@@ -18,8 +18,9 @@ import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
-import { IterratorContext } from "../contexts/iterratorContext";
-import InsetShadow from "react-native-inset-shadow";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -30,6 +31,11 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TutorialLaunchPadModal() {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const [tutPadCloseState, setTutPadCloseState] = useState(false);
   const [tutPad2CloseState, setTutPad2CloseState] = useState(false);
@@ -67,7 +73,9 @@ export default function TutorialLaunchPadModal() {
   };
 
   const handleClose = () => {
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("TutorialsButton");
+    setLargeModal(!largeModal);
   };
 
   return (

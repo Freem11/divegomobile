@@ -20,9 +20,16 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import TutorialLaunchPadModal from "../modals/tutorialsModal";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { LargeModalContext } from '../contexts/largeModalContext';
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
@@ -56,10 +63,16 @@ export default function GuidesButton() {
     }
   }, [tutorialLaunchpadModal]);
 
+  const handlePress = () => {
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('TutorialsButton')
+    setLargeModal(!largeModal)
+  }
+
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          onPress={() => {tutorialRunning ? null : setTutorialLaunchpadModal(!tutorialLaunchpadModal)}}
+          onPress={tutorialRunning ? null : handlePress}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{

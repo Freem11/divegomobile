@@ -19,6 +19,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
@@ -30,6 +33,11 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PartnerAccountRequestModal() {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
   const { profile, setProfile } = useContext(UserProfileContext);
   const [closeButtonState, setCloseButtonState] = useState(false);
@@ -90,7 +98,9 @@ export default function PartnerAccountRequestModal() {
       Latitude: "",
       Longitude: "",
     });
-    setPartnerModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("PartnerAccountButton");
+    setLargeModal(!largeModal);
   };
 
   const handleSubmit = (formValues) => {

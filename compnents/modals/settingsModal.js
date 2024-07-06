@@ -35,6 +35,9 @@ import { MyCreaturesContext } from "../../compnents/contexts/myCreaturesContext"
 import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext";
 import { SettingsContext } from "../../compnents/contexts/gearModalContext";
 import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { scale, moderateScale } from "react-native-size-matters";
@@ -45,6 +48,11 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function SettingsModal() {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
   const [settingsCloseState, setSettingsCloseState] = useState(false);
@@ -127,7 +135,8 @@ export default function SettingsModal() {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       subject: `Delete Account Request ${blurb}`,
-      body: "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
+      body:
+        "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
       checkCanOpen: false,
     }).catch(console.error);
   };
@@ -158,7 +167,9 @@ export default function SettingsModal() {
   };
 
   const toggleSettingsModal = () => {
-    setGearModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("SettingsButton");
+    setLargeModal(!largeModal);
   };
 
   const toggleDCSwitch = () =>
@@ -187,8 +198,9 @@ export default function SettingsModal() {
   }, [creaturesIsEnabled]);
 
   const handlePartnerButton = () => {
-    setPartnerModal(true);
-    setGearModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("PartnerAccountButton");
+    setLargeModal(!largeModal);
   };
 
   return (
@@ -276,14 +288,14 @@ export default function SettingsModal() {
         </TouchableWithoutFeedback>
 
         <Animated.View style={[dangerZoneReveal, styles.dangerZone]}>
-        <PrimaryButton
-          buttonAction={alertHandler}
-          label={"Delete Account"}
-          textColor={true}
-          bgColor={true}
-          bgPressedColor={true}
-          icon={null}
-        />
+          <PrimaryButton
+            buttonAction={alertHandler}
+            label={"Delete Account"}
+            textColor={true}
+            bgColor={true}
+            bgPressedColor={true}
+            icon={null}
+          />
         </Animated.View>
       </View>
     </View>

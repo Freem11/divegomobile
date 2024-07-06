@@ -16,13 +16,9 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
-import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
-import InsetShadow from "react-native-inset-shadow";
 import { scale, moderateScale } from "react-native-size-matters";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
@@ -32,6 +28,9 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
@@ -48,6 +47,12 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteModal() {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
@@ -56,8 +61,9 @@ export default function DiveSiteModal() {
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
 
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
   const [diveCloseState, setDiveCloseState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -306,7 +312,9 @@ export default function DiveSiteModal() {
         }
       }
     } else {
-      setDiveSiteAdderModal(!diveSiteAdderModal);
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("DiveSiteAdderButton");
+      setLargeModal(!largeModal);
       failBoxY.value = withTiming(scale(1200));
       successBoxY.value = withTiming(scale(1200));
       SetFormValidation({

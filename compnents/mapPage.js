@@ -17,6 +17,8 @@ import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
+import AnimatedModalLarge from '../compnents/reusables/animatedModalLarge';
+
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -1235,6 +1237,7 @@ export default function MapPage() {
             )}
 
             <AnimatedModalSmall />
+            <AnimatedModalLarge />
 
             <Map style={{ zIndex: 1 }} />
           </View>

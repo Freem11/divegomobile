@@ -25,6 +25,9 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ModalHeader from "../reusables/modalHeader";
 
 import { shops } from "../../supabaseCalls/shopsSupabaseCalls";
@@ -33,7 +36,11 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ShopModal(props) {
-  // const {lat, lng, setSelectedPhoto, setPhotoBoxModel } = props
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { shopModal, setShopModal } = useContext(ShopModalContext);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const [siteCloseState, setSiteCloseState] = useState(false);
@@ -73,7 +80,9 @@ export default function ShopModal(props) {
   const handleShopModalClose = () => {
     setSelectedShop({ ...selectedShop, id: 0, orgName: "" });
     setItineraryList("");
-    setShopModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("ShopMaskIcon");
+    setLargeModal(!largeModal);
   };
 
   return (
