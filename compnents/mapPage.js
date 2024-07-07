@@ -18,6 +18,7 @@ import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
 import AnimatedModalLarge from '../compnents/reusables/animatedModalLarge';
+import AnimatedModalLargeSecond from '../compnents/reusables/animatedModalLargeSecond';
 
 import {
   grabProfileById,
@@ -1238,6 +1239,7 @@ export default function MapPage() {
 
             <AnimatedModalSmall />
             <AnimatedModalLarge />
+            <AnimatedModalLargeSecond />
 
             <Map style={{ zIndex: 1 }} />
           </View>
@@ -1495,7 +1497,7 @@ const styles = StyleSheet.create({
     height: windowHeight,
     width: windowWidth,
     backgroundColor: "rgba(0,0,0,0.5)",
-    zIndex: 25,
+    zIndex: 26,
     left: 0,
   },
   commentsModal: {

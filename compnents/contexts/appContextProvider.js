@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { combineComponents } from '../combineComponents';
 
 import DiveSiteSearchModalContextProvider from './diveSiteSearchContext';
@@ -53,7 +51,8 @@ import SelectedProfileContextProvider from './selectedProfileModalContext';
 import ActiveButtonIDContextProvider from './activeButtonIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import SmallModalContextProvider from './smallModalContext';
-import LargeModalContextProvider from './largeModalContext'
+import LargeModalContextProvider from './largeModalContext';
+import LargeModalSecondContextProvider from './largeModalSecondContext';
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -107,7 +106,8 @@ const providers = [
     ActiveButtonIDContextProvider,
     PreviousButtonIDContextProvider,
     SmallModalContextProvider,
-    LargeModalContextProvider
+    LargeModalContextProvider,
+    LargeModalSecondContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

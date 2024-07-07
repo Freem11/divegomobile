@@ -180,7 +180,7 @@ export default function CommentsModal() {
                 source={bubbles}
                 style={[
                   {
-                    height: moderateScale(36),
+                    height: moderateScale(38),
                     width: moderateScale(36),
                   },
                 ]}
@@ -244,7 +244,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "90%",
+    marginLeft: "3%",
+    width: "94%",
     height: "100%",
   },
   input: {
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 },
     paddingRight: moderateScale(15),
     paddingLeft: moderateScale(15),
-    marginRight: moderateScale(5),
+    marginRight: moderateScale(8),
     marginLeft: moderateScale(-7),
     paddingTop: Platform.OS === "ios" ? moderateScale(10) : moderateScale(0),
   },

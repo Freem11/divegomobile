@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   TouchableWithoutFeedback,
   Platform,
   Alert,
@@ -12,9 +11,7 @@ import {
 } from "react-native";
 import Animated, {
   useSharedValue,
-  interpolate,
   useAnimatedStyle,
-  useDerivedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
@@ -28,19 +25,17 @@ import {
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { grabRequestById } from "../../supabaseCalls/partnerSupabaseCalls";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import { MyCreaturesContext } from "../../compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext";
-import { SettingsContext } from "../../compnents/contexts/gearModalContext";
-import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
-import { scale, moderateScale } from "react-native-size-matters";
+import { moderateScale } from "react-native-size-matters";
 import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
 
@@ -49,15 +44,13 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function SettingsModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
   const { activeSession, setActiveSession } = useContext(SessionContext);
-  const { profile, setProfile } = useContext(UserProfileContext);
-  const [settingsCloseState, setSettingsCloseState] = useState(false);
-  const { gearModal, setGearModal } = useContext(SettingsContext);
-  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
+  const { profile } = useContext(UserProfileContext);
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
 
@@ -141,10 +134,6 @@ export default function SettingsModal() {
     }).catch(console.error);
   };
 
-  const [signButState, setSignButState] = useState(false);
-  const [reqButState, setReqButState] = useState(false);
-  const [dangerButState, setDangerButState] = useState(false);
-
   const [diveSitesIsEnabled, setDiveSitesIsEnabled] = useState(false);
   const [creaturesIsEnabled, setCreaturesIsEnabled] = useState(false);
   const [requestCheck, setRequestCheck] = useState([]);
@@ -200,6 +189,7 @@ export default function SettingsModal() {
   const handlePartnerButton = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("PartnerAccountButton");
+    setLargeModalSecond(!largeModalSecond);
     setLargeModal(!largeModal);
   };
 

@@ -2,10 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  TouchableWithoutFeedback,
   Platform,
-  Dimensions,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import Animated, {
@@ -13,13 +10,10 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import InsetShadow from "react-native-inset-shadow";
 import { scale, moderateScale } from "react-native-size-matters";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { FontAwesome } from "@expo/vector-icons";
 import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
@@ -29,20 +23,14 @@ import FailModal from "./confirmationCautionModal";
 import ModalHeader from "../reusables/modalHeader";
 import SubmitButton from "../reusables/submitButton";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
 export default function PartnerAccountRequestModal() {
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
   const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
-  const { profile, setProfile } = useContext(UserProfileContext);
-  const [closeButtonState, setCloseButtonState] = useState(false);
-  const [subButState, setSubButState] = useState(false);
-
+  const { profile } = useContext(UserProfileContext);
   useEffect(() => {
     setFormValues({ ...formValues, UserId: profile[0].UserID });
   }, []);
@@ -100,7 +88,7 @@ export default function PartnerAccountRequestModal() {
     });
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("PartnerAccountButton");
-    setLargeModal(!largeModal);
+    setLargeModalSecond(!largeModalSecond);
   };
 
   const handleSubmit = (formValues) => {
