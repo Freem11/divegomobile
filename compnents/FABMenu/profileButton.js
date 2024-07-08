@@ -14,20 +14,18 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import {
-  MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalContext } from '../contexts/largeModalContext';
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
@@ -64,7 +62,7 @@ export default function ProfileButton() {
   const handlePress = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('UserProfileButton')
-    setLargeModal(!largeModal)
+    setLargeModalSecond(!largeModalSecond)
   }
 
   return (

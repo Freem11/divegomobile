@@ -9,7 +9,9 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 
+import UserProfileModal from "../modals/userProfileModal";
 import PartnerAccountRequestModal from "../modals/partnerAccountRequestModal";
+import PicUploadModal from "../modals/picUploaderModal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -59,8 +61,10 @@ export default function AnimatedModalLargeSecond(props) {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
+      {activeButtonID === "UserProfileButton" && <UserProfileModal />}
       {activeButtonID === "PartnerAccountButton" && <PartnerAccountRequestModal />}
-      
+      {activeButtonID === "PictureAdderButton" && <PicUploadModal />}
+
     </Animated.View>
   );
 }

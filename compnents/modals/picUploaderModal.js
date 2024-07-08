@@ -52,7 +52,7 @@ import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import InputField from "../reusables/textInputs";
@@ -68,7 +68,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PicUploadModal() {
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
@@ -477,7 +477,7 @@ export default function PicUploadModal() {
     } else {
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("PictureAdderButton");
-      setLargeModal(!largeModal);
+      setLargeModalSecond(!largeModalSecond);
       failBoxY.value = withTiming(scale(1200));
       successBoxY.value = withTiming(scale(1200));
       SetFormValidation({

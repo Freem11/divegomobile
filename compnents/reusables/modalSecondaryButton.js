@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TouchableWithoutFeedback, Text } from "react-native";
+import { StyleSheet, View, TouchableWithoutFeedback ,Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -30,11 +30,18 @@ export default function ModalSecondaryButton(props) {
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}
     >
-      <View style={applyBgStyle}>
+      <View
+        style={applyBgStyle}
+      >
         {buttonText ? (
           <Text style={applyFntStyle}>{buttonText}</Text>
         ) : (
-          <MaterialIcons name={icon} size={moderateScale(24)} color="gold" />
+          <MaterialIcons
+            name={icon}
+            size={moderateScale(24)}
+            color="gold"
+            onPress={buttonAction}
+          />
         )}
       </View>
     </TouchableWithoutFeedback>
@@ -67,6 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#6498c3",
     width: moderateScale(65),
     height: moderateScale(35),
+    marginRight: moderateScale(20),
     marginLeft: "30%",
     marginTop: "3%",
     alignSelf: "center",

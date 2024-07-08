@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Platform,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, View, Platform, Dimensions } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -14,15 +9,14 @@ import Share from "react-native-share";
 import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
-import {
-  getProfileWithStats,
-} from "../../supabaseCalls/accountSupabaseCalls";
+import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ImgToBase64 from "react-native-image-base64";
@@ -38,6 +32,9 @@ import PrimaryButton from "../reusables/primaryButton";
 
 export default function UserProfileModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
@@ -124,13 +121,16 @@ export default function UserProfileModal() {
   };
 
   const toggleProfileModal = () => {
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("UserProfileButton");
-    setLargeModal(!largeModal);
 
     if (selectedProfile) {
       setSelectedProfile(null);
-      setSiteModal(true);
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("SiteAnchorIcon");
+      setLargeModalSecond(!largeModalSecond);
+    } else {
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("UserProfileButton");
+      setLargeModalSecond(!largeModalSecond);
     }
   };
 

@@ -24,13 +24,13 @@ import {
 } from "@expo/vector-icons";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalContext } from '../contexts/largeModalContext';
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 
 export default function PhotoButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
@@ -95,7 +95,7 @@ export default function PhotoButton() {
   const handlePress = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('PictureAdderButton')
-    setLargeModal(!largeModal)
+    setLargeModalSecond(!largeModalSecond)
   }
 
   return (

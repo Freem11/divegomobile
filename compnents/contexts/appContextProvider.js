@@ -48,6 +48,8 @@ import CarrouselTilesContextProvider from './carrouselTilesContext';
 import CommentsModalContextProvider from './commentsModalContext';
 import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
+import PhotoBoxModalContextProvider from './photoBoxModalContext';
+import SelectedPhotoContextProvider from './selectedPhotoContext';
 import ActiveButtonIDContextProvider from './activeButtonIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import SmallModalContextProvider from './smallModalContext';
@@ -103,6 +105,8 @@ const providers = [
     CommentsModalContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
+    PhotoBoxModalContextProvider,
+    SelectedPhotoContextProvider,
     ActiveButtonIDContextProvider,
     PreviousButtonIDContextProvider,
     SmallModalContextProvider,

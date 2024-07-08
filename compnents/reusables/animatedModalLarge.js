@@ -11,9 +11,7 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 
 import DiveSiteModal from "../modals/diveSiteAdderModal";
-import PicUploadModal from "../modals/picUploaderModal";
 import SettingsModal from "../modals/settingsModal";
-import UserProfileModal from "../modals/userProfileModal";
 import TutorialLaunchPadModal from "../modals/tutorialsModal";
 import ItineraryListModal from "../modals/itineraryListModal";
 
@@ -70,9 +68,7 @@ export default function AnimatedModalLarge(props) {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeButtonID === "DiveSiteAdderButton" && <DiveSiteModal />}
-      {activeButtonID === "PictureAdderButton" && <PicUploadModal />}
       {activeButtonID === "SettingsButton" && <SettingsModal />}
-      {activeButtonID === "UserProfileButton" && <UserProfileModal />}
       {activeButtonID === "TutorialsButton" && <TutorialLaunchPadModal />}
       {activeButtonID === "ItineraryListButton" && <ItineraryListModal />}
 

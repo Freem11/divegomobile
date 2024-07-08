@@ -24,12 +24,15 @@ import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { PictureAdderContext } from "../contexts/picModalContext";
+import { PhotoBoxModalContext } from "../contexts/photoBoxModalContext";
+import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
-import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import ImgToBase64 from "react-native-image-base64";
 import Picture from "./picture";
@@ -39,11 +42,14 @@ let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 export default function AnchorModal(props) {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { setSelectedPhoto, setPhotoBoxModel } = props;
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
+  const { setPhotoBoxModal } = useContext(PhotoBoxModalContext);
+
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
   const { myCreatures } = useContext(MyCreaturesContext);
@@ -170,14 +176,14 @@ export default function AnchorModal(props) {
       Longitude: String(selectedDiveSite.Longitude),
     });
     setPreviousButtonID(activeButtonID);
-    setActiveButtonID("SiteAnchorIcon");
+    setActiveButtonID("PictureAdderButton");
+    setLargeModalSecond(!largeModalSecond);
     setLargeModal(!largeModal);
-    setPicAdderModal(true);
   };
 
   const togglePhotoBoxModal = (photo) => {
     setSelectedPhoto(photo);
-    setPhotoBoxModel(true);
+    setPhotoBoxModal(true);
   };
 
   const [base64, setBase64] = useState(null);
@@ -263,8 +269,6 @@ export default function AnchorModal(props) {
     setBase64(null);
   }, [base64]);
 
-  const [helpButState, setHelpButState] = useState(false);
-
   return (
     <View
       style={{
@@ -305,7 +309,7 @@ export default function AnchorModal(props) {
               </Text>
 
               <TouchableWithoutFeedback
-                onPress={() => handleSwitch()}
+                onPress={handleSwitch}
                 style={{
                   alignItems: "center",
                   justifyContent: "center",

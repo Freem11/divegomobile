@@ -12,15 +12,18 @@ import Animated, {
 } from "react-native-reanimated";
 import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
 import CloseButton from "../reusables/closeButton";
+import { PhotoBoxModalContext } from "../contexts/photoBoxModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal(props) {
-  const { picData, setPhotoBoxModel, photoBoxModel } = props;
+  const { picData} = props;
+  const { photoBoxModal, setPhotoBoxModal } = useContext(PhotoBoxModalContext);
+
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
@@ -52,7 +55,7 @@ export default function PhotoBoxModal(props) {
     yPrevious.value = 0;
     xOffset.value = 0;
     yOffset.value = 0;
-  }, [picData, photoBoxModel]);
+  }, [picData, photoBoxModal]);
 
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
@@ -274,7 +277,7 @@ export default function PhotoBoxModal(props) {
   });
 
   const onCloseModal = () => {
-    setPhotoBoxModel(false);
+    setPhotoBoxModal(false);
   };
 
   return (

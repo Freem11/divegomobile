@@ -97,6 +97,8 @@ import ShopModal from "./modals/shopModal";
 import ItineraryListModal from "./modals/itineraryListModal";
 import PartnerAccountRequestModal from "./modals/partnerAccountRequestModal";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { PhotoBoxModalContext } from './contexts/photoBoxModalContext';
+import { SelectedPhotoContext } from "./contexts/selectedPhotoContext";
 import { ProfileModalContext } from "./contexts/profileModalContext";
 import { SettingsContext } from "./contexts/gearModalContext";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -110,7 +112,7 @@ export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const { selectedPhoto, setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -346,7 +348,7 @@ export default function MapPage() {
 
   //PhotoBox Modal Animation
   const photoBoxModalY = useSharedValue(windowHeight);
-  const [photoBoxModel, setPhotoBoxModel] = useState(false);
+  const { photoBoxModal, setPhotoBoxModal } = useContext(PhotoBoxModalContext)
   const photoBoxModalReveal = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: photoBoxModalY.value }],
@@ -354,7 +356,7 @@ export default function MapPage() {
   });
 
   const startPhotoBoxModalAnimations = () => {
-    if (photoBoxModel) {
+    if (photoBoxModal) {
       photoBoxModalY.value = withTiming(-windowHeight);
     } else {
       photoBoxModalY.value = withTiming(windowHeight);
@@ -363,7 +365,7 @@ export default function MapPage() {
 
   useEffect(() => {
     startPhotoBoxModalAnimations();
-  }, [photoBoxModel]);
+  }, [photoBoxModal]);
 
   //Dive Site Modal Animation
   const diveSiteModalY = useSharedValue(windowHeight);
@@ -1144,8 +1146,8 @@ export default function MapPage() {
                 <AnchorModal
                   anchorModalY={anchorModalY}
                   SiteName={selectedDiveSite.SiteName}
-                  setSelectedPhoto={setSelectedPhoto}
-                  setPhotoBoxModel={setPhotoBoxModel}
+                  // setSelectedPhoto={setSelectedPhoto}
+                  setPhotoBoxModal={setPhotoBoxModal}
                   Lat={selectedDiveSite.Latitude}
                   Lng={selectedDiveSite.Longitude}
                 />
@@ -1162,33 +1164,17 @@ export default function MapPage() {
               </Animated.View>
             )}
 
-            {shopModal && (
-              <Animated.View style={[styles.anchorModal, shopModalReveal]}>
-                <ShopModal />
-              </Animated.View>
-            )}
-
-            {photoBoxModel && (
+            {photoBoxModal && (
               <Animated.View
                 style={[styles.photoBoxModal, photoBoxModalReveal]}
               >
                 <PhotoBoxModel
                   picData={selectedPhoto}
-                  photoBoxModel={photoBoxModel}
-                  setPhotoBoxModel={setPhotoBoxModel}
+                  photoBoxModal={photoBoxModal}
+                  setPhotoBoxModal={setPhotoBoxModal}
                 />
               </Animated.View>
             )}
-
-            {diveSiteAdderModal && (
-              <Animated.View style={[styles.anchorModal, diveSiteModalReveal]}>
-                <DiveSiteModal diveSiteModalY={diveSiteModalY} />
-              </Animated.View>
-            )}
-
-            <Animated.View style={[styles.anchorModal, pictureModalReveal]}>
-              <PicUploadModal pictureModalY={pictureModalY} />
-            </Animated.View>
 
             {/* {guideModal && ( */}
             <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
@@ -1207,35 +1193,6 @@ export default function MapPage() {
               <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
             </Animated.View>
             {/* )} */}
-
-            {profileModal && (
-              <Animated.View style={[styles.anchorModal, profileModalReveal]}>
-                <UserProfileModal />
-              </Animated.View>
-            )}
-
-            {gearModal && (
-              <Animated.View style={[styles.anchorModal, settingsModalReveal]}>
-                <SettingsModal />
-              </Animated.View>
-            )}
-
-            {partnerModal && (
-              <Animated.View style={[styles.anchorModal, partnerModalReveal]}>
-                <PartnerAccountRequestModal />
-              </Animated.View>
-            )}
-
-            {itineraryListModal && (
-              <Animated.View
-                style={[styles.anchorModal, itineraryListModalReveal]}
-              >
-                <ItineraryListModal
-                  itineraryListModal={itineraryListModal}
-                  setItineraryListModal={setItineraryListModal}
-                />
-              </Animated.View>
-            )}
 
             <AnimatedModalSmall />
             <AnimatedModalLarge />
