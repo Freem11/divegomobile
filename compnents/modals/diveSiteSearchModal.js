@@ -8,6 +8,7 @@ import {
 import React, { useContext, useEffect } from "react";
 import { moderateScale } from "react-native-size-matters";
 import DiveSiteAutoComplete from "../diveSiteSearch/diveSiteAutocomplete";
+import { LargeModalContext } from "../contexts/largeModalContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
@@ -18,6 +19,7 @@ import ModalHeader from "../reusables/modalHeader";
 
 export default function DiveSiteSearchModal(props) {
   const { setDiveSearchBump } = props;
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
@@ -34,10 +36,10 @@ export default function DiveSiteSearchModal(props) {
   };
 
   const swapToSiteAdd = () => {
-    setDiveSiteAdderModal(true);
     setPreviousButtonID(activeButtonID)
-    setActiveButtonID("DiveSiteSearchButton")
-    setSmallModal(!smallModal);
+    setActiveButtonID("DiveSiteAdderButton")
+    // setSmallModal(!smallModal);
+    setLargeModal(!largeModal)
   };
 
 //////////// need to refactor for guide ////////////

@@ -13,6 +13,7 @@ import Animated, {
 import { scale, moderateScale } from "react-native-size-matters";
 import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
@@ -24,6 +25,7 @@ import ModalHeader from "../reusables/modalHeader";
 import SubmitButton from "../reusables/submitButton";
 
 export default function PartnerAccountRequestModal() {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
@@ -89,6 +91,7 @@ export default function PartnerAccountRequestModal() {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("PartnerAccountButton");
     setLargeModalSecond(!largeModalSecond);
+    setLargeModal(!largeModal)
   };
 
   const handleSubmit = (formValues) => {

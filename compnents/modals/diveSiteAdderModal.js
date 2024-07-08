@@ -28,6 +28,7 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
@@ -47,6 +48,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteModal() {
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
@@ -315,6 +317,7 @@ export default function DiveSiteModal() {
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("DiveSiteAdderButton");
       setLargeModal(!largeModal);
+      setSmallModal(false)
       failBoxY.value = withTiming(scale(1200));
       successBoxY.value = withTiming(scale(1200));
       SetFormValidation({
