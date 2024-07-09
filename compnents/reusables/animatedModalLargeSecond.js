@@ -8,6 +8,8 @@ import Animated, {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { PinContext } from "../contexts/staticPinContext";
+import { MasterContext } from "../contexts/masterContext";
 
 import UserProfileModal from "../modals/userProfileModal";
 import PartnerAccountRequestModal from "../modals/partnerAccountRequestModal";
@@ -20,6 +22,8 @@ export default function AnimatedModalLargeSecond(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
   const { previousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModalSecond } = useContext(LargeModalSecondContext);
+  const { pinValues, setPinValues } = useContext(PinContext);
+  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
 
   const largeSeconModalY = useSharedValue(-windowHeight);
 
@@ -34,6 +38,17 @@ export default function AnimatedModalLargeSecond(props) {
       largeSeconModalY.value = withTiming(-windowHeight * 1.1);
     } else {
       largeSeconModalY.value = withTiming(windowHeight);
+      if (masterSwitch) {
+        setPinValues({
+          ...pinValues,
+          PicFile: null,
+          Animal: "",
+          PicDate: "",
+          Latitude: "",
+          Longitude: "",
+          DDVal: "0",
+        });
+      }
     }
   };
 

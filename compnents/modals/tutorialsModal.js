@@ -18,9 +18,11 @@ import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+
 import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -31,6 +33,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TutorialLaunchPadModal() {
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
@@ -56,20 +59,26 @@ export default function TutorialLaunchPadModal() {
 
   const handleTutorialStartup = () => {
     setTutorialRunning(true);
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
-    setGuideModal(!guideModal);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("FirstGuide");
+    setLargeModal(!largeModal);
+    setFullScreenModal(!fullScreenModal);
   };
 
   const handleSecondTutorialStartup = () => {
     setTutorialRunning(true);
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
-    setSecondGuideModal(!secondGuideModal);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("SecondGuide");
+    setLargeModal(!largeModal);
+    setFullScreenModal(!fullScreenModal);
   };
 
   const handleThirdTutorialStartup = () => {
     setTutorialRunning(true);
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
-    setThirdGuideModal(!thirdGuideModal);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("ThirdGuide");
+    setLargeModal(!largeModal);
+    setFullScreenModal(!fullScreenModal);
   };
 
   const handleClose = () => {

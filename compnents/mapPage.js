@@ -19,6 +19,8 @@ import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
 import AnimatedModalLarge from '../compnents/reusables/animatedModalLarge';
 import AnimatedModalLargeSecond from '../compnents/reusables/animatedModalLargeSecond';
+import AnimatedFullScreenModal from '../compnents/reusables/animatedFullScreenModal';
+
 
 import {
   grabProfileById,
@@ -81,21 +83,12 @@ import Animated, {
   Easing,
   withSpring,
 } from "react-native-reanimated";
-import TutorialLaunchPadModal from "./modals/tutorialsModal";
-import AnchorModal from "./modals/anchorModal";
 import CommentsModal from "./modals/commentsModal";
 import PhotoBoxModel from "./modals/photoBoxModal";
-import DiveSiteModal from "./modals/diveSiteAdderModal";
-import PicUploadModal from "./modals/picUploaderModal";
 import IntroTutorial from "./tutorial/introTutorial";
 import SecondTutorial from "./tutorial/secondTutorial";
 import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
-import UserProfileModal from "./modals/userProfileModal";
-import SettingsModal from "./modals/settingsModal";
-import ShopModal from "./modals/shopModal";
-import ItineraryListModal from "./modals/itineraryListModal";
-import PartnerAccountRequestModal from "./modals/partnerAccountRequestModal";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { PhotoBoxModalContext } from './contexts/photoBoxModalContext';
 import { SelectedPhotoContext } from "./contexts/selectedPhotoContext";
@@ -184,38 +177,6 @@ export default function MapPage() {
     }
   };
 
-  //Tutorial Launch Pad Model Animation
-  const tutorialLaunchpadModalY = useSharedValue(windowHeight);
-  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
-    TutorialLaunchPadContext
-  );
-
-  const tutorialLaunchpadModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorialLaunchpadModalY.value }],
-    };
-  });
-
-  const startTutorialLaunchPadModalAnimations = () => {
-    if (tutorialLaunchpadModal) {
-      tutorialLaunchpadModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorialLaunchpadModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startTutorialLaunchPadModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [tutorialLaunchpadModal]);
 
   //Anchor Modal Animation
   const anchorModalY = useSharedValue(windowHeight);
@@ -286,35 +247,6 @@ export default function MapPage() {
     startCommentsModalAnimations();
   }, [commentsModal]);
 
-  //Shop Modal Animation
-  const shopModalY = useSharedValue(windowHeight);
-  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { shopModal, setShopModal } = useContext(ShopModalContext);
-
-  const shopModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: shopModalY.value }],
-    };
-  });
-
-  const startShopModalAnimations = () => {
-    if (shopModal) {
-      shopModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      shopModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startShopModalAnimations();
-  }, [shopModal]);
-
   //ItineraryList Modal Animation
   const itineraryListModalY = useSharedValue(windowHeight);
   // const { selectedItinerary, setSelectedItinerary} = useContext(SelectedItineraryContext);
@@ -367,114 +299,6 @@ export default function MapPage() {
     startPhotoBoxModalAnimations();
   }, [photoBoxModal]);
 
-  //Dive Site Modal Animation
-  const diveSiteModalY = useSharedValue(windowHeight);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
-
-  const diveSiteModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: diveSiteModalY.value }],
-    };
-  });
-
-  const startDiveSiteModalAnimations = () => {
-    if (diveSiteAdderModal) {
-      diveSiteModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      Keyboard.dismiss();
-      // console.log(masterSwitch);
-      if (masterSwitch) {
-        setAddSiteVals({
-          ...addSiteVals,
-          Site: "",
-          Latitude: "",
-          Longitude: "",
-        });
-      }
-
-      diveSiteModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startDiveSiteModalAnimations();
-    // if (itterator > 0){
-    //   setItterator(itterator + 1);
-    // }
-  }, [diveSiteAdderModal]);
-
-  //Partner Modal Animation
-  const partnerModalY = useSharedValue(windowHeight);
-  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
-  const partnerModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: partnerModalY.value }],
-    };
-  });
-
-  const startPartnerModalAnimations = () => {
-    if (partnerModal) {
-      partnerModalY.value = withTiming(0);
-    } else {
-      partnerModalY.value = withTiming(windowHeight);
-    }
-  };
-
-  useEffect(() => {
-    startPartnerModalAnimations();
-  }, [partnerModal]);
-
-  //Picture Adder Modal
-  const pictureModalY = useSharedValue(windowHeight);
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-
-  const pictureModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: pictureModalY.value }],
-    };
-  });
-
-  const startPictureModalAnimations = () => {
-    if (picAdderModal) {
-      pictureModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      // console.log(masterSwitch);
-      Keyboard.dismiss();
-      if (masterSwitch) {
-        setPinValues({
-          ...pinValues,
-          PicFile: null,
-          Animal: "",
-          PicDate: "",
-          Latitude: "",
-          Longitude: "",
-          DDVal: "0",
-        });
-      }
-
-      pictureModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startPictureModalAnimations();
-    // if (itterator > 0){
-    //   setItterator(itterator + 1);
-    // }
-  }, [picAdderModal]);
 
   //Intro Tutorial Animations
   const tutorialModalY = useSharedValue(windowHeight);
@@ -576,53 +400,6 @@ export default function MapPage() {
     // }
   }, [thirdGuideModal]);
 
-  //Profile Modal Animation
-  const profileModalY = useSharedValue(windowHeight);
-  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
-
-  const profileModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: profileModalY.value }],
-    };
-  });
-
-  const startProfileModalAnimations = () => {
-    if (profileModal) {
-      profileModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      profileModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  //Settings Modal Animation
-  const settingsModalY = useSharedValue(windowHeight);
-  const { gearModal, setGearModal } = useContext(SettingsContext);
-
-  const settingsModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: settingsModalY.value }],
-    };
-  });
-
-  const startSettingsModalAnimations = () => {
-    if (gearModal) {
-      settingsModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      settingsModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
 
   const feedbackX = useSharedValue(0);
 
@@ -639,14 +416,6 @@ export default function MapPage() {
       feedbackX.value = withTiming(0);
     }
   };
-
-  useEffect(() => {
-    startProfileModalAnimations();
-  }, [profileModal]);
-
-  useEffect(() => {
-    startSettingsModalAnimations();
-  }, [gearModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -1131,29 +900,6 @@ export default function MapPage() {
 
             {/* modals go here? */}
 
-            {tutorialLaunchpadModal && (
-              <Animated.View
-                style={[styles.anchorModal, tutorialLaunchpadModalReveal]}
-              >
-                <TutorialLaunchPadModal
-                  tutorialLaunchpadModalY={tutorialLaunchpadModalY}
-                />
-              </Animated.View>
-            )}
-
-            {siteModal && (
-              <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
-                <AnchorModal
-                  anchorModalY={anchorModalY}
-                  SiteName={selectedDiveSite.SiteName}
-                  // setSelectedPhoto={setSelectedPhoto}
-                  setPhotoBoxModal={setPhotoBoxModal}
-                  Lat={selectedDiveSite.Latitude}
-                  Lng={selectedDiveSite.Longitude}
-                />
-              </Animated.View>
-            )}
-
             {commentsModal && (
               <Animated.View
                 style={[styles.commentScreen, commentsModalReveal]}
@@ -1197,6 +943,7 @@ export default function MapPage() {
             <AnimatedModalSmall />
             <AnimatedModalLarge />
             <AnimatedModalLargeSecond />
+            <AnimatedFullScreenModal />
 
             <Map style={{ zIndex: 1 }} />
           </View>

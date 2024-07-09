@@ -55,6 +55,7 @@ import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import SmallModalContextProvider from './smallModalContext';
 import LargeModalContextProvider from './largeModalContext';
 import LargeModalSecondContextProvider from './largeModalSecondContext';
+import FullScreenModalContextProvider from './fullScreenModalContext';
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -111,7 +112,8 @@ const providers = [
     PreviousButtonIDContextProvider,
     SmallModalContextProvider,
     LargeModalContextProvider,
-    LargeModalSecondContextProvider
+    LargeModalSecondContextProvider,
+    FullScreenModalContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

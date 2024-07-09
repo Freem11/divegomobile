@@ -50,11 +50,20 @@ import heatIconIOS from "../png/heatpoint.png";
 import arrowIOS from "../png/arrow.png";
 import UserNamer from "./usernamer";
 import ImageCasher from "../helpers/imageCashing";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function IntroTutorial() {
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
   const { selectedDiveSite, setSelectedDiveSite } = useContext(
@@ -90,9 +99,11 @@ export default function IntroTutorial() {
     if (tutorialReset && profile[0].UserName) {
       setItterator(null);
       setTutorialRunning(false);
-      setGuideModal(false);
       setTutorialReset(false);
-      setSiteModal(false);
+      
+      setFullScreenModal(false); 
+      setLargeModal(false);
+
       resetTutorial();
       setChapter(null);
     }
@@ -104,9 +115,9 @@ export default function IntroTutorial() {
     switch (chapter) {
       case "Getting around the map":
         resetTutorial();
-        setSiteModal(false);
+        setLargeModal(false);
         setItterator(6);
-        setGuideModal(true);
+        setFullScreenModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -117,9 +128,9 @@ export default function IntroTutorial() {
 
       case "Dive sites":
         resetTutorial();
-        setSiteModal(false);
+        setLargeModal(false);
         setItterator(9);
-        setGuideModal(true);
+        setFullScreenModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -132,9 +143,9 @@ export default function IntroTutorial() {
 
       case "Changed dive site":
         resetTutorial();
-        setSiteModal(false);
+        setLargeModal(false);
         setItterator(16);
-        setGuideModal(true);
+        setFullScreenModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -215,9 +226,9 @@ export default function IntroTutorial() {
 
   const handleSecondTutorialStartup = () => {
     setItterator(null);
-    setSiteModal(false);
+    setLargeModal(false);
     setTutorialRunning(true);
-    setGuideModal(false);
+    setFullScreenModal(false);
     setSecondGuideModal(true);
   };
 
@@ -316,11 +327,11 @@ export default function IntroTutorial() {
   const setupText = (pushVal) => {
     if (itterator === 12 && !textPrinting) {
       setItterator(11);
-      setGuideModal(false);
+      setFullScreenModal(false);
       return;
     } else if (itterator === 19 && !textPrinting) {
       setItterator(18);
-      setGuideModal(false);
+      setFullScreenModal(false);
       return;
     }
     if (
@@ -346,7 +357,7 @@ export default function IntroTutorial() {
       }
 
       if (pushVal === 1 && itterator === feederArray.length - 1) {
-        setGuideModal(false);
+        setFullScreenModal(false);
       }
     }
   };
@@ -479,10 +490,10 @@ export default function IntroTutorial() {
     if (itterator === 11) {
       if (movingBack) {
         setMovingBack(false);
-        setGuideModal(false);
+        setFullScreenModal(false);
         return;
       } else {
-        setGuideModal(false);
+        setFullScreenModal(false);
         heatPotintY.value = withTiming(scale(-1200));
         // startHeatPointAnimation();
         clusterAnchorY.value = withTiming(scale(-1200));
@@ -493,7 +504,7 @@ export default function IntroTutorial() {
     if (itterator === 12) {
       setTextPrinting(true);
       setMovingBack(true);
-      setGuideModal(true);
+      setFullScreenModal(true);
     }
 
     if (itterator === 13) {
@@ -506,11 +517,11 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 15) {
-      setGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator === 16) {
-      setGuideModal(true);
+      setFullScreenModal(true);
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
       // startArrowAnimation();
     }
@@ -518,11 +529,11 @@ export default function IntroTutorial() {
     if (itterator === 18) {
       if (movingBack) {
         setMovingBack(false);
-        setGuideModal(false);
+        setFullScreenModal(false);
         setBackHappened(false);
         return;
       } else {
-        setGuideModal(false);
+        setFullScreenModal(false);
         arrowY.value = withTiming(scale(-1200));
         // startArrowAnimation();
       }
@@ -538,18 +549,18 @@ export default function IntroTutorial() {
         setTextPrinting(true);
         setMovingBack(true);
         // -------------------------
-        setGuideModal(true);
+        setFullScreenModal(true);
       } else {
         setTextPrinting(true);
         setMovingBack(true);
-        setGuideModal(true);
+        setFullScreenModal(true);
         setBackHappened(true);
       }
     }
 
     if (itterator === 20) {
       arrowY.value = withTiming(scale(-1200));
-      setGuideModal(true);
+      setFullScreenModal(true);
     }
 
     if (itterator === 23) {
@@ -558,7 +569,7 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 24) {
-      setSiteModal(false);
+      setLargeModal(false);
       nextTutX.value = withTiming(scale(-300));
       // startNextTutAnimation();
     }
@@ -566,7 +577,7 @@ export default function IntroTutorial() {
     if (itterator === feederArray.length - 1) {
       setItterator(null);
       setTutorialRunning(false);
-      setGuideModal(false);
+      setFullScreenModal(false);
       characterX.value = withTiming(
         Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
       );
@@ -775,7 +786,7 @@ export default function IntroTutorial() {
     let today = new Date();
     let formattedDate = moment(today).format("YYYY-MM-DD");
     getPhotos(formattedDate);
-  }, [guideModal]);
+  }, [fullScreenModal]);
 
   useEffect(() => {
     if (tutorialRunning) {

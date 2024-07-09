@@ -9,6 +9,8 @@ import Animated, {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
+import { DiveSpotContext } from "../contexts/diveSpotContext";
+import { MasterContext } from "../contexts/masterContext";
 
 import DiveSiteModal from "../modals/diveSiteAdderModal";
 import SettingsModal from "../modals/settingsModal";
@@ -26,6 +28,8 @@ export default function AnimatedModalLarge(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
   const { previousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal } = useContext(LargeModalContext);
+  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
 
   const largeModalY = useSharedValue(-windowHeight);
 
@@ -40,6 +44,14 @@ export default function AnimatedModalLarge(props) {
       largeModalY.value = withTiming(-windowHeight * 1.1);
     } else {
       largeModalY.value = withTiming(windowHeight);
+      if (masterSwitch) {
+        setAddSiteVals({
+          ...addSiteVals,
+          Site: "",
+          Latitude: "",
+          Longitude: "",
+        });
+      }
     }
   };
 
