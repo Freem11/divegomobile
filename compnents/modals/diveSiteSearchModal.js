@@ -42,15 +42,13 @@ export default function DiveSiteSearchModal(props) {
     setLargeModal(!largeModal)
   };
 
-//////////// need to refactor for guide ////////////
-
-  // useEffect(() => {
-  //   if (tutorialRunning) {
-  //     if (itterator2 === 3) {
-  //       setItterator2(itterator2 + 1);
-  //     }
-  //   }
-  // }, [diveSiteSearchModal]);
+  useEffect(() => {
+    if (tutorialRunning) {
+      if (itterator2 === 3) {
+        setItterator2(itterator2 + 1);
+      }
+    }
+  }, [smallModal]);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

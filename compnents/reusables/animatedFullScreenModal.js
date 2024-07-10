@@ -5,7 +5,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 
 import IntroTutorial from "../tutorial/introTutorial";
@@ -16,7 +16,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function AnimatedFullScreenModal(props) {
-  const { activeButtonID } = useContext(ActiveButtonIDContext);
+  const { activeTutorialID } = useContext(ActiveTutorialIDContext);
   const { fullScreenModal } = useContext(FullScreenModalContext);
 
   const fullScreenModalY = useSharedValue(0);
@@ -36,15 +36,14 @@ export default function AnimatedFullScreenModal(props) {
   };
 
   useEffect(() => {
-      startfullScreenModalAnimation();
+    startfullScreenModalAnimation();
   }, [fullScreenModal]);
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeButtonID === "FirstGuide" && <IntroTutorial />}
-      {activeButtonID === "SecondGuide" && <SecondTutorial />}
-      {activeButtonID === "ThirdGuide" && <ThirdTutorial />}
-      
+      {activeTutorialID === "FirstGuide" && <IntroTutorial />}
+      {activeTutorialID === "SecondGuide" && <SecondTutorial />}
+      {activeTutorialID === "ThirdGuide" && <ThirdTutorial />}
     </Animated.View>
   );
 }

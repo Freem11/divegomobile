@@ -28,7 +28,9 @@ import { PhotoBoxModalContext } from "../contexts/photoBoxModalContext";
 import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
@@ -43,9 +45,13 @@ let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 export default function AnchorModal(props) {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
   );
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { setPhotoBoxModal } = useContext(PhotoBoxModalContext);
@@ -114,7 +120,8 @@ export default function AnchorModal(props) {
 
   useEffect(() => {
     if (itterator === 13) {
-      setGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("FirstGuide");
     }
     if (itterator === 20) {
       filterAnchorPhotos();
@@ -150,15 +157,18 @@ export default function AnchorModal(props) {
   const handleAnchorModalClose = () => {
     if (itterator === 15) {
       setItterator((prev) => prev + 1);
-      setGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("FirstGuide");
     }
 
     if (itterator === 11) {
-      setGuideModal(false);
+      console.log("HEY!")
+      setFullScreenModal(false);
+      setActiveTutorialID("FirstGuide");
     }
 
     if (itterator === 18) {
-      setGuideModal(false);
+      setFullScreenModal(false);
     }
 
     setPreviousButtonID(activeButtonID);

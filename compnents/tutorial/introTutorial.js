@@ -118,6 +118,7 @@ export default function IntroTutorial() {
         setLargeModal(false);
         setItterator(6);
         setFullScreenModal(true);
+        setActiveButtonID("FirstGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -131,6 +132,7 @@ export default function IntroTutorial() {
         setLargeModal(false);
         setItterator(9);
         setFullScreenModal(true);
+        setActiveButtonID("FirstGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -146,6 +148,7 @@ export default function IntroTutorial() {
         setLargeModal(false);
         setItterator(16);
         setFullScreenModal(true);
+        setActiveButtonID("FirstGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -228,8 +231,8 @@ export default function IntroTutorial() {
     setItterator(null);
     setLargeModal(false);
     setTutorialRunning(true);
-    setFullScreenModal(false);
-    setSecondGuideModal(true);
+    // setFullScreenModal(!fullScreenModal);
+    setActiveButtonID("SecondGuide");
   };
 
   const characterX = useSharedValue(scale(1000));
@@ -487,6 +490,7 @@ export default function IntroTutorial() {
       // startHeatPointAnimation();
     }
 
+    console.log(itterator)
     if (itterator === 11) {
       if (movingBack) {
         setMovingBack(false);
@@ -505,6 +509,7 @@ export default function IntroTutorial() {
       setTextPrinting(true);
       setMovingBack(true);
       setFullScreenModal(true);
+      setActiveButtonID("FirstGuide");
     }
 
     if (itterator === 13) {
@@ -522,6 +527,7 @@ export default function IntroTutorial() {
 
     if (itterator === 16) {
       setFullScreenModal(true);
+      setActiveButtonID("FirstGuide");
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
       // startArrowAnimation();
     }
@@ -550,10 +556,12 @@ export default function IntroTutorial() {
         setMovingBack(true);
         // -------------------------
         setFullScreenModal(true);
+        setActiveButtonID("FirstGuide");
       } else {
         setTextPrinting(true);
         setMovingBack(true);
         setFullScreenModal(true);
+        setActiveButtonID("FirstGuide");
         setBackHappened(true);
       }
     }
@@ -561,6 +569,8 @@ export default function IntroTutorial() {
     if (itterator === 20) {
       arrowY.value = withTiming(scale(-1200));
       setFullScreenModal(true);
+      setLargeModal(true)
+      setActiveButtonID("SiteAnchorIcon");
     }
 
     if (itterator === 23) {

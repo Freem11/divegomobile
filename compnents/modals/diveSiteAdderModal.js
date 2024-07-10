@@ -30,7 +30,9 @@ import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
@@ -50,11 +52,14 @@ const windowHeight = Dimensions.get("window").height;
 export default function DiveSiteModal() {
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
@@ -186,11 +191,12 @@ export default function DiveSiteModal() {
         }
       }
     }
-  }, [diveSiteAdderModal]);
+  }, [fullScreenModal]);
 
   useEffect(() => {
     if (itterator2 === 10 || itterator2 === 17) {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide")
     }
   }, [itterator2]);
 
@@ -230,7 +236,7 @@ export default function DiveSiteModal() {
       setChosenModal("DiveSite");
       setMapHelper(true);
       setMasterSwitch(false);
-      setDiveSiteAdderModal(false);
+      setFullScreenModal(true);
       if (tutorialRunning) {
         setItterator2(itterator2 + 1);
       }
@@ -304,7 +310,7 @@ export default function DiveSiteModal() {
       } else if (itterator2 === 16) {
         return;
       } else {
-        if (diveSiteAdderModal) {
+        if (fullScreenModal) {
           setAddSiteVals({
             ...addSiteVals,
             Site: "",
@@ -325,7 +331,7 @@ export default function DiveSiteModal() {
         LatVal: false,
         LngVal: false,
       });
-      if (diveSiteAdderModal) {
+      if (fullScreenModal) {
         setAddSiteVals({
           ...addSiteVals,
           Site: "",
@@ -339,7 +345,8 @@ export default function DiveSiteModal() {
   const activateGuide = () => {
     if (tutorialRunning) {
     } else {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
       setChapter("DS Help");
     }
   };

@@ -72,6 +72,9 @@ import { ItineraryListModalContext } from "./contexts/itineraryListModalContext"
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
+import { LargeModalContext } from "./contexts/largeModalContext";
+import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
+import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
@@ -105,6 +108,11 @@ export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { selectedPhoto, setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
@@ -515,7 +523,8 @@ export default function MapPage() {
         });
         setMapHelper(true);
         setMasterSwitch(true);
-        setDiveSiteAdderModal(!diveSiteAdderModal);
+        setActiveButtonID("DiveSiteAdderButton");
+        setLargeModal(!largeModal);
         setItterator2(itterator2 + 1);
         setChosenModal(null);
       } else if (chosenModal === "Photos") {
@@ -526,7 +535,8 @@ export default function MapPage() {
         });
         setMapHelper(true);
         setMasterSwitch(true);
-        setPicAdderModal(!picAdderModal);
+        setActiveButtonID("PictureAdderButton");
+        setLargeModalSecond(!largeModalSecond);
         setChosenModal(null);
       }
     }

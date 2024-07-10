@@ -51,6 +51,7 @@ import SelectedProfileContextProvider from './selectedProfileModalContext';
 import PhotoBoxModalContextProvider from './photoBoxModalContext';
 import SelectedPhotoContextProvider from './selectedPhotoContext';
 import ActiveButtonIDContextProvider from './activeButtonIDContext';
+import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import SmallModalContextProvider from './smallModalContext';
 import LargeModalContextProvider from './largeModalContext';
@@ -109,6 +110,7 @@ const providers = [
     PhotoBoxModalContextProvider,
     SelectedPhotoContextProvider,
     ActiveButtonIDContextProvider,
+    ActiveTutorialIDContextProvider,
     PreviousButtonIDContextProvider,
     SmallModalContextProvider,
     LargeModalContextProvider,

@@ -53,7 +53,9 @@ import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
@@ -68,10 +70,14 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PicUploadModal() {
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
   );
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { thirdGuideModal, setThirdGuideModal } = useContext(
@@ -199,11 +205,12 @@ export default function PicUploadModal() {
         }
       }
     }
-  }, [picAdderModal]);
+  }, [largeModalSecond]);
 
   useEffect(() => {
     if (itterator3 === 6 || itterator3 === 9) {
-      setThirdGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("ThirdGuide");
     }
   }, [itterator3]);
 
@@ -213,10 +220,11 @@ export default function PicUploadModal() {
     setMapHelper(true);
     setMasterSwitch(false);
     if (!tutorialRunning) {
-      setPicAdderModal(false);
+      setLargeModalSecond(false);
     }
     if (tutorialRunning) {
       if (itterator3 === 16) {
+        setLargeModalSecond(false);
         setItterator3(itterator3 + 1);
       }
     }
@@ -452,7 +460,7 @@ export default function PicUploadModal() {
       ) {
         return;
       } else {
-        setPicAdderModal(!picAdderModal);
+        setLargeModalSecond(!largeModalSecond);
         if (pinValues.PicFile !== null) {
           removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
@@ -462,7 +470,7 @@ export default function PicUploadModal() {
 
         setUploadedFile(null);
 
-        if (picAdderModal) {
+        if (largeModalSecond) {
           setPinValues({
             ...pinValues,
             PicFile: null,
@@ -496,7 +504,7 @@ export default function PicUploadModal() {
 
       setUploadedFile(null);
 
-      if (picAdderModal) {
+      if (largeModalSecond) {
         setPinValues({
           ...pinValues,
           PicFile: null,
@@ -511,7 +519,8 @@ export default function PicUploadModal() {
   };
 
   const activateGuide = () => {
-    setThirdGuideModal(true);
+    setFullScreenModal(true);
+    setActiveTutorialID("ThirdGuide");
     setChapter("Adding your photo");
   };
 

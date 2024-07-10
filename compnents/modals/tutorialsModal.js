@@ -21,6 +21,8 @@ import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 
 import { scale, moderateScale } from "react-native-size-matters";
@@ -38,6 +40,9 @@ export default function TutorialLaunchPadModal() {
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
   );
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const [tutPadCloseState, setTutPadCloseState] = useState(false);
@@ -60,7 +65,7 @@ export default function TutorialLaunchPadModal() {
   const handleTutorialStartup = () => {
     setTutorialRunning(true);
     setPreviousButtonID(activeButtonID);
-    setActiveButtonID("FirstGuide");
+    setActiveTutorialID("FirstGuide");
     setLargeModal(!largeModal);
     setFullScreenModal(!fullScreenModal);
   };
@@ -68,7 +73,7 @@ export default function TutorialLaunchPadModal() {
   const handleSecondTutorialStartup = () => {
     setTutorialRunning(true);
     setPreviousButtonID(activeButtonID);
-    setActiveButtonID("SecondGuide");
+    setActiveTutorialID("SecondGuide");
     setLargeModal(!largeModal);
     setFullScreenModal(!fullScreenModal);
   };
@@ -76,7 +81,7 @@ export default function TutorialLaunchPadModal() {
   const handleThirdTutorialStartup = () => {
     setTutorialRunning(true);
     setPreviousButtonID(activeButtonID);
-    setActiveButtonID("ThirdGuide");
+    setActiveTutorialID("ThirdGuide");
     setLargeModal(!largeModal);
     setFullScreenModal(!fullScreenModal);
   };
