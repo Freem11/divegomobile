@@ -1,8 +1,6 @@
 import {
   StyleSheet,
-  Text,
   View,
-  TextInput,
   Image,
   TouchableWithoutFeedback,
   Platform,
@@ -15,12 +13,10 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-  withSpring,
 } from "react-native-reanimated";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { PinContext } from "../contexts/staticPinContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
 import { MasterContext } from "../contexts/masterContext";
 import { PictureContext } from "../contexts/pictureContext";
 import { SessionContext } from "../contexts/sessionContext";
@@ -28,8 +24,6 @@ import { UserProfileContext } from "../contexts/userProfileContext";
 import { getToday } from "../helpers/picUploaderHelpers";
 import { formatDate, createFile } from "../helpers/imageUploadHelpers";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import ModalHeader from "../reusables/modalHeader";
@@ -37,7 +31,6 @@ import CompletnessIndicator from "../reusables/completnessIndicator";
 import PrimaryButton from "../reusables/primaryButton";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 import SubmitButton from "../reusables/submitButton";
-// import { uploadphoto, removePhoto } from "../../supabaseCalls/uploadSupabaseCalls";
 import {
   uploadphoto,
   removePhoto,
@@ -45,9 +38,7 @@ import {
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
-import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
-import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
@@ -67,44 +58,36 @@ let AnimalVar = false;
 let LatVar = false;
 let LngVar = false;
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function PicUploadModal() {
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
+  const { setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
-  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
-  const { thirdGuideModal, setThirdGuideModal } = useContext(
-    ThirdTutorialModalContext
-  );
+  const { setChosenModal } = useContext(ModalSelectContext);
+
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { tutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
-  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
+  const { setMapHelper } = useContext(MapHelperContext);
 
   const { setMasterSwitch } = useContext(MasterContext);
-  const { activeSession, setActiveSession } = useContext(SessionContext);
-  const { profile, setProfile } = useContext(UserProfileContext);
-
-  const [picCloseState, setPicCloseState] = useState(false);
+  
   const [indicatorState, setIndicatorState] = useState(false);
 
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-
+ 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   const [date, setDate] = useState(new Date());
 
   const [isLoading, setIsLoading] = useState(false);
   const { uploadedFile, setUploadedFile } = useContext(PictureContext);
-  const [pinChecker, setPinChecker] = useState(null);
 
   const [formValidation, SetFormValidation] = useState({
     PictureVal: false,
@@ -116,22 +99,35 @@ export default function PicUploadModal() {
 
   let counter = 0;
   let blinker;
+  const [datButState, setDatButState] = useState(false);
+  const [corButState, setCorButState] = useState(false);
+  const [subButState, setSubButState] = useState(false);
+  const [helpButState, setHelpButState] = useState(false);
 
-  function imageBut() {
-    counter++;
-    if (counter % 2 == 0) {
-      setImgButState(false);
-    } else {
-      setImgButState(true);
-    }
-  }
-
-  function calendarBut() {
+  function calendarButtonBlink() {
     counter++;
     if (counter % 2 == 0) {
       setDatButState(false);
     } else {
       setDatButState(true);
+    }
+  }
+
+  function pinButtonBlink() {
+    counter++;
+    if (counter % 2 == 0) {
+      setCorButState(false);
+    } else {
+      setCorButState(true);
+    }
+  }
+
+  function submitButtonBlink() {
+    counter++;
+    if (counter % 2 == 0) {
+      setSubButState(false);
+    } else {
+      setSubButState(true);
     }
   }
 
@@ -150,27 +146,10 @@ export default function PicUploadModal() {
     }
   }
 
-  function pinBut() {
-    counter++;
-    if (counter % 2 == 0) {
-      setCorButState(false);
-    } else {
-      setCorButState(true);
-    }
-  }
 
-  function subBut() {
-    counter++;
-    if (counter % 2 == 0) {
-      setSubButState(false);
-    } else {
-      setSubButState(true);
-    }
-  }
 
   function cleanUp() {
     clearInterval(blinker);
-    setImgButState(false);
     setDatButState(false);
     SetFormValidation({
       ...formValidation,
@@ -182,16 +161,14 @@ export default function PicUploadModal() {
 
   useEffect(() => {
     if (tutorialRunning) {
-      if (itterator3 === 8) {
-        blinker = setInterval(imageBut, 1000);
-      } else if (itterator3 === 11) {
-        blinker = setInterval(calendarBut, 1000);
+       if (itterator3 === 11) {
+        blinker = setInterval(calendarButtonBlink, 1000);
       } else if (itterator3 === 14) {
         blinker = setInterval(animalField, 1000);
       } else if (itterator3 === 16) {
-        blinker = setInterval(pinBut, 1000);
+        blinker = setInterval(pinButtonBlink, 1000);
       } else if (itterator3 === 22) {
-        blinker = setInterval(subBut, 1000);
+        blinker = setInterval(submitButtonBlink, 1000);
       }
     }
     return () => cleanUp();
@@ -524,12 +501,6 @@ export default function PicUploadModal() {
     setChapter("Adding your photo");
   };
 
-  const [imgButState, setImgButState] = useState(false);
-  const [datButState, setDatButState] = useState(false);
-  const [corButState, setCorButState] = useState(false);
-  const [subButState, setSubButState] = useState(false);
-  const [helpButState, setHelpButState] = useState(false);
-
   const successBoxY = useSharedValue(scale(1200));
   const failBoxY = useSharedValue(scale(1200));
 
@@ -689,6 +660,7 @@ export default function PicUploadModal() {
                 <ModalSecondaryButton
                   buttonAction={showDatePicker}
                   icon={"calendar-month"}
+                  blink={datButState}
                 />
                 <DateTimePickerModal
                   isVisible={datePickerVisible}
@@ -704,12 +676,13 @@ export default function PicUploadModal() {
                 <ModalSecondaryButton
                   buttonAction={onNavigate}
                   icon={"location-pin"}
+                  blink={corButState}
                 />
               </View>
             </View>
           </View>
 
-          <SubmitButton buttonAction={handleSubmit} label={"Submit Photo"} />
+          <SubmitButton buttonAction={handleSubmit} label={"Submit Photo"} blink={subButState} />
         </View>
         <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
           <SuccessModal

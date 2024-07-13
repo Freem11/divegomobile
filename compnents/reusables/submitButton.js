@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { TutorialContext } from "../contexts/tutorialContext";
 
 export default function SubmitButton(props) {
-  const { buttonAction, label } =
+  const { buttonAction, label, blink } =
     props;
   const [isPressed, setIsPressed] = useState(false);
+
+  useEffect(() => {
+    blink ? setIsPressed(true) : setIsPressed(false)
+  }, [blink]);
 
   return (
     <View style={styles.topBorder}>

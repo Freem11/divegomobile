@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback ,Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function ModalSecondaryButton(props) {
-  const { buttonAction, icon, buttonText, altStyle } = props;
+  const { buttonAction, icon, buttonText, altStyle, blink } = props;
   const [isPressed, setIsPressed] = useState(false);
 
   let applyBgStyle;
@@ -23,6 +23,11 @@ export default function ModalSecondaryButton(props) {
     applyBgStyle = styles.buttonBackgroundPressedAlt;
     applyFntStyle = styles.buttonTextAlt;
   }
+
+  useEffect(() => {
+    blink ? setIsPressed(true) : setIsPressed(false)
+  }, [blink]);
+
 
   return (
     <TouchableWithoutFeedback
