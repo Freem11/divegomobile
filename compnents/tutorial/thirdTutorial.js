@@ -36,6 +36,7 @@ import { MasterContext } from "../contexts/masterContext";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
@@ -46,6 +47,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function ThirdTutorial() {
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
@@ -122,7 +124,8 @@ export default function ThirdTutorial() {
           Longitude: "",
           DDVal: "0",
         });
-        // setChapter(null);
+        setLargeModalSecond(false);
+        setLargeModal(false)
         break;
 
       case "Adding your photo":
@@ -135,7 +138,7 @@ export default function ThirdTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setLargeModalSecond(true);
-        // setChapter(null);
+        setActiveButtonID("PictureAdderButton");
         break;
 
       case "Name that sea creature!":
@@ -147,7 +150,7 @@ export default function ThirdTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setLargeModalSecond(true);
-        // setChapter(null);
+        setActiveButtonID("PictureAdderButton");
         break;
 
       case "Dropping the pin":
@@ -159,7 +162,7 @@ export default function ThirdTutorial() {
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setLargeModalSecond(true);
-        // setChapter(null);
+        setActiveButtonID("PictureAdderButton");
         break;
 
       case "Exit Guide":
