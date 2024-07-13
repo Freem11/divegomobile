@@ -18,16 +18,12 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import mantaIOS from "../png/Manta32.png";
 import seaLionGuy from "../png/EmilioNeutral.png";
-import { TutorialModelContext } from "../contexts/tutorialModalContext";
-import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import {
-  getPhotosforAnchorMulti,
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "../../supabaseCalls/photoSupabaseCalls";
@@ -36,9 +32,9 @@ import moment from "moment";
 import { scale, moderateScale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { IterratorContext } from "../contexts/iterratorContext";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TutorialResetContext } from "../contexts/tutorialResetContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { ReverseContext } from "../contexts/reverseContext";
@@ -59,28 +55,23 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function IntroTutorial() {
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
-    ActiveTutorialIDContext
-  );
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
   const { selectedDiveSite, setSelectedDiveSite } = useContext(
     SelectedDiveSiteContext
   );
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-
-  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
-  const { secondGuideModal, setSecondGuideModal } = useContext(
-    SecondTutorialModalContext
-  );
   const { itterator, setItterator } = useContext(IterratorContext);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { setItterator2 } = useContext(Iterrator2Context);
+  const { setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { movingBack, setMovingBack } = useContext(ReverseContext);
@@ -103,8 +94,8 @@ export default function IntroTutorial() {
       setItterator(null);
       setTutorialRunning(false);
       setTutorialReset(false);
-      
-      setFullScreenModal(false); 
+
+      setFullScreenModal(false);
       setLargeModal(false);
 
       resetTutorial();
@@ -232,10 +223,10 @@ export default function IntroTutorial() {
 
   const handleSecondTutorialStartup = () => {
     setItterator(null);
-    setLargeModal(false);
+    setItterator2(0);
     setTutorialRunning(true);
-    // setFullScreenModal(!fullScreenModal);
     setActiveTutorialID("SecondGuide");
+    setLargeModal(false);
   };
 
   const characterX = useSharedValue(scale(1000));
@@ -427,12 +418,10 @@ export default function IntroTutorial() {
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
-        // startCharacterAnimation();
       }, 400);
 
       setTimeout(() => {
         textBoxY.value = withTiming(windowHeight * 0.8);
-        // startTextBoxAnimation();
         setupText(0);
       }, 600);
     }
@@ -445,17 +434,12 @@ export default function IntroTutorial() {
         return;
       }
       userBoxX.value = withSpring(windowWidth * 0.09);
-      // startUserBoxAnimation();
     }
 
     if (itterator === 2) {
       getProfile();
-      // if (userBoxX.value !== scale(-300)) {
       userBoxX.value = withTiming(scale(-300));
       Keyboard.dismiss();
-      // startUserBoxAnimation();
-      // }
-      // startPicAnimation();
     }
 
     if (itterator === 3) {
@@ -479,21 +463,18 @@ export default function IntroTutorial() {
 
     if (itterator === 8) {
       exploreButtonY.value = withTiming(windowHeight * 0.4);
-      // startExploreButtonAnimation();
     }
 
     if (itterator === 9) {
       exploreButtonY.value = withTiming(scale(-1000));
       clusterAnchorY.value = withTiming(windowHeight * 0.4);
-      // startClusterAnchorAnimation();
     }
 
     if (itterator === 10) {
       heatPotintY.value = withTiming(windowHeight * 0.25);
-      // startHeatPointAnimation();
     }
 
-    console.log(itterator, largeModal, activeButtonID)
+    console.log(itterator, largeModal, activeButtonID);
     if (itterator === 11) {
       if (movingBack) {
         setMovingBack(false);
@@ -502,9 +483,7 @@ export default function IntroTutorial() {
       } else {
         setFullScreenModal(false);
         heatPotintY.value = withTiming(scale(-1200));
-        // startHeatPointAnimation();
         clusterAnchorY.value = withTiming(scale(-1200));
-        // startClusterAnchorAnimation();
       }
     }
 
@@ -532,7 +511,6 @@ export default function IntroTutorial() {
       setFullScreenModal(true);
       setActiveTutorialID("FirstGuide");
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
-      // startArrowAnimation();
     }
 
     if (itterator === 18) {
@@ -544,7 +522,6 @@ export default function IntroTutorial() {
       } else {
         setFullScreenModal(false);
         arrowY.value = withTiming(scale(-1200));
-        // startArrowAnimation();
       }
     }
 
@@ -552,13 +529,11 @@ export default function IntroTutorial() {
       setLargeModal(false);
       if (backCount === 0) {
         arrowY.value = withTiming(scale(-1200));
-        // startArrowAnimation();
         setBackCount((prev) => prev + 1);
       }
       if (backHappened) {
         setTextPrinting(true);
         setMovingBack(true);
-        // -------------------------
         setFullScreenModal(true);
         setActiveTutorialID("FirstGuide");
       } else {
@@ -579,13 +554,11 @@ export default function IntroTutorial() {
 
     if (itterator === 23) {
       nextTutX.value = withSpring(windowWidth * 0.3);
-      // startNextTutAnimation();
     }
 
     if (itterator === 24) {
       setLargeModal(false);
       nextTutX.value = withTiming(scale(-300));
-      // startNextTutAnimation();
     }
 
     if (itterator === feederArray.length - 1) {
@@ -595,9 +568,7 @@ export default function IntroTutorial() {
       characterX.value = withTiming(
         Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
       );
-      // startCharacterAnimation();
       textBoxY.value = withTiming(scale(1000));
-      // startTextBoxAnimation();
       setChapter(null);
       setBackHappened(false);
       setMovingBack(false);
@@ -671,81 +642,6 @@ export default function IntroTutorial() {
     };
   });
 
-  const startCharacterAnimation = () => {
-    if (characterX.value === scale(1000)) {
-      characterX.value = withTiming(
-        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
-      );
-    } else {
-      characterX.value = withTiming(1000);
-    }
-  };
-
-  const startTextBoxAnimation = () => {
-    if (textBoxY.value === scale(1000)) {
-      textBoxY.value = withTiming(windowHeight * 0.8);
-    } else {
-      textBoxY.value = withTiming(scale(1000));
-    }
-  };
-
-  const startPicAnimation = () => {
-    if (picX.value === scale(-300)) {
-      picX.value = withSpring(0);
-    } else {
-      picX.value = withTiming(scale(-300));
-    }
-  };
-
-  const startExploreButtonAnimation = () => {
-    if (exploreButtonY.value === scale(-1000)) {
-      exploreButtonY.value = withTiming(windowHeight * 0.4);
-    } else {
-      exploreButtonY.value = withTiming(scale(-1000));
-    }
-  };
-
-  const startClusterAnchorAnimation = () => {
-    if (clusterAnchorY.value === scale(-1200)) {
-      clusterAnchorY.value = withTiming(windowHeight * 0.4);
-    } else {
-      clusterAnchorY.value = withTiming(scale(-1200));
-    }
-  };
-
-  const startHeatPointAnimation = () => {
-    if (heatPotintY.value === scale(-1200)) {
-      heatPotintY.value = withTiming(windowHeight * 0.25);
-    } else {
-      heatPotintY.value = withTiming(scale(-1200));
-    }
-  };
-
-  const startArrowAnimation = () => {
-    if (arrowY.value === scale(-1200)) {
-      arrowY.value = withTiming(windowWidth > 600 ? -50 : 40);
-    } else {
-      arrowY.value = withTiming(scale(-1200));
-    }
-  };
-
-  const startUserBoxAnimation = () => {
-    if (userBoxX.value === scale(-300)) {
-      userBoxX.value = withSpring(windowWidth * 0.2);
-    } else {
-      userBoxX.value = withTiming(scale(-300));
-      Keyboard.dismiss();
-    }
-  };
-
-  const startNextTutAnimation = () => {
-    if (nextTutX.value === scale(-300)) {
-      nextTutX.value = withSpring(windowWidth * 0.3);
-    } else {
-      nextTutX.value = withTiming(scale(-300));
-    }
-  };
-
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
@@ -813,7 +709,6 @@ export default function IntroTutorial() {
     }
     setItterator((prev) => prev + hopper);
     picX.value = withTiming(scale(-300));
-    // startPicAnimation();
   };
 
   const nudgeMap = (values) => {
