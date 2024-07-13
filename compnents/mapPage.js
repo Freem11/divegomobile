@@ -74,6 +74,7 @@ import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
+import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -110,6 +111,7 @@ export default function MapPage() {
   }
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
@@ -216,16 +218,17 @@ export default function MapPage() {
   useEffect(() => {
     startAnchorModalAnimations();
 
-    if (tutorialRunning && siteModal) {
+    if (tutorialRunning && largeModal) {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
-      } else if (itterator === 11 && anchPhotos === 0) {
-        setItterator(itterator + 1);
-      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0) {
-        setItterator(itterator + 2);
-      }
+      } 
+      // else if (itterator === 11 && anchPhotos === 0) {
+      //   setItterator(itterator + 1);
+      // } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0) {
+      //   setItterator(itterator + 2);
+      // }
     }
-  }, [siteModal]);
+  }, [largeModal]);
 
   //Comments Modal Animation
   const commentsModalY = useSharedValue(windowHeight);

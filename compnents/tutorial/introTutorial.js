@@ -52,6 +52,7 @@ import UserNamer from "./usernamer";
 import ImageCasher from "../helpers/imageCashing";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 
 const windowWidth = Dimensions.get("window").width;
@@ -63,7 +64,9 @@ export default function IntroTutorial() {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
   const { selectedDiveSite, setSelectedDiveSite } = useContext(
@@ -118,7 +121,7 @@ export default function IntroTutorial() {
         setLargeModal(false);
         setItterator(6);
         setFullScreenModal(true);
-        setActiveButtonID("FirstGuide");
+        setActiveTutorialID("FirstGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -132,7 +135,7 @@ export default function IntroTutorial() {
         setLargeModal(false);
         setItterator(9);
         setFullScreenModal(true);
-        setActiveButtonID("FirstGuide");
+        setActiveTutorialID("FirstGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -148,7 +151,7 @@ export default function IntroTutorial() {
         setLargeModal(false);
         setItterator(16);
         setFullScreenModal(true);
-        setActiveButtonID("FirstGuide");
+        setActiveTutorialID("FirstGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -232,7 +235,7 @@ export default function IntroTutorial() {
     setLargeModal(false);
     setTutorialRunning(true);
     // setFullScreenModal(!fullScreenModal);
-    setActiveButtonID("SecondGuide");
+    setActiveTutorialID("SecondGuide");
   };
 
   const characterX = useSharedValue(scale(1000));
@@ -490,7 +493,7 @@ export default function IntroTutorial() {
       // startHeatPointAnimation();
     }
 
-    console.log(itterator)
+    console.log(itterator, largeModal, activeButtonID)
     if (itterator === 11) {
       if (movingBack) {
         setMovingBack(false);
@@ -509,12 +512,12 @@ export default function IntroTutorial() {
       setTextPrinting(true);
       setMovingBack(true);
       setFullScreenModal(true);
-      setActiveButtonID("FirstGuide");
     }
 
     if (itterator === 13) {
       setTextRead("");
       setTextPrinting(true);
+      setFullScreenModal(true);
     }
 
     if (itterator === 14) {
@@ -527,7 +530,7 @@ export default function IntroTutorial() {
 
     if (itterator === 16) {
       setFullScreenModal(true);
-      setActiveButtonID("FirstGuide");
+      setActiveTutorialID("FirstGuide");
       arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
       // startArrowAnimation();
     }
@@ -546,6 +549,7 @@ export default function IntroTutorial() {
     }
 
     if (itterator === 19) {
+      setLargeModal(false);
       if (backCount === 0) {
         arrowY.value = withTiming(scale(-1200));
         // startArrowAnimation();
@@ -556,12 +560,12 @@ export default function IntroTutorial() {
         setMovingBack(true);
         // -------------------------
         setFullScreenModal(true);
-        setActiveButtonID("FirstGuide");
+        setActiveTutorialID("FirstGuide");
       } else {
         setTextPrinting(true);
         setMovingBack(true);
         setFullScreenModal(true);
-        setActiveButtonID("FirstGuide");
+        setActiveTutorialID("FirstGuide");
         setBackHappened(true);
       }
     }
@@ -569,7 +573,7 @@ export default function IntroTutorial() {
     if (itterator === 20) {
       arrowY.value = withTiming(scale(-1200));
       setFullScreenModal(true);
-      setLargeModal(true)
+      setLargeModal(true);
       setActiveButtonID("SiteAnchorIcon");
     }
 

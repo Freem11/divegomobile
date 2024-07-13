@@ -64,6 +64,8 @@ import { UserProfileContext } from "./contexts/userProfileContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
+import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -74,8 +76,12 @@ export default function Map() {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
 
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
 

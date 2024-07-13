@@ -44,8 +44,12 @@ let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 export default function AnchorModal(props) {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
@@ -116,17 +120,22 @@ export default function AnchorModal(props) {
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
     filterAnchorPhotos();
+
+    if (itterator === 11 && anchorPics.length === 0) {
+      setItterator(12);
+    } else if (itterator === 11 && anchorPics.length > 0) {
+      setItterator(13);
+    }
+
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (itterator === 13) {
-      setFullScreenModal(true);
-      setActiveTutorialID("FirstGuide");
-    }
     if (itterator === 20) {
       filterAnchorPhotos();
     }
   }, [itterator]);
+
+
 
   const getDiveSite = async () => {
     try {
@@ -155,22 +164,21 @@ export default function AnchorModal(props) {
   };
 
   const handleAnchorModalClose = () => {
+    setActiveButtonID(null);
     if (itterator === 15) {
       setItterator((prev) => prev + 1);
       setFullScreenModal(true);
       setActiveTutorialID("FirstGuide");
     }
 
-    if (itterator === 11) {
-      console.log("HEY!")
+    if (itterator === 12) {
       setFullScreenModal(false);
-      setActiveTutorialID("FirstGuide");
+      setItterator(11)
     }
 
     if (itterator === 18) {
       setFullScreenModal(false);
     }
-
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("SiteAnchorIcon");
     setLargeModal(!largeModal);
