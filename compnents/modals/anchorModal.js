@@ -5,7 +5,6 @@ import {
   ScrollView,
   Platform,
   TouchableWithoutFeedback,
-  Dimensions,
 } from "react-native";
 import Share from "react-native-share";
 import React, { useState, useContext, useEffect } from "react";
@@ -17,14 +16,10 @@ import { getDiveSiteWithUserName } from "../../supabaseCalls/diveSiteSupabaseCal
 import * as FileSystem from "expo-file-system";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
-import { TutorialModelContext } from "../contexts/tutorialModalContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
-import { PhotoBoxModalContext } from "../contexts/photoBoxModalContext";
 import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
@@ -47,31 +42,25 @@ export default function AnchorModal(props) {
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
   );
-  const { fullScreenModal, setFullScreenModal } = useContext(
+  const { setFullScreenModal } = useContext(
     FullScreenModalContext
   );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
+  const { setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const { setPhotoBoxModal } = useContext(PhotoBoxModalContext);
-
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
   const { myCreatures } = useContext(MyCreaturesContext);
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
-  const { setGuideModal } = useContext(TutorialModelContext);
-  const { setSiteModal } = useContext(AnchorModalContext);
-  const [siteCloseState, setSiteCloseState] = useState(false);
   const [site, setSite] = useState("");
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { setPicAdderModal } = useContext(PictureAdderContext);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -201,7 +190,8 @@ export default function AnchorModal(props) {
 
   const togglePhotoBoxModal = (photo) => {
     setSelectedPhoto(photo);
-    setPhotoBoxModal(true);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
   };
 
   const [base64, setBase64] = useState(null);

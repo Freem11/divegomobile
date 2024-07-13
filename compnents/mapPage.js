@@ -21,7 +21,6 @@ import AnimatedModalLarge from '../compnents/reusables/animatedModalLarge';
 import AnimatedModalLargeSecond from '../compnents/reusables/animatedModalLargeSecond';
 import AnimatedFullScreenModal from '../compnents/reusables/animatedFullScreenModal';
 
-
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -37,7 +36,6 @@ import Historgram from "./histogram/histogramBody";
 import PhotoFilterer from "./photoMenu/photoFilter";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
-import { PictureAdderContext } from "./contexts/picModalContext";
 import { MasterContext } from "./contexts/masterContext";
 import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
@@ -45,19 +43,8 @@ import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
-import { TutorialModelContext } from "./contexts/tutorialModalContext";
-import { ChapterContext } from "./contexts/chapterContext";
-import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContext";
-import { ThirdTutorialModalContext } from "./contexts/thirdTutorialModalContext";
-import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";
-import { CommentsModalContext } from "./contexts/commentsModalContext";
-import { DSAdderContext } from "./contexts/DSModalContext";
-import { PartnerModalContext } from "./contexts/partnerAccountRequestModalContext";
-import { IterratorContext } from "./contexts/iterratorContext";
-import { Iterrator2Context } from "./contexts/iterrator2Context";
-import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
@@ -66,15 +53,12 @@ import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
-import { SelectedShopContext } from "./contexts/selectedShopContext";
-import { ShopModalContext } from "./contexts/shopModalContext";
 import { ItineraryListModalContext } from "./contexts/itineraryListModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
-import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -87,17 +71,8 @@ import Animated, {
   Easing,
   withSpring,
 } from "react-native-reanimated";
-import CommentsModal from "./modals/commentsModal";
-import PhotoBoxModel from "./modals/photoBoxModal";
-import IntroTutorial from "./tutorial/introTutorial";
-import SecondTutorial from "./tutorial/secondTutorial";
-import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { PhotoBoxModalContext } from './contexts/photoBoxModalContext';
-import { SelectedPhotoContext } from "./contexts/selectedPhotoContext";
-import { ProfileModalContext } from "./contexts/profileModalContext";
-import { SettingsContext } from "./contexts/gearModalContext";
 import { MaterialIcons } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -111,14 +86,12 @@ export default function MapPage() {
   }
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
-  const { activeButtonID, setActiveButtonID } = useContext(
+ const { setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { selectedPhoto, setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
-  const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
@@ -126,17 +99,19 @@ export default function MapPage() {
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
 
-  const { textvalue, setTextValue } = useContext(SearchTextContext);
-  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setTextValue } = useContext(SearchTextContext);
+  const { areaPics } = useContext(AreaPicsContext);
+  const { setZoomHelper } = useContext(ZoomHelperContext);
 
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
-  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
+  const { setMapHelper } = useContext(MapHelperContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { chapter, setChapter } = useContext(ChapterContext);
+  const { selectedDiveSite, setSelectedDiveSite } = useContext(
+    SelectedDiveSiteContext
+  );
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
@@ -189,69 +164,16 @@ export default function MapPage() {
 
 
   //Anchor Modal Animation
-  const anchorModalY = useSharedValue(windowHeight);
   const { siteModal, setSiteModal } = useContext(AnchorModalContext);
-  const { selectedDiveSite, setSelectedDiveSite } = useContext(
-    SelectedDiveSiteContext
-  );
 
-  const anchorModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: anchorModalY.value }],
-    };
-  });
-
-  const startAnchorModalAnimations = () => {
-    if (siteModal) {
-      anchorModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      anchorModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
 
   useEffect(() => {
-    startAnchorModalAnimations();
-
     if (tutorialRunning && largeModal) {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
       } 
     }
   }, [largeModal]);
-
-  //Comments Modal Animation
-  const commentsModalY = useSharedValue(windowHeight);
-  const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
-
-  const commentsModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: commentsModalY.value }],
-    };
-  });
-
-  const startCommentsModalAnimations = () => {
-    if (commentsModal) {
-      commentsModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      commentsModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startCommentsModalAnimations();
-  }, [commentsModal]);
 
   //ItineraryList Modal Animation
   const itineraryListModalY = useSharedValue(windowHeight);
@@ -283,128 +205,6 @@ export default function MapPage() {
   useEffect(() => {
     startItineraryListModalAnimations();
   }, [itineraryListModal]);
-
-  //PhotoBox Modal Animation
-  const photoBoxModalY = useSharedValue(windowHeight);
-  const { photoBoxModal, setPhotoBoxModal } = useContext(PhotoBoxModalContext)
-  const photoBoxModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: photoBoxModalY.value }],
-    };
-  });
-
-  const startPhotoBoxModalAnimations = () => {
-    if (photoBoxModal) {
-      photoBoxModalY.value = withTiming(-windowHeight);
-    } else {
-      photoBoxModalY.value = withTiming(windowHeight);
-    }
-  };
-
-  useEffect(() => {
-    startPhotoBoxModalAnimations();
-  }, [photoBoxModal]);
-
-
-  //Intro Tutorial Animations
-  const tutorialModalY = useSharedValue(windowHeight);
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
-  const { itterator, setItterator } = useContext(IterratorContext);
-
-  const tutorialModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorialModalY.value }],
-    };
-  });
-
-  const startGuideModalAnimations = () => {
-    if (guideModal) {
-      tutorialModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorialModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startGuideModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [guideModal]);
-
-  //Second Tutorial Animations
-  const tutorial2ModalY = useSharedValue(windowHeight);
-  const { secondGuideModal, setSecondGuideModal } = useContext(
-    SecondTutorialModalContext
-  );
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-
-  const tutorial2ModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorial2ModalY.value }],
-    };
-  });
-
-  const startSecondGuideModalAnimations = () => {
-    if (secondGuideModal) {
-      tutorial2ModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorial2ModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startSecondGuideModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [secondGuideModal]);
-
-  //Third Tutorial Animations
-  const tutorial3ModalY = useSharedValue(windowHeight);
-  const { thirdGuideModal, setThirdGuideModal } = useContext(
-    ThirdTutorialModalContext
-  );
-  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-
-  const tutorial3ModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorial3ModalY.value }],
-    };
-  });
-
-  const startThirdGuideModalAnimations = () => {
-    if (thirdGuideModal) {
-      tutorial3ModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorial3ModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startThirdGuideModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [thirdGuideModal]);
 
 
   const feedbackX = useSharedValue(0);
@@ -732,12 +532,6 @@ export default function MapPage() {
                 </View>
               </View>
             )}
-            {/* 
-           {masterSwitch && ( 
-               <KeyboardAvoidingView behavior="height" enabled={false}>
-           
-               </KeyboardAvoidingView>
-           )} */}
 
             {masterSwitch && (
               <TouchableWithoutFeedback onPress={startTagAnimations}>
@@ -749,16 +543,6 @@ export default function MapPage() {
                 />
               </TouchableWithoutFeedback>
             )}
-
-            {/* {masterSwitch && (
-             
-            )} */}
-
-            {/* {masterSwitch && (
-              <View style={styles.Fbuttons}>
-                <FABButtons style={{ zIndex: 2 }} />
-              </View>
-            )} */}
 
             {masterSwitch && (
               <Animated.View
@@ -904,50 +688,6 @@ export default function MapPage() {
               </View>
             )}
 
-            {/* <Logo style={styles.Logo} pointerEvents={"none"} /> */}
-
-            {/* modals go here? */}
-
-            {commentsModal && (
-              <Animated.View
-                style={[styles.commentScreen, commentsModalReveal]}
-              >
-                <View style={styles.commentsModal}>
-                  <CommentsModal />
-                </View>
-              </Animated.View>
-            )}
-
-            {photoBoxModal && (
-              <Animated.View
-                style={[styles.photoBoxModal, photoBoxModalReveal]}
-              >
-                <PhotoBoxModel
-                  picData={selectedPhoto}
-                  photoBoxModal={photoBoxModal}
-                  setPhotoBoxModal={setPhotoBoxModal}
-                />
-              </Animated.View>
-            )}
-
-            {/* {guideModal && ( */}
-            <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
-              <IntroTutorial tutorialModalY={tutorialModalY} />
-            </Animated.View>
-            {/* )} */}
-
-            {/* {secondGuideModal && ( */}
-            <Animated.View style={[styles.tutorialModal, tutorial2ModalReveal]}>
-              <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
-            </Animated.View>
-            {/* )} */}
-
-            {/* {thirdGuideModal && ( */}
-            <Animated.View style={[styles.tutorialModal, tutorial3ModalReveal]}>
-              <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
-            </Animated.View>
-            {/* )} */}
-
             <AnimatedModalSmall />
             <AnimatedModalLarge />
             <AnimatedModalLargeSecond />
@@ -969,38 +709,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "green",
   },
-  slider: {
-    flex: 1,
-    position: "absolute",
-    alignItems: "center",
-    //Constants.statusBarHeight +
-    top: scale(0),
-    width: "80%",
-    height: scale(38),
-    zIndex: 2,
-    borderRadius: scale(15),
-    opacity: 0.8,
-    paddingBottom: 0,
-    paddingTop: scale(10),
-    backgroundColor: "white",
-    paddingRight: "2%",
-    paddingLeft: "2%",
-  },
-  monthText: {
-    flex: 1,
-    position: "absolute",
-    alignItems: "center",
-    //Constants.statusBarHeight +
-    top: scale(2),
-    width: "10%",
-    height: scale(20),
-    zIndex: 3,
-    borderRadius: scale(15),
-    paddingBottom: 0,
-    paddingTop: 0,
-    backgroundColor: "transparent",
-    opacity: 0.8,
-  },
   animalSelect: {
     display: "flex",
     flexDirection: "row",
@@ -1013,8 +721,6 @@ const styles = StyleSheet.create({
   FMenuAnimate: {
     position: "absolute",
     bottom: moderateScale(-65),
-    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
-    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -1038,20 +744,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     width: "100%",
     height: moderateScale(65),
-    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     zIndex: 3,
-  },
-  Fbuttons: {
-    alignItems: "center",
-    position: "absolute",
-    bottom: 0,
-    right: 5,
-    width: 100,
-    height: 40,
-    zIndex: 2,
-    borderRadius: 15,
-    opacity: 1,
-    paddingTop: -5,
   },
   PinButton: {
     position: "absolute",
@@ -1096,9 +789,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   carrousel: {
-    // flex: 1,
     position: "absolute",
-    // justifyContent: "center",
     flexDirection: "column",
     alignContent: "center",
     // backgroundColor: "blue",
@@ -1114,25 +805,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "column",
     position: "absolute",
-    // justifyContent: "center",
     flexDirection: "column",
-    // alignContent: "center",
-    // alignItems: "center",
-    // height: 25,
     width: "50%",
     top: moderateScale(105),
     zIndex: 3,
     // backgroundColor: "green"
   },
   emptyBox: {
-    // position: "absolute",
-    // top: -15,
     alignSelf: "center",
     flexDirection: "column",
-    // justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    // height: scale(55),
     width: "100%",
     zIndex: 3,
     // backgroundColor: "grey"
@@ -1141,9 +824,6 @@ const styles = StyleSheet.create({
     width: "25%",
     position: "absolute",
     left: "8%",
-    // justifyContent: "center",
-    // alignItems: "center",
-    // alignContent: "space-between",
     top: Platform.OS === "ios" ? "14%" : "14%",
     zIndex: 55,
     // backgroundColor:"pink"
@@ -1160,72 +840,6 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     backgroundColor: "transparent",
   },
-  tutorialModal: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    zIndex: 50,
-    left: 0,
-  },
-  anchorModal: {
-    position: "absolute",
-    height: windowHeight - windowHeight * 0.14,
-    width: windowWidth - windowWidth * 0.1,
-    marginLeft: windowWidth * 0.05,
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 25,
-    left: 0,
-    bottom: windowHeight * 0.09,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
-  searchModal: {
-    position: "absolute",
-    height: moderateScale(160),
-    width: "60%",
-    marginLeft: "19%",
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 25,
-    left: 0,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
-  diveSearchModal: {
-    position: "absolute",
-    height: moderateScale(160),
-    width: "60%",
-    marginLeft: "19%",
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 25,
-    left: 0,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
-  commentScreen: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    zIndex: 26,
-    left: 0,
-  },
-  commentsModal: {
-    position: "absolute",
-    height: windowHeight - windowHeight * 0.4,
-    width: windowWidth - windowWidth * 0.1,
-    marginLeft: windowWidth * 0.05,
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 27,
-    left: 0,
-    opacity: 1,
-    bottom: windowHeight * 0.04,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
   pullTab: {
     height: windowWidth > 600 ? scale(10) : scale(15),
     width: windowWidth > 600 ? scale(80) : scale(100),
@@ -1239,7 +853,6 @@ const styles = StyleSheet.create({
   },
   feedback: {
     zIndex: 20,
-    // opacity: 0.8,
     flexDirection: "row",
     backgroundColor: "#538bdb",
     position: "absolute",
@@ -1268,16 +881,6 @@ const styles = StyleSheet.create({
     marginRight: moderateScale(10),
     marginLeft: moderateScale(14),
     paddingLeft: moderateScale(50),
-  },
-  photoBoxModal: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    zIndex: 55,
-    left: "5%",
-    top: windowHeight,
-    marginTop: "10%",
-    backgroundColor: "green",
   },
   buttonwrapper: {
     position: "absolute",

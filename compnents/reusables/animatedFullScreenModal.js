@@ -11,6 +11,8 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import IntroTutorial from "../tutorial/introTutorial";
 import SecondTutorial from "../tutorial/secondTutorial";
 import ThirdTutorial from "../tutorial/thirdTutorial";
+import PhotoBoxModel from "../modals/photoBoxModal";
+import CommentsModal from "../modals/commentsModal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -44,6 +46,8 @@ export default function AnimatedFullScreenModal(props) {
       {activeTutorialID === "FirstGuide" && <IntroTutorial />}
       {activeTutorialID === "SecondGuide" && <SecondTutorial />}
       {activeTutorialID === "ThirdGuide" && <ThirdTutorial />}
+      {activeTutorialID === "PinchAndZoomPhoto" && <PhotoBoxModel />}
+      {activeTutorialID === "CommentsModal" && <CommentsModal />}
     </Animated.View>
   );
 }

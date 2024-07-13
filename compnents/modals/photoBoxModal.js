@@ -15,19 +15,20 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
 import CloseButton from "../reusables/closeButton";
-import { PhotoBoxModalContext } from "../contexts/photoBoxModalContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function PhotoBoxModal(props) {
-  const { picData} = props;
-  const { photoBoxModal, setPhotoBoxModal } = useContext(PhotoBoxModalContext);
+export default function PhotoBoxModal() {
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { selectedPhoto } = useContext(SelectedPhotoContext);
 
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
-  let fileName = picData && picData.split("/").pop();
+  let fileName = selectedPhoto && selectedPhoto.split("/").pop();
   let cacheDir = false;
 
   if (fileName) {
@@ -42,8 +43,6 @@ export default function PhotoBoxModal(props) {
     });
   }
 
-  const [photoCloseState, setPhotoCloseState] = useState(false);
-
   useEffect(() => {
     scaleCurrent.value = 1;
     scalePrevious.value = 1;
@@ -55,7 +54,7 @@ export default function PhotoBoxModal(props) {
     yPrevious.value = 0;
     xOffset.value = 0;
     yOffset.value = 0;
-  }, [picData, photoBoxModal]);
+  }, [selectedPhoto, fullScreenModal]);
 
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
@@ -114,9 +113,6 @@ export default function PhotoBoxModal(props) {
 
       xOffset.value = xCurrent.value;
       yOffset.value = yCurrent.value;
-
-      // console.log("coord", tempY, tempX)
-      // console.log("win", windowWidth/2, windowHeight/2)
 
       if (tempX > ((windowHeight * scalePrevious.value) / 2) * 0.8) {
         xCurrent.value = withTiming(
@@ -277,7 +273,7 @@ export default function PhotoBoxModal(props) {
   });
 
   const onCloseModal = () => {
-    setPhotoBoxModal(false);
+    setFullScreenModal(false);
   };
 
   return (
@@ -324,8 +320,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    marginTop: scale(-70),
-    marginLeft: scale(-35),
   },
   closeButton: {
     position: "absolute",
