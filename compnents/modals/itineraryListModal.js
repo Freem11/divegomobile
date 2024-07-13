@@ -93,7 +93,7 @@ export default function ItineraryListModal(props) {
         titleText={"Your Trips"}
         onClose={handleShopModalClose}
         icon={"create-new-folder"}
-        altButton={null}
+        altButton={handleShopModalClose}
       />
 
       <ScrollView style={{ marginTop: "3%", width: "100%", borderRadius: 15 }}>
