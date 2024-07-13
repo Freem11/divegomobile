@@ -53,7 +53,6 @@ import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
-import { ItineraryListModalContext } from "./contexts/itineraryListModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
@@ -68,7 +67,6 @@ import Animated, {
   useDerivedValue,
   withTiming,
   interpolate,
-  Easing,
   withSpring,
 } from "react-native-reanimated";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
@@ -174,38 +172,6 @@ export default function MapPage() {
       } 
     }
   }, [largeModal]);
-
-  //ItineraryList Modal Animation
-  const itineraryListModalY = useSharedValue(windowHeight);
-  // const { selectedItinerary, setSelectedItinerary} = useContext(SelectedItineraryContext);
-  const { itineraryListModal, setItineraryListModal } = useContext(
-    ItineraryListModalContext
-  );
-
-  const itineraryListModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: itineraryListModalY.value }],
-    };
-  });
-
-  const startItineraryListModalAnimations = () => {
-    if (itineraryListModal) {
-      itineraryListModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      itineraryListModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startItineraryListModalAnimations();
-  }, [itineraryListModal]);
-
 
   const feedbackX = useSharedValue(0);
 
@@ -341,8 +307,8 @@ export default function MapPage() {
   };
 
   const onShopNavigate = () => {
-    setSiteModal(false);
-    setShopModal(true);
+    setLargeModal(true);
+    setActiveButtonID("ShopMaskIcon");
     setMapHelper(true);
     setMasterSwitch(true);
     setMinorSwitch(true);

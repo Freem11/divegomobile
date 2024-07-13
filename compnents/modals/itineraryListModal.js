@@ -107,6 +107,10 @@ export default function ItineraryListModal(props) {
                   setSelectedID={setSelectedID}
                   selectedID={selectedID}
                   setShopModal={setShopModal}
+                  buttonOneText="Edit"
+                  buttonOneIcon="calendar-edit"
+                  buttonTwoText="Delete"
+                  buttonTwoIcon="delete-forever"
                 />
               );
             })}

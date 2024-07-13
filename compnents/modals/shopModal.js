@@ -58,13 +58,13 @@ export default function ShopModal(props) {
   }, [selectedShop]);
 
   useEffect(() => {
-    if (shopModal && zoomHelper) {
+    if (largeModal && zoomHelper) {
       setMapCenter({
         lat: selectedShop[0].lat,
         lng: selectedShop[0].lng,
       });
     }
-  }, [shopModal]);
+  }, [largeModal]);
 
   const getItineraries = async (IdNum) => {
     try {
@@ -109,7 +109,10 @@ export default function ShopModal(props) {
                   itinerary={itinerary}
                   setSelectedID={setSelectedID}
                   selectedID={selectedID}
-                  setShopModal={setShopModal}
+                  buttonOneText="Map"
+                  buttonOneIcon="anchor"
+                  buttonTwoText="Book"
+                  buttonTwoIcon="diving-scuba-flag"
                 />
               );
             })}
