@@ -162,6 +162,7 @@ export default function SecondTutorial() {
     if (bully == null || bully === "") {
       return;
     } else {
+      console.log("hit here")
       setTutorialReset(true);
     }
   };
@@ -608,14 +609,6 @@ export default function SecondTutorial() {
       nextTutX.value = withTiming(-300);
     }
   };
-
-  useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator2 === null) {
-        setItterator2(0);
-      }
-    }
-  }, [fullScreenModal]);
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });

@@ -222,11 +222,6 @@ export default function MapPage() {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
       } 
-      // else if (itterator === 11 && anchPhotos === 0) {
-      //   setItterator(itterator + 1);
-      // } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0) {
-      //   setItterator(itterator + 2);
-      // }
     }
   }, [largeModal]);
 

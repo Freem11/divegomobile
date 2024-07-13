@@ -624,14 +624,6 @@ export default function ThirdTutorial() {
     }
   };
 
-  useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator3 === null) {
-        setItterator3(0);
-      }
-    }
-  }, [thirdGuideModal]);
-
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });
   };

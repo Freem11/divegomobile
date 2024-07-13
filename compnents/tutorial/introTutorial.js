@@ -791,24 +791,12 @@ export default function IntroTutorial() {
   };
 
   useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator === null) {
-        setItterator(0);
-      }
-    }
-
     let today = new Date();
     let formattedDate = moment(today).format("YYYY-MM-DD");
     getPhotos(formattedDate);
   }, [fullScreenModal]);
 
   useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator === null) {
-        setItterator(0);
-      }
-    }
-
     let today = new Date();
     let formattedDate = moment(today).format("YYYY-MM-DD");
     getPhotos(formattedDate);

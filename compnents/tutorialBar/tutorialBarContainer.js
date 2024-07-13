@@ -75,6 +75,12 @@ export default function TutorialBar() {
   const handleList = async () => {
     setCount((prev) => prev + 1);
 
+    console.log(
+      "it1", itterator,
+      "it2", itterator2,
+      "it3", itterator3
+    )
+
     if (count % 2 !== 0) {
       setTutorialList(null);
     } else {
@@ -89,6 +95,10 @@ export default function TutorialBar() {
       }
     }
   };
+
+  useEffect(() => {
+    handleList()
+  }, [tutorialRunning]);
 
   const handleShift = async (listItem) => {
     let profileCheck = await getProfile();
@@ -136,9 +146,6 @@ export default function TutorialBar() {
   const progress = useDerivedValue(() => {
     return  withTiming(guideState === true ? 1 : 0)
   })
-  // const progress1 = useDerivedValue(() => {
-  //   return  withTiming(guideState === true ? 1 : 0)
-  // })
 
   const guideButtonPulse = useAnimatedStyle(() => {
     const backgroundColor = interpolateColor(
@@ -151,21 +158,8 @@ export default function TutorialBar() {
     };
   });
 
-  // const guideButtonTxtPulse = useAnimatedStyle(() => {
-  //   const fontColor = interpolateColor(
-  //     progress.value,
-  //     [0,1],
-  //     [styles.guideButton.color, styles.guideButtonAlt.color]
-  //   )
-  //   return {
-  //     fontColor,
-  //   };
-  // });
-
-
   return (
     <View style={styles.container} pointerEvents={"box-none"}>
-      {/* <View style={{ flexDirection: "column" }}> */}
       <TouchableWithoutFeedback
         onPress={handleList}
         style={{
@@ -217,7 +211,6 @@ export default function TutorialBar() {
               );
             })}
         </View>
-      {/* </View> */}
     </View>
   );
 }
