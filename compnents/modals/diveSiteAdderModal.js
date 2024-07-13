@@ -96,7 +96,14 @@ export default function DiveSiteModal() {
   let timer2;
   let timer3;
 
-  function locationBut() {
+  const [locButState, setLocButState] = useState(false);
+  const [pinButState, setPinButState] = useState(false);
+  const [subButState, setSubButState] = useState(false);
+  const [corButState, setCorButState] = useState(false);
+  const [helpButState, setHelpButState] = useState(false);
+
+
+  function locationButtonBlink() {
     counter1++;
     if (counter1 % 2 == 0) {
       setLocButState(false);
@@ -105,12 +112,21 @@ export default function DiveSiteModal() {
     }
   }
 
-  function pinBut() {
+  function pinButtonBlink() {
     counter1++;
     if (counter1 % 2 == 0) {
       setPinButState(false);
     } else {
       setPinButState(true);
+    }
+  }
+
+  function submitButtonBlink() {
+    counter3++;
+    if (counter3 % 2 == 0) {
+      setSubButState(false);
+    } else {
+      setSubButState(true);
     }
   }
 
@@ -129,30 +145,8 @@ export default function DiveSiteModal() {
     }
   }
 
-  function atSite() {
-    counter2++;
-    if (counter2 % 2 == 0) {
-      setImaButState(false);
-    } else {
-      setImaButState(true);
-    }
-  }
-
   function subButTimeout() {
-    blinker2 = setInterval(subBut, 1000);
-  }
-
-  function subBut() {
-    counter3++;
-    if (counter3 % 2 == 0) {
-      setSubButState(false);
-    } else {
-      setSubButState(true);
-    }
-  }
-
-  function subTimeout() {
-    blinker3 = setInterval(subBut, 1000);
+    blinker2 = setInterval(submitButtonBlink, 1000);
   }
 
   function cleanUp() {
@@ -172,9 +166,9 @@ export default function DiveSiteModal() {
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator2 === 16) {
-        blinker1 = setInterval(pinBut, 600);
+        blinker1 = setInterval(pinButtonBlink, 600);
       } else if (itterator2 === 13) {
-        blinker1 = setInterval(locationBut, 1000);
+        blinker1 = setInterval(locationButtonBlink, 1000);
       } else if (itterator2 === 23) {
         blinker1 = setInterval(siteField, 1000);
         timer2 = setTimeout(subButTimeout, 300);
@@ -351,12 +345,6 @@ export default function DiveSiteModal() {
     }
   };
 
-  const [locButState, setLocButState] = useState(false);
-  const [pinButState, setPinButState] = useState(false);
-  const [subButState, setSubButState] = useState(false);
-  const [corButState, setCorButState] = useState(false);
-  const [helpButState, setHelpButState] = useState(false);
-
   const successBoxY = useSharedValue(scale(1200));
   const failBoxY = useSharedValue(scale(1200));
 
@@ -446,10 +434,12 @@ export default function DiveSiteModal() {
             <ModalSecondaryButton
               buttonAction={getCurrentLocation}
               icon={"my-location"}
+              blink={locButState}
             />
             <ModalSecondaryButton
               buttonAction={onNavigate}
               icon={"location-pin"}
+              blink={pinButState}
             />
             <View style={{ marginTop: moderateScale(-30) }}>
               <CompletnessIndicator indicatorState={indicatorState} />
@@ -459,6 +449,7 @@ export default function DiveSiteModal() {
           <SubmitButton
             buttonAction={handleSubmit}
             label={"Submit Dive Site"}
+            blink={subButState}
           />
         </View>
         <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
