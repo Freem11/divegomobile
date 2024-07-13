@@ -65,7 +65,7 @@ export default function SuccessModal(props) {
           {blurb}
         </Text>
 
-        <View style={{ marginRight: "24%", marginBottom: moderateScale(20) }}>
+        <View style={{ marginLeft: moderateScale(20), marginBottom: moderateScale(20)}}>
           <ModalSecondaryButton
             buttonAction={tidyUp}
             icon={null}
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     color: "#36454F",
     fontFamily: "Itim_400Regular",
     alignSelf: "center",
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     margin: scale(10),
   },
   text2: {
-    fontSize: 18,
+    fontSize: moderateScale(18),
     color: "#36454F",
     fontFamily: "Itim_400Regular",
     alignSelf: "center",
@@ -109,48 +109,5 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     marginBottom: "7%",
     margin: scale(35),
-  },
-  OKbutton: {
-    backgroundColor: "#79bace",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    height: 35,
-    width: 150,
-    // marginLeft: "30%",
-    // marginTop: scale(10),
-    marginBottom: scale(20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.55,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  OKbuttonPressed: {
-    opacity: 1,
-    backgroundColor: "white",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    height: scale(35),
-    width: scale(150),
-    // marginLeft: "30%",
-    // marginTop: scale(10),
-    marginBottom: scale(20),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
+  }
 });

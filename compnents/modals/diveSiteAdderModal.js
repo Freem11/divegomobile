@@ -290,7 +290,7 @@ export default function DiveSiteModal() {
       if (tutorialRunning) {
         successBoxY.value = withTiming(scale(70));
       } else {
-        insertDiveSiteWaits(addSiteVals);
+        // insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
           ...addSiteVals,
           Site: "",

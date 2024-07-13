@@ -32,7 +32,7 @@ export default function TutorialBar() {
 
   const { chapter, setChapter } = useContext(ChapterContext);
   const [tutorialList, setTutorialList] = useState(null);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   const Tut1List = [
     "Getting around the map",
@@ -75,12 +75,6 @@ export default function TutorialBar() {
   const handleList = async () => {
     setCount((prev) => prev + 1);
 
-    console.log(
-      "it1", itterator,
-      "it2", itterator2,
-      "it3", itterator3
-    )
-
     if (count % 2 !== 0) {
       setTutorialList(null);
     } else {
@@ -116,6 +110,7 @@ export default function TutorialBar() {
       setChapter(listItem);
       setTutorialList(null);
     }
+    setTutorialList(null);
   };
 
   let counter = 0;

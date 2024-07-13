@@ -444,12 +444,11 @@ const styles = StyleSheet.create({
   userContainer: {
     position: "absolute",
     top: Platform.OS === "ios" ? "18%" : "18%",
+    left: "20%",
     backgroundColor: "transparent",
     alignItems: "center",
-    // marginTop: "-3%",
     height: "90%",
-    marginRight: scale(10),
-    marginLeft: scale(10),
+    width: "60%",
     borderRadius: 15,
     // backgroundColor: "green"
   },

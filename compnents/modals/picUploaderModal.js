@@ -359,7 +359,7 @@ export default function PicUploadModal() {
       if (tutorialRunning) {
         successBoxY.value = withTiming(scale(70));
       } else {
-        insertPhotoWaits(pinValues);
+        // insertPhotoWaits(pinValues);
         setPinValues({
           ...pinValues,
           PicFile: null,

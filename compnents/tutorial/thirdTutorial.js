@@ -67,6 +67,7 @@ export default function ThirdTutorial() {
   useEffect(() => {
     if (tutorialReset) {
       setItterator3(null);
+      setLargeModal(false);
       setLargeModalSecond(false);
       setTutorialRunning(false);
       setFullScreenModal(false);
@@ -93,6 +94,7 @@ export default function ThirdTutorial() {
     switch (chapter) {
       case "Contributing photos overview":
         setItterator3(3);
+        setLargeModal(false);
         setLargeModalSecond(false);
         setFullScreenModal(true);
         setActiveTutorialID("ThirdGuide");
@@ -110,8 +112,7 @@ export default function ThirdTutorial() {
           Longitude: "",
           DDVal: "0",
         });
-        setLargeModalSecond(false);
-        setLargeModal(false);
+        
         break;
 
       case "Adding your photo":

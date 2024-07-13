@@ -85,6 +85,7 @@ export default function SecondTutorial() {
         setItterator2(1);
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
+        setLargeModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -95,6 +96,7 @@ export default function SecondTutorial() {
         setItterator2(8);
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
+        setLargeModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -103,6 +105,8 @@ export default function SecondTutorial() {
 
       case "DS Help":
         setItterator2(10);
+        setLargeModal(false);
+        setActiveButtonID("DiveSiteAdderButton");
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
         setTutorialRunning(true);
@@ -110,20 +114,18 @@ export default function SecondTutorial() {
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
-        setLargeModal(true);
-        setActiveButtonID("DiveSiteAdderButton");
         break;
 
       case "Placing the pin":
         setItterator2(15);
+        setLargeModal(false);
+        setActiveButtonID("DiveSiteAdderButton");
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
-        setLargeModal(true);
-        setActiveButtonID("DiveSiteAdderButton");
         break;
 
       case "Exit Guide":
