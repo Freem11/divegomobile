@@ -98,6 +98,8 @@ export default function DiveSiteButton() {
   }, [diveSiteAdderModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("DiveSiteAdderButton");
     useButtonPressHelper("DiveSiteAdderButton", activeButtonID, largeModal, setLargeModal)

@@ -94,6 +94,8 @@ export default function PhotoButton() {
   }, [picAdderModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('PictureAdderButton')
     useButtonPressHelper('PictureAdderButton', activeButtonID, largeModalSecond, setLargeModalSecond)

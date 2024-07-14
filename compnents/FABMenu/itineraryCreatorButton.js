@@ -92,6 +92,8 @@ export default function ItineraryListButton() {
   }, [itineraryListModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('ItineraryListButton')
     useButtonPressHelper('ItineraryListButton', activeButtonID, largeModal, setLargeModal)

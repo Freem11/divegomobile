@@ -61,6 +61,8 @@ export default function ProfileButton() {
   }, [profileModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('UserProfileButton')
     useButtonPressHelper('UserProfileButton', activeButtonID, largeModalSecond, setLargeModalSecond)

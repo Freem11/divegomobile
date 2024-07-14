@@ -552,6 +552,8 @@ export default function Map() {
       Latitude: lat,
       Longitude: lng,
     });
+    setTiles(true);
+    setShowFilterer(false);
     filterAnchorPhotos();
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("SiteAnchorIcon");
@@ -560,6 +562,8 @@ export default function Map() {
 
   const setupShopModal = async (shopName) => {
     let chosenShop = await getShopByName(shopName);
+    setTiles(true);
+    setShowFilterer(false);
     setSelectedShop(chosenShop);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("ShopMaskIcon");

@@ -56,8 +56,10 @@ import { ModalSelectContext } from "./contexts/modalSelectContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
+import { SmallModalContext } from "./contexts/smallModalContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
+import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -82,9 +84,11 @@ export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
+  const { setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
- const { setActiveButtonID } = useContext(
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
@@ -107,7 +111,7 @@ export default function MapPage() {
   const [monthVal, setMonthVal] = useState("");
   const { setMapHelper } = useContext(MapHelperContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { selectedDiveSite, setSelectedDiveSite } = useContext(
+  const { selectedDiveSite } = useContext(
     SelectedDiveSiteContext
   );
   const [anchPhotos, setAnchPhotos] = useState(null);
@@ -231,14 +235,10 @@ export default function MapPage() {
     if (showFilterer) {
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
-      setGearModal(false);
-      setProfileModal(false);
-      setMapSearchModal(false);
-      setDiveSiteSearchModal(false);
-      setPicAdderModal(false);
-      setDiveSiteAdderModal(false);
-      setTutorialLaunchpadModal(false);
-      setSiteModal(false);
+      setSmallModal(false);
+      setLargeModal(false);
+      setLargeModalSecond(false);
+      setFullScreenModal(false);
     } else {
       Keyboard.dismiss();
       pullTabHeight.value = withTiming(0);
@@ -340,7 +340,8 @@ export default function MapPage() {
       if (success) {
         let bully = success[0].UserName;
         if (bully == null || bully === "") {
-          setGuideModal(true);
+          setLargeModal(true);
+          setActiveButtonID("SettingsButton");
           setTutorialRunning(true);
           setItterator(0);
         } else {
@@ -454,13 +455,10 @@ export default function MapPage() {
 
   const toggleDiveSites = () => {
     setDiveSitesTog(!diveSitesTog);
-    setGearModal(false);
-    setProfileModal(false);
-    setMapSearchModal(false);
-    setDiveSiteSearchModal(false);
-    setPicAdderModal(false);
-    setDiveSiteAdderModal(false);
-    setTutorialLaunchpadModal(false);
+    setSmallModal(false);
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    setFullScreenModal(false);
   };
 
   return (

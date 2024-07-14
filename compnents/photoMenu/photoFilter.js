@@ -1,10 +1,9 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { StyleSheet, View, TextInput, Dimensions } from "react-native";
 import { scale } from "react-native-size-matters";
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchTextContext } from "../contexts/searchTextContext";
@@ -16,11 +15,20 @@ import { PictureAdderContext } from "../contexts/picModalContext";
 import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SettingsContext } from "../contexts/gearModalContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoFilterer() {
+  const { setSmallModal } = useContext(SmallModalContext);
+  const { setLargeModal } = useContext(LargeModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+
   const { textvalue, setTextValue } = useContext(SearchTextContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
 
@@ -42,24 +50,18 @@ export default function PhotoFilterer() {
 
   const handleChange = async (text) => {
     setTextValue(text);
-    setGearModal(false);
-    setProfileModal(false);
-    setMapSearchModal(false);
-    setDiveSiteSearchModal(false);
-    setPicAdderModal(false);
-    setDiveSiteAdderModal(false);
-    setTutorialLaunchpadModal(false);
+    setSmallModal(false);
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    setFullScreenModal(false);
   };
 
   const handleClear = () => {
     setTextValue("");
-    setGearModal(false);
-    setProfileModal(false);
-    setMapSearchModal(false);
-    setDiveSiteSearchModal(false);
-    setPicAdderModal(false);
-    setDiveSiteAdderModal(false);
-    setTutorialLaunchpadModal(false);
+    setSmallModal(false);
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    setFullScreenModal(false);
   };
 
   return (

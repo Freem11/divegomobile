@@ -61,6 +61,8 @@ export default function SettingsButton() {
   }, [gearModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('SettingsButton')
     useButtonPressHelper('SettingsButton', activeButtonID, largeModal, setLargeModal)

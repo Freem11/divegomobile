@@ -13,7 +13,7 @@ export const useButtonPressHelper = (
     setter(true);
     setTimeout(() => {
       setter(true);
-    }, 500);
+    }, 250);
     
   }
 };

@@ -65,6 +65,8 @@ export default function GuidesButton() {
   }, [tutorialLaunchpadModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('TutorialsButton')
     useButtonPressHelper('TutorialsButton', activeButtonID, largeModal, setLargeModal)

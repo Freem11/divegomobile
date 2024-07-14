@@ -65,6 +65,8 @@ export default function LocationSearchButton() {
   }, [mapSearchModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('MapSearchButton')
     useButtonPressHelper('MapSearchButton', activeButtonID, smallModal, setSmallModal)
