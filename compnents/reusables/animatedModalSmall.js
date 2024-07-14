@@ -21,10 +21,10 @@ const windowHeight = Dimensions.get("window").height;
 export default function AnimatedModalSmall(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
   const { previousButtonID } = useContext(PreviousButtonIDContext);
-  const { smallModal } = useContext(SmallModalContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { setLargeModal } = useContext(LargeModalContext);
   const { setLargeModalSecond } = useContext(LargeModalSecondContext);
-  
+
   const [diveSearchBump, setDiveSearchBump] = useState(false);
   const [mapSearchBump, setMapSearchBump] = useState(false);
 
@@ -38,7 +38,7 @@ export default function AnimatedModalSmall(props) {
 
   const startSmallModalAnimation = () => {
     if (smallModalY.value === windowHeight) {
-      smallModalY.value = withTiming(-windowHeight*1.1);
+      smallModalY.value = withTiming(-windowHeight * 1.1);
     } else {
       smallModalY.value = withTiming(windowHeight);
     }
@@ -47,24 +47,24 @@ export default function AnimatedModalSmall(props) {
   useEffect(() => {
     setLargeModal(false);
     setLargeModalSecond(false);
-    if(smallModal){
+    if (smallModal) {
       smallModalY.value = withTiming(-windowHeight * 1.1);
     } else {
       smallModalY.value = withTiming(windowHeight);
-    }
-  }, [smallModal]);
 
+    }    
+  }, [smallModal]);
 
   useEffect(() => {
     if (diveSearchBump) {
-      smallModalY.value = withTiming(-windowHeight*1.35);
+      smallModalY.value = withTiming(-windowHeight * 1.35);
     }
     setDiveSearchBump(false);
   }, [diveSearchBump]);
 
   useEffect(() => {
     if (mapSearchBump) {
-      smallModalY.value = withTiming(-windowHeight*1.35);
+      smallModalY.value = withTiming(-windowHeight * 1.35);
     }
     setMapSearchBump(false);
   }, [mapSearchBump]);

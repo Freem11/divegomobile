@@ -15,6 +15,7 @@ import { SecondTutorialModalContext } from "../contexts/secondTutorialModalConte
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { moderateScale } from "react-native-size-matters";
+import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -103,10 +104,9 @@ export default function DiveSiteAutoComplete(props) {
           }
         }
       }
-      console.log("WHAT?", activeButtonID);
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("DiveSiteSearchButton");
-      setSmallModal(!smallModal);
+      useButtonPressHelper("DiveSiteSearchButton", activeButtonID, smallModal, setSmallModal)
       Keyboard.dismiss();
     }
   };

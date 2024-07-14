@@ -12,10 +12,10 @@ import { LargeModalContext } from "../contexts/largeModalContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
 import { TutorialContext } from "../../compnents/contexts/tutorialContext";
 import { Iterrator2Context } from "../../compnents/contexts/iterrator2Context";
 import ModalHeader from "../reusables/modalHeader";
+import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
 
 export default function DiveSiteSearchModal(props) {
   const { setDiveSearchBump } = props;
@@ -24,7 +24,6 @@ export default function DiveSiteSearchModal(props) {
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
  
-  const { setDiveSiteAdderModal } = useContext(DSAdderContext);
   const { tutorialRunning } = useContext(TutorialContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
 
@@ -38,8 +37,9 @@ export default function DiveSiteSearchModal(props) {
   const swapToSiteAdd = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID("DiveSiteAdderButton")
-    // setSmallModal(!smallModal);
-    setLargeModal(!largeModal)
+    setSmallModal(!smallModal);
+    useButtonPressHelper("DiveSiteAdderButton", activeButtonID, largeModal, setLargeModal)
+      
   };
 
   useEffect(() => {

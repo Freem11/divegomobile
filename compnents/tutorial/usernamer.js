@@ -116,29 +116,49 @@ export default function UserNamer(props) {
       />
       {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
 
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-around",
-          marginTop: moderateScale(10),
-          marginBottom: moderateScale(20),
-        }}
-      >
-        <ModalSecondaryButton
-          buttonAction={handleSubmit}
-          icon={null}
-          buttonText={"Ok"}
-        />
-       {nameChangerState &&
-       <ModalSecondaryButton
-       buttonAction={handleCancel}
-       icon={null}
-       buttonText={"Cancel"}
-       altStyle={true}
-     />
-     } 
-      </View>
+      {nameChangerState && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            marginTop: moderateScale(10),
+            marginBottom: moderateScale(20),
+          }}
+        >
+          <ModalSecondaryButton
+            buttonAction={handleSubmit}
+            icon={null}
+            buttonText={"Ok"}
+          />
+
+          <ModalSecondaryButton
+            buttonAction={handleCancel}
+            icon={null}
+            buttonText={"Cancel"}
+            altStyle={true}
+          />
+        </View>
+      )}
+
+      {!nameChangerState && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            marginTop: moderateScale(10),
+            marginBottom: moderateScale(20),
+            marginLeft: moderateScale(20),
+          }}
+        >
+          <ModalSecondaryButton
+            buttonAction={handleSubmit}
+            icon={null}
+            buttonText={"Ok"}
+          />
+        </View>
+      )}
     </View>
   );
 }

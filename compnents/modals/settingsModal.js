@@ -38,7 +38,7 @@ import email from "react-native-email";
 import { moderateScale } from "react-native-size-matters";
 import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
-
+import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -146,8 +146,9 @@ export default function SettingsModal() {
     if (myCreatures.length > 0) {
       setCreaturesIsEnabled(true);
     }
-
-    checkForRequest(profile[0].UserID);
+    if(profile[0]){
+      checkForRequest(profile[0].UserID);
+    }
   }, []);
 
   const checkForRequest = async (id) => {
@@ -158,7 +159,7 @@ export default function SettingsModal() {
   const toggleSettingsModal = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("SettingsButton");
-    setLargeModal(!largeModal);
+    useButtonPressHelper('SettingsButton', activeButtonID, largeModalSecond, setLargeModalSecond)
   };
 
   const toggleDCSwitch = () =>
@@ -189,8 +190,9 @@ export default function SettingsModal() {
   const handlePartnerButton = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("PartnerAccountButton");
-    setLargeModalSecond(!largeModalSecond);
-    setLargeModal(!largeModal);
+    setLargeModal(false);
+    useButtonPressHelper('PartnerAccountButton', activeButtonID, largeModalSecond, setLargeModalSecond)
+  
   };
 
   return (

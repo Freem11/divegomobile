@@ -17,9 +17,9 @@ import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
-import AnimatedModalLarge from '../compnents/reusables/animatedModalLarge';
-import AnimatedModalLargeSecond from '../compnents/reusables/animatedModalLargeSecond';
-import AnimatedFullScreenModal from '../compnents/reusables/animatedFullScreenModal';
+import AnimatedModalLarge from "../compnents/reusables/animatedModalLarge";
+import AnimatedModalLargeSecond from "../compnents/reusables/animatedModalLargeSecond";
+import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
 
 import {
   grabProfileById,
@@ -61,6 +61,8 @@ import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
+import { IterratorContext } from "./contexts/iterratorContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
@@ -86,11 +88,13 @@ export default function MapPage() {
   }
   const { setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { setActiveButtonID } = useContext(
-    ActiveButtonIDContext
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
   );
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { activeTutorialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { itterator, setItterator } = useContext(IterratorContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
   const { activeSession } = useContext(SessionContext);
@@ -111,9 +115,7 @@ export default function MapPage() {
   const [monthVal, setMonthVal] = useState("");
   const { setMapHelper } = useContext(MapHelperContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { selectedDiveSite } = useContext(
-    SelectedDiveSiteContext
-  );
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
@@ -164,16 +166,11 @@ export default function MapPage() {
     }
   };
 
-
-  //Anchor Modal Animation
-  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
-
-
   useEffect(() => {
     if (tutorialRunning && largeModal) {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
-      } 
+      }
     }
   }, [largeModal]);
 
@@ -340,10 +337,10 @@ export default function MapPage() {
       if (success) {
         let bully = success[0].UserName;
         if (bully == null || bully === "") {
-          setLargeModal(true);
-          setActiveButtonID("SettingsButton");
           setTutorialRunning(true);
           setItterator(0);
+          setActiveTutorialID("FirstGuide");
+          setFullScreenModal(true);
         } else {
           setProfile(success);
           setPinValues({
@@ -371,8 +368,9 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
+    const {
+      status: existingStatus,
+    } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
