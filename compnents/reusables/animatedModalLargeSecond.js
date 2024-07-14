@@ -8,6 +8,8 @@ import Animated, {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { MasterContext } from "../contexts/masterContext";
 
@@ -22,6 +24,9 @@ export default function AnimatedModalLargeSecond(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
   const { previousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModalSecond } = useContext(LargeModalSecondContext);
+  const { setSmallModal } = useContext(SmallModalContext);
+  const { setLargeModal } = useContext(LargeModalContext);
+  
   const { pinValues, setPinValues } = useContext(PinContext);
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
 
@@ -59,16 +64,16 @@ export default function AnimatedModalLargeSecond(props) {
       largeSeconModalY.value === -windowHeight * 1.1 &&
       activeButtonID !== previousButtonID
     ) {
-      // console.log('conditiion met')
       startLargeModalAnimation();
       setTimeout(() => {
         startLargeModalAnimation();
       }, 315);
       return;
     } else {
-      // console.log('conditiion 3 met')
       setTimeout(() => {
         startLargeModalAnimation();
+        setLargeModal(false);
+        setSmallModal(false);
       }, 100);
       return;
     }

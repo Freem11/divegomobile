@@ -9,6 +9,8 @@ import Animated, {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
 
 import MapSearchModal from "../modals/mapSearchModal";
 import DiveSiteSearchModal from "../modals/diveSiteSearchModal";
@@ -20,7 +22,9 @@ export default function AnimatedModalSmall(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
   const { previousButtonID } = useContext(PreviousButtonIDContext);
   const { smallModal } = useContext(SmallModalContext);
-
+  const { setLargeModal } = useContext(LargeModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
+  
   const [diveSearchBump, setDiveSearchBump] = useState(false);
   const [mapSearchBump, setMapSearchBump] = useState(false);
 
@@ -47,7 +51,6 @@ export default function AnimatedModalSmall(props) {
       (smallModalY.value === -windowHeight*1.1)  &&
       (activeButtonID !== previousButtonID)
     ) {
-      // console.log('conditiion met')
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
@@ -57,16 +60,16 @@ export default function AnimatedModalSmall(props) {
       (smallModalY.value === -windowHeight*1.35)  &&
     (activeButtonID !== previousButtonID)
     ){
-      // console.log('conditiion 2 met')
       startSmallModalAnimation();
       setTimeout(() => {
         startSmallModalAnimation();
       }, timout);
       return
     } else {
-      // console.log('conditiion 3 met')
       setTimeout(() => {
         startSmallModalAnimation();
+        setLargeModal(false);
+        setLargeModalSecond(false);
       }, 100);
       return
     }
