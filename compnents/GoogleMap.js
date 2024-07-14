@@ -59,6 +59,7 @@ import {
 } from "../supabaseCalls/heatPointSupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { scale } from "react-native-size-matters";
+import { useButtonPressHelper } from './FABMenu/buttonPressHelper';
 import * as ScreenOrientation from "expo-screen-orientation";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
@@ -554,7 +555,7 @@ export default function Map() {
     filterAnchorPhotos();
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("SiteAnchorIcon");
-    setLargeModal(!largeModal);
+    useButtonPressHelper('SiteAnchorIcon', activeButtonID, largeModal, setLargeModal)
   };
 
   const setupShopModal = async (shopName) => {
@@ -562,7 +563,7 @@ export default function Map() {
     setSelectedShop(chosenShop);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("ShopMaskIcon");
-    setLargeModal(!largeModal);
+    useButtonPressHelper('ShopMaskIcon', activeButtonID, largeModal, setLargeModal)
   };
 
   const clearModals = async () => {

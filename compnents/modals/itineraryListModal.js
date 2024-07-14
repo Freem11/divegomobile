@@ -65,7 +65,6 @@ export default function ItineraryListModal(props) {
     }
   };
 
-  console.log("???", itineraryList)
   const handleShopModalClose = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("ItineraryListButton");

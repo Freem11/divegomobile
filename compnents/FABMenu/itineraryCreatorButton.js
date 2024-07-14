@@ -25,11 +25,12 @@ import {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalContext } from '../contexts/largeModalContext';
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function ItineraryListButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -93,7 +94,7 @@ export default function ItineraryListButton() {
   const handlePress = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('ItineraryListButton')
-    setLargeModal(!largeModal)
+    useButtonPressHelper('ItineraryListButton', activeButtonID, largeModal, setLargeModal)
   }
   
   return (

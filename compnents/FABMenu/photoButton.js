@@ -25,11 +25,12 @@ import {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function PhotoButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -95,7 +96,7 @@ export default function PhotoButton() {
   const handlePress = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('PictureAdderButton')
-    setLargeModalSecond(!largeModalSecond)
+    useButtonPressHelper('PictureAdderButton', activeButtonID, largeModalSecond, setLargeModalSecond)
   }
 
   return (

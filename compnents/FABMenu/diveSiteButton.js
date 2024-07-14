@@ -24,18 +24,21 @@ import {
 } from "@expo/vector-icons";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalContext } from '../contexts/largeModalContext';
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function DiveSiteButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  
-  const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(
-    PullTabContext
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
   );
+  const { previousButtonID, setPreviousButtonID } = useContext(
+    PreviousButtonIDContext
+  );
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
+  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
   );
@@ -91,14 +94,14 @@ export default function DiveSiteButton() {
       setShopModal(false);
       setShowFilterer(false);
       setTiles(true);
-    } 
+    }
   }, [diveSiteAdderModal]);
 
   const handlePress = () => {
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID('DiveSiteAdderButton')
-    setLargeModal(!largeModal)
-  }
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("DiveSiteAdderButton");
+    useButtonPressHelper("DiveSiteAdderButton", activeButtonID, largeModal, setLargeModal)
+  };
 
   return (
     <View style={styles.container}>

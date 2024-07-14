@@ -62,24 +62,12 @@ export default function AnimatedModalLarge(props) {
   };
 
   useEffect(() => {
-    let timout;
-    windowHeight > 1000 ? (timout = 900) : (timout = 400);
-    if (
-      largeModalY.value === -windowHeight * 1.1 &&
-      activeButtonID !== previousButtonID
-    ) {
-      startLargeModalAnimation();
-      setTimeout(() => {
-        startLargeModalAnimation();
-      }, 315);
-      return;
+    setLargeModalSecond(false);
+    setSmallModal(false);
+    if(largeModal){
+      largeModalY.value = withTiming(-windowHeight * 1.1);
     } else {
-      setTimeout(() => {
-        startLargeModalAnimation();
-        setLargeModalSecond(false);
-      setSmallModal(false);
-      }, 100);
-      return;
+      largeModalY.value = withTiming(windowHeight);
     }
   }, [largeModal]);
 

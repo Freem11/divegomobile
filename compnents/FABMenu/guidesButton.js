@@ -23,11 +23,12 @@ import TutorialLaunchPadModal from "../modals/tutorialsModal";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalContext } from '../contexts/largeModalContext';
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -66,7 +67,7 @@ export default function GuidesButton() {
   const handlePress = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('TutorialsButton')
-    setLargeModal(!largeModal)
+    useButtonPressHelper('TutorialsButton', activeButtonID, largeModal, setLargeModal)
   }
 
   return (

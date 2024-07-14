@@ -19,11 +19,12 @@ import {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -62,7 +63,7 @@ export default function ProfileButton() {
   const handlePress = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('UserProfileButton')
-    setLargeModalSecond(!largeModalSecond)
+    useButtonPressHelper('UserProfileButton', activeButtonID, largeModalSecond, setLargeModalSecond)
   }
 
   return (

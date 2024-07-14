@@ -45,33 +45,12 @@ export default function AnimatedModalSmall(props) {
   };
 
   useEffect(() => {
-    let timout
-    windowHeight > 1000 ? timout = 850 : timout = 400
-    if (
-      (smallModalY.value === -windowHeight*1.1)  &&
-      (activeButtonID !== previousButtonID)
-    ) {
-      startSmallModalAnimation();
-      setTimeout(() => {
-        startSmallModalAnimation();
-      }, 315);
-      return
-    } else if ( 
-      (smallModalY.value === -windowHeight*1.35)  &&
-    (activeButtonID !== previousButtonID)
-    ){
-      startSmallModalAnimation();
-      setTimeout(() => {
-        startSmallModalAnimation();
-      }, timout);
-      return
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    if(smallModal){
+      smallModalY.value = withTiming(-windowHeight * 1.1);
     } else {
-      setTimeout(() => {
-        startSmallModalAnimation();
-        setLargeModal(false);
-        setLargeModalSecond(false);
-      }, 100);
-      return
+      smallModalY.value = withTiming(windowHeight);
     }
   }, [smallModal]);
 

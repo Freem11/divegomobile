@@ -19,6 +19,7 @@ import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { SmallModalContext } from '../contexts/smallModalContext';
+import { useButtonPressHelper } from './buttonPressHelper';
 
 import {
   MaterialIcons,
@@ -30,7 +31,7 @@ import {
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
@@ -97,7 +98,7 @@ export default function SiteSearchButton() {
   const handlePress = () => {
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('DiveSiteSearchButton')
-    setSmallModal(!smallModal)
+    useButtonPressHelper('DiveSiteSearchButton', activeButtonID, smallModal, setSmallModal)
   }
 
   return (

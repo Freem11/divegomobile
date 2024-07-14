@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Text } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -30,19 +30,19 @@ export default function AnimatedModalLargeSecond(props) {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
 
-  const largeSeconModalY = useSharedValue(-windowHeight);
+  const largeSecondModalY = useSharedValue(-windowHeight);
 
   const modalSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: largeSeconModalY.value }],
+      transform: [{ translateY: largeSecondModalY.value }],
     };
   });
 
   const startLargeModalAnimation = () => {
-    if (largeSeconModalY.value === windowHeight) {
-      largeSeconModalY.value = withTiming(-windowHeight * 1.1);
+    if (largeSecondModalY.value === windowHeight) {
+      largeSecondModalY.value = withTiming(-windowHeight * 1.1);
     } else {
-      largeSeconModalY.value = withTiming(windowHeight);
+      largeSecondModalY.value = withTiming(windowHeight);
       if (masterSwitch) {
         setPinValues({
           ...pinValues,
@@ -57,30 +57,20 @@ export default function AnimatedModalLargeSecond(props) {
     }
   };
 
+
   useEffect(() => {
-    let timout;
-    windowHeight > 1000 ? (timout = 900) : (timout = 400);
-    if (
-      largeSeconModalY.value === -windowHeight * 1.1 &&
-      activeButtonID !== previousButtonID
-    ) {
-      startLargeModalAnimation();
-      setTimeout(() => {
-        startLargeModalAnimation();
-      }, 315);
-      return;
-    } else {
-      setTimeout(() => {
-        startLargeModalAnimation();
-        setLargeModal(false);
-        setSmallModal(false);
-      }, 100);
-      return;
-    }
+    setLargeModal(false);
+    setSmallModal(false);
+  if(largeModalSecond){
+    largeSecondModalY.value = withTiming(-windowHeight * 1.1);
+  } else {
+    largeSecondModalY.value = withTiming(windowHeight);
+  }
   }, [largeModalSecond]);
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
+      <Text>big2</Text>
       {activeButtonID === "UserProfileButton" && <UserProfileModal />}
       {activeButtonID === "PartnerAccountButton" && <PartnerAccountRequestModal />}
       {activeButtonID === "PictureAdderButton" && <PicUploadModal />}
