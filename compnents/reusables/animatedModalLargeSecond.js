@@ -16,6 +16,7 @@ import { MasterContext } from "../contexts/masterContext";
 import UserProfileModal from "../modals/userProfileModal";
 import PartnerAccountRequestModal from "../modals/partnerAccountRequestModal";
 import PicUploadModal from "../modals/picUploaderModal";
+import TripCreatorModal from '../modals/tripCreatorModal';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -70,11 +71,10 @@ export default function AnimatedModalLargeSecond(props) {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      <Text>big2</Text>
       {activeButtonID === "UserProfileButton" && <UserProfileModal />}
       {activeButtonID === "PartnerAccountButton" && <PartnerAccountRequestModal />}
       {activeButtonID === "PictureAdderButton" && <PicUploadModal />}
-
+      {activeButtonID === "TripCreator" && <TripCreatorModal />}
     </Animated.View>
   );
 }

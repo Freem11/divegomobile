@@ -25,16 +25,19 @@ import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import ModalHeader from "../reusables/modalHeader";
+import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ItineraryListModal(props) {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
@@ -65,6 +68,13 @@ export default function ItineraryListModal(props) {
     }
   };
 
+  const handleCreateNewButton = () => {
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("TripCreator");
+    setLargeModal(false);
+    useButtonPressHelper('TripCreator', activeButtonID, largeModalSecond, setLargeModalSecond)
+  };
+
   const handleShopModalClose = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("ItineraryListButton");
@@ -83,7 +93,7 @@ export default function ItineraryListModal(props) {
         titleText={"Your Trips"}
         onClose={handleShopModalClose}
         icon={"create-new-folder"}
-        altButton={handleShopModalClose}
+        altButton={handleCreateNewButton}
       />
 
       <ScrollView style={{ marginTop: "3%", width: "100%", borderRadius: 15 }}>

@@ -90,7 +90,7 @@ export default function PartnerAccountRequestModal() {
     });
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("PartnerAccountButton");
-    setLargeModalSecond(!largeModalSecond);
+    setLargeModalSecond(true);
     setLargeModal(!largeModal)
   };
 
