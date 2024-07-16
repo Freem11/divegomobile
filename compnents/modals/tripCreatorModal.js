@@ -1,4 +1,4 @@
-import { StyleSheet, View, Platform, Dimensions, Keyboard } from "react-native";
+import { StyleSheet, View, Platform, TextInput, Keyboard } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -28,7 +28,7 @@ import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
 import SubmitButton from "../reusables/submitButton";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-
+import InsetShadow from "react-native-inset-shadow";
 export default function TripCreatorModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
@@ -137,7 +137,22 @@ export default function TripCreatorModal() {
       />
 
       <View style={styles.statsContainer}>
-        <TouchableWithoutFeedback onPress={() => showDatePicker("StartDate")} style={{marginTop: moderateScale(-20), marginBottom: moderateScale(10)}}>
+
+      <View style={styles.leftSide}>
+
+      <InputField
+          placeHolderText={"Price"}
+          inputValue={formValues.Price}
+          keyboardType={"numbers-and-punctuation"}
+        />
+  
+        <TouchableWithoutFeedback
+          onPress={() => showDatePicker("StartDate")}
+          style={{
+            marginTop: moderateScale(-10),
+            marginBottom: moderateScale(10),
+          }}
+        >
           <View pointerEvents="none">
             <InputField
               placeHolderText={"Start Date"}
@@ -148,7 +163,13 @@ export default function TripCreatorModal() {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={() => showDatePicker("EndDate")} style={{marginTop: moderateScale(-20), marginBottom: moderateScale(10)}}>
+        <TouchableWithoutFeedback
+          onPress={() => showDatePicker("EndDate")}
+          style={{
+            marginTop: moderateScale(-20),
+            marginBottom: moderateScale(10),
+          }}
+        >
           <View pointerEvents="none">
             <InputField
               placeHolderText={"End Date"}
@@ -159,14 +180,86 @@ export default function TripCreatorModal() {
           </View>
         </TouchableWithoutFeedback>
 
-        <InputField
-          placeHolderText={"Price"}
-          inputValue={formValues.Price}
-          keyboardType={"numbers-and-punctuation"}
-        />
+          <PrimaryButton buttonAction={null} label={"Select Dive Sites"} />
+
+          </View>
+
+          <View style={styles.rightSide}>
+
+        <InsetShadow
+          containerStyle={{
+            backgroundColor: "transparent",
+            borderRadius: moderateScale(15),
+            height: "100%",
+            width: "80%",
+            marginTop: moderateScale(20),
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          elevation={20}
+          shadowRadius={15}
+          shadowOpacity={0.3}
+        >
+          <TextInput
+            style={{
+              width: "90%",
+              height: "30%",
+              borderRadius: moderateScale(15),
+              margin: moderateScale(5),
+              textAlign: "center",
+              verticalAlign: "middle",
+              fontFamily: "Itim_400Regular",
+            }}
+            value={formValues.DiveSites}
+            placeholder={"Possible Dive Sites in this Trip"}
+            placeholderTextColor="darkgrey"
+            keyboardType={"default"}
+            color={"#F0EEEB"}
+            fontSize={moderateScale(18)}
+            multiline={true}
+            editable={false}
+          ></TextInput>
+        </InsetShadow>
       </View>
 
-      <PrimaryButton buttonAction={null} label={"Select Dive Sites"} />
+      </View>
+
+      <InsetShadow
+        containerStyle={{
+          backgroundColor: "transparent",
+          borderRadius: moderateScale(15),
+          height: "20%",
+          width: "90%",
+          marginTop: moderateScale(-115),
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        elevation={20}
+        shadowRadius={15}
+        shadowOpacity={0.3}
+      >
+        <TextInput
+          style={{
+            width: "90%",
+            height: "20%",
+            borderRadius: moderateScale(15),
+            margin: moderateScale(5),
+            textAlign: "center",
+            verticalAlign: "middle",
+            fontFamily: "Itim_400Regular",
+          }}
+          value={formValues.TripDesc}
+          placeholder={"Trip Details"}
+          placeholderTextColor="darkgrey"
+          keyboardType={"default"}
+          color={"#F0EEEB"}
+          fontSize={moderateScale(18)}
+          multiline={true}
+          onChangeText={(text) =>
+            setFormValues({ ...formValues, TripDesc: text })
+          }
+        ></TextInput>
+      </InsetShadow>
 
       <SubmitButton buttonAction={handleSubmit} label={"Submit Trip"} />
 
@@ -196,6 +289,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: moderateScale(30),
+  },
+  leftSide: {
+    marginTop: moderateScale(-20),
+    alignItems: 'center',
+    justifyContent: "center",
+    // backgroundColor: 'pink',
+    height: '50%',
+  },
+  rightSide: {
+    marginTop: moderateScale(-20),
+    alignItems: 'flex-end',
+    justifyContent: "center",
+    // backgroundColor: 'green',
+    height: '60%',
   },
   labelBox: {
     flexDirection: "row",
