@@ -1,4 +1,4 @@
-import { StyleSheet, View, Platform, Dimensions } from "react-native";
+import { StyleSheet, View, Platform, Dimensions, Keyboard } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -19,7 +19,7 @@ import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-
+import moment from "moment";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import InputFieldLg from "../reusables/textInputLarge";
 import InputFieldSm from "../reusables/textInputSmall";
@@ -27,6 +27,7 @@ import InputField from "../reusables/textInputs";
 import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
 import SubmitButton from "../reusables/submitButton";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default function TripCreatorModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
@@ -45,6 +46,8 @@ export default function TripCreatorModal() {
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [dateType, setDateType] = useState("");
 
   const getProfile = async () => {
     let userID;
@@ -75,6 +78,38 @@ export default function TripCreatorModal() {
     ShopId: null,
   });
 
+  const showDatePicker = (value) => {
+    setDateType(value);
+    Keyboard.dismiss();
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleConfirm = (date) => {
+    let formattedDate = moment(date).format("YYYY-MM-DD");
+
+    if (dateType === "StartDate") {
+      if (formValues.EndDate.length > 0 && formValues.EndDate < formattedDate) {
+        return;
+      }
+    }
+
+    if (dateType === "EndDate") {
+      if (
+        formValues.StartDate.length > 0 &&
+        formValues.StartDate > formattedDate
+      ) {
+        return;
+      }
+    }
+
+    setFormValues({ ...formValues, [dateType]: formattedDate });
+    hideDatePicker();
+  };
+
   const toggleTripCreatorModal = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("TripCreator");
@@ -102,26 +137,45 @@ export default function TripCreatorModal() {
       />
 
       <View style={styles.statsContainer}>
+        <TouchableWithoutFeedback onPress={() => showDatePicker("StartDate")} style={{marginTop: moderateScale(-20), marginBottom: moderateScale(10)}}>
+          <View pointerEvents="none">
+            <InputField
+              placeHolderText={"Start Date"}
+              inputValue={formValues.StartDate}
+              keyboardType={"default"}
+              noPtEvents={true}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback onPress={() => showDatePicker("EndDate")} style={{marginTop: moderateScale(-20), marginBottom: moderateScale(10)}}>
+          <View pointerEvents="none">
+            <InputField
+              placeHolderText={"End Date"}
+              inputValue={formValues.EndDate}
+              keyboardType={"default"}
+              noPtEvents={true}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+
         <InputField
           placeHolderText={"Price"}
           inputValue={formValues.Price}
           keyboardType={"numbers-and-punctuation"}
-        />
-        <InputField
-          placeHolderText={"Start Date"}
-          inputValue={formValues.StartDate}
-          keyboardType={"default"}
-        />
-        <InputField
-          placeHolderText={"End Date"}
-          inputValue={formValues.EndDate}
-          keyboardType={"default"}
         />
       </View>
 
       <PrimaryButton buttonAction={null} label={"Select Dive Sites"} />
 
       <SubmitButton buttonAction={handleSubmit} label={"Submit Trip"} />
+
+      <DateTimePickerModal
+        isVisible={datePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
     </View>
   );
 }
@@ -129,6 +183,7 @@ export default function TripCreatorModal() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
     marginBottom: "2%",
