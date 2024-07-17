@@ -34,3 +34,19 @@ export const getItinerariesByUserId = async (id) => {
   }
 };
 
+
+export const getItineraryDiveSiteByIdArray = async (siteIds) => {
+
+  const { data, error } = await supabase.rpc(
+    "get_multiple_divesites_with_usernames", { divesitesid: siteIds }
+  );
+
+  if (error) {
+    console.log("couldn't do it itineraries8,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};

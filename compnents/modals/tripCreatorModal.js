@@ -17,6 +17,7 @@ import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
+import { getItineraryDiveSiteByIdArray } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
@@ -32,7 +33,8 @@ import InputFieldLg from "../reusables/textInputLarge";
 import InputFieldSm from "../reusables/textInputSmall";
 import InputField from "../reusables/textInputs";
 import ModalHeader from "../reusables/modalHeader";
-import PrimaryButton from "../reusables/primaryButton";
+import ListHeader from "../reusables/listHeader";
+import ListItem from "../reusables/listItem";
 import SubmitButton from "../reusables/submitButton";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import InsetShadow from "react-native-inset-shadow";
@@ -48,7 +50,7 @@ export default function TripCreatorModal() {
   );
   const { profile } = useContext(UserProfileContext);
   const [nameChangerState, setNameChangerState] = useState(false);
-  const [userFollows, setUserFollows] = useState(false);
+  const [tripDiveSites, setTripDiveSites] = useState([]);
   const { setProfileModal } = useContext(ProfileModalContext);
   const [userStats, setUserStats] = useState(null);
   const { selectedProfile, setSelectedProfile } = useContext(
@@ -56,6 +58,21 @@ export default function TripCreatorModal() {
   );
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [dateType, setDateType] = useState("");
+
+  useEffect(() => {
+    getTripDiveSites();
+  }, []);
+
+  const getTripDiveSites = async () => {
+    try {
+      const success = await getItineraryDiveSiteByIdArray(formValues.DiveSites);
+      if (success) {
+        setTripDiveSites(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   const getProfile = async () => {
     let userID;
@@ -82,7 +99,18 @@ export default function TripCreatorModal() {
     EndDate: "",
     Price: 0,
     TripDesc: "",
-    DiveSites: [],
+    DiveSites: [
+      "155",
+      "12",
+      "10",
+      "163",
+      "162",
+      "158",
+      "156",
+      "11",
+      "159",
+      "161",
+    ],
     ShopId: null,
   });
 
@@ -126,27 +154,26 @@ export default function TripCreatorModal() {
 
   const handleSubmit = () => {};
 
-  const { format: formatCurrency } = Intl.NumberFormat('en-Us', {
-    currency: 'USD',
-    style: 'currency',
+  const { format: formatCurrency } = Intl.NumberFormat("en-Us", {
+    currency: "USD",
+    style: "currency",
   });
 
   function useATMInput() {
-    const [value, setValue] = useState('0.00');
+    const [value, setValue] = useState("$0.00");
     function handleChange(value) {
-      const decimal = Number(value.replace(/\D/g, '')) / 100;
-      setValue(formatCurrency(decimal || 0).replace('R$\xa0', ''));
+      const decimal = Number(value.replace(/\D/g, "")) / 100;
+      setValue(formatCurrency(decimal || 0).replace("R$\xa0", ""));
     }
     return [value, handleChange];
-  };
+  }
 
   const [value, setValue] = useATMInput();
-  
-  useEffect(() => {
-    setFormValues({...formValues, Price: value})
-  },[value])
 
-  console.log("$$", formValues.Price)
+  useEffect(() => {
+    setFormValues({ ...formValues, Price: value });
+  }, [value]);
+
   return (
     <View style={styles.container}>
       <ModalHeader
@@ -213,45 +240,32 @@ export default function TripCreatorModal() {
                 />
               </View>
             </TouchableWithoutFeedback>
-
-            <PrimaryButton buttonAction={null} label={"Select Dive Sites"} />
           </View>
 
           <View style={styles.rightSide}>
-            <InsetShadow
-              containerStyle={{
-                backgroundColor: "transparent",
-                borderRadius: moderateScale(15),
-                height: "100%",
-                width: "80%",
-                marginTop: moderateScale(20),
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              elevation={20}
-              shadowRadius={15}
-              shadowOpacity={0.3}
+            <ListHeader
+              titleText="Possible Sites in this Trip"
+              buttonAction={showDatePicker}
+              buttonText={"Select Sites"}
+            />
+            <ScrollView
+              style={{ width: "102%", paddingLeft: moderateScale(5) }}
             >
-              <TextInput
-                style={{
-                  width: "90%",
-                  height: "30%",
-                  borderRadius: moderateScale(15),
-                  margin: moderateScale(5),
-                  textAlign: "center",
-                  verticalAlign: "middle",
-                  fontFamily: "Itim_400Regular",
-                }}
-                value={formValues.DiveSites}
-                placeholder={"Possible Dive Sites in this Trip"}
-                placeholderTextColor="darkgrey"
-                keyboardType={"default"}
-                color={"#F0EEEB"}
-                fontSize={moderateScale(18)}
-                multiline={true}
-                editable={false}
-              ></TextInput>
-            </InsetShadow>
+              {tripDiveSites.map((site) => {
+                if (site.region) {
+                  return (
+                    <ListItem
+                      titleText={`${site.name} ~ ${site.region}`}
+                      buttonAction={site}
+                    />
+                  );
+                } else {
+                  return (
+                    <ListItem titleText={`${site.name}`} buttonAction={site} />
+                  );
+                }
+              })}
+            </ScrollView>
           </View>
         </View>
 
@@ -328,19 +342,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: moderateScale(30),
   },
-  leftSide: {
-    marginTop: moderateScale(-20),
+  statsContainer: {
+    width: "100%",
+    // height: "50%",
+    // backgroundColor: "pink",
+    marginTop: moderateScale(20),
+    flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: 'pink',
-    height: "50%",
+  },
+  leftSide: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "blue",
   },
   rightSide: {
-    marginTop: moderateScale(-20),
-    alignItems: "flex-end",
-    justifyContent: "center",
-    // backgroundColor: 'green',
-    height: "60%",
+    height: "80%",
+    width: "50%",
+    alignItems: "center",
+    borderRadius: moderateScale(5),
+    // backgroundColor: "green",
   },
   labelBox: {
     flexDirection: "row",
@@ -378,14 +400,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     overflow: "scroll",
-  },
-  statsContainer: {
-    // backgroundColor: "pink",
-    marginTop: moderateScale(20),
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-evenly",
   },
   inputSmall: {
     fontFamily: "Itim_400Regular",
