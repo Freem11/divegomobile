@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback, Text } from "react-native";
-import { moderateScale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function MaterialCommunityIconsButton(props) {
@@ -47,10 +47,10 @@ export default function MaterialCommunityIconsButton(props) {
 
 const styles = StyleSheet.create({
   buttonBackground: {
-    borderRadius: moderateScale(40),
+    borderRadius: moderateScale(55),
     backgroundColor: "#538dbd",
-    width: moderateScale(65),
-    height: moderateScale(50),
+    width: moderateScale(55),
+    height: moderateScale(45),
     padding: moderateScale(5),
     marginRight: moderateScale(20),
     marginTop: "3%",

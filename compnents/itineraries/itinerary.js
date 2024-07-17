@@ -7,7 +7,7 @@ import { MasterContext } from "../contexts/masterContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import MaterialCommunityIconsButton from "../reusables/materialCommunityIconsButton";
 import { useMapFlip } from './hooks';
-import { scale } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   moreBox: {
     flexDirection: "column",
-    width: "60%",
+    width: "58%",
     height: "100%",
   },
   buttonBox: {
@@ -139,6 +139,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "40%",
     height: "100%",
+    // backgroundColor: "pink",
+    paddingLeft: moderateScale(-20)
   },
   tripName: {
     fontFamily: "Itim_400Regular",

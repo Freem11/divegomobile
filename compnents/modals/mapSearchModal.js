@@ -79,13 +79,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "65%",
+    width: moderateScale(250),
+    // backgroundColor: "pink"
   },
   buttonlabel: {
     fontFamily: "Itim_400Regular",
     color: "white",
     fontSize: moderateScale(14),
     marginTop: moderateScale(5),
-    marginRight: moderateScale(-30),
+    marginLeft: moderateScale(15),
   },
 });

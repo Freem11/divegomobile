@@ -33,16 +33,18 @@ const styles = StyleSheet.create({
     padding: "1%",
     marginTop: "2%",
     marginLeft: "3%",
+    minHeight: moderateScale(50),
     width: "92%",
     borderRadius: 10,
     overflow: "hidden",
     // backgroundColor: "orange"
   },
   titleBox: {
-    width: "60%",
+    width: "120%",
     // backgroundColor: "purple"
   },
   titleText: {
+    width:"50%",
     flexWrap: "wrap",
     fontFamily: "PatrickHand_400Regular",
     color: "#F0EEEB",

@@ -1,4 +1,11 @@
-import { StyleSheet, View, Platform, TextInput, Keyboard } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Platform,
+  TextInput,
+  Keyboard,
+  ScrollView,
+} from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -29,6 +36,7 @@ import PrimaryButton from "../reusables/primaryButton";
 import SubmitButton from "../reusables/submitButton";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import InsetShadow from "react-native-inset-shadow";
+
 export default function TripCreatorModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
@@ -118,6 +126,27 @@ export default function TripCreatorModal() {
 
   const handleSubmit = () => {};
 
+  const { format: formatCurrency } = Intl.NumberFormat('en-Us', {
+    currency: 'USD',
+    style: 'currency',
+  });
+
+  function useATMInput() {
+    const [value, setValue] = useState('0.00');
+    function handleChange(value) {
+      const decimal = Number(value.replace(/\D/g, '')) / 100;
+      setValue(formatCurrency(decimal || 0).replace('R$\xa0', ''));
+    }
+    return [value, handleChange];
+  };
+
+  const [value, setValue] = useATMInput();
+  
+  useEffect(() => {
+    setFormValues({...formValues, Price: value})
+  },[value])
+
+  console.log("$$", formValues.Price)
   return (
     <View style={styles.container}>
       <ModalHeader
@@ -125,74 +154,114 @@ export default function TripCreatorModal() {
         onClose={toggleTripCreatorModal}
       />
 
-      <InputFieldLg
-        placeHolderText={"Trip Name"}
-        inputValue={formValues.TripName}
-        keyboardType={"default"}
-      />
-      <InputFieldLg
-        placeHolderText={"Booking Link"}
-        inputValue={formValues.BookingLink}
-        keyboardType={"default"}
-      />
-
-      <View style={styles.statsContainer}>
-
-      <View style={styles.leftSide}>
-
-      <InputField
-          placeHolderText={"Price"}
-          inputValue={formValues.Price}
-          keyboardType={"numbers-and-punctuation"}
+      <ScrollView
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+        style={styles.bodyContent}
+      >
+        <InputFieldLg
+          placeHolderText={"Trip Name"}
+          inputValue={formValues.TripName}
+          keyboardType={"default"}
         />
-  
-        <TouchableWithoutFeedback
-          onPress={() => showDatePicker("StartDate")}
-          style={{
-            marginTop: moderateScale(-10),
-            marginBottom: moderateScale(10),
-          }}
-        >
-          <View pointerEvents="none">
+        <InputFieldLg
+          placeHolderText={"Booking Link"}
+          inputValue={formValues.BookingLink}
+          keyboardType={"default"}
+        />
+
+        <View style={styles.statsContainer}>
+          <View style={styles.leftSide}>
             <InputField
-              placeHolderText={"Start Date"}
-              inputValue={formValues.StartDate}
-              keyboardType={"default"}
-              noPtEvents={true}
+              placeHolderText={"Price"}
+              inputValue={value}
+              keyboardType={"numbers-and-punctuation"}
+              onChangeText={setValue}
             />
-          </View>
-        </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback
-          onPress={() => showDatePicker("EndDate")}
-          style={{
-            marginTop: moderateScale(-20),
-            marginBottom: moderateScale(10),
-          }}
-        >
-          <View pointerEvents="none">
-            <InputField
-              placeHolderText={"End Date"}
-              inputValue={formValues.EndDate}
-              keyboardType={"default"}
-              noPtEvents={true}
-            />
-          </View>
-        </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() => showDatePicker("StartDate")}
+              style={{
+                marginTop: moderateScale(-10),
+                marginBottom: moderateScale(10),
+              }}
+            >
+              <View pointerEvents="none">
+                <InputField
+                  placeHolderText={"Start Date"}
+                  inputValue={formValues.StartDate}
+                  keyboardType={"default"}
+                  noPtEvents={true}
+                />
+              </View>
+            </TouchableWithoutFeedback>
 
-          <PrimaryButton buttonAction={null} label={"Select Dive Sites"} />
+            <TouchableWithoutFeedback
+              onPress={() => showDatePicker("EndDate")}
+              style={{
+                marginTop: moderateScale(-20),
+                marginBottom: moderateScale(10),
+              }}
+            >
+              <View pointerEvents="none">
+                <InputField
+                  placeHolderText={"End Date"}
+                  inputValue={formValues.EndDate}
+                  keyboardType={"default"}
+                  noPtEvents={true}
+                />
+              </View>
+            </TouchableWithoutFeedback>
 
+            <PrimaryButton buttonAction={null} label={"Select Dive Sites"} />
           </View>
 
           <View style={styles.rightSide}>
+            <InsetShadow
+              containerStyle={{
+                backgroundColor: "transparent",
+                borderRadius: moderateScale(15),
+                height: "100%",
+                width: "80%",
+                marginTop: moderateScale(20),
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              elevation={20}
+              shadowRadius={15}
+              shadowOpacity={0.3}
+            >
+              <TextInput
+                style={{
+                  width: "90%",
+                  height: "30%",
+                  borderRadius: moderateScale(15),
+                  margin: moderateScale(5),
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                  fontFamily: "Itim_400Regular",
+                }}
+                value={formValues.DiveSites}
+                placeholder={"Possible Dive Sites in this Trip"}
+                placeholderTextColor="darkgrey"
+                keyboardType={"default"}
+                color={"#F0EEEB"}
+                fontSize={moderateScale(18)}
+                multiline={true}
+                editable={false}
+              ></TextInput>
+            </InsetShadow>
+          </View>
+        </View>
 
         <InsetShadow
           containerStyle={{
             backgroundColor: "transparent",
             borderRadius: moderateScale(15),
-            height: "100%",
-            width: "80%",
-            marginTop: moderateScale(20),
+            height: "20%",
+            width: "90%",
+            marginTop: moderateScale(-115),
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -203,63 +272,26 @@ export default function TripCreatorModal() {
           <TextInput
             style={{
               width: "90%",
-              height: "30%",
+              height: "20%",
               borderRadius: moderateScale(15),
               margin: moderateScale(5),
               textAlign: "center",
               verticalAlign: "middle",
               fontFamily: "Itim_400Regular",
             }}
-            value={formValues.DiveSites}
-            placeholder={"Possible Dive Sites in this Trip"}
+            value={formValues.TripDesc}
+            placeholder={"Trip Details"}
             placeholderTextColor="darkgrey"
             keyboardType={"default"}
             color={"#F0EEEB"}
             fontSize={moderateScale(18)}
             multiline={true}
-            editable={false}
+            onChangeText={(text) =>
+              setFormValues({ ...formValues, TripDesc: text })
+            }
           ></TextInput>
         </InsetShadow>
-      </View>
-
-      </View>
-
-      <InsetShadow
-        containerStyle={{
-          backgroundColor: "transparent",
-          borderRadius: moderateScale(15),
-          height: "20%",
-          width: "90%",
-          marginTop: moderateScale(-115),
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        elevation={20}
-        shadowRadius={15}
-        shadowOpacity={0.3}
-      >
-        <TextInput
-          style={{
-            width: "90%",
-            height: "20%",
-            borderRadius: moderateScale(15),
-            margin: moderateScale(5),
-            textAlign: "center",
-            verticalAlign: "middle",
-            fontFamily: "Itim_400Regular",
-          }}
-          value={formValues.TripDesc}
-          placeholder={"Trip Details"}
-          placeholderTextColor="darkgrey"
-          keyboardType={"default"}
-          color={"#F0EEEB"}
-          fontSize={moderateScale(18)}
-          multiline={true}
-          onChangeText={(text) =>
-            setFormValues({ ...formValues, TripDesc: text })
-          }
-        ></TextInput>
-      </InsetShadow>
+      </ScrollView>
 
       <SubmitButton buttonAction={handleSubmit} label={"Submit Trip"} />
 
@@ -280,9 +312,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     // backgroundColor: 'green',
     marginBottom: "2%",
-    width: "100%",
+    width: "98%",
+    height: "100%",
     marginLeft: 2,
+    marginTop: "2%",
     minHeight: Platform.OS === "android" ? 490 : 0,
+  },
+  bodyContent: {
+    // height: "80%",
+    // backgroundColor: "pink",
   },
   inputContainer: {
     width: "100%",
@@ -292,17 +330,17 @@ const styles = StyleSheet.create({
   },
   leftSide: {
     marginTop: moderateScale(-20),
-    alignItems: 'center',
+    alignItems: "center",
     justifyContent: "center",
     // backgroundColor: 'pink',
-    height: '50%',
+    height: "50%",
   },
   rightSide: {
     marginTop: moderateScale(-20),
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     justifyContent: "center",
     // backgroundColor: 'green',
-    height: '60%',
+    height: "60%",
   },
   labelBox: {
     flexDirection: "row",
