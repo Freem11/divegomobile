@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import CloseButton from "./closeButton";
+import CloseButtonSmall from "./closeButtonSmall";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -14,7 +14,7 @@ export default function ListItem(props) {
         <Text style={styles.titleText}>{titleText}</Text>
       </View>
       <View style={styles.altButton}>
-       <CloseButton onClose={buttonAction} />
+       <CloseButtonSmall onClose={buttonAction} />
       </View>
     </View>
   );
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     minHeight: moderateScale(30),
     width: "98%",
     overflow: "hidden",
-    backgroundColor: "lightgrey",
+    backgroundColor: "#6496de",
     borderRadius: moderateScale(3)
   },
   titleBox: {
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     fontFamily: "Itim_400Regular",
     color: "black",
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(12),
     // backgroundColor: "purple",
   },
   altButton: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     right: windowWidth > 600 ? moderateScale(0) : moderateScale(10),
     // backgroundColor: "pink",
     height: "100%",
-    width: "25%",
+    width: "10%",
     marginRight: moderateScale(5)
   },
 });

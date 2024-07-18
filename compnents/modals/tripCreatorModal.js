@@ -5,6 +5,7 @@ import {
   TextInput,
   Keyboard,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -38,6 +39,10 @@ import ListItem from "../reusables/listItem";
 import SubmitButton from "../reusables/submitButton";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import InsetShadow from "react-native-inset-shadow";
+
+const windowWidth = Dimensions.get("window").width;
+
+console.log(windowWidth)
 
 export default function TripCreatorModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
@@ -183,7 +188,9 @@ export default function TripCreatorModal() {
 
       <ScrollView
         contentContainerStyle={{
+          height: "auto",
           alignItems: "center",
+          // backgroundColor: "pink"
         }}
         style={styles.bodyContent}
       >
@@ -197,6 +204,7 @@ export default function TripCreatorModal() {
           inputValue={formValues.BookingLink}
           keyboardType={"default"}
         />
+
 
         <View style={styles.statsContainer}>
           <View style={styles.leftSide}>
@@ -249,33 +257,34 @@ export default function TripCreatorModal() {
               buttonText={"Select Sites"}
             />
             <ScrollView
-              style={{ width: "102%", paddingLeft: moderateScale(5) }}
+              style={{ width: "102%", height: moderateScale(200), paddingLeft: moderateScale(5), borderRadius: moderateScale(15) }}
             >
               {tripDiveSites.map((site) => {
                 if (site.region) {
                   return (
                     <ListItem
+                      key={site.id}
                       titleText={`${site.name} ~ ${site.region}`}
                       buttonAction={site}
                     />
                   );
                 } else {
                   return (
-                    <ListItem titleText={`${site.name}`} buttonAction={site} />
+                    <ListItem key={site.id} titleText={`${site.name}`} buttonAction={site} />
                   );
                 }
               })}
             </ScrollView>
           </View>
         </View>
-
+        <View style={{width: "100%", marginTop: moderateScale(20), marginBottom: moderateScale(20)}}>
         <InsetShadow
           containerStyle={{
             backgroundColor: "transparent",
             borderRadius: moderateScale(15),
-            height: "20%",
+            height: moderateScale(200),
             width: "90%",
-            marginTop: moderateScale(-115),
+            marginLeft: "5%",
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -286,12 +295,12 @@ export default function TripCreatorModal() {
           <TextInput
             style={{
               width: "90%",
-              height: "20%",
+              height: moderateScale(200),
               borderRadius: moderateScale(15),
               margin: moderateScale(5),
               textAlign: "center",
-              verticalAlign: "middle",
               fontFamily: "Itim_400Regular",
+              // backgroundColor: "purple"
             }}
             value={formValues.TripDesc}
             placeholder={"Trip Details"}
@@ -305,10 +314,15 @@ export default function TripCreatorModal() {
             }
           ></TextInput>
         </InsetShadow>
+        </View>
+
+
+
       </ScrollView>
 
+<View style={{zIndex: 2, alignItems: "center", backgroundColor: "#538bdb", width: "100%", height: "6%"}}>
       <SubmitButton buttonAction={handleSubmit} label={"Submit Trip"} />
-
+      </View>
       <DateTimePickerModal
         isVisible={datePickerVisible}
         mode="date"
@@ -327,14 +341,10 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green',
     marginBottom: "2%",
     width: "98%",
-    height: "100%",
+    height: "30%",
     marginLeft: 2,
     marginTop: "2%",
     minHeight: Platform.OS === "android" ? 490 : 0,
-  },
-  bodyContent: {
-    // height: "80%",
-    // backgroundColor: "pink",
   },
   inputContainer: {
     width: "100%",
@@ -343,26 +353,26 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(30),
   },
   statsContainer: {
-    width: "100%",
-    // height: "50%",
-    // backgroundColor: "pink",
+    // backgroundColor: 'orange',
     marginTop: moderateScale(20),
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: windowWidth > 500 ? "row" : "column",
     alignItems: "center",
     justifyContent: "center",
   },
   leftSide: {
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "blue",
+    justifyContent: "space-between",
+    maxHeight: moderateScale(250),
+    // backgroundColor: "blue",
+    margin: moderateScale(2)
   },
   rightSide: {
-    height: "80%",
     width: "50%",
     alignItems: "center",
-    borderRadius: moderateScale(5),
+    borderRadius: moderateScale(10),
+    minWidth: moderateScale(200),
     // backgroundColor: "green",
+    margin: moderateScale(2)
   },
   labelBox: {
     flexDirection: "row",
