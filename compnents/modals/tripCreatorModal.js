@@ -218,7 +218,7 @@ export default function TripCreatorModal() {
             <TouchableWithoutFeedback
               onPress={() => showDatePicker("StartDate")}
               style={{
-                marginTop: moderateScale(-10),
+                marginTop: moderateScale(10),
                 marginBottom: moderateScale(10),
               }}
             >
@@ -235,7 +235,7 @@ export default function TripCreatorModal() {
             <TouchableWithoutFeedback
               onPress={() => showDatePicker("EndDate")}
               style={{
-                marginTop: moderateScale(-20),
+                marginTop: moderateScale(5),
                 marginBottom: moderateScale(10),
               }}
             >
@@ -295,7 +295,7 @@ export default function TripCreatorModal() {
           <TextInput
             style={{
               width: "90%",
-              height: moderateScale(200),
+              height: moderateScale(180),
               borderRadius: moderateScale(15),
               margin: moderateScale(5),
               textAlign: "center",
@@ -364,7 +364,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     maxHeight: moderateScale(250),
     // backgroundColor: "blue",
-    margin: moderateScale(2)
+    margin: moderateScale(2),
+    marginBottom: moderateScale(20)
   },
   rightSide: {
     width: "50%",

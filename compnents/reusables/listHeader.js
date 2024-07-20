@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     minHeight: moderateScale(40),
     width: "98%",
     overflow: "hidden",
-    backgroundColor: "#3a6199",
+    backgroundColor: "#73a0e1",
     borderRadius: moderateScale(3)
   },
   titleBox: {

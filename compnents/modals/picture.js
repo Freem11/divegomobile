@@ -35,7 +35,7 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
-let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Picture(props) {
   const { pic } = props;
@@ -138,6 +138,7 @@ export default function Picture(props) {
   const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
 
     let local = await getPhotoLocation(lat, lng);
+
     setMapLocal(local);
     setCreastureN(seaCreature);
     setPhotoDate(picDate);
@@ -146,7 +147,7 @@ export default function Picture(props) {
     } else {
       setUserN("an unnamed diver");
     }
-
+    console.log(userN, local, lat, lng)
     let temp = photofile.split("/");
     let lastIndex = temp.length - 1;
     let fileName = temp[lastIndex];
@@ -183,7 +184,7 @@ export default function Picture(props) {
       url: "",
     };
     if (base64) {
-      shareOptions.message = `Checkout this cool pic of a ${creastureN} on Scuba SEAsons! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing out pics as well!\n\nLearn more about it here:\n${localUri}`;
+      shareOptions.message = `Checkout this cool pic of a ${creastureN} on Scuba SEAsons! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
       shareOptions.url = `data:image/jpg;base64,${base64}`;
       doShare(shareOptions);
     }
@@ -201,7 +202,7 @@ export default function Picture(props) {
             onPress={() =>
               onShare(
                 pic.photofile,
-                pic.newuserame,
+                pic.newusername,
                 pic.label,
                 pic.dateTaken,
                 pic.latitude,
