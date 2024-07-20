@@ -6,7 +6,7 @@ import {
   Image,
   Dimensions,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -17,18 +17,15 @@ import Animated, {
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
 import seaLionGuy from "../png/EmilioNeutral.png";
-import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
-import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { scale, moderateScale } from "react-native-size-matters";
-import { MapRegionContext } from "../contexts/mapRegionContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TutorialResetContext } from "../contexts/tutorialResetContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { ChapterContext } from "../contexts/chapterContext";
 import {
@@ -36,32 +33,32 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
 } from "@expo/vector-icons";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function SecondTutorial() {
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
-  const { secondGuideModal, setSecondGuideModal } = useContext(
-    SecondTutorialModalContext
-  );
-  const { thirdGuideModal, setThirdGuideModal } = useContext(
-    ThirdTutorialModalContext
-  );
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+  const { setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { setMapCenter } = useContext(MapCenterContext);
-  const { setRegion } = useContext(MapRegionContext);
-
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
 
   useEffect(() => {
     getProfile();
@@ -70,9 +67,9 @@ export default function SecondTutorial() {
   useEffect(() => {
     if (tutorialReset) {
       setItterator2(null);
-      setDiveSiteAdderModal(false);
+      setLargeModal(false);
       setTutorialRunning(false);
-      setSecondGuideModal(false);
+      setFullScreenModal(false);
       setTutorialReset(false);
       resetTutorial();
       setChapter(null);
@@ -80,51 +77,55 @@ export default function SecondTutorial() {
   }, [tutorialReset]);
 
   useEffect(() => {
-    setDiveSiteAdderModal(false);
+    setLargeModal(false);
     resetTutorial();
 
     switch (chapter) {
       case "Checking for a dive site":
         setItterator2(1);
-        setSecondGuideModal(true);
+        setFullScreenModal(true);
+        setActiveTutorialID("SecondGuide");
+        setLargeModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
-        // setChapter(null);
         break;
 
       case "Adding your dive sites":
         setItterator2(8);
-        setSecondGuideModal(true);
+        setFullScreenModal(true);
+        setActiveTutorialID("SecondGuide");
+        setLargeModal(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
-        // setChapter(null);
         break;
 
       case "DS Help":
         setItterator2(10);
-        setSecondGuideModal(true);
-        setDiveSiteAdderModal(true);
-        setTutorialRunning(true)
+        setLargeModal(false);
+        setActiveButtonID("DiveSiteAdderButton");
+        setFullScreenModal(true);
+        setActiveTutorialID("SecondGuide");
+        setTutorialRunning(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
-        // setChapter(null);
         break;
 
       case "Placing the pin":
         setItterator2(15);
-        setSecondGuideModal(true);
+        setLargeModal(false);
+        setActiveButtonID("DiveSiteAdderButton");
+        setFullScreenModal(true);
+        setActiveTutorialID("SecondGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
-        setDiveSiteAdderModal(true);
-        // setChapter(null);
         break;
 
       case "Exit Guide":
@@ -149,14 +150,14 @@ export default function SecondTutorial() {
       setTutorialReset(true);
     }
   };
-  
+
   const resetTutorial = async () => {
     characterX.value = 1000;
     textBoxY.value = 1000;
     DsSearchY.value = scale(-1000);
     diveSiteY.value = scale(-1000);
     locationY.value = scale(-1000);
-    pinY.value = scale(-1000); 
+    pinY.value = scale(-1000);
     mantaY.value = scale(-1200);
     nextTutX.value = -300;
     setAddSiteVals({
@@ -182,10 +183,10 @@ export default function SecondTutorial() {
 
   const handleThirdTutorialStartup = () => {
     setItterator2(null);
-    setDiveSiteAdderModal(false);
+    setItterator3(0);
     setTutorialRunning(true);
-    setSecondGuideModal(false);
-    setThirdGuideModal(true);
+    setActiveTutorialID("ThirdGuide");
+    setLargeModal(false);
   };
 
   const characterX = useSharedValue(1000);
@@ -217,16 +218,16 @@ export default function SecondTutorial() {
   const text10 =
     "This is the dive site adding form, here, you can see 3 fields and a couple of buttons. First is the site name, add the dive site name in this spot";
   const text11 =
-    "Next are the GPS lat and lng fields, there are 3 ways you can add them. The first is manually if you have the decimal format GPS coordinates simply add them to the fields and your good to go!"; 
-  const text12 = 
+    "Next are the GPS lat and lng fields, there are 3 ways you can add them. The first is manually if you have the decimal format GPS coordinates simply add them to the fields and your good to go!";
+  const text12 =
     "The second way is using the location button, it’s this one. Tapping it will take your device’s current location and use that to create GPS coordinates for the dive site. Try it out now!";
   const text13 = "";
-  const text14 = 
+  const text14 =
     "Nice! As you can see tapping the location button has produced GPS coordinates for your current location!";
   const text15 =
-   "Next, assuming neither of these options will fit your situation there is one more, using this Pin Dropper button to open up the map so we can drop a pin, let’s try it";
+    "Next, assuming neither of these options will fit your situation there is one more, using this Pin Dropper button to open up the map so we can drop a pin, let’s try it";
   const text16 = "";
-  const text17 = 
+  const text17 =
     "As you can see we are now back on the map and there is a new icon that looks like a manta ray, this is our draggable pin";
   const text18 =
     "Simply press on and drag the manta pin to to place it where you dive site is meant to be and then tap the 'set pin' button at the bottom";
@@ -242,7 +243,7 @@ export default function SecondTutorial() {
 
   const text24 =
     "Nice Job, That's how you add a new dive site to Scuba SEAsons! In this case, since this is a guide, the entry was not submitted, but you can add from now on, in the same way";
-  
+
   const text25 =
     "That's it for adding dive sites to the app! In the next guide we will look at adding sea creature sighting photos! Tap on this button to go to that guide next, otherwise tap anywhere else to close, and thanks for joining me again!";
 
@@ -281,8 +282,6 @@ export default function SecondTutorial() {
     text26,
   ];
 
-  //  var interval;
-
   const setupText = (pushVal) => {
     if (
       itterator2 === 3 ||
@@ -308,7 +307,7 @@ export default function SecondTutorial() {
       }
 
       if (pushVal === 1 && itterator2 === feederArray.length - 1) {
-        setSecondGuideModal(false);
+        setFullScreenModal(false);
       }
     }
   };
@@ -361,19 +360,20 @@ export default function SecondTutorial() {
       moveMap({ lat: 50.03312256836453, lng: -125.27333546429873 });
       setTimeout(() => {
         DsSearchY.value = withTiming(windowHeight * 0.4);
-        // startDsSearchButtonAnimation();
       }, 1000);
     }
 
     if (itterator2 === 3) {
       DsSearchY.value = withTiming(scale(-1000));
-      // startDsSearchButtonAnimation();
-      setSecondGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator2 === 4) {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
     }
+
+    console.log(itterator2, fullScreenModal, largeModal);
 
     if (itterator2 === 5) {
       setChapter(null);
@@ -387,16 +387,16 @@ export default function SecondTutorial() {
         textBoxY.value = withTiming(windowHeight * 0.8);
         setupText(0);
       }, 600);
-      setSecondGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator2 === 6) {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
     }
 
     if (itterator2 === 8) {
       diveSiteY.value = withTiming(windowHeight * 0.4);
-      // startDiveSiteAnimation();
     }
 
     if (itterator2 === 9) {
@@ -412,8 +412,7 @@ export default function SecondTutorial() {
         setupText(0);
       }, 600);
       diveSiteY.value = withTiming(scale(-1000));
-      // startDiveSiteAnimation();
-      setSecondGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator2 === 10) {
@@ -421,16 +420,17 @@ export default function SecondTutorial() {
     }
 
     if (itterator2 === 12) {
-      locationY.value =  withTiming(windowHeight * 0.4);
+      locationY.value = withTiming(windowHeight * 0.4);
     }
 
     if (itterator2 === 13) {
-      locationY.value =  withTiming(scale(-1000));
-      setSecondGuideModal(false)
+      locationY.value = withTiming(scale(-1000));
+      setFullScreenModal(false);
     }
 
     if (itterator2 === 14) {
-      setSecondGuideModal(true)
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
     }
 
     if (itterator2 === 15) {
@@ -438,38 +438,40 @@ export default function SecondTutorial() {
     }
 
     if (itterator2 === 16) {
-      pinY.value =  withTiming(scale(-1000));
-      setSecondGuideModal(false)
+      pinY.value = withTiming(scale(-1000));
+      setFullScreenModal(false);
     }
 
     if (itterator2 === 17) {
-      setSecondGuideModal(true);
+      setLargeModal(false);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
       setTimeout(() => {
         mantaY.value = withTiming(windowHeight * 0.4);
-        // startMantaAnimation();
       }, 1000);
     }
 
     if (itterator2 === 19) {
-      setSecondGuideModal(false);
+      setFullScreenModal(false);
       mantaY.value = withTiming(scale(-1200));
     }
 
     if (itterator2 === 20) {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
     }
 
     if (itterator2 === 23) {
-      setSecondGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator2 === 24) {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
     }
 
     if (itterator2 === 25) {
       nextTutX.value = withSpring(windowWidth * 0.3);
-      // startNextTutAnimation();
     }
 
     if (itterator2 === 26) {
@@ -480,15 +482,14 @@ export default function SecondTutorial() {
         Longitude: "",
       });
       nextTutX.value = withTiming(-300);
-      // startNextTutAnimation();
-      setDiveSiteAdderModal(false);
+      setLargeModal(false);
       setTutorialRunning(false);
     }
 
     if (itterator2 === feederArray.length - 1) {
       setTutorialRunning(false);
       setItterator2(null);
-      setSecondGuideModal(false);
+      setFullScreenModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
       setChapter(null);
@@ -560,38 +561,6 @@ export default function SecondTutorial() {
       textBoxY.value = withTiming(1000);
     }
   };
-
-  const startDsSearchButtonAnimation = () => {
-    if (DsSearchY.value === scale(-1000)) {
-      DsSearchY.value = withTiming(windowHeight * 0.4);
-    } else {
-      DsSearchY.value = withTiming(scale(-1000));
-    }
-  };
-
-  const startDiveSiteAnimation = () => {
-    if (diveSiteY.value === scale(-1000)) {
-      diveSiteY.value = withTiming(windowHeight * 0.4);
-    } else {
-      diveSiteY.value = withTiming(scale(-1000));
-    }
-  };
-
-  const startNextTutAnimation = () => {
-    if (nextTutX.value === -300) {
-      nextTutX.value = withSpring(windowWidth * 0.3);
-    } else {
-      nextTutX.value = withTiming(-300);
-    }
-  };
-
-  useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator2 === null) {
-        setItterator2(0);
-      }
-    }
-  }, [secondGuideModal]);
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });

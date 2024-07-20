@@ -8,6 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Keyboard,
+  Dimensions
 } from "react-native";
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import { FontAwesome } from "@expo/vector-icons";
@@ -22,6 +23,10 @@ import {
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import { ScrollView } from "react-native-gesture-handler";
 import CommentListItem from "../commentListItem/commentListItem";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function CommentsModal() {
   const [commentContent, setCommentContent] = useState(null);
@@ -31,12 +36,15 @@ export default function CommentsModal() {
   const { profile } = useContext(UserProfileContext);
   const { selectedPicture } = useContext(SelectedPictureContext);
   const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
 
   useEffect(() => {
     if (selectedPicture) {
       getAllPictureComments(selectedPicture.id);
     }
-  }, [commentsModal]);
+  }, [fullScreenModal]);
 
   const getAllPictureComments = async (picId) => {
     let picComments = await grabPhotoCommentsByPicId(picId);
@@ -73,7 +81,7 @@ export default function CommentsModal() {
 
   const handleCommentModalClose = async () => {
     setReplyTo(null)
-    setCommentsModal(false)
+    setFullScreenModal(false);
   }
 
   const hideRepliesForChildren = (parentId, newSelectedReplyId) => {
@@ -139,6 +147,8 @@ export default function CommentsModal() {
   }
 
   return (
+    <View style={styles.commentScreen}>
+    <View style={styles.commentsModal}>
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={() => handleCommentModalClose()}>
         <View style={styles.commentHeader}>
@@ -180,7 +190,7 @@ export default function CommentsModal() {
                 source={bubbles}
                 style={[
                   {
-                    height: moderateScale(36),
+                    height: moderateScale(38),
                     width: moderateScale(36),
                   },
                 ]}
@@ -190,10 +200,34 @@ export default function CommentsModal() {
         </View>
       </KeyboardAvoidingView>
     </View>
+    </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  commentScreen: {
+    position: "absolute",
+    height: windowHeight,
+    width: windowWidth,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 26,
+    left: 0,
+  },
+  commentsModal: {
+    position: "absolute",
+    height: windowHeight - windowHeight * 0.4,
+    width: windowWidth - windowWidth * 0.1,
+    marginLeft: windowWidth * 0.05,
+    backgroundColor: "#538bdb",
+    borderRadius: 15,
+    zIndex: 27,
+    left: 0,
+    opacity: 1,
+    bottom: windowHeight * 0.04,
+    borderWidth: 1,
+    borderColor: "darkgrey",
+  },
   container: {
     flex: 1,
     backgroundColor: "#538bdb",
@@ -244,7 +278,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "90%",
+    marginLeft: "3%",
+    width: "94%",
     height: "100%",
   },
   input: {
@@ -265,7 +300,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 },
     paddingRight: moderateScale(15),
     paddingLeft: moderateScale(15),
-    marginRight: moderateScale(5),
+    marginRight: moderateScale(8),
     marginLeft: moderateScale(-7),
     paddingTop: Platform.OS === "ios" ? moderateScale(10) : moderateScale(0),
   },

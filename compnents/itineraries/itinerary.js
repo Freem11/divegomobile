@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
-import { MinorContext } from "../contexts/minorContext";
 import { MasterContext } from "../contexts/masterContext";
-
-import { scale } from "react-native-size-matters";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import MaterialCommunityIconsButton from "../reusables/materialCommunityIconsButton";
+import { useMapFlip } from './hooks';
+import { scale, moderateScale } from "react-native-size-matters";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -15,16 +15,22 @@ import Animated, {
   useDerivedValue,
   interpolate,
 } from "react-native-reanimated";
-import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
-
 
 export default function Itinerary(props) {
-  const { itinerary, selectedID, setSelectedID , setShopModal} = props;
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
-  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
-  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
+  const {
+    itinerary,
+    selectedID,
+    setSelectedID,
+    buttonOneText,
+    buttonOneIcon,
+    buttonTwoText,
+    buttonTwoIcon,
+  } = props;
+  const { setSitesArray } = useContext(SitesArrayContext);
+  const { setMapCenter } = useContext(MapCenterContext);
+  const { setZoomHelper } = useContext(ZoomHelperContext);
+  const { setMasterSwitch } = useContext(MasterContext);
+  const { setLargeModal } = useContext(LargeModalContext);
 
   const moreInfoHeight = useSharedValue(0);
 
@@ -60,30 +66,6 @@ export default function Itinerary(props) {
     }
   }, [selectedID]);
 
-  const flipMap = async (siteList) => {
-    setSitesArray(siteList)
-    let itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteList))
-    
-    let lats = []
-    let lngs = []
-    itinerizedDiveSites.forEach((site) => {
-      lats.push(site.lat)
-      lngs.push(site.lng)
-
-    })
-    let moveLat = lats.reduce((acc, curr) => acc + curr, 0) / lats.length
-    let moveLng = lngs.reduce((acc, curr) => acc + curr, 0) / lngs.length
-    setZoomHelper(true)
-    setShopModal(false)
-    setMasterSwitch(false)
-    setMapCenter({
-      lat: moveLat,
-      lng: moveLng,
-    });
-   
-    
-  };
-
   return (
     <View style={styles.masterBox} key={itinerary.id}>
       <View style={styles.shadowbox}>
@@ -96,20 +78,17 @@ export default function Itinerary(props) {
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.buttonBox}>
-        <TouchableWithoutFeedback
-            onPress={() => flipMap(itinerary.siteList)}
-          >
-          <View style={styles.sitesButton}>
-            <FontAwesome5 name="anchor" size={24} color="gold" />
-          </View>
-          </TouchableWithoutFeedback>
-          <View style={styles.bookButton}>
-          <MaterialCommunityIcons
-            name="diving-scuba-flag"
-            size={24}
-            color="red"
+          <MaterialCommunityIconsButton
+            icon={buttonOneIcon}
+            buttonAction={() => useMapFlip(itinerary.siteList, setSitesArray, setZoomHelper, setLargeModal, setMasterSwitch, setMapCenter)}
+            iconColour="gold"
+            buttonText={buttonOneText}
           />
-          </View>
+          <MaterialCommunityIconsButton
+            icon={buttonTwoIcon}
+            iconColour="red"
+            buttonText={buttonTwoText}
+          />
         </View>
       </View>
       <Animated.View style={[tabPullx, styles.extraBox]}>
@@ -151,7 +130,7 @@ const styles = StyleSheet.create({
   },
   moreBox: {
     flexDirection: "column",
-    width: "60%",
+    width: "58%",
     height: "100%",
   },
   buttonBox: {
@@ -160,42 +139,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "40%",
     height: "100%",
-  },
-  sitesButton: {
-    marginLeft: scale(20),
-    backgroundColor: "black",
-    height: scale(35),
-    width: scale(35),
-    borderRadius: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  bookButton: {
-    marginRight: scale(20),
-    backgroundColor: "white",
-    height: scale(35),
-    width: scale(35),
-    borderRadius: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-
-    elevation: 10,
+    // backgroundColor: "pink",
+    paddingLeft: moderateScale(-20)
   },
   tripName: {
     fontFamily: "Itim_400Regular",

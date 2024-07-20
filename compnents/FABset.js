@@ -17,7 +17,6 @@ import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { TutorialContext } from "./contexts/tutorialContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   StyleSheet,
   View,

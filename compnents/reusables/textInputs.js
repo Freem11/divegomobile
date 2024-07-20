@@ -4,11 +4,16 @@ import { moderateScale } from "react-native-size-matters";
 import InsetShadow from "react-native-inset-shadow";
 
 export default function InputField(props) {
-  const {validationItem, placeHolderText, inputValue, keyboardType, onChangeText, secure} = props
+  const {validationItem, placeHolderText, inputValue, keyboardType, onChangeText, secure, ptEvents} = props
 
   let multiLine = true
   if(secure){
     multiLine= false
+  }
+
+  let pointerEventsAllows = true
+  if(ptEvents){
+    pointerEventsAllows= false
   }
   return (
     <InsetShadow
@@ -40,6 +45,7 @@ export default function InputField(props) {
           multiline={multiLine}
           onChangeText={onChangeText}
           secureTextEntry={secure}
+          editable={pointerEventsAllows}
         ></TextInput>
       </InsetShadow>
   );

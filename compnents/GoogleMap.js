@@ -48,7 +48,7 @@ import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
 // import shopIOS from "../compnents/png/scuba.png";
-import shopClustIOS from "../compnents/png/mapIcons/DiveCentre48x48.png";
+import shopClustIOS from "../compnents/png/mapIcons/DiveCentre60x60.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
@@ -59,8 +59,14 @@ import {
 } from "../supabaseCalls/heatPointSupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { scale } from "react-native-size-matters";
+import { useButtonPressHelper } from './FABMenu/buttonPressHelper';
 import * as ScreenOrientation from "expo-screen-orientation";
 import { UserProfileContext } from "./contexts/userProfileContext";
+import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
+import { LargeModalContext } from "./contexts/largeModalContext";
+import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -68,6 +74,16 @@ export default function Map() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
 
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
@@ -440,8 +456,8 @@ export default function Map() {
   }, []);
 
   useEffect(() => {
-    if(shopModal){
-      return
+    if (shopModal) {
+      return;
     }
     updateMapCenter();
   }, [siteModal, diveSiteAdderModal, diveSiteSearchModal, picAdderModal]);
@@ -531,20 +547,27 @@ export default function Map() {
   });
 
   const setupAnchorModal = (diveSiteName, lat, lng) => {
-    console.log("kididng", diveSiteName)
     setSelectedDiveSite({
       SiteName: diveSiteName,
       Latitude: lat,
       Longitude: lng,
     });
+    setTiles(true);
+    setShowFilterer(false);
     filterAnchorPhotos();
-    setSiteModal(true);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("SiteAnchorIcon");
+    useButtonPressHelper('SiteAnchorIcon', activeButtonID, largeModal, setLargeModal)
   };
 
   const setupShopModal = async (shopName) => {
     let chosenShop = await getShopByName(shopName);
+    setTiles(true);
+    setShowFilterer(false);
     setSelectedShop(chosenShop);
-    setShopModal(true);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("ShopMaskIcon");
+    useButtonPressHelper('ShopMaskIcon', activeButtonID, largeModal, setLargeModal)
   };
 
   const clearModals = async () => {

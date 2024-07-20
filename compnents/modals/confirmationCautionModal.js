@@ -30,7 +30,7 @@ export default function FailModal(props) {
         </Text>
         <Text style={styles.text2}>{blurb}</Text>
 
-        <View style={{ marginRight: "24%", marginBottom: moderateScale(20) }}>
+        <View style={{ marginLeft: moderateScale(0), marginBottom: moderateScale(20)}}>
           <ModalSecondaryButton
             buttonAction={tidyUp}
             icon={null}
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     color: "#36454F",
     fontFamily: "Itim_400Regular",
     alignSelf: "center",
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     margin: scale(10),
   },
   text2: {
-    fontSize: 18,
+    fontSize: moderateScale(18),
     color: "#36454F",
     fontFamily: "Itim_400Regular",
     alignSelf: "center",

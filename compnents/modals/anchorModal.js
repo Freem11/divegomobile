@@ -5,7 +5,6 @@ import {
   ScrollView,
   Platform,
   TouchableWithoutFeedback,
-  Dimensions,
 } from "react-native";
 import Share from "react-native-share";
 import React, { useState, useContext, useEffect } from "react";
@@ -17,16 +16,20 @@ import { getDiveSiteWithUserName } from "../../supabaseCalls/diveSiteSupabaseCal
 import * as FileSystem from "expo-file-system";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
-import { TutorialModelContext } from "../contexts/tutorialModalContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
+import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { scale } from "react-native-size-matters";
-import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import ImgToBase64 from "react-native-image-base64";
 import Picture from "./picture";
@@ -35,19 +38,29 @@ import ModalHeader from "../reusables/modalHeader";
 let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 export default function AnchorModal(props) {
-  const { setSelectedPhoto, setPhotoBoxModel } = props;
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
+  const { setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchorPics, setAnchorPics] = useState([]);
   const { myCreatures } = useContext(MyCreaturesContext);
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
-  const { setGuideModal } = useContext(TutorialModelContext);
-  const { setSiteModal } = useContext(AnchorModalContext);
-  const [siteCloseState, setSiteCloseState] = useState(false);
   const [site, setSite] = useState("");
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { setPicAdderModal } = useContext(PictureAdderContext);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -96,16 +109,22 @@ export default function AnchorModal(props) {
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
     filterAnchorPhotos();
+
+    if (itterator === 11 && anchorPics.length === 0) {
+      setItterator(12);
+    } else if (itterator === 11 && anchorPics.length > 0) {
+      setItterator(13);
+    }
+
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (itterator === 13) {
-      setGuideModal(true);
-    }
     if (itterator === 20) {
       filterAnchorPhotos();
     }
   }, [itterator]);
+
+
 
   const getDiveSite = async () => {
     try {
@@ -127,26 +146,31 @@ export default function AnchorModal(props) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${selectedDiveSite.SiteName}" at Latitude: ${selectedDiveSite.Latitude} Longitude: ${selectedDiveSite.Longitude} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body:
+        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
 
   const handleAnchorModalClose = () => {
+    setActiveButtonID(null);
     if (itterator === 15) {
       setItterator((prev) => prev + 1);
-      setGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("FirstGuide");
     }
 
-    if (itterator === 11) {
-      setGuideModal(false);
+    if (itterator === 12) {
+      setFullScreenModal(false);
+      setItterator(11)
     }
 
     if (itterator === 18) {
-      setGuideModal(false);
+      setFullScreenModal(false);
     }
-
-    setSiteModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("SiteAnchorIcon");
+    setLargeModal(!largeModal);
   };
 
   const handleSwitch = () => {
@@ -158,13 +182,16 @@ export default function AnchorModal(props) {
       Latitude: String(selectedDiveSite.Latitude),
       Longitude: String(selectedDiveSite.Longitude),
     });
-    setSiteModal(false);
-    setPicAdderModal(true);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("PictureAdderButton");
+    setLargeModalSecond(!largeModalSecond);
+    setLargeModal(!largeModal);
   };
 
   const togglePhotoBoxModal = (photo) => {
     setSelectedPhoto(photo);
-    setPhotoBoxModel(true);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
   };
 
   const [base64, setBase64] = useState(null);
@@ -250,8 +277,6 @@ export default function AnchorModal(props) {
     setBase64(null);
   }, [base64]);
 
-  const [helpButState, setHelpButState] = useState(false);
-
   return (
     <View
       style={{
@@ -292,7 +317,7 @@ export default function AnchorModal(props) {
               </Text>
 
               <TouchableWithoutFeedback
-                onPress={() => handleSwitch()}
+                onPress={handleSwitch}
                 style={{
                   alignItems: "center",
                   justifyContent: "center",

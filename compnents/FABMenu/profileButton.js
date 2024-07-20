@@ -14,14 +14,19 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import {
-  MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
@@ -55,10 +60,18 @@ export default function ProfileButton() {
     }
   }, [profileModal]);
 
+  const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('UserProfileButton')
+    useButtonPressHelper('UserProfileButton', activeButtonID, largeModalSecond, setLargeModalSecond)
+  }
+
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          onPress={() => {tutorialRunning ? null : setProfileModal(!profileModal)}}
+          onPress={tutorialRunning ? null : handlePress}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{

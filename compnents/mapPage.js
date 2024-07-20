@@ -17,6 +17,10 @@ import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
+import AnimatedModalLarge from "../compnents/reusables/animatedModalLarge";
+import AnimatedModalLargeSecond from "../compnents/reusables/animatedModalLargeSecond";
+import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
+
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -32,7 +36,6 @@ import Historgram from "./histogram/histogramBody";
 import PhotoFilterer from "./photoMenu/photoFilter";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
-import { PictureAdderContext } from "./contexts/picModalContext";
 import { MasterContext } from "./contexts/masterContext";
 import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
@@ -40,19 +43,8 @@ import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
-import { TutorialModelContext } from "./contexts/tutorialModalContext";
-import { ChapterContext } from "./contexts/chapterContext";
-import { SecondTutorialModalContext } from "./contexts/secondTutorialModalContext";
-import { ThirdTutorialModalContext } from "./contexts/thirdTutorialModalContext";
-import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { AnchorModalContext } from "./contexts/anchorModalContext";
-import { CommentsModalContext } from "./contexts/commentsModalContext";
-import { DSAdderContext } from "./contexts/DSModalContext";
-import { PartnerModalContext } from "./contexts/partnerAccountRequestModalContext";
-import { IterratorContext } from "./contexts/iterratorContext";
-import { Iterrator2Context } from "./contexts/iterrator2Context";
-import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
@@ -61,12 +53,16 @@ import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
 import { ModalSelectContext } from "./contexts/modalSelectContext";
-import { SelectedShopContext } from "./contexts/selectedShopContext";
-import { ShopModalContext } from "./contexts/shopModalContext";
-import { ItineraryListModalContext } from "./contexts/itineraryListModalContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
+import { SmallModalContext } from "./contexts/smallModalContext";
+import { LargeModalContext } from "./contexts/largeModalContext";
+import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
+import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
+import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
+import { IterratorContext } from "./contexts/iterratorContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import Animated, {
@@ -75,27 +71,10 @@ import Animated, {
   useDerivedValue,
   withTiming,
   interpolate,
-  Easing,
   withSpring,
 } from "react-native-reanimated";
-import TutorialLaunchPadModal from "./modals/tutorialsModal";
-import AnchorModal from "./modals/anchorModal";
-import CommentsModal from "./modals/commentsModal";
-import PhotoBoxModel from "./modals/photoBoxModal";
-import DiveSiteModal from "./modals/diveSiteAdderModal";
-import PicUploadModal from "./modals/picUploaderModal";
-import IntroTutorial from "./tutorial/introTutorial";
-import SecondTutorial from "./tutorial/secondTutorial";
-import ThirdTutorial from "./tutorial/thirdTutorial";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
-import UserProfileModal from "./modals/userProfileModal";
-import SettingsModal from "./modals/settingsModal";
-import ShopModal from "./modals/shopModal";
-import ItineraryListModal from "./modals/itineraryListModal";
-import PartnerAccountRequestModal from "./modals/partnerAccountRequestModal";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { ProfileModalContext } from "./contexts/profileModalContext";
-import { SettingsContext } from "./contexts/gearModalContext";
 import { MaterialIcons } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -107,10 +86,18 @@ export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const { setSmallModal } = useContext(SmallModalContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { activeTutorialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { itterator, setItterator } = useContext(IterratorContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
-  const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
@@ -118,17 +105,17 @@ export default function MapPage() {
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
 
-  const { textvalue, setTextValue } = useContext(SearchTextContext);
-  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setTextValue } = useContext(SearchTextContext);
+  const { areaPics } = useContext(AreaPicsContext);
+  const { setZoomHelper } = useContext(ZoomHelperContext);
 
   const { animalSelection } = useContext(AnimalSelectContext);
   const [monthVal, setMonthVal] = useState("");
-  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
+  const { setMapHelper } = useContext(MapHelperContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { chapter, setChapter } = useContext(ChapterContext);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
@@ -179,445 +166,13 @@ export default function MapPage() {
     }
   };
 
-  //Tutorial Launch Pad Model Animation
-  const tutorialLaunchpadModalY = useSharedValue(windowHeight);
-  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
-    TutorialLaunchPadContext
-  );
-
-  const tutorialLaunchpadModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorialLaunchpadModalY.value }],
-    };
-  });
-
-  const startTutorialLaunchPadModalAnimations = () => {
-    if (tutorialLaunchpadModal) {
-      tutorialLaunchpadModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorialLaunchpadModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
   useEffect(() => {
-    startTutorialLaunchPadModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [tutorialLaunchpadModal]);
-
-  //Anchor Modal Animation
-  const anchorModalY = useSharedValue(windowHeight);
-  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
-  const { selectedDiveSite, setSelectedDiveSite } = useContext(
-    SelectedDiveSiteContext
-  );
-
-  const anchorModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: anchorModalY.value }],
-    };
-  });
-
-  const startAnchorModalAnimations = () => {
-    if (siteModal) {
-      anchorModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      anchorModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startAnchorModalAnimations();
-
-    if (tutorialRunning && siteModal) {
+    if (tutorialRunning && largeModal) {
       if (itterator > 0 && itterator !== 11 && itterator !== 20) {
         setItterator(itterator + 1);
-      } else if (itterator === 11 && anchPhotos === 0) {
-        setItterator(itterator + 1);
-      } else if ((itterator === 18 || itterator === 11) && anchPhotos > 0) {
-        setItterator(itterator + 2);
       }
     }
-  }, [siteModal]);
-
-  //Comments Modal Animation
-  const commentsModalY = useSharedValue(windowHeight);
-  const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
-
-  const commentsModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: commentsModalY.value }],
-    };
-  });
-
-  const startCommentsModalAnimations = () => {
-    if (commentsModal) {
-      commentsModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      commentsModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startCommentsModalAnimations();
-  }, [commentsModal]);
-
-  //Shop Modal Animation
-  const shopModalY = useSharedValue(windowHeight);
-  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { shopModal, setShopModal } = useContext(ShopModalContext);
-
-  const shopModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: shopModalY.value }],
-    };
-  });
-
-  const startShopModalAnimations = () => {
-    if (shopModal) {
-      shopModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      shopModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startShopModalAnimations();
-  }, [shopModal]);
-
-  //ItineraryList Modal Animation
-  const itineraryListModalY = useSharedValue(windowHeight);
-  // const { selectedItinerary, setSelectedItinerary} = useContext(SelectedItineraryContext);
-  const { itineraryListModal, setItineraryListModal } = useContext(
-    ItineraryListModalContext
-  );
-
-  const itineraryListModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: itineraryListModalY.value }],
-    };
-  });
-
-  const startItineraryListModalAnimations = () => {
-    if (itineraryListModal) {
-      itineraryListModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      itineraryListModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startItineraryListModalAnimations();
-  }, [itineraryListModal]);
-
-  //PhotoBox Modal Animation
-  const photoBoxModalY = useSharedValue(windowHeight);
-  const [photoBoxModel, setPhotoBoxModel] = useState(false);
-  const photoBoxModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: photoBoxModalY.value }],
-    };
-  });
-
-  const startPhotoBoxModalAnimations = () => {
-    if (photoBoxModel) {
-      photoBoxModalY.value = withTiming(-windowHeight);
-    } else {
-      photoBoxModalY.value = withTiming(windowHeight);
-    }
-  };
-
-  useEffect(() => {
-    startPhotoBoxModalAnimations();
-  }, [photoBoxModel]);
-
-  //Dive Site Modal Animation
-  const diveSiteModalY = useSharedValue(windowHeight);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
-
-  const diveSiteModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: diveSiteModalY.value }],
-    };
-  });
-
-  const startDiveSiteModalAnimations = () => {
-    if (diveSiteAdderModal) {
-      diveSiteModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      Keyboard.dismiss();
-      // console.log(masterSwitch);
-      if (masterSwitch) {
-        setAddSiteVals({
-          ...addSiteVals,
-          Site: "",
-          Latitude: "",
-          Longitude: "",
-        });
-      }
-
-      diveSiteModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startDiveSiteModalAnimations();
-    // if (itterator > 0){
-    //   setItterator(itterator + 1);
-    // }
-  }, [diveSiteAdderModal]);
-
-  //Partner Modal Animation
-  const partnerModalY = useSharedValue(windowHeight);
-  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
-  const partnerModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: partnerModalY.value }],
-    };
-  });
-
-  const startPartnerModalAnimations = () => {
-    if (partnerModal) {
-      partnerModalY.value = withTiming(0);
-    } else {
-      partnerModalY.value = withTiming(windowHeight);
-    }
-  };
-
-  useEffect(() => {
-    startPartnerModalAnimations();
-  }, [partnerModal]);
-
-  //Picture Adder Modal
-  const pictureModalY = useSharedValue(windowHeight);
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-
-  const pictureModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: pictureModalY.value }],
-    };
-  });
-
-  const startPictureModalAnimations = () => {
-    if (picAdderModal) {
-      pictureModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      // console.log(masterSwitch);
-      Keyboard.dismiss();
-      if (masterSwitch) {
-        setPinValues({
-          ...pinValues,
-          PicFile: null,
-          Animal: "",
-          PicDate: "",
-          Latitude: "",
-          Longitude: "",
-          DDVal: "0",
-        });
-      }
-
-      pictureModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startPictureModalAnimations();
-    // if (itterator > 0){
-    //   setItterator(itterator + 1);
-    // }
-  }, [picAdderModal]);
-
-  //Intro Tutorial Animations
-  const tutorialModalY = useSharedValue(windowHeight);
-  const { guideModal, setGuideModal } = useContext(TutorialModelContext);
-  const { itterator, setItterator } = useContext(IterratorContext);
-
-  const tutorialModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorialModalY.value }],
-    };
-  });
-
-  const startGuideModalAnimations = () => {
-    if (guideModal) {
-      tutorialModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorialModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startGuideModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [guideModal]);
-
-  //Second Tutorial Animations
-  const tutorial2ModalY = useSharedValue(windowHeight);
-  const { secondGuideModal, setSecondGuideModal } = useContext(
-    SecondTutorialModalContext
-  );
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-
-  const tutorial2ModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorial2ModalY.value }],
-    };
-  });
-
-  const startSecondGuideModalAnimations = () => {
-    if (secondGuideModal) {
-      tutorial2ModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorial2ModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startSecondGuideModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [secondGuideModal]);
-
-  //Third Tutorial Animations
-  const tutorial3ModalY = useSharedValue(windowHeight);
-  const { thirdGuideModal, setThirdGuideModal } = useContext(
-    ThirdTutorialModalContext
-  );
-  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-
-  const tutorial3ModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: tutorial3ModalY.value }],
-    };
-  });
-
-  const startThirdGuideModalAnimations = () => {
-    if (thirdGuideModal) {
-      tutorial3ModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      tutorial3ModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  useEffect(() => {
-    startThirdGuideModalAnimations();
-    // if (!itterator && guideModal) {
-    //   setItterator(0);
-    // }
-  }, [thirdGuideModal]);
-
-  //Profile Modal Animation
-  const profileModalY = useSharedValue(windowHeight);
-  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
-
-  const profileModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: profileModalY.value }],
-    };
-  });
-
-  const startProfileModalAnimations = () => {
-    if (profileModal) {
-      profileModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      profileModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
-
-  //Settings Modal Animation
-  const settingsModalY = useSharedValue(windowHeight);
-  const { gearModal, setGearModal } = useContext(SettingsContext);
-
-  const settingsModalReveal = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: settingsModalY.value }],
-    };
-  });
-
-  const startSettingsModalAnimations = () => {
-    if (gearModal) {
-      settingsModalY.value = withTiming(0, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    } else {
-      settingsModalY.value = withTiming(windowHeight, {
-        duration: 150,
-        easing: Easing.out(Easing.linear),
-      });
-    }
-  };
+  }, [largeModal]);
 
   const feedbackX = useSharedValue(0);
 
@@ -634,14 +189,6 @@ export default function MapPage() {
       feedbackX.value = withTiming(0);
     }
   };
-
-  useEffect(() => {
-    startProfileModalAnimations();
-  }, [profileModal]);
-
-  useEffect(() => {
-    startSettingsModalAnimations();
-  }, [gearModal]);
 
   const [token, setToken] = useState(false);
   const [diveSitesTog, setDiveSitesTog] = useState(true);
@@ -685,14 +232,10 @@ export default function MapPage() {
     if (showFilterer) {
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
-      setGearModal(false);
-      setProfileModal(false);
-      setMapSearchModal(false);
-      setDiveSiteSearchModal(false);
-      setPicAdderModal(false);
-      setDiveSiteAdderModal(false);
-      setTutorialLaunchpadModal(false);
-      setSiteModal(false);
+      setSmallModal(false);
+      setLargeModal(false);
+      setLargeModalSecond(false);
+      setFullScreenModal(false);
     } else {
       Keyboard.dismiss();
       pullTabHeight.value = withTiming(0);
@@ -741,7 +284,8 @@ export default function MapPage() {
         });
         setMapHelper(true);
         setMasterSwitch(true);
-        setDiveSiteAdderModal(!diveSiteAdderModal);
+        setActiveButtonID("DiveSiteAdderButton");
+        setLargeModal(!largeModal);
         setItterator2(itterator2 + 1);
         setChosenModal(null);
       } else if (chosenModal === "Photos") {
@@ -752,15 +296,16 @@ export default function MapPage() {
         });
         setMapHelper(true);
         setMasterSwitch(true);
-        setPicAdderModal(!picAdderModal);
+        setActiveButtonID("PictureAdderButton");
+        setLargeModalSecond(!largeModalSecond);
         setChosenModal(null);
       }
     }
   };
 
   const onShopNavigate = () => {
-    setSiteModal(false);
-    setShopModal(true);
+    setLargeModal(true);
+    setActiveButtonID("ShopMaskIcon");
     setMapHelper(true);
     setMasterSwitch(true);
     setMinorSwitch(true);
@@ -792,9 +337,10 @@ export default function MapPage() {
       if (success) {
         let bully = success[0].UserName;
         if (bully == null || bully === "") {
-          setGuideModal(true);
           setTutorialRunning(true);
           setItterator(0);
+          setActiveTutorialID("FirstGuide");
+          setFullScreenModal(true);
         } else {
           setProfile(success);
           setPinValues({
@@ -822,8 +368,9 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
+    const {
+      status: existingStatus,
+    } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
@@ -906,13 +453,10 @@ export default function MapPage() {
 
   const toggleDiveSites = () => {
     setDiveSitesTog(!diveSitesTog);
-    setGearModal(false);
-    setProfileModal(false);
-    setMapSearchModal(false);
-    setDiveSiteSearchModal(false);
-    setPicAdderModal(false);
-    setDiveSiteAdderModal(false);
-    setTutorialLaunchpadModal(false);
+    setSmallModal(false);
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    setFullScreenModal(false);
   };
 
   return (
@@ -950,12 +494,6 @@ export default function MapPage() {
                 </View>
               </View>
             )}
-            {/* 
-           {masterSwitch && ( 
-               <KeyboardAvoidingView behavior="height" enabled={false}>
-           
-               </KeyboardAvoidingView>
-           )} */}
 
             {masterSwitch && (
               <TouchableWithoutFeedback onPress={startTagAnimations}>
@@ -967,16 +505,6 @@ export default function MapPage() {
                 />
               </TouchableWithoutFeedback>
             )}
-
-            {/* {masterSwitch && (
-             
-            )} */}
-
-            {/* {masterSwitch && (
-              <View style={styles.Fbuttons}>
-                <FABButtons style={{ zIndex: 2 }} />
-              </View>
-            )} */}
 
             {masterSwitch && (
               <Animated.View
@@ -1122,119 +650,10 @@ export default function MapPage() {
               </View>
             )}
 
-            {/* <Logo style={styles.Logo} pointerEvents={"none"} /> */}
-
-            {/* modals go here? */}
-
-            {tutorialLaunchpadModal && (
-              <Animated.View
-                style={[styles.anchorModal, tutorialLaunchpadModalReveal]}
-              >
-                <TutorialLaunchPadModal
-                  tutorialLaunchpadModalY={tutorialLaunchpadModalY}
-                />
-              </Animated.View>
-            )}
-
-            {siteModal && (
-              <Animated.View style={[styles.anchorModal, anchorModalReveal]}>
-                <AnchorModal
-                  anchorModalY={anchorModalY}
-                  SiteName={selectedDiveSite.SiteName}
-                  setSelectedPhoto={setSelectedPhoto}
-                  setPhotoBoxModel={setPhotoBoxModel}
-                  Lat={selectedDiveSite.Latitude}
-                  Lng={selectedDiveSite.Longitude}
-                />
-              </Animated.View>
-            )}
-
-            {commentsModal && (
-              <Animated.View
-                style={[styles.commentScreen, commentsModalReveal]}
-              >
-                <View style={styles.commentsModal}>
-                  <CommentsModal />
-                </View>
-              </Animated.View>
-            )}
-
-            {shopModal && (
-              <Animated.View style={[styles.anchorModal, shopModalReveal]}>
-                <ShopModal />
-              </Animated.View>
-            )}
-
-            {photoBoxModel && (
-              <Animated.View
-                style={[styles.photoBoxModal, photoBoxModalReveal]}
-              >
-                <PhotoBoxModel
-                  picData={selectedPhoto}
-                  photoBoxModel={photoBoxModel}
-                  setPhotoBoxModel={setPhotoBoxModel}
-                />
-              </Animated.View>
-            )}
-
-            {diveSiteAdderModal && (
-              <Animated.View style={[styles.anchorModal, diveSiteModalReveal]}>
-                <DiveSiteModal diveSiteModalY={diveSiteModalY} />
-              </Animated.View>
-            )}
-
-            <Animated.View style={[styles.anchorModal, pictureModalReveal]}>
-              <PicUploadModal pictureModalY={pictureModalY} />
-            </Animated.View>
-
-            {/* {guideModal && ( */}
-            <Animated.View style={[styles.tutorialModal, tutorialModalReveal]}>
-              <IntroTutorial tutorialModalY={tutorialModalY} />
-            </Animated.View>
-            {/* )} */}
-
-            {/* {secondGuideModal && ( */}
-            <Animated.View style={[styles.tutorialModal, tutorial2ModalReveal]}>
-              <SecondTutorial tutorial2ModalY={tutorial2ModalY} />
-            </Animated.View>
-            {/* )} */}
-
-            {/* {thirdGuideModal && ( */}
-            <Animated.View style={[styles.tutorialModal, tutorial3ModalReveal]}>
-              <ThirdTutorial tutorial3ModalY={tutorial3ModalY} />
-            </Animated.View>
-            {/* )} */}
-
-            {profileModal && (
-              <Animated.View style={[styles.anchorModal, profileModalReveal]}>
-                <UserProfileModal />
-              </Animated.View>
-            )}
-
-            {gearModal && (
-              <Animated.View style={[styles.anchorModal, settingsModalReveal]}>
-                <SettingsModal />
-              </Animated.View>
-            )}
-
-            {partnerModal && (
-              <Animated.View style={[styles.anchorModal, partnerModalReveal]}>
-                <PartnerAccountRequestModal />
-              </Animated.View>
-            )}
-
-            {itineraryListModal && (
-              <Animated.View
-                style={[styles.anchorModal, itineraryListModalReveal]}
-              >
-                <ItineraryListModal
-                  itineraryListModal={itineraryListModal}
-                  setItineraryListModal={setItineraryListModal}
-                />
-              </Animated.View>
-            )}
-
             <AnimatedModalSmall />
+            <AnimatedModalLarge />
+            <AnimatedModalLargeSecond />
+            <AnimatedFullScreenModal />
 
             <Map style={{ zIndex: 1 }} />
           </View>
@@ -1252,38 +671,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "green",
   },
-  slider: {
-    flex: 1,
-    position: "absolute",
-    alignItems: "center",
-    //Constants.statusBarHeight +
-    top: scale(0),
-    width: "80%",
-    height: scale(38),
-    zIndex: 2,
-    borderRadius: scale(15),
-    opacity: 0.8,
-    paddingBottom: 0,
-    paddingTop: scale(10),
-    backgroundColor: "white",
-    paddingRight: "2%",
-    paddingLeft: "2%",
-  },
-  monthText: {
-    flex: 1,
-    position: "absolute",
-    alignItems: "center",
-    //Constants.statusBarHeight +
-    top: scale(2),
-    width: "10%",
-    height: scale(20),
-    zIndex: 3,
-    borderRadius: scale(15),
-    paddingBottom: 0,
-    paddingTop: 0,
-    backgroundColor: "transparent",
-    opacity: 0.8,
-  },
   animalSelect: {
     display: "flex",
     flexDirection: "row",
@@ -1296,8 +683,6 @@ const styles = StyleSheet.create({
   FMenuAnimate: {
     position: "absolute",
     bottom: moderateScale(-65),
-    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
-    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -1321,20 +706,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#538bdb",
     width: "100%",
     height: moderateScale(65),
-    // bottom: windowWidth > 700 ? moderateScale(6) : moderateScale(12),
     zIndex: 3,
-  },
-  Fbuttons: {
-    alignItems: "center",
-    position: "absolute",
-    bottom: 0,
-    right: 5,
-    width: 100,
-    height: 40,
-    zIndex: 2,
-    borderRadius: 15,
-    opacity: 1,
-    paddingTop: -5,
   },
   PinButton: {
     position: "absolute",
@@ -1379,9 +751,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   carrousel: {
-    // flex: 1,
     position: "absolute",
-    // justifyContent: "center",
     flexDirection: "column",
     alignContent: "center",
     // backgroundColor: "blue",
@@ -1397,25 +767,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "column",
     position: "absolute",
-    // justifyContent: "center",
     flexDirection: "column",
-    // alignContent: "center",
-    // alignItems: "center",
-    // height: 25,
     width: "50%",
     top: moderateScale(105),
     zIndex: 3,
     // backgroundColor: "green"
   },
   emptyBox: {
-    // position: "absolute",
-    // top: -15,
     alignSelf: "center",
     flexDirection: "column",
-    // justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    // height: scale(55),
     width: "100%",
     zIndex: 3,
     // backgroundColor: "grey"
@@ -1424,9 +786,6 @@ const styles = StyleSheet.create({
     width: "25%",
     position: "absolute",
     left: "8%",
-    // justifyContent: "center",
-    // alignItems: "center",
-    // alignContent: "space-between",
     top: Platform.OS === "ios" ? "14%" : "14%",
     zIndex: 55,
     // backgroundColor:"pink"
@@ -1443,72 +802,6 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     backgroundColor: "transparent",
   },
-  tutorialModal: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    zIndex: 50,
-    left: 0,
-  },
-  anchorModal: {
-    position: "absolute",
-    height: windowHeight - windowHeight * 0.14,
-    width: windowWidth - windowWidth * 0.1,
-    marginLeft: windowWidth * 0.05,
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 25,
-    left: 0,
-    bottom: windowHeight * 0.09,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
-  searchModal: {
-    position: "absolute",
-    height: moderateScale(160),
-    width: "60%",
-    marginLeft: "19%",
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 25,
-    left: 0,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
-  diveSearchModal: {
-    position: "absolute",
-    height: moderateScale(160),
-    width: "60%",
-    marginLeft: "19%",
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 25,
-    left: 0,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
-  commentScreen: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    zIndex: 25,
-    left: 0,
-  },
-  commentsModal: {
-    position: "absolute",
-    height: windowHeight - windowHeight * 0.4,
-    width: windowWidth - windowWidth * 0.1,
-    marginLeft: windowWidth * 0.05,
-    backgroundColor: "#538bdb",
-    borderRadius: 15,
-    zIndex: 27,
-    left: 0,
-    opacity: 1,
-    bottom: windowHeight * 0.04,
-    borderWidth: 1,
-    borderColor: "darkgrey",
-  },
   pullTab: {
     height: windowWidth > 600 ? scale(10) : scale(15),
     width: windowWidth > 600 ? scale(80) : scale(100),
@@ -1522,7 +815,6 @@ const styles = StyleSheet.create({
   },
   feedback: {
     zIndex: 20,
-    // opacity: 0.8,
     flexDirection: "row",
     backgroundColor: "#538bdb",
     position: "absolute",
@@ -1551,16 +843,6 @@ const styles = StyleSheet.create({
     marginRight: moderateScale(10),
     marginLeft: moderateScale(14),
     paddingLeft: moderateScale(50),
-  },
-  photoBoxModal: {
-    position: "absolute",
-    height: windowHeight,
-    width: windowWidth,
-    zIndex: 55,
-    left: "5%",
-    top: windowHeight,
-    marginTop: "10%",
-    backgroundColor: "green",
   },
   buttonwrapper: {
     position: "absolute",

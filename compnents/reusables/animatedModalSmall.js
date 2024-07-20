@@ -9,6 +9,8 @@ import Animated, {
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
 
 import MapSearchModal from "../modals/mapSearchModal";
 import DiveSiteSearchModal from "../modals/diveSiteSearchModal";
@@ -19,7 +21,9 @@ const windowHeight = Dimensions.get("window").height;
 export default function AnimatedModalSmall(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
   const { previousButtonID } = useContext(PreviousButtonIDContext);
-  const { smallModal } = useContext(SmallModalContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { setLargeModal } = useContext(LargeModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
 
   const [diveSearchBump, setDiveSearchBump] = useState(false);
   const [mapSearchBump, setMapSearchBump] = useState(false);
@@ -34,55 +38,33 @@ export default function AnimatedModalSmall(props) {
 
   const startSmallModalAnimation = () => {
     if (smallModalY.value === windowHeight) {
-      smallModalY.value = withTiming(-windowHeight*1.1);
+      smallModalY.value = withTiming(-windowHeight * 1.1);
     } else {
       smallModalY.value = withTiming(windowHeight);
     }
   };
 
   useEffect(() => {
-    let timout
-    windowHeight > 1000 ? timout = 850 : timout = 400
-    if (
-      (smallModalY.value === -windowHeight*1.1)  &&
-      (activeButtonID !== previousButtonID)
-    ) {
-      // console.log('conditiion met')
-      startSmallModalAnimation();
-      setTimeout(() => {
-        startSmallModalAnimation();
-      }, 315);
-      return
-    } else if ( 
-      (smallModalY.value === -windowHeight*1.35)  &&
-    (activeButtonID !== previousButtonID)
-    ){
-      // console.log('conditiion 2 met')
-      startSmallModalAnimation();
-      setTimeout(() => {
-        startSmallModalAnimation();
-      }, timout);
-      return
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    if (smallModal) {
+      smallModalY.value = withTiming(-windowHeight * 1.1);
     } else {
-      // console.log('conditiion 3 met')
-      setTimeout(() => {
-        startSmallModalAnimation();
-      }, 100);
-      return
-    }
-  }, [smallModal]);
+      smallModalY.value = withTiming(windowHeight);
 
+    }    
+  }, [smallModal]);
 
   useEffect(() => {
     if (diveSearchBump) {
-      smallModalY.value = withTiming(-windowHeight*1.35);
+      smallModalY.value = withTiming(-windowHeight * 1.35);
     }
     setDiveSearchBump(false);
   }, [diveSearchBump]);
 
   useEffect(() => {
     if (mapSearchBump) {
-      smallModalY.value = withTiming(-windowHeight*1.35);
+      smallModalY.value = withTiming(-windowHeight * 1.35);
     }
     setMapSearchBump(false);
   }, [mapSearchBump]);

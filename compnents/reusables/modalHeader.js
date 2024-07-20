@@ -13,14 +13,12 @@ export default function ModalHeader(props) {
   return (
     <View style={styles.container}>
       <View style={styles.titleBox}>
-      <Text style={styles.titleText}>{titleText}</Text>
-     {subText && <Text style={styles.subText}>{subText}</Text>}
+        <Text style={styles.titleText}>{titleText}</Text>
+        {subText && <Text style={styles.subText}>{subText}</Text>}
       </View>
       <View style={styles.altButton}>
-        {tertButton && <ModalTertiaryButton tertButton={tertButton}/>}
-        {icon ? (
-          <ModalSecondaryButton buttonAction={altButton} icon={icon} />
-        ) : null}
+        {tertButton && <ModalTertiaryButton tertButton={tertButton} />}
+        {altButton && icon && <ModalSecondaryButton buttonAction={altButton} icon={icon} />}
         <CloseButton onClose={onClose} />
       </View>
     </View>
@@ -35,16 +33,18 @@ const styles = StyleSheet.create({
     padding: "1%",
     marginTop: "2%",
     marginLeft: "3%",
+    minHeight: moderateScale(50),
     width: "92%",
     borderRadius: 10,
     overflow: "hidden",
     // backgroundColor: "orange"
   },
   titleBox: {
-    width: "60%",
+    width: "120%",
     // backgroundColor: "purple"
   },
   titleText: {
+    width:"50%",
     flexWrap: "wrap",
     fontFamily: "PatrickHand_400Regular",
     color: "#F0EEEB",
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   altButton: {
     position: "absolute",
-    right: windowWidth > 600 ? moderateScale(0) :  moderateScale(10),
+    right: windowWidth > 600 ? moderateScale(0) : moderateScale(10),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",

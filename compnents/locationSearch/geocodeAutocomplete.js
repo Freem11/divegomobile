@@ -6,6 +6,8 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { SmallModalContext } from '../contexts/smallModalContext';
 import { moderateScale } from "react-native-size-matters";
+import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
+
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function GeocodeAutoComplete(props) {
@@ -16,14 +18,14 @@ export default function GeocodeAutoComplete(props) {
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
 
   const handleConfirm = async (place) => {
+    console.log("b4", smallModal)
     setMapCenter({
       lat: place.result.geometry.location.lat,
       lng: place.result.geometry.location.lng,
     });
     setPreviousButtonID(activeButtonID)
     setActiveButtonID("MapSearchButton")
-    setSmallModal(!smallModal);
-    console.log("WHAT?", activeButtonID)
+    useButtonPressHelper("MapSearchButton", activeButtonID, smallModal, setSmallModal)
     Keyboard.dismiss();
   };
 

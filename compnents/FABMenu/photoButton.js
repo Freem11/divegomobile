@@ -22,9 +22,17 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function PhotoButton() {
   const [butState, setButState] = useState(false);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(
     PullTabContext
@@ -85,11 +93,18 @@ export default function PhotoButton() {
     }
   }, [picAdderModal]);
 
+  const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('PictureAdderButton')
+    useButtonPressHelper('PictureAdderButton', activeButtonID, largeModalSecond, setLargeModalSecond)
+  }
 
   return (
     <View style={styles.container}>
      <TouchableWithoutFeedback
-          onPress={() => {itterator === 11 || itterator === 15 || itterator === 18 || itterator2 === 3 || itterator2 === 5 || itterator2 === 9 ? null : setPicAdderModal(!picAdderModal)}}
+          onPress={itterator === 11 || itterator === 15 || itterator === 18 || itterator2 === 3 || itterator2 === 5 || itterator2 === 9 ? null : handlePress}
           onPressIn={() => setButState(true)}
           onPressOut={() => setButState(false)}
           style={{

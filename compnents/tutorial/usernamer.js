@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, View, Text, Keyboard } from "react-native";
+import { StyleSheet, View, Text, Keyboard, Dimensions } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { SessionContext } from "../contexts/sessionContext";
@@ -11,6 +11,7 @@ import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 import InputField from "../reusables/textInputs";
 
 let userVar = false;
+const windowWidth = Dimensions.get("window").width;
 
 export default function UserNamer(props) {
   const { nameChangerState, setNameChangerState, currentUserName } = props;
@@ -115,30 +116,49 @@ export default function UserNamer(props) {
       />
       {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
 
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-around",
-          marginTop: moderateScale(10),
-          marginBottom: moderateScale(20),
-          marginRight: "23%",
-        }}
-      >
-        <ModalSecondaryButton
-          buttonAction={handleSubmit}
-          icon={null}
-          buttonText={"Ok"}
-        />
-       {nameChangerState &&
-       <ModalSecondaryButton
-       buttonAction={handleCancel}
-       icon={null}
-       buttonText={"Cancel"}
-       altStyle={true}
-     />
-     } 
-      </View>
+      {nameChangerState && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            marginTop: moderateScale(10),
+            marginBottom: moderateScale(20),
+          }}
+        >
+          <ModalSecondaryButton
+            buttonAction={handleSubmit}
+            icon={null}
+            buttonText={"Ok"}
+          />
+
+          <ModalSecondaryButton
+            buttonAction={handleCancel}
+            icon={null}
+            buttonText={"Cancel"}
+            altStyle={true}
+          />
+        </View>
+      )}
+
+      {!nameChangerState && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            marginTop: moderateScale(10),
+            marginBottom: moderateScale(20),
+            marginLeft: moderateScale(20),
+          }}
+        >
+          <ModalSecondaryButton
+            buttonAction={handleSubmit}
+            icon={null}
+            buttonText={"Ok"}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -153,7 +173,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     zIndex: 2,
     bottom: 0,
-    left: 0,
     borderRadius: moderateScale(15),
     borderColor: "darkgrey",
     borderWidth: 1,

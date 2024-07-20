@@ -24,11 +24,12 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function LocationSearchButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
@@ -64,9 +65,11 @@ export default function LocationSearchButton() {
   }, [mapSearchModal]);
 
   const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
     setPreviousButtonID(activeButtonID)
     setActiveButtonID('MapSearchButton')
-    setSmallModal(!smallModal)
+    useButtonPressHelper('MapSearchButton', activeButtonID, smallModal, setSmallModal)
   }
 
   return (

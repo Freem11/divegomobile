@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { combineComponents } from '../combineComponents';
 
 import DiveSiteSearchModalContextProvider from './diveSiteSearchContext';
@@ -50,9 +48,15 @@ import CarrouselTilesContextProvider from './carrouselTilesContext';
 import CommentsModalContextProvider from './commentsModalContext';
 import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
+import PhotoBoxModalContextProvider from './photoBoxModalContext';
+import SelectedPhotoContextProvider from './selectedPhotoContext';
 import ActiveButtonIDContextProvider from './activeButtonIDContext';
+import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
-import SmallModalContextProvider from "./smallModalContext";
+import SmallModalContextProvider from './smallModalContext';
+import LargeModalContextProvider from './largeModalContext';
+import LargeModalSecondContextProvider from './largeModalSecondContext';
+import FullScreenModalContextProvider from './fullScreenModalContext';
 
 const providers = [
     DiveSiteSearchModalContextProvider,
@@ -103,9 +107,15 @@ const providers = [
     CommentsModalContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
+    PhotoBoxModalContextProvider,
+    SelectedPhotoContextProvider,
     ActiveButtonIDContextProvider,
+    ActiveTutorialIDContextProvider,
     PreviousButtonIDContextProvider,
-    SmallModalContextProvider
+    SmallModalContextProvider,
+    LargeModalContextProvider,
+    LargeModalSecondContextProvider,
+    FullScreenModalContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

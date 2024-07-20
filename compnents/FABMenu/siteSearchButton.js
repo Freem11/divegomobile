@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { scale, moderateScale } from "react-native-size-matters";
+import { moderateScale } from "react-native-size-matters";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { DSAdderContext } from "../contexts/DSModalContext";
@@ -18,24 +18,21 @@ import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { SmallModalContext } from '../contexts/smallModalContext';
-
-import {
-  MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { useButtonPressHelper } from "./buttonPressHelper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { previousButtonID, setPreviousButtonID } = useContext(
+    PreviousButtonIDContext
+  );
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(
-    PullTabContext
-  );
+  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
     DiveSiteSearchModalContext
   );
@@ -47,7 +44,7 @@ export default function SiteSearchButton() {
   const { setDiveSiteAdderModal } = useContext(DSAdderContext);
   const { setSiteModal } = useContext(AnchorModalContext);
   const { setShopModal } = useContext(ShopModalContext);
- 
+
   const { itterator } = useContext(IterratorContext);
   const { itterator2 } = useContext(Iterrator2Context);
   const { itterator3 } = useContext(Iterrator3Context);
@@ -95,10 +92,17 @@ export default function SiteSearchButton() {
   }, [diveSiteSearchModal]);
 
   const handlePress = () => {
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID('DiveSiteSearchButton')
-    setSmallModal(!smallModal)
-  }
+    setTiles(true);
+    setShowFilterer(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("DiveSiteSearchButton");
+    useButtonPressHelper(
+      "DiveSiteSearchButton",
+      activeButtonID,
+      smallModal,
+      setSmallModal
+    );
+  };
 
   return (
     <View style={styles.container}>

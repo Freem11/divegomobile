@@ -18,8 +18,18 @@ import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
 import { TutorialModelContext } from "../contexts/tutorialModalContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
+
 import { IterratorContext } from "../contexts/iterratorContext";
-import InsetShadow from "react-native-inset-shadow";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
+
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+
 import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -30,6 +40,20 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TutorialLaunchPadModal() {
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
+
+  const { itterator, setItterator } = useContext(IterratorContext);
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const [tutPadCloseState, setTutPadCloseState] = useState(false);
   const [tutPad2CloseState, setTutPad2CloseState] = useState(false);
@@ -50,24 +74,35 @@ export default function TutorialLaunchPadModal() {
 
   const handleTutorialStartup = () => {
     setTutorialRunning(true);
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
-    setGuideModal(!guideModal);
+    setItterator(0);
+    setPreviousButtonID(activeButtonID);
+    setActiveTutorialID("FirstGuide");
+    setLargeModal(!largeModal);
+    setFullScreenModal(!fullScreenModal);
   };
 
   const handleSecondTutorialStartup = () => {
     setTutorialRunning(true);
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
-    setSecondGuideModal(!secondGuideModal);
+    setItterator2(0);
+    setPreviousButtonID(activeButtonID);
+    setActiveTutorialID("SecondGuide");
+    setLargeModal(!largeModal);
+    setFullScreenModal(!fullScreenModal);
   };
 
   const handleThirdTutorialStartup = () => {
     setTutorialRunning(true);
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
-    setThirdGuideModal(!thirdGuideModal);
+    setItterator3(0);
+    setPreviousButtonID(activeButtonID);
+    setActiveTutorialID("ThirdGuide");
+    setLargeModal(!largeModal);
+    setFullScreenModal(!fullScreenModal);
   };
 
   const handleClose = () => {
-    setTutorialLaunchpadModal(!tutorialLaunchpadModal);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("TutorialsButton");
+    setLargeModal(!largeModal);
   };
 
   return (

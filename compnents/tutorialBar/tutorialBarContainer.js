@@ -32,7 +32,7 @@ export default function TutorialBar() {
 
   const { chapter, setChapter } = useContext(ChapterContext);
   const [tutorialList, setTutorialList] = useState(null);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   const Tut1List = [
     "Getting around the map",
@@ -90,6 +90,10 @@ export default function TutorialBar() {
     }
   };
 
+  useEffect(() => {
+    handleList()
+  }, [tutorialRunning]);
+
   const handleShift = async (listItem) => {
     let profileCheck = await getProfile();
     let bully;
@@ -106,6 +110,7 @@ export default function TutorialBar() {
       setChapter(listItem);
       setTutorialList(null);
     }
+    setTutorialList(null);
   };
 
   let counter = 0;
@@ -136,9 +141,6 @@ export default function TutorialBar() {
   const progress = useDerivedValue(() => {
     return  withTiming(guideState === true ? 1 : 0)
   })
-  // const progress1 = useDerivedValue(() => {
-  //   return  withTiming(guideState === true ? 1 : 0)
-  // })
 
   const guideButtonPulse = useAnimatedStyle(() => {
     const backgroundColor = interpolateColor(
@@ -151,21 +153,8 @@ export default function TutorialBar() {
     };
   });
 
-  // const guideButtonTxtPulse = useAnimatedStyle(() => {
-  //   const fontColor = interpolateColor(
-  //     progress.value,
-  //     [0,1],
-  //     [styles.guideButton.color, styles.guideButtonAlt.color]
-  //   )
-  //   return {
-  //     fontColor,
-  //   };
-  // });
-
-
   return (
     <View style={styles.container} pointerEvents={"box-none"}>
-      {/* <View style={{ flexDirection: "column" }}> */}
       <TouchableWithoutFeedback
         onPress={handleList}
         style={{
@@ -217,7 +206,6 @@ export default function TutorialBar() {
               );
             })}
         </View>
-      {/* </View> */}
     </View>
   );
 }

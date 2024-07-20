@@ -17,20 +17,32 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 import Itinerary from "../itineraries/itinerary";
-import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
+import { getItinerariesByUserId } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { scale } from "react-native-size-matters";
 import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
-import { shops } from "../../supabaseCalls/shopsSupabaseCalls";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import ModalHeader from "../reusables/modalHeader";
+import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ItineraryListModal(props) {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { profile } = useContext(UserProfileContext);
   const { itineraryListModal, setItineraryListModal } = props;
   const { shopModal, setShopModal } = useContext(ShopModalContext);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
@@ -42,34 +54,31 @@ export default function ItineraryListModal(props) {
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
 
   useEffect(() => {
-    if (selectedShop[0]) {
-      getItineraries(selectedShop[0].id);
-      setMasterSwitch(true);
-    }
-  }, [selectedShop]);
-
-  useEffect(() => {
-    if (shopModal && zoomHelper) {
-      setMapCenter({
-        lat: selectedShop[0].lat,
-        lng: selectedShop[0].lng,
-      });
-    }
-  }, [shopModal]);
+    getItineraries(profile[0].UserID)
+  }, [largeModal]);
 
   const getItineraries = async (IdNum) => {
     try {
-      const itins = await itineraries(IdNum);
+      const itins = await getItinerariesByUserId(IdNum)
       if (itins.length > 0) {
-        setItineraryList(itins);
+        setItineraryList(itins[0].itineraries);
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
   };
 
+  const handleCreateNewButton = () => {
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("TripCreator");
+    setLargeModal(false);
+    useButtonPressHelper('TripCreator', activeButtonID, largeModalSecond, setLargeModalSecond)
+  };
+
   const handleShopModalClose = () => {
-    setItineraryListModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("ItineraryListButton");
+    setLargeModal(!largeModal);
   };
 
   return (
@@ -84,7 +93,7 @@ export default function ItineraryListModal(props) {
         titleText={"Your Trips"}
         onClose={handleShopModalClose}
         icon={"create-new-folder"}
-        altButton={null}
+        altButton={handleCreateNewButton}
       />
 
       <ScrollView style={{ marginTop: "3%", width: "100%", borderRadius: 15 }}>
@@ -98,6 +107,10 @@ export default function ItineraryListModal(props) {
                   setSelectedID={setSelectedID}
                   selectedID={selectedID}
                   setShopModal={setShopModal}
+                  buttonOneText="Edit"
+                  buttonOneIcon="calendar-edit"
+                  buttonTwoText="Delete"
+                  buttonTwoIcon="delete-forever"
                 />
               );
             })}

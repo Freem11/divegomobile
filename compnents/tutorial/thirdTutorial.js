@@ -6,7 +6,7 @@ import {
   Image,
   Dimensions,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -16,44 +16,45 @@ import Animated, {
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
 import seaLionGuy from "../png/EmilioNeutral.png";
-import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { PictureContext } from "../contexts/pictureContext";
-import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { TutorialResetContext } from "../contexts/tutorialResetContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
 import { PinContext } from "../contexts/staticPinContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
 import { ChapterContext } from "../contexts/chapterContext";
 import { MasterContext } from "../contexts/masterContext";
-
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ThirdTutorial() {
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
+  const { setLargeModal } = useContext(LargeModalContext);
+  const { setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { uploadedFile, setUploadedFile } = useContext(PictureContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-
-  const { thirdGuideModal, setThirdGuideModal } = useContext(
-    ThirdTutorialModalContext
-  );
+  const { setUploadedFile } = useContext(PictureContext);
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
   const { tutorialReset, setTutorialReset } = useContext(TutorialResetContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
@@ -66,9 +67,10 @@ export default function ThirdTutorial() {
   useEffect(() => {
     if (tutorialReset) {
       setItterator3(null);
-      setPicAdderModal(false);
+      setLargeModal(false);
+      setLargeModalSecond(false);
       setTutorialRunning(false);
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
       setMasterSwitch(true);
       setUploadedFile(null);
       setPinValues({
@@ -92,8 +94,10 @@ export default function ThirdTutorial() {
     switch (chapter) {
       case "Contributing photos overview":
         setItterator3(3);
-        setPicAdderModal(false);
-        setThirdGuideModal(true);
+        setLargeModal(false);
+        setLargeModalSecond(false);
+        setFullScreenModal(true);
+        setActiveTutorialID("ThirdGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
@@ -108,41 +112,44 @@ export default function ThirdTutorial() {
           Longitude: "",
           DDVal: "0",
         });
-        // setChapter(null);
+        
         break;
 
       case "Adding your photo":
         setItterator3(6);
-        setThirdGuideModal(true);
-        setTutorialRunning(true)
+        setFullScreenModal(true);
+        setActiveTutorialID("ThirdGuide");
+        setTutorialRunning(true);
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
-        setPicAdderModal(true);
-        // setChapter(null);
+        setLargeModalSecond(true);
+        setActiveButtonID("PictureAdderButton");
         break;
 
       case "Name that sea creature!":
         setItterator3(12);
-        setThirdGuideModal(true);
+        setFullScreenModal(true);
+        setActiveTutorialID("ThirdGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
-        setPicAdderModal(true);
-        // setChapter(null);
+        setLargeModalSecond(true);
+        setActiveButtonID("PictureAdderButton");
         break;
 
       case "Dropping the pin":
         setItterator3(15);
-        setThirdGuideModal(true);
+        setFullScreenModal(true);
+        setActiveTutorialID("ThirdGuide");
         characterX.value = withTiming(
           Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
-        setPicAdderModal(true);
-        // setChapter(null);
+        setLargeModalSecond(true);
+        setActiveButtonID("PictureAdderButton");
         break;
 
       case "Exit Guide":
@@ -306,7 +313,7 @@ export default function ThirdTutorial() {
       }
 
       if (pushVal === 1 && itterator3 === feederArray.length - 1) {
-        setThirdGuideModal(false);
+        setFullScreenModal(false);
       }
     }
   };
@@ -344,9 +351,6 @@ export default function ThirdTutorial() {
   }, [itterator3, textPrinting]);
 
   useEffect(() => {
-    // let textVal = feederArray[itterator3];
-    // setTextRead(textVal);
-
     if (itterator3 === 0) {
       setTimeout(() => {
         startCharacterAnimation();
@@ -360,7 +364,6 @@ export default function ThirdTutorial() {
 
     if (itterator3 === 3) {
       photoY.value = withTiming(windowHeight * 0.4);
-      // startPhotoButtonAnimation();
     }
 
     if (itterator3 === 5) {
@@ -376,34 +379,30 @@ export default function ThirdTutorial() {
         setupText(0);
       }, 600);
       photoY.value = withTiming(scale(-1000));
-      // startPhotoButtonAnimation();
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator3 === 7) {
       imageY.value = withTiming(windowHeight * 0.4);
-      // startImageButtonAnimation();
     }
 
     if (itterator3 === 8) {
       imageY.value = withTiming(scale(-1000));
-      // startImageButtonAnimation();
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator3 === 10) {
       calendarY.value = withTiming(windowHeight * 0.4);
-      //  startCalendarAnimation();
     }
 
     if (itterator3 === 11) {
       calendarY.value = withTiming(scale(-1000));
-      // startCalendarAnimation();
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator3 === 12) {
-      setThirdGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("ThirdGuide");
     }
     if (itterator3 === 13) {
       setChapter(null);
@@ -420,15 +419,16 @@ export default function ThirdTutorial() {
     }
 
     if (itterator3 === 14) {
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
     }
+    console.log(itterator3, fullScreenModal, largeModalSecond);
 
     if (itterator3 === 15) {
       moveMap({ lat: mapCenter.lat, lng: mapCenter.lng });
-      setThirdGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("ThirdGuide");
       setTimeout(() => {
         pinY.value = withTiming(windowHeight * 0.4);
-        // startPinAnimation();
       }, 1000);
     }
 
@@ -444,36 +444,36 @@ export default function ThirdTutorial() {
         textBoxY.value = withTiming(windowHeight * 0.77);
         setupText(0);
       }, 600);
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
       pinY.value = withTiming(scale(-1000));
-      // startPinAnimation();
     }
 
     if (itterator3 === 17) {
-      setPicAdderModal(false);
-      setThirdGuideModal(true);
+      setLargeModalSecond(false);
+      setFullScreenModal(true);
+      setActiveTutorialID("ThirdGuide");
       setTimeout(() => {
         mantaY.value = withTiming(windowHeight * 0.4);
-        // startMantaAnimation();
       }, 1000);
     }
 
     if (itterator3 === 19) {
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
       mantaY.value = withTiming(scale(-1200));
-      // startMantaAnimation();
     }
 
     if (itterator3 === 20) {
-      setThirdGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("ThirdGuide");
     }
 
     if (itterator3 === 22) {
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
     }
 
     if (itterator3 === 23) {
-      setThirdGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("ThirdGuide");
     }
 
     if (itterator3 === 26) {
@@ -487,14 +487,14 @@ export default function ThirdTutorial() {
         DDVal: "0",
       });
       setUploadedFile(null);
-      setPicAdderModal(false);
+      setLargeModalSecond(false);
       setTutorialRunning(false);
     }
 
     if (itterator3 === feederArray.length - 1) {
       setTutorialRunning(false);
       setItterator3(null);
-      setThirdGuideModal(false);
+      setFullScreenModal(false);
       startCharacterAnimation();
       startTextBoxAnimation();
       setChapter(null);
@@ -560,54 +560,6 @@ export default function ThirdTutorial() {
       textBoxY.value = withTiming(1000);
     }
   };
-
-  const startPhotoButtonAnimation = () => {
-    if (photoY.value === scale(-1000)) {
-      photoY.value = withTiming(windowHeight * 0.4);
-    } else {
-      photoY.value = withTiming(scale(-1000));
-    }
-  };
-
-  const startImageButtonAnimation = () => {
-    if (imageY.value === scale(-1000)) {
-      imageY.value = withTiming(windowHeight * 0.4);
-    } else {
-      imageY.value = withTiming(scale(-1000));
-    }
-  };
-
-  const startCalendarAnimation = () => {
-    if (calendarY.value === scale(-1000)) {
-      calendarY.value = withTiming(windowHeight * 0.4);
-    } else {
-      calendarY.value = withTiming(scale(-1000));
-    }
-  };
-
-  const startPinAnimation = () => {
-    if (pinY.value === scale(-1000)) {
-      pinY.value = withTiming(windowHeight * 0.4);
-    } else {
-      pinY.value = withTiming(scale(-1000));
-    }
-  };
-
-  const startMantaAnimation = () => {
-    if (mantaY.value === scale(-1200)) {
-      mantaY.value = withTiming(windowHeight * 0.4);
-    } else {
-      mantaY.value = withTiming(scale(-1200));
-    }
-  };
-
-  useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator3 === null) {
-        setItterator3(0);
-      }
-    }
-  }, [thirdGuideModal]);
 
   const moveMap = (values) => {
     setMapCenter({ lat: values.lat, lng: values.lng });

@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Platform,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, View, Platform, Dimensions } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -14,14 +9,16 @@ import Share from "react-native-share";
 import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
-import {
-  getProfileWithStats,
-} from "../../supabaseCalls/accountSupabaseCalls";
+import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ImgToBase64 from "react-native-image-base64";
 import {
   insertUserFollow,
@@ -34,6 +31,14 @@ import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
 
 export default function UserProfileModal() {
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { profile } = useContext(UserProfileContext);
   const [nameChangerState, setNameChangerState] = useState(false);
   const [userFollows, setUserFollows] = useState(false);
@@ -116,12 +121,16 @@ export default function UserProfileModal() {
   };
 
   const toggleProfileModal = () => {
-    setProfileModal(false);
-    // setUserStats(null);
 
     if (selectedProfile) {
       setSelectedProfile(null);
-      setSiteModal(true);
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("SiteAnchorIcon");
+      setLargeModalSecond(!largeModalSecond);
+    } else {
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("UserProfileButton");
+      setLargeModalSecond(!largeModalSecond);
     }
   };
 
@@ -435,12 +444,11 @@ const styles = StyleSheet.create({
   userContainer: {
     position: "absolute",
     top: Platform.OS === "ios" ? "18%" : "18%",
+    left: "20%",
     backgroundColor: "transparent",
     alignItems: "center",
-    // marginTop: "-3%",
     height: "90%",
-    marginRight: scale(10),
-    marginLeft: scale(10),
+    width: "60%",
     borderRadius: 15,
     // backgroundColor: "green"
   },

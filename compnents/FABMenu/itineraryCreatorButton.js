@@ -22,9 +22,17 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { LargeModalContext } from '../contexts/largeModalContext';
+import { useButtonPressHelper } from './buttonPressHelper';
 
 export default function ItineraryListButton() {
   const [butState, setButState] = useState(false);
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { itineraryListModal, setItineraryListModal } = useContext(ItineraryListModalContext);
@@ -83,10 +91,18 @@ export default function ItineraryListButton() {
     }
   }, [itineraryListModal]);
 
+  const handlePress = () => {
+    setTiles(true);
+    setShowFilterer(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('ItineraryListButton')
+    useButtonPressHelper('ItineraryListButton', activeButtonID, largeModal, setLargeModal)
+  }
+  
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={() => setItineraryListModal(!itineraryListModal)}
+        onPress={handlePress}
         onPressIn={() => setButState(true)}
         onPressOut={() => setButState(false)}
         style={{

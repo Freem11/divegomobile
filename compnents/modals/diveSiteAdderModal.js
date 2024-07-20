@@ -16,13 +16,9 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { DSAdderContext } from "../contexts/DSModalContext";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
-import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
-import InsetShadow from "react-native-inset-shadow";
 import { scale, moderateScale } from "react-native-size-matters";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
@@ -32,6 +28,12 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MasterContext } from "../contexts/masterContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
@@ -48,6 +50,16 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteModal() {
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { secondGuideModal, setSecondGuideModal } = useContext(
     SecondTutorialModalContext
@@ -56,8 +68,9 @@ export default function DiveSiteModal() {
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
 
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
   const [diveCloseState, setDiveCloseState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -83,7 +96,14 @@ export default function DiveSiteModal() {
   let timer2;
   let timer3;
 
-  function locationBut() {
+  const [locButState, setLocButState] = useState(false);
+  const [pinButState, setPinButState] = useState(false);
+  const [subButState, setSubButState] = useState(false);
+  const [corButState, setCorButState] = useState(false);
+  const [helpButState, setHelpButState] = useState(false);
+
+
+  function locationButtonBlink() {
     counter1++;
     if (counter1 % 2 == 0) {
       setLocButState(false);
@@ -92,12 +112,21 @@ export default function DiveSiteModal() {
     }
   }
 
-  function pinBut() {
+  function pinButtonBlink() {
     counter1++;
     if (counter1 % 2 == 0) {
       setPinButState(false);
     } else {
       setPinButState(true);
+    }
+  }
+
+  function submitButtonBlink() {
+    counter3++;
+    if (counter3 % 2 == 0) {
+      setSubButState(false);
+    } else {
+      setSubButState(true);
     }
   }
 
@@ -116,30 +145,8 @@ export default function DiveSiteModal() {
     }
   }
 
-  function atSite() {
-    counter2++;
-    if (counter2 % 2 == 0) {
-      setImaButState(false);
-    } else {
-      setImaButState(true);
-    }
-  }
-
   function subButTimeout() {
-    blinker2 = setInterval(subBut, 1000);
-  }
-
-  function subBut() {
-    counter3++;
-    if (counter3 % 2 == 0) {
-      setSubButState(false);
-    } else {
-      setSubButState(true);
-    }
-  }
-
-  function subTimeout() {
-    blinker3 = setInterval(subBut, 1000);
+    blinker2 = setInterval(submitButtonBlink, 1000);
   }
 
   function cleanUp() {
@@ -159,9 +166,9 @@ export default function DiveSiteModal() {
   useEffect(() => {
     if (tutorialRunning) {
       if (itterator2 === 16) {
-        blinker1 = setInterval(pinBut, 600);
+        blinker1 = setInterval(pinButtonBlink, 600);
       } else if (itterator2 === 13) {
-        blinker1 = setInterval(locationBut, 1000);
+        blinker1 = setInterval(locationButtonBlink, 1000);
       } else if (itterator2 === 23) {
         blinker1 = setInterval(siteField, 1000);
         timer2 = setTimeout(subButTimeout, 300);
@@ -178,11 +185,12 @@ export default function DiveSiteModal() {
         }
       }
     }
-  }, [diveSiteAdderModal]);
+  }, [fullScreenModal]);
 
   useEffect(() => {
     if (itterator2 === 10 || itterator2 === 17) {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide")
     }
   }, [itterator2]);
 
@@ -222,7 +230,7 @@ export default function DiveSiteModal() {
       setChosenModal("DiveSite");
       setMapHelper(true);
       setMasterSwitch(false);
-      setDiveSiteAdderModal(false);
+      setFullScreenModal(true);
       if (tutorialRunning) {
         setItterator2(itterator2 + 1);
       }
@@ -276,7 +284,7 @@ export default function DiveSiteModal() {
       if (tutorialRunning) {
         successBoxY.value = withTiming(scale(70));
       } else {
-        insertDiveSiteWaits(addSiteVals);
+        // insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
           ...addSiteVals,
           Site: "",
@@ -296,7 +304,7 @@ export default function DiveSiteModal() {
       } else if (itterator2 === 16) {
         return;
       } else {
-        if (diveSiteAdderModal) {
+        if (fullScreenModal) {
           setAddSiteVals({
             ...addSiteVals,
             Site: "",
@@ -306,7 +314,10 @@ export default function DiveSiteModal() {
         }
       }
     } else {
-      setDiveSiteAdderModal(!diveSiteAdderModal);
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("DiveSiteAdderButton");
+      setLargeModal(!largeModal);
+      setSmallModal(false)
       failBoxY.value = withTiming(scale(1200));
       successBoxY.value = withTiming(scale(1200));
       SetFormValidation({
@@ -314,7 +325,7 @@ export default function DiveSiteModal() {
         LatVal: false,
         LngVal: false,
       });
-      if (diveSiteAdderModal) {
+      if (fullScreenModal) {
         setAddSiteVals({
           ...addSiteVals,
           Site: "",
@@ -328,16 +339,11 @@ export default function DiveSiteModal() {
   const activateGuide = () => {
     if (tutorialRunning) {
     } else {
-      setSecondGuideModal(true);
+      setFullScreenModal(true);
+      setActiveTutorialID("SecondGuide");
       setChapter("DS Help");
     }
   };
-
-  const [locButState, setLocButState] = useState(false);
-  const [pinButState, setPinButState] = useState(false);
-  const [subButState, setSubButState] = useState(false);
-  const [corButState, setCorButState] = useState(false);
-  const [helpButState, setHelpButState] = useState(false);
 
   const successBoxY = useSharedValue(scale(1200));
   const failBoxY = useSharedValue(scale(1200));
@@ -428,10 +434,12 @@ export default function DiveSiteModal() {
             <ModalSecondaryButton
               buttonAction={getCurrentLocation}
               icon={"my-location"}
+              blink={locButState}
             />
             <ModalSecondaryButton
               buttonAction={onNavigate}
               icon={"location-pin"}
+              blink={pinButState}
             />
             <View style={{ marginTop: moderateScale(-30) }}>
               <CompletnessIndicator indicatorState={indicatorState} />
@@ -441,6 +449,7 @@ export default function DiveSiteModal() {
           <SubmitButton
             buttonAction={handleSubmit}
             label={"Submit Dive Site"}
+            blink={subButState}
           />
         </View>
         <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>

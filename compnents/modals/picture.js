@@ -9,13 +9,12 @@ import {
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   insertPhotoLike,
   deletePhotoLike,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
 import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
-import { countPhotoCommentById } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { CommentsModalContext } from "../contexts/commentsModalContext";
@@ -29,13 +28,29 @@ import email from "react-native-email";
 import Share from "react-native-share";
 import notLiked from "../png/Hand-Hollow-Blue.png";
 import liked from "../png/Hand-Filled-Blue.png";
-import bubbles from "../png/bubbles.png";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
-let GoogleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Picture(props) {
   const { pic } = props;
-
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
   const handleEmail = (pic) => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
@@ -64,7 +79,9 @@ export default function Picture(props) {
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
 
   const handleCommentModal = (pic) => {
-    setCommentsModal(true);
+    // setCommentsModal(true);
+    setFullScreenModal(true);
+    setActiveTutorialID("CommentsModal");
     setSelectedPicture(pic);
   };
 
@@ -89,8 +106,10 @@ export default function Picture(props) {
     }
 
     setSelectedProfile(picOwnerAccount[0].UserID)
-    setProfileModal(true)
-
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("UserProfileButton");
+    setLargeModalSecond(!largeModalSecond);
+    setLargeModal(!largeModal)
   };
 
   const convertBase64 = (cacheDir) => {
@@ -119,6 +138,7 @@ export default function Picture(props) {
   const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
 
     let local = await getPhotoLocation(lat, lng);
+
     setMapLocal(local);
     setCreastureN(seaCreature);
     setPhotoDate(picDate);
@@ -127,7 +147,7 @@ export default function Picture(props) {
     } else {
       setUserN("an unnamed diver");
     }
-
+    console.log(userN, local, lat, lng)
     let temp = photofile.split("/");
     let lastIndex = temp.length - 1;
     let fileName = temp[lastIndex];
@@ -164,7 +184,7 @@ export default function Picture(props) {
       url: "",
     };
     if (base64) {
-      shareOptions.message = `Checkout this cool pic of a ${creastureN} on Scuba SEAsons! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing out pics as well!\n\nLearn more about it here:\n${localUri}`;
+      shareOptions.message = `Checkout this cool pic of a ${creastureN} on Scuba SEAsons! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
       shareOptions.url = `data:image/jpg;base64,${base64}`;
       doShare(shareOptions);
     }
@@ -182,7 +202,7 @@ export default function Picture(props) {
             onPress={() =>
               onShare(
                 pic.photofile,
-                pic.newuserame,
+                pic.newusername,
                 pic.label,
                 pic.dateTaken,
                 pic.latitude,
