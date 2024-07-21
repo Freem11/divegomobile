@@ -147,7 +147,6 @@ export default function Picture(props) {
     } else {
       setUserN("an unnamed diver");
     }
-    console.log(userN, local, lat, lng)
     let temp = photofile.split("/");
     let lastIndex = temp.length - 1;
     let fileName = temp[lastIndex];

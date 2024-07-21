@@ -44,8 +44,6 @@ import InsetShadow from "react-native-inset-shadow";
 
 const windowWidth = Dimensions.get("window").width;
 
-console.log(windowWidth);
-
 export default function TripCreatorModal() {
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
   const { setMapHelper } = useContext(MapHelperContext);

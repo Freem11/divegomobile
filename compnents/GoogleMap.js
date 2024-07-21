@@ -438,10 +438,7 @@ export default function Map() {
     mapCenter,
   ]);
 
-  // console.log("at first", mapCenter)
-
   useEffect(() => {
-    console.log("tiggered?", mapCenter);
     if (mapConfig === 1) {
       setDragPin(mapCenter);
     }
