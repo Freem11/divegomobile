@@ -170,7 +170,7 @@ export default function AnchorModal(props) {
     }
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("SiteAnchorIcon");
-    setLargeModal(!largeModal);
+    setLargeModal(false);
   };
 
   const handleSwitch = () => {
@@ -183,10 +183,16 @@ export default function AnchorModal(props) {
       Longitude: String(selectedDiveSite.Longitude),
     });
     setPreviousButtonID(activeButtonID);
+    setLargeModal(false);
+    setLargeModalSecond(true);
     setActiveButtonID("PictureAdderButton");
-    setLargeModalSecond(!largeModalSecond);
-    setLargeModal(!largeModal);
   };
+
+  useEffect(() => {
+    console.log(activeButtonID, largeModalSecond)
+  }, [activeButtonID]);
+
+
 
   const togglePhotoBoxModal = (photo) => {
     setSelectedPhoto(photo);

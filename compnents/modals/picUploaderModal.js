@@ -2,13 +2,14 @@ import {
   StyleSheet,
   View,
   Image,
-  TouchableWithoutFeedback,
   Platform,
   Keyboard,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
   Dimensions,
   ActivityIndicator,
 } from "react-native";
+import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -61,14 +62,14 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function PicUploadModal() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { setActiveTutorialID } = useContext(
-    ActiveTutorialIDContext
-  );
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setChosenModal } = useContext(ModalSelectContext);
 
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
@@ -77,11 +78,11 @@ export default function PicUploadModal() {
   const { setMapHelper } = useContext(MapHelperContext);
 
   const { setMasterSwitch } = useContext(MasterContext);
-  
+
   const [indicatorState, setIndicatorState] = useState(false);
 
   const { pinValues, setPinValues } = useContext(PinContext);
- 
+
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   const [date, setDate] = useState(new Date());
@@ -146,8 +147,6 @@ export default function PicUploadModal() {
     }
   }
 
-
-
   function cleanUp() {
     clearInterval(blinker);
     setDatButState(false);
@@ -161,7 +160,7 @@ export default function PicUploadModal() {
 
   useEffect(() => {
     if (tutorialRunning) {
-       if (itterator3 === 11) {
+      if (itterator3 === 11) {
         blinker = setInterval(calendarButtonBlink, 1000);
       } else if (itterator3 === 14) {
         blinker = setInterval(animalField, 1000);
@@ -253,6 +252,7 @@ export default function PicUploadModal() {
   }, []);
 
   const showDatePicker = () => {
+    console.log("yo");
     Keyboard.dismiss();
     setDatePickerVisible(true);
   };
@@ -585,7 +585,7 @@ export default function PicUploadModal() {
           <View
             style={{
               flexDirection: "row",
-              marginTop: "-1%",
+              marginTop: "0%",
               marginBottom: "1%",
             }}
           >
@@ -597,92 +597,85 @@ export default function PicUploadModal() {
 
             <CompletnessIndicator indicatorState={indicatorState} />
           </View>
-          <View style={styles.lowerZone}>
-            <View style={styles.fields}>
-              <View style={styles.dateField}>
-                <InputField
-                  validationItem={formValidation.DateVal}
-                  placeHolderText={"Date"}
-                  inputValue={pinValues.PicDate}
-                  keyboardType={"default"}
-                  onChangeText={(text) =>
-                    setPinValues({ ...pinValues, PicDate: text })
-                  }
-                />
-              </View>
 
+          <View style={styles.lowerZone}>
+            <View style={styles.dateField}>
+              <Toucher
+                onPress={() => showDatePicker()}
+                style={{
+                  marginTop: moderateScale(10),
+                  marginBottom: moderateScale(10),
+                }}
+              >
+                <View pointerEvents="none">
+                  <InputField
+                    validationItem={formValidation.DateVal}
+                    placeHolderText={"Date"}
+                    inputValue={pinValues.PicDate}
+                    keyboardType={"default"}
+                  />
+                </View>
+              </Toucher>
+            </View>
+
+            <View style={styles.animalField}>
               <AnimalAutoSuggest
                 pin={pinValues}
                 setPin={setPinValues}
                 formValidation={formValidation}
                 SetFormValidation={SetFormValidation}
               />
-
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={GPSKeyBoardOffset1}
-                style={styles.autocompleteA}
-              >
-                <View style={styles.latField}>
-                  <InputField
-                    validationItem={formValidation.LatVal}
-                    placeHolderText={"Latitude"}
-                    inputValue={pinValues.Latitude}
-                    keyboardType={"numbers-and-punctuation"}
-                    onChangeText={(text) =>
-                      setPinValues({ ...pinValues, Latitude: text })
-                    }
-                  />
-                </View>
-              </KeyboardAvoidingView>
-
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={GPSKeyBoardOffset2}
-                style={styles.autocompleteB}
-              >
-                <View style={styles.lngField}>
-                  <InputField
-                    validationItem={formValidation.LngVal}
-                    placeHolderText={"Longitude"}
-                    inputValue={pinValues.Longitude}
-                    keyboardType={"numbers-and-punctuation"}
-                    onChangeText={(text) =>
-                      setPinValues({ ...pinValues, Longitude: text })
-                    }
-                  />
-                </View>
-              </KeyboardAvoidingView>
             </View>
 
-            <View style={styles.smallButtons}>
-              <View style={styles.dateButton}>
-                <ModalSecondaryButton
-                  buttonAction={showDatePicker}
-                  icon={"calendar-month"}
-                  blink={datButState}
-                />
-                <DateTimePickerModal
-                  isVisible={datePickerVisible}
-                  mode="date"
-                  onConfirm={handleConfirm}
-                  onCancel={hideDatePicker}
-                />
-              </View>
-
-              <View style={styles.animalButton}></View>
-
-              <View style={styles.latLngButton}>
-                <ModalSecondaryButton
-                  buttonAction={onNavigate}
-                  icon={"location-pin"}
-                  blink={corButState}
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={GPSKeyBoardOffset1}
+              style={styles.autocompleteA}
+            >
+              <View style={styles.latField}>
+                <InputField
+                  validationItem={formValidation.LatVal}
+                  placeHolderText={"Latitude"}
+                  inputValue={pinValues.Latitude}
+                  keyboardType={"numbers-and-punctuation"}
+                  onChangeText={(text) =>
+                    setPinValues({ ...pinValues, Latitude: text })
+                  }
                 />
               </View>
-            </View>
+            </KeyboardAvoidingView>
+
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={GPSKeyBoardOffset2}
+              style={styles.autocompleteB}
+            >
+              <View style={styles.lngField}>
+                <InputField
+                  validationItem={formValidation.LngVal}
+                  placeHolderText={"Longitude"}
+                  inputValue={pinValues.Longitude}
+                  keyboardType={"numbers-and-punctuation"}
+                  onChangeText={(text) =>
+                    setPinValues({ ...pinValues, Longitude: text })
+                  }
+                />
+              </View>
+            </KeyboardAvoidingView>
           </View>
 
-          <SubmitButton buttonAction={handleSubmit} label={"Submit Photo"} blink={subButState} />
+          <SubmitButton
+            buttonAction={handleSubmit}
+            label={"Submit Photo"}
+            blink={subButState}
+          />
+
+          <DateTimePickerModal
+            isVisible={datePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
         </View>
         <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
           <SuccessModal
@@ -740,11 +733,13 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   lowerZone: {
-    flexDirection: "row",
-    marginTop: windowWidth > 700 ? moderateScale(15) : moderateScale(20),
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: windowWidth > 700 ? moderateScale(25) : moderateScale(20),
     width: windowWidth > 700 ? "80%" : "100%",
     // backgroundColor: "green",
-    height: "32%",
+    height: "35%",
   },
   fields: {
     flexDirection: "column",
@@ -753,54 +748,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     // backgroundColor: "orange",
     height: "100%",
-    width: "70%",
-  },
-  smallButtons: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "space-evenly",
-    marginTop: windowWidth > 700 ? scale(15) : scale(20),
-    // backgroundColor: "pink",
-    height: "100%",
-    width: "25%",
+    width: "100%",
   },
   dateField: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     width: "80%",
     height: "25%",
     // backgroundColor: "yellow",
     marginBottom: scale(5),
   },
-  dateButton: {
-    width: "80%",
-    height: "25%",
-    // backgroundColor: "yellow"
-  },
   animalField: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    // backgroundColor: "pink",
-    width: "80%",
-    height: "25%",
-    // marginTop: scale(-40),
-    // marginTop: Platform.OS == "android" ? 7 : scale(-40),
-    // marginBottom: Platform.OS == "android" ? -4 : scale(-20)
-  },
-  animalButton: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "80%",
+    // backgroundColor: "#538bdb",
+    width: "73%",
     height: "25%",
-    zIndex: -1,
-    // backgroundColor: "maroon"
   },
   latField: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     width: "100%",
     // height: "25%",
@@ -809,7 +778,7 @@ const styles = StyleSheet.create({
   },
   lngField: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     width: "100%",
     // height: "25%",
