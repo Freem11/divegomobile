@@ -188,12 +188,6 @@ export default function AnchorModal(props) {
     setActiveButtonID("PictureAdderButton");
   };
 
-  useEffect(() => {
-    console.log(activeButtonID, largeModalSecond)
-  }, [activeButtonID]);
-
-
-
   const togglePhotoBoxModal = (photo) => {
     setSelectedPhoto(photo);
     setFullScreenModal(true);
