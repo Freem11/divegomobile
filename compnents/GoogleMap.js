@@ -390,6 +390,7 @@ export default function Map() {
   };
 
   const updateMapCenter = async () => {
+    handleMapChange()
     if (mapRef) {
       let currentMapPosition = await mapRef.getCamera();
       if (currentMapPosition) {
@@ -603,7 +604,7 @@ export default function Map() {
         minZoomLevel={1}
         ref={(ref) => setMapRef(ref)}
         onMapReady={() => handleMapChange()}
-        onRegionChangeComplete={() => handleMapChange()}
+        onRegionChangeComplete={() => updateMapCenter()}
         toolbarEnabled={false}
         onPress={clearModals}
       >
