@@ -42,8 +42,20 @@ import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "./../supabaseCalls/photoSupabaseCalls";
-import MapView, { PROVIDER_GOOGLE, Marker, Heatmap, Callout } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Platform, Keyboard, Text } from "react-native";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Marker,
+  Heatmap,
+  Callout,
+} from "react-native-maps";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Platform,
+  Keyboard,
+  Text,
+} from "react-native";
 import mantaIOS from "../compnents/png/mapIcons/Manta_60.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
@@ -53,7 +65,10 @@ import shopClustIOS from "../compnents/png/mapIcons/DiveCentre60x60.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
-import { getDiveSitesWithUser } from "../supabaseCalls/diveSiteSupabaseCalls";
+import {
+  getDiveSitesWithUser,
+  getSingleDiveSiteByNameAndRegion,
+} from "../supabaseCalls/diveSiteSupabaseCalls";
 import {
   getHeatPointsWithUser,
   getHeatPointsWithUserEmpty,
@@ -485,7 +500,7 @@ export default function Map() {
   }
 
   const shopPoints = setupShopClusters(newShops);
-  const sitePoints = setupClusters(newSites, sitesArray);
+  let sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
   shopPoints.forEach((entity) => {
@@ -545,6 +560,31 @@ export default function Map() {
     setCommentsModal(false);
     setTiles(true);
     setSelectedPicture(null);
+  };
+
+  const addToSitesArray = async (siteName) => {
+    let splitNames = siteName.split("~");
+    let grabbedSite = await getSingleDiveSiteByNameAndRegion({
+      name: splitNames[0],
+      region: splitNames[1],
+    });
+    sitesArray.push(grabbedSite[0].id);
+    setSitesArray(sitesArray)
+    handleMapChange()
+  };
+
+  const removeFromSitesArray = async (siteName) => {
+    let splitNames = siteName.split("~");
+    let grabbedSite = await getSingleDiveSiteByNameAndRegion({
+      name: splitNames[0],
+      region: splitNames[1],
+    });
+    const index = sitesArray.indexOf(grabbedSite[0].id);
+    if (index > -1) {
+      sitesArray.splice(index, 1);
+    }
+    setSitesArray(sitesArray)
+    handleMapChange()
   };
 
   return (
@@ -630,19 +670,38 @@ export default function Map() {
                 image={anchorIconIOS}
                 onPress={() =>
                   mapConfig === 3
-                    ? null
+                    ? addToSitesArray(cluster.properties.siteID)
                     : setupAnchorModal(
-                      cluster.properties.siteID,
+                        cluster.properties.siteID,
                         latitude,
                         longitude
                       )
                 }
-              > 
-              {  mapConfig === 3 ? <Callout tooltip>
-                <View style={{marginBottom: moderateScale(5), backgroundColor:'#538bdb', padding: moderateScale(3), paddingLeft: moderateScale(10) , paddingRight: moderateScale(10), borderRadius: moderateScale(20)}}>
-                  <Text style={{color: "white", fontFamily: "Itim_400Regular", fontSize: moderateScale(18)}}>{cluster.properties.siteName}</Text>
-                </View>
-              </Callout> : null}
+              >
+                {mapConfig === 3 ? (
+                  <Callout tooltip>
+                    <View
+                      style={{
+                        marginBottom: moderateScale(5),
+                        backgroundColor: "#538bdb",
+                        padding: moderateScale(3),
+                        paddingLeft: moderateScale(10),
+                        paddingRight: moderateScale(10),
+                        borderRadius: moderateScale(20),
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "white",
+                          fontFamily: "Itim_400Regular",
+                          fontSize: moderateScale(18),
+                        }}
+                      >
+                        {cluster.properties.siteName}
+                      </Text>
+                    </View>
+                  </Callout>
+                ) : null}
               </Marker>
             );
           } else if (cluster.properties.category === "Dive Site Selected") {
@@ -653,13 +712,12 @@ export default function Map() {
                 image={anchorGold}
                 onPress={() =>
                   mapConfig === 3
-                  ? null
-                  :
-                  setupAnchorModal(
-                    cluster.properties.siteName,
-                    latitude,
-                    longitude
-                  )
+                    ? removeFromSitesArray(cluster.properties.siteID)
+                    : setupAnchorModal(
+                        cluster.properties.siteName,
+                        latitude,
+                        longitude
+                      )
                 }
               ></Marker>
             );
