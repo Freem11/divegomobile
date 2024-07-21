@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { MapConfigContext } from './contexts/mapConfigContext';
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { TutorialContext } from "./contexts/tutorialContext";
@@ -43,7 +44,7 @@ import {
 } from "./../supabaseCalls/photoSupabaseCalls";
 import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
 import { StyleSheet, View, Dimensions, Platform, Keyboard } from "react-native";
-import mantaIOS from "../compnents/png/Manta32.png";
+import mantaIOS from "../compnents/png/mapIcons/Manta_60.png"
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
@@ -74,6 +75,7 @@ export default function Map() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
+  const { mapConfig, setMapConfig } =useContext(MapConfigContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
@@ -472,11 +474,14 @@ export default function Map() {
     mapCenter,
   ]);
 
+  // console.log("at first", mapCenter)
+
   useEffect(() => {
-    if (minorSwitch && !masterSwitch) {
+    console.log("tiggered?", mapCenter)
+    if (mapConfig === 1) {
       setDragPin(mapCenter);
     }
-  }, [masterSwitch]);
+  }, [mapConfig]);
 
   useEffect(() => {
     let zoomHelp;
@@ -517,7 +522,6 @@ export default function Map() {
           },
           zoom: zoomHelp,
         });
-        // Keyboard.dismiss();
       }
     }
   }, [mapCenter]);
@@ -586,6 +590,7 @@ export default function Map() {
 
   const [siteCloseState, setSiteCloseState] = useState(false);
 
+  // console.log("config", mapConfig)
   return (
     <View style={styles.container}>
       <MapView
@@ -620,8 +625,10 @@ export default function Map() {
           />
         )}
 
-        {!masterSwitch && minorSwitch && (
-          <Marker
+        {/* {!masterSwitch && minorSwitch && ( */}
+
+          {mapConfig === 1 ?
+            <Marker
             draggable={true}
             coordinate={{
               latitude: dragPin.lat,
@@ -634,8 +641,9 @@ export default function Map() {
                 lng: e.nativeEvent.coordinate.longitude,
               });
             }}
-          />
-        )}
+          /> : null}
+     
+        {/* )} */}
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;

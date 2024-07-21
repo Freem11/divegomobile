@@ -4,6 +4,7 @@ import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 import { MasterContext } from "../contexts/masterContext";
+import { MapConfigContext } from '../contexts/mapConfigContext';
 import { LargeModalContext } from "../contexts/largeModalContext";
 import MaterialCommunityIconsButton from "../reusables/materialCommunityIconsButton";
 import { useMapFlip } from './hooks';
@@ -26,6 +27,7 @@ export default function Itinerary(props) {
     buttonTwoText,
     buttonTwoIcon,
   } = props;
+  const { mapConfig, setMapConfig } =useContext(MapConfigContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { setZoomHelper } = useContext(ZoomHelperContext);
@@ -80,7 +82,7 @@ export default function Itinerary(props) {
         <View style={styles.buttonBox}>
           <MaterialCommunityIconsButton
             icon={buttonOneIcon}
-            buttonAction={() => useMapFlip(itinerary.siteList, setSitesArray, setZoomHelper, setLargeModal, setMasterSwitch, setMapCenter)}
+            buttonAction={() => useMapFlip(itinerary.siteList, setSitesArray, setZoomHelper, setLargeModal, setMapConfig, setMapCenter)}
             iconColour="gold"
             buttonText={buttonOneText}
           />

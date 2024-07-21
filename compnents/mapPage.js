@@ -34,6 +34,8 @@ import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
 import PhotoFilterer from "./photoMenu/photoFilter";
+import PrimaryButton from "../compnents/reusables/primaryButton";
+import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { MasterContext } from "./contexts/masterContext";
@@ -86,14 +88,19 @@ export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
+  const { mapConfig, setMapConfig } = useContext(MapConfigContext);
   const { setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
   );
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
   const { setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { activeTutorialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
   const { itterator, setItterator } = useContext(IterratorContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
 
@@ -284,9 +291,10 @@ export default function MapPage() {
         });
         setMapHelper(true);
         setMasterSwitch(true);
+        setMapConfig(0);
         setActiveButtonID("DiveSiteAdderButton");
         setLargeModal(!largeModal);
-        setItterator2(itterator2 + 1);
+        // setItterator2(itterator2 + 1);
         setChosenModal(null);
       } else if (chosenModal === "Photos") {
         setPinValues({
@@ -307,10 +315,16 @@ export default function MapPage() {
     setLargeModal(true);
     setActiveButtonID("ShopMaskIcon");
     setMapHelper(true);
-    setMasterSwitch(true);
-    setMinorSwitch(true);
+    setMapConfig(0);
     setZoomHelper(true);
     setSitesArray([]);
+  };
+
+  const onTripSetNavigate = () => {
+    setLargeModalSecond(true);
+    setActiveButtonID("TripCreator");
+    setMapHelper(true);
+    setMapConfig(0);
   };
 
   useEffect(() => {
@@ -368,9 +382,8 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const {
-      status: existingStatus,
-    } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
@@ -470,7 +483,8 @@ export default function MapPage() {
               </View>
             )}
 
-            {masterSwitch && (
+
+{mapConfig in [,,2] || !mapConfig? (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
                 <PhotoMenu style={{ zIndex: 3 }} />
                 <View style={styles.filterer} pointerEvents={"box-none"}>
@@ -493,7 +507,7 @@ export default function MapPage() {
                   </View>
                 </View>
               </View>
-            )}
+            ): null}
 
             {masterSwitch && (
               <TouchableWithoutFeedback onPress={startTagAnimations}>
@@ -506,7 +520,7 @@ export default function MapPage() {
               </TouchableWithoutFeedback>
             )}
 
-            {masterSwitch && (
+            {mapConfig === 0 ? (
               <Animated.View
                 style={[styles.FMenuAnimate, tabFY]}
                 pointerEvents={"box-none"}
@@ -578,77 +592,40 @@ export default function MapPage() {
                   <FABMenu style={{ zIndex: 2 }} />
                 </View>
               </Animated.View>
-            )}
+            ) : null}
 
-            {!masterSwitch && minorSwitch && (
-              <View
-                style={subButState ? styles.PinButtonPressed : styles.PinButton}
-              >
-                <TouchableOpacity
-                  style={{
-                    // backgroundColor: "orange",
-                    width: scale(200),
-                    height: scale(30),
-                  }}
-                  onPress={onNavigate}
-                  onPressIn={() => setSubButState(true)}
-                  onPressOut={() => setSubButState(false)}
-                >
-                  <Text
-                    style={{
-                      color: "gold",
-                      fontFamily: "PatrickHand_400Regular",
-                      fontSize: scale(22),
-                      width: "100%",
-                      height: "120%",
-                      textAlign: "center",
-                      marginTop: -5,
-                      borderRadius: scale(15),
-                    }}
-                  >
-                    Set Pin
-                  </Text>
-                </TouchableOpacity>
+            {mapConfig in [, 1, 2, 3] ? (
+              <View style={styles.lowerButtonWrapper}>
+                <PrimaryButton
+                  label={
+                    mapConfig === 1
+                      ? "Set Pin"
+                      : mapConfig === 2
+                      ? "Return to Shop"
+                      : mapConfig === 3
+                      ? "Sites Complete"
+                      : null
+                  }
+                  buttonAction={
+                    mapConfig === 1
+                      ? onNavigate
+                      : mapConfig === 2
+                      ? onShopNavigate
+                      : mapConfig === 3
+                      ? onTripSetNavigate
+                      : null
+                  }
+                />
               </View>
-            )}
+            ) : null}
 
-            {!masterSwitch && !minorSwitch && (
-              <View
-                style={subButState ? styles.PinButtonPressed : styles.PinButton}
-              >
-                <TouchableOpacity
-                  style={{
-                    // backgroundColor: "orange",
-                    width: scale(200),
-                    height: scale(30),
-                  }}
-                  onPress={onShopNavigate}
-                  onPressIn={() => setSubButState(true)}
-                  onPressOut={() => setSubButState(false)}
-                >
-                  <Text
-                    style={{
-                      color: "gold",
-                      fontFamily: "PatrickHand_400Regular",
-                      fontSize: scale(22),
-                      width: "100%",
-                      height: "120%",
-                      textAlign: "center",
-                      marginTop: -5,
-                      borderRadius: scale(15),
-                    }}
-                  >
-                    Return to Shop
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+   
 
-            {masterSwitch && (
+            {mapConfig === 0 ? (
               <View style={styles.Hist} pointerEvents={"none"}>
                 <Historgram style={{ zIndex: 2 }} />
               </View>
-            )}
+            ) : null}
 
             <AnimatedModalSmall />
             <AnimatedModalLarge />
@@ -708,26 +685,12 @@ const styles = StyleSheet.create({
     height: moderateScale(65),
     zIndex: 3,
   },
-  PinButton: {
+  lowerButtonWrapper: {
     position: "absolute",
     alignItems: "center",
     textAlign: "center",
     bottom: scale(28),
-    backgroundColor: "#538dbd",
-    borderRadius: scale(10),
-    marginBottom: 0,
-    width: "50%",
-    height: scale(30),
     zIndex: 2,
-    paddingTop: 3,
-    shadowOffset: {
-      width: 3,
-      height: 3,
-    },
-    shadowOpacity: 0.9,
-    shadowRadius: 5,
-
-    elevation: 10,
   },
   PinButtonPressed: {
     position: "absolute",

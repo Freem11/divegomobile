@@ -28,6 +28,8 @@ import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { MapHelperContext } from "../contexts/mapHelperContext";
+import { MapConfigContext } from "../contexts/mapConfigContext";
 import moment from "moment";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import InputFieldLg from "../reusables/textInputLarge";
@@ -42,9 +44,11 @@ import InsetShadow from "react-native-inset-shadow";
 
 const windowWidth = Dimensions.get("window").width;
 
-console.log(windowWidth)
+console.log(windowWidth);
 
 export default function TripCreatorModal() {
+  const { mapConfig, setMapConfig } = useContext(MapConfigContext);
+  const { setMapHelper } = useContext(MapHelperContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
@@ -179,6 +183,13 @@ export default function TripCreatorModal() {
     setFormValues({ ...formValues, Price: value });
   }, [value]);
 
+  const onNavigate = () => {
+    Keyboard.dismiss();
+    setMapHelper(true);
+    setMapConfig(3);
+    setLargeModalSecond(false);
+  };
+
   return (
     <View style={styles.container}>
       <ModalHeader
@@ -204,7 +215,6 @@ export default function TripCreatorModal() {
           inputValue={formValues.BookingLink}
           keyboardType={"default"}
         />
-
 
         <View style={styles.statsContainer}>
           <View style={styles.leftSide}>
@@ -253,11 +263,16 @@ export default function TripCreatorModal() {
           <View style={styles.rightSide}>
             <ListHeader
               titleText="Possible Sites in this Trip"
-              buttonAction={showDatePicker}
+              buttonAction={onNavigate}
               buttonText={"Select Sites"}
             />
             <ScrollView
-              style={{ width: "102%", height: moderateScale(200), paddingLeft: moderateScale(5), borderRadius: moderateScale(15) }}
+              style={{
+                width: "102%",
+                height: moderateScale(200),
+                paddingLeft: moderateScale(5),
+                borderRadius: moderateScale(15),
+              }}
             >
               {tripDiveSites.map((site) => {
                 if (site.region) {
@@ -270,58 +285,73 @@ export default function TripCreatorModal() {
                   );
                 } else {
                   return (
-                    <ListItem key={site.id} titleText={`${site.name}`} buttonAction={site} />
+                    <ListItem
+                      key={site.id}
+                      titleText={`${site.name}`}
+                      buttonAction={site}
+                    />
                   );
                 }
               })}
             </ScrollView>
           </View>
         </View>
-        <View style={{width: "100%", marginTop: moderateScale(20), marginBottom: moderateScale(20)}}>
-        <InsetShadow
-          containerStyle={{
-            backgroundColor: "transparent",
-            borderRadius: moderateScale(15),
-            height: moderateScale(200),
-            width: "90%",
-            marginLeft: "5%",
-            alignItems: "center",
-            justifyContent: "center",
+        <View
+          style={{
+            width: "100%",
+            marginTop: moderateScale(20),
+            marginBottom: moderateScale(20),
           }}
-          elevation={20}
-          shadowRadius={15}
-          shadowOpacity={0.3}
         >
-          <TextInput
-            style={{
-              width: "90%",
-              height: moderateScale(180),
+          <InsetShadow
+            containerStyle={{
+              backgroundColor: "transparent",
               borderRadius: moderateScale(15),
-              margin: moderateScale(5),
-              textAlign: "center",
-              fontFamily: "Itim_400Regular",
-              // backgroundColor: "purple"
+              height: moderateScale(200),
+              width: "90%",
+              marginLeft: "5%",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-            value={formValues.TripDesc}
-            placeholder={"Trip Details"}
-            placeholderTextColor="darkgrey"
-            keyboardType={"default"}
-            color={"#F0EEEB"}
-            fontSize={moderateScale(18)}
-            multiline={true}
-            onChangeText={(text) =>
-              setFormValues({ ...formValues, TripDesc: text })
-            }
-          ></TextInput>
-        </InsetShadow>
+            elevation={20}
+            shadowRadius={15}
+            shadowOpacity={0.3}
+          >
+            <TextInput
+              style={{
+                width: "90%",
+                height: moderateScale(180),
+                borderRadius: moderateScale(15),
+                margin: moderateScale(5),
+                textAlign: "center",
+                fontFamily: "Itim_400Regular",
+                // backgroundColor: "purple"
+              }}
+              value={formValues.TripDesc}
+              placeholder={"Trip Details"}
+              placeholderTextColor="darkgrey"
+              keyboardType={"default"}
+              color={"#F0EEEB"}
+              fontSize={moderateScale(18)}
+              multiline={true}
+              onChangeText={(text) =>
+                setFormValues({ ...formValues, TripDesc: text })
+              }
+            ></TextInput>
+          </InsetShadow>
         </View>
-
-
-
       </ScrollView>
 
-<View style={{zIndex: 2, alignItems: "center", backgroundColor: "#538bdb", width: "100%", height: "6%"}}>
-      <SubmitButton buttonAction={handleSubmit} label={"Submit Trip"} />
+      <View
+        style={{
+          zIndex: 2,
+          alignItems: "center",
+          backgroundColor: "#538bdb",
+          width: "100%",
+          height: "6%",
+        }}
+      >
+        <SubmitButton buttonAction={handleSubmit} label={"Submit Trip"} />
       </View>
       <DateTimePickerModal
         isVisible={datePickerVisible}
@@ -365,7 +395,7 @@ const styles = StyleSheet.create({
     maxHeight: moderateScale(250),
     // backgroundColor: "blue",
     margin: moderateScale(2),
-    marginBottom: moderateScale(20)
+    marginBottom: moderateScale(20),
   },
   rightSide: {
     width: "50%",
@@ -373,7 +403,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     minWidth: moderateScale(200),
     // backgroundColor: "green",
-    margin: moderateScale(2)
+    margin: moderateScale(2),
   },
   labelBox: {
     flexDirection: "row",

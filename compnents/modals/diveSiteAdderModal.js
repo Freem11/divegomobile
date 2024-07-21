@@ -26,7 +26,7 @@ import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
-import { MasterContext } from "../contexts/masterContext";
+import { MapConfigContext } from '../contexts/mapConfigContext';
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
@@ -50,6 +50,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteModal() {
+  const { mapConfig, setMapConfig } =useContext(MapConfigContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
@@ -79,7 +80,6 @@ export default function DiveSiteModal() {
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-  const { setMasterSwitch } = useContext(MasterContext);
 
   const [formValidation, SetFormValidation] = useState({
     SiteNameVal: false,
@@ -99,9 +99,6 @@ export default function DiveSiteModal() {
   const [locButState, setLocButState] = useState(false);
   const [pinButState, setPinButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-  const [corButState, setCorButState] = useState(false);
-  const [helpButState, setHelpButState] = useState(false);
-
 
   function locationButtonBlink() {
     counter1++;
@@ -229,8 +226,9 @@ export default function DiveSiteModal() {
     } else {
       setChosenModal("DiveSite");
       setMapHelper(true);
-      setMasterSwitch(false);
-      setFullScreenModal(true);
+      setMapConfig(1);
+      setLargeModal(false);
+      // setFullScreenModal(true);
       if (tutorialRunning) {
         setItterator2(itterator2 + 1);
       }

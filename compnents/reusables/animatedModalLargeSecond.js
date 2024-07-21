@@ -67,8 +67,6 @@ export default function AnimatedModalLargeSecond(props) {
   }
   }, [largeModalSecond]);
 
-  console.log(activeButtonID, largeModalSecond)
-
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeButtonID === "UserProfileButton" && <UserProfileModal />}

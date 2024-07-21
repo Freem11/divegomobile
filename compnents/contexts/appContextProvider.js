@@ -57,8 +57,10 @@ import SmallModalContextProvider from './smallModalContext';
 import LargeModalContextProvider from './largeModalContext';
 import LargeModalSecondContextProvider from './largeModalSecondContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
+import MapConfigContextProvider from './mapConfigContext';
 
 const providers = [
+    MapConfigContextProvider,
     DiveSiteSearchModalContextProvider,
     MapSearchModalContextProvider,
     ZoomHelperContextProvider,
