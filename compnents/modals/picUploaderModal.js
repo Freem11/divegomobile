@@ -103,8 +103,7 @@ export default function PicUploadModal() {
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-  const [helpButState, setHelpButState] = useState(false);
-
+  
   function calendarButtonBlink() {
     counter++;
     if (counter % 2 == 0) {
@@ -190,22 +189,6 @@ export default function PicUploadModal() {
     }
   }, [itterator3]);
 
-  const onNavigate = () => {
-    Keyboard.dismiss();
-    setChosenModal("Photos");
-    setMapHelper(true);
-    setMasterSwitch(false);
-    if (!tutorialRunning) {
-      setLargeModalSecond(false);
-    }
-    if (tutorialRunning) {
-      if (itterator3 === 16) {
-        setLargeModalSecond(false);
-        setItterator3(itterator3 + 1);
-      }
-    }
-  };
-
   useEffect(() => {
     let formattedDate = moment(date).format("YYYY-MM-DD");
     setPinValues({ ...pinValues, PicDate: formattedDate });
@@ -252,7 +235,6 @@ export default function PicUploadModal() {
   }, []);
 
   const showDatePicker = () => {
-    console.log("yo");
     Keyboard.dismiss();
     setDatePickerVisible(true);
   };
@@ -261,8 +243,10 @@ export default function PicUploadModal() {
     setDatePickerVisible(false);
   };
 
-  const handleConfirm = (date) => {
-    let formattedDate = moment(date).format("YYYY-MM-DD");
+  const handleConfirm = (passedDate) => {
+    let formattedDate = moment(passedDate).format("YYYY-MM-DD");
+    if (passedDate > date) return;
+    
     setPinValues({ ...pinValues, PicDate: formattedDate });
     if (tutorialRunning) {
       if (itterator3 === 11) {
@@ -336,7 +320,7 @@ export default function PicUploadModal() {
       if (tutorialRunning) {
         successBoxY.value = withTiming(scale(70));
       } else {
-        // insertPhotoWaits(pinValues);
+        insertPhotoWaits(pinValues);
         setPinValues({
           ...pinValues,
           PicFile: null,
@@ -437,7 +421,7 @@ export default function PicUploadModal() {
       ) {
         return;
       } else {
-        setLargeModalSecond(!largeModalSecond);
+        setLargeModalSecond(false);
         if (pinValues.PicFile !== null) {
           removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
@@ -462,7 +446,7 @@ export default function PicUploadModal() {
     } else {
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("PictureAdderButton");
-      setLargeModalSecond(!largeModalSecond);
+      setLargeModalSecond(false);
       failBoxY.value = withTiming(scale(1200));
       successBoxY.value = withTiming(scale(1200));
       SetFormValidation({
@@ -741,29 +725,18 @@ const styles = StyleSheet.create({
     // backgroundColor: "green",
     height: "35%",
   },
-  fields: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "space-evenly",
-    // backgroundColor: "orange",
-    height: "100%",
-    width: "100%",
-  },
   dateField: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     width: "80%",
     height: "25%",
-    // backgroundColor: "yellow",
     marginBottom: scale(5),
   },
   animalField: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "#538bdb",
     width: "73%",
     height: "25%",
   },
@@ -772,48 +745,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    // height: "25%",
-    // zIndex: -1,
-    // backgroundColor: "blue",
   },
   lngField: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    // height: "25%",
-    // zIndex: 2,
-    // backgroundColor: "green",
-  },
-  latLngButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "80%",
-    height: "50%",
-    // backgroundColor: "green",
   },
   autocompleteA: {
     width: "80%",
     height: "25%",
     alignSelf: "center",
     justifyContent: "center",
-    // alignItems: "center",
-    // backgroundColor: "maroon",
-    // marginLeft: scale(-10),
     marginTop: scale(5),
-    // zIndex: 1
   },
   autocompleteB: {
     width: "80%",
     height: "25%",
     alignSelf: "center",
     justifyContent: "center",
-    // alignItems: "center",
-    // backgroundColor: "pink",
-    // marginLeft: scale(-10),
     marginTop: scale(5),
-    //zIndex: 1
   },
   imgStyle: {
     width: "101%",
@@ -831,20 +782,5 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
   },
-  ImageUploadIndicatorGreen: {
-    backgroundColor: "lightgreen",
-    height: moderateScale(15),
-    width: moderateScale(15),
-    borderRadius: moderateScale(15),
-    marginLeft: moderateScale(20),
-    marginTop: windowWidth > 700 ? moderateScale(25) : moderateScale(30),
-  },
-  ImageUploadIndicatorRed: {
-    backgroundColor: "red",
-    height: moderateScale(15),
-    width: moderateScale(15),
-    borderRadius: moderateScale(15),
-    marginLeft: moderateScale(20),
-    marginTop: windowWidth > 700 ? moderateScale(25) : moderateScale(30),
-  },
+
 });
