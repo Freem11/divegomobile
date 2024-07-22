@@ -58,6 +58,7 @@ import LargeModalContextProvider from './largeModalContext';
 import LargeModalSecondContextProvider from './largeModalSecondContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
 import MapConfigContextProvider from './mapConfigContext';
+import ShopContextProvider from './shopContext';
 
 const providers = [
     MapConfigContextProvider,
@@ -117,7 +118,8 @@ const providers = [
     SmallModalContextProvider,
     LargeModalContextProvider,
     LargeModalSecondContextProvider,
-    FullScreenModalContextProvider
+    FullScreenModalContextProvider,
+    ShopContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

@@ -18,7 +18,7 @@ import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
-import { getItineraryDiveSiteByIdArray } from "../../supabaseCalls/itinerarySupabaseCalls";
+import { getItineraryDiveSiteByIdArray, insertItinerary } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
@@ -31,6 +31,7 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
+import { ShopContext } from '../contexts/shopContext';
 import moment from "moment";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import InputFieldLg from "../reusables/textInputLarge";
@@ -47,6 +48,7 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function TripCreatorModal() {
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
+  const { shop, setShop } = useContext(ShopContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
@@ -57,14 +59,7 @@ export default function TripCreatorModal() {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { profile } = useContext(UserProfileContext);
-  const [nameChangerState, setNameChangerState] = useState(false);
   const [tripDiveSites, setTripDiveSites] = useState([]);
-  const { setProfileModal } = useContext(ProfileModalContext);
-  const [userStats, setUserStats] = useState(null);
-  const { selectedProfile, setSelectedProfile } = useContext(
-    SelectedProfileContext
-  );
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [dateType, setDateType] = useState("");
 
@@ -91,7 +86,6 @@ export default function TripCreatorModal() {
 
 
   const removeFromSitesArray = async (siteIdNo) => {
-    console.log("passing", siteIdNo)
     const index = sitesArray.indexOf(siteIdNo);
     if (index > -1) {
       sitesArray.splice(index, 1);
@@ -106,24 +100,6 @@ export default function TripCreatorModal() {
     getTripDiveSites();
   };
 
-  const getProfile = async () => {
-    let userID;
-    if (selectedProfile) {
-      userID = selectedProfile;
-    } else {
-      userID = profile[0].UserID;
-    }
-
-    try {
-      const success = await getProfileWithStats(userID);
-      if (success) {
-        setUserStats(success);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
   const [formValues, setFormValues] = useState({
     BookingLink: "",
     TripName: "",
@@ -131,19 +107,8 @@ export default function TripCreatorModal() {
     EndDate: "",
     Price: 0,
     TripDesc: "",
-    DiveSites: [
-      155,
-      12,
-      10,
-      163,
-      162,
-      158,
-      156,
-      11,
-      159,
-      161,
-    ],
-    ShopId: null,
+    DiveSites: [],
+    ShopId: shop,
   });
 
   const showDatePicker = (value) => {
@@ -184,7 +149,35 @@ export default function TripCreatorModal() {
     setLargeModalSecond(false);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+
+    if (
+      formValues.TripName === "" ||
+      formValues.BookingLink === "" ||
+      formValues.StartDate === "" ||
+      formValues.EndDate === "" ||
+      formValues.Price === 0 ||
+      formValues.TripDesc === "" ||
+      formValues.DiveSites.length === 0
+    ) {
+      // failBoxY.value = withTiming(scale(70));
+      return;
+    } else {
+      insertItinerary(formValues);
+        setFormValues({
+          ...formValues,
+          BookingLink: "",
+          TripName: "",
+          StartDate: "",
+          EndDate: "",
+          Price: 0,
+          TripDesc: "",
+          DiveSites: [],
+        });
+
+        // successBoxY.value = withTiming(scale(70));
+      }
+  };
 
   const { format: formatCurrency } = Intl.NumberFormat("en-Us", {
     currency: "USD",
@@ -232,11 +225,17 @@ export default function TripCreatorModal() {
           placeHolderText={"Trip Name"}
           inputValue={formValues.TripName}
           keyboardType={"default"}
+          onChangeText={(text) =>
+            setFormValues({ ...formValues, TripName: text })
+          }
         />
         <InputFieldLg
           placeHolderText={"Booking Link"}
           inputValue={formValues.BookingLink}
           keyboardType={"default"}
+          onChangeText={(text) =>
+            setFormValues({ ...formValues, BookingLink: text })
+          }
         />
 
         <View style={styles.statsContainer}>

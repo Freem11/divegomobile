@@ -50,3 +50,33 @@ export const getItineraryDiveSiteByIdArray = async (siteIds) => {
     return data;
   }
 };
+
+
+export const insertItinerary = async (values) => {
+
+  console.log("Itinerary add gets ", values)
+
+  const { data, error } = await supabase
+  .from("itineraries")
+  .insert([
+    {
+      shopID: values.ShopId,
+      tripName: values.TripName,
+      startDate: values.StartDate,
+      endDate: values.EndDate,
+      price: values.Price,
+      description: values.TripDesc,
+      siteList: values.DiveSites,
+      BookingPage: values.BookingLink
+    },
+  ]);
+
+  if (error) {
+    console.log("couldn't do it 03,", error);
+  }
+
+  if (data) {
+    return data
+    // console.log(data);
+  }
+};
