@@ -24,6 +24,7 @@ import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
@@ -46,6 +47,7 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function TripCreatorModal() {
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
@@ -68,7 +70,13 @@ export default function TripCreatorModal() {
 
   useEffect(() => {
     getTripDiveSites();
+    setSitesArray(formValues.DiveSites)
   }, []);
+
+  useEffect(() => {
+    setFormValues({ ...formValues, DiveSites: sitesArray})
+    getTripDiveSites();
+  }, [sitesArray.length]);
 
   const getTripDiveSites = async () => {
     try {
@@ -79,6 +87,23 @@ export default function TripCreatorModal() {
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
+  };
+
+
+  const removeFromSitesArray = async (siteIdNo) => {
+    console.log("passing", siteIdNo)
+    const index = sitesArray.indexOf(siteIdNo);
+    if (index > -1) {
+      sitesArray.splice(index, 1);
+     
+    }
+    setSitesArray(sitesArray)
+
+    const indexLocal = formValues.DiveSites.indexOf(siteIdNo);
+    if (indexLocal > -1) {
+      formValues.DiveSites.splice(index, 1);
+    }
+    getTripDiveSites();
   };
 
   const getProfile = async () => {
@@ -107,16 +132,16 @@ export default function TripCreatorModal() {
     Price: 0,
     TripDesc: "",
     DiveSites: [
-      "155",
-      "12",
-      "10",
-      "163",
-      "162",
-      "158",
-      "156",
-      "11",
-      "159",
-      "161",
+      155,
+      12,
+      10,
+      163,
+      162,
+      158,
+      156,
+      11,
+      159,
+      161,
     ],
     ShopId: null,
   });
@@ -278,7 +303,7 @@ export default function TripCreatorModal() {
                     <ListItem
                       key={site.id}
                       titleText={`${site.name} ~ ${site.region}`}
-                      buttonAction={site}
+                      buttonAction={() => removeFromSitesArray(site.id)}
                     />
                   );
                 } else {
@@ -286,7 +311,7 @@ export default function TripCreatorModal() {
                     <ListItem
                       key={site.id}
                       titleText={`${site.name}`}
-                      buttonAction={site}
+                      buttonAction={() => removeFromSitesArray(site.id)}
                     />
                   );
                 }
