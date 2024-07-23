@@ -44,6 +44,13 @@ import SubmitButton from "../reusables/submitButton";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import InsetShadow from "react-native-inset-shadow";
 
+let TripNameVar = false;
+let BookingLinkVar = false;
+let StartDateVar = false;
+let EndDateVar = false;
+let TripDescVar = false;
+let PriceVar = false;
+
 const windowWidth = Dimensions.get("window").width;
 
 export default function TripCreatorModal() {
@@ -111,6 +118,16 @@ export default function TripCreatorModal() {
     ShopId: shop,
   });
 
+  const [formValidation, SetFormValidation] = useState({
+    BookingLinkVal: false,
+    TripNameVal: false,
+    StartDateVal: false,
+    EndDateVal: false,
+    PriceVal: false,
+    TripDescVal: false,
+    DiveSitesVal: false
+  });
+
   const showDatePicker = (value) => {
     setDateType(value);
     Keyboard.dismiss();
@@ -151,6 +168,54 @@ export default function TripCreatorModal() {
 
   const handleSubmit = () => {
 
+    console.log("erhem", formValues)
+
+    if (formValues.TripName === "" || formValues.TripName === null) {
+      TripNameVar = true;
+    } else {
+      TripNameVar = false;
+    }
+
+    if (formValues.BookingLink === "" || formValues.BookingLink === null) {
+      BookingLinkVar = true;
+    } else {
+      BookingLinkVar = false;
+    }
+
+    if (formValues.StartDate === "" || formValues.StartDate === null) {
+      StartDateVar = true;
+    } else {
+      StartDateVar = false;
+    }
+
+    if (formValues.EndDate === "" || formValues.EndDate === null) {
+      EndDateVar = true;
+    } else {
+      EndDateVar = false;
+    }
+
+    if (formValues.TripDesc === "" || formValues.TripDesc === null) {
+      TripDescVar = true;
+    } else {
+      TripDescVar = false;
+    }
+
+    if (formValues.Price === 0 || formValues.Price === "$0.00") {
+      PriceVar = true;
+    } else {
+      PriceVar = false;
+    }
+
+    SetFormValidation({
+      ...formValidation,
+      TripNameVal: TripNameVar,
+      BookingLinkVal: BookingLinkVar,
+      StartDateVal: StartDateVar,
+      EndDateVal: EndDateVar,
+      TripDescVal: TripDescVar,
+      PriceVal: PriceVar
+    });
+
     if (
       formValues.TripName === "" ||
       formValues.BookingLink === "" ||
@@ -174,7 +239,7 @@ export default function TripCreatorModal() {
           TripDesc: "",
           DiveSites: [],
         });
-
+        setValue("$0.00");
         // successBoxY.value = withTiming(scale(70));
       }
   };
@@ -222,6 +287,7 @@ export default function TripCreatorModal() {
         style={styles.bodyContent}
       >
         <InputFieldLg
+         validationItem={formValidation.TripNameVal}
           placeHolderText={"Trip Name"}
           inputValue={formValues.TripName}
           keyboardType={"default"}
@@ -230,6 +296,7 @@ export default function TripCreatorModal() {
           }
         />
         <InputFieldLg
+         validationItem={formValidation.BookingLinkVal}
           placeHolderText={"Booking Link"}
           inputValue={formValues.BookingLink}
           keyboardType={"default"}
@@ -241,12 +308,12 @@ export default function TripCreatorModal() {
         <View style={styles.statsContainer}>
           <View style={styles.leftSide}>
             <InputField
+              validationItem={formValidation.PriceVal}
               placeHolderText={"Price"}
               inputValue={value}
               keyboardType={"numbers-and-punctuation"}
               onChangeText={setValue}
             />
-
             <TouchableWithoutFeedback
               onPress={() => showDatePicker("StartDate")}
               style={{
@@ -256,6 +323,7 @@ export default function TripCreatorModal() {
             >
               <View pointerEvents="none">
                 <InputField
+                  validationItem={formValidation.StartDateVal}
                   placeHolderText={"Start Date"}
                   inputValue={formValues.StartDate}
                   keyboardType={"default"}
@@ -273,6 +341,7 @@ export default function TripCreatorModal() {
             >
               <View pointerEvents="none">
                 <InputField
+                  validationItem={formValidation.EndDateVal}
                   placeHolderText={"End Date"}
                   inputValue={formValues.EndDate}
                   keyboardType={"default"}
@@ -347,7 +416,7 @@ export default function TripCreatorModal() {
                 margin: moderateScale(5),
                 textAlign: "center",
                 fontFamily: "Itim_400Regular",
-                // backgroundColor: "purple"
+                backgroundColor: formValidation.TripDescVal ? "pink" : "transparent"
               }}
               value={formValues.TripDesc}
               placeholder={"Trip Details"}
