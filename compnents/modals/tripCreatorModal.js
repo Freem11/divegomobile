@@ -18,7 +18,10 @@ import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
-import { getItineraryDiveSiteByIdArray, insertItinerary } from "../../supabaseCalls/itinerarySupabaseCalls";
+import {
+  getItineraryDiveSiteByIdArray,
+  insertItinerary,
+} from "../../supabaseCalls/itinerarySupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
@@ -31,7 +34,7 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
-import { ShopContext } from '../contexts/shopContext';
+import { ShopContext } from "../contexts/shopContext";
 import moment from "moment";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import InputFieldLg from "../reusables/textInputLarge";
@@ -72,11 +75,11 @@ export default function TripCreatorModal() {
 
   useEffect(() => {
     getTripDiveSites();
-    setSitesArray(formValues.DiveSites)
+    setSitesArray(formValues.DiveSites);
   }, []);
 
   useEffect(() => {
-    setFormValues({ ...formValues, DiveSites: sitesArray})
+    setFormValues({ ...formValues, DiveSites: sitesArray });
     getTripDiveSites();
   }, [sitesArray.length]);
 
@@ -91,14 +94,12 @@ export default function TripCreatorModal() {
     }
   };
 
-
   const removeFromSitesArray = async (siteIdNo) => {
     const index = sitesArray.indexOf(siteIdNo);
     if (index > -1) {
       sitesArray.splice(index, 1);
-     
     }
-    setSitesArray(sitesArray)
+    setSitesArray(sitesArray);
 
     const indexLocal = formValues.DiveSites.indexOf(siteIdNo);
     if (indexLocal > -1) {
@@ -125,7 +126,7 @@ export default function TripCreatorModal() {
     EndDateVal: false,
     PriceVal: false,
     TripDescVal: false,
-    DiveSitesVal: false
+    DiveSitesVal: false,
   });
 
   const showDatePicker = (value) => {
@@ -167,8 +168,7 @@ export default function TripCreatorModal() {
   };
 
   const handleSubmit = () => {
-
-    console.log("erhem", formValues)
+    console.log("erhem", formValues);
 
     if (formValues.TripName === "" || formValues.TripName === null) {
       TripNameVar = true;
@@ -213,7 +213,7 @@ export default function TripCreatorModal() {
       StartDateVal: StartDateVar,
       EndDateVal: EndDateVar,
       TripDescVal: TripDescVar,
-      PriceVal: PriceVar
+      PriceVal: PriceVar,
     });
 
     if (
@@ -229,19 +229,19 @@ export default function TripCreatorModal() {
       return;
     } else {
       insertItinerary(formValues);
-        setFormValues({
-          ...formValues,
-          BookingLink: "",
-          TripName: "",
-          StartDate: "",
-          EndDate: "",
-          Price: 0,
-          TripDesc: "",
-          DiveSites: [],
-        });
-        setValue("$0.00");
-        // successBoxY.value = withTiming(scale(70));
-      }
+      setFormValues({
+        ...formValues,
+        BookingLink: "",
+        TripName: "",
+        StartDate: "",
+        EndDate: "",
+        Price: 0,
+        TripDesc: "",
+        DiveSites: [],
+      });
+      setValue("$0.00");
+      // successBoxY.value = withTiming(scale(70));
+    }
   };
 
   const { format: formatCurrency } = Intl.NumberFormat("en-Us", {
@@ -287,7 +287,7 @@ export default function TripCreatorModal() {
         style={styles.bodyContent}
       >
         <InputFieldLg
-         validationItem={formValidation.TripNameVal}
+          validationItem={formValidation.TripNameVal}
           placeHolderText={"Trip Name"}
           inputValue={formValues.TripName}
           keyboardType={"default"}
@@ -296,7 +296,7 @@ export default function TripCreatorModal() {
           }
         />
         <InputFieldLg
-         validationItem={formValidation.BookingLinkVal}
+          validationItem={formValidation.BookingLinkVal}
           placeHolderText={"Booking Link"}
           inputValue={formValues.BookingLink}
           keyboardType={"default"}
@@ -363,6 +363,7 @@ export default function TripCreatorModal() {
                 height: moderateScale(200),
                 paddingLeft: moderateScale(5),
                 borderRadius: moderateScale(15),
+                backgroundColor: formValidation.EndDateVal ? "pink" : "transparent"
               }}
             >
               {tripDiveSites.map((site) => {
@@ -416,7 +417,9 @@ export default function TripCreatorModal() {
                 margin: moderateScale(5),
                 textAlign: "center",
                 fontFamily: "Itim_400Regular",
-                backgroundColor: formValidation.TripDescVal ? "pink" : "transparent"
+                backgroundColor: formValidation.TripDescVal
+                  ? "pink"
+                  : "transparent",
               }}
               value={formValues.TripDesc}
               placeholder={"Trip Details"}
