@@ -18,6 +18,9 @@ import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
@@ -32,6 +35,11 @@ export default function PartnerAccountRequestModal() {
     ActiveButtonIDContext
   );
   const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
+
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
+
   const { profile } = useContext(UserProfileContext);
   useEffect(() => {
     setFormValues({ ...formValues, UserId: profile[0].UserID });
@@ -143,11 +151,15 @@ export default function PartnerAccountRequestModal() {
       formValues.Longitude == "" ||
       isNaN(formValues.Longitude)
     ) {
-      failBoxY.value = withTiming(scale(70));
+      setConfirmationType("Partner Account Creation Request");
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
       return;
     } else {
       createPartnerAccountRequest(formValues);
-      successBoxY.value = withTiming(scale(70));
+      setConfirmationType("Partner Account Creation Request");
+      setActiveConfirmationID("ConfirmationSuccess");
+      setConfirmationModal(true);
     }
   };
 

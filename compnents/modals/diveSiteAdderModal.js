@@ -34,6 +34,9 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
 import SuccessModal from "./confirmationSuccessModal";
 import FailModal from "./confirmationCautionModal";
@@ -68,6 +71,10 @@ export default function DiveSiteModal() {
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
+
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
   const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
     DSAdderContext
@@ -276,21 +283,26 @@ export default function DiveSiteModal() {
       addSiteVals.Longitude == "" ||
       isNaN(addSiteVals.Longitude)
     ) {
-      failBoxY.value = withTiming(scale(70));
+      setConfirmationType("Dive Site");
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
       return;
     } else {
       if (tutorialRunning) {
-        successBoxY.value = withTiming(scale(70));
+        setConfirmationType("Dive Site");
+        setActiveConfirmationID("ConfirmationSuccess");
+        setConfirmationModal(true);
       } else {
-        // insertDiveSiteWaits(addSiteVals);
+        insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
           ...addSiteVals,
           Site: "",
           Latitude: "",
           Longitude: "",
         });
-
-        successBoxY.value = withTiming(scale(70));
+        setConfirmationType("Dive Site");
+        setActiveConfirmationID("ConfirmationSuccess");
+        setConfirmationModal(true);
       }
     }
   };

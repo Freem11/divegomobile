@@ -42,6 +42,7 @@ export default function SuccessModal(props) {
       case "Dive Site":
         break;
       case "Partner Account Creation Request":
+        setLargeModalSecond(false);
         break;
     }
     if (submissionItem === "dive site") {

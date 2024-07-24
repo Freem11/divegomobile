@@ -73,7 +73,7 @@ export default function PicUploadModal() {
     ActiveButtonIDContext
   );
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  
+
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -332,7 +332,7 @@ export default function PicUploadModal() {
         setActiveConfirmationID("ConfirmationSuccess");
         setConfirmationModal(true);
       } else {
-        // insertPhotoWaits(pinValues);
+        insertPhotoWaits(pinValues);
         setPinValues({
           ...pinValues,
           PicFile: null,
