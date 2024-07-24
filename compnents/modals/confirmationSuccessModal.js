@@ -37,6 +37,7 @@ export default function SuccessModal(props) {
         setLargeModalSecond(false);
         break;
       case "Sea Creature Submission":
+        setLargeModalSecond(false);
         break;
       case "Dive Site":
         break;
