@@ -20,7 +20,7 @@ import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
 import AnimatedModalLarge from "../compnents/reusables/animatedModalLarge";
 import AnimatedModalLargeSecond from "../compnents/reusables/animatedModalLargeSecond";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
-
+import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -631,6 +631,7 @@ export default function MapPage() {
             <AnimatedModalLarge />
             <AnimatedModalLargeSecond />
             <AnimatedFullScreenModal />
+            <AnimatedModalConfirmation />
 
             <Map style={{ zIndex: 1 }} />
           </View>

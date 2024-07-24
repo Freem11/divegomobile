@@ -1,36 +1,49 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 
 export default function FailModal(props) {
-  const { submissionItem, confirmationFailClose } = props;
-
+  const { confirmationType } = useContext(ConfirmationTypeContext);
+  const { setConfirmationModal } = useContext(
+    ConfirmationModalContext
+  );
   const tidyUp = () => {
-    confirmationFailClose();
+    setConfirmationModal(false);
   };
 
   let blurb = null;
-  if (submissionItem === "sea creature submission") {
-    blurb =
-      "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again.";
-  } else if (submissionItem === "dive site") {
-    blurb =
-      "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.";
-  } else if (submissionItem === "partner account creation request") {
-    blurb =
-      "Your request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete your request.";
+  switch (confirmationType) {
+    case "Trip Submission":
+        blurb = "Trip Submission is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
+      break;
+    case "Sea Creature Submission":
+        blurb = "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again.";
+      break;
+    case "Dive Site":
+        blurb =  "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.";
+      break;
+    case "Partner Account Creation Request":
+        blurb = "Your request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete your request.";
+      break;
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.text}>
-          Your {submissionItem} cannot be completed just yet.
+          Your {confirmationType} cannot be completed just yet.
         </Text>
         <Text style={styles.text2}>{blurb}</Text>
 
-        <View style={{ marginLeft: moderateScale(0), marginBottom: moderateScale(20)}}>
+        <View
+          style={{
+            marginLeft: moderateScale(0),
+            marginBottom: moderateScale(20),
+          }}
+        >
           <ModalSecondaryButton
             buttonAction={tidyUp}
             icon={null}

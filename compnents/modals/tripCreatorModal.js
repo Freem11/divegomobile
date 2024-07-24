@@ -32,6 +32,9 @@ import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { ActiveConfirmationIDContext } from '../contexts/activeConfirmationIDContext';
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
+import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
 import { ShopContext } from "../contexts/shopContext";
@@ -69,6 +72,12 @@ export default function TripCreatorModal() {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
+  const { activeConfirmationID, setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { confirmationModal, setConfirmationModal } = useContext(
+    ConfirmationModalContext
+  );
+  const { setConfirmationType} = useContext(ConfirmationTypeContext);
+  
   const [tripDiveSites, setTripDiveSites] = useState([]);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [dateType, setDateType] = useState("");
@@ -168,7 +177,6 @@ export default function TripCreatorModal() {
   };
 
   const handleSubmit = () => {
-    console.log("erhem", formValues);
 
     if (formValues.TripName === "" || formValues.TripName === null) {
       TripNameVar = true;
@@ -225,7 +233,9 @@ export default function TripCreatorModal() {
       formValues.TripDesc === "" ||
       formValues.DiveSites.length === 0
     ) {
-      // failBoxY.value = withTiming(scale(70));
+      setConfirmationType("Trip Submission")
+      setActiveConfirmationID('ConfirmationCaution')
+      setConfirmationModal(true)
       return;
     } else {
       insertItinerary(formValues);
@@ -239,8 +249,11 @@ export default function TripCreatorModal() {
         TripDesc: "",
         DiveSites: [],
       });
+      setSitesArray([])
       setValue("$0.00");
-      // successBoxY.value = withTiming(scale(70));
+      setConfirmationType("Trip Submission")
+      setActiveConfirmationID('ConfirmationSuccess')
+      setConfirmationModal(true)
     }
   };
 

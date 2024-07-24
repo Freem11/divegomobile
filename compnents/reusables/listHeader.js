@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, scale } from "react-native-size-matters";
 import TinyButton from "./tinyButton";
 
 const windowWidth = Dimensions.get("window").width;
@@ -38,18 +38,19 @@ const styles = StyleSheet.create({
     // backgroundColor: "purple"
   },
   titleText: {
-    width:"70%",
+    width:"50%",
     flexWrap: "wrap",
     fontFamily: "Itim_400Regular",
     color: "black",
     fontSize: moderateScale(14),
+    textAlign: 'center'
     // backgroundColor: "purple",
   },
   altButton: {
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    right: windowWidth > 600 ? moderateScale(0) : moderateScale(10),
+    right: windowWidth > 600 ? moderateScale(10) : moderateScale(10),
     // backgroundColor: "pink",
     height: "100%",
     width: "25%",
