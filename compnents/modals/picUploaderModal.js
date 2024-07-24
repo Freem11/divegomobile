@@ -10,40 +10,28 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { PinContext } from "../contexts/staticPinContext";
-import { MasterContext } from "../contexts/masterContext";
 import { PictureContext } from "../contexts/pictureContext";
-import { SessionContext } from "../contexts/sessionContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
 import { getToday } from "../helpers/picUploaderHelpers";
-import { formatDate, createFile } from "../helpers/imageUploadHelpers";
+import { formatDate } from "../helpers/imageUploadHelpers";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import ModalHeader from "../reusables/modalHeader";
 import CompletnessIndicator from "../reusables/completnessIndicator";
 import PrimaryButton from "../reusables/primaryButton";
-import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 import SubmitButton from "../reusables/submitButton";
 import {
   uploadphoto,
   removePhoto,
 } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
-import { userCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { ChapterContext } from "../contexts/chapterContext";
-import { MapHelperContext } from "../contexts/mapHelperContext";
-import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
@@ -53,8 +41,6 @@ import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDCon
 import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
-import SuccessModal from "./confirmationSuccessModal";
-import FailModal from "./confirmationCautionModal";
 
 let PicVar = false;
 let DateVar = false;
@@ -78,14 +64,9 @@ export default function PicUploadModal() {
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
-  const { setChosenModal } = useContext(ModalSelectContext);
-
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { tutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
-  const { setMapHelper } = useContext(MapHelperContext);
-
-  const { setMasterSwitch } = useContext(MasterContext);
 
   const [indicatorState, setIndicatorState] = useState(false);
 
@@ -461,8 +442,6 @@ export default function PicUploadModal() {
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("PictureAdderButton");
       setLargeModalSecond(false);
-      failBoxY.value = withTiming(scale(1200));
-      successBoxY.value = withTiming(scale(1200));
       SetFormValidation({
         PictureVal: false,
         DateVal: false,
@@ -497,29 +476,6 @@ export default function PicUploadModal() {
     setFullScreenModal(true);
     setActiveTutorialID("ThirdGuide");
     setChapter("Adding your photo");
-  };
-
-  const successBoxY = useSharedValue(scale(1200));
-  const failBoxY = useSharedValue(scale(1200));
-
-  const sucessModalSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: successBoxY.value }],
-    };
-  });
-
-  const cautionModalSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: failBoxY.value }],
-    };
-  });
-
-  const confirmationSucessClose = () => {
-    successBoxY.value = withTiming(scale(1200));
-  };
-
-  const confirmationFailClose = () => {
-    failBoxY.value = withTiming(scale(1200));
   };
 
   useEffect(() => {
@@ -675,22 +631,6 @@ export default function PicUploadModal() {
             onCancel={hideDatePicker}
           />
         </View>
-        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-          <SuccessModal
-            submissionItem="sea creature submission"
-            togglePicModal={togglePicModal}
-            confirmationSucessClose={confirmationSucessClose}
-            itterator3={itterator3}
-            setItterator3={setItterator3}
-          ></SuccessModal>
-        </Animated.View>
-
-        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-          <FailModal
-            submissionItem="sea creature submission"
-            confirmationFailClose={confirmationFailClose}
-          ></FailModal>
-        </Animated.View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -791,10 +731,6 @@ const styles = StyleSheet.create({
     height: "101%",
     borderRadius: 15,
     backgroundColor: "pink",
-  },
-  confirmationBox: {
-    width: "100%",
-    position: "absolute",
   },
 
 });

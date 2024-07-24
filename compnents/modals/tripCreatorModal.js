@@ -7,28 +7,13 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
-import Share from "react-native-share";
-import UserNamer from "../tutorial/usernamer";
 import React, { useState, useContext, useEffect } from "react";
-import * as FileSystem from "expo-file-system";
-import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 import {
   getItineraryDiveSiteByIdArray,
   insertItinerary,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
-import { scale, moderateScale } from "react-native-size-matters";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
-import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
+import { moderateScale } from "react-native-size-matters";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
@@ -41,7 +26,6 @@ import { ShopContext } from "../contexts/shopContext";
 import moment from "moment";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import InputFieldLg from "../reusables/textInputLarge";
-import InputFieldSm from "../reusables/textInputSmall";
 import InputField from "../reusables/textInputs";
 import ModalHeader from "../reusables/modalHeader";
 import ListHeader from "../reusables/listHeader";
@@ -60,12 +44,11 @@ let PriceVar = false;
 const windowWidth = Dimensions.get("window").width;
 
 export default function TripCreatorModal() {
-  const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-  const { shop, setShop } = useContext(ShopContext);
+  const { setMapConfig } = useContext(MapConfigContext);
+  const { shop } = useContext(ShopContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { setMapHelper } = useContext(MapHelperContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
+  const { setLargeModalSecond } = useContext(
     LargeModalSecondContext
   );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
@@ -482,12 +465,6 @@ const styles = StyleSheet.create({
     marginTop: "2%",
     minHeight: Platform.OS === "android" ? 490 : 0,
   },
-  inputContainer: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: moderateScale(30),
-  },
   statsContainer: {
     // backgroundColor: 'orange',
     marginTop: moderateScale(20),
@@ -510,142 +487,5 @@ const styles = StyleSheet.create({
     minWidth: moderateScale(200),
     // backgroundColor: "green",
     margin: moderateScale(2),
-  },
-  labelBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: moderateScale(10),
-    width: "40%",
-    // backgroundColor: "pink"
-  },
-  labelText: {
-    marginTop: moderateScale(10),
-    marginLeft: moderateScale(10),
-    marginRight: moderateScale(10),
-    color: "white",
-  },
-  input: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "#538bdb",
-    borderRadius: moderateScale(10),
-    width: moderateScale(180),
-    height: moderateScale(27),
-    marginTop: scale(6),
-    textAlign: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    overflow: "scroll",
-  },
-  inputRed: {
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "pink",
-    borderRadius: moderateScale(10),
-    width: moderateScale(180),
-    height: moderateScale(27),
-    marginTop: scale(6),
-    textAlign: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    overflow: "scroll",
-  },
-  inputSmall: {
-    fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(16),
-    color: "white",
-  },
-  ShareButton: {
-    backgroundColor: "#538bdb",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(200),
-    marginTop: moderateScale(30),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  ShareButtonPressed: {
-    backgroundColor: "#538dbd",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(40),
-    height: moderateScale(40),
-    width: moderateScale(200),
-    marginTop: moderateScale(30),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  FollowButton: {
-    backgroundColor: "#538bdb",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(10),
-    height: moderateScale(40),
-    marginTop: moderateScale(30),
-    marginBottom: moderateScale(10),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  FollowButtonPressed: {
-    backgroundColor: "white",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(10),
-    marginBottom: moderateScale(10),
-    height: moderateScale(40),
-    marginTop: moderateScale(30),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  userContainer: {
-    position: "absolute",
-    top: Platform.OS === "ios" ? "18%" : "18%",
-    left: "20%",
-    backgroundColor: "transparent",
-    alignItems: "center",
-    height: "90%",
-    width: "60%",
-    borderRadius: 15,
-    // backgroundColor: "green"
-  },
-  buttonContainer: {
-    flexDirection: "column-reverse",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "90%",
-    height: moderateScale(110),
-    marginTop: moderateScale(15),
   },
 });

@@ -2,16 +2,9 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
@@ -40,6 +33,7 @@ export default function SuccessModal(props) {
         setLargeModalSecond(false);
         break;
       case "Dive Site":
+        setLargeModal(false);
         break;
       case "Partner Account Creation Request":
         setLargeModalSecond(false);
