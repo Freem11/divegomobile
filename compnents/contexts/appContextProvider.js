@@ -52,13 +52,19 @@ import PhotoBoxModalContextProvider from './photoBoxModalContext';
 import SelectedPhotoContextProvider from './selectedPhotoContext';
 import ActiveButtonIDContextProvider from './activeButtonIDContext';
 import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
+import ActiveConfirmationIDContextProvider from './activeConfirmationIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import SmallModalContextProvider from './smallModalContext';
 import LargeModalContextProvider from './largeModalContext';
 import LargeModalSecondContextProvider from './largeModalSecondContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
+import ConfirmationModalContextProvider from './confirmationModalContext';
+import ConfirmationTypeContextProvider from './confirmationTypeContext';
+import MapConfigContextProvider from './mapConfigContext';
+import ShopContextProvider from './shopContext';
 
 const providers = [
+    MapConfigContextProvider,
     DiveSiteSearchModalContextProvider,
     MapSearchModalContextProvider,
     ZoomHelperContextProvider,
@@ -112,10 +118,14 @@ const providers = [
     ActiveButtonIDContextProvider,
     ActiveTutorialIDContextProvider,
     PreviousButtonIDContextProvider,
+    ActiveConfirmationIDContextProvider,
     SmallModalContextProvider,
     LargeModalContextProvider,
     LargeModalSecondContextProvider,
-    FullScreenModalContextProvider
+    FullScreenModalContextProvider,
+    ConfirmationModalContextProvider,
+    ConfirmationTypeContextProvider,
+    ShopContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

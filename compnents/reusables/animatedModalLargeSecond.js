@@ -60,8 +60,6 @@ export default function AnimatedModalLargeSecond(props) {
 
 
   useEffect(() => {
-    setLargeModal(false);
-    setSmallModal(false);
   if(largeModalSecond){
     largeSecondModalY.value = withTiming(-windowHeight * 1.1);
   } else {

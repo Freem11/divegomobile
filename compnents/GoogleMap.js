@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { TutorialContext } from "./contexts/tutorialContext";
@@ -41,9 +42,21 @@ import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "./../supabaseCalls/photoSupabaseCalls";
-import MapView, { PROVIDER_GOOGLE, Marker, Heatmap } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Platform, Keyboard } from "react-native";
-import mantaIOS from "../compnents/png/Manta32.png";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Marker,
+  Heatmap,
+  Callout,
+} from "react-native-maps";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Platform,
+  Keyboard,
+  Text,
+} from "react-native";
+import mantaIOS from "../compnents/png/mapIcons/Manta_60.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
@@ -52,14 +65,17 @@ import shopClustIOS from "../compnents/png/mapIcons/DiveCentre60x60.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
-import { getDiveSitesWithUser } from "../supabaseCalls/diveSiteSupabaseCalls";
+import {
+  getDiveSitesWithUser,
+  getSingleDiveSiteByNameAndRegion,
+} from "../supabaseCalls/diveSiteSupabaseCalls";
 import {
   getHeatPointsWithUser,
   getHeatPointsWithUserEmpty,
 } from "../supabaseCalls/heatPointSupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
-import { scale } from "react-native-size-matters";
-import { useButtonPressHelper } from './FABMenu/buttonPressHelper';
+import { moderateScale, scale } from "react-native-size-matters";
+import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
@@ -74,6 +90,7 @@ export default function Map() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
+  const { mapConfig, setMapConfig } = useContext(MapConfigContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
@@ -82,7 +99,9 @@ export default function Map() {
   );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
 
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
 
@@ -133,9 +152,8 @@ export default function Map() {
     DiveSiteSearchModalContext
   );
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
+  const { diveSiteAdderModal, setDiveSiteAdderModal } =
+    useContext(DSAdderContext);
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
@@ -210,24 +228,6 @@ export default function Map() {
               minLng: settedBoundaries[0],
               maxLng: 180,
             });
-            // const AmericanDiveSites = await diveSites(
-            //   {
-            //     minLat: settedBoundaries[1],
-            //     maxLat: settedBoundaries[3],
-            //     minLng: -180,
-            //     maxLng: settedBoundaries[2],
-            //   },
-            //   myDiveSites
-            // );
-            // const AsianDiveSites = await diveSites(
-            //   {
-            //     minLat: settedBoundaries[1],
-            //     maxLat: settedBoundaries[3],
-            //     minLng: settedBoundaries[0],
-            //     maxLng: 180,
-            //   },
-            //   myDiveSites
-            // );
 
             let diveSiteList = [...AsianDiveSites, ...AmericanDiveSites];
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
@@ -271,26 +271,6 @@ export default function Map() {
                 animalMultiSelection,
               });
             }
-            // const AmericanHeatPoints = await multiHeatPoints(
-            //   {
-            //     minLat: settedBoundaries[1],
-            //     maxLat: settedBoundaries[3],
-            //     minLng: -180,
-            //     maxLng: settedBoundaries[2],
-            //   },
-            //   animalMultiSelection,
-            //   myCreatures
-            // );
-            // const AsianHeatPoints = await multiHeatPoints(
-            //   {
-            //     minLat: settedBoundaries[1],
-            //     maxLat: settedBoundaries[3],
-            //     minLng: settedBoundaries[0],
-            //     maxLng: 180,
-            //   },
-            //   animalMultiSelection,
-            //   myCreatures
-            // );
 
             let heatPointList = [...AsianHeatPoints, ...AmericanHeatPoints];
             setNewHeat(formatHeatVals(heatPointList));
@@ -306,17 +286,6 @@ export default function Map() {
               minLng: settedBoundaries[0],
               maxLng: settedBoundaries[2],
             });
-            // const diveSiteList = await diveSites(
-            //   {
-            //     minLat: settedBoundaries[1],
-            //     maxLat: settedBoundaries[3],
-            //     minLng: settedBoundaries[0],
-            //     maxLng: settedBoundaries[2],
-            //   },
-            //   myDiveSites
-            // );
-
-            // console.log(diveSiteList)
 
             !diveSitesTog ? setnewSites([]) : setnewSites(diveSiteList);
           } catch (e) {
@@ -375,10 +344,6 @@ export default function Map() {
                 newBoundaries.northEast.longitude -
                 newBoundaries.southWest.longitude,
             });
-            // setMapCenter({
-            //   lat: currentMapPosition.center.latitude,
-            //   lng: currentMapPosition.center.longitude,
-            // });
           }
         }
       } catch (e) {
@@ -388,6 +353,7 @@ export default function Map() {
   };
 
   const updateMapCenter = async () => {
+    handleMapChange();
     if (mapRef) {
       let currentMapPosition = await mapRef.getCamera();
       if (currentMapPosition) {
@@ -473,10 +439,10 @@ export default function Map() {
   ]);
 
   useEffect(() => {
-    if (minorSwitch && !masterSwitch) {
+    if (mapConfig === 1) {
       setDragPin(mapCenter);
     }
-  }, [masterSwitch]);
+  }, [mapConfig]);
 
   useEffect(() => {
     let zoomHelp;
@@ -517,7 +483,6 @@ export default function Map() {
           },
           zoom: zoomHelp,
         });
-        // Keyboard.dismiss();
       }
     }
   }, [mapCenter]);
@@ -532,7 +497,7 @@ export default function Map() {
   }
 
   const shopPoints = setupShopClusters(newShops);
-  const sitePoints = setupClusters(newSites, sitesArray);
+  let sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
   shopPoints.forEach((entity) => {
@@ -557,7 +522,12 @@ export default function Map() {
     filterAnchorPhotos();
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("SiteAnchorIcon");
-    useButtonPressHelper('SiteAnchorIcon', activeButtonID, largeModal, setLargeModal)
+    useButtonPressHelper(
+      "SiteAnchorIcon",
+      activeButtonID,
+      largeModal,
+      setLargeModal
+    );
   };
 
   const setupShopModal = async (shopName) => {
@@ -567,7 +537,12 @@ export default function Map() {
     setSelectedShop(chosenShop);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("ShopMaskIcon");
-    useButtonPressHelper('ShopMaskIcon', activeButtonID, largeModal, setLargeModal)
+    useButtonPressHelper(
+      "ShopMaskIcon",
+      activeButtonID,
+      largeModal,
+      setLargeModal
+    );
   };
 
   const clearModals = async () => {
@@ -584,7 +559,30 @@ export default function Map() {
     setSelectedPicture(null);
   };
 
-  const [siteCloseState, setSiteCloseState] = useState(false);
+  const addToSitesArray = async (siteName) => {
+    let splitNames = siteName.split("~");
+    let grabbedSite = await getSingleDiveSiteByNameAndRegion({
+      name: splitNames[0],
+      region: splitNames[1],
+    });
+    sitesArray.push(grabbedSite[0].id);
+    setSitesArray(sitesArray)
+    handleMapChange()
+  };
+
+  const removeFromSitesArray = async (siteName) => {
+    let splitNames = siteName.split("~");
+    let grabbedSite = await getSingleDiveSiteByNameAndRegion({
+      name: splitNames[0],
+      region: splitNames[1],
+    });
+    const index = sitesArray.indexOf(grabbedSite[0].id);
+    if (index > -1) {
+      sitesArray.splice(index, 1);
+    }
+    setSitesArray(sitesArray)
+    handleMapChange()
+  };
 
   return (
     <View style={styles.container}>
@@ -598,7 +596,7 @@ export default function Map() {
         minZoomLevel={1}
         ref={(ref) => setMapRef(ref)}
         onMapReady={() => handleMapChange()}
-        onRegionChangeComplete={() => handleMapChange()}
+        onRegionChangeComplete={() => updateMapCenter()}
         toolbarEnabled={false}
         onPress={clearModals}
       >
@@ -620,7 +618,7 @@ export default function Map() {
           />
         )}
 
-        {!masterSwitch && minorSwitch && (
+        {mapConfig === 1 ? (
           <Marker
             draggable={true}
             coordinate={{
@@ -635,14 +633,12 @@ export default function Map() {
               });
             }}
           />
-        )}
+        ) : null}
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
-          const {
-            cluster: isCluster,
-            point_count: pointCount,
-          } = cluster.properties;
+          const { cluster: isCluster, point_count: pointCount } =
+            cluster.properties;
 
           if (isCluster) {
             return (
@@ -670,13 +666,40 @@ export default function Map() {
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={anchorIconIOS}
                 onPress={() =>
-                  setupAnchorModal(
-                    cluster.properties.siteName,
-                    latitude,
-                    longitude
-                  )
+                  mapConfig === 3
+                    ? addToSitesArray(cluster.properties.siteID)
+                    : setupAnchorModal(
+                        cluster.properties.siteID,
+                        latitude,
+                        longitude
+                      )
                 }
-              ></Marker>
+              >
+                {mapConfig === 3 ? (
+                  <Callout tooltip>
+                    <View
+                      style={{
+                        marginBottom: moderateScale(5),
+                        backgroundColor: "#538bdb",
+                        padding: moderateScale(3),
+                        paddingLeft: moderateScale(10),
+                        paddingRight: moderateScale(10),
+                        borderRadius: moderateScale(20),
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "white",
+                          fontFamily: "Itim_400Regular",
+                          fontSize: moderateScale(18),
+                        }}
+                      >
+                        {cluster.properties.siteName}
+                      </Text>
+                    </View>
+                  </Callout>
+                ) : null}
+              </Marker>
             );
           } else if (cluster.properties.category === "Dive Site Selected") {
             return (
@@ -685,63 +708,27 @@ export default function Map() {
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={anchorGold}
                 onPress={() =>
-                  setupAnchorModal(
-                    cluster.properties.siteName,
-                    latitude,
-                    longitude
-                  )
+                  mapConfig === 3
+                    ? removeFromSitesArray(cluster.properties.siteID)
+                    : setupAnchorModal(
+                        cluster.properties.siteName,
+                        latitude,
+                        longitude
+                      )
                 }
               ></Marker>
             );
           } else {
-            return (
+            return mapConfig === 0 ? (
               <Marker
                 key={cluster.properties.siteID}
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={shopClustIOS}
                 onPress={() => setupShopModal(cluster.properties.siteID)}
               ></Marker>
-            );
+            ) : null;
           }
         })}
-
-        {/* {shopPoints.map((cluster) => {
-          const [longitude, latitude] = cluster.geometry.coordinates;
-          const {
-            cluster: isCluster,
-            point_count: pointCount,
-          } = cluster.properties;
-
-          if (isCluster) {
-            return (
-              <Marker
-                key={cluster.id}
-                coordinate={{ latitude: latitude, longitude: longitude }}
-                image={shopClustIOS}
-                onPress={() => {
-                  const expansionZoom = Math.min(
-                    supercluster2.getClusterExpansionZoom(cluster.id),
-                    16
-                  );
-                  mapRef.animateCamera({
-                    center: { latitude, longitude },
-                    zoom: expansionZoom,
-                  });
-                }}
-              ></Marker>
-            );
-          }
-          return (
-            <Marker
-              key={cluster.properties.siteID}
-              coordinate={{ latitude: latitude, longitude: longitude }}
-              image={shopIOS}
-              // onPress={() =>
-              //   setupAnchorModal(cluster.properties.siteID, latitude, longitude)
-              // }
-            ></Marker>
-          );
-        })} */}
       </MapView>
     </View>
   );

@@ -1,32 +1,21 @@
 import {
   StyleSheet,
-  Text,
   View,
-  TextInput,
   TouchableWithoutFeedback,
   Platform,
   ActivityIndicator,
-  Dimensions,
   Keyboard,
 } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-} from "react-native-reanimated";
 import React, { useState, useContext, useEffect } from "react";
-import { DSAdderContext } from "../contexts/DSModalContext";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
 import { scale, moderateScale } from "react-native-size-matters";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
-import { SecondTutorialModalContext } from "../contexts/secondTutorialModalContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
-import { MasterContext } from "../contexts/masterContext";
+import { MapConfigContext } from '../contexts/mapConfigContext';
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
@@ -34,9 +23,10 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
-import SuccessModal from "./confirmationSuccessModal";
-import FailModal from "./confirmationCautionModal";
 import ModalHeader from "../reusables/modalHeader";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 import SubmitButton from "../reusables/submitButton";
@@ -46,40 +36,35 @@ let SiteNameVar = false;
 let LatVar = false;
 let LngVar = false;
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
 export default function DiveSiteModal() {
-  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { setMapConfig } =useContext(MapConfigContext);
+  const { setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
+  const { setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
-  const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
-  const { secondGuideModal, setSecondGuideModal } = useContext(
-    SecondTutorialModalContext
-  );
+  const { setChosenModal } = useContext(ModalSelectContext);
+
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { tutorialRunning } = useContext(TutorialContext);
   const { chapter, setChapter } = useContext(ChapterContext);
 
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
-  const [diveCloseState, setDiveCloseState] = useState(false);
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
   const [indicatorState, setIndicatorState] = useState(false);
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
-  const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-  const { setMasterSwitch } = useContext(MasterContext);
+  const { setMapHelper } = useContext(MapHelperContext);
 
   const [formValidation, SetFormValidation] = useState({
     SiteNameVal: false,
@@ -88,7 +73,6 @@ export default function DiveSiteModal() {
   });
 
   let counter1 = 0;
-  let counter2 = 0;
   let counter3 = 0;
   let blinker1;
   let blinker2;
@@ -99,9 +83,6 @@ export default function DiveSiteModal() {
   const [locButState, setLocButState] = useState(false);
   const [pinButState, setPinButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-  const [corButState, setCorButState] = useState(false);
-  const [helpButState, setHelpButState] = useState(false);
-
 
   function locationButtonBlink() {
     counter1++;
@@ -229,8 +210,8 @@ export default function DiveSiteModal() {
     } else {
       setChosenModal("DiveSite");
       setMapHelper(true);
-      setMasterSwitch(false);
-      setFullScreenModal(true);
+      setMapConfig(1);
+      setLargeModal(false);
       if (tutorialRunning) {
         setItterator2(itterator2 + 1);
       }
@@ -278,21 +259,26 @@ export default function DiveSiteModal() {
       addSiteVals.Longitude == "" ||
       isNaN(addSiteVals.Longitude)
     ) {
-      failBoxY.value = withTiming(scale(70));
+      setConfirmationType("Dive Site");
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
       return;
     } else {
       if (tutorialRunning) {
-        successBoxY.value = withTiming(scale(70));
+        setConfirmationType("Dive Site");
+        setActiveConfirmationID("ConfirmationSuccess");
+        setConfirmationModal(true);
       } else {
-        // insertDiveSiteWaits(addSiteVals);
+        insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({
           ...addSiteVals,
           Site: "",
           Latitude: "",
           Longitude: "",
         });
-
-        successBoxY.value = withTiming(scale(70));
+        setConfirmationType("Dive Site");
+        setActiveConfirmationID("ConfirmationSuccess");
+        setConfirmationModal(true);
       }
     }
   };
@@ -318,8 +304,6 @@ export default function DiveSiteModal() {
       setActiveButtonID("DiveSiteAdderButton");
       setLargeModal(!largeModal);
       setSmallModal(false)
-      failBoxY.value = withTiming(scale(1200));
-      successBoxY.value = withTiming(scale(1200));
       SetFormValidation({
         SiteNameVal: false,
         LatVal: false,
@@ -343,29 +327,6 @@ export default function DiveSiteModal() {
       setActiveTutorialID("SecondGuide");
       setChapter("DS Help");
     }
-  };
-
-  const successBoxY = useSharedValue(scale(1200));
-  const failBoxY = useSharedValue(scale(1200));
-
-  const sucessModalSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: successBoxY.value }],
-    };
-  });
-
-  const cautionModalSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: failBoxY.value }],
-    };
-  });
-
-  const confirmationSucessClose = () => {
-    successBoxY.value = withTiming(scale(1200));
-  };
-
-  const confirmationFailClose = () => {
-    failBoxY.value = withTiming(scale(1200));
   };
 
   useEffect(() => {
@@ -452,22 +413,6 @@ export default function DiveSiteModal() {
             blink={subButState}
           />
         </View>
-        <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-          <SuccessModal
-            submissionItem="dive site"
-            toggleDiveModal={toggleDiveModal}
-            confirmationSucessClose={confirmationSucessClose}
-            itterator2={itterator2}
-            setItterator2={setItterator2}
-          ></SuccessModal>
-        </Animated.View>
-
-        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-          <FailModal
-            submissionItem="dive site"
-            confirmationFailClose={confirmationFailClose}
-          ></FailModal>
-        </Animated.View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -491,13 +436,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: Platform.OS === "ios" ? "-20%" : "-20%",
   },
-  inputContainerLower: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: 0,
-    width: "45%",
-  },
   latLngButton: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -506,25 +444,5 @@ const styles = StyleSheet.create({
     marginTop: 35,
     width: 140,
     // backgroundColor: "pink"
-  },
-  confirmationBox: {
-    width: "100%",
-    position: "absolute",
-  },
-  ImageUploadIndicatorGreen: {
-    backgroundColor: "lightgreen",
-    height: moderateScale(15),
-    width: moderateScale(15),
-    borderRadius: moderateScale(15),
-    marginLeft: moderateScale(20),
-    marginTop: scale(-2),
-  },
-  ImageUploadIndicatorRed: {
-    backgroundColor: "red",
-    height: moderateScale(15),
-    width: moderateScale(15),
-    borderRadius: moderateScale(15),
-    marginLeft: moderateScale(20),
-    marginTop: scale(-2),
   },
 });

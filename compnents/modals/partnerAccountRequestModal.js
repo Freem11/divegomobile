@@ -5,60 +5,35 @@ import {
   Platform,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
-import { scale, moderateScale } from "react-native-size-matters";
-import { PartnerModalContext } from "../../compnents/contexts/partnerAccountRequestModalContext";
+import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
-import SuccessModal from "./confirmationSuccessModal";
-import FailModal from "./confirmationCautionModal";
 import ModalHeader from "../reusables/modalHeader";
 import SubmitButton from "../reusables/submitButton";
 
 export default function PartnerAccountRequestModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { partnerModal, setPartnerModal } = useContext(PartnerModalContext);
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
+
   const { profile } = useContext(UserProfileContext);
   useEffect(() => {
     setFormValues({ ...formValues, UserId: profile[0].UserID });
   }, []);
-
-  const successBoxY = useSharedValue(scale(1200));
-  const failBoxY = useSharedValue(scale(1200));
-
-  const sucessModalSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: successBoxY.value }],
-    };
-  });
-
-  const cautionModalSlide = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: failBoxY.value }],
-    };
-  });
-
-  const confirmationSucessClose = () => {
-    successBoxY.value = withTiming(scale(1200));
-  };
-
-  const confirmationFailClose = () => {
-    failBoxY.value = withTiming(scale(1200));
-  };
 
   const [formValues, setFormValues] = useState({
     WebsiteLink: "",
@@ -143,11 +118,15 @@ export default function PartnerAccountRequestModal() {
       formValues.Longitude == "" ||
       isNaN(formValues.Longitude)
     ) {
-      failBoxY.value = withTiming(scale(70));
+      setConfirmationType("Partner Account Creation Request");
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
       return;
     } else {
       createPartnerAccountRequest(formValues);
-      successBoxY.value = withTiming(scale(70));
+      setConfirmationType("Partner Account Creation Request");
+      setActiveConfirmationID("ConfirmationSuccess");
+      setConfirmationModal(true);
     }
   };
 
@@ -213,20 +192,6 @@ export default function PartnerAccountRequestModal() {
           label={"Submit Account Request"}
           />
       </View>
-      <Animated.View style={[styles.confirmationBox, sucessModalSlide]}>
-          <SuccessModal
-            submissionItem="partner account creation request"
-            confirmationSucessClose={confirmationSucessClose}
-            setPartnerModal={setPartnerModal}
-          ></SuccessModal>
-        </Animated.View>
-
-        <Animated.View style={[styles.confirmationBox, cautionModalSlide]}>
-          <FailModal
-            submissionItem="partner account creation request"
-            confirmationFailClose={confirmationFailClose}
-          ></FailModal>
-        </Animated.View>
     </View>
   );
 }
@@ -258,10 +223,5 @@ const styles = StyleSheet.create({
     color: "#F0EEEB",
     fontSize: moderateScale(12),
     textAlign: "center",
-  },
-  confirmationBox: {
-    width: "100%",
-    position: "absolute",
-    width: "100%",
-  },
+  }
 });

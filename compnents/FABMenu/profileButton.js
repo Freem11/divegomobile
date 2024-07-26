@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { scale, moderateScale } from 'react-native-size-matters';
+import { MapConfigContext } from '../contexts/mapConfigContext';
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { DSAdderContext } from "../contexts/DSModalContext";

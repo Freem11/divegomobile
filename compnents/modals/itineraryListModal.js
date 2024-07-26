@@ -29,19 +29,23 @@ import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
+import { ShopContext } from "../../compnents/contexts/shopContext";
 import ModalHeader from "../reusables/modalHeader";
-import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ItineraryListModal(props) {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
+  const { shop, setShop } = useContext(ShopContext);
   const { profile } = useContext(UserProfileContext);
   const { itineraryListModal, setItineraryListModal } = props;
   const { shopModal, setShopModal } = useContext(ShopModalContext);
@@ -54,12 +58,12 @@ export default function ItineraryListModal(props) {
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
 
   useEffect(() => {
-    getItineraries(profile[0].UserID)
+    getItineraries(profile[0].UserID);
   }, [largeModal]);
 
   const getItineraries = async (IdNum) => {
     try {
-      const itins = await getItinerariesByUserId(IdNum)
+      const itins = await getItinerariesByUserId(IdNum);
       if (itins.length > 0) {
         setItineraryList(itins[0].itineraries);
       }
@@ -68,11 +72,21 @@ export default function ItineraryListModal(props) {
     }
   };
 
+  useEffect(() => {
+    setShop(itineraryList[0]?.shopID)
+  }, [itineraryList]);
+
+
   const handleCreateNewButton = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("TripCreator");
     setLargeModal(false);
-    useButtonPressHelper('TripCreator', activeButtonID, largeModalSecond, setLargeModalSecond)
+    useButtonPressHelper(
+      "TripCreator",
+      activeButtonID,
+      largeModalSecond,
+      setLargeModalSecond
+    );
   };
 
   const handleShopModalClose = () => {

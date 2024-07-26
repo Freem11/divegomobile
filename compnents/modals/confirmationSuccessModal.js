@@ -2,34 +2,43 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
+import { Iterrator2Context } from "../contexts/iterrator2Context";
 
 export default function SuccessModal(props) {
-  const {
-    submissionItem,
-    toggleDiveModal,
-    togglePicModal,
-    confirmationSucessClose,
-    itterator2,
-    setItterator2,
-    itterator3,
-    setItterator3,
-    setPartnerModal
-  } = props;
+  const { submissionItem, toggleDiveModal, togglePicModal, setPartnerModal } =
+    props;
+  const { confirmationType } = useContext(ConfirmationTypeContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
 
-  const [profileCloseState, setProfileCloseState] = useState(false);
+  const { setLargeModal } = useContext(LargeModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
 
   const tidyUp = () => {
+    switch (confirmationType) {
+      case "Trip Submission":
+        setLargeModalSecond(false);
+        break;
+      case "Sea Creature Submission":
+        setLargeModalSecond(false);
+        break;
+      case "Dive Site":
+        setLargeModal(false);
+        break;
+      case "Partner Account Creation Request":
+        setLargeModalSecond(false);
+        break;
+    }
     if (submissionItem === "dive site") {
       toggleDiveModal();
       if (itterator2 > 0) {
@@ -41,31 +50,42 @@ export default function SuccessModal(props) {
         setItterator3(itterator3 + 1);
       }
     } else if (submissionItem === "partner account creation request") {
-      setPartnerModal(false)
+      setPartnerModal(false);
     }
 
-    confirmationSucessClose();
+    setConfirmationModal(false);
   };
 
   let blurb = null;
-  if (submissionItem === "partner account creation request") {
-    blurb =
-      `We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies.`;
-  } else {
-    blurb = "Please allow up to 24 hours for it to be reviewed and approved."
+  switch (confirmationType) {
+    case "Trip Submission":
+      blurb = "Check it by opening up your dive center on the map.";
+      break;
+    case "Sea Creature Submission":
+      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
+      break;
+    case "Dive Site":
+      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
+      break;
+    case "Partner Account Creation Request":
+      blurb = `We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies.`;
+      break;
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.text}>
-          Your {submissionItem} was successully submitted!
+          Your {confirmationType} was successully submitted!
         </Text>
-        <Text style={styles.text2}>
-          {blurb}
-        </Text>
+        <Text style={styles.text2}>{blurb}</Text>
 
-        <View style={{ marginLeft: moderateScale(20), marginBottom: moderateScale(20)}}>
+        <View
+          style={{
+            marginLeft: moderateScale(20),
+            marginBottom: moderateScale(20),
+          }}
+        >
           <ModalSecondaryButton
             buttonAction={tidyUp}
             icon={null}
@@ -109,5 +129,5 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     marginBottom: "7%",
     margin: scale(35),
-  }
+  },
 });

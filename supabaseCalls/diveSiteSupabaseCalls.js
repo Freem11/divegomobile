@@ -130,7 +130,7 @@ export const getDiveSitesByIDs = async (valueArray) => {
 
 export const getSingleDiveSiteByNameAndRegion = async (values) => {
 
-  if (values.region === undefined) {
+  if (values.region === undefined || values.region === "null") {
 
     const { data, error } = await supabase
     .from("diveSites")

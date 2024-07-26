@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import Animated, {
   useSharedValue,
@@ -8,7 +8,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { scale, moderateScale } from "react-native-size-matters";
-import PhotoButton from "./photoButton";
 import DiveSiteButton from "./diveSiteButton";
 import SiteSearchButton from "./siteSearchButton";
 import LocationSearchButton from "./locationSearchButton";
@@ -23,11 +22,11 @@ let numbButtons = 0;
 export default function FABMenu() {
   const windowWidth = Dimensions.get("window").width;
   const [fabMenuSize, setFabMenuSize] = useState(0);
-  const { profile, setProfile } = useContext(UserProfileContext);
+  const { profile } = useContext(UserProfileContext);
 
   const PARTNER_ACCOUNT_STATUS = profile[0] && profile[0].partnerAccount || false
 
-  numbButtons = 7
+  numbButtons = 6
 
   useEffect(() => {
     setFabMenuSize(numbButtons * moderateScale(80));
@@ -100,9 +99,8 @@ export default function FABMenu() {
               <ProfileButton/>
               <SettingsButton/>
               <LocationSearchButton/>
-              <PhotoButton/>
-              <DiveSiteButton/>
               <SiteSearchButton/>
+              <DiveSiteButton/>
               {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton/>}
 
       
@@ -118,14 +116,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     zIndex: 90,
     elevation: 90,
-    // backgroundColor: 'pink',
     width: numbButtons * moderateScale(80)
   },
   picContainer2: {
     alignItems: "center",
     justifyContent: "center",
     marginLeft: 0,
-    // marginTop: scale(10),
   },
   titleText: {
     textAlign: "center",
