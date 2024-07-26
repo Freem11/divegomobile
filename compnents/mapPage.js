@@ -68,7 +68,7 @@ import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
-import { useButtonPressHelper } from './FABMenu/buttonPressHelper';
+import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -102,14 +102,16 @@ export default function MapPage() {
   const { previousButtonID, setPreviousButtonID } = useContext(
     PreviousButtonIDContext
   );
-  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { activeTutorialID, setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
   const { itterator, setItterator } = useContext(IterratorContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  
+
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -492,7 +494,15 @@ export default function MapPage() {
     );
   };
 
-  console.log(mapConfig)
+  const handleMapSearchButton = () => {
+    setTiles(true);
+    setShowFilterer(false);
+    setPreviousButtonID(activeButtonID)
+    setActiveButtonID('MapSearchButton')
+    useButtonPressHelper('MapSearchButton', activeButtonID, smallModal, setSmallModal)
+  }
+
+  console.log(mapConfig);
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
@@ -600,14 +610,29 @@ export default function MapPage() {
               </Animated.View>
             ) : null}
 
+            {mapConfig in [, 1, , 3] ? (
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: moderateScale(35),
+                  left: moderateScale(35),
+                  zIndex: 2,
+                }}
+              >
+                <CircularButton
+                  buttonAction={handleMapSearchButton}
+                  icon="compass"
+                />
+              </View>
+            ) : null}
 
-            {mapConfig in [, 1,, 3] ? (
+            {mapConfig in [, 1, , 3] ? (
               <View
                 style={{
                   position: "absolute",
                   bottom: moderateScale(35),
                   right: moderateScale(35),
-                  zIndex: 2
+                  zIndex: 2,
                 }}
               >
                 <CircularButton
