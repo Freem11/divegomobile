@@ -9,7 +9,6 @@ import {
   Keyboard,
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import email from "react-native-email";
@@ -35,6 +34,7 @@ import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
 import PhotoFilterer from "./photoMenu/photoFilter";
 import PrimaryButton from "../compnents/reusables/primaryButton";
+import CircularButton from "../compnents/reusables/circularButton";
 import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
@@ -46,7 +46,6 @@ import { DiveSpotContext } from "./contexts/diveSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
-import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
@@ -77,7 +76,7 @@ import Animated, {
 } from "react-native-reanimated";
 import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { MaterialIcons } from "@expo/vector-icons";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 let feedbackRequest = null;
@@ -561,32 +560,10 @@ export default function MapPage() {
                   </TouchableWithoutFeedback>
                 </Animated.View>
 
-                <View
-                  style={
-                    anchButState
-                      ? styles.buttonwrapperPressed
-                      : styles.buttonwrapper
-                  }
-                >
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      tutorialRunning ? null : toggleDiveSites();
-                    }}
-                    onPressIn={() => setAnchButState(true)}
-                    onPressOut={() => setAnchButState(false)}
-                    style={{
-                      alignItems: "center",
-                      width: moderateScale(30),
-                      height: moderateScale(30),
-                    }}
-                  >
-                    <MaterialIcons
-                      name="anchor"
-                      color={anchButState ? "gold" : "white"}
-                      size={moderateScale(30)}
-                    />
-                  </TouchableWithoutFeedback>
-                </View>
+                <CircularButton 
+                buttonAction={toggleDiveSites}
+                icon="anchor"
+                />
 
                 <View style={styles.FMenu}>
                   <FABMenu style={{ zIndex: 2 }} />
