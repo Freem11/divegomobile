@@ -500,9 +500,10 @@ export default function Map() {
   let sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
+  mapConfig === 0 ?
   shopPoints.forEach((entity) => {
     points.push(entity);
-  });
+  }) : null
 
   const { clusters, supercluster } = useSupercluster({
     points,
