@@ -1,27 +1,11 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Platform,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Linking,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  useDerivedValue,
-  interpolate,
-} from "react-native-reanimated";
 import Itinerary from "../itineraries/itinerary";
 import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
-import { ShopModalContext } from "../contexts/shopModalContext";
 import { scale } from "react-native-size-matters";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
+import { MapConfigContext } from "../contexts/mapConfigContext";
 import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
@@ -29,26 +13,22 @@ import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ModalHeader from "../reusables/modalHeader";
+import { useMapFlip } from "../itineraries/hooks";
 
-import { shops } from "../../supabaseCalls/shopsSupabaseCalls";
-
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
-export default function ShopModal(props) {
+export default function ShopModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { shopModal, setShopModal } = useContext(ShopModalContext);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const [siteCloseState, setSiteCloseState] = useState(false);
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
-  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
-  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
+  const { setMasterSwitch } = useContext(MasterContext);
+  const { setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
+  const { setMapConfig } = useContext(MapConfigContext);
 
   useEffect(() => {
     if (selectedShop[0]) {
@@ -111,6 +91,16 @@ export default function ShopModal(props) {
                   selectedID={selectedID}
                   buttonOneText="Map"
                   buttonOneIcon="anchor"
+                  buttonOneAction={() =>
+                    useMapFlip(
+                      itinerary.siteList,
+                      setSitesArray,
+                      setZoomHelper,
+                      setLargeModal,
+                      setMapConfig,
+                      setMapCenter
+                    )
+                  }
                   buttonTwoText="Book"
                   buttonTwoIcon="diving-scuba-flag"
                 />

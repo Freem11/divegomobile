@@ -9,13 +9,6 @@ import {
   Linking,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  useDerivedValue,
-  interpolate,
-} from "react-native-reanimated";
 import Itinerary from "../itineraries/itinerary";
 import { getItinerariesByUserId } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
@@ -30,8 +23,12 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { ShopContext } from "../../compnents/contexts/shopContext";
+import { EditModeContext } from "../../compnents/contexts/editModeContext";
+import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
+import { MapConfigContext } from '../../compnents/contexts/mapConfigContext';
 import ModalHeader from "../reusables/modalHeader";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
+import { useMapFlip } from '../itineraries/hooks';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -46,6 +43,7 @@ export default function ItineraryListModal(props) {
     ActiveButtonIDContext
   );
   const { shop, setShop } = useContext(ShopContext);
+  const {editMode, setEditMode} = useContext(EditModeContext);
   const { profile } = useContext(UserProfileContext);
   const { itineraryListModal, setItineraryListModal } = props;
   const { shopModal, setShopModal } = useContext(ShopModalContext);
@@ -56,6 +54,8 @@ export default function ItineraryListModal(props) {
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
+  const { mapConfig, setMapConfig } =useContext(MapConfigContext);
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
@@ -123,6 +123,7 @@ export default function ItineraryListModal(props) {
                   setShopModal={setShopModal}
                   buttonOneText="Edit"
                   buttonOneIcon="calendar-edit"
+                  buttonOneAction={() => useMapFlip(itinerary.siteList, setSitesArray, setZoomHelper, setLargeModal, setMapConfig, setMapCenter)}
                   buttonTwoText="Delete"
                   buttonTwoIcon="delete-forever"
                 />

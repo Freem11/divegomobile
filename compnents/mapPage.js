@@ -502,7 +502,6 @@ export default function MapPage() {
     useButtonPressHelper('MapSearchButton', activeButtonID, smallModal, setSmallModal)
   }
 
-  console.log(mapConfig);
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
