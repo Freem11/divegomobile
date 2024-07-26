@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function CircularButton(props) {
   const { buttonAction, icon } = props;
   const [isPressed, setIsPressed] = useState(false);
-  
+
   return (
     <View
     style={
@@ -25,8 +25,8 @@ export default function CircularButton(props) {
         height: moderateScale(30),
       }}
     >
-      <MaterialIcons
-        name={icon}  //"anchor"
+      <MaterialCommunityIcons
+        name={icon}
         color={isPressed ? "gold" : "white"}
         size={moderateScale(30)}
       />
@@ -37,9 +37,6 @@ export default function CircularButton(props) {
 
 const styles = StyleSheet.create({
   buttonwrapper: {
-    position: "absolute",
-    top: -moderateScale(30),
-    right: moderateScale(30),
     alignItems: "center",
     justifyContent: "center",
     borderRadius: moderateScale(50),
@@ -58,9 +55,6 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   buttonwrapperPressed: {
-    position: "absolute",
-    top: -moderateScale(30),
-    right: moderateScale(30),
     alignItems: "center",
     justifyContent: "center",
     borderRadius: moderateScale(50),

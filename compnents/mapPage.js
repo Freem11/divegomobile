@@ -57,15 +57,18 @@ import { ModalSelectContext } from "./contexts/modalSelectContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
+import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
 import { SmallModalContext } from "./contexts/smallModalContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
+import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
+import { useButtonPressHelper } from './FABMenu/buttonPressHelper';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -88,7 +91,7 @@ export default function MapPage() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-  const { setSmallModal } = useContext(SmallModalContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
@@ -96,13 +99,17 @@ export default function MapPage() {
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
-  const { setActiveButtonID } = useContext(ActiveButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(
+    PreviousButtonIDContext
+  );
+  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
   const { activeTutorialID, setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
   const { itterator, setItterator } = useContext(IterratorContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
-
+  const { tiles, setTiles } = useContext(CarrouselTilesContext);
+  
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
@@ -381,8 +388,9 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
+    const {
+      status: existingStatus,
+    } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
@@ -471,6 +479,20 @@ export default function MapPage() {
     setFullScreenModal(false);
   };
 
+  const handleSiteSearchButton = () => {
+    setTiles(true);
+    setShowFilterer(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("DiveSiteSearchButton");
+    useButtonPressHelper(
+      "DiveSiteSearchButton",
+      activeButtonID,
+      smallModal,
+      setSmallModal
+    );
+  };
+
+  console.log(mapConfig)
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
@@ -482,8 +504,7 @@ export default function MapPage() {
               </View>
             )}
 
-
-{mapConfig in [,,2] || !mapConfig? (
+            {mapConfig in [, , 2] || !mapConfig ? (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
                 <PhotoMenu style={{ zIndex: 3 }} />
                 <View style={styles.filterer} pointerEvents={"box-none"}>
@@ -506,7 +527,7 @@ export default function MapPage() {
                   </View>
                 </View>
               </View>
-            ): null}
+            ) : null}
 
             {masterSwitch && (
               <TouchableWithoutFeedback onPress={startTagAnimations}>
@@ -560,15 +581,40 @@ export default function MapPage() {
                   </TouchableWithoutFeedback>
                 </Animated.View>
 
-                <CircularButton 
-                buttonAction={toggleDiveSites}
-                icon="anchor"
-                />
+                <View
+                  style={{
+                    position: "absolute",
+                    top: -moderateScale(30),
+                    right: moderateScale(30),
+                  }}
+                >
+                  <CircularButton
+                    buttonAction={toggleDiveSites}
+                    icon="anchor"
+                  />
+                </View>
 
                 <View style={styles.FMenu}>
                   <FABMenu style={{ zIndex: 2 }} />
                 </View>
               </Animated.View>
+            ) : null}
+
+
+            {mapConfig in [, 1,, 3] ? (
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: moderateScale(35),
+                  right: moderateScale(35),
+                  zIndex: 2
+                }}
+              >
+                <CircularButton
+                  buttonAction={handleSiteSearchButton}
+                  icon="map-search-outline"
+                />
+              </View>
             ) : null}
 
             {mapConfig in [, 1, 2, 3] ? (
@@ -595,8 +641,6 @@ export default function MapPage() {
                 />
               </View>
             ) : null}
-
-   
 
             {mapConfig === 0 ? (
               <View style={styles.Hist} pointerEvents={"none"}>
