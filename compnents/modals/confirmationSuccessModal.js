@@ -1,8 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
@@ -38,6 +34,9 @@ export default function SuccessModal(props) {
       case "Partner Account Creation Request":
         setLargeModalSecond(false);
         break;
+      case "Trip Edit":
+        setLargeModalSecond(false);
+        break;
     }
     if (submissionItem === "dive site") {
       toggleDiveModal();
@@ -69,6 +68,9 @@ export default function SuccessModal(props) {
       break;
     case "Partner Account Creation Request":
       blurb = `We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies.`;
+      break;
+    case "Trip Edit":
+      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
       break;
   }
 

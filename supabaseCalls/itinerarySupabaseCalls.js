@@ -80,3 +80,33 @@ export const insertItinerary = async (values) => {
     // console.log(data);
   }
 };
+
+export const insertItineraryRequest = async (values, reqType) => {
+
+  console.log("Itinerary add gets ", values)
+
+  const { data, error } = await supabase
+  .from("itineraryRequests")
+  .insert([
+    {
+      shopID: values.ShopId,
+      tripName: values.TripName,
+      startDate: values.StartDate,
+      endDate: values.EndDate,
+      price: values.Price,
+      description: values.TripDesc,
+      siteList: values.DiveSites,
+      BookingPage: values.BookingLink,
+      requestType: reqType
+    },
+  ]);
+
+  if (error) {
+    console.log("couldn't do it 03,", error);
+  }
+
+  if (data) {
+    return data
+    // console.log(data);
+  }
+};

@@ -7,9 +7,7 @@ import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 
 export default function FailModal(props) {
   const { confirmationType } = useContext(ConfirmationTypeContext);
-  const { setConfirmationModal } = useContext(
-    ConfirmationModalContext
-  );
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const tidyUp = () => {
     setConfirmationModal(false);
   };
@@ -17,16 +15,23 @@ export default function FailModal(props) {
   let blurb = null;
   switch (confirmationType) {
     case "Trip Submission":
-        blurb = "Trip Submission is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
+      blurb =
+        "Trip Submission is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
       break;
     case "Sea Creature Submission":
-        blurb = "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again.";
+      blurb =
+        "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again.";
       break;
     case "Dive Site":
-        blurb =  "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.";
+      blurb =
+        "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.";
       break;
     case "Partner Account Creation Request":
-        blurb = "Your request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete your request.";
+      blurb =
+        "Your request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete your request.";
+      break;
+    case "Trip Edit":
+      blurb = "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
       break;
   }
 
