@@ -284,11 +284,27 @@ export default function TripCreatorModal() {
     setLargeModalSecond(false);
   };
 
+  const [modalHeader, setModalHeader] = useState(
+    editMode ? "Request Trip Edits"  : "Submit a New Trip"
+  );
+
+  const [submitText, setSubmitText] = useState(
+    editMode ? "Submit Edit Request" : "Submit Trip"
+  );
+
+const editButtonPress = () => {
+  setEditMode(false) 
+  setModalHeader("Submit a New Trip")
+  setSubmitText("Submit Trip")
+}
+
   return (
     <View style={styles.container}>
       <ModalHeader
-        titleText="Submit a new Trip"
+        titleText={modalHeader}
         onClose={toggleTripCreatorModal}
+        icon={'folder-copy'}
+        altButton={editMode.IsEditModeOn ? editButtonPress : null}
       />
 
       <ScrollView
@@ -460,7 +476,7 @@ export default function TripCreatorModal() {
           height: "6%",
         }}
       >
-        <SubmitButton buttonAction={handleSubmit} label={editMode ? "Submit Edit Request" : "Submit Trip"} />
+        <SubmitButton buttonAction={handleSubmit} label={submitText} />
       </View>
       <DateTimePickerModal
         isVisible={datePickerVisible}
