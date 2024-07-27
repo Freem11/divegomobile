@@ -3,10 +3,10 @@ import { createContext, useState } from 'react';
 export const PictureContext = createContext('');
 
 const PictureContextProvider = ({children}) => {
-    const [uploadedFile, setUploadedFile] = useState(null);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
 
     return (
-        <PictureContext.Provider value={{ uploadedFile, setUploadedFile }}>
+        <PictureContext.Provider value={{ uploadedFiles, setUploadedFiles }}>
             {children}
         </PictureContext.Provider>
     )

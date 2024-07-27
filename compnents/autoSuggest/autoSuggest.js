@@ -202,11 +202,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
   autocomplete: {
-    width: "80%",
-    height: "25%",
-    alignSelf: "center",
-    justifyContent: "center",
-    // backgroundColor: "green",
     zIndex: 1,
   },
 });
