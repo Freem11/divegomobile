@@ -25,11 +25,14 @@ import { UserProfileContext } from "../../compnents/contexts/userProfileContext"
 import { ShopContext } from "../../compnents/contexts/shopContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
 import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
-import { MapConfigContext } from '../../compnents/contexts/mapConfigContext';
+import { MapConfigContext } from "../../compnents/contexts/mapConfigContext";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../../compnents/contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../../compnents/contexts/confirmationModalContext";
+
 import ModalHeader from "../reusables/modalHeader";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import { useMapFlip } from '../itineraries/hooks';
-
+import { insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -43,7 +46,7 @@ export default function ItineraryListModal(props) {
     ActiveButtonIDContext
   );
   const { setShop } = useContext(ShopContext);
-  const {editMode, setEditMode} = useContext(EditModeContext);
+  const { editMode, setEditMode } = useContext(EditModeContext);
   const { profile } = useContext(UserProfileContext);
   const { setShopModal } = useContext(ShopModalContext);
   const [itineraryList, setItineraryList] = useState("");
@@ -51,7 +54,10 @@ export default function ItineraryListModal(props) {
   const { setMapCenter } = useContext(MapCenterContext);
   const { setZoomHelper } = useContext(ZoomHelperContext);
   const { setSitesArray } = useContext(SitesArrayContext);
-  const { setMapConfig } =useContext(MapConfigContext);
+  const { setMapConfig } = useContext(MapConfigContext);
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
@@ -69,9 +75,8 @@ export default function ItineraryListModal(props) {
   };
 
   useEffect(() => {
-    setShop(itineraryList[0]?.shopID)
+    setShop(itineraryList[0]?.shopID);
   }, [itineraryList]);
-
 
   const handleCreateNewButton = () => {
     setPreviousButtonID(activeButtonID);
@@ -88,7 +93,7 @@ export default function ItineraryListModal(props) {
   const handleEditButton = (itineraryInfo) => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("TripCreator");
-    setEditMode({itineraryInfo, IsEditModeOn: true})
+    setEditMode({ itineraryInfo, IsEditModeOn: true });
     setLargeModal(false);
     useButtonPressHelper(
       "TripCreator",
@@ -96,6 +101,25 @@ export default function ItineraryListModal(props) {
       largeModalSecond,
       setLargeModalSecond
     );
+  };
+
+  const handleDeleteButton = (itineraryInfo) => {
+    insertItineraryRequest(
+      {
+        BookingLink: itineraryInfo.BookingPage,
+        TripName: itineraryInfo.tripName,
+        StartDate: itineraryInfo.startDate,
+        EndDate: itineraryInfo.endDate,
+        Price: itineraryInfo.price,
+        TripDesc: itineraryInfo.description,
+        DiveSites: itineraryInfo.siteList,
+        ShopId: itineraryInfo.shopID,
+      },
+      "Delete"
+    );
+    setConfirmationType("Trip Delete");
+    setActiveConfirmationID("ConfirmationSuccess");
+    setConfirmationModal(true);
   };
 
   const handleShopModalClose = () => {
@@ -135,6 +159,7 @@ export default function ItineraryListModal(props) {
                   buttonOneAction={() => handleEditButton(itinerary)}
                   buttonTwoText="Delete"
                   buttonTwoIcon="delete-forever"
+                  buttonTwoAction={() => handleDeleteButton(itinerary)}
                 />
               );
             })}

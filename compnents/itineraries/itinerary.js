@@ -20,6 +20,7 @@ export default function Itinerary(props) {
     buttonOneAction,
     buttonTwoText,
     buttonTwoIcon,
+    buttonTwoAction,
   } = props;
 
   const moreInfoHeight = useSharedValue(0);
@@ -76,8 +77,10 @@ export default function Itinerary(props) {
           />
           <MaterialCommunityIconsButton
             icon={buttonTwoIcon}
+            buttonAction={buttonTwoAction}
             iconColour="red"
             buttonText={buttonTwoText}
+            
           />
         </View>
       </View>

@@ -676,7 +676,7 @@ export default function Map() {
                     : mapConfig === 1
                     ? null
                     : setupAnchorModal(
-                        cluster.properties.siteID,
+                        cluster.properties.siteName,
                         latitude,
                         longitude
                       )

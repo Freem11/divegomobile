@@ -18,7 +18,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import seaLionGuy from "../png/EmilioNeutral.png";
+import seaLionGuy from "../png/EmilioNew.png";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
@@ -114,7 +114,7 @@ export default function IntroTutorial() {
         setFullScreenModal(true);
         setActiveTutorialID("FirstGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         picX.value = withSpring(0);
@@ -128,7 +128,7 @@ export default function IntroTutorial() {
         setFullScreenModal(true);
         setActiveTutorialID("FirstGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         clusterAnchorY.value = withTiming(windowHeight * 0.4);
@@ -144,7 +144,7 @@ export default function IntroTutorial() {
         setFullScreenModal(true);
         setActiveTutorialID("FirstGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         arrowY.value = withTiming(windowWidth > 600 ? scale(-10) : scale(65));
@@ -416,7 +416,7 @@ export default function IntroTutorial() {
     if (itterator === 0) {
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -566,7 +566,7 @@ export default function IntroTutorial() {
       setTutorialRunning(false);
       setFullScreenModal(false);
       characterX.value = withTiming(
-        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        moderateScale(30)
       );
       textBoxY.value = withTiming(scale(1000));
       setChapter(null);
@@ -961,9 +961,9 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: Platform.OS === "ios" ? "-10%" : "-7%",
+    bottom: Platform.OS === "ios" ? "-7%" : "-7%",
     right: Platform.OS === "ios" ? "-10%" : "-4%",
-    height: scale(400),
+    height: scale(300),
     width: scale(300),
     opacity: 1,
     // backgroundColor: "green"

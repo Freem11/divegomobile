@@ -72,6 +72,9 @@ export default function SuccessModal(props) {
     case "Trip Edit":
       blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
       break;
+    case "Trip Delete":
+      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
+      break;
   }
 
   return (

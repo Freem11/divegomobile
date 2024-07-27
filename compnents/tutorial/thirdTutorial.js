@@ -15,7 +15,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/EmilioNeutral.png";
+import seaLionGuy from "../png/EmilioNew.png";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -99,7 +99,7 @@ export default function ThirdTutorial() {
         setFullScreenModal(true);
         setActiveTutorialID("ThirdGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setUploadedFile(null);
@@ -121,7 +121,7 @@ export default function ThirdTutorial() {
         setActiveTutorialID("ThirdGuide");
         setTutorialRunning(true);
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setLargeModalSecond(true);
@@ -133,7 +133,7 @@ export default function ThirdTutorial() {
         setFullScreenModal(true);
         setActiveTutorialID("ThirdGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setLargeModalSecond(true);
@@ -145,7 +145,7 @@ export default function ThirdTutorial() {
         setFullScreenModal(true);
         setActiveTutorialID("ThirdGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         setLargeModalSecond(true);
@@ -370,7 +370,7 @@ export default function ThirdTutorial() {
       setChapter(null);
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -408,7 +408,7 @@ export default function ThirdTutorial() {
       setChapter(null);
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -436,7 +436,7 @@ export default function ThirdTutorial() {
       setChapter(null);
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -546,7 +546,7 @@ export default function ThirdTutorial() {
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
       characterX.value = withTiming(
-        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+        moderateScale(30)
       );
     } else {
       characterX.value = withTiming(1000);
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: Platform.OS === "ios" ? "-7%" : "-4%",
     right: Platform.OS === "ios" ? "-10%" : "-4%",
-    height: scale(400),
+    height: scale(300),
     width: scale(300),
     opacity: 1,
   },

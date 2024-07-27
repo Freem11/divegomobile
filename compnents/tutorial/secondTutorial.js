@@ -16,7 +16,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/EmilioNeutral.png";
+import seaLionGuy from "../png/EmilioNew.png";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -87,7 +87,7 @@ export default function SecondTutorial() {
         setActiveTutorialID("SecondGuide");
         setLargeModal(true);
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         break;
@@ -98,7 +98,7 @@ export default function SecondTutorial() {
         setActiveTutorialID("SecondGuide");
         setLargeModal(true);
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         break;
@@ -111,7 +111,7 @@ export default function SecondTutorial() {
         setActiveTutorialID("SecondGuide");
         setTutorialRunning(true);
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         break;
@@ -123,7 +123,7 @@ export default function SecondTutorial() {
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         break;
@@ -379,7 +379,7 @@ export default function SecondTutorial() {
       setChapter(null);
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -403,7 +403,7 @@ export default function SecondTutorial() {
       setChapter(null);
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -546,9 +546,7 @@ export default function SecondTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(
-        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
-      );
+      characterX.value = withTiming(moderateScale(30));
     } else {
       characterX.value = withTiming(1000);
     }
@@ -658,9 +656,9 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: Platform.OS === "ios" ? "-10%" : "-7%",
+    bottom: Platform.OS === "ios" ? "-7%" : "-7%",
     right: Platform.OS === "ios" ? "-10%" : "-4%",
-    height: scale(400),
+    height: scale(300),
     width: scale(300),
     opacity: 1,
   },
