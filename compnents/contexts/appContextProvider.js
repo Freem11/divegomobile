@@ -62,6 +62,7 @@ import ConfirmationModalContextProvider from './confirmationModalContext';
 import ConfirmationTypeContextProvider from './confirmationTypeContext';
 import MapConfigContextProvider from './mapConfigContext';
 import ShopContextProvider from './shopContext';
+import EditModeContextProvider from './editModeContext';
 
 const providers = [
     MapConfigContextProvider,
@@ -125,7 +126,8 @@ const providers = [
     FullScreenModalContextProvider,
     ConfirmationModalContextProvider,
     ConfirmationTypeContextProvider,
-    ShopContextProvider
+    ShopContextProvider,
+    EditModeContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

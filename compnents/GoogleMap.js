@@ -152,8 +152,9 @@ export default function Map() {
     DiveSiteSearchModalContext
   );
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
+  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
+    DSAdderContext
+  );
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
@@ -500,9 +501,11 @@ export default function Map() {
   let sitePoints = setupClusters(newSites, sitesArray);
   const points = sitePoints;
 
-  shopPoints.forEach((entity) => {
-    points.push(entity);
-  });
+  mapConfig === 0
+    ? shopPoints.forEach((entity) => {
+        points.push(entity);
+      })
+    : null;
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -566,8 +569,8 @@ export default function Map() {
       region: splitNames[1],
     });
     sitesArray.push(grabbedSite[0].id);
-    setSitesArray(sitesArray)
-    handleMapChange()
+    setSitesArray(sitesArray);
+    handleMapChange();
   };
 
   const removeFromSitesArray = async (siteName) => {
@@ -580,8 +583,8 @@ export default function Map() {
     if (index > -1) {
       sitesArray.splice(index, 1);
     }
-    setSitesArray(sitesArray)
-    handleMapChange()
+    setSitesArray(sitesArray);
+    handleMapChange();
   };
 
   return (
@@ -637,8 +640,10 @@ export default function Map() {
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
-          const { cluster: isCluster, point_count: pointCount } =
-            cluster.properties;
+          const {
+            cluster: isCluster,
+            point_count: pointCount,
+          } = cluster.properties;
 
           if (isCluster) {
             return (
@@ -668,6 +673,8 @@ export default function Map() {
                 onPress={() =>
                   mapConfig === 3
                     ? addToSitesArray(cluster.properties.siteID)
+                    : mapConfig === 1
+                    ? null
                     : setupAnchorModal(
                         cluster.properties.siteID,
                         latitude,
@@ -675,7 +682,7 @@ export default function Map() {
                       )
                 }
               >
-                {mapConfig === 3 ? (
+                {mapConfig in [, 1, , 3] ? (
                   <Callout tooltip>
                     <View
                       style={{

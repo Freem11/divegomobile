@@ -23,6 +23,7 @@ import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
 import { ShopContext } from "../contexts/shopContext";
+import { EditModeContext } from "../contexts/editModeContext";
 import moment from "moment";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import InputFieldLg from "../reusables/textInputLarge";
@@ -44,11 +45,12 @@ let PriceVar = false;
 const windowWidth = Dimensions.get("window").width;
 
 export default function TripCreatorModal() {
+  const {editMode, setEditMode} = useContext(EditModeContext);
   const { setMapConfig } = useContext(MapConfigContext);
   const { shop } = useContext(ShopContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { setMapHelper } = useContext(MapHelperContext);
-  const { setLargeModalSecond } = useContext(
+  const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
   );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
@@ -63,10 +65,33 @@ export default function TripCreatorModal() {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [dateType, setDateType] = useState("");
 
+  const [formValues, setFormValues] = useState({
+    BookingLink: editMode && editMode.itineraryInfo.BookingPage || "",
+    TripName: editMode && editMode.itineraryInfo.tripName || "",
+    StartDate: editMode && editMode.itineraryInfo.startDate || "",
+    EndDate: editMode && editMode.itineraryInfo.endDate || "",
+    Price: editMode && editMode.itineraryInfo.price || 0,
+    TripDesc: editMode && editMode.itineraryInfo.description || "",
+    DiveSites: editMode && editMode.itineraryInfo.siteList || [],
+    ShopId: editMode && editMode.itineraryInfo.shopID || shop,
+  });
+
+  const [formValidation, SetFormValidation] = useState({
+    BookingLinkVal: false,
+    TripNameVal: false,
+    StartDateVal: false,
+    EndDateVal: false,
+    PriceVal: false,
+    TripDescVal: false,
+    DiveSitesVal: false,
+  });
+
   useEffect(() => {
     getTripDiveSites();
     setSitesArray(formValues.DiveSites);
   }, []);
+
+  console.log(formValues)
 
   useEffect(() => {
     setFormValues({ ...formValues, DiveSites: sitesArray });
@@ -97,27 +122,6 @@ export default function TripCreatorModal() {
     }
     getTripDiveSites();
   };
-
-  const [formValues, setFormValues] = useState({
-    BookingLink: "",
-    TripName: "",
-    StartDate: "",
-    EndDate: "",
-    Price: 0,
-    TripDesc: "",
-    DiveSites: [],
-    ShopId: shop,
-  });
-
-  const [formValidation, SetFormValidation] = useState({
-    BookingLinkVal: false,
-    TripNameVal: false,
-    StartDateVal: false,
-    EndDateVal: false,
-    PriceVal: false,
-    TripDescVal: false,
-    DiveSitesVal: false,
-  });
 
   const showDatePicker = (value) => {
     setDateType(value);
@@ -152,6 +156,19 @@ export default function TripCreatorModal() {
   };
 
   const toggleTripCreatorModal = () => {
+    setFormValues({
+      ...formValues,
+      BookingLink: "",
+      TripName: "",
+      StartDate: "",
+      EndDate: "",
+      Price: 0,
+      TripDesc: "",
+      DiveSites: [],
+    });
+    setSitesArray([]);
+    setValue("$0.00");
+    setEditMode(false);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("TripCreator");
     setLargeModalSecond(false);

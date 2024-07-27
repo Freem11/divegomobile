@@ -9,13 +9,6 @@ import {
   Linking,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  useDerivedValue,
-  interpolate,
-} from "react-native-reanimated";
 import Itinerary from "../itineraries/itinerary";
 import { getItinerariesByUserId } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
@@ -30,8 +23,12 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { ShopContext } from "../../compnents/contexts/shopContext";
+import { EditModeContext } from "../../compnents/contexts/editModeContext";
+import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
+import { MapConfigContext } from '../../compnents/contexts/mapConfigContext';
 import ModalHeader from "../reusables/modalHeader";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
+import { useMapFlip } from '../itineraries/hooks';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -45,17 +42,16 @@ export default function ItineraryListModal(props) {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { shop, setShop } = useContext(ShopContext);
+  const { setShop } = useContext(ShopContext);
+  const {editMode, setEditMode} = useContext(EditModeContext);
   const { profile } = useContext(UserProfileContext);
-  const { itineraryListModal, setItineraryListModal } = props;
-  const { shopModal, setShopModal } = useContext(ShopModalContext);
-  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const [siteCloseState, setSiteCloseState] = useState(false);
+  const { setShopModal } = useContext(ShopModalContext);
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
-  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
-  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setMapCenter } = useContext(MapCenterContext);
+  const { setZoomHelper } = useContext(ZoomHelperContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
+  const { setMapConfig } =useContext(MapConfigContext);
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
@@ -80,6 +76,19 @@ export default function ItineraryListModal(props) {
   const handleCreateNewButton = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("TripCreator");
+    setLargeModal(false);
+    useButtonPressHelper(
+      "TripCreator",
+      activeButtonID,
+      largeModalSecond,
+      setLargeModalSecond
+    );
+  };
+
+  const handleEditButton = (itineraryInfo) => {
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("TripCreator");
+    setEditMode({itineraryInfo, IsEditModeOn: true})
     setLargeModal(false);
     useButtonPressHelper(
       "TripCreator",
@@ -123,6 +132,7 @@ export default function ItineraryListModal(props) {
                   setShopModal={setShopModal}
                   buttonOneText="Edit"
                   buttonOneIcon="calendar-edit"
+                  buttonOneAction={() => handleEditButton(itinerary)}
                   buttonTwoText="Delete"
                   buttonTwoIcon="delete-forever"
                 />

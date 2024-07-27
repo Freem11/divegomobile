@@ -8,6 +8,14 @@ export const useMapFlip = async (
   setMapConfig,
   setMapCenter
 ) => {
+
+  console.log("STUFF", siteList,
+    setSitesArray,
+    setZoomHelper,
+    setLargeModal,
+    setMapConfig,
+    setMapCenter)
+
   setSitesArray(siteList);
   let itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteList));
 
