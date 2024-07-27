@@ -42,20 +42,16 @@ export default function ItineraryListModal(props) {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { shop, setShop } = useContext(ShopContext);
+  const { setShop } = useContext(ShopContext);
   const {editMode, setEditMode} = useContext(EditModeContext);
   const { profile } = useContext(UserProfileContext);
-  const { itineraryListModal, setItineraryListModal } = props;
-  const { shopModal, setShopModal } = useContext(ShopModalContext);
-  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const [siteCloseState, setSiteCloseState] = useState(false);
+  const { setShopModal } = useContext(ShopModalContext);
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
-  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
-  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setMapCenter } = useContext(MapCenterContext);
+  const { setZoomHelper } = useContext(ZoomHelperContext);
   const { setSitesArray } = useContext(SitesArrayContext);
-  const { mapConfig, setMapConfig } =useContext(MapConfigContext);
+  const { setMapConfig } =useContext(MapConfigContext);
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
@@ -80,6 +76,19 @@ export default function ItineraryListModal(props) {
   const handleCreateNewButton = () => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("TripCreator");
+    setLargeModal(false);
+    useButtonPressHelper(
+      "TripCreator",
+      activeButtonID,
+      largeModalSecond,
+      setLargeModalSecond
+    );
+  };
+
+  const handleEditButton = (itineraryInfo) => {
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("TripCreator");
+    setEditMode({itineraryInfo, IsEditModeOn: true})
     setLargeModal(false);
     useButtonPressHelper(
       "TripCreator",
@@ -123,7 +132,7 @@ export default function ItineraryListModal(props) {
                   setShopModal={setShopModal}
                   buttonOneText="Edit"
                   buttonOneIcon="calendar-edit"
-                  buttonOneAction={() => useMapFlip(itinerary.siteList, setSitesArray, setZoomHelper, setLargeModal, setMapConfig, setMapCenter)}
+                  buttonOneAction={() => handleEditButton(itinerary)}
                   buttonTwoText="Delete"
                   buttonTwoIcon="delete-forever"
                 />
