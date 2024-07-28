@@ -264,10 +264,11 @@ export default function DiveSiteModal() {
       setConfirmationModal(true);
       return;
     } else {
-      if (tutorialRunning) {
+      if (itterator2 === 23) {
         setConfirmationType("Dive Site");
         setActiveConfirmationID("ConfirmationSuccess");
         setConfirmationModal(true);
+        setItterator2(itterator2 + 1)
       } else {
         insertDiveSiteWaits(addSiteVals);
         setAddSiteVals({

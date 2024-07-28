@@ -33,10 +33,12 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
 } from "@expo/vector-icons";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -45,6 +47,7 @@ export default function SecondTutorial() {
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { setActiveButtonID } = useContext(ActiveButtonIDContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
@@ -85,7 +88,7 @@ export default function SecondTutorial() {
         setItterator2(1);
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
-        setLargeModal(true);
+        setLargeModal(false);
         characterX.value = withTiming(
           moderateScale(30)
         );
@@ -95,6 +98,7 @@ export default function SecondTutorial() {
       case "Adding your dive sites":
         setItterator2(8);
         setFullScreenModal(true);
+        setLargeModal(true);
         setActiveTutorialID("SecondGuide");
         setLargeModal(true);
         characterX.value = withTiming(
@@ -105,7 +109,7 @@ export default function SecondTutorial() {
 
       case "DS Help":
         setItterator2(10);
-        setLargeModal(false);
+        setLargeModal(true);
         setActiveButtonID("DiveSiteAdderButton");
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
@@ -121,6 +125,7 @@ export default function SecondTutorial() {
         setLargeModal(false);
         setActiveButtonID("DiveSiteAdderButton");
         setFullScreenModal(true);
+        setLargeModal(true);
         setActiveTutorialID("SecondGuide");
         characterX.value = withTiming(
           moderateScale(30)
@@ -373,8 +378,6 @@ export default function SecondTutorial() {
       setActiveTutorialID("SecondGuide");
     }
 
-    console.log(itterator2, fullScreenModal, largeModal);
-
     if (itterator2 === 5) {
       setChapter(null);
       setTimeout(() => {
@@ -484,6 +487,7 @@ export default function SecondTutorial() {
       nextTutX.value = withTiming(-300);
       setLargeModal(false);
       setTutorialRunning(false);
+      setConfirmationModal(false);
     }
 
     if (itterator2 === feederArray.length - 1) {

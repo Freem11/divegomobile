@@ -66,6 +66,7 @@ import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { IterratorContext } from "./contexts/iterratorContext";
+import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
@@ -109,6 +110,7 @@ export default function MapPage() {
     ActiveTutorialIDContext
   );
   const { itterator, setItterator } = useContext(IterratorContext);
+  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
@@ -301,8 +303,10 @@ export default function MapPage() {
         setMasterSwitch(true);
         setMapConfig(0);
         setActiveButtonID("DiveSiteAdderButton");
-        setLargeModal(!largeModal);
-        // setItterator2(itterator2 + 1);
+        setLargeModal(true);
+        if (itterator2 === 19) {
+          setItterator2(itterator2 + 1);
+        }
         setChosenModal(null);
       } else if (chosenModal === "Photos") {
         setPinValues({
@@ -390,9 +394,8 @@ export default function MapPage() {
   };
 
   const registerForPushNotificationsAsync = async (sess) => {
-    const {
-      status: existingStatus,
-    } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
@@ -497,10 +500,15 @@ export default function MapPage() {
   const handleMapSearchButton = () => {
     setTiles(true);
     setShowFilterer(false);
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID('MapSearchButton')
-    useButtonPressHelper('MapSearchButton', activeButtonID, smallModal, setSmallModal)
-  }
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("MapSearchButton");
+    useButtonPressHelper(
+      "MapSearchButton",
+      activeButtonID,
+      smallModal,
+      setSmallModal
+    );
+  };
 
   return (
     <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
