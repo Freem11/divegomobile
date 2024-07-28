@@ -1,16 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { scale, moderateScale } from "react-native-size-matters";
-import { MapConfigContext } from '../contexts/mapConfigContext';
-import { ShopModalContext } from "../contexts/shopModalContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
-import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
-import { MapSearchModalContext } from "../contexts/mapSearchContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
-import { SettingsContext } from "../contexts/gearModalContext";
-import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
+import { moderateScale } from "react-native-size-matters";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
@@ -18,60 +8,42 @@ import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { SmallModalContext } from '../contexts/smallModalContext';
-import {
-  MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import { useButtonPressHelper } from './buttonPressHelper';
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useButtonPressHelper } from "./buttonPressHelper";
 
 export default function LocationSearchButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { smallModal, setSmallModal } = useContext(SmallModalContext);
-  const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
-  const { mapSearchModal, setMapSearchModal } = useContext(
-    MapSearchModalContext
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
   );
-  const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
-  const { setDiveSiteAdderModal } = useContext(DSAdderContext);
-  const { setPicAdderModal } = useContext(PictureAdderContext);
-  const { setProfileModal } = useContext(ProfileModalContext);
-  const { setGearModal } = useContext(SettingsContext);
-  const { setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
-  const { setSiteModal } = useContext(AnchorModalContext);
-  const { setShopModal } = useContext(ShopModalContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setLargeModal } = useContext(LargeModalContext);
+  const { setTiles } = useContext(CarrouselTilesContext);
+  const { setShowFilterer } = useContext(PullTabContext);
 
   const { itterator } = useContext(IterratorContext);
   const { itterator2 } = useContext(Iterrator2Context);
   const { itterator3 } = useContext(Iterrator3Context);
 
-  useEffect(() => {
-    if (mapSearchModal) {
-      setDiveSiteAdderModal(false);
-      setTutorialLaunchpadModal(false);
-      setPicAdderModal(false);
-      setProfileModal(false);
-      setGearModal(false);
-      setDiveSiteSearchModal(false);
-      setSiteModal(false);
-      setShopModal(false);
-      setShowFilterer(false);
-      setTiles(true);
-    }
-  }, [mapSearchModal]);
-
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID('MapSearchButton')
-    useButtonPressHelper('MapSearchButton', activeButtonID, smallModal, setSmallModal)
-  }
+    setLargeModalSecond(false);
+    setLargeModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("MapSearchButton");
+    useButtonPressHelper(
+      "MapSearchButton",
+      activeButtonID,
+      smallModal,
+      setSmallModal
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -123,9 +95,6 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    // borderWidth: 1,
-    // borderColor: "darkgrey",
-    // borderRadius: 10,
     backgroundColor: "#538bdb",
     width: moderateScale(80),
     height: moderateScale(55),

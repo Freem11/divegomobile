@@ -1,61 +1,37 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { scale, moderateScale } from "react-native-size-matters";
-import { MapConfigContext } from '../contexts/mapConfigContext';
-import { ShopModalContext } from "../contexts/shopModalContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
-import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
-import { MapSearchModalContext } from "../contexts/mapSearchContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
-import { SettingsContext } from "../contexts/gearModalContext";
-import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
+import { moderateScale } from "react-native-size-matters";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
-import {
-  MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
-import { useButtonPressHelper } from './buttonPressHelper';
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { useButtonPressHelper } from "./buttonPressHelper";
 
 export default function DiveSiteButton() {
   const [butState, setButState] = useState(false);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { previousButtonID, setPreviousButtonID } = useContext(
-    PreviousButtonIDContext
-  );
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setSmallModal } = useContext(SmallModalContext);
 
-  const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
-  const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
-  const { setMapSearchModal } = useContext(MapSearchModalContext);
-  const { setPicAdderModal } = useContext(PictureAdderContext);
-  const { setProfileModal } = useContext(ProfileModalContext);
-  const { setGearModal } = useContext(SettingsContext);
-  const { setDiveSiteSearchModal } = useContext(DiveSiteSearchModalContext);
-  const { setSiteModal } = useContext(AnchorModalContext);
-  const { setShopModal } = useContext(ShopModalContext);
+  const { setTiles } = useContext(CarrouselTilesContext);
+  const { setShowFilterer } = useContext(PullTabContext);
 
-  const { itterator, setItterator } = useContext(IterratorContext);
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { itterator } = useContext(IterratorContext);
+  const { itterator2 } = useContext(Iterrator2Context);
+  const { itterator3 } = useContext(Iterrator3Context);
+  const { tutorialRunning } = useContext(TutorialContext);
 
   let counter = 0;
   let blinker;
@@ -83,27 +59,19 @@ export default function DiveSiteButton() {
     return () => cleanUp();
   }, [itterator2]);
 
-  useEffect(() => {
-    if (diveSiteAdderModal) {
-      setTutorialLaunchpadModal(false);
-      setMapSearchModal(false);
-      setPicAdderModal(false);
-      setProfileModal(false);
-      setGearModal(false);
-      setDiveSiteSearchModal(false);
-      setSiteModal(false);
-      setShopModal(false);
-      setShowFilterer(false);
-      setTiles(true);
-    }
-  }, [diveSiteAdderModal]);
-
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
+    setLargeModalSecond(false);
+    setSmallModal(false);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("DiveSiteAdderButton");
-    useButtonPressHelper("DiveSiteAdderButton", activeButtonID, largeModal, setLargeModal)
+    useButtonPressHelper(
+      "DiveSiteAdderButton",
+      activeButtonID,
+      largeModal,
+      setLargeModal
+    );
   };
 
   return (
@@ -156,9 +124,6 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    // borderWidth: 1,
-    // borderColor: "darkgrey",
-    // borderRadius: 10,
     backgroundColor: "#538bdb",
     width: moderateScale(80),
     height: moderateScale(55),

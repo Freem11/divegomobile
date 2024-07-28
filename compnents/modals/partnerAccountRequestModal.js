@@ -60,8 +60,8 @@ export default function PartnerAccountRequestModal() {
     });
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("PartnerAccountButton");
-    setLargeModalSecond(true);
-    setLargeModal(!largeModal);
+    setLargeModalSecond(false);
+    setLargeModal(false);
   };
 
   const handleSubmit = (formValues) => {

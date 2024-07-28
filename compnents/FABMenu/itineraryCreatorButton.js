@@ -1,105 +1,44 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
-import { scale, moderateScale } from "react-native-size-matters";
-import { MapConfigContext } from '../contexts/mapConfigContext';
-import { ShopModalContext } from "../contexts/shopModalContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
-import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
-import { MapSearchModalContext } from "../contexts/mapSearchContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
-import { SettingsContext } from "../contexts/gearModalContext";
-import { ItineraryListModalContext } from "../contexts/itineraryListModalContext";
-import { IterratorContext } from "../contexts/iterratorContext";
-import { Iterrator2Context } from "../contexts/iterrator2Context";
-import { Iterrator3Context } from "../contexts/iterrator3Context";
-import { TutorialContext } from "../contexts/tutorialContext";
+import { moderateScale } from "react-native-size-matters";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
-import {
-  MaterialIcons,
-  FontAwesome5,
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalContext } from '../contexts/largeModalContext';
-import { useButtonPressHelper } from './buttonPressHelper';
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { SmallModalContext } from "../contexts/smallModalContext";
+import { useButtonPressHelper } from "./buttonPressHelper";
 
 export default function ItineraryListButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
-  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  
-  const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
-  const { itineraryListModal, setItineraryListModal } = useContext(ItineraryListModalContext);
-  const { setGearModal } = useContext(SettingsContext);
-  const { setProfileModal } = useContext(ProfileModalContext);
-  const { setPicAdderModal } = useContext(PictureAdderContext);
-  const { setMapSearchModal } = useContext(MapSearchModalContext);
-  const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
-  const { setDiveSiteAdderModal } = useContext(DSAdderContext);
-  const { setSiteModal } = useContext(AnchorModalContext);
-  const { setShopModal } = useContext(ShopModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setSmallModal } = useContext(SmallModalContext);
 
-  const { itterator } = useContext(IterratorContext);
-  const { itterator2 } = useContext(Iterrator2Context);
-  const { itterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-
-  let counter = 0;
-  let blinker;
-
-  function diveSiteSearch() {
-    counter++;
-    if (counter % 2 == 0) {
-      setButState(false);
-    } else {
-      setButState(true);
-    }
-  }
-
-  function cleanUp() {
-    clearInterval(blinker);
-    setButState(false);
-  }
-
-  useEffect(() => {
-    if (tutorialRunning) {
-      if (itterator2 === 3) {
-        blinker = setInterval(diveSiteSearch, 1000);
-      }
-    }
-    return () => cleanUp();
-  }, [itterator2]);
-
-  useEffect(() => {
-    if (itineraryListModal) {
-      setDiveSiteAdderModal(false);
-      setTutorialLaunchpadModal(false);
-      setMapSearchModal(false);
-      setPicAdderModal(false);
-      setProfileModal(false);
-      setGearModal(false);
-      setSiteModal(false);
-      setShopModal(false);
-      setShowFilterer(false);
-      setTiles(true);
-    }
-  }, [itineraryListModal]);
+  const { setTiles } = useContext(CarrouselTilesContext);
+  const { setShowFilterer } = useContext(PullTabContext);
 
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID('ItineraryListButton')
-    useButtonPressHelper('ItineraryListButton', activeButtonID, largeModal, setLargeModal)
-  }
-  
+    setLargeModalSecond(false);
+    setSmallModal(false);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("ItineraryListButton");
+    useButtonPressHelper(
+      "ItineraryListButton",
+      activeButtonID,
+      largeModal,
+      setLargeModal
+    );
+  };
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
@@ -141,9 +80,6 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    // borderWidth: 1,
-    // borderColor: "darkgrey",
-    // borderRadius: 10,
     backgroundColor: "#538bdb",
     width: moderateScale(80),
     height: moderateScale(55),
