@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "hidden",
     flexDirection: "row",
-    backgroundColor: "#538bdb"
+    // backgroundColor: "#538bdb"
   },
   mainBox: {
     height: "10%",
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     marginTop: scale(3),
   },
   xButton: {
-    marginTop: moderateScale(32),
+    marginTop: moderateScale(12),
     marginLeft: moderateScale(-30),
     // backgroundColor: "yellow",
   },

@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Dimensions,
-  ActivityIndicator, ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
@@ -77,7 +77,7 @@ export default function PicUploadModal() {
   const [date, setDate] = useState(new Date());
 
   const [isLoading, setIsLoading] = useState(false);
-  const { uploadedFiles, setUploadedFiles } = useContext(PictureContext);
+  const { uploadedFile, setUploadedFile } = useContext(PictureContext);
 
   const [formValidation, SetFormValidation] = useState({
     PictureVal: false,
@@ -195,12 +195,10 @@ export default function PicUploadModal() {
 
     let chosenImage = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      // allowsEditing: true,
+      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
       exif: true,
-      allowsMultipleSelection: true,
-      selectionLimit: 5
     });
 
     try {
@@ -325,7 +323,7 @@ export default function PicUploadModal() {
           Longitude: "",
           DDVal: "0",
         });
-        setUploadedFiles(null);
+        setUploadedFile(null);
 
         setConfirmationType("Sea Creature Submission");
         setActiveConfirmationID("ConfirmationSuccess");
@@ -354,11 +352,11 @@ export default function PicUploadModal() {
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
-        if (image.assets[0].exif?.DateTimeOriginal) {
+        if (image.assets[0].exif.DateTimeOriginal) {
           formattedDate = formatDate(image.assets[0].exif.DateTimeOriginal);
         }
 
-        if (image.assets[0].exif?.GPSLatitude) {
+        if (image.assets[0].exif.GPSLatitude) {
           newLatitude = image.assets[0].exif.GPSLatitude.toString();
           newLongitude = image.assets[0].exif.GPSLongitude.toString();
         }
@@ -371,26 +369,12 @@ export default function PicUploadModal() {
           Longitude: newLongitude,
         });
 
-        const imagesFromLibrary = image.assets;
-
-        const newUploadedUris = []
-
-        const uploadImageFromLibrary = async (imageFromLibrary) => {
-          const imageUri = imageFromLibrary.uri
-
-          newUploadedUris.push(imageFromLibrary.uri)
-
-          //create new photo file and upload
-          let picture = await fetch(imageUri);
-          picture = await picture.blob();
-          await uploadphoto(picture, fileName);
-        }
-
-        setUploadedFiles(newUploadedUris);
-
-        imagesFromLibrary.forEach(uploadImageFromLibrary)
-
+        //create new photo file and upload
+        setUploadedFile(image.assets[0].uri);
         setIsLoading(false);
+        let picture = await fetch(image.assets[0].uri);
+        picture = await picture.blob();
+        uploadphoto(picture, fileName);
 
         DateVar = false;
         AnimalVar = false;
@@ -440,7 +424,7 @@ export default function PicUploadModal() {
           });
         }
 
-        setUploadedFiles(null);
+        setUploadedFile(null);
 
         if (largeModalSecond) {
           setPinValues({
@@ -472,7 +456,7 @@ export default function PicUploadModal() {
         });
       }
 
-      setUploadedFiles(null);
+      setUploadedFile(null);
 
       if (largeModalSecond) {
         setPinValues({
@@ -510,6 +494,7 @@ export default function PicUploadModal() {
   }, [pinValues]);
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <ModalHeader
           titleText={"Submit Your Picture"}
@@ -519,50 +504,37 @@ export default function PicUploadModal() {
         />
 
         <View style={styles.contentContainer}>
-          <ScrollView
-            horizontal
-            style={styles.picsScrollContainer}
-            contentContainerStyle={styles.picsScrollContentContainer}
-            showsHorizontalScrollIndicator={false}
-            scrollEnabled={!!uploadedFiles?.length}
-          >
-            {uploadedFiles && uploadedFiles?.map((image) => {
-              return (
-                <View style={styles.picContainer}>
-                  <Image
-                    key={image}
-                    source={{
-                      uri: image,
-                      // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFiles}`,
-                    }}
-                    style={[
-                      formValidation.PictureVal
-                          ? styles.imgStyleRed
-                          : styles.imgStyle,
-                        styles.pic,
-                    ]
-                    }
-                  />
-                </View>
-              )
-            })}
-            {!uploadedFiles && !isLoading && (
+          <View style={styles.picContainer}>
+            {uploadedFile && (
+              <Image
+                source={{
+                  uri: `${uploadedFile}`,
+                  // uri: `https://lsakqvscxozherlpunqx.supabase.co/storage/v1/object/public/${uploadedFile}`,
+                }}
+                style={
+                  formValidation.PictureVal
+                    ? styles.imgStyleRed
+                    : styles.imgStyle
+                }
+              />
+            )}
+            {!uploadedFile && !isLoading && (
               <View
                 style={
-                  [formValidation.PictureVal
+                  formValidation.PictureVal
                     ? styles.imgStyleRed
-                    : styles.imgStyle, styles.picContainer]
+                    : styles.imgStyle
                 }
               />
             )}
 
-            {!uploadedFiles && isLoading && (
+            {!uploadedFile && isLoading && (
               <ActivityIndicator
                 color="gold"
                 style={{ marginTop: "5%", backgroundColor: "#538dbd" }}
               ></ActivityIndicator>
             )}
-          </ScrollView>
+          </View>
 
           <View
             style={{
@@ -571,7 +543,6 @@ export default function PicUploadModal() {
               marginBottom: "1%",
             }}
           >
-
             <PrimaryButton
               buttonAction={handleImageUpload}
               label={"Choose an Image"}
@@ -579,7 +550,6 @@ export default function PicUploadModal() {
             />
 
             <CompletnessIndicator indicatorState={indicatorState} />
-
           </View>
 
           <View style={styles.lowerZone}>
@@ -662,6 +632,7 @@ export default function PicUploadModal() {
           />
         </View>
       </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -679,26 +650,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // backgroundColor: "pink",
   },
-  picsScrollContentContainer: {
+  picContainer: {
+    marginTop: moderateScale(-70),
     alignItems: "center",
     justifyContent: "center",
-
-    gap: moderateScale(16),
-
-    paddingHorizontal: '10%',
-    paddingVertical: moderateScale(8),
-  },
-  picsScrollContainer: {
-    marginTop: moderateScale(-70),
     marginBottom: Platform.OS === "ios" ? moderateScale(10) : "2%",
-    // width: '100%',
-    height: Platform.OS === "ios" ? "35%" : "35%",
+    borderWidth: 0.3,
     borderRadius: scale(15),
-
-    flexGrow: 0,
-
-  },
-  picContainer: {
+    borderColor: "darkgrey",
+    width: Platform.OS === "ios" ? "80%" : "80%",
+    height: Platform.OS === "ios" ? "35%" : "35%",
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -706,19 +667,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3,
+
     elevation: 10,
-
-    width: windowWidth * 0.7,
-
-    borderWidth: 0.3,
-    borderColor: "darkgrey",
-  },
-  pic: {
-    height: '100%',
-    width: windowWidth * 0.7,
-
-    borderWidth: 0.3,
-    borderColor: "darkgrey",
   },
   lowerZone: {
     flexDirection: "column",
@@ -741,7 +691,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "80%",
+    width: "73%",
     height: "25%",
   },
   latField: {

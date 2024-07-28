@@ -343,6 +343,7 @@ const editButtonPress = () => {
               keyboardType={"numbers-and-punctuation"}
               onChangeText={setValue}
             />
+            <View style={styles.spacer}>
             <TouchableWithoutFeedback
               onPress={() => showDatePicker("StartDate")}
               style={{
@@ -360,7 +361,8 @@ const editButtonPress = () => {
                 />
               </View>
             </TouchableWithoutFeedback>
-
+            </View>
+            <View style={styles.spacer}>
             <TouchableWithoutFeedback
               onPress={() => showDatePicker("EndDate")}
               style={{
@@ -378,6 +380,7 @@ const editButtonPress = () => {
                 />
               </View>
             </TouchableWithoutFeedback>
+            </View>
           </View>
 
           <View style={styles.rightSide}>
@@ -524,4 +527,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "green",
     margin: moderateScale(2),
   },
+  spacer: {
+    marginTop: moderateScale(20)
+  }
 });

@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(20),
   },
   inputBox: {
-    marginTop: moderateScale(-10),
+    marginTop: moderateScale(10),
   },
   SignUpWithGoogle: {
     backgroundColor: "#ffffff",

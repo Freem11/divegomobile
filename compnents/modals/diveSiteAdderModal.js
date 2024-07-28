@@ -15,7 +15,7 @@ import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { ChapterContext } from "../contexts/chapterContext";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
-import { MapConfigContext } from '../contexts/mapConfigContext';
+import { MapConfigContext } from "../contexts/mapConfigContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
@@ -24,7 +24,7 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
 import ModalHeader from "../reusables/modalHeader";
@@ -37,17 +37,17 @@ let LatVar = false;
 let LngVar = false;
 
 export default function DiveSiteModal() {
-  const { setMapConfig } =useContext(MapConfigContext);
+  const { setMapConfig } = useContext(MapConfigContext);
   const { setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { setActiveTutorialID } = useContext(
-    ActiveTutorialIDContext
-  );
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setChosenModal } = useContext(ModalSelectContext);
 
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
@@ -171,7 +171,7 @@ export default function DiveSiteModal() {
   useEffect(() => {
     if (itterator2 === 10 || itterator2 === 17) {
       setFullScreenModal(true);
-      setActiveTutorialID("SecondGuide")
+      setActiveTutorialID("SecondGuide");
     }
   }, [itterator2]);
 
@@ -303,7 +303,7 @@ export default function DiveSiteModal() {
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("DiveSiteAdderButton");
       setLargeModal(!largeModal);
-      setSmallModal(false)
+      setSmallModal(false);
       SetFormValidation({
         SiteNameVal: false,
         LatVal: false,
@@ -363,27 +363,29 @@ export default function DiveSiteModal() {
               }
             />
 
-            <InputField
-              validationItem={formValidation.LatVal}
-              placeHolderText={"Latitude"}
-              inputValue={addSiteVals.Latitude}
-              keyboardType={"numbers-and-punctuation"}
-              onChangeText={(text) =>
-                setAddSiteVals({ ...addSiteVals, Latitude: text })
-              }
-            />
-
-            <InputField
-              validationItem={formValidation.LngVal}
-              placeHolderText={"Longitude"}
-              inputValue={addSiteVals.Longitude}
-              keyboardType={"numbers-and-punctuation"}
-              onChangeText={(text) =>
-                setAddSiteVals({ ...addSiteVals, Longitude: text })
-              }
-            />
+            <View style={styles.spacer}>
+              <InputField
+                validationItem={formValidation.LatVal}
+                placeHolderText={"Latitude"}
+                inputValue={addSiteVals.Latitude}
+                keyboardType={"numbers-and-punctuation"}
+                onChangeText={(text) =>
+                  setAddSiteVals({ ...addSiteVals, Latitude: text })
+                }
+              />
+            </View>
+            <View style={styles.spacer}>
+              <InputField
+                validationItem={formValidation.LngVal}
+                placeHolderText={"Longitude"}
+                inputValue={addSiteVals.Longitude}
+                keyboardType={"numbers-and-punctuation"}
+                onChangeText={(text) =>
+                  setAddSiteVals({ ...addSiteVals, Longitude: text })
+                }
+              />
+            </View>
           </View>
-
           {isLoading && (
             <ActivityIndicator
               color="gold"
@@ -441,8 +443,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginLeft: scale(-90),
-    marginTop: 35,
+    marginTop: moderateScale(30),
     width: 140,
     // backgroundColor: "pink"
+  },
+  spacer: {
+    marginTop: moderateScale(20),
   },
 });

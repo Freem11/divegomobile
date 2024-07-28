@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     marginTop: scale(10),
   },
   inputBox: {
-    marginTop: moderateScale(-10),
+    marginTop: moderateScale(10),
   },
   erroMsg: {
     margin: 5,
