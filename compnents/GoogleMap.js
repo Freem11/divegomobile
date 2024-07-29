@@ -531,6 +531,9 @@ export default function Map() {
       largeModal,
       setLargeModal
     );
+    if (itterator3 === 5){
+      setItterator3(itterator3 + 1)
+    }
   };
 
   const setupShopModal = async (shopName) => {

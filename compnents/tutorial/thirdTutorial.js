@@ -16,6 +16,7 @@ import Animated, {
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
 import seaLionGuy from "../png/EmilioNew.png";
+import anchorIconIOS from "../png/mapIcons/AnchorBlue.png";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -178,7 +179,7 @@ export default function ThirdTutorial() {
   const resetTutorial = async () => {
     characterX.value = 1000;
     textBoxY.value = 1000;
-    photoY.value = scale(-1000);
+    anchorY.value = scale(-1000);
     imageY.value = scale(-1000);
     pinY.value = scale(-1000);
     mantaY.value = scale(-1200);
@@ -200,7 +201,7 @@ export default function ThirdTutorial() {
 
   const characterX = useSharedValue(1000);
   const textBoxY = useSharedValue(1000);
-  const photoY = useSharedValue(scale(-1000));
+  const anchorY = useSharedValue(scale(-1000));
   const imageY = useSharedValue(scale(-1000));
   const calendarY = useSharedValue(scale(-1000));
   const pinY = useSharedValue(scale(-1000));
@@ -211,46 +212,40 @@ export default function ThirdTutorial() {
   const text1 =
     "This time, let's look at working with your sea creature sightings, in other words the photos of sea creatures you have taken on your dives ";
   const text2 =
-    "At this point you have already seen that diver's photos make up the heat map and show up when you open a dive site that is near to a sighting";
+    "At this point you have already seen that diver's photos make up the heat map and can be viewed when you open a dive site.";
   const text3 =
-    "Now it's time for you to join your fellow divers! To add a photo, we first need to open up the photo adding form, under the photo icon. It looks like this";
-  const text4 = "Open it up and let's take a look!";
+    "To add a photo, we first need to open up the specific dive site that we want to add a photo sighting to.";
+  const text4 = "To do that let's tap on any of the blue anchor icons that are on the map screen.";
   const text5 = "";
-  const text6 =
-    "This is the photo adding form, as you can see there's a lot here, so let's start from the top and work our way down.";
-  const text7 =
-    "At the top you can see this big empty field and just below is the 'Choose an image' button, tap it to go into your device's photos and select one (preferably a sea creature of course!)";
+  const text6 = "Now that we have a dive site open, you can find the photo add button up along the top, if you are on a site with no picutres yet you can also see another photo add button in the middle of the page."
+  const text7 = "In iether case tap one of them and we will find the photo adding form."
   const text8 = "";
   const text9 =
-    "As you can see, the photo you chose is now in the big empty field and, depending on the photo you may have seen, that the date, lat. and lng. fields are populated. Scuba SEAsons will pull that data off your photo if it carries that info. If not, don't worry we can add them manually.";
+    "This is the photo adding form, as you can see there's a lot here, so let's start from the top and work our way down.";
   const text10 =
-    "In any case, let's assume you need to add in that info. First let's take care of the date, you'll see a calendar icon just to the right of the date field (looks like this) tap in and set the date the photo was taken for us";
+    "At the top you can see this big empty field and just below is the 'Choose an image' button, tap it to go into your device's photos and select one (preferably a sea creature of course!)";
   const text11 = "";
   const text12 =
-    "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one, you can tap right on it and a dropdown will pop up.";
+    "As you can see, the photo you chose is now in the big empty field.";
   const text13 =
-    "Start entering the name of the sea creature in your picture, if it already exists in Scuba SEAsons it will show up as a selectable option to help speed things along, but if it's completely new you will need to type it out.";
+    "Next, let's take care of the date, tap the field and the date picker will pop up, adjust it to the date you want and press confirn to set the date the photo was taken.";
   const text14 = "";
   const text15 =
-    "Wonderful! Now that the sea creature has its name, the only piece left is the GPS, since we are assuming that we don't have them, use the Pin Dropper button to open up the map so we can drop a pin!";
-  const text16 = "";
+    "Great! Now that we have the correct date in place, let's move down to the next 'animal' field. For this one, you can tap right on it and a dropdown will pop up.";
+  const text16 =
+    "Start entering the name of the sea creature in your picture, if it already exists in Scuba SEAsons it will show up as a selectable option to help speed things along, but if it's completely new you will need to type it out.";
   const text17 =
-    "And here we are! As you can see we have returned to the map page and the manta ray draggable pin is waiting for us once again.";
+    "Wonderful! Now that the sea creature has its name and date, your sighting is now ready! (Please note: The location or GPS is taken from the location of the dive site you are attaching the photo to)";
   const text18 =
-    "Let's pretend that one of the dive sites on the map is where your sea creature sighting took place, drag the manta pin to be on top of it's anchor and then tap the 'set pin' button at the bottom";
+    "All you need to do now is tap the 'submit photo' button at the bottom to finish up!";
   const text19 = "";
   const text20 =
-    "As you can see Scuba SEAsons has taken the location of the pin you set and has given us its GPS coordinates!";
-  const text21 =
-    "Your sighting is now ready! All you need to do now is tap the 'submit photo' button at the bottom to finish up!";
-  const text22 = "";
-  const text23 =
     "Bam! That's how you add a new sea creature sighting to Scuba SEAsons! As we did with the dive site guide, this entry was not submitted since it's a dry run, but you can from now on in the same way.";
-  const text24 =
+  const text21 =
     "Just like with the Dive site submissions your sea creature sighting won't automatically be added to the map, the Scuba SEAsons team will verify your submission before committing to the map, but after that your photo will go in and be credited to you with your diver name that we setup back in the intro guide!";
-  const text25 =
+  const text22 =
     "That's it for adding sea creature sightings to the app! This is currently the last guide so tap anywhere else to close, and thanks for being a member of Scuba SEAsons, I look forward to seeing what amazing sea creatures you encounter on your dives!";
-  const text26 = "";
+  const text23 = "";
 
   const [textRead, setTextRead] = useState("");
   const [textPrinting, setTextPrinting] = useState(true);
@@ -280,9 +275,6 @@ export default function ThirdTutorial() {
     text21,
     text22,
     text23,
-    text24,
-    text25,
-    text26,
   ];
 
   //  var interval;
@@ -294,8 +286,6 @@ export default function ThirdTutorial() {
       itterator3 === 11 ||
       itterator3 === 14 ||
       itterator3 === 16 ||
-      itterator3 === 19 ||
-      itterator3 === 22 ||
       itterator3 >= 26
     ) {
       return;
@@ -363,7 +353,7 @@ export default function ThirdTutorial() {
     }
 
     if (itterator3 === 3) {
-      photoY.value = withTiming(windowHeight * 0.4);
+      anchorY.value = withTiming(windowHeight * 0.4);
     }
 
     if (itterator3 === 5) {
@@ -378,25 +368,34 @@ export default function ThirdTutorial() {
         textBoxY.value = withTiming(windowHeight * 0.77);
         setupText(0);
       }, 600);
-      photoY.value = withTiming(scale(-1000));
+      anchorY.value = withTiming(scale(-1000));
       setFullScreenModal(false);
     }
 
-    if (itterator3 === 7) {
-      imageY.value = withTiming(windowHeight * 0.4);
+    if (itterator3 === 6) {
+      setFullScreenModal(true);
+      setTimeout(() => {
+        characterX.value = withTiming(
+          moderateScale(30)
+        );
+      }, 400);
+
+      setTimeout(() => {
+        textBoxY.value = withTiming(windowHeight * 0.77);
+        setupText(0);
+      }, 600);
     }
 
     if (itterator3 === 8) {
-      imageY.value = withTiming(scale(-1000));
       setFullScreenModal(false);
     }
 
     if (itterator3 === 10) {
-      calendarY.value = withTiming(windowHeight * 0.4);
+      imageY.value = withTiming(windowHeight * 0.4);
     }
 
     if (itterator3 === 11) {
-      calendarY.value = withTiming(scale(-1000));
+      imageY.value = withTiming(scale(-1000));
       setFullScreenModal(false);
     }
 
@@ -427,39 +426,18 @@ export default function ThirdTutorial() {
       moveMap({ lat: mapCenter.lat, lng: mapCenter.lng });
       setFullScreenModal(true);
       setActiveTutorialID("ThirdGuide");
-      setTimeout(() => {
-        pinY.value = withTiming(windowHeight * 0.4);
-      }, 1000);
     }
 
     if (itterator3 === 16) {
-      setChapter(null);
-      setTimeout(() => {
-        characterX.value = withTiming(
-          moderateScale(30)
-        );
-      }, 400);
-
-      setTimeout(() => {
-        textBoxY.value = withTiming(windowHeight * 0.77);
-        setupText(0);
-      }, 600);
       setFullScreenModal(false);
-      pinY.value = withTiming(scale(-1000));
     }
 
     if (itterator3 === 17) {
-      setLargeModalSecond(false);
       setFullScreenModal(true);
-      setActiveTutorialID("ThirdGuide");
-      setTimeout(() => {
-        mantaY.value = withTiming(windowHeight * 0.4);
-      }, 1000);
     }
 
     if (itterator3 === 19) {
       setFullScreenModal(false);
-      mantaY.value = withTiming(scale(-1200));
     }
 
     if (itterator3 === 20) {
@@ -467,16 +445,7 @@ export default function ThirdTutorial() {
       setActiveTutorialID("ThirdGuide");
     }
 
-    if (itterator3 === 22) {
-      setFullScreenModal(false);
-    }
-
     if (itterator3 === 23) {
-      setFullScreenModal(true);
-      setActiveTutorialID("ThirdGuide");
-    }
-
-    if (itterator3 === 26) {
       setPinValues({
         ...pinValues,
         PicFile: null,
@@ -489,6 +458,7 @@ export default function ThirdTutorial() {
       setUploadedFile(null);
       setLargeModalSecond(false);
       setTutorialRunning(false);
+      setFullScreenModal(false);
     }
 
     if (itterator3 === feederArray.length - 1) {
@@ -513,9 +483,9 @@ export default function ThirdTutorial() {
     };
   });
 
-  const photoButtonSlide = useAnimatedStyle(() => {
+  const anchorSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: photoY.value }],
+      transform: [{ translateY: anchorY.value }],
     };
   });
 
@@ -591,11 +561,16 @@ export default function ThirdTutorial() {
           <Text style={styles.textContain}>{textRead}</Text>
         </Animated.View>
 
-        <Animated.View style={[styles.buttonwrapper, photoButtonSlide]}>
-          <MaterialIcons
-            name="photo-camera"
-            color="aquamarine"
-            size={scale(42)}
+        <Animated.View style={[styles.buttonwrapper, anchorSlide]}>
+        <Image
+            source={anchorIconIOS}
+            style={[
+              styles.anchor1,
+              {
+                height: scale(28),
+                width: scale(28),
+              },
+            ]}
           />
         </Animated.View>
 
@@ -683,5 +658,16 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     opacity: 1,
+  },
+  anchor1: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    position: "absolute",
+    height: scale(45),
+    width: scale(45),
+    opacity: 1,
+    marginBottom: 15,
   },
 });

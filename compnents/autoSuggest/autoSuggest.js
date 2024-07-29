@@ -43,7 +43,7 @@ export default function AnimalAutoSuggest(props) {
     clearTimeout(waiter);
 
     if (tutorialRunning) {
-      if (itterator3 === 14) {
+      if (itterator3 === 16) {
         waiter = setTimeout(() => {
           setItterator3(itterator3 + 1);
         }, 2000);

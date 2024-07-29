@@ -29,6 +29,9 @@ export default function SuccessModal(props) {
         setLargeModalSecond(false);
         break;
       case "Dive Site":
+        if(itterator3 === 19){
+          return;
+        }
         setLargeModal(false);
         break;
       case "Partner Account Creation Request":

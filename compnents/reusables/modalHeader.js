@@ -8,7 +8,7 @@ import CloseButton from "./closeButton";
 const windowWidth = Dimensions.get("window").width;
 
 export default function ModalHeader(props) {
-  const { titleText, subText, onClose, altButton, icon, tertButton } = props;
+  const { titleText, subText, onClose, altButton, icon, tertButton, blink } = props;
 
   return (
     <View style={styles.container}>
@@ -18,7 +18,7 @@ export default function ModalHeader(props) {
       </View>
       <View style={styles.altButton}>
         {tertButton && <ModalTertiaryButton tertButton={tertButton} />}
-        {altButton && icon && <ModalSecondaryButton buttonAction={altButton} icon={icon} />}
+        {altButton && icon && <ModalSecondaryButton buttonAction={altButton} icon={icon} blink={blink}/>}
         <CloseButton onClose={onClose} />
       </View>
     </View>

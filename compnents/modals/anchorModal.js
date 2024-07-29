@@ -17,6 +17,7 @@ import * as FileSystem from "expo-file-system";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { IterratorContext } from "../contexts/iterratorContext";
+import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -59,8 +60,35 @@ export default function AnchorModal(props) {
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { itterator, setItterator } = useContext(IterratorContext);
+  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const [site, setSite] = useState("");
   const { pinValues, setPinValues } = useContext(PinContext);
+
+  let counter = 0;
+  let blinker;
+  const [photoButState, setPhotoButState] = useState(false);
+
+  function photoButtonBlink() {
+    counter++;
+    if (counter % 2 == 0) {
+      setPhotoButState(false);
+    } else {
+      setPhotoButState(true);
+    }
+  }
+
+  function cleanUp() {
+    clearInterval(blinker);
+    setPhotoButState(false);
+  }
+
+  useEffect(() => {
+      if (itterator3 === 8) {
+        blinker = setInterval(photoButtonBlink, 1000);
+      } 
+    return () => cleanUp();
+  }, [itterator3]);
+
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -186,6 +214,9 @@ export default function AnchorModal(props) {
     setLargeModal(false);
     setLargeModalSecond(true);
     setActiveButtonID("PictureAdderButton");
+    if(itterator3 === 8) {
+      setItterator3(itterator3  + 1)
+    }
   };
 
   const togglePhotoBoxModal = (photo) => {
@@ -291,6 +322,7 @@ export default function AnchorModal(props) {
         icon={"add-a-photo"}
         altButton={handleSwitch}
         tertButton={handleEmailDS}
+        blink={photoButState}
       />
       <ScrollView style={{ marginTop: "2%", width: "100%", borderRadius: 15 }}>
         <View style={styles.container3}>
@@ -330,7 +362,7 @@ export default function AnchorModal(props) {
                 <View
                   style={{
                     borderRadius: scale(40),
-                    backgroundColor: "white",
+                    backgroundColor: photoButState ? "white": "lightgrey",
                     width: scale(100),
                     height: scale(40),
                     alignSelf: "center",

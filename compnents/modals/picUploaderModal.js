@@ -93,12 +93,33 @@ export default function PicUploadModal() {
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
   
-  function calendarButtonBlink() {
+  function calendarField() {
     counter++;
     if (counter % 2 == 0) {
-      setDatButState(false);
+      SetFormValidation({
+        ...formValidation,
+        DateVal: false,
+      });
     } else {
-      setDatButState(true);
+      SetFormValidation({
+        ...formValidation,
+        DateVal: true,
+      });
+    }
+  }
+
+  function animalField() {
+    counter++;
+    if (counter % 2 == 0) {
+      SetFormValidation({
+        ...formValidation,
+        AnimalVal: false,
+      });
+    } else {
+      SetFormValidation({
+        ...formValidation,
+        AnimalVal: true,
+      });
     }
   }
 
@@ -120,21 +141,6 @@ export default function PicUploadModal() {
     }
   }
 
-  function animalField() {
-    counter++;
-    if (counter % 2 == 0) {
-      SetFormValidation({
-        ...formValidation,
-        AnimalVal: false,
-      });
-    } else {
-      SetFormValidation({
-        ...formValidation,
-        AnimalVal: true,
-      });
-    }
-  }
-
   function cleanUp() {
     clearInterval(blinker);
     setDatButState(false);
@@ -148,13 +154,13 @@ export default function PicUploadModal() {
 
   useEffect(() => {
     if (tutorialRunning) {
-      if (itterator3 === 11) {
-        blinker = setInterval(calendarButtonBlink, 1000);
-      } else if (itterator3 === 14) {
+      if (itterator3 === 14) {
+        blinker = setInterval(calendarField, 1000);
+      } else if (itterator3 === 16) {
         blinker = setInterval(animalField, 1000);
       } else if (itterator3 === 16) {
         blinker = setInterval(pinButtonBlink, 1000);
-      } else if (itterator3 === 22) {
+      } else if (itterator3 === 19) {
         blinker = setInterval(submitButtonBlink, 1000);
       }
     }
@@ -164,7 +170,7 @@ export default function PicUploadModal() {
   useEffect(() => {
     if (chapter === null) {
       if (tutorialRunning) {
-        if (itterator3 > 0 && itterator3 !== 17) {
+        if (itterator3 > 0 && itterator3 !== 17 && itterator3 !== 9) {
           setItterator3(itterator3 + 1);
         }
       }
@@ -238,7 +244,7 @@ export default function PicUploadModal() {
     
     setPinValues({ ...pinValues, PicDate: formattedDate });
     if (tutorialRunning) {
-      if (itterator3 === 11) {
+      if (itterator3 === 14) {
         setItterator3(itterator3 + 1);
       }
     }
@@ -349,9 +355,11 @@ export default function PicUploadModal() {
         let formattedDate = pinValues.PicDate;
         let newLatitude = pinValues.Latitude;
         let newLongitude = pinValues.Longitude;
+        let uri = image.assets[0].uri
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
+        console.log(uri)
         if (image.assets[0].exif.DateTimeOriginal) {
           formattedDate = formatDate(image.assets[0].exif.DateTimeOriginal);
         }
@@ -370,9 +378,9 @@ export default function PicUploadModal() {
         });
 
         //create new photo file and upload
-        setUploadedFile(image.assets[0].uri);
+        setUploadedFile(uri);
         setIsLoading(false);
-        let picture = await fetch(image.assets[0].uri);
+        let picture = await fetch(uri);
         picture = await picture.blob();
         uploadphoto(picture, fileName);
 
@@ -391,7 +399,7 @@ export default function PicUploadModal() {
         });
 
         if (tutorialRunning) {
-          if (itterator3 === 8) {
+          if (itterator3 === 11) {
             setItterator3(itterator3 + 1);
           }
         }
@@ -404,9 +412,7 @@ export default function PicUploadModal() {
 
   const togglePicModal = () => {
     if (tutorialRunning) {
-      if (itterator3 === 9) {
-        setItterator3(itterator3 + 1);
-      } else if (
+       if (
         itterator3 === 8 ||
         itterator3 === 11 ||
         itterator3 === 14 ||

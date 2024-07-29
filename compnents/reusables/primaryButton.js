@@ -54,7 +54,7 @@ function cleanUp() {
 
 useEffect(() => {
   if (tutorialRunning) {
-    if (itterator3 === 8) {
+    if (itterator3 === 11) {
       blinker = setInterval(imageButtonBlink, 1000);
     } 
   }
