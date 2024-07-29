@@ -152,9 +152,8 @@ export default function Map() {
     DiveSiteSearchModalContext
   );
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
+  const { diveSiteAdderModal, setDiveSiteAdderModal } =
+    useContext(DSAdderContext);
   const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
     TutorialLaunchPadContext
   );
@@ -401,7 +400,7 @@ export default function Map() {
 
   useEffect(() => {
     if (mapRef) {
-      if (selectedShop.lat) {
+      if (selectedShop[0]) {
         mapRef.animateCamera({
           center: {
             latitude: selectedShop[0].lat,
@@ -531,8 +530,8 @@ export default function Map() {
       largeModal,
       setLargeModal
     );
-    if (itterator3 === 5){
-      setItterator3(itterator3 + 1)
+    if (itterator3 === 5) {
+      setItterator3(itterator3 + 1);
     }
   };
 
@@ -643,10 +642,8 @@ export default function Map() {
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
-          const {
-            cluster: isCluster,
-            point_count: pointCount,
-          } = cluster.properties;
+          const { cluster: isCluster, point_count: pointCount } =
+            cluster.properties;
 
           if (isCluster) {
             return (
@@ -734,7 +731,9 @@ export default function Map() {
                 key={cluster.properties.siteID}
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={shopClustIOS}
-                onPress={() => setupShopModal(cluster.properties.siteID)}
+                onPress={() =>
+                  setupShopModal(cluster.properties.siteID)
+                }
               ></Marker>
             ) : null;
           }

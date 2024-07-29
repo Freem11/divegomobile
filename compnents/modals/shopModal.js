@@ -29,6 +29,7 @@ export default function ShopModal() {
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setMapConfig } = useContext(MapConfigContext);
+  
 
   useEffect(() => {
     if (selectedShop[0]) {
