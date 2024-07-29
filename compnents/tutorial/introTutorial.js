@@ -474,7 +474,6 @@ export default function IntroTutorial() {
       heatPotintY.value = withTiming(windowHeight * 0.25);
     }
 
-    console.log(itterator, largeModal, activeButtonID);
     if (itterator === 11) {
       if (movingBack) {
         setMovingBack(false);
