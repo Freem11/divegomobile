@@ -50,7 +50,6 @@ export default function TutorialBar() {
     "Contributing photos overview",
     "Adding your photo",
     "Name that sea creature!",
-    "Dropping the pin",
     "Exit Guide",
   ];
 

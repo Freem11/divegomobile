@@ -117,7 +117,7 @@ export default function ThirdTutorial() {
         break;
 
       case "Adding your photo":
-        setItterator3(6);
+        setItterator3(9);
         setFullScreenModal(true);
         setActiveTutorialID("ThirdGuide");
         setTutorialRunning(true);
@@ -130,18 +130,6 @@ export default function ThirdTutorial() {
         break;
 
       case "Name that sea creature!":
-        setItterator3(12);
-        setFullScreenModal(true);
-        setActiveTutorialID("ThirdGuide");
-        characterX.value = withTiming(
-          moderateScale(30)
-        );
-        textBoxY.value = withTiming(windowHeight * 0.77);
-        setLargeModalSecond(true);
-        setActiveButtonID("PictureAdderButton");
-        break;
-
-      case "Dropping the pin":
         setItterator3(15);
         setFullScreenModal(true);
         setActiveTutorialID("ThirdGuide");
@@ -420,7 +408,6 @@ export default function ThirdTutorial() {
     if (itterator3 === 14) {
       setFullScreenModal(false);
     }
-    console.log(itterator3, fullScreenModal, largeModalSecond);
 
     if (itterator3 === 15) {
       moveMap({ lat: mapCenter.lat, lng: mapCenter.lng });
