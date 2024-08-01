@@ -706,7 +706,11 @@ export default function Map() {
                       </Text>
                     </View>
                   </Callout>
-                ) :  <Callout />}
+                ) : (
+                  <Callout tooltip>
+                    <View style={{ backgroundColor: "transparent" }}></View>
+                  </Callout>
+                )}
               </Marker>
             );
           } else if (cluster.properties.category === "Dive Site Selected") {
