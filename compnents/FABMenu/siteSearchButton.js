@@ -1,16 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { MapConfigContext } from '../contexts/mapConfigContext';
-import { ShopModalContext } from "../contexts/shopModalContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
-import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
-import { MapSearchModalContext } from "../contexts/mapSearchContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
-import { SettingsContext } from "../contexts/gearModalContext";
-import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
 import { IterratorContext } from "../contexts/iterratorContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
@@ -20,6 +10,8 @@ import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
+import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
+import { LargeModalContext } from "../contexts/largeModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -28,28 +20,17 @@ export default function SiteSearchButton() {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { previousButtonID, setPreviousButtonID } = useContext(
-    PreviousButtonIDContext
-  );
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
-  const { tiles, setTiles } = useContext(CarrouselTilesContext);
-  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
-  const { setGearModal } = useContext(SettingsContext);
-  const { setProfileModal } = useContext(ProfileModalContext);
-  const { setPicAdderModal } = useContext(PictureAdderContext);
-  const { setMapSearchModal } = useContext(MapSearchModalContext);
-  const { setTutorialLaunchpadModal } = useContext(TutorialLaunchPadContext);
-  const { setDiveSiteAdderModal } = useContext(DSAdderContext);
-  const { setSiteModal } = useContext(AnchorModalContext);
-  const { setShopModal } = useContext(ShopModalContext);
+  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { setLargeModal } = useContext(LargeModalContext);
+  const { setTiles } = useContext(CarrouselTilesContext);
+  const { setShowFilterer } = useContext(PullTabContext);
 
   const { itterator } = useContext(IterratorContext);
   const { itterator2 } = useContext(Iterrator2Context);
   const { itterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
+  const { tutorialRunning } = useContext(TutorialContext);
 
   let counter = 0;
   let blinker;
@@ -77,24 +58,11 @@ export default function SiteSearchButton() {
     return () => cleanUp();
   }, [itterator2]);
 
-  useEffect(() => {
-    if (diveSiteSearchModal) {
-      setDiveSiteAdderModal(false);
-      setTutorialLaunchpadModal(false);
-      setMapSearchModal(false);
-      setPicAdderModal(false);
-      setProfileModal(false);
-      setGearModal(false);
-      setSiteModal(false);
-      setShopModal(false);
-      setShowFilterer(false);
-      setTiles(true);
-    }
-  }, [diveSiteSearchModal]);
-
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
+    setLargeModalSecond(false);
+    setLargeModal(false);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("DiveSiteSearchButton");
     useButtonPressHelper(
@@ -154,9 +122,6 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    // borderWidth: 1,
-    // borderColor: "darkgrey",
-    // borderRadius: 10,
     backgroundColor: "#538bdb",
     width: moderateScale(80),
     height: moderateScale(55),

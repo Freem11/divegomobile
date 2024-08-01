@@ -18,7 +18,6 @@ export default function GeocodeAutoComplete(props) {
   const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
 
   const handleConfirm = async (place) => {
-    console.log("b4", smallModal)
     setMapCenter({
       lat: place.result.geometry.location.lat,
       lng: place.result.geometry.location.lng,

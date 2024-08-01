@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Platform,
-} from "react-native";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
@@ -13,7 +8,7 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
 import ModalHeader from "../reusables/modalHeader";
@@ -65,8 +60,8 @@ export default function PartnerAccountRequestModal() {
     });
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("PartnerAccountButton");
-    setLargeModalSecond(true);
-    setLargeModal(!largeModal)
+    setLargeModalSecond(false);
+    setLargeModal(false);
   };
 
   const handleSubmit = (formValues) => {
@@ -145,6 +140,7 @@ export default function PartnerAccountRequestModal() {
           Dive Shops, Dive Charters, Diver Centres and Liveaboards
         </Text>
 
+        <View style={styles.spacer}>
         <InputField
           validationItem={formValidation.BusinessNameVal}
           placeHolderText={"Full Business Name"}
@@ -155,7 +151,8 @@ export default function PartnerAccountRequestModal() {
           }
         />
         <Text style={styles.explainerMicro}>(For display purposes)</Text>
-
+        </View>
+        <View style={styles.spacer}>
         <InputField
           validationItem={formValidation.WebsiteLinkVal}
           placeHolderText={"Website URL"}
@@ -166,31 +163,35 @@ export default function PartnerAccountRequestModal() {
           }
         />
         <Text style={styles.explainerMicro}>(To validate your business)</Text>
+        </View>
+        <View style={styles.spacer}>
+          <InputField
+            validationItem={formValidation.LatVal}
+            placeHolderText={"Latitude"}
+            inputValue={formValues.Latitude}
+            keyboardType={"numbers-and-punctuation"}
+            onChangeText={(text) =>
+              setFormValues({ ...formValues, Latitude: text })
+            }
+          />
+        </View>
+        <View style={styles.spacer}>
+          <InputField
+            validationItem={formValidation.LngVal}
+            placeHolderText={"Longitude"}
+            inputValue={formValues.Longitude}
+            keyboardType={"numbers-and-punctuation"}
+            onChangeText={(text) =>
+              setFormValues({ ...formValues, Longitude: text })
+            }
+          />
+          <Text style={styles.explainerMicro}>(For map placement)</Text>
+        </View>
 
-        <InputField
-          validationItem={formValidation.LatVal}
-          placeHolderText={"Latitude"}
-          inputValue={formValues.Latitude}
-          keyboardType={"numbers-and-punctuation"}
-          onChangeText={(text) =>
-            setFormValues({ ...formValues, Latitude: text })
-          }
-        />
-        <InputField
-          validationItem={formValidation.LngVal}
-          placeHolderText={"Longitude"}
-          inputValue={formValues.Longitude}
-          keyboardType={"numbers-and-punctuation"}
-          onChangeText={(text) =>
-            setFormValues({ ...formValues, Longitude: text })
-          }
-        />
-        <Text style={styles.explainerMicro}>(For map placement)</Text>
-
-        <SubmitButton 
+        <SubmitButton
           buttonAction={() => handleSubmit(formValues)}
           label={"Submit Account Request"}
-          />
+        />
       </View>
     </View>
   );
@@ -223,5 +224,8 @@ const styles = StyleSheet.create({
     color: "#F0EEEB",
     fontSize: moderateScale(12),
     textAlign: "center",
-  }
+  },
+  spacer: {
+    marginTop: moderateScale(20),
+  },
 });

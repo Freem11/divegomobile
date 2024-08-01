@@ -11,6 +11,7 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   getItineraryDiveSiteByIdArray,
   insertItinerary,
+  insertItineraryRequest,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { moderateScale } from "react-native-size-matters";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
@@ -45,7 +46,7 @@ let PriceVar = false;
 const windowWidth = Dimensions.get("window").width;
 
 export default function TripCreatorModal() {
-  const {editMode, setEditMode} = useContext(EditModeContext);
+  const { editMode, setEditMode } = useContext(EditModeContext);
   const { setMapConfig } = useContext(MapConfigContext);
   const { shop } = useContext(ShopContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
@@ -66,14 +67,14 @@ export default function TripCreatorModal() {
   const [dateType, setDateType] = useState("");
 
   const [formValues, setFormValues] = useState({
-    BookingLink: editMode && editMode.itineraryInfo.BookingPage || "",
-    TripName: editMode && editMode.itineraryInfo.tripName || "",
-    StartDate: editMode && editMode.itineraryInfo.startDate || "",
-    EndDate: editMode && editMode.itineraryInfo.endDate || "",
-    Price: editMode && editMode.itineraryInfo.price || 0,
-    TripDesc: editMode && editMode.itineraryInfo.description || "",
-    DiveSites: editMode && editMode.itineraryInfo.siteList || [],
-    ShopId: editMode && editMode.itineraryInfo.shopID || shop,
+    BookingLink: (editMode && editMode.itineraryInfo.BookingPage) || "",
+    TripName: (editMode && editMode.itineraryInfo.tripName) || "",
+    StartDate: (editMode && editMode.itineraryInfo.startDate) || "",
+    EndDate: (editMode && editMode.itineraryInfo.endDate) || "",
+    Price: (editMode && editMode.itineraryInfo.price) || 0,
+    TripDesc: (editMode && editMode.itineraryInfo.description) || "",
+    DiveSites: (editMode && editMode.itineraryInfo.siteList) || [],
+    ShopId: (editMode && editMode.itineraryInfo.shopID) || shop,
   });
 
   const [formValidation, SetFormValidation] = useState({
@@ -90,8 +91,6 @@ export default function TripCreatorModal() {
     getTripDiveSites();
     setSitesArray(formValues.DiveSites);
   }, []);
-
-  console.log(formValues)
 
   useEffect(() => {
     setFormValues({ ...formValues, DiveSites: sitesArray });
@@ -230,12 +229,14 @@ export default function TripCreatorModal() {
       formValues.TripDesc === "" ||
       formValues.DiveSites.length === 0
     ) {
-      setConfirmationType("Trip Submission");
+      editMode
+        ? setConfirmationType("Trip Edit")
+        : setConfirmationType("Trip Submission");
       setActiveConfirmationID("ConfirmationCaution");
       setConfirmationModal(true);
       return;
     } else {
-      insertItinerary(formValues);
+      editMode ? insertItineraryRequest(formValues, "Edit") : insertItinerary(formValues);
       setFormValues({
         ...formValues,
         BookingLink: "",
@@ -248,7 +249,9 @@ export default function TripCreatorModal() {
       });
       setSitesArray([]);
       setValue("$0.00");
-      setConfirmationType("Trip Submission");
+      editMode
+        ? setConfirmationType("Trip Edit")
+        : setConfirmationType("Trip Submission");
       setActiveConfirmationID("ConfirmationSuccess");
       setConfirmationModal(true);
     }
@@ -260,7 +263,7 @@ export default function TripCreatorModal() {
   });
 
   function useATMInput() {
-    const [value, setValue] = useState("$0.00");
+    const [value, setValue] = useState(editMode? editMode.itineraryInfo.price : "$0.00");
     function handleChange(value) {
       const decimal = Number(value.replace(/\D/g, "")) / 100;
       setValue(formatCurrency(decimal || 0).replace("R$\xa0", ""));
@@ -281,11 +284,27 @@ export default function TripCreatorModal() {
     setLargeModalSecond(false);
   };
 
+  const [modalHeader, setModalHeader] = useState(
+    editMode ? "Request Trip Edits"  : "Submit a New Trip"
+  );
+
+  const [submitText, setSubmitText] = useState(
+    editMode ? "Submit Edit Request" : "Submit Trip"
+  );
+
+const editButtonPress = () => {
+  setEditMode(false) 
+  setModalHeader("Submit a New Trip")
+  setSubmitText("Submit Trip")
+}
+
   return (
     <View style={styles.container}>
       <ModalHeader
-        titleText="Submit a new Trip"
+        titleText={modalHeader}
         onClose={toggleTripCreatorModal}
+        icon={'folder-copy'}
+        altButton={editMode.IsEditModeOn ? editButtonPress : null}
       />
 
       <ScrollView
@@ -324,6 +343,7 @@ export default function TripCreatorModal() {
               keyboardType={"numbers-and-punctuation"}
               onChangeText={setValue}
             />
+            <View style={styles.spacer}>
             <TouchableWithoutFeedback
               onPress={() => showDatePicker("StartDate")}
               style={{
@@ -341,7 +361,8 @@ export default function TripCreatorModal() {
                 />
               </View>
             </TouchableWithoutFeedback>
-
+            </View>
+            <View style={styles.spacer}>
             <TouchableWithoutFeedback
               onPress={() => showDatePicker("EndDate")}
               style={{
@@ -359,6 +380,7 @@ export default function TripCreatorModal() {
                 />
               </View>
             </TouchableWithoutFeedback>
+            </View>
           </View>
 
           <View style={styles.rightSide}>
@@ -457,7 +479,7 @@ export default function TripCreatorModal() {
           height: "6%",
         }}
       >
-        <SubmitButton buttonAction={handleSubmit} label={"Submit Trip"} />
+        <SubmitButton buttonAction={handleSubmit} label={submitText} />
       </View>
       <DateTimePickerModal
         isVisible={datePickerVisible}
@@ -505,4 +527,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "green",
     margin: moderateScale(2),
   },
+  spacer: {
+    marginTop: moderateScale(20)
+  }
 });

@@ -43,7 +43,7 @@ export default function AnimalAutoSuggest(props) {
     clearTimeout(waiter);
 
     if (tutorialRunning) {
-      if (itterator3 === 14) {
+      if (itterator3 === 16) {
         waiter = setTimeout(() => {
           setItterator3(itterator3 + 1);
         }, 2000);
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "hidden",
     flexDirection: "row",
-    backgroundColor: "#538bdb"
+    // backgroundColor: "#538bdb"
   },
   mainBox: {
     height: "10%",
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     marginTop: scale(3),
   },
   xButton: {
-    marginTop: moderateScale(32),
+    marginTop: moderateScale(12),
     marginLeft: moderateScale(-30),
     // backgroundColor: "yellow",
   },
@@ -202,11 +202,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
   autocomplete: {
-    width: "80%",
-    height: "25%",
-    alignSelf: "center",
-    justifyContent: "center",
-    // backgroundColor: "green",
     zIndex: 1,
   },
 });

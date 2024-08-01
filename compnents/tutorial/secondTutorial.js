@@ -16,7 +16,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/EmilioNeutral.png";
+import seaLionGuy from "../png/EmilioNew.png";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -33,10 +33,12 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
 } from "@expo/vector-icons";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -45,6 +47,7 @@ export default function SecondTutorial() {
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { setActiveButtonID } = useContext(ActiveButtonIDContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
@@ -85,9 +88,9 @@ export default function SecondTutorial() {
         setItterator2(1);
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
-        setLargeModal(true);
+        setLargeModal(false);
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         break;
@@ -95,23 +98,24 @@ export default function SecondTutorial() {
       case "Adding your dive sites":
         setItterator2(8);
         setFullScreenModal(true);
+        setLargeModal(true);
         setActiveTutorialID("SecondGuide");
         setLargeModal(true);
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         break;
 
       case "DS Help":
         setItterator2(10);
-        setLargeModal(false);
+        setLargeModal(true);
         setActiveButtonID("DiveSiteAdderButton");
         setFullScreenModal(true);
         setActiveTutorialID("SecondGuide");
         setTutorialRunning(true);
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.8);
         break;
@@ -121,9 +125,10 @@ export default function SecondTutorial() {
         setLargeModal(false);
         setActiveButtonID("DiveSiteAdderButton");
         setFullScreenModal(true);
+        setLargeModal(true);
         setActiveTutorialID("SecondGuide");
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
         textBoxY.value = withTiming(windowHeight * 0.77);
         break;
@@ -373,13 +378,11 @@ export default function SecondTutorial() {
       setActiveTutorialID("SecondGuide");
     }
 
-    console.log(itterator2, fullScreenModal, largeModal);
-
     if (itterator2 === 5) {
       setChapter(null);
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -403,7 +406,7 @@ export default function SecondTutorial() {
       setChapter(null);
       setTimeout(() => {
         characterX.value = withTiming(
-          Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
+          moderateScale(30)
         );
       }, 400);
 
@@ -484,6 +487,7 @@ export default function SecondTutorial() {
       nextTutX.value = withTiming(-300);
       setLargeModal(false);
       setTutorialRunning(false);
+      setConfirmationModal(false);
     }
 
     if (itterator2 === feederArray.length - 1) {
@@ -546,9 +550,7 @@ export default function SecondTutorial() {
 
   const startCharacterAnimation = () => {
     if (characterX.value === 1000) {
-      characterX.value = withTiming(
-        Platform.OS === "ios" ? windowWidth * 0.2 : windowWidth * 0.26
-      );
+      characterX.value = withTiming(moderateScale(30));
     } else {
       characterX.value = withTiming(1000);
     }
@@ -658,9 +660,9 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: Platform.OS === "ios" ? "-10%" : "-7%",
+    bottom: Platform.OS === "ios" ? "-7%" : "-7%",
     right: Platform.OS === "ios" ? "-10%" : "-4%",
-    height: scale(400),
+    height: scale(300),
     width: scale(300),
     opacity: 1,
   },

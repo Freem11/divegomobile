@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
   buttonBackground: {
     borderRadius: moderateScale(55),
     backgroundColor: "#538dbd",
-    width: moderateScale(55),
-    height: moderateScale(45),
+    width: moderateScale(65),
+    height: moderateScale(50),
     padding: moderateScale(5),
     marginRight: moderateScale(20),
     marginTop: "3%",

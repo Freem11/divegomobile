@@ -20,11 +20,10 @@ export default function InputField(props) {
         containerStyle={{
           backgroundColor: validationItem
             ? "pink"
-            : "transparent",
+            : "#538bdb",
           borderRadius: moderateScale(25),
           height: moderateScale(40),
           width: moderateScale(200),
-          marginTop: moderateScale(20),
           alignItems: "center",
           justifyContent: "center",
         }}
