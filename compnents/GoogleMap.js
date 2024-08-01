@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
@@ -55,6 +55,7 @@ import {
   Platform,
   Keyboard,
   Text,
+  Alert,
 } from "react-native";
 import mantaIOS from "../compnents/png/mapIcons/Manta_60.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
@@ -504,7 +505,7 @@ export default function Map() {
     ? shopPoints.forEach((entity) => {
         points.push(entity);
       })
-    : null;
+    : [];
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -570,6 +571,7 @@ export default function Map() {
       name: splitNames[0],
       region: splitNames[1],
     });
+
     sitesArray.push(grabbedSite[0].id);
     setSitesArray(sitesArray);
     handleMapChange();
@@ -605,16 +607,13 @@ export default function Map() {
         toolbarEnabled={false}
         onPress={clearModals}
       >
-        {masterSwitch && newHeat.length > 0 && (
-          <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
-        )}
-
-        {!masterSwitch && !minorSwitch && newHeat.length > 0 && (
+        {mapConfig in [0, , 2] && newHeat.length > 0 && (
           <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
         )}
 
         {tempMarker.length > 0 && (
           <Marker
+            key={"temp"}
             coordinate={{
               latitude: tempMarker[0],
               longitude: tempMarker[1],
@@ -625,6 +624,7 @@ export default function Map() {
 
         {mapConfig === 1 ? (
           <Marker
+            key={"drag"}
             draggable={true}
             coordinate={{
               latitude: dragPin.lat,
@@ -664,10 +664,11 @@ export default function Map() {
               ></Marker>
             );
           }
+
           if (cluster.properties.category === "Dive Site") {
             return (
               <Marker
-                key={cluster.properties.siteID}
+                key={`${cluster.properties.siteID}-blue`}
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={anchorIconIOS}
                 onPress={() =>
@@ -705,13 +706,13 @@ export default function Map() {
                       </Text>
                     </View>
                   </Callout>
-                ) : null}
+                ) :  <Callout />}
               </Marker>
             );
           } else if (cluster.properties.category === "Dive Site Selected") {
             return (
               <Marker
-                key={cluster.properties.siteID}
+                key={`${cluster.properties.siteID}-gold`}
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={anchorGold}
                 onPress={() =>
@@ -728,14 +729,14 @@ export default function Map() {
           } else {
             return mapConfig === 0 ? (
               <Marker
-                key={cluster.properties.siteID}
+                key={`${cluster.properties.siteID}-shop`}
                 coordinate={{ latitude: latitude, longitude: longitude }}
                 image={shopClustIOS}
-                onPress={() =>
-                  setupShopModal(cluster.properties.siteID)
-                }
+                onPress={() => setupShopModal(cluster.properties.siteID)}
               ></Marker>
-            ) : null;
+            ) : (
+              <Fragment key={cluster.properties.siteID} />
+            );
           }
         })}
       </MapView>
