@@ -6,6 +6,7 @@ import {
   getSingleDiveSiteByNameAndRegion,
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
+import { PinSpotContext } from "../contexts/pinSpotContext";
 import addIndexNumber from "../helpers/optionHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
@@ -27,6 +28,7 @@ export default function DiveSiteAutoComplete(props) {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
+  const { setDragPin } = useContext(PinSpotContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const [list, setList] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -97,6 +99,10 @@ export default function DiveSiteAutoComplete(props) {
           Latitude: diveSiteSet[0].lat,
           Longitude: diveSiteSet[0].lng,
         });
+        setDragPin({
+          lat: diveSiteSet[0].lat,
+          lng: diveSiteSet[0].lng,
+        })
 
         if (tutorialRunning) {
           if (itterator2 === 5) {
