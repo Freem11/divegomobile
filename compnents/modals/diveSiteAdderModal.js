@@ -303,21 +303,19 @@ export default function DiveSiteModal() {
     } else {
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("DiveSiteAdderButton");
-      setLargeModal(!largeModal);
+      setLargeModal(false);
       setSmallModal(false);
       SetFormValidation({
         SiteNameVal: false,
         LatVal: false,
         LngVal: false,
       });
-      if (fullScreenModal) {
         setAddSiteVals({
           ...addSiteVals,
           Site: "",
           Latitude: "",
           Longitude: "",
         });
-      }
     }
   };
 

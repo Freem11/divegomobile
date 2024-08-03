@@ -300,6 +300,7 @@ export default function MapPage() {
           Longitude: dragPin.lng.toString(),
         });
         setMapHelper(true);
+        setSmallModal(false);
         setMasterSwitch(true);
         setMapConfig(0);
         setActiveButtonID("DiveSiteAdderButton");
@@ -325,6 +326,7 @@ export default function MapPage() {
 
   const onShopNavigate = () => {
     setLargeModal(true);
+    setSmallModal(false);
     setActiveButtonID("ShopMaskIcon");
     setMapHelper(true);
     setMapConfig(0);
@@ -334,6 +336,7 @@ export default function MapPage() {
 
   const onTripSetNavigate = () => {
     setLargeModalSecond(true);
+    setSmallModal(false);
     setActiveButtonID("TripCreator");
     setMapHelper(true);
     setMapConfig(0);
