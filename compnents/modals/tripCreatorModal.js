@@ -94,6 +94,7 @@ export default function TripCreatorModal() {
 
   useEffect(() => {
     setFormValues({ ...formValues, DiveSites: sitesArray });
+    setSitesArray(formValues.DiveSites)
     getTripDiveSites();
   }, [sitesArray.length]);
 
