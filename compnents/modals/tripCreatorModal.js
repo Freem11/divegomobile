@@ -54,7 +54,7 @@ export default function TripCreatorModal() {
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
   );
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { previousButtonID, setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
@@ -73,7 +73,7 @@ export default function TripCreatorModal() {
     EndDate: (editMode && editMode.itineraryInfo.endDate) || "",
     Price: (editMode && editMode.itineraryInfo.price) || 0,
     TripDesc: (editMode && editMode.itineraryInfo.description) || "",
-    DiveSites: (editMode && editMode.itineraryInfo.siteList) || [],
+    DiveSites: (editMode && editMode.itineraryInfo.siteList) || sitesArray || [],
     ShopId: (editMode && editMode.itineraryInfo.shopID) || shop,
   });
 
@@ -89,8 +89,8 @@ export default function TripCreatorModal() {
 
   useEffect(() => {
     getTripDiveSites();
-    setSitesArray(formValues.DiveSites);
   }, []);
+
 
   useEffect(() => {
     setFormValues({ ...formValues, DiveSites: sitesArray });
