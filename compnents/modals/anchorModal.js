@@ -209,6 +209,7 @@ export default function AnchorModal(props) {
       ...pinValues,
       Latitude: String(selectedDiveSite.Latitude),
       Longitude: String(selectedDiveSite.Longitude),
+      siteName: selectedDiveSite.SiteName,
     });
     setPreviousButtonID(activeButtonID);
     setLargeModal(false);
