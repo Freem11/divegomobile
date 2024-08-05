@@ -9,7 +9,7 @@ const PinContextProvider = ({children}) => {
         PicDate: "",
         Latitude: "",
         Longitude: "",
-        DDVal: "0",
+        siteName: "",
         UserId: null,
       });
 

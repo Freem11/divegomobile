@@ -34,7 +34,7 @@ export default function MaterialCommunityIconsButton(props) {
         {icon && (
           <MaterialCommunityIcons
             name={icon}
-            size={moderateScale(24)}
+            size={moderateScale(22)}
             color={iconColour}
             onPress={buttonAction}
           />
@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
   buttonBackground: {
     borderRadius: moderateScale(55),
     backgroundColor: "#538dbd",
-    width: moderateScale(65),
+    width: scale(55),
     height: moderateScale(50),
     padding: moderateScale(5),
-    marginRight: moderateScale(20),
+    marginRight: moderateScale(10),
     marginTop: "3%",
     alignSelf: "center",
     alignItems: "center",
@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
   buttonBackgroundPressed: {
     borderRadius: moderateScale(40),
     backgroundColor: "#6498c3",
-    width: moderateScale(65),
+    width: scale(55),
     height: moderateScale(50),
     padding: moderateScale(5),
-    marginRight: moderateScale(20),
+    marginRight: moderateScale(10),
     marginTop: "3%",
     alignSelf: "center",
     alignItems: "center",
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   buttonBackgroundAlt: {
     borderRadius: moderateScale(40),
     backgroundColor: "pink",
-    width: moderateScale(65),
+    width: scale(55),
     height: moderateScale(50),
     padding: moderateScale(5),
     marginTop: "3%",
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   buttonBackgroundPressedAlt: {
     borderRadius: moderateScale(40),
     backgroundColor: "#ffccd5",
-    width: moderateScale(65),
+    width: scale(55),
     height: moderateScale(50),
     padding: moderateScale(5),
     marginTop: "3%",
@@ -131,11 +131,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(12),
   },
   buttonTextAlt: {
     color: "black",
     fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(17),
+    fontSize: moderateScale(12),
   },
 });
