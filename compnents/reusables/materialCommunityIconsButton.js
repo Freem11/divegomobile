@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     width: scale(55),
     height: moderateScale(50),
     padding: moderateScale(5),
-    marginRight: moderateScale(20),
+    marginRight: moderateScale(10),
     marginTop: "3%",
     alignSelf: "center",
     alignItems: "center",
