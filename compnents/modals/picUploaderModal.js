@@ -700,7 +700,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    marginBottom: scale(5),
   },
   animalField: {
     flexDirection: "row",
@@ -708,6 +707,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "73%",
     height: "25%",
+    marginTop: moderateScale(15)
   },
   latField: {
     flexDirection: "row",
