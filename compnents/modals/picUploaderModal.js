@@ -710,6 +710,7 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(15)
   },
   latField: {
+    zIndex: -1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

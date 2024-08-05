@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(26),
   },
   topBorder: {
+    zIndex: -1,
     position: "absolute",
     marginBottom: "0%",
     borderTopWidth: 0.5,
