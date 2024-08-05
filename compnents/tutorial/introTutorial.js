@@ -18,7 +18,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import seaLionGuy from "../png/EmilioNew.png";
+import seaLionGuy from "../png/guideIcons/EmilioNew.png";
 import { getRecentPhotos } from "../../supabaseCalls/photoSupabaseCalls";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
@@ -42,8 +42,8 @@ import { ChapterContext } from "../contexts/chapterContext";
 import { MaterialIcons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import anchorClustIOS from "../png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../png/mapIcons/AnchorBlue.png";
-import heatIconIOS from "../png/heatpoint.png";
-import arrowIOS from "../png/arrow.png";
+import heatIconIOS from "../png/guideIcons/heatpoint.png";
+import arrowIOS from "../png/guideIcons/arrow.png";
 import UserNamer from "./usernamer";
 import ImageCasher from "../helpers/imageCashing";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";

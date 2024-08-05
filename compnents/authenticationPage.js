@@ -9,7 +9,7 @@ import SignUpRoute from "./signUp";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { scale } from "react-native-size-matters";
-import mantaIOS from "../compnents/png/Manta32.png";
+import mantaIOS from "../compnents/png/guideIcons/Manta32.png";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

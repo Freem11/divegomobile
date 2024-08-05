@@ -15,8 +15,8 @@ import Animated, {
   withTiming,
   withSpring,
 } from "react-native-reanimated";
-import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/EmilioNew.png";
+import mantaIOS from "../png/guideIcons/Manta32.png";
+import seaLionGuy from "../png/guideIcons/EmilioNew.png";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
