@@ -40,9 +40,11 @@ export default function AnimatedFullScreenModal(props) {
   useEffect(() => {
     startfullScreenModalAnimation();
   }, [fullScreenModal]);
+  console.log('HEY', activeTutorialID)
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
+      {activeTutorialID === "Onboarding" && <OnBoarding />}
       {activeTutorialID === "FirstGuide" && <IntroTutorial />}
       {activeTutorialID === "SecondGuide" && <SecondTutorial />}
       {activeTutorialID === "ThirdGuide" && <ThirdTutorial />}
@@ -59,6 +61,6 @@ const styles = StyleSheet.create({
     width: windowWidth,
     zIndex: 50,
     left: 0,
-    // backgroundColor: "pink"
+    backgroundColor: "pink"
   },
 });

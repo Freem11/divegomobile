@@ -50,7 +50,7 @@ export default function AuthenticationPage() {
             activeColor={"lightgrey"}
             inactiveColor={"darkgrey"}
             labelStyle={{
-              fontFamily: "PermanentMarker_400Regular",
+              fontFamily: "SanFranSemi",
               fontSize: windowWidth > 600 ? scale(8) : scale(14),
             }}
           />

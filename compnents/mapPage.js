@@ -364,11 +364,11 @@ export default function MapPage() {
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {
-        let bully = success[0].UserName;
+        let bully = success[0] && success[0].UserName;
         if (bully == null || bully === "") {
-          setTutorialRunning(true);
-          setItterator(0);
-          setActiveTutorialID("FirstGuide");
+          // setTutorialRunning(true);
+          // setItterator(0);
+          setActiveTutorialID("Onboarding");
           setFullScreenModal(true);
         } else {
           setProfile(success);
