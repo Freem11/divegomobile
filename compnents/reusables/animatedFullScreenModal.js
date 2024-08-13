@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Text, View } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,6 +8,7 @@ import Animated, {
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 
+import OnboardingTest from '../tutorial/onBoarding';
 import IntroTutorial from "../tutorial/introTutorial";
 import SecondTutorial from "../tutorial/secondTutorial";
 import ThirdTutorial from "../tutorial/thirdTutorial";
@@ -40,11 +41,10 @@ export default function AnimatedFullScreenModal(props) {
   useEffect(() => {
     startfullScreenModalAnimation();
   }, [fullScreenModal]);
-  console.log('HEY', activeTutorialID)
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeTutorialID === "Onboarding" && <OnBoarding />}
+      {activeTutorialID === "OnboardingX" && <OnboardingTest/>}
       {activeTutorialID === "FirstGuide" && <IntroTutorial />}
       {activeTutorialID === "SecondGuide" && <SecondTutorial />}
       {activeTutorialID === "ThirdGuide" && <ThirdTutorial />}
@@ -61,6 +61,5 @@ const styles = StyleSheet.create({
     width: windowWidth,
     zIndex: 50,
     left: 0,
-    backgroundColor: "pink"
   },
 });

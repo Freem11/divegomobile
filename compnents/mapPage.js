@@ -366,9 +366,7 @@ export default function MapPage() {
       if (success) {
         let bully = success[0] && success[0].UserName;
         if (bully == null || bully === "") {
-          // setTutorialRunning(true);
-          // setItterator(0);
-          setActiveTutorialID("Onboarding");
+          setActiveTutorialID("OnboardingX");
           setFullScreenModal(true);
         } else {
           setProfile(success);
