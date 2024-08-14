@@ -13,6 +13,7 @@ import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SessionContext } from "../contexts/sessionContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
@@ -20,6 +21,7 @@ import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ImgToBase64 from "react-native-image-base64";
+import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import {
   insertUserFollow,
   deleteUserFollow,
@@ -40,9 +42,9 @@ export default function UserProfileModal() {
     ActiveButtonIDContext
   );
   const { profile } = useContext(UserProfileContext);
+  const { activeSession } = useContext(SessionContext);
   const [nameChangerState, setNameChangerState] = useState(false);
   const [userFollows, setUserFollows] = useState(false);
-  const { setProfileModal } = useContext(ProfileModalContext);
   const [userStats, setUserStats] = useState(null);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
@@ -66,9 +68,8 @@ export default function UserProfileModal() {
   };
 
   const handleFollow = async (userName) => {
-    // if (profile[0].UserID === picOwnerAccount[0].UserID){
-    //   return
-    // }
+
+    await registerForPushNotificationsAsync(activeSession);
 
     if (userFollows) {
       deleteUserFollow(followData);

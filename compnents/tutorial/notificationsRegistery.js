@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
-import { SessionContext } from '../contexts/sessionContext';
 import {
   grabProfileById,
   updatePushToken,
 } from '../../supabaseCalls/accountSupabaseCalls';
+import { Alert, Linking } from "react-native";
 
 export const registerForPushNotificationsAsync = async (activeSession) => {
 
@@ -18,6 +18,17 @@ export const registerForPushNotificationsAsync = async (activeSession) => {
     }
 
     if (finalStatus !== "granted") {
+      Alert.alert(
+        "Notifications Permission",
+        "You previously declined to recieve push notifications" +
+          "\n" +
+          "\n" +
+          "To grant access, and be notifed of this users activities, please visit Scuba SEAsons under your device's settings menu",
+        [
+          { text: "Go to Settings", onPress: () => Linking.openSettings() },
+          { text: "Close", onPress: () => console.log("no tapped") },
+        ]
+      );
       return;
     }
 

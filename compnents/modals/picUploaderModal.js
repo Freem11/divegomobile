@@ -11,6 +11,7 @@ import {
   Alert,
   Linking,
 } from "react-native";
+import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -193,22 +194,7 @@ export default function PicUploadModal() {
 
   const chooseImageHandler = async () => { 
     if (Platform.OS !== "web") {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "Photo Library Permission",
-          "You previously declined to grant access to your device's photo library"+
-            "\n" +
-            "\n" +
-            "To grant access, please visit Scuba SEAsons under your device's settings menu",
-          [
-            { text: "Go to Settings", onPress: () => Linking.openSettings() },
-            { text: "Close", onPress: () => console.log("no tapped") },
-          ]
-        );
-        return;
-      }
+     await registerForPhotoLibraryAccessAsync()
     }
 
     let chosenImage = await ImagePicker.launchImageLibraryAsync({
