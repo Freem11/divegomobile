@@ -13,6 +13,8 @@ import { scale, moderateScale } from "react-native-size-matters";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import carrouselData from "./carrouselData";
 import emilio from "../png/EmilioNew.png";
+import { registerForPushNotificationsAsync } from "./notificationsRegistery";
+import { SessionContext } from "../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -21,16 +23,23 @@ export default function OnboardingTest() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const carrouselRef = useRef(null);
   const [carrouselIndex, setCarrouselIndex] = useState(0);
+  const { activeSession } = useContext(SessionContext);
 
   const onPress = () => {
-    if (carrouselIndex + 1 > carrouselData.length){
-      setFullScreenModal(false)
+    if (carrouselIndex === 4) {
+      registerForPushNotificationsAsync(activeSession);
+    }
+    moveToNextPage();
+  };
+
+  const moveToNextPage = () => {
+    if (carrouselIndex + 1 > carrouselData.length) {
+      setFullScreenModal(false);
     } else {
-      setCarrouselIndex(carrouselIndex + 1)
+      setCarrouselIndex(carrouselIndex + 1);
       const scrollToIndex = carrouselIndex;
       carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
     }
-
   };
 
   return (
@@ -73,9 +82,13 @@ export default function OnboardingTest() {
               </TouchableWithoutFeedback>
 
               {item.buttonTwoText && (
-                <View style={styles.buttonTwo}>
-                  <Text style={styles.buttonTwoText}>{item.buttonTwoText}</Text>
-                </View>
+                <TouchableWithoutFeedback onPress={moveToNextPage}>
+                  <View style={styles.buttonTwo}>
+                    <Text style={styles.buttonTwoText}>
+                      {item.buttonTwoText}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
               )}
             </View>
           </View>
@@ -90,7 +103,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: "#538bdb",
+    backgroundColor: "#0073E6",
     zIndex: 26,
     left: 0,
     alignItems: "center",
@@ -116,14 +129,14 @@ const styles = StyleSheet.create({
     // borderWidth: 2,
   },
   scrollViewBox: {
-    height: windowHeight / 3,
+    height: windowHeight / 3.1,
     // backgroundColor: 'pink'
   },
   scrollView: {
     // backgroundColor: 'purple',
   },
   title: {
-    fontFamily: "PatrickHand_400Regular",
+    fontFamily: "GothamBlack",
     fontSize: moderateScale(32),
     marginTop: moderateScale(50),
     marginBottom: moderateScale(10),
@@ -133,7 +146,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingTop: moderateScale(5),
-    fontFamily: "Itim_400Regular",
+    fontFamily: "SanFran",
     fontSize: moderateScale(16),
     marginTop: moderateScale(15),
     width: windowWidth * 0.8,
@@ -142,18 +155,22 @@ const styles = StyleSheet.create({
   },
   image: {
     position: "absolute",
-    bottom: moderateScale(100),
+    bottom: moderateScale(95),
     right: moderateScale(-50),
     height: moderateScale(200),
     width: moderateScale(300),
+    transform: [{ rotate: "3deg" }],
   },
   buttonBox: {
     // backgroundColor: 'pink',
-    width: windowWidth,
+    width: windowWidth * 0.85,
     height: moderateScale(70),
     position: "absolute",
     bottom: scale(20),
-    flexDirection: "row",
+    borderTopWidth: moderateScale(1),
+    borderTopColor: "lightgray",
+    paddingTop: moderateScale(5),
+    flexDirection: "row-reverse",
     alignItems: "center",
     justifyContent: "space-around",
   },
@@ -163,7 +180,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
   },
   buttonTwoText: {
-    fontFamily: "Itim_400Regular",
+    fontFamily: "GothamBold",
     fontSize: moderateScale(20),
     color: "white",
     padding: moderateScale(10),
@@ -175,7 +192,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   buttonOneText: {
-    fontFamily: "Itim_400Regular",
+    fontFamily: "GothamBold",
     fontSize: moderateScale(20),
     color: "#538bdb",
     padding: moderateScale(10),
