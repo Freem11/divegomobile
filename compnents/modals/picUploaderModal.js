@@ -9,6 +9,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Alert,
+  Linking,
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
@@ -196,16 +197,16 @@ export default function PicUploadModal() {
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         Alert.alert(
-          "You previously declined to grant access to your device's photo library" +
+          "Photo Library Permission",
+          "You previously declined to grant access to your device's photo library"+
             "\n" +
             "\n" +
             "To grant access, please visit Scuba SEAsons under your device's settings menu",
           [
-            // { text: "Delete My Account", onPress: () => handleAccountDelete() },
+            { text: "Go to Settings", onPress: () => Linking.openSettings() },
             { text: "Close", onPress: () => console.log("no tapped") },
           ]
         );
-        console.log("image library permissions denied");
         return;
       }
     }
