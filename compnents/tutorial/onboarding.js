@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -25,11 +25,14 @@ export default function OnboardingTest() {
   const [carrouselIndex, setCarrouselIndex] = useState(0);
   const { activeSession } = useContext(SessionContext);
 
-  const onPress = () => {
-    if (carrouselIndex === 4) {
-      registerForPushNotificationsAsync(activeSession);
+  const onPress = async () => {
+
+    if (carrouselIndex === 5) {
+      await registerForPushNotificationsAsync(activeSession);
+      moveToNextPage();
+    } else {
+      moveToNextPage();
     }
-    moveToNextPage();
   };
 
   const moveToNextPage = () => {
@@ -75,14 +78,14 @@ export default function OnboardingTest() {
             <Image style={styles.image} source={emilio} />
 
             <View style={styles.buttonBox}>
-              <TouchableWithoutFeedback onPress={onPress}>
+              <TouchableWithoutFeedback onPress={() => onPress()}>
                 <View style={styles.buttonOne}>
                   <Text style={styles.buttonOneText}>{item.buttonOneText}</Text>
                 </View>
               </TouchableWithoutFeedback>
 
               {item.buttonTwoText && (
-                <TouchableWithoutFeedback onPress={moveToNextPage}>
+                <TouchableWithoutFeedback onPress={() => moveToNextPage()}>
                   <View style={styles.buttonTwo}>
                     <Text style={styles.buttonTwoText}>
                       {item.buttonTwoText}
