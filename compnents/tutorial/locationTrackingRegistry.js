@@ -1,5 +1,6 @@
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
+import { Alert, Linking } from "react-native";
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME";
 let foregroundSubscription = null;
@@ -11,10 +12,10 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
   }
 });
 
-const requestPermissions = async () => {
+export const registerForForegroundLocationTrackingsAsync = async () => {
   try {
     const forground = await Location.requestForegroundPermissionsAsync();
-    return forground.status
+    return forground.status;
   } catch (e) {
     console.log({ title: "Error76", message: e.message });
   }
@@ -23,30 +24,38 @@ const requestPermissions = async () => {
 const requestHighAccuracy = async () => {
   try {
     const accurate = await Location.enableNetworkProviderAsync();
-    return accurate.status
+    return accurate.status;
   } catch (e) {
     console.log({ title: "Error87", message: e.message });
   }
 };
 
-const getCurrentCoordinates = async() => {
-  
+export const getCurrentCoordinates = async () => {
   const { granted } = await Location.getForegroundPermissionsAsync();
 
   if (!granted) {
-    requestPermissions();
+    registerForForegroundLocationTrackingsAsync();
     requestHighAccuracy();
-    console.warn("location tracking denied");
   }
   foregroundSubscription?.remove();
 
   try {
-   const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High, maximumAge: 10000 });
-  //  console.log("accurate to:", location)
-   return location;
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+      maximumAge: 10000,
+    });
+    return location;
   } catch (e) {
-    console.warn("Location tracking error");
+    Alert.alert(
+      "Foreground Location Tracking Permission",
+      "You previously declined to grant access to your location for this feature" +
+        "\n" +
+        "\n" +
+        "To grant access, please visit Scuba SEAsons under your device's settings menu",
+      [
+        { text: "Go to Settings", onPress: () => Linking.openSettings() },
+        { text: "Close", onPress: () => console.log("no tapped") },
+      ]
+    );
   }
 };
-
-export { getCurrentCoordinates };

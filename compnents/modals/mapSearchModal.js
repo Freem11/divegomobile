@@ -12,7 +12,7 @@ import { SmallModalContext } from "../contexts/smallModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { MapCenterContext } from "../../compnents/contexts/mapCenterContext";
-import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
+import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import ModalHeader from "../reusables/modalHeader";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 

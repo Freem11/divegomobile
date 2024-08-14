@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
-import { getCurrentCoordinates } from "../helpers/permissionsHelpers";
+import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { scale, moderateScale } from "react-native-size-matters";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { Iterrator2Context } from "../contexts/iterrator2Context";

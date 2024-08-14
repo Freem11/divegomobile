@@ -13,6 +13,7 @@ import { scale, moderateScale } from "react-native-size-matters";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import carrouselData from "./carrouselData";
 import emilio from "../png/EmilioNew.png";
+import { registerForForegroundLocationTrackingsAsync } from "./locationTrackingRegistry";
 import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
 import { registerForPushNotificationsAsync } from "./notificationsRegistery";
 import { SessionContext } from "../contexts/sessionContext";
@@ -28,7 +29,10 @@ export default function OnboardingTest() {
 
   const onPress = async () => {
     
-    if (carrouselIndex === 4) {
+    if (carrouselIndex === 3) {
+      await registerForForegroundLocationTrackingsAsync();
+      moveToNextPage();
+    } else if (carrouselIndex === 4) {
       await registerForPhotoLibraryAccessAsync();
       moveToNextPage();
     } else if (carrouselIndex === 5) {
