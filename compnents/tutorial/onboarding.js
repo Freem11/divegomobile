@@ -13,6 +13,7 @@ import { scale, moderateScale } from "react-native-size-matters";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import carrouselData from "./carrouselData";
 import emilio from "../png/EmilioNew.png";
+import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
 import { registerForPushNotificationsAsync } from "./notificationsRegistery";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -26,8 +27,11 @@ export default function OnboardingTest() {
   const { activeSession } = useContext(SessionContext);
 
   const onPress = async () => {
-
-    if (carrouselIndex === 5) {
+    
+    if (carrouselIndex === 4) {
+      await registerForPhotoLibraryAccessAsync();
+      moveToNextPage();
+    } else if (carrouselIndex === 5) {
       await registerForPushNotificationsAsync(activeSession);
       moveToNextPage();
     } else {
