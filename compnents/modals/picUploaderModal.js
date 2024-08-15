@@ -192,9 +192,12 @@ export default function PicUploadModal() {
     setPinValues({ ...pinValues, PicDate: formattedDate });
   }, [date]);
 
-  const chooseImageHandler = async () => { 
-    if (Platform.OS !== "web") {
-     await registerForPhotoLibraryAccessAsync()
+  const chooseImageHandler = async () => {
+    let permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
+
+    if (!permissionGiven) {
+      setIsLoading(false);
+      return
     }
 
     let chosenImage = await ImagePicker.launchImageLibraryAsync({
@@ -712,7 +715,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginTop: moderateScale(15)
+    marginTop: moderateScale(15),
   },
   lngField: {
     flexDirection: "row",

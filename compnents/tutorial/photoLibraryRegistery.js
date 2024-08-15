@@ -1,10 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
 import { Alert, Linking } from "react-native";
 
-export const registerForPhotoLibraryAccessAsync = async () => {
+export const registerForPhotoLibraryAccessAsync = async (runAlert) => {
 
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (status !== "granted") {
+  if (status !== "granted" && runAlert === "yes") {
     Alert.alert(
       "Photo Library Permission",
       "You previously declined to grant access to your device's photo library"+
@@ -16,7 +16,9 @@ export const registerForPhotoLibraryAccessAsync = async () => {
         { text: "Close", onPress: () => console.log("no tapped") },
       ]
     );
-    return;
+    return false;
+  } else {
+    return true;
   }
   
 };

@@ -8,6 +8,7 @@ import {
   Text,
   ScrollView,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
@@ -17,6 +18,11 @@ import { registerForForegroundLocationTrackingsAsync } from "./locationTrackingR
 import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
 import { registerForPushNotificationsAsync } from "./notificationsRegistery";
 import { SessionContext } from "../contexts/sessionContext";
+import { PinContext } from "../contexts/staticPinContext";
+import { DiveSpotContext } from "../contexts/diveSpotContext";
+import { UserProfileContext } from "../contexts/userProfileContext";
+import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
+import InputField from "../reusables/textInputs";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,16 +33,26 @@ export default function OnboardingTest() {
   const [carrouselIndex, setCarrouselIndex] = useState(0);
   const { activeSession } = useContext(SessionContext);
 
+  const { pinValues, setPinValues } = useContext(PinContext);
+  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
+  const { profile, setProfile } = useContext(UserProfileContext);
+
   const onPress = async () => {
-    
-    if (carrouselIndex === 3) {
+    if (carrouselIndex === 2) {
+      let result = await handleSubmit();
+      if (result === "success") {
+        moveToNextPage();
+      } else {
+        return;
+      }
+    } else if (carrouselIndex === 3) {
       await registerForForegroundLocationTrackingsAsync();
       moveToNextPage();
     } else if (carrouselIndex === 4) {
-      await registerForPhotoLibraryAccessAsync();
+      await registerForPhotoLibraryAccessAsync("no");
       moveToNextPage();
     } else if (carrouselIndex === 5) {
-      await registerForPushNotificationsAsync(activeSession);
+      await registerForPushNotificationsAsync(activeSession, "no");
       moveToNextPage();
     } else {
       moveToNextPage();
@@ -53,6 +69,78 @@ export default function OnboardingTest() {
     }
   };
 
+  const [formVal, setFormVal] = useState({
+    userName: "",
+  });
+
+  const [formValidation, SetFormValidation] = useState({
+    userName: "",
+  });
+
+  const [userFail, setUserFail] = useState("");
+
+  const handleText = async (text) => {
+    setFormVal({ ...formVal, userName: text });
+    setUserFail("");
+    SetFormValidation({
+      ...formValidation,
+      userName: false,
+    });
+  };
+
+  const handleSubmit = async () => {
+    Keyboard.dismiss();
+    if (formVal.userName === "" || formVal.userName === null) {
+      userVar = true;
+    } else {
+      userVar = false;
+    }
+
+    SetFormValidation({
+      ...formValidation,
+      userName: userVar,
+    });
+
+    if (formVal.userName === "") {
+      setUserFail("Your Username cannot be blank!");
+      return "fail";
+    } else {
+      let sessionUserId = activeSession.user.id;
+      // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13';
+      try {
+        const success = await updateProfile({
+          id: sessionUserId,
+          username: formVal.userName,
+        });
+        if (success.length > 0) {
+          setFormVal({ userName: "" });
+          if (Array.isArray(success)) {
+            setProfile(success);
+          } else {
+            setProfile([success]);
+          }
+          setPinValues({
+            ...pinValues,
+            UserId: success[0].UserID,
+            UserName: success[0].UserName,
+          });
+          setAddSiteVals({
+            ...addSiteVals,
+            UserID: success[0].UserID,
+            UserName: success[0].UserName,
+          });
+          return "success";
+        } else {
+          setUserFail("Sorry that username has already been taken");
+          return "fail";
+        }
+      } catch (e) {
+        setUserFail("Sorry that username has already been taken");
+        console.log({ title: "Error19", message: e.message });
+        return "fail";
+      }
+    }
+  };
   return (
     <View style={styles.wrapper}>
       <FlatList
@@ -82,6 +170,20 @@ export default function OnboardingTest() {
             ) : (
               <Text style={styles.content}>{item.content}</Text>
             )}
+
+            {item.page === 2 ? (
+              <View style={styles.inputBox}>
+                <InputField
+                  validationItem={formValidation.userName}
+                  placeHolderText={"Diver Name"}
+                  inputValue={formVal.userName}
+                  keyboardType={"default"}
+                  onChangeText={(text) => handleText(text)}
+                />
+              </View>
+            ) : null}
+
+            {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
 
             <Image style={styles.image} source={emilio} />
 
@@ -209,5 +311,24 @@ const styles = StyleSheet.create({
     padding: moderateScale(10),
     paddingRight: moderateScale(30),
     paddingLeft: moderateScale(30),
+  },
+  erroMsg: {
+    margin: moderateScale(5),
+    marginLeft: windowHeight < 800 ? moderateScale(-110) : 0,
+    width: windowHeight < 800 ? "50%" : "auto",
+    textAlign: 'center',
+    padding: moderateScale(7),
+    paddingHorizontal: moderateScale(10),
+    color: "pink",
+    fontFamily: "Itim_400Regular",
+    fontSize: scale(14),
+    borderStyle: "dashed",
+    borderRadius: moderateScale(10),
+    borderColor: "darkblue",
+    borderWidth: 1,
+    marginTop: moderateScale(40),
+  },
+  inputBox: {
+    marginTop: scale(30),
   },
 });

@@ -69,7 +69,11 @@ export default function UserProfileModal() {
 
   const handleFollow = async (userName) => {
 
-    await registerForPushNotificationsAsync(activeSession);
+    let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    console.log(permissionGiven)
+    if (!permissionGiven) {
+      return
+    }
 
     if (userFollows) {
       deleteUserFollow(followData);
@@ -221,6 +225,7 @@ export default function UserProfileModal() {
       />
       <View style={styles.inputContainer}>
         {selectedProfile ? (
+          <View style={styles.boost}>
           <PrimaryButton
             buttonAction={handleFollow}
             label={
@@ -231,6 +236,7 @@ export default function UserProfileModal() {
             icon={null}
             followed={userFollows ? true : false}
           />
+             </View>
         ) : (
           <>
             <InputFieldLg
@@ -312,9 +318,14 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "100%",
+    height: "85%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: moderateScale(30),
+    marginTop: scale(10),
+    // backgroundColor: "pink"
+  },
+  boost : {
+    // marginTop: scale(30),
   },
   labelBox: {
     flexDirection: "row",
