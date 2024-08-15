@@ -8,7 +8,7 @@ import Animated, {
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 
-import OnboardingTest from '../tutorial/onBoarding';
+import OnboardingTest from "../tutorial/onboarding";
 import IntroTutorial from "../tutorial/introTutorial";
 import SecondTutorial from "../tutorial/secondTutorial";
 import ThirdTutorial from "../tutorial/thirdTutorial";
