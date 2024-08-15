@@ -321,7 +321,6 @@ const styles = StyleSheet.create({
     height: "85%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: scale(10),
     // backgroundColor: "pink"
   },
   boost : {
