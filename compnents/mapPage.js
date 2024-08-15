@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -366,8 +366,11 @@ export default function MapPage() {
       if (success) {
         let bully = success[0] && success[0].UserName;
         if (bully == null || bully === "") {
+          console.log("made it here")
           setActiveTutorialID("OnboardingX");
+          console.log("activeTutorialID", activeTutorialID)
           setFullScreenModal(true);
+          console.log("fullScreenModal", fullScreenModal)
         } else {
           setProfile(success);
           setPinValues({
@@ -448,7 +451,7 @@ export default function MapPage() {
   //   }
   // };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getProfile();
     // registerForPushNotificationsAsync();
   }, []);

@@ -30,7 +30,7 @@ export const registerForPushNotificationsAsync = async (activeSession, runAlert)
       );
       return false;
     }
-
+    
   let tokenE;
   try {
     tokenE = (
@@ -54,5 +54,6 @@ export const registerForPushNotificationsAsync = async (activeSession, runAlert)
       
     }
   }
+  console.log("returning true")
   return true
 };
