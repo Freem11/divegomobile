@@ -8,7 +8,10 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   ActivityIndicator,
+  Alert,
+  Linking,
 } from "react-native";
+import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -38,7 +41,7 @@ import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from '../contexts/confirmationTypeContext';
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import InputField from "../reusables/textInputs";
 
@@ -92,7 +95,7 @@ export default function PicUploadModal() {
   const [datButState, setDatButState] = useState(false);
   const [corButState, setCorButState] = useState(false);
   const [subButState, setSubButState] = useState(false);
-  
+
   function calendarField() {
     counter++;
     if (counter % 2 == 0) {
@@ -190,13 +193,11 @@ export default function PicUploadModal() {
   }, [date]);
 
   const chooseImageHandler = async () => {
-    if (Platform.OS !== "web") {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        console.log("image library permissions denied");
-        return;
-      }
+    let permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
+
+    if (!permissionGiven) {
+      setIsLoading(false);
+      return
     }
 
     let chosenImage = await ImagePicker.launchImageLibraryAsync({
@@ -241,7 +242,7 @@ export default function PicUploadModal() {
   const handleConfirm = (passedDate) => {
     let formattedDate = moment(passedDate).format("YYYY-MM-DD");
     if (passedDate > date) return;
-    
+
     setPinValues({ ...pinValues, PicDate: formattedDate });
     if (tutorialRunning) {
       if (itterator3 === 14) {
@@ -355,7 +356,7 @@ export default function PicUploadModal() {
         let formattedDate = pinValues.PicDate;
         let newLatitude = pinValues.Latitude;
         let newLongitude = pinValues.Longitude;
-        let uri = image.assets[0].uri
+        let uri = image.assets[0].uri;
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
@@ -363,10 +364,10 @@ export default function PicUploadModal() {
           formattedDate = formatDate(image.assets[0].exif.DateTimeOriginal);
         }
 
-        if (image.assets[0].exif.GPSLatitude) {
-          newLatitude = image.assets[0].exif.GPSLatitude.toString();
-          newLongitude = image.assets[0].exif.GPSLongitude.toString();
-        }
+        // if (image.assets[0].exif.GPSLatitude) {
+        //   newLatitude = image.assets[0].exif.GPSLatitude.toString();
+        //   newLongitude = image.assets[0].exif.GPSLongitude.toString();
+        // }
 
         setPinValues({
           ...pinValues,
@@ -411,7 +412,7 @@ export default function PicUploadModal() {
 
   const togglePicModal = () => {
     if (tutorialRunning) {
-       if (
+      if (
         itterator3 === 8 ||
         itterator3 === 11 ||
         itterator3 === 14 ||
@@ -586,7 +587,17 @@ export default function PicUploadModal() {
               />
             </View>
 
-            <KeyboardAvoidingView
+            <View style={styles.latField}>
+              <View pointerEvents="none">
+                <InputField
+                  placeHolderText={"Dive Site"}
+                  inputValue={pinValues.siteName}
+                  keyboardType={"default"}
+                />
+              </View>
+            </View>
+
+            {/* <KeyboardAvoidingView
               behavior="position"
               keyboardVerticalOffset={GPSKeyBoardOffset1}
               style={styles.autocompleteA}
@@ -620,7 +631,7 @@ export default function PicUploadModal() {
                   }
                 />
               </View>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView> */}
           </View>
 
           <SubmitButton
@@ -690,7 +701,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "25%",
-    marginBottom: scale(5),
   },
   animalField: {
     flexDirection: "row",
@@ -698,12 +708,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "73%",
     height: "25%",
+    marginTop: moderateScale(15)
   },
   latField: {
+    zIndex: -1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+    marginTop: moderateScale(15),
   },
   lngField: {
     flexDirection: "row",
@@ -737,5 +750,4 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "pink",
   },
-
 });

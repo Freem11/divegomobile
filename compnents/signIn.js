@@ -18,9 +18,9 @@ import {
 } from "../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
-import facebookLogo from "../compnents/png/facebookblue.png";
-import googleLogo from "../compnents/png/google-logo-9822.png";
-import mantaIOS from "../compnents/png/Matt_Manta_White.png";
+import facebookLogo from "../compnents/png/loginIcons/facebookblue.png";
+import googleLogo from "../compnents/png/loginIcons/google-logo-9822.png";
+import mantaIOS from "../compnents/png/loginIcons/Matt_Manta_White.png";
 import {
   GoogleSignin,
   GoogleSigninButton,

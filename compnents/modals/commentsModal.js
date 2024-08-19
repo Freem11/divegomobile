@@ -13,7 +13,7 @@ import {
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
-import bubbles from "../png/Bubbles96x96.png";
+import bubbles from "../png/socialIcons/Bubbles96x96.png";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import { CommentsModalContext } from "../contexts/commentsModalContext";

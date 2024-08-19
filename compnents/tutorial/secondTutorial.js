@@ -15,8 +15,8 @@ import Animated, {
   withTiming,
   withSpring,
 } from "react-native-reanimated";
-import mantaIOS from "../png/Manta32.png";
-import seaLionGuy from "../png/EmilioNew.png";
+import mantaIOS from "../png/guideIcons/Manta32.png";
+import seaLionGuy from "../png/guideIcons/EmilioNew.png";
 import { SessionContext } from "../contexts/sessionContext";
 import { grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -660,8 +660,8 @@ const styles = StyleSheet.create({
   },
   character: {
     position: "absolute",
-    bottom: Platform.OS === "ios" ? "-7%" : "-7%",
-    right: Platform.OS === "ios" ? "-10%" : "-4%",
+    bottom: Platform.OS === "ios" ? "-4%" : "-3%",
+    right: Platform.OS === "ios" ? "-4%" : "-4%",
     height: scale(300),
     width: scale(300),
     opacity: 1,

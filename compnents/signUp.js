@@ -15,7 +15,7 @@ import {
   sessionCheck,
 } from "../supabaseCalls/authenticateSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
-import mantaIOS from "../compnents/png/Matt_Manta_White.png";
+import mantaIOS from "../compnents/png/loginIcons/Matt_Manta_White.png";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 import SubmitButton from "./reusables/submitButton";
 import InputField from "./reusables/textInputs";
