@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -9,8 +9,6 @@ import {
   Keyboard,
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
-import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
 import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
@@ -23,7 +21,6 @@ import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfi
 import {
   grabProfileById,
   updateProfileFeeback,
-  updatePushToken,
 } from "./../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosWithUser,
@@ -118,7 +115,6 @@ export default function MapPage() {
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
-  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
@@ -137,7 +133,6 @@ export default function MapPage() {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [anchButState, setAnchButState] = useState(false);
 
   useEffect(() => {
     filterAnchorPhotos();
@@ -364,12 +359,12 @@ export default function MapPage() {
     try {
       const success = await grabProfileById(sessionUserId);
       if (success) {
-        let bully = success[0].UserName;
+        let bully = success[0] && success[0].UserName;
         if (bully == null || bully === "") {
-          setTutorialRunning(true);
-          setItterator(0);
-          setActiveTutorialID("FirstGuide");
-          setFullScreenModal(true);
+          setTimeout(() => {
+            setActiveTutorialID("OnboardingX");
+            setFullScreenModal(true);
+          }, 500);
         } else {
           setProfile(success);
           setPinValues({
@@ -383,7 +378,6 @@ export default function MapPage() {
             UserName: success[0].UserName,
           });
         }
-
         if (success[0].feedbackRequested === false) {
           feedbackRequest = setTimeout(() => {
             startFeedbackAnimations();
@@ -396,63 +390,12 @@ export default function MapPage() {
     }
   };
 
-  const registerForPushNotificationsAsync = async (sess) => {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-
-    if (finalStatus !== "granted") {
-      return;
-    }
-
-    let token;
-    try {
-      token = (
-        await Notifications.getDevicePushTokenAsync({
-          projectId: Constants.expoConfig.extra.eas.projectId,
-        })
-      ).data;
-    } catch (err) {
-      console.log("error", err);
-    }
-
-    let tokenE;
-    try {
-      tokenE = (
-        await Notifications.getExpoPushTokenAsync({
-          projectId: Constants.expoConfig.extra.eas.projectId,
-        })
-      ).data;
-    } catch (err) {
-      console.log("error", err);
-    }
-
-    if (activeSession && activeSession.user) {
-      const user = await grabProfileById(activeSession.user.id);
-      const activeToken = user[0].expo_push_token;
-      if (activeToken === null || !activeToken.includes(token)) {
-        updatePushToken({
-          token: activeToken ? [...activeToken, token] : [token],
-          UserID: activeSession.user.id,
-        });
-      }
-      if (activeToken === null || !activeToken.includes(tokenE)) {
-        updatePushToken({
-          token: activeToken ? [...activeToken, tokenE] : [tokenE],
-          UserID: activeSession.user.id,
-        });
-      }
-    }
-  };
+  useLayoutEffect(() => {
+    getProfile();
+  }, []);
 
   useEffect(() => {
     getProfile();
-    registerForPushNotificationsAsync();
   }, []);
 
   useEffect(() => {

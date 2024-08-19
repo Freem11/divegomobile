@@ -8,7 +8,10 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   ActivityIndicator,
+  Alert,
+  Linking,
 } from "react-native";
+import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -190,13 +193,11 @@ export default function PicUploadModal() {
   }, [date]);
 
   const chooseImageHandler = async () => {
-    if (Platform.OS !== "web") {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        console.log("image library permissions denied");
-        return;
-      }
+    let permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
+
+    if (!permissionGiven) {
+      setIsLoading(false);
+      return
     }
 
     let chosenImage = await ImagePicker.launchImageLibraryAsync({
@@ -715,7 +716,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginTop: moderateScale(15)
+    marginTop: moderateScale(15),
   },
   lngField: {
     flexDirection: "row",

@@ -13,6 +13,7 @@ import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { ProfileModalContext } from "../contexts/profileModalContext";
+import { SessionContext } from "../contexts/sessionContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
@@ -20,6 +21,7 @@ import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import ImgToBase64 from "react-native-image-base64";
+import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import {
   insertUserFollow,
   deleteUserFollow,
@@ -40,9 +42,9 @@ export default function UserProfileModal() {
     ActiveButtonIDContext
   );
   const { profile } = useContext(UserProfileContext);
+  const { activeSession } = useContext(SessionContext);
   const [nameChangerState, setNameChangerState] = useState(false);
   const [userFollows, setUserFollows] = useState(false);
-  const { setProfileModal } = useContext(ProfileModalContext);
   const [userStats, setUserStats] = useState(null);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
@@ -66,9 +68,12 @@ export default function UserProfileModal() {
   };
 
   const handleFollow = async (userName) => {
-    // if (profile[0].UserID === picOwnerAccount[0].UserID){
-    //   return
-    // }
+
+    let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    console.log(permissionGiven)
+    if (!permissionGiven) {
+      return
+    }
 
     if (userFollows) {
       deleteUserFollow(followData);
@@ -220,6 +225,7 @@ export default function UserProfileModal() {
       />
       <View style={styles.inputContainer}>
         {selectedProfile ? (
+          <View style={styles.boost}>
           <PrimaryButton
             buttonAction={handleFollow}
             label={
@@ -230,6 +236,7 @@ export default function UserProfileModal() {
             icon={null}
             followed={userFollows ? true : false}
           />
+             </View>
         ) : (
           <>
             <InputFieldLg
@@ -311,9 +318,13 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "100%",
+    height: "85%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: moderateScale(30),
+    // backgroundColor: "pink"
+  },
+  boost : {
+    // marginTop: scale(30),
   },
   labelBox: {
     flexDirection: "row",
