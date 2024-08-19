@@ -9,8 +9,6 @@ import {
   Keyboard,
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
-import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
 import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
@@ -23,7 +21,6 @@ import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfi
 import {
   grabProfileById,
   updateProfileFeeback,
-  updatePushToken,
 } from "./../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosWithUser,
@@ -118,7 +115,6 @@ export default function MapPage() {
   const { profile, setProfile } = useContext(UserProfileContext);
 
   const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
-  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
@@ -137,7 +133,6 @@ export default function MapPage() {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [anchButState, setAnchButState] = useState(false);
 
   useEffect(() => {
     filterAnchorPhotos();
@@ -366,11 +361,10 @@ export default function MapPage() {
       if (success) {
         let bully = success[0] && success[0].UserName;
         if (bully == null || bully === "") {
-          console.log("made it here")
-          setActiveTutorialID("OnboardingX");
-          console.log("activeTutorialID", activeTutorialID)
-          setFullScreenModal(true);
-          console.log("fullScreenModal", fullScreenModal)
+          setTimeout(() => {
+            setActiveTutorialID("OnboardingX");
+            setFullScreenModal(true);
+          }, 500);
         } else {
           setProfile(success);
           setPinValues({
@@ -384,7 +378,6 @@ export default function MapPage() {
             UserName: success[0].UserName,
           });
         }
-
         if (success[0].feedbackRequested === false) {
           feedbackRequest = setTimeout(() => {
             startFeedbackAnimations();
