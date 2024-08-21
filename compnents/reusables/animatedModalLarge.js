@@ -11,7 +11,6 @@ import DiveSiteModal from "../modals/diveSiteAdderModal";
 import SettingsModal from "../modals/settingsModal";
 import TutorialLaunchPadModal from "../modals/tutorialsModal";
 import ItineraryListModal from "../modals/itineraryListModal";
-
 import AnchorModal from "../modals/anchorModal";
 import ShopModal from "../modals/shopModal";
 
