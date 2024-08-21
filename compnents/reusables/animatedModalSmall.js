@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import { scale } from "react-native-size-matters";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -20,7 +19,6 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function AnimatedModalSmall(props) {
   const { activeButtonID } = useContext(ActiveButtonIDContext);
-  const { previousButtonID } = useContext(PreviousButtonIDContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { setLargeModal } = useContext(LargeModalContext);
   const { setLargeModalSecond } = useContext(LargeModalSecondContext);
@@ -36,13 +34,10 @@ export default function AnimatedModalSmall(props) {
     };
   });
 
-  const startSmallModalAnimation = () => {
-    if (smallModalY.value === windowHeight) {
-      smallModalY.value = withTiming(-windowHeight * 1.1);
-    } else {
-      smallModalY.value = withTiming(windowHeight);
-    }
-  };
+  useLayoutEffect(() => {
+    setSmallModal(false);
+  }, []);
+
 
   useEffect(() => {
     setLargeModal(false);

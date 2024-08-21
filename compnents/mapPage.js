@@ -59,6 +59,7 @@ import { SmallModalContext } from "./contexts/smallModalContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
+import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
@@ -93,6 +94,9 @@ export default function MapPage() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
+  );
+  const { confirmationModal, setConfirmationModal } = useContext(
+    ConfirmationModalContext
   );
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
@@ -366,6 +370,7 @@ export default function MapPage() {
             setFullScreenModal(true);
           }, 500);
         } else {
+          setFullScreenModal(false);
           setProfile(success);
           setPinValues({
             ...pinValues,
@@ -391,6 +396,10 @@ export default function MapPage() {
   };
 
   useLayoutEffect(() => {
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    setSmallModal(false);
+    setConfirmationModal(false);
     getProfile();
   }, []);
 
