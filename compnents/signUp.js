@@ -4,6 +4,8 @@ import {
   View,
   Image,
   KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
   Dimensions,
   Platform,
 } from "react-native";
@@ -109,6 +111,7 @@ export default function SignUpRoute() {
   const keboardOffset = Platform.OS === "ios" ? 100 : 0;
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
       <View style={styles.Headliner}>
         <Image source={mantaIOS} style={styles.manta} />
@@ -175,6 +178,7 @@ export default function SignUpRoute() {
 
       <SubmitButton buttonAction={handleSignUpSubmit} label={"Sign Up"} />
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

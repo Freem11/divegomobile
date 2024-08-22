@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Image,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   Dimensions,
 } from "react-native";
@@ -301,6 +302,7 @@ export default function SignInRoute() {
   const [facebookState, setFacebookButState] = useState(false);
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
       <View style={styles.Headliner}>
         <Image source={mantaIOS} style={styles.manta} />
@@ -427,6 +429,7 @@ export default function SignInRoute() {
 
       <SubmitButton buttonAction={handleSignInSubmit} label={"Sign In"} />
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 
