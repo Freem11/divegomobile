@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
     overflow: "hidden",
+    width: '100%'
   },
   inputRed: {
     fontFamily: "Itim_400Regular",
