@@ -708,7 +708,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "73%",
     height: "25%",
-    marginTop: moderateScale(15)
+    marginTop: scale(13)
   },
   latField: {
     zIndex: -1,
@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginTop: moderateScale(15),
+    marginTop: scale(16),
   },
   lngField: {
     flexDirection: "row",
