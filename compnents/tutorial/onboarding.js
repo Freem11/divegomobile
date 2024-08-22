@@ -251,8 +251,6 @@ const styles = StyleSheet.create({
     height: windowHeight,
     width: windowWidth,
     alignItems: "center",
-    // borderColor: "grey",
-    // borderWidth: 2,
   },
   scrollViewBox: {
     height: windowHeight / 2.5,
@@ -264,7 +262,8 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "GothamBlack",
     fontSize: moderateScale(32),
-    marginTop: moderateScale(50),
+    paddingHorizontal: moderateScale(30),
+    marginTop: windowHeight > 700 && windowWidth < 700 ? scale(150) : scale(60),
     marginBottom: moderateScale(10),
     width: windowWidth,
     color: "#F0EEEB",
