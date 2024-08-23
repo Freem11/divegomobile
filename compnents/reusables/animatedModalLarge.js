@@ -14,7 +14,6 @@ import ItineraryListModal from "../modals/itineraryListModal";
 import AnchorModal from "../modals/anchorModal";
 import ShopModal from "../modals/shopModal";
 
-
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
