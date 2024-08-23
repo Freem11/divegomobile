@@ -23,6 +23,8 @@ import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import InputField from "../reusables/textInputs";
+import MaskedView from '@react-native-masked-view/masked-view';
+import { LinearGradient } from "expo-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -103,7 +105,7 @@ export default function OnboardingTest() {
     });
 
     if (formVal.userName === "") {
-      setUserFail("Your Username cannot be blank!");
+      setUserFail("Your diver name cannot be blank!");
       return "fail";
     } else {
       let sessionUserId = activeSession.user.id;
@@ -132,11 +134,11 @@ export default function OnboardingTest() {
           });
           return "success";
         } else {
-          setUserFail("Sorry that username has already been taken");
+          setUserFail("Sorry that diver name has already been taken");
           return "fail";
         }
       } catch (e) {
-        setUserFail("Sorry that username has already been taken");
+        setUserFail("Sorry that diver name has already been taken");
         console.log({ title: "Error19", message: e.message });
         return "fail";
       }
@@ -163,11 +165,21 @@ export default function OnboardingTest() {
             <Text style={styles.title}>{item.title}</Text>
 
             {item.page === 1 ? (
+
+              <MaskedView
+              maskElement={
+                <LinearGradient
+                style={{flex: 1}}
+                colors={["green", "transparent"]}
+                start={{ x: 0.5, y: 0.7 }}></LinearGradient>
+              }
+              >
               <View style={styles.scrollViewBox}>
                 <ScrollView style={styles.scrollView}>
                   <Text style={styles.content}>{item.content}</Text>
                 </ScrollView>
               </View>
+              </MaskedView>
             ) : (
               <Text style={styles.content}>{item.content}</Text>
             )}
@@ -239,11 +251,9 @@ const styles = StyleSheet.create({
     height: windowHeight,
     width: windowWidth,
     alignItems: "center",
-    // borderColor: "grey",
-    // borderWidth: 2,
   },
   scrollViewBox: {
-    height: windowHeight / 3.1,
+    height: windowHeight / 2.5,
     // backgroundColor: 'pink'
   },
   scrollView: {
@@ -252,7 +262,8 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "GothamBlack",
     fontSize: moderateScale(32),
-    marginTop: moderateScale(50),
+    paddingHorizontal: moderateScale(30),
+    marginTop: windowHeight > 700 && windowWidth < 700 ? scale(150) : scale(60),
     marginBottom: moderateScale(10),
     width: windowWidth,
     color: "#F0EEEB",

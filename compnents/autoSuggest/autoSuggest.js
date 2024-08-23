@@ -3,8 +3,6 @@ import { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
-  TouchableWithoutFeedback,
-  TextInput,
   Platform,
   Keyboard,
   Dimensions,
@@ -15,9 +13,7 @@ import AutoSuggestListItem from "./autoSuggestListItem";
 import InputField from "../reusables/textInputs";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
-import InsetShadow from "react-native-inset-shadow";
 import { TutorialContext } from "../contexts/tutorialContext";
-import { ThirdTutorialModalContext } from "../contexts/thirdTutorialModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { PictureAdderContext } from "../contexts/picModalContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -25,19 +21,22 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 let waiter;
 
 const windowHeight = Dimensions.get("window").height;
-const AnimalKeboardOffset = Platform.OS === "ios" ? 700 - 160 : 700 - 140;
+
+offset = 0
+if(windowHeight < 700){
+  offset = 700
+} else {
+  offset = 1000
+}
+const AnimalKeboardOffset = Platform.OS === "ios" ? offset - scale(160) : offset;
 
 export default function AnimalAutoSuggest(props) {
   const { setPin, pin, formValidation, SetFormValidation } = props;
   const [list, setList] = useState([]);
   const [textSource, setTextSource] = useState(false);
-
-  const { thirdGuideModal, setThirdGuideModal } = useContext(
-    ThirdTutorialModalContext
-  );
   const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
+  const { tutorialRunning } = useContext(TutorialContext);
+  const { picAdderModal } = useContext(PictureAdderContext);
 
   useEffect(() => {
     clearTimeout(waiter);
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "hidden",
     flexDirection: "row",
-    // backgroundColor: "#538bdb"
+    backgroundColor: "#538bdb"
   },
   mainBox: {
     height: "10%",

@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  Keyboard,
+  Keyboard
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
