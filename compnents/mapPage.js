@@ -404,6 +404,10 @@ export default function MapPage() {
   }, []);
 
   useEffect(() => {
+    setLargeModal(false);
+    setLargeModalSecond(false);
+    setSmallModal(false);
+    setConfirmationModal(false);
     getProfile();
   }, []);
 
