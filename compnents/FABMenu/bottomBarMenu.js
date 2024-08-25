@@ -10,7 +10,6 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { scale, moderateScale } from "react-native-size-matters";
 import DiveSiteButton from "./diveSiteButton";
 import SiteSearchButton from "./siteSearchButton";
-import LocationSearchButton from "./locationSearchButton";
 import SettingsButton from "./settingsButton";
 import GuidesButton from "./guidesButton";
 import ItineraryListButton from "./itineraryCreatorButton";
@@ -26,7 +25,7 @@ export default function FABMenu() {
 
   const PARTNER_ACCOUNT_STATUS = profile[0] && profile[0].partnerAccount || false
 
-  numbButtons = 6
+  numbButtons = 5
 
   useEffect(() => {
     setFabMenuSize(numbButtons * moderateScale(80));
@@ -98,7 +97,6 @@ export default function FABMenu() {
       >
               <ProfileButton/>
               <SettingsButton/>
-              <LocationSearchButton/>
               <SiteSearchButton/>
               <DiveSiteButton/>
               {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton/>}

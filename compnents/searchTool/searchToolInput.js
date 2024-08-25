@@ -1,8 +1,8 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { StyleSheet, View, Keyboard, Dimensions } from "react-native";
 import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
-import InputField from "../reusables/textInputs";
+import InputFieldLg from "../reusables/textInputLarge";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -101,17 +101,22 @@ export default function SearchToolInput(props) {
     Keyboard.dismiss();
   };
 
+  useEffect(() => {
+    if (searchValue == 0) {
+      setList([]);
+    }
+  }, [searchValue]);
+
   return (
     <View style={styles.mainBox}>
       <View style={styles.container}>
-        <InputField
+        <InputFieldLg
           placeHolderText={"Search location, dive sites..."}
           inputValue={searchValue}
           keyboardType={"default"}
           onChangeText={(text) => handleChangeText(text)}
         />
-
-        {searchValue && searchValue.length > 1 && (
+        {(searchValue && searchValue.length > 1) ? (
           <View style={styles.xButton}>
             <TouchableOpacity
               onPress={handleClear}
@@ -127,6 +132,22 @@ export default function SearchToolInput(props) {
               />
             </TouchableOpacity>
           </View>
+        ) : (
+          <View style={styles.xButton}>
+          <TouchableOpacity
+            onPress={handleClear}
+            style={{
+              width: moderateScale(18),
+              height: moderateScale(18),
+            }}
+          >
+            <MaterialIcons
+              name="highlight-remove"
+              size={moderateScale(18)}
+              color="#00171f"
+            />
+          </TouchableOpacity>
+        </View>
         )}
       </View>
     </View>
@@ -136,21 +157,20 @@ export default function SearchToolInput(props) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    overflow: "hidden",
     flexDirection: "row",
-    backgroundColor: "#538bdb",
+    justifyContent: "center",
+    marginRight: moderateScale(5)
   },
   mainBox: {
     height: "10%",
-    width: moderateScale(200),
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
     // backgroundColor: "yellow",
-    zIndex: 70,
-    marginTop: scale(10),
+    marginTop: scale(-10),
   },
   xButton: {
-    marginTop: moderateScale(12),
+    marginTop: moderateScale(31),
     marginLeft: moderateScale(-30),
     // backgroundColor: "yellow",
   },
@@ -173,7 +193,6 @@ const styles = StyleSheet.create({
     height: moderateScale(40),
     width: moderateScale(200),
     backgroundColor: "pink",
-    // borderRadius: 10,
     fontSize: moderateScale(16),
     textAlign: "center",
     fontFamily: "Itim_400Regular",

@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     height: windowHeight - windowHeight * 0.1,
     width: windowWidth - windowWidth * 0.1,
     marginLeft: windowWidth * 0.05,
-    backgroundColor: "#538bdb",
+    backgroundColor: "#0073E6",
     borderRadius: 15,
     borderWidth: 1,
     borderColor: "darkgrey",

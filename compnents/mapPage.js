@@ -13,7 +13,6 @@ import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
-import AnimatedModalSmall from "../compnents/reusables/animatedModalSmall";
 import AnimatedModalLarge from "../compnents/reusables/animatedModalLarge";
 import AnimatedModalLargeSecond from "../compnents/reusables/animatedModalLargeSecond";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
@@ -36,7 +35,6 @@ import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { MasterContext } from "./contexts/masterContext";
-import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
@@ -55,7 +53,6 @@ import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
-import { SmallModalContext } from "./contexts/smallModalContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
@@ -90,7 +87,6 @@ export default function MapPage() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-  const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
@@ -248,7 +244,7 @@ export default function MapPage() {
     if (showFilterer) {
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
-      setSmallModal(false);
+
       setLargeModal(false);
       setLargeModalSecond(false);
       setFullScreenModal(false);
@@ -299,7 +295,7 @@ export default function MapPage() {
           Longitude: dragPin.lng.toString(),
         });
         setMapHelper(true);
-        setSmallModal(false);
+  
         setMasterSwitch(true);
         setMapConfig(0);
         setActiveButtonID("DiveSiteAdderButton");
@@ -325,7 +321,6 @@ export default function MapPage() {
 
   const onShopNavigate = () => {
     setLargeModal(true);
-    setSmallModal(false);
     setActiveButtonID("ShopMaskIcon");
     setMapHelper(true);
     setMapConfig(0);
@@ -335,7 +330,6 @@ export default function MapPage() {
 
   const onTripSetNavigate = () => {
     setLargeModalSecond(true);
-    setSmallModal(false);
     setActiveButtonID("TripCreator");
     setMapHelper(true);
     setMapConfig(0);
@@ -398,7 +392,6 @@ export default function MapPage() {
   useLayoutEffect(() => {
     setLargeModal(false);
     setLargeModalSecond(false);
-    setSmallModal(false);
     setConfirmationModal(false);
     getProfile();
   }, []);
@@ -406,7 +399,6 @@ export default function MapPage() {
   useEffect(() => {
     setLargeModal(false);
     setLargeModalSecond(false);
-    setSmallModal(false);
     setConfirmationModal(false);
     getProfile();
   }, []);
@@ -437,7 +429,6 @@ export default function MapPage() {
 
   const toggleDiveSites = () => {
     setDiveSitesTog(!diveSitesTog);
-    setSmallModal(false);
     setLargeModal(false);
     setLargeModalSecond(false);
     setFullScreenModal(false);
@@ -451,21 +442,8 @@ export default function MapPage() {
     useButtonPressHelper(
       "DiveSiteSearchButton",
       activeButtonID,
-      smallModal,
-      setSmallModal
-    );
-  };
-
-  const handleMapSearchButton = () => {
-    setTiles(true);
-    setShowFilterer(false);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("MapSearchButton");
-    useButtonPressHelper(
-      "MapSearchButton",
-      activeButtonID,
-      smallModal,
-      setSmallModal
+      largeModal,
+      setLargeModal
     );
   };
 
@@ -639,7 +617,6 @@ export default function MapPage() {
               </View>
             ) : null}
 
-            <AnimatedModalSmall />
             <AnimatedModalLarge />
             <AnimatedModalLargeSecond />
             <AnimatedFullScreenModal />

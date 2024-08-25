@@ -13,7 +13,7 @@ import { SmallModalContext } from "../contexts/smallModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
@@ -94,13 +94,13 @@ export default function SiteSearchButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <MaterialCommunityIcons
-            name="map-search-outline"
+          <MaterialIcons
+            name="explore"
             color={butState ? "gold" : "white"}
             size={moderateScale(34)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Site Search
+             Search Map
           </Text>
         </View>
       </TouchableWithoutFeedback>

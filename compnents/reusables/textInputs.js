@@ -20,7 +20,7 @@ export default function InputField(props) {
         containerStyle={{
           backgroundColor: validationItem
             ? "pink"
-            : "#538bdb",
+            : "#00171f",
           borderRadius: moderateScale(25),
           height: moderateScale(40),
           width: moderateScale(200),
@@ -39,7 +39,7 @@ export default function InputField(props) {
           placeholder={placeHolderText}
           placeholderTextColor="darkgrey"
           keyboardType={keyboardType}
-          color={validationItem ? "black" : "#F0EEEB"}
+          color={validationItem ? "#00171f" : "#ffffff"}
           fontSize={moderateScale(18)}
           multiline={multiLine}
           onChangeText={onChangeText}
@@ -53,7 +53,7 @@ export default function InputField(props) {
 const styles = StyleSheet.create({
   input: {
     fontFamily: "Itim_400Regular",
-    backgroundColor: "#538bdb",
+    backgroundColor: "#00171f",
     borderRadius: 10,
     alignSelf: "center",
     textAlign: "center",
@@ -67,5 +67,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
     overflow: "hidden",
+    width: '100%'
   },
 });

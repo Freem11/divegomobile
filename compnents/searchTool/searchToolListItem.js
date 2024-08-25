@@ -46,6 +46,8 @@ export default SearchToolListItem = (props) => {
           lat: location.lat,
           lng: location.lng,
         });
+        setSearchValue('')
+        setList([])
         setPreviousButtonID(activeButtonID);
         setActiveButtonID("DiveSiteSearchButton");
         useButtonPressHelper(
@@ -54,8 +56,6 @@ export default SearchToolListItem = (props) => {
           largeModal,
           setLargeModal
         );
-        setSearchValue('')
-        setList([])
         Keyboard.dismiss();
       })
       .catch((error) => console.warn(error));
@@ -104,21 +104,26 @@ export default SearchToolListItem = (props) => {
           }
           style={{
             width: "100%",
-            height: moderateScale(30),
+            height: '100%',
           }}
         >
           <View style={styles.searchCard}>
             {soureImage === "anchor" ? (
+              <View style={styles.logoHousing}>
               <Image
                 style={styles.logo}
                 source={require("../png/mapIcons/AnchorGold.png")}
               ></Image>
+                </View>
             ) : (
+              <View style={styles.logoHousing}>
               <Image
                 style={styles.logo}
                 source={require("../png/compass.png")}
               ></Image>
+              </View>
             )}
+                <View style={styles.textHousing}>
             <Text
               style={{
                 fontFamily: "Itim_400Regular",
@@ -131,6 +136,7 @@ export default SearchToolListItem = (props) => {
             >
               {name}
             </Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -140,10 +146,9 @@ export default SearchToolListItem = (props) => {
 
 const styles = StyleSheet.create({
   suggestion: {
-    height: moderateScale(40),
-    width: moderateScale(320),
-    backgroundColor: "#538dbd",
-    borderRadius: 5,
+    height: moderateScale(55),
+    width: moderateScale(340),
+    backgroundColor: "#538bdb",
     textAlign: "center",
     justifyContent: "center",
     listStyle: "none",
@@ -151,7 +156,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 5,
     },
-    shadowOpacity: 0.34,
+    shadowOpacity: 1,
     shadowRadius: 6.27,
 
     elevation: 20,
@@ -160,11 +165,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
   },
+  logoHousing: {
+    height: moderateScale(55),
+    alignItems: 'center',
+    justifyContent: "center"
+  },
   logo: {
     paddingLeft: moderateScale(20),
     marginRight: moderateScale(10),
     height: moderateScale(20),
     width: moderateScale(20),
     marginTop: moderateScale(2),
+  },
+  textHousing: {
+    height: moderateScale(55),
+    width: '100%',
+    //alignItems: 'center',
+    justifyContent: "center"
   },
 });

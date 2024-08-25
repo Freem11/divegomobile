@@ -5,7 +5,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   FlatList,
-  Dimensions
+  Dimensions,
+  Button,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { moderateScale } from "react-native-size-matters";
@@ -20,6 +21,7 @@ import ModalHeader from "../reusables/modalHeader";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import SearchToolInput from "../searchTool/searchToolInput";
 import SearchToolListItem from "../searchTool/searchToolListItem";
+import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -77,6 +79,32 @@ export default function DiveSiteSearchModal() {
           setSearchValue={setSearchValue}
           searchValue={searchValue}
         />
+
+        <View style={styles.buttonContainer}>
+          <TouchableWithoutFeedback>
+            <View
+              style={{
+                backgroundColor: "darkgrey",
+                height: moderateScale(35),
+                width: moderateScale(100),
+                borderRadius: moderateScale(12),
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Text
+                style={{
+                  color: "#ffffff",
+                  fontSize: moderateScale(16),
+                  fontFamily: "PatrickHand_400Regular",
+                }}
+              >
+                Dive Sites Only
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainter}
@@ -121,10 +149,15 @@ const styles = StyleSheet.create({
     right: moderateScale(10),
     // marginTop: "5%"
   },
+  buttonContainer: {
+    height: moderateScale(50),
+    width: "100%",
+    alignItems: "center",
+  },
   page: {
     width: "100%",
-    height: "75%",
-    marginTop: "0%",
+    height: "72%",
+    marginTop: "-2%",
     marginBottom: "10%",
     // backgroundColor: "lightblue",
   },
