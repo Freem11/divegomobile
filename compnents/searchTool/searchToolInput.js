@@ -10,6 +10,7 @@ import { getSiteNamesThatFit } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
+import anchor from '../png/mapIcons/AnchorGold.png'
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -79,18 +80,9 @@ export default function SearchToolInput(props) {
         }
       });
     }
-    let megaArray = [...placesArray, ...diveSiteArray];
-    setList(addIndexNumber(megaArray));
-    console.log("HMMMMM", list);
+    let megaArray = [...addIndexNumber(placesArray, "compass"), ...addIndexNumber(diveSiteArray, "anchor")];
+    setList(megaArray);
   };
-
-  // useEffect(() => {
-  //   handleDataList();
-  // }, []);
-
-  // useEffect(() => {
-  //   handleDataList();
-  // }, [boundaries]);
 
   const handleChangeText = (text) => {
     setSearchValue(text);

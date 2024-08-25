@@ -1,38 +1,138 @@
-import { StyleSheet, View, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { useContext } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  Image,
+  Keyboard,
+} from "react-native";
+import Geocoder from "react-native-geocoding";
 import { moderateScale } from "react-native-size-matters";
+import { LargeModalContext } from "../contexts/largeModalContext";
+import { MapCenterContext } from "../contexts/mapCenterContext";
+import { PinSpotContext } from "../contexts/pinSpotContext";
+import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
+
+let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default SearchToolListItem = (props) => {
-  const { setList, name, setSearchValue, setTextSource } = props;
+  const { setList, key, name, soureImage, setSearchValue } =
+    props;
+  const { setMapCenter } = useContext(MapCenterContext);
+  const { setDragPin } = useContext(PinSpotContext);
+  const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
 
-  const handleSelect = async (text) => {
-    setTextSource(true);
-    setSearchValue(text);
-    setList([]);
+  Geocoder.init(GoogleMapsApiKey);
+
+  const handleMapOptionSelected = async (place) => {
+    Geocoder.from(place)
+      .then((json) => {
+        var location = json.results[0].geometry.location;
+        setMapCenter({
+          lat: location.lat,
+          lng: location.lng,
+        });
+        setDragPin({
+          lat: location.lat,
+          lng: location.lng,
+        });
+        setPreviousButtonID(activeButtonID);
+        setActiveButtonID("DiveSiteSearchButton");
+        useButtonPressHelper(
+          "DiveSiteSearchButton",
+          activeButtonID,
+          largeModal,
+          setLargeModal
+        );
+        setSearchValue('')
+        setList([])
+        Keyboard.dismiss();
+      })
+      .catch((error) => console.warn(error));
   };
 
+  const handleDiveSiteOptionSelected = async (diveSite) => {
+    if (diveSite !== null) {
+      let nameOnly = diveSite.split(" ~ ");
+      let diveSiteSet = await getSingleDiveSiteByNameAndRegion({
+        name: nameOnly[0],
+        region: nameOnly[1],
+      });
+
+      if (diveSiteSet) {
+        setSelectedDiveSite({
+          SiteName: diveSiteSet[0].name,
+          Latitude: diveSiteSet[0].lat,
+          Longitude: diveSiteSet[0].lng,
+        });
+        setDragPin({
+          lat: diveSiteSet[0].lat,
+          lng: diveSiteSet[0].lng,
+        });
+      }
+      setPreviousButtonID(activeButtonID);
+      setActiveButtonID("DiveSiteSearchButton");
+      useButtonPressHelper(
+        "DiveSiteSearchButton",
+        activeButtonID,
+        largeModal,
+        setLargeModal
+      );
+      setSearchValue('')
+      setList([])
+      Keyboard.dismiss();
+    }
+  };
   return (
-    <View id={name} style={styles.suggestion}>
-      <View>
-        <TouchableOpacity
-          onPress={() => handleSelect(name)}
+    <View id={name} key={key} style={styles.suggestion}>
+      <View style={{ paddingLeft: moderateScale(8), justifyContent: "center" }}>
+        <TouchableWithoutFeedback
+          onPress={() =>
+            soureImage === "anchor"
+              ? handleDiveSiteOptionSelected(name)
+              : handleMapOptionSelected(name)
+          }
           style={{
             width: "100%",
             height: moderateScale(30),
           }}
         >
-          <Text
-            style={{
-              fontFamily: "Itim_400Regular",
-              fontSize: moderateScale(20),
-              textAlign: "center",
-              color: "#F0EEEB",
-            }}
-            onPress={() => handleSelect(name)}
-          >
-            {name}
-          </Text>
-        </TouchableOpacity>
+          <View style={styles.searchCard}>
+            {soureImage === "anchor" ? (
+              <Image
+                style={styles.logo}
+                source={require("../png/mapIcons/AnchorGold.png")}
+              ></Image>
+            ) : (
+              <Image
+                style={styles.logo}
+                source={require("../png/compass.png")}
+              ></Image>
+            )}
+            <Text
+              style={{
+                fontFamily: "Itim_400Regular",
+                fontSize: moderateScale(20),
+                textAlign: "left",
+                color: "#F0EEEB",
+                width: "86s%",
+                overflow: "scroll",
+              }}
+            >
+              {name}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );
@@ -45,7 +145,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#538dbd",
     borderRadius: 5,
     textAlign: "center",
-    alignContent: "center",
     justifyContent: "center",
     listStyle: "none",
     shadowOffset: {
@@ -56,5 +155,16 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
 
     elevation: 20,
+  },
+  searchCard: {
+    flexDirection: "row",
+    alignContent: "center",
+  },
+  logo: {
+    paddingLeft: moderateScale(20),
+    marginRight: moderateScale(10),
+    height: moderateScale(20),
+    width: moderateScale(20),
+    marginTop: moderateScale(2),
   },
 });

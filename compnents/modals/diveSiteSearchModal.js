@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   FlatList,
+  Dimensions
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { moderateScale } from "react-native-size-matters";
@@ -19,6 +20,8 @@ import ModalHeader from "../reusables/modalHeader";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import SearchToolInput from "../searchTool/searchToolInput";
 import SearchToolListItem from "../searchTool/searchToolListItem";
+
+const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSiteSearchModal(props) {
   const { setDiveSearchBump } = props;
@@ -59,8 +62,6 @@ export default function DiveSiteSearchModal(props) {
     }
   }, [smallModal]);
 
-  console.log("THIS", list);
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -81,12 +82,13 @@ export default function DiveSiteSearchModal(props) {
           style={styles.page}
           contentContainerStyle={styles.pageContainter}
           keyExtractor={(item) => item.id}
-          scrollEnabled
+          scrollEnabled={true}
           data={list}
           renderItem={({ item }) => (
             <SearchToolListItem
               key={item.id}
               name={item.title}
+              soureImage={item.source}
               setTextSource={setTextSource}
               setList={setList}
               setSearchValue={setSearchValue}
@@ -106,7 +108,7 @@ export default function DiveSiteSearchModal(props) {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    // justifyContent: "center",
+    justifyContent: "center",
     borderRadius: moderateScale(15),
     width: "100%",
   },
@@ -118,13 +120,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: moderateScale(7),
     right: moderateScale(10),
+    // marginTop: "5%"
   },
   page: {
     width: "100%",
-    // backgroundColor: "pink"
+    height: "75%",
+    marginTop: "0%",
+    marginBottom: "10%",
+    // backgroundColor: "lightblue",
   },
   pageContainter: {
     alignItems: "center",
-    // backgroundColor: "green"
+    justifyContent: "center",
   },
 });
