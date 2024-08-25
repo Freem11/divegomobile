@@ -4,8 +4,9 @@ import {
   View,
   TouchableWithoutFeedback,
   Keyboard,
+  FlatList,
 } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { moderateScale } from "react-native-size-matters";
 import DiveSiteAutoComplete from "../diveSiteSearch/diveSiteAutocomplete";
 import { LargeModalContext } from "../contexts/largeModalContext";
@@ -15,31 +16,39 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { TutorialContext } from "../../compnents/contexts/tutorialContext";
 import { Iterrator2Context } from "../../compnents/contexts/iterrator2Context";
 import ModalHeader from "../reusables/modalHeader";
-import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
+import SearchToolInput from "../searchTool/searchToolInput";
+import SearchToolListItem from "../searchTool/searchToolListItem";
 
 export default function DiveSiteSearchModal(props) {
   const { setDiveSearchBump } = props;
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { activeButtonID, setActiveButtonID } = useContext(ActiveButtonIDContext);
- 
+  const { activeButtonID, setActiveButtonID } = useContext(
+    ActiveButtonIDContext
+  );
   const { tutorialRunning } = useContext(TutorialContext);
   const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-
+  const [list, setList] = useState([]);
+  const [textSource, setTextSource] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const toggleDiveSiteSearchModal = () => {
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID("DiveSiteSearchButton")
-    setSmallModal(!smallModal);
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("DiveSiteSearchButton");
+    setLargeModal(false);
   };
 
   const swapToSiteAdd = () => {
-    setPreviousButtonID(activeButtonID)
-    setActiveButtonID("DiveSiteAdderButton")
-    setSmallModal(!smallModal);
-    useButtonPressHelper("DiveSiteAdderButton", activeButtonID, largeModal, setLargeModal)
-      
+    setPreviousButtonID(activeButtonID);
+    setActiveButtonID("DiveSiteAdderButton");
+    useButtonPressHelper(
+      "DiveSiteAdderButton",
+      activeButtonID,
+      largeModal,
+      setLargeModal
+    );
   };
 
   useEffect(() => {
@@ -50,6 +59,8 @@ export default function DiveSiteSearchModal(props) {
     }
   }, [smallModal]);
 
+  console.log("THIS", list);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -59,7 +70,29 @@ export default function DiveSiteSearchModal(props) {
           icon={null}
           altButton={null}
         />
-        <DiveSiteAutoComplete setDiveSearchBump={setDiveSearchBump} />
+        <SearchToolInput
+          setList={setList}
+          list={list}
+          setTextSource={setTextSource}
+          setSearchValue={setSearchValue}
+          searchValue={searchValue}
+        />
+        <FlatList
+          style={styles.page}
+          contentContainerStyle={styles.pageContainter}
+          keyExtractor={(item) => item.id}
+          scrollEnabled
+          data={list}
+          renderItem={({ item }) => (
+            <SearchToolListItem
+              key={item.id}
+              name={item.title}
+              setTextSource={setTextSource}
+              setList={setList}
+              setSearchValue={setSearchValue}
+            />
+          )}
+        />
         <TouchableWithoutFeedback onPress={swapToSiteAdd}>
           <Text style={styles.siteAddPrompt}>
             Can't find your dive site? Tap here to add it!
@@ -72,11 +105,10 @@ export default function DiveSiteSearchModal(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
     borderRadius: moderateScale(15),
-    width: "98%",
+    width: "100%",
   },
   siteAddPrompt: {
     fontFamily: "PatrickHand_400Regular",
@@ -86,5 +118,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: moderateScale(7),
     right: moderateScale(10),
+  },
+  page: {
+    width: "100%",
+    // backgroundColor: "pink"
+  },
+  pageContainter: {
+    alignItems: "center",
+    // backgroundColor: "green"
   },
 });
