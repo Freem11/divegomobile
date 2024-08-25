@@ -23,10 +23,9 @@ import SearchToolListItem from "../searchTool/searchToolListItem";
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function DiveSiteSearchModal(props) {
-  const { setDiveSearchBump } = props;
+export default function DiveSiteSearchModal() {
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { smallModal, setSmallModal } = useContext(SmallModalContext);
+  const { smallModal } = useContext(SmallModalContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
@@ -66,7 +65,7 @@ export default function DiveSiteSearchModal(props) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <ModalHeader
-          titleText={"Dive Site Search"}
+          titleText={"Map Navigation"}
           onClose={toggleDiveSiteSearchModal}
           icon={null}
           altButton={null}
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
   },
   siteAddPrompt: {
     fontFamily: "PatrickHand_400Regular",
-    fontSize: moderateScale(12),
+    fontSize: moderateScale(16),
     alignSelf: "center",
     color: "#F0EEEB",
     position: "absolute",

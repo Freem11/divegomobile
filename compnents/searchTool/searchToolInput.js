@@ -1,7 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { StyleSheet, View, Keyboard, Dimensions } from "react-native";
-import addIndexNumber from "../helpers/optionHelpers";
+import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
 import InputField from "../reusables/textInputs";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
@@ -10,7 +10,7 @@ import { getSiteNamesThatFit } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
-import anchor from '../png/mapIcons/AnchorGold.png'
+import anchor from "../png/mapIcons/AnchorGold.png";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -80,8 +80,11 @@ export default function SearchToolInput(props) {
         }
       });
     }
-    let megaArray = [...addIndexNumber(placesArray, "compass"), ...addIndexNumber(diveSiteArray, "anchor")];
-    setList(megaArray);
+    let megaArray = [
+      ...addIconType(placesArray, "compass"),
+      ...addIconType(diveSiteArray, "anchor"),
+    ];
+    setList(addIndexNumber(megaArray));
   };
 
   const handleChangeText = (text) => {
@@ -102,7 +105,7 @@ export default function SearchToolInput(props) {
     <View style={styles.mainBox}>
       <View style={styles.container}>
         <InputField
-          placeHolderText={"SearchDiveSites"}
+          placeHolderText={"Search location, dive sites..."}
           inputValue={searchValue}
           keyboardType={"default"}
           onChangeText={(text) => handleChangeText(text)}
