@@ -9,8 +9,8 @@ export default function WavyHeader({ customStyles }) {
   return (
     <View style={styles.customStyles}>
       <View style={{ flex: 1,  backgroundColor: "#5000ca",}}>
-          <ImageBackground style={styles.backgroundImage} source={require('./png/MonkSeal.png')} />
-     <View style={{ flex: 1,  marginTop: windowHeight*-0.75}}>
+          <ImageBackground style={styles.backgroundImage} source={require('./png/blackManta.png')} />
+     <View style={{ flex: 1,  marginTop: windowHeight*-0.70}}>
         <Svg
           height="100%"
           width="100%"
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: windowWidth*1.1,
-    height: windowHeight/2,
+    height: windowHeight/1.8,
   }
 });
