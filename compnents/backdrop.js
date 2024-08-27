@@ -8,7 +8,7 @@ import { moderateScale } from "react-native-size-matters";
 export default function BackDrop() {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Welcome</Text>
+      <Text style={styles.header}>Dive In. . .</Text>
 
       <View style={styles.loginButton}>
       <Text style={styles.loginText}>Log In</Text>
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "50%",
     left: "23%",
-    fontSize: moderateScale(32),
-    fontFamily: activeFonts.Black,
+    fontSize: moderateScale(34),
+    fontFamily: activeFonts.Bold,
     color: colors.themeBlack,
   },
   loginButton: [
