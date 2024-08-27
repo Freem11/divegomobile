@@ -56,10 +56,6 @@ export default function AnimalAutoSuggest(props) {
     }
   }, [picAdderModal]);
 
-  // useEffect(() => {
-  //     setTextSource(false)
-  //  }, [pin])
-
   const handleList = async (values) => {
     if (values.value === 1) {
       setPin({ ...pin, Animal: values.animal });

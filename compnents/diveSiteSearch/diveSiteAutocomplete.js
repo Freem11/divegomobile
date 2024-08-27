@@ -16,7 +16,9 @@ import { SecondTutorialModalContext } from "../contexts/secondTutorialModalConte
 import { Iterrator2Context } from "../contexts/iterrator2Context";
 import { TutorialContext } from "../contexts/tutorialContext";
 import { moderateScale } from "react-native-size-matters";
-import { useButtonPressHelper } from '../FABMenu/buttonPressHelper';
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
+
+let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -41,9 +43,25 @@ export default function DiveSiteAutoComplete(props) {
 
   let diveSiteData;
 
-  const handleDiveSiteList = async (value) => {
-    let diveSiteArray = [];
+  const getPlaces = async (text) => {
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${GoogleMapsApiKey}`
+      );
+      const placeInfo = await res.json();
+      if (placeInfo) {
+        return placeInfo.predictions;
+      }
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
 
+  const handleDataList = async (value) => {
+    let diveSiteArray = [];
+    let placesArray = [];
+
+    placesData = null;
     diveSiteData = null;
     diveSiteArray = [];
 
@@ -51,6 +69,14 @@ export default function DiveSiteAutoComplete(props) {
       diveSiteData = await getSiteNamesThatFit(value);
     } else {
       diveSiteData = null;
+    }
+
+    placesData = await getPlaces(value);
+
+    if (placesData) {
+      placesData.forEach((place) => {
+        placesArray.push(place.description);
+      });
     }
 
     if (diveSiteData) {
@@ -65,25 +91,24 @@ export default function DiveSiteAutoComplete(props) {
           diveSiteArray.push(fullDSName);
         }
       });
-      setList(addIndexNumber(diveSiteArray));
-    } else {
-      setList([]);
     }
+    let megaArray = [...placesArray, ...diveSiteArray];
+    setList(addIndexNumber(megaArray));
   };
 
   useEffect(() => {
-    handleDiveSiteList();
+    handleDataList();
   }, []);
 
   useEffect(() => {
-    handleDiveSiteList();
+    handleDataList();
   }, [boundaries]);
 
-  useEffect(() => {
-    if (list.length > 0) {
-      setDiveSearchBump(true);
-    }
-  }, [list]);
+  // useEffect(() => {
+  //   if (list.length > 0) {
+  //     setDiveSearchBump(true);
+  //   }
+  // }, [list]);
 
   const handleConfirm = async (diveSite) => {
     if (diveSite !== null) {
@@ -102,7 +127,7 @@ export default function DiveSiteAutoComplete(props) {
         setDragPin({
           lat: diveSiteSet[0].lat,
           lng: diveSiteSet[0].lng,
-        })
+        });
 
         if (tutorialRunning) {
           if (itterator2 === 5) {
@@ -112,19 +137,24 @@ export default function DiveSiteAutoComplete(props) {
       }
       setPreviousButtonID(activeButtonID);
       setActiveButtonID("DiveSiteSearchButton");
-      useButtonPressHelper("DiveSiteSearchButton", activeButtonID, smallModal, setSmallModal)
+      useButtonPressHelper(
+        "DiveSiteSearchButton",
+        activeButtonID,
+        smallModal,
+        setSmallModal
+      );
       Keyboard.dismiss();
     }
   };
 
   const handleClear = () => {
-    handleDiveSiteList();
+    handleDataList();
   };
 
   const handleChangeText = (value) => {
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("DiveSiteSearchButton");
-    handleDiveSiteList(value);
+    handleDataList(value);
   };
 
   return (
@@ -175,12 +205,12 @@ export default function DiveSiteAutoComplete(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    alignContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
+    // alignContent: "center",
     width: moderateScale(200),
     borderRadius: moderateScale(10),
     zIndex: 1,
-    marginTop: moderateScale(-30),
+    marginTop: moderateScale(30),
   },
 });

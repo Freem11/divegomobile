@@ -14,6 +14,8 @@ import ItineraryListModal from "../modals/itineraryListModal";
 import AnchorModal from "../modals/anchorModal";
 import ShopModal from "../modals/shopModal";
 
+import DiveSiteSearchModal from "../modals/diveSiteSearchModal";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -30,11 +32,11 @@ export default function AnimatedModalLarge(props) {
   });
 
   useLayoutEffect(() => {
-      setLargeModal(false)
+    setLargeModal(false);
   }, []);
 
   useEffect(() => {
-    if(largeModal){
+    if (largeModal) {
       largeModalY.value = withTiming(-windowHeight * 1.1);
     } else {
       largeModalY.value = withTiming(windowHeight);
@@ -43,6 +45,7 @@ export default function AnimatedModalLarge(props) {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
+      {activeButtonID === "DiveSiteSearchButton" && <DiveSiteSearchModal />}
       {activeButtonID === "DiveSiteAdderButton" && <DiveSiteModal />}
       {activeButtonID === "SettingsButton" && <SettingsModal />}
       {activeButtonID === "TutorialsButton" && <TutorialLaunchPadModal />}
@@ -50,8 +53,6 @@ export default function AnimatedModalLarge(props) {
 
       {activeButtonID === "SiteAnchorIcon" && <AnchorModal />}
       {activeButtonID === "ShopMaskIcon" && <ShopModal />}
-
-      
     </Animated.View>
   );
 }

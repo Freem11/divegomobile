@@ -13,7 +13,7 @@ import { SmallModalContext } from "../contexts/smallModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
@@ -23,7 +23,7 @@ export default function SiteSearchButton() {
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { smallModal, setSmallModal } = useContext(SmallModalContext);
   const { setLargeModalSecond } = useContext(LargeModalSecondContext);
-  const { setLargeModal } = useContext(LargeModalContext);
+  const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
 
@@ -62,14 +62,14 @@ export default function SiteSearchButton() {
     setTiles(true);
     setShowFilterer(false);
     setLargeModalSecond(false);
-    setLargeModal(false);
+    setSmallModal(false);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("DiveSiteSearchButton");
     useButtonPressHelper(
       "DiveSiteSearchButton",
       activeButtonID,
-      smallModal,
-      setSmallModal
+      largeModal,
+      setLargeModal
     );
   };
 
@@ -94,13 +94,13 @@ export default function SiteSearchButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <MaterialCommunityIcons
-            name="map-search-outline"
+          <MaterialIcons
+            name="explore"
             color={butState ? "gold" : "white"}
             size={moderateScale(34)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Site Search
+             Search Map
           </Text>
         </View>
       </TouchableWithoutFeedback>

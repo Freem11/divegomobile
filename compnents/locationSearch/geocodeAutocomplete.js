@@ -35,10 +35,26 @@ export default function GeocodeAutoComplete(props) {
   };
 
   const handleText = async (text) => {
+   let test = await findPlaces(text)
+   console.log("anything?", test)
     if (text.length > 0) {
       setMapSearchBump(true);
     }
   };
+
+  async function findPlaces(text) {
+    try {
+      const res = await fetch(
+       `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${GoogleMapsApiKey}`   
+        );
+      const placeInfo = await res.json();
+      if (placeInfo) {
+        return placeInfo.predictions;
+      }
+    } catch (err) {
+      console.log("error", err);
+    }
+  }
 
   return (
     <View style={styles.container} pointerEvents={"box-none"}>

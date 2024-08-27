@@ -37,9 +37,9 @@ export default function InputField(props) {
           }
           value={inputValue}
           placeholder={placeHolderText}
-          placeholderTextColor="darkgrey"
+          placeholderTextColor="lightgrey"
           keyboardType={keyboardType}
-          color={validationItem ? "black" : "#F0EEEB"}
+          color={'validationItem ? "#00171f" : "lightgrey"'}
           fontSize={moderateScale(18)}
           multiline={multiLine}
           onChangeText={onChangeText}
@@ -67,5 +67,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
     overflow: "hidden",
+    width: '100%'
   },
 });
