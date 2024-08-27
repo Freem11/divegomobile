@@ -41,7 +41,7 @@ export const primaryButton = {
   width: moderateScale(240),
   height: moderateScale(50),
   color: colors.themeWhite,
-  borderRadius: moderateScale(15),
+  borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center'
 }
@@ -59,7 +59,7 @@ export const primaryButtonAlt = {
   color: colors.primaryBlue,
   borderColor: colors.primaryBlue,
   borderWidth: moderateScale(1),
-  borderRadius: moderateScale(15),
+  borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center'
 }
