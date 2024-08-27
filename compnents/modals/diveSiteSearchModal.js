@@ -21,7 +21,6 @@ import ModalHeader from "../reusables/modalHeader";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import SearchToolInput from "../searchTool/searchToolInput";
 import SearchToolListItem from "../searchTool/searchToolListItem";
-import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 
 const windowHeight = Dimensions.get("window").height;
 
