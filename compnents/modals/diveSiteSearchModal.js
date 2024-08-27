@@ -80,7 +80,7 @@ export default function DiveSiteSearchModal() {
           searchValue={searchValue}
         />
 
-        <View style={styles.buttonContainer}>
+        {/* <View style={styles.buttonContainer}>
           <TouchableWithoutFeedback>
             <View
               style={{
@@ -103,7 +103,7 @@ export default function DiveSiteSearchModal() {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        </View>
+        </View> */}
 
         <FlatList
           style={styles.page}
@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
   },
   page: {
     width: "100%",
-    height: "72%",
-    marginTop: "-2%",
+    height: "77%",
+    marginTop: "2%",
     marginBottom: "10%",
     // backgroundColor: "lightblue",
   },

@@ -128,7 +128,7 @@ export default function SearchToolInput(props) {
               <MaterialIcons
                 name="highlight-remove"
                 size={moderateScale(18)}
-                color="lightgrey"
+                color="darkgrey"
               />
             </TouchableOpacity>
           </View>
@@ -144,7 +144,7 @@ export default function SearchToolInput(props) {
             <MaterialIcons
               name="highlight-remove"
               size={moderateScale(18)}
-              color="#00171f"
+              color="darkgrey"
             />
           </TouchableOpacity>
         </View>
