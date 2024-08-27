@@ -24,7 +24,7 @@ import { MyCreaturesContext } from "./compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "./compnents/contexts/myDiveSitesContext";
 import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
-import BackDrop from './compnents/backdrop';
+import LandingPage from './compnents/landingPage';
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -243,7 +243,7 @@ export default function App() {
                   <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
                     <SessionContext.Provider value={{ activeSession, setActiveSession }}>
                       {activeSession ? (
-                        <BackDrop />
+                        <LandingPage />
                         // <MapPage />
                       ) : (
                         <AuthenticationPage />

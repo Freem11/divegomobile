@@ -19,8 +19,9 @@ import {
 } from "../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
 import { scale, moderateScale } from "react-native-size-matters";
-import facebookLogo from "../compnents/png/loginIcons/facebookblue.png";
-import googleLogo from "../compnents/png/loginIcons/google-logo-9822.png";
+import appleLogo from "../compnents/png/loginIcons/apple.png";
+import facebookLogo from "../compnents/png/loginIcons/facebook.png";
+import googleLogo from "../compnents/png/loginIcons/google.png";
 import mantaIOS from "../compnents/png/loginIcons/Matt_Manta_White.png";
 import {
   GoogleSignin,
@@ -93,14 +94,11 @@ export default function SignInRoute() {
 
   const getAppleAuth = () => {
     return (
-      <AppleAuthentication.AppleAuthenticationButton
-        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-        cornerRadius={5}
-        style={styles.appleButton}
-        onPress={appleLogin}
-        disabled={isSignedIn}
-      />
+      <TouchableWithoutFeedback onPress={appleLogin} disabled={isSignedIn}>
+        <View style={styles.appleButton}>
+          <Image source={appleLogo} style={styles.appleLogo} />
+        </View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -303,132 +301,97 @@ export default function SignInRoute() {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.container}>
-      <View style={styles.Headliner}>
-        <Image source={mantaIOS} style={styles.manta} />
-        <Text
+      <View style={styles.container}>
+        <View style={styles.Headliner}>
+          <Image source={mantaIOS} style={styles.manta} />
+          <Text
+            style={{
+              fontFamily: "Caveat_400Regular",
+              fontSize: scale(25),
+              color: "white",
+            }}
+          >
+            Scuba SEAsons
+          </Text>
+        </View>
+        <View
           style={{
-            fontFamily: "Caveat_400Regular",
-            fontSize: scale(25),
-            color: "white",
+            marginTop: Platform.OS === "ios" ? scale(35) : scale(35),
+            marginBottom: scale(20),
+            alignItems: "center",
+            flexDirection: "row",
           }}
         >
-          Scuba SEAsons
-        </Text>
-      </View>
-      <View
-        style={{
-          marginTop: Platform.OS === "ios" ? scale(35) : scale(35),
-          marginBottom: scale(20),
-          alignItems: "center",
-        }}
-      >
-        <TouchableWithoutFeedback
-          onPress={googleSignIn}
-          onPressIn={() => setGoogleButState(true)}
-          onPressOut={() => setGoogleButState(false)}
-          disabled={isSignedIn}
-        >
-          <View
-            style={
-              googleButState
-                ? styles.SignUpWithGooglePressed
-                : styles.SignUpWithGoogle
-            }
+          <TouchableWithoutFeedback
+            onPress={googleSignIn}
+            onPressIn={() => setGoogleButState(true)}
+            onPressOut={() => setGoogleButState(false)}
+            disabled={isSignedIn}
           >
-            <Image source={googleLogo} style={[styles.gLogo]} />
-            <Text
-              style={{
-                color: googleButState ? "#ffffff" : "#2d2d2d",
-                fontFamily: "Roboto_700Bold",
-                fontWeight: "bold",
-                fontSize: moderateScale(12),
-                opacity: 0.8,
-                marginLeft: scale(0),
-              }}
-            >
-              Sign in with Google
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+            <View style={styles.SignUpWithGoogle}>
+              <Image source={googleLogo} style={[styles.gLogo]} />
+            </View>
+          </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback
-          onPress={facebookSignIn}
-          onPressIn={() => setFacebookButState(true)}
-          onPressOut={() => setFacebookButState(false)}
-          disabled={isSignedIn}
-        >
-          <View
-            style={
-              facebookState
-                ? styles.SignUpWithFacebookPressed
-                : styles.SignUpWithFacebook
-            }
+          <TouchableWithoutFeedback
+            onPress={facebookSignIn}
+            onPressIn={() => setFacebookButState(true)}
+            onPressOut={() => setFacebookButState(false)}
+            disabled={isSignedIn}
           >
-            <Image source={facebookLogo} style={[styles.fbLogo]} />
-            <Text
-              style={{
-                marginLeft: windowWidth > 600 ? scale(5) : scale(10),
-                color: "#FFFFFF",
-                fontFamily: "Roboto_700Bold",
-                fontWeight: "bold",
-                fontSize: moderateScale(12),
-                opacity: 1,
-              }}
-            >
-              Sign in with Facebook
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+            <View style={styles.SignUpWithFacebook}>
+              <Image source={facebookLogo} style={[styles.fbLogo]} />
+            </View>
+          </TouchableWithoutFeedback>
 
-        {appleAuthAvailable ? getAppleAuth() : null}
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(20),
-          marginBottom:
-            windowWidth > 700 ? moderateScale(20) : moderateScale(10),
-        }}
-      >
-        <View style={styles.leftLine}></View>
-        <Text style={styles.orTag}>or</Text>
-        <View style={styles.leftLine}></View>
-        <View></View>
-      </View>
-
-      <KeyboardAvoidingView
-        behavior="position"
-        keyboardVerticalOffset={keboardOffset}
-      >
-        <View style={styles.inputContainer}>
-          <InputField
-            validationItem={formValidation.emailVal}
-            placeHolderText={"Email"}
-            inputValue={formVals.email}
-            keyboardType={"default"}
-            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
-          />
-          <View style={styles.inputBox}>
-            <InputField
-              validationItem={formValidation.passwordVal}
-              placeHolderText={"Password"}
-              inputValue={formVals.password}
-              keyboardType={null}
-              onChangeText={(text) =>
-                setFormVals({ ...formVals, password: text })
-              }
-              secure={true}
-            />
-          </View>
-
-          {loginFail && <Text style={styles.erroMsg}>{loginFail}</Text>}
+          {appleAuthAvailable ? getAppleAuth() : null}
         </View>
-      </KeyboardAvoidingView>
 
-      <SubmitButton buttonAction={handleSignInSubmit} label={"Sign In"} />
-    </View>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: windowWidth > 700 ? moderateScale(0) : moderateScale(20),
+            marginBottom:
+              windowWidth > 700 ? moderateScale(20) : moderateScale(10),
+          }}
+        >
+          <View style={styles.leftLine}></View>
+          <Text style={styles.orTag}>or</Text>
+          <View style={styles.leftLine}></View>
+          <View></View>
+        </View>
+
+        <KeyboardAvoidingView
+          behavior="position"
+          keyboardVerticalOffset={keboardOffset}
+        >
+          <View style={styles.inputContainer}>
+            <InputField
+              validationItem={formValidation.emailVal}
+              placeHolderText={"Email"}
+              inputValue={formVals.email}
+              keyboardType={"default"}
+              onChangeText={(text) => setFormVals({ ...formVals, email: text })}
+            />
+            <View style={styles.inputBox}>
+              <InputField
+                validationItem={formValidation.passwordVal}
+                placeHolderText={"Password"}
+                inputValue={formVals.password}
+                keyboardType={null}
+                onChangeText={(text) =>
+                  setFormVals({ ...formVals, password: text })
+                }
+                secure={true}
+              />
+            </View>
+
+            {loginFail && <Text style={styles.erroMsg}>{loginFail}</Text>}
+          </View>
+        </KeyboardAvoidingView>
+
+        <SubmitButton buttonAction={handleSignInSubmit} label={"Sign In"} />
+      </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -451,14 +414,14 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(10),
   },
   SignUpWithGoogle: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "transparent",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(2),
-    height: moderateScale(30),
-    width: moderateScale(200),
-    marginTop: moderateScale(0),
+    borderRadius: moderateScale(25),
+    height: moderateScale(48),
+    width: moderateScale(48),
+    marginRight: moderateScale(7),
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: moderateScale(1),
@@ -474,9 +437,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(2),
-    height: moderateScale(30),
-    width: moderateScale(200),
+    borderRadius: moderateScale(25),
+    height: moderateScale(50),
+    width: moderateScale(50),
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: moderateScale(1),
@@ -488,14 +451,14 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   SignUpWithFacebook: {
-    backgroundColor: "#0165E1",
+    backgroundColor: "#1877F2",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(2),
-    height: moderateScale(30),
-    width: moderateScale(200),
-    marginTop: Platform.OS === "ios" ? moderateScale(10) : scale(10),
+    borderRadius: moderateScale(25),
+    height: moderateScale(48),
+    width: moderateScale(48),
+    marginLeft: moderateScale(5),
     shadowColor: "#2d2d2d",
     shadowOffset: {
       width: moderateScale(1),
@@ -511,9 +474,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: moderateScale(2),
-    height: moderateScale(30),
-    width: moderateScale(200),
+    borderRadius: moderateScale(25),
+    height: moderateScale(50),
+    width: moderateScale(50),
     marginTop: Platform.OS === "ios" ? moderateScale(10) : scale(10),
     shadowColor: "#2d2d2d",
     shadowOffset: {
@@ -525,20 +488,31 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  fbLogo: {
-    backgroundColor: "white",
-    borderRadius: windowWidth > 600 ? 24 / 2 : 16 / 2,
-    height: windowWidth > 600 ? scale(8) : scale(16),
-    width: windowWidth > 600 ? scale(8) : scale(16),
+  appleLogo: {
+    // backgroundColor: "white",
+    borderRadius: windowWidth > 600 ? 24 / 2 : 50 / 2,
+    height: windowWidth > 600 ? scale(8) : scale(50),
+    width: windowWidth > 600 ? scale(8) : scale(50),
     opacity: 1,
-    marginRight: -2,
+    // marginRight: -2,
+    // marginLeft: 10,
+  },
+  fbLogo: {
+    // backgroundColor: "white",
+    borderRadius: windowWidth > 600 ? 24 / 2 : 22 / 2,
+    height: windowWidth > 600 ? scale(8) : scale(45),
+    width: windowWidth > 600 ? scale(8) : scale(45),
+    opacity: 1,
+    // marginRight: -2,
     // marginLeft: 10,
   },
   gLogo: {
-    height: windowWidth > 600 ? scale(10) : scale(20),
-    width: windowWidth > 600 ? scale(10) : scale(20),
+    marginTop: moderateScale(2),
+    marginRight: moderateScale(1),
+    height: windowWidth > 600 ? scale(10) : scale(60),
+    width: windowWidth > 600 ? scale(10) : scale(60),
     opacity: 1,
-    marginRight: 2,
+    // marginRight: 2,
     // marginLeft: 7,
   },
   erroMsg: {
@@ -568,20 +542,21 @@ const styles = StyleSheet.create({
     marginBottom: scale(5),
   },
   appleButton: {
-    width: moderateScale(201),
-    height: moderateScale(32),
-    alignSelf: "center",
-    marginTop: moderateScale(9),
-    marginBottom: scale(0),
-    shadowColor: "#2d2d2d",
+    backgroundColor: "white",
+    width: 48,
+    height: 48,
+    borderRadius: 50 / 2,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: moderateScale(15),
     shadowOffset: {
-      width: 1,
-      height: 1,
+      width: moderateScale(1),
+      height: moderateScale(1),
     },
-    shadowOpacity: 1,
-    shadowRadius: 2,
+    shadowOpacity: moderateScale(1),
+    shadowRadius: moderateScale(2),
 
-    elevation: 1,
+    elevation: 10,
   },
   orTag: {
     color: "white",
