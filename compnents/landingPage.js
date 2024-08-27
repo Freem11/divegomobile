@@ -27,6 +27,7 @@ import { appleLogin, googleSignIn, facebookSignIn } from "./loginHelpers";
 import { scale, moderateScale } from "react-native-size-matters";
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function LandingPage() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -70,7 +71,7 @@ export default function LandingPage() {
         <View
           style={{
             width: moderateScale(240),
-            marginTop: scale(35),
+            marginTop: moderateScale(30),
             alignItems: "center",
             justifyContent: 'space-around',
             flexDirection: "row",
@@ -115,8 +116,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    height: "100%",
+    height: windowHeight,
     width: "100%",
+    // backgroundColor: "pink"
   },
   contentScroll: {
     flex: 1,
@@ -126,24 +128,21 @@ const styles = StyleSheet.create({
   },
   header: {
     zIndex: 10,
-    marginTop: "80%",
-    marginRight: "20%",
-    // position: "absolute",
-    // top: "50%",
-    // left: "23%",
+    marginTop: windowWidth > 600 ? windowHeight/2.7 : windowHeight/2.5,
+    marginRight: windowWidth/3,
     fontSize: moderateScale(34),
     fontFamily: activeFonts.Regular,
     color: colors.themeBlack,
   },
   social: {
     zIndex: 10,
-    marginTop: "10%",
+    marginTop: windowHeight/20,
     fontSize: moderateScale(18),
     fontFamily: activeFonts.ThinItalic,
     color: colors.themeBlack,
   },
-  loginButton: [primaryButton, { marginTop: " 7%" }],
-  registerButton: [primaryButtonAlt, { marginTop: " 5%" }],
+  loginButton: [primaryButton, { marginTop: windowHeight/20 }],
+  registerButton: [primaryButtonAlt, { marginTop: windowHeight/25 }],
   loginText: buttonText,
   registerText: buttonTextAlt,
   svgCurve: {
@@ -189,9 +188,9 @@ const styles = StyleSheet.create({
   },
   appleButton: {
     backgroundColor: "white",
-    width: 46,
-    height: 46,
-    borderRadius: 48 / 2,
+    borderRadius: moderateScale(25),
+    height: moderateScale(48),
+    width: moderateScale(48),
     alignItems: "center",
     justifyContent: "center",
     marginLeft: moderateScale(6),
@@ -206,18 +205,18 @@ const styles = StyleSheet.create({
   },
   appleLogo: {
     // backgroundColor: "white",
-    borderRadius: windowWidth > 600 ? 24 / 2 : 50 / 2,
-    height: windowWidth > 600 ? scale(8) : scale(50),
-    width: windowWidth > 600 ? scale(8) : scale(50),
+    borderRadius:  50 / 2,
+    height: moderateScale(50),
+    width: moderateScale(50),
     opacity: 1,
     // marginRight: -2,
     // marginLeft: 10,
   },
   fbLogo: {
     // backgroundColor: "white",
-    borderRadius: windowWidth > 600 ? 24 / 2 : 22 / 2,
-    height: windowWidth > 600 ? scale(8) : scale(45),
-    width: windowWidth > 600 ? scale(8) : scale(45),
+    borderRadius:  22 / 2,
+    height:  moderateScale(45),
+    width:  moderateScale(45),
     opacity: 1,
     // marginRight: -2,
     // marginLeft: 10,
@@ -225,8 +224,8 @@ const styles = StyleSheet.create({
   gLogo: {
     marginTop: moderateScale(2),
     marginRight: moderateScale(1),
-    height: windowWidth > 600 ? scale(10) : scale(60),
-    width: windowWidth > 600 ? scale(10) : scale(60),
+    height: moderateScale(60),
+    width: moderateScale(60),
     opacity: 1,
     // marginRight: 2,
     // marginLeft: 7,
