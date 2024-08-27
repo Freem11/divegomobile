@@ -2,14 +2,21 @@ import React from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import WavyHeader from "./wavyHeader";
+import { activeFonts, colors, primaryButton, primaryButtonAlt, buttonText, buttonTextAlt } from "./styles";
+import { moderateScale } from "react-native-size-matters";
 
 export default function BackDrop() {
   return (
     <View style={styles.container}>
-      <WavyHeader customStyles={styles.svgCurve} />
-      {/* <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Custom Header</Text>
-      </View> */}
+      <Text style={styles.header}>Welcome</Text>
+
+      <View style={styles.loginButton}>
+      <Text style={styles.loginText}>Log In</Text>
+      </View>
+      <View style={styles.registerButton}>
+      <Text style={styles.registerText}>Create New Account</Text>
+      </View>
+      <WavyHeader customStyles={styles.svgCurve}></WavyHeader>
     </View>
   );
 }
@@ -18,18 +25,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    alignItems: "center",
   },
-  headerContainer: {
-    marginTop: 50,
-    marginHorizontal: 10,
+  header: {
+    zIndex: 10,
+    position: "absolute",
+    top: "50%",
+    left: "23%",
+    fontSize: moderateScale(32),
+    fontFamily: activeFonts.Black,
+    color: colors.themeBlack,
   },
-  headerText: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    marginTop: 35,
-  },
+  loginButton: [
+    primaryButton,
+    { zIndex: 10, position: "absolute", top: "62%" },
+  ],
+  registerButton: [
+    primaryButtonAlt,
+    { zIndex: 10, position: "absolute", top: "70%" },
+  ],
+  loginText: buttonText, 
+  registerText: buttonTextAlt,
   svgCurve: {
     position: "absolute",
     bottom: 0,
