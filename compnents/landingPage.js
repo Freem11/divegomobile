@@ -71,7 +71,7 @@ export default function LandingPage() {
         <View
           style={{
             width: moderateScale(240),
-            marginTop: moderateScale(30),
+            marginTop: windowHeight/30,
             alignItems: "center",
             justifyContent: 'space-around',
             flexDirection: "row",
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     color: colors.themeBlack,
   },
   loginButton: [primaryButton, { marginTop: windowHeight/20 }],
-  registerButton: [primaryButtonAlt, { marginTop: windowHeight/25 }],
+  registerButton: [primaryButtonAlt, { marginTop: windowHeight/50 }],
   loginText: buttonText,
   registerText: buttonTextAlt,
   svgCurve: {
