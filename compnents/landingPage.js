@@ -20,16 +20,36 @@ import {
 } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { Settings } from "react-native-fbsdk-next";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import appleLogo from "../compnents/png/loginIcons/apple.png";
 import facebookLogo from "../compnents/png/loginIcons/facebook.png";
 import googleLogo from "../compnents/png/loginIcons/google.png";
 import { appleLogin, googleSignIn, facebookSignIn } from "./loginHelpers";
-import { scale, moderateScale } from "react-native-size-matters";
+import { moderateScale } from "react-native-size-matters";
+import { SessionContext } from "./contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+Settings.initializeSDK();
+
+const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
+const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
 
 export default function LandingPage() {
+
+  const { setActiveSession } = useContext(SessionContext);
+
+  Platform.OS === "ios"
+  ? GoogleSignin.configure({
+      scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+      iosClientId: googleIOSClientId,
+    })
+  : GoogleSignin.configure({
+      scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+      webClientId: googleWebClientId,
+    });
+
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
 
@@ -42,9 +62,10 @@ export default function LandingPage() {
     };
     checkApple();
   }, []);
+  
   const getAppleAuth = () => {
     return (
-      <TouchableWithoutFeedback onPress={appleLogin} disabled={isSignedIn}>
+      <TouchableWithoutFeedback onPress={() => appleLogin(setActiveSession, setIsSignedIn)} disabled={isSignedIn}>
         <View style={styles.appleButton}>
           <Image source={appleLogo} style={styles.appleLogo} />
         </View>
@@ -79,7 +100,7 @@ export default function LandingPage() {
           }}
         >
           <TouchableWithoutFeedback
-            onPress={googleSignIn}
+            onPress={() => googleSignIn(setActiveSession, setIsSignedIn)}
             disabled={isSignedIn}
           >
             <View style={styles.SignUpWithGoogle}>
@@ -88,7 +109,7 @@ export default function LandingPage() {
           </TouchableWithoutFeedback>
 
           <TouchableWithoutFeedback
-            onPress={facebookSignIn}
+            onPress={() => facebookSignIn(setActiveSession, setIsSignedIn)}
             disabled={isSignedIn}
           >
             <View style={styles.SignUpWithFacebook}>
