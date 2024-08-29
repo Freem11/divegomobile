@@ -62,7 +62,6 @@ export default function Authentication() {
         ref={carrouselRef}
         horizontal
         pagingEnabled
-        // scrollEnabled={false}
         initialScrollIndex={1}
         onScrollToIndexFailed={(carrouselIndex) => {
           const wait = new Promise((resolve) => setTimeout(resolve, 500));

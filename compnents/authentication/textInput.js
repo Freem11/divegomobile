@@ -14,8 +14,6 @@ export default function TextInputField(props) {
     onChangeText,
   } = props;
 
-  // <MaterialIcons name="person-outline" size={24} color="darkgrey" />
-
   return (
     <View style={styles.container}>
       <MaterialIcons name={icon} size={24} color="darkgrey" />

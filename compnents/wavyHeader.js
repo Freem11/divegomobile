@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Dimensions, Image, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, Dimensions, Image, ImageBackground, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";
 
@@ -10,7 +10,7 @@ export default function WavyHeader({ customStyles }) {
     <View style={styles.customStyles}>
       <View style={{ flex: 1,  backgroundColor: "#5000ca",}}>
           <ImageBackground style={styles.backgroundImage} source={require('./png/blackManta.png')} />
-     <View style={{ flex: 1,  marginTop: windowHeight*-0.75}}>
+     <View style={{ flex: 1,  marginTop: Platform.OS === "ios" ? windowHeight*-0.75 : windowHeight*-0.77 }}>
         <Svg
           height="100%"
           width="100%"
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: windowWidth,
     aspectRatio: 1,
-    marginTop: moderateScale(-18)
+    marginTop: Platform.OS === "ios" ? moderateScale(0) : moderateScale(-24)
   }
 });
