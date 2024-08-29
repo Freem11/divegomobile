@@ -24,19 +24,21 @@ import { SessionContext } from "../contexts/sessionContext";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function LoginPage(props) {
+export default function CreateAccountPage(props) {
   const {
     title,
+    namePlaceholder,
     emailPlaceholder,
     passwordPlaceholder,
     buttonText,
     promptText,
     promptLinkText,
     moveToLandingPage,
-    moveToSignUpPage
+    moveToLoginPage
   } = props;
 
   const [formVals, setFormVals] = useState({
+    name: "",
     email: "",
     password: ""
   });
@@ -52,6 +54,17 @@ export default function LoginPage(props) {
         <Text style={styles.header}>{title}</Text>
 
         <View style={{ marginTop: moderateScale(60) }}>
+          <TextInputField
+            icon={"person-outline"}
+            placeHolderText={namePlaceholder}
+            secure={false}
+            onChangeText={(text) =>
+              setFormVals({ ...formVals, name: text })
+            }
+          />
+        </View>
+
+        <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"alternate-email"}
             placeHolderText={emailPlaceholder}
@@ -87,7 +100,7 @@ export default function LoginPage(props) {
 
         <View style={styles.promtBox}>
           <Text style={styles.promptText}>{promptText} </Text>
-          <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
+          <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
             <Text style={styles.promptLinkText}>{promptLinkText}</Text>
           </TouchableWithoutFeedback>
         </View>
@@ -123,7 +136,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: "90%",
+    marginTop: "65%",
   },
   promptText: {
     fontSize: moderateScale(15),

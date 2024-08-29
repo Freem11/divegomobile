@@ -37,7 +37,14 @@ const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
 
 export default function LandingPage(props) {
-  const { title, loginButton, registerButton, content } = props;
+  const {
+    title,
+    loginButton,
+    registerButton,
+    content,
+    moveToLoginPage,
+    moveToSignUpPage,
+  } = props;
   const { setActiveSession } = useContext(SessionContext);
 
   Platform.OS === "ios"
@@ -85,12 +92,18 @@ export default function LandingPage(props) {
       >
         <Text style={styles.header}>{title}</Text>
 
-        <View style={styles.loginButton}>
-          <Text style={styles.loginText}>{loginButton}</Text>
-        </View>
+        <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
+          <View style={styles.loginButton}>
+            <Text style={styles.loginText}>{loginButton}</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
         <View style={styles.registerButton}>
           <Text style={styles.registerText}>{registerButton}</Text>
         </View>
+        </TouchableWithoutFeedback>
+
         <Text style={styles.social}>{content}</Text>
         <View
           style={{

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
 import carrouselData from "./carrouselData";
+import CreateAccountPage from "./createAccountPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
 import {
@@ -34,11 +35,24 @@ export default function Authentication() {
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
   };
 
+  const moveToLandingPage = () => {
+    setCarrouselIndex(1);
+    const scrollToIndex = carrouselIndex;
+    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
+  };
+
   const moveToSignUpPage = () => {
     setCarrouselIndex(0);
     const scrollToIndex = carrouselIndex;
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
   };
+
+  useEffect(() => {
+    carrouselIndex === 0 ? moveToSignUpPage() : null
+    carrouselIndex === 1 ? moveToLandingPage() : null
+    carrouselIndex === 2 ? moveToLoginPage() : null
+
+  },[carrouselIndex])
 
   return (
     <View style={styles.wrapper}>
@@ -67,7 +81,19 @@ export default function Authentication() {
         data={carrouselData}
         renderItem={({ item }) => (
           <View key={item.page} style={styles.pageContent}>
-            {item.page === 1 ? <Text>Empty</Text> : null}
+            {item.page === 1 ? (
+              <CreateAccountPage
+                title={item.title}
+                emailPlaceholder={item.emailPlaceholder}
+                passwordPlaceholder={item.passwordPlaceholder}
+                namePlaceholder={item.namePlaceholder}
+                buttonText={item.buttonText}
+                promptText={item.promptText}
+                promptLinkText={item.promptLinkText}
+                moveToLandingPage={moveToLandingPage}
+                moveToLoginPage={moveToLoginPage}
+              />
+            ) : null}
 
             {item.page === 2 ? (
               <LandingPage
@@ -75,6 +101,8 @@ export default function Authentication() {
                 loginButton={item.buttonOneText}
                 registerButton={item.buttonTwoText}
                 content={item.content}
+                moveToLoginPage={moveToLoginPage}
+                moveToSignUpPage={moveToSignUpPage}
               />
             ) : null}
 
@@ -86,6 +114,8 @@ export default function Authentication() {
                 buttonText={item.buttonText}
                 promptText={item.promptText}
                 promptLinkText={item.promptLinkText}
+                moveToLandingPage={moveToLandingPage}
+                moveToSignUpPage={moveToSignUpPage}
               />
             ) : null}
           </View>
@@ -98,7 +128,7 @@ export default function Authentication() {
 const styles = StyleSheet.create({
   wrapper: {
     position: "absolute",
-    height: '100%',
+    height: "100%",
     width: windowWidth,
     backgroundColor: colors.themeWhite,
     zIndex: 26,
