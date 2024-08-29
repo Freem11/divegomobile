@@ -55,7 +55,6 @@ export default function OnboardingTest() {
       moveToNextPage();
     } else if (carrouselIndex === 5) {
       await registerForPushNotificationsAsync(activeSession, "no");
-      console.log("registered notifcations")
       moveToNextPage();
     } else {
       moveToNextPage();
