@@ -43,7 +43,16 @@ export const primaryButton = {
   color: colors.themeWhite,
   borderRadius: moderateScale(25),
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  shadowColor: "#2d2d2d",
+  shadowOffset: {
+    width: moderateScale(1),
+    height: moderateScale(1),
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: moderateScale(2),
+
+  elevation: 10,
 }
 
 export const buttonText = {
@@ -61,7 +70,16 @@ export const primaryButtonAlt = {
   borderWidth: moderateScale(1),
   borderRadius: moderateScale(25),
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  shadowColor: "#2d2d2d",
+  shadowOffset: {
+    width: moderateScale(1),
+    height: moderateScale(1),
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: moderateScale(2),
+
+  elevation: 10,
 }
 
 export const buttonTextAlt = {
@@ -83,7 +101,7 @@ export const authenicationButton = {
     width: moderateScale(1),
     height: moderateScale(1),
   },
-  shadowOpacity: 1,
+  shadowOpacity: 0.5,
   shadowRadius: moderateScale(2),
 
   elevation: 10,
