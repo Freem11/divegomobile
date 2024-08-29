@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
   backgroundImage:{
     alignItems: 'center',
     justifyContent: 'center',
-    width: windowWidth*1.1,
-    height: windowHeight/1.8,
-    marginTop: moderateScale(-20)
+    width: windowWidth,
+    aspectRatio: 1,
+    marginTop: moderateScale(-18)
   }
 });

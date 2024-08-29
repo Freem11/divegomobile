@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
 import carrouselData from "./carrouselData";
-import LandingPage from './landingPage';
+import LandingPage from "./landingPage";
+import LoginPage from "./loginPage";
 import {
   activeFonts,
   colors,
@@ -18,7 +19,7 @@ import {
   primaryButtonAlt,
   buttonText,
   buttonTextAlt,
-} from "./styles";
+} from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -28,9 +29,9 @@ export default function Authentication() {
   const [carrouselIndex, setCarrouselIndex] = useState(1);
 
   const moveToLoginPage = () => {
-      setCarrouselIndex(2);
-      const scrollToIndex = carrouselIndex;
-      carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
+    setCarrouselIndex(2);
+    const scrollToIndex = carrouselIndex;
+    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
   };
 
   const moveToSignUpPage = () => {
@@ -47,10 +48,10 @@ export default function Authentication() {
         ref={carrouselRef}
         horizontal
         pagingEnabled
-        scrollEnabled={false}
+        // scrollEnabled={false}
         initialScrollIndex={1}
-        onScrollToIndexFailed={carrouselIndex => {
-          const wait = new Promise(resolve => setTimeout(resolve, 500));
+        onScrollToIndexFailed={(carrouselIndex) => {
+          const wait = new Promise((resolve) => setTimeout(resolve, 500));
           wait.then(() => {
             setCarrouselIndex(1);
             const scrollToIndex = carrouselIndex;
@@ -66,12 +67,27 @@ export default function Authentication() {
         data={carrouselData}
         renderItem={({ item }) => (
           <View key={item.page} style={styles.pageContent}>
-            {item.page === 1 ? (<Text>Empty</Text>) : null}
+            {item.page === 1 ? <Text>Empty</Text> : null}
 
-            {item.page === 2 ? (<LandingPage/>) : null}
+            {item.page === 2 ? (
+              <LandingPage
+                title={item.title}
+                loginButton={item.buttonOneText}
+                registerButton={item.buttonTwoText}
+                content={item.content}
+              />
+            ) : null}
 
-            {item.page === 3 ? (<Text>Empty</Text>) : null}
-
+            {item.page === 3 ? (
+              <LoginPage
+                title={item.title}
+                emailPlaceholder={item.emailPlaceholder}
+                passwordPlaceholder={item.passwordPlaceholder}
+                buttonText={item.buttonText}
+                promptText={item.promptText}
+                promptLinkText={item.promptLinkText}
+              />
+            ) : null}
           </View>
         )}
       />
@@ -82,7 +98,7 @@ export default function Authentication() {
 const styles = StyleSheet.create({
   wrapper: {
     position: "absolute",
-    height: windowHeight,
+    height: '100%',
     width: windowWidth,
     backgroundColor: colors.themeWhite,
     zIndex: 26,
@@ -93,10 +109,12 @@ const styles = StyleSheet.create({
   page: {
     width: "100%",
     height: "100%",
+    // backgroundColor: "pink"
   },
   pageContainter: {
     alignItems: "center",
     justifyContent: "center",
+    // backgroundColor: "pink"
   },
   pageContent: {
     // backgroundColor: "green",
@@ -130,5 +148,5 @@ const styles = StyleSheet.create({
     borderColor: "darkblue",
     borderWidth: 1,
     marginTop: moderateScale(40),
-  }
+  },
 });

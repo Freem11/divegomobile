@@ -9,7 +9,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
 } from "react-native";
-import WavyHeader from "./wavyHeader";
+import WavyHeader from "../wavyHeader";
 import {
   activeFonts,
   colors,
@@ -17,17 +17,17 @@ import {
   primaryButtonAlt,
   buttonText,
   buttonTextAlt,
-} from "./styles";
+} from "../styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Settings } from "react-native-fbsdk-next";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import appleLogo from "../compnents/png/loginIcons/apple.png";
-import facebookLogo from "../compnents/png/loginIcons/facebook.png";
-import googleLogo from "../compnents/png/loginIcons/google.png";
-import { appleLogin, googleSignIn, facebookSignIn } from "./loginHelpers";
+import appleLogo from "../png/loginIcons/apple.png";
+import facebookLogo from "../png/loginIcons/facebook.png";
+import googleLogo from "../png/loginIcons/google.png";
+import { appleLogin, googleSignIn, facebookSignIn } from "../loginHelpers";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "./contexts/sessionContext";
+import { SessionContext } from "../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -36,19 +36,19 @@ Settings.initializeSDK();
 const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
 
-export default function LandingPage() {
-
+export default function LandingPage(props) {
+  const { title, loginButton, registerButton, content } = props;
   const { setActiveSession } = useContext(SessionContext);
 
   Platform.OS === "ios"
-  ? GoogleSignin.configure({
-      scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
-      iosClientId: googleIOSClientId,
-    })
-  : GoogleSignin.configure({
-      scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
-      webClientId: googleWebClientId,
-    });
+    ? GoogleSignin.configure({
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+        iosClientId: googleIOSClientId,
+      })
+    : GoogleSignin.configure({
+        scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+        webClientId: googleWebClientId,
+      });
 
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
@@ -62,10 +62,13 @@ export default function LandingPage() {
     };
     checkApple();
   }, []);
-  
+
   const getAppleAuth = () => {
     return (
-      <TouchableWithoutFeedback onPress={() => appleLogin(setActiveSession, setIsSignedIn)} disabled={isSignedIn}>
+      <TouchableWithoutFeedback
+        onPress={() => appleLogin(setActiveSession, setIsSignedIn)}
+        disabled={isSignedIn}
+      >
         <View style={styles.appleButton}>
           <Image source={appleLogo} style={styles.appleLogo} />
         </View>
@@ -76,25 +79,25 @@ export default function LandingPage() {
   return (
     <View style={styles.container}>
       <ScrollView
-        scrollEnabled={true}
+        scrollEnabled={false}
         style={styles.contentContainer}
         contentContainerStyle={styles.contentScroll}
       >
-        <Text style={styles.header}>Dive In. . .</Text>
+        <Text style={styles.header}>{title}</Text>
 
         <View style={styles.loginButton}>
-          <Text style={styles.loginText}>Log In</Text>
+          <Text style={styles.loginText}>{loginButton}</Text>
         </View>
         <View style={styles.registerButton}>
-          <Text style={styles.registerText}>Create New Account</Text>
+          <Text style={styles.registerText}>{registerButton}</Text>
         </View>
-        <Text style={styles.social}>Social Sign In:</Text>
+        <Text style={styles.social}>{content}</Text>
         <View
           style={{
             width: moderateScale(240),
-            marginTop: windowHeight/30,
+            marginTop: windowHeight / 30,
             alignItems: "center",
-            justifyContent: 'space-around',
+            justifyContent: "space-around",
             flexDirection: "row",
             // backgroundColor: 'pink'
           }}
@@ -149,21 +152,21 @@ const styles = StyleSheet.create({
   },
   header: {
     zIndex: 10,
-    marginTop: windowWidth > 600 ? windowHeight/2.7 : windowHeight/2.5,
-    marginRight: windowWidth/3,
+    marginTop: windowWidth > 600 ? windowHeight / 2.7 : windowHeight / 3.2,
+    marginRight: windowWidth / 3,
     fontSize: moderateScale(34),
     fontFamily: activeFonts.Regular,
     color: colors.themeBlack,
   },
   social: {
     zIndex: 10,
-    marginTop: windowHeight/20,
+    marginTop: windowHeight / 20,
     fontSize: moderateScale(18),
     fontFamily: activeFonts.ThinItalic,
     color: colors.themeBlack,
   },
-  loginButton: [primaryButton, { marginTop: windowHeight/20 }],
-  registerButton: [primaryButtonAlt, { marginTop: windowHeight/50 }],
+  loginButton: [primaryButton, { marginTop: windowHeight / 20 }],
+  registerButton: [primaryButtonAlt, { marginTop: windowHeight / 50 }],
   loginText: buttonText,
   registerText: buttonTextAlt,
   svgCurve: {
@@ -226,7 +229,7 @@ const styles = StyleSheet.create({
   },
   appleLogo: {
     // backgroundColor: "white",
-    borderRadius:  50 / 2,
+    borderRadius: 50 / 2,
     height: moderateScale(50),
     width: moderateScale(50),
     opacity: 1,
@@ -235,9 +238,9 @@ const styles = StyleSheet.create({
   },
   fbLogo: {
     // backgroundColor: "white",
-    borderRadius:  22 / 2,
-    height:  moderateScale(45),
-    width:  moderateScale(45),
+    borderRadius: 22 / 2,
+    height: moderateScale(45),
+    width: moderateScale(45),
     opacity: 1,
     // marginRight: -2,
     // marginLeft: 10,
