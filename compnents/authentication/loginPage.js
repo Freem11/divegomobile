@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
+    marginTop: moderateScale(-50)
   },
   promtBox: {
     position: "absolute",
