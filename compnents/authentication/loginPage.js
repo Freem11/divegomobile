@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -39,8 +39,12 @@ export default function LoginPage(props) {
   });
 
   const { setActiveSession } = useContext(SessionContext);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [loginFail, setLoginFail] = useState(null);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  useEffect(() => {
+      setLoginFail(null)
+  }, [formVals])
 
   return (
     <View style={styles.container}>
@@ -74,9 +78,15 @@ export default function LoginPage(props) {
           />
         </View>
 
+        {loginFail ? (
+          <Text style={styles.erroMsg}>{loginFail}</Text>
+        ) : (
+          <View style={styles.erroMsgEmpty}></View>
+        )}
+
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback
-            onPress={() => handleLogInSubmit(formVals, setActiveSession)}
+            onPress={() => handleLogInSubmit(formVals, setActiveSession, setLoginFail)}
           >
             <View style={styles.loginButton}>
               <Text style={styles.loginText}>{buttonText}</Text>
@@ -145,4 +155,18 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
+  erroMsg: {
+    minHeight: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  },
+  erroMsgEmpty: {
+    height: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  }
 });

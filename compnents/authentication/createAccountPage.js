@@ -44,8 +44,12 @@ export default function CreateAccountPage(props) {
   });
 
   const { setActiveSession } = useContext(SessionContext);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [regFail, setRegFail] = useState(null);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  useEffect(() => {
+    setRegFail(null)
+}, [formVals])
 
   return (
     <View style={styles.container}>
@@ -84,8 +88,15 @@ export default function CreateAccountPage(props) {
             }
           />
         </View>
+        {regFail ? (
+          <Text style={styles.erroMsg}>{regFail}</Text>
+        ) : (
+          <View style={styles.erroMsgEmpty}></View>
+        )}
         <TouchableWithoutFeedback
-          onPress={() => handleSignUpSubmit(formVals, setActiveSession)}
+          onPress={() =>
+            handleSignUpSubmit(formVals, setActiveSession, setRegFail)
+          }
         >
           <View style={styles.buttonBox}>
             <View style={styles.loginButton}>
@@ -131,6 +142,7 @@ const styles = StyleSheet.create({
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
+    marginTop: moderateScale(-50)
   },
   promtBox: {
     position: "absolute",
@@ -155,4 +167,18 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
+  erroMsg: {
+    minHeight: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  },
+  erroMsgEmpty: {
+    height: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  }
 });

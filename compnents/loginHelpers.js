@@ -167,10 +167,10 @@ async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
 }
 
 
-export const handleLogInSubmit = async (formVals, setActiveSession) => {
+export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
 
   if (formVals.email === "" || formVals.password == "") {
-    // setLoginFail("Please fill out both email and password");
+    setLoginFail("Please fill out both email and password");
     return;
   } else {
     let accessToken = await signInStandard(formVals);
@@ -179,7 +179,7 @@ export const handleLogInSubmit = async (formVals, setActiveSession) => {
       setActiveSession(accessToken.session);
       // console.log("sign in reg", accessToken)
     } else {
-      // setLoginFail("The credentials you supplied are not valid");
+      setLoginFail("The credentials you supplied are not valid");
       return;
     }
     let checker = await sessionCheck();
@@ -188,18 +188,17 @@ export const handleLogInSubmit = async (formVals, setActiveSession) => {
 };
 
 
-export const handleSignUpSubmit = async (formVals, setActiveSession) => {
-
+export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail) => {
 
   if (
     formVals.email === "" ||
     formVals.password == "" ||
     formVals.name == ""
   ) {
-    // setRegFail("Please fill out all fields");
+    setRegFail("Please fill out all fields");
     return;
   } else if (formVals.password.length < 6) {
-    // setRegFail("Your password must be 6 characters or greater");
+    setRegFail("Your password must be 6 characters or greater");
     return;
   } else {
 
@@ -220,7 +219,7 @@ export const handleSignUpSubmit = async (formVals, setActiveSession) => {
       await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
       setActiveSession(registrationToken);
     } else {
-      // setRegFail(`You have already registered this account, please sign in`);
+      setRegFail(`You have already registered this account, please use the log in page`);
     }
     let checker = await sessionCheck();
     //  console.log("checkerbox", checker)
