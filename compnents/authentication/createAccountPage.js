@@ -3,9 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   Dimensions,
-  Platform,
   TouchableWithoutFeedback,
 } from "react-native";
 import {
@@ -16,8 +14,7 @@ import {
 } from "../styles";
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { handleSignUpSubmit } from "../loginHelpers";
+import { handleSignUpSubmit } from "../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 

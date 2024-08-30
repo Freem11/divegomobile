@@ -1,12 +1,9 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   StyleSheet,
   Dimensions,
   FlatList,
   View,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
 import carrouselData from "./carrouselData";
@@ -16,10 +13,6 @@ import LoginPage from "./loginPage";
 import {
   activeFonts,
   colors,
-  primaryButton,
-  primaryButtonAlt,
-  buttonText,
-  buttonTextAlt,
 } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;

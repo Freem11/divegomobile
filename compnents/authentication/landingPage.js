@@ -25,7 +25,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import appleLogo from "../png/loginIcons/apple.png";
 import facebookLogo from "../png/loginIcons/facebook.png";
 import googleLogo from "../png/loginIcons/google.png";
-import { appleLogin, googleSignIn, facebookSignIn } from "../loginHelpers";
+import { appleLogin, googleSignIn, facebookSignIn } from "../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 

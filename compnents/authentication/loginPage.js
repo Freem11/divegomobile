@@ -14,7 +14,7 @@ import {
 } from "../styles";
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleLogInSubmit } from "../loginHelpers";
+import { handleLogInSubmit } from "../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
