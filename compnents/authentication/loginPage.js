@@ -3,9 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   Dimensions,
-  Platform,
   TouchableWithoutFeedback,
 } from "react-native";
 import {
@@ -16,8 +14,7 @@ import {
 } from "../styles";
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { appleLogin, googleSignIn, facebookSignIn } from "../loginHelpers";
+import { handleLogInSubmit } from "../loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -33,21 +30,30 @@ export default function LoginPage(props) {
     promptText,
     promptLinkText,
     moveToLandingPage,
-    moveToSignUpPage
+    moveToSignUpPage,
   } = props;
 
   const [formVals, setFormVals] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const { setActiveSession } = useContext(SessionContext);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [loginFail, setLoginFail] = useState(null);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  useEffect(() => {
+      setLoginFail(null)
+  }, [formVals])
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name="chevron-left" size={48} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={"darkgrey"}
+        onPress={() => moveToLandingPage()}
+      />
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
 
@@ -56,9 +62,7 @@ export default function LoginPage(props) {
             icon={"alternate-email"}
             placeHolderText={emailPlaceholder}
             secure={false}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, email: text })
-            }
+            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
           />
         </View>
 
@@ -74,23 +78,32 @@ export default function LoginPage(props) {
           />
         </View>
 
-        <View style={styles.buttonBox}>
-        <View style={styles.loginButton}>
-          <Text style={styles.loginText}>{buttonText}</Text>
-          <MaterialIcons
-            name="chevron-right"
-            size={30}
-            color={colors.themeWhite}
-          />
-        </View>
-        </View>
+        {loginFail ? (
+          <Text style={styles.erroMsg}>{loginFail}</Text>
+        ) : (
+          <View style={styles.erroMsgEmpty}></View>
+        )}
 
-        <View style={styles.promtBox}>
-          <Text style={styles.promptText}>{promptText} </Text>
-          <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
-            <Text style={styles.promptLinkText}>{promptLinkText}</Text>
+        <View style={styles.buttonBox}>
+          <TouchableWithoutFeedback
+            onPress={() => handleLogInSubmit(formVals, setActiveSession, setLoginFail)}
+          >
+            <View style={styles.loginButton}>
+              <Text style={styles.loginText}>{buttonText}</Text>
+              <MaterialIcons
+                name="chevron-right"
+                size={30}
+                color={colors.themeWhite}
+              />
+            </View>
           </TouchableWithoutFeedback>
         </View>
+      </View>
+      <View style={styles.promtBox}>
+        <Text style={styles.promptText}>{promptText} </Text>
+        <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
+          <Text style={styles.promptLinkText}>{promptLinkText}</Text>
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );
@@ -118,12 +131,14 @@ const styles = StyleSheet.create({
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
+    marginTop: moderateScale(-50)
   },
   promtBox: {
+    position: "absolute",
+    bottom: moderateScale(10),
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: "90%",
   },
   promptText: {
     fontSize: moderateScale(15),
@@ -141,4 +156,18 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
+  erroMsg: {
+    minHeight: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  },
+  erroMsgEmpty: {
+    height: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  }
 });

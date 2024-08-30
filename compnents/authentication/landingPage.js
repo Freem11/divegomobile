@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   header: {
     zIndex: 10,
-    marginTop: windowWidth > 600 ? windowHeight / 2.7 : windowHeight / 3.2,
+    marginTop: windowWidth > 600 ? windowHeight / 2.5 : moderateScale(windowHeight / 3.2),
     marginRight: windowWidth / 3,
     fontSize: moderateScale(34),
     fontFamily: activeFonts.Regular,

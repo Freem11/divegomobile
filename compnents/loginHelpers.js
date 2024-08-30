@@ -165,3 +165,63 @@ async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
     }
   }
 }
+
+
+export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
+
+  if (formVals.email === "" || formVals.password == "") {
+    setLoginFail("Please fill out both email and password");
+    return;
+  } else {
+    let accessToken = await signInStandard(formVals);
+    if (accessToken) {
+      await AsyncStorage.setItem("token", JSON.stringify(accessToken));
+      setActiveSession(accessToken.session);
+      // console.log("sign in reg", accessToken)
+    } else {
+      setLoginFail("The credentials you supplied are not valid");
+      return;
+    }
+    let checker = await sessionCheck();
+    //  console.log("checkerbox", checker)
+  }
+};
+
+
+export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail) => {
+
+  if (
+    formVals.email === "" ||
+    formVals.password == "" ||
+    formVals.name == ""
+  ) {
+    setRegFail("Please fill out all fields");
+    return;
+  } else if (formVals.password.length < 6) {
+    setRegFail("Your password must be 6 characters or greater");
+    return;
+  } else {
+
+    let nameSplit =  formVals.name.split(/ (.*)/s);
+      let dataPack = {
+        email: formVals.email,
+        password:  formVals.password,
+        firstName: nameSplit[0],
+        lastName: nameSplit[1]
+      }
+
+    let registrationToken = await register(dataPack);
+    if (registrationToken.session !== null) {
+      await createProfile({
+        id: registrationToken.session.user.id,
+        email: formVals.email,
+      });
+      await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
+      setActiveSession(registrationToken);
+    } else {
+      setRegFail(`You have already registered this account, please use the log in page`);
+    }
+    let checker = await sessionCheck();
+    //  console.log("checkerbox", checker)
+  }
+};

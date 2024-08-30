@@ -17,7 +17,7 @@ import {
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { appleLogin, googleSignIn, facebookSignIn } from "../loginHelpers";
+import { handleSignUpSubmit } from "../loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -34,47 +34,49 @@ export default function CreateAccountPage(props) {
     promptText,
     promptLinkText,
     moveToLandingPage,
-    moveToLoginPage
+    moveToLoginPage,
   } = props;
 
   const [formVals, setFormVals] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const { setActiveSession } = useContext(SessionContext);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [regFail, setRegFail] = useState(null);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  useEffect(() => {
+    setRegFail(null)
+}, [formVals])
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name="chevron-left" size={48} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={"darkgrey"}
+        onPress={() => moveToLandingPage()}
+      />
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
-
         <View style={{ marginTop: moderateScale(60) }}>
           <TextInputField
             icon={"person-outline"}
             placeHolderText={namePlaceholder}
             secure={false}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, name: text })
-            }
+            onChangeText={(text) => setFormVals({ ...formVals, name: text })}
           />
         </View>
-
         <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"alternate-email"}
             placeHolderText={emailPlaceholder}
             secure={false}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, email: text })
-            }
+            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
           />
         </View>
-
         <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"lock-outline"}
@@ -86,24 +88,33 @@ export default function CreateAccountPage(props) {
             }
           />
         </View>
-
-        <View style={styles.buttonBox}>
-        <View style={styles.loginButton}>
-          <Text style={styles.loginText}>{buttonText}</Text>
-          <MaterialIcons
-            name="chevron-right"
-            size={30}
-            color={colors.themeWhite}
-          />
-        </View>
-        </View>
-
-        <View style={styles.promtBox}>
-          <Text style={styles.promptText}>{promptText} </Text>
-          <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
-            <Text style={styles.promptLinkText}>{promptLinkText}</Text>
-          </TouchableWithoutFeedback>
-        </View>
+        {regFail ? (
+          <Text style={styles.erroMsg}>{regFail}</Text>
+        ) : (
+          <View style={styles.erroMsgEmpty}></View>
+        )}
+        <TouchableWithoutFeedback
+          onPress={() =>
+            handleSignUpSubmit(formVals, setActiveSession, setRegFail)
+          }
+        >
+          <View style={styles.buttonBox}>
+            <View style={styles.loginButton}>
+              <Text style={styles.loginText}>{buttonText}</Text>
+              <MaterialIcons
+                name="chevron-right"
+                size={30}
+                color={colors.themeWhite}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+      <View style={styles.promtBox}>
+        <Text style={styles.promptText}>{promptText} </Text>
+        <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
+          <Text style={styles.promptLinkText}>{promptLinkText}</Text>
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );
@@ -131,12 +142,14 @@ const styles = StyleSheet.create({
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
+    marginTop: moderateScale(-50)
   },
   promtBox: {
+    position: "absolute",
+    bottom: moderateScale(10),
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: "65%",
   },
   promptText: {
     fontSize: moderateScale(15),
@@ -154,4 +167,18 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
+  erroMsg: {
+    minHeight: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  },
+  erroMsgEmpty: {
+    height: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  }
 });
