@@ -17,7 +17,7 @@ import {
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { appleLogin, googleSignIn, facebookSignIn } from "../loginHelpers";
+import { handleSignUpSubmit } from "../loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -34,13 +34,13 @@ export default function CreateAccountPage(props) {
     promptText,
     promptLinkText,
     moveToLandingPage,
-    moveToLoginPage
+    moveToLoginPage,
   } = props;
 
   const [formVals, setFormVals] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const { setActiveSession } = useContext(SessionContext);
@@ -49,32 +49,30 @@ export default function CreateAccountPage(props) {
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name="chevron-left" size={moderateScale(48)} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={"darkgrey"}
+        onPress={() => moveToLandingPage()}
+      />
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
-
         <View style={{ marginTop: moderateScale(60) }}>
           <TextInputField
             icon={"person-outline"}
             placeHolderText={namePlaceholder}
             secure={false}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, name: text })
-            }
+            onChangeText={(text) => setFormVals({ ...formVals, name: text })}
           />
         </View>
-
         <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"alternate-email"}
             placeHolderText={emailPlaceholder}
             secure={false}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, email: text })
-            }
+            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
           />
         </View>
-
         <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"lock-outline"}
@@ -86,24 +84,27 @@ export default function CreateAccountPage(props) {
             }
           />
         </View>
-
-        <View style={styles.buttonBox}>
-        <View style={styles.loginButton}>
-          <Text style={styles.loginText}>{buttonText}</Text>
-          <MaterialIcons
-            name="chevron-right"
-            size={30}
-            color={colors.themeWhite}
-          />
-        </View>
-        </View>
+        <TouchableWithoutFeedback
+          onPress={() => handleSignUpSubmit(formVals, setActiveSession)}
+        >
+          <View style={styles.buttonBox}>
+            <View style={styles.loginButton}>
+              <Text style={styles.loginText}>{buttonText}</Text>
+              <MaterialIcons
+                name="chevron-right"
+                size={30}
+                color={colors.themeWhite}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
       <View style={styles.promtBox}>
-          <Text style={styles.promptText}>{promptText} </Text>
-          <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
-            <Text style={styles.promptLinkText}>{promptLinkText}</Text>
-          </TouchableWithoutFeedback>
-        </View>
+        <Text style={styles.promptText}>{promptText} </Text>
+        <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
+          <Text style={styles.promptLinkText}>{promptLinkText}</Text>
+        </TouchableWithoutFeedback>
+      </View>
     </View>
   );
 }

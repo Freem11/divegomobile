@@ -1,11 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   View,
   Text,
-  Image,
   Dimensions,
-  Platform,
   TouchableWithoutFeedback,
 } from "react-native";
 import {
@@ -16,8 +14,7 @@ import {
 } from "../styles";
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { handleSignInSubmit } from "../loginHelpers";
+import { handleLogInSubmit } from "../loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -33,12 +30,12 @@ export default function LoginPage(props) {
     promptText,
     promptLinkText,
     moveToLandingPage,
-    moveToSignUpPage
+    moveToSignUpPage,
   } = props;
 
   const [formVals, setFormVals] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const { setActiveSession } = useContext(SessionContext);
@@ -47,7 +44,12 @@ export default function LoginPage(props) {
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name="chevron-left" size={moderateScale(48)} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={"darkgrey"}
+        onPress={() => moveToLandingPage()}
+      />
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
 
@@ -56,9 +58,7 @@ export default function LoginPage(props) {
             icon={"alternate-email"}
             placeHolderText={emailPlaceholder}
             secure={false}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, email: text })
-            }
+            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
           />
         </View>
 
@@ -75,24 +75,26 @@ export default function LoginPage(props) {
         </View>
 
         <View style={styles.buttonBox}>
-        <TouchableWithoutFeedback onPress={() => handleSignInSubmit(formVals, setActiveSession)}>
-        <View style={styles.loginButton}>
-          <Text style={styles.loginText}>{buttonText}</Text>
-          <MaterialIcons
-            name="chevron-right"
-            size={30}
-            color={colors.themeWhite}
-          />
-        </View>
-        </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => handleLogInSubmit(formVals, setActiveSession)}
+          >
+            <View style={styles.loginButton}>
+              <Text style={styles.loginText}>{buttonText}</Text>
+              <MaterialIcons
+                name="chevron-right"
+                size={30}
+                color={colors.themeWhite}
+              />
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
       <View style={styles.promtBox}>
-          <Text style={styles.promptText}>{promptText} </Text>
-          <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
-            <Text style={styles.promptLinkText}>{promptLinkText}</Text>
-          </TouchableWithoutFeedback>
-        </View>
+        <Text style={styles.promptText}>{promptText} </Text>
+        <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
+          <Text style={styles.promptLinkText}>{promptLinkText}</Text>
+        </TouchableWithoutFeedback>
+      </View>
     </View>
   );
 }
