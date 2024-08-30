@@ -49,7 +49,7 @@ export default function CreateAccountPage(props) {
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name="chevron-left" size={48} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
+      <MaterialIcons name="chevron-left" size={moderateScale(48)} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
 
@@ -97,14 +97,13 @@ export default function CreateAccountPage(props) {
           />
         </View>
         </View>
-
-        <View style={styles.promtBox}>
+      </View>
+      <View style={styles.promtBox}>
           <Text style={styles.promptText}>{promptText} </Text>
           <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
             <Text style={styles.promptLinkText}>{promptLinkText}</Text>
           </TouchableWithoutFeedback>
         </View>
-      </View>
     </View>
   );
 }
@@ -133,10 +132,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   promtBox: {
+    position: "absolute",
+    bottom: moderateScale(10),
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: "65%",
   },
   promptText: {
     fontSize: moderateScale(15),

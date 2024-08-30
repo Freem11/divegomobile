@@ -16,7 +16,7 @@ export default function TextInputField(props) {
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name={icon} size={24} color="darkgrey" />
+      <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" />
       <TextInput
         style={styles.input}
         value={inputValue}
@@ -31,7 +31,7 @@ export default function TextInputField(props) {
         secure ? (
           <FontAwesome6
             name="eye-slash"
-            size={24}
+            size={moderateScale(22)}
             color="darkgrey"
             onPress={() => setSecureTextEntry(false)}
           />
@@ -39,7 +39,7 @@ export default function TextInputField(props) {
           <FontAwesome6
             style={{ marginLeft: moderateScale(1) }}
             name="eye"
-            size={24}
+            size={moderateScale(22)}
             color="darkgrey"
             onPress={() => setSecureTextEntry(true)}
           />

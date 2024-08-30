@@ -165,3 +165,24 @@ async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
     }
   }
 }
+
+
+export const handleSignInSubmit = async (formVals, setActiveSession) => {
+
+  if (formVals.email === "" || formVals.password == "") {
+    // setLoginFail("Please fill out both email and password");
+    return;
+  } else {
+    let accessToken = await signInStandard(formVals);
+    if (accessToken) {
+      await AsyncStorage.setItem("token", JSON.stringify(accessToken));
+      setActiveSession(accessToken.session);
+      // console.log("sign in reg", accessToken)
+    } else {
+      // setLoginFail("The credentials you supplied are not valid");
+      return;
+    }
+    let checker = await sessionCheck();
+    //  console.log("checkerbox", checker)
+  }
+};

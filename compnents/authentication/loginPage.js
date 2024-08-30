@@ -17,7 +17,7 @@ import {
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { appleLogin, googleSignIn, facebookSignIn } from "../loginHelpers";
+import { handleSignInSubmit } from "../loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -47,7 +47,7 @@ export default function LoginPage(props) {
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name="chevron-left" size={48} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
+      <MaterialIcons name="chevron-left" size={moderateScale(48)} color={'darkgrey'} onPress={() => moveToLandingPage()}/>
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
 
@@ -75,6 +75,7 @@ export default function LoginPage(props) {
         </View>
 
         <View style={styles.buttonBox}>
+        <TouchableWithoutFeedback onPress={() => handleSignInSubmit(formVals, setActiveSession)}>
         <View style={styles.loginButton}>
           <Text style={styles.loginText}>{buttonText}</Text>
           <MaterialIcons
@@ -83,15 +84,15 @@ export default function LoginPage(props) {
             color={colors.themeWhite}
           />
         </View>
+        </TouchableWithoutFeedback>
         </View>
-
-        <View style={styles.promtBox}>
+      </View>
+      <View style={styles.promtBox}>
           <Text style={styles.promptText}>{promptText} </Text>
           <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
             <Text style={styles.promptLinkText}>{promptLinkText}</Text>
           </TouchableWithoutFeedback>
         </View>
-      </View>
     </View>
   );
 }
@@ -120,10 +121,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   promtBox: {
+    position: "absolute",
+    bottom: moderateScale(10),
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: "90%",
   },
   promptText: {
     fontSize: moderateScale(15),
