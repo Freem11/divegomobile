@@ -31,6 +31,8 @@ export default function LoginPage(props) {
     promptLinkText,
     moveToLandingPage,
     moveToSignUpPage,
+    loginFail,
+    setLoginFail
   } = props;
 
   const [formVals, setFormVals] = useState({
@@ -39,7 +41,6 @@ export default function LoginPage(props) {
   });
 
   const { setActiveSession } = useContext(SessionContext);
-  const [loginFail, setLoginFail] = useState(null);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   useEffect(() => {

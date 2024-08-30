@@ -260,9 +260,9 @@ const styles = StyleSheet.create({
   },
   gLogo: {
     marginTop: moderateScale(2),
-    marginRight: moderateScale(1),
-    height: moderateScale(60),
-    width: moderateScale(60),
+    marginRight: moderateScale(5),
+    height: moderateScale(62),
+    width: moderateScale(62),
     opacity: 1,
     // marginRight: 2,
     // marginLeft: 7,
