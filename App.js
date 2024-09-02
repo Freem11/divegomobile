@@ -22,7 +22,6 @@ import { PinSpotContext } from "./compnents/contexts/pinSpotContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import { MyCreaturesContext } from "./compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "./compnents/contexts/myDiveSitesContext";
-import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
 import Authentication from './compnents/authentication/newAuthentication';
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";

@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "83%",
-    height: moderateScale(30)
+    height: moderateScale(30),
+    fontFamily: activeFonts.Regular
   },
 });

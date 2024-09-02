@@ -25,7 +25,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import appleLogo from "../png/loginIcons/apple.png";
 import facebookLogo from "../png/loginIcons/facebook.png";
 import googleLogo from "../png/loginIcons/google.png";
-import { appleLogin, googleSignIn, facebookSignIn } from "../loginHelpers";
+import { appleLogin, googleSignIn, facebookSignIn } from "../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -260,9 +260,9 @@ const styles = StyleSheet.create({
   },
   gLogo: {
     marginTop: moderateScale(2),
-    marginRight: moderateScale(1),
-    height: moderateScale(60),
-    width: moderateScale(60),
+    marginRight: moderateScale(5),
+    height: moderateScale(62),
+    width: moderateScale(62),
     opacity: 1,
     // marginRight: 2,
     // marginLeft: 7,

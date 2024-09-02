@@ -13,8 +13,8 @@ import {
   sessionCheck,
   signInStandard,
   register,
-} from "../supabaseCalls/authenticateSupabaseCalls";
-import { createProfile } from "../supabaseCalls/accountSupabaseCalls";
+} from "../../supabaseCalls/authenticateSupabaseCalls";
+import { createProfile } from "../../supabaseCalls/accountSupabaseCalls";
 
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {

@@ -1,12 +1,9 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   StyleSheet,
   Dimensions,
   FlatList,
   View,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
 import carrouselData from "./carrouselData";
@@ -16,10 +13,6 @@ import LoginPage from "./loginPage";
 import {
   activeFonts,
   colors,
-  primaryButton,
-  primaryButtonAlt,
-  buttonText,
-  buttonTextAlt,
 } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
@@ -28,20 +21,28 @@ const windowHeight = Dimensions.get("window").height;
 export default function Authentication() {
   const carrouselRef = useRef(null);
   const [carrouselIndex, setCarrouselIndex] = useState(1);
+  const [loginFail, setLoginFail] = useState(null);
+  const [regFail, setRegFail] = useState(null);
 
   const moveToLoginPage = () => {
+    setLoginFail(null);
+    setRegFail(null);
     setCarrouselIndex(2);
     const scrollToIndex = carrouselIndex;
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
   };
 
   const moveToLandingPage = () => {
+    setLoginFail(null);
+    setRegFail(null);
     setCarrouselIndex(1);
     const scrollToIndex = carrouselIndex;
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
   };
 
   const moveToSignUpPage = () => {
+    setLoginFail(null);
+    setRegFail(null);
     setCarrouselIndex(0);
     const scrollToIndex = carrouselIndex;
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
@@ -91,6 +92,8 @@ export default function Authentication() {
                 promptLinkText={item.promptLinkText}
                 moveToLandingPage={moveToLandingPage}
                 moveToLoginPage={moveToLoginPage}
+                regFail={regFail}
+                setRegFail={setRegFail}
               />
             ) : null}
 
@@ -115,6 +118,8 @@ export default function Authentication() {
                 promptLinkText={item.promptLinkText}
                 moveToLandingPage={moveToLandingPage}
                 moveToSignUpPage={moveToSignUpPage}
+                loginFail={loginFail} 
+                setLoginFail={setLoginFail}
               />
             ) : null}
           </View>

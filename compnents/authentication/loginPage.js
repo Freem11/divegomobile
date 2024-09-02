@@ -14,7 +14,7 @@ import {
 } from "../styles";
 import TextInputField from "./textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleLogInSubmit } from "../loginHelpers";
+import { handleLogInSubmit } from "../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 
@@ -31,6 +31,8 @@ export default function LoginPage(props) {
     promptLinkText,
     moveToLandingPage,
     moveToSignUpPage,
+    loginFail,
+    setLoginFail
   } = props;
 
   const [formVals, setFormVals] = useState({
@@ -39,7 +41,6 @@ export default function LoginPage(props) {
   });
 
   const { setActiveSession } = useContext(SessionContext);
-  const [loginFail, setLoginFail] = useState(null);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   useEffect(() => {
