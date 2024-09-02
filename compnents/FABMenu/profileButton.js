@@ -5,23 +5,26 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveScreenContext } from '../contexts/activeScreenContext';
+import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
+
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
+  const { activeScreen, setActiveScreen } = useContext(
+    ActiveScreenContext
+    );
+  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
+
+
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
   );
-  const { setLargeModal } = useContext(LargeModalContext);
   const { setSmallModal } = useContext(SmallModalContext);
 
   const { setTiles } = useContext(CarrouselTilesContext);
@@ -31,18 +34,18 @@ export default function ProfileButton() {
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
-    setLargeModal(false);
-    setSmallModal(false);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("UserProfileButton");
+
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("ProfileScreen");
     useButtonPressHelper(
-      "UserProfileButton",
-      activeButtonID,
-      largeModalSecond,
-      setLargeModalSecond
+      "ProfileScreen",
+      activeScreen,
+      levelOneScreen,
+      setLevelOneScreen
     );
   };
 
+  console.log("hey", levelOneScreen)
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
@@ -72,7 +75,7 @@ export default function ProfileButton() {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "green",
+    backgroundColor: "green",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",

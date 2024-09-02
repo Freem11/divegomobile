@@ -14,7 +14,6 @@ export default function PlainTextInput(props) {
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" />
       <TextInput
         style={styles.input}
         value={content}

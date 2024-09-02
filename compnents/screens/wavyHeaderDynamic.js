@@ -9,7 +9,7 @@ export default function WavyHeaderDynamic({ customStyles }) {
   return (
     <View style={styles.customStyles}>
       <View style={{ flex: 1,  backgroundColor: "#5000ca",}}>
-          <ImageBackground style={styles.backgroundImage} source={require('./png/blackManta.png')} />
+          <ImageBackground style={styles.backgroundImage} source={require('../png/blackManta.png')} />
      <View style={{ flex: 1,  marginTop: Platform.OS === "android" ? windowHeight*-0.77 : windowWidth > 600? windowHeight*-0.9 : windowHeight*-0.77 }}>
         <Svg
           height="100%"
