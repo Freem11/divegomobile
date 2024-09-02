@@ -19,7 +19,8 @@ const windowHeight = Dimensions.get("window").height;
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
-  const [profileVals, setProfileVals] = useState({});
+  let defaultState = profile[0];
+  const [profileVals, setProfileVals] = useState({ defaultState });
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
   //profile photo : profile.profilePhoto
@@ -29,17 +30,19 @@ export default function UserProfile(props) {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <PlainTextInput
-          content={profile.UserName}
-          isEditModeOn={isEditModeOn}
-          setIsEditModeOn={setIsEditModeOn}
-          onChangeText={(text) =>
-            setProfileVals({ ...profileVals, UserName: text })
-          }
-        />
+        <View style={{marginLeft: "-50%", marginBottom: windowHeight/20}}>
+          <PlainTextInput
+            content={profile[0].UserName}
+            isEditModeOn={isEditModeOn}
+            setIsEditModeOn={setIsEditModeOn}
+            onChangeText={(text) =>
+              setProfileVals({ ...profileVals, UserName: text })
+            }
+          />
+        </View>
 
         <PlainTextInput
-          content={profile.profileBio}
+          content={profile[0].profileBio}
           isEditModeOn={isEditModeOn}
           setIsEditModeOn={setIsEditModeOn}
           onChangeText={(text) =>

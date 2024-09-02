@@ -15,25 +15,29 @@ export default function PlainTextInput(props) {
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={[styles.input , {backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite}]}
         value={content}
-        color={"darkgrey"}
+        color={colors.themeBlack}
+        editable={isEditModeOn ? true: false}
         fontSize={moderateScale(18)}
         onChangeText={onChangeText}
+        multiline={true}
       ></TextInput>
       {isEditModeOn ? (
         <FontAwesome6
           name="check"
-          size={moderateScale(22)}
+          size={moderateScale(16)}
           color="green"
           onPress={() => setIsEditModeOn(false)}
+          style={{marginLeft: moderateScale(5)}}
         />
       ) : (
         <FontAwesome6
           name="pencil"
-          size={moderateScale(22)}
+          size={moderateScale(16)}
           color="darkgrey"
           onPress={() => setIsEditModeOn(true)}
+          style={{marginLeft: moderateScale(5)}}
         />
       )}
     </View>
@@ -43,11 +47,14 @@ export default function PlainTextInput(props) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-end",
+    marginHorizontal: "10%",
   },
   input: {
-    width: "100%",
-    height: moderateScale(30),
-    fontFamily: activeFonts.Regular
+    minWidth: moderateScale(40),
+    maxWidth: '90%',
+    flexWrap: 'wrap',
+    height:'auto',
+    fontFamily: activeFonts.BoldItalic
   },
 });
