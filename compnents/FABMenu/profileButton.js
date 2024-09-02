@@ -45,7 +45,6 @@ export default function ProfileButton() {
     );
   };
 
-  console.log("hey", levelOneScreen)
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback

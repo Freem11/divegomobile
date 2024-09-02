@@ -7,6 +7,7 @@ import { activeFonts, colors } from "../styles";
 export default function PlainTextInput(props) {
   const {
     content,
+    fontSz,
     isEditModeOn,
     setIsEditModeOn,
     onChangeText,
@@ -15,11 +16,11 @@ export default function PlainTextInput(props) {
   return (
     <View style={styles.container}>
       <TextInput
-        style={[styles.input , {backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite}]}
+        style={[styles.input, {backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite}]}
         value={content}
         color={colors.themeBlack}
         editable={isEditModeOn ? true: false}
-        fontSize={moderateScale(18)}
+        fontSize={moderateScale(fontSz)}
         onChangeText={onChangeText}
         multiline={true}
       ></TextInput>
@@ -52,9 +53,9 @@ const styles = StyleSheet.create({
   },
   input: {
     minWidth: moderateScale(40),
-    maxWidth: '90%',
+    maxWidth: '94%',
     flexWrap: 'wrap',
     height:'auto',
-    fontFamily: activeFonts.BoldItalic
+    fontFamily: activeFonts.Medium
   },
 });

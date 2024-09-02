@@ -5,6 +5,7 @@ import PlainTextInput from "./plaintextInput";
 import {
   activeFonts,
   colors,
+  fontSizes,
   primaryButton,
   primaryButtonAlt,
   buttonText,
@@ -30,9 +31,10 @@ export default function UserProfile(props) {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{marginLeft: "-50%", marginBottom: windowHeight/20}}>
+        <View style={{ marginBottom: windowHeight/30 }}>
           <PlainTextInput
             content={profile[0].UserName}
+            fontSz={fontSizes.Header}
             isEditModeOn={isEditModeOn}
             setIsEditModeOn={setIsEditModeOn}
             onChangeText={(text) =>
@@ -43,6 +45,7 @@ export default function UserProfile(props) {
 
         <PlainTextInput
           content={profile[0].profileBio}
+          fontSz={fontSizes.StandardText}
           isEditModeOn={isEditModeOn}
           setIsEditModeOn={setIsEditModeOn}
           onChangeText={(text) =>
@@ -50,6 +53,8 @@ export default function UserProfile(props) {
           }
         />
       </View>
+
+
       <WavyHeaderDynamic customStyles={styles.svgCurve}></WavyHeaderDynamic>
     </View>
   );
@@ -64,12 +69,12 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: "left",
     zIndex: 15,
     position: "absolute",
     top: 0,
     left: 0,
+    marginTop: windowHeight/2.5,
     height: windowHeight,
     width: "100%",
     // backgroundColor: "pink"

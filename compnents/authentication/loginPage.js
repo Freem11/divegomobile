@@ -9,6 +9,7 @@ import {
 import {
   activeFonts,
   colors,
+  fontSizes,
   buttonText,
   authenicationButton,
 } from "../styles";
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   header: {
     zIndex: 10,
     marginTop: "10%",
-    fontSize: moderateScale(34),
+    fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Bold,
     color: "darkgrey",
   },
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
   },
   promptLinkText: {
     marginTop: moderateScale(1),
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.thin,
     color: colors.primaryBlue,
   },
@@ -160,14 +161,14 @@ const styles = StyleSheet.create({
   erroMsg: {
     minHeight: moderateScale(34),
     marginTop: moderateScale(15),
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Italic,
     color: "maroon",
   },
   erroMsgEmpty: {
     height: moderateScale(34),
     marginTop: moderateScale(15),
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Italic,
     color: "maroon",
   }
