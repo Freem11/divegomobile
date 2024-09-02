@@ -112,3 +112,22 @@ export const authenicationButton = {
 
   elevation: 10,
 }
+
+export const roundButton = {
+  // backgroundColor: colors.primaryBlue,
+  width: moderateScale(50),
+  height: moderateScale(50),
+  color: colors.themeWhite,
+  borderRadius: moderateScale(25),
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: "#2d2d2d",
+  shadowOffset: {
+    width: moderateScale(1),
+    height: moderateScale(1),
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: moderateScale(2),
+
+  elevation: 10,
+}

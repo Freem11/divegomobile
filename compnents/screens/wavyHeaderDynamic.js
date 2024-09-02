@@ -5,11 +5,18 @@ import Svg, { Path } from "react-native-svg";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function WavyHeaderDynamic({ customStyles }) {
+export default function WavyHeaderDynamic({ customStyles, image }) {
+
+  let picUri
+  if(image){
+    let photoName = image.split("/").pop();
+    picUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`  
+  }
+
   return (
     <View style={styles.customStyles}>
       <View style={{ flex: 1,  backgroundColor: "#5000ca",}}>
-          <ImageBackground style={styles.backgroundImage} source={require('../png/blackManta.png')} />
+          <ImageBackground source={image ? { uri: picUri} : require('../png/blackManta.png') } style={styles.backgroundImage} />
      <View style={{ flex: 1,  marginTop: Platform.OS === "android" ? windowHeight*-0.77 : windowWidth > 600? windowHeight*-0.9 : windowHeight*-0.77 }}>
         <Svg
           height="100%"

@@ -4,19 +4,16 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import {
-  activeFonts,
-  colors,
-  fontSizes,
-  primaryButton,
-  primaryButtonAlt,
-  buttonText,
-  buttonTextAlt,
-} from "../styles";
+import { activeFonts, colors, fontSizes, roundButton } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
-
+import { MaterialIcons } from "@expo/vector-icons";
+import { chooseImageHandler } from "./imageUploadHelpers";
+import {
+  uploadphoto,
+  removePhoto,
+} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -34,11 +31,11 @@ export default function UserProfile(props) {
       bio: profile[0].profileBio,
       photo: profile[0].profilePhoto,
     });
-    setTempUserName(profile[0].UserName)
+    setTempUserName(profile[0].UserName);
   }, []);
 
   useEffect(() => {
-    setUserFail("")
+    setUserFail("");
 
     if (!isEditModeOn && profileVals) {
       profileUpdate();
@@ -48,13 +45,14 @@ export default function UserProfile(props) {
   const profileUpdate = async () => {
     if (profileVals.userName === "") {
       setUserFail("Your diver name cannot be blank!");
-      setProfileVals({...profileVals, userName: tempUserName})
+      setProfileVals({ ...profileVals, userName: tempUserName });
     } else {
       try {
         const success = await updateProfile({
           id: profileVals.id,
           username: profileVals.userName,
           bio: profileVals.bio,
+          photo: profileVals.profilePhoto
         });
         if (success[0].length === 0 && profileVals) {
           setProfileVals({ ...profileVals, userName: tempUserName });
@@ -68,26 +66,63 @@ export default function UserProfile(props) {
     }
   };
 
+  const handleImageUpload = async () => {
+    try {
+      const image = await chooseImageHandler();
+      if (image) {
+        let uri = image.assets[0].uri;
+        let extension = image.assets[0].uri.split(".").pop();
+        const fileName = Date.now() + "." + extension;
+
+        setProfileVals({
+          ...profileVals,
+          photo: `animalphotos/public/${fileName}`,
+        });
+
+        console.log("profileVals", profileVals)
+        const success = await updateProfile({...profileVals, photo: `animalphotos/public/${fileName}`})
+
+        console.log("returned data" , success)
+        //create new photo file and upload
+        let picture = await fetch(uri);
+        picture = await picture.blob();
+        uploadphoto(picture, fileName);
+      }
+    } catch (e) {
+      console.log("error: Photo Selection Cancelled", e.message);
+    }
+  };
+
+  console.log("vars", profileVals)
   return (
     <View style={styles.container}>
+      <View style={styles.addPhotoButton}>
+        <MaterialIcons
+          name="add-a-photo"
+          size={moderateScale(30)}
+          color={colors.themeWhite}
+          onPress={() => handleImageUpload()}
+        />
+      </View>
       <View style={styles.contentContainer}>
         <View style={{ marginBottom: windowHeight / 70 }}>
-        {profileVals && <PlainTextInput
-            content={profileVals.userName}
-            fontSz={fontSizes.Header}
-            isEditModeOn={isEditModeOn}
-            setIsEditModeOn={setIsEditModeOn}
-            onChangeText={(nameText) =>
-              setProfileVals({ ...profileVals, userName: nameText })
-            }
-          />}
+          {profileVals && (
+            <PlainTextInput
+              content={profileVals.userName}
+              fontSz={fontSizes.Header}
+              isEditModeOn={isEditModeOn}
+              setIsEditModeOn={setIsEditModeOn}
+              onChangeText={(nameText) =>
+                setProfileVals({ ...profileVals, userName: nameText })
+              }
+            />
+          )}
 
           {userFail.length > 0 ? (
             <Text style={styles.erroMsg}>{userFail}</Text>
           ) : (
             <View style={styles.erroMsgEmpty}></View>
           )}
-
         </View>
         <MaskedView
           maskElement={
@@ -100,21 +135,26 @@ export default function UserProfile(props) {
         >
           <View style={styles.scrollViewBox}>
             <ScrollView>
-            {profileVals && <PlainTextInput
-                content={profileVals.bio}
-                fontSz={fontSizes.StandardText}
-                isEditModeOn={isEditModeOn}
-                setIsEditModeOn={setIsEditModeOn}
-                onChangeText={(bioText) =>
-                  setProfileVals({ ...profileVals, bio: bioText })
-                }
-              />}
+              {profileVals && (
+                <PlainTextInput
+                  content={profileVals.bio}
+                  fontSz={fontSizes.StandardText}
+                  isEditModeOn={isEditModeOn}
+                  setIsEditModeOn={setIsEditModeOn}
+                  onChangeText={(bioText) =>
+                    setProfileVals({ ...profileVals, bio: bioText })
+                  }
+                />
+              )}
             </ScrollView>
           </View>
         </MaskedView>
       </View>
 
-      <WavyHeaderDynamic customStyles={styles.svgCurve}></WavyHeaderDynamic>
+      <WavyHeaderDynamic
+        customStyles={styles.svgCurve}
+        image={profileVals && profileVals.photo}
+      ></WavyHeaderDynamic>
     </View>
   );
 }
@@ -160,10 +200,9 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.ThinItalic,
     color: colors.themeBlack,
   },
-  loginButton: [primaryButton, { marginTop: windowHeight / 20 }],
-  registerButton: [primaryButtonAlt, { marginTop: windowHeight / 50 }],
-  loginText: buttonText,
-  registerText: buttonTextAlt,
+  addPhotoButton: [
+    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
+  ],
   svgCurve: {
     position: "absolute",
     bottom: 0,
@@ -175,7 +214,7 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Italic,
     color: "maroon",
     marginHorizontal: "10%",
-    marginTop: "1%"
+    marginTop: "1%",
   },
   erroMsgEmpty: {
     // height: moderateScale(34),
@@ -183,6 +222,6 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Italic,
     color: "maroon",
     marginHorizontal: "10%",
-    marginTop: "1%"
+    marginTop: "1%",
   },
 });
