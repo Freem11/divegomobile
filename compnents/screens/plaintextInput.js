@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { MaterialIcons, FontAwesome6 } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
 
 export default function PlainTextInput(props) {

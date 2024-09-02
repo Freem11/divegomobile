@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Text, Dimensions, ScrollView } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
 import {
@@ -13,6 +13,7 @@ import {
 } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
+import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -20,40 +21,59 @@ const windowHeight = Dimensions.get("window").height;
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
-  let defaultState = profile[0];
-  const [profileVals, setProfileVals] = useState({ defaultState });
-  const [isEditModeOn, setIsEditModeOn] = useState(false);
 
-  //profile photo : profile.profilePhoto
-  //profile name : profile.UserName
-  //profile photo : profile.profileBio
+  const [profileVals, setProfileVals] = useState({});
+  const [isEditModeOn, setIsEditModeOn] = useState(false);
+  useEffect(() => {
+    setProfileVals({
+      id: profile[0].UserID,
+      userName: profile[0].UserName,
+      bio: profile[0].profileBio,
+      photo: profile[0].profilePhoto
+    })
+  }, []);
+
+  useEffect(() => {
+    if (!isEditModeOn) {
+      profileUpdate()
+    }
+  }, [isEditModeOn]);
+
+  const profileUpdate = async () => {
+    const success = await updateProfile({
+      id: profileVals.id,
+      username: profileVals.userName,
+      bio: profileVals.bio,
+    });
+  };
+
+  console.log("????", profileVals);
 
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ marginBottom: windowHeight/30 }}>
+        <View style={{ marginBottom: windowHeight / 30 }}>
           <PlainTextInput
-            content={profile[0].UserName}
+            content={profileVals.userName}
             fontSz={fontSizes.Header}
             isEditModeOn={isEditModeOn}
             setIsEditModeOn={setIsEditModeOn}
-            onChangeText={(text) =>
-              setProfileVals({ ...profileVals, UserName: text })
+            onChangeText={(nameText) =>
+              setProfileVals({ ...profileVals, userName: nameText })
             }
           />
         </View>
 
         <PlainTextInput
-          content={profile[0].profileBio}
+          content={profileVals.bio}
           fontSz={fontSizes.StandardText}
           isEditModeOn={isEditModeOn}
           setIsEditModeOn={setIsEditModeOn}
-          onChangeText={(text) =>
-            setProfileVals({ ...profileVals, profileBio: text })
+          onChangeText={(bioText) =>
+            setProfileVals({ ...profileVals, bio: bioText })
           }
         />
       </View>
-
 
       <WavyHeaderDynamic customStyles={styles.svgCurve}></WavyHeaderDynamic>
     </View>
@@ -74,7 +94,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    marginTop: windowHeight/2.5,
+    marginTop: windowHeight / 2.5,
     height: windowHeight,
     width: "100%",
     // backgroundColor: "pink"
