@@ -48,7 +48,7 @@ export default function PlainTextInput(props) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     marginHorizontal: "10%",
   },
   input: {

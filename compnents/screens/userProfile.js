@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions, Text, ScrollView } from "react-native";
+import MaskedView from "@react-native-masked-view/masked-view";
+import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
 import {
@@ -21,39 +23,56 @@ const windowHeight = Dimensions.get("window").height;
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
-
-  const [profileVals, setProfileVals] = useState({});
+  const [userFail, setUserFail] = useState("");
+  const [profileVals, setProfileVals] = useState(null);
+  const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   useEffect(() => {
     setProfileVals({
       id: profile[0].UserID,
       userName: profile[0].UserName,
       bio: profile[0].profileBio,
-      photo: profile[0].profilePhoto
-    })
+      photo: profile[0].profilePhoto,
+    });
+    setTempUserName(profile[0].UserName)
   }, []);
 
   useEffect(() => {
-    if (!isEditModeOn) {
-      profileUpdate()
+    setUserFail("")
+
+    if (!isEditModeOn && profileVals) {
+      profileUpdate();
     }
   }, [isEditModeOn]);
 
   const profileUpdate = async () => {
-    const success = await updateProfile({
-      id: profileVals.id,
-      username: profileVals.userName,
-      bio: profileVals.bio,
-    });
+    if (profileVals.userName === "") {
+      setUserFail("Your diver name cannot be blank!");
+      setProfileVals({...profileVals, userName: tempUserName})
+    } else {
+      try {
+        const success = await updateProfile({
+          id: profileVals.id,
+          username: profileVals.userName,
+          bio: profileVals.bio,
+        });
+        if (success[0].length === 0 && profileVals) {
+          setProfileVals({ ...profileVals, userName: tempUserName });
+          setUserFail("Sorry that diver name has already been taken");
+        }
+      } catch (e) {
+        setProfileVals({ ...profileVals, userName: tempUserName });
+        setUserFail("Sorry that diver name has already been taken");
+        console.log({ title: "Error19", message: e.message });
+      }
+    }
   };
-
-  console.log("????", profileVals);
 
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ marginBottom: windowHeight / 30 }}>
-          <PlainTextInput
+        <View style={{ marginBottom: windowHeight / 70 }}>
+        {profileVals && <PlainTextInput
             content={profileVals.userName}
             fontSz={fontSizes.Header}
             isEditModeOn={isEditModeOn}
@@ -61,18 +80,38 @@ export default function UserProfile(props) {
             onChangeText={(nameText) =>
               setProfileVals({ ...profileVals, userName: nameText })
             }
-          />
-        </View>
+          />}
 
-        <PlainTextInput
-          content={profileVals.bio}
-          fontSz={fontSizes.StandardText}
-          isEditModeOn={isEditModeOn}
-          setIsEditModeOn={setIsEditModeOn}
-          onChangeText={(bioText) =>
-            setProfileVals({ ...profileVals, bio: bioText })
+          {userFail.length > 0 ? (
+            <Text style={styles.erroMsg}>{userFail}</Text>
+          ) : (
+            <View style={styles.erroMsgEmpty}></View>
+          )}
+
+        </View>
+        <MaskedView
+          maskElement={
+            <LinearGradient
+              style={{ flex: 1 }}
+              colors={["white", "transparent"]}
+              start={{ x: 0.5, y: 0.7 }}
+            ></LinearGradient>
           }
-        />
+        >
+          <View style={styles.scrollViewBox}>
+            <ScrollView>
+            {profileVals && <PlainTextInput
+                content={profileVals.bio}
+                fontSz={fontSizes.StandardText}
+                isEditModeOn={isEditModeOn}
+                setIsEditModeOn={setIsEditModeOn}
+                onChangeText={(bioText) =>
+                  setProfileVals({ ...profileVals, bio: bioText })
+                }
+              />}
+            </ScrollView>
+          </View>
+        </MaskedView>
       </View>
 
       <WavyHeaderDynamic customStyles={styles.svgCurve}></WavyHeaderDynamic>
@@ -94,7 +133,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    marginTop: windowHeight / 2.5,
+    marginTop: windowHeight / 2.4,
     height: windowHeight,
     width: "100%",
     // backgroundColor: "pink"
@@ -109,6 +148,10 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(34),
     fontFamily: activeFonts.Regular,
     color: colors.themeBlack,
+  },
+  scrollViewBox: {
+    height: windowHeight / 3.5,
+    // backgroundColor: 'pink'
   },
   social: {
     zIndex: 10,
@@ -126,84 +169,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: Dimensions.get("window").width,
   },
-  SignUpWithFacebook: {
-    backgroundColor: "#1877F2",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(25),
-    height: moderateScale(48),
-    width: moderateScale(48),
-    shadowColor: "#2d2d2d",
-    shadowOffset: {
-      width: moderateScale(1),
-      height: moderateScale(1),
-    },
-    shadowOpacity: 1,
-    shadowRadius: moderateScale(2),
-
-    elevation: 10,
+  erroMsg: {
+    minHeight: moderateScale(34),
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+    marginHorizontal: "10%",
+    marginTop: "1%"
   },
-  SignUpWithGoogle: {
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(25),
-    height: moderateScale(48),
-    width: moderateScale(48),
-    shadowColor: "#2d2d2d",
-    shadowOffset: {
-      width: moderateScale(1),
-      height: moderateScale(1),
-    },
-    shadowOpacity: moderateScale(1),
-    shadowRadius: moderateScale(2),
-
-    elevation: 10,
-  },
-  appleButton: {
-    backgroundColor: "white",
-    borderRadius: moderateScale(25),
-    height: moderateScale(48),
-    width: moderateScale(48),
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: moderateScale(6),
-    shadowOffset: {
-      width: moderateScale(1),
-      height: moderateScale(1),
-    },
-    shadowOpacity: moderateScale(1),
-    shadowRadius: moderateScale(2),
-
-    elevation: 10,
-  },
-  appleLogo: {
-    // backgroundColor: "white",
-    borderRadius: 50 / 2,
-    height: moderateScale(50),
-    width: moderateScale(50),
-    opacity: 1,
-    // marginRight: -2,
-    // marginLeft: 10,
-  },
-  fbLogo: {
-    // backgroundColor: "white",
-    borderRadius: 22 / 2,
-    height: moderateScale(45),
-    width: moderateScale(45),
-    opacity: 1,
-    // marginRight: -2,
-    // marginLeft: 10,
-  },
-  gLogo: {
-    marginTop: moderateScale(2),
-    marginRight: moderateScale(5),
-    height: moderateScale(62),
-    width: moderateScale(62),
-    opacity: 1,
-    // marginRight: 2,
-    // marginLeft: 7,
+  erroMsgEmpty: {
+    // height: moderateScale(34),
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+    marginHorizontal: "10%",
+    marginTop: "1%"
   },
 });

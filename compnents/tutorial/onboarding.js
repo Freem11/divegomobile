@@ -143,6 +143,7 @@ export default function OnboardingTest() {
       }
     }
   };
+  
   return (
     <View style={styles.wrapper}>
       <FlatList
