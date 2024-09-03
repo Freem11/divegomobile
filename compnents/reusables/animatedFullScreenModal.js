@@ -57,7 +57,7 @@ export default function AnimatedFullScreenModal(props) {
 const styles = StyleSheet.create({
   modalBody: {
     position: "absolute",
-    height: windowHeight,
+    height: "100%",
     width: windowWidth,
     zIndex: 50,
     left: 0,

@@ -11,7 +11,7 @@ import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import UserProfile from '../screens/userProfile';
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelOneScreen() {
   const { activeScreen } = useContext(ActiveScreenContext);
@@ -47,7 +47,7 @@ export default function LevelOneScreen() {
 const styles = StyleSheet.create({
   modalBody: {
     position: "absolute",
-    height: windowHeight,
+    height: "100%",
     width: windowWidth,
     zIndex: 50,
     left: 0,
