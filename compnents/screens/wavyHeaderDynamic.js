@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Dimensions, Image, ImageBackground, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";
@@ -6,18 +7,24 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function WavyHeaderDynamic({ customStyles, image }) {
+  const [picUri, setPicUri] = useState(null);
 
-  let picUri
-  if(image){
-    let photoName = image.split("/").pop();
-    picUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`  
-  }
+  useEffect(()=> {
+    if(image){
+      let photoName = image.split("/").pop();
+     setPicUri(`https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`)
+    }
+  },[image])
 
   return (
     <View style={styles.customStyles}>
-      <View style={{ flex: 1,  backgroundColor: "#5000ca",}}>
-          <ImageBackground source={image ? { uri: picUri} : require('../png/blackManta.png') } style={styles.backgroundImage} />
-     <View style={{ flex: 1,  marginTop: Platform.OS === "android" ? windowHeight*-0.77 : windowWidth > 600? windowHeight*-0.9 : windowHeight*-0.77 }}>
+      <View style={{ flex: 1,  backgroundColor: "white",}}>
+        {picUri ? 
+              <ImageBackground source={{ uri: picUri }} style={styles.backgroundImage} />
+              :
+              <ImageBackground source={require('../png/blackManta.png')} style={styles.backgroundImage} />
+            }
+    <View style={{ flex: 1,  marginTop: Platform.OS === "android" ? windowHeight*-0.77 : windowWidth > 600? windowHeight*-0.9 : windowHeight*-0.77 }}>
         <Svg
           height="100%"
           width="100%"

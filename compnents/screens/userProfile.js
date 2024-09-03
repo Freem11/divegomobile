@@ -74,26 +74,28 @@ export default function UserProfile(props) {
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
+        //create new photo file and upload
+        let picture = await fetch(uri);
+        picture = await picture.blob();
+        await uploadphoto(picture, fileName);
+        if(profileVals.photo !== null || profileVals.photo === ""){
+          await removePhoto({
+            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+            fileName: profileVals.photo.split("/").pop()
+          });
+        }
+        
         setProfileVals({
           ...profileVals,
           photo: `animalphotos/public/${fileName}`,
         });
-
-        console.log("profileVals", profileVals)
         const success = await updateProfile({...profileVals, photo: `animalphotos/public/${fileName}`})
-
-        console.log("returned data" , success)
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        uploadphoto(picture, fileName);
       }
     } catch (e) {
       console.log("error: Photo Selection Cancelled", e.message);
     }
   };
 
-  console.log("vars", profileVals)
   return (
     <View style={styles.container}>
       <View style={styles.addPhotoButton}>
