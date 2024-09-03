@@ -36,7 +36,7 @@ export default function GeocodeAutoComplete(props) {
 
   const handleText = async (text) => {
    let test = await findPlaces(text)
-   console.log("anything?", test)
+
     if (text.length > 0) {
       setMapSearchBump(true);
     }

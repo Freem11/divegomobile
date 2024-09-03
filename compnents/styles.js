@@ -8,6 +8,12 @@ export const colors = {
   themeBlack: '#00171f'
 }
 
+export const fontSizes = {
+  Header: 34,
+  StandardText: 18,
+  SmallText: 14
+}
+
 export const activeFonts = Platform.OS === "android" ? {
   Black: "RobotoBlack",
   BlackItalic: "RobotoBlackItalic",
@@ -58,7 +64,7 @@ export const primaryButton = {
 export const buttonText = {
   color: colors.themeWhite,
   fontFamily: activeFonts.Regular,
-  fontSize: moderateScale(18)
+  fontSize : moderateScale(fontSizes.StandardText)
 }
 
 export const primaryButtonAlt = {
@@ -85,13 +91,32 @@ export const primaryButtonAlt = {
 export const buttonTextAlt = {
   color: colors.primaryBlue,
   fontFamily: activeFonts.Reg,
-  fontSize: moderateScale(18)
+  fontSize: moderateScale(fontSizes.StandardText)
 }
 
 export const authenicationButton = {
   backgroundColor: colors.primaryBlue,
   width: moderateScale(130),
   height: moderateScale(45),
+  color: colors.themeWhite,
+  borderRadius: moderateScale(25),
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: "#2d2d2d",
+  shadowOffset: {
+    width: moderateScale(1),
+    height: moderateScale(1),
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: moderateScale(2),
+
+  elevation: 10,
+}
+
+export const roundButton = {
+  // backgroundColor: colors.primaryBlue,
+  width: moderateScale(50),
+  height: moderateScale(50),
   color: colors.themeWhite,
   borderRadius: moderateScale(25),
   alignItems: 'center',

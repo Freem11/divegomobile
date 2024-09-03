@@ -1,12 +1,13 @@
 export const useButtonPressHelper = (
-  activeButtonID,
-  previousButtonID,
-  modal,
+  activeScreenID,
+  previousScreenID,
+  screenOpen,
   setter
 ) => {
-  if (modal && (activeButtonID === previousButtonID)) {
+  console.log(screenOpen, activeScreenID, previousScreenID, setter)
+  if (screenOpen && (activeScreenID === previousScreenID)) {
     setter(false);
-  } else if (modal && (activeButtonID !== previousButtonID)) {
+  } else if (screenOpen && (activeScreenID !== previousScreenID)) {
     setter(true);
   } else {
     setter(true);
