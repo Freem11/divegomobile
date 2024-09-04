@@ -46,8 +46,9 @@ export default function LevelOneScreen() {
 
 const styles = StyleSheet.create({
   modalBody: {
+    backgroundColor: "green",
     position: "absolute",
-    height: "100%",
+    height: windowHeight,
     width: windowWidth,
     zIndex: 50,
     left: 0,
