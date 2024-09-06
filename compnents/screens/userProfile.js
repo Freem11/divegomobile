@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Dimensions, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Dimensions, Text, ScrollView, Platform } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
+    height: windowHeight
   },
   contentContainer: {
     alignItems: "left",
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    marginTop: windowHeight / 2.4,
+    marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight/2.2,
     width: "100%",
   },
   header: {

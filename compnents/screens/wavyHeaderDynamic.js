@@ -13,7 +13,7 @@ import Svg, { Path } from "react-native-svg";
 import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("screen").height;
+const windowHeight = Dimensions.get("window").height;
 
 export default function WavyHeaderDynamic({ customStyles, image }) {
   const [picUri, setPicUri] = useState(null);
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   customStyles: {
     flex: 1,
     height: windowHeight,
+    backgroundColor: "pink"
   },
   backgroundImage: {
     backgroundColor: colors.themeWhite,
@@ -80,6 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: windowWidth,
     aspectRatio: 1,
-    marginTop: Platform.OS === "ios" ? moderateScale(0) : moderateScale(-24),
+    marginTop: Platform.OS === "ios" ? moderateScale(0) : moderateScale(0),
   },
 });
