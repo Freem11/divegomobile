@@ -90,6 +90,7 @@ export const getDiveSiteByName = async (value) => {
 };
 
 export const getDiveSiteWithUserName = async (values) => {
+  console.log("supa?", values)
   const { data, error } = await supabase.rpc(
     "get_single_divesites_with_username",
     {
@@ -162,5 +163,22 @@ export const getSingleDiveSiteByNameAndRegion = async (values) => {
   if (data) {
     return data;
   }
+  }
+};
+
+export const updateDiveSite = async (values) => {
+  console.log("updating...", values)
+  const { data, error } = await supabase
+    .from("diveSites")
+    .update({ diveSiteBio: values.bio, diveSiteProfilePhoto: values.photo  })
+    .eq("id", values.id);
+
+  if (error) {
+    console.log("couldn't do it 2,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
   }
 };

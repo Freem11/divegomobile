@@ -81,6 +81,9 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
+import { ActiveScreenContext } from './contexts/activeScreenContext';
+import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
+
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
@@ -92,6 +95,11 @@ export default function Map() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
+  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const { activeScreen, setActiveScreen } = useContext(
+    ActiveScreenContext
+    );
+
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
@@ -524,12 +532,12 @@ export default function Map() {
     setShowFilterer(false);
     filterAnchorPhotos();
     setPreviousButtonID(activeButtonID);
-    setActiveButtonID("SiteAnchorIcon");
+    setActiveScreen("DiveSiteScreen")
     useButtonPressHelper(
-      "SiteAnchorIcon",
-      activeButtonID,
-      largeModal,
-      setLargeModal
+      "DiveSiteScreen",
+      activeScreen,
+      levelOneScreen,
+      setLevelOneScreen
     );
     if (itterator3 === 5) {
       setItterator3(itterator3 + 1);

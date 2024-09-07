@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { activeFonts, colors, fontSizes, roundButton } from '../styles';
 import { scale, moderateScale } from "react-native-size-matters";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import carrouselData from "./carrouselData";
@@ -23,11 +24,12 @@ import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import InputField from "../reusables/textInputs";
+import TextInputField from '../authentication/textInput';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from "expo-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const windowHeight = Dimensions.get("screen").height;
 
 export default function OnboardingTest() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -186,11 +188,11 @@ export default function OnboardingTest() {
 
             {item.page === 2 ? (
               <View style={styles.inputBox}>
-                <InputField
-                  validationItem={formValidation.userName}
+                <TextInputField
+                  icon={"scuba-diving"}
                   placeHolderText={"Diver Name"}
                   inputValue={formVal.userName}
-                  keyboardType={"default"}
+                  secure={false}
                   onChangeText={(text) => handleText(text)}
                 />
               </View>
@@ -229,7 +231,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: "#0073E6",
+    backgroundColor: colors.primaryBlue,
     zIndex: 26,
     left: 0,
     alignItems: "center",
@@ -260,22 +262,22 @@ const styles = StyleSheet.create({
     // backgroundColor: 'purple',
   },
   title: {
-    fontFamily: "GothamBlack",
-    fontSize: moderateScale(32),
+    fontFamily: activeFonts.Regular,
+    fontSize: fontSizes.Header,
     paddingHorizontal: moderateScale(30),
     marginTop: windowHeight > 700 && windowWidth < 700 ? scale(150) : scale(60),
     marginBottom: moderateScale(10),
     width: windowWidth,
-    color: "#F0EEEB",
+    color: colors.themeWhite,
     textAlign: "center",
   },
   content: {
     paddingTop: moderateScale(5),
-    fontFamily: "SanFran",
-    fontSize: moderateScale(16),
+    fontFamily: activeFonts.Medium,
+    fontSize: fontSizes.StandardText,
     marginTop: moderateScale(15),
     width: windowWidth * 0.8,
-    color: "#F0EEEB",
+    color: colors.themeWhite,
     textAlign: "center",
   },
   image: {
@@ -302,24 +304,24 @@ const styles = StyleSheet.create({
   buttonTwo: {
     borderRadius: moderateScale(10),
     borderWidth: moderateScale(2),
-    borderColor: "white",
+    borderColor: colors.themeWhite,
   },
   buttonTwoText: {
-    fontFamily: "GothamBold",
+    fontFamily: activeFonts.Medium,
     fontSize: moderateScale(20),
-    color: "white",
+    color: colors.themeWhite,
     padding: moderateScale(10),
     paddingRight: moderateScale(30),
     paddingLeft: moderateScale(30),
   },
   buttonOne: {
     borderRadius: moderateScale(10),
-    backgroundColor: "white",
+    backgroundColor: colors.themeWhite,
   },
   buttonOneText: {
-    fontFamily: "GothamBold",
+    fontFamily: activeFonts.Medium,
     fontSize: moderateScale(20),
-    color: "#538bdb",
+    color: colors.primaryBlue,
     padding: moderateScale(10),
     paddingRight: moderateScale(30),
     paddingLeft: moderateScale(30),
@@ -332,7 +334,7 @@ const styles = StyleSheet.create({
     padding: moderateScale(7),
     paddingHorizontal: moderateScale(10),
     color: "pink",
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Thin,
     fontSize: scale(14),
     borderStyle: "dashed",
     borderRadius: moderateScale(10),
@@ -341,6 +343,7 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(40),
   },
   inputBox: {
+    width: "60%",
     marginTop: scale(30),
   },
 });

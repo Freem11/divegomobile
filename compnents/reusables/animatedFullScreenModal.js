@@ -21,7 +21,6 @@ const windowHeight = Dimensions.get("window").height;
 export default function AnimatedFullScreenModal(props) {
   const { activeTutorialID } = useContext(ActiveTutorialIDContext);
   const { fullScreenModal } = useContext(FullScreenModalContext);
-
   const fullScreenModalY = useSharedValue(0);
 
   const modalSlide = useAnimatedStyle(() => {
@@ -57,7 +56,7 @@ export default function AnimatedFullScreenModal(props) {
 const styles = StyleSheet.create({
   modalBody: {
     position: "absolute",
-    height: windowHeight,
+    height: "100%",
     width: windowWidth,
     zIndex: 50,
     left: 0,

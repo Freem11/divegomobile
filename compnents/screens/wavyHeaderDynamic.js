@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Dimensions, Image, ImageBackground, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  Image,
+  ImageBackground,
+  Platform,
+} from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";
+import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -9,48 +18,69 @@ const windowHeight = Dimensions.get("window").height;
 export default function WavyHeaderDynamic({ customStyles, image }) {
   const [picUri, setPicUri] = useState(null);
 
-  useEffect(()=> {
-    if(image){
+  useEffect(() => {
+    if (image) {
       let photoName = image.split("/").pop();
-     setPicUri(`https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`)
+      setPicUri(
+        `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`
+      );
     }
-  },[image])
+  }, [image]);
 
   return (
     <View style={styles.customStyles}>
-      <View style={{ flex: 1,  backgroundColor: "white",}}>
-        {picUri ? 
-              <ImageBackground source={{ uri: picUri }} style={styles.backgroundImage} />
-              :
-              <ImageBackground source={require('../png/blackManta.png')} style={styles.backgroundImage} />
-            }
-    <View style={{ flex: 1,  marginTop: Platform.OS === "android" ? windowHeight*-0.77 : windowWidth > 600? windowHeight*-0.9 : windowHeight*-0.77 }}>
-        <Svg
-          height="100%"
-          width="100%"
-          viewBox="0 0 1440 320"
-          style={{ position: "absolute", backgroundColor: 'transparent', zIndex: 5 }}
+      <View style={{ flex:1, backgroundColor: "blue" }}>
+        {picUri ? (
+          <ImageBackground
+            source={{ uri: picUri }}
+            style={styles.backgroundImage}
+          />
+        ) : (
+          <ImageBackground
+            source={require("../png/blackManta.png")}
+            style={styles.backgroundImage}
+          />
+        )}
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "white",
+          }}
         >
-           <Path fill="#ffffff"
-            d="M 0,700 L 0,262 C 123.33333333333331,187.60000000000002 246.66666666666663,113.20000000000002 401,132 C 555.3333333333334,150.79999999999998 740.6666666666667,262.8 919,300 C 1097.3333333333333,337.2 1268.6666666666665,299.6 1540,102 L 1440,2200 L 0,2200 Z"
+          <Svg
+            height="100%"
+            width="100%"
+            viewBox="0 0 1440 320"
+            style={{
+              flex: 1,
+              marginTop: "-80%",
+              backgroundColor: "transparent",
+              zIndex: 5,
+            }}
+          >
+            <Path
+              fill="#ffffff"
+              d="M 0,700 L 0,262 C 123.33333333333331,187.60000000000002 246.66666666666663,113.20000000000002 401,132 C 555.3333333333334,150.79999999999998 740.6666666666667,262.8 919,300 C 1097.3333333333333,337.2 1268.6666666666665,299.6 1540,102 L 1440, 2200 L 0,2200 Z"
             />
-        </Svg>
+          </Svg>
         </View>
       </View>
-      </View>
+    </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   customStyles: {
     flex: 1,
+    height: windowHeight,
+    backgroundColor: "pink"
   },
-  backgroundImage:{
-    alignItems: 'center',
-    justifyContent: 'center',
+  backgroundImage: {
+    backgroundColor: colors.themeWhite,
+    alignItems: "center",
+    justifyContent: "center",
     width: windowWidth,
     aspectRatio: 1,
-    marginTop: Platform.OS === "ios" ? moderateScale(0) : moderateScale(-24)
-  }
+    marginTop: Platform.OS === "ios" ? moderateScale(0) : moderateScale(0),
+  },
 });

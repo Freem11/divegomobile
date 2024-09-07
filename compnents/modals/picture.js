@@ -224,7 +224,7 @@ export default function Picture(props) {
           photoFile={pic.photofile}
           id={pic.id}
           style={{
-            borderRadius: 15,
+            borderRadius: moderateScale(15),
             resizeMode: "cover",
             marginTop: moderateScale(-22),
             // backgroundColor: "pink",
@@ -287,8 +287,9 @@ export default function Picture(props) {
 
 const styles = StyleSheet.create({
   outterBox: {
+    zIndex: 30,
     width: "100%",
-    marginLeft: moderateScale(-10),
+    marginLeft: moderateScale(0),
     marginBottom: moderateScale(5),
     // backgroundColor: 'pink'
   },
@@ -297,9 +298,10 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // flexDirection: "column",
     overflow: "hidden",
+    zIndex: 40,
     // backgroundColor: "white",
-    // borderTopRightRadius: scale(15),
-    width: "100%",
+    borderTopRightRadius: scale(10),
+    width: "98%",
     padding: moderateScale(2)
   },
   titleText: {
@@ -324,7 +326,7 @@ const styles = StyleSheet.create({
     // position: "relative",
     backgroundColor: "black",
     opacity: 0.6,
-    width: "120%",
+    width: "96%",
     borderRadius: 5,
     zIndex: 2,
     left: scale(8),
@@ -373,6 +375,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     backgroundColor: "black",
+    width: "98%",
     height: moderateScale(18),
     opacity: 0.6,
     color: "white",
@@ -387,7 +390,7 @@ const styles = StyleSheet.create({
   },
   microLow2: {
     display: "flex",
-    width: "100%",
+    width: "98%",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",

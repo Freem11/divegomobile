@@ -1,11 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Dimensions, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Dimensions, Text, ScrollView, Platform } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
+import CloseButton from '../reusables/closeButton';
 import { activeFonts, colors, fontSizes, roundButton } from "../styles";
 import { moderateScale } from "react-native-size-matters";
+import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
+
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -14,12 +17,14 @@ import {
   uploadphoto,
   removePhoto,
 } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
+  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);
   const [tempUserName, setTempUserName] = useState("");
@@ -96,8 +101,15 @@ export default function UserProfile(props) {
     }
   };
 
+  const onClose = () => {
+    setLevelOneScreen(false)
+  }
+
   return (
     <View style={styles.container}>
+      <View style={styles.screenCloseButton}>
+      <CloseButton onClose={() => onClose()}/>
+      </View>
       <View style={styles.addPhotoButton}>
         <MaterialIcons
           name="add-a-photo"
@@ -164,21 +176,19 @@ export default function UserProfile(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
+    height: windowHeight
   },
   contentContainer: {
-    flex: 1,
     alignItems: "left",
     zIndex: 15,
     position: "absolute",
     top: 0,
     left: 0,
-    marginTop: windowHeight / 2.4,
-    height: windowHeight,
+    marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight/2.2,
     width: "100%",
-    // backgroundColor: "pink"
   },
   header: {
     zIndex: 10,
@@ -193,15 +203,10 @@ const styles = StyleSheet.create({
   },
   scrollViewBox: {
     height: windowHeight / 3.5,
-    // backgroundColor: 'pink'
   },
-  social: {
-    zIndex: 10,
-    marginTop: windowHeight / 20,
-    fontSize: moderateScale(18),
-    fontFamily: activeFonts.ThinItalic,
-    color: colors.themeBlack,
-  },
+  screenCloseButton: [
+    { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
+  ],
   addPhotoButton: [
     { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
   ],

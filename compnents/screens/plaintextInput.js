@@ -11,15 +11,23 @@ export default function PlainTextInput(props) {
     isEditModeOn,
     setIsEditModeOn,
     onChangeText,
+    placeHolder,
   } = props;
 
   return (
     <View style={styles.container}>
       <TextInput
-        style={[styles.input, {backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite}]}
+        placeholder={placeHolder}
+        style={[
+          styles.input,
+          {
+            backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite,
+            fontFamily: content ? activeFonts.Medium : activeFonts.ThinItalic,
+          },
+        ]}
         value={content}
         color={colors.themeBlack}
-        editable={isEditModeOn ? true: false}
+        editable={isEditModeOn ? true : false}
         fontSize={moderateScale(fontSz)}
         onChangeText={onChangeText}
         multiline={true}
@@ -30,7 +38,7 @@ export default function PlainTextInput(props) {
           size={moderateScale(16)}
           color="green"
           onPress={() => setIsEditModeOn(false)}
-          style={{marginLeft: moderateScale(5)}}
+          style={{ marginLeft: moderateScale(5) }}
         />
       ) : (
         <FontAwesome6
@@ -38,7 +46,7 @@ export default function PlainTextInput(props) {
           size={moderateScale(16)}
           color="darkgrey"
           onPress={() => setIsEditModeOn(true)}
-          style={{marginLeft: moderateScale(5)}}
+          style={{ marginLeft: moderateScale(5) }}
         />
       )}
     </View>
@@ -53,9 +61,8 @@ const styles = StyleSheet.create({
   },
   input: {
     minWidth: moderateScale(40),
-    maxWidth: '94%',
-    flexWrap: 'wrap',
-    height:'auto',
-    fontFamily: activeFonts.Medium
+    maxWidth: "94%",
+    flexWrap: "wrap",
+    height: "auto",
   },
 });

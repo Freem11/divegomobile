@@ -9,9 +9,10 @@ import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 
 import UserProfile from '../screens/userProfile';
+import DiveSite from '../screens/diveSite';
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelOneScreen() {
   const { activeScreen } = useContext(ActiveScreenContext);
@@ -40,12 +41,14 @@ export default function LevelOneScreen() {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen === "ProfileScreen" && <UserProfile/>}
+      {activeScreen === "DiveSiteScreen" && <DiveSite/>}
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   modalBody: {
+    backgroundColor: "green",
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
