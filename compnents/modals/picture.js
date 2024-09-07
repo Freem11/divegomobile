@@ -287,21 +287,20 @@ export default function Picture(props) {
 
 const styles = StyleSheet.create({
   outterBox: {
-    zIndex: 30,
-    width: "100%",
-    marginLeft: moderateScale(0),
+    zIndex: 70,
+    width: "98%",
+    marginLeft: "1%",
     marginBottom: moderateScale(5),
-    // backgroundColor: 'pink'
   },
   container: {
     // flex: 1,
     // justifyContent: "center",
     // flexDirection: "column",
-    overflow: "hidden",
+    // overflow: "hidden",
     zIndex: 40,
     // backgroundColor: "white",
     borderTopRightRadius: scale(10),
-    width: "98%",
+    width: "100%",
     padding: moderateScale(2)
   },
   titleText: {
@@ -420,7 +419,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     opacity: 1,
-    color: "white",
+    color: "black",
     // backgroundColor: "black",
     fontFamily: "Itim_400Regular",
     fontSize: scale(10),
