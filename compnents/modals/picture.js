@@ -289,7 +289,6 @@ const styles = StyleSheet.create({
   outterBox: {
     zIndex: 70,
     width: "98%",
-    marginLeft: "1%",
     marginBottom: moderateScale(5),
   },
   container: {

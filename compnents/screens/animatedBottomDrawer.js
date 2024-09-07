@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, FlatList } from "react-native";
+import { StyleSheet, View, Dimensions, FlatList, Text } from "react-native";
 import React, { useState, useContext, useEffect, useRef } from "react";
 import Animated, {
   useSharedValue,
@@ -7,51 +7,59 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import { Gesture, GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  Gesture,
+  GestureDetector,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import Picture from "../modals/picture";
+import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function BottomDrawer(props) {
-  const { dataSet, lowerBound, upperBound} = props
+  const { dataSet, lowerBound, upperBound } = props;
   const photosRef = useRef(null);
-  const boxheight = useSharedValue(moderateScale(280));
+  const boxheight = useSharedValue(moderateScale(290));
 
   const [bounds, setBounds] = useState({});
 
   useEffect(() => {
-    setBounds({lower: lowerBound, upper: upperBound})
+    setBounds({ lower: lowerBound, upper: upperBound });
   }, []);
 
-  const animatedBottomDrawer = Gesture.Pan()
-    .onUpdate((event) => {
-      if(event.translationY < 0){
-        boxheight.value = bounds.upper
-      } else {
-        boxheight.value = bounds.lower
-      }
-    })
+  const animatedBottomDrawer = Gesture.Pan().onUpdate((event) => {
+    if (event.translationY < 0) {
+      boxheight.value = bounds.upper;
+    } else {
+      boxheight.value = bounds.lower;
+    }
+  });
 
   const animatedBoxStyle = useAnimatedStyle(() => {
     return {
-          height: withTiming(boxheight.value, {
-            duration: 500,
-            easing: Easing.inOut(Easing.linear),
-          }),
-        }
+      height: withTiming(boxheight.value, {
+        duration: 400,
+        easing: Easing.inOut(Easing.linear),
+      }),
+    };
   });
 
   return (
-    <GestureDetector gesture={animatedBottomDrawer}>
-      <Animated.View
-        style={[
-          styles.mainHousing,
-          animatedBoxStyle,
-        ]}
-      >
-        {/* <FlatList
+    <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
+      <GestureDetector gesture={animatedBottomDrawer}>
+        <View
+        style={styles.handle}
+        >
+          <View style={styles.tab}></View>
+        </View>
+      </GestureDetector>
+
+      {dataSet.length > 0 ?
+      <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
           ref={photosRef}
@@ -60,8 +68,7 @@ export default function BottomDrawer(props) {
           showsVerticalScrollIndicator={false}
           snapToInterval={moderateScale(290)}
           snapToAlignment="center"
-          decelerationRate="fast"
-          disableIntervalMomentum
+          decelerationRate='normal'
           keyExtractor={(item) => item.id}
           data={dataSet}
           renderItem={({ item }) => (
@@ -69,9 +76,58 @@ export default function BottomDrawer(props) {
               <Picture key={item.id} pic={item}></Picture>
             </View>
           )}
-        /> */}
-      </Animated.View>
-    </GestureDetector>
+        />
+
+: 
+            <View>
+              <Text style={styles.noSightings}>
+                No Sightings At This Site Yet!
+              </Text>
+              {/* <Text style={styles.noSightings2}>
+                Be the first to add one here.
+              </Text> */}
+
+              {/* <TouchableWithoutFeedback
+                onPress={handleSwitch}
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: scale(32),
+                  height: scale(32),
+                  borderRadius: scale(32),
+                  backgroundColor: "black",
+                }}
+              >
+                <View
+                  style={{
+                    borderRadius: scale(40),
+                    backgroundColor: photoButState ? "white": "lightgrey",
+                    width: scale(100),
+                    height: scale(40),
+                    alignSelf: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 0,
+                    },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 5,
+
+                    elevation: 10,
+                  }}
+                >
+                  <MaterialIcons
+                    name="add-a-photo"
+                    size={scale(32)}
+                    color="#538dbd"
+                  />
+                </View>
+              </TouchableWithoutFeedback> */}
+            </View>
+          }
+    </Animated.View>
   );
 }
 
@@ -80,14 +136,31 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     left: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    justifyContent: "flex-start",
     zIndex: 10,
     elevation: 10,
     width: windowWidth,
+    borderColor: "darkgrey",
+    borderWidth: moderateScale(1),
     borderTopRightRadius: moderateScale(10),
     borderTopLeftRadius: moderateScale(10),
-    backgroundColor: "white"
+    backgroundColor: colors.themeWhite,
+  },
+  handle:{
+    zIndex: 11,
+    alignItems: 'center',
+    justifyContent: "center",
+    borderColor: "darkgrey",
+    borderBottomWidth: moderateScale(1),
+    height: moderateScale(30),
+    width: "100%",
+  },
+  tab: {
+    backgroundColor: colors.themeBlack,
+    height: moderateScale(5),
+    width: moderateScale(50),
+    borderRadius: moderateScale(10)
   },
   shadowbox: {
     flex: 1,
@@ -100,5 +173,17 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
 
     elevation: 10,
+  },
+  noSightings: {
+    marginTop: "25%",
+    height: moderateScale(20),
+    width: "60%",
+    marginLeft: "20%",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    fontFamily: activeFonts.Light,
+    fontSize: fontSizes.StandardText,
+    color:  colors.themeBlack,
   },
 });

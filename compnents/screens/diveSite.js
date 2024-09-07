@@ -12,16 +12,9 @@ import {
   Text,
   ScrollView,
   Platform,
-  FlatList,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetBackdrop,
-} from '@gorhom/bottom-sheet';
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
 import CloseButton from "../reusables/closeButton";
@@ -74,10 +67,8 @@ export default function DiveSite(props) {
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
   const drawerUpperBound = windowHeight*0.9
-  const drawerLowerBound = moderateScale(280)
+  const drawerLowerBound = moderateScale(290)
   
-
-  console.log("bounds",  drawerLowerBound, drawerUpperBound)
   useEffect(() => {
     if (!isEditModeOn && site) {
       diveSiteUpdateUpdate();
@@ -308,7 +299,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight / 2.2,
     width: "100%",
     height: 300,
-    backgroundColor: "pink",
+    // backgroundColor: "pink",
   },
   siteNameContainer: {
     // zIndex: 1,
