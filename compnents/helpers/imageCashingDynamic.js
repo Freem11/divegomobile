@@ -92,8 +92,8 @@ export default function ImageCasherDynamic(Props) {
   if (picUri) {
     Image.getSize(picUri, (width, height) => {
       let ratio = height / width;
-      setPicWidth(scale(300));
-      setPicHeigth(scale(300) * ratio);
+      setPicWidth(scale(345));
+      setPicHeigth(scale(345) * ratio);
     });
   }
 

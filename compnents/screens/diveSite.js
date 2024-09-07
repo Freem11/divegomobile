@@ -277,7 +277,7 @@ export default function DiveSite(props) {
         ref={bottomSheetRef}
         index={0}
         onChange={handleSheetChanges}
-        snapPoints={[moderateScale(250), "90%"]}
+        snapPoints={[moderateScale(290), "90%"]}
         style={{zIndex: 50, borderColor: "lightgray", borderWidth: 1, borderRadius: 15 }}
       >
         <FlatList
@@ -285,6 +285,7 @@ export default function DiveSite(props) {
           contentContainerStyle={styles.pageContainer}
           ref={photosRef}
           showsVerticalScrollIndicator={false}
+          snapToAlignment="center"
           keyExtractor={(item) => item.id}
           data={diveSitePics}
           renderItem={({ item }) => (
@@ -360,8 +361,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 1,
     // bottom: -200,
-    width: "90%",
-    marginLeft: "5%",
+    width: "100%",
+    // marginLeft: "1%",
     // marginTop: -windowHeight,
     height: "100%",
   },
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     position: "absolute",
     // top: 0,
-    left: "5%",
+    // left: "5%",
     // backgroundColor: "yellow",
   },
   gapBox: { pointerEvents: "none", height: windowHeight * 0.75 },

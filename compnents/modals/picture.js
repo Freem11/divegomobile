@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   outterBox: {
     zIndex: 30,
     width: "100%",
-    marginLeft: moderateScale(-10),
+    marginLeft: moderateScale(0),
     marginBottom: moderateScale(5),
     // backgroundColor: 'pink'
   },
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     zIndex: 40,
     // backgroundColor: "white",
     borderTopRightRadius: scale(10),
-    width: "100%",
+    width: "98%",
     padding: moderateScale(2)
   },
   titleText: {
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     // position: "relative",
     backgroundColor: "black",
     opacity: 0.6,
-    width: "120%",
+    width: "96%",
     borderRadius: 5,
     zIndex: 2,
     left: scale(8),
@@ -375,6 +375,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     backgroundColor: "black",
+    width: "98%",
     height: moderateScale(18),
     opacity: 0.6,
     color: "white",
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
   },
   microLow2: {
     display: "flex",
-    width: "100%",
+    width: "98%",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
