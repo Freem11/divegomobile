@@ -2,7 +2,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
+  Dimensions,
   Image,
   TouchableWithoutFeedback,
   Platform
@@ -36,6 +36,7 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
   const { pic } = props;

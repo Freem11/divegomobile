@@ -23,7 +23,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function BottomDrawer(props) {
   const { dataSet, lowerBound, upperBound } = props;
   const photosRef = useRef(null);
-  const boxheight = useSharedValue(moderateScale(290));
+  const boxheight = useSharedValue( windowWidth > 600 ? moderateScale(220) : moderateScale(290));
 
   const [bounds, setBounds] = useState({});
 
@@ -136,11 +136,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     left: 0,
-    // alignItems: "center",
+    alignItems: "center",
     justifyContent: "flex-start",
     zIndex: 10,
     elevation: 10,
-    width: windowWidth,
+    width:  windowWidth,
     borderColor: "darkgrey",
     borderWidth: moderateScale(1),
     borderTopRightRadius: moderateScale(10),

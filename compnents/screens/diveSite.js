@@ -67,7 +67,7 @@ export default function DiveSite(props) {
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
   const drawerUpperBound = windowHeight*0.9
-  const drawerLowerBound = moderateScale(290)
+  const drawerLowerBound = windowWidth > 600 ? moderateScale(220) : moderateScale(290)
   
   useEffect(() => {
     if (!isEditModeOn && site) {
@@ -112,13 +112,11 @@ export default function DiveSite(props) {
   };
 
   const filterAnchorPhotos = async () => {
-    console.log("???", selectedDiveSite);
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
     );
 
-    console.log("stuff", minLat, maxLat, minLng, maxLng, profile[0].UserID);
     try {
       let photos;
       if (animalMultiSelection.length === 0) {
