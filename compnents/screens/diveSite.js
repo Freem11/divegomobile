@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import {
   StyleSheet,
   View,
@@ -6,20 +12,25 @@ import {
   Text,
   ScrollView,
   Platform,
+  FlatList,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
 import CloseButton from "../reusables/closeButton";
+import Picture from "../modals/picture";
 import { FontAwesome } from "@expo/vector-icons";
 import { activeFonts, colors, fontSizes, roundButton } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
+import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { MaterialIcons } from "@expo/vector-icons";
+import email from "react-native-email";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { chooseImageHandler } from "./imageUploadHelpers";
 import {
@@ -30,19 +41,26 @@ import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "../../supabaseCalls/photoSupabaseCalls";
-import { getDiveSiteWithUserName, updateDiveSite } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import {
+  getDiveSiteWithUserName,
+  updateDiveSite,
+} from "../../supabaseCalls/diveSiteSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSite(props) {
   const {} = props;
+  const photosRef = useRef(null);
+  const bottomSheetRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+  const { myCreatures } = useContext(MyCreaturesContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
+  const [diveSitePics, setDiveSitePics] = useState([]);
   const [site, setSite] = useState("");
   const [diveSiteVals, setDiveSiteVals] = useState({
     diveSitebio: null,
@@ -57,20 +75,25 @@ export default function DiveSite(props) {
   }, [isEditModeOn]);
 
   const diveSiteUpdateUpdate = async () => {
-      try {
-        const success = await updateDiveSite({
-          id: site.id,
-          bio: site.divesitebio,
-          photo: site.divesiteprofilephoto
-        });
-      } catch (e) {
-        console.log({ title: "Error19", message: e.message });
-      }
+    try {
+      const success = await updateDiveSite({
+        id: site.id,
+        bio: site.divesitebio,
+        photo: site.divesiteprofilephoto,
+      });
+    } catch (e) {
+      console.log({ title: "Error19", message: e.message });
+    }
   };
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
     filterAnchorPhotos();
   }, [selectedDiveSite]);
+
+  useEffect(() => {
+    getDiveSite(selectedDiveSite.SiteName);
+    filterAnchorPhotos();
+  }, []);
 
   const getDiveSite = async () => {
     try {
@@ -87,13 +110,14 @@ export default function DiveSite(props) {
     }
   };
 
-  console.log("site is", site)
   const filterAnchorPhotos = async () => {
+    console.log("???", selectedDiveSite);
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
     );
 
+    console.log("stuff", minLat, maxLat, minLng, maxLng, profile[0].UserID);
     try {
       let photos;
       if (animalMultiSelection.length === 0) {
@@ -116,8 +140,10 @@ export default function DiveSite(props) {
           maxLng,
         });
       }
+      console.log("phoots?", photos);
       if (photos) {
-        setAnchorPics(photos);
+        // photos.unshift({ id: 0 });
+        setDiveSitePics(photos);
         let count = 0;
         photos.forEach((obj) => {
           count++;
@@ -144,10 +170,13 @@ export default function DiveSite(props) {
         let picture = await fetch(uri);
         picture = await picture.blob();
         await uploadphoto(picture, fileName);
-        if (site.diveSiteProfilePhoto !== null || site.diveSiteProfilePhoto === "") {
+        if (
+          site.divesiteprofilephoto !== null ||
+          site.divesiteprofilephoto === ""
+        ) {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: site.diveSiteProfilePhoto.split("/").pop(),
+            fileName: site.divesiteprofilephoto.split("/").pop(),
           });
         }
 
@@ -156,7 +185,8 @@ export default function DiveSite(props) {
           photo: `animalphotos/public/${fileName}`,
         });
         const success = await updateDiveSite({
-          ...site,
+          id: site.id,
+          bio: site.divesitebio,
           photo: `animalphotos/public/${fileName}`,
         });
       }
@@ -165,9 +195,24 @@ export default function DiveSite(props) {
     }
   };
 
+  const handleEmailDS = () => {
+    const to = ["scubaseasons@gmail.com"];
+    email(to, {
+      // Optional additional arguments
+      subject: `Reporting issue with Dive Site: "${site.name}" at Latitude: ${site.lat} Longitude: ${site.lng} `,
+      body:
+        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
+    }).catch(console.error);
+  };
+
   const onClose = () => {
     setLevelOneScreen(false);
   };
+  console.log("pics", diveSitePics);
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -182,21 +227,19 @@ export default function DiveSite(props) {
           onPress={() => handleImageUpload()}
         />
       </View>
-      <View style={styles.contentContainer}>
-        <View style={{ marginBottom: windowHeight / 70 }}>
-          <View style={styles.siteNameContainer}>
-            <Text style={styles.header}>{site.name}</Text>
-           
-            <FontAwesome
-              name="flag"
-              color="maroon"
-              size={moderateScale(16)}
-              style={{ marginLeft: moderateScale(10) }}
-              onPress={() => null}
-            />
-          </View>
-          <Text style={styles.contributor}>Added by: {site.newusername}</Text>
+      <View pointerEvents="none" style={styles.contentContainer}>
+        <View style={styles.siteNameContainer}>
+          <Text style={styles.header}>{site.name}</Text>
+
+          <FontAwesome
+            name="flag"
+            color="maroon"
+            size={moderateScale(16)}
+            style={{ marginLeft: moderateScale(10) }}
+            onPress={() => handleEmailDS()}
+          />
         </View>
+        <Text style={styles.contributor}>Added by: {site.newusername}</Text>
         <MaskedView
           maskElement={
             <LinearGradient
@@ -229,6 +272,28 @@ export default function DiveSite(props) {
         customStyles={styles.svgCurve}
         image={site && site.divesiteprofilephoto}
       ></WavyHeaderDynamic>
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={0}
+        onChange={handleSheetChanges}
+        snapPoints={[moderateScale(250), "90%"]}
+        style={{zIndex: 50, borderColor: "lightgray", borderWidth: 1, borderRadius: 15 }}
+      >
+        <FlatList
+          style={styles.page}
+          contentContainerStyle={styles.pageContainer}
+          ref={photosRef}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          data={diveSitePics}
+          renderItem={({ item }) => (
+            <View style={styles.shadowbox}>
+              <Picture key={item.id} pic={item}></Picture>
+            </View>
+          )}
+        />
+      </BottomSheet>
     </View>
   );
 }
@@ -236,6 +301,7 @@ export default function DiveSite(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
@@ -243,61 +309,81 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     alignItems: "left",
-    zIndex: 15,
+    zIndex: 1,
     position: "absolute",
     top: 0,
     left: 0,
     marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight / 2.2,
     width: "100%",
+    height: 300,
+    backgroundColor: "transparent",
   },
   siteNameContainer: {
-    flexDirection: 'row',
-    width: 'auto',
+    // zIndex: 1,
+    flexDirection: "row",
+    width: "auto",
     marginTop: Platform.OS === "ios" ? windowHeight / 50 : windowHeight / 50,
     marginLeft: "8%",
   },
   header: {
-    zIndex: 10,
+    // zIndex: 50,
     fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Regular,
     color: colors.themeBlack,
   },
   contributor: {
-    zIndex: 10,
+    // zIndex: 50,
     fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Thin,
     color: colors.themeBlack,
     marginLeft: "12%",
   },
   scrollViewBox: {
+    // zIndex: 5,
+    marginTop: "5%",
     marginLeft: "2%",
-    height: windowHeight / 3.5,
+    height: windowHeight / 6,
+    // backgroundColor: "green"
   },
   screenCloseButton: [
-    { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
+    { zIndex: 10, position: "absolute", top: "5%", right: "5%" },
   ],
   addPhotoButton: [
-    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
+    { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
   ],
   svgCurve: {
     position: "absolute",
     bottom: 0,
     width: Dimensions.get("window").width,
   },
-  erroMsg: {
-    minHeight: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
+  page: {
+    position: "absolute",
+    zIndex: 1,
+    // bottom: -200,
+    width: "90%",
+    marginLeft: "5%",
+    // marginTop: -windowHeight,
+    height: "100%",
   },
-  erroMsgEmpty: {
-    // height: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
+  pageContainer: {
+    // pointerEvents: "none",
+    // justifyContent: "center",
+    position: "absolute",
+    // top: 0,
+    left: "5%",
+    // backgroundColor: "yellow",
+  },
+  gapBox: { pointerEvents: "none", height: windowHeight * 0.75 },
+  shadowbox: {
+    flex: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+
+    elevation: 10,
   },
 });

@@ -224,7 +224,7 @@ export default function Picture(props) {
           photoFile={pic.photofile}
           id={pic.id}
           style={{
-            borderRadius: 15,
+            borderRadius: moderateScale(15),
             resizeMode: "cover",
             marginTop: moderateScale(-22),
             // backgroundColor: "pink",
@@ -287,6 +287,7 @@ export default function Picture(props) {
 
 const styles = StyleSheet.create({
   outterBox: {
+    zIndex: 30,
     width: "100%",
     marginLeft: moderateScale(-10),
     marginBottom: moderateScale(5),
@@ -297,8 +298,9 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // flexDirection: "column",
     overflow: "hidden",
+    zIndex: 40,
     // backgroundColor: "white",
-    // borderTopRightRadius: scale(15),
+    borderTopRightRadius: scale(10),
     width: "100%",
     padding: moderateScale(2)
   },

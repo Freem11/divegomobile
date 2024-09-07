@@ -9,14 +9,14 @@ import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 
 export default function ImageCasherDynamic(Props) {
   const { photoFile, id, style, anchorPics } = Props;
+
   const { areaPics } = useContext(AreaPicsContext);
   const { siteModal } = useContext(AnchorModalContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-
-  let fileName = photoFile.split("/").pop();
+  let fileName = photoFile && photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
-  let photoName = photoFile.split("/").pop();
+  let photoName = photoFile && photoFile.split("/").pop();
 
   let image = {
     uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`,
