@@ -22,7 +22,7 @@ export default function PlainTextInput(props) {
           styles.input,
           {
             backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite,
-            fontFamily: content ? activeFonts.Medium : activeFonts.ThinItalic,
+            fontFamily: content ? activeFonts.Regular : activeFonts.Italic,
           },
         ]}
         value={content}

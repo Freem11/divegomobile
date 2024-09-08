@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   },
   countDisplay: {
     color: colors.themeWhite,
-    fontSize: fontSizes.SmallText,
+    fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Bold,
   },
   microLow: {

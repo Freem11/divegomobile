@@ -54,7 +54,8 @@ export default function BottomDrawer(props) {
         <View
         style={styles.handle}
         >
-          <View style={styles.tab}></View>
+          <Text style={styles.label}>Sea Creature Sightings</Text>
+          {/* <View style={styles.tab}></View> */}
         </View>
       </GestureDetector>
 
@@ -162,6 +163,11 @@ const styles = StyleSheet.create({
     width: moderateScale(50),
     borderRadius: moderateScale(10)
   },
+  label: {
+      color: colors.themeBlack,
+      fontFamily: activeFonts.Regular,
+      fontSize: moderateScale(fontSizes.SmallText)
+  },
   shadowbox: {
     flex: 1,
     shadowColor: "#000",
@@ -175,15 +181,15 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   noSightings: {
-    marginTop: "25%",
-    height: moderateScale(20),
+    marginTop: windowWidth > 600 ? "15%" : "25%",
+    height: moderateScale(25),
     width: "60%",
-    marginLeft: "20%",
+    // marginLeft: "20%",
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
     fontFamily: activeFonts.Light,
-    fontSize: fontSizes.StandardText,
+    fontSize: moderateScale(fontSizes.StandardText),
     color:  colors.themeBlack,
   },
 });

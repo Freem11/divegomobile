@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   },
   scrollViewBox: {
     // zIndex: 5,
-    marginTop: "5%",
+    marginTop: "3%",
     marginLeft: "2%",
     height: windowHeight / 6,
     // backgroundColor: "green"
