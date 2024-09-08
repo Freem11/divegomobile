@@ -23,7 +23,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function BottomDrawer(props) {
   const { dataSet, lowerBound, upperBound } = props;
   const photosRef = useRef(null);
-  const boxheight = useSharedValue( windowWidth > 600 ? moderateScale(220) : moderateScale(290));
+  const boxheight = useSharedValue("30%");
 
   const [bounds, setBounds] = useState({});
 

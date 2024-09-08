@@ -66,8 +66,8 @@ export default function DiveSite(props) {
   });
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
-  const drawerUpperBound = windowHeight*0.9
-  const drawerLowerBound = windowWidth > 600 ? moderateScale(220) : moderateScale(290)
+  const drawerUpperBound = "90%"
+  const drawerLowerBound = "30%"
   
   useEffect(() => {
     if (!isEditModeOn && site) {
@@ -233,7 +233,7 @@ export default function DiveSite(props) {
             name="flag"
             color="maroon"
             size={moderateScale(16)}
-            style={{ marginLeft: moderateScale(10) }}
+            style={{ marginTop: "5%", marginLeft: moderateScale(10) }}
             onPress={() => handleEmailDS()}
           />
         </View>
@@ -308,6 +308,7 @@ const styles = StyleSheet.create({
   },
   header: {
     // zIndex: 50,
+    marginTop: "5%",
     fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Regular,
     color: colors.themeBlack,

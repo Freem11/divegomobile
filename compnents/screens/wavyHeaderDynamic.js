@@ -55,7 +55,7 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
             style={{
               flex: 1,
               marginLeft: windowWidth > 600 ? "-10%" : 0,
-              marginTop: windowWidth > 600 ? "-75%" : "-80%",
+              marginTop: windowWidth > 600 ? "-75%" : "-75%",
               backgroundColor: "transparent",
               zIndex: 5,
             }}
