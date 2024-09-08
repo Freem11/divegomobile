@@ -12,15 +12,12 @@ import {
   Text,
   ScrollView,
   Platform,
-  FlatList,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
 import CloseButton from "../reusables/closeButton";
-import Picture from "../modals/picture";
 import { FontAwesome } from "@expo/vector-icons";
 import { activeFonts, colors, fontSizes, roundButton } from "../styles";
 import { moderateScale } from "react-native-size-matters";
@@ -45,6 +42,7 @@ import {
   getDiveSiteWithUserName,
   updateDiveSite,
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import BottomDrawer from './animatedBottomDrawer';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -68,6 +66,9 @@ export default function DiveSite(props) {
   });
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
+  const drawerUpperBound = windowHeight*0.9
+  const drawerLowerBound = windowWidth > 600 ? moderateScale(220) : moderateScale(290)
+  
   useEffect(() => {
     if (!isEditModeOn && site) {
       diveSiteUpdateUpdate();
@@ -111,13 +112,11 @@ export default function DiveSite(props) {
   };
 
   const filterAnchorPhotos = async () => {
-    console.log("???", selectedDiveSite);
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
     );
 
-    console.log("stuff", minLat, maxLat, minLng, maxLng, profile[0].UserID);
     try {
       let photos;
       if (animalMultiSelection.length === 0) {
@@ -209,7 +208,6 @@ export default function DiveSite(props) {
   const onClose = () => {
     setLevelOneScreen(false);
   };
-  console.log("pics", diveSitePics);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
@@ -227,7 +225,7 @@ export default function DiveSite(props) {
           onPress={() => handleImageUpload()}
         />
       </View>
-      <View pointerEvents="none" style={styles.contentContainer}>
+      <View style={styles.contentContainer}>
         <View style={styles.siteNameContainer}>
           <Text style={styles.header}>{site.name}</Text>
 
@@ -268,34 +266,16 @@ export default function DiveSite(props) {
         </MaskedView>
       </View>
 
+   
       <WavyHeaderDynamic
         customStyles={styles.svgCurve}
         image={site && site.divesiteprofilephoto}
       ></WavyHeaderDynamic>
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={0}
-        onChange={handleSheetChanges}
-        snapPoints={[moderateScale(290), "90%"]}
-        style={{zIndex: 50, borderColor: "lightgray", borderWidth: 1, borderRadius: 15 }}
-      >
-        <FlatList
-          style={styles.page}
-          contentContainerStyle={styles.pageContainer}
-          ref={photosRef}
-          showsVerticalScrollIndicator={false}
-          snapToAlignment="center"
-          keyExtractor={(item) => item.id}
-          data={diveSitePics}
-          renderItem={({ item }) => (
-            <View style={styles.shadowbox}>
-              <Picture key={item.id} pic={item}></Picture>
-            </View>
-          )}
-        />
-      </BottomSheet>
+<BottomDrawer dataSet={diveSitePics} lowerBound={drawerLowerBound} upperBound={drawerUpperBound}/>
+
     </View>
+
   );
 }
 
@@ -317,7 +297,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight / 2.2,
     width: "100%",
     height: 300,
-    backgroundColor: "transparent",
+    // backgroundColor: "pink",
   },
   siteNameContainer: {
     // zIndex: 1,
@@ -347,10 +327,10 @@ const styles = StyleSheet.create({
     // backgroundColor: "green"
   },
   screenCloseButton: [
-    { zIndex: 10, position: "absolute", top: "5%", right: "5%" },
+    { zIndex: 1, position: "absolute", top: "5%", right: "5%" },
   ],
   addPhotoButton: [
-    { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
+    { zIndex: 1, position: "absolute", top: "32%", right: "5%" },
   ],
   svgCurve: {
     position: "absolute",

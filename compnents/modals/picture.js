@@ -2,13 +2,14 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
+  Dimensions,
   Image,
   TouchableWithoutFeedback,
   Platform
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
+import { activeFonts, colors, fontSizes, roundButton } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   insertPhotoLike,
@@ -36,6 +37,7 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
   const { pic } = props;
@@ -287,31 +289,29 @@ export default function Picture(props) {
 
 const styles = StyleSheet.create({
   outterBox: {
-    zIndex: 30,
-    width: "100%",
-    marginLeft: moderateScale(0),
+    zIndex: 70,
+    width: "98%",
     marginBottom: moderateScale(5),
-    // backgroundColor: 'pink'
   },
   container: {
     // flex: 1,
     // justifyContent: "center",
     // flexDirection: "column",
-    overflow: "hidden",
+    // overflow: "hidden",
     zIndex: 40,
     // backgroundColor: "white",
     borderTopRightRadius: scale(10),
-    width: "98%",
+    width: "100%",
     padding: moderateScale(2)
   },
   titleText: {
     // textAlign: "center",
     alignItems: "flex-start",
     alignContent: "flex-start",
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
+    fontFamily: activeFonts.Light,
+    color: colors.themeWhite,
     width: "77%",
-    fontSize: scale(15),
+    fontSize: moderateScale(fontSizes.StandardText),
     marginLeft: scale(-30),
   },
   share: {
@@ -323,9 +323,10 @@ const styles = StyleSheet.create({
   micro: {
     flex: 1,
     flexDirection: "row",
+    alignItems: "center",
     // position: "relative",
-    backgroundColor: "black",
-    opacity: 0.6,
+    backgroundColor: colors.themeBlack,
+    opacity: 0.7,
     width: "96%",
     borderRadius: 5,
     zIndex: 2,
@@ -354,19 +355,19 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 4,
     right: moderateScale(30),
-    backgroundColor: "black",
+    backgroundColor: colors.themeBlack,
     width: "10%",
     height: moderateScale(18),
     paddingLeft: scale(5),
-    opacity: 0.6,
+    opacity: 0.7,
     bottom: Platform.OS === "ios" ? "3%" : "3%",
     borderTopLeftRadius: scale(5),
     borderBottomLeftRadius: scale(5),
   },
   countDisplay: {
-    color: "white",
-    fontSize: scale(8),
-    fontFamily: "Itim_400Regular",
+    color: colors.themeWhite,
+    fontSize: fontSizes.SmallText,
+    fontFamily: activeFonts.Bold,
   },
   microLow: {
     display: "flex",
@@ -374,12 +375,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     position: "absolute",
-    backgroundColor: "black",
+    backgroundColor: colors.themeBlack,
     width: "98%",
     height: moderateScale(18),
-    opacity: 0.6,
-    color: "white",
-    fontFamily: "Itim_400Regular",
+    opacity: 0.7,
+    color: colors.themeWhite,
+    fontFamily: activeFonts.Light,
     padding: 1,
     paddingLeft: scale(6),
     paddingRight: scale(7),
@@ -395,9 +396,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     opacity: 1,
-    color: "white",
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(8),
+    color: colors.themeWhite,
+    fontFamily: activeFonts.Light,
+    fontSize: moderateScale(fontSizes.SmallText),
     zIndex: 2,
   },
   microLow2Alt: {
@@ -407,23 +408,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     opacity: 1,
-    color: "gold",
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(8),
+    color: colors.secondaryYellow,
+    fontFamily: activeFonts.Light,
+    fontSize: moderateScale(fontSizes.SmallText),
     zIndex: 2,
   },
   commentPrompt: {
     display: "flex",
     width: scale(200),
-    // height: scale(30),
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     opacity: 1,
-    color: "white",
-    // backgroundColor: "black",
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(10),
+    color: colors.themeBlack,
+    fontFamily: activeFonts.Thin,
+    fontSize: moderateScale(fontSizes.SmallText),
     zIndex: 10,
     paddingTop: moderateScale(5),
     paddingLeft: moderateScale(10),

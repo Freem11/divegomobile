@@ -44,16 +44,18 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
         <View
           style={{
             flex: 1,
+            height: windowWidth > 600 ? "130%": "100%",
             backgroundColor: "white",
           }}
         >
           <Svg
             height="100%"
-            width="100%"
+            width={ windowWidth > 600 ? "120%" : "100%"}
             viewBox="0 0 1440 320"
             style={{
               flex: 1,
-              marginTop: "-80%",
+              marginLeft: windowWidth > 600 ? "-10%" : 0,
+              marginTop: windowWidth > 600 ? "-75%" : "-80%",
               backgroundColor: "transparent",
               zIndex: 5,
             }}
@@ -79,8 +81,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.themeWhite,
     alignItems: "center",
     justifyContent: "center",
-    width: windowWidth,
+    marginLeft: windowWidth > 600 ? "-10%": 0,
+    width: windowWidth > 600 ? "110%": windowWidth,
+    height:  windowWidth > 600 ? "70%": "auto",
     aspectRatio: 1,
-    marginTop: Platform.OS === "ios" ? moderateScale(0) : moderateScale(0),
+    marginTop: windowWidth > 600 ? moderateScale(0) : moderateScale(0),
   },
 });

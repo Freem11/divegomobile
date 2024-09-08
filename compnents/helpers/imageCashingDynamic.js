@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
-import { StyleSheet, View, Text, Image, LogBox } from "react-native";
+import { StyleSheet, Image, Dimensions } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+
+const windowWidth = Dimensions.get("window").width;
 
 export default function ImageCasherDynamic(Props) {
   const { photoFile, id, style, anchorPics } = Props;
