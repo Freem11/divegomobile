@@ -90,8 +90,8 @@ export const primaryButtonAlt = {
 
 export const buttonTextAlt = {
   color: colors.primaryBlue,
-  fontFamily: activeFonts.Reg,
-  fontSize: moderateScale(fontSizes.StandardText)
+  fontFamily: activeFonts.Regular,
+  fontSize: moderateScale(fontSizes.StandardText),
 }
 
 export const authenicationButton = {
@@ -113,6 +113,26 @@ export const authenicationButton = {
   elevation: 10,
 }
 
+export const screenSecondaryButton = {
+  backgroundColor: colors.themeWhite,
+  width: moderateScale(130),
+  height: moderateScale(45),
+  color: colors.primaryBlue,
+  borderColor: colors.primaryBlue,
+  borderWidth: moderateScale(1),
+  borderRadius: moderateScale(25),
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: "#2d2d2d",
+  shadowOffset: {
+    width: moderateScale(1),
+    height: moderateScale(1),
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: moderateScale(2),
+
+  elevation: 10,
+}
 export const roundButton = {
   // backgroundColor: colors.primaryBlue,
   width: moderateScale(50),

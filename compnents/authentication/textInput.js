@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { MaterialIcons, FontAwesome6 } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
 
 export default function TextInputField(props) {
@@ -12,17 +12,20 @@ export default function TextInputField(props) {
     setSecureTextEntry,
     inputValue,
     onChangeText,
+    vectorIcon
   } = props;
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" />
+{!vectorIcon ? <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
+{vectorIcon === 'MaterialCommunityIcons' ? <MaterialCommunityIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
+
       <TextInput
         style={styles.input}
         value={inputValue}
         placeholder={placeHolderText}
         placeholderTextColor="darkgrey"
-        color={"darkgrey"}
+        color={colors.themeBlack}
         fontSize={moderateScale(18)}
         onChangeText={onChangeText}
         secureTextEntry={secure}
@@ -54,11 +57,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderBottomColor: "darkgrey",
     borderBottomWidth: moderateScale(2),
-    alignItems: 'center'
+    alignItems: 'center',
   },
   input: {
     width: "83%",
     height: moderateScale(30),
-    fontFamily: activeFonts.Regular
+    fontFamily: activeFonts.Regular,
   },
 });

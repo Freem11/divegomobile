@@ -8,14 +8,19 @@ import {
   ImageBackground,
   Platform,
 } from "react-native";
+import {
+  uploadphoto,
+  removePhoto,
+} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { chooseImageHandler } from "./imageUploadHelpers";
 import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";
-import { colors } from "../styles";
-
+import { activeFonts, colors, fontSizes, primaryButtonAlt, buttonTextAlt } from "../styles";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function WavyHeaderDynamic({ customStyles, image }) {
+export default function WavyHeaderUploader({ customStyles, image, setPinValues, pinValues }) {
   const [picUri, setPicUri] = useState(null);
 
   useEffect(() => {
@@ -27,6 +32,39 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
     }
   }, [image]);
 
+
+  const handleImageUpload = async () => {
+    try {
+      const image = await chooseImageHandler();
+      if (image) {
+        let uri = image.assets[0].uri;
+        let extension = image.assets[0].uri.split(".").pop();
+        const fileName = Date.now() + "." + extension;
+
+        //create new photo file and upload
+        let picture = await fetch(uri);
+        picture = await picture.blob();
+        await uploadphoto(picture, fileName);
+        if (
+          pinValues.PicFile !== null ||
+          pinValues.PicFile === ""
+        ) {
+          await removePhoto({
+            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+            fileName: pinValues.PicFile.split("/").pop(),
+          });
+        }
+
+        setPinValues({
+          ...pinValues,
+          PicFile: `animalphotos/public/${fileName}`,
+        });
+      }
+    } catch (e) {
+      console.log("error: Photo Selection Cancelled", e.message);
+    }
+  };
+
   return (
     <View style={styles.customStyles}>
       {/* <View style={{ flex: 1, backgroundColor: "blue" }}> */}
@@ -36,10 +74,14 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
               style={styles.backgroundImage}
             />
         ) : (
-            <ImageBackground
-              source={require("../png/blackManta.png")}
-              style={styles.backgroundImage}
-            />
+            <View style={styles.uploaderBackground}>
+              <TouchableWithoutFeedback onPress={handleImageUpload}>
+                <View style={styles.photoUploadButton}>
+                  <Text style={styles.photoUploadText}>Upload a Photo</Text>
+                </View>
+              </TouchableWithoutFeedback>
+
+            </View>
         )}
         <View
           style={{
@@ -87,4 +129,15 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     marginTop: windowWidth > 600 ? moderateScale(0) : moderateScale(0),
   },
+  uploaderBackground: {
+    alignItems: 'center',
+    backgroundColor: colors.primaryBlue,
+    width: windowWidth,
+    height: "40%"
+  },
+  photoUploadButton: [
+    primaryButtonAlt,
+    { flexDirection: "row", marginTop: "60%" },
+  ],
+  photoUploadText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
 });
