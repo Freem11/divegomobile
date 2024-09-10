@@ -6,7 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   Platform,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -28,7 +28,11 @@ import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
-import { removePhoto } from "../cloudflareBucketCalls/cloudflareAWSCalls";
+import {
+  uploadphoto,
+  removePhoto,
+} from "../cloudflareBucketCalls/cloudflareAWSCalls";
+import { chooseImageHandler } from "./imageUploadHelpers";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -63,6 +67,35 @@ export default function PicUploader(props) {
     hideDatePicker();
   };
 
+  const handleImageUpload = async () => {
+    try {
+      const image = await chooseImageHandler();
+      if (image) {
+        let uri = image.assets[0].uri;
+        let extension = image.assets[0].uri.split(".").pop();
+        const fileName = Date.now() + "." + extension;
+
+        //create new photo file and upload
+        let picture = await fetch(uri);
+        picture = await picture.blob();
+        await uploadphoto(picture, fileName);
+        if (pinValues.PicFile !== null || pinValues.PicFile === "") {
+          await removePhoto({
+            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+            fileName: pinValues.PicFile.split("/").pop(),
+          });
+        }
+
+        setPinValues({
+          ...pinValues,
+          PicFile: `animalphotos/public/${fileName}`,
+        });
+      }
+    } catch (e) {
+      console.log("error: Photo Selection Cancelled", e.message);
+    }
+  };
+
   const onSubmit = async () => {
     if (
       pinValues.PicFile &&
@@ -92,6 +125,16 @@ export default function PicUploader(props) {
       <View style={styles.screenCloseButton}>
         <CloseButton onClose={() => onClose()} />
       </View>
+      {pinValues.PicFile ? (
+        <View style={styles.addPhotoButton}>
+          <MaterialIcons
+            name="add-a-photo"
+            size={moderateScale(30)}
+            color={colors.themeWhite}
+            onPress={() => handleImageUpload()}
+          />
+        </View>
+      ) : null}
       <View style={styles.contentContainer}>
         <Text style={styles.header}>Your Sea Creature Sighting</Text>
         <View
@@ -190,6 +233,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: windowHeight,
   },
+  addPhotoButton: [
+    { zIndex: 50, position: "absolute", top: "30%", right: "5%" },
+  ],
   contentContainer: {
     alignItems: "left",
     zIndex: 15,
