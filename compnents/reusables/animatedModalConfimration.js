@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(25),
     borderWidth: moderateScale(2),
     borderColor: "darkgrey",
-    zIndex: 25,
+    zIndex: 55,
   },
 });

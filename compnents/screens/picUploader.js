@@ -27,13 +27,16 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
+import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import {
   uploadphoto,
   removePhoto,
 } from "../cloudflareBucketCalls/cloudflareAWSCalls";
 import { chooseImageHandler } from "./imageUploadHelpers";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -45,8 +48,9 @@ export default function PicUploader(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const [userFail, setUserFail] = useState("");
-  const [tempUserName, setTempUserName] = useState("");
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -103,9 +107,23 @@ export default function PicUploader(props) {
       pinValues.PicDate.length > 0 &&
       pinValues.Animal.length > 0
     ) {
-      console.log("yay!");
+      insertPhotoWaits(pinValues);
+      setPinValues({
+        ...pinValues,
+        PicFile: null,
+        Animal: "",
+        PicDate: "",
+        Latitude: "",
+        Longitude: "",
+        DDVal: "0",
+      });
+      setConfirmationType("Sea Creature Submission");
+      setActiveConfirmationID("ConfirmationSuccess");
+      setConfirmationModal(true);
     } else {
-      console.log("boo!");
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
+    
     }
   };
 
@@ -118,8 +136,6 @@ export default function PicUploader(props) {
     }
     setLevelTwoScreen(false);
   };
-
-  console.log("THESE", pinValues);
 
   return (
     <View style={styles.container}>
@@ -168,9 +184,6 @@ export default function PicUploader(props) {
                   placeHolderText={"Date of Sighting"}
                   secure={false}
                   vectorIcon={"MaterialCommunityIcons"}
-                  // onChangeText={(nameText) =>
-                  //   setProfileVals({ ...pi, userName: nameText })
-                  // }
                 />
               </View>
             </Toucher>
@@ -182,17 +195,8 @@ export default function PicUploader(props) {
               inputValue={pinValues.siteName}
               placeHolderText={"Location of Sighting"}
               secure={false}
-              // onChangeText={(nameText) =>
-              //   setProfileVals({ ...pi, userName: nameText })
-              // }
             />
           </View>
-
-          {userFail.length > 0 ? (
-            <Text style={styles.erroMsg}>{userFail}</Text>
-          ) : (
-            <View style={styles.erroMsgEmpty}></View>
-          )}
         </View>
 
         <View style={styles.buttonBox}>

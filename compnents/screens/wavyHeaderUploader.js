@@ -121,8 +121,6 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     backgroundColor: colors.themeWhite,
-    // alignItems: "center",
-    // justifyContent: "center",
     marginLeft: windowWidth > 600 ? "-15%" : 0,
     width: windowWidth > 600 ? "120%" : windowWidth,
     height: windowWidth > 600 ? "70%" : "auto",

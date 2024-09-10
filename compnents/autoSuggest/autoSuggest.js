@@ -84,8 +84,6 @@ export default function AnimalAutoSuggest(props) {
     Keyboard.dismiss();
   };
 
-  console.log("THIS", icon)
-
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -125,45 +123,11 @@ export default function AnimalAutoSuggest(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    overflow: "hidden",
-    flexDirection: "row",
-    backgroundColor: colors.themeWhite,
-  },
  inputContainer: {
     flexDirection: "row",
     borderBottomColor: "darkgrey",
     borderBottomWidth: moderateScale(2),
     alignItems: 'center',
     height: moderateScale(30),
-
-  },
-  mainBox: {
-    height: "10%",
-    alignItems: "center",
-    justifyContent: "center",
-    // backgroundColor: "yellow",
-    zIndex: 70,
-    marginTop: scale(3),
-  },
-  xButton: {
-    zIndex: 90,
-    marginTop: moderateScale(0),
-    marginLeft: moderateScale(0),
-    // backgroundColor: "yellow",
-  },
-  suggestInput: {
-    borderRadius: moderateScale(25),
-    height: moderateScale(40),
-    width: moderateScale(200),
-    backgroundColor: colors.themeWhite,
-    // borderRadius: 10,
-    fontSize: fontSizes.StandardText,
-    textAlign: "center",
-    fontFamily: activeFonts.Light,
-    overflow: "hidden",
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 0 },
   }
 });

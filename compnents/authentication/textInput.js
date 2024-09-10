@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "darkgrey",
     borderBottomWidth: moderateScale(2),
     alignItems: 'center',
-    backgroundColor: colors.themeWhite
+    backgroundColor: colors.themeWhite,
+    borderRadius: moderateScale(5)
   },
   input: {
     width: "83%",
