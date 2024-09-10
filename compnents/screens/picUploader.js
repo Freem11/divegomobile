@@ -135,6 +135,15 @@ export default function PicUploader(props) {
       });
     }
     setLevelTwoScreen(false);
+    setPinValues({
+      ...pinValues,
+      PicFile: null,
+      Animal: "",
+      PicDate: "",
+      Latitude: "",
+      Longitude: "",
+      DDVal: "0",
+    });
   };
 
   return (
