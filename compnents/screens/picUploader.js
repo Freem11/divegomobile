@@ -6,11 +6,21 @@ import {
   Text,
   TouchableWithoutFeedback,
   Platform,
+  Keyboard
 } from "react-native";
+import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 import WavyHeaderUploader from "./wavyHeaderUploader";
 import TextInputField from "../authentication/textInput";
 import CloseButton from "../reusables/closeButton";
-import { activeFonts, colors, fontSizes, authenicationButton, buttonText } from "../styles";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  authenicationButton,
+  buttonText,
+} from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
@@ -18,9 +28,7 @@ import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
-import {
-  removePhoto,
-} from "../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "../cloudflareBucketCalls/cloudflareAWSCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -35,20 +43,40 @@ export default function PicUploader(props) {
   const [userFail, setUserFail] = useState("");
   const [tempUserName, setTempUserName] = useState("");
 
-  const onSubmit = async () => {
-    if(pinValues.PicFile && pinValues.PicDate.length > 0 && pinValues.Animal.length > 0){
-      console.log("yay!")
-    } else {
-      console.log("boo!")
-    }
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
 
+  const showDatePicker = () => {
+    Keyboard.dismiss();
+    setDatePickerVisible(true);
   };
 
-  const onClose = async() => {
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleDatePickerConfirm = (passedDate) => {
+    let formattedDate = moment(passedDate).format("YYYY-MM-DD");
+    if (passedDate > date) return;
+
+    setPinValues({ ...pinValues, PicDate: formattedDate });
+    hideDatePicker();
+  };
+
+  const onSubmit = async () => {
     if (
-      pinValues.PicFile !== null ||
-      pinValues.PicFile === ""
+      pinValues.PicFile &&
+      pinValues.PicDate.length > 0 &&
+      pinValues.Animal.length > 0
     ) {
+      console.log("yay!");
+    } else {
+      console.log("boo!");
+    }
+  };
+
+  const onClose = async () => {
+    if (pinValues.PicFile !== null || pinValues.PicFile === "") {
       await removePhoto({
         filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
         fileName: pinValues.PicFile.split("/").pop(),
@@ -57,7 +85,7 @@ export default function PicUploader(props) {
     setLevelTwoScreen(false);
   };
 
-  console.log("THESE", pinValues)
+  console.log("THESE", pinValues);
 
   return (
     <View style={styles.container}>
@@ -65,9 +93,7 @@ export default function PicUploader(props) {
         <CloseButton onClose={() => onClose()} />
       </View>
       <View style={styles.contentContainer}>
-
-        <Text style={styles.header}>
-          Your Sea Creature Sighting</Text>
+        <Text style={styles.header}>Your Sea Creature Sighting</Text>
         <View
           style={{
             marginBottom: windowHeight / 70,
@@ -89,20 +115,24 @@ export default function PicUploader(props) {
             />
           </View>
           <View style={styles.textBuffer}>
-          <Text style={styles.label}>When you saw it</Text>
-            <TextInputField
-              icon={"calendar-month-outline"}
-              inputValue={pinValues.Animal}
-              placeHolderText={"Date of Sighting"}
-              secure={false}
-              vectorIcon={"MaterialCommunityIcons"}
-              // onChangeText={(nameText) =>
-              //   setProfileVals({ ...pi, userName: nameText })
-              // }
-            />
+            <Text style={styles.label}>When you saw it</Text>
+            <Toucher onPress={() => showDatePicker()}>
+              <View pointerEvents="none">
+                <TextInputField
+                  icon={"calendar-month-outline"}
+                  inputValue={pinValues.PicDate}
+                  placeHolderText={"Date of Sighting"}
+                  secure={false}
+                  vectorIcon={"MaterialCommunityIcons"}
+                  // onChangeText={(nameText) =>
+                  //   setProfileVals({ ...pi, userName: nameText })
+                  // }
+                />
+              </View>
+            </Toucher>
           </View>
           <View style={styles.textBuffer}>
-          <Text style={styles.label}>Where you saw it</Text>
+            <Text style={styles.label}>Where you saw it</Text>
             <TextInputField
               icon={"anchor"}
               inputValue={pinValues.siteName}
@@ -121,11 +151,8 @@ export default function PicUploader(props) {
           )}
         </View>
 
-
         <View style={styles.buttonBox}>
-          <TouchableWithoutFeedback
-            onPress={() => onSubmit()}
-          >
+          <TouchableWithoutFeedback onPress={() => onSubmit()}>
             <View style={styles.submitButton}>
               <Text style={styles.submitText}>Submit</Text>
               <MaterialIcons
@@ -136,7 +163,6 @@ export default function PicUploader(props) {
             </View>
           </TouchableWithoutFeedback>
         </View>
-     
       </View>
 
       <WavyHeaderUploader
@@ -145,6 +171,13 @@ export default function PicUploader(props) {
         setPinValues={setPinValues}
         pinValues={pinValues}
       ></WavyHeaderUploader>
+
+      <DateTimePickerModal
+        isVisible={datePickerVisible}
+        mode="date"
+        onConfirm={handleDatePickerConfirm}
+        onCancel={hideDatePicker}
+      />
     </View>
   );
 }
@@ -174,12 +207,12 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.Header,
     fontFamily: activeFonts.Thin,
     color: colors.themeBlack,
-    alignSelf: "flex-start"
+    alignSelf: "flex-start",
   },
   label: {
     marginLeft: "-5%",
     fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.LightItalic
+    fontFamily: activeFonts.LightItalic,
   },
   textBuffer: {
     marginBottom: moderateScale(20),
@@ -188,7 +221,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "flex-end",
     marginTop: "-15%",
-    marginRight: "15%"
+    marginRight: "15%",
   },
   submitButton: [
     authenicationButton,
