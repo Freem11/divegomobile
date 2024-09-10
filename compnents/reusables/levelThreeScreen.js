@@ -6,40 +6,40 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
-import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
+import { LevelThreeScreenContext } from '../contexts/levelThreeScreenContext';
 
-import DiveSite from '../screens/diveSite';
+import Settings from '../screens/settings';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
 
-export default function LevelOneScreen() {
+export default function LevelThreeScreen() {
   const { activeScreen } = useContext(ActiveScreenContext);
-  const { levelOneScreen } = useContext(LevelOneScreenContext);
+  const { levelThreeScreen } = useContext(LevelThreeScreenContext);
 
-  const levelOneScreenY = useSharedValue(0);
+  const levelThreeScreenY = useSharedValue(0);
 
   const modalSlide = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: levelOneScreenY.value }],
+      transform: [{ translateY: levelThreeScreenY.value }],
     };
   });
 
-  const startLevelOneScreenAnimation = () => {
-    if (levelOneScreenY.value === 0) {
-      levelOneScreenY.value = withTiming(windowHeight);
+  const startlevelThreeScreenAnimation = () => {
+    if (levelThreeScreenY.value === 0) {
+      levelThreeScreenY.value = withTiming(windowHeight);
     } else {
-      levelOneScreenY.value = withTiming(0);
+      levelThreeScreenY.value = withTiming(0);
     }
   };
 
   useEffect(() => {
-    startLevelOneScreenAnimation();
-  }, [levelOneScreen]);
+    startlevelThreeScreenAnimation();
+  }, [levelThreeScreen]);
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "DiveSiteScreen" && <DiveSite/>}
+      {activeScreen === "SettingsScreen" && <Settings/>}
     </Animated.View>
   );
 }

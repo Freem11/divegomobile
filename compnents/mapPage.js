@@ -19,6 +19,7 @@ import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenMo
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
 import LevelOneScreen from '../compnents/reusables/levelOneScreen';
 import LevelTwoScreen from '../compnents/reusables/levelTwoScreen';
+import LevelThreeScreen from '../compnents/reusables/levelThreeScreen';
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -60,6 +61,7 @@ import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
 import { LevelTwoScreenContext } from './contexts/levelTwoScreenContext';
+import { LevelThreeScreenContext } from './contexts/levelThreeScreenContext';
 
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
@@ -108,7 +110,9 @@ export default function MapPage() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-
+  const { levelThreeScreen, setLevelThreeScreen } = useContext(
+    LevelTwoScreenContext
+  );
   const { previousButtonID, setPreviousButtonID } = useContext(
     PreviousButtonIDContext
   );
@@ -631,6 +635,7 @@ export default function MapPage() {
 
             <LevelOneScreen />
             <LevelTwoScreen />
+            <LevelThreeScreen />
             <AnimatedModalLarge />
             <AnimatedModalLargeSecond />
             <AnimatedFullScreenModal />

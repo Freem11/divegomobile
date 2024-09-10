@@ -6,7 +6,7 @@ import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
-import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
+import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
 
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
@@ -18,7 +18,7 @@ export default function ProfileButton() {
   const { activeScreen, setActiveScreen } = useContext(
     ActiveScreenContext
     );
-  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
 
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
@@ -40,8 +40,8 @@ export default function ProfileButton() {
     useButtonPressHelper(
       "ProfileScreen",
       activeScreen,
-      levelOneScreen,
-      setLevelOneScreen
+      levelTwoScreen,
+      setLevelTwoScreen
     );
   };
 
