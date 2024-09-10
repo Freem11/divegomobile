@@ -249,9 +249,9 @@ const styles = StyleSheet.create({
   },
   header: {
     zIndex: -1,
-    marginVertical: "8%",
+    marginVertical: "5%",
     marginHorizontal: "5%",
-    fontSize: fontSizes.Header,
+    fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Thin,
     color: colors.themeBlack,
     alignSelf: "flex-start",
