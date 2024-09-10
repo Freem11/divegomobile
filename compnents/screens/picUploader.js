@@ -14,6 +14,7 @@ import moment from "moment";
 import WavyHeaderUploader from "./wavyHeaderUploader";
 import TextInputField from "../authentication/textInput";
 import CloseButton from "../reusables/closeButton";
+import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import {
   activeFonts,
   colors,
@@ -146,16 +147,16 @@ export default function PicUploader(props) {
         >
           <View style={styles.textBuffer}>
             <Text style={styles.label}>What you saw</Text>
-            <TextInputField
-              icon={"shark"}
-              inputValue={pinValues.Animal}
-              placeHolderText={"Sea Life Encountered"}
-              secure={false}
-              vectorIcon={"MaterialCommunityIcons"}
-              // onChangeText={(nameText) =>
-              //   setProfileVals({ ...pi, userName: nameText })
-              // }
-            />
+            <AnimalAutoSuggest
+                pinValues={pinValues}
+                setPinValues={setPinValues}
+                inputValue={pinValues.Animal}
+                icon={'shark'}
+                placeHolderText={"Sea Life Encountered"}
+                secure={false}
+                vectorIcon={"MaterialCommunityIcons"}
+              />
+         
           </View>
           <View style={styles.textBuffer}>
             <Text style={styles.label}>When you saw it</Text>
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     height: windowHeight,
   },
   addPhotoButton: [
-    { zIndex: 50, position: "absolute", top: "30%", right: "5%" },
+    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
   ],
   contentContainer: {
     alignItems: "left",
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    zIndex: 10,
+    zIndex: -1,
     marginVertical: "8%",
     marginHorizontal: "5%",
     fontSize: fontSizes.Header,

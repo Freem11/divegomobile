@@ -12,7 +12,9 @@ export default function TextInputField(props) {
     setSecureTextEntry,
     inputValue,
     onChangeText,
-    vectorIcon
+    vectorIcon,
+    handleClear,
+    animal
   } = props;
 
   return (
@@ -48,6 +50,15 @@ export default function TextInputField(props) {
           />
         )
       ) : null}
+    {placeHolderText === "Sea Life Encountered" && animal.length > 1 ? (
+             <MaterialIcons
+             name="highlight-remove"
+             size={moderateScale(22)}
+             color="darkgrey"
+             onPress={() => handleClear()}
+           />
+    ): <View style={{width: moderateScale(22)}}></View>}
+
     </View>
   );
 }
@@ -58,6 +69,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "darkgrey",
     borderBottomWidth: moderateScale(2),
     alignItems: 'center',
+    backgroundColor: colors.themeWhite
   },
   input: {
     width: "83%",
