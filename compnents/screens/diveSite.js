@@ -12,6 +12,7 @@ import {
   Text,
   ScrollView,
   Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
@@ -19,17 +20,30 @@ import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
 import CloseButton from "../reusables/closeButton";
 import { FontAwesome } from "@expo/vector-icons";
-import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  screenSecondaryButton,
+  buttonTextAlt,
+} from "../styles";
 import { moderateScale } from "react-native-size-matters";
+import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { ActiveScreenContext } from "../contexts/activeScreenContext";
+
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { chooseImageHandler } from "./imageUploadHelpers";
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import {
   uploadphoto,
   removePhoto,
@@ -42,7 +56,7 @@ import {
   getDiveSiteWithUserName,
   updateDiveSite,
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import BottomDrawer from './animatedBottomDrawer';
+import BottomDrawer from "./animatedBottomDrawer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -54,10 +68,16 @@ export default function DiveSite(props) {
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { myCreatures } = useContext(MyCreaturesContext);
+  const { pinValues, setPinValues } = useContext(PinContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [site, setSite] = useState("");
   const [diveSiteVals, setDiveSiteVals] = useState({
@@ -66,9 +86,9 @@ export default function DiveSite(props) {
   });
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
-  const drawerUpperBound = "90%"
-  const drawerLowerBound = "30%"
-  
+  const drawerUpperBound = "90%";
+  const drawerLowerBound = "30%";
+
   useEffect(() => {
     if (!isEditModeOn && site) {
       diveSiteUpdateUpdate();
@@ -199,8 +219,7 @@ export default function DiveSite(props) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${site.name}" at Latitude: ${site.lat} Longitude: ${site.lng} `,
-      body:
-        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -208,15 +227,39 @@ export default function DiveSite(props) {
   const onClose = () => {
     setLevelOneScreen(false);
   };
-  const handleSheetChanges = useCallback((index) => {
-    console.log("handleSheetChanges", index);
-  }, []);
+
+  const openPicUploader = () => {
+    setPinValues({
+      ...pinValues,
+      Latitude: String(selectedDiveSite.Latitude),
+      Longitude: String(selectedDiveSite.Longitude),
+      siteName: selectedDiveSite.SiteName,
+    });
+    setLevelOneScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("PictureUploadScreen");
+    useButtonPressHelper(
+      "PictureUploadScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
+    );
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.screenCloseButton}>
         <CloseButton onClose={() => onClose()} />
       </View>
+
+      <TouchableWithoutFeedback
+        onPress={openPicUploader}
+      >
+        <View style={styles.contributeButton}>
+          <Text style={styles.contributeButtonText}>Add Sighting</Text>
+        </View>
+      </TouchableWithoutFeedback>
+
       <View style={styles.addPhotoButton}>
         <MaterialIcons
           name="add-a-photo"
@@ -266,16 +309,17 @@ export default function DiveSite(props) {
         </MaskedView>
       </View>
 
-   
       <WavyHeaderDynamic
         customStyles={styles.svgCurve}
         image={site && site.divesiteprofilephoto}
       ></WavyHeaderDynamic>
 
-<BottomDrawer dataSet={diveSitePics} lowerBound={drawerLowerBound} upperBound={drawerUpperBound}/>
-
+      <BottomDrawer
+        dataSet={diveSitePics}
+        lowerBound={drawerLowerBound}
+        upperBound={drawerUpperBound}
+      />
     </View>
-
   );
 }
 
@@ -328,10 +372,15 @@ const styles = StyleSheet.create({
     // backgroundColor: "green"
   },
   screenCloseButton: [
-    { zIndex: 1, position: "absolute", top: "5%", right: "5%" },
+    { zIndex: 1, position: "absolute", top: "6%", right: "5%" },
   ],
+  contributeButton: [
+    { zIndex: 50, position: "absolute", top: "6%", left: "3%" },
+    screenSecondaryButton,
+  ],
+  contributeButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   addPhotoButton: [
-    { zIndex: 1, position: "absolute", top: "32%", right: "5%" },
+    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
   ],
   svgCurve: {
     position: "absolute",

@@ -8,6 +8,13 @@ import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { Iterrator2Context } from "../contexts/iterrator2Context";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  authenicationButton,
+  buttonText,
+} from "../styles";
 
 export default function SuccessModal(props) {
   const { submissionItem, toggleDiveModal, togglePicModal, setPartnerModal } =
@@ -119,9 +126,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: moderateScale(20),
+    fontSize: moderateScale(fontSizes.StandardText),
     color: "#36454F",
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Regular,
     alignSelf: "center",
     textAlign: "center",
     marginTop: "10%",
@@ -129,9 +136,9 @@ const styles = StyleSheet.create({
     margin: scale(10),
   },
   text2: {
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(fontSizes.SmallText),
     color: "#36454F",
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Regular,
     alignSelf: "center",
     textAlign: "center",
     marginTop: "5%",

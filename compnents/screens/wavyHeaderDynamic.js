@@ -29,33 +29,33 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
 
   return (
     <View style={styles.customStyles}>
-      <View style={{ flex:1, backgroundColor: "blue" }}>
+      {/* <View style={{ flex: 1, backgroundColor: "blue" }}> */}
         {picUri ? (
-          <ImageBackground
-            source={{ uri: picUri }}
-            style={styles.backgroundImage}
-          />
+            <ImageBackground
+              source={{ uri: picUri }}
+              style={styles.backgroundImage}
+            />
         ) : (
-          <ImageBackground
-            source={require("../png/blackManta.png")}
-            style={styles.backgroundImage}
-          />
+            <ImageBackground
+              source={require("../png/blackManta.png")}
+              style={styles.backgroundImage}
+            />
         )}
         <View
           style={{
             flex: 1,
-            height: windowWidth > 600 ? "130%": "100%",
+            height: windowWidth > 600 ? "130%" : "100%",
             backgroundColor: "white",
           }}
         >
           <Svg
             height="100%"
-            width={ windowWidth > 600 ? "120%" : "100%"}
+            width={windowWidth > 600 ? "140%" : "100%"}
             viewBox="0 0 1440 320"
             style={{
               flex: 1,
-              marginLeft: windowWidth > 600 ? "-10%" : 0,
-              marginTop: windowWidth > 600 ? "-75%" : "-75%",
+              marginLeft: windowWidth > 600 ? "-20%" : 0,
+              marginTop: windowWidth > 600 ? "-80%" : "-80%",
               backgroundColor: "transparent",
               zIndex: 5,
             }}
@@ -66,7 +66,7 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
             />
           </Svg>
         </View>
-      </View>
+      {/* </View> */}
     </View>
   );
 }
@@ -75,15 +75,15 @@ const styles = StyleSheet.create({
   customStyles: {
     flex: 1,
     height: windowHeight,
-    backgroundColor: "pink"
+    backgroundColor: "pink",
   },
   backgroundImage: {
     backgroundColor: colors.themeWhite,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: windowWidth > 600 ? "-10%": 0,
-    width: windowWidth > 600 ? "110%": windowWidth,
-    height:  windowWidth > 600 ? "70%": "auto",
+    // alignItems: "center",
+    // justifyContent: "center",
+    marginLeft: windowWidth > 600 ? "-15%" : 0,
+    width: windowWidth > 600 ? "120%" : windowWidth,
+    height: windowWidth > 600 ? "70%" : "auto",
     aspectRatio: 1,
     marginTop: windowWidth > 600 ? moderateScale(0) : moderateScale(0),
   },
