@@ -128,9 +128,13 @@ export default function UserProfile(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.screenCloseButton}>
-      <CloseButton onClose={() => onClose()}/>
-      </View>
+        <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={colors.themeWhite}
+        onPress={() => onClose()}
+        style={styles.backButton}
+      />
       <View style={styles.settingsButton}>
         <MaterialIcons
           name="settings"
@@ -236,8 +240,11 @@ const styles = StyleSheet.create({
   screenCloseButton: [
     { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
   ],
+  backButton: [
+    { zIndex: 50, position: "absolute", top: "5%", left: "2%" },
+  ],
   settingsButton: [
-    { zIndex: 50, position: "absolute", top: "5%", left: "3%" },
+    { zIndex: 50, position: "absolute", top: "5%", right: "3%" },
   ],
   addPhotoButton: [
     { zIndex: 50, position: "absolute", top: "32%", right: "5%" },

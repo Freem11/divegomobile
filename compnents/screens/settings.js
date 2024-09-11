@@ -137,15 +137,16 @@ export default function SettingsPage(props) {
 
         <View style={styles.dataHousing}>
           <Text style={styles.dataLabels}>{profileType}</Text>
-        </View>
-
-        {profileType === "Diver Account" ? (
+          {profileType === "Diver Account" ? (
           <TouchableWithoutFeedback onPress={() => openPartnerAccountScreen()}>
             <Text style={styles.promptLinkText}>
               {screenData.SettingsPage.notPartnerAccount}
             </Text>
           </TouchableWithoutFeedback>
         ) : null}
+        </View>
+
+        
 
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => handleLogout()}>

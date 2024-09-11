@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { MaterialIcons, FontAwesome6, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome6, MaterialCommunityIcons, Entypo, Ionicons } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
 
 export default function TextInputField(props) {
@@ -22,6 +22,7 @@ export default function TextInputField(props) {
 {!vectorIcon ? <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
 {vectorIcon === 'MaterialCommunityIcons' ? <MaterialCommunityIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
 {vectorIcon === 'Entypo' ? <Entypo name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
+{vectorIcon === 'Ionicons' ? <Ionicons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
 
       <TextInput
         style={styles.input}
@@ -51,7 +52,7 @@ export default function TextInputField(props) {
           />
         )
       ) : null}
-    {placeHolderText === "Sea Life Encountered" && animal.length > 1 ? (
+    {(placeHolderText === "Sea Life Encountered" || placeHolderText === "Search by Dive Site name or Location") && animal.length > 1 ? (
              <MaterialIcons
              name="highlight-remove"
              size={moderateScale(22)}

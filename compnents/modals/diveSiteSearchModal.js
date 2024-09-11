@@ -73,6 +73,8 @@ export default function DiveSiteSearchModal() {
           altButton={null}
         />
         <SearchToolInput
+          icon="navigate-circle-outline"
+          vectorIcon="Ionicons"
           setList={setList}
           list={list}
           setTextSource={setTextSource}

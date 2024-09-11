@@ -1,8 +1,9 @@
 import React from "react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Keyboard, Dimensions } from "react-native";
 import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
 import InputFieldLg from "../reusables/textInputLarge";
+import TextInputField from "../authentication/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -24,12 +25,22 @@ if (windowHeight < 700) {
 }
 
 export default function SearchToolInput(props) {
-  const { setList, list, setSearchValue, searchValue, setTextSource } = props;
+  const {
+    setList,
+    list,
+    setSearchValue,
+    searchValue,
+    setTextSource,
+    icon,
+    placeHolderText,
+    vectorIcon,
+  } = props;
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
   const { boundaries } = useContext(MapBoundariesContext);
+  const [isClearOn, setIsClearOn] = useState(false);
 
   const getPlaces = async (text) => {
     try {
@@ -87,22 +98,28 @@ export default function SearchToolInput(props) {
     setList(addIndexNumber(megaArray));
   };
 
-  const handleChangeText = (text) => {
+  const handleChange = (text) => {
+    if (isClearOn){
+      setIsClearOn(false)
+      return
+    }
     setSearchValue(text);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("DiveSiteSearchButton");
     handleDataList(text);
+    
   };
 
   const handleClear = () => {
-    setSearchValue("");
-    setTextSource(false);
+    setIsClearOn(true)
     setList([]);
+    setTextSource(false);
+    setSearchValue("");
     Keyboard.dismiss();
   };
 
   useEffect(() => {
-    if (searchValue == 0) {
+    if (searchValue.length === 0) {
       setList([]);
     }
   }, [searchValue]);
@@ -110,45 +127,15 @@ export default function SearchToolInput(props) {
   return (
     <View style={styles.mainBox}>
       <View style={styles.container}>
-        <InputFieldLg
-          placeHolderText={"Search location, dive sites..."}
+        <TextInputField
+          icon={icon}
           inputValue={searchValue}
-          keyboardType={"default"}
-          onChangeText={(text) => handleChangeText(text)}
+          placeHolderText={placeHolderText}
+          vectorIcon={vectorIcon}
+          onChangeText={handleChange}
+          handleClear={handleClear}
+          animal={searchValue}
         />
-        {(searchValue && searchValue.length > 1) ? (
-          <View style={styles.xButton}>
-            <TouchableOpacity
-              onPress={handleClear}
-              style={{
-                width: moderateScale(18),
-                height: moderateScale(18),
-              }}
-            >
-              <MaterialIcons
-                name="highlight-remove"
-                size={moderateScale(18)}
-                color="lightgrey"
-              />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.xButton}>
-          <TouchableOpacity
-            onPress={handleClear}
-            style={{
-              width: moderateScale(18),
-              height: moderateScale(18),
-            }}
-          >
-            <MaterialIcons
-              name="highlight-remove"
-              size={moderateScale(18)}
-              color="#00171f"
-            />
-          </TouchableOpacity>
-        </View>
-        )}
       </View>
     </View>
   );
@@ -159,7 +146,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginRight: moderateScale(5)
+    marginRight: moderateScale(5),
   },
   mainBox: {
     height: "10%",

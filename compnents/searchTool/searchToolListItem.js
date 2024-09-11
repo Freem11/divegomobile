@@ -7,22 +7,32 @@ import {
   Image,
   Keyboard,
 } from "react-native";
+import {
+  activeFonts,
+  colors,
+  fontSizes
+} from "../styles";
 import Geocoder from "react-native-geocoding";
 import { moderateScale } from "react-native-size-matters";
-import { LargeModalContext } from "../contexts/largeModalContext";
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { PinSpotContext } from "../contexts/pinSpotContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default SearchToolListItem = (props) => {
-  const { setList, key, name, soureImage, setSearchValue } =
-    props;
+  const {
+    setList,
+    key,
+    name,
+    soureImage,
+    setSearchValue,
+    setTextSource,
+  } = props;
   const { setMapCenter } = useContext(MapCenterContext);
   const { setDragPin } = useContext(PinSpotContext);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -30,7 +40,9 @@ export default SearchToolListItem = (props) => {
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
   );
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
+  const { levelOneScreen, setLevelOneScreen } = useContext(
+    LevelOneScreenContext
+  );
 
   Geocoder.init(GoogleMapsApiKey);
 
@@ -46,17 +58,11 @@ export default SearchToolListItem = (props) => {
           lat: location.lat,
           lng: location.lng,
         });
-        setSearchValue('')
-        setList([])
-        setPreviousButtonID(activeButtonID);
-        setActiveButtonID("DiveSiteSearchButton");
-        useButtonPressHelper(
-          "DiveSiteSearchButton",
-          activeButtonID,
-          largeModal,
-          setLargeModal
-        );
+        setList([]);
+        setTextSource(false);
+        setSearchValue("");
         Keyboard.dismiss();
+        setLevelOneScreen(false);
       })
       .catch((error) => console.warn(error));
   };
@@ -80,17 +86,11 @@ export default SearchToolListItem = (props) => {
           lng: diveSiteSet[0].lng,
         });
       }
-      setPreviousButtonID(activeButtonID);
-      setActiveButtonID("DiveSiteSearchButton");
-      useButtonPressHelper(
-        "DiveSiteSearchButton",
-        activeButtonID,
-        largeModal,
-        setLargeModal
-      );
-      setSearchValue('')
-      setList([])
+      setList([]);
+      setTextSource(false);
+      setSearchValue("");
       Keyboard.dismiss();
+      setLevelOneScreen(false);
     }
   };
   return (
@@ -104,38 +104,38 @@ export default SearchToolListItem = (props) => {
           }
           style={{
             width: "100%",
-            height: '100%',
+            height: "100%",
           }}
         >
           <View style={styles.searchCard}>
             {soureImage === "anchor" ? (
               <View style={styles.logoHousing}>
-              <Image
-                style={styles.logo}
-                source={require("../png/mapIcons/AnchorGold.png")}
-              ></Image>
-                </View>
+                <Image
+                  style={styles.logo}
+                  source={require("../png/mapIcons/AnchorGold.png")}
+                ></Image>
+              </View>
             ) : (
               <View style={styles.logoHousing}>
-              <Image
-                style={styles.logo}
-                source={require("../png/compass.png")}
-              ></Image>
+                <Image
+                  style={styles.logo}
+                  source={require("../png/compass.png")}
+                ></Image>
               </View>
             )}
-                <View style={styles.textHousing}>
-            <Text
-              style={{
-                fontFamily: "Itim_400Regular",
-                fontSize: moderateScale(20),
-                textAlign: "left",
-                color: "#F0EEEB",
-                width: "86s%",
-                overflow: "scroll",
-              }}
-            >
-              {name}
-            </Text>
+            <View style={styles.textHousing}>
+              <Text
+                style={{
+                  fontFamily: activeFonts.Medium,
+                  fontSize: moderateScale(fontSizes.StandardText),
+                  textAlign: "left",
+                  color: colors.themeBlack,
+                  width: "86%",
+                  overflow: "scroll",
+                }}
+              >
+                {name}
+              </Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -148,18 +148,17 @@ const styles = StyleSheet.create({
   suggestion: {
     height: moderateScale(55),
     width: moderateScale(340),
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.themeWhite,
+    borderWidth: moderateScale(1),
+    borderColor: "darkgrey",
+    borderRadius: moderateScale(10),
+    // borderTopWidth: moderateScale(1),
+    // borderTopColor: "darkgrey",
+    // borderBottomWidth: moderateScale(1),
+    // borderBottomColor: "darkgrey",
     textAlign: "center",
     justifyContent: "center",
     listStyle: "none",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 6.27,
-
-    elevation: 20,
   },
   searchCard: {
     flexDirection: "row",
@@ -167,8 +166,8 @@ const styles = StyleSheet.create({
   },
   logoHousing: {
     height: moderateScale(55),
-    alignItems: 'center',
-    justifyContent: "center"
+    alignItems: "center",
+    justifyContent: "center",
   },
   logo: {
     paddingLeft: moderateScale(20),
@@ -179,8 +178,8 @@ const styles = StyleSheet.create({
   },
   textHousing: {
     height: moderateScale(55),
-    width: '100%',
+    width: "100%",
     //alignItems: 'center',
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });

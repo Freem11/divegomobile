@@ -123,7 +123,6 @@ export default function PicUploader(props) {
     } else {
       setActiveConfirmationID("ConfirmationCaution");
       setConfirmationModal(true);
-    
     }
   };
 
@@ -148,9 +147,13 @@ export default function PicUploader(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.screenCloseButton}>
-        <CloseButton onClose={() => onClose()} />
-      </View>
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={colors.themeWhite}
+        onPress={() => onClose()}
+        style={styles.backButton}
+      />
       {pinValues.PicFile ? (
         <View style={styles.addPhotoButton}>
           <MaterialIcons
@@ -173,15 +176,14 @@ export default function PicUploader(props) {
           <View style={styles.textBuffer}>
             <Text style={styles.label}>What you saw</Text>
             <AnimalAutoSuggest
-                pinValues={pinValues}
-                setPinValues={setPinValues}
-                inputValue={pinValues.Animal}
-                icon={'shark'}
-                placeHolderText={"Sea Life Encountered"}
-                secure={false}
-                vectorIcon={"MaterialCommunityIcons"}
-              />
-         
+              pinValues={pinValues}
+              setPinValues={setPinValues}
+              inputValue={pinValues.Animal}
+              icon={"shark"}
+              placeHolderText={"Sea Life Encountered"}
+              secure={false}
+              vectorIcon={"MaterialCommunityIcons"}
+            />
           </View>
           <View style={styles.textBuffer}>
             <Text style={styles.label}>When you saw it</Text>
@@ -250,6 +252,7 @@ const styles = StyleSheet.create({
   addPhotoButton: [
     { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
   ],
+  backButton: [{ zIndex: 50, position: "absolute", top: "5.5%", left: "2%" }],
   contentContainer: {
     alignItems: "left",
     zIndex: 15,
