@@ -112,7 +112,7 @@ export default SearchToolListItem = (props) => {
               <View style={styles.logoHousing}>
                 <Image
                   style={styles.logo}
-                  source={require("../png/mapIcons/AnchorGold.png")}
+                  source={require("../png/mapIcons/AnchorBlueA.png")}
                 ></Image>
               </View>
             ) : (

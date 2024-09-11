@@ -88,7 +88,7 @@ export default function SearchPage(props) {
           <Text style={styles.promptText}>
             {screenData.SearchPage.diveAddPrompt}
           </Text>
-          <TouchableWithoutFeedback onPress={() => openPartnerAccountScreen()}>
+          <TouchableWithoutFeedback onPress={() => null}>
             <Text style={styles.promptLinkText}>
               {screenData.SearchPage.diveAddLink}
             </Text>

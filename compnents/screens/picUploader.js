@@ -8,12 +8,12 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
+import screenData from "./screenData.json";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import WavyHeaderUploader from "./wavyHeaderUploader";
 import TextInputField from "../authentication/textInput";
-import CloseButton from "../reusables/closeButton";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import {
   activeFonts,
@@ -165,7 +165,7 @@ export default function PicUploader(props) {
         </View>
       ) : null}
       <View style={styles.contentContainer}>
-        <Text style={styles.header}>Your Sea Creature Sighting</Text>
+        <Text style={styles.header}>{screenData.PicUploader.header}</Text>
         <View
           style={{
             marginBottom: windowHeight / 70,
@@ -174,25 +174,25 @@ export default function PicUploader(props) {
           }}
         >
           <View style={styles.textBuffer}>
-            <Text style={styles.label}>What you saw</Text>
+            <Text style={styles.label}>{screenData.PicUploader.whatLabel}</Text>
             <AnimalAutoSuggest
               pinValues={pinValues}
               setPinValues={setPinValues}
               inputValue={pinValues.Animal}
               icon={"shark"}
-              placeHolderText={"Sea Life Encountered"}
+              placeHolderText={screenData.PicUploader.whatPlaceholder}
               secure={false}
               vectorIcon={"MaterialCommunityIcons"}
             />
           </View>
           <View style={styles.textBuffer}>
-            <Text style={styles.label}>When you saw it</Text>
+            <Text style={styles.label}>{screenData.PicUploader.whenLabel}</Text>
             <Toucher onPress={() => showDatePicker()}>
               <View pointerEvents="none">
                 <TextInputField
                   icon={"calendar-month-outline"}
                   inputValue={pinValues.PicDate}
-                  placeHolderText={"Date of Sighting"}
+                  placeHolderText={screenData.PicUploader.whenPlaceholder}
                   secure={false}
                   vectorIcon={"MaterialCommunityIcons"}
                 />
@@ -200,11 +200,11 @@ export default function PicUploader(props) {
             </Toucher>
           </View>
           <View style={styles.textBuffer}>
-            <Text style={styles.label}>Where you saw it</Text>
+        <Text style={styles.label}>{screenData.PicUploader.whereLabel}</Text>
             <TextInputField
               icon={"anchor"}
               inputValue={pinValues.siteName}
-              placeHolderText={"Location of Sighting"}
+              placeHolderText={screenData.PicUploader.wherePlaceholder}
               secure={false}
             />
           </View>
@@ -213,7 +213,7 @@ export default function PicUploader(props) {
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => onSubmit()}>
             <View style={styles.submitButton}>
-              <Text style={styles.submitText}>Submit</Text>
+        <Text style={styles.submitText}>{screenData.PicUploader.submitButton}</Text>
               <MaterialIcons
                 name="chevron-right"
                 size={30}
