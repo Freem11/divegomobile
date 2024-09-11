@@ -24,6 +24,7 @@ import {
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
+import email from "react-native-email";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
@@ -41,7 +42,7 @@ export default function SettingsPage(props) {
   const {} = props;
 
   const { profile } = useContext(UserProfileContext);
-  const { setActiveSession } = useContext(SessionContext);
+  const { activeSession, setActiveSession } = useContext(SessionContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
 
@@ -91,6 +92,16 @@ export default function SettingsPage(props) {
       ]
     );
   };
+
+  let blurb;
+  let first;
+  let last;
+
+  if (activeSession) {
+    first = activeSession.user.user_metadata.firstName || "";
+    last = activeSession.user.user_metadata.lastName || "";
+    blurb = `:${activeSession.user.id}` || null;
+  }
 
   const handleEmail = () => {
     const to = ["scubaseasons@gmail.com"];
@@ -163,7 +174,9 @@ export default function SettingsPage(props) {
           </TouchableWithoutFeedback>
         </View>
 
-        <Text style={styles.subHeadersDanger}>
+      </View>
+
+      <Text style={styles.subHeadersDanger}>
           {screenData.SettingsPage.dangerZoneBar}
         </Text>
         <TouchableWithoutFeedback onPress={alertHandler}>
@@ -173,7 +186,6 @@ export default function SettingsPage(props) {
             </Text>
           </View>
         </TouchableWithoutFeedback>
-      </View>
     </View>
   );
 }
@@ -206,7 +218,9 @@ const styles = StyleSheet.create({
   },
   subHeadersDanger: {
     zIndex: 10,
-    marginTop: "85%",
+    position:"absolute",
+    bottom: moderateScale(120),
+    marginTop: windowHeight/6,
     fontSize: moderateScale(fontSizes.SubHeading),
     fontFamily: activeFonts.Medium,
     color: "maroon",
@@ -221,14 +235,18 @@ const styles = StyleSheet.create({
     borderBottomColor: "darkgrey",
   },
   dataHousingDanger: {
+    position:"absolute",
+    bottom: moderateScale(40),
     backgroundColor: "#FCE4EC",
     alignItems: "center",
+    justifyContent: 'center',
     marginTop: "5%",
     borderTopWidth: moderateScale(1),
     borderTopColor: "maroon",
     paddingBottom: "4%",
     borderBottomWidth: moderateScale(1),
     borderBottomColor: "maroon",
+    width: "90%"
   },
   dataLabels: {
     zIndex: 10,

@@ -35,7 +35,7 @@ export default function FailModal(props) {
       break;
     case "Partner Account Creation Request":
       blurb =
-        "Your request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete your request.";
+        "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.";
       break;
     case "Trip Edit":
       blurb = "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";

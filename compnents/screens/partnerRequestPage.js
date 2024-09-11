@@ -5,6 +5,7 @@ import {
   Text,
   Dimensions,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import {
   activeFonts,
@@ -13,13 +14,16 @@ import {
   buttonText,
   authenicationButton,
 } from "../styles";
+import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
 import screenData from "./screenData.json";
-import TextInputField from '../authentication/textInput';
+import TextInputField from "../authentication/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleLogInSubmit } from "../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
+import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -35,112 +39,153 @@ export default function PartnerRequestPage(props) {
     moveToLandingPage,
     moveToSignUpPage,
     loginFail,
-    setLoginFail
+    setLoginFail,
   } = props;
 
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+  const { profile } = useContext(UserProfileContext);
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
+
+  useEffect(() => {
+    setFormVals({ ...formVals, UserId: profile[0].UserID });
+  }, []);
 
   const [formVals, setFormVals] = useState({
-    email: "",
-    password: "",
+    businessName: "",
+    websiteLink: "",
+    latitude: null,
+    lontitude: null,
+    UserId: null,
   });
 
-  const { setActiveSession } = useContext(SessionContext);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-
+  const handleSubmit = (formValues) => {
+    if (
+      formVals.websiteLink === "" ||
+      formVals.businessName === "" ||
+      formVals.latitude == "" ||
+      isNaN(formVals.latitude) ||
+      formVals.lontitude == "" ||
+      isNaN(formVals.lontitude)
+    ) {
+      setConfirmationType("Partner Account Creation Request");
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
+      return;
+    } else {
+      createPartnerAccountRequest(formVals);
+      setConfirmationType("Partner Account Creation Request");
+      setActiveConfirmationID("ConfirmationSuccess");
+      setConfirmationModal(true);
+      setFormVals({
+        ...formVals,
+        websiteLink: "",
+        businessName: "",
+        latitude: null,
+        lontitude: null,
+      });
+      setLevelTwoScreen(false);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <MaterialIcons
-        name="chevron-left"
-        size={moderateScale(48)}
-        color={"darkgrey"}
-        onPress={() => setLevelTwoScreen(false)}
-        style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
-     
-      />
-      <View style={styles.content}>
-        <Text style={styles.header}>{screenData.PartnerRequestPage.header}</Text>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <MaterialIcons
+          name="chevron-left"
+          size={moderateScale(48)}
+          color={"darkgrey"}
+          onPress={() => setLevelTwoScreen(false)}
+          style={{
+            marginTop: "15%",
+            alignSelf: "flex-start",
+            marginLeft: "2%",
+          }}
+        />
+        <View style={styles.content}>
+          <Text style={styles.header}>
+            {screenData.PartnerRequestPage.header}
+          </Text>
 
-        <View style={{ marginTop: moderateScale(60) }}>
-          <TextInputField
-            icon={"store"}
-            placeHolderText={screenData.PartnerRequestPage.businessPlaceholder}
-            secure={false}
-            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
-          />
-        </View>
+          <Text style={styles.expliainer}>
+            {screenData.PartnerRequestPage.explanation}
+          </Text>
+          <View style={{ marginTop: windowWidth > 600 ? "5%" : "10%" }}>
+            <TextInputField
+              icon={"store"}
+              placeHolderText={
+                screenData.PartnerRequestPage.businessPlaceholder
+              }
+              secure={false}
+              onChangeText={(text) =>
+                setFormVals({ ...formVals, businessName: text })
+              }
+            />
+            <Text style={styles.infos}>
+              {screenData.PartnerRequestPage.businessExplainer}
+            </Text>
+          </View>
 
-        <View style={{ marginTop: moderateScale(40) }}>
-          <TextInputField
-            icon={"web"}
-            placeHolderText={screenData.PartnerRequestPage.websitePlaceholder}
-            setSecureTextEntry={setSecureTextEntry}
-            secure={secureTextEntry}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, password: text })
-            }
-          />
-        </View>
+          <View style={{ marginTop: moderateScale(30) }}>
+            <TextInputField
+              icon={"web"}
+              placeHolderText={screenData.PartnerRequestPage.websitePlaceholder}
+              onChangeText={(text) =>
+                setFormVals({ ...formVals, websiteLink: text })
+              }
+            />
+            <Text style={styles.infos}>
+              {screenData.PartnerRequestPage.websiteExplainer}
+            </Text>
+          </View>
 
+          <View style={{ marginTop: moderateScale(30) }}>
+            <TextInputField
+              icon={"latitude"}
+              placeHolderText={screenData.PartnerRequestPage.latPlaceholder}
+              vectorIcon={"MaterialCommunityIcons"}
+              keyboardConfig="number-pad"
+              onChangeText={(text) =>
+                setFormVals({ ...formVals, latitude: text })
+              }
+            />
+          </View>
 
-        <View style={{ marginTop: moderateScale(40) }}>
-          <TextInputField
-            icon={"latitude"}
-            placeHolderText={screenData.PartnerRequestPage.latPlaceholder}
-            setSecureTextEntry={setSecureTextEntry}
-            secure={secureTextEntry}
-            vectorIcon={"MaterialCommunityIcons"}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, password: text })
-            }
-          />
-        </View>
+          <View style={{ marginTop: moderateScale(30) }}>
+            <TextInputField
+              icon={"longitude"}
+              placeHolderText={screenData.PartnerRequestPage.lngPlaceholder}
+              vectorIcon={"MaterialCommunityIcons"}
+              keyboardConfig="number-pad"
+              onChangeText={(text) =>
+                setFormVals({ ...formVals, lontitude: text })
+              }
+            />
+            <Text style={styles.infos}>
+              {screenData.PartnerRequestPage.latLngExplainer}
+            </Text>
+          </View>
 
-
-        <View style={{ marginTop: moderateScale(40) }}>
-          <TextInputField
-            icon={"longitude"}
-            placeHolderText={screenData.PartnerRequestPage.lngPlaceholder}
-            setSecureTextEntry={setSecureTextEntry}
-            secure={secureTextEntry}
-            vectorIcon={"MaterialCommunityIcons"}
-            onChangeText={(text) =>
-              setFormVals({ ...formVals, password: text })
-            }
-          />
-        </View>
-
-        {loginFail ? (
-          <Text style={styles.erroMsg}>{loginFail}</Text>
-        ) : (
-          <View style={styles.erroMsgEmpty}></View>
-        )}
-
-        <View style={styles.buttonBox}>
-          <TouchableWithoutFeedback
-            onPress={() => null}
-          >
-            <View style={styles.loginButton}>
-              <Text style={styles.loginText}>{screenData.PartnerRequestPage.submitButton}</Text>
-              <MaterialIcons
-                name="chevron-right"
-                size={30}
-                color={colors.themeWhite}
-              />
-            </View>
-          </TouchableWithoutFeedback>
+          <View style={styles.buttonBox}>
+            <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+              <View style={styles.loginButton}>
+                <Text style={styles.loginText}>
+                  {screenData.PartnerRequestPage.submitButton}
+                </Text>
+                <MaterialIcons
+                  name="chevron-right"
+                  size={30}
+                  color={colors.themeWhite}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
       </View>
-      <View style={styles.promtBox}>
-        <Text style={styles.promptText}>{promptText} </Text>
-        <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
-          <Text style={styles.promptLinkText}>{promptLinkText}</Text>
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -157,15 +202,29 @@ const styles = StyleSheet.create({
   },
   header: {
     zIndex: 10,
-    marginTop: "10%",
+    marginTop: "5%",
     fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Bold,
     color: "darkgrey",
   },
+  expliainer: {
+    marginTop: windowWidth > 600 ? "5%" : "10%",
+    textAlign: "center",
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Bold,
+    color: "darkgrey",
+  },
+  infos: {
+    marginTop: "1%",
+    textAlign: "center",
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Thin,
+    color: colors.themeBlack,
+  },
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
-    marginTop: moderateScale(-50)
+    marginTop: "-10%",
   },
   promtBox: {
     position: "absolute",
@@ -203,5 +262,5 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Italic,
     color: "maroon",
-  }
+  },
 });
