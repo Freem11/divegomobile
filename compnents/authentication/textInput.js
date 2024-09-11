@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { Platform, StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { MaterialIcons, FontAwesome6, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
@@ -14,8 +14,22 @@ export default function TextInputField(props) {
     onChangeText,
     vectorIcon,
     handleClear,
-    animal
+    animal,
+    keyboardConfig
   } = props;
+
+
+let keyboardValue
+
+  if(keyboardConfig === "number-pad"){
+    if(Platform.OS === "ios") {
+      keyboardValue= "numbers-and-punctuation"
+    }
+  }
+
+  if(!keyboardConfig){
+      keyboardValue = "default"
+  }
 
   return (
     <View style={styles.container}>
@@ -32,6 +46,7 @@ export default function TextInputField(props) {
         fontSize={moderateScale(18)}
         onChangeText={onChangeText}
         secureTextEntry={secure}
+        keyboardType={keyboardValue}
       ></TextInput>
       {placeHolderText === "Password" ? (
         secure ? (

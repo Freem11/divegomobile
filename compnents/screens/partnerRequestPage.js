@@ -5,6 +5,7 @@ import {
   Text,
   Dimensions,
   TouchableWithoutFeedback,
+  Keyboard
 } from "react-native";
 import {
   activeFonts,
@@ -16,8 +17,8 @@ import {
 import screenData from "./screenData.json";
 import TextInputField from '../authentication/textInput';
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleLogInSubmit } from "../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
+import { UserProfileContext } from "../../compnents/contexts/userProfileContext";
 import { SessionContext } from "../contexts/sessionContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
@@ -41,17 +42,26 @@ export default function PartnerRequestPage(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+  const { profile } = useContext(UserProfileContext);
+
+  useEffect(() => {
+    setFormVals({ ...formVals, UserId: profile[0].UserID });
+  }, []);
 
   const [formVals, setFormVals] = useState({
+    businessName: "",
     email: "",
-    password: "",
+    latitude: null,
+    lontitude: null,
+    UserId: null
   });
 
   const { setActiveSession } = useContext(SessionContext);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
+  console.log(formVals)
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
       <MaterialIcons
         name="chevron-left"
@@ -64,60 +74,51 @@ export default function PartnerRequestPage(props) {
       <View style={styles.content}>
         <Text style={styles.header}>{screenData.PartnerRequestPage.header}</Text>
 
-        <View style={{ marginTop: moderateScale(60) }}>
+        <Text style={styles.expliainer}>{screenData.PartnerRequestPage.explanation}</Text>
+        <View style={{ marginTop: "10%" }}>
           <TextInputField
             icon={"store"}
             placeHolderText={screenData.PartnerRequestPage.businessPlaceholder}
             secure={false}
-            onChangeText={(text) => setFormVals({ ...formVals, email: text })}
+            onChangeText={(text) => setFormVals({ ...formVals, businessName: text })}
           />
         </View>
 
-        <View style={{ marginTop: moderateScale(40) }}>
+        <View style={{ marginTop: moderateScale(30) }}>
           <TextInputField
             icon={"web"}
             placeHolderText={screenData.PartnerRequestPage.websitePlaceholder}
-            setSecureTextEntry={setSecureTextEntry}
-            secure={secureTextEntry}
             onChangeText={(text) =>
-              setFormVals({ ...formVals, password: text })
+              setFormVals({ ...formVals, email: text })
             }
           />
         </View>
 
 
-        <View style={{ marginTop: moderateScale(40) }}>
+        <View style={{ marginTop: moderateScale(30) }}>
           <TextInputField
             icon={"latitude"}
             placeHolderText={screenData.PartnerRequestPage.latPlaceholder}
-            setSecureTextEntry={setSecureTextEntry}
-            secure={secureTextEntry}
             vectorIcon={"MaterialCommunityIcons"}
+            keyboardConfig="number-pad"
             onChangeText={(text) =>
-              setFormVals({ ...formVals, password: text })
+              setFormVals({ ...formVals, latitude: text })
             }
           />
         </View>
 
 
-        <View style={{ marginTop: moderateScale(40) }}>
+        <View style={{ marginTop: moderateScale(30) }}>
           <TextInputField
             icon={"longitude"}
             placeHolderText={screenData.PartnerRequestPage.lngPlaceholder}
-            setSecureTextEntry={setSecureTextEntry}
-            secure={secureTextEntry}
             vectorIcon={"MaterialCommunityIcons"}
+            keyboardConfig="number-pad"
             onChangeText={(text) =>
-              setFormVals({ ...formVals, password: text })
+              setFormVals({ ...formVals, lontitude: text })
             }
           />
         </View>
-
-        {loginFail ? (
-          <Text style={styles.erroMsg}>{loginFail}</Text>
-        ) : (
-          <View style={styles.erroMsgEmpty}></View>
-        )}
 
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback
@@ -141,6 +142,7 @@ export default function PartnerRequestPage(props) {
         </TouchableWithoutFeedback>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -157,15 +159,22 @@ const styles = StyleSheet.create({
   },
   header: {
     zIndex: 10,
-    marginTop: "10%",
+    marginTop: "5%",
     fontSize: moderateScale(fontSizes.Header),
+    fontFamily: activeFonts.Bold,
+    color: "darkgrey",
+  },
+  expliainer: {
+    marginTop: "5%",
+    textAlign: 'center',
+    fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Bold,
     color: "darkgrey",
   },
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
-    marginTop: moderateScale(-50)
+    marginTop: "-5%"
   },
   promtBox: {
     position: "absolute",
