@@ -375,12 +375,12 @@ const styles = StyleSheet.create({
     { zIndex: 1, position: "absolute", top: "6%", right: "5%" },
   ],
   contributeButton: [
-    { zIndex: 50, position: "absolute", top: "6%", left: "3%" },
+    { zIndex: 10, position: "absolute", top: "6%", left: "3%" },
     screenSecondaryButton,
   ],
   contributeButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   addPhotoButton: [
-    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
+    { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
   ],
   svgCurve: {
     position: "absolute",
