@@ -8,7 +8,7 @@ import CloseButton from '../reusables/closeButton';
 import { activeFonts, colors, fontSizes, roundButton } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
-import { LevelThreeScreenContext } from "../contexts/levelThreeScreenContext";
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 
@@ -31,7 +31,7 @@ export default function UserProfile(props) {
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { levelThreeScreen, setLevelThreeScreen } = useContext(LevelThreeScreenContext);
+  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);
   const [tempUserName, setTempUserName] = useState("");
@@ -119,11 +119,10 @@ export default function UserProfile(props) {
     useButtonPressHelper(
       "SettingsScreen",
       activeScreen,
-      levelThreeScreen,
-      setLevelThreeScreen
+      levelOneScreen,
+      setLevelOneScreen
     );
 
-    console.log("lvl thee?", levelThreeScreen)
   };
 
 

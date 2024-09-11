@@ -1,6 +1,6 @@
    
     {
-      "SettingPage": 
+      "SettingsPage": 
       {
        "header": "Settings",
        "subHeading1": "Account Type",
@@ -9,6 +9,19 @@
        "logout": "Log Out",
        "delAccount": "Delete Account",
        "dangerZoneBar": "Danger Zone"
+      },
+      "PartnerRequestPage":
+      {
+        "header": "Partner Account Upgrade",
+        "explanation": "To qualify for a 'Partner Account' Your Account must represent a diving business that takes divers out diving. \n Examples include: Dive Shops, Dive Charters, Diver Centres and Liveaboards",
+        "businessPlaceholder": "Full business name",
+        "businessExplainer": "For display purposes",
+        "websitePlaceholder": "Website Url",
+        "websiteExplainer": "To evaluate and validate your business",
+        "latPlaceholder": "Latitude",
+        "lngPlaceholder": "Longitude",
+        "latLngExplainer": "To place your business on the map",
+        "submitButton" : "Submit"
       }
     }
 

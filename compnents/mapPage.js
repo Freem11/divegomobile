@@ -19,7 +19,6 @@ import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenMo
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
 import LevelOneScreen from '../compnents/reusables/levelOneScreen';
 import LevelTwoScreen from '../compnents/reusables/levelTwoScreen';
-import LevelThreeScreen from '../compnents/reusables/levelThreeScreen';
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -635,7 +634,6 @@ export default function MapPage() {
 
             <LevelOneScreen />
             <LevelTwoScreen />
-            <LevelThreeScreen />
             <AnimatedModalLarge />
             <AnimatedModalLargeSecond />
             <AnimatedFullScreenModal />

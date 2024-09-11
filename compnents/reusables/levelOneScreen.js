@@ -9,6 +9,7 @@ import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 
 import DiveSite from '../screens/diveSite';
+import Settings from '../screens/settings';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -40,6 +41,7 @@ export default function LevelOneScreen() {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen === "DiveSiteScreen" && <DiveSite/>}
+      {activeScreen === "SettingsScreen" && <Settings/>}
     </Animated.View>
   );
 }

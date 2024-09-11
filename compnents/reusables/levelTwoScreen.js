@@ -9,7 +9,8 @@ import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
 import UserProfile from '../screens/userProfile';
-import PicUploader from "../screens/picUploader";
+import PartnerRequestPage from '../screens/partnerRequestPage';
+import PicUploader from '../screens/picUploader';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -41,6 +42,7 @@ export default function LevelTwoScreen() {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen === "ProfileScreen" && <UserProfile />}
+      {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen === "PictureUploadScreen" && <PicUploader />}
     </Animated.View>
   );

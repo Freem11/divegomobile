@@ -23,12 +23,16 @@ import {
   addDeletedAccountInfo,
   deleteProfile,
 } from "../../supabaseCalls/accountSupabaseCalls";
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { LevelThreeScreenContext } from "../contexts/levelThreeScreenContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { ActiveScreenContext } from "../contexts/activeScreenContext";
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -38,14 +42,34 @@ export default function SettingsPage(props) {
 
   const { profile } = useContext(UserProfileContext);
   const { setActiveSession } = useContext(SessionContext);
-  const { levelThreeScreen, setLevelThreeScreen } = useContext(LevelThreeScreenContext);
-  
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+
+  const { levelOneScreen, setLevelOneScreen } = useContext(
+    LevelOneScreenContext
+  );
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+
   let profileType;
   if (profile[0].partnerAccount) {
     profileType = "Partner Account";
   } else {
     profileType = "Diver Account";
   }
+
+  const openPartnerAccountScreen = () => {
+    setLevelOneScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("PartnerRequestScreen");
+    useButtonPressHelper(
+      "PartnerRequestScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
+    );
+  };
 
   const handleLogout = async () => {
     await setActiveSession(null);
@@ -72,7 +96,8 @@ export default function SettingsPage(props) {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       subject: `Delete Account Request ${blurb}`,
-      body: "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
+      body:
+        "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
       checkCanOpen: false,
     }).catch(console.error);
   };
@@ -100,30 +125,33 @@ export default function SettingsPage(props) {
         name="chevron-left"
         size={moderateScale(48)}
         color={"darkgrey"}
-        onPress={() => setLevelThreeScreen(false)}
+        onPress={() => setLevelOneScreen(false)}
         style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
       />
       <View style={styles.content}>
-        <Text style={styles.header}>{screenData.SettingPage.header}</Text>
+        <Text style={styles.header}>{screenData.SettingsPage.header}</Text>
 
         <Text style={styles.subHeaders}>
-          {screenData.SettingPage.subHeading1}
+          {screenData.SettingsPage.subHeading1}
         </Text>
 
         <View style={styles.dataHousing}>
           <Text style={styles.dataLabels}>{profileType}</Text>
-          {profileType === "Diver Account" ? (
-            <Text style={styles.promptLinkText}>
-              {screenData.SettingPage.notPartnerAccount}
-            </Text>
-          ) : null}
         </View>
+
+        {profileType === "Diver Account" ? (
+          <TouchableWithoutFeedback onPress={() => openPartnerAccountScreen()}>
+            <Text style={styles.promptLinkText}>
+              {screenData.SettingsPage.notPartnerAccount}
+            </Text>
+          </TouchableWithoutFeedback>
+        ) : null}
 
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => handleLogout()}>
             <View style={styles.loginButton}>
               <Text style={styles.loginText}>
-                {screenData.SettingPage.logout}
+                {screenData.SettingsPage.logout}
               </Text>
               <MaterialIcons
                 name="chevron-right"
@@ -135,14 +163,15 @@ export default function SettingsPage(props) {
         </View>
 
         <Text style={styles.subHeadersDanger}>
-          {screenData.SettingPage.dangerZoneBar}
+          {screenData.SettingsPage.dangerZoneBar}
         </Text>
         <TouchableWithoutFeedback onPress={alertHandler}>
-        <View style={styles.dataHousingDanger}>
-          <Text style={styles.dataLabelsDanger}>{screenData.SettingPage.delAccount}</Text>
-        </View>
+          <View style={styles.dataHousingDanger}>
+            <Text style={styles.dataLabelsDanger}>
+              {screenData.SettingsPage.delAccount}
+            </Text>
+          </View>
         </TouchableWithoutFeedback>
-
       </View>
     </View>
   );
@@ -192,7 +221,7 @@ const styles = StyleSheet.create({
   },
   dataHousingDanger: {
     backgroundColor: "#FCE4EC",
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: "5%",
     borderTopWidth: moderateScale(1),
     borderTopColor: "maroon",
@@ -213,7 +242,7 @@ const styles = StyleSheet.create({
     marginTop: "4%",
     fontSize: moderateScale(fontSizes.StandardText),
     fontFamily: activeFonts.Bold,
-    color: 'maroon',
+    color: "maroon",
   },
   promtBox: {
     position: "absolute",
@@ -235,6 +264,7 @@ const styles = StyleSheet.create({
     color: colors.primaryBlue,
   },
   buttonBox: {
+    zIndex: -1,
     width: "100%",
     alignItems: "flex-end",
     marginTop: moderateScale(-50),
