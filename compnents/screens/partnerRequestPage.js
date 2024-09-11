@@ -75,13 +75,14 @@ export default function PartnerRequestPage(props) {
         <Text style={styles.header}>{screenData.PartnerRequestPage.header}</Text>
 
         <Text style={styles.expliainer}>{screenData.PartnerRequestPage.explanation}</Text>
-        <View style={{ marginTop: "10%" }}>
+        <View style={{ marginTop:  windowWidth > 600 ? "5%" : "10%"}}>
           <TextInputField
             icon={"store"}
             placeHolderText={screenData.PartnerRequestPage.businessPlaceholder}
             secure={false}
             onChangeText={(text) => setFormVals({ ...formVals, businessName: text })}
           />
+          <Text style={styles.infos}>{screenData.PartnerRequestPage.businessExplainer}</Text>
         </View>
 
         <View style={{ marginTop: moderateScale(30) }}>
@@ -92,6 +93,7 @@ export default function PartnerRequestPage(props) {
               setFormVals({ ...formVals, email: text })
             }
           />
+                    <Text style={styles.infos}>{screenData.PartnerRequestPage.websiteExplainer}</Text>
         </View>
 
 
@@ -118,6 +120,7 @@ export default function PartnerRequestPage(props) {
               setFormVals({ ...formVals, lontitude: text })
             }
           />
+                    <Text style={styles.infos}>{screenData.PartnerRequestPage.latLngExplainer}</Text>
         </View>
 
         <View style={styles.buttonBox}>
@@ -165,16 +168,23 @@ const styles = StyleSheet.create({
     color: "darkgrey",
   },
   expliainer: {
-    marginTop: "5%",
+    marginTop: windowWidth > 600 ? "5%" : '10%',
     textAlign: 'center',
     fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Bold,
     color: "darkgrey",
   },
+  infos: {
+    marginTop: "1%",
+    textAlign: 'center',
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Thin,
+    color: colors.themeBlack,
+  },
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
-    marginTop: "-5%"
+    marginTop: "-10%"
   },
   promtBox: {
     position: "absolute",
