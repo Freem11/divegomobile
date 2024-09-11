@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Bold,
-    color: "darkgrey",
+    color: colors.primaryBlue,
   },
   infos: {
     marginTop: "1%",
