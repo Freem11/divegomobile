@@ -92,12 +92,12 @@ export default function WavyHeaderUploader({ customStyles, image, setPinValues, 
         >
           <Svg
             height={windowWidth > 600 ? "175%" :"100%"}
-            width={windowWidth > 600 ? "100%" : "100%"}
+            width={windowWidth > 600 ? "140%" : "100%"}
             viewBox="0 0 1440 320"
             style={{
               flex: 1,
-              marginLeft: 0,
-              marginTop: windowWidth > 600 ? "-80%" : "-80%",
+              marginLeft:  windowWidth > 600 ? "-20%" : 0,
+              marginTop: windowWidth > 600 ? "-102%" : "-80%",
               backgroundColor: "transparent",
               zIndex: 5,
             }}
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
   },
   backgroundImage: {
+    zIndex: -1,
     backgroundColor: colors.themeWhite,
     marginLeft: windowWidth > 600 ? "-15%" : 0,
     width: windowWidth > 600 ? "120%" : windowWidth,

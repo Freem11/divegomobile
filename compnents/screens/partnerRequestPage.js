@@ -87,6 +87,7 @@ export default function PartnerRequestPage(props) {
         latitude: null,
         lontitude: null,
       });
+      setLevelTwoScreen(false);
     }
   };
 
