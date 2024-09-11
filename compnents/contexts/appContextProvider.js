@@ -66,6 +66,7 @@ import EditModeContextProvider from './editModeContext';
 import ActiveScreenContextProvider from './activeScreenContext';
 import LevelOneScreenContextProvider from './levelOneScreenContext';
 import LevelTwoScreenContextProvider from './levelTwoScreenContext';
+import LevelThreeScreenContextProvider from './levelThreeScreenContext';
 
 const providers = [
     MapConfigContextProvider,
@@ -133,7 +134,8 @@ const providers = [
     EditModeContextProvider,
     ActiveScreenContextProvider,
     LevelOneScreenContextProvider,
-    LevelTwoScreenContextProvider
+    LevelTwoScreenContextProvider,
+    LevelThreeScreenContextProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers);

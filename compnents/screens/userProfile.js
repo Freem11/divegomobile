@@ -7,11 +7,15 @@ import PlainTextInput from "./plaintextInput";
 import CloseButton from '../reusables/closeButton';
 import { activeFonts, colors, fontSizes, roundButton } from "../styles";
 import { moderateScale } from "react-native-size-matters";
-import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
+import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
+import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
+import { ActiveScreenContext } from "../contexts/activeScreenContext";
 
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { chooseImageHandler } from "./imageUploadHelpers";
 import {
   uploadphoto,
@@ -24,6 +28,9 @@ const windowHeight = Dimensions.get("window").height;
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);
@@ -102,13 +109,35 @@ export default function UserProfile(props) {
   };
 
   const onClose = () => {
-    setLevelOneScreen(false)
+    setLevelTwoScreen(false)
   }
+
+  const openSettings = () => {
+    setLevelTwoScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("SettingsScreen");
+    useButtonPressHelper(
+      "SettingsScreen",
+      activeScreen,
+      levelOneScreen,
+      setLevelOneScreen
+    );
+
+  };
+
 
   return (
     <View style={styles.container}>
       <View style={styles.screenCloseButton}>
       <CloseButton onClose={() => onClose()}/>
+      </View>
+      <View style={styles.settingsButton}>
+        <MaterialIcons
+          name="settings"
+          size={moderateScale(46)}
+          color={colors.themeWhite}
+          onPress={openSettings}
+        />
       </View>
       <View style={styles.addPhotoButton}>
         <MaterialIcons
@@ -206,6 +235,9 @@ const styles = StyleSheet.create({
   },
   screenCloseButton: [
     { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
+  ],
+  settingsButton: [
+    { zIndex: 50, position: "absolute", top: "5%", left: "3%" },
   ],
   addPhotoButton: [
     { zIndex: 50, position: "absolute", top: "32%", right: "5%" },

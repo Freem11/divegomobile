@@ -60,6 +60,7 @@ import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
 import { LevelTwoScreenContext } from './contexts/levelTwoScreenContext';
+import { LevelThreeScreenContext } from './contexts/levelThreeScreenContext';
 
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
@@ -108,7 +109,9 @@ export default function MapPage() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-
+  const { levelThreeScreen, setLevelThreeScreen } = useContext(
+    LevelTwoScreenContext
+  );
   const { previousButtonID, setPreviousButtonID } = useContext(
     PreviousButtonIDContext
   );

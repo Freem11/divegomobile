@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { MaterialIcons, FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome6, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
 
 export default function TextInputField(props) {
@@ -21,6 +21,7 @@ export default function TextInputField(props) {
     <View style={styles.container}>
 {!vectorIcon ? <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
 {vectorIcon === 'MaterialCommunityIcons' ? <MaterialCommunityIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
+{vectorIcon === 'Entypo' ? <Entypo name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
 
       <TextInput
         style={styles.input}

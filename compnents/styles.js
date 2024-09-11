@@ -10,6 +10,7 @@ export const colors = {
 
 export const fontSizes = {
   Header: 34,
+  SubHeading: 24,
   StandardText: 18,
   SmallText: 14
 }

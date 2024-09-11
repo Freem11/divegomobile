@@ -5,9 +5,11 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { ActiveScreenContext } from '../contexts/activeScreenContext';
-import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
+import { ActiveScreenContext } from "../contexts/activeScreenContext";
+import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
+import UserProfile from '../screens/userProfile';
+import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
 
 const windowWidth = Dimensions.get("window").width;
@@ -39,7 +41,9 @@ export default function LevelTwoScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "PictureUploadScreen" && <PicUploader/>}
+      {activeScreen === "ProfileScreen" && <UserProfile />}
+      {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
+      {activeScreen === "PictureUploadScreen" && <PicUploader />}
     </Animated.View>
   );
 }
