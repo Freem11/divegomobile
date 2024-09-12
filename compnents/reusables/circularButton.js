@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function CircularButton(props) {
   const { buttonAction, icon } = props;
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(50),
     height: moderateScale(39),
     width: moderateScale(39),
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     zIndex: 1,
     shadowColor: "#000",
     shadowOffset: {

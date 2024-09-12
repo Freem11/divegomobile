@@ -10,10 +10,10 @@ import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
-
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { MaterialIcons } from "@expo/vector-icons";
+import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
@@ -84,20 +84,21 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
+    marginTop: moderateScale(2)
   },
   buttonlabel: {
-    fontFamily: "Itim_400Regular",
-    color: "white",
-    fontSize: moderateScale(13),
-    marginTop: moderateScale(0),
+    fontFamily: activeFonts.Medium,
+    color: colors.themeWhite,
+    fontSize: fontSizes.SmallText,
+    marginTop: moderateScale(2),
   },
   buttonlabelAlt: {
-    fontFamily: "Itim_400Regular",
-    color: "gold",
-    fontSize: moderateScale(13),
-    marginTop: moderateScale(0),
+    fontFamily: activeFonts.Medium,
+    color: colors.secondaryYellow,
+    fontSize: fontSizes.SmallText,
+    marginTop: moderateScale(2),
   },
 });

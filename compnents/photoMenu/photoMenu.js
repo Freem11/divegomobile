@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
@@ -227,8 +228,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     marginTop: scale(15),
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(15),
-    color: "#F0EEEB",
+    fontFamily: activeFonts.Medium,
+    fontSize: fontSizes.StandardText,
+    color: colors.themeWhite,
   },
 });

@@ -8,6 +8,7 @@ import {
   Dimensions,
   Keyboard
 } from "react-native";
+import { activeFonts, colors, fontSizes } from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
 import Map from "./GoogleMap";
@@ -679,15 +680,15 @@ const styles = StyleSheet.create({
     paddingBottom: "2%",
   },
   FText: {
-    color: "white",
-    fontFamily: "Itim_400Regular",
+    color: colors.themeWhite,
+    fontFamily: activeFonts.Bold,
     fontSize: moderateScale(15),
   },
   FMenu: {
     flexDirection: "column",
     alignContent: "center",
     justifyContent: "center",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     width: "100%",
     height: moderateScale(65),
     zIndex: 3,
@@ -775,7 +776,7 @@ const styles = StyleSheet.create({
   pullTab: {
     height: windowWidth > 600 ? scale(10) : scale(15),
     width: windowWidth > 600 ? scale(80) : scale(100),
-    backgroundColor: "gold",
+    backgroundColor: colors.secondaryYellow,
     borderBottomRightRadius: scale(7),
     borderBottomLeftRadius: scale(7),
     zIndex: 10,
@@ -786,7 +787,7 @@ const styles = StyleSheet.create({
   feedback: {
     zIndex: 20,
     flexDirection: "row",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     position: "absolute",
     top: -moderateScale(30),
     left: -0.88 * FbWidth,
@@ -806,54 +807,12 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   feedRequest: {
-    color: "white",
-    fontFamily: "Itim_400Regular",
+    color: colors.themeWhite,
+    fontFamily: activeFonts.ThinItalic,
     fontSize: moderateScale(18),
     marginTop: moderateScale(3),
     marginRight: moderateScale(10),
     marginLeft: moderateScale(14),
     paddingLeft: moderateScale(50),
-  },
-  buttonwrapper: {
-    position: "absolute",
-    top: -moderateScale(30),
-    right: moderateScale(30),
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(50),
-    height: moderateScale(39),
-    width: moderateScale(39),
-    backgroundColor: "#538bdb",
-    zIndex: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 8,
-      height: 8,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
-  buttonwrapperPressed: {
-    position: "absolute",
-    top: windowHeight * 0.83,
-    right: moderateScale(30),
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: moderateScale(50),
-    height: moderateScale(39),
-    width: moderateScale(39),
-    backgroundColor: "white",
-    zIndex: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 8,
-      height: 8,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
+  }
 });

@@ -14,6 +14,7 @@ import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
+import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function DiveSiteButton() {
   const [butState, setButState] = useState(false);
@@ -124,20 +125,21 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
+    marginTop: moderateScale(2)
   },
   buttonlabel: {
-    fontFamily: "Itim_400Regular",
-    color: "white",
-    fontSize: moderateScale(12),
-    marginTop: moderateScale(0),
+    fontFamily: activeFonts.Medium,
+    color: colors.themeWhite,
+    fontSize: fontSizes.SmallText,
+    marginTop: moderateScale(2),
   },
   buttonlabelAlt: {
-    fontFamily: "Itim_400Regular",
-    color: "gold",
-    fontSize: moderateScale(12),
-    marginTop: moderateScale(0),
+    fontFamily: activeFonts.Medium,
+    color: colors.secondaryYellow,
+    fontSize: fontSizes.SmallText,
+    marginTop: moderateScale(2),
   },
 });

@@ -14,7 +14,7 @@ import {
 } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import Picture from "../modals/picture";
-import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
