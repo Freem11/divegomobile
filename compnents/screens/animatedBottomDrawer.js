@@ -21,7 +21,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function BottomDrawer(props) {
-  const { dataSet, lowerBound, upperBound } = props;
+  const { dataSet, lowerBound, upperBound, drawerHeader, emptyDrawer } = props;
   const photosRef = useRef(null);
   const boxheight = useSharedValue("30%");
 
@@ -54,7 +54,7 @@ export default function BottomDrawer(props) {
         <View
         style={styles.handle}
         >
-          <Text style={styles.label}>Sea Creature Sightings</Text>
+          <Text style={styles.label}>{drawerHeader}</Text>
           {/* <View style={styles.tab}></View> */}
         </View>
       </GestureDetector>
@@ -82,50 +82,8 @@ export default function BottomDrawer(props) {
 : 
             <View>
               <Text style={styles.noSightings}>
-                No Sightings At This Site Yet!
+                {emptyDrawer}
               </Text>
-              {/* <Text style={styles.noSightings2}>
-                Be the first to add one here.
-              </Text> */}
-
-              {/* <TouchableWithoutFeedback
-                onPress={handleSwitch}
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: scale(32),
-                  height: scale(32),
-                  borderRadius: scale(32),
-                  backgroundColor: "black",
-                }}
-              >
-                <View
-                  style={{
-                    borderRadius: scale(40),
-                    backgroundColor: photoButState ? "white": "lightgrey",
-                    width: scale(100),
-                    height: scale(40),
-                    alignSelf: "center",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 0,
-                    },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 5,
-
-                    elevation: 10,
-                  }}
-                >
-                  <MaterialIcons
-                    name="add-a-photo"
-                    size={scale(32)}
-                    color="#538dbd"
-                  />
-                </View>
-              </TouchableWithoutFeedback> */}
             </View>
           }
     </Animated.View>
@@ -139,7 +97,7 @@ const styles = StyleSheet.create({
     left: 0,
     alignItems: "center",
     justifyContent: "flex-start",
-    zIndex: 10,
+    zIndex: 20,
     elevation: 10,
     width:  windowWidth,
     borderColor: "darkgrey",
