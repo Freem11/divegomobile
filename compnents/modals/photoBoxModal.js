@@ -320,6 +320,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+    zIndex: 26
   },
   closeButton: {
     position: "absolute",

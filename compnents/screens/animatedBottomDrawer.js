@@ -15,7 +15,9 @@ import {
 import { moderateScale } from "react-native-size-matters";
 import Picture from "../modals/picture";
 import { activeFonts, colors, fontSizes, roundButton } from "../styles";
-
+import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -24,8 +26,11 @@ export default function BottomDrawer(props) {
   const { dataSet, lowerBound, upperBound, drawerHeader, emptyDrawer } = props;
   const photosRef = useRef(null);
   const boxheight = useSharedValue("30%");
-
   const [bounds, setBounds] = useState({});
+
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   useEffect(() => {
     setBounds({ lower: lowerBound, upper: upperBound });
@@ -48,19 +53,23 @@ export default function BottomDrawer(props) {
     };
   });
 
+  const togglePhotoBoxModal = (photo) => {
+    setSelectedPhoto(photo);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
+  };
+
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
       <GestureDetector gesture={animatedBottomDrawer}>
-        <View
-        style={styles.handle}
-        >
+        <View style={styles.handle}>
           <Text style={styles.label}>{drawerHeader}</Text>
           {/* <View style={styles.tab}></View> */}
         </View>
       </GestureDetector>
 
-      {dataSet.length > 0 ?
-      <FlatList
+      {dataSet.length > 0 ? (
+        <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
           ref={photosRef}
@@ -69,23 +78,25 @@ export default function BottomDrawer(props) {
           showsVerticalScrollIndicator={false}
           snapToInterval={moderateScale(290)}
           snapToAlignment="center"
-          decelerationRate='normal'
+          decelerationRate="normal"
           keyExtractor={(item) => item.id}
           data={dataSet}
           renderItem={({ item }) => (
-            <View style={styles.shadowbox}>
-              <Picture key={item.id} pic={item}></Picture>
-            </View>
+            <TouchableWithoutFeedback
+              key={item.id}
+              onPress={() => togglePhotoBoxModal(item.photofile)}
+            >
+              <View style={styles.shadowbox}>
+                <Picture key={item.id} pic={item}></Picture>
+              </View>
+            </TouchableWithoutFeedback>
           )}
         />
-
-: 
-            <View>
-              <Text style={styles.noSightings}>
-                {emptyDrawer}
-              </Text>
-            </View>
-          }
+      ) : (
+        <View>
+          <Text style={styles.noSightings}>{emptyDrawer}</Text>
+        </View>
+      )}
     </Animated.View>
   );
 }
@@ -99,16 +110,16 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     zIndex: 20,
     elevation: 10,
-    width:  windowWidth,
+    width: windowWidth,
     borderColor: "darkgrey",
     borderWidth: moderateScale(1),
     borderTopRightRadius: moderateScale(10),
     borderTopLeftRadius: moderateScale(10),
     backgroundColor: colors.themeWhite,
   },
-  handle:{
+  handle: {
     zIndex: 11,
-    alignItems: 'center',
+    alignItems: "center",
     justifyContent: "center",
     borderColor: "darkgrey",
     borderBottomWidth: moderateScale(1),
@@ -119,12 +130,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.themeBlack,
     height: moderateScale(5),
     width: moderateScale(50),
-    borderRadius: moderateScale(10)
+    borderRadius: moderateScale(10),
   },
   label: {
-      color: colors.themeBlack,
-      fontFamily: activeFonts.Regular,
-      fontSize: moderateScale(fontSizes.SmallText)
+    color: colors.themeBlack,
+    fontFamily: activeFonts.Regular,
+    fontSize: moderateScale(fontSizes.SmallText),
   },
   shadowbox: {
     flex: 1,
@@ -148,6 +159,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: activeFonts.Light,
     fontSize: moderateScale(fontSizes.StandardText),
-    color:  colors.themeBlack,
+    color: colors.themeBlack,
   },
 });
