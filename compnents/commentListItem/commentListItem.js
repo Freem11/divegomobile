@@ -1,6 +1,11 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import {
+  activeFonts,
+  colors,
+  fontSizes
+} from "../styles";
 
 export default function CommentListItem(props) {
   const { commentDetails, setReplyTo, replyTo, toggleShowReplies, selectedReplyId, nbReplies } = props;
@@ -51,9 +56,10 @@ export default function CommentListItem(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#537bdb",
+    backgroundColor: colors.themeWhite,
     justifyContent: "center",
     borderRadius: moderateScale(10),
+    borderWidth: moderateScale(0.5),
     width: "98%",
     marginLeft: "1%",
     marginTop: "2%",
@@ -66,24 +72,24 @@ const styles = StyleSheet.create({
     marginBottom: "4%",
   },
   userTxt: {
-    fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(13),
-    color: "black",
+    fontFamily: activeFonts.Bold,
+    fontSize: moderateScale(fontSizes.SmallText),
+    color: colors.themeBlack,
   },
   dateTxt: {
-    fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(12),
-    color: "lightgrey",
+    fontFamily: activeFonts.ThinItalic,
+    fontSize: fontSizes.SmallText,
+    color: "darkgrey",
   },
   contentTxt: {
-    fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(16),
-    color: "black",
+    fontFamily: activeFonts.Light,
+    fontSize: fontSizes.StandardText,
+    color: colors.themeBlack,
   },
   replyTxt: {
-    fontFamily: "Itim_400Regular",
-    fontSize: moderateScale(14),
-    color: "white",
+    fontFamily: activeFonts.Medium,
+    fontSize: moderateScale(fontSizes.SmallText),
+    color: colors.themeBlack,
     marginTop: moderateScale(5),
     marginLeft: moderateScale(25),
     borderBottomWidth: 0,

@@ -2,16 +2,12 @@ import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Keyboard, Dimensions } from "react-native";
 import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
-import InputFieldLg from "../reusables/textInputLarge";
 import TextInputField from "../authentication/textInput";
-import { MaterialIcons } from "@expo/vector-icons";
 import { scale, moderateScale } from "react-native-size-matters";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { getSiteNamesThatFit } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
-import anchor from "../png/mapIcons/AnchorGold.png";
+import { MapBoundariesContext } from "../contexts/mapBoundariesContext";;
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
