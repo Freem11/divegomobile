@@ -22,6 +22,36 @@
         "lngPlaceholder": "Longitude",
         "latLngExplainer": "To place your business on the map",
         "submitButton" : "Submit"
+      },
+      "SearchPage" :
+      {
+        "header": "Map Navigation",
+        "placeholder": "Search by Dive Site name or Location",
+        "diveAddPrompt": "Can't find your dive site?",
+        "diveAddLink": "Tap here to add it!"
+      },
+      "DiveSiteAdd" :
+      {
+        "header": "Add a New Dive Site",
+        "siteNamePlaceholder": "Site Name",
+        "latPlaceholder": "Latitude",
+        "lngPlaceholder": "Longitude",
+        "myLocationButton" : "Use my current location",
+        "myLocationexplainer" : "This can take up to 30 seconds",
+        "pinButton" : "Drop a pin",
+        "submitButton" : "Submit"
+      },
+      "PicUploader" :
+      {
+        "header": "Your Sea Creature Sighting",
+        "uploadButton" : "Upload a Photo",
+        "whatLabel": "What you saw",
+        "whatPlaceholder": "Sea Life Encountered",
+        "whenLabel": "When you saw it",
+        "whenPlaceholder": "Date of Sighting",
+        "whereLabel": "Where you saw it",
+        "wherePlaceholder": "Location of Sighting",
+        "submitButton" : "Submit"
       }
     }
 

@@ -248,10 +248,13 @@ export default function DiveSite(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.screenCloseButton}>
-        <CloseButton onClose={() => onClose()} />
-      </View>
-
+           <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={colors.themeWhite}
+        onPress={() => onClose()}
+        style={styles.backButton}
+      />
       <TouchableWithoutFeedback
         onPress={openPicUploader}
       >
@@ -375,8 +378,11 @@ const styles = StyleSheet.create({
     { zIndex: 1, position: "absolute", top: "6%", right: "5%" },
   ],
   contributeButton: [
-    { zIndex: 10, position: "absolute", top: "6%", left: "3%" },
+    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
     screenSecondaryButton,
+  ],
+  backButton: [
+    { zIndex: 10, position: "absolute", top: "5.5%", left: "2%" },
   ],
   contributeButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   addPhotoButton: [
