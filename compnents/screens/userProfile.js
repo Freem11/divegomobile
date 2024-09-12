@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     color: colors.themeBlack,
   },
   scrollViewBox: {
-    height: windowHeight / 3.5,
+    height: windowHeight / 4.5,
   },
   screenCloseButton: [
     { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
