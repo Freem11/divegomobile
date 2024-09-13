@@ -15,9 +15,6 @@ import {
 import { moderateScale } from "react-native-size-matters";
 import Picture from "../modals/picture";
 import { activeFonts, colors, fontSizes } from "../styles";
-import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
-import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,10 +24,6 @@ export default function BottomDrawer(props) {
   const photosRef = useRef(null);
   const boxheight = useSharedValue("30%");
   const [bounds, setBounds] = useState({});
-
-  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   useEffect(() => {
     setBounds({ lower: lowerBound, upper: upperBound });
@@ -52,12 +45,6 @@ export default function BottomDrawer(props) {
       }),
     };
   });
-
-  const togglePhotoBoxModal = (photo) => {
-    setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
-  };
 
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
@@ -82,14 +69,9 @@ export default function BottomDrawer(props) {
           keyExtractor={(item) => item.id}
           data={dataSet}
           renderItem={({ item }) => (
-            <TouchableWithoutFeedback
-              key={item.id}
-              onPress={() => togglePhotoBoxModal(item.photofile)}
-            >
               <View style={styles.shadowbox}>
                 <Picture key={item.id} pic={item}></Picture>
               </View>
-            </TouchableWithoutFeedback>
           )}
         />
       ) : (

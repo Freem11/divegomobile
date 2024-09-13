@@ -25,6 +25,7 @@ export default function PhotoBoxModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
 
+  console.log("HERE", selectedPhoto)
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 

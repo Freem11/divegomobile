@@ -1,16 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
-import { StyleSheet, Image, Dimensions } from "react-native";
+import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
 import { AnchorModalContext } from "../contexts/anchorModalContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
+
 const windowWidth = Dimensions.get("window").width;
 
 export default function ImageCasherDynamic(Props) {
   const { photoFile, id, style, anchorPics } = Props;
+
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
 
   const { areaPics } = useContext(AreaPicsContext);
   const { siteModal } = useContext(AnchorModalContext);
@@ -99,13 +111,24 @@ export default function ImageCasherDynamic(Props) {
     });
   }
 
+  const togglePhotoBoxModal = (photo) => {
+    setSelectedPhoto(photo);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
+  };
+
 
   if (picUri) {
     return (
-      <Image
-        source={{ uri: picUri }}
-        style={{ ...style, height: picHeigth, width: picWidth }}
-      ></Image>
+      <TouchableWithoutFeedback
+        key={id}
+        onPress={() => togglePhotoBoxModal(picUri)}
+      >
+        <Image
+          source={{ uri: picUri }}
+          style={{ ...style, height: picHeigth, width: picWidth }}
+        ></Image>
+      </TouchableWithoutFeedback>
     );
   }
 }
