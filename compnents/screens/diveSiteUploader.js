@@ -30,7 +30,7 @@ import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { MaterialIcons } from "@expo/vector-icons";
-import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
+import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
@@ -60,7 +60,7 @@ export default function DiveSiteUploader(props) {
       addSiteVals.Latitude.length > 0 &&
       addSiteVals.Longitude.length > 0
     ) {
-      insertPhotoWaits(addSiteVals);
+      insertDiveSiteWaits(addSiteVals);
       setAddSiteVals({
         ...addSiteVals,
         Site: "",
@@ -206,6 +206,7 @@ export default function DiveSiteUploader(props) {
       <WavyHeaderDynamic
         customStyles={styles.svgCurve}
         image={null}
+        defaultImg={'diveSitePhoto'}
       ></WavyHeaderDynamic>
     </View>
   );
