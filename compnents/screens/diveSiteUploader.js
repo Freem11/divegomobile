@@ -23,6 +23,9 @@ import {
 } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+import { MapHelperContext } from "../contexts/mapHelperContext";
+import { MapConfigContext } from "../contexts/mapConfigContext";
+import { ModalSelectContext } from "../contexts/modalSelectContext";
 
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -42,6 +45,10 @@ export default function DiveSiteUploader(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+  const { setMapHelper } = useContext(MapHelperContext);
+  const { setMapConfig } = useContext(MapConfigContext);
+  const { setChosenModal } = useContext(ModalSelectContext);
+
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -83,6 +90,14 @@ export default function DiveSiteUploader(props) {
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
+  };
+
+  const onNavigate = () => {
+    Keyboard.dismiss();
+      setChosenModal("DiveSite");
+      setMapHelper(true);
+      setMapConfig(1);
+      setLevelTwoScreen(false);
   };
 
   const onClose = async () => {
@@ -164,7 +179,7 @@ export default function DiveSiteUploader(props) {
             </View>
           </TouchableWithoutFeedback>
 
-          <TouchableWithoutFeedback onPress={null}>
+          <TouchableWithoutFeedback onPress={() => onNavigate()}>
             <View style={styles.pinButton}>
               <Text style={styles.pinText}>
                 {screenData.DiveSiteAdd.pinButton}
