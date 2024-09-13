@@ -229,23 +229,16 @@ export default function Picture(props) {
           />
           <Text style={styles.titleText}>{pic.label}</Text>
         </View>
-        <TouchableWithoutFeedback
-          key={pic.id}
-          onPress={() => togglePhotoBoxModal(pic.photofile)}
-        >
-          <View style={{height: windowWidth, width: windowWidth}}>
-          <ImageCasherDynamic
-            photoFile={pic.photofile}
-            id={pic.id}
-            style={{
-              borderRadius: moderateScale(15),
-              resizeMode: "cover",
-              marginTop: moderateScale(-22),
-              // backgroundColor: "pink",
-            }}
-          />
-          </View>
-        </TouchableWithoutFeedback>
+        <ImageCasherDynamic
+          photoFile={pic.photofile}
+          id={pic.id}
+          style={{
+            borderRadius: moderateScale(15),
+            resizeMode: "cover",
+            marginTop: moderateScale(-22),
+            // backgroundColor: "pink",
+          }}
+        />
         {countOfLikes > 0 ? (
           <View style={styles.countIndicator}>
             <Text style={styles.countDisplay}>{countOfLikes}</Text>
