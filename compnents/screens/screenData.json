@@ -33,10 +33,10 @@
       "DiveSiteAdd" :
       {
         "header": "Add a New Dive Site",
-        "siteNamePlaceholder": "Site Name",
+        "siteNamePlaceholder": "Dive Site Name",
         "latPlaceholder": "Latitude",
         "lngPlaceholder": "Longitude",
-        "myLocationButton" : "Use my current location",
+        "myLocationButton" : "Use my location",
         "myLocationexplainer" : "This can take up to 30 seconds",
         "pinButton" : "Drop a pin",
         "submitButton" : "Submit"

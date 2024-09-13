@@ -34,7 +34,6 @@ export default function ProfileButton() {
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
-
     setPreviousButtonID(activeScreen);
     setActiveScreen("ProfileScreen");
     useButtonPressHelper(

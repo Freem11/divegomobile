@@ -134,6 +134,7 @@ export const screenSecondaryButton = {
 
   elevation: 10,
 }
+
 export const roundButton = {
   // backgroundColor: colors.primaryBlue,
   width: moderateScale(50),
