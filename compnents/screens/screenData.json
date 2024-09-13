@@ -52,6 +52,16 @@
         "whereLabel": "Where you saw it",
         "wherePlaceholder": "Location of Sighting",
         "submitButton" : "Submit"
+      },
+      "UserProfile" :
+      {
+        "drawerHeader" : "'s Sea Creature Encounters",
+        "emptyDrawer": " hasn't posted any sightings yet."
+      },
+      "DiveSite" :
+      {
+        "drawerHeader" : "Sea Creature Sightings",
+        "emptyDrawer": "No sightings at this site yet."
       }
     }
 

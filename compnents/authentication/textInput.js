@@ -1,7 +1,14 @@
 import React from "react";
 import { Platform, StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { MaterialIcons, FontAwesome6, MaterialCommunityIcons, Entypo, Ionicons } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  FontAwesome6,
+  MaterialCommunityIcons,
+  Entypo,
+  Ionicons,
+  Fontisto
+} from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
 
 export default function TextInputField(props) {
@@ -15,28 +22,39 @@ export default function TextInputField(props) {
     vectorIcon,
     handleClear,
     animal,
-    keyboardConfig
+    keyboardConfig,
   } = props;
 
+  let keyboardValue;
 
-let keyboardValue
-
-  if(keyboardConfig === "number-pad"){
-    if(Platform.OS === "ios") {
-      keyboardValue= "numbers-and-punctuation"
+  if (keyboardConfig === "number-pad") {
+    if (Platform.OS === "ios") {
+      keyboardValue = "numbers-and-punctuation";
     }
   }
 
-  if(!keyboardConfig){
-      keyboardValue = "default"
+  if (!keyboardConfig) {
+    keyboardValue = "default";
   }
 
   return (
     <View style={styles.container}>
-{!vectorIcon ? <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
-{vectorIcon === 'MaterialCommunityIcons' ? <MaterialCommunityIcons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
-{vectorIcon === 'Entypo' ? <Entypo name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
-{vectorIcon === 'Ionicons' ? <Ionicons name={icon} size={moderateScale(24)} color="darkgrey" /> : null}
+      {!vectorIcon ? (
+        <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" />
+      ) : null}
+      {vectorIcon === "MaterialCommunityIcons" ? (
+        <MaterialCommunityIcons
+          name={icon}
+          size={moderateScale(24)}
+          color="darkgrey"
+        />
+      ) : null}
+      {vectorIcon === "Entypo" ? (
+        <Entypo name={icon} size={moderateScale(24)} color="darkgrey" />
+      ) : null}
+      {vectorIcon === "Ionicons" ? (
+        <Ionicons name={icon} size={moderateScale(24)} color="darkgrey" />
+      ) : null}
 
       <TextInput
         style={styles.input}
@@ -67,15 +85,29 @@ let keyboardValue
           />
         )
       ) : null}
-    {(placeHolderText === "Sea Life Encountered" || placeHolderText === "Search by Dive Site name or Location") && animal.length > 1 ? (
-             <MaterialIcons
-             name="highlight-remove"
-             size={moderateScale(22)}
-             color="darkgrey"
-             onPress={() => handleClear()}
-           />
-    ): <View style={{width: moderateScale(22)}}></View>}
+      {(placeHolderText === "Sea Life Encountered" ||
+        placeHolderText === "Search by Dive Site name or Location") &&
+      animal.length > 1 ? (
+        <MaterialIcons
+          name="highlight-remove"
+          size={moderateScale(22)}
+          color="darkgrey"
+          onPress={() => handleClear()}
+        />
+      ) : (
+        <View style={{ width: moderateScale(22) }}></View>
+      )}
 
+      {placeHolderText === "Blow some bubbles" ? (
+        <Fontisto
+          name="snorkel"
+          size={moderateScale(22)}
+          color="darkgrey"
+          onPress={() => handleClear()}
+        />
+      ) : (
+        <View style={{ width: moderateScale(22) }}></View>
+      )}
     </View>
   );
 }
@@ -85,9 +117,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderBottomColor: "darkgrey",
     borderBottomWidth: moderateScale(2),
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: colors.themeWhite,
-    borderRadius: moderateScale(5)
+    borderRadius: moderateScale(5),
   },
   input: {
     width: "83%",

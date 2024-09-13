@@ -6,11 +6,11 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { scale, moderateScale } from "react-native-size-matters";
 import DiveSiteButton from "./diveSiteButton";
 import SiteSearchButton from "./siteSearchButton";
-import SettingsButton from "./settingsButton";
 import GuidesButton from "./guidesButton";
 import ItineraryListButton from "./itineraryCreatorButton";
 import ProfileButton from "./profileButton";
@@ -96,7 +96,6 @@ export default function FABMenu() {
         ]}
       >
               <ProfileButton/>
-              <SettingsButton/>
               <SiteSearchButton/>
               <DiveSiteButton/>
               {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton/>}
@@ -115,26 +114,5 @@ const styles = StyleSheet.create({
     zIndex: 90,
     elevation: 90,
     width: numbButtons * moderateScale(80)
-  },
-  picContainer2: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 0,
-  },
-  titleText: {
-    textAlign: "center",
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(15),
-    marginLeft: scale(12),
-  },
-  noSightings: {
-    width: scale(200),
-    alignItems: "center",
-    textAlign: "center",
-    marginTop: scale(15),
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(15),
-    color: "#F0EEEB",
-  },
+  }
 });

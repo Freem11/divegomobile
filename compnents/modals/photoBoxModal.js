@@ -24,7 +24,6 @@ const windowHeight = Dimensions.get("window").height;
 export default function PhotoBoxModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
-
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
@@ -320,6 +319,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+    zIndex: 26
   },
   closeButton: {
     position: "absolute",

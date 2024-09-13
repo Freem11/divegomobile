@@ -5,6 +5,7 @@ import { scale } from "react-native-size-matters";
 import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
@@ -71,7 +72,7 @@ export default function PhotoFilterer() {
         placeholder={"Dive Deeper!"}
         value={textvalue}
         placeholderTextColor="darkgrey"
-        color="black"
+        color={colors.themeBlack}
         onChangeText={handleChange}
       ></TextInput>
       <TouchableOpacity
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "white",
+    backgroundColor: colors.themeWhite,
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: scale(10),
     paddingRight: 5,
     paddingLeft: 12,
-    fontSize: "2rem",
+    fontSize: fontSizes.StandardText,
   },
   suggestInput: {
     fontSize: windowWidth > 600 ? scale(10) : scale(12),

@@ -5,7 +5,7 @@ import {
   Dimensions,
   Image,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
@@ -42,7 +42,9 @@ const windowWidth = Dimensions.get("window").width;
 export default function Picture(props) {
   const { pic } = props;
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
+  const { largeModalSecond, setLargeModalSecond } = useContext(
+    LargeModalSecondContext
+  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeButtonID, setActiveButtonID } = useContext(
     ActiveButtonIDContext
@@ -64,7 +66,6 @@ export default function Picture(props) {
     }).catch(console.error);
   };
 
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [base64, setBase64] = useState(null);
   const [userN, setUserN] = useState(null);
   const [creastureN, setCreastureN] = useState(null);
@@ -75,7 +76,9 @@ export default function Picture(props) {
   const { setCommentsModal } = useContext(CommentsModalContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
   const { setProfileModal } = useContext(ProfileModalContext);
-  const { selectedProfile, setSelectedProfile } =useContext(SelectedProfileContext);
+  const { selectedProfile, setSelectedProfile } = useContext(
+    SelectedProfileContext
+  );
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
@@ -103,15 +106,15 @@ export default function Picture(props) {
   const handleFollow = async (userName) => {
     let picOwnerAccount = await grabProfileByUserName(userName);
 
-    if (profile[0].UserID === picOwnerAccount[0].UserID){
-      return
+    if (profile[0].UserID === picOwnerAccount[0].UserID) {
+      return;
     }
 
-    setSelectedProfile(picOwnerAccount[0].UserID)
+    setSelectedProfile(picOwnerAccount[0].UserID);
     setPreviousButtonID(activeButtonID);
     setActiveButtonID("UserProfileButton");
     setLargeModalSecond(!largeModalSecond);
-    setLargeModal(!largeModal)
+    setLargeModal(!largeModal);
   };
 
   const convertBase64 = (cacheDir) => {
@@ -138,7 +141,6 @@ export default function Picture(props) {
   };
 
   const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
-
     let local = await getPhotoLocation(lat, lng);
 
     setMapLocal(local);
@@ -192,6 +194,12 @@ export default function Picture(props) {
     setBase64(null);
   }, [base64]);
 
+  const togglePhotoBoxModal = (photo) => {
+    setSelectedPhoto(photo);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
+  };
+
   return (
     <View style={styles.outterBox}>
       <View style={styles.container}>
@@ -221,7 +229,6 @@ export default function Picture(props) {
           />
           <Text style={styles.titleText}>{pic.label}</Text>
         </View>
-
         <ImageCasherDynamic
           photoFile={pic.photofile}
           id={pic.id}
@@ -259,7 +266,10 @@ export default function Picture(props) {
           </Text>
         </View>
       </View>
-      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)} style={{height: moderateScale(30), backgroundColor: 'pink'}}>
+      <TouchableWithoutFeedback
+        onPress={() => handleCommentModal(pic)}
+        style={{ height: moderateScale(30), backgroundColor: "pink" }}
+      >
         <View
           // onPress={() => handleCommentModal(pic)}
           style={{
@@ -274,9 +284,7 @@ export default function Picture(props) {
             // backgroundColor: 'pink'
           }}
         >
-          <Text
-            style={styles.commentPrompt}
-          >
+          <Text style={styles.commentPrompt}>
             {pic.commentcount < 1
               ? "Be first to Comment"
               : `Comment / View all ${pic.commentcount} Comments`}{" "}
@@ -302,7 +310,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "white",
     borderTopRightRadius: scale(10),
     width: "100%",
-    padding: moderateScale(2)
+    padding: moderateScale(2),
   },
   titleText: {
     // textAlign: "center",

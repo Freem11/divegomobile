@@ -7,11 +7,11 @@ import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
-
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
+import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
@@ -86,21 +86,20 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
-    height: moderateScale(53),
-    marginTop: moderateScale(-2),
+    height: moderateScale(55),
   },
   buttonlabel: {
-    fontFamily: "Itim_400Regular",
-    color: "white",
-    fontSize: moderateScale(13),
+    fontFamily: activeFonts.Medium,
+    color: colors.themeWhite,
+    fontSize: fontSizes.SmallText,
     marginTop: moderateScale(0),
   },
   buttonlabelAlt: {
-    fontFamily: "Itim_400Regular",
-    color: "gold",
-    fontSize: moderateScale(13),
+    fontFamily: activeFonts.Medium,
+    color: colors.secondaryYellow,
+    fontSize: fontSizes.SmallText,
     marginTop: moderateScale(0),
   },
 });

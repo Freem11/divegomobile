@@ -1,13 +1,21 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Dimensions, Text, ScrollView, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Text,
+  ScrollView,
+  Platform,
+} from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import CloseButton from '../reusables/closeButton';
+import CloseButton from "../reusables/closeButton";
 import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
-import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
+import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
@@ -17,6 +25,7 @@ import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { chooseImageHandler } from "./imageUploadHelpers";
+import BottomDrawer from "./animatedBottomDrawer";
 import {
   uploadphoto,
   removePhoto,
@@ -30,12 +39,20 @@ export default function UserProfile(props) {
   const { profile } = useContext(UserProfileContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+  const { levelOneScreen, setLevelOneScreen } = useContext(
+    LevelOneScreenContext
+  );
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);
   const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
+
+  const drawerUpperBound = "90%";
+  const drawerLowerBound = "30%";
+
   useEffect(() => {
     setProfileVals({
       id: profile[0].UserID,
@@ -64,7 +81,7 @@ export default function UserProfile(props) {
           id: profileVals.id,
           username: profileVals.userName,
           bio: profileVals.bio,
-          photo: profileVals.profilePhoto
+          photo: profileVals.profilePhoto,
         });
         if (success[0].length === 0 && profileVals) {
           setProfileVals({ ...profileVals, userName: tempUserName });
@@ -90,18 +107,21 @@ export default function UserProfile(props) {
         let picture = await fetch(uri);
         picture = await picture.blob();
         await uploadphoto(picture, fileName);
-        if(profileVals.photo !== null || profileVals.photo === ""){
+        if (profileVals.photo !== null || profileVals.photo === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: profileVals.photo.split("/").pop()
+            fileName: profileVals.photo.split("/").pop(),
           });
         }
-        
+
         setProfileVals({
           ...profileVals,
           photo: `animalphotos/public/${fileName}`,
         });
-        const success = await updateProfile({...profileVals, photo: `animalphotos/public/${fileName}`})
+        const success = await updateProfile({
+          ...profileVals,
+          photo: `animalphotos/public/${fileName}`,
+        });
       }
     } catch (e) {
       console.log("error: Photo Selection Cancelled", e.message);
@@ -109,8 +129,8 @@ export default function UserProfile(props) {
   };
 
   const onClose = () => {
-    setLevelTwoScreen(false)
-  }
+    setLevelTwoScreen(false);
+  };
 
   const openSettings = () => {
     setLevelTwoScreen(false);
@@ -122,13 +142,11 @@ export default function UserProfile(props) {
       levelOneScreen,
       setLevelOneScreen
     );
-
   };
-
 
   return (
     <View style={styles.container}>
-        <MaterialIcons
+      <MaterialIcons
         name="chevron-left"
         size={moderateScale(48)}
         color={colors.themeWhite}
@@ -202,6 +220,14 @@ export default function UserProfile(props) {
         customStyles={styles.svgCurve}
         image={profileVals && profileVals.photo}
       ></WavyHeaderDynamic>
+
+      <BottomDrawer
+        dataSet={[]}
+        lowerBound={drawerLowerBound}
+        upperBound={drawerUpperBound}
+        drawerHeader={profile[0].UserName + screenData.UserProfile.drawerHeader}
+        emptyDrawer={profile[0].UserName + screenData.UserProfile.emptyDrawer}
+      />
     </View>
   );
 }
@@ -212,7 +238,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
-    height: windowHeight
+    height: windowHeight,
   },
   contentContainer: {
     alignItems: "left",
@@ -220,7 +246,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight/2.2,
+    marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight / 2.2,
     width: "100%",
   },
   header: {
@@ -235,14 +261,12 @@ const styles = StyleSheet.create({
     color: colors.themeBlack,
   },
   scrollViewBox: {
-    height: windowHeight / 3.5,
+    height: windowHeight / 4.5,
   },
   screenCloseButton: [
     { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
   ],
-  backButton: [
-    { zIndex: 50, position: "absolute", top: "5%", left: "2%" },
-  ],
+  backButton: [{ zIndex: 50, position: "absolute", top: "5%", left: "2%" }],
   settingsButton: [
     { zIndex: 50, position: "absolute", top: "5%", right: "3%" },
   ],
