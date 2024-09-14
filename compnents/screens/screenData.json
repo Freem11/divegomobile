@@ -53,6 +53,14 @@
         "wherePlaceholder": "Location of Sighting",
         "submitButton" : "Submit"
       },
+      "TripList" :
+      {
+        "header": "Your Dive Trip Offerings",
+        "creatNewTripButton": "New Trip",
+        "expandTrip": "More Info",
+        "editButton": "Edit",
+        "deleteButton": "Delete"
+      },
       "UserProfile" :
       {
         "drawerHeader" : "'s Sea Creature Encounters",

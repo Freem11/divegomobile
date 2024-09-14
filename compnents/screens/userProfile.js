@@ -11,8 +11,7 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import CloseButton from "../reusables/closeButton";
-import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+import { activeFonts, colors, fontSizes } from "../styles";
 import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
@@ -21,6 +20,7 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 
 import { UserProfileContext } from "../contexts/userProfileContext";
+import { getPhotosByUserWithExtra } from '../../supabaseCalls/photoSupabaseCalls';
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
@@ -52,6 +52,15 @@ export default function UserProfile(props) {
 
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
+
+  const grabBoobs = async () => {
+    const success = await getPhotosByUserWithExtra(profile[0].UserID);
+    console.log("DATA_PROFILE", success)
+  }
+  
+  useEffect(() => {
+    grabBoobs()
+  }, [])
 
   useEffect(() => {
     setProfileVals({

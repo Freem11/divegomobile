@@ -11,7 +11,7 @@ import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import DiveSite from '../screens/diveSite';
 import Settings from '../screens/settings';
 import SearchPage from '../screens/search';
-import { activeFonts } from "../styles";
+import TripListPage from '../screens/tripList';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -45,6 +45,8 @@ export default function LevelOneScreen() {
       {activeScreen === "DiveSiteScreen" && <DiveSite/>}
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}
+      {activeScreen === "TripListScreen" && <TripListPage/>}
+
     </Animated.View>
   );
 }

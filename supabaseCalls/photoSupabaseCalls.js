@@ -108,6 +108,45 @@ export const getPhotosforMapArea = async (value, myCreatures) => {
   }
 };
 
+export const getPhotosByDiveSiteWithExtra = async (values) => {
+  console.log(values);
+  const {
+    data,
+    error,
+  } = await supabase.rpc("get_photos_for_divesite_lat_and_lng_groupby_date", {
+    lat: values.lat,
+    lng: values.lng
+  });
+
+  if (error) {
+    console.error("couldn't do it 30,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
+export const getPhotosByUserWithExtra = async (userId) => {
+  console.log(userId);
+  const {
+    data,
+    error,
+  } = await supabase.rpc("get_photos_by_userid_groupby_divesite_date", {
+    userid: userId,
+  });
+
+  if (error) {
+    console.error("couldn't do it 31,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
 export const getPhotosWithUser = async (values) => {
   const { data, error } = await supabase.rpc("get_photos_with_user", {
     animals: values.animalMultiSelection,

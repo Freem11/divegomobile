@@ -8,8 +8,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
 
@@ -19,13 +17,7 @@ export default function ProfileButton() {
     ActiveScreenContext
     );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-
-
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
-    LargeModalSecondContext
-  );
-  const { setSmallModal } = useContext(SmallModalContext);
 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
