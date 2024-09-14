@@ -206,6 +206,22 @@ export default function TripCreatorPage(props) {
     getTripDiveSites();
   };
 
+
+  const handleClose = () => {
+    setEditMode(false);
+    setFormValues({
+      BookingLink: "",
+      TripName: "",
+      StartDate: "",
+      EndDate: "",
+      Price: "",
+      TripDesc:  "",
+      DiveSites: [],
+      ShopId: null,
+    });
+    setLevelTwoScreen(false);
+  
+  };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
@@ -213,7 +229,7 @@ export default function TripCreatorPage(props) {
         name="chevron-left"
         size={moderateScale(48)}
         color={"darkgrey"}
-        onPress={() => setLevelTwoScreen(false)}
+        onPress={() => handleClose()}
         style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
       />
 

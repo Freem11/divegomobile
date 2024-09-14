@@ -74,7 +74,7 @@
         "tripDescriptionPlaceholder" : "Please add any further details about your trip that you think would be helpful in promoting your trip to divers, right here",
         "submitButton" : "Submit",
         "selectSitesButton": "Select Dive Sites",
-        "drawerHeader" : "Possible Sites in this Trip",
+        "drawerHeader" : "Possible Sites in this Trip   (Press to Remove)",
         "emptyDrawer": "No Dive Sites have been added to this Trip yet."
       },
       "UserProfile" :

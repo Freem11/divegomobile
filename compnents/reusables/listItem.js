@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import CloseButtonSmall from "./closeButtonSmall";
 import { activeFonts, colors, fontSizes } from "../styles";
@@ -11,14 +11,11 @@ export default function ListItem(props) {
 
   console.log(props)
   return (
+    <TouchableWithoutFeedback onPress={buttonAction}>
     <View style={styles.container}>
-      <View style={styles.titleBox}>
         <Text style={styles.titleText}>{titleText}</Text>
-      </View>
-      <View style={styles.altButton}>
-       <CloseButtonSmall onClose={buttonAction} />
-      </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -26,28 +23,22 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     padding: "1%",
     marginTop: "1%",
-    minHeight: moderateScale(30),
-    width: "98%",
+    marginLeft: "1%",
+    minHeight: moderateScale(40),
+    width: windowWidth -(windowWidth/100)*3,
     overflow: "hidden",
     backgroundColor: colors.themeWhite,
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
     borderRadius: moderateScale(5),
   },
-  titleBox: {
-    width: "120%",
-    paddingLeft: moderateScale(5)
-    // backgroundColor: "purple"
-  },
   titleText: {
-    width:"70%",
-    flexWrap: "wrap",
     fontFamily: activeFonts.Light,
     color: colors.themeBlack,
-    fontSize: fontSizes.SmallText,
+    fontSize: fontSizes.StandardText,
     // backgroundColor: "purple",
   },
   altButton: {
@@ -58,6 +49,6 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     height: "100%",
     width: "10%",
-    marginRight: moderateScale(5)
+    marginRight: moderateScale(-5)
   },
 });

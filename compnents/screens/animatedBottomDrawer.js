@@ -78,6 +78,7 @@ export default function BottomDrawer(props) {
     setLevelTwoScreen(false);
   };
 
+  console.log(dataSet)
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
       <GestureDetector gesture={animatedBottomDrawer}>
@@ -124,7 +125,14 @@ export default function BottomDrawer(props) {
           )}
         />
       ) : (
-        <View>
+        <View style={{alignItems: "center"}}>
+         {dataSetType === "Trips" ? (
+              <View style={styles.flatListHeader}>
+                <View style={styles.selectSitesButton}>
+            <Text style={styles.selectSitesText}>{headerButton}</Text>
+                </View>
+              </View>
+            ) : null}
           <Text style={styles.noSightings}>{emptyDrawer}</Text>
         </View>
       )}
