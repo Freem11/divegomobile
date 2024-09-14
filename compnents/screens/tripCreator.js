@@ -21,6 +21,7 @@ import screenData from "./screenData.json";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
+  insertItinerary,
   getItineraryDiveSiteByIdArray,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
@@ -222,6 +223,44 @@ export default function TripCreatorPage(props) {
     setLevelTwoScreen(false);
   
   };
+
+  const handleSubmit = () => {
+    if (
+      formValues.TripName === "" ||
+      formValues.BookingLink === "" ||
+      formValues.StartDate === "" ||
+      formValues.EndDate === "" ||
+      formValues.Price === 0 ||
+      formValues.TripDesc === "" ||
+      formValues.DiveSites.length === 0
+    ) {
+      editMode
+        ? setConfirmationType("Trip Edit")
+        : setConfirmationType("Trip Submission");
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
+      return;
+    } else {
+      editMode ? insertItineraryRequest(formValues, "Edit") : insertItinerary(formValues);
+      setFormValues({
+        ...formValues,
+        BookingLink: "",
+        TripName: "",
+        StartDate: "",
+        EndDate: "",
+        Price: 0,
+        TripDesc: "",
+        DiveSites: [],
+      });
+      setSitesArray([]);
+      setValue("$0.00");
+      editMode
+        ? setConfirmationType("Trip Edit")
+        : setConfirmationType("Trip Submission");
+      setActiveConfirmationID("ConfirmationSuccess");
+      setConfirmationModal(true);
+    }
+  };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
@@ -328,7 +367,7 @@ export default function TripCreatorPage(props) {
       </View>
 
       <View style={styles.buttonBox}>
-          <TouchableWithoutFeedback onPress={() => onSubmit()}>
+          <TouchableWithoutFeedback onPress={() => handleSubmit()}>
             <View style={styles.submitButton}>
         <Text style={styles.submitText}>{screenData.TripCreator.submitButton}</Text>
               <MaterialIcons

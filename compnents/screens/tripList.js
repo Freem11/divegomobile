@@ -22,6 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
+import { ShopContext } from "../../compnents/contexts/shopContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
@@ -40,6 +41,7 @@ export default function TripListPage(props) {
   const {} = props;
   const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
+  const { setShop } = useContext(ShopContext);
   const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
 
@@ -63,6 +65,10 @@ export default function TripListPage(props) {
   useEffect(() => {
     getItineraries(profile[0].UserID);
   }, []);
+
+  useEffect(() => {
+    setShop(itineraryList[0]?.shopID);
+  }, [itineraryList]);
 
   const getItineraries = async (IdNum) => {
     try {
