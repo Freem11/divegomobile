@@ -61,6 +61,18 @@
         "editButton": "Edit",
         "deleteButton": "Delete"
       },
+      "TripCreator" :
+      {
+        "header": "Create a New Dive Trip",
+        "headerEdit": "Submit Trip Edits",
+        "cloneButton": "Clone This Trip",
+        "tripMamePlaceholder": "Your Trip's Name",
+        "bookingLinkPlaceholder": "Link to your booking page",
+        "pricePlaceholder": "Trip Price",
+        "startDatePlaceholder": "Start Date",
+        "endDatePlaceholder": "End Date",
+        "submitButton" : "Submit"
+      },
       "UserProfile" :
       {
         "drawerHeader" : "'s Sea Creature Encounters",

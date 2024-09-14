@@ -3,10 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  FlatList,
+  Keyboard,
   Dimensions,
   TouchableWithoutFeedback,
 } from "react-native";
+import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import {
   activeFonts,
   colors,
@@ -15,14 +16,20 @@ import {
   buttonTextAlt,
 } from "../styles";
 import screenData from "./screenData.json";
-import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
+import {
+  getItinerariesByUserId,
+  insertItineraryRequest,
+} from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import Itinerary from "../itineraries/itinerary";
+import TextInputField from "../authentication/textInput";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
@@ -32,21 +39,25 @@ import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDCon
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
+import { ShopContext } from "../contexts/shopContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function TripListPage(props) {
+export default function TripCreatorPage(props) {
   const {} = props;
   const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
   const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
-  
+  const [dateType, setDateType] = useState("");
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const { shop } = useContext(ShopContext);
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  
+
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -59,6 +70,17 @@ export default function TripListPage(props) {
   );
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
+
+  const [formValues, setFormValues] = useState({
+    BookingLink: (editMode && editMode.itineraryInfo.BookingPage) || "",
+    TripName: (editMode && editMode.itineraryInfo.tripName) || "",
+    StartDate: (editMode && editMode.itineraryInfo.startDate) || "",
+    EndDate: (editMode && editMode.itineraryInfo.endDate) || "",
+    Price: (editMode && editMode.itineraryInfo.price) || 0,
+    TripDesc: (editMode && editMode.itineraryInfo.description) || "",
+    DiveSites: (editMode && editMode.itineraryInfo.siteList) || sitesArray || [],
+    ShopId: (editMode && editMode.itineraryInfo.shopID) || shop,
+  });
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
@@ -74,31 +96,29 @@ export default function TripListPage(props) {
       console.log({ title: "Error", message: e.message });
     }
   };
-
-  const openTripCreatorScreen = () => {
-    setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("TripCreatorScreen");
-    useButtonPressHelper(
-      "TripCreatorScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
-  };
-
+  // const openPartnerAccountScreen = () => {
+  //   setLevelOneScreen(false);
+  //   setPreviousButtonID(activeScreen);
+  //   setActiveScreen("PartnerRequestScreen");
+  //   useButtonPressHelper(
+  //     "PartnerRequestScreen",
+  //     activeScreen,
+  //     levelTwoScreen,
+  //     setLevelTwoScreen
+  //   );
+  // };
 
   const handleEditButton = (itineraryInfo) => {
-    setPreviousButtonID(activeButtonID);
-    setActiveScreen("TripCreatorScreen");
-    setEditMode({ itineraryInfo, IsEditModeOn: true });
-    setLevelOneScreen(false);
-    useButtonPressHelper(
-      "TripCreatorScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
+    // setPreviousButtonID(activeButtonID);
+    // setActiveScreen("TripCreator");
+    // setEditMode({ itineraryInfo, IsEditModeOn: true });
+    // setLevelOneScreen(false);
+    // useButtonPressHelper(
+    //   "TripCreator",
+    //   activeButtonID,
+    //   largeModalSecond,
+    //   setLargeModalSecond
+    // );
   };
 
   const handleDeleteButton = (itineraryInfo) => {
@@ -120,7 +140,67 @@ export default function TripListPage(props) {
     setConfirmationModal(true);
   };
 
+  //currency formatter stuff
+  const { format: formatCurrency } = Intl.NumberFormat("en-Us", {
+    currency: "USD",
+    style: "currency",
+  });
 
+  function useATMInput() {
+    const [value, setValue] = useState(
+      editMode ? editMode.itineraryInfo.price : "$0.00"
+    );
+    function handleChange(value) {
+      const decimal = Number(value.replace(/\D/g, "")) / 100;
+      setValue(formatCurrency(decimal || 0).replace("R$\xa0", ""));
+    }
+    return [value, handleChange];
+  }
+
+  const [value, setValue] = useATMInput();
+
+  useEffect(() => {
+    setFormValues({ ...formValues, Price: value });
+  }, [value]);
+
+//date picker stuff
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
+
+  const showDatePicker = (value) => {
+    setDateType(value);
+    Keyboard.dismiss();
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleDatePickerConfirm = (date) => {
+    let formattedDate = moment(date).format("YYYY-MM-DD");
+
+    console.log(dateType, formattedDate, formValues.StartDate)
+    if (dateType === "StartDate") {
+      if (formValues.EndDate.length > 0 && formValues.EndDate < formattedDate) {
+        return;
+      }
+    }
+
+    if (dateType === "EndDate") {
+      if (
+        formValues.StartDate.length > 0 &&
+        formValues.StartDate > formattedDate
+      ) {
+        return;
+      }
+    }
+
+    setFormValues({ ...formValues, [dateType]: formattedDate });
+    hideDatePicker();
+  };
+
+  console.log("made it?", formValues)
 
   return (
     <View style={styles.container}>
@@ -132,47 +212,63 @@ export default function TripListPage(props) {
         style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
       />
 
-      <TouchableWithoutFeedback onPress={() => openTripCreatorScreen()}>
-        <View style={styles.creatNewButton}>
-          <Text style={styles.createNewText}>
-            {screenData.TripList.creatNewTripButton}
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
+      {editMode && (
+        <TouchableWithoutFeedback onPress={null}>
+          <View style={styles.creatNewButton}>
+            <Text style={styles.createNewText}>
+              {screenData.TripCreator.cloneButton}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+      )}
 
       <View style={styles.content}>
-        <Text style={styles.header}>{screenData.TripList.header}</Text>
+        {editMode ? (
+          <Text style={styles.header}>{screenData.TripCreator.headerEdit}</Text>
+        ) : (
+          <Text style={styles.header}>{screenData.TripCreator.header}</Text>
+        )}
       </View>
 
-      <FlatList
-        style={styles.page}
-        contentContainerStyle={styles.pageContainer}
-        ref={tripsRef}
-        pagingEnabled
-        horizontal={false}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={moderateScale(290)}
-        snapToAlignment="center"
-        decelerationRate="normal"
-        keyExtractor={(item) => item.id}
-        data={itineraryList}
-        renderItem={({ item }) => (
-          <View style={styles.shadowbox}>
-            <Itinerary
-              key={item.id}
-              itinerary={item}
-              setSelectedID={setSelectedID}
-              selectedID={selectedID}
-              setShopModal={setShopModal}
-              buttonOneText="Edit"
-              buttonOneIcon="pencil"
-              buttonOneAction={() => handleEditButton(item)}
-              buttonTwoText="Delete"
-              buttonTwoIcon="delete-forever"
-              buttonTwoAction={() => handleDeleteButton(item)}
-            />
-          </View>
-        )}
+      <TextInputField
+        icon={"attach-money"}
+        inputValue={formValues.Price}
+        placeHolderText={screenData.TripCreator.pricePlaceholder}
+        secure={false}
+        inputValue={value}
+        keyboardType={"numbers-and-punctuation"}
+        onChangeText={setValue}
+      />
+
+      <Toucher onPress={() => showDatePicker("StartDate")}>
+        <View pointerEvents="none">
+          <TextInputField
+            icon={"calendar-month-outline"}
+            inputValue={formValues.StartDate}
+            placeHolderText={screenData.TripCreator.startDatePlaceholder}
+            secure={false}
+            vectorIcon={"MaterialCommunityIcons"}
+          />
+        </View>
+      </Toucher>
+
+      <Toucher onPress={() => showDatePicker("EndDate")}>
+        <View pointerEvents="none">
+          <TextInputField
+            icon={"calendar-month-outline"}
+            inputValue={formValues.EndDate}
+            placeHolderText={screenData.TripCreator.endDatePlaceholder}
+            secure={false}
+            vectorIcon={"MaterialCommunityIcons"}
+          />
+        </View>
+      </Toucher>
+
+      <DateTimePickerModal
+        isVisible={datePickerVisible}
+        mode="date"
+        onConfirm={handleDatePickerConfirm}
+        onCancel={hideDatePicker}
       />
     </View>
   );
@@ -188,7 +284,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: "90%",
-    marginBottom: "5%"
+    marginBottom: "5%",
   },
   header: {
     zIndex: 10,
