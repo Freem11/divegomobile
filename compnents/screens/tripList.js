@@ -42,7 +42,7 @@ export default function TripListPage(props) {
   const { profile } = useContext(UserProfileContext);
   const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
-  
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
@@ -89,7 +89,7 @@ export default function TripListPage(props) {
 
 
   const handleEditButton = (itineraryInfo) => {
-    setPreviousButtonID(activeButtonID);
+    setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
     setEditMode({ itineraryInfo, IsEditModeOn: true });
     setLevelOneScreen(false);

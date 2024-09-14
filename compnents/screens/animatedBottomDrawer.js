@@ -14,13 +14,38 @@ import {
 } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import Picture from "../modals/picture";
-import { activeFonts, colors, fontSizes } from "../styles";
+import ListItem from "../reusables/listItem";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  primaryButton,
+  buttonText,
+} from "../styles";
+import { MapHelperContext } from "../contexts/mapHelperContext";
+import { MapConfigContext } from "../contexts/mapConfigContext";
+import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function BottomDrawer(props) {
-  const { dataSet, lowerBound, upperBound, drawerHeader, emptyDrawer } = props;
+  const {
+    dataSet,
+    dataSetType,
+    lowerBound,
+    upperBound,
+    drawerHeader,
+    emptyDrawer,
+    headerButton
+  } = props;
+
+  const { setMapHelper } = useContext(MapHelperContext);
+  const { setMapConfig } = useContext(MapConfigContext);
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+
   const photosRef = useRef(null);
   const boxheight = useSharedValue(lowerBound);
   const [bounds, setBounds] = useState({});
@@ -46,6 +71,13 @@ export default function BottomDrawer(props) {
     };
   });
 
+  const onNavigate = () => {
+    Keyboard.dismiss();
+    setMapHelper(true);
+    setMapConfig(3);
+    setLevelTwoScreen(false);
+  };
+
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
       <GestureDetector gesture={animatedBottomDrawer}>
@@ -59,6 +91,15 @@ export default function BottomDrawer(props) {
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
+          ListHeaderComponent={
+            dataSetType === "Trips" ? (
+              <View style={styles.flatListHeader}>
+                <View style={styles.selectSitesButton}>
+            <Text style={styles.selectSitesText}>{headerButton}</Text>
+                </View>
+              </View>
+            ) : null
+          }
           ref={photosRef}
           pagingEnabled
           horizontal={false}
@@ -69,9 +110,17 @@ export default function BottomDrawer(props) {
           keyExtractor={(item) => item.id}
           data={dataSet}
           renderItem={({ item }) => (
-              <View style={styles.shadowbox}>
-                <Picture key={item.id} pic={item}></Picture>
-              </View>
+            <View>
+              {dataSetType === "Trips" ? (
+                <ListItem key={item.id} titleText={item}></ListItem>
+              ) : null}
+
+              {dataSetType === "DiveSitePhotos" ? (
+                <View style={styles.shadowbox}>
+                  <Picture key={item.id} pic={item}></Picture>
+                </View>
+              ) : null}
+            </View>
           )}
         />
       ) : (
@@ -108,6 +157,17 @@ const styles = StyleSheet.create({
     height: moderateScale(30),
     width: "100%",
   },
+  flatListHeader: {
+    width: windowWidth,
+    alignItems: "center",
+    justifyContent: "center",
+    height: moderateScale(60),
+  },
+  selectSitesButton: [
+    primaryButton,
+    { zIndex: 10 },
+  ],
+  selectSitesText: [buttonText, { marginHorizontal: moderateScale(5) }],
   tab: {
     backgroundColor: colors.themeBlack,
     height: moderateScale(5),

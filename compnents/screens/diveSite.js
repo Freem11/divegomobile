@@ -333,6 +333,7 @@ export default function DiveSite(props) {
 
       <BottomDrawer
         dataSet={diveSitePics}
+        dataSetType={"DiveSitePhotos"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
         drawerHeader={screenData.DiveSite.drawerHeader}

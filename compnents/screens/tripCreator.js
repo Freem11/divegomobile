@@ -21,6 +21,7 @@ import screenData from "./screenData.json";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
+  getItineraryDiveSiteByIdArray,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import TextInputField from "../authentication/textInput";
@@ -28,7 +29,6 @@ import PlainTextInput from "./plaintextInput";
 import BottomDrawer from "./animatedBottomDrawer";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
@@ -54,6 +54,8 @@ export default function TripCreatorPage(props) {
   const { profile } = useContext(UserProfileContext);
   const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
+
+  const [tripDiveSites, setTripDiveSites] = useState([]);
   const [dateType, setDateType] = useState("");
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { shop } = useContext(ShopContext);
@@ -166,7 +168,43 @@ export default function TripCreatorPage(props) {
     hideDatePicker();
   };
 
-  console.log("made it?", formValues);
+
+  //Handling the Dive site list 
+  useEffect(() => {
+    getTripDiveSites();
+  }, []);
+
+
+  // useEffect(() => {
+  //   setFormValues({ ...formValues, DiveSites: sitesArray });
+  //   setSitesArray(formValues.DiveSites)
+  //   getTripDiveSites();
+  // }, [sitesArray.length]);
+
+  const getTripDiveSites = async () => {
+    try {
+      const success = await getItineraryDiveSiteByIdArray(formValues.DiveSites);
+      if (success) {
+        setTripDiveSites(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
+  const removeFromSitesArray = async (siteIdNo) => {
+    const index = sitesArray.indexOf(siteIdNo);
+    if (index > -1) {
+      sitesArray.splice(index, 1);
+    }
+    setSitesArray(sitesArray);
+
+    const indexLocal = formValues.DiveSites.indexOf(siteIdNo);
+    if (indexLocal > -1) {
+      formValues.DiveSites.splice(index, 1);
+    }
+    getTripDiveSites();
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -287,11 +325,13 @@ export default function TripCreatorPage(props) {
         </View>
 
         <BottomDrawer
-        dataSet={[]}
+        dataSet={formValues.DiveSites}
+        dataSetType={"Trips"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
         drawerHeader={screenData.TripCreator.drawerHeader}
         emptyDrawer={screenData.TripCreator.emptyDrawer}
+        headerButton={screenData.TripCreator.selectSitesButton}
       />
 
       <DateTimePickerModal
