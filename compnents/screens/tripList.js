@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
   Text,
-  Alert,
+  FlatList,
   Dimensions,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -15,27 +15,39 @@ import {
   buttonTextAlt,
 } from "../styles";
 import screenData from "./screenData.json";
+import { getItinerariesByUserId } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
+import Itinerary from "../itineraries/itinerary";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
+import { ShopModalContext } from "../contexts/shopModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TripListPage(props) {
   const {} = props;
-
+  const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
+  const { setShopModal } = useContext(ShopModalContext);
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -43,7 +55,23 @@ export default function TripListPage(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+  const [itineraryList, setItineraryList] = useState("");
+  const [selectedID, setSelectedID] = useState(null);
 
+  useEffect(() => {
+    getItineraries(profile[0].UserID);
+  }, []);
+
+  const getItineraries = async (IdNum) => {
+    try {
+      const itins = await getItinerariesByUserId(IdNum);
+      if (itins.length > 0) {
+        setItineraryList(itins[0].itineraries);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
   // const openPartnerAccountScreen = () => {
   //   setLevelOneScreen(false);
   //   setPreviousButtonID(activeScreen);
@@ -56,10 +84,38 @@ export default function TripListPage(props) {
   //   );
   // };
 
- 
- 
 
+  const handleEditButton = (itineraryInfo) => {
+    // setPreviousButtonID(activeButtonID);
+    // setActiveScreen("TripCreator");
+    // setEditMode({ itineraryInfo, IsEditModeOn: true });
+    // setLevelOneScreen(false);
+    // useButtonPressHelper(
+    //   "TripCreator",
+    //   activeButtonID,
+    //   largeModalSecond,
+    //   setLargeModalSecond
+    // );
+  };
 
+  const handleDeleteButton = (itineraryInfo) => {
+    insertItineraryRequest(
+      {
+        BookingLink: itineraryInfo.BookingPage,
+        TripName: itineraryInfo.tripName,
+        StartDate: itineraryInfo.startDate,
+        EndDate: itineraryInfo.endDate,
+        Price: itineraryInfo.price,
+        TripDesc: itineraryInfo.description,
+        DiveSites: itineraryInfo.siteList,
+        ShopId: itineraryInfo.shopID,
+      },
+      "Delete"
+    );
+    setConfirmationType("Trip Delete");
+    setActiveConfirmationID("ConfirmationSuccess");
+    setConfirmationModal(true);
+  };
 
 
 
@@ -73,15 +129,48 @@ export default function TripListPage(props) {
         style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
       />
 
-<TouchableWithoutFeedback onPress={null}>
+      <TouchableWithoutFeedback onPress={null}>
         <View style={styles.creatNewButton}>
-  <Text style={styles.createNewText}>{screenData.TripList.creatNewTripButton}</Text>
+          <Text style={styles.createNewText}>
+            {screenData.TripList.creatNewTripButton}
+          </Text>
         </View>
       </TouchableWithoutFeedback>
 
       <View style={styles.content}>
         <Text style={styles.header}>{screenData.TripList.header}</Text>
       </View>
+
+      <FlatList
+        style={styles.page}
+        contentContainerStyle={styles.pageContainer}
+        ref={tripsRef}
+        pagingEnabled
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        snapToInterval={moderateScale(290)}
+        snapToAlignment="center"
+        decelerationRate="normal"
+        keyExtractor={(item) => item.id}
+        data={itineraryList}
+        renderItem={({ item }) => (
+          <View style={styles.shadowbox}>
+            <Itinerary
+              key={item.id}
+              itinerary={item}
+              setSelectedID={setSelectedID}
+              selectedID={selectedID}
+              setShopModal={setShopModal}
+              buttonOneText="Edit"
+              buttonOneIcon="calendar-edit"
+              buttonOneAction={() => handleEditButton(itinerary)}
+              buttonTwoText="Delete"
+              buttonTwoIcon="delete-forever"
+              buttonTwoAction={() => handleDeleteButton(itinerary)}
+            />
+          </View>
+        )}
+      />
     </View>
   );
 }
@@ -96,6 +185,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: "90%",
+    marginBottom: "5%"
   },
   header: {
     zIndex: 10,
@@ -114,9 +204,9 @@ const styles = StyleSheet.create({
   },
   subHeadersDanger: {
     zIndex: 10,
-    position:"absolute",
+    position: "absolute",
     bottom: moderateScale(120),
-    marginTop: windowHeight/6,
+    marginTop: windowHeight / 6,
     fontSize: moderateScale(fontSizes.SubHeading),
     fontFamily: activeFonts.Medium,
     color: "maroon",
@@ -131,18 +221,18 @@ const styles = StyleSheet.create({
     borderBottomColor: "darkgrey",
   },
   dataHousingDanger: {
-    position:"absolute",
+    position: "absolute",
     bottom: moderateScale(40),
     backgroundColor: "#FCE4EC",
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: "5%",
     borderTopWidth: moderateScale(1),
     borderTopColor: "maroon",
     paddingBottom: "4%",
     borderBottomWidth: moderateScale(1),
     borderBottomColor: "maroon",
-    width: "90%"
+    width: "90%",
   },
   dataLabels: {
     zIndex: 10,

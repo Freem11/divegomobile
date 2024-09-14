@@ -9,6 +9,11 @@ import Animated, {
   useDerivedValue,
   interpolate,
 } from "react-native-reanimated";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+} from "../styles";
 
 export default function Itinerary(props) {
   const {
@@ -104,22 +109,18 @@ const styles = StyleSheet.create({
     marginBottom: scale(10),
   },
   shadowbox: {
-    flex: 1,
     flexDirection: "row",
-    backgroundColor: "#538dbd",
-    borderRadius: 10,
-    marginBottom: 10,
-    width: "100%",
-    height: scale(80),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-
-    elevation: 10,
+    height: moderateScale(75),
+    width: "98%",
+    marginLeft: "1%",
+    marginBottom: "2%",
+    backgroundColor: colors.themeWhite,
+    borderWidth: moderateScale(1),
+    borderColor: "darkgrey",
+    borderRadius: moderateScale(10),
+    textAlign: "center",
+    justifyContent: "center",
+    listStyle: "none",
   },
   moreBox: {
     flexDirection: "column",
@@ -136,17 +137,17 @@ const styles = StyleSheet.create({
     paddingLeft: moderateScale(-20)
   },
   tripName: {
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(15),
+    fontFamily: activeFonts.Light,
+    color: colors.themeBlack,
+    fontSize: moderateScale(fontSizes.StandardText),
     marginLeft: scale(10),
     marginTop: scale(5),
     height: "60%",
   },
   opener: {
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(12),
+    fontFamily: activeFonts.Medium,
+    color: colors.themeBlack,
+    fontSize: moderateScale(fontSizes.SmallText),
     marginLeft: scale(70),
     marginTop: scale(0),
   },
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
     width: "93%",
     marginTop: scale(-10),
-    backgroundColor: "#F0EEEB",
+    backgroundColor: colors.themeWhite,
     borderBottomEndRadius: scale(10),
     borderBottomStartRadius: scale(10),
     shadowColor: "#000",
@@ -171,9 +172,9 @@ const styles = StyleSheet.create({
   lowerText: {
     marginTop: scale(15),
     marginLeft: scale(30),
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(11),
-    color: "#000000",
+    fontFamily: activeFonts.lig,
+    fontSize: fontSizes.SmallText,
+    color: colors.themeBlack,
   },
   topRail: {
     flexDirection: "row",
@@ -183,13 +184,13 @@ const styles = StyleSheet.create({
     marginRight: scale(20),
   },
   dateText: {
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(12),
-    color: "#000000",
+    fontFamily: activeFonts.Medium,
+    fontSize: fontSizes.SmallText,
+    color: colors.themeBlack,
   },
   priceText: {
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(12),
-    color: "#000000",
+    fontFamily: activeFonts.Medium,
+    fontSize: fontSizes.SmallText,
+    color: colors.themeBlack,
   },
 });
