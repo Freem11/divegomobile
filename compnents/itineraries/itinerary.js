@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import MaterialCommunityIconsButton from "../reusables/materialCommunityIconsButton";
 import { scale, moderateScale } from "react-native-size-matters";
 import Animated, {
@@ -13,6 +15,8 @@ import {
   activeFonts,
   colors,
   fontSizes,
+  roundButton,
+  buttonTextAlt
 } from "../styles";
 
 export default function Itinerary(props) {
@@ -74,19 +78,22 @@ export default function Itinerary(props) {
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.buttonBox}>
-          <MaterialCommunityIconsButton
-            icon={buttonOneIcon}
-            buttonAction={buttonOneAction}
-            iconColour="gold"
-            buttonText={buttonOneText}
-          />
-          <MaterialCommunityIconsButton
-            icon={buttonTwoIcon}
-            buttonAction={buttonTwoAction}
-            iconColour="red"
-            buttonText={buttonTwoText}
-            
-          />
+          <View style={{width: "10%"}}></View>
+          <TouchableWithoutFeedback onPress={buttonOneAction}>
+              <MaterialCommunityIcons 
+              name={buttonOneIcon}
+              size={moderateScale(22)}
+              color={"darkgrey"}
+              onPress={buttonOneAction}/>  
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback onPress={buttonTwoAction}>
+              <MaterialCommunityIcons 
+              name={buttonTwoIcon}
+              size={moderateScale(22)}
+              color={"darkgrey"}
+              onPress={buttonTwoAction}/>  
+          </TouchableWithoutFeedback>
         </View>
       </View>
       <Animated.View style={[tabPullx, styles.extraBox]}>
@@ -127,14 +134,25 @@ const styles = StyleSheet.create({
     width: "58%",
     height: "100%",
   },
+  editButton: [
+    roundButton,
+    { flexDirection: "column" },
+  ],
+  editButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5), fontSize: moderateScale(fontSizes.SmallText) }],
+  deleteButton: [
+    roundButton,
+    { flexDirection: "column" },
+  ],
+  deltetButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5), fontSize: moderateScale(fontSizes.SmallText) }],
+  
   buttonBox: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
     width: "40%",
     height: "100%",
-    // backgroundColor: "pink",
-    paddingLeft: moderateScale(-20)
+    paddingHorizontal: "2%",
+    // backgroundColor: "pink"
   },
   tripName: {
     fontFamily: activeFonts.Light,

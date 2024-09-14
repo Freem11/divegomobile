@@ -15,7 +15,7 @@ import {
   buttonTextAlt,
 } from "../styles";
 import screenData from "./screenData.json";
-import { getItinerariesByUserId } from "../../supabaseCalls/itinerarySupabaseCalls";
+import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import Itinerary from "../itineraries/itinerary";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -162,11 +162,11 @@ export default function TripListPage(props) {
               selectedID={selectedID}
               setShopModal={setShopModal}
               buttonOneText="Edit"
-              buttonOneIcon="calendar-edit"
-              buttonOneAction={() => handleEditButton(itinerary)}
+              buttonOneIcon="pencil"
+              buttonOneAction={() => handleEditButton(item)}
               buttonTwoText="Delete"
               buttonTwoIcon="delete-forever"
-              buttonTwoAction={() => handleDeleteButton(itinerary)}
+              buttonTwoAction={() => handleDeleteButton(item)}
             />
           </View>
         )}

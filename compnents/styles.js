@@ -136,16 +136,17 @@ export const screenSecondaryButton = {
 }
 
 export const roundButton = {
-  // backgroundColor: colors.primaryBlue,
-  width: moderateScale(50),
-  height: moderateScale(50),
+  borderColor: "darkgrey",
+  borderWidth: moderateScale(1),
+  borderRadius: moderateScale(30),
+  width: moderateScale(55),
+  height: moderateScale(55),
   color: colors.themeWhite,
-  borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
   shadowColor: "#2d2d2d",
   shadowOffset: {
-    width: moderateScale(1),
+    width: moderateScale(3),
     height: moderateScale(1),
   },
   shadowOpacity: 0.5,
