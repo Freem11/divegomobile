@@ -22,6 +22,7 @@ import {
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import TextInputField from "../authentication/textInput";
+import PlainTextInput from "./plaintextInput";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -78,7 +79,8 @@ export default function TripCreatorPage(props) {
     EndDate: (editMode && editMode.itineraryInfo.endDate) || "",
     Price: (editMode && editMode.itineraryInfo.price) || 0,
     TripDesc: (editMode && editMode.itineraryInfo.description) || "",
-    DiveSites: (editMode && editMode.itineraryInfo.siteList) || sitesArray || [],
+    DiveSites:
+      (editMode && editMode.itineraryInfo.siteList) || sitesArray || [],
     ShopId: (editMode && editMode.itineraryInfo.shopID) || shop,
   });
 
@@ -163,7 +165,7 @@ export default function TripCreatorPage(props) {
     setFormValues({ ...formValues, Price: value });
   }, [value]);
 
-//date picker stuff
+  //date picker stuff
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [date, setDate] = useState(new Date());
 
@@ -180,7 +182,7 @@ export default function TripCreatorPage(props) {
   const handleDatePickerConfirm = (date) => {
     let formattedDate = moment(date).format("YYYY-MM-DD");
 
-    console.log(dateType, formattedDate, formValues.StartDate)
+    console.log(dateType, formattedDate, formValues.StartDate);
     if (dateType === "StartDate") {
       if (formValues.EndDate.length > 0 && formValues.EndDate < formattedDate) {
         return;
@@ -200,7 +202,7 @@ export default function TripCreatorPage(props) {
     hideDatePicker();
   };
 
-  console.log("made it?", formValues)
+  console.log("made it?", formValues);
 
   return (
     <View style={styles.container}>
@@ -228,41 +230,82 @@ export default function TripCreatorPage(props) {
         ) : (
           <Text style={styles.header}>{screenData.TripCreator.header}</Text>
         )}
+
+        <View style={styles.textBuffer}>
+          <TextInputField
+            icon={"store"}
+            inputValue={formValues.TripName}
+            placeHolderText={screenData.TripCreator.tripNamePlaceholder}
+            secure={false}
+            onChangeText={(text) =>
+              setFormValues({ ...formValues, TripName: text })
+            }
+          />
+        </View>
+
+        <View style={styles.textBuffer}>
+          <TextInputField
+            icon={"alternate-email"}
+            inputValue={formValues.BookingLink}
+            placeHolderText={screenData.TripCreator.bookingLinkPlaceholder}
+            secure={false}
+            onChangeText={(text) =>
+              setFormValues({ ...formValues, BookingLink: text })
+            }
+          />
+        </View>
+
+        <View style={styles.textBuffer}>
+          <TextInputField
+            icon={"attach-money"}
+            inputValue={formValues.Price}
+            placeHolderText={screenData.TripCreator.pricePlaceholder}
+            secure={false}
+            inputValue={value}
+            keyboardType={"numbers-and-punctuation"}
+            onChangeText={setValue}
+          />
+        </View>
+
+        <View style={styles.textBuffer}>
+          <Toucher onPress={() => showDatePicker("StartDate")}>
+            <View pointerEvents="none">
+              <TextInputField
+                icon={"calendar-month-outline"}
+                inputValue={formValues.StartDate}
+                placeHolderText={screenData.TripCreator.startDatePlaceholder}
+                secure={false}
+                vectorIcon={"MaterialCommunityIcons"}
+              />
+            </View>
+          </Toucher>
+        </View>
+
+        <View style={styles.textBuffer}>
+          <Toucher onPress={() => showDatePicker("EndDate")}>
+            <View pointerEvents="none">
+              <TextInputField
+                icon={"calendar-month-outline"}
+                inputValue={formValues.EndDate}
+                placeHolderText={screenData.TripCreator.endDatePlaceholder}
+                secure={false}
+                vectorIcon={"MaterialCommunityIcons"}
+              />
+            </View>
+          </Toucher>
+        </View>
+
+        <View style={styles.descriptionBox}>
+          <PlainTextInput
+            placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
+            content={formValues.TripDesc}
+            fontSz={fontSizes.StandardText}
+            onChangeText={(text) =>
+              setFormValues({ ...formValues, TripDesc: text })
+            }
+          />
+        </View>
       </View>
-
-      <TextInputField
-        icon={"attach-money"}
-        inputValue={formValues.Price}
-        placeHolderText={screenData.TripCreator.pricePlaceholder}
-        secure={false}
-        inputValue={value}
-        keyboardType={"numbers-and-punctuation"}
-        onChangeText={setValue}
-      />
-
-      <Toucher onPress={() => showDatePicker("StartDate")}>
-        <View pointerEvents="none">
-          <TextInputField
-            icon={"calendar-month-outline"}
-            inputValue={formValues.StartDate}
-            placeHolderText={screenData.TripCreator.startDatePlaceholder}
-            secure={false}
-            vectorIcon={"MaterialCommunityIcons"}
-          />
-        </View>
-      </Toucher>
-
-      <Toucher onPress={() => showDatePicker("EndDate")}>
-        <View pointerEvents="none">
-          <TextInputField
-            icon={"calendar-month-outline"}
-            inputValue={formValues.EndDate}
-            placeHolderText={screenData.TripCreator.endDatePlaceholder}
-            secure={false}
-            vectorIcon={"MaterialCommunityIcons"}
-          />
-        </View>
-      </Toucher>
 
       <DateTimePickerModal
         isVisible={datePickerVisible}
@@ -289,9 +332,21 @@ const styles = StyleSheet.create({
   header: {
     zIndex: 10,
     marginTop: "5%",
+    marginBottom: "5%",
     fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Bold,
     color: "darkgrey",
+  },
+  textBuffer: {
+    marginBottom: moderateScale(20),
+  },
+  descriptionBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: moderateScale(1),
+    borderColor: "darkgrey",
+    borderRadius: moderateScale(10),
+    paddingBottom: "2%"
   },
   subHeaders: {
     zIndex: 10,

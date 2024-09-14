@@ -23,6 +23,7 @@ export default function PlainTextInput(props) {
           {
             backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite,
             fontFamily: content ? activeFonts.Regular : activeFonts.Italic,
+            textAlign: placeHolder.length > 100 ? "center": 'left'
           },
         ]}
         value={content}
@@ -32,7 +33,8 @@ export default function PlainTextInput(props) {
         onChangeText={onChangeText}
         multiline={true}
       ></TextInput>
-      {isEditModeOn ? (
+      {placeHolder.length > 100 ? null :
+      isEditModeOn ? (
         <FontAwesome6
           name="check"
           size={moderateScale(16)}

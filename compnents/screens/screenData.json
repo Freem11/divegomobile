@@ -66,11 +66,12 @@
         "header": "Create a New Dive Trip",
         "headerEdit": "Submit Trip Edits",
         "cloneButton": "Clone This Trip",
-        "tripMamePlaceholder": "Your Trip's Name",
-        "bookingLinkPlaceholder": "Link to your booking page",
+        "tripNamePlaceholder": "Your Trip's Name",
+        "bookingLinkPlaceholder": "Link to your trip's booking page",
         "pricePlaceholder": "Trip Price",
         "startDatePlaceholder": "Start Date",
         "endDatePlaceholder": "End Date",
+        "tripDescriptionPlaceholder" : "Please add and further details about your trip that you think would be helpful in promoting your trip to divers here",
         "submitButton" : "Submit"
       },
       "UserProfile" :
