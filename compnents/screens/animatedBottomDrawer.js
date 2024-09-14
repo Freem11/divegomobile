@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, FlatList, Text } from "react-native";
+import { StyleSheet, View, Dimensions, FlatList, Text, Keyboard } from "react-native";
 import React, { useState, useContext, useEffect, useRef } from "react";
 import Animated, {
   useSharedValue,
@@ -37,7 +37,7 @@ export default function BottomDrawer(props) {
     upperBound,
     drawerHeader,
     emptyDrawer,
-    headerButton
+    headerButton,
   } = props;
 
   const { setMapHelper } = useContext(MapHelperContext);
@@ -78,7 +78,7 @@ export default function BottomDrawer(props) {
     setLevelTwoScreen(false);
   };
 
-  console.log(dataSet)
+  console.log(dataSet);
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
       <GestureDetector gesture={animatedBottomDrawer}>
@@ -95,9 +95,11 @@ export default function BottomDrawer(props) {
           ListHeaderComponent={
             dataSetType === "Trips" ? (
               <View style={styles.flatListHeader}>
-                <View style={styles.selectSitesButton}>
-            <Text style={styles.selectSitesText}>{headerButton}</Text>
-                </View>
+                <TouchableWithoutFeedback onPress={() => onNavigate()}>
+                  <View style={styles.selectSitesButton}>
+                    <Text style={styles.selectSitesText}>{headerButton}</Text>
+                  </View>
+                </TouchableWithoutFeedback>
               </View>
             ) : null
           }
@@ -125,14 +127,16 @@ export default function BottomDrawer(props) {
           )}
         />
       ) : (
-        <View style={{alignItems: "center"}}>
-         {dataSetType === "Trips" ? (
-              <View style={styles.flatListHeader}>
+        <View style={{ alignItems: "center" }}>
+          {dataSetType === "Trips" ? (
+            <View style={styles.flatListHeader}>
+              <TouchableWithoutFeedback onPress={() => onNavigate()}>
                 <View style={styles.selectSitesButton}>
-            <Text style={styles.selectSitesText}>{headerButton}</Text>
+                  <Text style={styles.selectSitesText}>{headerButton}</Text>
                 </View>
-              </View>
-            ) : null}
+              </TouchableWithoutFeedback>
+            </View>
+          ) : null}
           <Text style={styles.noSightings}>{emptyDrawer}</Text>
         </View>
       )}
@@ -171,10 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: moderateScale(60),
   },
-  selectSitesButton: [
-    primaryButton,
-    { zIndex: 10 },
-  ],
+  selectSitesButton: [primaryButton, { zIndex: 10 }],
   selectSitesText: [buttonText, { marginHorizontal: moderateScale(5) }],
   tab: {
     backgroundColor: colors.themeBlack,

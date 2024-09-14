@@ -350,8 +350,8 @@ export default function MapPage() {
   };
 
   const onTripSetNavigate = () => {
-    setLargeModalSecond(true);
-    setActiveButtonID("TripCreator");
+    setLevelTwoScreen(true);
+    setActiveScreen("TripCreatorScreen");
     setMapHelper(true);
     setMapConfig(0);
   };
