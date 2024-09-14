@@ -205,6 +205,7 @@ export default function TripCreatorPage(props) {
   console.log("made it?", formValues);
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
       <MaterialIcons
         name="chevron-left"
@@ -300,6 +301,7 @@ export default function TripCreatorPage(props) {
             placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
             content={formValues.TripDesc}
             fontSz={fontSizes.StandardText}
+            isEditModeOn={true}
             onChangeText={(text) =>
               setFormValues({ ...formValues, TripDesc: text })
             }
@@ -314,6 +316,7 @@ export default function TripCreatorPage(props) {
         onCancel={hideDatePicker}
       />
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

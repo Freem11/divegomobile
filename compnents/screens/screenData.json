@@ -71,7 +71,7 @@
         "pricePlaceholder": "Trip Price",
         "startDatePlaceholder": "Start Date",
         "endDatePlaceholder": "End Date",
-        "tripDescriptionPlaceholder" : "Please add and further details about your trip that you think would be helpful in promoting your trip to divers here",
+        "tripDescriptionPlaceholder" : "Please add any further details about your trip that you think would be helpful in promoting your trip to divers, right here",
         "submitButton" : "Submit"
       },
       "UserProfile" :

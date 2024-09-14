@@ -21,7 +21,7 @@ export default function PlainTextInput(props) {
         style={[
           styles.input,
           {
-            backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite,
+            backgroundColor: isEditModeOn && placeHolder.length < 100 ? "darkgrey" : colors.themeWhite,
             fontFamily: content ? activeFonts.Regular : activeFonts.Italic,
             textAlign: placeHolder.length > 100 ? "center": 'left'
           },
