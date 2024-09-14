@@ -14,6 +14,8 @@ import {
   fontSizes,
   screenSecondaryButton,
   buttonTextAlt,
+  authenicationButton,
+  buttonText
 } from "../styles";
 import screenData from "./screenData.json";
 import {
@@ -23,6 +25,7 @@ import {
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import TextInputField from "../authentication/textInput";
 import PlainTextInput from "./plaintextInput";
+import BottomDrawer from "./animatedBottomDrawer";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -72,6 +75,10 @@ export default function TripCreatorPage(props) {
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
 
+  const drawerUpperBound = "80%";
+  const drawerLowerBound = "15%";
+
+
   const [formValues, setFormValues] = useState({
     BookingLink: (editMode && editMode.itineraryInfo.BookingPage) || "",
     TripName: (editMode && editMode.itineraryInfo.tripName) || "",
@@ -97,49 +104,6 @@ export default function TripCreatorPage(props) {
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
-  };
-  // const openPartnerAccountScreen = () => {
-  //   setLevelOneScreen(false);
-  //   setPreviousButtonID(activeScreen);
-  //   setActiveScreen("PartnerRequestScreen");
-  //   useButtonPressHelper(
-  //     "PartnerRequestScreen",
-  //     activeScreen,
-  //     levelTwoScreen,
-  //     setLevelTwoScreen
-  //   );
-  // };
-
-  const handleEditButton = (itineraryInfo) => {
-    // setPreviousButtonID(activeButtonID);
-    // setActiveScreen("TripCreator");
-    // setEditMode({ itineraryInfo, IsEditModeOn: true });
-    // setLevelOneScreen(false);
-    // useButtonPressHelper(
-    //   "TripCreator",
-    //   activeButtonID,
-    //   largeModalSecond,
-    //   setLargeModalSecond
-    // );
-  };
-
-  const handleDeleteButton = (itineraryInfo) => {
-    insertItineraryRequest(
-      {
-        BookingLink: itineraryInfo.BookingPage,
-        TripName: itineraryInfo.tripName,
-        StartDate: itineraryInfo.startDate,
-        EndDate: itineraryInfo.endDate,
-        Price: itineraryInfo.price,
-        TripDesc: itineraryInfo.description,
-        DiveSites: itineraryInfo.siteList,
-        ShopId: itineraryInfo.shopID,
-      },
-      "Delete"
-    );
-    setConfirmationType("Trip Delete");
-    setActiveConfirmationID("ConfirmationSuccess");
-    setConfirmationModal(true);
   };
 
   //currency formatter stuff
@@ -211,7 +175,7 @@ export default function TripCreatorPage(props) {
         name="chevron-left"
         size={moderateScale(48)}
         color={"darkgrey"}
-        onPress={() => setLevelOneScreen(false)}
+        onPress={() => setLevelTwoScreen(false)}
         style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
       />
 
@@ -309,6 +273,27 @@ export default function TripCreatorPage(props) {
         </View>
       </View>
 
+      <View style={styles.buttonBox}>
+          <TouchableWithoutFeedback onPress={() => onSubmit()}>
+            <View style={styles.submitButton}>
+        <Text style={styles.submitText}>{screenData.TripCreator.submitButton}</Text>
+              <MaterialIcons
+                name="chevron-right"
+                size={30}
+                color={colors.themeWhite}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+
+        <BottomDrawer
+        dataSet={[]}
+        lowerBound={drawerLowerBound}
+        upperBound={drawerUpperBound}
+        drawerHeader={screenData.TripCreator.drawerHeader}
+        emptyDrawer={screenData.TripCreator.emptyDrawer}
+      />
+
       <DateTimePickerModal
         isVisible={datePickerVisible}
         mode="date"
@@ -335,7 +320,7 @@ const styles = StyleSheet.create({
   header: {
     zIndex: 10,
     marginTop: "5%",
-    marginBottom: "5%",
+    marginBottom: "8%",
     fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Bold,
     color: "darkgrey",
@@ -349,8 +334,21 @@ const styles = StyleSheet.create({
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
     borderRadius: moderateScale(10),
-    paddingBottom: "2%"
+    paddingBottom: "2%",
+    marginTop: "5%"
   },
+  buttonBox: {
+    zIndex: -1,
+    width: "90%",
+    alignItems: "flex-end",
+    marginTop: "-15%",
+    marginHorizontal: "15%",
+  },
+  submitButton: [
+    authenicationButton,
+    { flexDirection: "row", marginTop: windowHeight / 10 },
+  ],
+  submitText: [buttonText, { marginHorizontal: moderateScale(5) }],
   subHeaders: {
     zIndex: 10,
     marginTop: "10%",
@@ -424,12 +422,6 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.thin,
     color: colors.primaryBlue,
-  },
-  buttonBox: {
-    zIndex: -1,
-    width: "100%",
-    alignItems: "flex-end",
-    marginTop: moderateScale(-50),
   },
   creatNewButton: [
     screenSecondaryButton,

@@ -22,7 +22,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function BottomDrawer(props) {
   const { dataSet, lowerBound, upperBound, drawerHeader, emptyDrawer } = props;
   const photosRef = useRef(null);
-  const boxheight = useSharedValue("30%");
+  const boxheight = useSharedValue(lowerBound);
   const [bounds, setBounds] = useState({});
 
   useEffect(() => {
