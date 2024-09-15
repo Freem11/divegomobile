@@ -202,7 +202,7 @@ export default function Picture(props) {
   };
 
   return (
-    <View style={styles.outterBox}>
+    <View key={pic.id} style={styles.outterBox}>
       <View style={styles.container}>
         <View style={styles.micro}>
           <FontAwesome

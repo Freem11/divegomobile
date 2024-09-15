@@ -116,7 +116,7 @@ export default function BottomDrawer(props) {
           snapToInterval={moderateScale(290)}
           snapToAlignment="center"
           decelerationRate="normal"
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => `${item.id}-${item.dateTaken}`}
           data={dataSet}
           renderItem={({ item }) => (
             <View>
@@ -125,29 +125,25 @@ export default function BottomDrawer(props) {
               ) : null}
 
               {dataSetType === "DiveSitePhotos" ? (
-                <View style={styles.shadowbox}>
-                  <Picture key={item.id} pic={item.photos}></Picture>
+                <View key={item.id} style={styles.shadowbox}>
+                  <Picture pic={item.photos}></Picture>
                 </View>
               ) : null}
 
               {dataSetType === "ProfilePhotos" ? (
-                <View>
+                <View key={`${item.id}-${item.dateTaken}`}>
                   <View style={styles.locationHeader}>
                     <Text>{item.name}</Text>
                     <Text>{item.dateTaken}</Text>
                   </View>
                   {item.photos.length > 0 &&
-              item.photos.map((photo) => {
-                return (
-               <Picture key={photo.id} pic={photo}></Picture>
-                );
-              })}
-
-
-                  
+                    item.photos.map((photo) => {
+                      return (
+                        <Picture key={`${photo.id}-d`} pic={photo}></Picture>
+                      );
+                    })}
                 </View>
               ) : null}
-              
             </View>
           )}
         />
@@ -229,7 +225,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: moderateScale(50),
     width: windowWidth,
-    alignItems: 'center',
+    alignItems: "center",
     justifyContent: "space-around",
     borderBottomWidth: moderateScale(2),
     borderBottomColor: "darkgrey",
@@ -237,7 +233,7 @@ const styles = StyleSheet.create({
     borderTopColor: "darkgrey",
     marginTop: "5%",
     marginBottom: "2%",
-    backgroundColor: "lightgray"
+    backgroundColor: "lightgray",
   },
   noSightings: {
     marginTop: windowWidth > 600 ? "15%" : "25%",

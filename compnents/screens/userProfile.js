@@ -63,7 +63,6 @@ export default function UserProfile(props) {
     getPhotos()
   }, [])
 
-  console.log("THESE", profilePhotos)
   useEffect(() => {
     setProfileVals({
       id: profile[0].UserID,
