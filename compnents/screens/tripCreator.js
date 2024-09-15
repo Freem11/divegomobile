@@ -31,7 +31,7 @@ import BottomDrawer from "./animatedBottomDrawer";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, s } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
@@ -175,12 +175,12 @@ export default function TripCreatorPage(props) {
     getTripDiveSites();
   }, []);
 
-
-  // useEffect(() => {
-  //   setFormValues({ ...formValues, DiveSites: sitesArray });
-  //   setSitesArray(formValues.DiveSites)
-  //   getTripDiveSites();
-  // }, [sitesArray.length]);
+console.log("GOT", tripDiveSites)
+  useEffect(() => {
+    setFormValues({ ...formValues, DiveSites: sitesArray });
+    // setSitesArray(formValues.DiveSites)
+    getTripDiveSites();
+  }, [sitesArray.length]);
 
   const getTripDiveSites = async () => {
     try {
@@ -380,7 +380,7 @@ export default function TripCreatorPage(props) {
         </View>
 
         <BottomDrawer
-        dataSet={formValues.DiveSites}
+        dataSet={tripDiveSites}
         dataSetType={"Trips"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}

@@ -85,6 +85,7 @@ export default function BottomDrawer(props) {
     setLevelTwoScreen(false);
   };
 
+  console.log("WHAT", dataSet)
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
       <GestureDetector gesture={animatedBottomDrawer}>
@@ -94,7 +95,7 @@ export default function BottomDrawer(props) {
         </View>
       </GestureDetector>
 
-      {dataSet && dataSet.length > 0 ? (
+      {dataSet ? (
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
@@ -121,7 +122,7 @@ export default function BottomDrawer(props) {
           renderItem={({ item }) => (
             <View>
               {dataSetType === "Trips" ? (
-                <ListItem key={item.id} titleText={item}></ListItem>
+                <ListItem key={item.id} titleText={item.name}></ListItem>
               ) : null}
 
               {dataSetType === "DiveSitePhotos" ? (
@@ -139,7 +140,7 @@ export default function BottomDrawer(props) {
                   {item.photos.length > 0 &&
                     item.photos.map((photo) => {
                       return (
-                        <Picture key={`${photo.id}-d`} pic={photo}></Picture>
+                        <Picture key={`${photo.id}-d`} pic={photo} dataSetType={dataSetType} diveSiteName={item.name}></Picture>
                       );
                     })}
                 </View>
@@ -180,6 +181,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: moderateScale(10),
     borderTopLeftRadius: moderateScale(10),
     backgroundColor: colors.themeWhite,
+  },
+  page: {
+    width: windowWidth
   },
   handle: {
     zIndex: 11,

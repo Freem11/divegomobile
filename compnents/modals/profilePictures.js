@@ -29,8 +29,6 @@ import email from "react-native-email";
 import Share from "react-native-share";
 import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
 import liked from "../png/socialIcons/Hand-Filled-Blue.png";
-import { MaterialIcons } from "@expo/vector-icons";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
@@ -41,12 +39,8 @@ import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 const windowWidth = Dimensions.get("window").width;
 
-export default function Picture(props) {
-  const { pic, dataSetType, diveSiteName } = props;
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
-  const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
+export default function ProfilePictures(props) {
+  const { pic } = props;
 
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
@@ -122,15 +116,6 @@ export default function Picture(props) {
     setActiveButtonID("UserProfileButton");
     setLargeModalSecond(!largeModalSecond);
     setLargeModal(!largeModal);
-  };
-
-  const handleDiveSiteMove = async (pic) => {
-    setSelectedDiveSite({
-      SiteName: diveSiteName,
-      Latitude: pic.latitude,
-      Longitude: pic.longitude,
-    });
-    setLevelTwoScreen(false)
   };
 
   const convertBase64 = (cacheDir) => {
@@ -220,7 +205,6 @@ export default function Picture(props) {
     <View key={pic.id} style={styles.outterBox}>
       <View style={styles.container}>
         <View style={styles.micro}>
-        <Text style={styles.titleText}>{pic.label}</Text>
           <FontAwesome
             name="share"
             color="white"
@@ -244,6 +228,7 @@ export default function Picture(props) {
             onPress={() => handleEmail(pic)}
             style={styles.flag}
           />
+          <Text style={styles.titleText}>{pic.label}</Text>
         </View>
         <ImageCasherDynamic
           photoFile={pic.photoFile}
@@ -255,46 +240,31 @@ export default function Picture(props) {
             // backgroundColor: "pink",
           }}
         />
-        <View style={{ width: "100%", position: "absolute", bottom: 10, left: 7}}>
-          {countOfLikes > 0 ? (
-            <View style={styles.countIndicator}>
-              <Text style={styles.countDisplay}>{countOfLikes}</Text>
-            </View>
-          ) : null}
-          <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
-            <Image
-              source={picLiked ? liked : notLiked}
-              style={[
-                styles.likeIcon,
-                {
-                  height: moderateScale(30),
-                  width: moderateScale(30),
-                },
-              ]}
-            />
-          </TouchableWithoutFeedback>
-
-        
-            <View style={styles.microLow}>
-             {dataSetType === "ProfilePhotos" ?
-             <Text
-             style={styles.microLow2}
-             onPress={() => handleDiveSiteMove(pic)}
-           >
-             {" "}
-             Take me to this!
-           </Text>
-             
-             :
-             <Text
-                style={styles.microLow2}
-                onPress={() => handleFollow(pic.newusername)}
-              >
-                {" "}
-                Added by: {pic.newusername}
-              </Text> 
-              }
-            </View>
+        {countOfLikes > 0 ? (
+          <View style={styles.countIndicator}>
+            <Text style={styles.countDisplay}>{countOfLikes}</Text>
+          </View>
+        ) : null}
+        <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
+          <Image
+            source={picLiked ? liked : notLiked}
+            style={[
+              styles.likeIcon,
+              {
+                height: moderateScale(30),
+                width: moderateScale(30),
+              },
+            ]}
+          />
+        </TouchableWithoutFeedback>
+        <View style={styles.microLow}>
+          <Text
+            style={styles.microLow2}
+            onPress={() => handleFollow(pic.newusername)}
+          >
+            {" "}
+            Added by: {pic.newusername}
+          </Text>
         </View>
       </View>
       <TouchableWithoutFeedback
@@ -333,18 +303,29 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(5),
   },
   container: {
+    // flex: 1,
+    // justifyContent: "center",
+    // flexDirection: "column",
+    // overflow: "hidden",
     zIndex: 40,
+    // backgroundColor: "white",
     borderTopRightRadius: scale(10),
-    width: windowWidth,
+    width: "100%",
     padding: moderateScale(2),
   },
   titleText: {
+    // textAlign: "center",
+    alignItems: "flex-start",
+    alignContent: "flex-start",
     fontFamily: activeFonts.Light,
     color: colors.themeWhite,
     width: "77%",
     fontSize: moderateScale(fontSizes.StandardText),
+    marginLeft: scale(-30),
   },
   share: {
+    left: scale(232),
+    top: scale(1),
     opacity: 0.8,
     zIndex: 2,
   },
@@ -352,17 +333,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    // position: "relative",
     backgroundColor: colors.themeBlack,
     opacity: 0.7,
     width: "96%",
-    top: "1%",
-    marginLeft: "3%",
     borderRadius: 5,
     zIndex: 2,
-
+    left: scale(8),
+    top: Platform.OS === "ios" ? "2%" : "3%",
   },
   flag: {
+    left: scale(237),
+    top: scale(1),
     zIndex: 2,
   },
   likeIcon: {
@@ -372,7 +354,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 4,
     right: "2%",
-    bottom: Platform.OS === "ios" ? "10%" : "10%",
+    bottom: Platform.OS === "ios" ? "2%" : "2%",
     borderRadius: scale(5),
   },
   countIndicator: {
@@ -397,18 +379,24 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Bold,
   },
   microLow: {
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
     position: "absolute",
-    backgroundColor: colors.primaryBlue,
+    backgroundColor: colors.themeBlack,
+    width: "98%",
+    height: moderateScale(18),
+    opacity: 0.7,
     color: colors.themeWhite,
     fontFamily: activeFonts.Light,
-    paddingHorizontal: moderateScale(10),
-    paddingVertical: moderateScale(3),
+    padding: 1,
+    paddingLeft: scale(6),
+    paddingRight: scale(7),
     zIndex: 2,
-    left: "1%",
+    left: "2%",
     bottom: Platform.OS === "ios" ? "3%" : "3%",
-    borderRadius: scale(8),
+    borderRadius: scale(5),
   },
   microLow2: {
     display: "flex",
