@@ -49,19 +49,21 @@ export default function UserProfile(props) {
   const [profileVals, setProfileVals] = useState(null);
   const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
+  const [profilePhotos, setProfilePhotos] = useState(null);
 
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
-  const grabBoobs = async () => {
+  const getPhotos = async () => {
     const success = await getPhotosByUserWithExtra(profile[0].UserID);
-    console.log("DATA_PROFILE", success)
+    setProfilePhotos(success)
   }
   
   useEffect(() => {
-    grabBoobs()
+    getPhotos()
   }, [])
 
+  console.log("THESE", profilePhotos)
   useEffect(() => {
     setProfileVals({
       id: profile[0].UserID,
@@ -192,7 +194,7 @@ export default function UserProfile(props) {
             />
           )}
 
-          {userFail.length > 0 ? (
+          {userFail && userFail.length > 0 ? (
             <Text style={styles.erroMsg}>{userFail}</Text>
           ) : (
             <View style={styles.erroMsgEmpty}></View>
@@ -231,7 +233,8 @@ export default function UserProfile(props) {
       ></WavyHeaderDynamic>
 
       <BottomDrawer
-        dataSet={[]}
+        dataSet={profilePhotos}
+        dataSetType={"ProfilePhotos"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
         drawerHeader={profile[0].UserName + screenData.UserProfile.drawerHeader}
@@ -273,14 +276,14 @@ const styles = StyleSheet.create({
     height: windowHeight / 4.5,
   },
   screenCloseButton: [
-    { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
+    { zIndex: 10, position: "absolute", top: "5%", right: "5%" },
   ],
   backButton: [{ zIndex: 50, position: "absolute", top: "5%", left: "2%" }],
   settingsButton: [
-    { zIndex: 50, position: "absolute", top: "5%", right: "3%" },
+    { zIndex: 10, position: "absolute", top: "5%", right: "3%" },
   ],
   addPhotoButton: [
-    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
+    { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
   ],
   svgCurve: {
     position: "absolute",

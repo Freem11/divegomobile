@@ -1,4 +1,11 @@
-import { StyleSheet, View, Dimensions, FlatList, Text, Keyboard } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  FlatList,
+  Text,
+  Keyboard,
+} from "react-native";
 import React, { useState, useContext, useEffect, useRef } from "react";
 import Animated, {
   useSharedValue,
@@ -78,7 +85,6 @@ export default function BottomDrawer(props) {
     setLevelTwoScreen(false);
   };
 
-  console.log(dataSet);
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
       <GestureDetector gesture={animatedBottomDrawer}>
@@ -88,7 +94,7 @@ export default function BottomDrawer(props) {
         </View>
       </GestureDetector>
 
-      {dataSet.length > 0 ? (
+      {dataSet && dataSet.length > 0 ? (
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
@@ -120,9 +126,28 @@ export default function BottomDrawer(props) {
 
               {dataSetType === "DiveSitePhotos" ? (
                 <View style={styles.shadowbox}>
-                  <Picture key={item.id} pic={item}></Picture>
+                  <Picture key={item.id} pic={item.photos}></Picture>
                 </View>
               ) : null}
+
+              {dataSetType === "ProfilePhotos" ? (
+                <View>
+                  <View style={styles.locationHeader}>
+                    <Text>{item.name}</Text>
+                    <Text>{item.dateTaken}</Text>
+                  </View>
+                  {item.photos.length > 0 &&
+              item.photos.map((photo) => {
+                return (
+               <Picture key={photo.id} pic={photo}></Picture>
+                );
+              })}
+
+
+                  
+                </View>
+              ) : null}
+              
             </View>
           )}
         />
@@ -199,6 +224,20 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
 
     elevation: 10,
+  },
+  locationHeader: {
+    flexDirection: "row",
+    height: moderateScale(50),
+    width: windowWidth,
+    alignItems: 'center',
+    justifyContent: "space-around",
+    borderBottomWidth: moderateScale(2),
+    borderBottomColor: "darkgrey",
+    borderTopWidth: moderateScale(2),
+    borderTopColor: "darkgrey",
+    marginTop: "5%",
+    marginBottom: "2%",
+    backgroundColor: "lightgray"
   },
   noSightings: {
     marginTop: windowWidth > 600 ? "15%" : "25%",

@@ -41,6 +41,7 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
   const { pic } = props;
+
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
@@ -230,7 +231,7 @@ export default function Picture(props) {
           <Text style={styles.titleText}>{pic.label}</Text>
         </View>
         <ImageCasherDynamic
-          photoFile={pic.photofile}
+          photoFile={pic.photoFile}
           id={pic.id}
           style={{
             borderRadius: moderateScale(15),
