@@ -85,7 +85,6 @@ export default function BottomDrawer(props) {
     setLevelTwoScreen(false);
   };
 
-  console.log("WHAT", dataSet)
   return (
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
       <GestureDetector gesture={animatedBottomDrawer}>

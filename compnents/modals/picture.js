@@ -48,8 +48,6 @@ export default function Picture(props) {
   );
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
-
-  console.log("im better than azim",pic)
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext

@@ -92,14 +92,12 @@ export default function DiveSite(props) {
   const drawerLowerBound = "30%";
 
   const getPhotos = async () => {
-    console.log("HEYYYYY", selectedDiveSite)
     const success = await getPhotosByDiveSiteWithExtra({
       lat: selectedDiveSite.Latitude,
       lng: selectedDiveSite.Longitude,
       userId: profile[0].UserID
     });
     setDiveSitePics(success)
-    console.log("DATA-DIVE-SITE", success);
   };
 
   useEffect(() => {
@@ -180,7 +178,7 @@ export default function DiveSite(props) {
           maxLng,
         });
       }
-      console.log("phoots?", photos);
+
       if (photos) {
         // photos.unshift({ id: 0 });
         setDiveSitePics(photos);
