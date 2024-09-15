@@ -126,9 +126,17 @@ export default function BottomDrawer(props) {
               ) : null}
 
               {dataSetType === "DiveSitePhotos" ? (
-                <View key={item.id} style={styles.shadowbox}>
-                  <Picture pic={item.photos}></Picture>
-                </View>
+                   <View key={`${item.id}-${item.dateTaken}`}>
+                   <View style={styles.locationHeader}>
+                     <Text>{item.dateTaken}</Text>
+                   </View>
+                   {item.photos.length > 0 &&
+                     item.photos.map((photo) => {
+                       return (
+                         <Picture key={`${photo.id}-d`} pic={photo} dataSetType={dataSetType} diveSiteName={item.name}></Picture>
+                       );
+                     })}
+                 </View>
               ) : null}
 
               {dataSetType === "ProfilePhotos" ? (

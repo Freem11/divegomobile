@@ -48,6 +48,8 @@ export default function Picture(props) {
   );
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
+
+  console.log("im better than azim",pic)
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { largeModalSecond, setLargeModalSecond } = useContext(
     LargeModalSecondContext
@@ -288,10 +290,10 @@ export default function Picture(props) {
              :
              <Text
                 style={styles.microLow2}
-                onPress={() => handleFollow(pic.newusername)}
+                onPress={() => handleFollow(pic.UserName)}
               >
                 {" "}
-                Added by: {pic.newusername}
+                Added by: {pic.UserName}
               </Text> 
               }
             </View>
@@ -411,8 +413,6 @@ const styles = StyleSheet.create({
     borderRadius: scale(8),
   },
   microLow2: {
-    display: "flex",
-    width: "98%",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",

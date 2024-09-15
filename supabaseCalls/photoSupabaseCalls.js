@@ -109,13 +109,14 @@ export const getPhotosforMapArea = async (value, myCreatures) => {
 };
 
 export const getPhotosByDiveSiteWithExtra = async (values) => {
-  console.log(values);
+  console.log("VALS", values);
   const {
     data,
     error,
   } = await supabase.rpc("get_photos_for_divesite_lat_and_lng_groupby_date", {
     lat: values.lat,
-    lng: values.lng
+    lng: values.lng,
+    connecteduserid: values.userId
   });
 
   if (error) {
@@ -128,13 +129,14 @@ export const getPhotosByDiveSiteWithExtra = async (values) => {
   }
 };
 
-export const getPhotosByUserWithExtra = async (userId) => {
+export const getPhotosByUserWithExtra = async (userId, connectedUserId) => {
   console.log(userId);
   const {
     data,
     error,
   } = await supabase.rpc("get_photos_by_userid_groupby_divesite_date", {
     userid: userId,
+    connecteduserid: connectedUserId
   });
 
   if (error) {

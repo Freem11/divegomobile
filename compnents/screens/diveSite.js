@@ -91,18 +91,24 @@ export default function DiveSite(props) {
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
-  const grabBoobs = async () => {
+  const getPhotos = async () => {
     console.log("HEYYYYY", selectedDiveSite)
     const success = await getPhotosByDiveSiteWithExtra({
       lat: selectedDiveSite.Latitude,
-      lng: selectedDiveSite.Longitude
+      lng: selectedDiveSite.Longitude,
+      userId: profile[0].UserID
     });
+    setDiveSitePics(success)
     console.log("DATA-DIVE-SITE", success);
   };
 
   useEffect(() => {
-    grabBoobs();
+    getPhotos();
   }, []);
+
+    useEffect(() => {
+      getPhotos();
+  }, [selectedDiveSite]);
 
   useEffect(() => {
     if (!isEditModeOn && site) {
@@ -121,15 +127,15 @@ export default function DiveSite(props) {
       console.log({ title: "Error19", message: e.message });
     }
   };
-  useEffect(() => {
-    getDiveSite(selectedDiveSite.SiteName);
-    filterAnchorPhotos();
-  }, [selectedDiveSite]);
+  // useEffect(() => {
+  //   getDiveSite(selectedDiveSite.SiteName);
+  //   filterAnchorPhotos();
+  // }, [selectedDiveSite]);
 
-  useEffect(() => {
-    getDiveSite(selectedDiveSite.SiteName);
-    filterAnchorPhotos();
-  }, []);
+  // useEffect(() => {
+  //   getDiveSite(selectedDiveSite.SiteName);
+  //   filterAnchorPhotos();
+  // }, []);
 
   const getDiveSite = async () => {
     try {

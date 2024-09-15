@@ -55,7 +55,7 @@ export default function UserProfile(props) {
   const drawerLowerBound = "30%";
 
   const getPhotos = async () => {
-    const success = await getPhotosByUserWithExtra(profile[0].UserID);
+    const success = await getPhotosByUserWithExtra(profile[0].UserID,profile[0].UserID);
     setProfilePhotos(success)
   }
   
