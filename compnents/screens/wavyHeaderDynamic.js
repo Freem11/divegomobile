@@ -20,13 +20,14 @@ export default function WavyHeaderDynamic({ customStyles, image, defaultImg }) {
 
   useEffect(() => {
     if (image) {
-      console.log("this?")
       let photoName = image.split("/").pop();
       setPicUri(
         `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`
       );
+    } else {
+      setPicUri(null)
     }
-  }, [image]);
+  }, [image, picUri]);
 
   return (
     <View style={styles.customStyles}>
