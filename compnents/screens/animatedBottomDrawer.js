@@ -62,7 +62,7 @@ export default function BottomDrawer(props) {
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
-  
+
   const photosRef = useRef(null);
   const boxheight = useSharedValue(lowerBound);
   const [bounds, setBounds] = useState({});
@@ -107,7 +107,6 @@ export default function BottomDrawer(props) {
   };
 
   const removeFromSitesArray = async (siteIdNo) => {
-    console.log("???", siteIdNo)
     const index = sitesArray.indexOf(siteIdNo);
     if (index > -1) {
       sitesArray.splice(index, 1);

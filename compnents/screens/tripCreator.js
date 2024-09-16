@@ -84,7 +84,6 @@ export default function TripCreatorPage(props) {
   const drawerLowerBound = "15%";
 
   useEffect(() => {
-    console.log("hmmm", formValues)
     getItineraries(profile[0].UserID);
     getTripDiveSites(sitesArray);
     setTripDiveSites(getTripDiveSites(formValues.siteList))
@@ -92,7 +91,6 @@ export default function TripCreatorPage(props) {
   }, []);
 
   useEffect(() => {
-    console.log("WTF", sitesArray)
     setFormValues({...formValues, siteList: sitesArray})
     getTripDiveSites(sitesArray);
     setTripDiveSites(getTripDiveSites(sitesArray))

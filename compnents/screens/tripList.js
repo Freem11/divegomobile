@@ -99,7 +99,6 @@ export default function TripListPage(props) {
 
 
   const handleEditButton = (itineraryInfo) => {
-    console.log(itineraryInfo)
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
     setEditMode({ itineraryInfo, IsEditModeOn: true });
