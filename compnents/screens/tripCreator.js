@@ -84,7 +84,7 @@ export default function TripCreatorPage(props) {
   const drawerLowerBound = "15%";
 
   useEffect(() => {
-    console.log("hmmm", sitesArray)
+    console.log("hmmm", formValues)
     getItineraries(profile[0].UserID);
     getTripDiveSites(sitesArray);
     setTripDiveSites(getTripDiveSites(formValues.siteList))
@@ -129,7 +129,7 @@ export default function TripCreatorPage(props) {
   const [value, setValue] = useATMInput();
 
   useEffect(() => {
-    setFormValues({ ...formValues, Price: value });
+    setFormValues({ ...formValues, price: value });
   }, [value]);
 
   //date picker stuff
@@ -149,16 +149,16 @@ export default function TripCreatorPage(props) {
   const handleDatePickerConfirm = (date) => {
     let formattedDate = moment(date).format("YYYY-MM-DD");
 
-    if (dateType === "StartDate") {
-      if (formValues.EndDate.length > 0 && formValues.EndDate < formattedDate) {
+    if (dateType === "startDate") {
+      if (formValues.endDate.length > 0 && formValues.endDate < formattedDate) {
         return;
       }
     }
 
-    if (dateType === "EndDate") {
+    if (dateType === "endDate") {
       if (
-        formValues.StartDate.length > 0 &&
-        formValues.StartDate > formattedDate
+        formValues.startDate.length > 0 &&
+        formValues.startDate > formattedDate
       ) {
         return;
       }
@@ -196,27 +196,27 @@ export default function TripCreatorPage(props) {
   const handleClose = () => {
     setEditMode(false);
     setFormValues({
-      BookingLink: "",
-      TripName: "",
-      StartDate: "",
-      EndDate: "",
-      Price: "",
-      TripDesc: "",
-      DiveSites: [],
-      ShopId: null,
+      ...formValues,
+      BookingPage: "",
+      tripName: "",
+      startDate: "",
+      endDate: "",
+      price: 0,
+      description: "",
+      siteList: [],
     });
     setLevelTwoScreen(false);
   };
 
   const handleSubmit = () => {
     if (
-      formValues.TripName === "" ||
-      formValues.BookingLink === "" ||
-      formValues.StartDate === "" ||
-      formValues.EndDate === "" ||
-      formValues.Price === 0 ||
-      formValues.TripDesc === "" ||
-      formValues.DiveSites.length === 0
+      formValues.tripName === "" ||
+      formValues.BookingPage === "" ||
+      formValues.startDate === "" ||
+      formValues.endDate === "" ||
+      formValues.price === 0 ||
+      formValues.description === "" ||
+      formValues.siteList.length === 0
     ) {
       editMode
         ? setConfirmationType("Trip Edit")
@@ -230,13 +230,13 @@ export default function TripCreatorPage(props) {
         : insertItinerary(formValues);
       setFormValues({
         ...formValues,
-        BookingLink: "",
-        TripName: "",
-        StartDate: "",
-        EndDate: "",
-        Price: 0,
-        TripDesc: "",
-        DiveSites: [],
+        BookingPage: "",
+        tripName: "",
+        startDate: "",
+        endDate: "",
+        price: 0,
+        description: "",
+        siteList: [],
       });
       setSitesArray([]);
       setValue("$0.00");
@@ -293,7 +293,7 @@ export default function TripCreatorPage(props) {
               placeHolderText={screenData.TripCreator.tripNamePlaceholder}
               secure={false}
               onChangeText={(text) =>
-                setFormValues({ ...formValues, TripName: text })
+                setFormValues({ ...formValues, tripName: text })
               }
             />
           </View>
@@ -305,7 +305,7 @@ export default function TripCreatorPage(props) {
               placeHolderText={screenData.TripCreator.bookingLinkPlaceholder}
               secure={false}
               onChangeText={(text) =>
-                setFormValues({ ...formValues, BookingLink: text })
+                setFormValues({ ...formValues, BookingPage: text })
               }
             />
           </View>
@@ -323,7 +323,7 @@ export default function TripCreatorPage(props) {
           </View>
 
           <View style={styles.textBuffer}>
-            <Toucher onPress={() => showDatePicker("StartDate")}>
+            <Toucher onPress={() => showDatePicker("startDate")}>
               <View pointerEvents="none">
                 <TextInputField
                   icon={"calendar-month-outline"}
@@ -337,7 +337,7 @@ export default function TripCreatorPage(props) {
           </View>
 
           <View style={styles.textBuffer}>
-            <Toucher onPress={() => showDatePicker("EndDate")}>
+            <Toucher onPress={() => showDatePicker("endDate")}>
               <View pointerEvents="none">
                 <TextInputField
                   icon={"calendar-month-outline"}
@@ -357,7 +357,7 @@ export default function TripCreatorPage(props) {
               fontSz={fontSizes.StandardText}
               isEditModeOn={true}
               onChangeText={(text) =>
-                setFormValues({ ...formValues, TripDesc: text })
+                setFormValues({ ...formValues, description: text })
               }
             />
           </View>

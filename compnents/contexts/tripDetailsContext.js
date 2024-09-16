@@ -4,14 +4,14 @@ export const TripDetailContext = createContext('');
 
 const TripDetailContextProvider = ({children}) => {
     const [formValues, setFormValues] = useState({
-        BookingLink: "",
-        TripName: "",
-        StartDate: "",
-        EndDate: "",
-        Price: 0,
-        TripDesc: "",
-        DiveSites: [],
-        ShopId: null
+        BookingPage: "",
+        tripName: "",
+        startDate: "",
+        endDate: "",
+        price: 0,
+        description: "",
+        siteList: [],
+        shopID: null
       });
 
     return (

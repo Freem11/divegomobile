@@ -85,6 +85,7 @@ export default function TripListPage(props) {
   };
 
   const openTripCreatorScreen = () => {
+    setFormValues({...formValues, shopID : itineraryList[0]?.shopID})
     setLevelOneScreen(false);
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
@@ -98,10 +99,11 @@ export default function TripListPage(props) {
 
 
   const handleEditButton = (itineraryInfo) => {
+    console.log(itineraryInfo)
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
     setEditMode({ itineraryInfo, IsEditModeOn: true });
-    setFormValues(itineraryInfo)
+    setFormValues({...itineraryInfo, shopID : itineraryList[0]?.shopID})
     setSitesArray(itineraryInfo.siteList)
     setLevelOneScreen(false);
     useButtonPressHelper(
