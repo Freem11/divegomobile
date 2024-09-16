@@ -125,15 +125,16 @@ export default function DiveSite(props) {
       console.log({ title: "Error19", message: e.message });
     }
   };
-  // useEffect(() => {
-  //   getDiveSite(selectedDiveSite.SiteName);
-  //   filterAnchorPhotos();
-  // }, [selectedDiveSite]);
 
-  // useEffect(() => {
-  //   getDiveSite(selectedDiveSite.SiteName);
-  //   filterAnchorPhotos();
-  // }, []);
+  useEffect(() => {
+    getDiveSite(selectedDiveSite.SiteName);
+    // filterAnchorPhotos();
+  }, [selectedDiveSite]);
+
+  useEffect(() => {
+    getDiveSite(selectedDiveSite.SiteName);
+    // filterAnchorPhotos();
+  }, []);
 
   const getDiveSite = async () => {
     try {
