@@ -18,7 +18,6 @@ import screenData from "./screenData.json";
 import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import Itinerary from "../itineraries/itinerary";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
@@ -33,6 +32,8 @@ import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDCon
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
+import { TripDetailContext } from "../../compnents/contexts/tripDetailsContext";
+import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -44,6 +45,8 @@ export default function TripListPage(props) {
   const { setShop } = useContext(ShopContext);
   const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
+  const { formValues, setFormValues } = useContext(TripDetailContext);
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
@@ -98,6 +101,8 @@ export default function TripListPage(props) {
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
     setEditMode({ itineraryInfo, IsEditModeOn: true });
+    setFormValues(itineraryInfo)
+    setSitesArray(itineraryInfo.siteList)
     setLevelOneScreen(false);
     useButtonPressHelper(
       "TripCreatorScreen",

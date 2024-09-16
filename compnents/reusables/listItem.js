@@ -8,8 +8,7 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function ListItem(props) {
   const { titleText, buttonAction} = props;
-
-  console.log(props)
+  
   return (
     <TouchableWithoutFeedback onPress={buttonAction}>
     <View style={styles.container}>

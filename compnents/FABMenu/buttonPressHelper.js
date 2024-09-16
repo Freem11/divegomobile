@@ -4,13 +4,7 @@ export const useButtonPressHelper = (
   screenOpen,
   setter
 ) => {
-  console.log(
-    "BP helper:",
-    activeScreenID,
-    previousScreenID,
-    screenOpen,
-    setter
-  );
+ 
   if (screenOpen && activeScreenID === previousScreenID) {
     setter(false);
   } else if (screenOpen && activeScreenID !== previousScreenID) {

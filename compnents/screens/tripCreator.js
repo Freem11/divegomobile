@@ -15,7 +15,7 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
   authenicationButton,
-  buttonText
+  buttonText,
 } from "../styles";
 import screenData from "./screenData.json";
 import {
@@ -24,7 +24,6 @@ import {
   insertItinerary,
   getItineraryDiveSiteByIdArray,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import TextInputField from "../authentication/textInput";
 import PlainTextInput from "./plaintextInput";
 import BottomDrawer from "./animatedBottomDrawer";
@@ -34,6 +33,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale, s } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
+import { TripDetailContext } from "../contexts/tripDetailsContext";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
@@ -45,6 +45,7 @@ import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
 import { ShopContext } from "../contexts/shopContext";
+import { TripSitesContext } from "../contexts/tripSitesContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -56,9 +57,10 @@ export default function TripCreatorPage(props) {
   const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
 
-  const [tripDiveSites, setTripDiveSites] = useState([]);
   const [dateType, setDateType] = useState("");
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+  const { formValues, setFormValues } = useContext(TripDetailContext);
   const { shop } = useContext(ShopContext);
 
   const { activeSession, setActiveSession } = useContext(SessionContext);
@@ -81,22 +83,20 @@ export default function TripCreatorPage(props) {
   const drawerUpperBound = "80%";
   const drawerLowerBound = "15%";
 
-
-  const [formValues, setFormValues] = useState({
-    BookingLink: (editMode && editMode.itineraryInfo.BookingPage) || "",
-    TripName: (editMode && editMode.itineraryInfo.tripName) || "",
-    StartDate: (editMode && editMode.itineraryInfo.startDate) || "",
-    EndDate: (editMode && editMode.itineraryInfo.endDate) || "",
-    Price: (editMode && editMode.itineraryInfo.price) || 0,
-    TripDesc: (editMode && editMode.itineraryInfo.description) || "",
-    DiveSites:
-      (editMode && editMode.itineraryInfo.siteList) || sitesArray || [],
-    ShopId: (editMode && editMode.itineraryInfo.shopID) || shop,
-  });
+  useEffect(() => {
+    console.log("hmmm", sitesArray)
+    getItineraries(profile[0].UserID);
+    getTripDiveSites(sitesArray);
+    setTripDiveSites(getTripDiveSites(formValues.siteList))
+    setSitesArray(formValues.siteList);
+  }, []);
 
   useEffect(() => {
-    getItineraries(profile[0].UserID);
-  }, []);
+    console.log("WTF", sitesArray)
+    setFormValues({...formValues, siteList: sitesArray})
+    getTripDiveSites(sitesArray);
+    setTripDiveSites(getTripDiveSites(sitesArray))
+  }, [sitesArray]);
 
   const getItineraries = async (IdNum) => {
     try {
@@ -149,7 +149,6 @@ export default function TripCreatorPage(props) {
   const handleDatePickerConfirm = (date) => {
     let formattedDate = moment(date).format("YYYY-MM-DD");
 
-    console.log(dateType, formattedDate, formValues.StartDate);
     if (dateType === "StartDate") {
       if (formValues.EndDate.length > 0 && formValues.EndDate < formattedDate) {
         return;
@@ -169,22 +168,9 @@ export default function TripCreatorPage(props) {
     hideDatePicker();
   };
 
-
-  //Handling the Dive site list 
-  useEffect(() => {
-    getTripDiveSites();
-  }, []);
-
-console.log("GOT", tripDiveSites)
-  useEffect(() => {
-    setFormValues({ ...formValues, DiveSites: sitesArray });
-    // setSitesArray(formValues.DiveSites)
-    getTripDiveSites();
-  }, [sitesArray.length]);
-
-  const getTripDiveSites = async () => {
+  const getTripDiveSites = async (siteIds) => {
     try {
-      const success = await getItineraryDiveSiteByIdArray(formValues.DiveSites);
+      const success = await getItineraryDiveSiteByIdArray(siteIds);
       if (success) {
         setTripDiveSites(success);
       }
@@ -207,7 +193,6 @@ console.log("GOT", tripDiveSites)
     getTripDiveSites();
   };
 
-
   const handleClose = () => {
     setEditMode(false);
     setFormValues({
@@ -216,12 +201,11 @@ console.log("GOT", tripDiveSites)
       StartDate: "",
       EndDate: "",
       Price: "",
-      TripDesc:  "",
+      TripDesc: "",
       DiveSites: [],
       ShopId: null,
     });
     setLevelTwoScreen(false);
-  
   };
 
   const handleSubmit = () => {
@@ -241,7 +225,9 @@ console.log("GOT", tripDiveSites)
       setConfirmationModal(true);
       return;
     } else {
-      editMode ? insertItineraryRequest(formValues, "Edit") : insertItinerary(formValues);
+      editMode
+        ? insertItineraryRequest(formValues, "Edit")
+        : insertItinerary(formValues);
       setFormValues({
         ...formValues,
         BookingLink: "",
@@ -261,115 +247,128 @@ console.log("GOT", tripDiveSites)
       setConfirmationModal(true);
     }
   };
+
+  const cloneButtonPress = () => {
+    setEditMode(false);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.container}>
-      <MaterialIcons
-        name="chevron-left"
-        size={moderateScale(48)}
-        color={"darkgrey"}
-        onPress={() => handleClose()}
-        style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
-      />
+      <View style={styles.container}>
+        <MaterialIcons
+          name="chevron-left"
+          size={moderateScale(48)}
+          color={"darkgrey"}
+          onPress={() => handleClose()}
+          style={{
+            marginTop: "15%",
+            alignSelf: "flex-start",
+            marginLeft: "2%",
+          }}
+        />
 
-      {editMode && (
-        <TouchableWithoutFeedback onPress={null}>
-          <View style={styles.creatNewButton}>
-            <Text style={styles.createNewText}>
-              {screenData.TripCreator.cloneButton}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-      )}
-
-      <View style={styles.content}>
-        {editMode ? (
-          <Text style={styles.header}>{screenData.TripCreator.headerEdit}</Text>
-        ) : (
-          <Text style={styles.header}>{screenData.TripCreator.header}</Text>
+        {editMode && (
+          <TouchableWithoutFeedback onPress={() => cloneButtonPress()}>
+            <View style={styles.creatNewButton}>
+              <Text style={styles.createNewText}>
+                {screenData.TripCreator.cloneButton}
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
         )}
 
-        <View style={styles.textBuffer}>
-          <TextInputField
-            icon={"store"}
-            inputValue={formValues.TripName}
-            placeHolderText={screenData.TripCreator.tripNamePlaceholder}
-            secure={false}
-            onChangeText={(text) =>
-              setFormValues({ ...formValues, TripName: text })
-            }
-          />
+        <View style={styles.content}>
+          {editMode ? (
+            <Text style={styles.header}>
+              {screenData.TripCreator.headerEdit}
+            </Text>
+          ) : (
+            <Text style={styles.header}>{screenData.TripCreator.header}</Text>
+          )}
+
+          <View style={styles.textBuffer}>
+            <TextInputField
+              icon={"store"}
+              inputValue={formValues && formValues.tripName}
+              placeHolderText={screenData.TripCreator.tripNamePlaceholder}
+              secure={false}
+              onChangeText={(text) =>
+                setFormValues({ ...formValues, TripName: text })
+              }
+            />
+          </View>
+
+          <View style={styles.textBuffer}>
+            <TextInputField
+              icon={"alternate-email"}
+              inputValue={formValues && formValues.BookingPage}
+              placeHolderText={screenData.TripCreator.bookingLinkPlaceholder}
+              secure={false}
+              onChangeText={(text) =>
+                setFormValues({ ...formValues, BookingLink: text })
+              }
+            />
+          </View>
+
+          <View style={styles.textBuffer}>
+            <TextInputField
+              icon={"attach-money"}
+              inputValue={formValues && formValues.price}
+              placeHolderText={screenData.TripCreator.pricePlaceholder}
+              secure={false}
+              inputValue={value}
+              keyboardType={"numbers-and-punctuation"}
+              onChangeText={setValue}
+            />
+          </View>
+
+          <View style={styles.textBuffer}>
+            <Toucher onPress={() => showDatePicker("StartDate")}>
+              <View pointerEvents="none">
+                <TextInputField
+                  icon={"calendar-month-outline"}
+                  inputValue={formValues && formValues.startDate}
+                  placeHolderText={screenData.TripCreator.startDatePlaceholder}
+                  secure={false}
+                  vectorIcon={"MaterialCommunityIcons"}
+                />
+              </View>
+            </Toucher>
+          </View>
+
+          <View style={styles.textBuffer}>
+            <Toucher onPress={() => showDatePicker("EndDate")}>
+              <View pointerEvents="none">
+                <TextInputField
+                  icon={"calendar-month-outline"}
+                  inputValue={formValues && formValues.endDate}
+                  placeHolderText={screenData.TripCreator.endDatePlaceholder}
+                  secure={false}
+                  vectorIcon={"MaterialCommunityIcons"}
+                />
+              </View>
+            </Toucher>
+          </View>
+
+          <View style={styles.descriptionBox}>
+            <PlainTextInput
+              placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
+              content={formValues && formValues.description}
+              fontSz={fontSizes.StandardText}
+              isEditModeOn={true}
+              onChangeText={(text) =>
+                setFormValues({ ...formValues, TripDesc: text })
+              }
+            />
+          </View>
         </View>
 
-        <View style={styles.textBuffer}>
-          <TextInputField
-            icon={"alternate-email"}
-            inputValue={formValues.BookingLink}
-            placeHolderText={screenData.TripCreator.bookingLinkPlaceholder}
-            secure={false}
-            onChangeText={(text) =>
-              setFormValues({ ...formValues, BookingLink: text })
-            }
-          />
-        </View>
-
-        <View style={styles.textBuffer}>
-          <TextInputField
-            icon={"attach-money"}
-            inputValue={formValues.Price}
-            placeHolderText={screenData.TripCreator.pricePlaceholder}
-            secure={false}
-            inputValue={value}
-            keyboardType={"numbers-and-punctuation"}
-            onChangeText={setValue}
-          />
-        </View>
-
-        <View style={styles.textBuffer}>
-          <Toucher onPress={() => showDatePicker("StartDate")}>
-            <View pointerEvents="none">
-              <TextInputField
-                icon={"calendar-month-outline"}
-                inputValue={formValues.StartDate}
-                placeHolderText={screenData.TripCreator.startDatePlaceholder}
-                secure={false}
-                vectorIcon={"MaterialCommunityIcons"}
-              />
-            </View>
-          </Toucher>
-        </View>
-
-        <View style={styles.textBuffer}>
-          <Toucher onPress={() => showDatePicker("EndDate")}>
-            <View pointerEvents="none">
-              <TextInputField
-                icon={"calendar-month-outline"}
-                inputValue={formValues.EndDate}
-                placeHolderText={screenData.TripCreator.endDatePlaceholder}
-                secure={false}
-                vectorIcon={"MaterialCommunityIcons"}
-              />
-            </View>
-          </Toucher>
-        </View>
-
-        <View style={styles.descriptionBox}>
-          <PlainTextInput
-            placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
-            content={formValues.TripDesc}
-            fontSz={fontSizes.StandardText}
-            isEditModeOn={true}
-            onChangeText={(text) =>
-              setFormValues({ ...formValues, TripDesc: text })
-            }
-          />
-        </View>
-      </View>
-
-      <View style={styles.buttonBox}>
+        <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => handleSubmit()}>
             <View style={styles.submitButton}>
-        <Text style={styles.submitText}>{screenData.TripCreator.submitButton}</Text>
+              <Text style={styles.submitText}>
+                {screenData.TripCreator.submitButton}
+              </Text>
               <MaterialIcons
                 name="chevron-right"
                 size={30}
@@ -380,22 +379,22 @@ console.log("GOT", tripDiveSites)
         </View>
 
         <BottomDrawer
-        dataSet={tripDiveSites}
-        dataSetType={"Trips"}
-        lowerBound={drawerLowerBound}
-        upperBound={drawerUpperBound}
-        drawerHeader={screenData.TripCreator.drawerHeader}
-        emptyDrawer={screenData.TripCreator.emptyDrawer}
-        headerButton={screenData.TripCreator.selectSitesButton}
-      />
+          dataSet={tripDiveSites}
+          dataSetType={"Trips"}
+          lowerBound={drawerLowerBound}
+          upperBound={drawerUpperBound}
+          drawerHeader={screenData.TripCreator.drawerHeader}
+          emptyDrawer={screenData.TripCreator.emptyDrawer}
+          headerButton={screenData.TripCreator.selectSitesButton}
+        />
 
-      <DateTimePickerModal
-        isVisible={datePickerVisible}
-        mode="date"
-        onConfirm={handleDatePickerConfirm}
-        onCancel={hideDatePicker}
-      />
-    </View>
+        <DateTimePickerModal
+          isVisible={datePickerVisible}
+          mode="date"
+          onConfirm={handleDatePickerConfirm}
+          onCancel={hideDatePicker}
+        />
+      </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -430,7 +429,7 @@ const styles = StyleSheet.create({
     borderColor: "darkgrey",
     borderRadius: moderateScale(10),
     paddingBottom: "2%",
-    marginTop: "5%"
+    marginTop: "5%",
   },
   buttonBox: {
     zIndex: -1,

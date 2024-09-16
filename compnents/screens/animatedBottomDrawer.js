@@ -29,9 +29,16 @@ import {
   primaryButton,
   buttonText,
 } from "../styles";
+import {
+  getItineraryDiveSiteByIdArray,
+} from "../../supabaseCalls/itinerarySupabaseCalls";
+
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
+import { TripDetailContext } from "../contexts/tripDetailsContext";
+import { TripSitesContext } from "../contexts/tripSitesContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -52,7 +59,10 @@ export default function BottomDrawer(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const { formValues, setFormValues } = useContext(TripDetailContext);
+  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+  
   const photosRef = useRef(null);
   const boxheight = useSharedValue(lowerBound);
   const [bounds, setBounds] = useState({});
@@ -83,6 +93,32 @@ export default function BottomDrawer(props) {
     setMapHelper(true);
     setMapConfig(3);
     setLevelTwoScreen(false);
+  };
+
+  const getTripDiveSites = async (siteIds) => {
+    try {
+      const success = await getItineraryDiveSiteByIdArray(siteIds);
+      if (success) {
+        setTripDiveSites(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
+  const removeFromSitesArray = async (siteIdNo) => {
+    console.log("???", siteIdNo)
+    const index = sitesArray.indexOf(siteIdNo);
+    if (index > -1) {
+      sitesArray.splice(index, 1);
+    }
+    setSitesArray(sitesArray);
+
+    const indexLocal = formValues.siteList.indexOf(siteIdNo);
+    if (indexLocal > -1) {
+      formValues.siteList.splice(index, 1);
+    }
+    getTripDiveSites();
   };
 
   return (
@@ -121,7 +157,7 @@ export default function BottomDrawer(props) {
           renderItem={({ item }) => (
             <View>
               {dataSetType === "Trips" ? (
-                <ListItem key={item.id} titleText={item.name}></ListItem>
+                <ListItem buttonAction={() => removeFromSitesArray(item.id)} key={item.id} titleText={item.name}></ListItem>
               ) : null}
 
               {dataSetType === "DiveSitePhotos" ? (

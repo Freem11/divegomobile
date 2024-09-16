@@ -37,6 +37,7 @@ import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
 import { CommentsModalContext } from "./contexts/commentsModalContext";
 import { SelectedPictureContext } from "./contexts/selectedPictureContext";
+
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import {
   getPhotosWithUser,
@@ -74,6 +75,9 @@ import {
   getHeatPointsWithUser,
   getHeatPointsWithUserEmpty,
 } from "../supabaseCalls/heatPointSupabaseCalls";
+import {
+  getItineraryDiveSiteByIdArray,
+} from "../supabaseCalls/itinerarySupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { moderateScale, scale } from "react-native-size-matters";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
@@ -87,6 +91,8 @@ import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
+import { TripSitesContext } from "./contexts/tripSitesContext";
+import { TripDetailContext } from "./contexts/tripDetailsContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -111,6 +117,9 @@ export default function Map() {
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
+
+  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+  const { formValues, setFormValues } = useContext(TripDetailContext);
 
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
 
@@ -572,6 +581,25 @@ export default function Map() {
     setTiles(true);
     setSelectedPicture(null);
   };
+
+
+  const getTripDiveSites = async (siteIds) => {
+    try {
+      const success = await getItineraryDiveSiteByIdArray(siteIds);
+      if (success) {
+        setTripDiveSites(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
+  useEffect(() => {
+    setFormValues({...formValues, siteList: sitesArray})
+    getTripDiveSites(sitesArray);
+    setTripDiveSites(getTripDiveSites(sitesArray))
+  }, [sitesArray.length]);
+
 
   const addToSitesArray = async (siteName) => {
     let splitNames = siteName.split("~");
