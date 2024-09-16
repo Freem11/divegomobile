@@ -341,8 +341,8 @@ export default function MapPage() {
   };
 
   const onShopNavigate = () => {
-    setLargeModal(true);
-    setActiveButtonID("ShopMaskIcon");
+    setLevelOneScreen(true);
+    setActiveScreen("DiveShopScreen");
     setMapHelper(true);
     setMapConfig(0);
     setZoomHelper(true);

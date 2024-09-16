@@ -548,9 +548,6 @@ export default function Map() {
       levelOneScreen,
       setLevelOneScreen
     );
-    if (itterator3 === 5) {
-      setItterator3(itterator3 + 1);
-    }
   };
 
   const setupShopModal = async (shopName) => {
@@ -559,12 +556,12 @@ export default function Map() {
     setShowFilterer(false);
     setSelectedShop(chosenShop);
     setPreviousButtonID(activeButtonID);
-    setActiveButtonID("ShopMaskIcon");
+    setActiveScreen("DiveShopScreen")
     useButtonPressHelper(
-      "ShopMaskIcon",
-      activeButtonID,
-      largeModal,
-      setLargeModal
+      "DiveShopScreen",
+      activeScreen,
+      levelOneScreen,
+      setLevelOneScreen
     );
   };
 

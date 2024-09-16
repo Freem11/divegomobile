@@ -109,7 +109,6 @@ export const getPhotosforMapArea = async (value, myCreatures) => {
 };
 
 export const getPhotosByDiveSiteWithExtra = async (values) => {
-  console.log("VALS", values);
   const {
     data,
     error,
@@ -130,7 +129,6 @@ export const getPhotosByDiveSiteWithExtra = async (values) => {
 };
 
 export const getPhotosByUserWithExtra = async (userId, connectedUserId) => {
-  console.log(userId);
   const {
     data,
     error,

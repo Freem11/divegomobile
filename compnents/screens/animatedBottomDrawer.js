@@ -22,6 +22,7 @@ import {
 import { moderateScale } from "react-native-size-matters";
 import Picture from "../modals/picture";
 import ListItem from "../reusables/listItem";
+import Itinerary from "../itineraries/itinerary";
 import {
   activeFonts,
   colors,
@@ -29,16 +30,18 @@ import {
   primaryButton,
   buttonText,
 } from "../styles";
-import {
-  getItineraryDiveSiteByIdArray,
-} from "../../supabaseCalls/itinerarySupabaseCalls";
-
+import { getItineraryDiveSiteByIdArray } from "../../supabaseCalls/itinerarySupabaseCalls";
+import { useMapFlip } from "../itineraries/hooks";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { TripDetailContext } from "../contexts/tripDetailsContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
+import { MasterContext } from "../contexts/masterContext";
+import { MapCenterContext } from "../contexts/mapCenterContext";
+import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -54,14 +57,21 @@ export default function BottomDrawer(props) {
     headerButton,
   } = props;
 
+  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setMapCenter } = useContext(MapCenterContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
+  const { levelOneScreen, setLevelOneScreen } = useContext(
+    LevelOneScreenContext
+  );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+
+  const [selectedID, setSelectedID] = useState(null);
 
   const photosRef = useRef(null);
   const boxheight = useSharedValue(lowerBound);
@@ -87,6 +97,7 @@ export default function BottomDrawer(props) {
       }),
     };
   });
+
 
   const onNavigate = () => {
     Keyboard.dismiss();
@@ -156,21 +167,53 @@ export default function BottomDrawer(props) {
           renderItem={({ item }) => (
             <View>
               {dataSetType === "Trips" ? (
-                <ListItem buttonAction={() => removeFromSitesArray(item.id)} key={item.id} titleText={item.name}></ListItem>
+                <ListItem
+                  buttonAction={() => removeFromSitesArray(item.id)}
+                  key={item.id}
+                  titleText={item.name}
+                ></ListItem>
+              ) : null}
+
+              {dataSetType === "DiveShopTrips" ? (
+                       <Itinerary
+                       key={item.id}
+                       itinerary={item}
+                       setSelectedID={setSelectedID}
+                       selectedID={selectedID}
+                       buttonOneText="Map"
+                       buttonOneIcon="anchor"
+                       buttonOneAction={() =>
+                         useMapFlip(
+                           item.siteList,
+                           setSitesArray,
+                           setZoomHelper,
+                           setLevelOneScreen,
+                           setMapConfig,
+                           setMapCenter
+                         )
+                       }
+                       buttonTwoText="Book"
+                       buttonTwoIcon="diving-scuba-flag"
+                     />
               ) : null}
 
               {dataSetType === "DiveSitePhotos" ? (
-                   <View key={`${item.id}-${item.dateTaken}`}>
-                   <View style={styles.locationHeader}>
-                     <Text>{item.dateTaken}</Text>
-                   </View>
-                   {item.photos.length > 0 &&
-                     item.photos.map((photo) => {
-                       return (
-                         <Picture key={`${photo.id}-d`} pic={photo} dataSetType={dataSetType} diveSiteName={item.name}></Picture>
-                       );
-                     })}
-                 </View>
+                <View key={`${item.id}-${item.dateTaken}`}>
+                  <View style={styles.locationHeader}>
+                    <Text>{item.dateTaken}</Text>
+                  </View>
+                  {item.photos.length > 0 &&
+                    item.photos.map((photo) => {
+                      return (
+                        <Picture
+                          key={`${photo.id}-d`}
+                          pic={photo}
+                          dataSetType={dataSetType}
+                          diveSiteName={item.name}
+                        ></Picture>
+                      );
+                    })}
+                </View>
               ) : null}
 
               {dataSetType === "ProfilePhotos" ? (
@@ -182,7 +225,12 @@ export default function BottomDrawer(props) {
                   {item.photos.length > 0 &&
                     item.photos.map((photo) => {
                       return (
-                        <Picture key={`${photo.id}-d`} pic={photo} dataSetType={dataSetType} diveSiteName={item.name}></Picture>
+                        <Picture
+                          key={`${photo.id}-d`}
+                          pic={photo}
+                          dataSetType={dataSetType}
+                          diveSiteName={item.name}
+                        ></Picture>
                       );
                     })}
                 </View>
@@ -225,7 +273,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.themeWhite,
   },
   page: {
-    width: windowWidth
+    width: windowWidth,
   },
   handle: {
     zIndex: 11,

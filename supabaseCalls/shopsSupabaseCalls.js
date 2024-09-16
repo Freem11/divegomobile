@@ -50,3 +50,20 @@ if (data) {
   return data;
 }
 };
+
+export const updateDiveShop = async (values) => {
+  console.log("updating...", values)
+  const { data, error } = await supabase
+    .from("shops")
+    .update({ diveShopBio: values.bio, diveShopProfilePhoto: values.photo  })
+    .eq("id", values.id);
+
+  if (error) {
+    console.log("couldn't do it 2,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
