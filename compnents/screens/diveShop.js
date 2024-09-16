@@ -48,11 +48,6 @@ import {
 } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import {
-  getPhotosWithUser,
-  getPhotosWithUserEmpty,
-  getPhotosByDiveSiteWithExtra,
-} from "../../supabaseCalls/photoSupabaseCalls";
-import {
   updateDiveShop,
 } from "../../supabaseCalls/shopsSupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
@@ -98,7 +93,6 @@ export default function DiveShop(props) {
     }
   };
 
-  console.log("??", selectedShop)
 
   useEffect(() => {
     if (levelOneScreen && zoomHelper) {
@@ -120,7 +114,8 @@ export default function DiveShop(props) {
     if (selectedShop[0]) {
       getItineraries(selectedShop[0].id);
     }
-  }, [selectedShop]);
+  }, [selectedShop[0].id]);
+
 
 
   useEffect(() => {

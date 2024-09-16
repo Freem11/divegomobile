@@ -39,7 +39,6 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { TripDetailContext } from "../contexts/tripDetailsContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
-import { MasterContext } from "../contexts/masterContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 
@@ -56,6 +55,8 @@ export default function BottomDrawer(props) {
     emptyDrawer,
     headerButton,
   } = props;
+
+  console.log("ERHEM", dataSet)
 
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { setMapCenter } = useContext(MapCenterContext);
@@ -239,7 +240,7 @@ export default function BottomDrawer(props) {
           )}
         />
       ) : (
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", width: windowWidth }}>
           {dataSetType === "Trips" ? (
             <View style={styles.flatListHeader}>
               <TouchableWithoutFeedback onPress={() => onNavigate()}>
@@ -331,12 +332,10 @@ const styles = StyleSheet.create({
   },
   noSightings: {
     marginTop: windowWidth > 600 ? "15%" : "25%",
-    height: moderateScale(25),
-    width: "60%",
-    // marginLeft: "20%",
     alignItems: "center",
     justifyContent: "center",
-    textAlign: "center",
+    textAlign: 'center',
+    marginHorizontal: "5%",
     fontFamily: activeFonts.Light,
     fontSize: moderateScale(fontSizes.StandardText),
     color: colors.themeBlack,
