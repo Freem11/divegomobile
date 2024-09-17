@@ -219,8 +219,8 @@ export default function BottomDrawer(props) {
               {dataSetType === "ProfilePhotos" ? (
                 <View key={`${item.id}-${item.dateTaken}`}>
                   <View style={styles.locationHeader}>
-                    <Text>{item.name}</Text>
-                    <Text>{item.dateTaken}</Text>
+                    <Text style={styles.headerText}>{item.name}</Text>
+                    <Text style={styles.headerText}>{item.dateTaken}</Text>
                   </View>
                   {item.photos.length > 0 &&
                     item.photos.map((photo) => {
@@ -329,6 +329,10 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     marginBottom: "2%",
     backgroundColor: "lightgray",
+  },
+  headerText: {
+    fontSize: moderateScale(fontSizes.StandardText),
+    fontFamily: activeFonts.Medium,
   },
   noSightings: {
     marginTop: windowWidth > 600 ? "15%" : "25%",

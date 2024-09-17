@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     marginTop: scale(15),
     marginLeft: scale(30),
     fontFamily: activeFonts.lig,
-    fontSize: fontSizes.SmallText,
+    fontSize: moderateScale(fontSizes.SmallText),
     color: colors.themeBlack,
   },
   topRail: {
@@ -203,12 +203,12 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontFamily: activeFonts.Medium,
-    fontSize: fontSizes.SmallText,
+    fontSize: moderateScale(fontSizes.SmallText),
     color: colors.themeBlack,
   },
   priceText: {
     fontFamily: activeFonts.Medium,
-    fontSize: fontSizes.SmallText,
+    fontSize: moderateScale(fontSizes.SmallText),
     color: colors.themeBlack,
   },
 });

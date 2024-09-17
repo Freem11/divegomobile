@@ -367,8 +367,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.themeBlack,
     opacity: 0.7,
     width: "96%",
-    top: "1%",
-    marginLeft: "3%",
+    top: windowWidth > 600 ? "3%" : "2%",
+    marginLeft: "2%",
     borderRadius: 5,
     zIndex: 2,
 
