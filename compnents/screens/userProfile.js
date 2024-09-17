@@ -152,8 +152,8 @@ export default function UserProfile(props) {
         setFollowData(alreadyFollows[0].id);
       }
     }
-
-    followCheck();
+if (selectedProfile){followCheck()}
+  
   }, []);
 
   useEffect(() => {

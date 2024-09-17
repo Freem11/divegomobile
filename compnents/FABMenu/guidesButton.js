@@ -45,9 +45,9 @@ export default function GuidesButton() {
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={tutorialRunning ? null : handlePress}
-        onPressIn={() => setButState(true)}
-        onPressOut={() => setButState(false)}
+        onPress={null}
+        // onPressIn={() => setButState(true)}
+        // onPressOut={() => setButState(false)}
         style={{
           alignItems: "center",
           width: moderateScale(32),
@@ -57,7 +57,7 @@ export default function GuidesButton() {
         <View style={styles.buttonBox}>
           <FontAwesome5
             name="question"
-            color={butState ? "gold" : "white"}
+            color={butState ? "gold" : "darkgrey"}
             size={moderateScale(32)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   buttonlabel: {
     fontFamily: activeFonts.Medium,
-    color: colors.themeWhite,
+    color: "darkgrey",
     fontSize: fontSizes.SmallText,
     marginTop: moderateScale(2),
   },
