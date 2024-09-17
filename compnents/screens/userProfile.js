@@ -6,23 +6,32 @@ import {
   Text,
   ScrollView,
   Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import CloseButton from "../reusables/closeButton";
-import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  screenSecondaryButton,
+  buttonTextAlt,
+} from "../styles";
 import screenData from "./screenData.json";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, s } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
-
+import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
+import { SessionContext } from "../contexts/sessionContext";
+import { getPhotosByUserWithExtra } from "../../supabaseCalls/photoSupabaseCalls";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
+import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { chooseImageHandler } from "./imageUploadHelpers";
 import BottomDrawer from "./animatedBottomDrawer";
@@ -30,6 +39,12 @@ import {
   uploadphoto,
   removePhoto,
 } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import {
+  insertUserFollow,
+  deleteUserFollow,
+  checkIfUserFollows,
+} from "../../supabaseCalls/userFollowSupabaseCalls";
+import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -37,6 +52,11 @@ const windowHeight = Dimensions.get("window").height;
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
+  const { activeSession } = useContext(SessionContext);
+  const { selectedProfile, setSelectedProfile } = useContext(
+    SelectedProfileContext
+  );
+ 
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -47,13 +67,73 @@ export default function UserProfile(props) {
   );
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);
+  const [visitProfileVals, setVisitProfileVals] = useState(null);
   const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
+  const [profilePhotos, setProfilePhotos] = useState(null);
+  const [followData, setFollowData] = useState(profile[0].UserID);
+  const [userFollows, setUserFollows] = useState(false);
+  const [userStats, setUserStats] = useState(null);
 
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
+  const getPhotos = async () => {
+
+    let success;
+    if (selectedProfile && selectedProfile[0].UserID) {
+      success = await getPhotosByUserWithExtra(
+        selectedProfile[0].UserID,
+        profile[0].UserID
+      );
+    } else {
+      success = await getPhotosByUserWithExtra(
+        profile[0].UserID,
+        profile[0].UserID
+      );
+    }
+    setProfilePhotos(success);
+  };
+
+  const getProfile = async () => {
+    let userID;
+    if (selectedProfile) {
+      userID = selectedProfile[0].UserID;
+    } else {
+      userID = profile[0].UserID;
+    }
+
+    try {
+      const success = await getProfileWithStats(userID);
+      if (success) {
+        setUserStats(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
   useEffect(() => {
+    getProfile();
+    getPhotos();
+  }, []);
+
+  useEffect(() => {
+    getProfile();
+    getPhotos();
+  }, [selectedProfile]);
+
+  useEffect(() => {
+    if (!selectedProfile|| selectedProfile[0].UserID === profile[0].UserID) {
+    } else {
+      setVisitProfileVals({
+        id: selectedProfile[0].UserID,
+        userName: selectedProfile[0].UserName,
+        bio: selectedProfile[0].profileBio,
+        photo: selectedProfile[0].profilePhoto,
+      });
+    }
+
     setProfileVals({
       id: profile[0].UserID,
       userName: profile[0].UserName,
@@ -61,6 +141,19 @@ export default function UserProfile(props) {
       photo: profile[0].profilePhoto,
     });
     setTempUserName(profile[0].UserName);
+
+    async function followCheck() {
+      let alreadyFollows = await checkIfUserFollows(
+        profile[0].UserID,
+        selectedProfile[0].UserID
+      );
+      if (alreadyFollows && alreadyFollows.length > 0) {
+        setUserFollows(true);
+        setFollowData(alreadyFollows[0].id);
+      }
+    }
+if (selectedProfile){followCheck()}
+  
   }, []);
 
   useEffect(() => {
@@ -129,6 +222,8 @@ export default function UserProfile(props) {
   };
 
   const onClose = () => {
+    setVisitProfileVals(null);
+    setSelectedProfile(null);
     setLevelTwoScreen(false);
   };
 
@@ -144,6 +239,29 @@ export default function UserProfile(props) {
     );
   };
 
+
+  const handleFollow = async () => {
+
+    // let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    // console.log("ERHEM", permissionGiven)
+    // if (!permissionGiven) {
+    //   return
+    // }
+
+    if (userFollows) {
+      deleteUserFollow(followData);
+      setUserFollows(false);
+    } else {
+      if (userStats) {
+        let newRecord = await insertUserFollow(
+          profile[0].UserID,
+          userStats[0].userid
+        );
+        setFollowData(newRecord[0].id);
+        setUserFollows(true);
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <MaterialIcons
@@ -153,37 +271,53 @@ export default function UserProfile(props) {
         onPress={() => onClose()}
         style={styles.backButton}
       />
-      <View style={styles.settingsButton}>
-        <MaterialIcons
-          name="settings"
-          size={moderateScale(46)}
-          color={colors.themeWhite}
-          onPress={openSettings}
-        />
-      </View>
-      <View style={styles.addPhotoButton}>
-        <MaterialIcons
-          name="add-a-photo"
-          size={moderateScale(30)}
-          color={colors.themeWhite}
-          onPress={() => handleImageUpload()}
-        />
-      </View>
+      {visitProfileVals ? (
+        <TouchableWithoutFeedback onPress={()=> handleFollow()}>
+          <View style={styles.followButton}>
+      <Text style={styles.followButtonText}>{userFollows ? screenData.UserProfile.userDoesFollow : screenData.UserProfile.UserDoesNotFollow}</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      ) : (
+        <View style={styles.settingsButton}>
+          <MaterialIcons
+            name="settings"
+            size={moderateScale(46)}
+            color={colors.themeWhite}
+            onPress={openSettings}
+          />
+        </View>
+      )}
+      {visitProfileVals ? null : (
+        <View style={styles.addPhotoButton}>
+          <MaterialIcons
+            name="add-a-photo"
+            size={moderateScale(30)}
+            color={colors.themeWhite}
+            onPress={() => handleImageUpload()}
+          />
+        </View>
+      )}
+
       <View style={styles.contentContainer}>
         <View style={{ marginBottom: windowHeight / 70 }}>
           {profileVals && (
             <PlainTextInput
-              content={profileVals.userName}
+              content={
+                visitProfileVals
+                  ? visitProfileVals.userName
+                  : profileVals.userName
+              }
               fontSz={fontSizes.Header}
-              isEditModeOn={isEditModeOn}
+              isEditModeOn={visitProfileVals ? false : isEditModeOn}
               setIsEditModeOn={setIsEditModeOn}
+              visitor={visitProfileVals}
               onChangeText={(nameText) =>
                 setProfileVals({ ...profileVals, userName: nameText })
               }
             />
           )}
 
-          {userFail.length > 0 ? (
+          {userFail && userFail.length > 0 ? (
             <Text style={styles.erroMsg}>{userFail}</Text>
           ) : (
             <View style={styles.erroMsgEmpty}></View>
@@ -202,10 +336,13 @@ export default function UserProfile(props) {
             <ScrollView>
               {profileVals && (
                 <PlainTextInput
-                  content={profileVals.bio}
+                  content={
+                    visitProfileVals ? visitProfileVals.bio : profileVals.bio
+                  }
                   fontSz={fontSizes.StandardText}
-                  isEditModeOn={isEditModeOn}
+                  isEditModeOn={visitProfileVals ? false : isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
+                  visitor={visitProfileVals}
                   onChangeText={(bioText) =>
                     setProfileVals({ ...profileVals, bio: bioText })
                   }
@@ -218,15 +355,28 @@ export default function UserProfile(props) {
 
       <WavyHeaderDynamic
         customStyles={styles.svgCurve}
-        image={profileVals && profileVals.photo}
+        image={
+          visitProfileVals
+            ? visitProfileVals && visitProfileVals.photo
+            : profileVals && profileVals.photo
+        }
       ></WavyHeaderDynamic>
 
       <BottomDrawer
-        dataSet={[]}
+        dataSet={profilePhotos}
+        dataSetType={"ProfilePhotos"}
+        placeHolder={"Say a little about yourself"}
+        setVisitProfileVals={setVisitProfileVals}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
-        drawerHeader={profile[0].UserName + screenData.UserProfile.drawerHeader}
-        emptyDrawer={profile[0].UserName + screenData.UserProfile.emptyDrawer}
+        drawerHeader={
+          (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
+          screenData.UserProfile.drawerHeader
+        }
+        emptyDrawer={
+          (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
+          screenData.UserProfile.emptyDrawer
+        }
       />
     </View>
   );
@@ -264,15 +414,20 @@ const styles = StyleSheet.create({
     height: windowHeight / 4.5,
   },
   screenCloseButton: [
-    { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
+    { zIndex: 10, position: "absolute", top: "5%", right: "5%" },
   ],
   backButton: [{ zIndex: 50, position: "absolute", top: "5%", left: "2%" }],
   settingsButton: [
-    { zIndex: 50, position: "absolute", top: "5%", right: "3%" },
+    { zIndex: 10, position: "absolute", top: "5%", right: "3%" },
   ],
   addPhotoButton: [
-    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
+    { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
   ],
+  followButton: [
+    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
+    screenSecondaryButton,
+  ],
+  followButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   svgCurve: {
     position: "absolute",
     bottom: 0,

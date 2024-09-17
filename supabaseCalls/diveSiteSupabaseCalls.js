@@ -90,7 +90,6 @@ export const getDiveSiteByName = async (value) => {
 };
 
 export const getDiveSiteWithUserName = async (values) => {
-  console.log("supa?", values)
   const { data, error } = await supabase.rpc(
     "get_single_divesites_with_username",
     {

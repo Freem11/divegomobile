@@ -15,7 +15,7 @@ import { colors } from "../styles";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function WavyHeaderDynamic({ customStyles, image }) {
+export default function WavyHeaderDynamic({ customStyles, image, defaultImg }) {
   const [picUri, setPicUri] = useState(null);
 
   useEffect(() => {
@@ -24,22 +24,29 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
       setPicUri(
         `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`
       );
+    } else {
+      setPicUri(null)
     }
-  }, [image]);
+  }, [image, picUri]);
 
   return (
     <View style={styles.customStyles}>
-      {/* <View style={{ flex: 1, backgroundColor: "blue" }}> */}
         {picUri ? (
             <ImageBackground
               source={{ uri: picUri }}
               style={styles.backgroundImage}
             />
         ) : (
+          defaultImg === "diveSitePhoto" ?
             <ImageBackground
-              source={require("../png/blackManta.png")}
+              source={require("../png/boat.png")}
               style={styles.backgroundImage}
-            />
+            /> 
+            :
+            <ImageBackground
+            source={require("../png/blackManta.png")}
+            style={styles.backgroundImage}
+          /> 
         )}
         <View
           style={{
@@ -66,7 +73,6 @@ export default function WavyHeaderDynamic({ customStyles, image }) {
             />
           </Svg>
         </View>
-      {/* </View> */}
     </View>
   );
 }

@@ -9,9 +9,10 @@ import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 
 import DiveSite from '../screens/diveSite';
+import DiveShop from '../screens/diveShop';
 import Settings from '../screens/settings';
 import SearchPage from '../screens/search';
-import { activeFonts } from "../styles";
+import TripListPage from '../screens/tripList';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -43,8 +44,11 @@ export default function LevelOneScreen() {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen === "DiveSiteScreen" && <DiveSite/>}
+      {activeScreen === "DiveShopScreen" && <DiveShop/>}
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}
+      {activeScreen === "TripListScreen" && <TripListPage/>}
+
     </Animated.View>
   );
 }

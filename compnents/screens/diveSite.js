@@ -52,6 +52,7 @@ import {
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
+  getPhotosByDiveSiteWithExtra,
 } from "../../supabaseCalls/photoSupabaseCalls";
 import {
   getDiveSiteWithUserName,
@@ -77,6 +78,7 @@ export default function DiveSite(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
@@ -86,9 +88,27 @@ export default function DiveSite(props) {
     diveSitePhoto: null,
   });
   const [isEditModeOn, setIsEditModeOn] = useState(false);
-
+  const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
+
+  console.log("profile", profile);
+  const getPhotos = async () => {
+    const success = await getPhotosByDiveSiteWithExtra({
+      lat: selectedDiveSite.Latitude,
+      lng: selectedDiveSite.Longitude,
+      userId: profile[0].UserID,
+    });
+    setDiveSitePics(success);
+  };
+
+  useEffect(() => {
+    getPhotos();
+  }, []);
+
+  useEffect(() => {
+    getPhotos();
+  }, [selectedDiveSite]);
 
   useEffect(() => {
     if (!isEditModeOn && site) {
@@ -107,14 +127,19 @@ export default function DiveSite(props) {
       console.log({ title: "Error19", message: e.message });
     }
   };
-  useEffect(() => {
-    getDiveSite(selectedDiveSite.SiteName);
-    filterAnchorPhotos();
-  }, [selectedDiveSite]);
 
   useEffect(() => {
     getDiveSite(selectedDiveSite.SiteName);
-    filterAnchorPhotos();
+    // filterAnchorPhotos();
+  }, [selectedDiveSite]);
+
+  useEffect(() => {
+    if(profile[0].partnerAccount){
+      setIsPartnerAccount(true)
+    }
+
+    getDiveSite(selectedDiveSite.SiteName);
+    // filterAnchorPhotos();
   }, []);
 
   const getDiveSite = async () => {
@@ -160,7 +185,7 @@ export default function DiveSite(props) {
           maxLng,
         });
       }
-      console.log("phoots?", photos);
+
       if (photos) {
         // photos.unshift({ id: 0 });
         setDiveSitePics(photos);
@@ -220,7 +245,8 @@ export default function DiveSite(props) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${site.name}" at Latitude: ${site.lat} Longitude: ${site.lng} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body:
+        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
@@ -249,29 +275,30 @@ export default function DiveSite(props) {
 
   return (
     <View style={styles.container}>
-           <MaterialIcons
+      <MaterialIcons
         name="chevron-left"
         size={moderateScale(48)}
         color={colors.themeWhite}
         onPress={() => onClose()}
         style={styles.backButton}
       />
-      <TouchableWithoutFeedback
-        onPress={openPicUploader}
-      >
+      <TouchableWithoutFeedback onPress={openPicUploader}>
         <View style={styles.contributeButton}>
           <Text style={styles.contributeButtonText}>Add Sighting</Text>
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.addPhotoButton}>
-        <MaterialIcons
-          name="add-a-photo"
-          size={moderateScale(30)}
-          color={colors.themeWhite}
-          onPress={() => handleImageUpload()}
-        />
-      </View>
+      {profile[0].partnerAccount && (
+        <View style={styles.addPhotoButton}>
+          <MaterialIcons
+            name="add-a-photo"
+            size={moderateScale(30)}
+            color={colors.themeWhite}
+            onPress={() => handleImageUpload()}
+          />
+        </View>
+      )}
+
       <View style={styles.contentContainer}>
         <View style={styles.siteNameContainer}>
           <Text style={styles.header}>{site.name}</Text>
@@ -301,6 +328,7 @@ export default function DiveSite(props) {
                   placeHolder={`A little about ${site.name}`}
                   content={site.divesitebio}
                   fontSz={fontSizes.StandardText}
+                  isPartnerAccount={isPartnerAccount}
                   isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
                   onChangeText={(bioText) =>
@@ -320,11 +348,11 @@ export default function DiveSite(props) {
 
       <BottomDrawer
         dataSet={diveSitePics}
+        dataSetType={"DiveSitePhotos"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
         drawerHeader={screenData.DiveSite.drawerHeader}
         emptyDrawer={screenData.DiveSite.emptyDrawer}
-     
       />
     </View>
   );
@@ -385,9 +413,7 @@ const styles = StyleSheet.create({
     { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
     screenSecondaryButton,
   ],
-  backButton: [
-    { zIndex: 10, position: "absolute", top: "5.5%", left: "2%" },
-  ],
+  backButton: [{ zIndex: 10, position: "absolute", top: "5.5%", left: "2%" }],
   contributeButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   addPhotoButton: [
     { zIndex: 10, position: "absolute", top: "32%", right: "5%" },

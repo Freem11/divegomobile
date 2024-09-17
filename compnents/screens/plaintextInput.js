@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
+import { UserProfileContext } from "../contexts/userProfileContext";
 
 export default function PlainTextInput(props) {
   const {
@@ -10,9 +11,21 @@ export default function PlainTextInput(props) {
     fontSz,
     isEditModeOn,
     setIsEditModeOn,
+    isPartnerAccount,
+    isMyShop,
+    visitor,
     onChangeText,
     placeHolder,
   } = props;
+
+  const { profile } = useContext(UserProfileContext);
+
+  let checkPasser = false
+  if(isPartnerAccount){
+    checkPasser = isPartnerAccount
+  } else if(isMyShop) {
+    checkPasser = isMyShop
+  }
 
   return (
     <View style={styles.container}>
@@ -21,8 +34,9 @@ export default function PlainTextInput(props) {
         style={[
           styles.input,
           {
-            backgroundColor: isEditModeOn ? "darkgrey" : colors.themeWhite,
+            backgroundColor: isEditModeOn && placeHolder && placeHolder.length < 100 ? "darkgrey" : colors.themeWhite,
             fontFamily: content ? activeFonts.Regular : activeFonts.Italic,
+            textAlign: placeHolder && placeHolder.length > 100 ? "center": 'left'
           },
         ]}
         value={content}
@@ -32,7 +46,8 @@ export default function PlainTextInput(props) {
         onChangeText={onChangeText}
         multiline={true}
       ></TextInput>
-      {isEditModeOn ? (
+      {placeHolder && placeHolder.length > 100 || visitor || !checkPasser ? null :
+      isEditModeOn ? (
         <FontAwesome6
           name="check"
           size={moderateScale(16)}
@@ -61,7 +76,7 @@ const styles = StyleSheet.create({
   },
   input: {
     minWidth: moderateScale(40),
-    maxWidth: "94%",
+    maxWidth: "100%",
     flexWrap: "wrap",
     height: "auto",
   },

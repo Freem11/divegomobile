@@ -6,9 +6,15 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  Keyboard
+  Keyboard,
 } from "react-native";
-import { activeFonts, colors, fontSizes } from "./styles";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  primaryButtonAlt,
+  buttonTextAlt,
+} from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
 import Map from "./GoogleMap";
@@ -18,8 +24,8 @@ import AnimatedModalLarge from "../compnents/reusables/animatedModalLarge";
 import AnimatedModalLargeSecond from "../compnents/reusables/animatedModalLargeSecond";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
-import LevelOneScreen from '../compnents/reusables/levelOneScreen';
-import LevelTwoScreen from '../compnents/reusables/levelTwoScreen';
+import LevelOneScreen from "../compnents/reusables/levelOneScreen";
+import LevelTwoScreen from "../compnents/reusables/levelTwoScreen";
 import {
   grabProfileById,
   updateProfileFeeback,
@@ -59,9 +65,9 @@ import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
 import { LargeModalContext } from "./contexts/largeModalContext";
 import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
-import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
-import { LevelTwoScreenContext } from './contexts/levelTwoScreenContext';
-import { LevelThreeScreenContext } from './contexts/levelThreeScreenContext';
+import { LevelOneScreenContext } from "./contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "./contexts/levelTwoScreenContext";
+import { ActiveScreenContext } from "./contexts/activeScreenContext";
 
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
@@ -69,7 +75,7 @@ import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
-import { scale, moderateScale } from "react-native-size-matters";
+import { scale, moderateScale, s } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import Animated, {
@@ -104,6 +110,7 @@ export default function MapPage() {
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
@@ -311,14 +318,12 @@ export default function MapPage() {
           Longitude: dragPin.lng.toString(),
         });
         setMapHelper(true);
-  
+
         setMasterSwitch(true);
         setMapConfig(0);
-        setActiveButtonID("DiveSiteAdderButton");
-        setLargeModal(true);
-        if (itterator2 === 19) {
-          setItterator2(itterator2 + 1);
-        }
+
+        setActiveScreen("DiveSiteUploadScreen");
+        setLevelTwoScreen(true);
         setChosenModal(null);
       } else if (chosenModal === "Photos") {
         setPinValues({
@@ -336,8 +341,8 @@ export default function MapPage() {
   };
 
   const onShopNavigate = () => {
-    setLargeModal(true);
-    setActiveButtonID("ShopMaskIcon");
+    setLevelOneScreen(true);
+    setActiveScreen("DiveShopScreen");
     setMapHelper(true);
     setMapConfig(0);
     setZoomHelper(true);
@@ -345,8 +350,8 @@ export default function MapPage() {
   };
 
   const onTripSetNavigate = () => {
-    setLargeModalSecond(true);
-    setActiveButtonID("TripCreator");
+    setLevelTwoScreen(true);
+    setActiveScreen("TripCreatorScreen");
     setMapHelper(true);
     setMapConfig(0);
   };
@@ -450,16 +455,16 @@ export default function MapPage() {
     setFullScreenModal(false);
   };
 
-  const handleSiteSearchButton = () => {
+  const handleMapSearchButton = () => {
     setTiles(true);
     setShowFilterer(false);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("DiveSiteSearchButton");
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("SearchScreen");
     useButtonPressHelper(
-      "DiveSiteSearchButton",
-      activeButtonID,
-      largeModal,
-      setLargeModal
+      "SearchScreen",
+      activeScreen,
+      levelOneScreen,
+      setLevelOneScreen
     );
   };
 
@@ -586,45 +591,30 @@ export default function MapPage() {
               </View>
             ) : null}
 
-            {mapConfig in [, 1, , 3] ? (
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: moderateScale(35),
-                  right: moderateScale(35),
-                  zIndex: 2,
-                }}
-              >
-                <CircularButton
-                  buttonAction={handleSiteSearchButton}
-                  icon="map-search-outline"
-                />
-              </View>
-            ) : null}
-
             {mapConfig in [, 1, 2, 3] ? (
-              <View style={styles.lowerButtonWrapper}>
-                <PrimaryButton
-                  label={
-                    mapConfig === 1
+              <TouchableWithoutFeedback
+                onPress={
+                  mapConfig === 1
+                    ? onNavigate
+                    : mapConfig === 2
+                    ? onShopNavigate
+                    : mapConfig === 3
+                    ? onTripSetNavigate
+                    : null
+                }
+              >
+                <View style={styles.lowerButtonWrapper}>
+                  <Text style={styles.lowerButtonText}>
+                    {mapConfig === 1
                       ? "Set Pin"
                       : mapConfig === 2
                       ? "Return to Shop"
                       : mapConfig === 3
                       ? "Sites Complete"
-                      : null
-                  }
-                  buttonAction={
-                    mapConfig === 1
-                      ? onNavigate
-                      : mapConfig === 2
-                      ? onShopNavigate
-                      : mapConfig === 3
-                      ? onTripSetNavigate
-                      : null
-                  }
-                />
-              </View>
+                      : null}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
             ) : null}
 
             {mapConfig === 0 ? (
@@ -693,13 +683,18 @@ const styles = StyleSheet.create({
     height: moderateScale(65),
     zIndex: 3,
   },
-  lowerButtonWrapper: {
-    position: "absolute",
-    alignItems: "center",
-    textAlign: "center",
-    bottom: scale(28),
-    zIndex: 2,
-  },
+  lowerButtonWrapper: [
+    primaryButtonAlt,
+    {
+      position: "absolute",
+      alignItems: "center",
+      textAlign: "center",
+      bottom: scale(28),
+      left: scale(100),
+      zIndex: 2,
+    },
+  ],
+  lowerButtonText: buttonTextAlt,
   PinButtonPressed: {
     position: "absolute",
     alignItems: "center",
@@ -814,5 +809,5 @@ const styles = StyleSheet.create({
     marginRight: moderateScale(10),
     marginLeft: moderateScale(14),
     paddingLeft: moderateScale(50),
-  }
+  },
 });

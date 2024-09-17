@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import MaterialCommunityIconsButton from "../reusables/materialCommunityIconsButton";
 import { scale, moderateScale } from "react-native-size-matters";
 import Animated, {
@@ -9,6 +11,13 @@ import Animated, {
   useDerivedValue,
   interpolate,
 } from "react-native-reanimated";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  roundButton,
+  buttonTextAlt
+} from "../styles";
 
 export default function Itinerary(props) {
   const {
@@ -69,19 +78,22 @@ export default function Itinerary(props) {
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.buttonBox}>
-          <MaterialCommunityIconsButton
-            icon={buttonOneIcon}
-            buttonAction={buttonOneAction}
-            iconColour="gold"
-            buttonText={buttonOneText}
-          />
-          <MaterialCommunityIconsButton
-            icon={buttonTwoIcon}
-            buttonAction={buttonTwoAction}
-            iconColour="red"
-            buttonText={buttonTwoText}
-            
-          />
+          <View style={{width: "10%"}}></View>
+          <TouchableWithoutFeedback onPress={buttonOneAction}>
+              <MaterialCommunityIcons 
+              name={buttonOneIcon}
+              size={moderateScale(22)}
+              color={"darkgrey"}
+              onPress={buttonOneAction}/>  
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback onPress={buttonTwoAction}>
+              <MaterialCommunityIcons 
+              name={buttonTwoIcon}
+              size={moderateScale(22)}
+              color={"darkgrey"}
+              onPress={buttonTwoAction}/>  
+          </TouchableWithoutFeedback>
         </View>
       </View>
       <Animated.View style={[tabPullx, styles.extraBox]}>
@@ -104,49 +116,56 @@ const styles = StyleSheet.create({
     marginBottom: scale(10),
   },
   shadowbox: {
-    flex: 1,
     flexDirection: "row",
-    backgroundColor: "#538dbd",
-    borderRadius: 10,
-    marginBottom: 10,
-    width: "100%",
-    height: scale(80),
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-
-    elevation: 10,
+    height: moderateScale(75),
+    width: "98%",
+    marginLeft: "1%",
+    marginBottom: "2%",
+    backgroundColor: colors.themeWhite,
+    borderWidth: moderateScale(1),
+    borderColor: "darkgrey",
+    borderRadius: moderateScale(10),
+    textAlign: "center",
+    justifyContent: "center",
+    listStyle: "none",
   },
   moreBox: {
     flexDirection: "column",
     width: "58%",
     height: "100%",
   },
+  editButton: [
+    roundButton,
+    { flexDirection: "column" },
+  ],
+  editButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5), fontSize: moderateScale(fontSizes.SmallText) }],
+  deleteButton: [
+    roundButton,
+    { flexDirection: "column" },
+  ],
+  deltetButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5), fontSize: moderateScale(fontSizes.SmallText) }],
+  
   buttonBox: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
     width: "40%",
     height: "100%",
-    // backgroundColor: "pink",
-    paddingLeft: moderateScale(-20)
+    paddingHorizontal: "2%",
+    // backgroundColor: "pink"
   },
   tripName: {
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(15),
+    fontFamily: activeFonts.Light,
+    color: colors.themeBlack,
+    fontSize: moderateScale(fontSizes.StandardText),
     marginLeft: scale(10),
     marginTop: scale(5),
     height: "60%",
   },
   opener: {
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(12),
+    fontFamily: activeFonts.Medium,
+    color: colors.themeBlack,
+    fontSize: moderateScale(fontSizes.SmallText),
     marginLeft: scale(70),
     marginTop: scale(0),
   },
@@ -155,7 +174,7 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
     width: "93%",
     marginTop: scale(-10),
-    backgroundColor: "#F0EEEB",
+    backgroundColor: colors.themeWhite,
     borderBottomEndRadius: scale(10),
     borderBottomStartRadius: scale(10),
     shadowColor: "#000",
@@ -171,9 +190,9 @@ const styles = StyleSheet.create({
   lowerText: {
     marginTop: scale(15),
     marginLeft: scale(30),
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(11),
-    color: "#000000",
+    fontFamily: activeFonts.lig,
+    fontSize: fontSizes.SmallText,
+    color: colors.themeBlack,
   },
   topRail: {
     flexDirection: "row",
@@ -183,13 +202,13 @@ const styles = StyleSheet.create({
     marginRight: scale(20),
   },
   dateText: {
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(12),
-    color: "#000000",
+    fontFamily: activeFonts.Medium,
+    fontSize: fontSizes.SmallText,
+    color: colors.themeBlack,
   },
   priceText: {
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(12),
-    color: "#000000",
+    fontFamily: activeFonts.Medium,
+    fontSize: fontSizes.SmallText,
+    color: colors.themeBlack,
   },
 });

@@ -54,20 +54,18 @@ export const getItineraryDiveSiteByIdArray = async (siteIds) => {
 
 export const insertItinerary = async (values) => {
 
-  console.log("Itinerary add gets ", values)
-
   const { data, error } = await supabase
   .from("itineraries")
   .insert([
     {
-      shopID: values.ShopId,
-      tripName: values.TripName,
-      startDate: values.StartDate,
-      endDate: values.EndDate,
-      price: values.Price,
-      description: values.TripDesc,
-      siteList: values.DiveSites,
-      BookingPage: values.BookingLink
+      shopID: values.shopID,
+      tripName: values.tripName,
+      startDate: values.startDate,
+      endDate: values.endDate,
+      price: values.price,
+      description: values.description,
+      siteList: values.siteList,
+      BookingPage: values.BookingPage
     },
   ]);
 
@@ -83,20 +81,18 @@ export const insertItinerary = async (values) => {
 
 export const insertItineraryRequest = async (values, reqType) => {
 
-  console.log("Itinerary add gets ", values)
-
   const { data, error } = await supabase
   .from("itineraryRequests")
   .insert([
     {
-      shopID: values.ShopId,
-      tripName: values.TripName,
-      startDate: values.StartDate,
-      endDate: values.EndDate,
-      price: values.Price,
-      description: values.TripDesc,
-      siteList: values.DiveSites,
-      BookingPage: values.BookingLink,
+      shopID: values.shopID,
+      tripName: values.tripName,
+      startDate: values.startDate,
+      endDate: values.endDate,
+      price: values.price,
+      description: values.description,
+      siteList: values.siteList,
+      BookingPage: values.BookingPage,
       requestType: reqType
     },
   ]);

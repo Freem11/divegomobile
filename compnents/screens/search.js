@@ -11,6 +11,7 @@ import { activeFonts, colors, fontSizes } from "../styles";
 import screenData from "./screenData.json";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
@@ -41,6 +42,20 @@ export default function SearchPage(props) {
     setTextSource(false);
     setSearchValue("");
   }, [levelOneScreen]);
+
+
+  const handleSwitch = () => {
+    setLevelOneScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("DiveSiteUploadScreen");
+    useButtonPressHelper(
+      "DiveSiteUploadScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
+    );
+  }
+ 
 
   return (
     <View style={styles.container}>
@@ -88,7 +103,7 @@ export default function SearchPage(props) {
           <Text style={styles.promptText}>
             {screenData.SearchPage.diveAddPrompt}
           </Text>
-          <TouchableWithoutFeedback onPress={() => null}>
+          <TouchableWithoutFeedback onPress={() => handleSwitch()}>
             <Text style={styles.promptLinkText}>
               {screenData.SearchPage.diveAddLink}
             </Text>

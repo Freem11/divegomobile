@@ -1,4 +1,3 @@
-   
     {
       "SettingsPage": 
       {
@@ -33,10 +32,10 @@
       "DiveSiteAdd" :
       {
         "header": "Add a New Dive Site",
-        "siteNamePlaceholder": "Site Name",
+        "siteNamePlaceholder": "Dive Site Name",
         "latPlaceholder": "Latitude",
         "lngPlaceholder": "Longitude",
-        "myLocationButton" : "Use my current location",
+        "myLocationButton" : "Use my location",
         "myLocationexplainer" : "This can take up to 30 seconds",
         "pinButton" : "Drop a pin",
         "submitButton" : "Submit"
@@ -53,15 +52,46 @@
         "wherePlaceholder": "Location of Sighting",
         "submitButton" : "Submit"
       },
+      "TripList" :
+      {
+        "header": "Your Dive Trip Offerings",
+        "creatNewTripButton": "New Trip",
+        "expandTrip": "More Info",
+        "editButton": "Edit",
+        "deleteButton": "Delete"
+      },
+      "TripCreator" :
+      {
+        "header": "Create a New Dive Trip",
+        "headerEdit": "Submit Trip Edits",
+        "cloneButton": "Clone This Trip",
+        "tripNamePlaceholder": "Your Trip's Name",
+        "bookingLinkPlaceholder": "Link to your trip's booking page",
+        "pricePlaceholder": "Trip Price",
+        "startDatePlaceholder": "Start Date",
+        "endDatePlaceholder": "End Date",
+        "tripDescriptionPlaceholder" : "Please add any further details about your trip that you think would be helpful in promoting your trip to divers, right here",
+        "submitButton" : "Submit",
+        "selectSitesButton": "Select Dive Sites",
+        "drawerHeader" : "Possible Sites in this Trip   (Press to Remove)",
+        "emptyDrawer": "No Dive Sites have been added to this Trip yet."
+      },
       "UserProfile" :
       {
         "drawerHeader" : "'s Sea Creature Encounters",
-        "emptyDrawer": " hasn't posted any sightings yet."
+        "emptyDrawer": " hasn't posted any sightings yet.",
+        "userDoesFollow": "Following",
+        "UserDoesNotFollow": "Follow"
       },
       "DiveSite" :
       {
         "drawerHeader" : "Sea Creature Sightings",
         "emptyDrawer": "No sightings at this site yet."
+      },
+      "DiveShop" :
+      {
+        "drawerHeader" : "Offered Dive Trips",
+        "emptyDrawer": " aren't currently offering any Dive Trips"
       }
     }
 

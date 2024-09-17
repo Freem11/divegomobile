@@ -3,6 +3,8 @@ import { combineComponents } from '../combineComponents';
 import DiveSiteSearchModalContextProvider from './diveSiteSearchContext';
 import MapSearchModalContextProvider from './mapSearchContext';
 import ZoomHelperContextProvider from './zoomHelperContext';
+import TripDetailContextProvider from './tripDetailsContext';
+import TripSitesContextProvider from './tripSitesContext';
 import SitesArrayContextProvider from './sitesArrayContext';
 import ShopModalContextProvider from './shopModalContext';
 import SelectedShopContextProvider from './selectedShopContext';
@@ -73,6 +75,8 @@ const providers = [
     DiveSiteSearchModalContextProvider,
     MapSearchModalContextProvider,
     ZoomHelperContextProvider,
+    TripDetailContextProvider,
+    TripSitesContextProvider,
     SitesArrayContextProvider,
     ShopModalContextProvider,
     SelectedShopContextProvider,
