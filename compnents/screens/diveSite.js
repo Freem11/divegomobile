@@ -91,21 +91,22 @@ export default function DiveSite(props) {
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
+  console.log("profile", profile);
   const getPhotos = async () => {
     const success = await getPhotosByDiveSiteWithExtra({
       lat: selectedDiveSite.Latitude,
       lng: selectedDiveSite.Longitude,
-      userId: profile[0].UserID
+      userId: profile[0].UserID,
     });
-    setDiveSitePics(success)
+    setDiveSitePics(success);
   };
 
   useEffect(() => {
     getPhotos();
   }, []);
 
-    useEffect(() => {
-      getPhotos();
+  useEffect(() => {
+    getPhotos();
   }, [selectedDiveSite]);
 
   useEffect(() => {
@@ -282,14 +283,17 @@ export default function DiveSite(props) {
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.addPhotoButton}>
-        <MaterialIcons
-          name="add-a-photo"
-          size={moderateScale(30)}
-          color={colors.themeWhite}
-          onPress={() => handleImageUpload()}
-        />
-      </View>
+      {profile[0].partnerAccount && (
+        <View style={styles.addPhotoButton}>
+          <MaterialIcons
+            name="add-a-photo"
+            size={moderateScale(30)}
+            color={colors.themeWhite}
+            onPress={() => handleImageUpload()}
+          />
+        </View>
+      )}
+
       <View style={styles.contentContainer}>
         <View style={styles.siteNameContainer}>
           <Text style={styles.header}>{site.name}</Text>

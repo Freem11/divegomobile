@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
+import { UserProfileContext } from "../contexts/userProfileContext";
 
 export default function PlainTextInput(props) {
   const {
@@ -14,6 +15,8 @@ export default function PlainTextInput(props) {
     onChangeText,
     placeHolder,
   } = props;
+
+  const { profile } = useContext(UserProfileContext);
 
   return (
     <View style={styles.container}>
@@ -34,7 +37,7 @@ export default function PlainTextInput(props) {
         onChangeText={onChangeText}
         multiline={true}
       ></TextInput>
-      {placeHolder && placeHolder.length > 100 || visitor ? null :
+      {placeHolder && placeHolder.length > 100 || visitor || !profile[0].partnerAccount ? null :
       isEditModeOn ? (
         <FontAwesome6
           name="check"

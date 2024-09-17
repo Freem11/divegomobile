@@ -172,14 +172,16 @@ export default function DiveShop(props) {
         style={styles.backButton}
       />
 
+{profile[0].partnerAccount &&
       <View style={styles.addPhotoButton}>
-        <MaterialIcons
-          name="add-a-photo"
-          size={moderateScale(30)}
-          color={colors.themeWhite}
-          onPress={() => handleImageUpload()}
-        />
-      </View>
+      <MaterialIcons
+        name="add-a-photo"
+        size={moderateScale(30)}
+        color={colors.themeWhite}
+        onPress={() => handleImageUpload()}
+      />
+    </View>}
+
       <View style={styles.contentContainer}>
         <View style={styles.shopNameContainer}>
           <Text style={styles.header}>{selectedShop[0].orgName}</Text>
