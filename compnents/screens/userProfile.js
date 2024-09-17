@@ -56,7 +56,8 @@ export default function UserProfile(props) {
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
- 
+  const [isNotVisitor, setIsNotVisitor] = useState(true);
+
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -113,19 +114,12 @@ export default function UserProfile(props) {
     }
   };
 
-  useEffect(() => {
-    getProfile();
-    getPhotos();
-  }, []);
-
-  useEffect(() => {
-    getProfile();
-    getPhotos();
-  }, [selectedProfile]);
-
-  useEffect(() => {
-    if (!selectedProfile|| selectedProfile[0].UserID === profile[0].UserID) {
+  const getFollowStatus = async () => {
+    if (!selectedProfile || selectedProfile[0].UserID === profile[0].UserID) {
+      setVisitProfileVals(null);
+      setIsNotVisitor(true)
     } else {
+      setIsNotVisitor(false)
       setVisitProfileVals({
         id: selectedProfile[0].UserID,
         userName: selectedProfile[0].UserName,
@@ -154,7 +148,22 @@ export default function UserProfile(props) {
     }
 if (selectedProfile){followCheck()}
   
+  };
+
+
+  useEffect(() => {
+    getProfile();
+    getPhotos();
+    getFollowStatus();
   }, []);
+
+  useEffect(() => {
+    getProfile();
+    getPhotos();
+    getFollowStatus();
+  }, [selectedProfile]);
+
+
 
   useEffect(() => {
     setUserFail("");
@@ -310,7 +319,7 @@ if (selectedProfile){followCheck()}
               fontSz={fontSizes.Header}
               isEditModeOn={visitProfileVals ? false : isEditModeOn}
               setIsEditModeOn={setIsEditModeOn}
-              visitor={visitProfileVals}
+              isNotVisitor={isNotVisitor}
               onChangeText={(nameText) =>
                 setProfileVals({ ...profileVals, userName: nameText })
               }
@@ -342,7 +351,7 @@ if (selectedProfile){followCheck()}
                   fontSz={fontSizes.StandardText}
                   isEditModeOn={visitProfileVals ? false : isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
-                  visitor={visitProfileVals}
+                  isNotVisitor={isNotVisitor}
                   onChangeText={(bioText) =>
                     setProfileVals({ ...profileVals, bio: bioText })
                   }
