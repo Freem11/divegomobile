@@ -134,12 +134,12 @@ const styles = StyleSheet.create({
     color: "darkgrey",
   },
   flatListBox: {
-    marginTop: "-3%",
-    maxHeight: "72%"
+    marginTop: windowWidth > 600 ? "0%" : "-3%",
+    maxHeight: windowWidth > 600 ?  "63%" : "72%"
   },
   promtBox: {
     position: "absolute",
-    bottom: moderateScale(10),
+    bottom: windowWidth > 600 ? moderateScale(50) : moderateScale(10),
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",

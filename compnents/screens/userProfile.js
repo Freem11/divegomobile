@@ -299,7 +299,7 @@ if (selectedProfile){followCheck()}
       )}
 
       <View style={styles.contentContainer}>
-        <View style={{ marginBottom: windowHeight / 70 }}>
+        <View style={styles.nameContainer}>
           {profileVals && (
             <PlainTextInput
               content={
@@ -399,14 +399,17 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight / 2.2,
     width: "100%",
   },
+  nameContainer: {
+    // zIndex: 1,
+    flexDirection: "row",
+    width: "auto",
+    marginTop: Platform.OS === "ios" ? windowHeight / 50 : windowHeight / 50,
+    marginHorizontal: "0%",
+  },
   header: {
-    zIndex: 10,
-    marginTop:
-      windowWidth > 600
-        ? windowHeight / 2.5
-        : moderateScale(windowHeight / 3.2),
-    marginRight: windowWidth / 3,
-    fontSize: moderateScale(34),
+    // zIndex: 50,
+    marginTop: "5%",
+    fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Regular,
     color: colors.themeBlack,
   },

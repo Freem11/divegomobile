@@ -147,7 +147,7 @@ export default SearchToolListItem = (props) => {
 const styles = StyleSheet.create({
   suggestion: {
     height: moderateScale(55),
-    width: moderateScale(340),
+    width: "100%",
     backgroundColor: colors.themeWhite,
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
