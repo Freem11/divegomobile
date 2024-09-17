@@ -16,6 +16,7 @@ import {
   deletePhotoLike,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
 import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { CommentsModalContext } from "../contexts/commentsModalContext";
@@ -29,11 +30,11 @@ import email from "react-native-email";
 import Share from "react-native-share";
 import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
 import liked from "../png/socialIcons/Hand-Filled-Blue.png";
-import { MaterialIcons } from "@expo/vector-icons";
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
@@ -43,6 +44,9 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
   const { pic, dataSetType, diveSiteName } = props;
+  const { levelOneScreen, setLevelOneScreen } = useContext(
+    LevelOneScreenContext
+  );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
@@ -53,9 +57,8 @@ export default function Picture(props) {
     LargeModalSecondContext
   );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
@@ -117,11 +120,17 @@ export default function Picture(props) {
       return;
     }
 
-    setSelectedProfile(picOwnerAccount[0].UserID);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("UserProfileButton");
-    setLargeModalSecond(!largeModalSecond);
-    setLargeModal(!largeModal);
+    setSelectedProfile(picOwnerAccount);
+    setLevelOneScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("ProfileScreen");
+    useButtonPressHelper(
+      "ProfileScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
+    );
+
   };
 
   const handleDiveSiteMove = async (pic) => {

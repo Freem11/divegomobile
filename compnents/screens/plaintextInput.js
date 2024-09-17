@@ -10,6 +10,7 @@ export default function PlainTextInput(props) {
     fontSz,
     isEditModeOn,
     setIsEditModeOn,
+    visitor,
     onChangeText,
     placeHolder,
   } = props;
@@ -33,7 +34,7 @@ export default function PlainTextInput(props) {
         onChangeText={onChangeText}
         multiline={true}
       ></TextInput>
-      {placeHolder && placeHolder.length > 100 ? null :
+      {placeHolder && placeHolder.length > 100 || visitor ? null :
       isEditModeOn ? (
         <FontAwesome6
           name="check"
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   },
   input: {
     minWidth: moderateScale(40),
-    maxWidth: "94%",
+    maxWidth: "100%",
     flexWrap: "wrap",
     height: "auto",
   },

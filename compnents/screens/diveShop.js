@@ -133,7 +133,6 @@ export default function DiveShop(props) {
         let picture = await fetch(uri);
         picture = await picture.blob();
         await uploadphoto(picture, fileName);
-        console.log("hmm", diveShopVals.photo)
         if (
           diveShopVals.photo !== null ||
           diveShopVals.photo === ""

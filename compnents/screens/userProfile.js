@@ -6,21 +6,22 @@ import {
   Text,
   ScrollView,
   Platform,
+  TouchableWithoutFeedback
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import { activeFonts, colors, fontSizes } from "../styles";
+import { activeFonts, colors, fontSizes, screenSecondaryButton, buttonTextAlt } from "../styles";
 import screenData from "./screenData.json";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, s } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
-
+import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { getPhotosByUserWithExtra } from '../../supabaseCalls/photoSupabaseCalls';
+import { getPhotosByUserWithExtra } from "../../supabaseCalls/photoSupabaseCalls";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
@@ -37,6 +38,12 @@ const windowHeight = Dimensions.get("window").height;
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
+  const { selectedProfile, setSelectedProfile } = useContext(
+    SelectedProfileContext
+  );
+  console.log("selectedProfile", selectedProfile);
+  console.log("activeProfile", profile);
+
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -47,6 +54,7 @@ export default function UserProfile(props) {
   );
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);
+  const [visitProfileVals, setVisitProfileVals] = useState(null);
   const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [profilePhotos, setProfilePhotos] = useState(null);
@@ -55,15 +63,28 @@ export default function UserProfile(props) {
   const drawerLowerBound = "30%";
 
   const getPhotos = async () => {
-    const success = await getPhotosByUserWithExtra(profile[0].UserID,profile[0].UserID);
-    setProfilePhotos(success)
-  }
-  
-  useEffect(() => {
-    getPhotos()
-  }, [])
+    const success = await getPhotosByUserWithExtra(
+      selectedProfile[0].UserID,
+      profile[0].UserID
+    );
+    setProfilePhotos(success);
+  };
 
   useEffect(() => {
+    getPhotos();
+  }, []);
+
+  useEffect(() => {
+    if (selectedProfile[0].UserID === profile[0].UserID) {
+    } else {
+      setVisitProfileVals({
+        id: selectedProfile[0].UserID,
+        userName: selectedProfile[0].UserName,
+        bio: selectedProfile[0].profileBio,
+        photo: selectedProfile[0].profilePhoto,
+      });
+    }
+
     setProfileVals({
       id: profile[0].UserID,
       userName: profile[0].UserName,
@@ -139,6 +160,7 @@ export default function UserProfile(props) {
   };
 
   const onClose = () => {
+    setSelectedProfile(null);
     setLevelTwoScreen(false);
   };
 
@@ -163,30 +185,46 @@ export default function UserProfile(props) {
         onPress={() => onClose()}
         style={styles.backButton}
       />
-      <View style={styles.settingsButton}>
-        <MaterialIcons
-          name="settings"
-          size={moderateScale(46)}
-          color={colors.themeWhite}
-          onPress={openSettings}
-        />
-      </View>
-      <View style={styles.addPhotoButton}>
-        <MaterialIcons
-          name="add-a-photo"
-          size={moderateScale(30)}
-          color={colors.themeWhite}
-          onPress={() => handleImageUpload()}
-        />
-      </View>
+      {visitProfileVals ? (
+        <TouchableWithoutFeedback onPress={null}>
+          <View style={styles.followButton}>
+            <Text style={styles.followButtonText}>Follow</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      ) : (
+        <View style={styles.settingsButton}>
+          <MaterialIcons
+            name="settings"
+            size={moderateScale(46)}
+            color={colors.themeWhite}
+            onPress={openSettings}
+          />
+        </View>
+      )}
+      {visitProfileVals ? null : (
+        <View style={styles.addPhotoButton}>
+          <MaterialIcons
+            name="add-a-photo"
+            size={moderateScale(30)}
+            color={colors.themeWhite}
+            onPress={() => handleImageUpload()}
+          />
+        </View>
+      )}
+
       <View style={styles.contentContainer}>
         <View style={{ marginBottom: windowHeight / 70 }}>
           {profileVals && (
             <PlainTextInput
-              content={profileVals.userName}
+              content={
+                visitProfileVals
+                  ? visitProfileVals.userName
+                  : profileVals.userName
+              }
               fontSz={fontSizes.Header}
-              isEditModeOn={isEditModeOn}
+              isEditModeOn={visitProfileVals ? false : isEditModeOn}
               setIsEditModeOn={setIsEditModeOn}
+              visitor={visitProfileVals}
               onChangeText={(nameText) =>
                 setProfileVals({ ...profileVals, userName: nameText })
               }
@@ -212,10 +250,13 @@ export default function UserProfile(props) {
             <ScrollView>
               {profileVals && (
                 <PlainTextInput
-                  content={profileVals.bio}
+                  content={
+                    visitProfileVals ? visitProfileVals.bio : profileVals.bio
+                  }
                   fontSz={fontSizes.StandardText}
-                  isEditModeOn={isEditModeOn}
+                  isEditModeOn={visitProfileVals ? false : isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
+                  visitor={visitProfileVals}
                   onChangeText={(bioText) =>
                     setProfileVals({ ...profileVals, bio: bioText })
                   }
@@ -228,17 +269,27 @@ export default function UserProfile(props) {
 
       <WavyHeaderDynamic
         customStyles={styles.svgCurve}
-        image={profileVals && profileVals.photo}
+        image={
+          visitProfileVals
+            ? visitProfileVals && visitProfileVals.photo
+            : profileVals && profileVals.photo
+        }
       ></WavyHeaderDynamic>
 
       <BottomDrawer
         dataSet={profilePhotos}
         dataSetType={"ProfilePhotos"}
-        placeHolder={'Say a little about yourself'}
+        placeHolder={"Say a little about yourself"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
-        drawerHeader={profile[0].UserName + screenData.UserProfile.drawerHeader}
-        emptyDrawer={profile[0].UserName + screenData.UserProfile.emptyDrawer}
+        drawerHeader={
+          (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
+          screenData.UserProfile.drawerHeader
+        }
+        emptyDrawer={
+          (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
+          screenData.UserProfile.emptyDrawer
+        }
       />
     </View>
   );
@@ -285,6 +336,11 @@ const styles = StyleSheet.create({
   addPhotoButton: [
     { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
   ],
+  followButton: [
+    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
+    screenSecondaryButton,
+  ],
+  followButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   svgCurve: {
     position: "absolute",
     bottom: 0,
