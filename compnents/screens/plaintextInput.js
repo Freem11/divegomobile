@@ -27,9 +27,6 @@ export default function PlainTextInput(props) {
     checkPasser = isMyShop
   }
 
-  console.log("isPartnerAccount", isPartnerAccount)
-  console.log("isMyShop", isMyShop)
-  
   return (
     <View style={styles.container}>
       <TextInput
