@@ -2,8 +2,6 @@ import React, {
   useState,
   useContext,
   useEffect,
-  useRef,
-  useCallback,
 } from "react";
 import {
   StyleSheet,
@@ -12,14 +10,11 @@ import {
   Text,
   ScrollView,
   Platform,
-  TouchableWithoutFeedback,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import CloseButton from "../reusables/closeButton";
-import { FontAwesome } from "@expo/vector-icons";
 import {
   activeFonts,
   colors,
@@ -29,19 +24,14 @@ import {
 } from "../styles";
 import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
-import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { chooseImageHandler } from "./imageUploadHelpers";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import {
   uploadphoto,
   removePhoto,
@@ -57,8 +47,6 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function DiveShop(props) {
   const {} = props;
-  const photosRef = useRef(null);
-  const bottomSheetRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
   const [itineraryList, setItineraryList] = useState("");
   const { setMapCenter } = useContext(MapCenterContext);
@@ -67,16 +55,7 @@ export default function DiveShop(props) {
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const [shop, setShop] = useState("");
-  const [diveShopVals, setDiveShopVals] = useState({
-    diveShopbio: null,
-    diveShopPhoto: null,
-  });
+  const [diveShopVals, setDiveShopVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
   const drawerUpperBound = "90%";
@@ -105,6 +84,12 @@ export default function DiveShop(props) {
 
 
   useEffect(() => {
+    setDiveShopVals({
+      id: selectedShop[0].id,
+      bio: selectedShop[0].diveShopBio,
+      photo: selectedShop[0].diveShopProfilePhoto,
+    });
+
     if (selectedShop[0]) {
       getItineraries(selectedShop[0].id);
     }
@@ -119,7 +104,7 @@ export default function DiveShop(props) {
 
 
   useEffect(() => {
-    if (!isEditModeOn && shop) {
+    if (!isEditModeOn && diveShopVals) {
       diveShopUpdateUpdate();
     }
   }, [isEditModeOn]);
@@ -127,9 +112,9 @@ export default function DiveShop(props) {
   const diveShopUpdateUpdate = async () => {
     try {
       const success = await updateDiveShop({
-        id: shop.id,
-        bio: shop.diveShopBio,
-        photo: shop.diveShopProfilePhoto,
+        id: diveShopVals.id,
+        bio: diveShopVals.bio,
+        photo: diveShopVals.photo,
       });
     } catch (e) {
       console.log({ title: "Error19", message: e.message });
@@ -148,23 +133,24 @@ export default function DiveShop(props) {
         let picture = await fetch(uri);
         picture = await picture.blob();
         await uploadphoto(picture, fileName);
+        console.log("hmm", diveShopVals.photo)
         if (
-          shop.diveshopprofilephoto !== null ||
-          shop.diveshopprofilephoto === ""
+          diveShopVals.photo !== null ||
+          diveShopVals.photo === ""
         ) {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: shop.diveshopprofilephoto.split("/").pop(),
+            fileName: diveShopVals.photo.split("/").pop(),
           });
         }
 
-        setShop({
-          ...shop,
+        setDiveShopVals({
+          ...diveShopVals,
           photo: `animalphotos/public/${fileName}`,
         });
         const success = await updateDiveShop({
-          id: shop.id,
-          bio: shop.diveshopbio,
+          id: diveShopVals.id,
+          bio: diveShopVals.bio,
           photo: `animalphotos/public/${fileName}`,
         });
       }
@@ -213,12 +199,12 @@ export default function DiveShop(props) {
               {selectedShop && (
                 <PlainTextInput
                   placeHolder={`A little about ${selectedShop[0].orgName}`}
-                  content={shop.diveshopbio}
+                  content={diveShopVals && diveShopVals.bio}
                   fontSz={fontSizes.StandardText}
                   isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
                   onChangeText={(bioText) =>
-                    setShop({ ...shop, diveshopbio: bioText })
+                    setDiveShopVals({ ...diveShopVals, bio: bioText })
                   }
                 />
               )}
@@ -229,7 +215,7 @@ export default function DiveShop(props) {
 
       <WavyHeaderDynamic
         customStyles={styles.svgCurve}
-        image={shop && shop.diveshopprofilephoto}
+        image={diveShopVals && diveShopVals.photo}
       ></WavyHeaderDynamic>
 
       <BottomDrawer

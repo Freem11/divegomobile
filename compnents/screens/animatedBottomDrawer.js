@@ -56,8 +56,6 @@ export default function BottomDrawer(props) {
     headerButton,
   } = props;
 
-  console.log("ERHEM", dataSet)
-
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { setMapHelper } = useContext(MapHelperContext);

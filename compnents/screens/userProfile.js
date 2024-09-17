@@ -234,6 +234,7 @@ export default function UserProfile(props) {
       <BottomDrawer
         dataSet={profilePhotos}
         dataSetType={"ProfilePhotos"}
+        placeHolder={'Say a little about yourself'}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
         drawerHeader={profile[0].UserName + screenData.UserProfile.drawerHeader}
