@@ -248,7 +248,6 @@ if (selectedProfile){followCheck()}
     //   return
     // }
 
-    console.log("K+HEY", userStats)
     if (userFollows) {
       deleteUserFollow(followData);
       setUserFollows(false);
