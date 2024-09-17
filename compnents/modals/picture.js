@@ -43,7 +43,7 @@ let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
-  const { pic, dataSetType, diveSiteName } = props;
+  const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
@@ -139,7 +139,9 @@ export default function Picture(props) {
       Latitude: pic.latitude,
       Longitude: pic.longitude,
     });
-    setLevelTwoScreen(false)
+    setVisitProfileVals(null);
+    setSelectedProfile(null);
+    setLevelTwoScreen(false);
   };
 
   const convertBase64 = (cacheDir) => {

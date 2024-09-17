@@ -27,9 +27,11 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
+import { SessionContext } from "../contexts/sessionContext";
 import { getPhotosByUserWithExtra } from "../../supabaseCalls/photoSupabaseCalls";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
+import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { chooseImageHandler } from "./imageUploadHelpers";
 import BottomDrawer from "./animatedBottomDrawer";
@@ -37,6 +39,12 @@ import {
   uploadphoto,
   removePhoto,
 } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import {
+  insertUserFollow,
+  deleteUserFollow,
+  checkIfUserFollows,
+} from "../../supabaseCalls/userFollowSupabaseCalls";
+import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -44,12 +52,11 @@ const windowHeight = Dimensions.get("window").height;
 export default function UserProfile(props) {
   const {} = props;
   const { profile } = useContext(UserProfileContext);
+  const { activeSession } = useContext(SessionContext);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
-  console.log("selectedProfile", selectedProfile);
-  console.log("activeProfile", profile);
-
+ 
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -64,11 +71,15 @@ export default function UserProfile(props) {
   const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [profilePhotos, setProfilePhotos] = useState(null);
+  const [followData, setFollowData] = useState(profile[0].UserID);
+  const [userFollows, setUserFollows] = useState(false);
+  const [userStats, setUserStats] = useState(null);
 
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
   const getPhotos = async () => {
+
     let success;
     if (selectedProfile && selectedProfile[0].UserID) {
       success = await getPhotosByUserWithExtra(
@@ -84,9 +95,33 @@ export default function UserProfile(props) {
     setProfilePhotos(success);
   };
 
+  const getProfile = async () => {
+    let userID;
+    if (selectedProfile) {
+      userID = selectedProfile[0].UserID;
+    } else {
+      userID = profile[0].UserID;
+    }
+
+    try {
+      const success = await getProfileWithStats(userID);
+      if (success) {
+        setUserStats(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
   useEffect(() => {
+    getProfile();
     getPhotos();
   }, []);
+
+  useEffect(() => {
+    getProfile();
+    getPhotos();
+  }, [selectedProfile]);
 
   useEffect(() => {
     if (!selectedProfile|| selectedProfile[0].UserID === profile[0].UserID) {
@@ -106,6 +141,19 @@ export default function UserProfile(props) {
       photo: profile[0].profilePhoto,
     });
     setTempUserName(profile[0].UserName);
+
+    async function followCheck() {
+      let alreadyFollows = await checkIfUserFollows(
+        profile[0].UserID,
+        selectedProfile[0].UserID
+      );
+      if (alreadyFollows && alreadyFollows.length > 0) {
+        setUserFollows(true);
+        setFollowData(alreadyFollows[0].id);
+      }
+    }
+
+    followCheck();
   }, []);
 
   useEffect(() => {
@@ -191,6 +239,30 @@ export default function UserProfile(props) {
     );
   };
 
+
+  const handleFollow = async () => {
+
+    // let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    // console.log("ERHEM", permissionGiven)
+    // if (!permissionGiven) {
+    //   return
+    // }
+
+    console.log("K+HEY", userStats)
+    if (userFollows) {
+      deleteUserFollow(followData);
+      setUserFollows(false);
+    } else {
+      if (userStats) {
+        let newRecord = await insertUserFollow(
+          profile[0].UserID,
+          userStats[0].userid
+        );
+        setFollowData(newRecord[0].id);
+        setUserFollows(true);
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <MaterialIcons
@@ -201,9 +273,9 @@ export default function UserProfile(props) {
         style={styles.backButton}
       />
       {visitProfileVals ? (
-        <TouchableWithoutFeedback onPress={null}>
+        <TouchableWithoutFeedback onPress={()=> handleFollow()}>
           <View style={styles.followButton}>
-            <Text style={styles.followButtonText}>Follow</Text>
+      <Text style={styles.followButtonText}>{userFollows ? screenData.UserProfile.userDoesFollow : screenData.UserProfile.UserDoesNotFollow}</Text>
           </View>
         </TouchableWithoutFeedback>
       ) : (
@@ -295,6 +367,7 @@ export default function UserProfile(props) {
         dataSet={profilePhotos}
         dataSetType={"ProfilePhotos"}
         placeHolder={"Say a little about yourself"}
+        setVisitProfileVals={setVisitProfileVals}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
         drawerHeader={

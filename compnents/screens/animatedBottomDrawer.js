@@ -51,6 +51,7 @@ export default function BottomDrawer(props) {
     dataSetType,
     lowerBound,
     upperBound,
+    setVisitProfileVals,
     drawerHeader,
     emptyDrawer,
     headerButton,
@@ -229,6 +230,7 @@ export default function BottomDrawer(props) {
                           pic={photo}
                           dataSetType={dataSetType}
                           diveSiteName={item.name}
+                          setVisitProfileVals={setVisitProfileVals}
                         ></Picture>
                       );
                     })}

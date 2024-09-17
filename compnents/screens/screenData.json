@@ -79,7 +79,9 @@
       "UserProfile" :
       {
         "drawerHeader" : "'s Sea Creature Encounters",
-        "emptyDrawer": " hasn't posted any sightings yet."
+        "emptyDrawer": " hasn't posted any sightings yet.",
+        "userDoesFollow": "Following",
+        "UserDoesNotFollow": "Follow"
       },
       "DiveSite" :
       {
