@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -37,9 +33,7 @@ import {
   removePhoto,
 } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
-import {
-  updateDiveShop,
-} from "../../supabaseCalls/shopsSupabaseCalls";
+import { updateDiveShop } from "../../supabaseCalls/shopsSupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
 
 const windowWidth = Dimensions.get("window").width;
@@ -57,6 +51,8 @@ export default function DiveShop(props) {
   );
   const [diveShopVals, setDiveShopVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
+  const [isMyShop, setIsMyShop] = useState(false);
+
 
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
@@ -72,7 +68,6 @@ export default function DiveShop(props) {
     }
   };
 
-
   useEffect(() => {
     if (levelOneScreen && zoomHelper) {
       setMapCenter({
@@ -82,8 +77,11 @@ export default function DiveShop(props) {
     }
   }, [levelOneScreen]);
 
-
   useEffect(() => {
+    if(profile[0].partnerAccount & (selectedShop[0].userId === profile[0].UserID)){
+      setIsMyShop(true)
+    }
+
     setDiveShopVals({
       id: selectedShop[0].id,
       bio: selectedShop[0].diveShopBio,
@@ -100,8 +98,6 @@ export default function DiveShop(props) {
       getItineraries(selectedShop[0].id);
     }
   }, [selectedShop[0].id]);
-
-
 
   useEffect(() => {
     if (!isEditModeOn && diveShopVals) {
@@ -133,10 +129,7 @@ export default function DiveShop(props) {
         let picture = await fetch(uri);
         picture = await picture.blob();
         await uploadphoto(picture, fileName);
-        if (
-          diveShopVals.photo !== null ||
-          diveShopVals.photo === ""
-        ) {
+        if (diveShopVals.photo !== null || diveShopVals.photo === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
             fileName: diveShopVals.photo.split("/").pop(),
@@ -172,15 +165,16 @@ export default function DiveShop(props) {
         style={styles.backButton}
       />
 
-{profile[0].partnerAccount &&
-      <View style={styles.addPhotoButton}>
-      <MaterialIcons
-        name="add-a-photo"
-        size={moderateScale(30)}
-        color={colors.themeWhite}
-        onPress={() => handleImageUpload()}
-      />
-    </View>}
+      {isMyShop && (
+        <View style={styles.addPhotoButton}>
+          <MaterialIcons
+            name="add-a-photo"
+            size={moderateScale(30)}
+            color={colors.themeWhite}
+            onPress={() => handleImageUpload()}
+          />
+        </View>
+      )}
 
       <View style={styles.contentContainer}>
         <View style={styles.shopNameContainer}>
@@ -202,6 +196,7 @@ export default function DiveShop(props) {
                   placeHolder={`A little about ${selectedShop[0].orgName}`}
                   content={diveShopVals && diveShopVals.bio}
                   fontSz={fontSizes.StandardText}
+                  isMyShop={isMyShop}
                   isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
                   onChangeText={(bioText) =>

@@ -11,6 +11,8 @@ export default function PlainTextInput(props) {
     fontSz,
     isEditModeOn,
     setIsEditModeOn,
+    isPartnerAccount,
+    isMyShop,
     visitor,
     onChangeText,
     placeHolder,
@@ -18,6 +20,16 @@ export default function PlainTextInput(props) {
 
   const { profile } = useContext(UserProfileContext);
 
+  let checkPasser = false
+  if(isPartnerAccount){
+    checkPasser = isPartnerAccount
+  } else if(isMyShop) {
+    checkPasser = isMyShop
+  }
+
+  console.log("isPartnerAccount", isPartnerAccount)
+  console.log("isMyShop", isMyShop)
+  
   return (
     <View style={styles.container}>
       <TextInput
@@ -37,7 +49,7 @@ export default function PlainTextInput(props) {
         onChangeText={onChangeText}
         multiline={true}
       ></TextInput>
-      {placeHolder && placeHolder.length > 100 || visitor || !profile[0].partnerAccount ? null :
+      {placeHolder && placeHolder.length > 100 || visitor || !checkPasser ? null :
       isEditModeOn ? (
         <FontAwesome6
           name="check"

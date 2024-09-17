@@ -78,6 +78,7 @@ export default function DiveSite(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
@@ -87,7 +88,7 @@ export default function DiveSite(props) {
     diveSitePhoto: null,
   });
   const [isEditModeOn, setIsEditModeOn] = useState(false);
-
+  const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
@@ -133,6 +134,10 @@ export default function DiveSite(props) {
   }, [selectedDiveSite]);
 
   useEffect(() => {
+    if(profile[0].partnerAccount){
+      setIsPartnerAccount(true)
+    }
+
     getDiveSite(selectedDiveSite.SiteName);
     // filterAnchorPhotos();
   }, []);
@@ -323,6 +328,7 @@ export default function DiveSite(props) {
                   placeHolder={`A little about ${site.name}`}
                   content={site.divesitebio}
                   fontSz={fontSizes.StandardText}
+                  isPartnerAccount={isPartnerAccount}
                   isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
                   onChangeText={(bioText) =>
