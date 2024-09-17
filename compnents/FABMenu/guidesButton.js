@@ -61,7 +61,7 @@ export default function GuidesButton() {
             size={moderateScale(32)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            User Guides
+            Guides
           </Text>
         </View>
       </TouchableWithoutFeedback>

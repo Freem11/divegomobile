@@ -516,22 +516,10 @@ export default function MapPage() {
             )}
 
             {mapConfig === 0 ? (
-              <Animated.View
-                style={[styles.FMenuAnimate, tabFY]}
+              <View
+                style={styles.FMenuAnimate}
                 pointerEvents={"box-none"}
               >
-                <TouchableWithoutFeedback onPress={startFTabAnimation}>
-                  <View style={styles.FBox}>
-                    <Text style={styles.FText}>{label}</Text>
-                    <AntDesign
-                      name={direction}
-                      size={moderateScale(18)}
-                      color="white"
-                      style={{ marginBottom: 5 }}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-
                 <Animated.View style={[styles.feedback, feedbackReveal]}>
                   <Text
                     style={styles.feedRequest}
@@ -556,23 +544,10 @@ export default function MapPage() {
                   </TouchableWithoutFeedback>
                 </Animated.View>
 
-                <View
-                  style={{
-                    position: "absolute",
-                    top: -moderateScale(30),
-                    right: moderateScale(30),
-                  }}
-                >
-                  <CircularButton
-                    buttonAction={toggleDiveSites}
-                    icon="anchor"
-                  />
-                </View>
-
                 <View style={styles.FMenu}>
-                  <FABMenu style={{ zIndex: 2 }} />
+                  <FABMenu style={{ zIndex: 2 }} toggleDiveSites={toggleDiveSites} />
                 </View>
-              </Animated.View>
+              </View>
             ) : null}
 
             {mapConfig in [, 1, , 3] ? (
@@ -657,7 +632,7 @@ const styles = StyleSheet.create({
   },
   FMenuAnimate: {
     position: "absolute",
-    bottom: moderateScale(-65),
+    bottom: moderateScale(15),
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -784,7 +759,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: colors.primaryBlue,
     position: "absolute",
-    top: -moderateScale(30),
+    top: -moderateScale(60),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),
