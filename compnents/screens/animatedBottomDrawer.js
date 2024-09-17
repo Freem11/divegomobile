@@ -139,7 +139,7 @@ export default function BottomDrawer(props) {
         </View>
       </GestureDetector>
 
-      {dataSet ? (
+      {dataSet && dataSet.length > 0 ? (
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}

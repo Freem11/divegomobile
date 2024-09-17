@@ -6,13 +6,19 @@ import {
   Text,
   ScrollView,
   Platform,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import { activeFonts, colors, fontSizes, screenSecondaryButton, buttonTextAlt } from "../styles";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  screenSecondaryButton,
+  buttonTextAlt,
+} from "../styles";
 import screenData from "./screenData.json";
 import { moderateScale, s } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
@@ -63,10 +69,18 @@ export default function UserProfile(props) {
   const drawerLowerBound = "30%";
 
   const getPhotos = async () => {
-    const success = await getPhotosByUserWithExtra(
-      selectedProfile[0].UserID,
-      profile[0].UserID
-    );
+    let success;
+    if (selectedProfile && selectedProfile[0].UserID) {
+      success = await getPhotosByUserWithExtra(
+        selectedProfile[0].UserID,
+        profile[0].UserID
+      );
+    } else {
+      success = await getPhotosByUserWithExtra(
+        profile[0].UserID,
+        profile[0].UserID
+      );
+    }
     setProfilePhotos(success);
   };
 
@@ -75,7 +89,7 @@ export default function UserProfile(props) {
   }, []);
 
   useEffect(() => {
-    if (selectedProfile[0].UserID === profile[0].UserID) {
+    if (!selectedProfile|| selectedProfile[0].UserID === profile[0].UserID) {
     } else {
       setVisitProfileVals({
         id: selectedProfile[0].UserID,
@@ -160,6 +174,7 @@ export default function UserProfile(props) {
   };
 
   const onClose = () => {
+    setVisitProfileVals(null);
     setSelectedProfile(null);
     setLevelTwoScreen(false);
   };
