@@ -13,7 +13,7 @@ export default function PlainTextInput(props) {
     setIsEditModeOn,
     isPartnerAccount,
     isMyShop,
-    visitor,
+    isNotVisitor,
     onChangeText,
     placeHolder,
   } = props;
@@ -25,6 +25,8 @@ export default function PlainTextInput(props) {
     checkPasser = isPartnerAccount
   } else if(isMyShop) {
     checkPasser = isMyShop
+  } else if(isNotVisitor) {
+    checkPasser = isNotVisitor
   }
 
   return (
@@ -46,7 +48,7 @@ export default function PlainTextInput(props) {
         onChangeText={onChangeText}
         multiline={true}
       ></TextInput>
-      {placeHolder && placeHolder.length > 100 || visitor || !checkPasser ? null :
+      {placeHolder && placeHolder.length > 100 || !checkPasser ? null :
       isEditModeOn ? (
         <FontAwesome6
           name="check"

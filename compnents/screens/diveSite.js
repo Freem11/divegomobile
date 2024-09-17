@@ -92,7 +92,6 @@ export default function DiveSite(props) {
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
-  console.log("profile", profile);
   const getPhotos = async () => {
     const success = await getPhotosByDiveSiteWithExtra({
       lat: selectedDiveSite.Latitude,
