@@ -80,7 +80,6 @@ import Animated, {
   interpolate,
   withSpring,
 } from "react-native-reanimated";
-import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import * as ScreenOrientation from "expo-screen-orientation";
 
 const windowWidth = Dimensions.get("window").width;
@@ -453,12 +452,6 @@ export default function MapPage() {
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
           <View style={styles.container}>
-            {tutorialRunning && (
-              <View style={styles.tutorialBar} pointerEvents={"box-none"}>
-                <TutorialBar style={{ zIndex: 55 }} />
-              </View>
-            )}
-
             {mapConfig in [, , 2] || !mapConfig ? (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
                 <PhotoMenu style={{ zIndex: 3 }} />
@@ -700,14 +693,6 @@ const styles = StyleSheet.create({
     width: "100%",
     zIndex: 3,
     // backgroundColor: "grey"
-  },
-  tutorialBar: {
-    width: "25%",
-    position: "absolute",
-    left: "8%",
-    top: Platform.OS === "ios" ? "14%" : "14%",
-    zIndex: 55,
-    // backgroundColor:"pink"
   },
   Hist: {
     alignItems: "center",

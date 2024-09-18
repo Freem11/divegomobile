@@ -16,7 +16,6 @@ import ItineraryListModalContextProvider from './itineraryListModalContext';
 import DevelopmentModeContextProvider from './developementModeContext';
 import AreaPicsContextProvider from './areaPicsContext';
 import SearchTextContextProvider from './searchTextContext';
-import ChapterContextProvider from './chapterContext';
 import AnchorPhotosContextProvider from './anchorPhotosContext';
 import ReverseContextProvider from './reverseContext';
 import UserProfileContextProvider from './userProfileContext';
@@ -86,7 +85,6 @@ const providers = [
     DevelopmentModeContextProvider,
     AreaPicsContextProvider,
     SearchTextContextProvider,
-    ChapterContextProvider,
     AnchorPhotosContextProvider,
     ReverseContextProvider,
     UserProfileContextProvider,
