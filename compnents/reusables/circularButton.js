@@ -23,7 +23,7 @@ export default function CircularButton(props) {
       <MaterialCommunityIcons
         name={icon}
         onPress={buttonAction}
-        color={isPressed ? "darkgrey" : colors.secondaryYellow }
+        color={colors.themeWhite }
         size={moderateScale(30)}
       />
   </View>
