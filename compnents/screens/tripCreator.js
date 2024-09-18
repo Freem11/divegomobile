@@ -31,20 +31,14 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale, s } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
-import { ShopModalContext } from "../contexts/shopModalContext";
 import { TripDetailContext } from "../contexts/tripDetailsContext";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
-import { ShopContext } from "../contexts/shopContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
 
 const windowWidth = Dimensions.get("window").width;
@@ -52,33 +46,22 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function TripCreatorPage(props) {
   const {} = props;
-  const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
-  const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
 
   const [dateType, setDateType] = useState("");
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { shop } = useContext(ShopContext);
-
-  const { activeSession, setActiveSession } = useContext(SessionContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
 
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const [itineraryList, setItineraryList] = useState("");
-  const [selectedID, setSelectedID] = useState(null);
 
   const drawerUpperBound = "80%";
   const drawerLowerBound = "15%";

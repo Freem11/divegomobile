@@ -8,7 +8,6 @@ import { MapZoomContext } from "./contexts/mapZoomContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
-import { SliderContext } from "./contexts/sliderContext";
 import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
@@ -93,7 +92,6 @@ export default function Map() {
   const { zoomlev, setZoomLev } = useContext(MapZoomContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { diveSitesTog } = useContext(DiveSitesContext);
-  const { sliderVal } = useContext(SliderContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { dragPin, setDragPin } = useContext(PinSpotContext);
@@ -382,7 +380,6 @@ export default function Map() {
     handleMapChange();
   }, [
     diveSitesTog,
-    sliderVal,
     animalSelection,
     animalMultiSelection,
     mapCenter,

@@ -24,7 +24,6 @@ import HeatPointsContextProvider from './heatPointsContext';
 import AnimalMultiSelectContextProvider from './animalMultiSelectContext';
 import SelectedDiveSiteContextProvider from './selectedDiveSiteContext';
 import PictureContextProvider from './pictureContext';
-import SliderContextProvider from './sliderContext';
 import AnimalSelectContextProvider from './animalSelectContext';
 import DiveSpotContextProvider from './diveSpotContext';
 import MapBoundariesContextProvider from './mapBoundariesContext';
@@ -76,7 +75,6 @@ const providers = [
     AnimalMultiSelectContextProvider,
     SelectedDiveSiteContextProvider,
     PictureContextProvider,
-    SliderContextProvider,
     AnimalSelectContextProvider,
     DiveSpotContextProvider,
     MapBoundariesContextProvider,

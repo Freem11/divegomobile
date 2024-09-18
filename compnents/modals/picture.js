@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
-import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   insertPhotoLike,
@@ -19,9 +19,7 @@ import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls"
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { CommentsModalContext } from "../contexts/commentsModalContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
@@ -76,9 +74,7 @@ export default function Picture(props) {
   const [mapLocal, setMapLocal] = useState(null);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
-  const { setCommentsModal } = useContext(CommentsModalContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
-  const { setProfileModal } = useContext(ProfileModalContext);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
