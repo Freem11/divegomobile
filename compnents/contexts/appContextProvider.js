@@ -13,7 +13,6 @@ import ProfileModalContextProvider from './profileModalContext';
 import PartnerModalContextProvider from './partnerAccountRequestModalContext';
 import ItineraryCreatorModalContextProvider from './itineraryCreatorModalContext';
 import ItineraryListModalContextProvider from './itineraryListModalContext';
-import DevelopmentModeContextProvider from './developementModeContext';
 import AreaPicsContextProvider from './areaPicsContext';
 import SearchTextContextProvider from './searchTextContext';
 import AnchorPhotosContextProvider from './anchorPhotosContext';
@@ -82,7 +81,6 @@ const providers = [
     PartnerModalContextProvider,
     ItineraryCreatorModalContextProvider,
     ItineraryListModalContextProvider,
-    DevelopmentModeContextProvider,
     AreaPicsContextProvider,
     SearchTextContextProvider,
     AnchorPhotosContextProvider,

@@ -5,17 +5,9 @@ import { scale } from "react-native-size-matters";
 import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
-import { activeFonts, colors, fontSizes } from "../styles";
+import { colors, fontSizes } from "../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchTextContext } from "../contexts/searchTextContext";
-import { AreaPicsContext } from "../contexts/areaPicsContext";
-import { DiveSiteSearchModalContext } from "../contexts/diveSiteSearchContext";
-import { MapSearchModalContext } from "../contexts/mapSearchContext";
-import { DSAdderContext } from "../contexts/DSModalContext";
-import { PictureAdderContext } from "../contexts/picModalContext";
-import { TutorialLaunchPadContext } from "../contexts/tutorialLaunchPadContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
-import { SettingsContext } from "../contexts/gearModalContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { SmallModalContext } from "../contexts/smallModalContext";
@@ -31,23 +23,6 @@ export default function PhotoFilterer() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const { textvalue, setTextValue } = useContext(SearchTextContext);
-  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-
-  const { gearModal, setGearModal } = useContext(SettingsContext);
-  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
-  const { mapSearchModal, setMapSearchModal } = useContext(
-    MapSearchModalContext
-  );
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } = useContext(
-    DSAdderContext
-  );
-  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
-    TutorialLaunchPadContext
-  );
 
   const handleChange = async (text) => {
     setTextValue(text);

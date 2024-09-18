@@ -9,7 +9,6 @@ import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { MapBoundariesContext } from "./contexts/mapBoundariesContext";
 import { MapRegionContext } from "./contexts/mapRegionContext";
 import { MapZoomContext } from "./contexts/mapZoomContext";
-import { MasterContext } from "./contexts/masterContext";
 import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
@@ -25,17 +24,10 @@ import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
-import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
-import { MapSearchModalContext } from "./contexts/mapSearchContext";
 import { DSAdderContext } from "./contexts/DSModalContext";
 import { PictureAdderContext } from "./contexts/picModalContext";
-import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
-import { ProfileModalContext } from "./contexts/profileModalContext";
-import { SettingsContext } from "./contexts/gearModalContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
-import { CommentsModalContext } from "./contexts/commentsModalContext";
-import { SelectedPictureContext } from "./contexts/selectedPictureContext";
 
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import {
@@ -53,9 +45,7 @@ import {
   View,
   Dimensions,
   Platform,
-  Keyboard,
   Text,
-  Alert,
 } from "react-native";
 import mantaIOS from "../compnents/png/mapIcons/Manta_60.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
@@ -84,10 +74,6 @@ import { UserProfileContext } from "./contexts/userProfileContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveScreenContext } from './contexts/activeScreenContext';
 import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
-
-import { LargeModalContext } from "./contexts/largeModalContext";
-import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { TripSitesContext } from "./contexts/tripSitesContext";
 import { TripDetailContext } from "./contexts/tripDetailsContext";
 
@@ -102,23 +88,12 @@ export default function Map() {
   const { activeScreen, setActiveScreen } = useContext(
     ActiveScreenContext
     );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
-    ActiveTutorialIDContext
-  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { fullScreenModal, setFullScreenModal } = useContext(
-    FullScreenModalContext
-  );
-
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
-
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-  const { masterSwitch } = useContext(MasterContext);
   const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
@@ -145,28 +120,16 @@ export default function Map() {
   const [newShops, setnewShops] = useState([]);;
 
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { setCommentsModal } = useContext(CommentsModalContext);
-  const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const { shopModal, setShopModal } = useContext(ShopModalContext);
 
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
-  const { gearModal, setGearModal } = useContext(SettingsContext);
-  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
-  const { mapSearchModal, setMapSearchModal } = useContext(
-    MapSearchModalContext
-  );
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
   const { diveSiteAdderModal, setDiveSiteAdderModal } =
     useContext(DSAdderContext);
-  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
-    TutorialLaunchPadContext
-  );
+
   const { profile } = useContext(UserProfileContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -436,7 +399,7 @@ export default function Map() {
       return;
     }
     updateMapCenter();
-  }, [diveSiteAdderModal, diveSiteSearchModal, picAdderModal]);
+  }, [diveSiteAdderModal, picAdderModal]);
 
   useEffect(() => {
     handleMapChange();
@@ -556,22 +519,6 @@ export default function Map() {
       setLevelOneScreen
     );
   };
-
-  const clearModals = async () => {
-    Keyboard.dismiss();
-    setGearModal(false);
-    setProfileModal(false);
-    setMapSearchModal(false);
-    setDiveSiteSearchModal(false);
-    setPicAdderModal(false);
-    setDiveSiteAdderModal(false);
-    setTutorialLaunchpadModal(false);
-    setCommentsModal(false);
-    setTiles(true);
-    setSelectedPicture(null);
-  };
-
-
   const getTripDiveSites = async (siteIds) => {
     try {
       const success = await getItineraryDiveSiteByIdArray(siteIds);
@@ -630,7 +577,6 @@ export default function Map() {
         onMapReady={() => handleMapChange()}
         onRegionChangeComplete={() => updateMapCenter()}
         toolbarEnabled={false}
-        onPress={clearModals}
       >
         {mapConfig in [0, , 2] && newHeat.length > 0 && (
           <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
