@@ -6,6 +6,7 @@ import {
   Keyboard,
   Dimensions,
   TouchableWithoutFeedback,
+  ScrollView
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import {
@@ -258,7 +259,7 @@ export default function TripCreatorPage(props) {
           </TouchableWithoutFeedback>
         )}
 
-        <View style={styles.content}>
+        <ScrollView style={styles.content}>
           {editMode ? (
             <Text style={styles.header}>
               {screenData.TripCreator.headerEdit}
@@ -342,9 +343,8 @@ export default function TripCreatorPage(props) {
               }
             />
           </View>
-        </View>
 
-        <View style={styles.buttonBox}>
+          <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => handleSubmit()}>
             <View style={styles.submitButton}>
               <Text style={styles.submitText}>
@@ -358,6 +358,9 @@ export default function TripCreatorPage(props) {
             </View>
           </TouchableWithoutFeedback>
         </View>
+        <View style={{height: moderateScale(50)}}>
+        </View>
+        </ScrollView>
 
         <BottomDrawer
           dataSet={tripDiveSites}
@@ -389,8 +392,9 @@ const styles = StyleSheet.create({
     height: windowHeight,
   },
   content: {
+    height: "180%",
     width: "90%",
-    marginBottom: "5%",
+    marginBottom: "20%",
   },
   header: {
     zIndex: 10,
@@ -417,7 +421,7 @@ const styles = StyleSheet.create({
     width: "90%",
     alignItems: "flex-end",
     marginTop: "-15%",
-    marginHorizontal: "15%",
+    marginHorizontal: "10%",
   },
   submitButton: [
     authenicationButton,

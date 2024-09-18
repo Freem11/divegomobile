@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
+  ScrollView,
   Text,
   Dimensions,
   TouchableWithoutFeedback,
@@ -93,7 +94,7 @@ export default function PartnerRequestPage(props) {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <MaterialIcons
           name="chevron-left"
           size={moderateScale(48)}
@@ -184,7 +185,7 @@ export default function PartnerRequestPage(props) {
             </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }
