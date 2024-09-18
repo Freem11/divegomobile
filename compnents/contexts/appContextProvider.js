@@ -38,7 +38,6 @@ import SelectedPhotoContextProvider from './selectedPhotoContext';
 import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
 import ActiveConfirmationIDContextProvider from './activeConfirmationIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
-import SmallModalContextProvider from './smallModalContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
 import ConfirmationModalContextProvider from './confirmationModalContext';
 import ConfirmationTypeContextProvider from './confirmationTypeContext';
@@ -89,7 +88,6 @@ const providers = [
     ActiveTutorialIDContextProvider,
     PreviousButtonIDContextProvider,
     ActiveConfirmationIDContextProvider,
-    SmallModalContextProvider,
     FullScreenModalContextProvider,
     ConfirmationModalContextProvider,
     ConfirmationTypeContextProvider,
