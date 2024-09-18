@@ -7,6 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
+import { activeFonts, colors, fontSizes } from "../styles";
 
 import DiveSite from '../screens/diveSite';
 import DiveShop from '../screens/diveShop';
@@ -55,7 +56,7 @@ export default function LevelOneScreen() {
 
 const styles = StyleSheet.create({
   modalBody: {
-    backgroundColor: "green",
+    backgroundColor: colors.primaryBlue,
     position: "absolute",
     height: windowHeight,
     width: windowWidth,

@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   buttonBox: {
     width: "100%",
     alignItems: "flex-end",
-    marginTop: "-15%",
+    marginTop: windowWidth > 600 ? "-15%" : "-20%",
     marginRight: "15%",
   },
   submitButton: [

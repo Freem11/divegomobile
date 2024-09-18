@@ -365,6 +365,8 @@ export default function MapPage() {
   }, []);
 
   useEffect(() => {
+    setLevelOneScreen(false);
+    setLevelTwoScreen(false);
     setConfirmationModal(false);
     getProfile();
   }, []);

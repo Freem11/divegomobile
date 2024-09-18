@@ -7,12 +7,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-
 import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
 import DiveSiteUploader from '../screens/diveSiteUploader';
 import TripCreatorPage from '../screens/tripCreator';
+import { activeFonts, colors, fontSizes } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -54,7 +54,7 @@ export default function LevelTwoScreen() {
 
 const styles = StyleSheet.create({
   modalBody: {
-    backgroundColor: "green",
+    backgroundColor: colors.primaryBlue,
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
