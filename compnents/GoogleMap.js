@@ -24,7 +24,6 @@ import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
-import { DSAdderContext } from "./contexts/DSModalContext";
 import { PictureAdderContext } from "./contexts/picModalContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
@@ -127,8 +126,6 @@ export default function Map() {
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
 
   const { profile } = useContext(UserProfileContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
@@ -399,7 +396,7 @@ export default function Map() {
       return;
     }
     updateMapCenter();
-  }, [diveSiteAdderModal, picAdderModal]);
+  }, [picAdderModal]);
 
   useEffect(() => {
     handleMapChange();

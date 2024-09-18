@@ -40,7 +40,6 @@ import MasterContextProvider from './masterContext';
 import MapBoundariesContextProvider from './mapBoundariesContext';
 import PinContextProvider from './staticPinContext';
 import PictureAdderContextProvider from './picModalContext';
-import DSAdderContextProvider from './DSModalContext';
 import PullTabContextProvider from './pullTabContext';
 import CarrouselTilesContextProvider from './carrouselTilesContext';
 import CommentsModalContextProvider from './commentsModalContext';
@@ -107,7 +106,6 @@ const providers = [
     MapBoundariesContextProvider,
     PinContextProvider,
     PictureAdderContextProvider,
-    DSAdderContextProvider,
     PullTabContextProvider,
     CarrouselTilesContextProvider,
     CommentsModalContextProvider,
