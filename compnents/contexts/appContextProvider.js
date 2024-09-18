@@ -29,7 +29,6 @@ import SecondTutorialModalContextProvider from './secondTutorialModalContext';
 import TutorialModalContextProvider from './tutorialModalContext';
 import HeatPointsContextProvider from './heatPointsContext';
 import AnimalMultiSelectContextProvider from './animalMultiSelectContext';
-import SettingsContextProvider from './gearModalContext';
 import SelectedDiveSiteContextProvider from './selectedDiveSiteContext';
 import PictureContextProvider from './pictureContext';
 import SliderContextProvider from './sliderContext';
@@ -95,7 +94,6 @@ const providers = [
     TutorialModalContextProvider,
     HeatPointsContextProvider,
     AnimalMultiSelectContextProvider,
-    SettingsContextProvider,
     SelectedDiveSiteContextProvider,
     PictureContextProvider,
     SliderContextProvider,
