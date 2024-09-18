@@ -9,34 +9,22 @@ import { colors, fontSizes } from "../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoFilterer() {
-  const { setSmallModal } = useContext(SmallModalContext);
-  const { setLargeModal } = useContext(LargeModalContext);
-  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const { textvalue, setTextValue } = useContext(SearchTextContext);
 
   const handleChange = async (text) => {
     setTextValue(text);
-    setSmallModal(false);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
   };
 
   const handleClear = () => {
     setTextValue("");
-    setSmallModal(false);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
   };
 

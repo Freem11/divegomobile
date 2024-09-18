@@ -2,8 +2,6 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import {
@@ -19,27 +17,8 @@ export default function SuccessModal(props) {
     props;
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
-  const { setLargeModal } = useContext(LargeModalContext);
-  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
 
   const tidyUp = () => {
-    switch (confirmationType) {
-      case "Trip Submission":
-        setLargeModalSecond(false);
-        break;
-      case "Sea Creature Submission":
-        setLargeModalSecond(false);
-        break;
-      case "Dive Site":
-        setLargeModal(false);
-        break;
-      case "Partner Account Creation Request":
-        setLargeModalSecond(false);
-        break;
-      case "Trip Edit":
-        setLargeModalSecond(false);
-        break;
-    }
     if (submissionItem === "dive site") {
       toggleDiveModal();
     } else if (submissionItem === "sea creature submission") {

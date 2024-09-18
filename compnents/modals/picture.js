@@ -32,8 +32,6 @@ import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
 import liked from "../png/socialIcons/Hand-Filled-Blue.png";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
@@ -51,11 +49,6 @@ export default function Picture(props) {
     LevelTwoScreenContext
   );
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
-    LargeModalSecondContext
-  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
 

@@ -1,43 +1,32 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
-  const { setSmallModal } = useContext(SmallModalContext);
 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
-  const { tutorialRunning } = useContext(TutorialContext);
-
+ 
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
-    setLargeModalSecond(false);
-    setSmallModal(false);
     setPreviousButtonID(activeScreen);
     setActiveScreen("TutorialsButton");
     useButtonPressHelper(
       "TutorialsButton",
       activeScreen,
-      largeModal,
-      setLargeModal
+      // largeModal,
+      // setLargeModal
     );
   };
 

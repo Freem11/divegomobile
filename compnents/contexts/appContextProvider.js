@@ -45,8 +45,6 @@ import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
 import ActiveConfirmationIDContextProvider from './activeConfirmationIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import SmallModalContextProvider from './smallModalContext';
-import LargeModalContextProvider from './largeModalContext';
-import LargeModalSecondContextProvider from './largeModalSecondContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
 import ConfirmationModalContextProvider from './confirmationModalContext';
 import ConfirmationTypeContextProvider from './confirmationTypeContext';
@@ -105,8 +103,6 @@ const providers = [
     PreviousButtonIDContextProvider,
     ActiveConfirmationIDContextProvider,
     SmallModalContextProvider,
-    LargeModalContextProvider,
-    LargeModalSecondContextProvider,
     FullScreenModalContextProvider,
     ConfirmationModalContextProvider,
     ConfirmationTypeContextProvider,

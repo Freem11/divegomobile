@@ -58,8 +58,6 @@ import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
-import { LargeModalContext } from "./contexts/largeModalContext";
-import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "./contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "./contexts/levelTwoScreenContext";
@@ -91,10 +89,7 @@ export default function MapPage() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
-    LargeModalSecondContext
-  );
+
   const { confirmationModal, setConfirmationModal } = useContext(
     ConfirmationModalContext
   );
@@ -246,8 +241,6 @@ export default function MapPage() {
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
 
-      setLargeModal(false);
-      setLargeModalSecond(false);
       setFullScreenModal(false);
     } else {
       Keyboard.dismiss();
@@ -378,15 +371,11 @@ export default function MapPage() {
   };
 
   useLayoutEffect(() => {
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setConfirmationModal(false);
     getProfile();
   }, []);
 
   useEffect(() => {
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setConfirmationModal(false);
     getProfile();
   }, []);
@@ -417,8 +406,6 @@ export default function MapPage() {
 
   const toggleDiveSites = () => {
     setDiveSitesTog(!diveSitesTog);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
   };
 
