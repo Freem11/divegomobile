@@ -5,7 +5,7 @@ import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
@@ -15,9 +15,8 @@ import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { largeModal, setLargeModal } = useContext(LargeModalContext);
   const { setLargeModalSecond } = useContext(LargeModalSecondContext);
@@ -32,11 +31,11 @@ export default function GuidesButton() {
     setShowFilterer(false);
     setLargeModalSecond(false);
     setSmallModal(false);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("TutorialsButton");
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("TutorialsButton");
     useButtonPressHelper(
       "TutorialsButton",
-      activeButtonID,
+      activeScreen,
       largeModal,
       setLargeModal
     );
