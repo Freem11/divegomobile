@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -21,8 +20,7 @@ export default function ProfileButton() {
 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
-  const { tutorialRunning } = useContext(TutorialContext);
-
+ 
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
@@ -39,7 +37,7 @@ export default function ProfileButton() {
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={tutorialRunning ? null : handlePress}
+        onPress={() => handlePress()}
         // onPressIn={() => setButState(true)}
         // onPressOut={() => setButState(false)}
         style={{

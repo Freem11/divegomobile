@@ -47,7 +47,6 @@ import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
-import { TutorialContext } from "./contexts/tutorialContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
@@ -124,7 +123,6 @@ export default function MapPage() {
 
   const { animalSelection } = useContext(AnimalSelectContext);
   const { setMapHelper } = useContext(MapHelperContext);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
@@ -370,20 +368,6 @@ export default function MapPage() {
     setConfirmationModal(false);
     getProfile();
   }, []);
-
-  useEffect(() => {
-    clearTimeout(feedbackRequest2);
-    clearTimeout(feedbackRequest);
-
-    if (tutorialRunning === false) {
-      if (!profile && profile[0].feedbackRequested === false) {
-        feedbackRequest2 = setTimeout(() => {
-          startFeedbackAnimations();
-          updateProfileFeeback(profile[0]);
-        }, 180000);
-      }
-    }
-  }, [tutorialRunning]);
 
   const handleEmail = () => {
     const to = ["scubaseasons@gmail.com"];

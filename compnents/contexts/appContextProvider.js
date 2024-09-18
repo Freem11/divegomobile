@@ -16,10 +16,6 @@ import UserProfileContextProvider from './userProfileContext';
 import MapHelperContextProvider from './mapHelperContext';
 import TutorialLaunchPadContextProvider from './tutorialLaunchPadContext';
 import TutorialResetContextProvider from './tutorialResetContext';
-import TutorialContextProvider from './tutorialContext';
-import ThirdTutorialModalContextProvider from './thirdTutorialModalContext';
-import SecondTutorialModalContextProvider from './secondTutorialModalContext';
-import TutorialModalContextProvider from './tutorialModalContext';
 import HeatPointsContextProvider from './heatPointsContext';
 import AnimalMultiSelectContextProvider from './animalMultiSelectContext';
 import SelectedDiveSiteContextProvider from './selectedDiveSiteContext';
@@ -66,10 +62,6 @@ const providers = [
     MapHelperContextProvider,
     TutorialLaunchPadContextProvider,
     TutorialResetContextProvider,
-    TutorialContextProvider,
-    ThirdTutorialModalContextProvider,
-    SecondTutorialModalContextProvider,
-    TutorialModalContextProvider,
     HeatPointsContextProvider,
     AnimalMultiSelectContextProvider,
     SelectedDiveSiteContextProvider,
