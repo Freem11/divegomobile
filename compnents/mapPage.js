@@ -11,7 +11,6 @@ import {
 import {
   activeFonts,
   colors,
-  fontSizes,
   primaryButtonAlt,
   buttonTextAlt,
 } from "./styles";
@@ -20,8 +19,6 @@ import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
-import AnimatedModalLarge from "../compnents/reusables/animatedModalLarge";
-import AnimatedModalLargeSecond from "../compnents/reusables/animatedModalLargeSecond";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
 import LevelOneScreen from "../compnents/reusables/levelOneScreen";
@@ -38,7 +35,6 @@ import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
 import PhotoFilterer from "./photoMenu/photoFilter";
-import PrimaryButton from "../compnents/reusables/primaryButton";
 import CircularButton from "../compnents/reusables/circularButton";
 import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
@@ -600,8 +596,6 @@ export default function MapPage() {
 
             <LevelOneScreen />
             <LevelTwoScreen />
-            <AnimatedModalLarge />
-            <AnimatedModalLargeSecond />
             <AnimatedFullScreenModal />
             <AnimatedModalConfirmation />
 

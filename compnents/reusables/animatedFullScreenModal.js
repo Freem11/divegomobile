@@ -9,9 +9,6 @@ import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 
 import OnboardingTest from "../tutorial/onboarding";
-import IntroTutorial from "../tutorial/introTutorial";
-import SecondTutorial from "../tutorial/secondTutorial";
-import ThirdTutorial from "../tutorial/thirdTutorial";
 import PhotoBoxModel from "../modals/photoBoxModal";
 import CommentsModal from "../modals/commentsModal";
 
@@ -44,9 +41,6 @@ export default function AnimatedFullScreenModal(props) {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeTutorialID === "OnboardingX" && <OnboardingTest/>}
-      {activeTutorialID === "FirstGuide" && <IntroTutorial />}
-      {activeTutorialID === "SecondGuide" && <SecondTutorial />}
-      {activeTutorialID === "ThirdGuide" && <ThirdTutorial />}
       {activeTutorialID === "PinchAndZoomPhoto" && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
     </Animated.View>
