@@ -66,8 +66,7 @@ import { LevelTwoScreenContext } from "./contexts/levelTwoScreenContext";
 import { ActiveScreenContext } from "./contexts/activeScreenContext";
 
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
-import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
-import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext"
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { IterratorContext } from "./contexts/iterratorContext";
 import { Iterrator2Context } from "./contexts/iterrator2Context";
@@ -118,9 +117,6 @@ export default function MapPage() {
   );
   const { previousButtonID, setPreviousButtonID } = useContext(
     PreviousButtonIDContext
-  );
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
   );
   const { activeTutorialID, setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
@@ -320,17 +316,6 @@ export default function MapPage() {
 
         setActiveScreen("DiveSiteUploadScreen");
         setLevelTwoScreen(true);
-        setChosenModal(null);
-      } else if (chosenModal === "Photos") {
-        setPinValues({
-          ...pinValues,
-          Latitude: dragPin.lat.toString(),
-          Longitude: dragPin.lng.toString(),
-        });
-        setMapHelper(true);
-        setMasterSwitch(true);
-        setActiveButtonID("PictureAdderButton");
-        setLargeModalSecond(!largeModalSecond);
         setChosenModal(null);
       }
     }

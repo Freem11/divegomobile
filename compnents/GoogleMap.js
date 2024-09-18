@@ -62,7 +62,6 @@ import mantaIOS from "../compnents/png/mapIcons/Manta_60.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
-// import shopIOS from "../compnents/png/scuba.png";
 import shopClustIOS from "../compnents/png/mapIcons/DiveCentre60x60.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
@@ -83,7 +82,6 @@ import { moderateScale, scale } from "react-native-size-matters";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { UserProfileContext } from "./contexts/userProfileContext";
-import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveScreenContext } from './contexts/activeScreenContext';
 import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
@@ -105,10 +103,6 @@ export default function Map() {
   const { activeScreen, setActiveScreen } = useContext(
     ActiveScreenContext
     );
-
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
   const { activeTutorialID, setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
@@ -540,7 +534,7 @@ export default function Map() {
     setTiles(true);
     setShowFilterer(false);
     filterAnchorPhotos();
-    setPreviousButtonID(activeButtonID);
+    setPreviousButtonID(activeScreen);
     setActiveScreen("DiveSiteScreen")
     useButtonPressHelper(
       "DiveSiteScreen",
@@ -555,7 +549,7 @@ export default function Map() {
     setTiles(true);
     setShowFilterer(false);
     setSelectedShop(chosenShop);
-    setPreviousButtonID(activeButtonID);
+    setPreviousButtonID(activeScreen);
     setActiveScreen("DiveShopScreen")
     useButtonPressHelper(
       "DiveShopScreen",
