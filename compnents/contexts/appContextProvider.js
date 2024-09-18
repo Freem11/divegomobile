@@ -28,7 +28,6 @@ import PictureContextProvider from './pictureContext';
 import SliderContextProvider from './sliderContext';
 import AnimalSelectContextProvider from './animalSelectContext';
 import DiveSpotContextProvider from './diveSpotContext';
-import MinorContextProvider from './minorContext';
 import MapBoundariesContextProvider from './mapBoundariesContext';
 import PinContextProvider from './staticPinContext';
 import PictureAdderContextProvider from './picModalContext';
@@ -84,7 +83,6 @@ const providers = [
     SliderContextProvider,
     AnimalSelectContextProvider,
     DiveSpotContextProvider,
-    MinorContextProvider,
     MapBoundariesContextProvider,
     PinContextProvider,
     PictureAdderContextProvider,

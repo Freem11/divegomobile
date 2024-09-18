@@ -5,7 +5,6 @@ import { MapCenterContext } from "./contexts/mapCenterContext";
 import { MapBoundariesContext } from "./contexts/mapBoundariesContext";
 import { MapRegionContext } from "./contexts/mapRegionContext";
 import { MapZoomContext } from "./contexts/mapZoomContext";
-import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
@@ -89,7 +88,6 @@ export default function Map() {
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
   const { region, setRegion } = useContext(MapRegionContext);
   const { boundaries, setBoundaries } = useContext(MapBoundariesContext);
@@ -412,10 +410,8 @@ export default function Map() {
     if (zoomHelper) {
       if (shopModal) {
         zoomHelp = 16;
-        setMinorSwitch(true);
       } else if (!shopModal) {
         zoomHelp = 12;
-        setMinorSwitch(false);
       }
       setZoomHelper(false);
     }
