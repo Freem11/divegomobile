@@ -12,7 +12,6 @@ import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
 import AutoSuggestListItem from "./autoSuggestListItem";
 import TextInputField from "../authentication/textInput";
 import { scale, moderateScale } from "react-native-size-matters";
-import { PictureAdderContext } from "../contexts/picModalContext";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -28,14 +27,6 @@ export default function AnimalAutoSuggest(props) {
   const { setPinValues, pinValues, inputValue, icon, vectorIcon, secure, placeHolderText} = props;
   const [list, setList] = useState([]);
   const [textSource, setTextSource] = useState(false);
-  const { picAdderModal } = useContext(PictureAdderContext);
-
-  
-  useEffect(() => {
-    if (!picAdderModal) {
-      setTextSource(false);
-    }
-  }, [picAdderModal]);
 
   const handleList = async (values) => {
     if (values.value === 1) {

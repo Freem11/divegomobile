@@ -29,7 +29,6 @@ import AnimalSelectContextProvider from './animalSelectContext';
 import DiveSpotContextProvider from './diveSpotContext';
 import MapBoundariesContextProvider from './mapBoundariesContext';
 import PinContextProvider from './staticPinContext';
-import PictureAdderContextProvider from './picModalContext';
 import PullTabContextProvider from './pullTabContext';
 import CarrouselTilesContextProvider from './carrouselTilesContext';
 import CommentsModalContextProvider from './commentsModalContext';
@@ -82,7 +81,6 @@ const providers = [
     DiveSpotContextProvider,
     MapBoundariesContextProvider,
     PinContextProvider,
-    PictureAdderContextProvider,
     PullTabContextProvider,
     CarrouselTilesContextProvider,
     CommentsModalContextProvider,
