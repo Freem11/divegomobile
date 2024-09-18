@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
     height: moderateScale(39),
     width: moderateScale(39),
     backgroundColor: colors.primaryBlue,
+    borderWidth: moderateScale(0.2),
+    borderColor : colors.themeWhite,
     zIndex: 1,
   },
   buttonwrapperPressed: {
@@ -47,6 +49,8 @@ const styles = StyleSheet.create({
     height: moderateScale(39),
     width: moderateScale(39),
     backgroundColor: colors.primaryBlue,
+    borderWidth: moderateScale(0.2),
+    borderColor : colors.themeWhite,
     zIndex: 1,
   },
 });
