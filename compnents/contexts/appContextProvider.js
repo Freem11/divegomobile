@@ -52,7 +52,6 @@ import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
 import PhotoBoxModalContextProvider from './photoBoxModalContext';
 import SelectedPhotoContextProvider from './selectedPhotoContext';
-import ActiveButtonIDContextProvider from './activeButtonIDContext';
 import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
 import ActiveConfirmationIDContextProvider from './activeConfirmationIDContext';
 import PreviousButtonIDContextProvider from './previousButtonIDContext';
@@ -124,7 +123,6 @@ const providers = [
     SelectedProfileContextProvider,
     PhotoBoxModalContextProvider,
     SelectedPhotoContextProvider,
-    ActiveButtonIDContextProvider,
     ActiveTutorialIDContextProvider,
     PreviousButtonIDContextProvider,
     ActiveConfirmationIDContextProvider,
