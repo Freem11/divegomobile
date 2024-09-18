@@ -2,10 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
 import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from "react-native";
 import * as FileSystem from "expo-file-system";
-import { AreaPicsContext } from "../contexts/areaPicsContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
-import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
@@ -24,10 +20,6 @@ export default function ImageCasherDynamic(Props) {
     ActiveTutorialIDContext
   );
 
-  const { areaPics } = useContext(AreaPicsContext);
-  const { siteModal } = useContext(AnchorModalContext);
-  const { boundaries } = useContext(MapBoundariesContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   let fileName = photoFile && photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
   let photoName = photoFile && photoFile.split("/").pop();

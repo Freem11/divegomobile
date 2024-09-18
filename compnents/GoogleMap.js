@@ -15,7 +15,6 @@ import { PinSpotContext } from "./contexts/pinSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SliderContext } from "./contexts/sliderContext";
-import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
@@ -143,8 +142,7 @@ export default function Map() {
   const [tempMarker, setTempMarker] = useState([]);
   const [mapRef, setMapRef] = useState(null);
   const [newSites, setnewSites] = useState([]);
-  const [newShops, setnewShops] = useState([]);
-  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
+  const [newShops, setnewShops] = useState([]);;
 
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setCommentsModal } = useContext(CommentsModalContext);
@@ -438,7 +436,7 @@ export default function Map() {
       return;
     }
     updateMapCenter();
-  }, [siteModal, diveSiteAdderModal, diveSiteSearchModal, picAdderModal]);
+  }, [diveSiteAdderModal, diveSiteSearchModal, picAdderModal]);
 
   useEffect(() => {
     handleMapChange();

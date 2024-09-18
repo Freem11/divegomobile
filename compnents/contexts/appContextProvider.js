@@ -22,7 +22,6 @@ import ReverseContextProvider from './reverseContext';
 import UserProfileContextProvider from './userProfileContext';
 import MapHelperContextProvider from './mapHelperContext';
 import TutorialLaunchPadContextProvider from './tutorialLaunchPadContext';
-import AnchorModalContextProvider from './anchorModalContext';
 import TutorialResetContextProvider from './tutorialResetContext';
 import TutorialContextProvider from './tutorialContext';
 import Iterator3ContextProvider from './iterrator3Context';
@@ -93,7 +92,6 @@ const providers = [
     UserProfileContextProvider,
     MapHelperContextProvider,
     TutorialLaunchPadContextProvider,
-    AnchorModalContextProvider,
     TutorialResetContextProvider,
     TutorialContextProvider,
     Iterator3ContextProvider,
