@@ -1,6 +1,5 @@
 import { combineComponents } from '../combineComponents';
 
-import DiveSiteSearchModalContextProvider from './diveSiteSearchContext';
 import MapSearchModalContextProvider from './mapSearchContext';
 import ZoomHelperContextProvider from './zoomHelperContext';
 import TripDetailContextProvider from './tripDetailsContext';
@@ -68,7 +67,6 @@ import LevelThreeScreenContextProvider from './levelThreeScreenContext';
 
 const providers = [
     MapConfigContextProvider,
-    DiveSiteSearchModalContextProvider,
     MapSearchModalContextProvider,
     ZoomHelperContextProvider,
     TripDetailContextProvider,
