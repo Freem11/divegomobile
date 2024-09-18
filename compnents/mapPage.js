@@ -39,7 +39,6 @@ import CircularButton from "../compnents/reusables/circularButton";
 import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
-import { MasterContext } from "./contexts/masterContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
@@ -103,9 +102,6 @@ export default function MapPage() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const { levelThreeScreen, setLevelThreeScreen } = useContext(
-    LevelTwoScreenContext
-  );
   const { previousButtonID, setPreviousButtonID } = useContext(
     PreviousButtonIDContext
   );
@@ -118,7 +114,6 @@ export default function MapPage() {
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
-  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
@@ -289,8 +284,6 @@ export default function MapPage() {
           Longitude: dragPin.lng.toString(),
         });
         setMapHelper(true);
-
-        setMasterSwitch(true);
         setMapConfig(0);
 
         setActiveScreen("DiveSiteUploadScreen");
@@ -452,7 +445,7 @@ export default function MapPage() {
               </View>
             ) : null}
 
-            {masterSwitch && (
+            {mapConfig in [, , 2] || !mapConfig ?(
               <TouchableWithoutFeedback onPress={startTagAnimations}>
                 <AntDesign
                   name="tags"
@@ -461,7 +454,7 @@ export default function MapPage() {
                   style={{ position: "absolute", left: "87.5%", top: "13%" }}
                 />
               </TouchableWithoutFeedback>
-            )}
+            ): null}
 
             {mapConfig === 0 ? (
               <View
