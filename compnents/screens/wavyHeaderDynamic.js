@@ -32,37 +32,44 @@ export default function WavyHeaderDynamic({ customStyles, image, defaultImg }) {
   return (
     <View style={styles.customStyles}>
         {picUri ? (
+          <View style={styles.uploaderBackground}>
             <ImageBackground
               source={{ uri: picUri }}
               style={styles.backgroundImage}
             />
+             </View>
         ) : (
           defaultImg === "diveSitePhoto" ?
+          <View style={styles.uploaderBackground}>
             <ImageBackground
               source={require("../png/boat.png")}
               style={styles.backgroundImage}
             /> 
+            </View>
             :
+            <View style={styles.uploaderBackground}>
             <ImageBackground
             source={require("../png/blackManta.png")}
             style={styles.backgroundImage}
           /> 
+          </View>
         )}
         <View
           style={{
-            flex: 1,
-            height: windowWidth > 600 ? "130%" : "100%",
-            backgroundColor: "white",
+            // flex: 1,
+          justifyContent: 'flex-end',
+          height: windowWidth > 600 ? "130%" : "150%",
+          backgroundColor: "pink",
           }}
         >
           <Svg
-            height="100%"
-            width={windowWidth > 600 ? "140%" : "100%"}
+            height={windowWidth > 600 ? "230%" : "230%"}
+            width={windowWidth > 600 ? "100%" : "100%"}
             viewBox="0 0 1440 320"
             style={{
               flex: 1,
-              marginLeft: windowWidth > 600 ? "-20%" : 0,
-              marginTop: windowWidth > 600 ? "-80%" : "-80%",
+              marginLeft: windowWidth > 600 ? "0%" : 0,
+              // marginTop: windowWidth > 600 ? "50%" : "50%",
               backgroundColor: "transparent",
               zIndex: 5,
             }}
@@ -84,13 +91,16 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
   },
   backgroundImage: {
+    zIndex: -1,
     backgroundColor: colors.themeWhite,
-    // alignItems: "center",
-    // justifyContent: "center",
-    marginLeft: windowWidth > 600 ? "-15%" : 0,
-    width: windowWidth > 600 ? "120%" : windowWidth,
-    height: windowWidth > 600 ? "70%" : "auto",
-    aspectRatio: 1,
-    marginTop: windowWidth > 600 ? moderateScale(0) : moderateScale(0),
+    resizeMode: 'cover',
+    width: windowWidth,
+    height: windowWidth > 600 ? "90%" : "90%",
+},
+  uploaderBackground: {
+    alignItems: "center",
+    backgroundColor: colors.primaryBlue,
+    width: windowWidth,
+    height: windowWidth > 600 ? "55%" : "60%",
   },
 });
