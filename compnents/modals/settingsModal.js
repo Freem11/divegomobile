@@ -29,30 +29,16 @@ import { UserProfileContext } from "../../compnents/contexts/userProfileContext"
 import { SessionContext } from "../../compnents/contexts/sessionContext";
 import { MyCreaturesContext } from "../../compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { moderateScale } from "react-native-size-matters";
 import ModalHeader from "../reusables/modalHeader";
 import PrimaryButton from "../reusables/primaryButton";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function SettingsModal() {
-  const { setSmallModal } = useContext(SmallModalContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
-    LargeModalSecondContext
-  );
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { profile } = useContext(UserProfileContext);
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
@@ -156,18 +142,6 @@ export default function SettingsModal() {
     setRequestCheck(returnedCheck);
   };
 
-  const toggleSettingsModal = () => {
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("SettingsButton");
-    setLargeModalSecond(false);
-    setSmallModal(false);
-    useButtonPressHelper(
-      "SettingsButton",
-      activeButtonID,
-      largeModal,
-      setLargeModal
-    );
-  };
 
   const toggleDCSwitch = () =>
     setDiveSitesIsEnabled((previousState) => !previousState);
@@ -193,18 +167,6 @@ export default function SettingsModal() {
       AsyncStorage.removeItem("myCreatures");
     }
   }, [creaturesIsEnabled]);
-
-  const handlePartnerButton = () => {
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("PartnerAccountButton");
-    setLargeModal(false);
-    useButtonPressHelper(
-      "PartnerAccountButton",
-      activeButtonID,
-      largeModalSecond,
-      setLargeModalSecond
-    );
-  };
 
   return (
     // <ScrollView style={{ width: "86%" }}>
