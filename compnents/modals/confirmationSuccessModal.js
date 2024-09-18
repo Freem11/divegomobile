@@ -13,20 +13,11 @@ import {
 } from "../styles";
 
 export default function SuccessModal(props) {
-  const { submissionItem, toggleDiveModal, togglePicModal, setPartnerModal } =
-    props;
+  const { } = props;
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
 
   const tidyUp = () => {
-    if (submissionItem === "dive site") {
-      toggleDiveModal();
-    } else if (submissionItem === "sea creature submission") {
-      togglePicModal();
-    } else if (submissionItem === "partner account creation request") {
-      setPartnerModal(false);
-    }
-
     setConfirmationModal(false);
   };
 
