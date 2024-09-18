@@ -28,7 +28,7 @@ const AnimalTag = (props) => {
                 color: colors.themeBlack,
                 fontFamily: activeFonts.Light,
                 fontSize: fontSizes.SmallText,
-                marginTop: scale(1.5),
+                textAlign: "center",
                 marginLeft: 4,
                 marginRight: 2
               }}
@@ -61,6 +61,8 @@ const styles = StyleSheet.create({
   },
   animalTag:{
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 1,
     marginLeft: 3
   },
