@@ -32,8 +32,6 @@ import { MyDiveSitesContext } from "../../compnents/contexts/myDiveSitesContext"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import email from "react-native-email";
 import { moderateScale } from "react-native-size-matters";
-import ModalHeader from "../reusables/modalHeader";
-import PrimaryButton from "../reusables/primaryButton";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -171,22 +169,7 @@ export default function SettingsModal() {
   return (
     // <ScrollView style={{ width: "86%" }}>
     <View style={styles.container}>
-      <ModalHeader
-        titleText={"Settings"}
-        onClose={toggleSettingsModal}
-        icon={null}
-        altButton={null}
-      />
-      <View style={styles.first}>
-        <PrimaryButton
-          buttonAction={handleLogout}
-          label={"Sign Out"}
-          icon={null}
-          textColor={null}
-          bgColor={null}
-          bgPressedColor={null}
-        />
-      </View>
+  
 
       <View style={styles.second}>
         <View style={styles.switchBox}>
@@ -217,20 +200,7 @@ export default function SettingsModal() {
         </View>
       </View>
 
-      <View style={styles.partnerButton}>
-        <PrimaryButton
-          buttonAction={requestCheck.length > 0 ? null : handlePartnerButton}
-          label={
-            requestCheck.length > 0
-              ? "Request In Progress"
-              : "Request Partner Account"
-          }
-          icon={null}
-          textColor={null}
-          bgColor={null}
-          bgPressedColor={null}
-        />
-      </View>
+     
 
       <View style={styles.third}>
         <TouchableWithoutFeedback
@@ -252,16 +222,7 @@ export default function SettingsModal() {
           </View>
         </TouchableWithoutFeedback>
 
-        <Animated.View style={[dangerZoneReveal, styles.dangerZone]}>
-          <PrimaryButton
-            buttonAction={alertHandler}
-            label={"Delete Account"}
-            textColor={true}
-            bgColor={true}
-            bgPressedColor={true}
-            icon={null}
-          />
-        </Animated.View>
+  
       </View>
     </View>
     // </ScrollView>

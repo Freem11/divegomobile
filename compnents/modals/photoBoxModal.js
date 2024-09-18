@@ -10,11 +10,14 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import {
+  colors,
+} from "../styles";
 import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
-import { scale } from "react-native-size-matters";
-import CloseButton from "../reusables/closeButton";
+import { scale, moderateScale } from "react-native-size-matters";
+import { MaterialIcons } from "@expo/vector-icons";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 
@@ -278,7 +281,13 @@ export default function PhotoBoxModal() {
   return (
     <View style={styles.container}>
       <View style={styles.closeButton}>
-        <CloseButton onClose={onCloseModal} />
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={colors.themeWhite}
+        onPress={() => onCloseModal()}
+        style={styles.backButton}
+      />
       </View>
 
       <GestureDetector gesture={combinedAnimations}>
@@ -323,8 +332,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: "absolute",
-    top: "12%",
-    left: "62%",
+    top: "8%",
+    left: "-18%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
