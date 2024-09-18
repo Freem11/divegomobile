@@ -67,8 +67,6 @@ import { ActiveScreenContext } from "./contexts/activeScreenContext";
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext"
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
-import { IterratorContext } from "./contexts/iterratorContext";
-import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { scale, moderateScale, s } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
@@ -119,8 +117,6 @@ export default function MapPage() {
   const { activeTutorialID, setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
-  const { itterator, setItterator } = useContext(IterratorContext);
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
@@ -190,14 +186,6 @@ export default function MapPage() {
       console.log({ title: "Error66", message: e.message });
     }
   };
-
-  useEffect(() => {
-    if (tutorialRunning && largeModal) {
-      if (itterator > 0 && itterator !== 11 && itterator !== 20) {
-        setItterator(itterator + 1);
-      }
-    }
-  }, [largeModal]);
 
   const feedbackX = useSharedValue(0);
 

@@ -2,23 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { FontAwesome } from "@expo/vector-icons";
-import { Iterrator3Context } from "../contexts/iterrator3Context";
-import { TutorialContext } from "../contexts/tutorialContext";
 
 export default function PrimaryButton(props) {
-  const { buttonAction, icon, label, textColor, bgColor, bgPressedColor, followed } =
+  const { buttonAction, icon, label, bgColor, bgPressedColor, followed } =
     props;
-
-  const { itterator3 } = useContext(Iterrator3Context);
-  const { tutorialRunning } = useContext(TutorialContext);
-
 
   const [isPressed, setIsPressed] = useState(false);
 
   let applyBgStyle
   let applyFntStyle
-  let counter = 0;
-  let blinker;
 
 if(followed) {
   applyBgStyle = styles.FollowButtonPressed
@@ -36,30 +28,6 @@ if(followed) {
   applyBgStyle = styles.buttonBackground
   applyFntStyle = styles.buttonText
 } 
-
-
-function imageButtonBlink() {
-  counter++;
-  if (counter % 2 == 0) {
-    setIsPressed(false);
-  } else {
-    setIsPressed(true);
-  }
-}
-
-function cleanUp() {
-  clearInterval(blinker);
-  setIsPressed(false);
-}
-
-useEffect(() => {
-  if (tutorialRunning) {
-    if (itterator3 === 11) {
-      blinker = setInterval(imageButtonBlink, 1000);
-    } 
-  }
-  return () => cleanUp();
-}, [itterator3]);
 
   return (
     <TouchableWithoutFeedback

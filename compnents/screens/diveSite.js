@@ -3,7 +3,6 @@ import React, {
   useContext,
   useEffect,
   useRef,
-  useCallback,
 } from "react";
 import {
   StyleSheet,
@@ -18,7 +17,6 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
 import PlainTextInput from "./plaintextInput";
-import CloseButton from "../reusables/closeButton";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   activeFonts,
@@ -65,8 +63,6 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function DiveSite(props) {
   const {} = props;
-  const photosRef = useRef(null);
-  const bottomSheetRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { myCreatures } = useContext(MyCreaturesContext);
@@ -192,10 +188,6 @@ export default function DiveSite(props) {
         photos.forEach((obj) => {
           count++;
         });
-
-        if (itterator === 11 && count > 0) {
-          setItterator(itterator + 2);
-        }
       }
     } catch (e) {
       console.log({ title: "Error55", message: e.message });

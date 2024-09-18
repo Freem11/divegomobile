@@ -21,9 +21,6 @@ import MapHelperContextProvider from './mapHelperContext';
 import TutorialLaunchPadContextProvider from './tutorialLaunchPadContext';
 import TutorialResetContextProvider from './tutorialResetContext';
 import TutorialContextProvider from './tutorialContext';
-import Iterator3ContextProvider from './iterrator3Context';
-import Iterator2ContextProvider from './iterrator2Context';
-import IteratorContextProvider from './iterratorContext';
 import ThirdTutorialModalContextProvider from './thirdTutorialModalContext';
 import SecondTutorialModalContextProvider from './secondTutorialModalContext';
 import TutorialModalContextProvider from './tutorialModalContext';
@@ -86,9 +83,6 @@ const providers = [
     TutorialLaunchPadContextProvider,
     TutorialResetContextProvider,
     TutorialContextProvider,
-    Iterator3ContextProvider,
-    Iterator2ContextProvider,
-    IteratorContextProvider,
     ThirdTutorialModalContextProvider,
     SecondTutorialModalContextProvider,
     TutorialModalContextProvider,

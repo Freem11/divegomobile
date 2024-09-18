@@ -6,8 +6,6 @@ import { LargeModalContext } from "../contexts/largeModalContext";
 import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
-import { Iterrator3Context } from "../contexts/iterrator3Context";
-import { Iterrator2Context } from "../contexts/iterrator2Context";
 import {
   activeFonts,
   colors,
@@ -21,9 +19,6 @@ export default function SuccessModal(props) {
     props;
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
-  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-
   const { setLargeModal } = useContext(LargeModalContext);
   const { setLargeModalSecond } = useContext(LargeModalSecondContext);
 
@@ -36,9 +31,6 @@ export default function SuccessModal(props) {
         setLargeModalSecond(false);
         break;
       case "Dive Site":
-        if(itterator3 === 19){
-          return;
-        }
         setLargeModal(false);
         break;
       case "Partner Account Creation Request":
@@ -50,14 +42,8 @@ export default function SuccessModal(props) {
     }
     if (submissionItem === "dive site") {
       toggleDiveModal();
-      if (itterator2 > 0) {
-        setItterator2(itterator2 + 1);
-      }
     } else if (submissionItem === "sea creature submission") {
       togglePicModal();
-      if (itterator3 > 0) {
-        setItterator3(itterator3 + 1);
-      }
     } else if (submissionItem === "partner account creation request") {
       setPartnerModal(false);
     }

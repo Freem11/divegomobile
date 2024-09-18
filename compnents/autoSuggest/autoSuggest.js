@@ -8,22 +8,11 @@ import {
   Dimensions,
   KeyboardAvoidingView,
 } from "react-native";
-import {
-  activeFonts,
-  colors,
-  fontSizes,
-} from "../styles";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
 import AutoSuggestListItem from "./autoSuggestListItem";
 import TextInputField from "../authentication/textInput";
 import { scale, moderateScale } from "react-native-size-matters";
-import { TutorialContext } from "../contexts/tutorialContext";
-import { Iterrator3Context } from "../contexts/iterrator3Context";
 import { PictureAdderContext } from "../contexts/picModalContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
-
-let waiter;
 
 const windowHeight = Dimensions.get("window").height;
 
