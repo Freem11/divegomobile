@@ -1,6 +1,5 @@
 import { combineComponents } from '../combineComponents';
 
-import MapSearchModalContextProvider from './mapSearchContext';
 import ZoomHelperContextProvider from './zoomHelperContext';
 import TripDetailContextProvider from './tripDetailsContext';
 import TripSitesContextProvider from './tripSitesContext';
@@ -58,7 +57,6 @@ import LevelThreeScreenContextProvider from './levelThreeScreenContext';
 
 const providers = [
     MapConfigContextProvider,
-    MapSearchModalContextProvider,
     ZoomHelperContextProvider,
     TripDetailContextProvider,
     TripSitesContextProvider,
