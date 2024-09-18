@@ -14,8 +14,6 @@ import AnchorPhotosContextProvider from './anchorPhotosContext';
 import ReverseContextProvider from './reverseContext';
 import UserProfileContextProvider from './userProfileContext';
 import MapHelperContextProvider from './mapHelperContext';
-import TutorialLaunchPadContextProvider from './tutorialLaunchPadContext';
-import TutorialResetContextProvider from './tutorialResetContext';
 import HeatPointsContextProvider from './heatPointsContext';
 import AnimalMultiSelectContextProvider from './animalMultiSelectContext';
 import SelectedDiveSiteContextProvider from './selectedDiveSiteContext';
@@ -60,8 +58,6 @@ const providers = [
     ReverseContextProvider,
     UserProfileContextProvider,
     MapHelperContextProvider,
-    TutorialLaunchPadContextProvider,
-    TutorialResetContextProvider,
     HeatPointsContextProvider,
     AnimalMultiSelectContextProvider,
     SelectedDiveSiteContextProvider,
