@@ -149,7 +149,6 @@ export default function DiveSiteUploader(props) {
                   vectorIcon={"MaterialCommunityIcons"}
                   keyboardConfig="number-pad"
                   secure={false}
-                  vectorIcon={"MaterialCommunityIcons"}
                   onChangeText={(text) =>
                     setAddSiteVals({ ...addSiteVals, Latitude: text })
                   }
@@ -277,7 +276,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.ThinItalic,
     marginTop: "2%",
-    marginLeft: "10%",
+    marginLeft: windowWidth > 600 ? "5%" : "9%",
     marginBottom: "0%",
     width: "30%",
   },
