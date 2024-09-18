@@ -43,7 +43,6 @@ import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
-import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
@@ -124,7 +123,6 @@ export default function MapPage() {
   const { setZoomHelper } = useContext(ZoomHelperContext);
 
   const { animalSelection } = useContext(AnimalSelectContext);
-  const [monthVal, setMonthVal] = useState("");
   const { setMapHelper } = useContext(MapHelperContext);
   const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -416,7 +414,6 @@ export default function MapPage() {
   };
 
   return (
-    <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
           <View style={styles.container}>
@@ -548,7 +545,6 @@ export default function MapPage() {
           </View>
         </DiveSitesContext.Provider>
       </MapCenterContext.Provider>
-    </MonthSelectContext.Provider>
   );
 }
 
