@@ -17,7 +17,9 @@ import {
   colors,
   fontSizes,
   screenSecondaryButton,
+  authenicationButton,
   buttonTextAlt,
+  buttonText
 } from "../styles";
 import screenData from "./screenData.json";
 import { moderateScale, s } from "react-native-size-matters";
@@ -251,11 +253,10 @@ if (selectedProfile){followCheck()}
 
   const handleFollow = async () => {
 
-    // let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
-    // console.log("ERHEM", permissionGiven)
-    // if (!permissionGiven) {
-    //   return
-    // }
+    let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    if (!permissionGiven) {
+      return
+    }
 
     if (userFollows) {
       deleteUserFollow(followData);
@@ -282,8 +283,8 @@ if (selectedProfile){followCheck()}
       />
       {visitProfileVals ? (
         <TouchableWithoutFeedback onPress={()=> handleFollow()}>
-          <View style={styles.followButton}>
-      <Text style={styles.followButtonText}>{userFollows ? screenData.UserProfile.userDoesFollow : screenData.UserProfile.UserDoesNotFollow}</Text>
+          <View style={userFollows ? styles.followButtonAlt : styles.followButton}>
+      <Text style={userFollows ? styles.followButtonTextAlt : styles.followButtonText}>{userFollows ? screenData.UserProfile.userDoesFollow : screenData.UserProfile.UserDoesNotFollow}</Text>
           </View>
         </TouchableWithoutFeedback>
       ) : (
@@ -439,7 +440,12 @@ const styles = StyleSheet.create({
     { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
     screenSecondaryButton,
   ],
+  followButtonAlt: [
+    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
+    authenicationButton,
+  ],
   followButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
+  followButtonTextAlt: [buttonText, { marginHorizontal: moderateScale(5) }],
   svgCurve: {
     position: "absolute",
     bottom: 0,
