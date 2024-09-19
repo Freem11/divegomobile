@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   FlatList,
+  Keyboard
 } from "react-native";
 import { activeFonts, colors, fontSizes } from "../styles";
 import screenData from "./screenData.json";
@@ -59,6 +60,7 @@ export default function SearchPage(props) {
  
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
       <MaterialIcons
         name="chevron-left"
@@ -112,6 +114,7 @@ export default function SearchPage(props) {
         </View>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 
