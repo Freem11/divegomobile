@@ -231,6 +231,19 @@ export default function TripCreatorPage(props) {
   };
 
   const cloneButtonPress = () => {
+    setSitesArray([]);
+    setFormValues({
+      ...formValues,
+      BookingPage: "",
+      tripName: "",
+      startDate: "",
+      endDate: "",
+      price: 0,
+      description: "",
+      siteList: [],
+    });
+    setTripDiveSites([])
+    setValue("$0.00");
     setEditMode(false);
   };
 
@@ -298,7 +311,6 @@ export default function TripCreatorPage(props) {
               inputValue={formValues && formValues.price}
               placeHolderText={screenData.TripCreator.pricePlaceholder}
               secure={false}
-              inputValue={value}
               keyboardType={"numbers-and-punctuation"}
               onChangeText={setValue}
             />
