@@ -8,22 +8,10 @@ import {
   Dimensions,
   KeyboardAvoidingView,
 } from "react-native";
-import {
-  activeFonts,
-  colors,
-  fontSizes,
-} from "../styles";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
 import AutoSuggestListItem from "./autoSuggestListItem";
 import TextInputField from "../authentication/textInput";
 import { scale, moderateScale } from "react-native-size-matters";
-import { TutorialContext } from "../contexts/tutorialContext";
-import { Iterrator3Context } from "../contexts/iterrator3Context";
-import { PictureAdderContext } from "../contexts/picModalContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
-
-let waiter;
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -39,14 +27,6 @@ export default function AnimalAutoSuggest(props) {
   const { setPinValues, pinValues, inputValue, icon, vectorIcon, secure, placeHolderText} = props;
   const [list, setList] = useState([]);
   const [textSource, setTextSource] = useState(false);
-  const { picAdderModal } = useContext(PictureAdderContext);
-
-  
-  useEffect(() => {
-    if (!picAdderModal) {
-      setTextSource(false);
-    }
-  }, [picAdderModal]);
 
   const handleList = async (values) => {
     if (values.value === 1) {

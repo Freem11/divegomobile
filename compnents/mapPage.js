@@ -11,7 +11,6 @@ import {
 import {
   activeFonts,
   colors,
-  fontSizes,
   primaryButtonAlt,
   buttonTextAlt,
 } from "./styles";
@@ -20,8 +19,6 @@ import email from "react-native-email";
 import Map from "./GoogleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
-import AnimatedModalLarge from "../compnents/reusables/animatedModalLarge";
-import AnimatedModalLargeSecond from "../compnents/reusables/animatedModalLargeSecond";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
 import LevelOneScreen from "../compnents/reusables/levelOneScreen";
@@ -38,22 +35,18 @@ import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
 import PhotoFilterer from "./photoMenu/photoFilter";
-import PrimaryButton from "../compnents/reusables/primaryButton";
 import CircularButton from "../compnents/reusables/circularButton";
 import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
-import { MasterContext } from "./contexts/masterContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { PinContext } from "./contexts/staticPinContext";
 import { DiveSpotContext } from "./contexts/diveSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
-import { MonthSelectContext } from "./contexts/monthSelectContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { MapHelperContext } from "./contexts/mapHelperContext";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { SessionContext } from "./contexts/sessionContext";
-import { TutorialContext } from "./contexts/tutorialContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
 import { SearchTextContext } from "./contexts/searchTextContext";
 import { AreaPicsContext } from "./contexts/areaPicsContext";
@@ -62,19 +55,13 @@ import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
-import { LargeModalContext } from "./contexts/largeModalContext";
-import { LargeModalSecondContext } from "./contexts/largeModalSecondContext";
 import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "./contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "./contexts/levelTwoScreenContext";
 import { ActiveScreenContext } from "./contexts/activeScreenContext";
-
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
-import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
-import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
+import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext"
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
-import { IterratorContext } from "./contexts/iterratorContext";
-import { Iterrator2Context } from "./contexts/iterrator2Context";
 import { scale, moderateScale, s } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
@@ -86,7 +73,6 @@ import Animated, {
   interpolate,
   withSpring,
 } from "react-native-reanimated";
-import TutorialBar from "./tutorialBar/tutorialBarContainer";
 import * as ScreenOrientation from "expo-screen-orientation";
 
 const windowWidth = Dimensions.get("window").width;
@@ -100,10 +86,7 @@ export default function MapPage() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
-    LargeModalSecondContext
-  );
+
   const { confirmationModal, setConfirmationModal } = useContext(
     ConfirmationModalContext
   );
@@ -117,27 +100,18 @@ export default function MapPage() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const { levelThreeScreen, setLevelThreeScreen } = useContext(
-    LevelTwoScreenContext
-  );
   const { previousButtonID, setPreviousButtonID } = useContext(
     PreviousButtonIDContext
-  );
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
   );
   const { activeTutorialID, setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
-  const { itterator, setItterator } = useContext(IterratorContext);
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
 
-  const { masterSwitch, setMasterSwitch } = useContext(MasterContext);
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
@@ -148,9 +122,7 @@ export default function MapPage() {
   const { setZoomHelper } = useContext(ZoomHelperContext);
 
   const { animalSelection } = useContext(AnimalSelectContext);
-  const [monthVal, setMonthVal] = useState("");
   const { setMapHelper } = useContext(MapHelperContext);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
@@ -200,14 +172,6 @@ export default function MapPage() {
       console.log({ title: "Error66", message: e.message });
     }
   };
-
-  useEffect(() => {
-    if (tutorialRunning && largeModal) {
-      if (itterator > 0 && itterator !== 11 && itterator !== 20) {
-        setItterator(itterator + 1);
-      }
-    }
-  }, [largeModal]);
 
   const feedbackX = useSharedValue(0);
 
@@ -268,8 +232,6 @@ export default function MapPage() {
       pullTabHeight.value = withTiming(1);
       setIsOpen(true);
 
-      setLargeModal(false);
-      setLargeModalSecond(false);
       setFullScreenModal(false);
     } else {
       Keyboard.dismiss();
@@ -318,23 +280,10 @@ export default function MapPage() {
           Longitude: dragPin.lng.toString(),
         });
         setMapHelper(true);
-
-        setMasterSwitch(true);
         setMapConfig(0);
 
         setActiveScreen("DiveSiteUploadScreen");
         setLevelTwoScreen(true);
-        setChosenModal(null);
-      } else if (chosenModal === "Photos") {
-        setPinValues({
-          ...pinValues,
-          Latitude: dragPin.lat.toString(),
-          Longitude: dragPin.lng.toString(),
-        });
-        setMapHelper(true);
-        setMasterSwitch(true);
-        setActiveButtonID("PictureAdderButton");
-        setLargeModalSecond(!largeModalSecond);
         setChosenModal(null);
       }
     }
@@ -411,32 +360,16 @@ export default function MapPage() {
   };
 
   useLayoutEffect(() => {
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setConfirmationModal(false);
     getProfile();
   }, []);
 
   useEffect(() => {
-    setLargeModal(false);
-    setLargeModalSecond(false);
+    setLevelOneScreen(false);
+    setLevelTwoScreen(false);
     setConfirmationModal(false);
     getProfile();
   }, []);
-
-  useEffect(() => {
-    clearTimeout(feedbackRequest2);
-    clearTimeout(feedbackRequest);
-
-    if (tutorialRunning === false) {
-      if (!profile && profile[0].feedbackRequested === false) {
-        feedbackRequest2 = setTimeout(() => {
-          startFeedbackAnimations();
-          updateProfileFeeback(profile[0]);
-        }, 180000);
-      }
-    }
-  }, [tutorialRunning]);
 
   const handleEmail = () => {
     const to = ["scubaseasons@gmail.com"];
@@ -450,8 +383,6 @@ export default function MapPage() {
 
   const toggleDiveSites = () => {
     setDiveSitesTog(!diveSitesTog);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
   };
 
@@ -469,16 +400,9 @@ export default function MapPage() {
   };
 
   return (
-    <MonthSelectContext.Provider value={{ monthVal, setMonthVal }}>
       <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
         <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
           <View style={styles.container}>
-            {tutorialRunning && (
-              <View style={styles.tutorialBar} pointerEvents={"box-none"}>
-                <TutorialBar style={{ zIndex: 55 }} />
-              </View>
-            )}
-
             {mapConfig in [, , 2] || !mapConfig ? (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
                 <PhotoMenu style={{ zIndex: 3 }} />
@@ -504,7 +428,7 @@ export default function MapPage() {
               </View>
             ) : null}
 
-            {masterSwitch && (
+            {mapConfig in [, , 2] || !mapConfig ?(
               <TouchableWithoutFeedback onPress={startTagAnimations}>
                 <AntDesign
                   name="tags"
@@ -513,7 +437,7 @@ export default function MapPage() {
                   style={{ position: "absolute", left: "87.5%", top: "13%" }}
                 />
               </TouchableWithoutFeedback>
-            )}
+            ): null}
 
             {mapConfig === 0 ? (
               <View
@@ -592,16 +516,14 @@ export default function MapPage() {
               </TouchableWithoutFeedback>
             ) : null}
 
-            {mapConfig === 0 ? (
+            {/* {mapConfig === 0 ? (
               <View style={styles.Hist} pointerEvents={"none"}>
                 <Historgram style={{ zIndex: 2 }} />
               </View>
-            ) : null}
+            ) : null} */}
 
             <LevelOneScreen />
             <LevelTwoScreen />
-            <AnimatedModalLarge />
-            <AnimatedModalLargeSecond />
             <AnimatedFullScreenModal />
             <AnimatedModalConfirmation />
 
@@ -609,7 +531,6 @@ export default function MapPage() {
           </View>
         </DiveSitesContext.Provider>
       </MapCenterContext.Provider>
-    </MonthSelectContext.Provider>
   );
 }
 
@@ -722,14 +643,6 @@ const styles = StyleSheet.create({
     width: "100%",
     zIndex: 3,
     // backgroundColor: "grey"
-  },
-  tutorialBar: {
-    width: "25%",
-    position: "absolute",
-    left: "8%",
-    top: Platform.OS === "ios" ? "14%" : "14%",
-    zIndex: 55,
-    // backgroundColor:"pink"
   },
   Hist: {
     alignItems: "center",

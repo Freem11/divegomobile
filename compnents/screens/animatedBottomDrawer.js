@@ -200,7 +200,7 @@ export default function BottomDrawer(props) {
               {dataSetType === "DiveSitePhotos" ? (
                 <View key={`${item.id}-${item.dateTaken}`}>
                   <View style={styles.locationHeader}>
-                    <Text>{item.dateTaken}</Text>
+                    <Text style={styles.headerText}>{item.dateTaken}</Text>
                   </View>
                   {item.photos.length > 0 &&
                     item.photos.map((photo) => {

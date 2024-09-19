@@ -17,9 +17,6 @@ import Animated, {
 import { activeFonts, colors } from "../styles";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -32,9 +29,6 @@ const PhotoMenuListItem = (props) => {
     selectedID,
     setSelectedID,
   } = props;
-  const { setSmallModal } = useContext(SmallModalContext);
-  const { setLargeModal } = useContext(LargeModalContext);
-  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -47,9 +41,6 @@ const PhotoMenuListItem = (props) => {
     } else {
       setAnimalMultiSelection([...animalMultiSelection, name]);
     }
-    setSmallModal(false);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
   };
 
@@ -69,9 +60,6 @@ const PhotoMenuListItem = (props) => {
 
   const pressInAnimations = (data, id) => {
     setSelectedID(id);
-    setSmallModal(false);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
 
     if (scaleStart.value === 1) {

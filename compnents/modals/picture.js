@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
-import { activeFonts, colors, fontSizes, roundButton } from "../styles";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   insertPhotoLike,
@@ -19,9 +19,7 @@ import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls"
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { CommentsModalContext } from "../contexts/commentsModalContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
@@ -32,8 +30,6 @@ import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
 import liked from "../png/socialIcons/Hand-Filled-Blue.png";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
@@ -51,11 +47,6 @@ export default function Picture(props) {
     LevelTwoScreenContext
   );
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
-    LargeModalSecondContext
-  );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
 
@@ -83,9 +74,7 @@ export default function Picture(props) {
   const [mapLocal, setMapLocal] = useState(null);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
-  const { setCommentsModal } = useContext(CommentsModalContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
-  const { setProfileModal } = useContext(ProfileModalContext);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
@@ -293,7 +282,7 @@ export default function Picture(props) {
              onPress={() => handleDiveSiteMove(pic)}
            >
              {" "}
-             Take me to this!
+             Go to this location!
            </Text>
              
              :

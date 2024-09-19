@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import CloseButtonSmall from "./closeButtonSmall";
 import { activeFonts, colors, fontSizes } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;

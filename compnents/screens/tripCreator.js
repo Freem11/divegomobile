@@ -6,6 +6,7 @@ import {
   Keyboard,
   Dimensions,
   TouchableWithoutFeedback,
+  ScrollView
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import {
@@ -31,20 +32,14 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale, s } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
-import { ShopModalContext } from "../contexts/shopModalContext";
 import { TripDetailContext } from "../contexts/tripDetailsContext";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
-import { ShopContext } from "../contexts/shopContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
 
 const windowWidth = Dimensions.get("window").width;
@@ -52,33 +47,22 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function TripCreatorPage(props) {
   const {} = props;
-  const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
-  const { setShopModal } = useContext(ShopModalContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
 
   const [dateType, setDateType] = useState("");
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { shop } = useContext(ShopContext);
-
-  const { activeSession, setActiveSession } = useContext(SessionContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
 
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const [itineraryList, setItineraryList] = useState("");
-  const [selectedID, setSelectedID] = useState(null);
 
   const drawerUpperBound = "80%";
   const drawerLowerBound = "15%";
@@ -275,7 +259,7 @@ export default function TripCreatorPage(props) {
           </TouchableWithoutFeedback>
         )}
 
-        <View style={styles.content}>
+        <ScrollView style={styles.content}>
           {editMode ? (
             <Text style={styles.header}>
               {screenData.TripCreator.headerEdit}
@@ -359,9 +343,8 @@ export default function TripCreatorPage(props) {
               }
             />
           </View>
-        </View>
 
-        <View style={styles.buttonBox}>
+          <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => handleSubmit()}>
             <View style={styles.submitButton}>
               <Text style={styles.submitText}>
@@ -375,6 +358,9 @@ export default function TripCreatorPage(props) {
             </View>
           </TouchableWithoutFeedback>
         </View>
+        <View style={{height: moderateScale(50)}}>
+        </View>
+        </ScrollView>
 
         <BottomDrawer
           dataSet={tripDiveSites}
@@ -406,8 +392,9 @@ const styles = StyleSheet.create({
     height: windowHeight,
   },
   content: {
+    height: "180%",
     width: "90%",
-    marginBottom: "5%",
+    marginBottom: "20%",
   },
   header: {
     zIndex: 10,
@@ -434,7 +421,7 @@ const styles = StyleSheet.create({
     width: "90%",
     alignItems: "flex-end",
     marginTop: "-15%",
-    marginHorizontal: "15%",
+    marginHorizontal: "10%",
   },
   submitButton: [
     authenicationButton,

@@ -18,8 +18,6 @@ import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { PinSpotContext } from "../contexts/pinSpotContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -36,10 +34,7 @@ export default SearchToolListItem = (props) => {
   const { setMapCenter } = useContext(MapCenterContext);
   const { setDragPin } = useContext(PinSpotContext);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
+
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );

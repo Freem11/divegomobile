@@ -1,13 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { IterratorContext } from "../contexts/iterratorContext";
-import { Iterrator2Context } from "../contexts/iterrator2Context";
-import { Iterrator3Context } from "../contexts/iterrator3Context";
-import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
@@ -17,9 +12,6 @@ import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
   const { activeScreen, setActiveScreen } = useContext(
     ActiveScreenContext
     );
@@ -33,7 +25,7 @@ export default function SiteSearchButton() {
     setTiles(true);
     setShowFilterer(false);
 
-    setPreviousButtonID(activeButtonID);
+    setPreviousButtonID(activeScreen);
     setActiveScreen("SearchScreen");
     useButtonPressHelper(
       "SearchScreen",

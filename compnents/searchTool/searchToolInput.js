@@ -5,8 +5,6 @@ import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
 import TextInputField from "../authentication/textInput";
 import { scale, moderateScale } from "react-native-size-matters";
 import { getSiteNamesThatFit } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";;
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -31,10 +29,6 @@ export default function SearchToolInput(props) {
     placeHolderText,
     vectorIcon,
   } = props;
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
   const { boundaries } = useContext(MapBoundariesContext);
   const [isClearOn, setIsClearOn] = useState(false);
 
@@ -100,8 +94,6 @@ export default function SearchToolInput(props) {
       return
     }
     setSearchValue(text);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("DiveSiteSearchButton");
     handleDataList(text);
     
   };
