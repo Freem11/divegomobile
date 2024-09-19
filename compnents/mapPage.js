@@ -8,12 +8,7 @@ import {
   Dimensions,
   Keyboard,
 } from "react-native";
-import {
-  activeFonts,
-  colors,
-  primaryButtonAlt,
-  buttonTextAlt,
-} from "./styles";
+import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
 import Map from "./GoogleMap";
@@ -60,7 +55,7 @@ import { LevelOneScreenContext } from "./contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "./contexts/levelTwoScreenContext";
 import { ActiveScreenContext } from "./contexts/activeScreenContext";
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
-import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext"
+import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { scale, moderateScale, s } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
@@ -400,87 +395,93 @@ export default function MapPage() {
   };
 
   return (
-      <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
-        <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
-          <View style={styles.container}>
-            {mapConfig in [, , 2] || !mapConfig ? (
-              <View style={styles.carrousel} pointerEvents={"box-none"}>
-                <PhotoMenu style={{ zIndex: 3 }} />
-                <View style={styles.filterer} pointerEvents={"box-none"}>
-                  {((areaPics && areaPics.length > 0) || isOpen) && (
-                    <View style={styles.emptyBox} pointerEvents={"box-none"}>
-                      <Animated.View style={[tabPull, styles.closer]}>
-                        <PhotoFilterer />
-                      </Animated.View>
+    <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
+      <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
+        <View style={styles.container}>
+          {mapConfig in [, , 2] || !mapConfig ? (
+            <View style={styles.carrousel} pointerEvents={"box-none"}>
+              <PhotoMenu style={{ zIndex: 3 }} />
+              <View style={styles.filterer} pointerEvents={"box-none"}>
+                {((areaPics && areaPics.length > 0) || isOpen) && (
+                  <View style={styles.emptyBox} pointerEvents={"box-none"}>
+                    <Animated.View style={[tabPull, styles.closer]}>
+                      <PhotoFilterer />
+                    </Animated.View>
 
-                      <TouchableWithoutFeedback
-                        onPress={() => setShowFilterer(!showFilterer)}
-                      >
-                        <View style={styles.pullTab}></View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  )}
-
-                  <View style={styles.animalSelect} pointerEvents={"box-none"}>
-                    <AnimalTopAutoSuggest transTagsY={transTagsY} />
+                    <TouchableWithoutFeedback
+                      onPress={() => setShowFilterer(!showFilterer)}
+                    >
+                      <View style={styles.pullTab}></View>
+                    </TouchableWithoutFeedback>
                   </View>
+                )}
+
+                <View style={styles.animalSelect} pointerEvents={"box-none"}>
+                  <AnimalTopAutoSuggest transTagsY={transTagsY} />
                 </View>
               </View>
-            ) : null}
+            </View>
+          ) : null}
 
-            {mapConfig in [, , 2] || !mapConfig ?(
-              <TouchableWithoutFeedback onPress={startTagAnimations}>
-                <AntDesign
-                  name="tags"
-                  color="#355D71"
-                  size={24}
-                  style={{ position: "absolute", left: "87.5%", top: "13%" }}
+          {mapConfig in [, , 2] || !mapConfig ? (
+            <TouchableWithoutFeedback onPress={startTagAnimations}>
+              <AntDesign
+                name="tags"
+                color="#355D71"
+                size={24}
+                style={{ position: "absolute", left: "87.5%", top: "13%" }}
+              />
+            </TouchableWithoutFeedback>
+          ) : null}
+
+          {mapConfig === 0 ? (
+            <View style={styles.FMenuAnimate} pointerEvents={"box-none"}>
+              <Animated.View style={[styles.feedback, feedbackReveal]}>
+                <Text style={styles.feedRequest} onPress={() => handleEmail()}>
+                  Send Scuba SEAsons feedback
+                </Text>
+                <TouchableWithoutFeedback
+                  style={{
+                    width: moderateScale(30),
+                    height: moderateScale(23),
+                    marginTop: moderateScale(3),
+                  }}
+                  onPress={startFeedbackAnimations}
+                >
+                  <Octicons
+                    name="paper-airplane"
+                    size={moderateScale(24)}
+                    color="white"
+                    style={{ marginTop: moderateScale(3) }}
+                  />
+                </TouchableWithoutFeedback>
+              </Animated.View>
+
+              <View style={styles.FMenu}>
+                <FABMenu
+                  style={{ zIndex: 2 }}
+                  toggleDiveSites={toggleDiveSites}
                 />
-              </TouchableWithoutFeedback>
-            ): null}
-
-            {mapConfig === 0 ? (
-              <View
-                style={styles.FMenuAnimate}
-                pointerEvents={"box-none"}
-              >
-                <Animated.View style={[styles.feedback, feedbackReveal]}>
-                  <Text
-                    style={styles.feedRequest}
-                    onPress={() => handleEmail()}
-                  >
-                    Send Scuba SEAsons feedback
-                  </Text>
-                  <TouchableWithoutFeedback
-                    style={{
-                      width: moderateScale(30),
-                      height: moderateScale(23),
-                      marginTop: moderateScale(3),
-                    }}
-                    onPress={startFeedbackAnimations}
-                  >
-                    <Octicons
-                      name="paper-airplane"
-                      size={moderateScale(24)}
-                      color="white"
-                      style={{ marginTop: moderateScale(3) }}
-                    />
-                  </TouchableWithoutFeedback>
-                </Animated.View>
-
-                <View style={styles.FMenu}>
-                  <FABMenu style={{ zIndex: 2 }} toggleDiveSites={toggleDiveSites} />
-                </View>
               </View>
-            ) : null}
+            </View>
+          ) : null}
 
+          <View 
+          pointerEvents={'box-none'}
+          style={{
+                  position: "absolute",
+                  bottom: moderateScale(35),
+                  width: "80%",
+                  alignItems: "center",
+                  justifyContent: 'center',
+                  flexDirection: "row",
+                  zIndex: 2,
+                }}>
             {mapConfig in [, 1, , 3] ? (
               <View
                 style={{
-                  position: "absolute",
-                  bottom: moderateScale(35),
-                  left: moderateScale(35),
                   zIndex: 2,
+                  marginRight: "10%"
                 }}
               >
                 <CircularButton
@@ -515,22 +516,24 @@ export default function MapPage() {
                 </View>
               </TouchableWithoutFeedback>
             ) : null}
+          </View>
 
-            {/* {mapConfig === 0 ? (
+
+          {/* {mapConfig === 0 ? (
               <View style={styles.Hist} pointerEvents={"none"}>
                 <Historgram style={{ zIndex: 2 }} />
               </View>
             ) : null} */}
 
-            <LevelOneScreen />
-            <LevelTwoScreen />
-            <AnimatedFullScreenModal />
-            <AnimatedModalConfirmation />
+          <LevelOneScreen />
+          <LevelTwoScreen />
+          <AnimatedFullScreenModal />
+          <AnimatedModalConfirmation />
 
-            <Map style={{ zIndex: 1 }} />
-          </View>
-        </DiveSitesContext.Provider>
-      </MapCenterContext.Provider>
+          <Map style={{ zIndex: 1 }} />
+        </View>
+      </DiveSitesContext.Provider>
+    </MapCenterContext.Provider>
   );
 }
 
@@ -582,11 +585,8 @@ const styles = StyleSheet.create({
   lowerButtonWrapper: [
     primaryButtonAlt,
     {
-      position: "absolute",
       alignItems: "center",
       textAlign: "center",
-      bottom: scale(28),
-      left: scale(100),
       zIndex: 2,
     },
   ],
