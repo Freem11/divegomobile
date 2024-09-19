@@ -49,6 +49,11 @@ export default function Authentication() {
   };
 
   useEffect(() => {
+    carrouselIndex === 2 ? moveToLandingPage() : null
+  },[])
+
+
+  useEffect(() => {
     carrouselIndex === 0 ? moveToSignUpPage() : null
     carrouselIndex === 1 ? moveToLandingPage() : null
     carrouselIndex === 2 ? moveToLoginPage() : null
@@ -63,9 +68,8 @@ export default function Authentication() {
         ref={carrouselRef}
         horizontal
         pagingEnabled
-        initialScrollIndex={1}
         onScrollToIndexFailed={(carrouselIndex) => {
-          const wait = new Promise((resolve) => setTimeout(resolve, 500));
+          const wait = new Promise((resolve) => setTimeout(resolve, 1));
           wait.then(() => {
             setCarrouselIndex(1);
             const scrollToIndex = carrouselIndex;
