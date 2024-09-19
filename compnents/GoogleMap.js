@@ -312,10 +312,13 @@ export default function Map() {
     if (mapRef) {
       let currentMapPosition = await mapRef.getCamera();
       if (currentMapPosition) {
-        setMapCenter({
-          lat: currentMapPosition.center.latitude,
-          lng: currentMapPosition.center.longitude,
-        });
+        // if(mapConfig !==2){
+        //   setMapCenter({
+        //     lat: currentMapPosition.center.latitude,
+        //     lng: currentMapPosition.center.longitude,
+        //   });
+        // }
+      
       }
     }
   };
@@ -388,6 +391,9 @@ export default function Map() {
   useEffect(() => {
     if (mapConfig === 1) {
       setDragPin(mapCenter);
+    }
+    if (mapConfig === 0) {
+      setSitesArray([])
     }
   }, [mapConfig]);
 
