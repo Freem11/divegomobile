@@ -516,11 +516,11 @@ export default function MapPage() {
               </TouchableWithoutFeedback>
             ) : null}
 
-            {mapConfig === 0 ? (
+            {/* {mapConfig === 0 ? (
               <View style={styles.Hist} pointerEvents={"none"}>
                 <Historgram style={{ zIndex: 2 }} />
               </View>
-            ) : null}
+            ) : null} */}
 
             <LevelOneScreen />
             <LevelTwoScreen />

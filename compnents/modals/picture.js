@@ -282,7 +282,7 @@ export default function Picture(props) {
              onPress={() => handleDiveSiteMove(pic)}
            >
              {" "}
-             Take me to this!
+             Go to this location!
            </Text>
              
              :
