@@ -98,6 +98,7 @@ export default function WavyHeaderUploader({
         <Svg
           height={windowWidth > 600 ? "230%" : "230%"}
           width={windowWidth > 600 ? "100%" : "100%"}
+          pointerEvents={'none'}
           viewBox="0 0 1440 320"
           style={{
             flex: 1,
