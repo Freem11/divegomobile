@@ -4,6 +4,13 @@ import { moderateScale, scale } from "react-native-size-matters";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+  authenicationButton,
+  buttonText,
+} from "../styles";
 
 export default function FailModal(props) {
   const { confirmationType } = useContext(ConfirmationTypeContext);
@@ -20,7 +27,7 @@ export default function FailModal(props) {
       break;
     case "Sea Creature Submission":
       blurb =
-        "The Image has not yet completed processing, please wait for the indicator to turn green, which indicates that it is ready, and try again.";
+        "In order to sucessfully submit your sea creature sighting, please provide a photo as well as the name of the species of sea creature in the photo as well as the date it was photographed. \n \n Note: The location will be automatically assumed to be the dive site you opened this page from.";
       break;
     case "Dive Site":
       blurb =
@@ -28,7 +35,7 @@ export default function FailModal(props) {
       break;
     case "Partner Account Creation Request":
       blurb =
-        "Your request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete your request.";
+        "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.";
       break;
     case "Trip Edit":
       blurb = "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
@@ -74,9 +81,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: moderateScale(20),
+    fontSize: moderateScale(fontSizes.StandardText),
     color: "#36454F",
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Regular,
     alignSelf: "center",
     textAlign: "center",
     marginTop: "10%",
@@ -84,9 +91,9 @@ const styles = StyleSheet.create({
     margin: scale(10),
   },
   text2: {
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(fontSizes.SmallText),
     color: "#36454F",
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Regular,
     alignSelf: "center",
     textAlign: "center",
     marginTop: "5%",

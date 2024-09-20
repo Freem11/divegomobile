@@ -1,18 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
-import { scale } from "react-native-size-matters";
-import { StyleSheet, View, Text, Image, YellowBox } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Image } from "react-native";
 import * as FileSystem from "expo-file-system";
-import { AreaPicsContext } from "../contexts/areaPicsContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
-import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 
 export default function ImageCasher(Props) {
-  const { photoFile, id, style, anchorPics } = Props;
-  const { areaPics } = useContext(AreaPicsContext);
-  const { siteModal } = useContext(AnchorModalContext);
-  const { boundaries } = useContext(MapBoundariesContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
+  const { photoFile, style } = Props;
   let fileName = photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
 

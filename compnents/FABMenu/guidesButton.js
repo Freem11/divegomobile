@@ -1,52 +1,41 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
+import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
-  const { setSmallModal } = useContext(SmallModalContext);
 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
-  const { tutorialRunning } = useContext(TutorialContext);
-
+ 
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
-    setLargeModalSecond(false);
-    setSmallModal(false);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("TutorialsButton");
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("TutorialsButton");
     useButtonPressHelper(
       "TutorialsButton",
-      activeButtonID,
-      largeModal,
-      setLargeModal
+      activeScreen,
+      // largeModal,
+      // setLargeModal
     );
   };
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={tutorialRunning ? null : handlePress}
-        onPressIn={() => setButState(true)}
-        onPressOut={() => setButState(false)}
+        onPress={null}
+        // onPressIn={() => setButState(true)}
+        // onPressOut={() => setButState(false)}
         style={{
           alignItems: "center",
           width: moderateScale(32),
@@ -56,11 +45,11 @@ export default function GuidesButton() {
         <View style={styles.buttonBox}>
           <FontAwesome5
             name="question"
-            color={butState ? "gold" : "white"}
+            color={butState ? "gold" : "darkgrey"}
             size={moderateScale(32)}
           />
           <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            User Guides
+            Guides
           </Text>
         </View>
       </TouchableWithoutFeedback>
@@ -82,21 +71,21 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
-    marginTop: moderateScale(1),
+    marginTop: moderateScale(4)
   },
   buttonlabel: {
-    fontFamily: "Itim_400Regular",
-    color: "white",
-    fontSize: moderateScale(13),
+    fontFamily: activeFonts.Medium,
+    color: "darkgrey",
+    fontSize: fontSizes.SmallText,
     marginTop: moderateScale(2),
   },
   buttonlabelAlt: {
-    fontFamily: "Itim_400Regular",
-    color: "gold",
-    fontSize: moderateScale(13),
+    fontFamily: activeFonts.Medium,
+    color: colors.secondaryYellow,
+    fontSize: fontSizes.SmallText,
     marginTop: moderateScale(2),
   },
 });

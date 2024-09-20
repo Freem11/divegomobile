@@ -6,10 +6,10 @@ export const createPartnerAccountRequest = async (values) => {
   .from("partnerAccountRequests")
   .insert([
     {
-      webpageLink : values.WebsiteLink,
-      businessName: values.BusinessName,
-      latitude: values.Latitude,
-      longitude: values.Longitude,
+      webpageLink : values.websiteLink,
+      businessName: values.businessName,
+      latitude: values.latitude,
+      longitude: values.lontitude,
       userId: values.UserId
     },
   ]);

@@ -2,24 +2,24 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
+  Dimensions,
   Image,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   insertPhotoLike,
   deletePhotoLike,
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
 import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
+import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { CommentsModalContext } from "../contexts/commentsModalContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
-import { ProfileModalContext } from "../contexts/profileModalContext";
 import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
 import ImageCasherDynamic from "../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
@@ -28,23 +28,28 @@ import email from "react-native-email";
 import Share from "react-native-share";
 import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
 import liked from "../png/socialIcons/Hand-Filled-Blue.png";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
-  const { pic } = props;
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(LargeModalSecondContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
+  const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
+  const { levelOneScreen, setLevelOneScreen } = useContext(
+    LevelOneScreenContext
   );
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+  const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
@@ -62,7 +67,6 @@ export default function Picture(props) {
     }).catch(console.error);
   };
 
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [base64, setBase64] = useState(null);
   const [userN, setUserN] = useState(null);
   const [creastureN, setCreastureN] = useState(null);
@@ -70,10 +74,10 @@ export default function Picture(props) {
   const [mapLocal, setMapLocal] = useState(null);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
-  const { setCommentsModal } = useContext(CommentsModalContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
-  const { setProfileModal } = useContext(ProfileModalContext);
-  const { selectedProfile, setSelectedProfile } =useContext(SelectedProfileContext);
+  const { selectedProfile, setSelectedProfile } = useContext(
+    SelectedProfileContext
+  );
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
@@ -101,15 +105,32 @@ export default function Picture(props) {
   const handleFollow = async (userName) => {
     let picOwnerAccount = await grabProfileByUserName(userName);
 
-    if (profile[0].UserID === picOwnerAccount[0].UserID){
-      return
+    if (profile[0].UserID === picOwnerAccount[0].UserID) {
+      return;
     }
 
-    setSelectedProfile(picOwnerAccount[0].UserID)
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("UserProfileButton");
-    setLargeModalSecond(!largeModalSecond);
-    setLargeModal(!largeModal)
+    setSelectedProfile(picOwnerAccount);
+    setLevelOneScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("ProfileScreen");
+    useButtonPressHelper(
+      "ProfileScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
+    );
+
+  };
+
+  const handleDiveSiteMove = async (pic) => {
+    setSelectedDiveSite({
+      SiteName: diveSiteName,
+      Latitude: pic.latitude,
+      Longitude: pic.longitude,
+    });
+    setVisitProfileVals(null);
+    setSelectedProfile(null);
+    setLevelTwoScreen(false);
   };
 
   const convertBase64 = (cacheDir) => {
@@ -136,7 +157,6 @@ export default function Picture(props) {
   };
 
   const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
-
     let local = await getPhotoLocation(lat, lng);
 
     setMapLocal(local);
@@ -190,10 +210,17 @@ export default function Picture(props) {
     setBase64(null);
   }, [base64]);
 
+  const togglePhotoBoxModal = (photo) => {
+    setSelectedPhoto(photo);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
+  };
+
   return (
-    <View style={styles.outterBox}>
+    <View key={pic.id} style={styles.outterBox}>
       <View style={styles.container}>
         <View style={styles.micro}>
+        <Text style={styles.titleText}>{pic.label}</Text>
           <FontAwesome
             name="share"
             color="white"
@@ -217,47 +244,63 @@ export default function Picture(props) {
             onPress={() => handleEmail(pic)}
             style={styles.flag}
           />
-          <Text style={styles.titleText}>{pic.label}</Text>
         </View>
-
         <ImageCasherDynamic
-          photoFile={pic.photofile}
+          photoFile={pic.photoFile}
           id={pic.id}
           style={{
-            borderRadius: 15,
+            borderRadius: moderateScale(15),
             resizeMode: "cover",
             marginTop: moderateScale(-22),
             // backgroundColor: "pink",
           }}
         />
-        {countOfLikes > 0 ? (
-          <View style={styles.countIndicator}>
-            <Text style={styles.countDisplay}>{countOfLikes}</Text>
-          </View>
-        ) : null}
-        <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
-          <Image
-            source={picLiked ? liked : notLiked}
-            style={[
-              styles.likeIcon,
-              {
-                height: moderateScale(30),
-                width: moderateScale(30),
-              },
-            ]}
-          />
-        </TouchableWithoutFeedback>
-        <View style={styles.microLow}>
-          <Text
-            style={styles.microLow2}
-            onPress={() => handleFollow(pic.newusername)}
-          >
-            {" "}
-            Added by: {pic.newusername}
-          </Text>
+        <View style={{ width: "100%", position: "absolute", bottom: 10, left: 7}}>
+          {countOfLikes > 0 ? (
+            <View style={styles.countIndicator}>
+              <Text style={styles.countDisplay}>{countOfLikes}</Text>
+            </View>
+          ) : null}
+          <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
+            <Image
+              source={picLiked ? liked : notLiked}
+              style={[
+                styles.likeIcon,
+                {
+                  height: moderateScale(30),
+                  width: moderateScale(30),
+                },
+              ]}
+            />
+          </TouchableWithoutFeedback>
+
+        
+            <View style={styles.microLow}>
+             {dataSetType === "ProfilePhotos" ?
+             <Text
+             style={styles.microLow2}
+             onPress={() => handleDiveSiteMove(pic)}
+           >
+             {" "}
+             Go to this location!
+           </Text>
+             
+             :
+             <Text
+                style={styles.microLow2}
+                onPress={() => handleFollow(pic.UserName)}
+              >
+                {" "}
+                Added by: {pic.UserName}
+              </Text> 
+              }
+            </View>
         </View>
       </View>
-      <TouchableWithoutFeedback onPress={() => handleCommentModal(pic)} style={{height: moderateScale(30), backgroundColor: 'pink'}}>
+      <TouchableWithoutFeedback
+        onPress={() => handleCommentModal(pic)}
+        style={{ height: moderateScale(30), backgroundColor: "pink" }}
+      >
         <View
           // onPress={() => handleCommentModal(pic)}
           style={{
@@ -272,9 +315,7 @@ export default function Picture(props) {
             // backgroundColor: 'pink'
           }}
         >
-          <Text
-            style={styles.commentPrompt}
-          >
+          <Text style={styles.commentPrompt}>
             {pic.commentcount < 1
               ? "Be first to Comment"
               : `Comment / View all ${pic.commentcount} Comments`}{" "}
@@ -287,52 +328,41 @@ export default function Picture(props) {
 
 const styles = StyleSheet.create({
   outterBox: {
-    width: "100%",
-    marginLeft: moderateScale(-10),
+    zIndex: 70,
+    width: windowWidth,
     marginBottom: moderateScale(5),
-    // backgroundColor: 'pink'
   },
   container: {
-    // flex: 1,
-    // justifyContent: "center",
-    // flexDirection: "column",
-    overflow: "hidden",
-    // backgroundColor: "white",
-    // borderTopRightRadius: scale(15),
-    width: "100%",
-    padding: moderateScale(2)
+    zIndex: 40,
+    borderTopRightRadius: scale(10),
+    width: windowWidth,
+    padding: moderateScale(2),
   },
   titleText: {
-    // textAlign: "center",
-    alignItems: "flex-start",
-    alignContent: "flex-start",
-    fontFamily: "Itim_400Regular",
-    color: "#F0EEEB",
+    fontFamily: activeFonts.Light,
+    color: colors.themeWhite,
     width: "77%",
-    fontSize: scale(15),
-    marginLeft: scale(-30),
+    fontSize: moderateScale(fontSizes.StandardText),
   },
   share: {
-    left: scale(232),
-    top: scale(1),
     opacity: 0.8,
     zIndex: 2,
   },
   micro: {
     flex: 1,
     flexDirection: "row",
-    // position: "relative",
-    backgroundColor: "black",
-    opacity: 0.6,
-    width: "120%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: colors.themeBlack,
+    opacity: 0.7,
+    width: "96%",
+    top: windowWidth > 600 ? "3%" : "2%",
+    marginLeft: "2%",
     borderRadius: 5,
     zIndex: 2,
-    left: scale(8),
-    top: Platform.OS === "ios" ? "2%" : "3%",
+
   },
   flag: {
-    left: scale(237),
-    top: scale(1),
     zIndex: 2,
   },
   likeIcon: {
@@ -342,7 +372,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 4,
     right: "2%",
-    bottom: Platform.OS === "ios" ? "2%" : "2%",
+    bottom: Platform.OS === "ios" ? "10%" : "10%",
     borderRadius: scale(5),
   },
   countIndicator: {
@@ -352,49 +382,42 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 4,
     right: moderateScale(30),
-    backgroundColor: "black",
+    backgroundColor: colors.themeBlack,
     width: "10%",
     height: moderateScale(18),
     paddingLeft: scale(5),
-    opacity: 0.6,
+    opacity: 0.7,
     bottom: Platform.OS === "ios" ? "3%" : "3%",
     borderTopLeftRadius: scale(5),
     borderBottomLeftRadius: scale(5),
   },
   countDisplay: {
-    color: "white",
-    fontSize: scale(8),
-    fontFamily: "Itim_400Regular",
+    color: colors.themeWhite,
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Bold,
   },
   microLow: {
-    display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
     position: "absolute",
-    backgroundColor: "black",
-    height: moderateScale(18),
-    opacity: 0.6,
-    color: "white",
-    fontFamily: "Itim_400Regular",
-    padding: 1,
-    paddingLeft: scale(6),
-    paddingRight: scale(7),
+    backgroundColor: colors.primaryBlue,
+    color: colors.themeWhite,
+    fontFamily: activeFonts.Light,
+    paddingHorizontal: moderateScale(10),
+    paddingVertical: moderateScale(3),
     zIndex: 2,
-    left: "2%",
+    left: "1%",
     bottom: Platform.OS === "ios" ? "3%" : "3%",
-    borderRadius: scale(5),
+    borderRadius: scale(8),
   },
   microLow2: {
-    display: "flex",
-    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     opacity: 1,
-    color: "white",
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(8),
+    color: colors.themeWhite,
+    fontFamily: activeFonts.Light,
+    fontSize: moderateScale(fontSizes.SmallText),
     zIndex: 2,
   },
   microLow2Alt: {
@@ -404,23 +427,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     opacity: 1,
-    color: "gold",
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(8),
+    color: colors.secondaryYellow,
+    fontFamily: activeFonts.Light,
+    fontSize: moderateScale(fontSizes.SmallText),
     zIndex: 2,
   },
   commentPrompt: {
     display: "flex",
     width: scale(200),
-    // height: scale(30),
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     opacity: 1,
-    color: "white",
-    // backgroundColor: "black",
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(10),
+    color: colors.themeBlack,
+    fontFamily: activeFonts.Thin,
+    fontSize: moderateScale(fontSizes.SmallText),
     zIndex: 10,
     paddingTop: moderateScale(5),
     paddingLeft: moderateScale(10),

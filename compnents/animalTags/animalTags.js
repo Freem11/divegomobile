@@ -4,6 +4,7 @@ import {
   Text,
   TouchableWithoutFeedback,
 } from "react-native";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
@@ -24,10 +25,10 @@ const AnimalTag = (props) => {
           <View style={[styles.animalTag]}>
             <Text
               style={{
-                color: "#355D71",
-                fontFamily: "Itim_400Regular",
-                fontSize: scale(11),
-                marginTop: scale(1.5),
+                color: colors.themeBlack,
+                fontFamily: activeFonts.Light,
+                fontSize: fontSizes.SmallText,
+                textAlign: "center",
                 marginLeft: 4,
                 marginRight: 2
               }}
@@ -38,7 +39,7 @@ const AnimalTag = (props) => {
               <MaterialIcons
                 name="highlight-remove"
                 size={scale(10)}
-                color="#355D71"
+                color="darkgrey"
               />
             </View>
           </View>
@@ -52,14 +53,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderWidth: 1,
     borderRadius: scale(10),
-    borderColor: "gold",
-    backgroundColor: "white",
+    borderColor: colors.secondaryYellow,
+    backgroundColor: colors.themeWhite,
     height: scale(20),
     marginRight: scale(5),
     marginBottom: scale(5),
   },
   animalTag:{
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 1,
     marginLeft: 3
   },
