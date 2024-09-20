@@ -4,7 +4,7 @@ export const useMapFlip = async (
   siteList,
   setSitesArray,
   setZoomHelper,
-  setLargeModal,
+  setScreen,
   setMapConfig,
   setMapCenter
 ) => {
@@ -21,7 +21,7 @@ export const useMapFlip = async (
   let moveLat = lats.reduce((acc, curr) => acc + curr, 0) / lats.length;
   let moveLng = lngs.reduce((acc, curr) => acc + curr, 0) / lngs.length;
   setZoomHelper(true);
-  setLargeModal(false);
+  setScreen(false);
   setMapConfig(2);
   setMapCenter({
     lat: moveLat,

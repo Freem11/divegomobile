@@ -10,10 +10,15 @@ import {
   Keyboard,
   Dimensions
 } from "react-native";
+import {
+  activeFonts,
+  colors,
+  fontSizes
+} from "../styles";
+import TextInputField from '../authentication/textInput';
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
-import bubbles from "../png/socialIcons/Bubbles96x96.png";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import { CommentsModalContext } from "../contexts/commentsModalContext";
@@ -29,6 +34,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function CommentsModal() {
+  const [isClearOn, setIsClearOn] = useState(false);
   const [commentContent, setCommentContent] = useState(null);
   const [listOfComments, setListOfComments] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
@@ -51,6 +57,14 @@ export default function CommentsModal() {
     setListOfComments(picComments);
   };
 
+  const handleChange = (text) => {
+    if (isClearOn){
+      setIsClearOn(false)
+      return
+    }
+    setCommentContent(text)
+  };
+
   const handleCommentInsert = async () => {
     let userIdentity = null
     if (replyTo){
@@ -71,7 +85,8 @@ export default function CommentsModal() {
         finalContent,
         userIdentity
       );
-      setCommentContent(null);
+      setIsClearOn(true)
+      setCommentContent("");
       setReplyTo(null);
       getAllPictureComments(selectedPicture.id);
       Keyboard.dismiss()
@@ -171,31 +186,16 @@ export default function CommentsModal() {
           {replyTo ? (
             <View style={styles.replyLine}>
               <Text style={styles.userTxt}>@{replyTo[0]}</Text>
-              <FontAwesome name="close" color="lightgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
+              <FontAwesome name="close" color="darkgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
             </View>
           ) : null}
           <View style={styles.replyBox}>
-            <TextInput
-              style={styles.input}
-              value={commentContent}
-              placeholder={"Blow some bubbles"}
-              placeholderTextColor="darkgrey"
-              fontSize={moderateScale(16)}
-              color={"grey"}
-              multiline={true}
-              onChangeText={(text) => setCommentContent(text)}
-            ></TextInput>
-            <TouchableWithoutFeedback onPress={() => handleCommentInsert()}>
-              <Image
-                source={bubbles}
-                style={[
-                  {
-                    height: moderateScale(38),
-                    width: moderateScale(36),
-                  },
-                ]}
-              />
-            </TouchableWithoutFeedback>
+          <TextInputField
+          inputValue={commentContent}
+          placeHolderText={"Blow some bubbles"}
+          onChangeText={(text) => handleChange(text)}
+          handleClear={() => handleCommentInsert()}
+        />
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -216,21 +216,20 @@ const styles = StyleSheet.create({
   },
   commentsModal: {
     position: "absolute",
-    height: windowHeight - windowHeight * 0.4,
-    width: windowWidth - windowWidth * 0.1,
-    marginLeft: windowWidth * 0.05,
-    backgroundColor: "#538bdb",
+    height: windowHeight - windowHeight * 0.38,
+    width: windowWidth,
+    backgroundColor: colors.themeWhite,
     borderRadius: 15,
     zIndex: 27,
     left: 0,
     opacity: 1,
-    bottom: windowHeight * 0.04,
+    bottom: 0,
     borderWidth: 1,
     borderColor: "darkgrey",
   },
   container: {
     flex: 1,
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.themeWhite,
     alignItems: "center",
     justifyContent: "center",
     marginTop: "5%",
@@ -242,23 +241,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tab: {
-    backgroundColor: "white",
-    height: moderateScale(8),
-    width: moderateScale(70),
+    backgroundColor: colors.themeBlack,
+    height: moderateScale(6),
+    width: moderateScale(60),
     borderRadius: moderateScale(5),
   },
   headerText: {
-    color: "white",
-    fontFamily: "PatrickHand_400Regular",
-    fontSize: moderateScale(26),
+    color: colors.themeBlack,
+    fontFamily: activeFonts.Light,
+    fontSize: fontSizes.Header,
     marginBottom: "2%",
   },
   commentListContainer: {
     flex: 1,
     width: "100%",
     height: "85%",
-    // borderBottomColor: "lightgrey",
-    // borderBottomWidth: moderateScale(0.2),
   },
   keyboardAvoid: {
     alignItems: "center",
@@ -271,21 +268,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     height: moderateScale(60),
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.themeWhite,
     marginTop: moderateScale(5),
+    marginLeft: moderateScale(-10)
   },
   replyBox: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginLeft: "3%",
-    width: "94%",
+    width: "98%",
     height: "100%",
   },
   input: {
     flex: 1,
-    fontFamily: "Itim_400Regular",
-    backgroundColor: "white",
+    fontFamily: activeFonts.Regular,
+    backgroundColor: colors.themeBlack,
     borderRadius: moderateScale(20),
     width: moderateScale(280),
     height: moderateScale(40),
@@ -306,21 +304,19 @@ const styles = StyleSheet.create({
   },
   replyLine: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: '#537dbd',
-    marginLeft: moderateScale(10),
+    backgroundColor: colors.themeWhite,
+    marginLeft: moderateScale(15),
     marginRight: moderateScale(55),
-    marginBottom: moderateScale(-8),
+    marginBottom: moderateScale(-14),
     marginTop: moderateScale(10),
-    borderTopRightRadius: moderateScale(15),
-    borderTopLeftRadius: moderateScale(15),
     paddingLeft: moderateScale(10),
     paddingRight: moderateScale(10)
   },
   userTxt: {
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Thin,
     fontSize: moderateScale(13),
-    color: "lightgrey",
+    color: colors.themeBlack,
     marginBottom: moderateScale(-15),
+    marginRight: moderateScale(5)
   },
 });

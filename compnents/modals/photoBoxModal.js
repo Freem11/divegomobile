@@ -10,11 +10,14 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import {
+  colors,
+} from "../styles";
 import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useState, useEffect, useContext } from "react";
-import { scale } from "react-native-size-matters";
-import CloseButton from "../reusables/closeButton";
+import { scale, moderateScale } from "react-native-size-matters";
+import { MaterialIcons } from "@expo/vector-icons";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 
@@ -24,7 +27,6 @@ const windowHeight = Dimensions.get("window").height;
 export default function PhotoBoxModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
-
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
@@ -279,7 +281,13 @@ export default function PhotoBoxModal() {
   return (
     <View style={styles.container}>
       <View style={styles.closeButton}>
-        <CloseButton onClose={onCloseModal} />
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={colors.themeWhite}
+        onPress={() => onCloseModal()}
+        style={styles.backButton}
+      />
       </View>
 
       <GestureDetector gesture={combinedAnimations}>
@@ -320,11 +328,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+    zIndex: 26
   },
   closeButton: {
     position: "absolute",
-    top: "12%",
-    left: "62%",
+    top: "8%",
+    left: "-18%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",

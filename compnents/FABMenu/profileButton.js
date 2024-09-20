@@ -1,54 +1,45 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { TutorialContext } from "../contexts/tutorialContext";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
+import { ActiveScreenContext } from '../contexts/activeScreenContext';
+import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
+import { activeFonts, colors, fontSizes } from "../styles";
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
+  const { activeScreen, setActiveScreen } = useContext(
+    ActiveScreenContext
+    );
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModalSecond, setLargeModalSecond } = useContext(
-    LargeModalSecondContext
-  );
-  const { setLargeModal } = useContext(LargeModalContext);
-  const { setSmallModal } = useContext(SmallModalContext);
 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
-  const { tutorialRunning } = useContext(TutorialContext);
-
+ 
   const handlePress = () => {
     setTiles(true);
     setShowFilterer(false);
-    setLargeModal(false);
-    setSmallModal(false);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("UserProfileButton");
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("ProfileScreen");
     useButtonPressHelper(
-      "UserProfileButton",
-      activeButtonID,
-      largeModalSecond,
-      setLargeModalSecond
+      "ProfileScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
     );
   };
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={tutorialRunning ? null : handlePress}
-        onPressIn={() => setButState(true)}
-        onPressOut={() => setButState(false)}
+        onPress={() => handlePress()}
+        // onPressIn={() => setButState(true)}
+        // onPressOut={() => setButState(false)}
         style={{
           alignItems: "center",
           width: moderateScale(32),
@@ -72,7 +63,7 @@ export default function ProfileButton() {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "green",
+    backgroundColor: "green",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -84,21 +75,20 @@ const styles = StyleSheet.create({
   buttonBox: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
-    height: moderateScale(53),
-    marginTop: moderateScale(-2),
+    height: moderateScale(55),
   },
   buttonlabel: {
-    fontFamily: "Itim_400Regular",
-    color: "white",
-    fontSize: moderateScale(13),
+    fontFamily: activeFonts.Medium,
+    color: colors.themeWhite,
+    fontSize: fontSizes.SmallText,
     marginTop: moderateScale(0),
   },
   buttonlabelAlt: {
-    fontFamily: "Itim_400Regular",
-    color: "gold",
-    fontSize: moderateScale(13),
+    fontFamily: activeFonts.Medium,
+    color: colors.secondaryYellow,
+    fontSize: fontSizes.SmallText,
     marginTop: moderateScale(0),
   },
 });

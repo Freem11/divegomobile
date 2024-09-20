@@ -2,20 +2,12 @@ import React, { useState, useEffect, useContext, Fragment } from "react";
 import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
-import { TutorialContext } from "./contexts/tutorialContext";
-import { IterratorContext } from "./contexts/iterratorContext";
-import { Iterrator2Context } from "./contexts/iterrator2Context";
-import { Iterrator3Context } from "./contexts/iterrator3Context";
 import { MapBoundariesContext } from "./contexts/mapBoundariesContext";
 import { MapRegionContext } from "./contexts/mapRegionContext";
 import { MapZoomContext } from "./contexts/mapZoomContext";
-import { MasterContext } from "./contexts/masterContext";
-import { MinorContext } from "./contexts/minorContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
 import { AnimalSelectContext } from "./contexts/animalSelectContext";
 import { AnimalMultiSelectContext } from "./contexts/animalMultiSelectContext";
-import { SliderContext } from "./contexts/sliderContext";
-import { AnchorModalContext } from "./contexts/anchorModalContext";
 import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
@@ -26,17 +18,9 @@ import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
-import { DiveSiteSearchModalContext } from "./contexts/diveSiteSearchContext";
-import { MapSearchModalContext } from "./contexts/mapSearchContext";
-import { DSAdderContext } from "./contexts/DSModalContext";
-import { PictureAdderContext } from "./contexts/picModalContext";
-import { TutorialLaunchPadContext } from "./contexts/tutorialLaunchPadContext";
-import { ProfileModalContext } from "./contexts/profileModalContext";
-import { SettingsContext } from "./contexts/gearModalContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
-import { CommentsModalContext } from "./contexts/commentsModalContext";
-import { SelectedPictureContext } from "./contexts/selectedPictureContext";
+
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import {
   getPhotosWithUser,
@@ -53,15 +37,12 @@ import {
   View,
   Dimensions,
   Platform,
-  Keyboard,
   Text,
-  Alert,
 } from "react-native";
 import mantaIOS from "../compnents/png/mapIcons/Manta_60.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
 import anchorIconIOS from "../compnents/png/mapIcons/AnchorBlue.png";
-// import shopIOS from "../compnents/png/scuba.png";
 import shopClustIOS from "../compnents/png/mapIcons/DiveCentre60x60.png";
 import { calculateZoom, formatHeatVals } from "./helpers/mapHelpers";
 import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
@@ -74,16 +55,19 @@ import {
   getHeatPointsWithUser,
   getHeatPointsWithUserEmpty,
 } from "../supabaseCalls/heatPointSupabaseCalls";
+import {
+  getItineraryDiveSiteByIdArray,
+} from "../supabaseCalls/itinerarySupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
 import { moderateScale, scale } from "react-native-size-matters";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { UserProfileContext } from "./contexts/userProfileContext";
-import { ActiveButtonIDContext } from "./contexts/activeButtonIDContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
-import { LargeModalContext } from "./contexts/largeModalContext";
-import { FullScreenModalContext } from "./contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
+import { ActiveScreenContext } from './contexts/activeScreenContext';
+import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
+import { TripSitesContext } from "./contexts/tripSitesContext";
+import { TripDetailContext } from "./contexts/tripDetailsContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -92,35 +76,22 @@ export default function Map() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-  const { activeButtonID, setActiveButtonID } = useContext(
-    ActiveButtonIDContext
-  );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
-    ActiveTutorialIDContext
-  );
+  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const { activeScreen, setActiveScreen } = useContext(
+    ActiveScreenContext
+    );
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { largeModal, setLargeModal } = useContext(LargeModalContext);
-  const { fullScreenModal, setFullScreenModal } = useContext(
-    FullScreenModalContext
-  );
-
+  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+  const { formValues, setFormValues } = useContext(TripDetailContext);
   const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
-
   const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-  const { masterSwitch } = useContext(MasterContext);
-  const { minorSwitch, setMinorSwitch } = useContext(MinorContext);
   const { mapCenter, setMapCenter } = useContext(MapCenterContext);
-  const { tutorialRunning, setTutorialRunning } = useContext(TutorialContext);
-  const { itterator, setItterator } = useContext(IterratorContext);
-  const { itterator2, setItterator2 } = useContext(Iterrator2Context);
-  const { itterator3, setItterator3 } = useContext(Iterrator3Context);
   const { region, setRegion } = useContext(MapRegionContext);
   const { boundaries, setBoundaries } = useContext(MapBoundariesContext);
   const { zoomlev, setZoomLev } = useContext(MapZoomContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { diveSitesTog } = useContext(DiveSitesContext);
-  const { sliderVal } = useContext(SliderContext);
   const { animalSelection } = useContext(AnimalSelectContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { dragPin, setDragPin } = useContext(PinSpotContext);
@@ -132,32 +103,15 @@ export default function Map() {
   const [tempMarker, setTempMarker] = useState([]);
   const [mapRef, setMapRef] = useState(null);
   const [newSites, setnewSites] = useState([]);
-  const [newShops, setnewShops] = useState([]);
-  const { siteModal, setSiteModal } = useContext(AnchorModalContext);
+  const [newShops, setnewShops] = useState([]);;
 
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { setCommentsModal } = useContext(CommentsModalContext);
-  const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const { shopModal, setShopModal } = useContext(ShopModalContext);
 
   const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
-  const { gearModal, setGearModal } = useContext(SettingsContext);
-  const { profileModal, setProfileModal } = useContext(ProfileModalContext);
-  const { mapSearchModal, setMapSearchModal } = useContext(
-    MapSearchModalContext
-  );
-  const { diveSiteSearchModal, setDiveSiteSearchModal } = useContext(
-    DiveSiteSearchModalContext
-  );
-  const { picAdderModal, setPicAdderModal } = useContext(PictureAdderContext);
-  const { diveSiteAdderModal, setDiveSiteAdderModal } =
-    useContext(DSAdderContext);
-  const { tutorialLaunchpadModal, setTutorialLaunchpadModal } = useContext(
-    TutorialLaunchPadContext
-  );
   const { profile } = useContext(UserProfileContext);
   const { showFilterer, setShowFilterer } = useContext(PullTabContext);
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -358,10 +312,13 @@ export default function Map() {
     if (mapRef) {
       let currentMapPosition = await mapRef.getCamera();
       if (currentMapPosition) {
-        setMapCenter({
-          lat: currentMapPosition.center.latitude,
-          lng: currentMapPosition.center.longitude,
-        });
+        // if(mapConfig !==2){
+        //   setMapCenter({
+        //     lat: currentMapPosition.center.latitude,
+        //     lng: currentMapPosition.center.longitude,
+        //   });
+        // }
+      
       }
     }
   };
@@ -423,17 +380,9 @@ export default function Map() {
   }, []);
 
   useEffect(() => {
-    if (shopModal) {
-      return;
-    }
-    updateMapCenter();
-  }, [siteModal, diveSiteAdderModal, diveSiteSearchModal, picAdderModal]);
-
-  useEffect(() => {
     handleMapChange();
   }, [
     diveSitesTog,
-    sliderVal,
     animalSelection,
     animalMultiSelection,
     mapCenter,
@@ -443,34 +392,19 @@ export default function Map() {
     if (mapConfig === 1) {
       setDragPin(mapCenter);
     }
+    if (mapConfig === 0) {
+      // setSitesArray([])
+    }
   }, [mapConfig]);
 
   useEffect(() => {
     let zoomHelp;
-    if (
-      (tutorialRunning && itterator === 7) ||
-      itterator === 9 ||
-      itterator === 10 ||
-      itterator === 16
-    ) {
-      zoomHelp = 8;
-    } else if (tutorialRunning && itterator === 12) {
-      zoomHelp = 12;
-    } else if (tutorialRunning && itterator2 === 2) {
-      zoomHelp = 8;
-    } else if (tutorialRunning && itterator2 === 10) {
-      zoomHelp = 10;
-    } else if (tutorialRunning && itterator3 === 15) {
-      zoomHelp = 10;
-    }
 
     if (zoomHelper) {
       if (shopModal) {
         zoomHelp = 16;
-        setMinorSwitch(true);
       } else if (!shopModal) {
         zoomHelp = 12;
-        setMinorSwitch(false);
       }
       setZoomHelper(false);
     }
@@ -523,17 +457,14 @@ export default function Map() {
     setTiles(true);
     setShowFilterer(false);
     filterAnchorPhotos();
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("SiteAnchorIcon");
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("DiveSiteScreen")
     useButtonPressHelper(
-      "SiteAnchorIcon",
-      activeButtonID,
-      largeModal,
-      setLargeModal
+      "DiveSiteScreen",
+      activeScreen,
+      levelOneScreen,
+      setLevelOneScreen
     );
-    if (itterator3 === 5) {
-      setItterator3(itterator3 + 1);
-    }
   };
 
   const setupShopModal = async (shopName) => {
@@ -541,29 +472,32 @@ export default function Map() {
     setTiles(true);
     setShowFilterer(false);
     setSelectedShop(chosenShop);
-    setPreviousButtonID(activeButtonID);
-    setActiveButtonID("ShopMaskIcon");
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("DiveShopScreen")
     useButtonPressHelper(
-      "ShopMaskIcon",
-      activeButtonID,
-      largeModal,
-      setLargeModal
+      "DiveShopScreen",
+      activeScreen,
+      levelOneScreen,
+      setLevelOneScreen
     );
   };
-
-  const clearModals = async () => {
-    Keyboard.dismiss();
-    setGearModal(false);
-    setProfileModal(false);
-    setMapSearchModal(false);
-    setDiveSiteSearchModal(false);
-    setPicAdderModal(false);
-    setDiveSiteAdderModal(false);
-    setTutorialLaunchpadModal(false);
-    setCommentsModal(false);
-    setTiles(true);
-    setSelectedPicture(null);
+  const getTripDiveSites = async (siteIds) => {
+    try {
+      const success = await getItineraryDiveSiteByIdArray(siteIds);
+      if (success) {
+        setTripDiveSites(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
   };
+
+  useEffect(() => {
+    setFormValues({...formValues, siteList: sitesArray})
+    getTripDiveSites(sitesArray);
+    setTripDiveSites(getTripDiveSites(sitesArray))
+  }, [sitesArray.length]);
+
 
   const addToSitesArray = async (siteName) => {
     let splitNames = siteName.split("~");
@@ -605,7 +539,6 @@ export default function Map() {
         onMapReady={() => handleMapChange()}
         onRegionChangeComplete={() => updateMapCenter()}
         toolbarEnabled={false}
-        onPress={clearModals}
       >
         {mapConfig in [0, , 2] && newHeat.length > 0 && (
           <Heatmap points={newHeat} radius={Platform.OS === "ios" ? 30 : 10} />
@@ -757,7 +690,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    height: "100%",
   },
   modalStyle: {
     // flex: 1,

@@ -1,33 +1,33 @@
 import { StyleSheet, View, Text, Keyboard } from "react-native";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { useState, useEffect, useContext } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { scale, moderateScale } from "react-native-size-matters";
 
 const AutoSuggestListItem = (props) => {
   const { setList, setPin, pin, name, handleList, setTextSource } = props;
- 
 
   const handleSelect = async (text) => {
-    setTextSource(true)
-    handleList({animal: text, value : 0})
+    setTextSource(true);
+    handleList({ animal: text, value: 0 });
   };
 
   return (
     <View id={name} style={styles.suggestion}>
-      <View style={{zIndex: 100}}>
-      <TouchableOpacity
-                onPress={() => handleSelect(name)}
-                style={{
-                  width: moderateScale(170),
-                  height: moderateScale(30),
-                }}
-              >
-        <Text
-          style={{ fontFamily: "Itim_400Regular", fontSize: moderateScale(15), textAlign: "center", color:"#F0EEEB", zIndex: 100 }}
-          onPress={() => handleSelect(name)}
-        >
-          {name}
-        </Text>
+      <View style={{ zIndex: 90, backgroundColor: colors.themeWhite }}>
+        <TouchableOpacity onPress={() => handleSelect(name)}>
+          <Text
+            style={{
+              fontFamily: activeFonts.Light,
+              fontSize: fontSizes.StandardText,
+              textAlign: "center",
+              color: colors.primaryBlue,
+              zIndex: 90,
+            }}
+            onPress={() => handleSelect(name)}
+          >
+            {name}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -36,15 +36,17 @@ const AutoSuggestListItem = (props) => {
 
 const styles = StyleSheet.create({
   suggestion: {
-    zIndex: 10,
-    width: moderateScale(165),
+    zIndex: 90,
+    width: moderateScale(250),
     height: moderateScale(25),
     marginTop: 1,
     paddingTop: 3,
-    backgroundColor: "#538bdb",
-    borderRadius: 5,
+    backgroundColor: colors.themeWhite,
+    color: colors.themeBlack,
+    borderRadius: moderateScale(2),
     textAlign: "center",
     alignContent: "center",
+    justifyContent: "center",
     listStyle: "none",
     transform: [{ translateX: 18 }],
     shadowOffset: {

@@ -14,11 +14,9 @@ import Animated, {
   withTiming,
   withSpring,
 } from "react-native-reanimated";
+import { activeFonts, colors } from "../styles";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { SmallModalContext } from "../contexts/smallModalContext";
-import { LargeModalSecondContext } from "../contexts/largeModalSecondContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -31,9 +29,6 @@ const PhotoMenuListItem = (props) => {
     selectedID,
     setSelectedID,
   } = props;
-  const { setSmallModal } = useContext(SmallModalContext);
-  const { setLargeModal } = useContext(LargeModalContext);
-  const { setLargeModalSecond } = useContext(LargeModalSecondContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
@@ -46,9 +41,6 @@ const PhotoMenuListItem = (props) => {
     } else {
       setAnimalMultiSelection([...animalMultiSelection, name]);
     }
-    setSmallModal(false);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
   };
 
@@ -68,9 +60,6 @@ const PhotoMenuListItem = (props) => {
 
   const pressInAnimations = (data, id) => {
     setSelectedID(id);
-    setSmallModal(false);
-    setLargeModal(false);
-    setLargeModalSecond(false);
     setFullScreenModal(false);
 
     if (scaleStart.value === 1) {
@@ -156,7 +145,7 @@ const PhotoMenuListItem = (props) => {
 
 const styles = StyleSheet.create({
   photolabel: {
-    color: "white",
+    color: colors.themeWhite,
     textAlign: "center",
     justifyContent: "center",
     alignContent: "center",
@@ -165,13 +154,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: moderateScale(15),
     borderTopRightRadius: moderateScale(15),
     paddingTop: moderateScale(3),
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Light,
     paddingLeft: moderateScale(5),
     paddingRight: moderateScale(5),
   },
   photolabelSelected: {
     fontSize: windowWidth > 600 ? scale(5) : scale(11),
-    color: "black",
+    color: colors.themeBlack,
     textAlign: "center",
     justifyContent: "center",
     alignContent: "center",
@@ -180,7 +169,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     paddingTop: moderateScale(3),
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Light,
     paddingLeft: moderateScale(5),
     paddingRight: moderateScale(5),
   },
@@ -188,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(15),
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
-    backgroundColor: "#538bdb",
+    backgroundColor: colors.primaryBlue,
     height: moderateScale(105),
     zIndex: 20,
     elevation: 20,
@@ -197,7 +186,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(15),
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
-    backgroundColor: "gold",
+    backgroundColor: colors.secondaryYellow,
     height: moderateScale(105),
     zIndex: 20,
     elevation: 20,

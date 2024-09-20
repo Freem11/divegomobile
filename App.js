@@ -22,8 +22,8 @@ import { PinSpotContext } from "./compnents/contexts/pinSpotContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import { MyCreaturesContext } from "./compnents/contexts/myCreaturesContext";
 import { MyDiveSitesContext } from "./compnents/contexts/myDiveSitesContext";
-import AuthenticationPage from "./compnents/authenticationPage";
 import MapPage from "./compnents/mapPage";
+import Authentication from './compnents/authentication/newAuthentication';
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -128,6 +128,30 @@ export default function App() {
   };
 
   let [fontsLoaded] = useFonts({
+    RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
+    SFBlack: require("./assets/SanFran/SF-Pro-Display-Black.otf"),
+    RobotoBlackItalic: require("./assets/Roboto/Roboto-BlackItalic.ttf"),
+    SFBlackItalic: require("./assets/SanFran/SF-Pro-Display-BlackItalic.otf"),
+    RobotoBold: require("./assets/Roboto/Roboto-Bold.ttf"),
+    SFBold: require("./assets/SanFran/SF-Pro-Display-Bold.otf"),
+    RobotoBoldItalic: require("./assets/Roboto/Roboto-BoldItalic.ttf"),
+    SFBoldItalic: require("./assets/SanFran/SF-Pro-Display-BoldItalic.otf"),
+    RobotoItalic: require("./assets/Roboto/Roboto-Italic.ttf"),
+    SFItalic: require("./assets/SanFran/SF-Pro-Display-RegularItalic.otf"),
+    RobotoLight: require("./assets/Roboto/Roboto-Light.ttf"),
+    SFLight: require("./assets/SanFran/SF-Pro-Display-Light.otf"),
+    RobotoLightItalic: require("./assets/Roboto/Roboto-LightItalic.ttf"),
+    SFLightItalic: require("./assets/SanFran/SF-Pro-Display-LightItalic.otf"),
+    RobotoMedium: require("./assets/Roboto/Roboto-Medium.ttf"),
+    SFMedium: require("./assets/SanFran/SF-Pro-Display-Medium.otf"),
+    RobotoMediumItalic: require("./assets/Roboto/Roboto-MediumItalic.ttf"),
+    SFMediumItalic: require("./assets/SanFran/SF-Pro-Display-MediumItalic.otf"),
+    RobotoRegular: require("./assets/Roboto/Roboto-Regular.ttf"),
+    SFRegular: require("./assets/SanFran/SF-Pro-Display-Regular.otf"),
+    RobotoThin: require("./assets/Roboto/Roboto-Thin.ttf"),
+    SFThin: require("./assets/SanFran/SF-Pro-Display-Thin.otf"),
+    RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
+    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
     PermanentMarker_400Regular,
     Caveat_400Regular,
     Caveat_500Medium,
@@ -220,7 +244,7 @@ export default function App() {
                       {activeSession ? (
                         <MapPage />
                       ) : (
-                        <AuthenticationPage />
+                        <Authentication />
                       )}
                     </SessionContext.Provider>
                   </MapCenterContext.Provider>

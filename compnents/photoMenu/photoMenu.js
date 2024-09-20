@@ -7,15 +7,12 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import { activeFonts, colors, fontSizes } from "../styles";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { LargeModalContext } from "../contexts/largeModalContext";
-import { ActiveButtonIDContext } from "../contexts/activeButtonIDContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
-import { TutorialContext } from "../contexts/tutorialContext";
-import { IterratorContext } from "../contexts/iterratorContext";
 import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import PhotoMenuListItem from "./photoMenuListItem";
@@ -30,27 +27,14 @@ export default function PhotoMenu() {
   const { myCreatures } = useContext(MyCreaturesContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
-  const { itterator, setItterator } = useContext(IterratorContext);
-  const { tutorialRunning } = useContext(TutorialContext);
   const { textvalue } = useContext(SearchTextContext);
 
-  const { setLargeModal } = useContext(LargeModalContext);
-  const { setActiveButtonID } = useContext(ActiveButtonIDContext);
+
   const [picMenuSize, setPicMenuSize] = useState(0);
   const [selectedID, setSelectedID] = useState(null);
 
   useEffect(() => {
     clearTimeout(waiter2);
-
-    if (tutorialRunning) {
-      if (itterator === 18) {
-        waiter2 = setTimeout(() => {
-          setItterator(itterator + 2);
-          setActiveButtonID("SiteAnchorIcon");
-          setLargeModal(true);
-        }, 2000);
-      }
-    }
   }, [animalMultiSelection]);
 
   numbPhotos = areaPics.length;
@@ -227,8 +211,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     marginTop: scale(15),
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(15),
-    color: "#F0EEEB",
+    fontFamily: activeFonts.Medium,
+    fontSize: fontSizes.StandardText,
+    color: colors.themeWhite,
   },
 });

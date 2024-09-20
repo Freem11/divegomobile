@@ -1,22 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
-import { StyleSheet, View, Text, Image, LogBox } from "react-native";
+import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from "react-native";
 import * as FileSystem from "expo-file-system";
-import { AreaPicsContext } from "../contexts/areaPicsContext";
-import { AnchorModalContext } from "../contexts/anchorModalContext";
-import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
-import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
+
+import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
+
+const windowWidth = Dimensions.get("window").width;
 
 export default function ImageCasherDynamic(Props) {
   const { photoFile, id, style, anchorPics } = Props;
-  const { areaPics } = useContext(AreaPicsContext);
-  const { siteModal } = useContext(AnchorModalContext);
-  const { boundaries } = useContext(MapBoundariesContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
-  let fileName = photoFile.split("/").pop();
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(
+    FullScreenModalContext
+  );
+  const { activeTutorialID, setActiveTutorialID } = useContext(
+    ActiveTutorialIDContext
+  );
+
+  let fileName = photoFile && photoFile.split("/").pop();
   let cacheDir = FileSystem.cacheDirectory + fileName;
-  let photoName = photoFile.split("/").pop();
+  let photoName = photoFile && photoFile.split("/").pop();
 
   let image = {
     uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${photoName}`,
@@ -92,18 +98,29 @@ export default function ImageCasherDynamic(Props) {
   if (picUri) {
     Image.getSize(picUri, (width, height) => {
       let ratio = height / width;
-      setPicWidth(scale(300));
-      setPicHeigth(scale(300) * ratio);
+      setPicWidth(scale(345));
+      setPicHeigth(scale(345) * ratio);
     });
   }
+
+  const togglePhotoBoxModal = (photo) => {
+    setSelectedPhoto(photo);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
+  };
 
 
   if (picUri) {
     return (
-      <Image
-        source={{ uri: picUri }}
-        style={{ ...style, height: picHeigth, width: picWidth }}
-      ></Image>
+      <TouchableWithoutFeedback
+        key={id}
+        onPress={() => togglePhotoBoxModal(picUri)}
+      >
+        <Image
+          source={{ uri: picUri }}
+          style={{ ...style, height: picHeigth, width: picWidth }}
+        ></Image>
+      </TouchableWithoutFeedback>
     );
   }
 }
