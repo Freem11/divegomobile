@@ -393,7 +393,7 @@ export default function Map() {
       setDragPin(mapCenter);
     }
     if (mapConfig === 0) {
-      setSitesArray([])
+      // setSitesArray([])
     }
   }, [mapConfig]);
 
