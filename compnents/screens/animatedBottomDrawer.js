@@ -98,7 +98,6 @@ export default function BottomDrawer(props) {
     };
   });
 
-
   const onNavigate = () => {
     Keyboard.dismiss();
     setMapHelper(true);
@@ -175,26 +174,26 @@ export default function BottomDrawer(props) {
               ) : null}
 
               {dataSetType === "DiveShopTrips" ? (
-                       <Itinerary
-                       key={item.id}
-                       itinerary={item}
-                       setSelectedID={setSelectedID}
-                       selectedID={selectedID}
-                       buttonOneText="Map"
-                       buttonOneIcon="anchor"
-                       buttonOneAction={() =>
-                         useMapFlip(
-                           item.siteList,
-                           setSitesArray,
-                           setZoomHelper,
-                           setLevelOneScreen,
-                           setMapConfig,
-                           setMapCenter
-                         )
-                       }
-                       buttonTwoText="Book"
-                       buttonTwoIcon="diving-scuba-flag"
-                     />
+                <Itinerary
+                  key={item.id}
+                  itinerary={item}
+                  setSelectedID={setSelectedID}
+                  selectedID={selectedID}
+                  buttonOneText="Map"
+                  buttonOneIcon="anchor"
+                  buttonOneAction={() =>
+                    useMapFlip(
+                      item.siteList,
+                      setSitesArray,
+                      setZoomHelper,
+                      setLevelOneScreen,
+                      setMapConfig,
+                      setMapCenter
+                    )
+                  }
+                  buttonTwoText="Book"
+                  buttonTwoIcon="diving-scuba-flag"
+                />
               ) : null}
 
               {dataSetType === "DiveSitePhotos" ? (
@@ -213,6 +212,7 @@ export default function BottomDrawer(props) {
                         ></Picture>
                       );
                     })}
+                  <View style={{ height: moderateScale(100) }}></View>
                 </View>
               ) : null}
 
@@ -234,6 +234,7 @@ export default function BottomDrawer(props) {
                         ></Picture>
                       );
                     })}
+                  <View style={{ height: moderateScale(100) }}></View>
                 </View>
               ) : null}
             </View>
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
     marginTop: windowWidth > 600 ? "15%" : "25%",
     alignItems: "center",
     justifyContent: "center",
-    textAlign: 'center',
+    textAlign: "center",
     marginHorizontal: "5%",
     fontFamily: activeFonts.Light,
     fontSize: moderateScale(fontSizes.StandardText),
