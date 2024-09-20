@@ -519,11 +519,11 @@ export default function MapPage() {
           </View>
 
 
-          {/* {mapConfig === 0 ? (
+          {mapConfig === 0  && animalMultiSelection.length > 0 ? (
               <View style={styles.Hist} pointerEvents={"none"}>
                 <Historgram style={{ zIndex: 2 }} />
               </View>
-            ) : null} */}
+            ) : null}
 
           <LevelOneScreen />
           <LevelTwoScreen />
@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "blue",
     height: 105,
     top:
-      windowWidth > 700 || Platform.OS == "android"
+      windowWidth > 700
         ? moderateScale(12)
         : moderateScale(40),
     zIndex: 3,
@@ -647,7 +647,7 @@ const styles = StyleSheet.create({
   Hist: {
     alignItems: "center",
     position: "absolute",
-    bottom: windowWidth > 700 ? scale(27) : scale(30),
+    bottom: scale(70),
     left: scale(75),
     width: scale(190),
     height: 100,
