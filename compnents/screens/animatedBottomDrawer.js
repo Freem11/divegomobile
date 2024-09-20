@@ -143,6 +143,9 @@ export default function BottomDrawer(props) {
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
+          ListFooterComponent={
+            <View style={{ height: moderateScale(50) }}></View>
+          }
           ListHeaderComponent={
             dataSetType === "Trips" ? (
               <View style={styles.flatListHeader}>
@@ -212,7 +215,6 @@ export default function BottomDrawer(props) {
                         ></Picture>
                       );
                     })}
-                  <View style={{ height: moderateScale(100) }}></View>
                 </View>
               ) : null}
 
@@ -233,8 +235,7 @@ export default function BottomDrawer(props) {
                           setVisitProfileVals={setVisitProfileVals}
                         ></Picture>
                       );
-                    })}
-                  <View style={{ height: moderateScale(100) }}></View>
+                    })}           
                 </View>
               ) : null}
             </View>
