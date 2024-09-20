@@ -6,7 +6,9 @@ import {
   Keyboard,
   Dimensions,
   TouchableWithoutFeedback,
-  ScrollView
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import {
@@ -177,6 +179,9 @@ export default function TripCreatorPage(props) {
 
   const handleClose = () => {
     setEditMode(false);
+    setSitesArray([]);
+    setTripDiveSites([])
+    setValue("$0.00");
     setFormValues({
       ...formValues,
       BookingPage: "",
@@ -231,19 +236,6 @@ export default function TripCreatorPage(props) {
   };
 
   const cloneButtonPress = () => {
-    setSitesArray([]);
-    setFormValues({
-      ...formValues,
-      BookingPage: "",
-      tripName: "",
-      startDate: "",
-      endDate: "",
-      price: 0,
-      description: "",
-      siteList: [],
-    });
-    setTripDiveSites([])
-    setValue("$0.00");
     setEditMode(false);
   };
 
@@ -311,7 +303,7 @@ export default function TripCreatorPage(props) {
               inputValue={formValues && formValues.price}
               placeHolderText={screenData.TripCreator.pricePlaceholder}
               secure={false}
-              keyboardType={"numbers-and-punctuation"}
+              keyboardConfig="number-pad"
               onChangeText={setValue}
             />
           </View>
@@ -344,6 +336,15 @@ export default function TripCreatorPage(props) {
             </Toucher>
           </View>
 
+          <KeyboardAvoidingView
+        behavior="position"
+        keyboardVerticalOffset={
+          Platform.OS === "ios"
+            ? moderateScale(650) - moderateScale(340)
+            : moderateScale(650) - moderateScale(340)
+        }
+        style={styles.keyboardAvoid}
+      >
           <View style={styles.descriptionBox}>
             <PlainTextInput
               placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
@@ -355,6 +356,7 @@ export default function TripCreatorPage(props) {
               }
             />
           </View>
+          </KeyboardAvoidingView>
 
           <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => handleSubmit()}>
@@ -427,6 +429,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     paddingBottom: "2%",
     marginTop: "5%",
+    backgroundColor: colors.themeWhite
   },
   buttonBox: {
     zIndex: -1,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
@@ -6,12 +6,10 @@ import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import {
   activeFonts,
-  colors,
   fontSizes,
-  authenicationButton,
-  buttonText,
+  screenSecondaryButton,
+  buttonTextAlt,
 } from "../styles";
-
 export default function FailModal(props) {
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
@@ -38,7 +36,8 @@ export default function FailModal(props) {
         "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.";
       break;
     case "Trip Edit":
-      blurb = "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
+      blurb =
+        "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
       break;
   }
 
@@ -50,19 +49,11 @@ export default function FailModal(props) {
         </Text>
         <Text style={styles.text2}>{blurb}</Text>
 
-        <View
-          style={{
-            marginLeft: moderateScale(0),
-            marginBottom: moderateScale(20),
-          }}
-        >
-          <ModalSecondaryButton
-            buttonAction={tidyUp}
-            icon={null}
-            buttonText={"Cancel"}
-            altStyle={true}
-          />
-        </View>
+        <TouchableWithoutFeedback onPress={tidyUp}>
+          <View style={styles.confirmButton}>
+            <Text style={styles.confirmButtonText}>Cancel</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );
@@ -80,6 +71,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  confirmButton: [screenSecondaryButton],
+  confirmButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   text: {
     fontSize: moderateScale(fontSizes.StandardText),
     color: "#36454F",
