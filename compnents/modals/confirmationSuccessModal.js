@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
 import ModalSecondaryButton from "../reusables/modalSecondaryButton";
@@ -6,10 +6,9 @@ import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import {
   activeFonts,
-  colors,
   fontSizes,
-  authenicationButton,
-  buttonText,
+  screenSecondaryButton,
+  buttonTextAlt,
 } from "../styles";
 
 export default function SuccessModal(props) {
@@ -51,19 +50,11 @@ export default function SuccessModal(props) {
         </Text>
         <Text style={styles.text2}>{blurb}</Text>
 
-        <View
-          style={{
-            marginLeft: moderateScale(20),
-            marginBottom: moderateScale(20),
-          }}
-        >
-          <ModalSecondaryButton
-            buttonAction={tidyUp}
-            icon={null}
-            buttonText={"Ok"}
-            altStyle={false}
-          />
-        </View>
+        <TouchableWithoutFeedback onPress={tidyUp}>
+          <View style={styles.confirmButton}>
+            <Text style={styles.confirmButtonText}>OK</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );
@@ -81,6 +72,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  confirmButton: [screenSecondaryButton],
+  confirmButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   text: {
     fontSize: moderateScale(fontSizes.StandardText),
     color: "#36454F",
