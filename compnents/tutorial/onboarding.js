@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: activeFonts.Regular,
-    fontSize: fontSizes.Header,
+    fontSize: moderateScale(fontSizes.Header),
     paddingHorizontal: moderateScale(30),
     marginTop: windowHeight > 700 && windowWidth < 700 ? scale(150) : scale(60),
     marginBottom: moderateScale(10),
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   content: {
     paddingTop: moderateScale(5),
     fontFamily: activeFonts.Medium,
-    fontSize: fontSizes.StandardText,
+    fontSize: moderateScale(fontSizes.StandardText),
     marginTop: moderateScale(15),
     width: windowWidth * 0.8,
     color: colors.themeWhite,

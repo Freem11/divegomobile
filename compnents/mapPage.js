@@ -677,7 +677,7 @@ const styles = StyleSheet.create({
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),
     borderBottomRightRadius: moderateScale(15),
-    width: FbWidth,
+    width: windowWidth > 600 ? FbWidth + moderateScale(20) : FbWidth,
     height: moderateScale(39),
     shadowColor: "#000",
     shadowOffset: {

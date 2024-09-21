@@ -521,7 +521,7 @@ const styles = StyleSheet.create({
     screenSecondaryButton,
     { zIndex: 10, position: "absolute", top: "7%", right: "6%" },
   ],
-  createNewText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
+  createNewText: [buttonTextAlt, {fontSize: moderateScale(fontSizes.SmallText),  marginHorizontal: moderateScale(5) }],
   erroMsg: {
     minHeight: moderateScale(34),
     marginTop: moderateScale(15),
