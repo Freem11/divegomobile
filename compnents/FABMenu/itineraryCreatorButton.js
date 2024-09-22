@@ -90,6 +90,6 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Medium,
     color: colors.secondaryYellow,
     fontSize: fontSizes.SmallText,
-    marginTop: moderateScale(0),
+    marginTop: moderateScale(2),
   },
 });
