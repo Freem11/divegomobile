@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
-  Platform
+  Platform,
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import {
@@ -72,14 +72,14 @@ export default function TripCreatorPage(props) {
   useEffect(() => {
     getItineraries(profile[0].UserID);
     getTripDiveSites(sitesArray);
-    setTripDiveSites(getTripDiveSites(formValues.siteList))
+    setTripDiveSites(getTripDiveSites(formValues.siteList));
     setSitesArray(formValues.siteList);
   }, []);
 
   useEffect(() => {
-    setFormValues({...formValues, siteList: sitesArray})
+    setFormValues({ ...formValues, siteList: sitesArray });
     getTripDiveSites(sitesArray);
-    setTripDiveSites(getTripDiveSites(sitesArray))
+    setTripDiveSites(getTripDiveSites(sitesArray));
   }, [sitesArray]);
 
   const getItineraries = async (IdNum) => {
@@ -180,7 +180,7 @@ export default function TripCreatorPage(props) {
   const handleClose = () => {
     setEditMode(false);
     setSitesArray([]);
-    setTripDiveSites([])
+    setTripDiveSites([]);
     setValue("$0.00");
     setFormValues({
       ...formValues,
@@ -337,43 +337,37 @@ export default function TripCreatorPage(props) {
           </View>
 
           <KeyboardAvoidingView
-        behavior="position"
-        keyboardVerticalOffset={
-          Platform.OS === "ios"
-            ? moderateScale(650) - moderateScale(340)
-            : moderateScale(650) - moderateScale(340)
-        }
-        style={styles.keyboardAvoid}
-      >
-          <View style={styles.descriptionBox}>
-            <PlainTextInput
-              placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
-              content={formValues && formValues.description}
-              fontSz={fontSizes.StandardText}
-              isEditModeOn={true}
-              onChangeText={(text) =>
-                setFormValues({ ...formValues, description: text })
-              }
-            />
-          </View>
+            behavior={'position'}
+            keyboardVerticalOffset={400}
+          >
+            <View style={styles.descriptionBox}>
+              <PlainTextInput
+                placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
+                content={formValues && formValues.description}
+                fontSz={fontSizes.StandardText}
+                isEditModeOn={true}
+                onChangeText={(text) =>
+                  setFormValues({ ...formValues, description: text })
+                }
+              />
+            </View>
           </KeyboardAvoidingView>
 
           <View style={styles.buttonBox}>
-          <TouchableWithoutFeedback onPress={() => handleSubmit()}>
-            <View style={styles.submitButton}>
-              <Text style={styles.submitText}>
-                {screenData.TripCreator.submitButton}
-              </Text>
-              <MaterialIcons
-                name="chevron-right"
-                size={30}
-                color={colors.themeWhite}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View style={{height: moderateScale(50)}}>
-        </View>
+            <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+              <View style={styles.submitButton}>
+                <Text style={styles.submitText}>
+                  {screenData.TripCreator.submitButton}
+                </Text>
+                <MaterialIcons
+                  name="chevron-right"
+                  size={30}
+                  color={colors.themeWhite}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+          <View style={{ height: moderateScale(50) }}></View>
         </ScrollView>
 
         <BottomDrawer
@@ -423,13 +417,13 @@ const styles = StyleSheet.create({
   },
   descriptionBox: {
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
     borderRadius: moderateScale(10),
     paddingBottom: "2%",
     marginTop: "5%",
-    backgroundColor: colors.themeWhite
+    backgroundColor: colors.themeWhite,
   },
   buttonBox: {
     zIndex: -1,
@@ -521,7 +515,13 @@ const styles = StyleSheet.create({
     screenSecondaryButton,
     { zIndex: 10, position: "absolute", top: "7%", right: "6%" },
   ],
-  createNewText: [buttonTextAlt, {fontSize: moderateScale(fontSizes.SmallText),  marginHorizontal: moderateScale(5) }],
+  createNewText: [
+    buttonTextAlt,
+    {
+      fontSize: moderateScale(fontSizes.SmallText),
+      marginHorizontal: moderateScale(5),
+    },
+  ],
   erroMsg: {
     minHeight: moderateScale(34),
     marginTop: moderateScale(15),

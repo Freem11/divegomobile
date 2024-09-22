@@ -336,6 +336,7 @@ const styles = StyleSheet.create({
     zIndex: 40,
     borderTopRightRadius: scale(10),
     width: windowWidth,
+    marginLeft: "0.25%",
     padding: moderateScale(2),
   },
   titleText: {

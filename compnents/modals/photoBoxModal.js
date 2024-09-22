@@ -1,7 +1,6 @@
 import {
   StyleSheet,
   View,
-  Image,
   Dimensions,
 } from "react-native";
 import Animated, {
@@ -27,22 +26,11 @@ const windowHeight = Dimensions.get("window").height;
 export default function PhotoBoxModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
-  const [picHeigth, setPicHeigth] = useState(0);
-  const [picWidth, setPicWidth] = useState(0);
-
   let fileName = selectedPhoto && selectedPhoto.split("/").pop();
   let cacheDir = false;
 
   if (fileName) {
     cacheDir = FileSystem.cacheDirectory + fileName;
-  }
-
-  if (cacheDir) {
-    Image.getSize(cacheDir, (width, height) => {
-      let ratio = height / width;
-      setPicWidth(windowHeight * 0.85);
-      setPicHeigth(windowHeight * ratio * 0.85);
-    });
   }
 
   useEffect(() => {
@@ -307,9 +295,10 @@ export default function PhotoBoxModal() {
               style={[
                 animatedPictureStyle,
                 {
-                  height: picHeigth,
-                  width: picWidth,
+                  width: "100%",
+                  aspectRatio: 1,
                   borderRadius: 15,
+                  resizeMode: "contain"
                 },
               ]}
             />
@@ -328,7 +317,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    zIndex: 26
+    zIndex: 26,
   },
   closeButton: {
     position: "absolute",
