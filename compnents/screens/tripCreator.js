@@ -337,6 +337,7 @@ export default function TripCreatorPage(props) {
           </View>
 
           <KeyboardAvoidingView
+          style={{flex: 1}}
             behavior={'position'}
             keyboardVerticalOffset={200}
           >

@@ -26,7 +26,6 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
-
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -48,7 +47,6 @@ export default function DiveSiteUploader(props) {
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
   const { setChosenModal } = useContext(ModalSelectContext);
-
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
