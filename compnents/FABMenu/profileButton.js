@@ -38,8 +38,8 @@ export default function ProfileButton() {
     <View style={styles.container}>
       <TouchableWithoutFeedback
         onPress={() => handlePress()}
-        // onPressIn={() => setButState(true)}
-        // onPressOut={() => setButState(false)}
+        onPressIn={() => setButState(true)}
+        onPressOut={() => setButState(false)}
         style={{
           alignItems: "center",
           width: moderateScale(32),
