@@ -312,8 +312,8 @@ export default function Map() {
     if (mapRef) {
       let currentMapPosition = await mapRef.getCamera();
       if (currentMapPosition) {
-        // if(mapConfig !==2){
-        //   setMapCenter({
+        // if(mapConfig === 1){
+        //   setDragPin({
         //     lat: currentMapPosition.center.latitude,
         //     lng: currentMapPosition.center.longitude,
         //   });
@@ -388,9 +388,26 @@ export default function Map() {
     mapCenter,
   ]);
 
+
+  const handleDragPin = async() => {
+    if (mapRef) {
+      let currentMapPosition = await mapRef.getCamera();
+      if (currentMapPosition) {
+        if(mapConfig === 1){
+          setDragPin({
+            lat: currentMapPosition.center.latitude,
+            lng: currentMapPosition.center.longitude,
+          });
+        }
+      
+      }
+    }
+  }
+
   useEffect(() => {
+
     if (mapConfig === 1) {
-      setDragPin(mapCenter);
+      handleDragPin()
     }
     if (mapConfig === 0) {
       // setSitesArray([])

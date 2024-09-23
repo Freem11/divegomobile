@@ -26,7 +26,9 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
-
+import { MapCenterContext } from "../contexts/mapCenterContext";
+import { MapRegionContext } from "../contexts/mapRegionContext";
+import { PinSpotContext } from "../contexts/pinSpotContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -48,7 +50,9 @@ export default function DiveSiteUploader(props) {
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
   const { setChosenModal } = useContext(ModalSelectContext);
-
+  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
+  const { region, setRegion } = useContext(MapRegionContext);
+  const { dragPin, setDragPin } = useContext(PinSpotContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -93,6 +97,8 @@ export default function DiveSiteUploader(props) {
   };
 
   const onNavigate = () => {
+    console.log("mapCenter", mapCenter)
+    console.log("region", region)
     Keyboard.dismiss();
       setChosenModal("DiveSite");
       setMapHelper(true);
