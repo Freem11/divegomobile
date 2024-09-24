@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, View, Text, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import MaterialCommunityIconsButton from "../reusables/materialCommunityIconsButton";
@@ -104,7 +104,9 @@ export default function Itinerary(props) {
           <Text style={styles.priceText}>{itinerary.price}</Text>
         </View>
 
+        <ScrollView style={{width: "95%"}}>
         <Text style={styles.lowerText}>{itinerary.description}</Text>
+        </ScrollView>
       </Animated.View>
     </View>
   );
