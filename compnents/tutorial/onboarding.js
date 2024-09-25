@@ -29,7 +29,8 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from "expo-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("screen").height;
+const windowHeight = Dimensions.get("window").height;
+const screenHeight = Dimensions.get("screen").height;
 
 export default function OnboardingTest() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -229,7 +230,7 @@ export default function OnboardingTest() {
 const styles = StyleSheet.create({
   wrapper: {
     position: "absolute",
-    height: windowHeight,
+    height: screenHeight,
     width: windowWidth,
     backgroundColor: colors.primaryBlue,
     zIndex: 26,
@@ -328,8 +329,8 @@ const styles = StyleSheet.create({
   },
   erroMsg: {
     margin: moderateScale(5),
-    marginLeft: windowHeight < 800 ? moderateScale(-110) : 0,
-    width: windowHeight < 800 ? "50%" : "auto",
+    marginLeft: screenHeight < 800 ? moderateScale(-110) : 0,
+    width: screenHeight < 800 ? "50%" : "auto",
     textAlign: 'center',
     padding: moderateScale(7),
     paddingHorizontal: moderateScale(10),
