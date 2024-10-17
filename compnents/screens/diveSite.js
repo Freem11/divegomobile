@@ -124,25 +124,20 @@ export default function DiveSite(props) {
   };
 
   useEffect(() => {
-    getDiveSite(selectedDiveSite.SiteName);
-    // filterAnchorPhotos();
+    getDiveSite(selectedDiveSite);
   }, [selectedDiveSite]);
 
   useEffect(() => {
     if(profile[0].partnerAccount){
       setIsPartnerAccount(true)
     }
-
-    getDiveSite(selectedDiveSite.SiteName);
-    // filterAnchorPhotos();
+    getDiveSite(selectedDiveSite);
   }, []);
 
-  const getDiveSite = async () => {
+  const getDiveSite = async (chosenSite) => {
     try {
       const selectedSite = await getDiveSiteWithUserName({
-        siteName: selectedDiveSite.SiteName,
-        lat: selectedDiveSite.Latitude,
-        lng: selectedDiveSite.Longitude,
+        siteName: chosenSite.SiteName
       });
       if (selectedSite.length > 0) {
         setSite(selectedSite[0]);
