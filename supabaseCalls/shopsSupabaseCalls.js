@@ -67,3 +67,21 @@ export const updateDiveShop = async (values) => {
     return data;
   }
 };
+
+
+export const getShopByUserID = async (value) => {
+
+  const { data, error } = await supabase
+  .from("shops")
+  .select()
+  .eq("userId", value)
+
+if (error) {
+  console.log("couldn't do it 39,", error);
+  return [];
+}
+
+if (data) {
+  return data;
+}
+};

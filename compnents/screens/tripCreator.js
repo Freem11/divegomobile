@@ -21,11 +21,13 @@ import {
   buttonText,
 } from "../styles";
 import screenData from "./screenData.json";
+import { getShopByUserID } from "../../supabaseCalls/shopsSupabaseCalls";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
+  itineraries,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import TextInputField from "../authentication/textInput";
 import PlainTextInput from "./plaintextInput";
