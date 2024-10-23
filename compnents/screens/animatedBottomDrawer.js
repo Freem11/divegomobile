@@ -19,6 +19,7 @@ import {
   GestureDetector,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
+import { openURL } from 'expo-linking';
 import { moderateScale } from "react-native-size-matters";
 import Picture from "../modals/picture";
 import ListItem from "../reusables/listItem";
@@ -196,6 +197,7 @@ export default function BottomDrawer(props) {
                   }
                   buttonTwoText="Book"
                   buttonTwoIcon="diving-scuba-flag"
+                  buttonTwoAction={() => openURL(item.BookingPage)}
                 />
               ) : null}
 
