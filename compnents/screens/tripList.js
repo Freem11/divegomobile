@@ -15,6 +15,7 @@ import {
   buttonTextAlt,
 } from "../styles";
 import screenData from "./screenData.json";
+import { getShopByUserID } from "../../supabaseCalls/shopsSupabaseCalls";
 import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import Itinerary from "../itineraries/itinerary";
@@ -66,12 +67,26 @@ export default function TripListPage(props) {
   const [selectedID, setSelectedID] = useState(null);
 
   useEffect(() => {
-    getItineraries(profile[0].UserID);
+    getItineraries(profile[0].UserID); 
+    getShop(profile[0].UserID)
   }, []);
 
   useEffect(() => {
     setShop(itineraryList[0]?.shopID);
   }, [itineraryList]);
+
+
+  const getShop = async (id) => {
+    try {
+      const shop = await getShopByUserID(id);
+      if (shop.length > 0) {
+        setFormValues({...formValues, shopID : shop[0].id})
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
 
   const getItineraries = async (IdNum) => {
     try {
@@ -85,7 +100,6 @@ export default function TripListPage(props) {
   };
 
   const openTripCreatorScreen = () => {
-    setFormValues({...formValues, shopID : itineraryList[0]?.shopID})
     setLevelOneScreen(false);
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
@@ -102,7 +116,6 @@ export default function TripListPage(props) {
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
     setEditMode({ itineraryInfo, IsEditModeOn: true });
-    setFormValues({...itineraryInfo, shopID : itineraryList[0]?.shopID})
     setSitesArray(itineraryInfo.siteList)
     setLevelOneScreen(false);
     useButtonPressHelper(
