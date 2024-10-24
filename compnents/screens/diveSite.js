@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -56,6 +51,7 @@ import {
   getDiveSiteWithUserName,
   updateDiveSite,
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
 
 const windowWidth = Dimensions.get("window").width;
@@ -87,6 +83,11 @@ export default function DiveSite(props) {
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
+
+  const getTrips = async () => {
+    const success = await getItinerariesForDiveSite(site.id);
+    console.log("itins?", success);
+  };
 
   const getPhotos = async () => {
     const success = await getPhotosByDiveSiteWithExtra({
@@ -124,12 +125,16 @@ export default function DiveSite(props) {
   };
 
   useEffect(() => {
+    getTrips();
+  }, [site]);
+
+  useEffect(() => {
     getDiveSite(selectedDiveSite);
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if(profile[0].partnerAccount){
-      setIsPartnerAccount(true)
+    if (profile[0].partnerAccount) {
+      setIsPartnerAccount(true);
     }
     getDiveSite(selectedDiveSite);
   }, []);
@@ -137,7 +142,7 @@ export default function DiveSite(props) {
   const getDiveSite = async (chosenSite) => {
     try {
       const selectedSite = await getDiveSiteWithUserName({
-        siteName: chosenSite.SiteName
+        siteName: chosenSite.SiteName,
       });
       if (selectedSite.length > 0) {
         setSite(selectedSite[0]);
@@ -231,8 +236,7 @@ export default function DiveSite(props) {
     email(to, {
       // Optional additional arguments
       subject: `Reporting issue with Dive Site: "${site.name}" at Latitude: ${site.lat} Longitude: ${site.lng} `,
-      body:
-        "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
