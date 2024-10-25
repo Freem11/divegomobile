@@ -1,14 +1,5 @@
 import { StyleSheet, Dimensions, View } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from "react-native-reanimated";
-import { activeFonts, colors, fontSizes } from "../styles";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { scale, moderateScale } from "react-native-size-matters";
+import React, { useContext } from "react";
 import DiveSiteButton from "./diveSiteButton";
 import SiteSearchButton from "./siteSearchButton";
 import GuidesButton from "./guidesButton";

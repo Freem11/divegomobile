@@ -564,15 +564,6 @@ const styles = StyleSheet.create({
     zIndex: 3,
     // backgroundColor: 'pink'
   },
-  FBox: {
-    alignItems: "center",
-    paddingBottom: "2%",
-  },
-  FText: {
-    color: colors.themeWhite,
-    fontFamily: activeFonts.Bold,
-    fontSize: moderateScale(15),
-  },
   FMenu: {
     flexDirection: "column",
     alignContent: "center",
@@ -591,27 +582,6 @@ const styles = StyleSheet.create({
     },
   ],
   lowerButtonText: buttonTextAlt,
-  PinButtonPressed: {
-    position: "absolute",
-    alignItems: "center",
-    textAlign: "center",
-    bottom: scale(28),
-    backgroundColor: "#538DBD",
-    borderRadius: scale(10),
-    marginBottom: 0,
-    width: "50%",
-    height: scale(30),
-    zIndex: 2,
-    paddingTop: 3,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 5,
-
-    elevation: 10,
-  },
   carrousel: {
     position: "absolute",
     flexDirection: "column",

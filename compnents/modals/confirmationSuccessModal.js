@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
-import ModalSecondaryButton from "../reusables/modalSecondaryButton";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import {

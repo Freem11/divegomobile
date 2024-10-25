@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { scale } from 'react-native-size-matters';
 
 let heightVal
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: scale(35),
     marginLeft: 1,
     marginRight: 1,
-    width: scale(13),
-    
+    width: scale(13), 
   },
 });

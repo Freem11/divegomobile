@@ -68,6 +68,7 @@ import { ActiveScreenContext } from './contexts/activeScreenContext';
 import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
 import { TripSitesContext } from "./contexts/tripSitesContext";
 import { TripDetailContext } from "./contexts/tripDetailsContext";
+import { activeFonts } from "./styles";
 
 const { width, height } = Dimensions.get("window");
 
@@ -648,7 +649,7 @@ export default function Map() {
                       <Text
                         style={{
                           color: "white",
-                          fontFamily: "Itim_400Regular",
+                          fontFamily: activeFonts.Thin,
                           fontSize: moderateScale(18),
                         }}
                       >
@@ -708,57 +709,5 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
     height: "100%",
-  },
-  modalStyle: {
-    // flex: 1,
-    // alignContent: "center",
-    // alignItems: "center",
-    backgroundColor: "#358BDB",
-    borderRadius: 20,
-    marginLeft: "5%",
-    marginRight: "5%",
-    marginTop: Platform.OS === "android" ? "5%" : "10%",
-    marginBottom: "5%",
-    shadowOpacity: 0.2,
-    shadowRadius: 50,
-  },
-  closeButtonAlt: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonAltPressed: {
-    position: "relative",
-    borderRadius: scale(42 / 2),
-    height: scale(30),
-    width: scale(30),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    opacity: 0.3,
-  },
-  headerAlt: {
-    // alignItems: "center",
-    // alignContent: "center",
-    fontFamily: "PermanentMarker_400Regular",
-    color: "#F0EEEB",
-    fontSize: scale(17),
-    width: "73%",
-    marginLeft: "13%",
-    // backgroundColor: 'pink'
-  },
-  titleAlt: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    marginTop: "3%",
-    width: "98%",
-    height: scale(30),
-    // backgroundColor: 'green'
   },
 });

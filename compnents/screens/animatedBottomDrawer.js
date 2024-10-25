@@ -10,7 +10,6 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  useDerivedValue,
   withTiming,
   Easing,
 } from "react-native-reanimated";
@@ -297,28 +296,10 @@ const styles = StyleSheet.create({
   },
   selectSitesButton: [primaryButton, { zIndex: 10 }],
   selectSitesText: [buttonText, { marginHorizontal: moderateScale(5) }],
-  tab: {
-    backgroundColor: colors.themeBlack,
-    height: moderateScale(5),
-    width: moderateScale(50),
-    borderRadius: moderateScale(10),
-  },
   label: {
     color: colors.themeBlack,
     fontFamily: activeFonts.Regular,
     fontSize: moderateScale(fontSizes.SmallText),
-  },
-  shadowbox: {
-    flex: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-
-    elevation: 10,
   },
   locationHeader: {
     flexDirection: "row",

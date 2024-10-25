@@ -39,13 +39,6 @@ export default function AnimalTopAutoSuggest(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: "95%",
-    flexDirection: "row",
-    overflow: "hidden",
-    alignContent: "center",
-    alignItems: "center",
-  },
   tagContainer: {
     position: "relative",
     alignSelf: "center",

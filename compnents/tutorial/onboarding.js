@@ -23,7 +23,6 @@ import { PinContext } from "../contexts/staticPinContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
-import InputField from "../reusables/textInputs";
 import TextInputField from '../authentication/textInput';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from "expo-linear-gradient";

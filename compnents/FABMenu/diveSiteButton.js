@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { PullTabContext } from "../contexts/pullTabContext";

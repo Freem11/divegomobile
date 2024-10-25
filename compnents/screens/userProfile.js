@@ -416,19 +416,9 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? windowHeight / 50 : windowHeight / 50,
     marginHorizontal: "0%",
   },
-  header: {
-    // zIndex: 50,
-    marginTop: "5%",
-    fontSize: moderateScale(fontSizes.Header),
-    fontFamily: activeFonts.Regular,
-    color: colors.themeBlack,
-  },
   scrollViewBox: {
     height: windowHeight / 4.5,
   },
-  screenCloseButton: [
-    { zIndex: 10, position: "absolute", top: "5%", right: "5%" },
-  ],
   backButton: [{ zIndex: 50, position: "absolute", top: "5%", left: "2%" }],
   settingsButton: [
     { zIndex: 10, position: "absolute", top: "5%", right: "3%" },

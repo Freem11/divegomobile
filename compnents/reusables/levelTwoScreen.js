@@ -12,7 +12,7 @@ import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
 import DiveSiteUploader from '../screens/diveSiteUploader';
 import TripCreatorPage from '../screens/tripCreator';
-import { activeFonts, colors, fontSizes } from "../styles";
+import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;

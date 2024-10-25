@@ -5,16 +5,6 @@ import { StyleSheet, Dimensions, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { Roboto_700Bold } from "@expo-google-fonts/roboto";
-import { PermanentMarker_400Regular } from "@expo-google-fonts/permanent-marker";
-import { Itim_400Regular } from "@expo-google-fonts/itim";
-import { PatrickHand_400Regular } from "@expo-google-fonts/patrick-hand";
-import {
-  Caveat_400Regular,
-  Caveat_500Medium,
-  Caveat_600SemiBold,
-  Caveat_700Bold,
-} from "@expo-google-fonts/caveat";
 import { MapCenterContext } from "./compnents/contexts/mapCenterContext";
 import { MapZoomContext } from "./compnents/contexts/mapZoomContext";
 import { MapRegionContext } from "./compnents/contexts/mapRegionContext";
@@ -152,18 +142,6 @@ export default function App() {
     SFThin: require("./assets/SanFran/SF-Pro-Display-Thin.otf"),
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
     SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
-    PermanentMarker_400Regular,
-    Caveat_400Regular,
-    Caveat_500Medium,
-    Caveat_600SemiBold,
-    Caveat_700Bold,
-    Roboto_700Bold,
-    Itim_400Regular,
-    PatrickHand_400Regular,
-    GothamBlack: require("./assets/Gotham-Black.otf"),
-    GothamBold: require("./assets/Gotham-Bold.otf"),
-    SanFran: require("./assets/SFNSText-RegularG1.otf"),
-    SanFranSemi: require("./assets/SFNSText-Semibold.otf"),
   });
 
   useLayoutEffect(() => {
@@ -257,9 +235,3 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

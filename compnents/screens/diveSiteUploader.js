@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -217,9 +217,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: windowHeight,
   },
-  addPhotoButton: [
-    { zIndex: 50, position: "absolute", top: "32%", right: "5%" },
-  ],
   backButton: [{ zIndex: 50, position: "absolute", top: "5.5%", left: "2%" }],
   contentContainer: {
     alignItems: "left",
@@ -239,11 +236,6 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Thin,
     color: colors.themeBlack,
     alignSelf: "flex-start",
-  },
-  label: {
-    marginLeft: "-5%",
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.LightItalic,
   },
   textBuffer: {
     marginBottom: moderateScale(20),
@@ -266,7 +258,6 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: "0%" },
   ],
   locationText: [buttonTextAlt, { marginHorizontal: moderateScale(5), fontSize: fontSizes.StandardText }],
-
   explainer: {
     alignSelf: "flex-start",
     textAlign: "center",
@@ -283,35 +274,14 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: "0%" },
   ],
   pinText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
-  
-  
   submitButton: [
     authenicationButton,
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   submitText: [buttonText, { marginHorizontal: moderateScale(5) }],
-  screenCloseButton: [
-    { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
-  ],
   svgCurve: {
     position: "absolute",
     bottom: 0,
     width: Dimensions.get("window").width,
-  },
-  erroMsg: {
-    minHeight: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
-  },
-  erroMsgEmpty: {
-    // height: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
   },
 });

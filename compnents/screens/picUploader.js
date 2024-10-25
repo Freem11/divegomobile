@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -24,7 +24,6 @@ import {
 } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -291,28 +290,9 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   submitText: [buttonText, { marginHorizontal: moderateScale(5) }],
-  screenCloseButton: [
-    { zIndex: 50, position: "absolute", top: "5%", right: "5%" },
-  ],
   svgCurve: {
     position: "absolute",
     bottom: 0,
     width: Dimensions.get("window").width,
-  },
-  erroMsg: {
-    minHeight: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
-  },
-  erroMsgEmpty: {
-    // height: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
   },
 });

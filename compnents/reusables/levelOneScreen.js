@@ -7,7 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
-import { activeFonts, colors, fontSizes } from "../styles";
+import { colors } from "../styles";
 
 import DiveSite from '../screens/diveSite';
 import DiveShop from '../screens/diveShop';

@@ -5,13 +5,11 @@ import {
   FlatList,
   View,
 } from "react-native";
-import { scale, moderateScale } from "react-native-size-matters";
 import carrouselData from "./carrouselData";
 import CreateAccountPage from "./createAccountPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
 import {
-  activeFonts,
   colors,
 } from "../styles";
 
@@ -159,32 +157,5 @@ const styles = StyleSheet.create({
     height: windowHeight,
     width: windowWidth,
     alignItems: "center",
-  },
-
-  title: {
-    fontFamily: activeFonts.Black,
-    fontSize: moderateScale(32),
-    paddingHorizontal: moderateScale(30),
-    marginTop: windowHeight > 700 && windowWidth < 700 ? scale(150) : scale(60),
-    marginBottom: moderateScale(10),
-    width: windowWidth,
-    color: colors.themeBlack,
-    textAlign: "center",
-  },
-  erroMsg: {
-    margin: moderateScale(5),
-    marginLeft: windowHeight < 800 ? moderateScale(-110) : 0,
-    width: windowHeight < 800 ? "50%" : "auto",
-    textAlign: "center",
-    padding: moderateScale(7),
-    paddingHorizontal: moderateScale(10),
-    color: "pink",
-    fontFamily: "Itim_400Regular",
-    fontSize: scale(14),
-    borderStyle: "dashed",
-    borderRadius: moderateScale(10),
-    borderColor: "darkblue",
-    borderWidth: 1,
-    marginTop: moderateScale(40),
   },
 });

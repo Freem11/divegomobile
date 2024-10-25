@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -8,7 +8,6 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
-  Platform,
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import {
@@ -21,13 +20,11 @@ import {
   buttonText,
 } from "../styles";
 import screenData from "./screenData.json";
-import { getShopByUserID } from "../../supabaseCalls/shopsSupabaseCalls";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
-  itineraries,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import TextInputField from "../authentication/textInput";
 import PlainTextInput from "./plaintextInput";
@@ -440,80 +437,6 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   submitText: [buttonText, { marginHorizontal: moderateScale(5) }],
-  subHeaders: {
-    zIndex: 10,
-    marginTop: "10%",
-    fontSize: moderateScale(fontSizes.SubHeading),
-    fontFamily: activeFonts.Medium,
-    color: "darkgrey",
-    marginLeft: "5%",
-  },
-  subHeadersDanger: {
-    zIndex: 10,
-    position: "absolute",
-    bottom: moderateScale(120),
-    marginTop: windowHeight / 6,
-    fontSize: moderateScale(fontSizes.SubHeading),
-    fontFamily: activeFonts.Medium,
-    color: "maroon",
-    marginLeft: "5%",
-  },
-  dataHousing: {
-    marginTop: "2%",
-    borderTopWidth: moderateScale(1),
-    borderTopColor: "darkgrey",
-    paddingBottom: "2%",
-    borderBottomWidth: moderateScale(1),
-    borderBottomColor: "darkgrey",
-  },
-  dataHousingDanger: {
-    position: "absolute",
-    bottom: moderateScale(40),
-    backgroundColor: "#FCE4EC",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
-    borderTopWidth: moderateScale(1),
-    borderTopColor: "maroon",
-    paddingBottom: "4%",
-    borderBottomWidth: moderateScale(1),
-    borderBottomColor: "maroon",
-    width: "90%",
-  },
-  dataLabels: {
-    zIndex: 10,
-    marginTop: "2%",
-    fontSize: moderateScale(fontSizes.StandardText),
-    fontFamily: activeFonts.Bold,
-    color: colors.themeBlack,
-    marginLeft: "10%",
-  },
-  dataLabelsDanger: {
-    zIndex: 10,
-    marginTop: "4%",
-    fontSize: moderateScale(fontSizes.StandardText),
-    fontFamily: activeFonts.Bold,
-    color: "maroon",
-  },
-  promtBox: {
-    position: "absolute",
-    bottom: moderateScale(10),
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  promptText: {
-    fontSize: moderateScale(15),
-    fontFamily: activeFonts.Italic,
-    color: colors.themeBlack,
-  },
-  promptLinkText: {
-    marginLeft: "15%",
-    marginTop: moderateScale(2),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.thin,
-    color: colors.primaryBlue,
-  },
   creatNewButton: [
     screenSecondaryButton,
     { zIndex: 10, position: "absolute", top: "7%", right: "6%" },
@@ -525,18 +448,4 @@ const styles = StyleSheet.create({
       marginHorizontal: moderateScale(5),
     },
   ],
-  erroMsg: {
-    minHeight: moderateScale(34),
-    marginTop: moderateScale(15),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-  },
-  erroMsgEmpty: {
-    height: moderateScale(34),
-    marginTop: moderateScale(15),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-  },
 });

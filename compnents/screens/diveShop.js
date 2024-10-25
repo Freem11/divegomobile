@@ -15,8 +15,6 @@ import {
   activeFonts,
   colors,
   fontSizes,
-  screenSecondaryButton,
-  buttonTextAlt,
 } from "../styles";
 import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
@@ -25,7 +23,6 @@ import { SelectedShopContext } from "../contexts/selectedShopContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
-
 import { MaterialIcons } from "@expo/vector-icons";
 import { chooseImageHandler } from "./imageUploadHelpers";
 import {
@@ -53,7 +50,6 @@ export default function DiveShop(props) {
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [isMyShop, setIsMyShop] = useState(false);
 
-
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
@@ -78,8 +74,11 @@ export default function DiveShop(props) {
   }, [levelOneScreen]);
 
   useEffect(() => {
-    if(profile[0].partnerAccount & (selectedShop[0].userId === profile[0].UserID)){
-      setIsMyShop(true)
+    if (
+      profile[0].partnerAccount &
+      (selectedShop[0].userId === profile[0].UserID)
+    ) {
+      setIsMyShop(true);
     }
 
     setDiveShopVals({
@@ -260,13 +259,6 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Regular,
     color: colors.themeBlack,
   },
-  contributor: {
-    // zIndex: 50,
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Thin,
-    color: colors.themeBlack,
-    marginLeft: "12%",
-  },
   scrollViewBox: {
     // zIndex: 5,
     marginTop: "3%",
@@ -274,15 +266,7 @@ const styles = StyleSheet.create({
     height: windowHeight / 6,
     // backgroundColor: "green"
   },
-  screenCloseButton: [
-    { zIndex: 1, position: "absolute", top: "6%", right: "5%" },
-  ],
-  contributeButton: [
-    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
-    screenSecondaryButton,
-  ],
   backButton: [{ zIndex: 10, position: "absolute", top: "5.5%", left: "2%" }],
-  contributeButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   addPhotoButton: [
     { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
   ],
@@ -290,35 +274,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: Dimensions.get("window").width,
-  },
-  page: {
-    position: "absolute",
-    zIndex: 1,
-    // bottom: -200,
-    width: "100%",
-    // marginLeft: "1%",
-    // marginTop: -windowHeight,
-    height: "100%",
-  },
-  pageContainer: {
-    // pointerEvents: "none",
-    // justifyContent: "center",
-    position: "absolute",
-    // top: 0,
-    // left: "5%",
-    // backgroundColor: "yellow",
-  },
-  gapBox: { pointerEvents: "none", height: windowHeight * 0.75 },
-  shadowbox: {
-    flex: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-
-    elevation: 10,
   },
 });

@@ -1,8 +1,7 @@
-import { StyleSheet, View, Text, Keyboard } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { activeFonts, colors, fontSizes } from "../styles";
-import { useState, useEffect, useContext } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { scale, moderateScale } from "react-native-size-matters";
+import { moderateScale } from "react-native-size-matters";
 
 const AutoSuggestListItem = (props) => {
   const { setList, setPin, pin, name, handleList, setTextSource } = props;

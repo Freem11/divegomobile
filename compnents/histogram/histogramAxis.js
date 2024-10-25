@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, Platform, Dimensions } from "react-native";
 import { scale } from "react-native-size-matters";
+import { activeFonts } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     marginRight: 1,
     width: scale(13),
     color: "white",
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Thin,
     opacity: 1   ,
     fontSize: scale(13)
   }

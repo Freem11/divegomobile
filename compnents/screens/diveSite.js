@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -396,9 +396,6 @@ const styles = StyleSheet.create({
     height: windowHeight / 6,
     // backgroundColor: "green"
   },
-  screenCloseButton: [
-    { zIndex: 1, position: "absolute", top: "6%", right: "5%" },
-  ],
   contributeButton: [
     { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
     screenSecondaryButton,
@@ -412,35 +409,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: Dimensions.get("window").width,
-  },
-  page: {
-    position: "absolute",
-    zIndex: 1,
-    // bottom: -200,
-    width: "100%",
-    // marginLeft: "1%",
-    // marginTop: -windowHeight,
-    height: "100%",
-  },
-  pageContainer: {
-    // pointerEvents: "none",
-    // justifyContent: "center",
-    position: "absolute",
-    // top: 0,
-    // left: "5%",
-    // backgroundColor: "yellow",
-  },
-  gapBox: { pointerEvents: "none", height: windowHeight * 0.75 },
-  shadowbox: {
-    flex: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-
-    elevation: 10,
   },
 });

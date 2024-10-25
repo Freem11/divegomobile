@@ -39,14 +39,4 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.StandardText,
     // backgroundColor: "purple",
   },
-  altButton: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    right: windowWidth > 600 ? moderateScale(0) : moderateScale(10),
-    // backgroundColor: "pink",
-    height: "100%",
-    width: "10%",
-    marginRight: moderateScale(-5)
-  },
 });

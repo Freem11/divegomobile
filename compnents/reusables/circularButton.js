@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { activeFonts, colors, fontSizes } from "../styles";
+import { colors } from "../styles";
 
 export default function CircularButton(props) {
   const { buttonAction, icon } = props;

@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
-import { moderateScale, scale } from "react-native-size-matters";
+import { moderateScale } from "react-native-size-matters";
 import TinyButton from "./tinyButton";
+import { activeFonts } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   titleText: {
     width:"50%",
     flexWrap: "wrap",
-    fontFamily: "Itim_400Regular",
+    fontFamily: activeFonts.Regular,
     color: "black",
     fontSize: moderateScale(14),
     textAlign: 'center'

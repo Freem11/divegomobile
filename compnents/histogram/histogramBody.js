@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Text, Dimensions, Platform } from "react-native";
+import { StyleSheet, View, Dimensions, Platform } from "react-native";
 import { scale } from "react-native-size-matters";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";

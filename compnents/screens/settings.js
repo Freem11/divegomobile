@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -263,18 +263,6 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Bold,
     color: "maroon",
   },
-  promtBox: {
-    position: "absolute",
-    bottom: moderateScale(10),
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  promptText: {
-    fontSize: moderateScale(15),
-    fontFamily: activeFonts.Italic,
-    color: colors.themeBlack,
-  },
   promptLinkText: {
     marginLeft: "15%",
     marginTop: moderateScale(2),
@@ -293,18 +281,5 @@ const styles = StyleSheet.create({
     { flexDirection: "row", marginTop: windowHeight / 10 },
   ],
   loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
-  erroMsg: {
-    minHeight: moderateScale(34),
-    marginTop: moderateScale(15),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-  },
-  erroMsgEmpty: {
-    height: moderateScale(34),
-    marginTop: moderateScale(15),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-  },
+
 });

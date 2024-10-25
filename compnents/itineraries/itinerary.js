@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Text, TouchableWithoutFeedback, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  ScrollView,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
-import MaterialCommunityIconsButton from "../reusables/materialCommunityIconsButton";
 import { scale, moderateScale } from "react-native-size-matters";
 import Animated, {
   useSharedValue,
@@ -14,9 +18,7 @@ import Animated, {
 import {
   activeFonts,
   colors,
-  fontSizes,
-  roundButton,
-  buttonTextAlt
+  fontSizes
 } from "../styles";
 
 export default function Itinerary(props) {
@@ -78,21 +80,23 @@ export default function Itinerary(props) {
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.buttonBox}>
-          <View style={{width: "10%"}}></View>
+          <View style={{ width: "10%" }}></View>
           <TouchableWithoutFeedback onPress={buttonOneAction}>
-              <MaterialCommunityIcons 
+            <MaterialCommunityIcons
               name={buttonOneIcon}
               size={moderateScale(22)}
               color={"darkgrey"}
-              onPress={buttonOneAction}/>  
+              onPress={buttonOneAction}
+            />
           </TouchableWithoutFeedback>
 
           <TouchableWithoutFeedback onPress={buttonTwoAction}>
-              <MaterialCommunityIcons 
+            <MaterialCommunityIcons
               name={buttonTwoIcon}
               size={moderateScale(22)}
               color={"darkgrey"}
-              onPress={buttonTwoAction}/>  
+              onPress={buttonTwoAction}
+            />
           </TouchableWithoutFeedback>
         </View>
       </View>
@@ -104,8 +108,8 @@ export default function Itinerary(props) {
           <Text style={styles.priceText}>{itinerary.price}</Text>
         </View>
 
-        <ScrollView style={{width: "95%"}}>
-        <Text style={styles.lowerText}>{itinerary.description}</Text>
+        <ScrollView style={{ width: "95%" }}>
+          <Text style={styles.lowerText}>{itinerary.description}</Text>
         </ScrollView>
       </Animated.View>
     </View>
@@ -136,17 +140,6 @@ const styles = StyleSheet.create({
     width: "58%",
     height: "100%",
   },
-  editButton: [
-    roundButton,
-    { flexDirection: "column" },
-  ],
-  editButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5), fontSize: moderateScale(fontSizes.SmallText) }],
-  deleteButton: [
-    roundButton,
-    { flexDirection: "column" },
-  ],
-  deltetButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5), fontSize: moderateScale(fontSizes.SmallText) }],
-  
   buttonBox: {
     flexDirection: "row",
     justifyContent: "space-evenly",

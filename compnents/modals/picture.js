@@ -361,7 +361,6 @@ const styles = StyleSheet.create({
     marginLeft: "2%",
     borderRadius: 5,
     zIndex: 2,
-
   },
   flag: {
     zIndex: 2,
@@ -417,18 +416,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     opacity: 1,
     color: colors.themeWhite,
-    fontFamily: activeFonts.Light,
-    fontSize: moderateScale(fontSizes.SmallText),
-    zIndex: 2,
-  },
-  microLow2Alt: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    opacity: 1,
-    color: colors.secondaryYellow,
     fontFamily: activeFonts.Light,
     fontSize: moderateScale(fontSizes.SmallText),
     zIndex: 2,

@@ -14,7 +14,7 @@ import {
 } from "../styles";
 import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
