@@ -19,7 +19,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
-import { CommentsModalContext } from "../contexts/commentsModalContext";
 import {
   insertPhotoComment,
   grabPhotoCommentsByPicId,
@@ -39,7 +38,6 @@ export default function CommentsModal() {
   const [selectedReplyId, setSelectedReplyId] = useState([]);
   const { profile } = useContext(UserProfileContext);
   const { selectedPicture } = useContext(SelectedPictureContext);
-  const { commentsModal, setCommentsModal } = useContext(CommentsModalContext);
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );

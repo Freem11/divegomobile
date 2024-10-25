@@ -39,7 +39,7 @@ export default function OnboardingTest() {
 
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
-  const { profile, setProfile } = useContext(UserProfileContext);
+  const { setProfile } = useContext(UserProfileContext);
 
   const onPress = async () => {
     if (carrouselIndex === 2) {

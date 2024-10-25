@@ -8,7 +8,6 @@ import AxisBar from "./histogramAxis";
 import DataBar from "./histogramBar";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function Historgram() {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);

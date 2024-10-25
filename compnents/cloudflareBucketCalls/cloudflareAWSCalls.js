@@ -1,15 +1,12 @@
 import { aws3 } from "../../aws"
 import {
-    GetObjectCommand,
     PutObjectCommand,
     DeleteObjectCommand,
   } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import 'react-native-get-random-values'
 import 'react-native-url-polyfill/auto';
 import { ReadableStream } from 'web-streams-polyfill/ponyfill';
 globalThis.ReadableStream = ReadableStream;
-// import { Buffer } from "buffer";
 
 export const uploadphoto = async (file, fileName) => {
 

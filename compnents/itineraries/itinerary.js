@@ -26,10 +26,8 @@ export default function Itinerary(props) {
     itinerary,
     selectedID,
     setSelectedID,
-    buttonOneText,
     buttonOneIcon,
     buttonOneAction,
-    buttonTwoText,
     buttonTwoIcon,
     buttonTwoAction,
   } = props;

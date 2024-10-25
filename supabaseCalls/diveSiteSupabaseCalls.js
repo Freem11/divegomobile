@@ -19,7 +19,7 @@ export const getDiveSitesWithUser = async (values) => {
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: values.myDiveSites,
+    userid: '',
   });
 
   if (error) {

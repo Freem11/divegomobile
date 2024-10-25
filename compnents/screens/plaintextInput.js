@@ -3,7 +3,6 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { activeFonts, colors } from "../styles";
-import { UserProfileContext } from "../contexts/userProfileContext";
 
 export default function PlainTextInput(props) {
   const {
@@ -17,8 +16,6 @@ export default function PlainTextInput(props) {
     onChangeText,
     placeHolder,
   } = props;
-
-  const { profile } = useContext(UserProfileContext);
 
   let checkPasser = false
   if(isPartnerAccount){

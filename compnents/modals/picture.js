@@ -40,22 +40,16 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
   const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
+  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
 
-  const { fullScreenModal, setFullScreenModal } = useContext(
-    FullScreenModalContext
-  );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
-    ActiveTutorialIDContext
-  );
   const handleEmail = (pic) => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
@@ -75,9 +69,7 @@ export default function Picture(props) {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
-  const { selectedProfile, setSelectedProfile } = useContext(
-    SelectedProfileContext
-  );
+  const { setSelectedProfile } = useContext(SelectedProfileContext);
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
@@ -119,7 +111,6 @@ export default function Picture(props) {
       levelTwoScreen,
       setLevelTwoScreen
     );
-
   };
 
   const handleDiveSiteMove = async (pic) => {
@@ -220,7 +211,7 @@ export default function Picture(props) {
     <View key={pic.id} style={styles.outterBox}>
       <View style={styles.container}>
         <View style={styles.micro}>
-        <Text style={styles.titleText}>{pic.label}</Text>
+          <Text style={styles.titleText}>{pic.label}</Text>
           <FontAwesome
             name="share"
             color="white"
@@ -255,7 +246,9 @@ export default function Picture(props) {
             // backgroundColor: "pink",
           }}
         />
-        <View style={{ width: "100%", position: "absolute", bottom: 10, left: 7}}>
+        <View
+          style={{ width: "100%", position: "absolute", bottom: 10, left: 7 }}
+        >
           {countOfLikes > 0 ? (
             <View style={styles.countIndicator}>
               <Text style={styles.countDisplay}>{countOfLikes}</Text>
@@ -274,27 +267,25 @@ export default function Picture(props) {
             />
           </TouchableWithoutFeedback>
 
-        
-            <View style={styles.microLow}>
-             {dataSetType === "ProfilePhotos" ?
-             <Text
-             style={styles.microLow2}
-             onPress={() => handleDiveSiteMove(pic)}
-           >
-             {" "}
-             Go to this location!
-           </Text>
-             
-             :
-             <Text
+          <View style={styles.microLow}>
+            {dataSetType === "ProfilePhotos" ? (
+              <Text
+                style={styles.microLow2}
+                onPress={() => handleDiveSiteMove(pic)}
+              >
+                {" "}
+                Go to this location!
+              </Text>
+            ) : (
+              <Text
                 style={styles.microLow2}
                 onPress={() => handleFollow(pic.UserName)}
               >
                 {" "}
                 Added by: {pic.UserName}
-              </Text> 
-              }
-            </View>
+              </Text>
+            )}
+          </View>
         </View>
       </View>
       <TouchableWithoutFeedback

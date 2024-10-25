@@ -11,11 +11,9 @@ import { SearchTextContext } from "../contexts/searchTextContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoFilterer() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-
   const { textvalue, setTextValue } = useContext(SearchTextContext);
 
   const handleChange = async (text) => {

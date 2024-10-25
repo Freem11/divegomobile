@@ -71,9 +71,7 @@ import Animated, {
 import * as ScreenOrientation from "expo-screen-orientation";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 let feedbackRequest = null;
-let feedbackRequest2 = null;
 let FbWidth = moderateScale(350);
 
 export default function MapPage() {
@@ -81,41 +79,26 @@ export default function MapPage() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-
-  const { confirmationModal, setConfirmationModal } = useContext(
-    ConfirmationModalContext
-  );
-  const { fullScreenModal, setFullScreenModal } = useContext(
-    FullScreenModalContext
-  );
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
-  const { previousButtonID, setPreviousButtonID } = useContext(
-    PreviousButtonIDContext
-  );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
-    ActiveTutorialIDContext
-  );
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { chosenModal, setChosenModal } = useContext(ModalSelectContext);
-  const { tiles, setTiles } = useContext(CarrouselTilesContext);
-
+  const { setTiles } = useContext(CarrouselTilesContext);
   const { activeSession } = useContext(SessionContext);
   const { profile, setProfile } = useContext(UserProfileContext);
-
   const { dragPin } = useContext(PinSpotContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { setSitesArray } = useContext(SitesArrayContext);
-
   const { setTextValue } = useContext(SearchTextContext);
   const { areaPics } = useContext(AreaPicsContext);
   const { setZoomHelper } = useContext(ZoomHelperContext);
-
   const { animalSelection } = useContext(AnimalSelectContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -466,22 +449,23 @@ export default function MapPage() {
             </View>
           ) : null}
 
-          <View 
-          pointerEvents={'box-none'}
-          style={{
-                  position: "absolute",
-                  bottom: moderateScale(35),
-                  width: "80%",
-                  alignItems: "center",
-                  justifyContent: 'center',
-                  flexDirection: "row",
-                  zIndex: 2,
-                }}>
+          <View
+            pointerEvents={"box-none"}
+            style={{
+              position: "absolute",
+              bottom: moderateScale(35),
+              width: "80%",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              zIndex: 2,
+            }}
+          >
             {mapConfig in [, 1, , 3] ? (
               <View
                 style={{
                   zIndex: 2,
-                  marginRight: "10%"
+                  marginRight: "10%",
                 }}
               >
                 <CircularButton
@@ -518,12 +502,11 @@ export default function MapPage() {
             ) : null}
           </View>
 
-
-          {mapConfig === 0  && animalMultiSelection.length > 0 ? (
-              <View style={styles.Hist} pointerEvents={"none"}>
-                <Historgram style={{ zIndex: 2 }} />
-              </View>
-            ) : null}
+          {mapConfig === 0 && animalMultiSelection.length > 0 ? (
+            <View style={styles.Hist} pointerEvents={"none"}>
+              <Historgram style={{ zIndex: 2 }} />
+            </View>
+          ) : null}
 
           <LevelOneScreen />
           <LevelTwoScreen />
@@ -588,10 +571,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top:
-      windowWidth > 700
-        ? moderateScale(12)
-        : moderateScale(40),
+    top: windowWidth > 700 ? moderateScale(12) : moderateScale(40),
     zIndex: 3,
   },
   filterer: {

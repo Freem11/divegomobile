@@ -2,20 +2,16 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   Dimensions,
-  Image,
   ImageBackground,
-  Platform,
 } from "react-native";
-import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";
 import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function WavyHeaderDynamic({ customStyles, image, defaultImg }) {
+export default function WavyHeaderDynamic({ image, defaultImg }) {
   const [picUri, setPicUri] = useState(null);
 
   useEffect(() => {

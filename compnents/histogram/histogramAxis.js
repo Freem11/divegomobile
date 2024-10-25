@@ -4,7 +4,6 @@ import { scale } from "react-native-size-matters";
 import { activeFonts } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function AxisBar() {
   return (

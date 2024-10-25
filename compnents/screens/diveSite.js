@@ -26,13 +26,10 @@ import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
-import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
-
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-
 import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
@@ -54,17 +51,14 @@ import {
 import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
 
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function DiveSite(props) {
-  const {} = props;
+export default function DiveSite() {
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-  const { myCreatures } = useContext(MyCreaturesContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { levelOneScreen, setLevelOneScreen } = useContext(
+  const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -75,10 +69,6 @@ export default function DiveSite(props) {
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [site, setSite] = useState("");
-  const [diveSiteVals, setDiveSiteVals] = useState({
-    diveSitebio: null,
-    diveSitePhoto: null,
-  });
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const drawerUpperBound = "90%";
@@ -162,7 +152,6 @@ export default function DiveSite(props) {
       let photos;
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
-          myCreatures,
           userId: profile[0].UserID,
           minLat,
           maxLat,
@@ -172,7 +161,6 @@ export default function DiveSite(props) {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
-          myCreatures,
           userId: profile[0].UserID,
           minLat,
           maxLat,

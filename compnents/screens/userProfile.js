@@ -48,7 +48,6 @@ import {
 } from "../../supabaseCalls/userFollowSupabaseCalls";
 import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
 
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function UserProfile(props) {
@@ -59,10 +58,9 @@ export default function UserProfile(props) {
     SelectedProfileContext
   );
   const [isNotVisitor, setIsNotVisitor] = useState(true);
-
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+  const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { levelOneScreen, setLevelOneScreen } = useContext(

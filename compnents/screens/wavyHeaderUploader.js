@@ -4,9 +4,7 @@ import {
   View,
   Text,
   Dimensions,
-  Image,
   ImageBackground,
-  Platform,
 } from "react-native";
 import {
   uploadphoto,
@@ -22,7 +20,6 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function WavyHeaderUploader({
-  customStyles,
   image,
   setPinValues,
   pinValues,

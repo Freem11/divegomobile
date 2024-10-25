@@ -19,7 +19,6 @@ import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 const PhotoMenuListItem = (props) => {
   const {
@@ -30,7 +29,6 @@ const PhotoMenuListItem = (props) => {
     setSelectedID,
   } = props;
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-
   const { tiles, setTiles } = useContext(CarrouselTilesContext);
 
   const handleSelect = (name) => {

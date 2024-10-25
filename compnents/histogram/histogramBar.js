@@ -4,7 +4,6 @@ import { scale } from 'react-native-size-matters';
 
 let heightVal
 
-
 export default function DataBar(props) {
 
   const { moddedVal } = props;

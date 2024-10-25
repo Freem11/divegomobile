@@ -20,7 +20,6 @@ import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import Itinerary from "../itineraries/itinerary";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
 import { ShopContext } from "../../compnents/contexts/shopContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -35,7 +34,6 @@ import { EditModeContext } from "../../compnents/contexts/editModeContext";
 import { TripDetailContext } from "../../compnents/contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
 
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TripListPage(props) {
@@ -44,19 +42,16 @@ export default function TripListPage(props) {
   const { profile } = useContext(UserProfileContext);
   const { setShop } = useContext(ShopContext);
   const { setShopModal } = useContext(ShopModalContext);
-  const { editMode, setEditMode } = useContext(EditModeContext);
+  const { setEditMode } = useContext(EditModeContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-
-  const { activeSession, setActiveSession } = useContext(SessionContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
-
-  const { levelOneScreen, setLevelOneScreen } = useContext(
+  const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(

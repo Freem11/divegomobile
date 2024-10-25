@@ -1,5 +1,3 @@
-//  import { heatVals } from "../data/testdata";
-
 function filterSites(newParams, array) {
 
   let newArr = [];

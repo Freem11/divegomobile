@@ -27,7 +27,6 @@ import { MapHelperContext } from "../contexts/mapHelperContext";
 import { MapConfigContext } from "../contexts/mapConfigContext";
 import { ModalSelectContext } from "../contexts/modalSelectContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
@@ -37,11 +36,9 @@ import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function DiveSiteUploader(props) {
-  const {} = props;
-  const { profile } = useContext(UserProfileContext);
+export default function DiveSiteUploader() {
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+  const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { setMapHelper } = useContext(MapHelperContext);

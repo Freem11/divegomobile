@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 
 const AutoSuggestListItem = (props) => {
-  const { setList, setPin, pin, name, handleList, setTextSource } = props;
+  const { name, handleList, setTextSource } = props;
 
   const handleSelect = async (text) => {
     setTextSource(true);

@@ -7,11 +7,7 @@ import {
   Image,
   Keyboard,
 } from "react-native";
-import {
-  activeFonts,
-  colors,
-  fontSizes
-} from "../styles";
+import { activeFonts, colors, fontSizes } from "../styles";
 import Geocoder from "react-native-geocoding";
 import { moderateScale } from "react-native-size-matters";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
@@ -34,10 +30,7 @@ export default SearchToolListItem = (props) => {
   const { setMapCenter } = useContext(MapCenterContext);
   const { setDragPin } = useContext(PinSpotContext);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
+  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   Geocoder.init(GoogleMapsApiKey);
 
@@ -147,10 +140,6 @@ const styles = StyleSheet.create({
     borderWidth: moderateScale(1),
     borderColor: "darkgrey",
     borderRadius: moderateScale(10),
-    // borderTopWidth: moderateScale(1),
-    // borderTopColor: "darkgrey",
-    // borderBottomWidth: moderateScale(1),
-    // borderBottomColor: "darkgrey",
     textAlign: "center",
     justifyContent: "center",
     listStyle: "none",

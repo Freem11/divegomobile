@@ -35,7 +35,6 @@ import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function SettingsPage(props) {
@@ -46,7 +45,7 @@ export default function SettingsPage(props) {
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
 
-  const { levelOneScreen, setLevelOneScreen } = useContext(
+  const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(

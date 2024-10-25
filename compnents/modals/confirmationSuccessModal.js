@@ -10,8 +10,7 @@ import {
   buttonTextAlt,
 } from "../styles";
 
-export default function SuccessModal(props) {
-  const { } = props;
+export default function SuccessModal() {
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
 

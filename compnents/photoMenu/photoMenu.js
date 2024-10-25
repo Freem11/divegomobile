@@ -13,7 +13,6 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
-import { MyCreaturesContext } from "../contexts/myCreaturesContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import PhotoMenuListItem from "./photoMenuListItem";
 
@@ -24,12 +23,9 @@ export default function PhotoMenu() {
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
-  const { myCreatures } = useContext(MyCreaturesContext);
   const { boundaries } = useContext(MapBoundariesContext);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
   const { textvalue } = useContext(SearchTextContext);
-
-
   const [picMenuSize, setPicMenuSize] = useState(0);
   const [selectedID, setSelectedID] = useState(null);
 
@@ -106,7 +102,6 @@ export default function PhotoMenu() {
               minLng: -180,
               maxLng: boundaries[2],
             },
-            myCreatures
           );
           const AsianPhotos = await getPhotosforMapArea(
             {
@@ -116,7 +111,6 @@ export default function PhotoMenu() {
               minLng: boundaries[0],
               maxLng: 180,
             },
-            myCreatures
           );
 
           let photos = [...AsianPhotos, ...AmericanPhotos];
@@ -142,8 +136,7 @@ export default function PhotoMenu() {
               maxLat: boundaries[3],
               minLng: boundaries[0],
               maxLng: boundaries[2],
-            },
-            myCreatures
+            }
           );
           if (photos) {
             const animalArray = Array.from(

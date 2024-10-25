@@ -43,7 +43,6 @@ import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function BottomDrawer(props) {
   const {
@@ -57,19 +56,19 @@ export default function BottomDrawer(props) {
     headerButton,
   } = props;
 
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
+  const { setZoomHelper } = useContext(ZoomHelperContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
-  const { levelOneScreen, setLevelOneScreen } = useContext(
+  const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+  const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+  const { formValues } = useContext(TripDetailContext);
+  const { setTripDiveSites } = useContext(TripSitesContext);
 
   const [selectedID, setSelectedID] = useState(null);
 

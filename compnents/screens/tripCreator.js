@@ -43,7 +43,6 @@ import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
 
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function TripCreatorPage(props) {
@@ -60,7 +59,7 @@ export default function TripCreatorPage(props) {
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+  const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const [itineraryList, setItineraryList] = useState("");

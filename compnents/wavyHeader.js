@@ -1,11 +1,11 @@
-import { StyleSheet, View, Text, Dimensions, Image, ImageBackground, Platform } from "react-native";
+import { StyleSheet, View, Dimensions, ImageBackground, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function WavyHeader({ customStyles }) {
+export default function WavyHeader() {
   return (
     <View style={styles.customStyles}>
       <View style={{ flex: 1,  backgroundColor: "#5000ca",}}>

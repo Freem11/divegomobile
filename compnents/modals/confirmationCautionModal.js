@@ -9,7 +9,7 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from "../styles";
-export default function FailModal(props) {
+export default function FailModal() {
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const tidyUp = () => {

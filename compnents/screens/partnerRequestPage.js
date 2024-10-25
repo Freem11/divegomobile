@@ -29,21 +29,8 @@ import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function PartnerRequestPage(props) {
-  const {
-    title,
-    emailPlaceholder,
-    passwordPlaceholder,
-    buttonText,
-    promptText,
-    promptLinkText,
-    moveToLandingPage,
-    moveToSignUpPage,
-    loginFail,
-    setLoginFail,
-  } = props;
-
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+export default function PartnerRequestPage() {
+  const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { profile } = useContext(UserProfileContext);
@@ -63,7 +50,7 @@ export default function PartnerRequestPage(props) {
     UserId: null,
   });
 
-  const handleSubmit = (formValues) => {
+  const handleSubmit = () => {
     if (
       formVals.websiteLink === "" ||
       formVals.businessName === "" ||

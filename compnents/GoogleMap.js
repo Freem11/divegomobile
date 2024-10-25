@@ -12,15 +12,12 @@ import { AnchorPhotosContext } from "./contexts/anchorPhotosContext";
 import { SelectedDiveSiteContext } from "./contexts/selectedDiveSiteContext";
 import { HeatPointsContext } from "./contexts/heatPointsContext";
 import { MapHelperContext } from "./contexts/mapHelperContext";
-import { MyCreaturesContext } from "./contexts/myCreaturesContext";
-import { MyDiveSitesContext } from "./contexts/myDiveSitesContext";
 import { SelectedShopContext } from "./contexts/selectedShopContext";
 import { ShopModalContext } from "./contexts/shopModalContext";
 import { SitesArrayContext } from "./contexts/sitesArrayContext";
 import { ZoomHelperContext } from "./contexts/zoomHelperContext";
 import { PullTabContext } from "./contexts/pullTabContext";
 import { CarrouselTilesContext } from "./contexts/carrouselTilesContext";
-
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import {
   getPhotosWithUser,
@@ -32,13 +29,7 @@ import MapView, {
   Heatmap,
   Callout,
 } from "react-native-maps";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Platform,
-  Text,
-} from "react-native";
+import { StyleSheet, View, Dimensions, Platform, Text } from "react-native";
 import mantaIOS from "../compnents/png/mapIcons/Manta_60.png";
 import anchorGold from "../compnents/png/mapIcons/AnchorGold.png";
 import anchorClustIOS from "../compnents/png/mapIcons/AnchorCluster.png";
@@ -55,39 +46,35 @@ import {
   getHeatPointsWithUser,
   getHeatPointsWithUserEmpty,
 } from "../supabaseCalls/heatPointSupabaseCalls";
-import {
-  getItineraryDiveSiteByIdArray,
-} from "../supabaseCalls/itinerarySupabaseCalls";
+import { getItineraryDiveSiteByIdArray } from "../supabaseCalls/itinerarySupabaseCalls";
 import { shops, getShopByName } from "../supabaseCalls/shopsSupabaseCalls";
-import { moderateScale, scale } from "react-native-size-matters";
+import { moderateScale } from "react-native-size-matters";
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { UserProfileContext } from "./contexts/userProfileContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
-import { ActiveScreenContext } from './contexts/activeScreenContext';
-import { LevelOneScreenContext } from './contexts/levelOneScreenContext';
+import { ActiveScreenContext } from "./contexts/activeScreenContext";
+import { LevelOneScreenContext } from "./contexts/levelOneScreenContext";
 import { TripSitesContext } from "./contexts/tripSitesContext";
 import { TripDetailContext } from "./contexts/tripDetailsContext";
 import { activeFonts } from "./styles";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 export default function Map() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-  const { mapConfig, setMapConfig } = useContext(MapConfigContext);
-  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { activeScreen, setActiveScreen } = useContext(
-    ActiveScreenContext
-    );
+  const { mapConfig } = useContext(MapConfigContext);
+  const { levelOneScreen, setLevelOneScreen } = useContext(
+    LevelOneScreenContext
+  );
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+  const { setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { myCreatures, setMyCreatures } = useContext(MyCreaturesContext);
-  const { myDiveSites, setMyDiveSites } = useContext(MyDiveSitesContext);
   const { mapHelper, setMapHelper } = useContext(MapHelperContext);
-  const { mapCenter, setMapCenter } = useContext(MapCenterContext);
+  const { mapCenter } = useContext(MapCenterContext);
   const { region, setRegion } = useContext(MapRegionContext);
   const { boundaries, setBoundaries } = useContext(MapBoundariesContext);
   const { zoomlev, setZoomLev } = useContext(MapZoomContext);
@@ -100,22 +87,17 @@ export default function Map() {
     SelectedDiveSiteContext
   );
   const { newHeat, setNewHeat } = useContext(HeatPointsContext);
-
   const [tempMarker, setTempMarker] = useState([]);
   const [mapRef, setMapRef] = useState(null);
   const [newSites, setnewSites] = useState([]);
-  const [newShops, setnewShops] = useState([]);;
-
+  const [newShops, setnewShops] = useState([]);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-
-  const { shopModal, setShopModal } = useContext(ShopModalContext);
-
-  const { anchPhotos, setAnchPhotos } = useContext(AnchorPhotosContext);
+  const { shopModal } = useContext(ShopModalContext);
+  const { setAnchPhotos } = useContext(AnchorPhotosContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-
   const { profile } = useContext(UserProfileContext);
-  const { showFilterer, setShowFilterer } = useContext(PullTabContext);
-  const { tiles, setTiles } = useContext(CarrouselTilesContext);
+  const { setShowFilterer } = useContext(PullTabContext);
+  const { setTiles } = useContext(CarrouselTilesContext);
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -127,7 +109,6 @@ export default function Map() {
       let photos;
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
-          myCreatures,
           userId: profile[0].UserID,
           minLat,
           maxLat,
@@ -138,7 +119,6 @@ export default function Map() {
         photos = await getPhotosWithUser({
           animalMultiSelection,
           userId: profile[0].UserID,
-          myCreatures,
           minLat,
           maxLat,
           minLng,
@@ -171,14 +151,12 @@ export default function Map() {
             let AmericanDiveSites;
             let AsianDiveSites;
             AmericanDiveSites = await getDiveSitesWithUser({
-              myDiveSites,
               minLat: settedBoundaries[1],
               maxLat: settedBoundaries[3],
               minLng: -180,
               maxLng: settedBoundaries[2],
             });
             AsianDiveSites = await getDiveSitesWithUser({
-              myDiveSites,
               minLat: settedBoundaries[1],
               maxLat: settedBoundaries[3],
               minLng: settedBoundaries[0],
@@ -196,14 +174,12 @@ export default function Map() {
             let AsianHeatPoints;
             if (animalMultiSelection.length === 0) {
               AmericanHeatPoints = await getHeatPointsWithUserEmpty({
-                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: -180,
                 maxLng: settedBoundaries[2],
               });
               AsianHeatPoints = await getHeatPointsWithUserEmpty({
-                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
@@ -211,7 +187,6 @@ export default function Map() {
               });
             } else {
               AmericanHeatPoints = await getHeatPointsWithUser({
-                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: -180,
@@ -219,7 +194,6 @@ export default function Map() {
                 animalMultiSelection,
               });
               AsianHeatPoints = await getHeatPointsWithUser({
-                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
@@ -236,7 +210,6 @@ export default function Map() {
         } else {
           try {
             const diveSiteList = await getDiveSitesWithUser({
-              myDiveSites,
               minLat: settedBoundaries[1],
               maxLat: settedBoundaries[3],
               minLng: settedBoundaries[0],
@@ -252,7 +225,6 @@ export default function Map() {
             let heatPointList;
             if (animalMultiSelection.length === 0) {
               heatPointList = await getHeatPointsWithUserEmpty({
-                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
@@ -261,7 +233,6 @@ export default function Map() {
             } else {
               heatPointList = await getHeatPointsWithUser({
                 animalMultiSelection,
-                myCreatures,
                 minLat: settedBoundaries[1],
                 maxLat: settedBoundaries[3],
                 minLng: settedBoundaries[0],
@@ -319,7 +290,6 @@ export default function Map() {
         //     lng: currentMapPosition.center.longitude,
         //   });
         // }
-      
       }
     }
   };
@@ -382,33 +352,25 @@ export default function Map() {
 
   useEffect(() => {
     handleMapChange();
-  }, [
-    diveSitesTog,
-    animalSelection,
-    animalMultiSelection,
-    mapCenter,
-  ]);
+  }, [diveSitesTog, animalSelection, animalMultiSelection, mapCenter]);
 
-
-  const handleDragPin = async() => {
+  const handleDragPin = async () => {
     if (mapRef) {
       let currentMapPosition = await mapRef.getCamera();
       if (currentMapPosition) {
-        if(mapConfig === 1){
+        if (mapConfig === 1) {
           setDragPin({
             lat: currentMapPosition.center.latitude,
             lng: currentMapPosition.center.longitude,
           });
         }
-      
       }
     }
-  }
+  };
 
   useEffect(() => {
-
     if (mapConfig === 1) {
-      handleDragPin()
+      handleDragPin();
     }
     if (mapConfig === 0) {
       // setSitesArray([])
@@ -476,7 +438,7 @@ export default function Map() {
     setShowFilterer(false);
     filterAnchorPhotos();
     setPreviousButtonID(activeScreen);
-    setActiveScreen("DiveSiteScreen")
+    setActiveScreen("DiveSiteScreen");
     useButtonPressHelper(
       "DiveSiteScreen",
       activeScreen,
@@ -491,7 +453,7 @@ export default function Map() {
     setShowFilterer(false);
     setSelectedShop(chosenShop);
     setPreviousButtonID(activeScreen);
-    setActiveScreen("DiveShopScreen")
+    setActiveScreen("DiveShopScreen");
     useButtonPressHelper(
       "DiveShopScreen",
       activeScreen,
@@ -511,11 +473,10 @@ export default function Map() {
   };
 
   useEffect(() => {
-    setFormValues({...formValues, siteList: sitesArray})
+    setFormValues({ ...formValues, siteList: sitesArray });
     getTripDiveSites(sitesArray);
-    setTripDiveSites(getTripDiveSites(sitesArray))
+    setTripDiveSites(getTripDiveSites(sitesArray));
   }, [sitesArray.length]);
-
 
   const addToSitesArray = async (siteName) => {
     let splitNames = siteName.split("~");
@@ -593,8 +554,10 @@ export default function Map() {
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
-          const { cluster: isCluster, point_count: pointCount } =
-            cluster.properties;
+          const {
+            cluster: isCluster,
+            point_count: pointCount,
+          } = cluster.properties;
 
           if (isCluster) {
             return (

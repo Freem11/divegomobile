@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { scale } from "react-native-size-matters";
-import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from "react-native";
+import { Image, TouchableWithoutFeedback } from "react-native";
 import * as FileSystem from "expo-file-system";
 
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 
-const windowWidth = Dimensions.get("window").width;
-
 export default function ImageCasherDynamic(Props) {
-  const { photoFile, id, style, anchorPics } = Props;
+  const { photoFile, id, style } = Props;
 
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const { fullScreenModal, setFullScreenModal } = useContext(
+  const { setFullScreenModal } = useContext(
     FullScreenModalContext
   );
-  const { activeTutorialID, setActiveTutorialID } = useContext(
+  const { setActiveTutorialID } = useContext(
     ActiveTutorialIDContext
   );
 
@@ -36,8 +34,6 @@ export default function ImageCasherDynamic(Props) {
   };
 
   const [picUri, setPicUri] = useState(null);
-  const [isDownloaded, setIsDownloaded] = useState(0);
-
   const [picHeigth, setPicHeigth] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
@@ -123,10 +119,4 @@ export default function ImageCasherDynamic(Props) {
       </TouchableWithoutFeedback>
     );
   }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+};

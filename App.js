@@ -1,7 +1,7 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React, { useState, useCallback, useLayoutEffect } from "react";
 import "react-native-url-polyfill/auto";
-import { StyleSheet, Dimensions, Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -10,10 +10,8 @@ import { MapZoomContext } from "./compnents/contexts/mapZoomContext";
 import { MapRegionContext } from "./compnents/contexts/mapRegionContext";
 import { PinSpotContext } from "./compnents/contexts/pinSpotContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
-import { MyCreaturesContext } from "./compnents/contexts/myCreaturesContext";
-import { MyDiveSitesContext } from "./compnents/contexts/myDiveSitesContext";
 import MapPage from "./compnents/mapPage";
-import Authentication from './compnents/authentication/newAuthentication';
+import Authentication from "./compnents/authentication/newAuthentication";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -25,10 +23,7 @@ export default function App() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-
   const [appIsReady, setAppIsReady] = useState(false);
-  const [myDiveSites, setMyDiveSites] = useState("");
-  const [myCreatures, setMyCreatures] = useState("");
   const [activeSession, setActiveSession] = useState(null);
   const [mapCenter, setMapCenter] = useState({
     lat: 49.246292,
@@ -42,60 +37,6 @@ export default function App() {
   });
   const [zoomlev, setZoomLev] = useState(region.latitudeDelta);
   const [dragPin, setDragPin] = useState({});
-
-  // async function findPlaces() {
-  //   try {
-  //     const res = await fetch(
-  //       `https://maps.googleapis.com/maps/api/place/textsearch/json?location=50.064541,-125.245750&query=['dive_site','reef']&radius=1&type=tourist_attraction&key=${GoogleMapsApiKey}`
-  //     );
-  //     const placeInfo = await res.json();
-
-  //     if (placeInfo) {
-  //       return placeInfo.results;
-  //     }
-  //   } catch (err) {
-  //     console.log("error", err);
-  //   }
-  // }
-
-  // async function getPlaceDetails(place) {
-  //   try {
-  //     const res = await fetch(
-  //       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&&key=${GoogleMapsApiKey}`
-  //     );
-  //     const placeDetails = await res.json();
-  //     const result = placeDetails.result;
-
-  //     const placeName = result.name;
-  //     const placeLocation = result.geometry.location;
-
-  //     if (result.photos) {
-  //       const photos = place.photos;
-  //       photos.forEach((photo) => {
-  //         getPhotoDetails(photo, placeName, placeLocation);
-  //       });
-  //     }
-  //   } catch (err) {
-  //     console.log("error", err);
-  //   }
-  // }
-
-  // async function getPhotoDetails(photo, placeName, placeLocation) {
-  //   try {
-  //     const res = await fetch(
-  //       `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo.photo_reference}&key=${config.GOOGLE_MAPS_API_KEY}`
-  //     );
-
-  //     console.log("---------------- photo details ---------------");
-  //     console.log("placeName: ", placeName);
-  //     console.log("placeLocation: ", placeLocation);
-  //     console.log("contributorLink: ", photo.html_attributions[0]);
-
-  //     console.log("photoUrl: ", res.url);
-  //   } catch (err) {
-  //     console.log("error", err);
-  //   }
-  // }
 
   const getCurrentLocation = async () => {
     try {
@@ -156,20 +97,6 @@ export default function App() {
       }
 
       try {
-        const diveSitesData = JSON.parse(
-          await AsyncStorage.getItem("myDiveSites")
-        );
-        const creaturesData = JSON.parse(
-          await AsyncStorage.getItem("myCreatures")
-        );
-
-        if (diveSitesData) {
-          setMyDiveSites(diveSitesData);
-        }
-        if (creaturesData) {
-          setMyCreatures(creaturesData);
-        }
-
         const asyncData = JSON.parse(await AsyncStorage.getItem("token"));
         if (asyncData === null) {
           setAppIsReady(true);
@@ -212,25 +139,19 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-        <MyCreaturesContext.Provider value={{ myCreatures, setMyCreatures }}>
-          <MyDiveSitesContext.Provider value={{ myDiveSites, setMyDiveSites }}>
-            <PinSpotContext.Provider value={{ dragPin, setDragPin }}>
-              <MapZoomContext.Provider value={{ zoomlev, setZoomLev }}>
-                <MapRegionContext.Provider value={{ region, setRegion }}>
-                  <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
-                    <SessionContext.Provider value={{ activeSession, setActiveSession }}>
-                      {activeSession ? (
-                        <MapPage />
-                      ) : (
-                        <Authentication />
-                      )}
-                    </SessionContext.Provider>
-                  </MapCenterContext.Provider>
-                </MapRegionContext.Provider>
-              </MapZoomContext.Provider>
-            </PinSpotContext.Provider>
-          </MyDiveSitesContext.Provider>
-        </MyCreaturesContext.Provider>
+        <PinSpotContext.Provider value={{ dragPin, setDragPin }}>
+          <MapZoomContext.Provider value={{ zoomlev, setZoomLev }}>
+            <MapRegionContext.Provider value={{ region, setRegion }}>
+              <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
+                <SessionContext.Provider
+                  value={{ activeSession, setActiveSession }}
+                >
+                  {activeSession ? <MapPage /> : <Authentication />}
+                </SessionContext.Provider>
+              </MapCenterContext.Provider>
+            </MapRegionContext.Provider>
+          </MapZoomContext.Provider>
+        </PinSpotContext.Provider>
       </AppContextProvider>
     </GestureHandlerRootView>
   );

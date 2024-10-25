@@ -33,16 +33,14 @@ import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { updateDiveShop } from "../../supabaseCalls/shopsSupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
 
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function DiveShop(props) {
-  const {} = props;
+export default function DiveShop() {
   const { profile } = useContext(UserProfileContext);
   const [itineraryList, setItineraryList] = useState("");
   const { setMapCenter } = useContext(MapCenterContext);
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
-  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
+  const { zoomHelper } = useContext(ZoomHelperContext);
+  const { selectedShop } = useContext(SelectedShopContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );

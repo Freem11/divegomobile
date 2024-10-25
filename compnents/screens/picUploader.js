@@ -25,7 +25,6 @@ import {
 import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { PinContext } from "../contexts/staticPinContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
 import {
@@ -40,11 +39,9 @@ import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function PicUploader(props) {
-  const {} = props;
-  const { profile } = useContext(UserProfileContext);
+export default function PicUploader() {
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+  const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);

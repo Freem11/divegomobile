@@ -86,12 +86,12 @@ export const getAnimalMultiSelect = async (text) => {
   }
 };
 
-export const getPhotosforMapArea = async (value, myCreatures) => {
+export const getPhotosforMapArea = async (value) => {
   const { data, error } = await supabase
     .from("photos")
     .select()
     .ilike("label", "%" + value.animal + "%")
-    .ilike("UserID", "%" + myCreatures + "%")
+    .ilike("UserID", "%" + '' + "%")
     .gte("latitude", value.minLat)
     .gte("longitude", value.minLng)
     .lte("latitude", value.maxLat)
