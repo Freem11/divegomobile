@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView
 } from "react-native";
 import { activeFonts, colors, fontSizes, roundButton } from '../styles';
 import { scale, moderateScale } from "react-native-size-matters";
@@ -187,6 +188,11 @@ export default function OnboardingTest() {
             )}
 
             {item.page === 2 ? (
+                  <KeyboardAvoidingView
+                  behavior="position"
+                  keyboardVerticalOffset={moderateScale(150)}
+                  style={{width: '100%', alignItems: 'center'}}
+                >
               <View style={styles.inputBox}>
                 <TextInputField
                   icon={"scuba-diving"}
@@ -196,6 +202,7 @@ export default function OnboardingTest() {
                   onChangeText={(text) => handleText(text)}
                 />
               </View>
+              </KeyboardAvoidingView>
             ) : null}
 
             {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
@@ -352,7 +359,7 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(40),
   },
   inputBox: {
-    width: "60%",
+    width: "70%",
     marginTop: '-10%',
   },
 });
