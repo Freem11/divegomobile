@@ -166,7 +166,7 @@ export default function OnboardingTest() {
           <View key={item.page} style={styles.pageContent}>
             <Text style={styles.title}>{item.title}</Text>
 
-            {item.page === 1 ? (
+            {item.page !== 2 ? (
 
               <MaskedView
               maskElement={
@@ -200,7 +200,9 @@ export default function OnboardingTest() {
 
             {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
 
+            <View style={styles.imageBox}>
             <Image style={styles.image} source={emilio} />
+            </View>
 
             <View style={styles.buttonBox}>
               <TouchableWithoutFeedback onPress={() => onPress()}>
@@ -240,12 +242,12 @@ const styles = StyleSheet.create({
   page: {
     width: "100%",
     height: windowHeight / 2,
-    marginTop: "10%",
+    // marginTop: "10%",
     marginBottom: "2%",
     // backgroundColor: "lightblue",
   },
   pageContainter: {
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "center",
   },
   pageContent: {
@@ -253,6 +255,7 @@ const styles = StyleSheet.create({
     height: windowHeight,
     width: windowWidth,
     alignItems: "center",
+    justifyContent: "center"
   },
   scrollViewBox: {
     height: windowHeight / 2.5,
@@ -265,7 +268,7 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Regular,
     fontSize: moderateScale(fontSizes.Header),
     paddingHorizontal: moderateScale(30),
-    marginTop: windowHeight > 700 && windowWidth < 700 ? scale(150) : scale(60),
+    marginTop: windowHeight > 700 && windowWidth < 700 ? '-35%' : '-35%',
     marginBottom: moderateScale(10),
     width: windowWidth,
     color: colors.themeWhite,
@@ -279,6 +282,12 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.8,
     color: colors.themeWhite,
     textAlign: "center",
+  },
+  imageBox: {
+    position: "absolute",
+    bottom: moderateScale(0),
+    right: moderateScale(0),
+    pointerEvents:'none'
   },
   image: {
     position: "absolute",
@@ -344,6 +353,6 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     width: "60%",
-    marginTop: scale(30),
+    marginTop: '-10%',
   },
 });

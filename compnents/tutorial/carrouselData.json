@@ -9,35 +9,35 @@
     {
       "page": 2,
       "title": "Your Diver Name",
-      "content": "Scuba SEAsons relies on user contributions of dive sites and sea creature sightings.\n\nTo credit and to let others know about your contributions please provide us with your “diver name”",
+      "content": "Scuba SEAsons relies on user contributions of dive sites and sea creature sightings.\n\nTo credit and to let others know about your contributions please provide us with your “diver name”\n\n\n\n\n",
       "buttonOneText": "Ok",
       "buttonTwoText": null
     },
     {
       "page": 3,
       "title": "Location Tracking",
-      "content": "Scuba SEAsons uses location tracking for two features within the app:\n\nFirst, to allow the map to centre on your current location when needed\n&\nTo allow you to use your current location as the GPS location of a dive site when you are physically at the dive site and you want to add it to the app.",
+      "content": "Scuba SEAsons uses location tracking for two features within the app:\n\nFirst, to allow the map to centre on your current location when needed\n&\nTo allow you to use your current location as the GPS location of a dive site when you are physically at the dive site and you want to add it to the app.\n\n\n\n\n",
       "buttonOneText": "Accept",
       "buttonTwoText": "Opt Out"
     },
     {
       "page": 4,
       "title": "Photo Gallery Access",
-      "content": "In order to make a sea creature sighting contribution to Scuba SEAsons, we need to request access to your photo library.\n\nThis will allow you to choose photos from your device to upload.",
+      "content": "In order to make a sea creature sighting contribution to Scuba SEAsons, we need to request access to your photo library.\n\nThis will allow you to choose photos from your device to upload.\n\n\n\n\n",
       "buttonOneText": "Accept",
       "buttonTwoText": "Opt Out"
     },
     {
       "page": 5,
       "title": "Notifications",
-      "content": "In Scuba SEAsons we have a number of social features  such as likes, comments and the ability to follow other divers’ activities.\n\nTo be notified when one of your submissions is accepted or when a user you are following makes a contribution, we ask that you please grant permission for notifications.",
+      "content": "In Scuba SEAsons we have a number of social features  such as likes, comments and the ability to follow other divers’ activities.\n\nTo be notified when one of your submissions is accepted or when a user you are following makes a contribution, we ask that you please grant permission for notifications.\n\n\n\n\n",
       "buttonOneText": "Accept",
       "buttonTwoText": "Opt Out"
     },
     {
       "page": 6,
       "title": "Thanks for joining Scuba SEAsons!",
-      "content": "That’s it!\n\nYou’re all setup.\n\nIf you ever want to change your diver name, you can do so from your profile page at any time.",
+      "content": "That’s it!\n\nYou’re all setup.\n\nIf you ever want to change your diver name, you can do so from your profile page at any time.\n\n\n\n\n",
       "buttonOneText": "Finish",
       "buttonTwoText": null
     }
