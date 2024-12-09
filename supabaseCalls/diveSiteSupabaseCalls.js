@@ -92,6 +92,8 @@ export const getDiveSiteByName = async (value) => {
 export const getDiveSiteWithUserName = async (values) => {
   const { data, error } = await supabase.rpc("get_single_divesites_with_username", {
     sitename: values.siteName,
+    sitelat: values.sitelat,
+    sitelng: values.sitelng
   });
 
   if (error) {

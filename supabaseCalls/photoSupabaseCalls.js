@@ -112,7 +112,7 @@ export const getPhotosByDiveSiteWithExtra = async (values) => {
   const {
     data,
     error,
-  } = await supabase.rpc("get_photos_for_divesite_lat_and_lng_groupby_date", {
+  } = await supabase.rpc("get_photos_for_divesite_with_socials_groupby_date", {
     lat: values.lat,
     lng: values.lng,
     connecteduserid: values.userId

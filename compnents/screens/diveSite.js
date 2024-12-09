@@ -76,24 +76,24 @@ export default function DiveSite() {
 
   const getTrips = async () => {
     const success = await getItinerariesForDiveSite(site.id);
-    console.log("itins?", success);
+    // console.log("itins?", success);
   };
 
-  const getPhotos = async () => {
+  const getPhotos = async (site, user) => {
     const success = await getPhotosByDiveSiteWithExtra({
-      lat: selectedDiveSite.Latitude,
-      lng: selectedDiveSite.Longitude,
+      lat: site.Latitude,
+      lng: site.Longitude,
       userId: profile[0].UserID,
     });
     setDiveSitePics(success);
   };
 
   useEffect(() => {
-    getPhotos();
+    getPhotos(selectedDiveSite, profile);
   }, []);
 
   useEffect(() => {
-    getPhotos();
+    getPhotos(selectedDiveSite, profile);
   }, [selectedDiveSite]);
 
   useEffect(() => {
@@ -133,6 +133,8 @@ export default function DiveSite() {
     try {
       const selectedSite = await getDiveSiteWithUserName({
         siteName: chosenSite.SiteName,
+        sitelat: chosenSite.Latitude,
+        sitelng: chosenSite.Longitude
       });
       if (selectedSite.length > 0) {
         setSite(selectedSite[0]);
@@ -303,7 +305,7 @@ export default function DiveSite() {
             <ScrollView>
               {site && (
                 <PlainTextInput
-                  placeHolder={`A little about ${site.name}`}
+                  placeHolder={`A little about ${selectedDiveSite.name}`}
                   content={site.divesitebio}
                   fontSz={fontSizes.StandardText}
                   isPartnerAccount={isPartnerAccount}
