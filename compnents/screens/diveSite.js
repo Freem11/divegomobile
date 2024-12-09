@@ -305,7 +305,7 @@ export default function DiveSite() {
             <ScrollView>
               {site && (
                 <PlainTextInput
-                  placeHolder={`A little about ${selectedDiveSite.name}`}
+                  placeHolder={`A little about ${site.name}`}
                   content={site.divesitebio}
                   fontSz={fontSizes.StandardText}
                   isPartnerAccount={isPartnerAccount}
