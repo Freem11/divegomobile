@@ -40,6 +40,7 @@ import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
 import {
   getDiveSitesWithUser,
+  getDiveSiteWithUserName,
   getSingleDiveSiteByNameAndRegion,
 } from "../supabaseCalls/diveSiteSupabaseCalls";
 import {
@@ -428,12 +429,13 @@ export default function Map() {
     options: { radius: 75, maxZoom: 16, minZoom: 3 },
   });
 
-  const setupAnchorModal = (diveSiteName, lat, lng) => {
-    setSelectedDiveSite({
-      SiteName: diveSiteName,
-      Latitude: lat,
-      Longitude: lng,
-    });
+  const setupAnchorModal = async(diveSiteName, lat, lng) => {
+    const cleanedSiteName = diveSiteName.split('~');
+    const steName = cleanedSiteName[0]
+    const siteRegion = cleanedSiteName[1] === "null" ? null : cleanedSiteName[1]
+    const chosenSite = await getDiveSiteWithUserName({ siteName: steName,region: siteRegion  });
+    setSelectedDiveSite(chosenSite[0]);
+
     setTiles(true);
     setShowFilterer(false);
     filterAnchorPhotos();
@@ -591,7 +593,7 @@ export default function Map() {
                     : mapConfig === 1
                     ? null
                     : setupAnchorModal(
-                        cluster.properties.siteName,
+                        cluster.properties.siteID,
                         latitude,
                         longitude
                       )

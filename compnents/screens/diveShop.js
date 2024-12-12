@@ -54,9 +54,7 @@ export default function DiveShop() {
   const getItineraries = async (IdNum) => {
     try {
       const itins = await itineraries(IdNum);
-      if (itins.length > 0) {
         setItineraryList(itins);
-      }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }

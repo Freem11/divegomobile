@@ -76,13 +76,12 @@ export default function DiveSite() {
 
   const getTrips = async () => {
     const success = await getItinerariesForDiveSite(site.id);
-    // console.log("itins?", success);
   };
 
   const getPhotos = async (site, user) => {
     const success = await getPhotosByDiveSiteWithExtra({
-      lat: site.Latitude,
-      lng: site.Longitude,
+      lat: site.lat,
+      lng: site.lng,
       userId: profile[0].UserID,
     });
     setDiveSitePics(success);
@@ -132,9 +131,8 @@ export default function DiveSite() {
   const getDiveSite = async (chosenSite) => {
     try {
       const selectedSite = await getDiveSiteWithUserName({
-        siteName: chosenSite.SiteName,
-        sitelat: chosenSite.Latitude,
-        sitelng: chosenSite.Longitude
+        siteName: chosenSite.name,
+        region: chosenSite.region,
       });
       if (selectedSite.length > 0) {
         setSite(selectedSite[0]);
