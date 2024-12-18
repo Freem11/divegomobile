@@ -90,13 +90,19 @@ export const getDiveSiteByName = async (value) => {
 };
 
 export const getDiveSiteWithUserName = async (values) => {
-  const { data, error } = await supabase.rpc("get_single_divesites_with_username", {
-    sitename: values.siteName,
-    region: values.region
-  });
+  const query = supabase
+    .from('diveSites')
+    .select('*')
+    .eq('name', values.siteName);
+
+  if (values.region !== null) {
+    query.eq('region', values.region);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
-    console.log("couldn't do it divesite2,", error);
+    console.log('couldn\'t do it 27,', error);
     return [];
   }
 
