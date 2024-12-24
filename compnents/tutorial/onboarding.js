@@ -23,7 +23,7 @@ import { SessionContext } from "../contexts/sessionContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
+import { updateProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import TextInputField from '../authentication/textInput';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from "expo-linear-gradient";
@@ -113,26 +113,28 @@ export default function OnboardingTest() {
       let sessionUserId = activeSession.user.id;
       // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13';
       try {
-        const success = await updateProfile({
+        await updateProfile({
           id: sessionUserId,
           username: formVal.userName,
         });
-        if (success.length > 0) {
+        let profileCheck = await grabProfileById(sessionUserId)
+        console.log(profileCheck)
+        if (profileCheck.length > 0) {
           setFormVal({ userName: "" });
-          if (Array.isArray(success)) {
-            setProfile(success);
+          if (Array.isArray(profileCheck)) {
+            setProfile(profileCheck);
           } else {
-            setProfile([success]);
+            setProfile([profileCheck]);
           }
           setPinValues({
             ...pinValues,
-            UserId: success[0].UserID,
-            UserName: success[0].UserName,
+            UserId: profileCheck[0].UserID,
+            UserName: profileCheck[0].UserName,
           });
           setAddSiteVals({
             ...addSiteVals,
-            UserID: success[0].UserID,
-            UserName: success[0].UserName,
+            UserID: profileCheck[0].UserID,
+            UserName: profileCheck[0].UserName,
           });
           return "success";
         } else {

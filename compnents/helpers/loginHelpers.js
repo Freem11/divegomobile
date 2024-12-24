@@ -14,7 +14,8 @@ import {
   signInStandard,
   register,
 } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { createProfile } from "../../supabaseCalls/accountSupabaseCalls";
+import { createProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { supabase } from '../../supabase';
 
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
@@ -36,7 +37,17 @@ export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
-    handleOAuthSubmit(userInfo.user, setActiveSession, setIsSignedIn);
+    if (userInfo.idToken) {
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: userInfo.idToken,
+      })
+      handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+      console.log(error, data)
+    } else {
+      throw new Error('no ID token present!')
+    }
+    // handleOAuthSubmit(userInfo.user, setActiveSession, setIsSignedIn);
   } catch (error) {
     setIsSignedIn(false);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -54,33 +65,44 @@ export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
 export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   setIsSignedIn(true);
   try {
-    const creds = await AppleAuthentication.signInAsync({
+    const userInfo = await AppleAuthentication.signInAsync({
       requestedScopes: [
         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
     });
-    const decoded = parseJwt(creds.identityToken);
-    if (
-      (creds.email !== null) &
-      (creds.fullName.familyName !== null) &
-      (creds.fullName.givenName !== null)
-    ) {
-      let appleObject = {
-        name: `${creds.fullName.givenName} ${creds.fullName.familyName}`,
-        email: creds.email,
-        id: creds.user,
-      };
-      handleOAuthSubmit(appleObject, setActiveSession, setIsSignedIn);
-      setIsSignedIn(false);
+    console.log(userInfo)
+    if (userInfo.identityToken) {
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'apple',
+        token: userInfo.identityToken,
+      })
+      handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+      console.log(error, data)
     } else {
-        let reUsedApple = {
-            email: decoded.email,
-            id: decoded.sub,
-          };
-          console.log("reUsedApple", reUsedApple)
-          handleOAuthSubmit(reUsedApple, setActiveSession, setIsSignedIn);
+      throw new Error('no ID token present!')
     }
+    // const decoded = parseJwt(creds.identityToken);
+    // if (
+    //   (creds.email !== null) &
+    //   (creds.fullName.familyName !== null) &
+    //   (creds.fullName.givenName !== null)
+    // ) {
+    //   let appleObject = {
+    //     name: `${creds.fullName.givenName} ${creds.fullName.familyName}`,
+    //     email: creds.email,
+    //     id: creds.user,
+    //   };
+    //   handleOAuthSubmit(appleObject, setActiveSession, setIsSignedIn);
+    //   setIsSignedIn(false);
+    // } else {
+    //     let reUsedApple = {
+    //         email: decoded.email,
+    //         id: decoded.sub,
+    //       };
+    //       console.log("reUsedApple", reUsedApple)
+    //       handleOAuthSubmit(reUsedApple, setActiveSession, setIsSignedIn);
+    // }
   } catch (e) {
     console.log(e);
   }
@@ -136,6 +158,29 @@ const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {
     setIsSignedIn
   );
 };
+
+async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
+  //LoginManager.logOut(); //Facebook
+  if (sessionToken) {
+    await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
+    setActiveSession(sessionToken.session);
+    setIsSignedIn(false);
+    console.log(sessionToken.session.user.id)
+   let profileCheck = await grabProfileById(sessionToken.session.user.id)
+
+   if(profileCheck.length === 0){
+      await createProfile({
+        id: sessionToken.session.user.id,
+        email: sessionToken.session.user.email,
+      });
+      console.log('profile created!')
+   }
+  }
+}
+
+
+
+
 
 async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
   console.log("supa", formVals);
