@@ -46,7 +46,7 @@ export default function LandingPage(props) {
     moveToLoginPage,
     moveToSignUpPage,
   } = props;
-  const { setActiveSession } = useContext(SessionContext);
+  const { activeSession, setActiveSession } = useContext(SessionContext);
 
   Platform.OS === "ios"
     ? GoogleSignin.configure({
@@ -58,6 +58,7 @@ export default function LandingPage(props) {
         webClientId: googleWebClientId,
       });
 
+  const [googleData, setGoogleData] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
 
@@ -117,7 +118,7 @@ export default function LandingPage(props) {
           }}
         >
           <TouchableWithoutFeedback
-            onPress={() => googleSignIn(setActiveSession, setIsSignedIn)}
+            onPress={() => googleSignIn(googleData, setGoogleData, setActiveSession, setIsSignedIn)}
             disabled={isSignedIn}
           >
             <View style={styles.SignUpWithGoogle}>

@@ -42,45 +42,45 @@ const createSessionFromUrl = async (url) => {
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
   setIsSignedIn(true);
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "facebook",
-    options: {
-      redirectTo,
-      skipBrowserRedirect: true,
-    },
-  });
-  if (error) throw error;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options :{
+        redirectTo,
+        skipBrowserRedirect: true,
+      }
+    });
 
-  const res = await WebBrowser.openAuthSessionAsync(
-    data?.url ?? "",
-    redirectTo
-  );
+    console.log("data", data)
+    if(data){
+      const res = await WebBrowser.openAuthSessionAsync(
+        data?.url ?? "",
+        redirectTo
+      );
 
-  if (res.type === "success") {
-    const { url } = res;
-    let data = await createSessionFromUrl(url);
-    handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
-  }
+      console.log("res", res)
+      if (res.type === "success") {
+        const { url } = res;
+        let data = await createSessionFromUrl(url);
+        handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+      }
+    }
+   
+    if (error) {
+      console.log('Supabase Facebook Sign-In error:', error.message);
+      return;
+    }
 };
 
-export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
+export const googleSignIn = async (googleData, setGoogleData, setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn()
-    .then(userInfo => {
-      console.log('User info: ', userInfo);
-    })
-    .catch(error => {
-      console.error('Google Sign-In Error: ', error);
-    });
-    console.log('end', userInfo)
     if (userInfo.idToken) {
       const { data, error } = await supabase.auth.signInWithIdToken({
         provider: 'google',
         token: userInfo.idToken,
       })
-      console.log(data)
       handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
     } else {
       throw new Error('no ID token present!')
@@ -174,6 +174,7 @@ const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {
 };
 
 async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
+  console.log("??", sessionToken)
   if (sessionToken) {
     await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
     if(sessionToken.session){
