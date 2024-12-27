@@ -1,7 +1,7 @@
-// import {
-//   AccessToken,
-//   LoginManager,
-// } from "react-native-fbsdk-next";
+import {
+  AccessToken,
+  LoginManager,
+} from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Buffer } from "buffer";
 import {
@@ -13,7 +13,6 @@ import {
   sessionCheck,
   signInStandard,
   register,
-  signInGoogle,
 } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { supabase } from '../../supabase';
@@ -43,34 +42,45 @@ const createSessionFromUrl = async (url) => {
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
   setIsSignedIn(true);
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "facebook",
-    options: {
-      redirectTo,
-      skipBrowserRedirect: true,
-    },
-  });
-  if (error) throw error;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options :{
+        redirectTo,
+        skipBrowserRedirect: true,
+      }
+    });
 
-  const res = await WebBrowser.openAuthSessionAsync(
-    data?.url ?? "",
-    redirectTo
-  );
+    console.log("data", data)
+    if(data){
+      const res = await WebBrowser.openAuthSessionAsync(
+        data?.url ?? "",
+        redirectTo
+      );
 
-  if (res.type === "success") {
-    const { url } = res;
-    let data = await createSessionFromUrl(url);
-    handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
-  }
+      console.log("res", res)
+      if (res.type === "success") {
+        const { url } = res;
+        let data = await createSessionFromUrl(url);
+        handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+      }
+    }
+   
+    if (error) {
+      console.log('Supabase Facebook Sign-In error:', error.message);
+      return;
+    }
 };
 
-export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
+export const googleSignIn = async (googleData, setGoogleData, setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
+    const userInfo = await GoogleSignin.signIn()
     if (userInfo.idToken) {
-      const data = await signInGoogle(userInfo)
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: userInfo.idToken,
+      })
       handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
     } else {
       throw new Error('no ID token present!')
@@ -134,35 +144,6 @@ function parseJwt(token) {
   return JSON.parse(jsonPayload);
 }
 
-async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
-  console.log("sessionToken", sessionToken)
-  if (sessionToken) {
-    await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
-    if(sessionToken.session){
-      setActiveSession(sessionToken.session);
-    } else {
-      setActiveSession(sessionToken);
-    }
-    setIsSignedIn(false);
-    let sanitizeData
-    if(sessionToken.session){
-      sanitizeData = sessionToken.session
-    } else {
-      sanitizeData = sessionToken
-    }
- 
-    let profileCheck = await grabProfileById(sanitizeData.user.id)
-
-   if(profileCheck.length === 0){
-      await createProfile({
-        id: sanitizeData.user.id,
-        email: sanitizeData.user.email,
-      });
-      console.log('profile created!')
-   }
-  }
-}
-
 const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {
   let Fname;
   let Lname;
@@ -192,9 +173,37 @@ const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {
   );
 };
 
+async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
+  console.log("??", sessionToken)
+  if (sessionToken) {
+    await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
+    if(sessionToken.session){
+      setActiveSession(sessionToken.session);
+    } else {
+      setActiveSession(sessionToken);
+    }
+    setIsSignedIn(false);
+    let sanitizeData
+    if(sessionToken.session){
+      sanitizeData = sessionToken.session
+    } else {
+      sanitizeData = sessionToken
+    }
+ 
+    let profileCheck = await grabProfileById(sanitizeData.user.id)
+
+   if(profileCheck.length === 0){
+      await createProfile({
+        id: sanitizeData.user.id,
+        email: sanitizeData.user.email,
+      });
+      console.log('profile created!')
+   }
+  }
+}
+
+
 async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
-  console.log("supa", formVals);
-  // LoginManager.logOut();
   let accessToken = await signInStandard(formVals);
   if (accessToken) {
     await AsyncStorage.setItem("token", JSON.stringify(accessToken));
@@ -229,9 +238,10 @@ export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail
     return;
   } else {
     let accessToken = await signInStandard(formVals);
-    if (accessToken) {
-      await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-      setActiveSession(accessToken.session);
+    console.log("accessToken", accessToken)
+    if (accessToken && accessToken?.data?.session !== null) {
+      await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
+      setActiveSession(accessToken.data.session);
       // console.log("sign in reg", accessToken)
     } else {
       setLoginFail("The credentials you supplied are not valid");
