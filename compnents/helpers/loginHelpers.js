@@ -1,7 +1,7 @@
-import {
-  AccessToken,
-  LoginManager,
-} from "react-native-fbsdk-next";
+// import {
+//   AccessToken,
+//   LoginManager,
+// } from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Buffer } from "buffer";
 import {
@@ -17,20 +17,51 @@ import {
 } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { supabase } from '../../supabase';
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
+import * as WebBrowser from "expo-web-browser";
+
+const redirectTo = makeRedirectUri();
+
+const createSessionFromUrl = async (url) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+
+  if (errorCode) throw new Error(errorCode);
+  const { access_token, refresh_token } = params;
+
+  if (!access_token) return;
+
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+  return data.session;
+};
 
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
   setIsSignedIn(true);
-  LoginManager.logInWithPermissions(["public_profile"]).then(function (result) {
-    if (result.isCancelled) {
-      setIsSignedIn(false);
-      console.log("Login cancelled");
-    } else {
-      AccessToken.getCurrentAccessToken().then((data) => {
-        getFacebokUserData(data.accessToken, setActiveSession, setIsSignedIn);
-      });
-    }
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
   });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    let data = await createSessionFromUrl(url);
+    handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+  }
 };
 
 export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
@@ -61,32 +92,20 @@ export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
 export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   setIsSignedIn(true);
   try {
-    const creds = await AppleAuthentication.signInAsync({
+    const userInfo = await AppleAuthentication.signInAsync({
       requestedScopes: [
         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
     });
-    const decoded = parseJwt(creds.identityToken);
-    if (
-      (creds.email !== null) &
-      (creds.fullName.familyName !== null) &
-      (creds.fullName.givenName !== null)
-    ) {
-      let appleObject = {
-        name: `${creds.fullName.givenName} ${creds.fullName.familyName}`,
-        email: creds.email,
-        id: creds.user,
-      };
-      handleOAuthSubmit(appleObject, setActiveSession, setIsSignedIn);
-      setIsSignedIn(false);
+    if (userInfo.identityToken) {
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'apple',
+        token: userInfo.identityToken,
+      })
+      handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
     } else {
-        let reUsedApple = {
-            email: decoded.email,
-            id: decoded.sub,
-          };
-          console.log("reUsedApple", reUsedApple)
-          handleOAuthSubmit(reUsedApple, setActiveSession, setIsSignedIn);
+      throw new Error('no ID token present!')
     }
   } catch (e) {
     console.log(e);
@@ -116,6 +135,7 @@ function parseJwt(token) {
 }
 
 async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
+  console.log("sessionToken", sessionToken)
   if (sessionToken) {
     await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
     if(sessionToken.session){
@@ -174,7 +194,7 @@ const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {
 
 async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
   console.log("supa", formVals);
-  LoginManager.logOut();
+  // LoginManager.logOut();
   let accessToken = await signInStandard(formVals);
   if (accessToken) {
     await AsyncStorage.setItem("token", JSON.stringify(accessToken));
