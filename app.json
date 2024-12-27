@@ -2,6 +2,7 @@
   "expo": {
     "name": "scubaseasons",
     "slug": "scubaseasons",
+    "scheme": "scubaseasons",
     "version": "1.0.0",
     "sdkVersion": "51.0.0",
     "platforms": [

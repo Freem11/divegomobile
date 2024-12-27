@@ -2,7 +2,7 @@ import { supabase } from "../supabase";
 
 
 export const sessionCheck = async() => {
-  const session = await supabase.auth.session();
+  const session = await supabase.auth.getSession();
   return session
 };
 
@@ -50,7 +50,8 @@ export const register = async (registerDetails) => {
 };
 
 export const signInStandard = async (loginDetails) => {
-  const { user, session, error } = await supabase.auth.signIn({
+  console.log(loginDetails)
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: loginDetails.email,
     password: loginDetails.password,
   });
@@ -59,8 +60,8 @@ export const signInStandard = async (loginDetails) => {
     console.log("couldn't login,", error);
   }
 
-  if (user && session) {
-    return { user, session };
+  if (data) {
+    return { data };
   }
 };
 

@@ -4,7 +4,7 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { supabase } from '../../supabase';
-
+import React, { useEffect } from 'react';
 
 WebBrowser.maybeCompleteAuthSession(); // required for web only
 const redirectTo = makeRedirectUri();
@@ -47,23 +47,49 @@ const performOAuth = async () => {
 };
 
 const passwordRecovery = async (email) => {
-console.log(email, redirectTo)
-const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: redirectTo,
-  })
 
-  console.log(data, error)
+  const resetPasswordURL = Linking.createURL('/');
 
+  try {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      options: {
+        redirectTo: resetPasswordURL,  // The URL to redirect to (your app)
+        skipBrowserRedirect: true,     // Skip browser redirect
+      },
+    });
+
+    if (error) {
+      console.error('Error sending password recovery email:', error.message);
+    } else {
+      console.log('Password recovery email sent:', data);
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err.message);
+  }
 }
 
+const sendMagicLink = async (email) => {
+  const { error } = await supabase.auth.signInWithOtp({
+    email: email,
+    options: {
+      shouldCreateUser: false,
+      emailRedirectTo: redirectTo
+    },
+  });
+
+  if (error) throw error;
+  // Email sent.
+};
+
 export default function ForgotPage() {
-  // Handle linking into app from email app.
-//   const url = Linking.useURL();
-//   if (url) createSessionFromUrl(url);
+  const url = Linking.useURL();
+  if (url) createSessionFromUrl(url);
+
 
   return (
     <View style={styles.container}>
       <Button onPress={() => passwordRecovery('freem1985@gmail.com')} title="Forgot Password?" />
+      <Button onPress={() => sendMagicLink('freem1985@gmail.com')} title="Send Magic Link" />
     </View>
   );
 }

@@ -67,12 +67,20 @@ export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
+    const userInfo = await GoogleSignin.signIn()
+    .then(userInfo => {
+      console.log('User info: ', userInfo);
+    })
+    .catch(error => {
+      console.error('Google Sign-In Error: ', error);
+    });
+    console.log('end', userInfo)
     if (userInfo.idToken) {
       const { data, error } = await supabase.auth.signInWithIdToken({
         provider: 'google',
         token: userInfo.idToken,
       })
+      console.log(data)
       handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
     } else {
       throw new Error('no ID token present!')
@@ -229,9 +237,10 @@ export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail
     return;
   } else {
     let accessToken = await signInStandard(formVals);
-    if (accessToken) {
-      await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-      setActiveSession(accessToken.session);
+    console.log("accessToken", accessToken)
+    if (accessToken && accessToken?.data?.session !== null) {
+      await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
+      setActiveSession(accessToken.data.session);
       // console.log("sign in reg", accessToken)
     } else {
       setLoginFail("The credentials you supplied are not valid");

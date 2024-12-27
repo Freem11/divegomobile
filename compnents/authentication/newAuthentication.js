@@ -9,6 +9,7 @@ import carrouselData from "./carrouselData";
 import CreateAccountPage from "./createAccountPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
+import ForgotPage from './forgotPassword';
 import {
   colors,
 } from "../styles";
@@ -100,6 +101,7 @@ export default function Authentication() {
             ) : null}
 
             {item.page === 2 ? (
+              // <ForgotPage/>
               <LandingPage
                 title={item.title}
                 loginButton={item.buttonOneText}
