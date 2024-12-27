@@ -26,7 +26,7 @@ export const userCheck = async() => {
 };
 
 export const register = async (registerDetails) => {
-  const { user, session, error } = await supabase.auth.signUp(
+  const { data, error } = await supabase.auth.signUp(
     {
       email: registerDetails.email,
       password: registerDetails.password,
@@ -41,16 +41,15 @@ export const register = async (registerDetails) => {
 
   if (error) {
     console.log("couldn't register,", error);
-    return { user, session };
   }
 
-  if (user && session) {
-    return { user, session };
+  if (data) {
+    return { data };
   }
 };
 
 export const signInStandard = async (loginDetails) => {
-  const { user, session, error } = await supabase.auth.signIn({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: loginDetails.email,
     password: loginDetails.password,
   });
@@ -59,8 +58,8 @@ export const signInStandard = async (loginDetails) => {
     console.log("couldn't login,", error);
   }
 
-  if (user && session) {
-    return { user, session };
+  if (data) {
+    return { data };
   }
 };
 
@@ -79,19 +78,18 @@ export const signInFaceBook = async () => {
   }
 };
 
-export const signInGoogle = async () => {
-  const { user, session, error } = await supabase.auth.signIn({
-    provider: 'google'
-  });
-
-  console.log(user, session, error)
+export const signInGoogle = async (userInfo) => {
+  const { data, error } = await supabase.auth.signInWithIdToken({
+    provider: 'google',
+    token: userInfo.idToken,
+  })
   if (error) {
     console.log("couldn't login,", error);
   }
 
-  if (user && session) {
+  if (data) {
     // console.log(user, session);
-    return { user, session };
+    return data;
   }
 };
 

@@ -13,8 +13,10 @@ import {
   sessionCheck,
   signInStandard,
   register,
+  signInGoogle,
 } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { createProfile } from "../../supabaseCalls/accountSupabaseCalls";
+import { createProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { supabase } from '../../supabase';
 
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
@@ -36,7 +38,12 @@ export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
-    handleOAuthSubmit(userInfo.user, setActiveSession, setIsSignedIn);
+    if (userInfo.idToken) {
+      const data = await signInGoogle(userInfo)
+      handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+    } else {
+      throw new Error('no ID token present!')
+    }
   } catch (error) {
     setIsSignedIn(false);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -106,6 +113,34 @@ function parseJwt(token) {
   var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
   var jsonPayload = Buffer.from(base64, "base64").toString("ascii");
   return JSON.parse(jsonPayload);
+}
+
+async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
+  if (sessionToken) {
+    await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
+    if(sessionToken.session){
+      setActiveSession(sessionToken.session);
+    } else {
+      setActiveSession(sessionToken);
+    }
+    setIsSignedIn(false);
+    let sanitizeData
+    if(sessionToken.session){
+      sanitizeData = sessionToken.session
+    } else {
+      sanitizeData = sessionToken
+    }
+ 
+    let profileCheck = await grabProfileById(sanitizeData.user.id)
+
+   if(profileCheck.length === 0){
+      await createProfile({
+        id: sanitizeData.user.id,
+        email: sanitizeData.user.email,
+      });
+      console.log('profile created!')
+   }
+  }
 }
 
 const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {

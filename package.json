@@ -18,7 +18,7 @@
     "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-google-signin/google-signin": "^10.0.1",
     "@react-native-masked-view/masked-view": "^0.3.1",
-    "@supabase/supabase-js": "^1.35.7",
+    "@supabase/supabase-js": "^2.47.10",
     "@types/react": "~18.2.14",
     "base-64": "^1.0.0",
     "buffer": "^6.0.3",
