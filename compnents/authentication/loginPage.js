@@ -33,7 +33,9 @@ export default function LoginPage(props) {
     moveToLandingPage,
     moveToSignUpPage,
     loginFail,
-    setLoginFail
+    setLoginFail,
+    moveToForgotPasswordPage,
+    forgotPromt
   } = props;
 
   const [formVals, setFormVals] = useState({
@@ -101,6 +103,12 @@ export default function LoginPage(props) {
           </TouchableWithoutFeedback>
         </View>
       </View>
+      <View style={styles.forgotBox}>
+        <TouchableWithoutFeedback onPress={() => moveToForgotPasswordPage()}>
+          <Text style={styles.promptLinkText}>{forgotPromt}</Text>
+        </TouchableWithoutFeedback>
+      </View>
+
       <View style={styles.promtBox}>
         <Text style={styles.promptText}>{promptText} </Text>
         <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
@@ -134,6 +142,13 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "flex-end",
     marginTop: moderateScale(-50)
+  },
+  forgotBox: {
+    position: "absolute",
+    bottom: moderateScale(40),
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
   },
   promtBox: {
     position: "absolute",
