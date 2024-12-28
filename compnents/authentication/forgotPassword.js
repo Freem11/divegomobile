@@ -166,7 +166,6 @@ export default function ForgotPage(props) {
     </View>
   </View>
     // <View style={styles.container}>
-    //   <Button onPress={() => passwordRecovery('freem1985@gmail.com')} title="Forgot Password?" />
     //   <Button onPress={() => sendMagicLink('freem1985@gmail.com')} title="Send Magic Link" />
     // </View>
   );

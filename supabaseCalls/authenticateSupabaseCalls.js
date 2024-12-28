@@ -1,5 +1,5 @@
 import { supabase } from "../supabase";
-
+import { makeRedirectUri } from "expo-auth-session";
 
 export const sessionCheck = async() => {
   const session = await supabase.auth.getSession();
@@ -66,18 +66,28 @@ export const signInStandard = async (loginDetails) => {
 };
 
 export const signInFaceBook = async () => {
-  const { user, session, error } = await supabase.auth.signIn({
-    provider: 'facebook'
-  });
+  const redirectTo = makeRedirectUri();
 
-  if (error) {
-    console.log("couldn't login,", error);
+  console.log("hey", redirectTo)
+  if(redirectTo){
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options :{
+        redirectTo,
+        skipBrowserRedirect: true,
+      }
+    });
+  
+    if (error) {
+      console.log("couldn't login,", error);
+    }
+  
+    if (user && session) {
+      // console.log(user, session);
+      return { user, session };
+    }
   }
 
-  if (user && session) {
-    // console.log(user, session);
-    return { user, session };
-  }
 };
 
 export const signInGoogle = async () => {

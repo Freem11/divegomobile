@@ -1,7 +1,3 @@
-import {
-  AccessToken,
-  LoginManager,
-} from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Buffer } from "buffer";
 import {
@@ -13,6 +9,7 @@ import {
   sessionCheck,
   signInStandard,
   register,
+  signInFaceBook,
 } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { supabase } from '../../supabase';
@@ -40,6 +37,7 @@ const createSessionFromUrl = async (url) => {
 
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
+  try {
   setIsSignedIn(true);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -50,14 +48,16 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
       }
     });
 
-    console.log("data", data)
     if(data){
       const res = await WebBrowser.openAuthSessionAsync(
         data?.url ?? "",
         redirectTo
       );
 
-      console.log("res", res)
+      if (res.type === "cancel") {
+        throw error
+      }
+    
       if (res.type === "success") {
         const { url } = res;
         let data = await createSessionFromUrl(url);
@@ -65,9 +65,9 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
       }
     }
    
-    if (error) {
-      console.log('Supabase Facebook Sign-In error:', error.message);
-      return;
+    } catch (error) {
+      setIsSignedIn(false);
+      console.log(error);
     }
 };
 
@@ -108,73 +108,32 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
     });
+
     if (userInfo.identityToken) {
       const { data, error } = await supabase.auth.signInWithIdToken({
         provider: 'apple',
         token: userInfo.identityToken,
       })
-      handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+
+      if(error){
+        throw error
+      }
+
+      if(data){
+        handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+      }
+    
     } else {
+      setIsSignedIn(false);
       throw new Error('no ID token present!')
     }
   } catch (e) {
+    setIsSignedIn(false);
     console.log(e);
   }
 };
 
-// Get User Data
-async function getFacebokUserData(tokenF, setActiveSession, setIsSignedIn) {
-  if (!tokenF) return;
-
-  try {
-    const res2 = await fetch(
-      `https://graph.facebook.com/me?access_token=${tokenF}&fields=id,name,email`
-    );
-    const user2 = await res2.json();
-    handleOAuthSubmit(user2, setActiveSession, setIsSignedIn);
-  } catch (err) {
-    console.log("error", err);
-  }
-}
-
-function parseJwt(token) {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  var jsonPayload = Buffer.from(base64, "base64").toString("ascii");
-  return JSON.parse(jsonPayload);
-}
-
-const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {
-  let Fname;
-  let Lname;
-  let Pword;
-  let MailE = user.email;
-
-  if (user.name) {
-    Fname = user.name.split(" ").slice(0, 1);
-    Lname = user.name.split(" ").slice(-1);
-  }
-
-  if (user.userID) {
-    Pword = user.userID;
-  } else if (user.id) {
-    Pword = user.id;
-  }
-
-  let accessToken = await OAuthSignIn(
-    {
-      password: Pword,
-      email: MailE,
-      firstName: Fname,
-      lastName: Lname,
-    },
-    setActiveSession,
-    setIsSignedIn
-  );
-};
-
 async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
-  console.log("??", sessionToken)
   if (sessionToken) {
     await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
     if(sessionToken.session){
@@ -202,35 +161,6 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
   }
 }
 
-
-async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
-  let accessToken = await signInStandard(formVals);
-  if (accessToken) {
-    await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-    setActiveSession(accessToken.session);
-    // console.log("at oauth", accessToken)
-    setIsSignedIn(false);
-  } else {
-    let registrationToken = await register(formVals);
-    if (registrationToken.session !== null) {
-      //test me
-      await createProfile({
-        id: registrationToken.session.user.id,
-        email: formVals.email,
-      });
-      ////
-      await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
-      setActiveSession(registrationToken.session);
-      // console.log("at oauth reg", registrationToken)
-      setIsSignedIn(false);
-    } else {
-      setIsSignedIn(false);
-      setLoginFail("You already have an account with this email");
-    }
-  }
-}
-
-
 export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
 
   if (formVals.email === "" || formVals.password == "") {
@@ -238,17 +168,14 @@ export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail
     return;
   } else {
     let accessToken = await signInStandard(formVals);
-    console.log("accessToken", accessToken)
     if (accessToken && accessToken?.data?.session !== null) {
       await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
       setActiveSession(accessToken.data.session);
-      // console.log("sign in reg", accessToken)
     } else {
       setLoginFail("The credentials you supplied are not valid");
       return;
     }
-    let checker = await sessionCheck();
-    //  console.log("checkerbox", checker)
+    await sessionCheck();
   }
 };
 
