@@ -61,15 +61,10 @@ export default function Authentication() {
   };
 
   useEffect(() => {
-    carrouselIndex === 2 ? moveToLandingPage() : null
-  },[])
-
-
-  useEffect(() => {
     carrouselIndex === 0 ? moveToSignUpPage() : null
     carrouselIndex === 1 ? moveToLandingPage() : null
     carrouselIndex === 2 ? moveToLoginPage() : null
-
+    carrouselIndex === 3 ? moveToForgotPasswordPage() : null
   },[carrouselIndex])
 
   return (

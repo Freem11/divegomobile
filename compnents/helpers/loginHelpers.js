@@ -209,7 +209,6 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
     } else {
       setRegFail(`You have already registered this account, please use the log in page`);
     }
-    let checker = await sessionCheck();
-    //  console.log("checkerbox", checker)
+    await sessionCheck();
   }
 };

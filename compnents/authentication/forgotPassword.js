@@ -101,7 +101,7 @@ export default function ForgotPage(props) {
   const passwordRecovery = async (email) => {
 
     setIsEnabled(false)
-    const resetPasswordURL = Linking.createURL('/');
+    const resetPasswordURL = Linking.createURL('');
   
     try {
       if(redirectTo){
@@ -123,7 +123,6 @@ export default function ForgotPage(props) {
     }
   }
 
-  console.log(formVals)
   return (  <View style={styles.container}>
     <MaterialIcons
       name="chevron-left"
