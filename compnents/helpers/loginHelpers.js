@@ -9,7 +9,6 @@ import {
   sessionCheck,
   signInStandard,
   register,
-  signInFaceBook,
 } from "../../supabaseCalls/authenticateSupabaseCalls";
 import { createProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
 import { supabase } from '../../supabase';
@@ -162,7 +161,6 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
 }
 
 export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
-
   if (formVals.email === "" || formVals.password == "") {
     setLoginFail("Please fill out both email and password");
     return;
@@ -194,22 +192,20 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
     return;
   } else {
 
-    let nameSplit =  formVals.name.split(/ (.*)/s);
       let dataPack = {
         email: formVals.email,
         password:  formVals.password,
-        firstName: nameSplit[0],
-        lastName: nameSplit[1]
+        name: formVals.name
       }
 
     let registrationToken = await register(dataPack);
-    if (registrationToken.session !== null) {
+    if (registrationToken.data.session !== null) {
       await createProfile({
-        id: registrationToken.session.user.id,
+        id: registrationToken.data.session.user.id,
         email: formVals.email,
       });
       await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
-      setActiveSession(registrationToken);
+      setActiveSession(registrationToken.data.session);
     } else {
       setRegFail(`You have already registered this account, please use the log in page`);
     }
