@@ -639,7 +639,7 @@ export default function Map() {
                   mapConfig === 3
                     ? removeFromSitesArray(cluster.properties.siteID)
                     : setupAnchorModal(
-                        cluster.properties.siteName,
+                        cluster.properties.siteID,
                         latitude,
                         longitude
                       )
