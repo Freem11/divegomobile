@@ -320,6 +320,7 @@ const styles = StyleSheet.create({
   },
   noSightings: {
     marginTop: windowWidth > 600 ? "15%" : "25%",
+    flexWrap: 'wrap',
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
