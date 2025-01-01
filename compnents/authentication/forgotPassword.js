@@ -101,14 +101,15 @@ export default function ForgotPage(props) {
   const passwordRecovery = async (email) => {
 
     setIsEnabled(false)
-    const resetPasswordURL = Linking.createURL('');
-  
+    // const resetPasswordURL = Linking.createURL('');
+    const resetPasswordURL = 'https://localhost:3000/account/password'; //dev
+    // const resetPasswordURL = 'https://scubaseasons.netlify.app/account/password' //production
+
     try {
-      if(redirectTo){
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
           options: {
-            redirectTo,  // The URL to redirect to (your app)
-            skipBrowserRedirect: true,     // Skip browser redirect
+            redirectTo: resetPasswordURL,
+            skipBrowserRedirect: true,
           },
         });
         setEmailSent("Password Reset Email Sent!, Check Your Inbox for it");
@@ -116,8 +117,7 @@ export default function ForgotPage(props) {
           console.error('Error sending password recovery email:', error.message);
         } else {
           console.log('Password recovery email sent:', data);
-        }
-      }    
+        } 
     } catch (err) {
       console.error('Unexpected error:', err.message);
     }
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   },
     loginButton: [
       authenicationButton,
-      { width: '60%', flexDirection: "row", marginTop: windowHeight / 10 },
+      { width: '65%', flexDirection: "row", marginTop: windowHeight / 10, paddingHorizontal: 15 },
     ],
     loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
     erroMsg: {

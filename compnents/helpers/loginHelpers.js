@@ -70,7 +70,7 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
     }
 };
 
-export const googleSignIn = async (googleData, setGoogleData, setActiveSession, setIsSignedIn) => {
+export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();

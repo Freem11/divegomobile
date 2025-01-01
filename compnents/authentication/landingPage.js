@@ -118,7 +118,7 @@ export default function LandingPage(props) {
           }}
         >
           <TouchableWithoutFeedback
-            onPress={() => googleSignIn(googleData, setGoogleData, setActiveSession, setIsSignedIn)}
+            onPress={() => googleSignIn(setActiveSession, setIsSignedIn)}
             disabled={isSignedIn}
           >
             <View style={styles.SignUpWithGoogle}>
