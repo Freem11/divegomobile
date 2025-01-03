@@ -156,7 +156,7 @@ export default function OnboardingTest() {
         contentContainerStyle={styles.pageContainter}
         ref={carrouselRef}
         horizontal
-        pagingEnabled
+        pagingEnabled 
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
         snapToInterval={windowWidth}

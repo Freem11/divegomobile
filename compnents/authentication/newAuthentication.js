@@ -93,6 +93,7 @@ export default function Authentication() {
         renderItem={({ item }) => (
           <View key={item.page} style={styles.pageContent}>
             {item.page === 1 ? (
+              
               <CreateAccountPage
                 title={item.title}
                 emailPlaceholder={item.emailPlaceholder}
@@ -135,6 +136,7 @@ export default function Authentication() {
                 forgotPromt={item.forgotPromt}
               />
             ) : null}
+
              {item.page === 4 ? (
              <ForgotPage
                 title={item.title}

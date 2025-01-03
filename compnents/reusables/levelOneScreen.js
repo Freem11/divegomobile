@@ -9,6 +9,7 @@ import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
 
+import DiveSiteCarousel from '../screens/DiveSite/diveSiteCarousel';
 import DiveSite from '../screens/diveSite';
 import DiveShop from '../screens/diveShop';
 import Settings from '../screens/settings';
@@ -44,7 +45,7 @@ export default function LevelOneScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "DiveSiteScreen" && <DiveSite/>}
+      {activeScreen === "DiveSiteScreen" && <DiveSiteCarousel/>}
       {activeScreen === "DiveShopScreen" && <DiveShop/>}
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}

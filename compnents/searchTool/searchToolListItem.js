@@ -58,11 +58,12 @@ export default SearchToolListItem = (props) => {
   const handleDiveSiteOptionSelected = async (diveSite) => {
     if (diveSite !== null) {
       let nameOnly = diveSite.split(" ~ ");
+      console.log(nameOnly)
       let diveSiteSet = await getSingleDiveSiteByNameAndRegion({
         name: nameOnly[0],
         region: nameOnly[1],
       });
-
+      console.log(diveSiteSet)
       if (diveSiteSet) {
         setSelectedDiveSite({
           SiteName: diveSiteSet[0].name,

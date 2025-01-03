@@ -90,25 +90,20 @@ export const getDiveSiteByName = async (value) => {
 };
 
 export const getDiveSiteWithUserName = async (values) => {
-  const query = supabase
-    .from('diveSites')
-    .select('*')
-    .eq('name', values.siteName);
-
-  if (values.region !== null) {
-    query.eq('region', values.region);
-  }
-
-  const { data, error } = await query;
+  const { data, error } = await supabase.rpc("get_single_divesite_info_with_username", {
+    sitename: values.siteName,
+    region: values.region
+  });
 
   if (error) {
-    console.log('couldn\'t do it 27,', error);
+    console.log("couldn't do it 7,", error);
     return [];
   }
 
   if (data) {
     return data;
   }
+
 };
 
 export const getDiveSitesByIDs = async (valueArray) => {
@@ -131,16 +126,22 @@ export const getDiveSitesByIDs = async (valueArray) => {
 };
 
 export const getSingleDiveSiteByNameAndRegion = async (values) => {
+    const query = supabase
+    .from('diveSites')
+    .select('*')
+    .eq('name', values.name);
 
-  if (values.region === undefined || values.region === "null") {
+    if (values.region === undefined){
+    } else {
+      if (values.region !== null) {
+        query.eq('region', values.region);
+      }
+    }
 
-    const { data, error } = await supabase
-    .from("diveSites")
-    .select()
-    .eq("name", values.name)
+  const { data, error } = await query;
 
   if (error) {
-    console.log("couldn't do it 7,", error);
+    console.log('couldn\'t do it 27,', error);
     return [];
   }
 
@@ -148,24 +149,57 @@ export const getSingleDiveSiteByNameAndRegion = async (values) => {
     return data;
   }
 
-  } else {
+}
 
-    const { data, error } = await supabase
-    .from("diveSites")
-    .select()
-    .eq("name", values.name)
-    .eq("region", values.region)
+  
+//   const { data, error } = await supabase.rpc("get_single_divesite_with_username", {
+//     sitename: values.siteName,
+//     region: values.region
+//   });
 
-  if (error) {
-    console.log("couldn't do it 7,", error);
-    return [];
-  }
+//   if (error) {
+//     console.log("couldn't do it 7,", error);
+//     return [];
+//   }
 
-  if (data) {
-    return data;
-  }
-  }
-};
+//   if (data) {
+//     return data;
+//   }
+
+//   if (values.region === undefined || values.region === "null") {
+
+//     const { data, error } = await supabase
+//     .from("diveSites")
+//     .select()
+//     .eq("name", values.name)
+
+//   if (error) {
+//     console.log("couldn't do it 7,", error);
+//     return [];
+//   }
+
+//   if (data) {
+//     return data;
+//   }
+
+//   } else {
+
+//     const { data, error } = await supabase
+//     .from("diveSites")
+//     .select()
+//     .eq("name", values.name)
+//     .eq("region", values.region)
+
+//   if (error) {
+//     console.log("couldn't do it 7,", error);
+//     return [];
+//   }
+
+//   if (data) {
+//     return data;
+//   }
+//   }
+// };
 
 export const updateDiveSite = async (values) => {
   console.log("updating...", values)

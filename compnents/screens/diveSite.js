@@ -134,6 +134,7 @@ export default function DiveSite() {
         siteName: chosenSite.name,
         region: chosenSite.region,
       });
+      console.log("??", selectedDiveSite)
       if (selectedSite.length > 0) {
         setSite(selectedSite[0]);
       }
