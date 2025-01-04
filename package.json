@@ -51,7 +51,6 @@
     "react-native-buffer": "^6.0.3",
     "react-native-dotenv": "^3.4.9",
     "react-native-email": "^2.1.0",
-    "react-native-fbsdk-next": "^11.2.1",
     "react-native-geocoding": "^0.5.0",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-get-random-values": "~1.11.0",
