@@ -1,8 +1,8 @@
 import { supabase } from "../supabase";
-
+import { makeRedirectUri } from "expo-auth-session";
 
 export const sessionCheck = async() => {
-  const session = await supabase.auth.session();
+  const session = await supabase.auth.getSession();
   return session
 };
 
@@ -26,31 +26,30 @@ export const userCheck = async() => {
 };
 
 export const register = async (registerDetails) => {
-  const { user, session, error } = await supabase.auth.signUp(
+  const { data, error } = await supabase.auth.signUp(
     {
       email: registerDetails.email,
       password: registerDetails.password,
-    },
-    {
-      data: {
-        firstName: registerDetails.firstName,
-        lastName: registerDetails.lastName,
+      options:  {
+        data: {
+          fullName: registerDetails.name,
+        },
       },
-    }
+    },
   );
 
   if (error) {
     console.log("couldn't register,", error);
-    return { user, session };
   }
 
-  if (user && session) {
-    return { user, session };
+  if (data) {
+    return { data };
   }
 };
 
 export const signInStandard = async (loginDetails) => {
-  const { user, session, error } = await supabase.auth.signIn({
+  console.log(loginDetails)
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: loginDetails.email,
     password: loginDetails.password,
   });
@@ -59,24 +58,34 @@ export const signInStandard = async (loginDetails) => {
     console.log("couldn't login,", error);
   }
 
-  if (user && session) {
-    return { user, session };
+  if (data) {
+    return { data };
   }
 };
 
 export const signInFaceBook = async () => {
-  const { user, session, error } = await supabase.auth.signIn({
-    provider: 'facebook'
-  });
+  const redirectTo = makeRedirectUri();
 
-  if (error) {
-    console.log("couldn't login,", error);
+  console.log("hey", redirectTo)
+  if(redirectTo){
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options :{
+        redirectTo,
+        skipBrowserRedirect: true,
+      }
+    });
+  
+    if (error) {
+      console.log("couldn't login,", error);
+    }
+  
+    if (user && session) {
+      // console.log(user, session);
+      return { user, session };
+    }
   }
 
-  if (user && session) {
-    // console.log(user, session);
-    return { user, session };
-  }
 };
 
 export const signInGoogle = async () => {

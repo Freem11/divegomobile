@@ -1,7 +1,3 @@
-import {
-  AccessToken,
-  LoginManager,
-} from "react-native-fbsdk-next";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Buffer } from "buffer";
 import {
@@ -40,34 +36,45 @@ const createSessionFromUrl = async (url) => {
 
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
+  try {
   setIsSignedIn(true);
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "facebook",
-    options: {
-      redirectTo,
-      skipBrowserRedirect: true,
-    },
-  });
-  if (error) throw error;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options :{
+        redirectTo,
+        skipBrowserRedirect: true,
+      }
+    });
 
-  const res = await WebBrowser.openAuthSessionAsync(
-    data?.url ?? "",
-    redirectTo
-  );
+    if(data){
+      const res = await WebBrowser.openAuthSessionAsync(
+        data?.url ?? "",
+        redirectTo
+      );
 
-  if (res.type === "success") {
-    const { url } = res;
-    let data = await createSessionFromUrl(url);
-    handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
-  }
+      if (res.type === "cancel") {
+        throw error
+      }
+    
+      if (res.type === "success") {
+        const { url } = res;
+        let data = await createSessionFromUrl(url);
+        handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+      }
+    }
+   
+    } catch (error) {
+      setIsSignedIn(false);
+      console.log(error);
+    }
 };
 
 export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
+    const userInfo = await GoogleSignin.signIn()
     if (userInfo.idToken) {
       const { data, error } = await supabase.auth.signInWithIdToken({
         provider: 'google',
@@ -100,69 +107,29 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
     });
+
     if (userInfo.identityToken) {
       const { data, error } = await supabase.auth.signInWithIdToken({
         provider: 'apple',
         token: userInfo.identityToken,
       })
-      handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+
+      if(error){
+        throw error
+      }
+
+      if(data){
+        handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+      }
+    
     } else {
+      setIsSignedIn(false);
       throw new Error('no ID token present!')
     }
   } catch (e) {
+    setIsSignedIn(false);
     console.log(e);
   }
-};
-
-// Get User Data
-async function getFacebokUserData(tokenF, setActiveSession, setIsSignedIn) {
-  if (!tokenF) return;
-
-  try {
-    const res2 = await fetch(
-      `https://graph.facebook.com/me?access_token=${tokenF}&fields=id,name,email`
-    );
-    const user2 = await res2.json();
-    handleOAuthSubmit(user2, setActiveSession, setIsSignedIn);
-  } catch (err) {
-    console.log("error", err);
-  }
-}
-
-function parseJwt(token) {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  var jsonPayload = Buffer.from(base64, "base64").toString("ascii");
-  return JSON.parse(jsonPayload);
-}
-
-const handleOAuthSubmit = async (user, setActiveSession, setIsSignedIn) => {
-  let Fname;
-  let Lname;
-  let Pword;
-  let MailE = user.email;
-
-  if (user.name) {
-    Fname = user.name.split(" ").slice(0, 1);
-    Lname = user.name.split(" ").slice(-1);
-  }
-
-  if (user.userID) {
-    Pword = user.userID;
-  } else if (user.id) {
-    Pword = user.id;
-  }
-
-  let accessToken = await OAuthSignIn(
-    {
-      password: Pword,
-      email: MailE,
-      firstName: Fname,
-      lastName: Lname,
-    },
-    setActiveSession,
-    setIsSignedIn
-  );
 };
 
 async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
@@ -193,52 +160,20 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
   }
 }
 
-
-async function OAuthSignIn(formVals, setActiveSession, setIsSignedIn) {
-  let accessToken = await signInStandard(formVals);
-  if (accessToken) {
-    await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-    setActiveSession(accessToken.session);
-    // console.log("at oauth", accessToken)
-    setIsSignedIn(false);
-  } else {
-    let registrationToken = await register(formVals);
-    if (registrationToken.session !== null) {
-      //test me
-      await createProfile({
-        id: registrationToken.session.user.id,
-        email: formVals.email,
-      });
-      ////
-      await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
-      setActiveSession(registrationToken.session);
-      // console.log("at oauth reg", registrationToken)
-      setIsSignedIn(false);
-    } else {
-      setIsSignedIn(false);
-      setLoginFail("You already have an account with this email");
-    }
-  }
-}
-
-
 export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
-
   if (formVals.email === "" || formVals.password == "") {
     setLoginFail("Please fill out both email and password");
     return;
   } else {
     let accessToken = await signInStandard(formVals);
-    if (accessToken) {
-      await AsyncStorage.setItem("token", JSON.stringify(accessToken));
-      setActiveSession(accessToken.session);
-      // console.log("sign in reg", accessToken)
+    if (accessToken && accessToken?.data?.session !== null) {
+      await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
+      setActiveSession(accessToken.data.session);
     } else {
       setLoginFail("The credentials you supplied are not valid");
       return;
     }
-    let checker = await sessionCheck();
-    //  console.log("checkerbox", checker)
+    await sessionCheck();
   }
 };
 
@@ -257,26 +192,23 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
     return;
   } else {
 
-    let nameSplit =  formVals.name.split(/ (.*)/s);
       let dataPack = {
         email: formVals.email,
         password:  formVals.password,
-        firstName: nameSplit[0],
-        lastName: nameSplit[1]
+        name: formVals.name
       }
 
     let registrationToken = await register(dataPack);
-    if (registrationToken.session !== null) {
+    if (registrationToken.data.session !== null) {
       await createProfile({
-        id: registrationToken.session.user.id,
+        id: registrationToken.data.session.user.id,
         email: formVals.email,
       });
       await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
-      setActiveSession(registrationToken);
+      setActiveSession(registrationToken.data.session);
     } else {
       setRegFail(`You have already registered this account, please use the log in page`);
     }
-    let checker = await sessionCheck();
-    //  console.log("checkerbox", checker)
+    await sessionCheck();
   }
 };

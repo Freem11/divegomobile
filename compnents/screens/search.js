@@ -6,7 +6,8 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   FlatList,
-  Keyboard
+  Keyboard,
+  Platform
 } from "react-native";
 import { activeFonts, colors, fontSizes } from "../styles";
 import screenData from "./screenData.json";
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   promtBox: {
     position: "absolute",
-    bottom: windowWidth > 600 ? moderateScale(50) : moderateScale(10),
+    bottom: windowWidth > 600 ? moderateScale(50) : Platform.OS === "android" ? moderateScale(-30) : moderateScale(10),
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
