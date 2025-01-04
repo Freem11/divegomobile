@@ -17,6 +17,8 @@ google-service.json
 google-services.json
 GoogleService-info.plist
 
+appleSecret
+script.rb
 credentials.json
 
 # macOS

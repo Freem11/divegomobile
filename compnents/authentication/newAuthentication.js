@@ -9,6 +9,7 @@ import carrouselData from "./carrouselData";
 import CreateAccountPage from "./createAccountPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
+import ForgotPage from './forgotPassword';
 import {
   colors,
 } from "../styles";
@@ -21,10 +22,21 @@ export default function Authentication() {
   const [carrouselIndex, setCarrouselIndex] = useState(1);
   const [loginFail, setLoginFail] = useState(null);
   const [regFail, setRegFail] = useState(null);
+  const [emailSent, setEmailSent] = useState(null);
+
+  const moveToForgotPasswordPage = () => {
+    setLoginFail(null);
+    setRegFail(null);
+    setEmailSent(null);
+    setCarrouselIndex(3);
+    const scrollToIndex = carrouselIndex;
+    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
+  };
 
   const moveToLoginPage = () => {
     setLoginFail(null);
     setRegFail(null);
+    setEmailSent(null);
     setCarrouselIndex(2);
     const scrollToIndex = carrouselIndex;
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
@@ -33,6 +45,7 @@ export default function Authentication() {
   const moveToLandingPage = () => {
     setLoginFail(null);
     setRegFail(null);
+    setEmailSent(null);
     setCarrouselIndex(1);
     const scrollToIndex = carrouselIndex;
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
@@ -41,21 +54,17 @@ export default function Authentication() {
   const moveToSignUpPage = () => {
     setLoginFail(null);
     setRegFail(null);
+    setEmailSent(null);
     setCarrouselIndex(0);
     const scrollToIndex = carrouselIndex;
     carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
   };
 
   useEffect(() => {
-    carrouselIndex === 2 ? moveToLandingPage() : null
-  },[])
-
-
-  useEffect(() => {
     carrouselIndex === 0 ? moveToSignUpPage() : null
     carrouselIndex === 1 ? moveToLandingPage() : null
     carrouselIndex === 2 ? moveToLoginPage() : null
-
+    carrouselIndex === 3 ? moveToForgotPasswordPage() : null
   },[carrouselIndex])
 
   return (
@@ -122,6 +131,18 @@ export default function Authentication() {
                 moveToSignUpPage={moveToSignUpPage}
                 loginFail={loginFail} 
                 setLoginFail={setLoginFail}
+                moveToForgotPasswordPage={moveToForgotPasswordPage}
+                forgotPromt={item.forgotPromt}
+              />
+            ) : null}
+             {item.page === 4 ? (
+             <ForgotPage
+                title={item.title}
+                emailPlaceholder={item.emailPlaceholder}
+                buttonText={item.buttonText}
+                moveToLoginPage={moveToLoginPage}
+                setEmailSent={setEmailSent}
+                emailSent={emailSent}
               />
             ) : null}
           </View>

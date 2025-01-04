@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
   },
   FMenuAnimate: {
     position: "absolute",
-    bottom: moderateScale(15),
+    bottom: Platform.OS ==="ios" ? moderateScale(15) : moderateScale(0),
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: windowWidth > 700 ? moderateScale(12) : moderateScale(40),
+    top: windowWidth > 700 ? moderateScale(12) : Platform.OS === 'android' ? moderateScale(30) : moderateScale(50),
     zIndex: 3,
   },
   filterer: {
