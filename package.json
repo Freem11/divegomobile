@@ -40,7 +40,6 @@
     "expo-splash-screen": "~0.27.6",
     "expo-status-bar": "~1.12.1",
     "expo-task-manager": "~11.8.2",
-    "expo-updates": "~0.25.27",
     "image-to-base64": "^2.2.0",
     "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
