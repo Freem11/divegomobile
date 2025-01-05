@@ -21,7 +21,6 @@ import {
 } from "../styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as AppleAuthentication from "expo-apple-authentication";
-// import { Settings } from "react-native-fbsdk-next";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import appleLogo from "../png/loginIcons/apple.png";
 import facebookLogo from "../png/loginIcons/facebook.png";
@@ -32,7 +31,6 @@ import { SessionContext } from "../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-// Settings.initializeSDK();
 
 const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;

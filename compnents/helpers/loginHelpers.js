@@ -1,5 +1,4 @@
 import * as AppleAuthentication from "expo-apple-authentication";
-import { Buffer } from "buffer";
 import {
   GoogleSignin,
   statusCodes,
