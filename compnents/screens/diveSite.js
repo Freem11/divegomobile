@@ -238,7 +238,7 @@ export default function DiveSite() {
       ...pinValues,
       Latitude: String(selectedDiveSite.Latitude),
       Longitude: String(selectedDiveSite.Longitude),
-      siteName: selectedDiveSite.SiteName,
+      siteName: selectedDiveSite.name,
     });
     setLevelOneScreen(false);
     setPreviousButtonID(activeScreen);
