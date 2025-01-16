@@ -446,9 +446,10 @@ export default function MapPage() {
                   toggleDiveSites={toggleDiveSites}
                 />
               </View>
+          
             </View>
           ) : null}
-
+         <View style={styles.iosBottom}/>
           <View
             pointerEvents={"box-none"}
             style={{
@@ -554,7 +555,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: "100%",
     height: moderateScale(65),
-    zIndex: 3,
+    zIndex: 3
+  },
+  iosBottom: {
+    position: 'absolute',
+    bottom: 0,
+    height: Platform.OS === "ios" ? moderateScale(15) : 0,
+    width: "100%",
+    backgroundColor: colors.primaryBlue,
+    zIndex: 3
   },
   lowerButtonWrapper: [
     primaryButtonAlt,
