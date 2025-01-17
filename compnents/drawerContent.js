@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     primaryButton,
     {
       position: 'absolute',
-      top: 800,
+      top: '80%',
       alignItems: "center",
       textAlign: "center",
       zIndex: 20,
