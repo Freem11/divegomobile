@@ -8,7 +8,7 @@ import {
   Dimensions,
   Keyboard,
 } from "react-native";
-import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
+import { activeFonts, colors, primaryButton, primaryButtonAlt, buttonTextAlt, buttonText } from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
 import Map from "./GoogleMap";
@@ -69,6 +69,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
+import BottomDrawer from './animatedBottomDrawerMain';
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -104,8 +105,11 @@ export default function MapPage() {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-
   const [isOpen, setIsOpen] = useState(false);
+
+  const drawerUpperBound = "105%";
+  const drawerLowerBound = Platform.OS === 'ios' ? "13%" : '11.5%';
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     filterAnchorPhotos();
@@ -515,6 +519,14 @@ export default function MapPage() {
           <AnimatedModalConfirmation />
 
           <Map style={{ zIndex: 1 }} />
+
+          <BottomDrawer
+            lowerBound={drawerLowerBound}
+            upperBound={drawerUpperBound}
+            drawerHeader={'Sea Life - Dive Sites - Dive Shops'}
+            setIsDrawerOpen={setIsDrawerOpen}
+            isDrawerOpen={isDrawerOpen}
+          />
         </View>
       </DiveSitesContext.Provider>
     </MapCenterContext.Provider>
@@ -574,6 +586,17 @@ const styles = StyleSheet.create({
     },
   ],
   lowerButtonText: buttonTextAlt,
+  mapButtonWrapper: [
+    primaryButton,
+    {
+      position: "absolute",
+      bottom: 100,
+      alignItems: "center",
+      textAlign: "center",
+      zIndex: 90,
+    },
+  ],
+  mapButtonText: buttonText,
   carrousel: {
     position: "absolute",
     flexDirection: "column",
