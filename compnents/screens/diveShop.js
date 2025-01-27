@@ -86,7 +86,7 @@ export default function DiveShop() {
     if (selectedShop[0]) {
       getItineraries(selectedShop[0].id);
     }
-  }, []);
+  }, [selectedShop]);
 
   useEffect(() => {
     if (selectedShop[0]) {
