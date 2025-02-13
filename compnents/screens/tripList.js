@@ -110,7 +110,7 @@ export default function TripListPage(props) {
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
     setEditMode({ itineraryInfo, IsEditModeOn: true });
-    setFormValues({...itineraryInfo, shopID : formValues.shopID})
+    setFormValues({...itineraryInfo, shopID : formValues.shopID, OriginalItineraryID: itineraryInfo.id})
     setSitesArray(itineraryInfo.siteList)
     setLevelOneScreen(false);
     useButtonPressHelper(
