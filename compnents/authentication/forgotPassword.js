@@ -102,8 +102,8 @@ export default function ForgotPage(props) {
 
     setIsEnabled(false)
     // const resetPasswordURL = Linking.createURL('');
-    const resetPasswordURL = 'https://localhost:3000/account/password'; //dev
-    // const resetPasswordURL = 'https://scubaseasons.netlify.app/account/password' //production
+    // const resetPasswordURL = 'https://localhost:3000/account/password'; //dev
+    const resetPasswordURL = 'https://scubaseasons.netlify.app/account/password' //production
 
     try {
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
