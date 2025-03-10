@@ -236,8 +236,8 @@ export default function DiveSite() {
   const openPicUploader = () => {
     setPinValues({
       ...pinValues,
-      Latitude: String(selectedDiveSite.Latitude),
-      Longitude: String(selectedDiveSite.Longitude),
+      Latitude: String(selectedDiveSite.lat),
+      Longitude: String(selectedDiveSite.lng),
       siteName: selectedDiveSite.name,
     });
     setLevelOneScreen(false);
