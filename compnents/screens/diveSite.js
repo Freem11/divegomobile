@@ -78,7 +78,7 @@ export default function DiveSite() {
     const success = await getItinerariesForDiveSite(site.id);
   };
 
-  const getPhotos = async (site, user) => {
+  const getPhotos = async (site, profile) => {
     const success = await getPhotosByDiveSiteWithExtra({
       lat: site.lat,
       lng: site.lng,

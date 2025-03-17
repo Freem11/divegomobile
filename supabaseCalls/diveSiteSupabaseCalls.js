@@ -166,3 +166,20 @@ export const updateDiveSite = async (values) => {
     return data;
   }
 };
+
+export const getSingleDiveSite = async (lat, lng) => {
+  const { data, error } = await supabase
+    .from('diveSites')
+    .select()
+    .eq('lat', lat)
+    .eq('lng', lng);
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
