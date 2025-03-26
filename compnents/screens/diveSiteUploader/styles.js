@@ -19,7 +19,6 @@ export const FullScreenCenter = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
-  
 `;
 
 export const BackButton = styled.View`
@@ -45,7 +44,6 @@ export const InputGroupContainer = styled.View`
 `;
 
 export const Header = styled.Text`
-  z-index: -1;
   margin: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Thin};
@@ -71,7 +69,6 @@ export const LocationText = styled.Text`
   font-size: ${fontSizes.StandardText}px;
 `;
 
-
 export const ButtonPosition = styled.View`
   ${screenSecondaryButton};
   flex-direction: row;
@@ -83,7 +80,7 @@ export const PinText = styled.Text`
   margin-horizontal: ${moderateScale(5)}px;
 `;
 
-export const Explainer = styled.Text`
+export const Hint = styled.Text`
   align-self: flex-start;
   text-align: center;
   color: ${colors.themeBlack};
@@ -105,12 +102,6 @@ export const SubmitText = styled.Text`
   ${buttonText};
   margin-horizontal: ${moderateScale(5)}px;
 `;
-
-export const SvgCurve = {
-  position: 'absolute',
-  bottom: 0,
-  width: Dimensions.get('window').width,
-};
 
 export const BackButtonWrapper = styled.View`
   z-index: 50;

@@ -9,15 +9,13 @@ import * as S from './styles';
 import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
 
-// continue:
-// flex, absolute, array of input ? 
 export default function DiveSiteUploaderView({
-    addSiteVals,
     onClose,
     onSubmit,
     onNavigate,
+    addSiteVals,
+    setAddSiteVals,
     getCurrentLocation,
-    setAddSiteVals
 }) {
     return (
         <Flex >
@@ -83,7 +81,7 @@ export default function DiveSiteUploaderView({
                     </TouchableWithoutFeedback>
                 </Flex>
 
-                <S.Explainer>{screenData.DiveSiteAdd.myLocationexplainer}</S.Explainer>
+                <S.Hint>{screenData.DiveSiteAdd.myLocationexplainer}</S.Hint>
 
                 <S.ButtonBox>
                     <TouchableWithoutFeedback onPress={onSubmit}>
@@ -95,7 +93,7 @@ export default function DiveSiteUploaderView({
                 </S.ButtonBox>
             </S.ContentContainer>
 
-            <WavyHeaderDynamic customStyles={S.SvgCurve} image={null} defaultImg="diveSitePhoto" />
+            <WavyHeaderDynamic image={null} defaultImg="diveSitePhoto" />
         </Flex >
     );
 }

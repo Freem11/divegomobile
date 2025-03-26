@@ -7,3 +7,4 @@ export const Flex = styled.View`
   align-items: ${({ align }) => align || 'flex-start'};
   ${({ bg }) => bg && `background-color: ${bg};`}
 `;
+
