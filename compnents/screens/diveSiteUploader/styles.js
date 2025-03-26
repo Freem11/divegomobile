@@ -19,6 +19,7 @@ export const FullScreenCenter = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
+  
 `;
 
 export const BackButton = styled.View`
@@ -41,7 +42,6 @@ export const ContentContainer = styled.View`
 export const InputGroupContainer = styled.View`
   margin-bottom: ${windowHeight / 70}px;
   width: ${windowWidth * 0.75}px;
-  align-items: center;
 `;
 
 export const Header = styled.Text`
@@ -64,14 +64,6 @@ export const ButtonBox = styled.View`
   margin-top: -15%;
   margin-right: 15%;
 `;
-
-export const ButtonOptions = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 84%;
-`;
-
 
 export const LocationText = styled.Text`
   ${buttonTextAlt};

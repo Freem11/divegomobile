@@ -106,16 +106,16 @@ export default function DiveSiteUploader() {
     });
   };
 
-  // return (
-  //   <DiveSiteUploaderView
-  //     addSiteVals={addSiteVals}
-  //     onSubmit={onSubmit}
-  //     getCurrentLocation={getCurrentLocation}
-  //     onNavigate={onNavigate}
-  //     onClose={onClose}
-  //     setAddSiteVals={setAddSiteVals}
-  //   />
-  // )
+  return (
+    <DiveSiteUploaderView
+      addSiteVals={addSiteVals}
+      onSubmit={onSubmit}
+      getCurrentLocation={getCurrentLocation}
+      onNavigate={onNavigate}
+      onClose={onClose}
+      setAddSiteVals={setAddSiteVals}
+    />
+  )
   return (
     <S.FullScreenCenter>
       <MaterialIcons

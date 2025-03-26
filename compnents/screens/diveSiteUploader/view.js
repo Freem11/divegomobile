@@ -20,7 +20,7 @@ export default function DiveSiteUploaderView({
     setAddSiteVals
 }) {
     return (
-        <S.FullScreenCenter>
+        <Flex >
             <S.BackButtonWrapper>
                 <MaterialIcons
                     name="chevron-left"
@@ -31,46 +31,45 @@ export default function DiveSiteUploaderView({
             </S.BackButtonWrapper>
             <S.ContentContainer>
                 <S.Header>{screenData.DiveSiteAdd.header}</S.Header>
-                <S.InputGroupContainer>
+                <Flex>
+                    <S.InputGroupContainer>
+                        <S.TextBuffer>
+                            <TextInputField
+                                icon="diving-scuba-flag"
+                                inputValue={addSiteVals.Site}
+                                placeHolderText={screenData.DiveSiteAdd.siteNamePlaceholder}
+                                vectorIcon="MaterialCommunityIcons"
+                                onChangeText={(text) => setAddSiteVals({ ...addSiteVals, Site: text })}
+                                secure={false}
+                            />
+                        </S.TextBuffer>
 
+                        <S.TextBuffer>
+                            <TextInputField
+                                icon="latitude"
+                                inputValue={addSiteVals.Latitude}
+                                placeHolderText={screenData.DiveSiteAdd.latPlaceholder}
+                                keyboardConfig="number-pad"
+                                vectorIcon="MaterialCommunityIcons"
+                                onChangeText={(text) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
+                                secure={false}
+                            />
+                        </S.TextBuffer>
 
-                    <S.TextBuffer>
-                        <TextInputField
-                            icon="diving-scuba-flag"
-                            inputValue={addSiteVals.Site}
-                            placeHolderText={screenData.DiveSiteAdd.siteNamePlaceholder}
-                            secure={false}
-                            vectorIcon="MaterialCommunityIcons"
-                            onChangeText={(text) => setAddSiteVals({ ...addSiteVals, Site: text })}
-                        />
-                    </S.TextBuffer>
-
-                    <S.TextBuffer>
-                        <TextInputField
-                            icon="latitude"
-                            inputValue={addSiteVals.Latitude}
-                            placeHolderText={screenData.DiveSiteAdd.latPlaceholder}
-                            vectorIcon="MaterialCommunityIcons"
-                            keyboardConfig="number-pad"
-                            secure={false}
-                            onChangeText={(text) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
-                        />
-                    </S.TextBuffer>
-
-                    <S.TextBuffer>
-                        <TextInputField
-                            icon="longitude"
-                            inputValue={addSiteVals.Longitude}
-                            placeHolderText={screenData.DiveSiteAdd.lngPlaceholder}
-                            vectorIcon="MaterialCommunityIcons"
-                            keyboardConfig="number-pad"
-                            secure={false}
-                            onChangeText={(text) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
-                        />
-                    </S.TextBuffer>
-                </S.InputGroupContainer>
-
-                <S.ButtonOptions>
+                        <S.TextBuffer>
+                            <TextInputField
+                                icon="longitude"
+                                inputValue={addSiteVals.Longitude}
+                                placeHolderText={screenData.DiveSiteAdd.lngPlaceholder}
+                                keyboardConfig="number-pad"
+                                vectorIcon="MaterialCommunityIcons"
+                                onChangeText={(text) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
+                                secure={false}
+                            />
+                        </S.TextBuffer>
+                    </S.InputGroupContainer>
+                </Flex>
+                <Flex direction="row" justify="space-between" width="84%">
                     <TouchableWithoutFeedback onPress={getCurrentLocation}>
                         <S.ButtonPosition>
                             <S.LocationText>{screenData.DiveSiteAdd.myLocationButton}</S.LocationText>
@@ -82,7 +81,7 @@ export default function DiveSiteUploaderView({
                             <S.PinText>{screenData.DiveSiteAdd.pinButton}</S.PinText>
                         </S.ButtonPosition>
                     </TouchableWithoutFeedback>
-                </S.ButtonOptions>
+                </Flex>
 
                 <S.Explainer>{screenData.DiveSiteAdd.myLocationexplainer}</S.Explainer>
 
@@ -97,7 +96,7 @@ export default function DiveSiteUploaderView({
             </S.ContentContainer>
 
             <WavyHeaderDynamic customStyles={S.SvgCurve} image={null} defaultImg="diveSitePhoto" />
-        </S.FullScreenCenter >
+        </Flex >
     );
 }
 
