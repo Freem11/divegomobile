@@ -38,6 +38,12 @@ export const ContentContainer = styled.View`
   align-items: center;
 `;
 
+export const InputGroupContainer = styled.View`
+  margin-bottom: ${windowHeight / 70}px;
+  width: ${windowWidth * 0.75}px;
+  align-items: center;
+`;
+
 export const Header = styled.Text`
   z-index: -1;
   margin: 5%;
@@ -66,11 +72,6 @@ export const ButtonOptions = styled.View`
   width: 84%;
 `;
 
-export const LocationButton = styled.View`
-  ${screenSecondaryButton};
-  flex-direction: row;
-  margin-top: 0%;
-`;
 
 export const LocationText = styled.Text`
   ${buttonTextAlt};
@@ -78,7 +79,8 @@ export const LocationText = styled.Text`
   font-size: ${fontSizes.StandardText}px;
 `;
 
-export const PinButton = styled.View`
+
+export const ButtonPosition = styled.View`
   ${screenSecondaryButton};
   flex-direction: row;
   margin-top: 0%;

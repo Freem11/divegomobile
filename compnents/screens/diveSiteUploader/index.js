@@ -127,14 +127,8 @@ export default function DiveSiteUploader() {
       />
       <S.ContentContainer>
         <S.Header>{screenData.DiveSiteAdd.header}</S.Header>
-        <View
-          style={{
-            marginBottom: windowHeight / 70,
-            width: windowWidth * 0.75,
-            alignItems: "center",
-          }}
-        >
-          <View style={styles.textBuffer}>
+        <S.InputGroupContainer>
+          <S.TextBuffer>
             <TextInputField
               icon={"diving-scuba-flag"}
               inputValue={addSiteVals.Site}
@@ -145,8 +139,8 @@ export default function DiveSiteUploader() {
                 setAddSiteVals({ ...addSiteVals, Site: text })
               }
             />
-          </View>
-          <View style={styles.textBuffer}>
+          </S.TextBuffer>
+          <S.TextBuffer>
             <TextInputField
               icon={"latitude"}
               inputValue={addSiteVals.Latitude}
@@ -158,8 +152,8 @@ export default function DiveSiteUploader() {
                 setAddSiteVals({ ...addSiteVals, Latitude: text })
               }
             />
-          </View>
-          <View style={styles.textBuffer}>
+          </S.TextBuffer>
+          <S.TextBuffer>
             <TextInputField
               icon={"longitude"}
               inputValue={addSiteVals.Longitude}
@@ -171,10 +165,10 @@ export default function DiveSiteUploader() {
                 setAddSiteVals({ ...addSiteVals, Longitude: text })
               }
             />
-          </View>
-        </View>
+          </S.TextBuffer>
+        </S.InputGroupContainer>
 
-        <View style={styles.buttonOptions}>
+        <S.ButtonOptions>
           <TouchableWithoutFeedback onPress={() => getCurrentLocation()}>
             <View style={styles.locationButton}>
               <Text style={styles.locationText}>
@@ -190,7 +184,7 @@ export default function DiveSiteUploader() {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        </View>
+        </S.ButtonOptions>
         <Text style={styles.explainer}>{screenData.DiveSiteAdd.myLocationexplainer}</Text>
 
         <View style={styles.buttonBox}>

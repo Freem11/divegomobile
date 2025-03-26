@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 
+// Flex, Absolute, etc
 export const FullScreenCenter = styled.View`
   flex: 1;
   justify-content: center;
