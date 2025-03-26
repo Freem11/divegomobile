@@ -6,7 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   Platform,
-  Keyboard,
+  Keyboard
 } from "react-native";
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import screenData from "../screenData.json";
@@ -32,6 +32,7 @@ import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabase
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
+import DiveSiteUploaderView from './view';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -105,6 +106,15 @@ export default function DiveSiteUploader() {
     });
   };
 
+  // return (
+  // <DiveSiteUploaderView
+  //   addSiteVals={addSiteVals}
+  //   onClose={onClose}
+  //   onSubmit={onSubmit}
+  //   onNavigate={onNavigate}
+  //   getCurrentLocation={getCurrentLocation}
+  //   setAddSiteVals={setAddSiteVals}
+  // />);
   return (
     <View style={styles.container}>
       <MaterialIcons
@@ -123,7 +133,7 @@ export default function DiveSiteUploader() {
             alignItems: "center",
           }}
         >
-
+          <DiveSiteUploaderView />
           <View style={styles.textBuffer}>
             <TextInputField
               icon={"diving-scuba-flag"}
