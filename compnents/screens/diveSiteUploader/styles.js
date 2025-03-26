@@ -14,6 +14,13 @@ import {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+export const FullScreenCenter = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+`;
+
 export const BackButton = styled.View`
   z-index: 50;
   position: absolute;
@@ -111,3 +118,9 @@ export const SvgCurve = {
   width: Dimensions.get('window').width,
 };
 
+export const BackButtonWrapper = styled.View`
+  z-index: 50;
+  position: absolute;
+  top: 5.5%;
+  left: 2%;
+`;

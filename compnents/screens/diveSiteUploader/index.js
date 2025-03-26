@@ -33,7 +33,7 @@ import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationID
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 import DiveSiteUploaderView from './view';
-
+import * as S from './styles';
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -107,16 +107,17 @@ export default function DiveSiteUploader() {
   };
 
   // return (
-  // <DiveSiteUploaderView
-  //   addSiteVals={addSiteVals}
-  //   onClose={onClose}
-  //   onSubmit={onSubmit}
-  //   onNavigate={onNavigate}
-  //   getCurrentLocation={getCurrentLocation}
-  //   setAddSiteVals={setAddSiteVals}
-  // />);
+  //   <DiveSiteUploaderView
+  //     addSiteVals={addSiteVals}
+  //     onSubmit={onSubmit}
+  //     getCurrentLocation={getCurrentLocation}
+  //     onNavigate={onNavigate}
+  //     onClose={onClose}
+  //     setAddSiteVals={setAddSiteVals}
+  //   />
+  // )
   return (
-    <View style={styles.container}>
+    <S.FullScreenCenter>
       <MaterialIcons
         name="chevron-left"
         size={moderateScale(48)}
@@ -124,8 +125,8 @@ export default function DiveSiteUploader() {
         onPress={() => onClose()}
         style={styles.backButton}
       />
-      <View style={styles.contentContainer}>
-        <Text style={styles.header}>{screenData.DiveSiteAdd.header}</Text>
+      <S.ContentContainer>
+        <S.Header>{screenData.DiveSiteAdd.header}</S.Header>
         <View
           style={{
             marginBottom: windowHeight / 70,
@@ -133,7 +134,6 @@ export default function DiveSiteUploader() {
             alignItems: "center",
           }}
         >
-          <DiveSiteUploaderView />
           <View style={styles.textBuffer}>
             <TextInputField
               icon={"diving-scuba-flag"}
@@ -205,25 +205,18 @@ export default function DiveSiteUploader() {
             </View>
           </TouchableWithoutFeedback>
         </View>
-      </View>
+      </S.ContentContainer>
 
       <WavyHeaderDynamic
         customStyles={styles.svgCurve}
         image={null}
         defaultImg={'diveSitePhoto'}
       ></WavyHeaderDynamic>
-    </View>
+    </S.FullScreenCenter>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-    height: windowHeight,
-  },
   backButton: [{ zIndex: 50, position: "absolute", top: "5.5%", left: "2%" }],
   contentContainer: {
     alignItems: "left",

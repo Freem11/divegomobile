@@ -1,11 +1,13 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 import { MaterialIcons } from '@expo/vector-icons';
 import TextInputField from '../../authentication/textInput';
 import WavyHeaderDynamic from '../wavyHeaderDynamic';
 import screenData from '../screenData.json';
 import * as S from './styles';
-import { FullScreenCenter } from '../../ui/containes';
+import { Flex } from '../../ui/containes';
+import { colors } from '../../styles';
 
 export default function DiveSiteUploaderView({
     addSiteVals,
@@ -16,16 +18,15 @@ export default function DiveSiteUploaderView({
     setAddSiteVals
 }) {
     return (
-        <FullScreenCenter >
-            <S.PinText>{screenData.DiveSiteAdd.pinButton}</S.PinText>
-            {/* <MaterialIcons
-                name="chevron-left"
-                size={48}
-                color="#fff"
-                onPress={onClose}
-                style={S.BackButton}
-            /> */}
-            {/* 
+        <S.FullScreenCenter>
+            <S.BackButtonWrapper>
+                <MaterialIcons
+                    name="chevron-left"
+                    size={moderateScale(48)}
+                    color={colors.themeWhite}
+                    onPress={onClose}
+                />
+            </S.BackButtonWrapper>
             <S.ContentContainer>
                 <S.Header>{screenData.DiveSiteAdd.header}</S.Header>
 
@@ -88,9 +89,13 @@ export default function DiveSiteUploaderView({
                         </S.SubmitButton>
                     </TouchableWithoutFeedback>
                 </S.ButtonBox>
-            </S.ContentContainer> */}
+            </S.ContentContainer>
 
             <WavyHeaderDynamic customStyles={S.SvgCurve} image={null} defaultImg="diveSitePhoto" />
-        </FullScreenCenter >
+        </S.FullScreenCenter >
     );
 }
+
+const styles = StyleSheet.create({
+    backButton: [{ zIndex: 50, position: "absolute", top: "5.5%", left: "2%" }]
+});
