@@ -65,7 +65,7 @@ export const primaryButton = {
 export const buttonText = {
   color: colors.themeWhite,
   fontFamily: activeFonts.Regular,
-  fontSize : moderateScale(fontSizes.StandardText)
+  fontSize: moderateScale(fontSizes.StandardText)
 }
 
 export const primaryButtonAlt = {
@@ -135,22 +135,22 @@ export const screenSecondaryButton = {
   elevation: 10,
 }
 
-export const roundButton = {
-  borderColor: "darkgrey",
-  borderWidth: moderateScale(1),
-  borderRadius: moderateScale(30),
-  width: moderateScale(55),
-  height: moderateScale(55),
-  color: colors.themeWhite,
-  alignItems: 'center',
-  justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(3),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
+// export const roundButton = {
+//   borderColor: "darkgrey",
+//   borderWidth: moderateScale(1),
+//   borderRadius: moderateScale(30),
+//   width: moderateScale(55),
+//   height: moderateScale(55),
+//   color: colors.themeWhite,
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   shadowColor: "#2d2d2d",
+//   shadowOffset: {
+//     width: moderateScale(3),
+//     height: moderateScale(1),
+//   },
+//   shadowOpacity: 0.5,
+//   shadowRadius: moderateScale(2),
 
-  elevation: 10,
-}
+//   elevation: 10,
+// }
