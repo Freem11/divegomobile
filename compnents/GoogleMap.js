@@ -40,7 +40,6 @@ import { setupClusters, setupShopClusters } from "./helpers/clusterHelpers";
 import useSupercluster from "use-supercluster";
 import {
   getDiveSitesWithUser,
-  getSingleDiveSite,
   getSingleDiveSiteByNameAndRegion,
 } from "../supabaseCalls/diveSiteSupabaseCalls";
 import {
@@ -429,12 +428,15 @@ export default function Map() {
     options: { radius: 75, maxZoom: 16, minZoom: 3 },
   });
 
-  const setupAnchorModal = async(diveSiteName, lat, lng) => {
+  const setupAnchorModal = async(id, diveSiteName, lat, lng) => {
     const cleanedSiteName = diveSiteName.split('~');
     const steName = cleanedSiteName[0]
     const siteRegion = cleanedSiteName[1] === "null" ? null : cleanedSiteName[1]
-    const chosenSite = await getSingleDiveSite(lat, lng);
-    setSelectedDiveSite(chosenSite[0]);
+    const chosenSite = await getSingleDiveSiteByNameAndRegion({name: steName, region: siteRegion})
+    if(chosenSite){
+      setSelectedDiveSite(chosenSite[0]);
+    }
+
 
     setTiles(true);
     setShowFilterer(false);
@@ -593,6 +595,7 @@ export default function Map() {
                     : mapConfig === 1
                     ? null
                     : setupAnchorModal(
+                        cluster,
                         cluster.properties.siteID,
                         latitude,
                         longitude
@@ -639,6 +642,7 @@ export default function Map() {
                   mapConfig === 3
                     ? removeFromSitesArray(cluster.properties.siteID)
                     : setupAnchorModal(
+                        cluster.properties.id,
                         cluster.properties.siteID,
                         latitude,
                         longitude
