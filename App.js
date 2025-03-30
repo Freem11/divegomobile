@@ -101,9 +101,9 @@ export default function App() {
         if (asyncData === null) {
           setAppIsReady(true);
         } else {
-          if (asyncData.refresh_token) {
+          if (asyncData.session.refresh_token) {
             let newSession = await sessionRefresh(
-              asyncData.refresh_token
+              asyncData.session.refresh_token
             );
             if (newSession === null) {
               setAppIsReady(true);
