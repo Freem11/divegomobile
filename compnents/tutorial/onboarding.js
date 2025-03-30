@@ -11,7 +11,7 @@ import {
   Keyboard,
   KeyboardAvoidingView
 } from "react-native";
-import { activeFonts, colors, fontSizes, roundButton } from '../styles';
+import { activeFonts, colors, fontSizes } from '../styles';
 import { scale, moderateScale } from "react-native-size-matters";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import carrouselData from "./carrouselData";
@@ -148,7 +148,7 @@ export default function OnboardingTest() {
       }
     }
   };
-  
+
   return (
     <View style={styles.wrapper}>
       <FlatList
@@ -172,45 +172,45 @@ export default function OnboardingTest() {
             {item.page !== 2 ? (
 
               <MaskedView
-              maskElement={
-                <LinearGradient
-                style={{flex: 1}}
-                colors={["green", "transparent"]}
-                start={{ x: 0.5, y: 0.7 }}></LinearGradient>
-              }
+                maskElement={
+                  <LinearGradient
+                    style={{ flex: 1 }}
+                    colors={["green", "transparent"]}
+                    start={{ x: 0.5, y: 0.7 }}></LinearGradient>
+                }
               >
-              <View style={styles.scrollViewBox}>
-                <ScrollView style={styles.scrollView}>
-                  <Text style={styles.content}>{item.content}</Text>
-                </ScrollView>
-              </View>
+                <View style={styles.scrollViewBox}>
+                  <ScrollView style={styles.scrollView}>
+                    <Text style={styles.content}>{item.content}</Text>
+                  </ScrollView>
+                </View>
               </MaskedView>
             ) : (
               <Text style={styles.content}>{item.content}</Text>
             )}
 
             {item.page === 2 ? (
-                  <KeyboardAvoidingView
-                  behavior="position"
-                  keyboardVerticalOffset={moderateScale(150)}
-                  style={{width: '100%', alignItems: 'center'}}
-                >
-              <View style={styles.inputBox}>
-                <TextInputField
-                  icon={"scuba-diving"}
-                  placeHolderText={"Diver Name"}
-                  inputValue={formVal.userName}
-                  secure={false}
-                  onChangeText={(text) => handleText(text)}
-                />
-              </View>
+              <KeyboardAvoidingView
+                behavior="position"
+                keyboardVerticalOffset={moderateScale(150)}
+                style={{ width: '100%', alignItems: 'center' }}
+              >
+                <View style={styles.inputBox}>
+                  <TextInputField
+                    icon={"scuba-diving"}
+                    placeHolderText={"Diver Name"}
+                    inputValue={formVal.userName}
+                    secure={false}
+                    onChangeText={(text) => handleText(text)}
+                  />
+                </View>
               </KeyboardAvoidingView>
             ) : null}
 
             {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
 
             <View style={styles.imageBox}>
-            <Image style={styles.image} source={emilio} />
+              <Image style={styles.image} source={emilio} />
             </View>
 
             <View style={styles.buttonBox}>
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: moderateScale(0),
     right: moderateScale(0),
-    pointerEvents:'none'
+    pointerEvents: 'none'
   },
   image: {
     position: "absolute",

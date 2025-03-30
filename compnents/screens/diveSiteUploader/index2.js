@@ -8,10 +8,10 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
-import screenData from "./screenData.json";
-import WavyHeaderDynamic from "./wavyHeaderDynamic";
-import TextInputField from "../authentication/textInput";
+import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
+import screenData from "../screenData.json";
+import WavyHeaderDynamic from "../wavyHeaderDynamic";
+import TextInputField from "../../authentication/textInput";
 import {
   activeFonts,
   colors,
@@ -20,23 +20,23 @@ import {
   buttonText,
   buttonTextAlt,
   screenSecondaryButton
-} from "../styles";
+} from "../../styles";
 import { moderateScale } from "react-native-size-matters";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { MapHelperContext } from "../contexts/mapHelperContext";
-import { MapConfigContext } from "../contexts/mapConfigContext";
-import { ModalSelectContext } from "../contexts/modalSelectContext";
-import { DiveSpotContext } from "../contexts/diveSpotContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { MapHelperContext } from "../../contexts/mapHelperContext";
+import { MapConfigContext } from "../../contexts/mapConfigContext";
+import { ModalSelectContext } from "../../contexts/modalSelectContext";
+import { DiveSpotContext } from "../../contexts/diveSpotContext";
 import { MaterialIcons } from "@expo/vector-icons";
-import { insertDiveSiteWaits } from "../../supabaseCalls/diveSiteWaitSupabaseCalls";
-import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
-import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
+import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabaseCalls";
+import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function DiveSiteUploader() {
+export default function Index() {
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext

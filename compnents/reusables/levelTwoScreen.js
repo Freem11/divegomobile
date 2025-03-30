@@ -10,7 +10,7 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
-import DiveSiteUploader from '../screens/diveSiteUploader';
+import DiveSiteUploadScreen from '../screens/diveSiteUploader';
 import TripCreatorPage from '../screens/tripCreator';
 import { colors } from "../styles";
 
@@ -46,7 +46,7 @@ export default function LevelTwoScreen() {
       {activeScreen === "ProfileScreen" && <UserProfile />}
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen === "PictureUploadScreen" && <PicUploader />}
-      {activeScreen === "DiveSiteUploadScreen" && <DiveSiteUploader />}
+      {activeScreen === "DiveSiteUploadScreen" && <DiveSiteUploadScreen />}
       {activeScreen === "TripCreatorScreen" && <TripCreatorPage />}
     </Animated.View>
   );
