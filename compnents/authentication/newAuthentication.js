@@ -65,7 +65,7 @@ export default function Authentication() {
     carrouselIndex === 1 ? moveToLandingPage() : null
     carrouselIndex === 2 ? moveToLoginPage() : null
     carrouselIndex === 3 ? moveToForgotPasswordPage() : null
-  },[carrouselIndex])
+  }, [carrouselIndex])
 
   return (
     <View style={styles.wrapper}>
@@ -129,14 +129,14 @@ export default function Authentication() {
                 promptLinkText={item.promptLinkText}
                 moveToLandingPage={moveToLandingPage}
                 moveToSignUpPage={moveToSignUpPage}
-                loginFail={loginFail} 
+                loginFail={loginFail}
                 setLoginFail={setLoginFail}
                 moveToForgotPasswordPage={moveToForgotPasswordPage}
                 forgotPromt={item.forgotPromt}
               />
             ) : null}
-             {item.page === 4 ? (
-             <ForgotPage
+            {item.page === 4 ? (
+              <ForgotPage
                 title={item.title}
                 emailPlaceholder={item.emailPlaceholder}
                 buttonText={item.buttonText}
