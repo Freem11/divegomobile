@@ -1,16 +1,16 @@
-import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { Dimensions } from "react-native";
+import { moderateScale } from "react-native-size-matters";
 import {
   colors,
   fontSizes,
   buttonText,
   activeFonts,
   authenicationButton,
-} from '../../styles';
+} from "../../styles";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export const Container = styled.View`
   flex: 1;

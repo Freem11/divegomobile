@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Keyboard } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import LoginPageView from './view';
-import { SessionContext } from '../../contexts/sessionContext';
-import { handleLogInSubmit } from '../../helpers/loginHelpers';
+import React, { useState, useContext, useEffect } from "react";
+import { Keyboard } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import LoginPageView from "./view";
+import { SessionContext } from "../../contexts/sessionContext";
+import { handleLogInSubmit } from "../../helpers/loginHelpers";
 
 export default function LoginPage(props) {
   const {
@@ -21,7 +21,7 @@ export default function LoginPage(props) {
     forgotPromt,
   } = props;
 
-  const [formVals, setFormVals] = useState({ email: '', password: '' });
+  const [formVals, setFormVals] = useState({ email: "", password: "" });
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { setActiveSession } = useContext(SessionContext);
 
@@ -46,7 +46,9 @@ export default function LoginPage(props) {
       moveToLandingPage={moveToLandingPage}
       moveToForgotPasswordPage={moveToForgotPasswordPage}
       moveToSignUpPage={moveToSignUpPage}
-      handleLogin={() => handleLogInSubmit(formVals, setActiveSession, setLoginFail)}
+      handleLogin={() =>
+        handleLogInSubmit(formVals, setActiveSession, setLoginFail)
+      }
     />
   );
 }
