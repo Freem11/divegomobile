@@ -22,6 +22,7 @@ export default function TextInputField(props) {
     vectorIcon,
     handleClear,
     animal,
+    style = {},
     keyboardConfig,
   } = props;
 
@@ -38,7 +39,7 @@ export default function TextInputField(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...style}>
       {!vectorIcon ? (
         <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" />
       ) : null}
@@ -87,7 +88,7 @@ export default function TextInputField(props) {
       ) : null}
       {(placeHolderText === "Sea Life Encountered" ||
         placeHolderText === "Search by Dive Site name or Location") &&
-      animal.length > 1 ? (
+        animal.length > 1 ? (
         <MaterialIcons
           name="highlight-remove"
           size={moderateScale(22)}

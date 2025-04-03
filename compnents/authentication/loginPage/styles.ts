@@ -2,11 +2,11 @@ import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import {
-  activeFonts,
   colors,
   fontSizes,
-  authenicationButton,
   buttonText,
+  activeFonts,
+  authenicationButton,
 } from '../../styles';
 
 const windowWidth = Dimensions.get('window').width;
@@ -51,6 +51,7 @@ export const PromptBox = styled.View`
   bottom: ${moderateScale(10)}px;
   width: 100%;
   flex-direction: row;
+  gap: 10px;
   justify-content: center;
 `;
 
@@ -63,7 +64,6 @@ export const PromptText = styled.Text`
 export const PromptLinkText = styled.Text`
   margin-top: ${moderateScale(1)}px;
   font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.Thin};
   color: ${colors.primaryBlue};
 `;
 

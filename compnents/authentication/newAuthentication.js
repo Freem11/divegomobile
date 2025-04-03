@@ -10,6 +10,7 @@ import carrouselData from "./carrouselData";
 import CreateAccountPage from "./createAccountPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
+// import LoginPage from "./loginPage/index2";
 import ForgotPage from "./forgotPassword";
 import { colors } from "../styles";
 
@@ -20,7 +21,7 @@ const PAGES = { SIGN_UP: 0, LANDING: 1, LOGIN: 2, FORGOT_PASSWORD: 3 };
 
 export default function Authentication() {
   const scrollViewRef = useRef(null);
-  const [carrouselIndex, setCarrouselIndex] = useState(PAGES.LANDING);
+  const [carrouselIndex, setCarrouselIndex] = useState(PAGES.LOGIN);
   const [loginFail, setLoginFail] = useState(null);
   const [regFail, setRegFail] = useState(null);
   const [emailSent, setEmailSent] = useState(null);
@@ -44,7 +45,7 @@ export default function Authentication() {
     });
   };
 
-  // TODO: refactor create acfcount page to use screen data
+  // TODO: refactor to use screen data / i18n
 
   return (
     <View style={styles.wrapper}>
