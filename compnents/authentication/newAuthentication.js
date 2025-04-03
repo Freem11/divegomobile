@@ -1,182 +1,130 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Dimensions,
-  FlatList,
+  ScrollView,
   View,
 } from "react-native";
 import carrouselData from "./carrouselData";
 import CreateAccountPage from "./createAccountPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
-import ForgotPage from './forgotPassword';
-import {
-  colors,
-} from "../styles";
+import ForgotPage from "./forgotPassword";
+import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+const PAGES = { SIGN_UP: 0, LANDING: 1, LOGIN: 2, FORGOT_PASSWORD: 3 };
+
 export default function Authentication() {
-  const carrouselRef = useRef(null);
-  const [carrouselIndex, setCarrouselIndex] = useState(1);
+  const scrollViewRef = useRef(null);
+  const [carrouselIndex, setCarrouselIndex] = useState(PAGES.LANDING);
   const [loginFail, setLoginFail] = useState(null);
   const [regFail, setRegFail] = useState(null);
   const [emailSent, setEmailSent] = useState(null);
 
-  const moveToForgotPasswordPage = () => {
+  const setPage = (pageIndex) => {
     setLoginFail(null);
     setRegFail(null);
     setEmailSent(null);
-    setCarrouselIndex(3);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
-  };
-
-  const moveToLoginPage = () => {
-    setLoginFail(null);
-    setRegFail(null);
-    setEmailSent(null);
-    setCarrouselIndex(2);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
-  };
-
-  const moveToLandingPage = () => {
-    setLoginFail(null);
-    setRegFail(null);
-    setEmailSent(null);
-    setCarrouselIndex(1);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
-  };
-
-  const moveToSignUpPage = () => {
-    setLoginFail(null);
-    setRegFail(null);
-    setEmailSent(null);
-    setCarrouselIndex(0);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
+    setCarrouselIndex(pageIndex);
+    scrollViewRef.current?.scrollTo({
+      x: windowWidth * pageIndex,
+      animated: true,
+    });
   };
 
   useEffect(() => {
-    carrouselIndex === 0 ? moveToSignUpPage() : null
-    carrouselIndex === 1 ? moveToLandingPage() : null
-    carrouselIndex === 2 ? moveToLoginPage() : null
-    carrouselIndex === 3 ? moveToForgotPasswordPage() : null
-  }, [carrouselIndex])
+    carrouselIndex === PAGES.LOGIN && setPage(PAGES.LOGIN);
+    carrouselIndex === PAGES.SIGN_UP && setPage(PAGES.SIGN_UP);
+    carrouselIndex === PAGES.LANDING && setPage(PAGES.LANDING);
+    carrouselIndex === PAGES.FORGOT_PASSWORD && setPage(PAGES.FORGOT_PASSWORD);
+  }, [carrouselIndex]);
 
   return (
     <View style={styles.wrapper}>
-      <FlatList
-        style={styles.page}
-        contentContainerStyle={styles.pageContainter}
-        ref={carrouselRef}
+      <ScrollView
         horizontal
         pagingEnabled
-        onScrollToIndexFailed={(carrouselIndex) => {
-          const wait = new Promise((resolve) => setTimeout(resolve, 1));
-          wait.then(() => {
-            setCarrouselIndex(1);
-            const scrollToIndex = carrouselIndex;
-            carrouselRef.current?.scrollToIndex(scrollToIndex);
-          });
-        }}
+        scrollEnabled={false}
+        ref={scrollViewRef}
         showsHorizontalScrollIndicator={false}
-        snapToInterval={windowWidth}
-        snapToAlignment="center"
-        decelerationRate="fast"
-        disableIntervalMomentum
-        keyExtractor={(item) => item.page}
-        data={carrouselData}
-        renderItem={({ item }) => (
-          <View key={item.page} style={styles.pageContent}>
-            {item.page === 1 ? (
-              <CreateAccountPage
-                title={item.title}
-                emailPlaceholder={item.emailPlaceholder}
-                passwordPlaceholder={item.passwordPlaceholder}
-                namePlaceholder={item.namePlaceholder}
-                buttonText={item.buttonText}
-                promptText={item.promptText}
-                promptLinkText={item.promptLinkText}
-                moveToLandingPage={moveToLandingPage}
-                moveToLoginPage={moveToLoginPage}
-                regFail={regFail}
-                setRegFail={setRegFail}
-              />
-            ) : null}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.pageContainter}
+      >
+        <View style={styles.pageContent}>
+          <CreateAccountPage
+            title={carrouselData[0].title}
+            emailPlaceholder={carrouselData[0].emailPlaceholder}
+            passwordPlaceholder={carrouselData[0].passwordPlaceholder}
+            namePlaceholder={carrouselData[0].namePlaceholder}
+            buttonText={carrouselData[0].buttonText}
+            promptText={carrouselData[0].promptText}
+            promptLinkText={carrouselData[0].promptLinkText}
+            moveToLandingPage={() => setPage(PAGES.LANDING)}
+            moveToLoginPage={() => setPage(PAGES.LOGIN)}
+            regFail={regFail}
+            setRegFail={setRegFail}
+          />
+        </View>
 
-            {item.page === 2 ? (
-              <LandingPage
-                title={item.title}
-                loginButton={item.buttonOneText}
-                registerButton={item.buttonTwoText}
-                content={item.content}
-                moveToLoginPage={moveToLoginPage}
-                moveToSignUpPage={moveToSignUpPage}
-              />
-            ) : null}
+        <View style={styles.pageContent}>
+          <LandingPage
+            title={carrouselData[1].title}
+            loginButton={carrouselData[1].buttonOneText}
+            registerButton={carrouselData[1].buttonTwoText}
+            content={carrouselData[1].content}
+            moveToLoginPage={() => setPage(PAGES.LOGIN)}
+            moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
+          />
+        </View>
 
-            {item.page === 3 ? (
-              <LoginPage
-                title={item.title}
-                emailPlaceholder={item.emailPlaceholder}
-                passwordPlaceholder={item.passwordPlaceholder}
-                buttonText={item.buttonText}
-                promptText={item.promptText}
-                promptLinkText={item.promptLinkText}
-                moveToLandingPage={moveToLandingPage}
-                moveToSignUpPage={moveToSignUpPage}
-                loginFail={loginFail}
-                setLoginFail={setLoginFail}
-                moveToForgotPasswordPage={moveToForgotPasswordPage}
-                forgotPromt={item.forgotPromt}
-              />
-            ) : null}
-            {item.page === 4 ? (
-              <ForgotPage
-                title={item.title}
-                emailPlaceholder={item.emailPlaceholder}
-                buttonText={item.buttonText}
-                moveToLoginPage={moveToLoginPage}
-                setEmailSent={setEmailSent}
-                emailSent={emailSent}
-              />
-            ) : null}
-          </View>
-        )}
-      />
+        <View style={styles.pageContent}>
+          <LoginPage
+            title={carrouselData[2].title}
+            emailPlaceholder={carrouselData[2].emailPlaceholder}
+            passwordPlaceholder={carrouselData[2].passwordPlaceholder}
+            buttonText={carrouselData[2].buttonText}
+            promptText={carrouselData[2].promptText}
+            promptLinkText={carrouselData[2].promptLinkText}
+            forgotPromt={carrouselData[2].forgotPromt}
+            loginFail={loginFail}
+            setLoginFail={setLoginFail}
+            moveToLandingPage={() => setPage(PAGES.LANDING)}
+            moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
+            moveToForgotPasswordPage={() => setPage(PAGES.FORGOT_PASSWORD)}
+          />
+        </View>
+
+        <View style={styles.pageContent}>
+          <ForgotPage
+            title={carrouselData[3].title}
+            emailPlaceholder={carrouselData[3].emailPlaceholder}
+            buttonText={carrouselData[3].buttonText}
+            moveToLoginPage={() => setPage(PAGES.LOGIN)}
+            setEmailSent={setEmailSent}
+            emailSent={emailSent}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: "absolute",
-    height: "100%",
-    width: windowWidth,
+    flex: 1,
     backgroundColor: colors.themeWhite,
-    zIndex: 26,
-    left: 0,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  page: {
-    width: "100%",
-    height: "100%",
-    // backgroundColor: "pink"
   },
   pageContainter: {
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "pink"
   },
   pageContent: {
-    // backgroundColor: "green",
-    height: windowHeight,
     width: windowWidth,
+    height: windowHeight,
+    justifyContent: "center",
     alignItems: "center",
   },
 });

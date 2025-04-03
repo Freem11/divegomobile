@@ -86,41 +86,58 @@ export default function App() {
   });
 
   useLayoutEffect(() => {
-    async function prepare() {
+    const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
 
       if (Platform.OS === "ios") {
-        ScreenOrientation.lockAsync(
+        await ScreenOrientation.lockAsync(
           ScreenOrientation.OrientationLock.PORTRAIT_UP
         );
       }
 
       try {
-        const asyncData = JSON.parse(await AsyncStorage.getItem("token"));
-        if (asyncData === null) {
+        const storedToken = await AsyncStorage.getItem("token");
+
+        if (!storedToken) {
+          console.log("No token found in AsyncStorage.");
           setAppIsReady(true);
-        } else {
-          if (asyncData.session.refresh_token) {
-            let newSession = await sessionRefresh(
-              asyncData.session.refresh_token
-            );
-            if (newSession === null) {
-              setAppIsReady(true);
-            } else {
-              setActiveSession(newSession);
-              setAppIsReady(true);
-            }
-          } else {
-            setAppIsReady(true);
-          }
+          return;
         }
+
+        let asyncData;
+        try {
+          asyncData = JSON.parse(storedToken);
+        } catch (e) {
+          console.log("Token in AsyncStorage is not valid JSON.");
+          setAppIsReady(true);
+          return;
+        }
+        // TODO: uncomment to show the token
+        // if (
+        //   asyncData?.session?.refresh_token &&
+        //   typeof asyncData.session.refresh_token === "string"
+        // ) {
+        //   const newSession = await sessionRefresh(asyncData.session.refresh_token);
+
+        //   if (newSession) {
+        //     setActiveSession(newSession);
+        //   } else {
+        //     console.log("Session refresh failed.");
+        //   }
+        // } else {
+        //   console.log("No refresh token found in session.");
+        // }
       } catch (error) {
         console.log("no dice:", error.message);
+      } finally {
+        setAppIsReady(true);
       }
-    }
+    };
+
     prepare();
   }, []);
+
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
