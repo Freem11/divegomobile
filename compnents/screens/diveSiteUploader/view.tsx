@@ -2,7 +2,6 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { MaterialIcons } from '@expo/vector-icons';
-import TextInputField from '../../authentication/textInput';
 import WavyHeaderDynamic from '../wavyHeaderDynamic';
 import screenData from '../screenData.json';
 import * as S from './styles';
@@ -54,20 +53,16 @@ export default function DiveSiteUploaderView({
           <S.InputGroupContainer>
             <S.TextBuffer>
               <MobileTextInput 
-              iconLeft={<DivingScubaFlag 
-              height={28} 
-              width={28} 
-              color="darkgray"/>} placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
+              iconLeft={<DivingScubaFlag height={28} width={28} color="darkgray"/>}
+              placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
               />
             </S.TextBuffer>
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Latitude 
-              height={28} 
-              width={28} 
-              color="darkgray"/>} placeholder={screenData.DiveSiteAdd.latPlaceholder}
+              iconLeft={<Latitude height={28} width={28} color="darkgray"/>} 
+              placeholder={screenData.DiveSiteAdd.latPlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
               keyboardConfig="number-pad"
               />
@@ -75,10 +70,8 @@ export default function DiveSiteUploaderView({
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Longitude 
-              height={28} 
-              width={28} 
-              color="darkgray"/>} placeholder={screenData.DiveSiteAdd.lngPlaceholder}
+              iconLeft={<Longitude height={28} width={28} color="darkgray"/>} 
+              placeholder={screenData.DiveSiteAdd.lngPlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
               keyboardConfig="number-pad"
               />
