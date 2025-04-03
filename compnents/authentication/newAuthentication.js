@@ -4,6 +4,7 @@ import {
   Dimensions,
   ScrollView,
   View,
+  Keyboard,
 } from "react-native";
 import carrouselData from "./carrouselData";
 import CreateAccountPage from "./createAccountPage";
@@ -24,6 +25,14 @@ export default function Authentication() {
   const [regFail, setRegFail] = useState(null);
   const [emailSent, setEmailSent] = useState(null);
 
+  useEffect(() => {
+    Keyboard.dismiss()
+    carrouselIndex === PAGES.LOGIN && setPage(PAGES.LOGIN);
+    carrouselIndex === PAGES.SIGN_UP && setPage(PAGES.SIGN_UP);
+    carrouselIndex === PAGES.LANDING && setPage(PAGES.LANDING);
+    carrouselIndex === PAGES.FORGOT_PASSWORD && setPage(PAGES.FORGOT_PASSWORD);
+  }, [carrouselIndex]);
+
   const setPage = (pageIndex) => {
     setLoginFail(null);
     setRegFail(null);
@@ -35,12 +44,7 @@ export default function Authentication() {
     });
   };
 
-  useEffect(() => {
-    carrouselIndex === PAGES.LOGIN && setPage(PAGES.LOGIN);
-    carrouselIndex === PAGES.SIGN_UP && setPage(PAGES.SIGN_UP);
-    carrouselIndex === PAGES.LANDING && setPage(PAGES.LANDING);
-    carrouselIndex === PAGES.FORGOT_PASSWORD && setPage(PAGES.FORGOT_PASSWORD);
-  }, [carrouselIndex]);
+  // TODO: refactor create acfcount page to use screen data
 
   return (
     <View style={styles.wrapper}>
@@ -55,13 +59,13 @@ export default function Authentication() {
       >
         <View style={styles.pageContent}>
           <CreateAccountPage
-            title={carrouselData[0].title}
-            emailPlaceholder={carrouselData[0].emailPlaceholder}
-            passwordPlaceholder={carrouselData[0].passwordPlaceholder}
-            namePlaceholder={carrouselData[0].namePlaceholder}
-            buttonText={carrouselData[0].buttonText}
-            promptText={carrouselData[0].promptText}
-            promptLinkText={carrouselData[0].promptLinkText}
+            title={carrouselData[PAGES.SIGN_UP].title}
+            emailPlaceholder={carrouselData[PAGES.SIGN_UP].emailPlaceholder}
+            passwordPlaceholder={carrouselData[PAGES.SIGN_UP].passwordPlaceholder}
+            namePlaceholder={carrouselData[PAGES.SIGN_UP].namePlaceholder}
+            buttonText={carrouselData[PAGES.SIGN_UP].buttonText}
+            promptText={carrouselData[PAGES.SIGN_UP].promptText}
+            promptLinkText={carrouselData[PAGES.SIGN_UP].promptLinkText}
             moveToLandingPage={() => setPage(PAGES.LANDING)}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
             regFail={regFail}
@@ -71,41 +75,45 @@ export default function Authentication() {
 
         <View style={styles.pageContent}>
           <LandingPage
-            title={carrouselData[1].title}
-            loginButton={carrouselData[1].buttonOneText}
-            registerButton={carrouselData[1].buttonTwoText}
-            content={carrouselData[1].content}
+            title={carrouselData[PAGES.LANDING].title}
+            loginButton={carrouselData[PAGES.LANDING].buttonOneText}
+            registerButton={carrouselData[PAGES.LANDING].buttonTwoText}
+            content={carrouselData[PAGES.LANDING].content}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
             moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
           />
         </View>
 
         <View style={styles.pageContent}>
+
           <LoginPage
-            title={carrouselData[2].title}
-            emailPlaceholder={carrouselData[2].emailPlaceholder}
-            passwordPlaceholder={carrouselData[2].passwordPlaceholder}
-            buttonText={carrouselData[2].buttonText}
-            promptText={carrouselData[2].promptText}
-            promptLinkText={carrouselData[2].promptLinkText}
-            forgotPromt={carrouselData[2].forgotPromt}
+            title={carrouselData[PAGES.LOGIN].title}
+            promptText={carrouselData[PAGES.LOGIN].promptText}
+            buttonText={carrouselData[PAGES.LOGIN].buttonText}
+            emailPlaceholder={carrouselData[PAGES.LOGIN].emailPlaceholder}
+            passwordPlaceholder={carrouselData[PAGES.LOGIN].passwordPlaceholder}
+            promptLinkText={carrouselData[PAGES.LOGIN].promptLinkText}
+            forgotPromt={carrouselData[PAGES.LOGIN].forgotPromt}
             loginFail={loginFail}
             setLoginFail={setLoginFail}
             moveToLandingPage={() => setPage(PAGES.LANDING)}
             moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
             moveToForgotPasswordPage={() => setPage(PAGES.FORGOT_PASSWORD)}
           />
+
         </View>
 
         <View style={styles.pageContent}>
+
           <ForgotPage
-            title={carrouselData[3].title}
-            emailPlaceholder={carrouselData[3].emailPlaceholder}
-            buttonText={carrouselData[3].buttonText}
+            title={carrouselData[PAGES.FORGOT_PASSWORD].title}
+            buttonText={carrouselData[PAGES.FORGOT_PASSWORD].buttonText}
+            emailPlaceholder={carrouselData[PAGES.FORGOT_PASSWORD].emailPlaceholder}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
             setEmailSent={setEmailSent}
             emailSent={emailSent}
           />
+
         </View>
       </ScrollView>
     </View>

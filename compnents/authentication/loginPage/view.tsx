@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as S from './styles';
 import TextInputField from '../textInput';
@@ -37,14 +37,14 @@ export default function LoginPageView({
     promptLinkText,
     forgotPromt,
     formVals,
-    setFormVals,
-    secureTextEntry,
-    setSecureTextEntry,
     loginFail,
-    moveToLandingPage,
-    moveToForgotPasswordPage,
-    moveToSignUpPage,
+    secureTextEntry,
+    setFormVals,
     handleLogin,
+    moveToSignUpPage,
+    moveToLandingPage,
+    setSecureTextEntry,
+    moveToForgotPasswordPage,
 }: IProps) {
     return (
         <S.Container>
