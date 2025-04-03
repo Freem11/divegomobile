@@ -36,17 +36,17 @@ const createSessionFromUrl = async (url) => {
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
   try {
-  setIsSignedIn(true);
+    setIsSignedIn(true);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
-      options :{
+      options: {
         redirectTo,
         skipBrowserRedirect: true,
       }
     });
 
-    if(data){
+    if (data) {
       const res = await WebBrowser.openAuthSessionAsync(
         data?.url ?? "",
         redirectTo
@@ -55,18 +55,18 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
       if (res.type === "cancel") {
         throw error
       }
-    
+
       if (res.type === "success") {
         const { url } = res;
         let data = await createSessionFromUrl(url);
         handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
       }
     }
-   
-    } catch (error) {
-      setIsSignedIn(false);
-      console.log(error);
-    }
+
+  } catch (error) {
+    setIsSignedIn(false);
+    console.log(error);
+  }
 };
 
 export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
@@ -113,14 +113,14 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
         token: userInfo.identityToken,
       })
 
-      if(error){
+      if (error) {
         throw error
       }
 
-      if(data){
+      if (data) {
         handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
       }
-    
+
     } else {
       setIsSignedIn(false);
       throw new Error('no ID token present!')
@@ -134,28 +134,28 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
 async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
   if (sessionToken) {
     await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
-    if(sessionToken.session){
+    if (sessionToken.session) {
       setActiveSession(sessionToken.session);
     } else {
       setActiveSession(sessionToken);
     }
     setIsSignedIn(false);
     let sanitizeData
-    if(sessionToken.session){
+    if (sessionToken.session) {
       sanitizeData = sessionToken.session
     } else {
       sanitizeData = sessionToken
     }
- 
+
     let profileCheck = await grabProfileById(sanitizeData.user.id)
 
-   if(profileCheck.length === 0){
+    if (profileCheck.length === 0) {
       await createProfile({
         id: sanitizeData.user.id,
         email: sanitizeData.user.email,
       });
       console.log('profile created!')
-   }
+    }
   }
 }
 
@@ -191,11 +191,11 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
     return;
   } else {
 
-      let dataPack = {
-        email: formVals.email,
-        password:  formVals.password,
-        name: formVals.name
-      }
+    let dataPack = {
+      email: formVals.email,
+      password: formVals.password,
+      name: formVals.name
+    }
 
     let registrationToken = await register(dataPack);
     if (registrationToken.data.session !== null) {

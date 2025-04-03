@@ -12,12 +12,12 @@ import {
   fontSizes,
   buttonText,
   authenicationButton,
-} from "../styles";
-import TextInputField from "./textInput";
+} from "../../styles";
+import TextInputField from "../textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleLogInSubmit } from "../helpers/loginHelpers";
+import { handleLogInSubmit } from "../../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
+import { SessionContext } from "../../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -47,7 +47,7 @@ export default function LoginPage(props) {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   useEffect(() => {
-      setLoginFail(null)
+    setLoginFail(null)
   }, [formVals])
 
   return (
