@@ -8,13 +8,13 @@ interface SvgProps {
   }
 
 function DivingScubaFlag(props:SvgProps) {
-    const { height, width, color = "black" } = props;
+    const { height, width, color } = props;
     return (
       <Svg viewBox="0 0 512 512.0131" 
-      height={height}
-      width={width}
-      {...props}>
-        <Path d="M43 128.01l362 299H43v-299zm64-43l362 299v-299H107z"  fill={color}/>
+        height={height}
+        width={width}
+        {...props}>
+        <Path d="M43 128.01l362 299H43v-299zm64-43l362 299v-299H107z" fill={color}/>
       </Svg>
     );
   };

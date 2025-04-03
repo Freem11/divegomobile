@@ -1,0 +1,22 @@
+import * as React from 'react';
+import Svg, { Path } from 'react-native-svg';
+
+interface SvgProps {
+    height?: number | string;
+    width?: number | string;
+    color?: string;
+  }
+
+function Latitude(props:SvgProps) {
+    const { height, width, color } = props;
+    return (
+      <Svg viewBox="0 0 512 512.0131" 
+        height={height}
+        width={width}
+        {...props}>
+        <Path d="M256 43.01q-58 0-107 28.5t-77.5 77.5q-28.5 49-28.5 107t28.5 107q28.5 49 77.5 77.5t107 28.5q58 0 107-28.5t77.5-77.5q28.5-49 28.5-107t-28.5-107q-28.5-49-77.5-77.5t-107-28.5zm0 42q47 0 85.5 23t61.5 63H109q23-40 61.5-63t85.5-23zm0 342q-47 0-85.5-23t-61.5-63h294q-23 40-61.5 63t-85.5 23zm-164-128q-7-20-7-43t7-43h330q7 20 7 43t-7 43H92z" fill={color}/>
+      </Svg>
+    );
+  };
+
+export default Latitude;

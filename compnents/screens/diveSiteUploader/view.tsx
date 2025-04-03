@@ -10,6 +10,8 @@ import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
 import MobileTextInput from "../../reusables/textInput";
 import DivingScubaFlag from "../../../icons/svg/diving-scuba-flag";
+import Latitude from "../../../icons/svg/latitude";
+import Longitude from "../../../icons/svg/longitude";
 
 interface DiveSiteVals {
   Site: string;
@@ -58,37 +60,27 @@ export default function DiveSiteUploaderView({
               color="darkgray"/>} placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
               />
-              {/* <TextInputField
-                icon="diving-scuba-flag"
-                inputValue={addSiteVals.Site}
-                placeHolderText={screenData.DiveSiteAdd.siteNamePlaceholder}
-                vectorIcon="MaterialCommunityIcons"
-                onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
-                secure={false}
-              /> */}
             </S.TextBuffer>
 
             <S.TextBuffer>
-              <TextInputField
-                icon="latitude"
-                inputValue={addSiteVals.Latitude}
-                placeHolderText={screenData.DiveSiteAdd.latPlaceholder}
-                keyboardConfig="number-pad"
-                vectorIcon="MaterialCommunityIcons"
-                onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
-                secure={false}
+            <MobileTextInput 
+              iconLeft={<Latitude 
+              height={28} 
+              width={28} 
+              color="darkgray"/>} placeholder={screenData.DiveSiteAdd.latPlaceholder}
+              onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
+              keyboardConfig="number-pad"
               />
             </S.TextBuffer>
 
             <S.TextBuffer>
-              <TextInputField
-                icon="longitude"
-                inputValue={addSiteVals.Longitude}
-                placeHolderText={screenData.DiveSiteAdd.lngPlaceholder}
-                keyboardConfig="number-pad"
-                vectorIcon="MaterialCommunityIcons"
-                onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
-                secure={false}
+            <MobileTextInput 
+              iconLeft={<Longitude 
+              height={28} 
+              width={28} 
+              color="darkgray"/>} placeholder={screenData.DiveSiteAdd.lngPlaceholder}
+              onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
+              keyboardConfig="number-pad"
               />
             </S.TextBuffer>
           </S.InputGroupContainer>
