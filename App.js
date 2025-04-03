@@ -113,21 +113,20 @@ export default function App() {
           setAppIsReady(true);
           return;
         }
-        // TODO: uncomment to show the token
-        // if (
-        //   asyncData?.session?.refresh_token &&
-        //   typeof asyncData.session.refresh_token === "string"
-        // ) {
-        //   const newSession = await sessionRefresh(asyncData.session.refresh_token);
+        if (
+          asyncData?.session?.refresh_token &&
+          typeof asyncData.session.refresh_token === "string"
+        ) {
+          const newSession = await sessionRefresh(asyncData.session.refresh_token);
 
-        //   if (newSession) {
-        //     setActiveSession(newSession);
-        //   } else {
-        //     console.log("Session refresh failed.");
-        //   }
-        // } else {
-        //   console.log("No refresh token found in session.");
-        // }
+          if (newSession) {
+            setActiveSession(newSession);
+          } else {
+            console.log("Session refresh failed.");
+          }
+        } else {
+          console.log("No refresh token found in session.");
+        }
       } catch (error) {
         console.log("no dice:", error.message);
       } finally {
