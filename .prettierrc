@@ -1,0 +1,6 @@
+{
+  "singleQuote": false,
+  "jsxSingleQuote": false,
+  "semi": true,
+  "space-before-function-paren": false
+}
