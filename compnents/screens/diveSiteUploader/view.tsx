@@ -8,6 +8,8 @@ import screenData from '../screenData.json';
 import * as S from './styles';
 import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
+import MobileTextInput from "../../reusables/textInput";
+import DivingScubaFlag from "../../../icons/svg/diving-scuba-flag";
 
 interface DiveSiteVals {
   Site: string;
@@ -49,14 +51,21 @@ export default function DiveSiteUploaderView({
         <Flex>
           <S.InputGroupContainer>
             <S.TextBuffer>
-              <TextInputField
+              <MobileTextInput 
+              iconLeft={<DivingScubaFlag 
+              height={28} 
+              width={28} 
+              color="darkgray"/>} placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
+              onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
+              />
+              {/* <TextInputField
                 icon="diving-scuba-flag"
                 inputValue={addSiteVals.Site}
                 placeHolderText={screenData.DiveSiteAdd.siteNamePlaceholder}
                 vectorIcon="MaterialCommunityIcons"
                 onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
                 secure={false}
-              />
+              /> */}
             </S.TextBuffer>
 
             <S.TextBuffer>
