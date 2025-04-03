@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, StyleSheet, TextInput, View } from "react-native";
+import { Platform, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import {
   MaterialIcons,
@@ -67,24 +67,17 @@ export default function TextInputField(props) {
         onChangeText={onChangeText}
         secureTextEntry={secure}
         keyboardType={keyboardValue}
-      ></TextInput>
+        autoCapitalize="none"
+      />
       {placeHolderText === "Password" ? (
-        secure ? (
+        <TouchableOpacity onPress={() => setSecureTextEntry(!secure)}>
           <FontAwesome6
-            name="eye-slash"
+            name={secure ? "eye-slash" : "eye"}
             size={moderateScale(22)}
             color="darkgrey"
-            onPress={() => setSecureTextEntry(false)}
-          />
-        ) : (
-          <FontAwesome6
             style={{ marginLeft: moderateScale(1) }}
-            name="eye"
-            size={moderateScale(22)}
-            color="darkgrey"
-            onPress={() => setSecureTextEntry(true)}
           />
-        )
+        </TouchableOpacity>
       ) : null}
       {(placeHolderText === "Sea Life Encountered" ||
         placeHolderText === "Search by Dive Site name or Location") &&
