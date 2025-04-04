@@ -20,7 +20,7 @@ const PAGES = { SIGN_UP: 0, LANDING: 1, LOGIN: 2, FORGOT_PASSWORD: 3 };
 
 export default function Authentication() {
   const scrollViewRef = useRef(null);
-  const [carrouselIndex, setCarrouselIndex] = useState(PAGES.LOGIN);
+  const [carrouselIndex, setCarrouselIndex] = useState(PAGES.LANDING);
   const [loginFail, setLoginFail] = useState(null);
   const [regFail, setRegFail] = useState(null);
   const [emailSent, setEmailSent] = useState(null);

@@ -49,13 +49,13 @@ export default function LandingPageView({
         <S.IconRow>
           <TouchableWithoutFeedback onPress={onGoogle} disabled={isSignedIn}>
             <S.GoogleButton>
-              <Image source={googleLogo} style={S.Icon} />
+              <Image source={googleLogo} style={S.GLogo} />
             </S.GoogleButton>
           </TouchableWithoutFeedback>
 
           <TouchableWithoutFeedback onPress={onFacebook} disabled={isSignedIn}>
             <S.FacebookButton>
-              <Image source={facebookLogo} style={S.Icon} />
+              <Image source={facebookLogo} style={S.FLogo} />
             </S.FacebookButton>
           </TouchableWithoutFeedback>
 

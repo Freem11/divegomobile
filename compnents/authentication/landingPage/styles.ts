@@ -81,7 +81,6 @@ export const IconRow = styled.View`
   flex-direction: row;
 `;
 
-// TODO: fix icon styles
 const sharedIconStyle = `
   border-radius: ${moderateScale(25)}px;
   height: ${moderateScale(48)}px;
@@ -95,9 +94,16 @@ const sharedIconStyle = `
 `;
 
 export const GoogleButton = styled.View`
-  background-color: transparent;
-  ${sharedIconStyle};
-  border-radius: ${moderateScale(50)}px;
+  background-color: white;
+  border-radius: ${moderateScale(25)}px;
+  height: ${moderateScale(48)}px;
+  width: ${moderateScale(50)}px;
+  align-items: center;
+  justify-content: center;
+  elevation: 5;
+  shadow-offset: 1px 2px;
+  shadow-opacity: 1;
+  shadow-radius: ${moderateScale(2)}px;
 `;
 
 export const FacebookButton = styled.View`
@@ -110,6 +116,17 @@ export const AppleButton = styled.View`
   margin-left: ${moderateScale(6)}px;
   ${sharedIconStyle};
 `;
+
+export const GLogo = {
+  height: moderateScale(62),
+  width: moderateScale(62),
+};
+
+export const FLogo = {
+  marginBottom: moderateScale(4),
+  height: moderateScale(45),
+  width: moderateScale(45),
+};
 
 export const Icon = {
   height: moderateScale(45),
