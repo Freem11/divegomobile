@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import carrouselData from "./carrouselData";
 import CreateAccountPage from "./signupPage";
-import LandingPage from "./landingPage";
+import LandingPage from "./landingPage/index2";
 import LoginPage from "./loginPage";
 import ForgotPage from './forgotPasswordPage';
 import {
