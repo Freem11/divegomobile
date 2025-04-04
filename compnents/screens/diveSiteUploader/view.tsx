@@ -11,6 +11,7 @@ import MobileTextInput from "../../reusables/textInput";
 import DivingScubaFlag from "../../../icons/svg/diving-scuba-flag";
 import Latitude from "../../../icons/svg/latitude";
 import Longitude from "../../../icons/svg/longitude";
+import Icon from "../../../icons/Icon";
 
 interface DiveSiteVals {
   Site: string;
@@ -53,7 +54,7 @@ export default function DiveSiteUploaderView({
           <S.InputGroupContainer>
             <S.TextBuffer>
               <MobileTextInput 
-              iconLeft={<DivingScubaFlag height={28} width={28} color="darkgray"/>}
+              iconLeft={<Icon name='diving-scuba-flag' fill={colors.neutralGrey}></Icon>}
               placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
               />
@@ -61,19 +62,19 @@ export default function DiveSiteUploaderView({
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Latitude height={28} width={28} color="darkgray"/>} 
+              iconLeft={<Icon name='latitude' fill={colors.neutralGrey}></Icon>}
               placeholder={screenData.DiveSiteAdd.latPlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
-              keyboardConfig="number-pad"
+              keyboardType="number-pad"
               />
             </S.TextBuffer>
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Longitude height={28} width={28} color="darkgray"/>} 
+              iconLeft={<Icon name='longitude' fill={colors.neutralGrey}></Icon>}
               placeholder={screenData.DiveSiteAdd.lngPlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
-              keyboardConfig="number-pad"
+              keyboardType="number-pad"
               />
             </S.TextBuffer>
           </S.InputGroupContainer>

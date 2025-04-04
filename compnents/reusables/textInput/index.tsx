@@ -6,13 +6,12 @@ import { colors } from '../../styles';
 export type TextInputProps = {
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
-  keyboardConfig?: string;
   onChangeText: (text: string) => void;
   error?: any;
 } & RNTextInputProps;
 
 const MobileTextInput = React.forwardRef<TextInput, TextInputProps>(function MobileTextInput(
-  { iconLeft, iconRight, keyboardConfig, onChangeText, error, ...rest }: TextInputProps,
+  { iconLeft, iconRight, onChangeText, error, ...rest }: TextInputProps,
   ref: ForwardedRef<TextInput>
 ) {
   return (
@@ -22,9 +21,9 @@ const MobileTextInput = React.forwardRef<TextInput, TextInputProps>(function Mob
         ref={ref} 
         onChangeText={onChangeText} // remove once react-hook-form takes over
         placeholderTextColor={colors.neutralGrey}
-        keyboardType={keyboardConfig}
-        {...rest} />
-        {iconRight && <>{iconRight}</>}
+        {...rest} 
+      />
+      {iconRight && <>{iconRight}</>}
     </TextInputWrapper>
   );
 });
