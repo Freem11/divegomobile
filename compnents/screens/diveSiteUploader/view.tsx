@@ -8,9 +8,6 @@ import * as S from './styles';
 import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
 import MobileTextInput from "../../reusables/textInput";
-import DivingScubaFlag from "../../../icons/svg/diving-scuba-flag";
-import Latitude from "../../../icons/svg/latitude";
-import Longitude from "../../../icons/svg/longitude";
 import Icon from "../../../icons/Icon";
 
 interface DiveSiteVals {
