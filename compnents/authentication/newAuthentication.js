@@ -10,7 +10,6 @@ import carrouselData from "./carrouselData";
 import CreateAccountPage from "./signupPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
-// import LoginPage from "./loginPage/index2";
 import ForgotPage from "./forgotPassword";
 import { colors } from "../styles";
 
