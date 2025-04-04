@@ -5,7 +5,8 @@ export const colors = {
   primaryBlue: '#0073E6',
   secondaryYellow: '#fdc500',
   themeWhite: '#ffffff',
-  themeBlack: '#00171f'
+  themeBlack: '#00171f',
+  neutralGrey: '#A9A9A9'
 }
 
 export const fontSizes = {
