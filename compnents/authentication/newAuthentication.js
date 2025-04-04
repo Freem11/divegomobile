@@ -7,7 +7,7 @@ import {
   Keyboard,
 } from "react-native";
 import carrouselData from "./carrouselData";
-import CreateAccountPage from "./createAccountPage";
+import CreateAccountPage from "./signupPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
 // import LoginPage from "./loginPage/index2";
