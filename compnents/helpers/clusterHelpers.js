@@ -3,6 +3,7 @@ function setupClusters(diveSiteData, sitesArray) {
     type: "Feature",
     properties: {
       cluster: false,
+      id: site.id,
       siteID: `${site.name}~${site.region}`,
       siteName: `${site.name}`,
       category: sitesArray.includes(site.id)
