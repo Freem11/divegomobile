@@ -9,7 +9,7 @@ import {
   Ionicons,
   Fontisto
 } from "@expo/vector-icons";
-import { activeFonts, colors } from "../styles";
+import { activeFonts, colors } from "../../styles";
 
 export default function TextInputField(props) {
   const {

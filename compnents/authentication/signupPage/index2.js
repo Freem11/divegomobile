@@ -12,12 +12,12 @@ import {
   fontSizes,
   buttonText,
   authenicationButton,
-} from "../styles";
-import TextInputField from "./textInput";
+} from "../../styles";
+import TextInputField from "../utils/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleSignUpSubmit } from "../helpers/loginHelpers";
+import { handleSignUpSubmit } from "../../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
+import { SessionContext } from "../../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -48,7 +48,7 @@ export default function CreateAccountPage(props) {
 
   useEffect(() => {
     setRegFail(null)
-}, [formVals])
+  }, [formVals])
 
   return (
     <View style={styles.container}>

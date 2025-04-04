@@ -26,7 +26,7 @@ import {
   insertItinerary,
   getItineraryDiveSiteByIdArray,
 } from "../../supabaseCalls/itinerarySupabaseCalls";
-import TextInputField from "../authentication/textInput";
+import TextInputField from "../authentication/utils/textInput";
 import PlainTextInput from "./plaintextInput";
 import BottomDrawer from "./animatedBottomDrawer";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -46,7 +46,7 @@ import { TripSitesContext } from "../contexts/tripSitesContext";
 const windowHeight = Dimensions.get("window").height;
 
 export default function TripCreatorPage(props) {
-  const {} = props;
+  const { } = props;
   const { profile } = useContext(UserProfileContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
 
@@ -335,7 +335,7 @@ export default function TripCreatorPage(props) {
           </View>
 
           <KeyboardAvoidingView
-          style={{flex: 1}}
+            style={{ flex: 1 }}
             behavior={'position'}
             keyboardVerticalOffset={200}
           >

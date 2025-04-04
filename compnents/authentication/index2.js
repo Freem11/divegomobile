@@ -6,10 +6,10 @@ import {
   View,
 } from "react-native";
 import carrouselData from "./carrouselData";
-import CreateAccountPage from "./createAccountPage";
-import LandingPage from "./landingPage";
+import CreateAccountPage from "./signupPage";
+import LandingPage from "./landingPage/index2";
 import LoginPage from "./loginPage";
-import ForgotPage from './forgotPassword';
+import ForgotPage from './forgotPasswordPage';
 import {
   colors,
 } from "../styles";

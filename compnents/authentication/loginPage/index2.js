@@ -13,7 +13,7 @@ import {
   buttonText,
   authenicationButton,
 } from "../../styles";
-import TextInputField from "../textInput";
+import TextInputField from "../utils/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import { handleLogInSubmit } from "../../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";

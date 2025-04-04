@@ -11,7 +11,7 @@ import {
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import screenData from "../screenData.json";
 import WavyHeaderDynamic from "../wavyHeaderDynamic";
-import TextInputField from "../../authentication/textInput";
+import TextInputField from "../../authentication/utils/textInput";
 import {
   activeFonts,
   colors,
@@ -89,10 +89,10 @@ export default function Index() {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-      setChosenModal("DiveSite");
-      setMapHelper(true);
-      setMapConfig(1);
-      setLevelTwoScreen(false);
+    setChosenModal("DiveSite");
+    setMapHelper(true);
+    setMapConfig(1);
+    setLevelTwoScreen(false);
   };
 
   const onClose = async () => {
@@ -126,28 +126,28 @@ export default function Index() {
 
           <View style={styles.textBuffer}>
             <TextInputField
-                  icon={"diving-scuba-flag"}
-                  inputValue={addSiteVals.Site}
-                  placeHolderText={screenData.DiveSiteAdd.siteNamePlaceholder}
-                  secure={false}
-                  vectorIcon={"MaterialCommunityIcons"}
-                  onChangeText={(text) =>
-                    setAddSiteVals({ ...addSiteVals, Site: text })
-                  }
-                />
+              icon={"diving-scuba-flag"}
+              inputValue={addSiteVals.Site}
+              placeHolderText={screenData.DiveSiteAdd.siteNamePlaceholder}
+              secure={false}
+              vectorIcon={"MaterialCommunityIcons"}
+              onChangeText={(text) =>
+                setAddSiteVals({ ...addSiteVals, Site: text })
+              }
+            />
           </View>
           <View style={styles.textBuffer}>
-                <TextInputField
-                  icon={"latitude"}
-                  inputValue={addSiteVals.Latitude}
-                  placeHolderText={screenData.DiveSiteAdd.latPlaceholder}
-                  vectorIcon={"MaterialCommunityIcons"}
-                  keyboardConfig="number-pad"
-                  secure={false}
-                  onChangeText={(text) =>
-                    setAddSiteVals({ ...addSiteVals, Latitude: text })
-                  }
-                />
+            <TextInputField
+              icon={"latitude"}
+              inputValue={addSiteVals.Latitude}
+              placeHolderText={screenData.DiveSiteAdd.latPlaceholder}
+              vectorIcon={"MaterialCommunityIcons"}
+              keyboardConfig="number-pad"
+              secure={false}
+              onChangeText={(text) =>
+                setAddSiteVals({ ...addSiteVals, Latitude: text })
+              }
+            />
           </View>
           <View style={styles.textBuffer}>
             <TextInputField
@@ -165,7 +165,7 @@ export default function Index() {
         </View>
 
         <View style={styles.buttonOptions}>
-        <TouchableWithoutFeedback onPress={() => getCurrentLocation()}>
+          <TouchableWithoutFeedback onPress={() => getCurrentLocation()}>
             <View style={styles.locationButton}>
               <Text style={styles.locationText}>
                 {screenData.DiveSiteAdd.myLocationButton}
@@ -180,13 +180,13 @@ export default function Index() {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-          </View>
-          <Text style={styles.explainer}>{screenData.DiveSiteAdd.myLocationexplainer}</Text>
+        </View>
+        <Text style={styles.explainer}>{screenData.DiveSiteAdd.myLocationexplainer}</Text>
 
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => onSubmit()}>
             <View style={styles.submitButton}>
-        <Text style={styles.submitText}>{screenData.DiveSiteAdd.submitButton}</Text>
+              <Text style={styles.submitText}>{screenData.DiveSiteAdd.submitButton}</Text>
               <MaterialIcons
                 name="chevron-right"
                 size={30}

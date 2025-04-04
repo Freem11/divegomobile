@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { MaterialIcons } from '@expo/vector-icons';
-import TextInputField from '../../authentication/textInput';
+import TextInputField from '../../authentication/utils/textInput';
 import WavyHeaderDynamic from '../wavyHeaderDynamic';
 import screenData from '../screenData.json';
 import * as S from './styles';

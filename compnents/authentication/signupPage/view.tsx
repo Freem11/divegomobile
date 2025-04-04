@@ -1,50 +1,49 @@
-import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import * as S from './styles';
-import TextInputField from '../utils/textInput';
+import React from "react";
+import { TouchableWithoutFeedback } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import * as S from "./styles";
+import TextInputField from "../utils/textInput";
 
 interface FormVals {
+    name: string;
     email: string;
     password: string;
 }
 
 interface IProps {
     title: string;
+    namePlaceholder: string;
     emailPlaceholder: string;
     passwordPlaceholder: string;
     buttonText: string;
     promptText: string;
     promptLinkText: string;
-    forgotPromt: string;
     formVals: FormVals;
     secureTextEntry: boolean;
-    loginFail: string | null;
+    regFail: string | null;
     setFormVals: (vals: FormVals) => void;
     setSecureTextEntry: (val: boolean) => void;
     moveToLandingPage: () => void;
-    moveToForgotPasswordPage: () => void;
-    moveToSignUpPage: () => void;
-    handleLogin: () => void;
+    moveToLoginPage: () => void;
+    handleSignUp: () => void;
 }
 
-export default function LoginPageView({
+export default function CreateAccountPageView({
     title,
+    namePlaceholder,
     emailPlaceholder,
     passwordPlaceholder,
     buttonText,
     promptText,
     promptLinkText,
-    forgotPromt,
     formVals,
-    loginFail,
     secureTextEntry,
+    regFail,
     setFormVals,
-    handleLogin,
-    moveToSignUpPage,
+    handleSignUp,
     moveToLandingPage,
+    moveToLoginPage,
     setSecureTextEntry,
-    moveToForgotPasswordPage,
 }: IProps) {
     return (
         <S.Container>
@@ -59,11 +58,19 @@ export default function LoginPageView({
                 <S.Header>{title}</S.Header>
 
                 <TextInputField
+                    icon="person-outline"
+                    placeHolderText={namePlaceholder}
+                    secure={false}
+                    onChangeText={(text: string) => setFormVals({ ...formVals, name: text })}
+                    style={{ marginTop: 60 }}
+                />
+
+                <TextInputField
                     icon="alternate-email"
                     placeHolderText={emailPlaceholder}
                     secure={false}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
-                    style={{ marginTop: 60 }}
+                    style={{ marginTop: 40 }}
                 />
 
                 <TextInputField
@@ -75,27 +82,21 @@ export default function LoginPageView({
                     style={{ marginTop: 40 }}
                 />
 
-                {loginFail ? <S.ErrorText>{loginFail}</S.ErrorText> : <S.ErrorText />}
+                {regFail ? <S.ErrorText>{regFail}</S.ErrorText> : <S.ErrorText />}
 
-                <S.ButtonBox>
-                    <TouchableWithoutFeedback onPress={handleLogin}>
+                <TouchableWithoutFeedback onPress={handleSignUp}>
+                    <S.ButtonBox>
                         <S.LoginButton>
                             <S.LoginText>{buttonText}</S.LoginText>
                             <MaterialIcons name="chevron-right" size={30} color="#fff" />
                         </S.LoginButton>
-                    </TouchableWithoutFeedback>
-                </S.ButtonBox>
-            </S.Content>
-
-            <S.ForgotBox>
-                <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
-                    <S.PromptLinkText>{forgotPromt}</S.PromptLinkText>
+                    </S.ButtonBox>
                 </TouchableWithoutFeedback>
-            </S.ForgotBox>
+            </S.Content>
 
             <S.PromptBox>
                 <S.PromptText>{promptText}</S.PromptText>
-                <TouchableWithoutFeedback onPress={moveToSignUpPage}>
+                <TouchableWithoutFeedback onPress={moveToLoginPage}>
                     <S.PromptLinkText>{promptLinkText}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>

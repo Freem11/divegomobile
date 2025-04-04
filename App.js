@@ -11,7 +11,7 @@ import { MapRegionContext } from "./compnents/contexts/mapRegionContext";
 import { PinSpotContext } from "./compnents/contexts/pinSpotContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import MapPage from "./compnents/mapPage";
-import Authentication from "./compnents/authentication/newAuthentication";
+import Authentication from "./compnents/authentication";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
