@@ -1,6 +1,6 @@
 import React, { ForwardedRef } from 'react';
 import { TextInput, TextInputProps as RNTextInputProps } from 'react-native';
-import { TextInputWrapper, StyledTextInput } from './styles';
+import { TextInputWrapper, StyledTextInput, IconWrapperLeft, IconWrapperRight } from './styles';
 import { colors } from '../../styles';
 
 export type TextInputProps = {
@@ -16,14 +16,14 @@ const MobileTextInput = React.forwardRef<TextInput, TextInputProps>(function Mob
 ) {
   return (
     <TextInputWrapper>
-      {iconLeft && <>{iconLeft}</>}
+      {iconLeft && <IconWrapperLeft>{iconLeft}</IconWrapperLeft>}
       <StyledTextInput 
         ref={ref} 
         onChangeText={onChangeText} // remove once react-hook-form takes over
         placeholderTextColor={colors.neutralGrey}
         {...rest} 
       />
-      {iconRight && <>{iconRight}</>}
+      {iconRight && <IconWrapperRight>{iconRight}</IconWrapperRight>}
     </TextInputWrapper>
   );
 });

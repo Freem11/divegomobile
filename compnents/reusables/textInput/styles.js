@@ -15,17 +15,23 @@ export const TextInputWrapper = styled.View`
   height: ${moderateScale(30)}px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: left;
   border-bottom-color: darkgray;
   border-bottom-width: 2px;
   position: relative;
 `;
 
 export const StyledTextInput = styled.TextInput`
-  width: 100%;
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
 `;
 
-// export const StyledIcon = styled(Icon)`
-// `;
+export const IconWrapperLeft = styled.View`
+    width: ${moderateScale(24)}px;
+    margin-right: ${moderateScale(2)}px;
+`;
+
+export const IconWrapperRight = styled.View`
+    width: ${moderateScale(24)}px;
+    margin-left: ${moderateScale(2)}px;
+`;
