@@ -2,7 +2,7 @@ import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Keyboard, Dimensions } from "react-native";
 import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
-import TextInputField from "../authentication/textInput";
+import TextInputField from "../authentication/utils/textInput";
 import { scale, moderateScale } from "react-native-size-matters";
 import { getSiteNamesThatFit } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { MapBoundariesContext } from "../contexts/mapBoundariesContext";;
@@ -89,13 +89,13 @@ export default function SearchToolInput(props) {
   };
 
   const handleChange = (text) => {
-    if (isClearOn){
+    if (isClearOn) {
       setIsClearOn(false)
       return
     }
     setSearchValue(text);
     handleDataList(text);
-    
+
   };
 
   const handleClear = () => {

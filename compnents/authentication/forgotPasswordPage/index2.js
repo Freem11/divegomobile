@@ -7,7 +7,7 @@ import { supabase } from '../../../supabase';
 import React, { useEffect, useState } from 'react';
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
-import TextInputField from "../textInput";
+import TextInputField from "../utils/textInput";
 import {
   activeFonts,
   colors,

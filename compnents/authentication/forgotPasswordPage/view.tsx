@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import TextInputField from "../textInput";
+import TextInputField from "../utils/textInput";
 import * as S from "./styles";
 
 interface IProps {

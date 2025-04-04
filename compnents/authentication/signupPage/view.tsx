@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as S from "./styles";
-import TextInputField from "../textInput";
+import TextInputField from "../utils/textInput";
 
 interface FormVals {
     name: string;

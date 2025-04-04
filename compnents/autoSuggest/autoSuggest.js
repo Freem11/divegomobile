@@ -10,13 +10,13 @@ import {
 } from "react-native";
 import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
 import AutoSuggestListItem from "./autoSuggestListItem";
-import TextInputField from "../authentication/textInput";
+import TextInputField from "../authentication/utils/textInput";
 import { scale, moderateScale } from "react-native-size-matters";
 
 const windowHeight = Dimensions.get("window").height;
 
 offset = 0
-if(windowHeight < 700){
+if (windowHeight < 700) {
   offset = moderateScale(700)
 } else {
   offset = moderateScale(700)
@@ -24,7 +24,7 @@ if(windowHeight < 700){
 const AnimalKeboardOffset = Platform.OS === "ios" ? offset - scale(160) : offset;
 
 export default function AnimalAutoSuggest(props) {
-  const { setPinValues, pinValues, inputValue, icon, vectorIcon, secure, placeHolderText} = props;
+  const { setPinValues, pinValues, inputValue, icon, vectorIcon, secure, placeHolderText } = props;
   const [list, setList] = useState([]);
   const [textSource, setTextSource] = useState(false);
 
@@ -70,40 +70,40 @@ export default function AnimalAutoSuggest(props) {
       keyboardVerticalOffset={AnimalKeboardOffset}
     >
 
-<View style={styles.inputContainer}>
-      <TextInputField
-              icon={icon}
-              inputValue={inputValue}
-              placeHolderText={placeHolderText}
-              secure={secure}
-              vectorIcon={vectorIcon}
-              onChangeText={handleChange}
-              handleClear={handleClear}
-              animal={pinValues.Animal}
-            />
-    </View>
-     
+      <View style={styles.inputContainer}>
+        <TextInputField
+          icon={icon}
+          inputValue={inputValue}
+          placeHolderText={placeHolderText}
+          secure={secure}
+          vectorIcon={vectorIcon}
+          onChangeText={handleChange}
+          handleClear={handleClear}
+          animal={pinValues.Animal}
+        />
+      </View>
 
-        {list.length > 0 &&
-          list.map((animal) => {
-            return (
-              <AutoSuggestListItem
-                key={animal}
-                name={animal}
-                pin={pinValues}
-                setPin={setPinValues}
-                setList={setList}
-                handleList={handleList}
-                setTextSource={setTextSource}
-              />
-            );
-          })}
+
+      {list.length > 0 &&
+        list.map((animal) => {
+          return (
+            <AutoSuggestListItem
+              key={animal}
+              name={animal}
+              pin={pinValues}
+              setPin={setPinValues}
+              setList={setList}
+              handleList={handleList}
+              setTextSource={setTextSource}
+            />
+          );
+        })}
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
- inputContainer: {
+  inputContainer: {
     flexDirection: "row",
     borderBottomColor: "darkgrey",
     borderBottomWidth: moderateScale(2),
