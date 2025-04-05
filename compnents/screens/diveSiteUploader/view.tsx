@@ -61,6 +61,7 @@ export default function DiveSiteUploaderView({
             <MobileTextInput 
               iconLeft={<Icon name='latitude' fill={colors.neutralGrey}></Icon>}
               placeholder={screenData.DiveSiteAdd.latPlaceholder}
+              value={addSiteVals.Latitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
               keyboardType="number-pad"
               />
@@ -70,6 +71,7 @@ export default function DiveSiteUploaderView({
             <MobileTextInput 
               iconLeft={<Icon name='longitude' fill={colors.neutralGrey}></Icon>}
               placeholder={screenData.DiveSiteAdd.lngPlaceholder}
+              value={addSiteVals.Longitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
               keyboardType="number-pad"
               />
