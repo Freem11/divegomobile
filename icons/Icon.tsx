@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import Svg, { Path, SvgProps } from 'react-native-svg';
 import config from './_config.json';
 
 type IconName = keyof typeof config;
@@ -16,7 +17,7 @@ const getFigure = (content: string): ReactElement | null => {
   if (content.startsWith('<')) {
     return <g dangerouslySetInnerHTML={{ __html: content }}></g>;
   } else {
-    return <path d={content}></path>;
+    return <Path d={content}></Path>;
   }
 };
 
@@ -50,13 +51,13 @@ const getViewBox = (data: viewBoxEncoded): string => {
 };
 
 
-const Icon = (props: Props & React.SVGAttributes<SVGElement>) => {
+const Icon = (props: Props & SvgProps) => {
   if (!config) {
     console.error(`_config.json not found. Run "_build-svg.js" generate config.`);
     return <></>;
   }
 
-  const { className, ...restProps } = props;
+  const { ...restProps } = props;
   const iconName = props.name;
   if (!iconName) {
     console.error(`icon name is required.`);
@@ -76,15 +77,13 @@ const Icon = (props: Props & React.SVGAttributes<SVGElement>) => {
   }
 
   return (
-    <svg
+    <Svg
       {...(viewBox ? { viewBox } : {})}
-      xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
-      className={`icon ${className || ''}`}
       {...restProps}
     >
       {figure}
-    </svg>
+    </Svg>
   );
 };
 

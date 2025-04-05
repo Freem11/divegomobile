@@ -483,24 +483,28 @@ export default function Map() {
   }, [sitesArray.length]);
 
   const addToSitesArray = async (siteName) => {
-    let splitNames = siteName.split("~");
-    let grabbedSite = await getSingleDiveSiteByNameAndRegion({
-      name: splitNames[0],
-      region: splitNames[1],
-    });
+    // let splitNames = siteName.split("~");
 
-    sitesArray.push(grabbedSite[0].id);
+    // console.log('splitNames', siteName)
+    // let grabbedSite = await getSingleDiveSiteByNameAndRegion({
+    //   name: splitNames[0],
+    //   region: splitNames[1],
+    // });
+
+    // console.log('grabbedSite', grabbedSite)
+
+    sitesArray.push(siteName);
     setSitesArray(sitesArray);
     handleMapChange();
   };
 
   const removeFromSitesArray = async (siteName) => {
-    let splitNames = siteName.split("~");
-    let grabbedSite = await getSingleDiveSiteByNameAndRegion({
-      name: splitNames[0],
-      region: splitNames[1],
-    });
-    const index = sitesArray.indexOf(grabbedSite[0].id);
+    // let splitNames = siteName.split("~");
+    // let grabbedSite = await getSingleDiveSiteByNameAndRegion({
+    //   name: splitNames[0],
+    //   region: splitNames[1],
+    // });
+    const index = sitesArray.indexOf(siteName);
     if (index > -1) {
       sitesArray.splice(index, 1);
     }
@@ -591,7 +595,7 @@ export default function Map() {
                 image={anchorIconIOS}
                 onPress={() =>
                   mapConfig === 3
-                    ? addToSitesArray(cluster.properties.siteID)
+                    ? addToSitesArray(cluster.properties.id)
                     : mapConfig === 1
                     ? null
                     : setupAnchorModal(
@@ -640,7 +644,7 @@ export default function Map() {
                 image={anchorGold}
                 onPress={() =>
                   mapConfig === 3
-                    ? removeFromSitesArray(cluster.properties.siteID)
+                    ? removeFromSitesArray(cluster.properties.id)
                     : setupAnchorModal(
                         cluster.properties.id,
                         cluster.properties.siteID,

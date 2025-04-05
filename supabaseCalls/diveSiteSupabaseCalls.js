@@ -151,7 +151,6 @@ export const getSingleDiveSiteByNameAndRegion = async (values) => {
 }
 
 export const updateDiveSite = async (values) => {
-  console.log("updating...", values)
   const { data, error } = await supabase
     .from("diveSites")
     .update({ diveSiteBio: values.bio, diveSiteProfilePhoto: values.photo  })

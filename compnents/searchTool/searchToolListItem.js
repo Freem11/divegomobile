@@ -56,6 +56,7 @@ export default SearchToolListItem = (props) => {
   };
 
   const handleDiveSiteOptionSelected = async (diveSite) => {
+    console.log("!!", diveSite)
     if (diveSite !== null) {
       let nameOnly = diveSite.split(" ~ ");
       let diveSiteSet = await getSingleDiveSiteByNameAndRegion({
