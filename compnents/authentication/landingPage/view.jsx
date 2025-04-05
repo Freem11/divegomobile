@@ -10,6 +10,7 @@ import * as S from "./styles";
 import googleLogo from "../../png/loginIcons/google.png";
 import facebookLogo from "../../png/loginIcons/facebook.png";
 import appleLogo from "../../png/loginIcons/apple.png";
+import LanguageSwitcher from "../../languageSwitcher";
 
 export default function LandingPageView({
   title,
@@ -52,7 +53,7 @@ export default function LandingPageView({
               <Image source={googleLogo} style={S.GLogo} />
             </S.GoogleButton>
           </TouchableWithoutFeedback>
-
+          <LanguageSwitcher />
           <TouchableWithoutFeedback onPress={onFacebook} disabled={isSignedIn}>
             <S.FacebookButton>
               <Image source={facebookLogo} style={S.FLogo} />

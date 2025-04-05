@@ -1,0 +1,5 @@
+{
+    "greeting": "¡Hola!",
+    "distance": "{{count}} metro",
+    "distance_plural": "{{count}} metros"
+}
