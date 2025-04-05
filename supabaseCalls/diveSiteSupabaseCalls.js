@@ -126,7 +126,6 @@ export const getDiveSitesByIDs = async (valueArray) => {
 };
 
 export const getSingleDiveSiteByNameAndRegion = async (values) => {
-  console.log("????", values)
     const query = supabase
     .from('diveSites')
     .select('*')
@@ -146,14 +145,12 @@ export const getSingleDiveSiteByNameAndRegion = async (values) => {
     return [];
   }
 
-console.log("????", data)
   if (data) {
     return data;
   }
 }
 
 export const updateDiveSite = async (values) => {
-  console.log("updating...", values)
   const { data, error } = await supabase
     .from("diveSites")
     .update({ diveSiteBio: values.bio, diveSiteProfilePhoto: values.photo  })
