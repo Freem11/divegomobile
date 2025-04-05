@@ -17,7 +17,7 @@ import {
 } from "../styles";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
 import screenData from "./screenData.json";
-import TextInputField from "../authentication/textInput";
+import TextInputField from "../authentication/utils/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../../compnents/contexts/userProfileContext";

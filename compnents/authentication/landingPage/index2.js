@@ -9,7 +9,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
 } from "react-native";
-import WavyHeader from "../wavyHeader";
+import WavyHeader from "../../wavyHeader";
 import {
   activeFonts,
   colors,
@@ -18,16 +18,16 @@ import {
   primaryButtonAlt,
   buttonText,
   buttonTextAlt,
-} from "../styles";
+} from "../../styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import appleLogo from "../png/loginIcons/apple.png";
-import facebookLogo from "../png/loginIcons/facebook.png";
-import googleLogo from "../png/loginIcons/google.png";
-import { appleLogin, googleSignIn, facebookSignIn } from "../helpers/loginHelpers";
+import appleLogo from "../../png/loginIcons/apple.png";
+import facebookLogo from "../../png/loginIcons/facebook.png";
+import googleLogo from "../../png/loginIcons/google.png";
+import { appleLogin, googleSignIn, facebookSignIn } from "../../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
+import { SessionContext } from "../../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -48,13 +48,13 @@ export default function LandingPage(props) {
 
   Platform.OS === "ios"
     ? GoogleSignin.configure({
-        scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
-        iosClientId: googleIOSClientId,
-      })
+      scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+      iosClientId: googleIOSClientId,
+    })
     : GoogleSignin.configure({
-        scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
-        webClientId: googleWebClientId,
-      });
+      scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+      webClientId: googleWebClientId,
+    });
 
   const [googleData, setGoogleData] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -99,9 +99,9 @@ export default function LandingPage(props) {
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
-        <View style={styles.registerButton}>
-          <Text style={styles.registerText}>{registerButton}</Text>
-        </View>
+          <View style={styles.registerButton}>
+            <Text style={styles.registerText}>{registerButton}</Text>
+          </View>
         </TouchableWithoutFeedback>
 
         <Text style={styles.social}>{content}</Text>

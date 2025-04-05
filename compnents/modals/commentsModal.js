@@ -13,7 +13,7 @@ import {
   colors,
   fontSizes
 } from "../styles";
-import TextInputField from '../authentication/textInput';
+import TextInputField from '../authentication/utils/textInput';
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
@@ -54,7 +54,7 @@ export default function CommentsModal() {
   };
 
   const handleChange = (text) => {
-    if (isClearOn){
+    if (isClearOn) {
       setIsClearOn(false)
       return
     }
@@ -63,7 +63,7 @@ export default function CommentsModal() {
 
   const handleCommentInsert = async () => {
     let userIdentity = null
-    if (replyTo){
+    if (replyTo) {
       userIdentity = replyTo[1]
     }
     if (commentContent === null || commentContent === "") {
@@ -99,7 +99,7 @@ export default function CommentsModal() {
     newSelectedReplyId = [...newSelectedReplyId.filter((id) => parentId !== id)];
     for (comment of listOfComments) {
       if (comment.replied_to === parentId) {
-        newSelectedReplyId = hideRepliesForChildren(comment.id, newSelectedReplyId);  
+        newSelectedReplyId = hideRepliesForChildren(comment.id, newSelectedReplyId);
       }
     }
 
@@ -111,16 +111,16 @@ export default function CommentsModal() {
       let selectedReplyIdTemp = hideRepliesForChildren(comment.id, selectedReplyId);
       setSelectedReplyId(selectedReplyIdTemp);
     } else {
-      setSelectedReplyId([...selectedReplyId,comment.id]);
+      setSelectedReplyId([...selectedReplyId, comment.id]);
     }
   }
 
-  const getCommentListView = (commentId, level=0) => {
-    let marginLeft = 5 * level; 
+  const getCommentListView = (commentId, level = 0) => {
+    let marginLeft = 5 * level;
     let width = 98 - marginLeft;
     const marginStyle = StyleSheet.create({
       commentLevelShift: {
-        marginLeft: `${marginLeft}%`, 
+        marginLeft: `${marginLeft}%`,
         width: `${width}%`,
       }
     });
@@ -138,65 +138,65 @@ export default function CommentsModal() {
               }
               return (
                 selectedReplyId.includes(commentDeets.replied_to) || commentDeets.replied_to === null ?
-                <Fragment key={commentDeets.id}>
-                  <CommentListItem
-                    commentDetails={commentDeets}
-                    setReplyTo={setReplyTo}
-                    replyTo={replyTo}
-                    toggleShowReplies={toggleShowReplies}
-                    selectedReplyId={selectedReplyId}
-                    nbReplies={nbReplies}
-                  />
-                  {getCommentListView(commentDeets.id, level+1)} 
-                </Fragment> : null
+                  <Fragment key={commentDeets.id}>
+                    <CommentListItem
+                      commentDetails={commentDeets}
+                      setReplyTo={setReplyTo}
+                      replyTo={replyTo}
+                      toggleShowReplies={toggleShowReplies}
+                      selectedReplyId={selectedReplyId}
+                      nbReplies={nbReplies}
+                    />
+                    {getCommentListView(commentDeets.id, level + 1)}
+                  </Fragment> : null
               );
             }
           }
-        )}
+          )}
       </ScrollView>
     )
   }
 
   return (
     <View style={styles.commentScreen}>
-    <View style={styles.commentsModal}>
-    <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => handleCommentModalClose()}>
-        <View style={styles.commentHeader}>
-          <View style={styles.tab}></View>
-          <Text style={styles.headerText}>Comments</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      {getCommentListView(null)}
-
-      <KeyboardAvoidingView
-        behavior="position"
-        keyboardVerticalOffset={
-          Platform.OS === "ios"
-            ? moderateScale(650) - moderateScale(340)
-            : moderateScale(650) - moderateScale(340)
-        }
-        style={styles.keyboardAvoid}
-      >
-        <View style={styles.commentEntryContainer}>
-          {replyTo ? (
-            <View style={styles.replyLine}>
-              <Text style={styles.userTxt}>@{replyTo[0]}</Text>
-              <FontAwesome name="close" color="darkgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)}/>
+      <View style={styles.commentsModal}>
+        <View style={styles.container}>
+          <TouchableWithoutFeedback onPress={() => handleCommentModalClose()}>
+            <View style={styles.commentHeader}>
+              <View style={styles.tab}></View>
+              <Text style={styles.headerText}>Comments</Text>
             </View>
-          ) : null}
-          <View style={styles.replyBox}>
-          <TextInputField
-          inputValue={commentContent}
-          placeHolderText={"Blow some bubbles"}
-          onChangeText={(text) => handleChange(text)}
-          handleClear={() => handleCommentInsert()}
-        />
-          </View>
+          </TouchableWithoutFeedback>
+          {getCommentListView(null)}
+
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={
+              Platform.OS === "ios"
+                ? moderateScale(650) - moderateScale(340)
+                : moderateScale(650) - moderateScale(340)
+            }
+            style={styles.keyboardAvoid}
+          >
+            <View style={styles.commentEntryContainer}>
+              {replyTo ? (
+                <View style={styles.replyLine}>
+                  <Text style={styles.userTxt}>@{replyTo[0]}</Text>
+                  <FontAwesome name="close" color="darkgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)} />
+                </View>
+              ) : null}
+              <View style={styles.replyBox}>
+                <TextInputField
+                  inputValue={commentContent}
+                  placeHolderText={"Blow some bubbles"}
+                  onChangeText={(text) => handleChange(text)}
+                  handleClear={() => handleCommentInsert()}
+                />
+              </View>
+            </View>
+          </KeyboardAvoidingView>
         </View>
-      </KeyboardAvoidingView>
-    </View>
-    </View>
+      </View>
     </View>
   );
 }

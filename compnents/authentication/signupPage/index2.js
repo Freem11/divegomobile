@@ -12,33 +12,33 @@ import {
   fontSizes,
   buttonText,
   authenicationButton,
-} from "../styles";
-import TextInputField from "./textInput";
+} from "../../styles";
+import TextInputField from "../utils/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleLogInSubmit } from "../helpers/loginHelpers";
+import { handleSignUpSubmit } from "../../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
+import { SessionContext } from "../../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function LoginPage(props) {
+export default function CreateAccountPage(props) {
   const {
     title,
+    namePlaceholder,
     emailPlaceholder,
     passwordPlaceholder,
     buttonText,
     promptText,
     promptLinkText,
     moveToLandingPage,
-    moveToSignUpPage,
-    loginFail,
-    setLoginFail,
-    moveToForgotPasswordPage,
-    forgotPromt
+    moveToLoginPage,
+    regFail,
+    setRegFail
   } = props;
 
   const [formVals, setFormVals] = useState({
+    name: "",
     email: "",
     password: "",
   });
@@ -47,7 +47,7 @@ export default function LoginPage(props) {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   useEffect(() => {
-      setLoginFail(null)
+    setRegFail(null)
   }, [formVals])
 
   return (
@@ -60,8 +60,15 @@ export default function LoginPage(props) {
       />
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
-
         <View style={{ marginTop: moderateScale(60) }}>
+          <TextInputField
+            icon={"person-outline"}
+            placeHolderText={namePlaceholder}
+            secure={false}
+            onChangeText={(text) => setFormVals({ ...formVals, name: text })}
+          />
+        </View>
+        <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"alternate-email"}
             placeHolderText={emailPlaceholder}
@@ -69,7 +76,6 @@ export default function LoginPage(props) {
             onChangeText={(text) => setFormVals({ ...formVals, email: text })}
           />
         </View>
-
         <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"lock-outline"}
@@ -81,17 +87,17 @@ export default function LoginPage(props) {
             }
           />
         </View>
-
-        {loginFail ? (
-          <Text style={styles.erroMsg}>{loginFail}</Text>
+        {regFail ? (
+          <Text style={styles.erroMsg}>{regFail}</Text>
         ) : (
           <View style={styles.erroMsgEmpty}></View>
         )}
-
-        <View style={styles.buttonBox}>
-          <TouchableWithoutFeedback
-            onPress={() => handleLogInSubmit(formVals, setActiveSession, setLoginFail)}
-          >
+        <TouchableWithoutFeedback
+          onPress={() =>
+            handleSignUpSubmit(formVals, setActiveSession, setRegFail)
+          }
+        >
+          <View style={styles.buttonBox}>
             <View style={styles.loginButton}>
               <Text style={styles.loginText}>{buttonText}</Text>
               <MaterialIcons
@@ -100,18 +106,12 @@ export default function LoginPage(props) {
                 color={colors.themeWhite}
               />
             </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
-      <View style={styles.forgotBox}>
-        <TouchableWithoutFeedback onPress={() => moveToForgotPasswordPage()}>
-          <Text style={styles.promptLinkText}>{forgotPromt}</Text>
+          </View>
         </TouchableWithoutFeedback>
       </View>
-
       <View style={styles.promtBox}>
         <Text style={styles.promptText}>{promptText} </Text>
-        <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
+        <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
           <Text style={styles.promptLinkText}>{promptLinkText}</Text>
         </TouchableWithoutFeedback>
       </View>
@@ -143,13 +143,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginTop: moderateScale(-50)
   },
-  forgotBox: {
-    position: "absolute",
-    bottom: moderateScale(40),
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
   promtBox: {
     position: "absolute",
     bottom: moderateScale(10),
@@ -158,7 +151,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   promptText: {
-    fontSize: moderateScale(15),
+    fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.Italic,
     color: colors.themeBlack,
   },
