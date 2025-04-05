@@ -53,7 +53,7 @@ export default function LandingPageView({
               <Image source={googleLogo} style={S.GLogo} />
             </S.GoogleButton>
           </TouchableWithoutFeedback>
-          <LanguageSwitcher />
+          {/* <LanguageSwitcher /> */}
           <TouchableWithoutFeedback onPress={onFacebook} disabled={isSignedIn}>
             <S.FacebookButton>
               <Image source={facebookLogo} style={S.FLogo} />

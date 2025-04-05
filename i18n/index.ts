@@ -1,6 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import * as Localization from "expo-localization";
+import { getLocales } from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import en from "./en.json";
@@ -20,19 +20,22 @@ const resources = {
 
 export const initI18n = async () => {
   const storedLang = await AsyncStorage.getItem(LANG_KEY);
-  const fallbackLang = Localization.locale.split("-")[0]; // e.g., "en-US" => "en"
 
-  const selectedLanguage =
-    storedLang || (fallbackLang in resources ? fallbackLang : "en");
+  const locales = getLocales();
+  console.log("locales", locales);
+  // const deviceLang = locales?.[0]?.languageCode || "en";
 
-  await i18n.use(initReactI18next).init({
-    resources,
-    lng: selectedLanguage,
-    fallbackLng: "en",
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+  // const selectedLanguage =
+  //   storedLang || (deviceLang in resources ? deviceLang : "en");
+
+  // await i18n.use(initReactI18next).init({
+  //   resources,
+  //   lng: selectedLanguage,
+  //   fallbackLng: "en",
+  //   interpolation: {
+  //     escapeValue: false,
+  //   },
+  // });
 };
 
 export const setLanguage = async (lang: string) => {
