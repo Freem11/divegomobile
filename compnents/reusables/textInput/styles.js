@@ -16,8 +16,8 @@ export const TextInputWrapper = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: left;
-  border-bottom-color: darkgray;
-  border-bottom-width: 2px;
+  border-bottom-color: ${colors.neutralGrey};
+  border-bottom-width: ${moderateScale(2)}px;
   position: relative;
 `;
 
