@@ -85,23 +85,24 @@ export default function WavyHeaderUploader({
         </View>
       )}
           <View
+          pointerEvents='none'
         style={{
-          // flex: 1,
           justifyContent: 'flex-end',
           height: windowWidth > 600 ? "130%" : "150%",
           backgroundColor: "pink",
+          pointerEvents: 'none'
         }}
       >
         <Svg
           height={windowWidth > 600 ? "230%" : "230%"}
           width={windowWidth > 600 ? "100%" : "100%"}
-          pointerEvents={'none'}
+          pointerEvents='none'
           viewBox="0 0 1440 320"
           style={{
             flex: 1,
             marginLeft: windowWidth > 600 ? "0%" : 0,
-            // marginTop: windowWidth > 600 ? "50%" : "50%",
             backgroundColor: "transparent",
+            pointerEvents: 'none',
             zIndex: 5,
           }}
         >

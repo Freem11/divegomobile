@@ -2,12 +2,13 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { MaterialIcons } from '@expo/vector-icons';
-import TextInputField from '../../authentication/utils/textInput';
 import WavyHeaderDynamic from '../wavyHeaderDynamic';
 import screenData from '../screenData.json';
 import * as S from './styles';
 import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
+import MobileTextInput from "../../reusables/textInput";
+import Icon from "../../../icons/Icon";
 
 interface DiveSiteVals {
   Site: string;
@@ -49,37 +50,30 @@ export default function DiveSiteUploaderView({
         <Flex>
           <S.InputGroupContainer>
             <S.TextBuffer>
-              <TextInputField
-                icon="diving-scuba-flag"
-                inputValue={addSiteVals.Site}
-                placeHolderText={screenData.DiveSiteAdd.siteNamePlaceholder}
-                vectorIcon="MaterialCommunityIcons"
-                onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
-                secure={false}
+              <MobileTextInput 
+              iconLeft={<Icon name='diving-scuba-flag' fill={colors.neutralGrey}></Icon>}
+              placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
+              onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
               />
             </S.TextBuffer>
 
             <S.TextBuffer>
-              <TextInputField
-                icon="latitude"
-                inputValue={addSiteVals.Latitude}
-                placeHolderText={screenData.DiveSiteAdd.latPlaceholder}
-                keyboardConfig="number-pad"
-                vectorIcon="MaterialCommunityIcons"
-                onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
-                secure={false}
+            <MobileTextInput 
+              iconLeft={<Icon name='latitude' fill={colors.neutralGrey}></Icon>}
+              placeholder={screenData.DiveSiteAdd.latPlaceholder}
+              value={addSiteVals.Latitude}
+              onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
+              keyboardType="number-pad"
               />
             </S.TextBuffer>
 
             <S.TextBuffer>
-              <TextInputField
-                icon="longitude"
-                inputValue={addSiteVals.Longitude}
-                placeHolderText={screenData.DiveSiteAdd.lngPlaceholder}
-                keyboardConfig="number-pad"
-                vectorIcon="MaterialCommunityIcons"
-                onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
-                secure={false}
+            <MobileTextInput 
+              iconLeft={<Icon name='longitude' fill={colors.neutralGrey}></Icon>}
+              placeholder={screenData.DiveSiteAdd.lngPlaceholder}
+              value={addSiteVals.Longitude}
+              onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
+              keyboardType="number-pad"
               />
             </S.TextBuffer>
           </S.InputGroupContainer>
