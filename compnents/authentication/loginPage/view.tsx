@@ -11,13 +11,6 @@ interface FormVals {
 }
 
 interface IProps {
-    title: string;
-    emailPlaceholder: string;
-    passwordPlaceholder: string;
-    buttonText: string;
-    promptText: string;
-    promptLinkText: string;
-    forgotPromt: string;
     formVals: FormVals;
     secureTextEntry: boolean;
     loginFail: string | null;
@@ -30,13 +23,6 @@ interface IProps {
 }
 
 export default function LoginPageView({
-    title,
-    emailPlaceholder,
-    passwordPlaceholder,
-    buttonText,
-    promptText,
-    promptLinkText,
-    forgotPromt,
     formVals,
     loginFail,
     secureTextEntry,
