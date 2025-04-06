@@ -73,6 +73,8 @@ export const ButtonPosition = styled.View`
   ${screenSecondaryButton};
   flex-direction: row;
   margin-top: 0%;
+   border-color: ${colors.primaryBlue};
+  border-width: ${moderateScale(1)};
 `;
 
 export const PinText = styled.Text`
@@ -96,6 +98,8 @@ export const SubmitButton = styled.View`
   ${authenicationButton};
   flex-direction: row;
   margin-top: ${windowHeight / 10}px;
+  border-color: ${colors.primaryBlue};
+  border-width: ${moderateScale(2)};
 `;
 
 export const SubmitText = styled.Text`

@@ -52,15 +52,6 @@ export const primaryButton = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
-
-  elevation: 10,
 }
 
 export const buttonText = {
@@ -79,15 +70,7 @@ export const primaryButtonAlt = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
 
-  elevation: 10,
 }
 
 export const buttonTextAlt = {
@@ -104,15 +87,6 @@ export const authenicationButton = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
-
-  elevation: 10,
 }
 
 export const screenSecondaryButton = {
@@ -125,15 +99,6 @@ export const screenSecondaryButton = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
-
-  elevation: 10,
 }
 
 // export const roundButton = {
@@ -145,13 +110,4 @@ export const screenSecondaryButton = {
 //   color: colors.themeWhite,
 //   alignItems: 'center',
 //   justifyContent: 'center',
-//   shadowColor: "#2d2d2d",
-//   shadowOffset: {
-//     width: moderateScale(3),
-//     height: moderateScale(1),
-//   },
-//   shadowOpacity: 0.5,
-//   shadowRadius: moderateScale(2),
-
-//   elevation: 10,
 // }

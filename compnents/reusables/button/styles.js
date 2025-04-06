@@ -7,8 +7,6 @@ import {
 } from '../../styles';
 
 export const StyledButton = styled.View`
-  height: ${moderateScale(50)}px;
-  width: ${moderateScale(140)}px;
   padding-horizontal: ${moderateScale(0)}px;
   background-color: ${(props) => (props.alt ? colors.themeWhite : colors.primaryBlue)};
   border-radius: ${moderateScale(30)}px;
@@ -16,8 +14,6 @@ export const StyledButton = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-color:  ${colors.primaryBlue};
-  border-width: ${moderateScale(1)}px;
 `;
 
 export const StyledButtonText = styled.Text`
