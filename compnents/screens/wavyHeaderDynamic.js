@@ -51,22 +51,25 @@ export default function WavyHeaderDynamic({ image, defaultImg }) {
           </View>
         )}
         <View
+        pointerEvents='none'
           style={{
-            // flex: 1,
           justifyContent: 'flex-end',
           height: windowWidth > 600 ? "130%" : "150%",
+          pointerEvents: 'none',
           backgroundColor: "pink",
           }}
         >
           <Svg
             height={windowWidth > 600 ? "230%" : "230%"}
             width={windowWidth > 600 ? "100%" : "100%"}
-            pointerEvents={'none'}
+            pointerEvents='none'
             viewBox="0 0 1440 320"
             style={{
               flex: 1,
               marginLeft: windowWidth > 600 ? "0%" : 0,
               backgroundColor: "transparent",
+              height: windowWidth > 600 ? "130%" : "150%",
+              pointerEvents: 'none',
               zIndex: 5,
             }}
           >
