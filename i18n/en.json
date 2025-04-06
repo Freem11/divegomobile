@@ -27,5 +27,10 @@
         "fillFields": "Please fill out all fields",
         "passwordFormat": "Your password must be 6 characters or greater",
         "accountExistMsg": "You have already registered this account, please use the log in page"
+    },
+    "forgot": {
+        "title": "Reset Password",
+        "email": "Enter Your Account Email",
+        "button": "Send Recovery Email"
     }
 }

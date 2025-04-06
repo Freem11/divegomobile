@@ -9,9 +9,6 @@
       "page": 3
     },
     {
-      "page": 4,
-      "title": "Reset Password",
-      "emailPlaceholder": "Enter Your Account Email",
-      "buttonText": "Send Recovery Email"
+      "page": 4
     }
   ]

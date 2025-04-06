@@ -24,14 +24,7 @@ const createSessionFromUrl = async (url) => {
 };
 
 export default function ForgotPage(props) {
-  const {
-    title,
-    emailPlaceholder,
-    buttonText,
-    moveToLoginPage,
-    setEmailSent,
-    emailSent,
-  } = props;
+  const { moveToLoginPage, setEmailSent, emailSent } = props;
 
   const [formVals, setFormVals] = useState({ email: "" });
   const [isEnabled, setIsEnabled] = useState(true);
@@ -72,9 +65,6 @@ export default function ForgotPage(props) {
 
   return (
     <ForgotPageView
-      title={title}
-      emailPlaceholder={emailPlaceholder}
-      buttonText={buttonText}
       moveToLoginPage={moveToLoginPage}
       setFormVals={setFormVals}
       formVals={formVals}
