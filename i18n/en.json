@@ -1,0 +1,11 @@
+{
+    "login": {
+        "title": "Dive in...",
+        "email": "Email",
+        "password": "Password",
+        "button": "Login",
+        "prompt": "Don't have an account?",
+        "promptLink": "Sign up",
+        "forgot": "Forgot your password?"
+    }
+}

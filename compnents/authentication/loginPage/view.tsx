@@ -3,6 +3,7 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as S from './styles';
 import TextInputField from '../utils/textInput';
+import { useTranslation } from "react-i18next";
 
 interface FormVals {
     email: string;
@@ -46,6 +47,9 @@ export default function LoginPageView({
     setSecureTextEntry,
     moveToForgotPasswordPage,
 }: IProps) {
+
+    const { t } = useTranslation();
+
     return (
         <S.Container>
             <MaterialIcons
@@ -56,11 +60,11 @@ export default function LoginPageView({
             />
 
             <S.Content>
-                <S.Header>{title}</S.Header>
+                <S.Header>{t('login.title')}</S.Header>
 
                 <TextInputField
                     icon="alternate-email"
-                    placeHolderText={emailPlaceholder}
+                    placeHolderText={t('login.email')}
                     secure={false}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     style={{ marginTop: 60 }}
@@ -68,7 +72,7 @@ export default function LoginPageView({
 
                 <TextInputField
                     icon="lock-outline"
-                    placeHolderText={passwordPlaceholder}
+                    placeHolderText={t('login.password')}
                     setSecureTextEntry={setSecureTextEntry}
                     secure={secureTextEntry}
                     onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
@@ -80,7 +84,7 @@ export default function LoginPageView({
                 <S.ButtonBox>
                     <TouchableWithoutFeedback onPress={handleLogin}>
                         <S.LoginButton>
-                            <S.LoginText>{buttonText}</S.LoginText>
+                            <S.LoginText>{t('login.button')}</S.LoginText>
                             <MaterialIcons name="chevron-right" size={30} color="#fff" />
                         </S.LoginButton>
                     </TouchableWithoutFeedback>
@@ -89,14 +93,14 @@ export default function LoginPageView({
 
             <S.ForgotBox>
                 <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
-                    <S.PromptLinkText>{forgotPromt}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('login.forgot')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.ForgotBox>
 
             <S.PromptBox>
-                <S.PromptText>{promptText}</S.PromptText>
+                <S.PromptText>{t('login.prompt')}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToSignUpPage}>
-                    <S.PromptLinkText>{promptLinkText}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('login.promptLink')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>

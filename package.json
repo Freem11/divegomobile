@@ -6,6 +6,8 @@
     "build:android": "npx eas-cli build -p android --profile preview --local",
     "start": "expo start --dev-client",
     "android": "expo run:android",
+    "android:manual": "expo run:android --device",
+    "android:clean": "expo start -c && expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "eslint ."
