@@ -1,19 +1,19 @@
   [
     {
-      "page": 1
+      "page": 1,
+      "title": "Sign Up",
+      "namePlaceholder": "Full Name",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "buttonText": "Sign Up",
+      "promptText": "Already have an account?",
+      "promptLinkText": "Log In"
     },
     {
       "page": 2
     },
     {
-      "page": 3,
-      "title": "Log In",
-      "emailPlaceholder": "Email",
-      "passwordPlaceholder": "Password",
-      "buttonText": "Log In",
-      "promptText": "Don't have an account?",
-      "promptLinkText": "Sign Up",
-      "forgotPromt": "Forgot Password?"
+      "page": 3
     },
     {
       "page": 4,
