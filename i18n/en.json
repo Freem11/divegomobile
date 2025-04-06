@@ -6,6 +6,8 @@
         "button": "Login",
         "prompt": "Don't have an account?",
         "promptLink": "Sign up",
-        "forgot": "Forgot your password?"
+        "forgot": "Forgot your password?",
+        "fillFields": "Please fill out both email and password",
+        "invalidCredentials": "The credentials you supplied are not valid"
     }
 }

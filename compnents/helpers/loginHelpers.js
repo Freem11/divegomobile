@@ -14,6 +14,7 @@ import { supabase } from '../../supabase';
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
+import { i18n } from "../../i18n";
 
 const redirectTo = makeRedirectUri();
 
@@ -161,6 +162,7 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
 
 export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
   if (formVals.email === "" || formVals.password == "") {
+    setLoginFail(i18n.t("login.fillFields"));
     setLoginFail("Please fill out both email and password");
     return;
   } else {
@@ -169,7 +171,7 @@ export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail
       await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
       setActiveSession(accessToken.data.session);
     } else {
-      setLoginFail("The credentials you supplied are not valid");
+      setLoginFail(i18n.t("login.invalidCredentials"));
       return;
     }
     await sessionCheck();
