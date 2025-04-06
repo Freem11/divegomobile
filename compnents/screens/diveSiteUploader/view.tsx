@@ -8,6 +8,7 @@ import * as S from './styles';
 import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
 import MobileTextInput from "../../reusables/textInput";
+import Button from '../../reusables/button';
 import Icon from "../../../icons/Icon";
 
 interface DiveSiteVals {
@@ -80,28 +81,28 @@ export default function DiveSiteUploaderView({
         </Flex>
 
         <Flex direction="row" justify="space-between" width="84%">
-          <TouchableWithoutFeedback onPress={getCurrentLocation}>
             <S.ButtonPosition>
-              <S.LocationText>{screenData.DiveSiteAdd.myLocationButton}</S.LocationText>
+            <TouchableWithoutFeedback onPress={getCurrentLocation}>
+                <Button alt={true} title={screenData.DiveSiteAdd.myLocationButton}/>
+            </TouchableWithoutFeedback>
             </S.ButtonPosition>
-          </TouchableWithoutFeedback>
 
-          <TouchableWithoutFeedback onPress={onNavigate}>
             <S.ButtonPosition>
-              <S.PinText>{screenData.DiveSiteAdd.pinButton}</S.PinText>
+            <TouchableWithoutFeedback onPress={onNavigate}>
+                <Button alt={true} title={screenData.DiveSiteAdd.pinButton}/>
+            </TouchableWithoutFeedback>
             </S.ButtonPosition>
-          </TouchableWithoutFeedback>
         </Flex>
 
         <S.Hint>{screenData.DiveSiteAdd.myLocationexplainer}</S.Hint>
 
+
         <S.ButtonBox>
-          <TouchableWithoutFeedback onPress={onSubmit}>
             <S.SubmitButton>
-              <S.SubmitText>{screenData.DiveSiteAdd.submitButton}</S.SubmitText>
-              <MaterialIcons name="chevron-right" size={30} color="#fff" />
+            <TouchableWithoutFeedback onPress={onSubmit}>
+                <Button alt={false} title={screenData.DiveSiteAdd.submitButton} iconRight="chevron-right"/>
+            </TouchableWithoutFeedback>
             </S.SubmitButton>
-          </TouchableWithoutFeedback>
         </S.ButtonBox>
       </S.ContentContainer>
 
