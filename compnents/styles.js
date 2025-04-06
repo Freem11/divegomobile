@@ -16,6 +16,12 @@ export const fontSizes = {
   SmallText: 14
 }
 
+export const buttonSizes = {
+  ButtonStandardHeight: 50,
+  ButtonStandardWidth: 140,
+}
+
+
 export const activeFonts = Platform.OS === "android" ? {
   Black: "RobotoBlack",
   BlackItalic: "RobotoBlackItalic",

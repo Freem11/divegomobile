@@ -7,9 +7,12 @@ import {
 } from '../../styles';
 
 export const StyledButton = styled.View`
-  padding-horizontal: ${moderateScale(0)}px;
+  width: 100%;
+  height: 100%;
   background-color: ${(props) => (props.alt ? colors.themeWhite : colors.primaryBlue)};
   border-radius: ${moderateScale(30)}px;
+  border-color: ${colors.primaryBlue};
+  border-width: ${moderateScale(1)}px;
   display: flex;
   flex-direction: row;
   align-items: center;
