@@ -15,5 +15,14 @@
         "loginButton": "Log In",
         "registerButton": "Create New Account",
         "socialText": "Social Sign In:"
+    },
+    "signup": {
+        "title": "Sign Up",
+        "name": "Full Name",
+        "email": "Email",
+        "password": "Password",
+        "button": "Sign up",
+        "prompt": "Already have an account?",
+        "promptLink": "Login"
     }
 }

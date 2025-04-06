@@ -1,13 +1,6 @@
   [
     {
-      "page": 1,
-      "title": "Sign Up",
-      "namePlaceholder": "Full Name",
-      "emailPlaceholder": "Email",
-      "passwordPlaceholder": "Password",
-      "buttonText": "Sign Up",
-      "promptText": "Already have an account?",
-      "promptLinkText": "Log In"
+      "page": 1
     },
     {
       "page": 2
