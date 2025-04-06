@@ -14,6 +14,22 @@ import {
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+export const StyledScrollView = styled.ScrollView.attrs(() => ({
+  scrollEnabled: false,
+  contentContainerStyle: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+}))`
+  z-index: 15;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: ${windowHeight}px;
+  width: 100%;
+`;
+
 export const Container = styled.View`
   flex: 1;
   background-color: #fff;

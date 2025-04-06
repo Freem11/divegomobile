@@ -9,5 +9,11 @@
         "forgot": "Forgot your password?",
         "fillFields": "Please fill out both email and password",
         "invalidCredentials": "The credentials you supplied are not valid"
+    },
+    "landing": {
+        "title": "Dive in. . .",
+        "loginButton": "Log In",
+        "registerButton": "Create New Account",
+        "socialText": "Social Sign In:"
     }
 }
