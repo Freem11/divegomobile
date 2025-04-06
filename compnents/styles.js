@@ -29,8 +29,6 @@ export const buttonSizes = {
     height: 50,
     width: 220
   },
-  ButtonStandardHeight: 50,
-  ButtonStandardWidth: 140,
 }
 
 
