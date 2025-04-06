@@ -23,6 +23,9 @@
         "password": "Password",
         "button": "Sign up",
         "prompt": "Already have an account?",
-        "promptLink": "Login"
+        "promptLink": "Login",
+        "fillFields": "Please fill out all fields",
+        "passwordFormat": "Your password must be 6 characters or greater",
+        "accountExistMsg": "You have already registered this account, please use the log in page"
     }
 }

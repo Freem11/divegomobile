@@ -185,10 +185,10 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
     formVals.password == "" ||
     formVals.name == ""
   ) {
-    setRegFail("Please fill out all fields");
+    setRegFail(i18n.t("signup.fillFields"));
     return;
   } else if (formVals.password.length < 6) {
-    setRegFail("Your password must be 6 characters or greater");
+    setRegFail(i18n.t("signup.passwordFormat"));
     return;
   } else {
 
@@ -207,7 +207,7 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
       await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
       setActiveSession(registrationToken.data.session);
     } else {
-      setRegFail(`You have already registered this account, please use the log in page`);
+      setRegFail(i18n.t("signup.accountExistMsg"));
     }
     await sessionCheck();
   }
