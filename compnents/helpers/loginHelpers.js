@@ -163,7 +163,6 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
 export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
   if (formVals.email === "" || formVals.password == "") {
     setLoginFail(i18n.t("login.fillFields"));
-    setLoginFail("Please fill out both email and password");
     return;
   } else {
     let accessToken = await signInStandard(formVals);
