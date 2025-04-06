@@ -1,5 +1,4 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { MaterialIcons } from '@expo/vector-icons';
 import WavyHeaderDynamic from '../wavyHeaderDynamic';
@@ -9,7 +8,6 @@ import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
 import MobileTextInput from "../../reusables/textInput";
 import Button from '../../reusables/button';
-import Icon from "../../../icons/Icon";
 
 interface DiveSiteVals {
   Site: string;
@@ -52,7 +50,7 @@ export default function DiveSiteUploaderView({
           <S.InputGroupContainer>
             <S.TextBuffer>
               <MobileTextInput 
-              iconLeft={<Icon name='diving-scuba-flag' fill={colors.neutralGrey}></Icon>}
+              iconLeft="diving-scuba-flag"
               placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
               />
@@ -60,7 +58,7 @@ export default function DiveSiteUploaderView({
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Icon name='latitude' fill={colors.neutralGrey}></Icon>}
+              iconLeft="latitude"
               placeholder={screenData.DiveSiteAdd.latPlaceholder}
               value={addSiteVals.Latitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
@@ -70,7 +68,7 @@ export default function DiveSiteUploaderView({
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Icon name='longitude' fill={colors.neutralGrey}></Icon>}
+              iconLeft="longitude"
               placeholder={screenData.DiveSiteAdd.lngPlaceholder}
               value={addSiteVals.Longitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
@@ -106,7 +104,8 @@ export default function DiveSiteUploaderView({
                 onPress={onSubmit} 
                 alt={false} 
                 title={screenData.DiveSiteAdd.submitButton} 
-                iconRight="chevron-right"/>
+                iconRight="chevron-right"
+                />
             </S.ButtonWrapper>
         </S.ButtonBox>
       </S.ContentContainer>
