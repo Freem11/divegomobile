@@ -14,6 +14,7 @@ import { supabase } from '../../supabase';
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
+import { i18n } from "../../i18n";
 
 const redirectTo = makeRedirectUri();
 
@@ -161,7 +162,7 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
 
 export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
   if (formVals.email === "" || formVals.password == "") {
-    setLoginFail("Please fill out both email and password");
+    setLoginFail(i18n.t("login.fillFields"));
     return;
   } else {
     let accessToken = await signInStandard(formVals);
@@ -169,7 +170,7 @@ export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail
       await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
       setActiveSession(accessToken.data.session);
     } else {
-      setLoginFail("The credentials you supplied are not valid");
+      setLoginFail(i18n.t("login.invalidCredentials"));
       return;
     }
     await sessionCheck();
@@ -184,10 +185,10 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
     formVals.password == "" ||
     formVals.name == ""
   ) {
-    setRegFail("Please fill out all fields");
+    setRegFail(i18n.t("signup.fillFields"));
     return;
   } else if (formVals.password.length < 6) {
-    setRegFail("Your password must be 6 characters or greater");
+    setRegFail(i18n.t("signup.passwordFormat"));
     return;
   } else {
 
@@ -206,7 +207,7 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
       await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
       setActiveSession(registrationToken.data.session);
     } else {
-      setRegFail(`You have already registered this account, please use the log in page`);
+      setRegFail(i18n.t("signup.accountExistMsg"));
     }
     await sessionCheck();
   }

@@ -3,6 +3,7 @@ import { TouchableWithoutFeedback } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as S from "./styles";
 import TextInputField from "../utils/textInput";
+import { useTranslation } from "react-i18next";
 
 interface FormVals {
     name: string;
@@ -11,13 +12,6 @@ interface FormVals {
 }
 
 interface IProps {
-    title: string;
-    namePlaceholder: string;
-    emailPlaceholder: string;
-    passwordPlaceholder: string;
-    buttonText: string;
-    promptText: string;
-    promptLinkText: string;
     formVals: FormVals;
     secureTextEntry: boolean;
     regFail: string | null;
@@ -29,13 +23,6 @@ interface IProps {
 }
 
 export default function CreateAccountPageView({
-    title,
-    namePlaceholder,
-    emailPlaceholder,
-    passwordPlaceholder,
-    buttonText,
-    promptText,
-    promptLinkText,
     formVals,
     secureTextEntry,
     regFail,
@@ -45,6 +32,8 @@ export default function CreateAccountPageView({
     moveToLoginPage,
     setSecureTextEntry,
 }: IProps) {
+    const { t } = useTranslation();
+
     return (
         <S.Container>
             <MaterialIcons
@@ -55,11 +44,11 @@ export default function CreateAccountPageView({
             />
 
             <S.Content>
-                <S.Header>{title}</S.Header>
+                <S.Header>{t("signup.title")}</S.Header>
 
                 <TextInputField
                     icon="person-outline"
-                    placeHolderText={namePlaceholder}
+                    placeHolderText={t("signup.name")}
                     secure={false}
                     onChangeText={(text: string) => setFormVals({ ...formVals, name: text })}
                     style={{ marginTop: 60 }}
@@ -67,7 +56,7 @@ export default function CreateAccountPageView({
 
                 <TextInputField
                     icon="alternate-email"
-                    placeHolderText={emailPlaceholder}
+                    placeHolderText={t("signup.email")}
                     secure={false}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     style={{ marginTop: 40 }}
@@ -75,7 +64,7 @@ export default function CreateAccountPageView({
 
                 <TextInputField
                     icon="lock-outline"
-                    placeHolderText={passwordPlaceholder}
+                    placeHolderText={t("signup.password")}
                     setSecureTextEntry={setSecureTextEntry}
                     secure={secureTextEntry}
                     onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
@@ -87,7 +76,7 @@ export default function CreateAccountPageView({
                 <TouchableWithoutFeedback onPress={handleSignUp}>
                     <S.ButtonBox>
                         <S.LoginButton>
-                            <S.LoginText>{buttonText}</S.LoginText>
+                            <S.LoginText>{t("signup.button")}</S.LoginText>
                             <MaterialIcons name="chevron-right" size={30} color="#fff" />
                         </S.LoginButton>
                     </S.ButtonBox>
@@ -95,9 +84,9 @@ export default function CreateAccountPageView({
             </S.Content>
 
             <S.PromptBox>
-                <S.PromptText>{promptText}</S.PromptText>
+                <S.PromptText>{t("signup.prompt")}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToLoginPage}>
-                    <S.PromptLinkText>{promptLinkText}</S.PromptLinkText>
+                    <S.PromptLinkText>{t("signup.promptLink")}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>

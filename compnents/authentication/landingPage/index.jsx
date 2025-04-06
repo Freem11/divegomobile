@@ -14,14 +14,7 @@ const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
 
 export default function LandingPage(props) {
-  const {
-    title,
-    buttonOneText,
-    buttonTwoText,
-    content,
-    moveToLoginPage,
-    moveToSignUpPage,
-  } = props;
+  const { moveToLoginPage, moveToSignUpPage } = props;
 
   const { setActiveSession } = useContext(SessionContext);
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -46,10 +39,6 @@ export default function LandingPage(props) {
 
   return (
     <LandingPageView
-      title={title}
-      loginButton={buttonOneText}
-      registerButton={buttonTwoText}
-      content={content}
       isSignedIn={isSignedIn}
       appleAuthAvailable={appleAuthAvailable}
       onLogin={() => moveToLoginPage()}

@@ -4,19 +4,7 @@ import { SessionContext } from "../../contexts/sessionContext";
 import { handleSignUpSubmit } from "../../helpers/loginHelpers";
 
 export default function CreateAccountPage(props) {
-  const {
-    title,
-    regFail,
-    setRegFail,
-    buttonText,
-    promptText,
-    promptLinkText,
-    moveToLoginPage,
-    namePlaceholder,
-    emailPlaceholder,
-    moveToLandingPage,
-    passwordPlaceholder,
-  } = props;
+  const { regFail, setRegFail, moveToLoginPage, moveToLandingPage } = props;
 
   const [formVals, setFormVals] = useState({
     name: "",
@@ -32,13 +20,6 @@ export default function CreateAccountPage(props) {
 
   return (
     <CreateAccountPageView
-      title={title}
-      namePlaceholder={namePlaceholder}
-      emailPlaceholder={emailPlaceholder}
-      passwordPlaceholder={passwordPlaceholder}
-      buttonText={buttonText}
-      promptText={promptText}
-      promptLinkText={promptLinkText}
       moveToLandingPage={moveToLandingPage}
       moveToLoginPage={moveToLoginPage}
       regFail={regFail}
