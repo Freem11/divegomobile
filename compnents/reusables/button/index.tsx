@@ -10,6 +10,7 @@ export type ButtonProps = {
   iconLeft?:  React.ReactNode
   iconRight?: React.ReactNode
   alt?: boolean
+  size: string
   children?:  React.ReactNode
 };
 

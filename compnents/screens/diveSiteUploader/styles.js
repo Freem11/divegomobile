@@ -60,11 +60,6 @@ export const ButtonBox = styled.View`
   margin-right: 15%;
 `;
 
-export const ButtonWrapper = styled.View`
-  width: ${moderateScale(buttonSizes.ButtonStandardWidth)}px;
-  height: ${moderateScale(buttonSizes.ButtonStandardHeight)}px;
-`;
-
 export const Hint = styled.Text`
   align-self: flex-start;
   text-align: center;

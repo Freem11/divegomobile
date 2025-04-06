@@ -79,34 +79,31 @@ export default function DiveSiteUploaderView({
         </Flex>
 
         <Flex direction="row" justify="space-between" width="84%">
-            <S.ButtonWrapper>
                 <Button 
                   onPress={getCurrentLocation} 
                   alt={true} 
+                  size='medium'
                   title={screenData.DiveSiteAdd.myLocationButton}
                 />
-            </S.ButtonWrapper>
 
-            <S.ButtonWrapper>
                 <Button 
                   onPress={onNavigate} 
                   alt={true} 
+                  size='medium'
                   title={screenData.DiveSiteAdd.pinButton}
                 />
-            </S.ButtonWrapper>
         </Flex>
 
         <S.Hint>{screenData.DiveSiteAdd.myLocationexplainer}</S.Hint>
 
         <S.ButtonBox>
-            <S.ButtonWrapper>
               <Button 
                 onPress={onSubmit} 
                 alt={false} 
+                size='medium'
                 title={screenData.DiveSiteAdd.submitButton} 
                 iconRight="chevron-right"
                 />
-            </S.ButtonWrapper>
         </S.ButtonBox>
       </S.ContentContainer>
 

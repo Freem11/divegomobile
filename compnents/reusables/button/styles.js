@@ -4,11 +4,12 @@ import {
   colors,
   fontSizes,
   activeFonts,
+  buttonSizes
 } from '../../styles';
 
 export const StyledButton = styled.View`
-  width: 100%;
-  height: 100%;
+  width: ${(props) => moderateScale(buttonSizes[props.size].width)}px;
+  height: ${(props) => moderateScale(buttonSizes[props.size].height)}px;
   background-color: ${(props) => (props.alt ? colors.themeWhite : colors.primaryBlue)};
   border-radius: ${moderateScale(30)}px;
   border-color: ${colors.primaryBlue};

@@ -17,6 +17,18 @@ export const fontSizes = {
 }
 
 export const buttonSizes = {
+  small: {
+    height: 50,
+    width: 50
+  },
+  medium : {
+    height: 50,
+    width: 140
+  },
+  large : {
+    height: 50,
+    width: 220
+  },
   ButtonStandardHeight: 50,
   ButtonStandardWidth: 140,
 }
