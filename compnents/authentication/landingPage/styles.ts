@@ -129,7 +129,7 @@ export const FacebookButton = styled.View`
 
 export const AppleButton = styled.View`
   background-color: white;
-  margin-left: ${moderateScale(6)}px;
+  margin-left: ${moderateScale(2)}px;
   ${sharedIconStyle};
 `;
 
@@ -142,6 +142,12 @@ export const FLogo = {
   marginBottom: moderateScale(4),
   height: moderateScale(45),
   width: moderateScale(45),
+};
+
+export const ALogo = {
+  // marginBottom: moderateScale(4),
+  height: moderateScale(49.5),
+  width: moderateScale(49.5),
 };
 
 export const Icon = {

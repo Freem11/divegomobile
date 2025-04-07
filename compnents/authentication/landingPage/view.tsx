@@ -63,7 +63,7 @@ export default function LandingPageView({
           {appleAuthAvailable && (
             <TouchableWithoutFeedback onPress={onApple} disabled={isSignedIn}>
               <S.AppleButton>
-                <Image source={appleLogo} />
+                <Image source={appleLogo} style={S.ALogo} />
               </S.AppleButton>
             </TouchableWithoutFeedback>
           )}
