@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Keyboard, ScrollView } from "react-native";
 import * as S from "./styles";
-import carrouselData from "./utils/carrouselData";
 import CreateAccountPage from "./signupPage";
 import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
@@ -45,7 +44,6 @@ export default function Authentication() {
       >
         <S.PageContent>
           <CreateAccountPage
-            {...carrouselData[PAGES.SIGN_UP]}
             moveToLandingPage={() => setPage(PAGES.LANDING)}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
             regFail={regFail}
@@ -55,7 +53,6 @@ export default function Authentication() {
 
         <S.PageContent>
           <LandingPage
-            {...carrouselData[PAGES.LANDING]}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
             moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
           />
@@ -63,7 +60,6 @@ export default function Authentication() {
 
         <S.PageContent>
           <LoginPage
-            {...carrouselData[PAGES.LOGIN]}
             loginFail={loginFail}
             setLoginFail={setLoginFail}
             moveToLandingPage={() => setPage(PAGES.LANDING)}
@@ -74,7 +70,6 @@ export default function Authentication() {
 
         <S.PageContent>
           <ForgotPage
-            {...carrouselData[PAGES.FORGOT_PASSWORD]}
             setEmailSent={setEmailSent}
             emailSent={emailSent}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}

@@ -3,11 +3,9 @@ import { TouchableWithoutFeedback } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import TextInputField from "../utils/textInput";
 import * as S from "./styles";
+import { useTranslation } from "react-i18next";
 
 interface IProps {
-  title: string;
-  emailPlaceholder: string;
-  buttonText: string;
   formVals: { email: string };
   isEnabled: boolean;
   emailSent: string | null;
@@ -17,16 +15,15 @@ interface IProps {
 }
 
 export default function ForgotPageView({
-  title,
   formVals,
   isEnabled,
   emailSent,
-  buttonText,
-  emailPlaceholder,
   setFormVals,
   moveToLoginPage,
   passwordRecovery,
 }: IProps) {
+  const { t } = useTranslation();
+
   return (
     <S.Container>
       <MaterialIcons
@@ -35,12 +32,13 @@ export default function ForgotPageView({
         color={"darkgrey"}
         onPress={moveToLoginPage}
       />
+
       <S.Content>
-        <S.Header>{title}</S.Header>
+        <S.Header>{t("forgot.title")}</S.Header>
 
         <TextInputField
           icon={"alternate-email"}
-          placeHolderText={emailPlaceholder}
+          placeHolderText={t("forgot.email")}
           secure={false}
           onChangeText={(text: string) => setFormVals({ email: text })}
           style={{ marginTop: 60 }}
@@ -53,7 +51,7 @@ export default function ForgotPageView({
             onPress={isEnabled ? () => passwordRecovery(formVals.email) : () => { }}
           >
             <S.LoginButton>
-              <S.LoginText>{buttonText}</S.LoginText>
+              <S.LoginText>{t("forgot.button")}</S.LoginText>
               <MaterialIcons name="chevron-right" size={30} color="#fff" />
             </S.LoginButton>
           </TouchableWithoutFeedback>

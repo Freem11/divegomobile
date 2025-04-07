@@ -1,5 +1,5 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useState, useCallback, useLayoutEffect } from "react";
+import React, { useState, useCallback, useLayoutEffect, useEffect } from "react";
 import "react-native-url-polyfill/auto";
 import { Dimensions, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +16,8 @@ import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
+import { I18nextProvider } from "react-i18next";
+import { i18n, initI18n } from "./i18n";
 
 const { width, height } = Dimensions.get("window");
 
@@ -84,6 +86,10 @@ export default function App() {
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
     SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
   });
+
+  useEffect(() => {
+    initI18n();
+  }, []);
 
   useLayoutEffect(() => {
     const prepare = async () => {
@@ -162,7 +168,9 @@ export default function App() {
                 <SessionContext.Provider
                   value={{ activeSession, setActiveSession }}
                 >
-                  {activeSession ? <MapPage /> : <Authentication />}
+                  <I18nextProvider i18n={i18n}>
+                    {activeSession ? <MapPage /> : <Authentication />}
+                  </I18nextProvider>
                 </SessionContext.Provider>
               </MapCenterContext.Provider>
             </MapRegionContext.Provider>

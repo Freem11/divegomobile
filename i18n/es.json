@@ -1,0 +1,13 @@
+{
+    "login": {
+        "title": "Sumérgete...",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "button": "Acceder",
+        "prompt": "¿No tienes una cuenta?",
+        "promptLink": "Regístrate",
+        "forgot": "¿Olvidaste tu contraseña?",
+        "fillFields": "Por favor completa el correo y la contraseña",
+        "invalidCredentials": "Las credenciales proporcionadas no son válidas"
+    }
+}

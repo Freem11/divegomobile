@@ -69,6 +69,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { getLocales } from "expo-localization";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -107,6 +108,9 @@ export default function MapPage() {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const locales = getLocales();
+  console.log("locales", locales);
+  
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);

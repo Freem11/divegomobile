@@ -1,21 +1,23 @@
 import React from "react";
-import {
-  Image,
-  ScrollView,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Image, TouchableWithoutFeedback, } from "react-native";
 import WavyHeader from "../../wavyHeader";
 import * as S from "./styles";
 import googleLogo from "../../png/loginIcons/google.png";
 import facebookLogo from "../../png/loginIcons/facebook.png";
 import appleLogo from "../../png/loginIcons/apple.png";
+import { useTranslation } from "react-i18next";
+
+interface IProps {
+  isSignedIn: boolean;
+  appleAuthAvailable: boolean;
+  onLogin: () => void;
+  onSignUp: () => void;
+  onGoogle: () => void;
+  onFacebook: () => void;
+  onApple: () => void;
+}
 
 export default function LandingPageView({
-  title,
-  loginButton,
-  registerButton,
-  content,
   isSignedIn,
   appleAuthAvailable,
   onLogin,
@@ -23,29 +25,28 @@ export default function LandingPageView({
   onGoogle,
   onFacebook,
   onApple,
-}) {
+}: IProps) {
+  const { t } = useTranslation();
+
   return (
     <S.Container>
-      <ScrollView
-        scrollEnabled={false}
-        style={S.scrollStyle}
-        contentContainerStyle={S.scrollContent}
-      >
-        <S.Header>{title}</S.Header>
+      <S.StyledScrollView>
+        <S.Header>{t("landing.title")}</S.Header>
 
         <TouchableWithoutFeedback onPress={onLogin}>
           <S.LoginButton>
-            <S.LoginText>{loginButton}</S.LoginText>
+            <S.LoginText>{t("landing.loginButton")}</S.LoginText>
           </S.LoginButton>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={onSignUp}>
           <S.RegisterButton>
-            <S.RegisterText>{registerButton}</S.RegisterText>
+            <S.RegisterText>{t("landing.registerButton")}</S.RegisterText>
           </S.RegisterButton>
         </TouchableWithoutFeedback>
 
-        <S.SocialText>{content}</S.SocialText>
+        <S.SocialText>{t("landing.socialText")}</S.SocialText>
+
         <S.IconRow>
           <TouchableWithoutFeedback onPress={onGoogle} disabled={isSignedIn}>
             <S.GoogleButton>
@@ -62,13 +63,14 @@ export default function LandingPageView({
           {appleAuthAvailable && (
             <TouchableWithoutFeedback onPress={onApple} disabled={isSignedIn}>
               <S.AppleButton>
-                <Image source={appleLogo} style={S.Icon} />
+                <Image source={appleLogo} />
               </S.AppleButton>
             </TouchableWithoutFeedback>
           )}
         </S.IconRow>
-      </ScrollView>
-      <WavyHeader customStyles={S.Curve} />
+      </S.StyledScrollView>
+
+      <WavyHeader />
     </S.Container>
   );
 }
