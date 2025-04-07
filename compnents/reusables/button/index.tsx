@@ -1,5 +1,5 @@
 import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
-import { StyledButton, StyledButtonText, IconWrapperLeft, IconWrapperRight } from './styles';
+import * as S from './styles';
 import Icon, { IconName } from "../../../icons/Icon";
 import { colors } from "../../styles";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -18,22 +18,22 @@ export default function Button(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, children, ...rest } = props;
   return (
     <TouchableWithoutFeedback onPress={() => props.onPress()}>
-    <StyledButton {...rest}>
+    <S.StyledButton {...rest}>
       {iconLeft && 
-        <IconWrapperLeft>
+        <S.IconWrapperLeft>
           <Icon name={iconRight as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
-        </IconWrapperLeft>
+        </S.IconWrapperLeft>
       }
 
-        <StyledButtonText alt={props.alt}>
+        <S.StyledButtonText alt={props.alt}>
           {props.title}
-        </StyledButtonText>
+        </S.StyledButtonText>
 
         {iconRight && 
-          <IconWrapperRight>
+          <S.IconWrapperRight>
             <Icon name={iconRight as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
-          </IconWrapperRight>}
-    </StyledButton>
+          </S.IconWrapperRight>}
+    </S.StyledButton>
     </TouchableWithoutFeedback>
   );
 }

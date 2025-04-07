@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Dimensions, Image, ImageBackground, Platform } from "react-native";
+import { Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 export const colors = {

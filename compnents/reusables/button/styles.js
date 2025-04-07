@@ -8,9 +8,9 @@ import {
 } from '../../styles';
 
 export const StyledButton = styled.View`
-  width: ${(props) => moderateScale(buttonSizes[props.size].width)}px;
-  height: ${(props) => moderateScale(buttonSizes[props.size].height)}px;
-  background-color: ${(props) => (props.alt ? colors.themeWhite : colors.primaryBlue)};
+  width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
+  height: ${({size}) => moderateScale(buttonSizes[size].height)}px;
+  background-color: ${({alt}) => (alt ? colors.themeWhite : colors.primaryBlue)};
   border-radius: ${moderateScale(30)}px;
   border-color: ${colors.primaryBlue};
   border-width: ${moderateScale(1)}px;
@@ -23,7 +23,7 @@ export const StyledButton = styled.View`
 export const StyledButtonText = styled.Text`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
-  color: ${(props) => (props.alt ? colors.primaryBlue : colors.themeWhite)};
+  color: ${({alt}) => (alt ? colors.primaryBlue : colors.themeWhite)};
 `;
 
 export const IconWrapperLeft = styled.View`
