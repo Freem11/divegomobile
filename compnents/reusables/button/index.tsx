@@ -2,7 +2,6 @@ import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 import * as S from './styles';
 import Icon, { IconName } from "../../../icons/Icon";
 import { colors } from "../../styles";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 type StandardButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 export type ButtonProps = {
@@ -17,7 +16,7 @@ export type ButtonProps = {
 export default function Button(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, children, ...rest } = props;
   return (
-    <TouchableWithoutFeedback onPress={() => props.onPress()}>
+    <S.StyledTouchableHighlight underlayColor={colors.buttonPressOverlay} {...rest} onPress={() => props.onPress()}>
     <S.StyledButton {...rest}>
       {iconLeft && 
         <S.IconWrapperLeft>
@@ -34,6 +33,6 @@ export default function Button(props: ButtonProps & StandardButtonProps) {
             <Icon name={iconRight as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
           </S.IconWrapperRight>}
     </S.StyledButton>
-    </TouchableWithoutFeedback>
+    </S.StyledTouchableHighlight>
   );
 }

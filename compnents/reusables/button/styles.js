@@ -7,6 +7,13 @@ import {
   buttonSizes
 } from '../../styles';
 
+
+export const StyledTouchableHighlight = styled.TouchableHighlight`
+  width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
+  height: ${({size}) => moderateScale(buttonSizes[size].height)}px;
+  border-radius: ${moderateScale(30)}px;
+`;
+
 export const StyledButton = styled.View`
   width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
   height: ${({size}) => moderateScale(buttonSizes[size].height)}px;

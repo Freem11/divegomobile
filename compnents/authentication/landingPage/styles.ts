@@ -144,6 +144,12 @@ export const FLogo = {
   width: moderateScale(45),
 };
 
+export const ALogo = {
+  height: moderateScale(50),
+  width: moderateScale(50),
+};
+
+
 export const Icon = {
   height: moderateScale(45),
   width: moderateScale(45),
