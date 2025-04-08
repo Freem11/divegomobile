@@ -6,7 +6,8 @@ export const colors = {
   secondaryYellow: '#fdc500',
   themeWhite: '#ffffff',
   themeBlack: '#00171f',
-  neutralGrey: '#A9A9A9'
+  neutralGrey: '#A9A9A9',
+  buttonPressOverlay: 'rgba(128, 128, 128, 0.25)'
 }
 
 export const fontSizes = {

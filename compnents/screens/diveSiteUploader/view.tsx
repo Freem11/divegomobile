@@ -8,6 +8,7 @@ import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
 import MobileTextInput from "../../reusables/textInput";
 import Button from '../../reusables/button';
+import ButtonIcon from '../../reusables/buttonIcon';
 
 interface DiveSiteVals {
   Site: string;
@@ -35,12 +36,17 @@ export default function DiveSiteUploaderView({
   return (
     <Flex>
       <S.BackButtonWrapper>
-        <MaterialIcons
+        <ButtonIcon 
+        icon="chevron-left"
+        onPress={onClose}
+        size='small'
+        />
+        {/* <MaterialIcons
           name="chevron-left"
           size={moderateScale(48)}
           color={colors.themeWhite}
           onPress={onClose}
-        />
+        /> */}
       </S.BackButtonWrapper>
 
       <S.ContentContainer>
