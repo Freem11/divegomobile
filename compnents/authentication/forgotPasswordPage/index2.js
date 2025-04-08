@@ -3,18 +3,18 @@ import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
-import { supabase } from '../../supabase';
+import { supabase } from '../../../supabase';
 import React, { useEffect, useState } from 'react';
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
-import TextInputField from "./textInput";
+import TextInputField from "../utils/textInput";
 import {
   activeFonts,
   colors,
   fontSizes,
   buttonText,
   authenicationButton,
-} from "../styles";
+} from "../../styles";
 
 WebBrowser.maybeCompleteAuthSession(); // required for web only
 const redirectTo = makeRedirectUri();
@@ -35,6 +35,7 @@ const createSessionFromUrl = async (url) => {
   return data.session;
 };
 
+// not in use
 const performOAuth = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
@@ -57,7 +58,7 @@ const performOAuth = async () => {
 };
 
 
-
+// not in use unless uncomment 
 const sendMagicLink = async (email) => {
   const { error } = await supabase.auth.signInWithOtp({
     email: email,
@@ -87,7 +88,7 @@ export default function ForgotPage(props) {
 
   useEffect(() => {
     setIsEnabled(true)
-  },[])
+  }, [])
 
   const [isEnabled, setIsEnabled] = useState(true);
 
@@ -106,24 +107,24 @@ export default function ForgotPage(props) {
     const resetPasswordURL = 'https://scubaseasons.netlify.app/account/password' //production
 
     try {
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          options: {
-            redirectTo: resetPasswordURL,
-            skipBrowserRedirect: true,
-          },
-        });
-        setEmailSent("Password Reset Email Sent!, Check Your Inbox for it");
-        if (error) {
-          console.error('Error sending password recovery email:', error.message);
-        } else {
-          console.log('Password recovery email sent:', data);
-        } 
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        options: {
+          redirectTo: resetPasswordURL,
+          skipBrowserRedirect: true,
+        },
+      });
+      setEmailSent("Password Reset Email Sent!, Check Your Inbox for it");
+      if (error) {
+        console.error('Error sending password recovery email:', error.message);
+      } else {
+        console.log('Password recovery email sent:', data);
+      }
     } catch (err) {
       console.error('Unexpected error:', err.message);
     }
   }
 
-  return (  <View style={styles.container}>
+  return (<View style={styles.container}>
     <MaterialIcons
       name="chevron-left"
       size={moderateScale(48)}
@@ -150,7 +151,7 @@ export default function ForgotPage(props) {
 
       <View style={styles.buttonBox}>
         <TouchableWithoutFeedback
-          onPress={isEnabled ? () => passwordRecovery(formVals.email): null}
+          onPress={isEnabled ? () => passwordRecovery(formVals.email) : null}
         >
           <View style={styles.loginButton}>
             <Text style={styles.loginText}>{buttonText}</Text>
@@ -186,28 +187,28 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Bold,
     color: "darkgrey",
   },
-    loginButton: [
-      authenicationButton,
-      { width: '65%', flexDirection: "row", marginTop: windowHeight / 10, paddingHorizontal: 15 },
-    ],
-    loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
-    erroMsg: {
-      minHeight: moderateScale(34),
-      marginTop: moderateScale(15),
-      fontSize: moderateScale(fontSizes.SmallText),
-      fontFamily: activeFonts.Italic,
-      color: "maroon",
-    },
-    erroMsgEmpty: {
-      height: moderateScale(34),
-      marginTop: moderateScale(15),
-      fontSize: moderateScale(fontSizes.SmallText),
-      fontFamily: activeFonts.Italic,
-      color: "maroon",
-    },
-    buttonBox: {
-      width: "100%",
-      alignItems: "flex-end",
-      marginTop: moderateScale(-50)
-    },
+  loginButton: [
+    authenicationButton,
+    { width: '65%', flexDirection: "row", marginTop: windowHeight / 10, paddingHorizontal: 15 },
+  ],
+  loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
+  erroMsg: {
+    minHeight: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  },
+  erroMsgEmpty: {
+    height: moderateScale(34),
+    marginTop: moderateScale(15),
+    fontSize: moderateScale(fontSizes.SmallText),
+    fontFamily: activeFonts.Italic,
+    color: "maroon",
+  },
+  buttonBox: {
+    width: "100%",
+    alignItems: "flex-end",
+    marginTop: moderateScale(-50)
+  },
 });

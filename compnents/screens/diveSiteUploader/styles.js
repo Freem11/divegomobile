@@ -5,10 +5,7 @@ import {
   colors,
   fontSizes,
   activeFonts,
-  authenicationButton,
-  buttonText,
-  screenSecondaryButton,
-  buttonTextAlt,
+  buttonSizes,
 } from '../../styles';
 
 const windowWidth = Dimensions.get('window').width;
@@ -59,25 +56,8 @@ export const ButtonBox = styled.View`
   z-index: -1;
   width: 100%;
   align-items: flex-end;
-  margin-top: -15%;
+  margin-top: ${Platform.OS === 'ios' ? '15%' : '2%'};
   margin-right: 15%;
-`;
-
-export const LocationText = styled.Text`
-  ${buttonTextAlt};
-  margin-horizontal: ${moderateScale(5)}px;
-  font-size: ${fontSizes.StandardText}px;
-`;
-
-export const ButtonPosition = styled.View`
-  ${screenSecondaryButton};
-  flex-direction: row;
-  margin-top: 0%;
-`;
-
-export const PinText = styled.Text`
-  ${buttonTextAlt};
-  margin-horizontal: ${moderateScale(5)}px;
 `;
 
 export const Hint = styled.Text`
@@ -92,20 +72,10 @@ export const Hint = styled.Text`
   width: 30%;
 `;
 
-export const SubmitButton = styled.View`
-  ${authenicationButton};
-  flex-direction: row;
-  margin-top: ${windowHeight / 10}px;
-`;
-
-export const SubmitText = styled.Text`
-  ${buttonText};
-  margin-horizontal: ${moderateScale(5)}px;
-`;
-
 export const BackButtonWrapper = styled.View`
   z-index: 50;
   position: absolute;
   top: 5.5%;
   left: 2%;
 `;
+

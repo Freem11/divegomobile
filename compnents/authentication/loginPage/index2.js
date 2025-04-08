@@ -12,33 +12,33 @@ import {
   fontSizes,
   buttonText,
   authenicationButton,
-} from "../styles";
-import TextInputField from "./textInput";
+} from "../../styles";
+import TextInputField from "../utils/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
-import { handleSignUpSubmit } from "../helpers/loginHelpers";
+import { handleLogInSubmit } from "../../helpers/loginHelpers";
 import { moderateScale } from "react-native-size-matters";
-import { SessionContext } from "../contexts/sessionContext";
+import { SessionContext } from "../../contexts/sessionContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function CreateAccountPage(props) {
+export default function LoginPage(props) {
   const {
     title,
-    namePlaceholder,
     emailPlaceholder,
     passwordPlaceholder,
     buttonText,
     promptText,
     promptLinkText,
     moveToLandingPage,
-    moveToLoginPage,
-    regFail,
-    setRegFail
+    moveToSignUpPage,
+    loginFail,
+    setLoginFail,
+    moveToForgotPasswordPage,
+    forgotPromt
   } = props;
 
   const [formVals, setFormVals] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -47,8 +47,8 @@ export default function CreateAccountPage(props) {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   useEffect(() => {
-    setRegFail(null)
-}, [formVals])
+    setLoginFail(null)
+  }, [formVals])
 
   return (
     <View style={styles.container}>
@@ -60,15 +60,8 @@ export default function CreateAccountPage(props) {
       />
       <View style={styles.content}>
         <Text style={styles.header}>{title}</Text>
+
         <View style={{ marginTop: moderateScale(60) }}>
-          <TextInputField
-            icon={"person-outline"}
-            placeHolderText={namePlaceholder}
-            secure={false}
-            onChangeText={(text) => setFormVals({ ...formVals, name: text })}
-          />
-        </View>
-        <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"alternate-email"}
             placeHolderText={emailPlaceholder}
@@ -76,6 +69,7 @@ export default function CreateAccountPage(props) {
             onChangeText={(text) => setFormVals({ ...formVals, email: text })}
           />
         </View>
+
         <View style={{ marginTop: moderateScale(40) }}>
           <TextInputField
             icon={"lock-outline"}
@@ -87,17 +81,17 @@ export default function CreateAccountPage(props) {
             }
           />
         </View>
-        {regFail ? (
-          <Text style={styles.erroMsg}>{regFail}</Text>
+
+        {loginFail ? (
+          <Text style={styles.erroMsg}>{loginFail}</Text>
         ) : (
           <View style={styles.erroMsgEmpty}></View>
         )}
-        <TouchableWithoutFeedback
-          onPress={() =>
-            handleSignUpSubmit(formVals, setActiveSession, setRegFail)
-          }
-        >
-          <View style={styles.buttonBox}>
+
+        <View style={styles.buttonBox}>
+          <TouchableWithoutFeedback
+            onPress={() => handleLogInSubmit(formVals, setActiveSession, setLoginFail)}
+          >
             <View style={styles.loginButton}>
               <Text style={styles.loginText}>{buttonText}</Text>
               <MaterialIcons
@@ -106,12 +100,18 @@ export default function CreateAccountPage(props) {
                 color={colors.themeWhite}
               />
             </View>
-          </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+      <View style={styles.forgotBox}>
+        <TouchableWithoutFeedback onPress={() => moveToForgotPasswordPage()}>
+          <Text style={styles.promptLinkText}>{forgotPromt}</Text>
         </TouchableWithoutFeedback>
       </View>
+
       <View style={styles.promtBox}>
         <Text style={styles.promptText}>{promptText} </Text>
-        <TouchableWithoutFeedback onPress={() => moveToLoginPage()}>
+        <TouchableWithoutFeedback onPress={() => moveToSignUpPage()}>
           <Text style={styles.promptLinkText}>{promptLinkText}</Text>
         </TouchableWithoutFeedback>
       </View>
@@ -143,6 +143,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginTop: moderateScale(-50)
   },
+  forgotBox: {
+    position: "absolute",
+    bottom: moderateScale(40),
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
   promtBox: {
     position: "absolute",
     bottom: moderateScale(10),
@@ -151,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   promptText: {
-    fontSize: moderateScale(fontSizes.SmallText),
+    fontSize: moderateScale(15),
     fontFamily: activeFonts.Italic,
     color: colors.themeBlack,
   },

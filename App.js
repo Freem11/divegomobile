@@ -1,5 +1,5 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useState, useCallback, useLayoutEffect } from "react";
+import React, { useState, useCallback, useLayoutEffect, useEffect } from "react";
 import "react-native-url-polyfill/auto";
 import { Dimensions, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -11,11 +11,13 @@ import { MapRegionContext } from "./compnents/contexts/mapRegionContext";
 import { PinSpotContext } from "./compnents/contexts/pinSpotContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import MapPage from "./compnents/mapPage";
-import Authentication from "./compnents/authentication/newAuthentication";
+import Authentication from "./compnents/authentication";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
+import { I18nextProvider } from "react-i18next";
+import { i18n, initI18n } from "./i18n";
 
 const { width, height } = Dimensions.get("window");
 
@@ -85,42 +87,62 @@ export default function App() {
     SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
   });
 
+  useEffect(() => {
+    initI18n();
+  }, []);
+
   useLayoutEffect(() => {
-    async function prepare() {
+    const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
       await getCurrentLocation();
 
       if (Platform.OS === "ios") {
-        ScreenOrientation.lockAsync(
+        await ScreenOrientation.lockAsync(
           ScreenOrientation.OrientationLock.PORTRAIT_UP
         );
       }
 
       try {
-        const asyncData = JSON.parse(await AsyncStorage.getItem("token"));
-        if (asyncData === null) {
+        const storedToken = await AsyncStorage.getItem("token");
+
+        if (!storedToken) {
+          console.log("No token found in AsyncStorage.");
           setAppIsReady(true);
-        } else {
-          if (asyncData.session.refresh_token) {
-            let newSession = await sessionRefresh(
-              asyncData.session.refresh_token
-            );
-            if (newSession === null) {
-              setAppIsReady(true);
-            } else {
-              setActiveSession(newSession);
-              setAppIsReady(true);
-            }
+          return;
+        }
+
+        let asyncData;
+        try {
+          asyncData = JSON.parse(storedToken);
+        } catch (e) {
+          console.log("Token in AsyncStorage is not valid JSON.");
+          setAppIsReady(true);
+          return;
+        }
+        if (
+          asyncData?.session?.refresh_token &&
+          typeof asyncData.session.refresh_token === "string"
+        ) {
+          const newSession = await sessionRefresh(asyncData.session.refresh_token);
+
+          if (newSession) {
+            setActiveSession(newSession);
           } else {
-            setAppIsReady(true);
+            console.log("Session refresh failed.");
           }
+        } else {
+          console.log("No refresh token found in session.");
         }
       } catch (error) {
         console.log("no dice:", error.message);
+      } finally {
+        setAppIsReady(true);
       }
-    }
+    };
+
     prepare();
   }, []);
+
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -146,7 +168,9 @@ export default function App() {
                 <SessionContext.Provider
                   value={{ activeSession, setActiveSession }}
                 >
-                  {activeSession ? <MapPage /> : <Authentication />}
+                  <I18nextProvider i18n={i18n}>
+                    {activeSession ? <MapPage /> : <Authentication />}
+                  </I18nextProvider>
                 </SessionContext.Provider>
               </MapCenterContext.Provider>
             </MapRegionContext.Provider>

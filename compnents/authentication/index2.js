@@ -6,16 +6,18 @@ import {
   View,
 } from "react-native";
 import carrouselData from "./carrouselData";
-import CreateAccountPage from "./createAccountPage";
-import LandingPage from "./landingPage";
+import CreateAccountPage from "./signupPage";
+import LandingPage from "./landingPage/index2";
 import LoginPage from "./loginPage";
-import ForgotPage from './forgotPassword';
+import ForgotPage from './forgotPasswordPage';
 import {
   colors,
 } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+
+const PAGES = { SIGN_UP: 0, LANDING: 1, LOGIN: 2, FORGOT_PASSWORD: 3 }
 
 export default function Authentication() {
   const carrouselRef = useRef(null);
@@ -24,48 +26,20 @@ export default function Authentication() {
   const [regFail, setRegFail] = useState(null);
   const [emailSent, setEmailSent] = useState(null);
 
-  const moveToForgotPasswordPage = () => {
+  const setPage = (pageIndex) => {
     setLoginFail(null);
     setRegFail(null);
     setEmailSent(null);
-    setCarrouselIndex(3);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
-  };
-
-  const moveToLoginPage = () => {
-    setLoginFail(null);
-    setRegFail(null);
-    setEmailSent(null);
-    setCarrouselIndex(2);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
-  };
-
-  const moveToLandingPage = () => {
-    setLoginFail(null);
-    setRegFail(null);
-    setEmailSent(null);
-    setCarrouselIndex(1);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
-  };
-
-  const moveToSignUpPage = () => {
-    setLoginFail(null);
-    setRegFail(null);
-    setEmailSent(null);
-    setCarrouselIndex(0);
-    const scrollToIndex = carrouselIndex;
-    carrouselRef.current?.scrollToIndex({ index: scrollToIndex });
-  };
+    setCarrouselIndex(pageIndex);
+    carrouselRef.current?.scrollToIndex({ index: pageIndex });
+  }
 
   useEffect(() => {
-    carrouselIndex === 0 ? moveToSignUpPage() : null
-    carrouselIndex === 1 ? moveToLandingPage() : null
-    carrouselIndex === 2 ? moveToLoginPage() : null
-    carrouselIndex === 3 ? moveToForgotPasswordPage() : null
-  },[carrouselIndex])
+    carrouselIndex === PAGES.LOGIN && setPage(PAGES.LOGIN);
+    carrouselIndex === PAGES.SIGN_UP && setPage(PAGES.SIGN_UP);
+    carrouselIndex === PAGES.LANDING && setPage(PAGES.LANDING);
+    carrouselIndex === PAGES.FORGOT_PASSWORD && setPage(PAGES.FORGOT_PASSWORD);
+  }, [carrouselIndex]);
 
   return (
     <View style={styles.wrapper}>
@@ -101,8 +75,8 @@ export default function Authentication() {
                 buttonText={item.buttonText}
                 promptText={item.promptText}
                 promptLinkText={item.promptLinkText}
-                moveToLandingPage={moveToLandingPage}
-                moveToLoginPage={moveToLoginPage}
+                moveToLandingPage={() => setPage(PAGES.LANDING)}
+                moveToLoginPage={() => setPage(PAGES.LOGIN)}
                 regFail={regFail}
                 setRegFail={setRegFail}
               />
@@ -114,8 +88,8 @@ export default function Authentication() {
                 loginButton={item.buttonOneText}
                 registerButton={item.buttonTwoText}
                 content={item.content}
-                moveToLoginPage={moveToLoginPage}
-                moveToSignUpPage={moveToSignUpPage}
+                moveToLoginPage={() => setPage(PAGES.LOGIN)}
+                moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
               />
             ) : null}
 
@@ -127,20 +101,20 @@ export default function Authentication() {
                 buttonText={item.buttonText}
                 promptText={item.promptText}
                 promptLinkText={item.promptLinkText}
-                moveToLandingPage={moveToLandingPage}
-                moveToSignUpPage={moveToSignUpPage}
-                loginFail={loginFail} 
+                loginFail={loginFail}
                 setLoginFail={setLoginFail}
-                moveToForgotPasswordPage={moveToForgotPasswordPage}
                 forgotPromt={item.forgotPromt}
+                moveToLandingPage={() => setPage(PAGES.LANDING)}
+                moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
+                moveToForgotPasswordPage={() => setPage(PAGES.FORGOT_PASSWORD)}
               />
             ) : null}
-             {item.page === 4 ? (
-             <ForgotPage
+            {item.page === 4 ? (
+              <ForgotPage
                 title={item.title}
                 emailPlaceholder={item.emailPlaceholder}
                 buttonText={item.buttonText}
-                moveToLoginPage={moveToLoginPage}
+                moveToLoginPage={() => setPage(PAGES.LOGIN)}
                 setEmailSent={setEmailSent}
                 emailSent={emailSent}
               />

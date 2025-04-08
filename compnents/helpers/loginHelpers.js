@@ -14,6 +14,7 @@ import { supabase } from '../../supabase';
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
+import { i18n } from "../../i18n";
 
 const redirectTo = makeRedirectUri();
 
@@ -36,17 +37,17 @@ const createSessionFromUrl = async (url) => {
 //Sign Ins
 export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
   try {
-  setIsSignedIn(true);
+    setIsSignedIn(true);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
-      options :{
+      options: {
         redirectTo,
         skipBrowserRedirect: true,
       }
     });
 
-    if(data){
+    if (data) {
       const res = await WebBrowser.openAuthSessionAsync(
         data?.url ?? "",
         redirectTo
@@ -55,18 +56,18 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
       if (res.type === "cancel") {
         throw error
       }
-    
+
       if (res.type === "success") {
         const { url } = res;
         let data = await createSessionFromUrl(url);
         handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
       }
     }
-   
-    } catch (error) {
-      setIsSignedIn(false);
-      console.log(error);
-    }
+
+  } catch (error) {
+    setIsSignedIn(false);
+    console.log(error);
+  }
 };
 
 export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
@@ -113,14 +114,14 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
         token: userInfo.identityToken,
       })
 
-      if(error){
+      if (error) {
         throw error
       }
 
-      if(data){
+      if (data) {
         handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
       }
-    
+
     } else {
       setIsSignedIn(false);
       throw new Error('no ID token present!')
@@ -134,34 +135,34 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
 async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
   if (sessionToken) {
     await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
-    if(sessionToken.session){
+    if (sessionToken.session) {
       setActiveSession(sessionToken.session);
     } else {
       setActiveSession(sessionToken);
     }
     setIsSignedIn(false);
     let sanitizeData
-    if(sessionToken.session){
+    if (sessionToken.session) {
       sanitizeData = sessionToken.session
     } else {
       sanitizeData = sessionToken
     }
- 
+
     let profileCheck = await grabProfileById(sanitizeData.user.id)
 
-   if(profileCheck.length === 0){
+    if (profileCheck.length === 0) {
       await createProfile({
         id: sanitizeData.user.id,
         email: sanitizeData.user.email,
       });
       console.log('profile created!')
-   }
+    }
   }
 }
 
 export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
   if (formVals.email === "" || formVals.password == "") {
-    setLoginFail("Please fill out both email and password");
+    setLoginFail(i18n.t("login.fillFields"));
     return;
   } else {
     let accessToken = await signInStandard(formVals);
@@ -169,7 +170,7 @@ export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail
       await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
       setActiveSession(accessToken.data.session);
     } else {
-      setLoginFail("The credentials you supplied are not valid");
+      setLoginFail(i18n.t("login.invalidCredentials"));
       return;
     }
     await sessionCheck();
@@ -184,18 +185,18 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
     formVals.password == "" ||
     formVals.name == ""
   ) {
-    setRegFail("Please fill out all fields");
+    setRegFail(i18n.t("signup.fillFields"));
     return;
   } else if (formVals.password.length < 6) {
-    setRegFail("Your password must be 6 characters or greater");
+    setRegFail(i18n.t("signup.passwordFormat"));
     return;
   } else {
 
-      let dataPack = {
-        email: formVals.email,
-        password:  formVals.password,
-        name: formVals.name
-      }
+    let dataPack = {
+      email: formVals.email,
+      password: formVals.password,
+      name: formVals.name
+    }
 
     let registrationToken = await register(dataPack);
     if (registrationToken.data.session !== null) {
@@ -206,7 +207,7 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
       await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
       setActiveSession(registrationToken.data.session);
     } else {
-      setRegFail(`You have already registered this account, please use the log in page`);
+      setRegFail(i18n.t("signup.accountExistMsg"));
     }
     await sessionCheck();
   }

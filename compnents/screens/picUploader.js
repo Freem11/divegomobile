@@ -13,7 +13,7 @@ import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handle
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import WavyHeaderUploader from "./wavyHeaderUploader";
-import TextInputField from "../authentication/textInput";
+import TextInputField from "../authentication/utils/textInput";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import {
   activeFonts,
@@ -196,7 +196,7 @@ export default function PicUploader() {
             </Toucher>
           </View>
           <View style={styles.textBuffer}>
-        <Text style={styles.label}>{screenData.PicUploader.whereLabel}</Text>
+            <Text style={styles.label}>{screenData.PicUploader.whereLabel}</Text>
             <TextInputField
               icon={"anchor"}
               inputValue={pinValues.siteName}
@@ -209,7 +209,7 @@ export default function PicUploader() {
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => onSubmit()}>
             <View style={styles.submitButton}>
-        <Text style={styles.submitText}>{screenData.PicUploader.submitButton}</Text>
+              <Text style={styles.submitText}>{screenData.PicUploader.submitButton}</Text>
               <MaterialIcons
                 name="chevron-right"
                 size={30}
