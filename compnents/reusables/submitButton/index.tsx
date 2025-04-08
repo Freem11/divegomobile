@@ -14,7 +14,7 @@ export type ButtonProps = {
   children?:  React.ReactNode
 };
 
-export default function Button(props: ButtonProps & StandardButtonProps) {
+export default function SubmitButton(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, children, ...rest } = props;
   return (
     <S.StyledTouchableHighlight underlayColor={colors.buttonPressOverlay} {...rest} onPress={() => props.onPress()}>
