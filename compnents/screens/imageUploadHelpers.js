@@ -1,5 +1,6 @@
 
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from 'expo-file-system';
 import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
 
 export const chooseImageHandler = async() => {
@@ -10,7 +11,7 @@ if (!permissionGiven) {
 }
 
 let chosenImage = await ImagePicker.launchImageLibraryAsync({
-  mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  mediaTypes: ['images', 'videos'],
   allowsEditing: true,
   aspect: [4, 3],
   quality: 1,
@@ -23,7 +24,6 @@ try {
   console.log({ title: "Image Upload", message: e.message });
 }
 }
-
 
 function formatDate(dateTaken) {
 

@@ -32,6 +32,7 @@ import {
 import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { updateDiveShop } from "../../supabaseCalls/shopsSupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
+import * as FileSystem from 'expo-file-system';
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -116,14 +117,24 @@ export default function DiveShop() {
     try {
       const image = await chooseImageHandler();
       if (image) {
+
         let uri = image.assets[0].uri;
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
+        const newFileUri = FileSystem.documentDirectory + fileName;
+
+        await FileSystem.moveAsync({
+          from: uri,
+          to: newFileUri,
+        });
+
+        const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        await uploadphoto(fileInfo, fileName);
+
         if (diveShopVals.photo !== null || diveShopVals.photo === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,

@@ -186,14 +186,24 @@ export default function DiveSite() {
     try {
       const image = await chooseImageHandler();
       if (image) {
+        
         let uri = image.assets[0].uri;
         let extension = image.assets[0].uri.split(".").pop();
         const fileName = Date.now() + "." + extension;
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
+        const newFileUri = FileSystem.documentDirectory + fileName;
+
+        await FileSystem.moveAsync({
+          from: uri,
+          to: newFileUri,
+        });
+
+        const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        await uploadphoto(fileInfo, fileName);
+        
         if (
           site.divesiteprofilephoto !== null ||
           site.divesiteprofilephoto === ""
