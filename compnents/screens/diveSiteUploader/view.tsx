@@ -22,8 +22,6 @@ interface Props {
   onClose: () => void;
   onSubmit: (data: Form) => void
   onNavigate: () => void;
-  addSiteVals: DiveSiteVals;
-  setAddSiteVals: (vals: DiveSiteVals) => void;
   getCurrentLocation: () => void;
 }
 

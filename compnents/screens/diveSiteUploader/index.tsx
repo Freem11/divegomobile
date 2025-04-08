@@ -9,7 +9,8 @@ import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
-import DiveSiteUploaderView from './view';
+import  DiveSiteUploaderView from './view';
+import { Form } from "./form";
 
 export default function DiveSiteUploader() {
   const { setMapHelper } = useContext(MapHelperContext);
@@ -18,10 +19,9 @@ export default function DiveSiteUploader() {
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
-  const [deviceLocation, setDeviceLocation] = useState(null);
-  // const [deviceLocation, setDeviceLocation] = useState<google.maps.LatLngLiteral | null>(null);
+  const [deviceLocation, setDeviceLocation] = useState<google.maps.LatLngLiteral | null>(null);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Form) => {
       insertDiveSiteWaits(data);
       setConfirmationType("Dive Site");
       setConfirmationModal(true);
@@ -33,8 +33,8 @@ export default function DiveSiteUploader() {
       const location = await getCurrentCoordinates();
       if (location) {
         setDeviceLocation({
-          Latitude: location.coords.latitude.toString(),
-          Longitude: location.coords.longitude.toString(),
+          lat: location.coords.latitude,
+          lng: location.coords.longitude,
         });
       }
     } catch (e) {
@@ -51,6 +51,7 @@ export default function DiveSiteUploader() {
   };
 
   const onClose = async () => {
+    setDeviceLocation(null);
     setLevelTwoScreen(false);
   };
 
@@ -61,8 +62,8 @@ export default function DiveSiteUploader() {
       onNavigate={onNavigate}
       getCurrentLocation={getCurrentLocation}
       values={{
-        Latitude: deviceLocation?.Latitude,
-        Longitude: deviceLocation?.Longitude,
+        Latitude: deviceLocation?.lat,
+        Longitude: deviceLocation?.lng,
       }}
     />
   )

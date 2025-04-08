@@ -4,8 +4,7 @@ import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
   fontSizes,
-  activeFonts,
-  buttonSizes,
+  activeFonts
 } from '../../styles';
 
 const windowWidth = Dimensions.get('window').width;

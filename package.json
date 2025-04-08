@@ -84,6 +84,7 @@
     "@babel/plugin-transform-class-static-block": "^7.26.0",
     "@eslint/js": "^9.23.0",
     "@react-native-community/cli": "^18.0.0",
+    "@types/google.maps": "^3.58.1",
     "@types/react-native": "^0.73.0",
     "@types/styled-components-react-native": "^5.2.5",
     "@typescript-eslint/eslint-plugin": "^8.29.0",
