@@ -1,6 +1,4 @@
-
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from 'expo-file-system';
 import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
 
 export const chooseImageHandler = async() => {

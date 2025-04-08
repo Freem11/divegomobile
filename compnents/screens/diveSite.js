@@ -50,6 +50,7 @@ import {
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
+import * as FileSystem from 'expo-file-system';
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -203,7 +204,7 @@ export default function DiveSite() {
         });
 
         await uploadphoto(fileInfo, fileName);
-        
+
         if (
           site.divesiteprofilephoto !== null ||
           site.divesiteprofilephoto === ""
