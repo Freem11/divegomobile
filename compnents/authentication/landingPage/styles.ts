@@ -145,10 +145,10 @@ export const FLogo = {
 };
 
 export const ALogo = {
-  // marginBottom: moderateScale(4),
-  height: moderateScale(49.5),
-  width: moderateScale(49.5),
+  height: moderateScale(50),
+  width: moderateScale(50),
 };
+
 
 export const Icon = {
   height: moderateScale(45),

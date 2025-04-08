@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Dimensions, Image, ImageBackground, Platform } from "react-native";
+import { Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 export const colors = {
@@ -6,7 +6,8 @@ export const colors = {
   secondaryYellow: '#fdc500',
   themeWhite: '#ffffff',
   themeBlack: '#00171f',
-  neutralGrey: '#A9A9A9'
+  neutralGrey: '#A9A9A9',
+  buttonPressOverlay: 'rgba(128, 128, 128, 0.25)'
 }
 
 export const fontSizes = {
@@ -15,6 +16,22 @@ export const fontSizes = {
   StandardText: 18,
   SmallText: 14
 }
+
+export const buttonSizes = {
+  small: {
+    height: 50,
+    width: 50
+  },
+  medium : {
+    height: 50,
+    width: 140
+  },
+  large : {
+    height: 50,
+    width: 220
+  },
+}
+
 
 export const activeFonts = Platform.OS === "android" ? {
   Black: "RobotoBlack",
@@ -52,15 +69,6 @@ export const primaryButton = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
-
-  elevation: 10,
 }
 
 export const buttonText = {
@@ -79,15 +87,7 @@ export const primaryButtonAlt = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
 
-  elevation: 10,
 }
 
 export const buttonTextAlt = {
@@ -104,15 +104,6 @@ export const authenicationButton = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
-
-  elevation: 10,
 }
 
 export const screenSecondaryButton = {
@@ -125,15 +116,6 @@ export const screenSecondaryButton = {
   borderRadius: moderateScale(25),
   alignItems: 'center',
   justifyContent: 'center',
-  shadowColor: "#2d2d2d",
-  shadowOffset: {
-    width: moderateScale(1),
-    height: moderateScale(1),
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: moderateScale(2),
-
-  elevation: 10,
 }
 
 // export const roundButton = {
@@ -145,13 +127,4 @@ export const screenSecondaryButton = {
 //   color: colors.themeWhite,
 //   alignItems: 'center',
 //   justifyContent: 'center',
-//   shadowColor: "#2d2d2d",
-//   shadowOffset: {
-//     width: moderateScale(3),
-//     height: moderateScale(1),
-//   },
-//   shadowOpacity: 0.5,
-//   shadowRadius: moderateScale(2),
-
-//   elevation: 10,
 // }

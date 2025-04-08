@@ -1,14 +1,9 @@
 import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
   fontSizes,
   activeFonts,
-  authenicationButton, 
-  buttonText,
-  screenSecondaryButton,
-  buttonTextAlt,
 } from '../../styles';
 
 export const TextInputWrapper = styled.View`

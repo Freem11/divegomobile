@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, TouchableWithoutFeedback, } from "react-native";
+import { Image, TouchableWithoutFeedback } from "react-native";
 import WavyHeader from "../../wavyHeader";
 import * as S from "./styles";
 import googleLogo from "../../png/loginIcons/google.png";
@@ -17,14 +17,14 @@ interface IProps {
   onApple: () => void;
 }
 
-export default function LandingPageView({
+export default function LandingPageView ({
   isSignedIn,
   appleAuthAvailable,
   onLogin,
   onSignUp,
   onGoogle,
   onFacebook,
-  onApple,
+  onApple
 }: IProps) {
   const { t } = useTranslation();
 
