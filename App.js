@@ -1,5 +1,10 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useState, useCallback, useLayoutEffect, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useLayoutEffect,
+  useEffect
+} from "react";
 import "react-native-url-polyfill/auto";
 import { Dimensions, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,7 +26,7 @@ import { i18n, initI18n } from "./i18n";
 
 const { width, height } = Dimensions.get("window");
 
-export default function App() {
+export default function App () {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
@@ -29,13 +34,13 @@ export default function App() {
   const [activeSession, setActiveSession] = useState(null);
   const [mapCenter, setMapCenter] = useState({
     lat: 49.246292,
-    lng: -123.116226,
+    lng: -123.116226
   });
   const [region, setRegion] = useState({
     latitude: mapCenter.lat,
     longitude: mapCenter.lng,
     latitudeDelta: 5,
-    longitudeDelta: 5 * (width / height),
+    longitudeDelta: 5 * (width / height)
   });
   const [zoomlev, setZoomLev] = useState(region.latitudeDelta);
   const [dragPin, setDragPin] = useState({});
@@ -48,11 +53,11 @@ export default function App() {
         setRegion({
           ...region,
           latitude: photoLocation[0].latitude,
-          longitude: photoLocation[0].longitude,
+          longitude: photoLocation[0].longitude
         });
         setDragPin({
           lat: photoLocation[0].latitude,
-          lng: photoLocation[0].longitude,
+          lng: photoLocation[0].longitude
         });
       }
     } catch (e) {
@@ -84,7 +89,7 @@ export default function App() {
     RobotoThin: require("./assets/Roboto/Roboto-Thin.ttf"),
     SFThin: require("./assets/SanFran/SF-Pro-Display-Thin.otf"),
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
-    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
+    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf")
   });
 
   useEffect(() => {
@@ -112,6 +117,7 @@ export default function App() {
         }
 
         let asyncData;
+
         try {
           asyncData = JSON.parse(storedToken);
         } catch (e) {
@@ -119,11 +125,9 @@ export default function App() {
           setAppIsReady(true);
           return;
         }
-        if (
-          asyncData?.session?.refresh_token &&
-          typeof asyncData.session.refresh_token === "string"
-        ) {
-          const newSession = await sessionRefresh(asyncData.session.refresh_token);
+
+        if (asyncData && typeof asyncData === "string") {
+          const newSession = await sessionRefresh(asyncData);
 
           if (newSession) {
             setActiveSession(newSession);
@@ -142,7 +146,6 @@ export default function App() {
 
     prepare();
   }, []);
-
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
