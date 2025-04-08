@@ -160,14 +160,18 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
   }
 }
 
-export const handleLogInSubmit = async (formVals, setActiveSession, setLoginFail) => {
+export const handleLogInSubmit = async (
+  formVals,
+  setActiveSession,
+  setLoginFail
+) => {
   if (formVals.email === "" || formVals.password == "") {
     setLoginFail(i18n.t("login.fillFields"));
     return;
   } else {
     let accessToken = await signInStandard(formVals);
     if (accessToken && accessToken?.data?.session !== null) {
-      await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data.session.refresh_token));
+      await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data));
       setActiveSession(accessToken.data.session);
     } else {
       setLoginFail(i18n.t("login.invalidCredentials"));
