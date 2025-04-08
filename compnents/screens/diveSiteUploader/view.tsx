@@ -1,5 +1,4 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { MaterialIcons } from '@expo/vector-icons';
 import WavyHeaderDynamic from '../wavyHeaderDynamic';
@@ -8,7 +7,7 @@ import * as S from './styles';
 import { Flex } from '../../ui/containes';
 import { colors } from '../../styles';
 import MobileTextInput from "../../reusables/textInput";
-import Icon from "../../../icons/Icon";
+import Button from '../../reusables/button';
 
 interface DiveSiteVals {
   Site: string;
@@ -51,7 +50,7 @@ export default function DiveSiteUploaderView({
           <S.InputGroupContainer>
             <S.TextBuffer>
               <MobileTextInput 
-              iconLeft={<Icon name='diving-scuba-flag' fill={colors.neutralGrey}></Icon>}
+              iconLeft="diving-scuba-flag"
               placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
               />
@@ -59,7 +58,7 @@ export default function DiveSiteUploaderView({
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Icon name='latitude' fill={colors.neutralGrey}></Icon>}
+              iconLeft="latitude"
               placeholder={screenData.DiveSiteAdd.latPlaceholder}
               value={addSiteVals.Latitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
@@ -69,7 +68,7 @@ export default function DiveSiteUploaderView({
 
             <S.TextBuffer>
             <MobileTextInput 
-              iconLeft={<Icon name='longitude' fill={colors.neutralGrey}></Icon>}
+              iconLeft="longitude"
               placeholder={screenData.DiveSiteAdd.lngPlaceholder}
               value={addSiteVals.Longitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
@@ -80,28 +79,31 @@ export default function DiveSiteUploaderView({
         </Flex>
 
         <Flex direction="row" justify="space-between" width="84%">
-          <TouchableWithoutFeedback onPress={getCurrentLocation}>
-            <S.ButtonPosition>
-              <S.LocationText>{screenData.DiveSiteAdd.myLocationButton}</S.LocationText>
-            </S.ButtonPosition>
-          </TouchableWithoutFeedback>
+                <Button 
+                  onPress={getCurrentLocation} 
+                  alt={true} 
+                  size='medium'
+                  title={screenData.DiveSiteAdd.myLocationButton}
+                />
 
-          <TouchableWithoutFeedback onPress={onNavigate}>
-            <S.ButtonPosition>
-              <S.PinText>{screenData.DiveSiteAdd.pinButton}</S.PinText>
-            </S.ButtonPosition>
-          </TouchableWithoutFeedback>
+                <Button 
+                  onPress={onNavigate} 
+                  alt={true} 
+                  size='medium'
+                  title={screenData.DiveSiteAdd.pinButton}
+                />
         </Flex>
 
         <S.Hint>{screenData.DiveSiteAdd.myLocationexplainer}</S.Hint>
 
         <S.ButtonBox>
-          <TouchableWithoutFeedback onPress={onSubmit}>
-            <S.SubmitButton>
-              <S.SubmitText>{screenData.DiveSiteAdd.submitButton}</S.SubmitText>
-              <MaterialIcons name="chevron-right" size={30} color="#fff" />
-            </S.SubmitButton>
-          </TouchableWithoutFeedback>
+              <Button 
+                onPress={onSubmit} 
+                alt={false} 
+                size='medium'
+                title={screenData.DiveSiteAdd.submitButton} 
+                iconRight="chevron-right"
+                />
         </S.ButtonBox>
       </S.ContentContainer>
 

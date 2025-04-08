@@ -453,7 +453,7 @@ export default function MapPage() {
           
             </View>
           ) : null}
-         <View style={styles.iosBottom}/>
+          {mapConfig === 0 ? <View style={styles.iosBottom}/> : null}
           <View
             pointerEvents={"box-none"}
             style={{
