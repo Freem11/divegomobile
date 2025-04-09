@@ -33,12 +33,9 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
@@ -50,7 +47,6 @@ import {
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
-import * as FileSystem from 'expo-file-system';
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -188,22 +184,7 @@ export default function DiveSite() {
       const image = await chooseImageHandler();
       if (image) {
         
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
-
-        const newFileUri = FileSystem.documentDirectory + fileName;
-
-        await FileSystem.moveAsync({
-          from: uri,
-          to: newFileUri,
-        });
-
-        const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        await uploadphoto(fileInfo, fileName);
+        let fileName = await imageUpload(image)
 
         if (
           site.divesiteprofilephoto !== null ||

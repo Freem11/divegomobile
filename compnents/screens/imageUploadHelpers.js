@@ -1,5 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from 'expo-file-system';
 import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
+import { uploadphoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 
 export const chooseImageHandler = async() => {
 let permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
@@ -22,6 +24,34 @@ try {
   console.log({ title: "Image Upload", message: e.message });
 }
 }
+
+
+export const imageUpload = async (image) => {
+
+  let uri = image.assets[0].uri;
+  let extension = image.assets[0].uri.split(".").pop();
+  const fileName = Date.now() + "." + extension;
+
+  const newFileUri = FileSystem.documentDirectory + fileName;
+
+  await FileSystem.moveAsync({
+    from: uri,
+    to: newFileUri,
+  });
+
+  const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  await uploadphoto(fileInfo, fileName);
+
+  return(fileName);
+
+}
+
+
+
+
 
 function formatDate(dateTaken) {
 

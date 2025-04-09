@@ -35,7 +35,7 @@ import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
 import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { chooseImageHandler, imageUpload} from "./imageUploadHelpers";
 import BottomDrawer from "./animatedBottomDrawer";
 import {
   uploadphoto,
@@ -203,22 +203,7 @@ if (selectedProfile){followCheck()}
       const image = await chooseImageHandler();
       if (image) {
         
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
-
-        const newFileUri = FileSystem.documentDirectory + fileName;
-
-        await FileSystem.moveAsync({
-          from: uri,
-          to: newFileUri,
-        });
-
-        const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        await uploadphoto(fileInfo, fileName);
+        let fileName = await imageUpload(image)
 
         if (profileVals.photo !== null || profileVals.photo === "") {
           await removePhoto({

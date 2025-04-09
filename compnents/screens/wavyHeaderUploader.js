@@ -6,17 +6,13 @@ import {
   Dimensions,
   ImageBackground,
 } from "react-native";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import screenData from "./screenData.json";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";
 import { colors, primaryButtonAlt, buttonTextAlt } from "../styles";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import * as FileSystem from 'expo-file-system';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -42,22 +38,8 @@ export default function WavyHeaderUploader({
       const image = await chooseImageHandler();
       if (image) {
 
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
+       let fileName = await imageUpload(image)
 
-        const newFileUri = FileSystem.documentDirectory + fileName;
-
-        await FileSystem.moveAsync({
-          from: uri,
-          to: newFileUri,
-        });
-
-        const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        await uploadphoto(fileInfo, fileName);
         if (pinValues.PicFile !== null || pinValues.PicFile === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
