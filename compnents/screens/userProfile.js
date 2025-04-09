@@ -186,7 +186,7 @@ if (selectedProfile){followCheck()}
           bio: profileVals.bio,
           photo: profileVals.profilePhoto,
         });
-        if (success[0].length === 0 && profileVals) {
+        if (success.length === 0 && profileVals) {
           setProfileVals({ ...profileVals, userName: tempUserName });
           setUserFail("Sorry that diver name has already been taken");
         }
