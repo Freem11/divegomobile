@@ -37,17 +37,13 @@ import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegi
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { chooseImageHandler, imageUpload} from "./imageUploadHelpers";
 import BottomDrawer from "./animatedBottomDrawer";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,
   deleteUserFollow,
   checkIfUserFollows,
 } from "../../supabaseCalls/userFollowSupabaseCalls";
 import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
-import * as FileSystem from 'expo-file-system';
 
 const windowHeight = Dimensions.get("window").height;
 
