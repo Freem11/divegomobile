@@ -1,16 +1,19 @@
 import * as AppleAuthentication from "expo-apple-authentication";
 import {
   GoogleSignin,
-  statusCodes,
+  statusCodes
 } from "@react-native-google-signin/google-signin";
 import * as SecureStore from "expo-secure-store";
 import {
   sessionCheck,
   signInStandard,
-  register,
+  register
 } from "../../supabaseCalls/authenticateSupabaseCalls";
-import { createProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
-import { supabase } from '../../supabase';
+import {
+  createProfile,
+  grabProfileById
+} from "../../supabaseCalls/accountSupabaseCalls";
+import { supabase } from "../../supabase";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
@@ -18,7 +21,7 @@ import { i18n } from "../../i18n";
 
 const redirectTo = makeRedirectUri();
 
-const createSessionFromUrl = async (url) => {
+const createSessionFromUrl = async url => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
 
   if (errorCode) throw new Error(errorCode);
@@ -28,7 +31,7 @@ const createSessionFromUrl = async (url) => {
 
   const { data, error } = await supabase.auth.setSession({
     access_token,
-    refresh_token,
+    refresh_token
   });
   if (error) throw error;
   return data.session;
@@ -40,10 +43,10 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
     setIsSignedIn(true);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'facebook',
+      provider: "facebook",
       options: {
         redirectTo,
-        skipBrowserRedirect: true,
+        skipBrowserRedirect: true
       }
     });
 
@@ -54,16 +57,15 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
       );
 
       if (res.type === "cancel") {
-        throw error
+        throw error;
       }
 
       if (res.type === "success") {
         const { url } = res;
         let data = await createSessionFromUrl(url);
-        handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+        handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
       }
     }
-
   } catch (error) {
     setIsSignedIn(false);
     console.log(error);
@@ -74,15 +76,15 @@ export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn()
+    const userInfo = await GoogleSignin.signIn();
     if (userInfo.idToken) {
       const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: 'google',
-        token: userInfo.idToken,
-      })
-      handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+        provider: "google",
+        token: userInfo.idToken
+      });
+      handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
     } else {
-      throw new Error('no ID token present!')
+      throw new Error("no ID token present!");
     }
   } catch (error) {
     setIsSignedIn(false);
@@ -104,27 +106,26 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
     const userInfo = await AppleAuthentication.signInAsync({
       requestedScopes: [
         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-        AppleAuthentication.AppleAuthenticationScope.EMAIL,
-      ],
+        AppleAuthentication.AppleAuthenticationScope.EMAIL
+      ]
     });
 
     if (userInfo.identityToken) {
       const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: 'apple',
-        token: userInfo.identityToken,
-      })
+        provider: "apple",
+        token: userInfo.identityToken
+      });
 
       if (error) {
-        throw error
+        throw error;
       }
 
       if (data) {
-        handleSupabaseSetup(data, setActiveSession, setIsSignedIn)
+        handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
       }
-
     } else {
       setIsSignedIn(false);
-      throw new Error('no ID token present!')
+      throw new Error("no ID token present!");
     }
   } catch (e) {
     setIsSignedIn(false);
@@ -132,7 +133,11 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
+async function handleSupabaseSetup (
+  sessionToken,
+  setActiveSession,
+  setIsSignedIn
+) {
   if (sessionToken) {
     await SecureStore.setItemAsync("token", JSON.stringify(sessionToken));
     if (sessionToken.session) {
@@ -141,21 +146,21 @@ async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn
       setActiveSession(sessionToken);
     }
     setIsSignedIn(false);
-    let sanitizeData
+    let sanitizeData;
     if (sessionToken.session) {
-      sanitizeData = sessionToken.session
+      sanitizeData = sessionToken.session;
     } else {
-      sanitizeData = sessionToken
+      sanitizeData = sessionToken;
     }
 
-    let profileCheck = await grabProfileById(sanitizeData.user.id)
+    let profileCheck = await grabProfileById(sanitizeData.user.id);
 
     if (profileCheck.length === 0) {
       await createProfile({
         id: sanitizeData.user.id,
-        email: sanitizeData.user.email,
+        email: sanitizeData.user.email
       });
-      console.log('profile created!')
+      console.log("profile created!");
     }
   }
 }
@@ -184,32 +189,29 @@ export const handleLogInSubmit = async (
   }
 };
 
-
-export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail) => {
-
-  if (
-    formVals.email === "" ||
-    formVals.password == "" ||
-    formVals.name == ""
-  ) {
+export const handleSignUpSubmit = async (
+  formVals,
+  setActiveSession,
+  setRegFail
+) => {
+  if (formVals.email === "" || formVals.password == "" || formVals.name == "") {
     setRegFail(i18n.t("signup.fillFields"));
     return;
   } else if (formVals.password.length < 6) {
     setRegFail(i18n.t("signup.passwordFormat"));
     return;
   } else {
-
     let dataPack = {
       email: formVals.email,
       password: formVals.password,
       name: formVals.name
-    }
+    };
 
     let registrationToken = await register(dataPack);
     if (registrationToken.data.session !== null) {
       await createProfile({
         id: registrationToken.data.session.user.id,
-        email: formVals.email,
+        email: formVals.email
       });
       await SecureStore.setItemAsync(
         "token",
