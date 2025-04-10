@@ -27,15 +27,11 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
-import {
-  uploadphoto,
-  removePhoto,
-} from "../cloudflareBucketCalls/cloudflareAWSCalls";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { removePhoto } from "../cloudflareBucketCalls/cloudflareAWSCalls";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
-import * as FileSystem from 'expo-file-system';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -74,22 +70,7 @@ export default function PicUploader() {
       const image = await chooseImageHandler();
       if (image) {
         
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
-
-        const newFileUri = FileSystem.documentDirectory + fileName;
-
-        await FileSystem.moveAsync({
-          from: uri,
-          to: newFileUri,
-        });
-
-        const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        await uploadphoto(fileInfo, fileName);
+        let fileName = await imageUpload(image)
 
         if (pinValues.PicFile !== null || pinValues.PicFile === "") {
           await removePhoto({
