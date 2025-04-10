@@ -78,7 +78,8 @@
     "styled-components": "^6.1.16",
     "typescript": "^5.3.3",
     "use-supercluster": "^0.4.0",
-    "web-streams-polyfill": "^3.3.2"
+    "web-streams-polyfill": "^3.3.2",
+    "expo-secure-store": "~14.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
