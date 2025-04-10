@@ -124,13 +124,8 @@ export default function App () {
           setAppIsReady(true);
           return;
         }
-        if (
-          asyncData?.session?.refresh_token &&
-          typeof asyncData.session.refresh_token === "string"
-        ) {
-          const newSession = await sessionRefresh(
-            asyncData.session.refresh_token
-          );
+        if (asyncData && typeof asyncData === "string") {
+          const newSession = await sessionRefresh(asyncData);
 
           if (newSession) {
             setActiveSession(newSession);

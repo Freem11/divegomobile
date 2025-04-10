@@ -139,7 +139,10 @@ async function handleSupabaseSetup (
   setIsSignedIn
 ) {
   if (sessionToken) {
-    await SecureStore.setItemAsync("token", JSON.stringify(sessionToken));
+    await SecureStore.setItemAsync(
+      "token",
+      JSON.stringify(sessionToken.session.refresh_token)
+    );
     if (sessionToken.session) {
       setActiveSession(sessionToken.session);
     } else {
@@ -178,8 +181,9 @@ export const handleLogInSubmit = async (
     if (accessToken && accessToken?.data?.session !== null) {
       await SecureStore.setItemAsync(
         "token",
-        JSON.stringify(accessToken?.data)
+        JSON.stringify(accessToken?.data.session.refresh_token)
       );
+      console.log("accessToken", accessToken?.data);
       setActiveSession(accessToken.data.session);
     } else {
       setLoginFail(i18n.t("login.invalidCredentials"));
@@ -217,7 +221,7 @@ export const handleSignUpSubmit = async (
         "token",
         JSON.stringify(registrationToken)
       );
-      setActiveSession(registrationToken.data.session);
+      setActiveSession(registrationToken.data.session.refresh_token);
     } else {
       setRegFail(i18n.t("signup.accountExistMsg"));
     }
