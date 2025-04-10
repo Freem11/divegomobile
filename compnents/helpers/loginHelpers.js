@@ -3,7 +3,7 @@ import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import {
   sessionCheck,
   signInStandard,
@@ -134,7 +134,7 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
 
 async function handleSupabaseSetup(sessionToken, setActiveSession, setIsSignedIn) {
   if (sessionToken) {
-    await AsyncStorage.setItem("token", JSON.stringify(sessionToken));
+    await SecureStore.setItemAsync("token", JSON.stringify(sessionToken));
     if (sessionToken.session) {
       setActiveSession(sessionToken.session);
     } else {
@@ -171,7 +171,10 @@ export const handleLogInSubmit = async (
   } else {
     let accessToken = await signInStandard(formVals);
     if (accessToken && accessToken?.data?.session !== null) {
-      await AsyncStorage.setItem("token", JSON.stringify(accessToken?.data));
+      await SecureStore.setItemAsync(
+        "token",
+        JSON.stringify(accessToken?.data)
+      );
       setActiveSession(accessToken.data.session);
     } else {
       setLoginFail(i18n.t("login.invalidCredentials"));
@@ -208,7 +211,10 @@ export const handleSignUpSubmit = async (formVals, setActiveSession, setRegFail)
         id: registrationToken.data.session.user.id,
         email: formVals.email,
       });
-      await AsyncStorage.setItem("token", JSON.stringify(registrationToken));
+      await SecureStore.setItemAsync(
+        "token",
+        JSON.stringify(registrationToken)
+      );
       setActiveSession(registrationToken.data.session);
     } else {
       setRegFail(i18n.t("signup.accountExistMsg"));

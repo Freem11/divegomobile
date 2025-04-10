@@ -25,7 +25,7 @@ import {
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import email from "react-native-email";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
@@ -73,7 +73,7 @@ export default function SettingsPage(props) {
 
   const handleLogout = async () => {
     await setActiveSession(null);
-    await AsyncStorage.removeItem("token");
+    await SecureStore.deleteItemAsync("token");
     await signOut();
   };
 
@@ -124,7 +124,7 @@ export default function SettingsPage(props) {
       await deleteProfile(activeSession.user.id);
       await userDelete(activeSession.user.id);
       await setActiveSession(null);
-      await AsyncStorage.removeItem("token");
+      await SecureStore.deleteItemAsync("token");
       await signOut();
     }
   };
