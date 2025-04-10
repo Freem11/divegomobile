@@ -27,11 +27,8 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { insertPhotoWaits } from "../../supabaseCalls/photoWaitSupabaseCalls";
-import {
-  uploadphoto,
-  removePhoto,
-} from "../cloudflareBucketCalls/cloudflareAWSCalls";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { removePhoto } from "../cloudflareBucketCalls/cloudflareAWSCalls";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
@@ -72,14 +69,9 @@ export default function PicUploader() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
+        
+        let fileName = await imageUpload(image)
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
         if (pinValues.PicFile !== null || pinValues.PicFile === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,

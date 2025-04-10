@@ -6,16 +6,21 @@ import {
 import 'react-native-get-random-values'
 import 'react-native-url-polyfill/auto';
 import { ReadableStream } from 'web-streams-polyfill/ponyfill';
+import { Buffer } from 'buffer';
+
 globalThis.ReadableStream = ReadableStream;
 
 export const uploadphoto = async (file, fileName) => {
 
+    const fileBuffer = Buffer.from(file, 'base64');
+    const fileSize = fileBuffer.length;
+
     const input = {
-        "Body": file,
+        "Body": fileBuffer,
         "Bucket": "scubaseasons",
         "Key": fileName,
         "ContentType": "image/jpeg",
-        // "Content-Length": fileSize
+        "Content-Length": fileSize
     }
 
     const command = new PutObjectCommand(input)
