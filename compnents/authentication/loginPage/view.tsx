@@ -4,6 +4,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as S from './styles';
 import TextInputField from '../utils/textInput';
 import { useTranslation } from "react-i18next";
+import SecureTextInput from "../../reusables/secureTextInput";
+import MobileTextInput from "../../reusables/textInput";
 
 interface FormVals {
     email: string;
@@ -48,22 +50,20 @@ export default function LoginPageView({
             <S.Content>
                 <S.Header>{t('login.title')}</S.Header>
 
-                <TextInputField
-                    icon="alternate-email"
-                    placeHolderText={t('login.email')}
-                    secure={false}
+                <S.TextInputWrapper>
+                    <MobileTextInput 
+                    iconLeft="at"
+                    placeholder={t('login.email')}
+                    value={formVals.email}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
-                    style={{ marginTop: 60 }}
-                />
-
-                <TextInputField
-                    icon="lock-outline"
-                    placeHolderText={t('login.password')}
-                    setSecureTextEntry={setSecureTextEntry}
-                    secure={secureTextEntry}
-                    onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
-                    style={{ marginTop: 40 }}
-                />
+                    />
+                </S.TextInputWrapper>
+                <S.SecureTextInputWrapper>
+                    <SecureTextInput 
+                        onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
+                        placeholder={t('login.password')}
+                    />
+                </S.SecureTextInputWrapper>
 
                 {loginFail ? <S.ErrorText>{loginFail}</S.ErrorText> : <S.ErrorText />}
 

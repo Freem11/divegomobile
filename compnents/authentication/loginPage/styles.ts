@@ -20,6 +20,14 @@ export const Container = styled.View`
   width: ${windowWidth - windowWidth / 10}px;
 `;
 
+export const TextInputWrapper = styled.View`
+   margin-top: ${moderateScale(60)}px;
+`;
+
+export const SecureTextInputWrapper = styled.View`
+   margin-top: ${moderateScale(40)}px;
+`;
+
 export const Content = styled.View`
   margin-horizontal: 7%;
 `;

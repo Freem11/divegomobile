@@ -19,7 +19,7 @@ export const TextInputWrapper = styled.View`
 export const StyledTextInput = styled.TextInput`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
-  width: 90%;
+  width: 82%;
 `;
 
 export const IconWrapperLeft = styled.View`
