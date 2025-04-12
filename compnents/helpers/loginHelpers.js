@@ -133,7 +133,7 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-async function handleSupabaseSetup (
+async function handleSupabaseSetup(
   sessionToken,
   setActiveSession,
   setIsSignedIn
@@ -171,7 +171,7 @@ export const handleLogInSubmit = async (
   setLoginFail
 ) => {
   if (formVals.email === "" || formVals.password == "") {
-    setLoginFail(i18n.t("login.fillFields"));
+    setLoginFail(i18n.t("validators:fillEmailAndPassword"));
     return;
   } else {
     let accessToken = await signInStandard(formVals);
@@ -182,7 +182,7 @@ export const handleLogInSubmit = async (
       );
       setActiveSession(accessToken.data.session);
     } else {
-      setLoginFail(i18n.t("login.invalidCredentials"));
+      setLoginFail(i18n.t("validators.invalidCredentials"));
       return;
     }
     await sessionCheck();

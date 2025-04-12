@@ -51,3 +51,22 @@ i18next.t('keyWithCount', {count: 0}); -> "0 items"
 i18next.t('keyWithCount', {count: 1}); -> "1 item"
 i18next.t('keyWithCount', {count: 5}); -> "5 items"
 i18next.t('keyWithCount', {count: 100}); -> "100 items"
+
+
+## Namespaces:
+
+two options u can use it:
+
+Option 1:
+  const { t: tAuth } = useTranslation("auth");
+  const { t: tCommon } = useTranslation("common");
+
+  and then like so:
+  tAuth("landing.title")
+  tCommon("button.login")
+
+Option 2:
+  const { t } = useTranslation();
+
+  and then like so:
+  t('auth:login.title')

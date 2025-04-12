@@ -1,7 +1,8 @@
 {
-    "button": {
-        "login": "Login",
-        "signup": "Sign up",
-        "registerAccount": "Create New Account"
-    }
+    "login": "Login",
+    "signup": "Sign up",
+    "fullName": "Full Name",
+    "registerAccount": "Create New Account",
+    "email": "Email",
+    "password": "Password"
 }

@@ -37,13 +37,13 @@ export default function LandingPageView({
 
         <TouchableWithoutFeedback onPress={onLogin}>
           <S.LoginButton>
-            <S.LoginText>{tCommon("button.login")}</S.LoginText>
+            <S.LoginText>{tCommon("login")}</S.LoginText>
           </S.LoginButton>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={onSignUp}>
           <S.RegisterButton>
-            <S.RegisterText>{tCommon("button.registerAccount")}</S.RegisterText>
+            <S.RegisterText>{tCommon("registerAccount")}</S.RegisterText>
           </S.RegisterButton>
         </TouchableWithoutFeedback>
 
