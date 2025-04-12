@@ -195,10 +195,10 @@ export const handleSignUpSubmit = async (
   setRegFail
 ) => {
   if (formVals.email === "" || formVals.password == "" || formVals.name == "") {
-    setRegFail(i18n.t("signup.fillFields"));
+    setRegFail(i18n.t("validators:fillAllFields"));
     return;
   } else if (formVals.password.length < 6) {
-    setRegFail(i18n.t("signup.passwordFormat"));
+    setRegFail(i18n.t("validators:passwordFormat"));
     return;
   } else {
     let dataPack = {
@@ -219,7 +219,7 @@ export const handleSignUpSubmit = async (
       );
       setActiveSession(registrationToken.data.session);
     } else {
-      setRegFail(i18n.t("signup.accountExistMsg"));
+      setRegFail(i18n.t("validators:accountExistMsg"));
     }
     await sessionCheck();
   }
