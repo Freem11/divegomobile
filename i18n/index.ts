@@ -2,18 +2,21 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getLocales } from "expo-localization";
 
-import en from "./en.json";
-import es from "./es.json";
-
 const resources = {
-  en: { translation: en },
-  es: { translation: es },
+  en: {
+    auth: require("./en/auth.json"),
+    common: require("./en/common.json"),
+    validators: require("./en/validators.json"),
+  },
+  es: {
+    auth: require("./es/auth.json"),
+    common: require("./es/common.json"),
+    validators: require("./es/validators.json"),
+  },
 };
 
 export const initI18n = async () => {
-  // const storedLang = await AsyncStorage.getItem(LANG_KEY);
   const locales = getLocales();
-
   const deviceLang = locales?.[0]?.languageCode ?? "en";
   const selectedLanguage = deviceLang in resources ? deviceLang : "en";
 
@@ -21,9 +24,9 @@ export const initI18n = async () => {
     resources,
     lng: selectedLanguage,
     fallbackLng: "en",
-    interpolation: {
-      escapeValue: false,
-    },
+    defaultNS: "common",
+    ns: ["auth", "common", "validators"],
+    interpolation: { escapeValue: false },
   });
 };
 
