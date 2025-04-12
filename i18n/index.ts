@@ -4,14 +4,14 @@ import { getLocales } from "expo-localization";
 
 const resources = {
   en: {
-    auth: require("./en/auth.json"),
-    common: require("./en/common.json"),
-    validators: require("./en/validators.json"),
+    auth: require("./locale/en/auth.json"),
+    common: require("./locale/en/common.json"),
+    validators: require("./locale/en/validators.json"),
   },
   es: {
-    auth: require("./es/auth.json"),
-    common: require("./es/common.json"),
-    validators: require("./es/validators.json"),
+    auth: require("./locale/es/auth.json"),
+    common: require("./locale/es/common.json"),
+    validators: require("./locale/es/validators.json"),
   },
 };
 
