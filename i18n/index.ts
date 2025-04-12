@@ -2,15 +2,16 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getLocales } from "expo-localization";
 
-import auth from "./en/auth.json";
-import common from "./en/common.json";
-import validators from "./en/validators.json";
-
 const resources = {
   en: {
-    auth,
-    common,
-    validators,
+    auth: require("./en/auth.json"),
+    common: require("./en/common.json"),
+    validators: require("./en/validators.json"),
+  },
+  es: {
+    auth: require("./es/auth.json"),
+    common: require("./es/common.json"),
+    validators: require("./es/validators.json"),
   },
 };
 
