@@ -1,0 +1,7 @@
+{
+    "button": {
+        "login": "Login",
+        "signup": "Sign up",
+        "registerAccount": "Create New Account"
+    }
+}
