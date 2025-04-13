@@ -29,12 +29,14 @@ export const SecureTextInputWrapper = styled.View`
 `;
 
 export const Content = styled.View`
+  flex: 1;
+  justify-content: center;
+  margin-top: -50%;
   margin-horizontal: 7%;
 `;
 
 export const Header = styled.Text`
   z-index: 10;
-  margin-top: 10%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
   color: darkgrey;
@@ -43,7 +45,6 @@ export const Header = styled.Text`
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${moderateScale(-50)}px;
 `;
 
 export const ForgotBox = styled.View`

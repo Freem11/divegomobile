@@ -41,12 +41,6 @@ export default function DiveSiteUploaderView({
         onPress={onClose}
         size='small'
         />
-        {/* <MaterialIcons
-          name="chevron-left"
-          size={moderateScale(48)}
-          color={colors.themeWhite}
-          onPress={onClose}
-        /> */}
       </S.BackButtonWrapper>
 
       <S.ContentContainer>

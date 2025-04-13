@@ -6,6 +6,9 @@ import TextInputField from '../utils/textInput';
 import { useTranslation } from "react-i18next";
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
+import ButtonIcon from "../../reusables/buttonIcon";
+import Button from "../../reusables/button";
+import { colors } from "../../styles";
 
 interface FormVals {
     email: string;
@@ -40,11 +43,11 @@ export default function LoginPageView({
 
     return (
         <S.Container>
-            <MaterialIcons
-                name="chevron-left"
-                size={48}
-                color="darkgrey"
-                onPress={moveToLandingPage}
+            <ButtonIcon 
+            icon="chevron-left"
+            onPress={moveToLandingPage}
+            size='small'
+            fillColor={colors.neutralGrey}
             />
 
             <S.Content>
@@ -68,12 +71,13 @@ export default function LoginPageView({
                 {loginFail ? <S.ErrorText>{loginFail}</S.ErrorText> : <S.ErrorText />}
 
                 <S.ButtonBox>
-                    <TouchableWithoutFeedback onPress={handleLogin}>
-                        <S.LoginButton>
-                            <S.LoginText>{t('login.button')}</S.LoginText>
-                            <MaterialIcons name="chevron-right" size={30} color="#fff" />
-                        </S.LoginButton>
-                    </TouchableWithoutFeedback>
+                    <Button 
+                        onPress={handleLogin} 
+                        alt={false} 
+                        size='medium'
+                        title={t('login.button')} 
+                        iconRight="chevron-right"
+                        />
                 </S.ButtonBox>
             </S.Content>
 
