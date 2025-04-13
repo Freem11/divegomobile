@@ -133,7 +133,7 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-async function handleSupabaseSetup(
+async function handleSupabaseSetup (
   sessionToken,
   setActiveSession,
   setIsSignedIn
@@ -183,7 +183,7 @@ export const handleLogInSubmit = async (
         "token",
         JSON.stringify(accessToken?.data.session.refresh_token)
       );
-      console.log("accessToken", accessToken?.data);
+
       setActiveSession(accessToken.data.session);
     } else {
       setLoginFail(i18n.t("validators.invalidCredentials"));
