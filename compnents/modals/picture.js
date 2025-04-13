@@ -26,6 +26,7 @@ import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
+import * as Sharing from "expo-sharing";
 import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
 import liked from "../png/socialIcons/Hand-Filled-Blue.png";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
