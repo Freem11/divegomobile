@@ -35,12 +35,9 @@ import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
 import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { chooseImageHandler, imageUpload} from "./imageUploadHelpers";
 import BottomDrawer from "./animatedBottomDrawer";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,
   deleteUserFollow,
@@ -185,7 +182,7 @@ if (selectedProfile){followCheck()}
           bio: profileVals.bio,
           photo: profileVals.profilePhoto,
         });
-        if (success[0].length === 0 && profileVals) {
+        if (success.length === 0 && profileVals) {
           setProfileVals({ ...profileVals, userName: tempUserName });
           setUserFail("Sorry that diver name has already been taken");
         }
@@ -201,14 +198,9 @@ if (selectedProfile){followCheck()}
     try {
       const image = await chooseImageHandler();
       if (image) {
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
+        
+        let fileName = await imageUpload(image)
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
         if (profileVals.photo !== null || profileVals.photo === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,

@@ -43,19 +43,17 @@ if (data) {
 };
 
 export const updateProfile = async (values) => {
-  const { data, error } = await supabase
+  const response = await supabase
     .from("UserProfiles")
     .update({ UserName: values.username, profileBio: values.bio, profilePhoto: values.photo  })
     .eq("UserID", values.id);
 
-  if (error) {
+  if (response.error) {
     console.log("couldn't do it 2,", error);
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+    return response;
 };
 
 export const updatePushToken = async (values) => {

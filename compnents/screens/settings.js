@@ -5,27 +5,27 @@ import {
   Text,
   Alert,
   Dimensions,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native";
 import {
   activeFonts,
   colors,
   fontSizes,
   buttonText,
-  authenicationButton,
+  authenicationButton
 } from "../styles";
 import screenData from "./screenData.json";
 import {
   signOut,
-  userDelete,
+  userDelete
 } from "../../supabaseCalls/authenticateSupabaseCalls";
 import {
   addDeletedAccountInfo,
-  deleteProfile,
+  deleteProfile
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import email from "react-native-email";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
@@ -37,7 +37,7 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function SettingsPage(props) {
+export default function SettingsPage (props) {
   const {} = props;
 
   const { profile } = useContext(UserProfileContext);
@@ -45,9 +45,7 @@ export default function SettingsPage(props) {
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
 
-  const { setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
+  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
@@ -73,7 +71,7 @@ export default function SettingsPage(props) {
 
   const handleLogout = async () => {
     await setActiveSession(null);
-    await AsyncStorage.removeItem("token");
+    await SecureStore.deleteItemAsync("token");
     await signOut();
   };
 
@@ -87,7 +85,7 @@ export default function SettingsPage(props) {
       [
         { text: "Delete My Account", onPress: () => handleAccountDelete() },
         { text: "Cancel Request", onPress: () => console.log("no tapped") },
-        { text: "Contact Scuba SEAsons", onPress: () => handleEmail() },
+        { text: "Contact Scuba SEAsons", onPress: () => handleEmail() }
       ]
     );
   };
@@ -106,9 +104,8 @@ export default function SettingsPage(props) {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       subject: `Delete Account Request ${blurb}`,
-      body:
-        "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
-      checkCanOpen: false,
+      body: "Hello I am deleting my Scuba SEAsons account and would also like to also have the following of my submissions removed as well \n \n My Dive Sites (Y/N) \n My Photo Submissions (Y/N) \n \n As removing these submisions would diminish the experience for others divers in the community, would you be willing to negotiate with Scuba SEAsons to allow these to stay in the app? (Y/N)",
+      checkCanOpen: false
     }).catch(console.error);
   };
 
@@ -118,13 +115,13 @@ export default function SettingsPage(props) {
         firstName: first,
         lastName: last,
         email: activeSession.user.email,
-        UserID: activeSession.user.id,
+        UserID: activeSession.user.id
       });
 
       await deleteProfile(activeSession.user.id);
       await userDelete(activeSession.user.id);
       await setActiveSession(null);
-      await AsyncStorage.removeItem("token");
+      await SecureStore.deleteItemAsync("token");
       await signOut();
     }
   };
@@ -148,15 +145,15 @@ export default function SettingsPage(props) {
         <View style={styles.dataHousing}>
           <Text style={styles.dataLabels}>{profileType}</Text>
           {profileType === "Diver Account" ? (
-          <TouchableWithoutFeedback onPress={() => openPartnerAccountScreen()}>
-            <Text style={styles.promptLinkText}>
-              {screenData.SettingsPage.notPartnerAccount}
-            </Text>
-          </TouchableWithoutFeedback>
-        ) : null}
+            <TouchableWithoutFeedback
+              onPress={() => openPartnerAccountScreen()}
+            >
+              <Text style={styles.promptLinkText}>
+                {screenData.SettingsPage.notPartnerAccount}
+              </Text>
+            </TouchableWithoutFeedback>
+          ) : null}
         </View>
-
-        
 
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => handleLogout()}>
@@ -172,19 +169,18 @@ export default function SettingsPage(props) {
             </View>
           </TouchableWithoutFeedback>
         </View>
-
       </View>
 
       <Text style={styles.subHeadersDanger}>
-          {screenData.SettingsPage.dangerZoneBar}
-        </Text>
-        <TouchableWithoutFeedback onPress={alertHandler}>
-          <View style={styles.dataHousingDanger}>
-            <Text style={styles.dataLabelsDanger}>
-              {screenData.SettingsPage.delAccount}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+        {screenData.SettingsPage.dangerZoneBar}
+      </Text>
+      <TouchableWithoutFeedback onPress={alertHandler}>
+        <View style={styles.dataHousingDanger}>
+          <Text style={styles.dataLabelsDanger}>
+            {screenData.SettingsPage.delAccount}
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
@@ -195,17 +191,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     alignItems: "center",
     // justifyContent: "center",
-    height: windowHeight,
+    height: windowHeight
   },
   content: {
-    width: "90%",
+    width: "90%"
   },
   header: {
     zIndex: 10,
     marginTop: "10%",
     fontSize: moderateScale(fontSizes.Header),
     fontFamily: activeFonts.Bold,
-    color: "darkgrey",
+    color: "darkgrey"
   },
   subHeaders: {
     zIndex: 10,
@@ -213,17 +209,17 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(fontSizes.SubHeading),
     fontFamily: activeFonts.Medium,
     color: "darkgrey",
-    marginLeft: "5%",
+    marginLeft: "5%"
   },
   subHeadersDanger: {
     zIndex: 10,
-    position:"absolute",
+    position: "absolute",
     bottom: moderateScale(120),
-    marginTop: windowHeight/6,
+    marginTop: windowHeight / 6,
     fontSize: moderateScale(fontSizes.SubHeading),
     fontFamily: activeFonts.Medium,
     color: "maroon",
-    marginLeft: "5%",
+    marginLeft: "5%"
   },
   dataHousing: {
     marginTop: "2%",
@@ -231,14 +227,14 @@ const styles = StyleSheet.create({
     borderTopColor: "darkgrey",
     paddingBottom: "2%",
     borderBottomWidth: moderateScale(1),
-    borderBottomColor: "darkgrey",
+    borderBottomColor: "darkgrey"
   },
   dataHousingDanger: {
-    position:"absolute",
+    position: "absolute",
     bottom: moderateScale(40),
     backgroundColor: "#FCE4EC",
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: "5%",
     borderTopWidth: moderateScale(1),
     borderTopColor: "maroon",
@@ -253,32 +249,31 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(fontSizes.StandardText),
     fontFamily: activeFonts.Bold,
     color: colors.themeBlack,
-    marginLeft: "10%",
+    marginLeft: "10%"
   },
   dataLabelsDanger: {
     zIndex: 10,
     marginTop: "4%",
     fontSize: moderateScale(fontSizes.StandardText),
     fontFamily: activeFonts.Bold,
-    color: "maroon",
+    color: "maroon"
   },
   promptLinkText: {
     marginLeft: "15%",
     marginTop: moderateScale(2),
     fontSize: moderateScale(fontSizes.SmallText),
     fontFamily: activeFonts.thin,
-    color: colors.primaryBlue,
+    color: colors.primaryBlue
   },
   buttonBox: {
     zIndex: -1,
     width: "100%",
     alignItems: "flex-end",
-    marginTop: moderateScale(-50),
+    marginTop: moderateScale(-50)
   },
   loginButton: [
     authenicationButton,
-    { flexDirection: "row", marginTop: windowHeight / 10 },
+    { flexDirection: "row", marginTop: windowHeight / 10 }
   ],
-  loginText: [buttonText, { marginHorizontal: moderateScale(5) }],
-
+  loginText: [buttonText, { marginHorizontal: moderateScale(5) }]
 });
