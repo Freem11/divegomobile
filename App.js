@@ -108,7 +108,15 @@ export default function App () {
       }
 
       try {
-        const storedToken = await SecureStore.getItemAsync("token");
+        let storedToken;
+
+        try {
+          storedToken = JSON.parse(await SecureStore.getItemAsync("token"));
+        } catch (e) {
+          console.log("Token in SecureStorage is not valid JSON.");
+          setAppIsReady(true);
+          return;
+        }
 
         if (!storedToken) {
           console.log("No token found in SecureStorage.");
@@ -116,16 +124,8 @@ export default function App () {
           return;
         }
 
-        let asyncData;
-        try {
-          asyncData = JSON.parse(storedToken);
-        } catch (e) {
-          console.log("Token in SecureStorage is not valid JSON.");
-          setAppIsReady(true);
-          return;
-        }
-        if (asyncData && typeof asyncData === "string") {
-          const newSession = await sessionRefresh(asyncData);
+        if (storedToken && typeof storedToken === "string") {
+          const newSession = await sessionRefresh(storedToken);
 
           if (newSession) {
             setActiveSession(newSession);
