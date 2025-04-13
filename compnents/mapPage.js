@@ -11,7 +11,7 @@ import {
 import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
-import Map from "./GoogleMap";
+import Map from "./googleMap";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
@@ -76,6 +76,8 @@ let feedbackRequest = null;
 let FbWidth = moderateScale(350);
 
 export default function MapPage() {
+  return <Map style={{ zIndex: 2 }} key={6} />;
+
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
@@ -110,7 +112,7 @@ export default function MapPage() {
 
   const locales = getLocales();
   console.log("locales", locales);
-  
+
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
@@ -450,10 +452,9 @@ export default function MapPage() {
                   toggleDiveSites={toggleDiveSites}
                 />
               </View>
-          
             </View>
           ) : null}
-          {mapConfig === 0 ? <View style={styles.iosBottom}/> : null}
+          {mapConfig === 0 ? <View style={styles.iosBottom} /> : null}
           <View
             pointerEvents={"box-none"}
             style={{
@@ -544,7 +545,7 @@ const styles = StyleSheet.create({
   },
   FMenuAnimate: {
     position: "absolute",
-    bottom: Platform.OS ==="ios" ? moderateScale(15) : moderateScale(0),
+    bottom: Platform.OS === "ios" ? moderateScale(15) : moderateScale(0),
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -559,15 +560,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: "100%",
     height: moderateScale(65),
-    zIndex: 3
+    zIndex: 3,
   },
   iosBottom: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     height: Platform.OS === "ios" ? moderateScale(15) : 0,
     width: "100%",
     backgroundColor: colors.primaryBlue,
-    zIndex: 3
+    zIndex: 3,
   },
   lowerButtonWrapper: [
     primaryButtonAlt,
@@ -584,7 +585,12 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: windowWidth > 700 ? moderateScale(12) : Platform.OS === 'android' ? moderateScale(30) : moderateScale(50),
+    top:
+      windowWidth > 700
+        ? moderateScale(12)
+        : Platform.OS === "android"
+        ? moderateScale(30)
+        : moderateScale(50),
     zIndex: 3,
   },
   filterer: {
