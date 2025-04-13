@@ -33,12 +33,9 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
@@ -186,14 +183,9 @@ export default function DiveSite() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
+        
+        let fileName = await imageUpload(image)
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
         if (
           site.divesiteprofilephoto !== null ||
           site.divesiteprofilephoto === ""

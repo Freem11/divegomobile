@@ -133,7 +133,7 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-async function handleSupabaseSetup (
+async function handleSupabaseSetup(
   sessionToken,
   setActiveSession,
   setIsSignedIn
@@ -174,7 +174,7 @@ export const handleLogInSubmit = async (
   setLoginFail
 ) => {
   if (formVals.email === "" || formVals.password == "") {
-    setLoginFail(i18n.t("login.fillFields"));
+    setLoginFail(i18n.t("validators:fillEmailAndPassword"));
     return;
   } else {
     let accessToken = await signInStandard(formVals);
@@ -186,7 +186,7 @@ export const handleLogInSubmit = async (
       console.log("accessToken", accessToken?.data);
       setActiveSession(accessToken.data.session);
     } else {
-      setLoginFail(i18n.t("login.invalidCredentials"));
+      setLoginFail(i18n.t("validators.invalidCredentials"));
       return;
     }
     await sessionCheck();
@@ -199,10 +199,10 @@ export const handleSignUpSubmit = async (
   setRegFail
 ) => {
   if (formVals.email === "" || formVals.password == "" || formVals.name == "") {
-    setRegFail(i18n.t("signup.fillFields"));
+    setRegFail(i18n.t("validators:fillAllFields"));
     return;
   } else if (formVals.password.length < 6) {
-    setRegFail(i18n.t("signup.passwordFormat"));
+    setRegFail(i18n.t("validators:passwordFormat"));
     return;
   } else {
     let dataPack = {
@@ -223,7 +223,7 @@ export const handleSignUpSubmit = async (
       );
       setActiveSession(registrationToken.data.session.refresh_token);
     } else {
-      setRegFail(i18n.t("signup.accountExistMsg"));
+      setRegFail(i18n.t("validators:accountExistMsg"));
     }
     await sessionCheck();
   }
