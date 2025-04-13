@@ -219,16 +219,16 @@ export default function Picture(props) {
             name="share"
             color="white"
             size={scale(19)}
-            onPress={() =>
-              onShare(
-                pic.photofile,
-                pic.newusername,
+            onPress={() => {
+              return onShare(
+                pic.photoFile,
+                pic.UserName,
                 pic.label,
                 pic.dateTaken,
                 pic.latitude,
                 pic.longitude
-              )
-            }
+              );
+            }}
             style={styles.share}
           />
           <FontAwesome
