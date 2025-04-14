@@ -10,7 +10,6 @@ import {
   Platform
 } from "react-native";
 import { activeFonts, colors, fontSizes } from "../styles";
-import screenData from "./screenData.json";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
@@ -20,12 +19,13 @@ import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import SearchToolInput from "../searchTool/searchToolInput";
 import SearchToolListItem from '../searchTool/searchToolListItem';
+import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function SearchPage(props) {
-  const {} = props;
+  const { } = props;
   const [list, setList] = useState([]);
   const [textSource, setTextSource] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -39,6 +39,7 @@ export default function SearchPage(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+  const { t } = useTranslation();
 
   useEffect(() => {
     setList([]);
@@ -58,63 +59,63 @@ export default function SearchPage(props) {
       setLevelTwoScreen
     );
   }
- 
+
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.container}>
-      <MaterialIcons
-        name="chevron-left"
-        size={moderateScale(48)}
-        color={"darkgrey"}
-        onPress={() => setLevelOneScreen(false)}
-        style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
-      />
-      <View style={styles.content}>
-        <Text style={styles.header}>{screenData.SearchPage.header}</Text>
-
-        <SearchToolInput
-          icon="navigate-circle-outline"
-          vectorIcon="Ionicons"
-          placeHolderText={screenData.SearchPage.placeholder}
-          setList={setList}
-          list={list}
-          setTextSource={setTextSource}
-          setSearchValue={setSearchValue}
-          searchValue={searchValue}
+      <View style={styles.container}>
+        <MaterialIcons
+          name="chevron-left"
+          size={moderateScale(48)}
+          color={"darkgrey"}
+          onPress={() => setLevelOneScreen(false)}
+          style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
         />
+        <View style={styles.content}>
+          <Text style={styles.header}>{t('SearchPage.header')}</Text>
 
-        <View style={styles.flatListBox}>
-          <FlatList
-            style={styles.page}
-            contentContainerStyle={styles.pageContainter}
-            keyExtractor={(item) => item.id}
-            scrollEnabled={true}
-            data={list}
-            renderItem={({ item }) => (
-              <SearchToolListItem
-                name={item.title}
-                soureImage={item.source}
-                setTextSource={setTextSource}
-                setList={setList}
-                setSearchValue={setSearchValue}
-              />
-            )}
+          <SearchToolInput
+            icon="navigate-circle-outline"
+            vectorIcon="Ionicons"
+            placeHolderText={t('SearchPage.placeholder')}
+            setList={setList}
+            list={list}
+            setTextSource={setTextSource}
+            setSearchValue={setSearchValue}
+            searchValue={searchValue}
           />
-        </View>
 
-        <View style={styles.promtBox}>
-          <Text style={styles.promptText}>
-            {screenData.SearchPage.diveAddPrompt}
-          </Text>
-          <TouchableWithoutFeedback onPress={() => handleSwitch()}>
-            <Text style={styles.promptLinkText}>
-              {screenData.SearchPage.diveAddLink}
+          <View style={styles.flatListBox}>
+            <FlatList
+              style={styles.page}
+              contentContainerStyle={styles.pageContainter}
+              keyExtractor={(item) => item.id}
+              scrollEnabled={true}
+              data={list}
+              renderItem={({ item }) => (
+                <SearchToolListItem
+                  name={item.title}
+                  soureImage={item.source}
+                  setTextSource={setTextSource}
+                  setList={setList}
+                  setSearchValue={setSearchValue}
+                />
+              )}
+            />
+          </View>
+
+          <View style={styles.promtBox}>
+            <Text style={styles.promptText}>
+              {t('SearchPage.diveAddPrompt')}
             </Text>
-          </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => handleSwitch()}>
+              <Text style={styles.promptLinkText}>
+                {t('SearchPage.diveAddLink')}
+              </Text>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
       </View>
-    </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   },
   flatListBox: {
     marginTop: windowWidth > 600 ? "0%" : "-3%",
-    maxHeight: windowWidth > 600 ?  "63%" : "72%"
+    maxHeight: windowWidth > 600 ? "63%" : "72%"
   },
   promtBox: {
     position: "absolute",
