@@ -7,7 +7,9 @@
         "email": "Email",
         "password": "Password",
         "cancel": "Cancel",
-        "ok": "OK"
+        "ok": "OK",
+        "edit": "Edit",
+        "delete": "Delete"
     },
     "SettingsPage": {
         "header": "Settings",
@@ -64,10 +66,7 @@
     },
     "TripList": {
         "header": "Your Dive Trip Offerings",
-        "creatNewTripButton": "New Trip",
-        "expandTrip": "More Info",
-        "editButton": "Edit",
-        "deleteButton": "Delete"
+        "newTrip": "New Trip",
     },
     "TripCreator": {
         "header": "Create a New Dive Trip",
