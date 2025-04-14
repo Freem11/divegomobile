@@ -87,7 +87,9 @@
     },
     "DiveSite": {
         "drawerHeader": "Sea Creature Sightings",
-        "emptyDrawer": "No sightings at this site yet."
+        "emptyDrawer": "No sightings at this site yet.",
+        "aLittleAbout": "A little about {{siteName}}",
+        "addSighting": "Add Sighting"
     },
     "DiveShop": {
         "drawerHeader": "Offered Dive Trips",

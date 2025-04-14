@@ -47,6 +47,7 @@ import {
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -61,7 +62,7 @@ export default function DiveSite() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-
+  const { t } = useTranslation();
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
@@ -183,7 +184,7 @@ export default function DiveSite() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        
+
         let fileName = await imageUpload(image)
 
         if (
@@ -254,7 +255,7 @@ export default function DiveSite() {
       />
       <TouchableWithoutFeedback onPress={openPicUploader}>
         <View style={styles.contributeButton}>
-          <Text style={styles.contributeButtonText}>Add Sighting</Text>
+          <Text style={styles.contributeButtonText}>{t('DiveSite.addSighting')}</Text>
         </View>
       </TouchableWithoutFeedback>
 
@@ -295,7 +296,7 @@ export default function DiveSite() {
             <ScrollView>
               {site && (
                 <PlainTextInput
-                  placeHolder={`A little about ${site.name}`}
+                  placeHolder={t('DiveSite.aLittleAbout', { siteName: site.name, })}
                   content={site.divesitebio}
                   fontSz={fontSizes.StandardText}
                   isPartnerAccount={isPartnerAccount}
@@ -321,8 +322,8 @@ export default function DiveSite() {
         dataSetType={"DiveSitePhotos"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
-        drawerHeader={screenData.DiveSite.drawerHeader}
-        emptyDrawer={screenData.DiveSite.emptyDrawer}
+        drawerHeader={t('DiveSite.drawerHeader')}
+        emptyDrawer={t('DiveSite.emptyDrawer')}
       />
     </View>
   );
