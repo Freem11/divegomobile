@@ -5,32 +5,30 @@ import {
   grabProfileById,
   updatePushToken,
 } from '../../supabaseCalls/accountSupabaseCalls';
+import { i18n } from "../../i18n";
 
 export const registerForPushNotificationsAsync = async (activeSession, runAlert) => {
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
 
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
 
-    if (finalStatus !== "granted" && runAlert == "yes") {
-      Alert.alert(
-        "Notifications Permission",
-        "You previously declined to recieve push notifications" +
-          "\n" +
-          "\n" +
-          "To grant access, and be notifed of this users activities, please visit Scuba SEAsons under your device's settings menu",
-        [
-          { text: "Go to Settings", onPress: () => Linking.openSettings() },
-          { text: "Close", onPress: () => console.log("no tapped") },
-        ]
-      );
-      return false;
-    }
-    
+  if (finalStatus !== "granted" && runAlert == "yes") {
+    Alert.alert(
+      i18n.t("OnBoarding.notificationsAlertTitle"),
+      i18n.t("OnBoarding.notificationsAlertMessage"),
+      [
+        { text: i18n.t("OnBoarding.goToSettings"), onPress: () => Linking.openSettings() },
+        { text: i18n.t("Common.close"), onPress: () => console.log("no tapped") },
+      ]
+    );
+    return false;
+  }
+
   let tokenE;
   try {
     tokenE = (
@@ -51,7 +49,7 @@ export const registerForPushNotificationsAsync = async (activeSession, runAlert)
         token: activeToken ? [...activeToken, tokenE] : [tokenE],
         UserID: activeSession.user.id,
       });
-      
+
     }
   }
   console.log("returning true")

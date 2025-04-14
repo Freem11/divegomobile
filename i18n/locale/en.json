@@ -13,7 +13,8 @@
         "next": "Next",
         "accept": "Accept",
         "optOut": "Opt Out",
-        "finish": "Finish"
+        "finish": "Finish",
+        "close": "Close"
     },
     "OnBoarding": {
         "welcomeTitle": "Welcome to Scuba SEAsons!",
@@ -29,6 +30,13 @@
         "notificationsContent": "In Scuba SEAsons we have a number of social features such as likes, comments and the ability to follow other divers’ activities.\n\nTo be notified when one of your submissions is accepted or when a user you are following makes a contribution, we ask that you please grant permission for notifications.\n\n\n\n\n",
         "doneTitle": "Thanks for joining Scuba SEAsons!",
         "doneContent": "That’s it!\n\nYou’re all setup.\n\nIf you ever want to change your diver name, you can do so from your profile page at any time.\n\n\n\n\n",
+        "locationAlertTitle": "Foreground Location Tracking Permission",
+        "locationAlertMessage": "You previously declined to grant access to your location for this feature.\n\nTo grant access, please visit Scuba SEAsons under your device's settings menu.",
+        "galleryAlertTitle": "Photo Library Permission",
+        "galleryAlertMessage": "You previously declined to grant access to your device's photo library.\n\nTo grant access, please visit Scuba SEAsons under your device's settings menu.",
+        "notificationsAlertTitle": "Notifications Permission",
+        "notificationsAlertMessage": "You previously declined to receive push notifications.\n\nTo grant access and be notified of this user's activities, please visit Scuba SEAsons under your device's settings menu.",
+        "goToSettings": "Go to Settings"
     },
     "MapPage": {},
     "SettingsPage": {
