@@ -46,11 +46,11 @@ export default function LoginPageView({
             />
 
             <S.Content>
-                <S.Header>{t('auth:login.title')}</S.Header>
+                <S.Header>{t('Auth.diveIn')}</S.Header>
 
                 <TextInputField
                     icon="alternate-email"
-                    placeHolderText={t('common:email')}
+                    placeHolderText={t('Common.email')}
                     secure={false}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     style={{ marginTop: 60 }}
@@ -58,7 +58,7 @@ export default function LoginPageView({
 
                 <TextInputField
                     icon="lock-outline"
-                    placeHolderText={t('common:password')}
+                    placeHolderText={t('Common.password')}
                     setSecureTextEntry={setSecureTextEntry}
                     secure={secureTextEntry}
                     onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
@@ -70,7 +70,7 @@ export default function LoginPageView({
                 <S.ButtonBox>
                     <TouchableWithoutFeedback onPress={handleLogin}>
                         <S.LoginButton>
-                            <S.LoginText>{t('common:login')}</S.LoginText>
+                            <S.LoginText>{t('Common.login')}</S.LoginText>
                             <MaterialIcons name="chevron-right" size={30} color="#fff" />
                         </S.LoginButton>
                     </TouchableWithoutFeedback>
@@ -79,14 +79,14 @@ export default function LoginPageView({
 
             <S.ForgotBox>
                 <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
-                    <S.PromptLinkText>{t('auth:login.forgot')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('Auth.forgotPassword')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.ForgotBox>
 
             <S.PromptBox>
-                <S.PromptText>{t('auth:login.noAccount')}</S.PromptText>
+                <S.PromptText>{t('Auth.noAccount')}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToSignUpPage}>
-                    <S.PromptLinkText>{t('common:signup')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('Common.signup')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>
