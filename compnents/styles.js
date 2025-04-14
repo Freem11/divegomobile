@@ -28,7 +28,7 @@ export const buttonSizes = {
   },
   large : {
     height: 50,
-    width: 220
+    width: 250
   },
 }
 

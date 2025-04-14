@@ -22,8 +22,8 @@ export const Container = styled.View`
 export const Content = styled.View`
   flex: 1;
   justify-content: center;
-  margin-top: -50%;
-  margin-horizontal: 5%;`;
+  margin-top: -75%;
+  margin-horizontal: 7%;`;
 
 export const TopInputWrapper = styled.View`
    margin-top: ${moderateScale(60)}px;

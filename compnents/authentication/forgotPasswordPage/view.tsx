@@ -55,7 +55,7 @@ export default function ForgotPageView({
            <Button 
             onPress={isEnabled ? () => passwordRecovery(formVals.email) : () => { }} 
             alt={false} 
-            size='large'
+            size='medium'
             title={t('forgot.button')} 
             iconRight="chevron-right"
             />
