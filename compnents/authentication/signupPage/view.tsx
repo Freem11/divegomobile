@@ -1,6 +1,5 @@
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
 import SecureTextInput from "../../reusables/secureTextInput";

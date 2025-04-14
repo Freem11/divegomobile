@@ -19,7 +19,15 @@ export const Container = styled.View`
   width: ${windowWidth - windowWidth / 10}px;
 `;
 
-export const Content = styled.View``;
+export const Content = styled.View`
+  flex: 1;
+  justify-content: center;
+  margin-top: -50%;
+  margin-horizontal: 5%;`;
+
+export const TopInputWrapper = styled.View`
+   margin-top: ${moderateScale(60)}px;
+`;
 
 export const Header = styled.Text`
   z-index: 10;
@@ -40,7 +48,6 @@ export const ErrorText = styled.Text`
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${moderateScale(-50)}px;
 `;
 
 export const LoginButton = styled.View`
