@@ -22,7 +22,7 @@ export default function ForgotPageView({
   moveToLoginPage,
   passwordRecovery,
 }: IProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
 
   return (
     <S.Container>

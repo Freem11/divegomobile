@@ -26,26 +26,28 @@ export default function LandingPageView({
   onFacebook,
   onApple,
 }: IProps) {
-  const { t } = useTranslation();
+
+  const { t: tAuth } = useTranslation("auth");
+  const { t: tCommon } = useTranslation("common");
 
   return (
     <S.Container>
       <S.StyledScrollView>
-        <S.Header>{t("landing.title")}</S.Header>
+        <S.Header>{tAuth("landing.title")}</S.Header>
 
         <TouchableWithoutFeedback onPress={onLogin}>
           <S.LoginButton>
-            <S.LoginText>{t("landing.loginButton")}</S.LoginText>
+            <S.LoginText>{tCommon("login")}</S.LoginText>
           </S.LoginButton>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={onSignUp}>
           <S.RegisterButton>
-            <S.RegisterText>{t("landing.registerButton")}</S.RegisterText>
+            <S.RegisterText>{tCommon("registerAccount")}</S.RegisterText>
           </S.RegisterButton>
         </TouchableWithoutFeedback>
 
-        <S.SocialText>{t("landing.socialText")}</S.SocialText>
+        <S.SocialText>{tAuth("landing.socialText")}</S.SocialText>
 
         <S.IconRow>
           <TouchableWithoutFeedback onPress={onGoogle} disabled={isSignedIn}>
@@ -63,7 +65,7 @@ export default function LandingPageView({
           {appleAuthAvailable && (
             <TouchableWithoutFeedback onPress={onApple} disabled={isSignedIn}>
               <S.AppleButton>
-                <Image source={appleLogo} style={S.ALogo}/>
+                <Image source={appleLogo} style={S.ALogo} />
               </S.AppleButton>
             </TouchableWithoutFeedback>
           )}

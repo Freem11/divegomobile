@@ -1,8 +1,6 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import * as S from './styles';
-import TextInputField from '../utils/textInput';
 import { useTranslation } from "react-i18next";
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
@@ -51,12 +49,12 @@ export default function LoginPageView({
             />
 
             <S.Content>
-                <S.Header>{t('login.title')}</S.Header>
+                <S.Header>{t('auth:login.title')}</S.Header>
 
                 <S.TextInputWrapper>
                     <MobileTextInput 
                     iconLeft="at"
-                    placeholder={t('login.email')}
+                    placeholder={t('common:email')}
                     value={formVals.email}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     />
@@ -64,7 +62,7 @@ export default function LoginPageView({
                 <S.SecureTextInputWrapper>
                     <SecureTextInput 
                         onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
-                        placeholder={t('login.password')}
+                        placeholder={t('common:password')}
                     />
                 </S.SecureTextInputWrapper>
 
@@ -75,7 +73,7 @@ export default function LoginPageView({
                         onPress={handleLogin} 
                         alt={false} 
                         size='medium'
-                        title={t('login.button')} 
+                        title={t('common:login')} 
                         iconRight="chevron-right"
                         />
                 </S.ButtonBox>
@@ -83,14 +81,14 @@ export default function LoginPageView({
 
             <S.ForgotBox>
                 <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
-                    <S.PromptLinkText>{t('login.forgot')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('auth:login.forgot')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.ForgotBox>
 
             <S.PromptBox>
-                <S.PromptText>{t('login.prompt')}</S.PromptText>
+                <S.PromptText>{t('auth:login.noAccount')}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToSignUpPage}>
-                    <S.PromptLinkText>{t('login.promptLink')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('common:signup')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>
