@@ -9,7 +9,8 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
 import { activeFonts, colors, fontSizes } from '../styles';
 import { scale, moderateScale } from "react-native-size-matters";

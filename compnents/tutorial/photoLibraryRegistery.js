@@ -1,24 +1,22 @@
 import * as ImagePicker from "expo-image-picker";
 import { Alert, Linking } from "react-native";
+import { i18n } from "../../i18n";
 
 export const registerForPhotoLibraryAccessAsync = async (runAlert) => {
 
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (status !== "granted" && runAlert === "yes") {
     Alert.alert(
-      "Photo Library Permission",
-      "You previously declined to grant access to your device's photo library"+
-        "\n" +
-        "\n" +
-        "To grant access, please visit Scuba SEAsons under your device's settings menu",
+      i18n.t("OnBoarding.galleryAlertTitle"),
+      i18n.t("OnBoarding.galleryAlertMessage"),
       [
-        { text: "Go to Settings", onPress: () => Linking.openSettings() },
-        { text: "Close", onPress: () => console.log("no tapped") },
+        { text: i18n.t("OnBoarding.goToSettings"), onPress: () => Linking.openSettings() },
+        { text: i18n.t("Common.close"), onPress: () => console.log("no tapped") },
       ]
     );
     return false;
   } else {
     return true;
   }
-  
+
 };
