@@ -205,7 +205,6 @@ export default function Picture(props) {
         date: photoDate,
         link: localUri
       })
-      // shareOptions.message = `Checkout this cool pic of a ${creastureN} on Scuba SEAsons! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
       shareOptions.url = `data:image/jpg;base64,${base64}`;
       doShare(shareOptions);
     }

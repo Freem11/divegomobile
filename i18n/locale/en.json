@@ -19,6 +19,9 @@
         "enterAccountEmail": "Enter Your Account Email",
         "sendRecoverEmail": "Send Recovery Email"
     },
+    "Photo": {
+        "diveDeeper": "Dive Deeper!"
+    },
     "CautionModal": {
         "cannotComplete": "Your {{confirmationType}} cannot be completed just yet.",
         "tripSubmissionBlurb": "Trip Submission is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.",
