@@ -139,6 +139,8 @@
         "blowBubbles": "Blow some bubbles"
     },
     "Validators": {
+        "requiredDiverName": "Your diver name cannot be blank!",
+        "diverNameTaken": "Sorry that diver name has already been taken",
         "fillAllFields": "Please fill out all fields",
         "fillEmailAndPassword": "Please fill out both email and password",
         "invalidCredentials": "The credentials you supplied are not valid",
