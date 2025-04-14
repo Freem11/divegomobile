@@ -20,7 +20,6 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from "../styles";
-import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
