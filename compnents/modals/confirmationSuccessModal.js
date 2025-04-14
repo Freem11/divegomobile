@@ -17,26 +17,20 @@ export default function SuccessModal() {
   const tidyUp = () => {
     setConfirmationModal(false);
   };
-
+  const { t } = useTranslation();
   let blurb = null;
   switch (confirmationType) {
-    case "Trip Submission":
-      blurb = "Check it by opening up your dive center on the map.";
-      break;
     case "Sea Creature Submission":
-      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
-      break;
     case "Dive Site":
-      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
+    case "Trip Edit":
+    case "Trip Delete":
+      blurb = t("ConfirmSuccessModal.allow24HoursToProcess");
+      break;
+    case "Trip Submission":
+      blurb = t("ConfirmSuccessModal.checkOpeningBlurb");
       break;
     case "Partner Account Creation Request":
-      blurb = `We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies.`;
-      break;
-    case "Trip Edit":
-      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
-      break;
-    case "Trip Delete":
-      blurb = "Please allow up to 24 hours for it to be reviewed and approved.";
+      blurb = t("ConfirmSuccessModal.waitTillProccessOrBeContacted");
       break;
   }
 
@@ -44,13 +38,13 @@ export default function SuccessModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.text}>
-          Your {confirmationType} was successully submitted!
+          {t("ConfirmSuccessModal.cannotComplete", { confirmationType: confirmationType })}
         </Text>
         <Text style={styles.text2}>{blurb}</Text>
 
         <TouchableWithoutFeedback onPress={tidyUp}>
           <View style={styles.confirmButton}>
-            <Text style={styles.confirmButtonText}>OK</Text>
+            <Text style={styles.confirmButtonText}>{t('Common.ok')}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>

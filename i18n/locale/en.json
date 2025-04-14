@@ -6,7 +6,8 @@
         "registerAccount": "Create New Account",
         "email": "Email",
         "password": "Password",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "ok": "OK"
     },
     "Auth": {
         "diveIn": "Dive in...",
@@ -25,6 +26,12 @@
         "diveSiteBlurb": "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.",
         "partnerAccountBlurb": "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.",
         "tripEditBlurb": "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it."
+    },
+    "ConfirmSuccessModal": {
+        "succesfullySubmitted": "Your {{confirmationType}} was successully submitted!",
+        "allow24HoursToProcess": "Please allow up to 24 hours for it to be reviewed and approved.",
+        "checkOpeningBlurb": "Check it by opening up your dive center on the map.",
+        "waitTillProccessOrBeContacted": "We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies."
     },
     "Comments": {
         "hideReplies": "Hide Replies",
