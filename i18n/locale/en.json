@@ -27,6 +27,13 @@
         "partnerAccountBlurb": "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.",
         "tripEditBlurb": "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it."
     },
+    "PictureModal": {
+        "beFirstToComment": "Be the first to comment",
+        "commentOrViewAll": "Comment / View all ${{count}} Comments",
+        "shareMessage": "Check out this cool pic of a {{creature}} on Scuba SEAsons! It was taken by {{user}} at the dive site: {{diveSite}}, in {{location}} on {{date}}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n{{link}}",
+        "goToLocation": "Go to this location!",
+        "addedBy": "Added by: {{user}}"
+    },
     "ConfirmSuccessModal": {
         "succesfullySubmitted": "Your {{confirmationType}} was successully submitted!",
         "allow24HoursToProcess": "Please allow up to 24 hours for it to be reviewed and approved.",
