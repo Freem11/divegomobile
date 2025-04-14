@@ -40,7 +40,7 @@ export default function AnimatedFullScreenModal(props) {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeTutorialID === "OnboardingX" && <OnboardingTest/>}
+      {activeTutorialID === "OnboardingX" && <OnboardingTest />}
       {activeTutorialID === "PinchAndZoomPhoto" && fullScreenModal && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
     </Animated.View>
