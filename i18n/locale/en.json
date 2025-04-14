@@ -11,12 +11,17 @@
     },
     "SettingsPage": {
         "header": "Settings",
-        "subHeading1": "Account Type",
+        "subHeading": "Account Type",
         "notPartnerAccount": "Request upgrade to Partner Account?",
         "notResearcherAccount": "Request upgrade to Researcher Account?",
         "logout": "Log Out",
         "delAccount": "Delete Account",
-        "dangerZoneBar": "Danger Zone"
+        "dangerZoneBar": "Danger Zone",
+        "aboutToDeleteAccountTitle": "You Are About To Delete Your Scuba SEAsons Account",
+        "deleteAccountMessage": "Are you sure you want to delete your account?\n\nPlease note that deleting your account will not delete your previous dive site or photo submissions. Please contact us if you wish to have those removed from the community.",
+        "deleteAccountButton": "Delete My Account",
+        "cancelDeleteButton": "Cancel Request",
+        "contactSupportButton": "Contact Scuba SEAsons"
     },
     "PartnerRequestPage": {
         "header": "Partner Account Upgrade",
