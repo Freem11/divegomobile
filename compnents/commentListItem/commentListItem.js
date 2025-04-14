@@ -6,16 +6,17 @@ import {
   colors,
   fontSizes
 } from "../styles";
+import { useTranslation } from "react-i18next";
 
 export default function CommentListItem(props) {
   const { commentDetails, setReplyTo, replyTo, toggleShowReplies, selectedReplyId, nbReplies } = props;
   let newDate = new Date(commentDetails.created_at);
   let finalDate = newDate.toLocaleString().substring(0, 10);
   let lastChar = finalDate.slice(-1)
-  if (lastChar == ","){
-    finalDate = finalDate.slice(0,-1)
+  if (lastChar == ",") {
+    finalDate = finalDate.slice(0, -1)
   }
-
+  const { t } = useTranslation();
   return (
     <View>
       <View style={styles.container} key={commentDetails.id}>
@@ -38,19 +39,19 @@ export default function CommentListItem(props) {
       </Text>
       {
         nbReplies > 0 ?
-        <Text
-          style={styles.replyTxt}
-          onPress={() => toggleShowReplies(commentDetails)}
-        >
-          {
-            selectedReplyId.includes(commentDetails.id)
-            ? `Hide replies`
-            : `View ${nbReplies} Replies`
-          }
-        </Text>
-        : ""
+          <Text
+            style={styles.replyTxt}
+            onPress={() => toggleShowReplies(commentDetails)}
+          >
+            {
+              selectedReplyId.includes(commentDetails.id)
+                ? t("Comments.hideReplies")
+                : t("Comments.showReplies", { count: nbReplies })
+            }
+          </Text>
+          : ""
       }
-      
+
     </View>
   );
 }

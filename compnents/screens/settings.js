@@ -14,7 +14,6 @@ import {
   buttonText,
   authenicationButton
 } from "../styles";
-import screenData from "./screenData.json";
 import {
   signOut,
   userDelete
@@ -34,12 +33,13 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function SettingsPage (props) {
-  const {} = props;
-
+export default function SettingsPage(props) {
+  const { } = props;
+  const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
   const { activeSession, setActiveSession } = useContext(SessionContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
@@ -77,15 +77,21 @@ export default function SettingsPage (props) {
 
   const alertHandler = async () => {
     Alert.alert(
-      "You Are About To Delete Your Scuba SEAsons Account",
-      "Are you sure you want to delete your account?" +
-        "\n" +
-        "\n" +
-        "Please note that deleting your account will not delete your previous dive site or photo submissions, please contact us if you wish to have those removed from the community",
+      t('SettingsPage.aboutToDeleteAccountTitle'),
+      t('SettingsPage.deleteAccountMessage'),
       [
-        { text: "Delete My Account", onPress: () => handleAccountDelete() },
-        { text: "Cancel Request", onPress: () => console.log("no tapped") },
-        { text: "Contact Scuba SEAsons", onPress: () => handleEmail() }
+        {
+          text: t('SettingsPage.deleteAccountButton'),
+          onPress: handleAccountDelete,
+        },
+        {
+          text: t('SettingsPage.cancelDeleteButton'),
+          onPress: () => console.log('no tapped'),
+        },
+        {
+          text: t('SettingsPage.contactSupportButton'),
+          onPress: handleEmail,
+        },
       ]
     );
   };
@@ -136,10 +142,10 @@ export default function SettingsPage (props) {
         style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
       />
       <View style={styles.content}>
-        <Text style={styles.header}>{screenData.SettingsPage.header}</Text>
+        <Text style={styles.header}>{t('SettingsPage.header')}</Text>
 
         <Text style={styles.subHeaders}>
-          {screenData.SettingsPage.subHeading1}
+          {t('SettingsPage.subHeading')}
         </Text>
 
         <View style={styles.dataHousing}>
@@ -149,7 +155,7 @@ export default function SettingsPage (props) {
               onPress={() => openPartnerAccountScreen()}
             >
               <Text style={styles.promptLinkText}>
-                {screenData.SettingsPage.notPartnerAccount}
+                {t('SettingsPage.notPartnerAccount')}
               </Text>
             </TouchableWithoutFeedback>
           ) : null}
@@ -159,7 +165,7 @@ export default function SettingsPage (props) {
           <TouchableWithoutFeedback onPress={() => handleLogout()}>
             <View style={styles.loginButton}>
               <Text style={styles.loginText}>
-                {screenData.SettingsPage.logout}
+                {t('SettingsPage.logout')}
               </Text>
               <MaterialIcons
                 name="chevron-right"
@@ -172,12 +178,12 @@ export default function SettingsPage (props) {
       </View>
 
       <Text style={styles.subHeadersDanger}>
-        {screenData.SettingsPage.dangerZoneBar}
+        {t('SettingsPage.dangerZoneBar')}
       </Text>
       <TouchableWithoutFeedback onPress={alertHandler}>
         <View style={styles.dataHousingDanger}>
           <Text style={styles.dataLabelsDanger}>
-            {screenData.SettingsPage.delAccount}
+            {t('SettingsPage.delAccount')}
           </Text>
         </View>
       </TouchableWithoutFeedback>

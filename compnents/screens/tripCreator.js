@@ -19,7 +19,6 @@ import {
   authenicationButton,
   buttonText,
 } from "../styles";
-import screenData from "./screenData.json";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
@@ -42,6 +41,7 @@ import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -58,7 +58,7 @@ export default function TripCreatorPage(props) {
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
-
+  const { t } = useTranslation()
   const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
@@ -256,7 +256,7 @@ export default function TripCreatorPage(props) {
           <TouchableWithoutFeedback onPress={() => cloneButtonPress()}>
             <View style={styles.creatNewButton}>
               <Text style={styles.createNewText}>
-                {screenData.TripCreator.cloneButton}
+                {t('TripCreator.cloneButton')}
               </Text>
             </View>
           </TouchableWithoutFeedback>
@@ -265,17 +265,17 @@ export default function TripCreatorPage(props) {
         <ScrollView style={styles.content}>
           {editMode ? (
             <Text style={styles.header}>
-              {screenData.TripCreator.headerEdit}
+              {t('TripCreator.headerEdit')}
             </Text>
           ) : (
-            <Text style={styles.header}>{screenData.TripCreator.header}</Text>
+            <Text style={styles.header}>{t('TripCreator.header')}</Text>
           )}
 
           <View style={styles.textBuffer}>
             <TextInputField
               icon={"store"}
               inputValue={formValues && formValues.tripName}
-              placeHolderText={screenData.TripCreator.tripNamePlaceholder}
+              placeHolderText={t('TripCreator.tripNamePlaceholder')}
               secure={false}
               onChangeText={(text) =>
                 setFormValues({ ...formValues, tripName: text })
@@ -287,7 +287,7 @@ export default function TripCreatorPage(props) {
             <TextInputField
               icon={"alternate-email"}
               inputValue={formValues && formValues.BookingPage}
-              placeHolderText={screenData.TripCreator.bookingLinkPlaceholder}
+              placeHolderText={t('TripCreator.bookingLinkPlaceholder')}
               secure={false}
               onChangeText={(text) =>
                 setFormValues({ ...formValues, BookingPage: text })
@@ -299,7 +299,7 @@ export default function TripCreatorPage(props) {
             <TextInputField
               icon={"attach-money"}
               inputValue={formValues && formValues.price}
-              placeHolderText={screenData.TripCreator.pricePlaceholder}
+              placeHolderText={t('TripCreator.pricePlaceholder')}
               secure={false}
               keyboardConfig="number-pad"
               onChangeText={setValue}
@@ -312,7 +312,7 @@ export default function TripCreatorPage(props) {
                 <TextInputField
                   icon={"calendar-month-outline"}
                   inputValue={formValues && formValues.startDate}
-                  placeHolderText={screenData.TripCreator.startDatePlaceholder}
+                  placeHolderText={t('TripCreator.startDatePlaceholder')}
                   secure={false}
                   vectorIcon={"MaterialCommunityIcons"}
                 />
@@ -326,7 +326,7 @@ export default function TripCreatorPage(props) {
                 <TextInputField
                   icon={"calendar-month-outline"}
                   inputValue={formValues && formValues.endDate}
-                  placeHolderText={screenData.TripCreator.endDatePlaceholder}
+                  placeHolderText={t('TripCreator.endDatePlaceholder')}
                   secure={false}
                   vectorIcon={"MaterialCommunityIcons"}
                 />
@@ -341,7 +341,7 @@ export default function TripCreatorPage(props) {
           >
             <View style={styles.descriptionBox}>
               <PlainTextInput
-                placeHolder={screenData.TripCreator.tripDescriptionPlaceholder}
+                placeHolder={t('TripCreator.tripDescriptionPlaceholder')}
                 content={formValues && formValues.description}
                 fontSz={fontSizes.StandardText}
                 isEditModeOn={true}
@@ -356,7 +356,7 @@ export default function TripCreatorPage(props) {
             <TouchableWithoutFeedback onPress={() => handleSubmit()}>
               <View style={styles.submitButton}>
                 <Text style={styles.submitText}>
-                  {screenData.TripCreator.submitButton}
+                  {t('TripCreator.submitButton')}
                 </Text>
                 <MaterialIcons
                   name="chevron-right"
@@ -374,9 +374,9 @@ export default function TripCreatorPage(props) {
           dataSetType={"Trips"}
           lowerBound={drawerLowerBound}
           upperBound={drawerUpperBound}
-          drawerHeader={screenData.TripCreator.drawerHeader}
-          emptyDrawer={screenData.TripCreator.emptyDrawer}
-          headerButton={screenData.TripCreator.selectSitesButton}
+          drawerHeader={t('TripCreator.drawerHeader')}
+          emptyDrawer={t('TripCreator.emptyDrawer')}
+          headerButton={t('TripCreator.selectSitesButton')}
         />
 
         <DateTimePickerModal

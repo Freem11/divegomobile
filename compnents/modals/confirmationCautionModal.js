@@ -9,34 +9,30 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from "../styles";
+import { useTranslation } from "react-i18next";
 export default function FailModal() {
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const tidyUp = () => {
     setConfirmationModal(false);
   };
-
+  const { t } = useTranslation();
   let blurb = null;
   switch (confirmationType) {
     case "Trip Submission":
-      blurb =
-        "Trip Submission is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
+      blurb = t('CautionModal.tripSubmissionBlurb')
       break;
     case "Sea Creature Submission":
-      blurb =
-        "In order to sucessfully submit your sea creature sighting, please provide a photo as well as the name of the species of sea creature in the photo as well as the date it was photographed. \n \n Note: The location will be automatically assumed to be the dive site you opened this page from.";
+      blurb = t('CautionModal.seaCreatureSubmissionBlurb')
       break;
     case "Dive Site":
-      blurb =
-        "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.";
+      blurb = t('CautionModal.diveSiteBlurb')
       break;
     case "Partner Account Creation Request":
-      blurb =
-        "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.";
+      blurb = t('CautionModal.partnerAccountBlurb')
       break;
     case "Trip Edit":
-      blurb =
-        "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.";
+      blurb = t('CautionModal.tripEditBlurb')
       break;
   }
 
@@ -44,13 +40,16 @@ export default function FailModal() {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.text}>
-          Your {confirmationType} cannot be completed just yet.
+          {t("CautionModal.cannotComplete", {
+            confirmationType: confirmationType,
+          })}
+
         </Text>
         <Text style={styles.text2}>{blurb}</Text>
 
         <TouchableWithoutFeedback onPress={tidyUp}>
           <View style={styles.confirmButton}>
-            <Text style={styles.confirmButtonText}>Cancel</Text>
+            <Text style={styles.confirmButtonText}>{t('Common.cancel')}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>

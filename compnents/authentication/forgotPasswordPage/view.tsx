@@ -22,7 +22,7 @@ export default function ForgotPageView({
   moveToLoginPage,
   passwordRecovery,
 }: IProps) {
-  const { t } = useTranslation('auth');
+  const { t } = useTranslation();
 
   return (
     <S.Container>
@@ -34,11 +34,11 @@ export default function ForgotPageView({
       />
 
       <S.Content>
-        <S.Header>{t("forgot.title")}</S.Header>
+        <S.Header>{t("Auth.resetPassword")}</S.Header>
 
         <TextInputField
           icon={"alternate-email"}
-          placeHolderText={t("forgot.email")}
+          placeHolderText={t("Auth.enterAccountEmail")}
           secure={false}
           onChangeText={(text: string) => setFormVals({ email: text })}
           style={{ marginTop: 60 }}
@@ -51,7 +51,7 @@ export default function ForgotPageView({
             onPress={isEnabled ? () => passwordRecovery(formVals.email) : () => { }}
           >
             <S.LoginButton>
-              <S.LoginText>{t("forgot.button")}</S.LoginText>
+              <S.LoginText>{t("Auth.sendRecoverEmail")}</S.LoginText>
               <MaterialIcons name="chevron-right" size={30} color="#fff" />
             </S.LoginButton>
           </TouchableWithoutFeedback>

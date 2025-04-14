@@ -16,7 +16,6 @@ import {
   authenicationButton,
 } from "../styles";
 import { createPartnerAccountRequest } from "../../supabaseCalls/partnerSupabaseCalls";
-import screenData from "./screenData.json";
 import TextInputField from "../authentication/utils/textInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
@@ -25,6 +24,7 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
+import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -37,7 +37,7 @@ export default function PartnerRequestPage() {
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
-
+  const { t } = useTranslation();
   useEffect(() => {
     setFormVals({ ...formVals, UserId: profile[0].UserID });
   }, []);
@@ -95,45 +95,43 @@ export default function PartnerRequestPage() {
         />
         <View style={styles.content}>
           <Text style={styles.header}>
-            {screenData.PartnerRequestPage.header}
+            {t('PartnerRequestPage.header')}
           </Text>
 
           <Text style={styles.expliainer}>
-            {screenData.PartnerRequestPage.explanation}
+            {t('PartnerRequestPage.explanation')}
           </Text>
           <View style={{ marginTop: windowWidth > 600 ? "5%" : "10%" }}>
             <TextInputField
               icon={"store"}
-              placeHolderText={
-                screenData.PartnerRequestPage.businessPlaceholder
-              }
+              placeHolderText={t('PartnerRequestPage.businessPlaceholder')}
               secure={false}
               onChangeText={(text) =>
                 setFormVals({ ...formVals, businessName: text })
               }
             />
             <Text style={styles.infos}>
-              {screenData.PartnerRequestPage.businessExplainer}
+              {t('PartnerRequestPage.businessExplainer')}
             </Text>
           </View>
 
           <View style={{ marginTop: moderateScale(30) }}>
             <TextInputField
               icon={"web"}
-              placeHolderText={screenData.PartnerRequestPage.websitePlaceholder}
+              placeHolderText={t('PartnerRequestPage.websitePlaceholder')}
               onChangeText={(text) =>
                 setFormVals({ ...formVals, websiteLink: text })
               }
             />
             <Text style={styles.infos}>
-              {screenData.PartnerRequestPage.websiteExplainer}
+              {t('PartnerRequestPage.websiteExplainer')}
             </Text>
           </View>
 
           <View style={{ marginTop: moderateScale(30) }}>
             <TextInputField
               icon={"latitude"}
-              placeHolderText={screenData.PartnerRequestPage.latPlaceholder}
+              placeHolderText={t('PartnerRequestPage.latPlaceholder')}
               vectorIcon={"MaterialCommunityIcons"}
               keyboardConfig="number-pad"
               onChangeText={(text) =>
@@ -145,7 +143,7 @@ export default function PartnerRequestPage() {
           <View style={{ marginTop: moderateScale(30) }}>
             <TextInputField
               icon={"longitude"}
-              placeHolderText={screenData.PartnerRequestPage.lngPlaceholder}
+              placeHolderText={t('PartnerRequestPage.lngPlaceholder')}
               vectorIcon={"MaterialCommunityIcons"}
               keyboardConfig="number-pad"
               onChangeText={(text) =>
@@ -153,7 +151,7 @@ export default function PartnerRequestPage() {
               }
             />
             <Text style={styles.infos}>
-              {screenData.PartnerRequestPage.latLngExplainer}
+              {t('PartnerRequestPage.latLngExplainer')}
             </Text>
           </View>
 
@@ -161,7 +159,7 @@ export default function PartnerRequestPage() {
             <TouchableWithoutFeedback onPress={() => handleSubmit()}>
               <View style={styles.loginButton}>
                 <Text style={styles.loginText}>
-                  {screenData.PartnerRequestPage.submitButton}
+                  {t('PartnerRequestPage.submitButton')}
                 </Text>
                 <MaterialIcons
                   name="chevron-right"

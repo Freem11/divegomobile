@@ -27,27 +27,26 @@ export default function LandingPageView({
   onApple,
 }: IProps) {
 
-  const { t: tAuth } = useTranslation("auth");
-  const { t: tCommon } = useTranslation("common");
+  const { t } = useTranslation();
 
   return (
     <S.Container>
       <S.StyledScrollView>
-        <S.Header>{tAuth("landing.title")}</S.Header>
+        <S.Header>{t("Auth.diveIn")}</S.Header>
 
         <TouchableWithoutFeedback onPress={onLogin}>
           <S.LoginButton>
-            <S.LoginText>{tCommon("login")}</S.LoginText>
+            <S.LoginText>{t("Common.login")}</S.LoginText>
           </S.LoginButton>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={onSignUp}>
           <S.RegisterButton>
-            <S.RegisterText>{tCommon("registerAccount")}</S.RegisterText>
+            <S.RegisterText>{t("Common.registerAccount")}</S.RegisterText>
           </S.RegisterButton>
         </TouchableWithoutFeedback>
 
-        <S.SocialText>{tAuth("landing.socialText")}</S.SocialText>
+        <S.SocialText>{t("Auth.socialText")}</S.SocialText>
 
         <S.IconRow>
           <TouchableWithoutFeedback onPress={onGoogle} disabled={isSignedIn}>

@@ -44,11 +44,11 @@ export default function CreateAccountPageView({
             />
 
             <S.Content>
-                <S.Header>{t("auth:signup.title")}</S.Header>
+                <S.Header>{t("Common.signup")}</S.Header>
 
                 <TextInputField
                     icon="person-outline"
-                    placeHolderText={t("common:fullName")}
+                    placeHolderText={t("Common.fullName")}
                     secure={false}
                     onChangeText={(text: string) => setFormVals({ ...formVals, name: text })}
                     style={{ marginTop: 60 }}
@@ -56,7 +56,7 @@ export default function CreateAccountPageView({
 
                 <TextInputField
                     icon="alternate-email"
-                    placeHolderText={t("common:email")}
+                    placeHolderText={t("Common.email")}
                     secure={false}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     style={{ marginTop: 40 }}
@@ -64,7 +64,7 @@ export default function CreateAccountPageView({
 
                 <TextInputField
                     icon="lock-outline"
-                    placeHolderText={t("common:password")}
+                    placeHolderText={t("Common.password")}
                     setSecureTextEntry={setSecureTextEntry}
                     secure={secureTextEntry}
                     onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
@@ -76,7 +76,7 @@ export default function CreateAccountPageView({
                 <TouchableWithoutFeedback onPress={handleSignUp}>
                     <S.ButtonBox>
                         <S.LoginButton>
-                            <S.LoginText>{t("common:signup")}</S.LoginText>
+                            <S.LoginText>{t("Common.signup")}</S.LoginText>
                             <MaterialIcons name="chevron-right" size={30} color="#fff" />
                         </S.LoginButton>
                     </S.ButtonBox>
@@ -84,9 +84,9 @@ export default function CreateAccountPageView({
             </S.Content>
 
             <S.PromptBox>
-                <S.PromptText>{t("auth:signup.prompt")}</S.PromptText>
+                <S.PromptText>{t("Auth.alreadyHaveAccount")}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToLoginPage}>
-                    <S.PromptLinkText>{t("common:login")}</S.PromptLinkText>
+                    <S.PromptLinkText>{t("Common.login")}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>
