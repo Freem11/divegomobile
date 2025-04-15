@@ -34,6 +34,9 @@ import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import abbreviateNumber from '../helpers/abbreviateNumber';
+import ButtonIcon from "../reusables/buttonIcon";
+import * as S from './styles';
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 const windowWidth = Dimensions.get("window").width;
@@ -83,7 +86,7 @@ export default function Picture(props) {
     setSelectedPicture(pic);
   };
 
-  const handleLike = async () => {
+  const handleLike = async (picId: number) => {
     if (picLiked) {
       deletePhotoLike(likeData);
       setPicLiked(false);
@@ -213,7 +216,6 @@ export default function Picture(props) {
     <View key={pic.id} style={styles.outterBox}>
       <View style={styles.container}>
         <View style={styles.micro}>
-          <Text style={styles.titleText}>{pic.label}</Text>
           <FontAwesome
             name="share"
             color="white"
@@ -249,72 +251,59 @@ export default function Picture(props) {
           }}
         />
         <View
-          style={{ width: "100%", position: "absolute", bottom: 10, left: 7 }}
+          style={{ width: "100%", position: "absolute", bottom: 15 }}
         >
-          {countOfLikes > 0 ? (
-            <View style={styles.countIndicator}>
-              <Text style={styles.countDisplay}>{countOfLikes}</Text>
-            </View>
-          ) : null}
-          <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
-            <Image
-              source={picLiked ? liked : notLiked}
-              style={[
-                styles.likeIcon,
-                {
-                  height: moderateScale(30),
-                  width: moderateScale(30),
-                },
-              ]}
-            />
-          </TouchableWithoutFeedback>
 
-          <View style={styles.microLow}>
-            {dataSetType === "ProfilePhotos" ? (
-              <Text
-                style={styles.microLow2}
-                onPress={() => handleDiveSiteMove(pic)}
-              >
-                {" "}
-                Go to this location!
-              </Text>
-            ) : (
-              <Text
-                style={styles.microLow2}
-                onPress={() => handleFollow(pic.UserName)}
-              >
-                {" "}
-                Added by: {pic.UserName}
-              </Text>
-            )}
-          </View>
+      
+<S.ContentWrapper>
+
+<S.LabelWrapper>
+<S.TitleText>{pic.label}</S.TitleText>
+
+{dataSetType === "ProfilePhotos" ? (
+    <S.NavigateText onPress={() => handleDiveSiteMove(pic)}>
+      View Site
+    </S.NavigateText>
+  ) : (
+    <S.NavigateText onPress={() => handleFollow(pic.UserName)}>
+      {pic.UserName}
+    </S.NavigateText>
+  )}
+
+</S.LabelWrapper>
+
+            <S.CounterWrapper>
+              <S.IconWrapper>
+                <ButtonIcon 
+                  icon="like-hand"
+                  onPress={() => handleLike(pic.id)}
+                  size='icon'
+                  fillColor={picLiked ? 'red' : null}
+                />
+              </S.IconWrapper>
+
+
+                <S.CounterText>{abbreviateNumber(countOfLikes)}</S.CounterText> 
+
+            </S.CounterWrapper>
+
+            <S.CounterWrapper>
+            <S.IconWrapper>
+              <ButtonIcon 
+                icon="comment"
+                onPress={() => handleCommentModal(pic)}
+                size='icon'
+              />
+            </S.IconWrapper>
+
+            <S.CounterText>{abbreviateNumber(pic.commentcount)}</S.CounterText>  
+              </S.CounterWrapper>
+</S.ContentWrapper>
+
+
         </View>
       </View>
-      <TouchableWithoutFeedback
-        onPress={() => handleCommentModal(pic)}
-        style={{ height: moderateScale(30), backgroundColor: "pink" }}
-      >
-        <View
-          // onPress={() => handleCommentModal(pic)}
-          style={{
-            flexDirection: "row",
-            marginLeft: moderateScale(20),
-            zIndex: 10,
-            height: moderateScale(25),
-            width: "80%",
-            borderRadius: moderateScale(10),
-            paddingBottom: moderateScale(5),
-            marginTop: moderateScale(5),
-            // backgroundColor: 'pink'
-          }}
-        >
-          <Text style={styles.commentPrompt}>
-            {pic.commentcount < 1
-              ? "Be first to Comment"
-              : `Comment / View all ${pic.commentcount} Comments`}{" "}
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
+  
     </View>
   );
 }
@@ -371,7 +360,6 @@ const styles = StyleSheet.create({
   countIndicator: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "left",
     position: "absolute",
     zIndex: 4,
     right: moderateScale(30),

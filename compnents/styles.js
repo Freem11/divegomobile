@@ -18,6 +18,10 @@ export const fontSizes = {
 }
 
 export const buttonSizes = {
+  icon: {
+    height: 28,
+    width: 28
+  },
   small: {
     height: 50,
     width: 50
