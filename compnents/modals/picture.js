@@ -34,6 +34,7 @@ import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { useTranslation } from "react-i18next";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 const windowWidth = Dimensions.get("window").width;
@@ -49,7 +50,7 @@ export default function Picture(props) {
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-
+  const { t } = useTranslation();
   const handleEmail = (pic) => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
@@ -196,7 +197,14 @@ export default function Picture(props) {
       url: "",
     };
     if (base64) {
-      shareOptions.message = `Checkout this cool pic of a ${creastureN} on Scuba SEAsons! It was taken by ${userN} at the dive site: ${selectedDiveSite.SiteName}, in${mapLocal} on ${photoDate}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
+      shareOptions.message = t('PictureModal.shareMessage', {
+        creature: creastureN,
+        user: userN,
+        diveSite: selectedDiveSite.SiteName,
+        location: mapLocal,
+        date: photoDate,
+        link: localUri
+      })
       shareOptions.url = `data:image/jpg;base64,${base64}`;
       doShare(shareOptions);
     }
@@ -276,7 +284,7 @@ export default function Picture(props) {
                 onPress={() => handleDiveSiteMove(pic)}
               >
                 {" "}
-                Go to this location!
+                {t('PictureModal.goToLocation')}
               </Text>
             ) : (
               <Text
@@ -284,7 +292,7 @@ export default function Picture(props) {
                 onPress={() => handleFollow(pic.UserName)}
               >
                 {" "}
-                Added by: {pic.UserName}
+                {t('PictureModal.addedBy', { user: pic.UserName })}
               </Text>
             )}
           </View>
@@ -310,8 +318,8 @@ export default function Picture(props) {
         >
           <Text style={styles.commentPrompt}>
             {pic.commentcount < 1
-              ? "Be first to Comment"
-              : `Comment / View all ${pic.commentcount} Comments`}{" "}
+              ? t('PictureModal.beFirstToComment')
+              : t('PictureModal.commentOrViewAll', { count: pic.commentcount })}{" "}
           </Text>
         </View>
       </TouchableWithoutFeedback>

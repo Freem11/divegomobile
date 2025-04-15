@@ -45,7 +45,7 @@ export default function CreateAccountPageView({
             />
             
             <S.Content>
-                <S.Header>{t("auth:signup.title")}</S.Header>
+                <S.Header>{t("Common.signup")}</S.Header>
 
                 <S.TopInputWrapper>
                     <MobileTextInput 
@@ -87,9 +87,9 @@ export default function CreateAccountPageView({
             </S.Content>
 
             <S.PromptBox>
-                <S.PromptText>{t("auth:signup.prompt")}</S.PromptText>
+                <S.PromptText>{t("Auth.alreadyHaveAccount")}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToLoginPage}>
-                    <S.PromptLinkText>{t("common:login")}</S.PromptLinkText>
+                    <S.PromptLinkText>{t("Common.login")}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>

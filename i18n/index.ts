@@ -2,16 +2,15 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getLocales } from "expo-localization";
 
+import en from "./locale/en.json";
+import es from "./locale/es.json";
+
 const resources = {
   en: {
-    auth: require("./locale/en/auth.json"),
-    common: require("./locale/en/common.json"),
-    validators: require("./locale/en/validators.json"),
+    translation: en,
   },
   es: {
-    auth: require("./locale/es/auth.json"),
-    common: require("./locale/es/common.json"),
-    validators: require("./locale/es/validators.json"),
+    translation: es,
   },
 };
 
@@ -24,8 +23,6 @@ export const initI18n = async () => {
     resources,
     lng: selectedLanguage,
     fallbackLng: "en",
-    defaultNS: "common",
-    ns: ["auth", "common", "validators"],
     interpolation: { escapeValue: false },
   });
 };

@@ -26,6 +26,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -41,7 +42,7 @@ export default function CommentsModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (selectedPicture) {
       getAllPictureComments(selectedPicture.id);
@@ -188,7 +189,7 @@ export default function CommentsModal() {
               <View style={styles.replyBox}>
                 <TextInputField
                   inputValue={commentContent}
-                  placeHolderText={"Blow some bubbles"}
+                  placeHolderText={t('Comments.blowBubbles')}
                   onChangeText={(text) => handleChange(text)}
                   handleClear={() => handleCommentInsert()}
                 />

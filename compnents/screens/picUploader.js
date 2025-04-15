@@ -8,7 +8,6 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import screenData from "./screenData.json";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
@@ -32,6 +31,7 @@ import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
+import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -41,6 +41,7 @@ export default function PicUploader() {
   const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+  const { t } = useTranslation();
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -69,7 +70,7 @@ export default function PicUploader() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        
+
         let fileName = await imageUpload(image)
 
         if (pinValues.PicFile !== null || pinValues.PicFile === "") {
@@ -153,7 +154,7 @@ export default function PicUploader() {
         </View>
       ) : null}
       <View style={styles.contentContainer}>
-        <Text style={styles.header}>{screenData.PicUploader.header}</Text>
+        <Text style={styles.header}>{t('PicUploader.header')}</Text>
         <View
           style={{
             marginBottom: windowHeight / 70,
@@ -162,25 +163,25 @@ export default function PicUploader() {
           }}
         >
           <View style={styles.textBuffer}>
-            <Text style={styles.label}>{screenData.PicUploader.whatLabel}</Text>
+            <Text style={styles.label}>{t('PicUploader.whatLabel')}</Text>
             <AnimalAutoSuggest
               pinValues={pinValues}
               setPinValues={setPinValues}
               inputValue={pinValues.Animal}
               icon={"shark"}
-              placeHolderText={screenData.PicUploader.whatPlaceholder}
+              placeHolderText={t('PicUploader.whatPlaceholder')}
               secure={false}
               vectorIcon={"MaterialCommunityIcons"}
             />
           </View>
           <View style={styles.textBuffer}>
-            <Text style={styles.label}>{screenData.PicUploader.whenLabel}</Text>
+            <Text style={styles.label}>{t('PicUploader.whenLabel')}</Text>
             <Toucher onPress={() => showDatePicker()}>
               <View pointerEvents="none">
                 <TextInputField
                   icon={"calendar-month-outline"}
                   inputValue={pinValues.PicDate}
-                  placeHolderText={screenData.PicUploader.whenPlaceholder}
+                  placeHolderText={t('PicUploader.whenPlaceholder')}
                   secure={false}
                   vectorIcon={"MaterialCommunityIcons"}
                 />
@@ -188,11 +189,11 @@ export default function PicUploader() {
             </Toucher>
           </View>
           <View style={styles.textBuffer}>
-            <Text style={styles.label}>{screenData.PicUploader.whereLabel}</Text>
+            <Text style={styles.label}>{t('PicUploader.whereLabel')}</Text>
             <TextInputField
               icon={"anchor"}
               inputValue={pinValues.siteName}
-              placeHolderText={screenData.PicUploader.wherePlaceholder}
+              placeHolderText={t('PicUploader.wherePlaceholder')}
               secure={false}
             />
           </View>
@@ -201,7 +202,7 @@ export default function PicUploader() {
         <View style={styles.buttonBox}>
           <TouchableWithoutFeedback onPress={() => onSubmit()}>
             <View style={styles.submitButton}>
-              <Text style={styles.submitText}>{screenData.PicUploader.submitButton}</Text>
+              <Text style={styles.submitText}>{t('PicUploader.submitButton')}</Text>
               <MaterialIcons
                 name="chevron-right"
                 size={30}

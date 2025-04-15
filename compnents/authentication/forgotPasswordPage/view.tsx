@@ -25,7 +25,7 @@ export default function ForgotPageView({
   moveToLoginPage,
   passwordRecovery,
 }: IProps) {
-  const { t } = useTranslation('auth');
+  const { t } = useTranslation();
 
   return (
     <S.Container>
@@ -38,7 +38,7 @@ export default function ForgotPageView({
         />
             
       <S.Content>
-        <S.Header>{t("forgot.title")}</S.Header>
+        <S.Header>{t("Auth.resetPassword")}</S.Header>
 
         <S.TopInputWrapper>
               <MobileTextInput 
