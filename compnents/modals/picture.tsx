@@ -1,16 +1,5 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-  Image,
-  TouchableWithoutFeedback,
-  Platform,
-} from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { scale, moderateScale } from "react-native-size-matters";
-import { activeFonts, colors, fontSizes } from "../styles";
-import { FontAwesome } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
 import {
   insertPhotoLike,
   deletePhotoLike,
@@ -26,8 +15,6 @@ import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
-import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
-import liked from "../png/socialIcons/Hand-Filled-Blue.png";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
@@ -39,7 +26,6 @@ import ButtonIcon from "../reusables/buttonIcon";
 import * as S from './styles';
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
-const windowWidth = Dimensions.get("window").width;
 
 export default function Picture(props) {
   const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
@@ -206,11 +192,6 @@ export default function Picture(props) {
     setBase64(null);
   }, [base64]);
 
-  const togglePhotoBoxModal = (photo) => {
-    setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
-  };
 
   return (
       <S.Container key={pic.id}>
@@ -259,13 +240,17 @@ export default function Picture(props) {
 <S.TitleText>{pic.label}</S.TitleText>
 
 {dataSetType === "ProfilePhotos" ? (
+  <S.NavigateTextPressable>
     <S.NavigateText onPress={() => handleDiveSiteMove(pic)}>
       View Site
     </S.NavigateText>
+    </S.NavigateTextPressable>
   ) : (
+    <S.NavigateTextPressable>
     <S.NavigateText onPress={() => handleFollow(pic.UserName)}>
       {pic.UserName}
     </S.NavigateText>
+    </S.NavigateTextPressable>
   )}
 
 </S.LabelWrapper>
@@ -301,13 +286,3 @@ export default function Picture(props) {
       </S.Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    zIndex: 40,
-    borderTopRightRadius: scale(10),
-    width: windowWidth,
-    marginLeft: "0.25%",
-    padding: moderateScale(2)
-  },
-});
