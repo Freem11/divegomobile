@@ -195,94 +195,94 @@ export default function Picture(props) {
 
   return (
       <S.Container key={pic.id}>
-        <S.Overlay></S.Overlay>
-        <S.TopContentWrapper>
+        <S.Overlay>
+          <S.TopContentWrapper>
 
-        <S.IconWrapper>
-          <ButtonIcon 
-            icon="share"
-            onPress={() =>
-              onShare(
-                pic.photofile,
-                pic.newusername,
-                pic.label,
-                pic.dateTaken,
-                pic.latitude,
-                pic.longitude
-              )}
-            size='icon'
-          />
-        </S.IconWrapper>
+            <S.IconWrapper>
+              <ButtonIcon 
+                icon="share"
+                onPress={() =>
+                  onShare(
+                    pic.photofile,
+                    pic.newusername,
+                    pic.label,
+                    pic.dateTaken,
+                    pic.latitude,
+                    pic.longitude
+                  )}
+                size='icon'
+              />
+            </S.IconWrapper>
 
-        <S.IconWrapper>
-          <ButtonIcon 
-            icon="error-outline"
-            onPress={() => handleEmail(pic)}
-            size='micro'
-          />
-        </S.IconWrapper>
+            <S.IconWrapper>
+              <ButtonIcon 
+                icon="error-outline"
+                onPress={() => handleEmail(pic)}
+                size='micro'
+              />
+            </S.IconWrapper>
 
-        </S.TopContentWrapper>
+          </S.TopContentWrapper>
 
+        <S.ContentWrapper>
+
+        <S.LabelWrapper>
+
+          <S.TitleText>{pic.label}</S.TitleText>
+
+          {dataSetType === "ProfilePhotos" ? (
+              <S.NavigateTextPressable>
+                <S.NavigateText onPress={() => handleDiveSiteMove(pic)}>
+                  View Site
+                </S.NavigateText>
+              </S.NavigateTextPressable>
+            ) : (
+              <S.NavigateTextPressable>
+                <S.NavigateText onPress={() => handleFollow(pic.UserName)}>
+                  {pic.UserName}
+                </S.NavigateText>
+              </S.NavigateTextPressable>
+            )}
+
+        </S.LabelWrapper>
+
+          <S.CounterWrapper>
+            <S.IconWrapper>
+              <ButtonIcon 
+                icon="like-hand"
+                onPress={() => handleLike(pic.id)}
+                size='icon'
+                fillColor={picLiked ? 'red' : null}
+              />
+            </S.IconWrapper>
+
+            <S.CounterText>{abbreviateNumber(countOfLikes)}</S.CounterText> 
+
+          </S.CounterWrapper>
+            <S.CounterWrapper>
+              <S.IconWrapper>
+                <ButtonIcon 
+                  icon="comment"
+                  onPress={() => handleCommentModal(pic)}
+                  size='icon'
+                />
+              </S.IconWrapper>
+
+              <S.CounterText>{abbreviateNumber(pic.commentcount)}</S.CounterText>  
+            </S.CounterWrapper>
+
+        </S.ContentWrapper>
+
+        </S.Overlay>
 
         <ImageCasherDynamic
           photoFile={pic.photoFile}
           id={pic.id}
           style={{
             borderRadius: moderateScale(15),
-            resizeMode: "cover",
-            marginTop: moderateScale(-22),
+            resizeMode: "cover"
           }}
         />
-
-<S.ContentWrapper>
-
-<S.LabelWrapper>
-<S.TitleText>{pic.label}</S.TitleText>
-
-{dataSetType === "ProfilePhotos" ? (
-  <S.NavigateTextPressable>
-    <S.NavigateText onPress={() => handleDiveSiteMove(pic)}>
-      View Site
-    </S.NavigateText>
-    </S.NavigateTextPressable>
-  ) : (
-    <S.NavigateTextPressable>
-    <S.NavigateText onPress={() => handleFollow(pic.UserName)}>
-      {pic.UserName}
-    </S.NavigateText>
-    </S.NavigateTextPressable>
-  )}
-
-</S.LabelWrapper>
-
-            <S.CounterWrapper>
-              <S.IconWrapper>
-                <ButtonIcon 
-                  icon="like-hand"
-                  onPress={() => handleLike(pic.id)}
-                  size='icon'
-                  fillColor={picLiked ? 'red' : null}
-                />
-              </S.IconWrapper>
-
-
-                <S.CounterText>{abbreviateNumber(countOfLikes)}</S.CounterText> 
-
-            </S.CounterWrapper>
-
-            <S.CounterWrapper>
-            <S.IconWrapper>
-              <ButtonIcon 
-                icon="comment"
-                onPress={() => handleCommentModal(pic)}
-                size='icon'
-              />
-            </S.IconWrapper>
-
-            <S.CounterText>{abbreviateNumber(pic.commentcount)}</S.CounterText>  
-              </S.CounterWrapper>
-</S.ContentWrapper>
 
       </S.Container>
   );

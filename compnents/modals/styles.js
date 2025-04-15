@@ -12,11 +12,9 @@ const windowWidth = Dimensions.get("window").width;
 
 export const Container = styled.View`
   width: ${windowWidth};
-  padding: ${moderateScale(2)}px;
-  margin-left: 0.25%;
-  margin-bottom: 15%;
+  margin-left: 0.75%;
+  margin-vertical: 2%;
 `;
-
 
 export const Overlay = styled(LinearGradient).attrs({
   colors: ['rgba(0,0,0,0)', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.75)'],
@@ -26,11 +24,9 @@ export const Overlay = styled(LinearGradient).attrs({
 })`
   position: absolute;
   z-index: 1;
-  inset: 0;
-  width: 100%;
-  height: 105%;
-  margin-top: 2.5%;
-  margin-left: 0.25%;
+  width: 98.5%;
+  height: 100%;
+  align-items: center;
   border-radius: ${moderateScale(10)}px;
   pointer-events: box-none;
 `;
@@ -40,20 +36,21 @@ export const ContentWrapper = styled.View`
   margin-left: 3%;
   width: 93%;
   pointer-events: box-none;
-  margin-top: -15%;
   z-index: 2;
+  position: absolute;
+  bottom: ${moderateScale(18)}px;
 `;
 
 export const TopContentWrapper = styled.View`
-  flex: 1;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  padding-top: 5%;
   width: 98%;
-  height: ${moderateScale(30)}px;
+  height: ${moderateScale(20)}px;
   z-index: 2;
   pointer-events: box-none;
+  position: absolute;
+  top: ${moderateScale(10)}px;
 `;
 
 export const LabelWrapper = styled.View`
