@@ -1,6 +1,7 @@
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { Alert, Linking } from "react-native";
+import { i18n } from "../../i18n";
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME";
 let foregroundSubscription = null;
@@ -47,14 +48,11 @@ export const getCurrentCoordinates = async () => {
     return location;
   } catch (e) {
     Alert.alert(
-      "Foreground Location Tracking Permission",
-      "You previously declined to grant access to your location for this feature" +
-        "\n" +
-        "\n" +
-        "To grant access, please visit Scuba SEAsons under your device's settings menu",
+      i18n.t("OnBoarding.locationAlertTitle"),
+      i18n.t("OnBoarding.locationAlertMessage"),
       [
-        { text: "Go to Settings", onPress: () => Linking.openSettings() },
-        { text: "Close", onPress: () => console.log("no tapped") },
+        { text: i18n.t("OnBoarding.goToSettings"), onPress: () => Linking.openSettings() },
+        { text: i18n.t("Common.close"), onPress: () => console.log("no tapped") },
       ]
     );
   }

@@ -16,7 +16,6 @@ import {
   colors,
   fontSizes,
 } from "../styles";
-import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
@@ -29,6 +28,7 @@ import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { updateDiveShop } from "../../supabaseCalls/shopsSupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -44,14 +44,14 @@ export default function DiveShop() {
   const [diveShopVals, setDiveShopVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [isMyShop, setIsMyShop] = useState(false);
-
+  const { t } = useTranslation()
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
   const getItineraries = async (IdNum) => {
     try {
       const itins = await itineraries(IdNum);
-        setItineraryList(itins);
+      setItineraryList(itins);
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
@@ -206,8 +206,8 @@ export default function DiveShop() {
         dataSetType={"DiveShopTrips"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
-        drawerHeader={screenData.DiveShop.drawerHeader}
-        emptyDrawer={selectedShop[0].orgName + screenData.DiveShop.emptyDrawer}
+        drawerHeader={t('DiveShop.drawerHeader')}
+        emptyDrawer={selectedShop[0].orgName + t('DiveShop.emptyDrawer')}
       />
     </View>
   );

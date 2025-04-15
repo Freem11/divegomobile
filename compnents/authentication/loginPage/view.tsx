@@ -49,7 +49,7 @@ export default function LoginPageView({
             />
 
             <S.Content>
-                <S.Header>{t('auth:login.title')}</S.Header>
+                <S.Header>{t('Auth.diveIn')}</S.Header>
 
                 <S.TextInputWrapper>
                     <MobileTextInput 
@@ -81,14 +81,14 @@ export default function LoginPageView({
 
             <S.ForgotBox>
                 <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
-                    <S.PromptLinkText>{t('auth:login.forgot')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('Auth.forgotPassword')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.ForgotBox>
 
             <S.PromptBox>
-                <S.PromptText>{t('auth:login.noAccount')}</S.PromptText>
+                <S.PromptText>{t('Auth.noAccount')}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToSignUpPage}>
-                    <S.PromptLinkText>{t('common:signup')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('Common.signup')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>
