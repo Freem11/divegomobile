@@ -50,7 +50,7 @@ export default function CreateAccountPageView({
                 <S.TopInputWrapper>
                     <MobileTextInput 
                     iconLeft="person"
-                    placeholder={t('common:fullName')}
+                    placeholder={t('Common.fullName')}
                     value={formVals.name}
                     onChangeText={(text: string) => setFormVals({ ...formVals, name: text })}
                     />
@@ -59,7 +59,7 @@ export default function CreateAccountPageView({
                 <S.TextInputWrapper>
                     <MobileTextInput 
                     iconLeft="at"
-                    placeholder={t('common:email')}
+                    placeholder={t('Common.email')}
                     value={formVals.email}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     />
@@ -68,7 +68,7 @@ export default function CreateAccountPageView({
                 <S.TextInputWrapper>
                     <SecureTextInput 
                         onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
-                        placeholder={t('common:password')}
+                        placeholder={t('Common.password')}
                     />
                 </S.TextInputWrapper>
 
@@ -79,7 +79,7 @@ export default function CreateAccountPageView({
                         onPress={handleSignUp} 
                         alt={false} 
                         size='medium'
-                        title={t('common:signup')} 
+                        title={t('Common.signup')} 
                         iconRight="chevron-right"
                         />
                     </S.ButtonBox>

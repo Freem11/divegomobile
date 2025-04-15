@@ -41,7 +41,7 @@ export default function LandingPageView({
                 onPress={onLogin} 
                 alt={false} 
                 size='large'
-                title={tCommon("login")} 
+                title={t('Common.login')} 
                 />
           </S.ButtonSpacer>
           <S.ButtonSpacer>
@@ -49,7 +49,7 @@ export default function LandingPageView({
                 onPress={onSignUp} 
                 alt={true} 
                 size='large'
-                title={tCommon("registerAccount")} 
+                title={t("Common.registerAccount")} 
                 />
           </S.ButtonSpacer>
         </S.ButtonBox>

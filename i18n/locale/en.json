@@ -135,7 +135,7 @@
         "alreadyHaveAccount": "Already have an account ?",
         "resetPassword": "Reset Password",
         "enterAccountEmail": "Enter Your Account Email",
-        "sendRecoverEmail": "Send Recovery Email"
+        "sendRecoverEmail": "Send Email"
     },
     "Photo": {
         "diveDeeper": "Dive Deeper!"
