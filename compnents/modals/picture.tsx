@@ -195,6 +195,7 @@ export default function Picture(props) {
 
   return (
       <S.Container key={pic.id}>
+        <S.Overlay></S.Overlay>
         <S.TopContentWrapper>
 
         <S.IconWrapper>
