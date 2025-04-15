@@ -213,13 +213,12 @@ export default function Picture(props) {
   };
 
   return (
-    <View key={pic.id} style={styles.outterBox}>
-      <View style={styles.container}>
-        <View style={styles.micro}>
-          <FontAwesome
-            name="share"
-            color="white"
-            size={scale(19)}
+      <S.Container key={pic.id}>
+        <S.TopContentWrapper>
+
+        <S.IconWrapper>
+          <ButtonIcon 
+            icon="share"
             onPress={() =>
               onShare(
                 pic.photofile,
@@ -228,18 +227,22 @@ export default function Picture(props) {
                 pic.dateTaken,
                 pic.latitude,
                 pic.longitude
-              )
-            }
-            style={styles.share}
+              )}
+            size='icon'
           />
-          <FontAwesome
-            name="flag"
-            color="maroon"
-            size={scale(19)}
+        </S.IconWrapper>
+
+        <S.IconWrapper>
+          <ButtonIcon 
+            icon="error-outline"
             onPress={() => handleEmail(pic)}
-            style={styles.flag}
+            size='micro'
           />
-        </View>
+        </S.IconWrapper>
+
+        </S.TopContentWrapper>
+
+
         <ImageCasherDynamic
           photoFile={pic.photoFile}
           id={pic.id}
@@ -247,14 +250,9 @@ export default function Picture(props) {
             borderRadius: moderateScale(15),
             resizeMode: "cover",
             marginTop: moderateScale(-22),
-            // backgroundColor: "pink",
           }}
         />
-        <View
-          style={{ width: "100%", position: "absolute", bottom: 15 }}
-        >
 
-      
 <S.ContentWrapper>
 
 <S.LabelWrapper>
@@ -300,120 +298,16 @@ export default function Picture(props) {
               </S.CounterWrapper>
 </S.ContentWrapper>
 
-
-        </View>
-      </View>
-  
-    </View>
+      </S.Container>
   );
 }
 
 const styles = StyleSheet.create({
-  outterBox: {
-    zIndex: 70,
-    width: windowWidth,
-    marginBottom: moderateScale(5),
-  },
   container: {
     zIndex: 40,
     borderTopRightRadius: scale(10),
     width: windowWidth,
     marginLeft: "0.25%",
-    padding: moderateScale(2),
-  },
-  titleText: {
-    fontFamily: activeFonts.Light,
-    color: colors.themeWhite,
-    width: "77%",
-    fontSize: moderateScale(fontSizes.StandardText),
-  },
-  share: {
-    opacity: 0.8,
-    zIndex: 2,
-  },
-  micro: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    backgroundColor: colors.themeBlack,
-    opacity: 0.7,
-    width: "96%",
-    top: windowWidth > 600 ? "3%" : "2%",
-    marginLeft: "2%",
-    borderRadius: 5,
-    zIndex: 2,
-  },
-  flag: {
-    zIndex: 2,
-  },
-  likeIcon: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    zIndex: 4,
-    right: "2%",
-    bottom: Platform.OS === "ios" ? "10%" : "10%",
-    borderRadius: scale(5),
-  },
-  countIndicator: {
-    display: "flex",
-    justifyContent: "center",
-    position: "absolute",
-    zIndex: 4,
-    right: moderateScale(30),
-    backgroundColor: colors.themeBlack,
-    width: "10%",
-    height: moderateScale(18),
-    paddingLeft: scale(5),
-    opacity: 0.7,
-    bottom: Platform.OS === "ios" ? "3%" : "3%",
-    borderTopLeftRadius: scale(5),
-    borderBottomLeftRadius: scale(5),
-  },
-  countDisplay: {
-    color: colors.themeWhite,
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Bold,
-  },
-  microLow: {
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    backgroundColor: colors.primaryBlue,
-    color: colors.themeWhite,
-    fontFamily: activeFonts.Light,
-    paddingHorizontal: moderateScale(10),
-    paddingVertical: moderateScale(3),
-    zIndex: 2,
-    left: "1%",
-    bottom: Platform.OS === "ios" ? "3%" : "3%",
-    borderRadius: scale(8),
-  },
-  microLow2: {
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    opacity: 1,
-    color: colors.themeWhite,
-    fontFamily: activeFonts.Light,
-    fontSize: moderateScale(fontSizes.SmallText),
-    zIndex: 2,
-  },
-  commentPrompt: {
-    display: "flex",
-    width: scale(200),
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    opacity: 1,
-    color: colors.themeBlack,
-    fontFamily: activeFonts.Thin,
-    fontSize: moderateScale(fontSizes.SmallText),
-    zIndex: 10,
-    paddingTop: moderateScale(5),
-    paddingLeft: moderateScale(10),
-    paddingRight: moderateScale(2),
+    padding: moderateScale(2)
   },
 });

@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { Dimensions } from "react-native";
 import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
@@ -7,11 +8,35 @@ import {
   buttonSizes
 } from '../styles';
 
+const windowWidth = Dimensions.get("window").width;
+
+export const Container = styled.View`
+  width: ${windowWidth};
+  padding: ${moderateScale(2)}px;
+  marginLeft: 0.25%;
+  margin-bottom: 5%;
+`;
+
 export const ContentWrapper = styled.View`
     flex: 1;
     flex-direction: row;
     margin-left: 5%;
     width: 90%;
+    pointer-events: box-none;
+    margin-top: -15%;
+    z-index: 2;
+`;
+
+export const TopContentWrapper = styled.View`
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 5%;
+    width: 98%;
+    height: ${moderateScale(30)}px;
+    z-index: 2;
+    pointer-events: box-none;
 `;
 
 export const LabelWrapper = styled.View`

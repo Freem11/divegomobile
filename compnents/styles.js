@@ -18,6 +18,10 @@ export const fontSizes = {
 }
 
 export const buttonSizes = {
+  micro: {
+    height: 20,
+    width: 20
+  },
   icon: {
     height: 28,
     width: 28
