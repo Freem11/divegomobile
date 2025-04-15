@@ -56,7 +56,7 @@ export const TopContentWrapper = styled.View`
 export const LabelWrapper = styled.View`
   flex-direction: column;
   pointer-events: box-none;
-  width: 75%;
+  width: ${() => (windowWidth > 600 ? '80%' : '75%')};
 `;
 
 export const CounterWrapper = styled.View`
