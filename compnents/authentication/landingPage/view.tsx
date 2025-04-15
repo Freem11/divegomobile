@@ -28,13 +28,12 @@ export default function LandingPageView({
   onApple,
 }: IProps) {
 
-  const { t: tAuth } = useTranslation("auth");
-  const { t: tCommon } = useTranslation("common");
+  const { t } = useTranslation();
 
   return (
     <S.Container>
       <S.StyledScrollView>
-        <S.Header>{tAuth("landing.title")}</S.Header>
+        <S.Header>{t("Auth.diveIn")}</S.Header>
 
         <S.ButtonBox>
           <S.ButtonSpacer>
@@ -55,7 +54,7 @@ export default function LandingPageView({
           </S.ButtonSpacer>
         </S.ButtonBox>
 
-        <S.SocialText>{tAuth("landing.socialText")}</S.SocialText>
+        <S.SocialText>{t("Auth.socialText")}</S.SocialText>
 
         <S.IconRow>
 

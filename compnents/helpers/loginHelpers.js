@@ -171,7 +171,7 @@ export const handleLogInSubmit = async (
   setLoginFail
 ) => {
   if (formVals.email === "" || formVals.password == "") {
-    setLoginFail(i18n.t("validators:fillEmailAndPassword"));
+    setLoginFail(i18n.t("Validators.fillEmailAndPassword"));
     return;
   } else {
     let accessToken = await signInStandard(formVals);
@@ -182,7 +182,7 @@ export const handleLogInSubmit = async (
       );
       setActiveSession(accessToken.data.session);
     } else {
-      setLoginFail(i18n.t("validators.invalidCredentials"));
+      setLoginFail(i18n.t("Validators.invalidCredentials"));
       return;
     }
     await sessionCheck();
@@ -195,10 +195,10 @@ export const handleSignUpSubmit = async (
   setRegFail
 ) => {
   if (formVals.email === "" || formVals.password == "" || formVals.name == "") {
-    setRegFail(i18n.t("validators:fillAllFields"));
+    setRegFail(i18n.t("Validators.fillAllFields"));
     return;
   } else if (formVals.password.length < 6) {
-    setRegFail(i18n.t("validators:passwordFormat"));
+    setRegFail(i18n.t("Validators.passwordFormat"));
     return;
   } else {
     let dataPack = {
@@ -219,7 +219,7 @@ export const handleSignUpSubmit = async (
       );
       setActiveSession(registrationToken.data.session);
     } else {
-      setRegFail(i18n.t("validators:accountExistMsg"));
+      setRegFail(i18n.t("Validators.accountExistMsg"));
     }
     await sessionCheck();
   }
