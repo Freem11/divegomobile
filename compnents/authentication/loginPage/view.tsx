@@ -1,9 +1,12 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import * as S from './styles';
-import TextInputField from '../utils/textInput';
 import { useTranslation } from "react-i18next";
+import SecureTextInput from "../../reusables/secureTextInput";
+import MobileTextInput from "../../reusables/textInput";
+import ButtonIcon from "../../reusables/buttonIcon";
+import Button from "../../reusables/button";
+import { colors } from "../../styles";
 
 interface FormVals {
     email: string;
@@ -38,42 +41,41 @@ export default function LoginPageView({
 
     return (
         <S.Container>
-            <MaterialIcons
-                name="chevron-left"
-                size={48}
-                color="darkgrey"
-                onPress={moveToLandingPage}
+            <ButtonIcon 
+            icon="chevron-left"
+            onPress={moveToLandingPage}
+            size='small'
+            fillColor={colors.neutralGrey}
             />
 
             <S.Content>
                 <S.Header>{t('Auth.diveIn')}</S.Header>
 
-                <TextInputField
-                    icon="alternate-email"
-                    placeHolderText={t('Common.email')}
-                    secure={false}
+                <S.TextInputWrapper>
+                    <MobileTextInput 
+                    iconLeft="at"
+                    placeholder={t('common:email')}
+                    value={formVals.email}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
-                    style={{ marginTop: 60 }}
-                />
-
-                <TextInputField
-                    icon="lock-outline"
-                    placeHolderText={t('Common.password')}
-                    setSecureTextEntry={setSecureTextEntry}
-                    secure={secureTextEntry}
-                    onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
-                    style={{ marginTop: 40 }}
-                />
+                    />
+                </S.TextInputWrapper>
+                <S.SecureTextInputWrapper>
+                    <SecureTextInput 
+                        onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
+                        placeholder={t('common:password')}
+                    />
+                </S.SecureTextInputWrapper>
 
                 {loginFail ? <S.ErrorText>{loginFail}</S.ErrorText> : <S.ErrorText />}
 
                 <S.ButtonBox>
-                    <TouchableWithoutFeedback onPress={handleLogin}>
-                        <S.LoginButton>
-                            <S.LoginText>{t('Common.login')}</S.LoginText>
-                            <MaterialIcons name="chevron-right" size={30} color="#fff" />
-                        </S.LoginButton>
-                    </TouchableWithoutFeedback>
+                    <Button 
+                        onPress={handleLogin} 
+                        alt={false} 
+                        size='medium'
+                        title={t('common:login')} 
+                        iconRight="chevron-right"
+                        />
                 </S.ButtonBox>
             </S.Content>
 
