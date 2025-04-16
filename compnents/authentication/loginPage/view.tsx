@@ -54,15 +54,16 @@ export default function LoginPageView({
                 <S.TextInputWrapper>
                     <MobileTextInput 
                     iconLeft="at"
-                    placeholder={t('common:email')}
+                    placeholder={t('Common.email')}
                     value={formVals.email}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     />
                 </S.TextInputWrapper>
+                
                 <S.SecureTextInputWrapper>
                     <SecureTextInput 
                         onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
-                        placeholder={t('common:password')}
+                        placeholder={t('Common.password')}
                     />
                 </S.SecureTextInputWrapper>
 
@@ -73,7 +74,7 @@ export default function LoginPageView({
                         onPress={handleLogin} 
                         alt={false} 
                         size='medium'
-                        title={t('common:login')} 
+                        title={t('Common.login')} 
                         iconRight="chevron-right"
                         />
                 </S.ButtonBox>
