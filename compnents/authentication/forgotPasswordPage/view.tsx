@@ -43,7 +43,7 @@ export default function ForgotPageView({
         <S.TopInputWrapper>
               <MobileTextInput 
               iconLeft="at"
-              placeholder={t('forgot.email')}
+              placeholder={t('Auth.enterAccountEmail')}
               value={formVals.email}
               onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
               />
@@ -56,7 +56,7 @@ export default function ForgotPageView({
             onPress={isEnabled ? () => passwordRecovery(formVals.email) : () => { }} 
             alt={false} 
             size='medium'
-            title={t('forgot.button')} 
+            title={t('Auth.sendRecoverEmail')} 
             iconRight="chevron-right"
             />
         </S.ButtonBox>
