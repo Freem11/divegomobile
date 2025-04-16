@@ -31,6 +31,6 @@
     "forgot": {
         "title": "Reset Password",
         "email": "Enter Your Account Email",
-        "button": "Send Recovery Email"
+        "button": "Send Email"
     }
 }

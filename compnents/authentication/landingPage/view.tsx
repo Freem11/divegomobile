@@ -6,6 +6,7 @@ import googleLogo from "../../png/loginIcons/google.png";
 import facebookLogo from "../../png/loginIcons/facebook.png";
 import appleLogo from "../../png/loginIcons/apple.png";
 import { useTranslation } from "react-i18next";
+import Button from "../../reusables/button";
 
 interface IProps {
   isSignedIn: boolean;
@@ -34,32 +35,40 @@ export default function LandingPageView({
       <S.StyledScrollView>
         <S.Header>{t("Auth.diveIn")}</S.Header>
 
-        <TouchableWithoutFeedback onPress={onLogin}>
-          <S.LoginButton>
-            <S.LoginText>{t("Common.login")}</S.LoginText>
-          </S.LoginButton>
-        </TouchableWithoutFeedback>
-
-        <TouchableWithoutFeedback onPress={onSignUp}>
-          <S.RegisterButton>
-            <S.RegisterText>{t("Common.registerAccount")}</S.RegisterText>
-          </S.RegisterButton>
-        </TouchableWithoutFeedback>
+        <S.ButtonBox>
+          <S.ButtonSpacer>
+            <Button 
+                onPress={onLogin} 
+                alt={false} 
+                size='large'
+                title={tCommon("login")} 
+                />
+          </S.ButtonSpacer>
+          <S.ButtonSpacer>
+            <Button 
+                onPress={onSignUp} 
+                alt={true} 
+                size='large'
+                title={tCommon("registerAccount")} 
+                />
+          </S.ButtonSpacer>
+        </S.ButtonBox>
 
         <S.SocialText>{t("Auth.socialText")}</S.SocialText>
 
         <S.IconRow>
+
           <TouchableWithoutFeedback onPress={onGoogle} disabled={isSignedIn}>
             <S.GoogleButton>
               <Image source={googleLogo} style={S.GLogo} />
             </S.GoogleButton>
           </TouchableWithoutFeedback>
 
-          <TouchableWithoutFeedback onPress={onFacebook} disabled={isSignedIn}>
+          {/* <TouchableWithoutFeedback onPress={onFacebook} disabled={isSignedIn}>
             <S.FacebookButton>
               <Image source={facebookLogo} style={S.FLogo} />
             </S.FacebookButton>
-          </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback> */}
 
           {appleAuthAvailable && (
             <TouchableWithoutFeedback onPress={onApple} disabled={isSignedIn}>

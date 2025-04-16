@@ -59,6 +59,7 @@ export default function LoginPageView({
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
                     />
                 </S.TextInputWrapper>
+                
                 <S.SecureTextInputWrapper>
                     <SecureTextInput 
                         onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
