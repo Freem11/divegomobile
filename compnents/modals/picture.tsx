@@ -1,16 +1,6 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-  Image,
-  TouchableWithoutFeedback,
-  Platform
-} from "react-native";
+import { Platform } from "react-native";
 import React, { useState, useContext } from "react";
-import { scale, moderateScale } from "react-native-size-matters";
-import { activeFonts, colors, fontSizes } from "../styles";
-import { FontAwesome } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
 import {
   insertPhotoLike,
   deletePhotoLike
@@ -26,17 +16,35 @@ import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
-import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
-import liked from "../png/socialIcons/Hand-Filled-Blue.png";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { useTranslation } from "react-i18next";
+import abbreviateNumber from "../helpers/abbreviateNumber";
+import ButtonIcon from "../reusables/buttonIcon";
+import * as S from "./styles";
 
 const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
-const windowWidth = Dimensions.get("window").width;
+
+interface Photo {
+  UserID: string;
+  UserName: string;
+  commentcount: number;
+  created_at: string;
+  dateTaken: string;
+  id: number;
+  label: string;
+  latitude: number;
+  longitude: number;
+  likecount: number;
+  likedbyuser: boolean;
+  likeid: number | null;
+  month: number;
+  photoFile: string;
+}
 
 const Picture = (props) => {
   const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
@@ -56,25 +64,26 @@ const Picture = (props) => {
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
+  const { t } = useTranslation();
 
-  const handleCommentModal = (pic) => {
+  const handleCommentModal = (pic: Photo) => {
     // setCommentsModal(true);
     setFullScreenModal(true);
     setActiveTutorialID("CommentsModal");
     setSelectedPicture(pic);
   };
 
-  const handleEmail = (pic) => {
+  const handleEmail = (pic: Photo) => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
-      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photofile} `,
+      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
       body: "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
       checkCanOpen: false // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
 
-  const handleLike = async () => {
+  const handleLike = async (picId: number) => {
     if (picLiked) {
       deletePhotoLike(likeData);
       setPicLiked(false);
@@ -87,7 +96,7 @@ const Picture = (props) => {
     }
   };
 
-  const handleFollow = async (userName) => {
+  const handleFollow = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (profile[0].UserID === picOwnerAccount[0].UserID) {
@@ -106,7 +115,7 @@ const Picture = (props) => {
     );
   };
 
-  const handleDiveSiteMove = async (pic) => {
+  const handleDiveSiteMove = async (pic: Photo) => {
     setSelectedDiveSite({
       SiteName: diveSiteName,
       Latitude: pic.latitude,
@@ -117,7 +126,7 @@ const Picture = (props) => {
     setLevelTwoScreen(false);
   };
 
-  const convertBase64 = async (cacheDir) => {
+  const convertBase64 = async (cacheDir: string) => {
     try {
       const base64String = await ImgToBase64.getBase64String(cacheDir);
       const result = `data:image/jpg;base64,${base64String}`;
@@ -129,7 +138,8 @@ const Picture = (props) => {
     }
   };
 
-  const onShare = async (picData) => {
+  const onShare = async (picData: Photo) => {
+    // console.log("Sharing picData:", picData);
     const { photoFile, UserName, label, dateTaken, latitude, longitude } =
       picData;
     const localUri = "https://divegolanding.web.app";
@@ -154,12 +164,12 @@ const Picture = (props) => {
 
         // Verify file exists
         const fileInfo = await FileSystem.getInfoAsync(fileUri);
-        console.log(
-          "File exists:",
-          fileInfo.exists,
-          "File size:",
-          fileInfo.size
-        );
+        // console.log(
+        //   "File exists:",
+        //   fileInfo.exists,
+        //   "File size:",
+        //   fileInfo.size
+        // );
 
         if (fileInfo.exists) {
           // Use react-native-share which works well on both platforms
@@ -179,9 +189,9 @@ const Picture = (props) => {
     }
   };
 
-  const getPhotoLocation = async (photoLat, photoLng) => {
-    const Lat = Number(photoLat);
-    const Lng = Number(photoLng);
+  const getPhotoLocation = async (Lat: number, Lng: number) => {
+    // const Lat = Number(photoLat);
+    // const Lng = Number(photoLng);
 
     try {
       const res = await fetch(
@@ -207,217 +217,77 @@ const Picture = (props) => {
   // };
 
   return (
-    <View key={pic.id} style={styles.outterBox}>
-      <View style={styles.container}>
-        <View style={styles.micro}>
-          <Text style={styles.titleText}>{pic.label}</Text>
-          <FontAwesome
-            name="share"
-            color="white"
-            size={scale(19)}
-            onPress={() => {
-              onShare(pic);
-            }}
-            style={styles.share}
-          />
-          <FontAwesome
-            name="flag"
-            color="maroon"
-            size={scale(19)}
-            onPress={() => handleEmail(pic)}
-            style={styles.flag}
-          />
-        </View>
-        <ImageCasherDynamic
-          photoFile={pic.photoFile}
-          id={pic.id}
-          style={{
-            borderRadius: moderateScale(15),
-            resizeMode: "cover",
-            marginTop: moderateScale(-22)
-            // backgroundColor: "pink",
-          }}
-        />
-        <View
-          style={{ width: "100%", position: "absolute", bottom: 10, left: 7 }}
-        >
-          {countOfLikes > 0 ? (
-            <View style={styles.countIndicator}>
-              <Text style={styles.countDisplay}>{countOfLikes}</Text>
-            </View>
-          ) : null}
-          <TouchableWithoutFeedback onPress={() => handleLike(pic.id)}>
-            <Image
-              source={picLiked ? liked : notLiked}
-              style={[
-                styles.likeIcon,
-                {
-                  height: moderateScale(30),
-                  width: moderateScale(30)
-                }
-              ]}
-            />
-          </TouchableWithoutFeedback>
+    <S.Container key={pic.id}>
+      <S.Overlay>
+        <S.TopContentWrapper>
+          <S.IconWrapper>
+            <ButtonIcon icon="share" onPress={() => onShare(pic)} size="icon" />
+          </S.IconWrapper>
 
-          <View style={styles.microLow}>
+          <S.IconWrapper>
+            <ButtonIcon
+              icon="error-outline"
+              onPress={() => handleEmail(pic)}
+              size="micro"
+            />
+          </S.IconWrapper>
+        </S.TopContentWrapper>
+
+        <S.ContentWrapper>
+          <S.LabelWrapper>
+            <S.TitleText>{pic.label}</S.TitleText>
+
             {dataSetType === "ProfilePhotos" ? (
-              <Text
-                style={styles.microLow2}
-                onPress={() => handleDiveSiteMove(pic)}
-              >
-                {" "}
-                Go to this location!
-              </Text>
+              <S.NavigateTextPressable>
+                <S.NavigateText onPress={() => handleDiveSiteMove(pic)}>
+                  View Site
+                </S.NavigateText>
+              </S.NavigateTextPressable>
             ) : (
-              <Text
-                style={styles.microLow2}
-                onPress={() => handleFollow(pic.UserName)}
-              >
-                {" "}
-                Added by: {pic.UserName}
-              </Text>
+              <S.NavigateTextPressable>
+                <S.NavigateText onPress={() => handleFollow(pic.UserName)}>
+                  {pic.UserName}
+                </S.NavigateText>
+              </S.NavigateTextPressable>
             )}
-          </View>
-        </View>
-      </View>
-      <TouchableWithoutFeedback
-        onPress={() => handleCommentModal(pic)}
-        style={{ height: moderateScale(30), backgroundColor: "pink" }}
-      >
-        <View
-          // onPress={() => handleCommentModal(pic)}
-          style={{
-            flexDirection: "row",
-            marginLeft: moderateScale(20),
-            zIndex: 10,
-            height: moderateScale(25),
-            width: "80%",
-            borderRadius: moderateScale(10),
-            paddingBottom: moderateScale(5),
-            marginTop: moderateScale(5)
-            // backgroundColor: 'pink'
-          }}
-        >
-          <Text style={styles.commentPrompt}>
-            {pic.commentcount < 1
-              ? "Be first to Comment"
-              : `Comment / View all ${pic.commentcount} Comments`}{" "}
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
+          </S.LabelWrapper>
+
+          <S.CounterWrapper>
+            <S.IconWrapper>
+              <ButtonIcon
+                icon="like-hand"
+                onPress={() => handleLike(pic.id)}
+                size="icon"
+                fillColor={picLiked ? "red" : null}
+              />
+            </S.IconWrapper>
+
+            <S.CounterText>{abbreviateNumber(countOfLikes)}</S.CounterText>
+          </S.CounterWrapper>
+          <S.CounterWrapper>
+            <S.IconWrapper>
+              <ButtonIcon
+                icon="comment"
+                onPress={() => handleCommentModal(pic)}
+                size="icon"
+              />
+            </S.IconWrapper>
+
+            <S.CounterText>{abbreviateNumber(pic.commentcount)}</S.CounterText>
+          </S.CounterWrapper>
+        </S.ContentWrapper>
+      </S.Overlay>
+
+      <ImageCasherDynamic
+        photoFile={pic.photoFile}
+        id={pic.id}
+        style={{
+          borderRadius: moderateScale(15),
+          resizeMode: "cover"
+        }}
+      />
+    </S.Container>
   );
 };
 
 export default Picture;
-
-const styles = StyleSheet.create({
-  outterBox: {
-    zIndex: 70,
-    width: windowWidth,
-    marginBottom: moderateScale(5)
-  },
-  container: {
-    zIndex: 40,
-    borderTopRightRadius: scale(10),
-    width: windowWidth,
-    marginLeft: "0.25%",
-    padding: moderateScale(2)
-  },
-  titleText: {
-    fontFamily: activeFonts.Light,
-    color: colors.themeWhite,
-    width: "77%",
-    fontSize: moderateScale(fontSizes.StandardText)
-  },
-  share: {
-    opacity: 0.8,
-    zIndex: 2
-  },
-  micro: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    backgroundColor: colors.themeBlack,
-    opacity: 0.7,
-    width: "96%",
-    top: windowWidth > 600 ? "3%" : "2%",
-    marginLeft: "2%",
-    borderRadius: 5,
-    zIndex: 2
-  },
-  flag: {
-    zIndex: 2
-  },
-  likeIcon: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    zIndex: 4,
-    right: "2%",
-    bottom: Platform.OS === "ios" ? "10%" : "10%",
-    borderRadius: scale(5)
-  },
-  countIndicator: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "left",
-    position: "absolute",
-    zIndex: 4,
-    right: moderateScale(30),
-    backgroundColor: colors.themeBlack,
-    width: "10%",
-    height: moderateScale(18),
-    paddingLeft: scale(5),
-    opacity: 0.7,
-    bottom: Platform.OS === "ios" ? "3%" : "3%",
-    borderTopLeftRadius: scale(5),
-    borderBottomLeftRadius: scale(5)
-  },
-  countDisplay: {
-    color: colors.themeWhite,
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Bold
-  },
-  microLow: {
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    backgroundColor: colors.primaryBlue,
-    color: colors.themeWhite,
-    fontFamily: activeFonts.Light,
-    paddingHorizontal: moderateScale(10),
-    paddingVertical: moderateScale(3),
-    zIndex: 2,
-    left: "1%",
-    bottom: Platform.OS === "ios" ? "3%" : "3%",
-    borderRadius: scale(8)
-  },
-  microLow2: {
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    opacity: 1,
-    color: colors.themeWhite,
-    fontFamily: activeFonts.Light,
-    fontSize: moderateScale(fontSizes.SmallText),
-    zIndex: 2
-  },
-  commentPrompt: {
-    display: "flex",
-    width: scale(200),
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    opacity: 1,
-    color: colors.themeBlack,
-    fontFamily: activeFonts.Thin,
-    fontSize: moderateScale(fontSizes.SmallText),
-    zIndex: 10,
-    paddingTop: moderateScale(5),
-    paddingLeft: moderateScale(10),
-    paddingRight: moderateScale(2)
-  }
-});

@@ -1,14 +1,11 @@
 import React from 'react';
-import { moderateScale } from 'react-native-size-matters';
-import { MaterialIcons } from '@expo/vector-icons';
 import WavyHeaderDynamic from '../wavyHeaderDynamic';
-import screenData from '../screenData.json';
 import * as S from './styles';
 import { Flex } from '../../ui/containes';
-import { colors } from '../../styles';
 import MobileTextInput from "../../reusables/textInput";
 import Button from '../../reusables/button';
 import ButtonIcon from '../../reusables/buttonIcon';
+import { useTranslation } from "react-i18next";
 
 interface DiveSiteVals {
   Site: string;
@@ -33,6 +30,8 @@ export default function DiveSiteUploaderView({
   setAddSiteVals,
   getCurrentLocation,
 }: Props) {
+
+  const { t } = useTranslation();
   return (
     <Flex>
       <S.BackButtonWrapper>
@@ -41,23 +40,17 @@ export default function DiveSiteUploaderView({
         onPress={onClose}
         size='small'
         />
-        {/* <MaterialIcons
-          name="chevron-left"
-          size={moderateScale(48)}
-          color={colors.themeWhite}
-          onPress={onClose}
-        /> */}
       </S.BackButtonWrapper>
 
       <S.ContentContainer>
-        <S.Header>{screenData.DiveSiteAdd.header}</S.Header>
+        <S.Header>{t('DiveSiteAdd.header')}</S.Header>
 
         <Flex>
           <S.InputGroupContainer>
             <S.TextBuffer>
               <MobileTextInput 
               iconLeft="diving-scuba-flag"
-              placeholder={screenData.DiveSiteAdd.siteNamePlaceholder}
+              placeholder={t('DiveSiteAdd.siteNamePlaceholder')}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Site: text })}
               />
             </S.TextBuffer>
@@ -65,7 +58,7 @@ export default function DiveSiteUploaderView({
             <S.TextBuffer>
             <MobileTextInput 
               iconLeft="latitude"
-              placeholder={screenData.DiveSiteAdd.latPlaceholder}
+              placeholder={t('DiveSiteAdd.latPlaceholder')}
               value={addSiteVals.Latitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Latitude: text })}
               keyboardType="number-pad"
@@ -75,7 +68,7 @@ export default function DiveSiteUploaderView({
             <S.TextBuffer>
             <MobileTextInput 
               iconLeft="longitude"
-              placeholder={screenData.DiveSiteAdd.lngPlaceholder}
+              placeholder={t('DiveSiteAdd.lngPlaceholder')}
               value={addSiteVals.Longitude}
               onChangeText={(text: string) => setAddSiteVals({ ...addSiteVals, Longitude: text })}
               keyboardType="number-pad"
@@ -89,25 +82,25 @@ export default function DiveSiteUploaderView({
                   onPress={getCurrentLocation} 
                   alt={true} 
                   size='medium'
-                  title={screenData.DiveSiteAdd.myLocationButton}
+                  title={t('DiveSiteAdd.myLocationButton')}
                 />
 
                 <Button 
                   onPress={onNavigate} 
                   alt={true} 
                   size='medium'
-                  title={screenData.DiveSiteAdd.pinButton}
+                  title={t('DiveSiteAdd.pinButton')}
                 />
         </Flex>
 
-        <S.Hint>{screenData.DiveSiteAdd.myLocationexplainer}</S.Hint>
+        <S.Hint>{t('DiveSiteAdd.myLocationexplainer')}</S.Hint>
 
         <S.ButtonBox>
               <Button 
                 onPress={onSubmit} 
                 alt={false} 
                 size='medium'
-                title={screenData.DiveSiteAdd.submitButton} 
+                title={t('DiveSiteAdd.submitButton')} 
                 iconRight="chevron-right"
                 />
         </S.ButtonBox>

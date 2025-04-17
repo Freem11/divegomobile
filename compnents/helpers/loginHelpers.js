@@ -133,13 +133,16 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-async function handleSupabaseSetup(
+async function handleSupabaseSetup (
   sessionToken,
   setActiveSession,
   setIsSignedIn
 ) {
   if (sessionToken) {
-    await SecureStore.setItemAsync("token", JSON.stringify(sessionToken));
+    await SecureStore.setItemAsync(
+      "token",
+      JSON.stringify(sessionToken.session.refresh_token)
+    );
     if (sessionToken.session) {
       setActiveSession(sessionToken.session);
     } else {
@@ -171,18 +174,19 @@ export const handleLogInSubmit = async (
   setLoginFail
 ) => {
   if (formVals.email === "" || formVals.password == "") {
-    setLoginFail(i18n.t("validators:fillEmailAndPassword"));
+    setLoginFail(i18n.t("Validators.fillEmailAndPassword"));
     return;
   } else {
     let accessToken = await signInStandard(formVals);
     if (accessToken && accessToken?.data?.session !== null) {
       await SecureStore.setItemAsync(
         "token",
-        JSON.stringify(accessToken?.data)
+        JSON.stringify(accessToken?.data.session.refresh_token)
       );
+
       setActiveSession(accessToken.data.session);
     } else {
-      setLoginFail(i18n.t("validators.invalidCredentials"));
+      setLoginFail(i18n.t("Validators.invalidCredentials"));
       return;
     }
     await sessionCheck();
@@ -195,10 +199,10 @@ export const handleSignUpSubmit = async (
   setRegFail
 ) => {
   if (formVals.email === "" || formVals.password == "" || formVals.name == "") {
-    setRegFail(i18n.t("validators:fillAllFields"));
+    setRegFail(i18n.t("Validators.fillAllFields"));
     return;
   } else if (formVals.password.length < 6) {
-    setRegFail(i18n.t("validators:passwordFormat"));
+    setRegFail(i18n.t("Validators.passwordFormat"));
     return;
   } else {
     let dataPack = {
@@ -217,9 +221,9 @@ export const handleSignUpSubmit = async (
         "token",
         JSON.stringify(registrationToken)
       );
-      setActiveSession(registrationToken.data.session);
+      setActiveSession(registrationToken.data.session.refresh_token);
     } else {
-      setRegFail(i18n.t("validators:accountExistMsg"));
+      setRegFail(i18n.t("Validators.accountExistMsg"));
     }
     await sessionCheck();
   }

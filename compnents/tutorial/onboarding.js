@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, { useRef, useState, useContext, useEffect, useMemo } from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -9,12 +9,12 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
 import { activeFonts, colors, fontSizes } from '../styles';
 import { scale, moderateScale } from "react-native-size-matters";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import carrouselData from "./carrouselData";
 import emilio from '../png/guideIcons/EmilioNew.png'
 import { registerForForegroundLocationTrackingsAsync } from "./locationTrackingRegistry";
 import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
@@ -27,6 +27,7 @@ import { updateProfile, grabProfileById } from "../../supabaseCalls/accountSupab
 import TextInputField from '../authentication/utils/textInput';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -41,6 +42,52 @@ export default function OnboardingTest() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { setProfile } = useContext(UserProfileContext);
+  const { t } = useTranslation();
+
+  const carrouselData = useMemo(() => [
+    {
+      page: 1,
+      title: t('OnBoarding.welcomeTitle'),
+      content: t('OnBoarding.welcomeContent'),
+      buttonOneText: t('Common.next'),
+      buttonTwoText: null,
+    },
+    {
+      page: 2,
+      title: t('OnBoarding.diverNameTitle'),
+      content: t('OnBoarding.diverNameContent'),
+      buttonOneText: t('Common.ok'),
+      buttonTwoText: null,
+    },
+    {
+      page: 3,
+      title: t('OnBoarding.locationTitle'),
+      content: t('OnBoarding.locationContent'),
+      buttonOneText: t('Common.accept'),
+      buttonTwoText: t('Common.optOut'),
+    },
+    {
+      page: 4,
+      title: t('OnBoarding.galleryTitle'),
+      content: t('OnBoarding.galleryContent'),
+      buttonOneText: t('Common.accept'),
+      buttonTwoText: t('Common.optOut'),
+    },
+    {
+      page: 5,
+      title: t('OnBoarding.notificationsTitle'),
+      content: t('OnBoarding.notificationsContent'),
+      buttonOneText: t('Common.accept'),
+      buttonTwoText: t('Common.optOut'),
+    },
+    {
+      page: 6,
+      title: t('OnBoarding.doneTitle'),
+      content: t('OnBoarding.doneContent'),
+      buttonOneText: t('Common.finish'),
+      buttonTwoText: null,
+    },
+  ], [t]);
 
   const onPress = async () => {
     if (carrouselIndex === 2) {
@@ -107,7 +154,7 @@ export default function OnboardingTest() {
     });
 
     if (formVal.userName === "") {
-      setUserFail("Your diver name cannot be blank!");
+      setUserFail(t('Validators.requiredDiverName'));
       return "fail";
     } else {
       let sessionUserId = activeSession.user.id;
@@ -138,11 +185,11 @@ export default function OnboardingTest() {
           });
           return "success";
         } else {
-          setUserFail("Sorry that diver name has already been taken");
+          setUserFail(t('Validators.diverNameTaken'));
           return "fail";
         }
       } catch (e) {
-        setUserFail("Sorry that diver name has already been taken");
+        setUserFail(t('Validators.diverNameTaken'));
         console.log({ title: "Error19", message: e.message });
         return "fail";
       }
@@ -198,7 +245,7 @@ export default function OnboardingTest() {
                 <View style={styles.inputBox}>
                   <TextInputField
                     icon={"scuba-diving"}
-                    placeHolderText={"Diver Name"}
+                    placeHolderText={t('OnBoarding.diverNamePlaceholder')}
                     inputValue={formVal.userName}
                     secure={false}
                     onChangeText={(text) => handleText(text)}

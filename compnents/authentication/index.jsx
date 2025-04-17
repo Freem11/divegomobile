@@ -37,6 +37,8 @@ export default function Authentication() {
     });
   };
 
+
+
   return (
     <S.Wrapper>
       <ScrollView
