@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   Platform
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
 import { activeFonts, colors, fontSizes } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
@@ -49,25 +49,6 @@ export default function Picture(props) {
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-
-  const handleEmail = (pic) => {
-    const to = ["scubaseasons@gmail.com"];
-    email(to, {
-      // Optional additional arguments
-      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photofile} `,
-      body:
-        "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
-      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
-    }).catch(console.error);
-  };
-
-
-
-  const [base64, setBase64] = useState(null);
-  const [userN, setUserN] = useState(null);
-  const [creastureN, setCreastureN] = useState(null);
-  const [photoDate, setPhotoDate] = useState(null);
-  const [mapLocal, setMapLocal] = useState(null);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
@@ -81,6 +62,16 @@ export default function Picture(props) {
     setFullScreenModal(true);
     setActiveTutorialID("CommentsModal");
     setSelectedPicture(pic);
+  };
+
+  const handleEmail = (pic) => {
+    const to = ["scubaseasons@gmail.com"];
+    email(to, {
+      // Optional additional arguments
+      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photofile} `,
+      body: "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
+      checkCanOpen: false // Call Linking.canOpenURL prior to Linking.openURL
+    }).catch(console.error);
   };
 
   const handleLike = async () => {
@@ -151,10 +142,7 @@ export default function Picture(props) {
     const message = `Checkout this cool pic of a ${label} on Scuba SEAsons! It was taken by ${UserName} at the dive site: ${selectedDiveSite.name}, in${local} on ${dateTaken}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
 
     try {
-      // For Expo Share, we need to save the base64 image to a file first
-      const isAvailable = await Sharing.isAvailableAsync();
-
-      if (isAvailable && url) {
+      if (url) {
         // Extract base64 data
         const base64Data = url.split(",")[1] || url.split("base64,")[1];
 
@@ -229,12 +217,6 @@ export default function Picture(props) {
             size={scale(19)}
             onPress={() => {
               onShare(pic);
-              // pic.photoFile,
-              // pic.UserName,
-              // pic.label,
-              // pic.dateTaken,
-              // pic.latitude,
-              // pic.longitude)
             }}
             style={styles.share}
           />
