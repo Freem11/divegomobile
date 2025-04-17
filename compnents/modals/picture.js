@@ -152,22 +152,45 @@ export default function Picture(props) {
     setMapLocal(null);
   };
 
-  const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
-    let local = await getPhotoLocation(lat, lng);
+  const onShare = async (picData) => {
+    const localUri = "https://divegolanding.web.app";
+    const { photoFile, UserName, label, dateTaken, latitude, longitude } =
+      picData;
 
-    setMapLocal(local);
-    setCreastureN(seaCreature);
-    setPhotoDate(picDate);
-    if (userN) {
-      setUserN(userN);
-    } else {
-      setUserN("an unnamed diver");
-    }
-    let temp = photofile.split("/");
-    let lastIndex = temp.length - 1;
-    let fileName = temp[lastIndex];
-    let cacheDir = FileSystem.cacheDirectory + fileName;
-    convertBase64(cacheDir);
+    let local = await getPhotoLocation(latitude, longitude);
+
+    const message = `Checkout this cool pic of a ${label} on Scuba SEAsons! It was taken by ${UserName} at the dive site: ${selectedDiveSite.name}, in${local} on ${dateTaken}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
+
+    const temp = photoFile.split("/");
+    const lastIndex = temp.length - 1;
+    const fileName = temp[lastIndex];
+    const cacheDir = FileSystem.cacheDirectory + fileName;
+    const url = await convertBase64(cacheDir);
+
+    doShare({ message, url });
+    // setMapLocal(local);
+    // setCreastureN(seaCreature);
+    // setPhotoDate(picDate);
+
+    // if (userN) {
+    //   // setUserN(userN);
+    //   setSharedImage({
+    //     ...sharedImage,
+    //     userN: userN
+    //   });
+    // } else {
+    //   // setUserN("an unnamed diver");
+    //   setSharedImage({
+    //     ...sharedImage,
+    //     userN: "an unnamed diver"
+    //   });
+    // }
+
+    // let temp = photofile.split("/");
+    // let lastIndex = temp.length - 1;
+    // let fileName = temp[lastIndex];
+    // let cacheDir = FileSystem.cacheDirectory + fileName;
+    // convertBase64(cacheDir);
   };
 
   async function getPhotoLocation(photoLat, photoLng) {
