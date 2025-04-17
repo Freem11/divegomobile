@@ -35,10 +35,10 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
-let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 const windowWidth = Dimensions.get("window").width;
 
-export default function Picture(props) {
+const Picture = (props) => {
   const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -80,7 +80,7 @@ export default function Picture(props) {
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
-      let newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
+      const newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
@@ -88,7 +88,7 @@ export default function Picture(props) {
   };
 
   const handleFollow = async (userName) => {
-    let picOwnerAccount = await grabProfileByUserName(userName);
+    const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (profile[0].UserID === picOwnerAccount[0].UserID) {
       return;
@@ -179,26 +179,26 @@ export default function Picture(props) {
     }
   };
 
-  async function getPhotoLocation (photoLat, photoLng) {
-    let Lat = Number(photoLat);
-    let Lng = Number(photoLng);
+  const getPhotoLocation = async (photoLat, photoLng) => {
+    const Lat = Number(photoLat);
+    const Lng = Number(photoLng);
 
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${GoogleMapsApiKey}`
       );
       const placeInfo = await res.json();
-      let genAddress = placeInfo.results[1].formatted_address;
-      let fudgedAddress = genAddress.split(",");
-      let bits = [
+      const genAddress = placeInfo.results[1].formatted_address;
+      const fudgedAddress = genAddress.split(",");
+      const bits = [
         fudgedAddress[fudgedAddress.length - 2],
-        fudgedAddress[fudgedAddress.length - 1],
+        fudgedAddress[fudgedAddress.length - 1]
       ].join();
       return bits;
     } catch (err) {
       console.log("error", err);
     }
-  }
+  };
 
   // const togglePhotoBoxModal = (photo) => {
   //   setSelectedPhoto(photo);
@@ -307,7 +307,9 @@ export default function Picture(props) {
       </TouchableWithoutFeedback>
     </View>
   );
-}
+};
+
+export default Picture;
 
 const styles = StyleSheet.create({
   outterBox: {
