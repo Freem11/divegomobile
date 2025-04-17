@@ -22,7 +22,6 @@ import { openURL } from 'expo-linking';
 import { moderateScale } from "react-native-size-matters";
 import SeaLifeImageCard from "../reusables/seaLifeImageCard/seaLifeImageCard";
 import ListItem from "../reusables/listItem";
-import Itinerary from "../itineraries/itinerary";
 import ItineraryCard from '../reusables/itineraryCard';
 
 import {
@@ -184,29 +183,18 @@ export default function BottomDrawer(props) {
                   itinerary={item}
                   setSelectedID={setSelectedID}
                   selectedID={selectedID}
+                  buttonOneAction={() =>
+                        useMapFlip(
+                          item.siteList,
+                          setSitesArray,
+                          setZoomHelper,
+                          setLevelOneScreen,
+                          setMapConfig,
+                          setMapCenter
+                        )
+                      }
+                  buttonTwoAction={() => openURL(item.BookingPage)}
                   />
-                  
-                // <Itinerary
-                //   key={item.id}
-                //   itinerary={item}
-                //   setSelectedID={setSelectedID}
-                //   selectedID={selectedID}
-                //   buttonOneText="Map"
-                //   buttonOneIcon="anchor"
-                //   buttonOneAction={() =>
-                //     useMapFlip(
-                //       item.siteList,
-                //       setSitesArray,
-                //       setZoomHelper,
-                //       setLevelOneScreen,
-                //       setMapConfig,
-                //       setMapCenter
-                //     )
-                //   }
-                //   buttonTwoText="Book"
-                //   buttonTwoIcon="diving-scuba-flag"
-                //   buttonTwoAction={() => openURL(item.BookingPage)}
-                // />
               ) : null}
 
               {dataSetType === "DiveSitePhotos" ? (

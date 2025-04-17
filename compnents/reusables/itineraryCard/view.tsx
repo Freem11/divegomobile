@@ -1,66 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import * as S from './styles'
 import { ItineraryItem } from '../../entities/itineraryItem';
 import ButtonIcon from "../buttonIcon";
 import readableDate from "../../helpers/readableDate";
 import { colors } from "../../styles";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  useDerivedValue,
-  interpolate,
-} from "react-native-reanimated";
-import { scale } from "react-native-size-matters";
+import Popover from 'react-native-popover-view';
+import { Placement } from "react-native-popover-view/dist/Types";
+import { View } from "react-native";
+import IconWithLabel from '../iconWithLabal';
 
 type TripCardViewProps = {
   itinerary:           ItineraryItem
   flipMap:             (siteList: number[]) => Promise<void>
   canChangeItinerary?: boolean
-  handleDeleteButton:  (itinerary: ItineraryItem) => void
-  handleEditButton:    (itinerary: ItineraryItem) => void
-  selectedID: number
-  setSelectedID: () => void
-  
+  buttonOneAction:  () => void
+  buttonTwoAction:    () => void  
 };
 
-export default function ItineraryCardView({ itinerary, flipMap, canChangeItinerary, handleDeleteButton, handleEditButton, selectedID, setSelectedID }: TripCardViewProps) {
+export default function ItineraryCardView({ itinerary, flipMap, canChangeItinerary, buttonOneAction, buttonTwoAction }: TripCardViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
-  const moreInfoHeight = useSharedValue(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const iconRef = useRef();
+  
+  const ButtonIconWithRef = forwardRef(() => (
+    <View ref={iconRef}>
+         <ButtonIcon 
+          icon="dots-horizontal"
+          size='icon'
+          onPress={() => setIsVisible(true)}
+          fillColor={colors.neutralGrey}
+        />
+    </View>
+  ));
 
-  const toVal = scale(100);
-
-  const moreInfoHeigth = useDerivedValue(() => {
-    return interpolate(moreInfoHeight.value, [0, 1], [0, toVal]);
-  });
-
-  const tabPullx = useAnimatedStyle(() => {
-    return {
-      height: moreInfoHeigth.value,
-    };
-  });
-
-  const startMoreInfoAnimation = (id) => {
-    setSelectedID(id);
-
-    if (moreInfoHeight.value === 0) {
-      moreInfoHeight.value = withTiming(1);
-    } else {
-      moreInfoHeight.value = withTiming(0);
-    }
-  };
-
-  const releaseMoreInfoAnimations = () => {
-    moreInfoHeight.value = withTiming(0);
-  };
-
-  useEffect(() => {
-    if (selectedID !== itinerary.id) {
-      releaseMoreInfoAnimations();
-    }
-  }, [selectedID]);
+  const handleButtonPress = (action: () => void) => {
+    action()
+    setIsVisible(false);
+  }
 
   return (
     <S.Card>
@@ -79,40 +57,47 @@ export default function ItineraryCardView({ itinerary, flipMap, canChangeItinera
         </S.MainContent>
 
         <S.Actions>
-          {canChangeItinerary
-            ? (
-                <>
+          
+        <ButtonIconWithRef ref={iconRef}/>
+
+                <Popover
+                from={iconRef}
+                isVisible={isVisible}
+                onRequestClose={() => setIsVisible(false)}
+                placement={Placement.AUTO}
+                >
+                   
+                 {canChangeItinerary ?  <>
                   <ButtonIcon 
                   icon="pencil"
-                  onPress={() => handleEditButton(itinerary)}
+                  onPress={() => buttonOneAction(itinerary)}
                   size='icon'
                   fillColor={colors.neutralGrey}
                   />
 
                   <ButtonIcon 
                   icon="trash"
-                  onPress={() => handleDeleteButton(itinerary)}
+                  onPress={() => buttonTwoAction(itinerary)}
                   size='icon'
                   fillColor={colors.neutralGrey}
                   />
-                </>
-              )
-            : (
+                </> 
+                :
                 <>
-                  <ButtonIcon 
-                  icon="anchor"
-                  onPress={() => itinerary.siteList && flipMap(itinerary.siteList)}
-                  size='icon'
-                  fillColor={colors.neutralGrey}
-                  />
-                  <ButtonIcon 
-                  icon="diving-scuba-flag"
-                  onPress={null}
-                  size='icon'
-                  fillColor={colors.neutralGrey}
-                  />
-                </>
-              )}
+                <IconWithLabel 
+                label="View on Map"
+                iconName="anchor"
+                buttonAction={() => handleButtonPress(buttonOneAction)}
+                />
+
+                <IconWithLabel 
+                label="Book Trip"
+                iconName="diving-scuba-flag"
+                buttonAction={() => handleButtonPress(buttonTwoAction)}
+                />
+              </>
+               }
+              </Popover>
         </S.Actions>
       </S.CardTop>
 
@@ -127,7 +112,6 @@ export default function ItineraryCardView({ itinerary, flipMap, canChangeItinera
          numberOfLines={isMeasuring === 0 ? undefined : 2}
          onTextLayout={(e) => {
            const lines = e.nativeEvent.lines.length;
-           console.log(lines, lines)
             if(lines > 2){
               setIsOverflowing(true);
             }

@@ -35,7 +35,7 @@ export const CardTop = styled.View`
   align-items: center;
   margin-bottom: ${moderateScale(5)}px;
   flex-direction: row;
-  flex-wrap: wrap;
+  width: 100%;
 `;
 
 export const MainContent = styled.View`
@@ -61,7 +61,7 @@ export const TopText = styled.Text`
 `;
 
 export const Actions = styled.View`
-  flex-direction: row;
+  flex-direction: ${windowWidth > 600 ? 'row' : 'column'};
   justify-content: space-between;
   align-items: center;
 `;
