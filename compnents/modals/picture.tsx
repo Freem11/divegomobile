@@ -150,7 +150,7 @@ const Picture = (props: PictureProps) => {
 
   const onShare = async (pic: Photo) => {
     const { photoFile, UserName, label, dateTaken, latitude, longitude } = pic;
-    const localUri = "https://divegolanding.web.app";
+    const localUri = "https://scuba-seasons.web.app";
     const local = await getPhotoLocation(latitude, longitude);
     const url = await convertBase64(photoFile);
     const message = `Checkout this cool pic of a ${label} on Scuba SEAsons! It was taken by ${UserName} at the dive site: ${selectedDiveSite.name}, in${local} on ${dateTaken}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
