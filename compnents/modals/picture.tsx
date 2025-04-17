@@ -138,10 +138,9 @@ const Picture = (props) => {
     }
   };
 
-  const onShare = async (picData: Photo) => {
+  const onShare = async (pic: Photo) => {
     // console.log("Sharing picData:", picData);
-    const { photoFile, UserName, label, dateTaken, latitude, longitude } =
-      picData;
+    const { photoFile, UserName, label, dateTaken, latitude, longitude } = pic;
     const localUri = "https://divegolanding.web.app";
     const temp = photoFile.split("/");
     const lastIndex = temp.length - 1;
