@@ -283,14 +283,13 @@ export default function Picture(props) {
             color="white"
             size={scale(19)}
             onPress={() => {
-              return onShare(
-                pic.photoFile,
-                pic.UserName,
-                pic.label,
-                pic.dateTaken,
-                pic.latitude,
-                pic.longitude
-              );
+              onShare(pic);
+              // pic.photoFile,
+              // pic.UserName,
+              // pic.label,
+              // pic.dateTaken,
+              // pic.latitude,
+              // pic.longitude)
             }}
             style={styles.share}
           />
