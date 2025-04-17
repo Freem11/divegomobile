@@ -132,7 +132,11 @@ const Picture = (props: PictureProps) => {
     setLevelTwoScreen(false);
   };
 
-  const convertBase64 = async (cacheDir: string) => {
+  const convertBase64 = async (photo: string) => {
+    const temp = photo.split("/");
+    const lastIndex = temp.length - 1;
+    const fileName = temp[lastIndex];
+    const cacheDir = FileSystem.cacheDirectory + fileName;
     try {
       const base64String = await ImgToBase64.getBase64String(cacheDir);
       const result = `data:image/jpg;base64,${base64String}`;
@@ -145,15 +149,10 @@ const Picture = (props: PictureProps) => {
   };
 
   const onShare = async (pic: Photo) => {
-    // console.log("Sharing picData:", picData);
     const { photoFile, UserName, label, dateTaken, latitude, longitude } = pic;
     const localUri = "https://divegolanding.web.app";
-    const temp = photoFile.split("/");
-    const lastIndex = temp.length - 1;
-    const fileName = temp[lastIndex];
-    const cacheDir = FileSystem.cacheDirectory + fileName;
     const local = await getPhotoLocation(latitude, longitude);
-    const url = await convertBase64(cacheDir);
+    const url = await convertBase64(photoFile);
     const message = `Checkout this cool pic of a ${label} on Scuba SEAsons! It was taken by ${UserName} at the dive site: ${selectedDiveSite.name}, in${local} on ${dateTaken}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
 
     try {
