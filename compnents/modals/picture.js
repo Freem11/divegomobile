@@ -5,7 +5,7 @@ import {
   Dimensions,
   Image,
   TouchableWithoutFeedback,
-  Platform,
+  Platform
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { scale, moderateScale } from "react-native-size-matters";
@@ -13,7 +13,7 @@ import { activeFonts, colors, fontSizes } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   insertPhotoLike,
-  deletePhotoLike,
+  deletePhotoLike
 } from "../../supabaseCalls/photoLikeSupabaseCalls";
 import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
@@ -120,7 +120,7 @@ export default function Picture(props) {
     setSelectedDiveSite({
       SiteName: diveSiteName,
       Latitude: pic.latitude,
-      Longitude: pic.longitude,
+      Longitude: pic.longitude
     });
     setVisitProfileVals(null);
     setSelectedProfile(null);
@@ -174,20 +174,15 @@ export default function Picture(props) {
           fileInfo.size
         );
 
-        // Check if sharing is available on the device
-        if (isAvailable) {
-          // Share both the message and the file
-          await Sharing.shareAsync(fileUri, {
-            mimeType: "image/jpeg",
-            dialogTitle: message,
-            UTI: "public.jpeg" // For iOS
-          });
-        } else {
-          console.error("Sharing is not available on this device");
-        }
+        // Share both the message and the file
+        await Sharing.shareAsync(fileUri, {
+          mimeType: "image/jpeg",
+          dialogTitle: message,
+          UTI: "public.jpeg" // For iOS
+        });
       } else {
         // If there's no image, just share the text message
-        console.error("No image to share");
+        console.error("There is an error sharing the file", isAvailable);
       }
     } catch (error) {
       console.log("Error sharing:", error);
@@ -315,7 +310,7 @@ export default function Picture(props) {
             width: "80%",
             borderRadius: moderateScale(10),
             paddingBottom: moderateScale(5),
-            marginTop: moderateScale(5),
+            marginTop: moderateScale(5)
             // backgroundColor: 'pink'
           }}
         >
