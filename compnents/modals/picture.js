@@ -234,7 +234,7 @@ const Picture = (props) => {
           style={{
             borderRadius: moderateScale(15),
             resizeMode: "cover",
-            marginTop: moderateScale(-22),
+            marginTop: moderateScale(-22)
             // backgroundColor: "pink",
           }}
         />
@@ -253,8 +253,8 @@ const Picture = (props) => {
                 styles.likeIcon,
                 {
                   height: moderateScale(30),
-                  width: moderateScale(30),
-                },
+                  width: moderateScale(30)
+                }
               ]}
             />
           </TouchableWithoutFeedback>
@@ -315,24 +315,24 @@ const styles = StyleSheet.create({
   outterBox: {
     zIndex: 70,
     width: windowWidth,
-    marginBottom: moderateScale(5),
+    marginBottom: moderateScale(5)
   },
   container: {
     zIndex: 40,
     borderTopRightRadius: scale(10),
     width: windowWidth,
     marginLeft: "0.25%",
-    padding: moderateScale(2),
+    padding: moderateScale(2)
   },
   titleText: {
     fontFamily: activeFonts.Light,
     color: colors.themeWhite,
     width: "77%",
-    fontSize: moderateScale(fontSizes.StandardText),
+    fontSize: moderateScale(fontSizes.StandardText)
   },
   share: {
     opacity: 0.8,
-    zIndex: 2,
+    zIndex: 2
   },
   micro: {
     flex: 1,
@@ -345,10 +345,10 @@ const styles = StyleSheet.create({
     top: windowWidth > 600 ? "3%" : "2%",
     marginLeft: "2%",
     borderRadius: 5,
-    zIndex: 2,
+    zIndex: 2
   },
   flag: {
-    zIndex: 2,
+    zIndex: 2
   },
   likeIcon: {
     display: "flex",
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     zIndex: 4,
     right: "2%",
     bottom: Platform.OS === "ios" ? "10%" : "10%",
-    borderRadius: scale(5),
+    borderRadius: scale(5)
   },
   countIndicator: {
     display: "flex",
@@ -374,12 +374,12 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     bottom: Platform.OS === "ios" ? "3%" : "3%",
     borderTopLeftRadius: scale(5),
-    borderBottomLeftRadius: scale(5),
+    borderBottomLeftRadius: scale(5)
   },
   countDisplay: {
     color: colors.themeWhite,
     fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Bold,
+    fontFamily: activeFonts.Bold
   },
   microLow: {
     justifyContent: "center",
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     left: "1%",
     bottom: Platform.OS === "ios" ? "3%" : "3%",
-    borderRadius: scale(8),
+    borderRadius: scale(8)
   },
   microLow2: {
     justifyContent: "center",
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     color: colors.themeWhite,
     fontFamily: activeFonts.Light,
     fontSize: moderateScale(fontSizes.SmallText),
-    zIndex: 2,
+    zIndex: 2
   },
   commentPrompt: {
     display: "flex",
@@ -418,6 +418,6 @@ const styles = StyleSheet.create({
     zIndex: 10,
     paddingTop: moderateScale(5),
     paddingLeft: moderateScale(10),
-    paddingRight: moderateScale(2),
-  },
+    paddingRight: moderateScale(2)
+  }
 });
