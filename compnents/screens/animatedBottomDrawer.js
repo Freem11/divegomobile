@@ -48,6 +48,7 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function BottomDrawer(props) {
   const {
+    isMyShop,
     dataSet,
     dataSetType,
     lowerBound,
@@ -179,6 +180,7 @@ export default function BottomDrawer(props) {
 
               {dataSetType === "DiveShopTrips" ? (
                 <ItineraryCard 
+                  isMyShop={isMyShop}
                   key={item.id}
                   itinerary={item}
                   setSelectedID={setSelectedID}

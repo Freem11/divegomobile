@@ -181,9 +181,12 @@ export default function TripListPage(props) {
         renderItem={({ item }) => (
           <View style={styles.shadowbox}>
             <ItineraryCard  
+              isMyShop={true}
               itinerary={item}    
               setSelectedID={setSelectedID}
               selectedID={selectedID}
+              buttonOneAction={() => handleEditButton(item)}
+              buttonTwoAction={() => handleDeleteButton(item)}
               />
             {/* <Itinerary
               key={item.id}
@@ -193,10 +196,9 @@ export default function TripListPage(props) {
               setShopModal={setShopModal}
               buttonOneText={t('Common.edit')}
               buttonOneIcon="pencil"
-              buttonOneAction={() => handleEditButton(item)}
               buttonTwoText={t('Common.delete')}
               buttonTwoIcon="delete-forever"
-              buttonTwoAction={() => handleDeleteButton(item)}
+              
             /> */}
           </View>
         )}

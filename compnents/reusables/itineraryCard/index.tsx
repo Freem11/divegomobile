@@ -12,12 +12,12 @@ import { ItineraryItem } from '../../entities/itineraryItem';
 
 type ItineraryCardProps = {
   itinerary:           ItineraryItem
-  canChangeItinerary?: boolean
+  isMyShop ?: boolean
   buttonOneAction: () => void
   buttonTwoAction: () => void
 };
 
-export default function ItineraryCard({ itinerary, canChangeItinerary, buttonOneAction, buttonTwoAction }: ItineraryCardProps) {
+export default function ItineraryCard({ itinerary, isMyShop, buttonOneAction, buttonTwoAction }: ItineraryCardProps) {
   const { setSitesArray } = useContext(SitesArrayContext);
   // const { setMapConfig, mapRef } = useContext(MapContext);
   // const { modalShow, modalCancel } = useContext(ModalContext);
@@ -68,7 +68,7 @@ export default function ItineraryCard({ itinerary, canChangeItinerary, buttonOne
     <ItineraryCardView
       itinerary={itinerary}
       flipMap={flipMap}
-      canChangeItinerary={canChangeItinerary}
+      isMyShop={isMyShop}
       buttonOneAction={buttonOneAction}
       buttonTwoAction={buttonTwoAction}
     />

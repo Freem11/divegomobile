@@ -12,12 +12,12 @@ import IconWithLabel from '../iconWithLabal';
 type TripCardViewProps = {
   itinerary:           ItineraryItem
   flipMap:             (siteList: number[]) => Promise<void>
-  canChangeItinerary?: boolean
+  isMyShop?: boolean
   buttonOneAction:  () => void
   buttonTwoAction:    () => void  
 };
 
-export default function ItineraryCardView({ itinerary, flipMap, canChangeItinerary, buttonOneAction, buttonTwoAction }: TripCardViewProps) {
+export default function ItineraryCardView({ itinerary, flipMap, isMyShop, buttonOneAction, buttonTwoAction }: TripCardViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
@@ -37,6 +37,12 @@ export default function ItineraryCardView({ itinerary, flipMap, canChangeItinera
 
   const handleButtonPress = (action: () => void) => {
     action()
+    setIsVisible(false);
+  }
+
+
+  const handleButtonPass = (action: (itin : ItineraryItem) => void, itin: ItineraryItem) => {
+    action(itin)
     setIsVisible(false);
   }
 
@@ -67,20 +73,17 @@ export default function ItineraryCardView({ itinerary, flipMap, canChangeItinera
                 placement={Placement.AUTO}
                 >
                    
-                 {canChangeItinerary ?  <>
-                  <ButtonIcon 
-                  icon="pencil"
-                  onPress={() => buttonOneAction(itinerary)}
-                  size='icon'
-                  fillColor={colors.neutralGrey}
-                  />
-
-                  <ButtonIcon 
-                  icon="trash"
-                  onPress={() => buttonTwoAction(itinerary)}
-                  size='icon'
-                  fillColor={colors.neutralGrey}
-                  />
+                 {isMyShop ?  <>
+                  <IconWithLabel 
+                    label="Edit Trip"
+                    iconName="pencil"
+                    buttonAction={() => handleButtonPass(buttonOneAction, itinerary)}
+                    />
+                    <IconWithLabel 
+                    label="Delete Trip"
+                    iconName="trash"
+                    buttonAction={() => handleButtonPass(buttonTwoAction, itinerary)}
+                    />
                 </> 
                 :
                 <>
