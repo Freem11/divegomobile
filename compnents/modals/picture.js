@@ -139,13 +139,22 @@ export default function Picture(props) {
     }
   };
 
-  const doShare = async (shareOptions) => {
-    const { message, url } = shareOptions;
+  const onShare = async (picData) => {
+    const { photoFile, UserName, label, dateTaken, latitude, longitude } =
+      picData;
+    const localUri = "https://divegolanding.web.app";
+    const temp = photoFile.split("/");
+    const lastIndex = temp.length - 1;
+    const fileName = temp[lastIndex];
+    const cacheDir = FileSystem.cacheDirectory + fileName;
+    const local = await getPhotoLocation(latitude, longitude);
+    const url = await convertBase64(cacheDir);
+    const message = `Checkout this cool pic of a ${label} on Scuba SEAsons! It was taken by ${UserName} at the dive site: ${selectedDiveSite.name}, in${local} on ${dateTaken}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
 
     try {
       // For Expo Share, we need to save the base64 image to a file first
       const isAvailable = await Sharing.isAvailableAsync();
-      console.log("isAvailable", isAvailable);
+
       if (isAvailable && url) {
         // Extract base64 data
         const base64Data = url.split(",")[1] || url.split("base64,")[1];
@@ -183,55 +192,9 @@ export default function Picture(props) {
     } catch (error) {
       console.log("Error sharing:", error);
     }
-
-    setUserN(null);
-    setCreastureN(null);
-    setPhotoDate(null);
-    setMapLocal(null);
   };
 
-  const onShare = async (picData) => {
-    const localUri = "https://divegolanding.web.app";
-    const { photoFile, UserName, label, dateTaken, latitude, longitude } =
-      picData;
-
-    let local = await getPhotoLocation(latitude, longitude);
-
-    const message = `Checkout this cool pic of a ${label} on Scuba SEAsons! It was taken by ${UserName} at the dive site: ${selectedDiveSite.name}, in${local} on ${dateTaken}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
-
-    const temp = photoFile.split("/");
-    const lastIndex = temp.length - 1;
-    const fileName = temp[lastIndex];
-    const cacheDir = FileSystem.cacheDirectory + fileName;
-    const url = await convertBase64(cacheDir);
-
-    doShare({ message, url });
-    // setMapLocal(local);
-    // setCreastureN(seaCreature);
-    // setPhotoDate(picDate);
-
-    // if (userN) {
-    //   // setUserN(userN);
-    //   setSharedImage({
-    //     ...sharedImage,
-    //     userN: userN
-    //   });
-    // } else {
-    //   // setUserN("an unnamed diver");
-    //   setSharedImage({
-    //     ...sharedImage,
-    //     userN: "an unnamed diver"
-    //   });
-    // }
-
-    // let temp = photofile.split("/");
-    // let lastIndex = temp.length - 1;
-    // let fileName = temp[lastIndex];
-    // let cacheDir = FileSystem.cacheDirectory + fileName;
-    // convertBase64(cacheDir);
-  };
-
-  async function getPhotoLocation(photoLat, photoLng) {
+  async function getPhotoLocation (photoLat, photoLng) {
     let Lat = Number(photoLat);
     let Lng = Number(photoLng);
 
