@@ -26,7 +26,6 @@ import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
-import * as Sharing from "expo-sharing";
 import notLiked from "../png/socialIcons/Hand-Hollow-Blue.png";
 import liked from "../png/socialIcons/Hand-Filled-Blue.png";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
@@ -174,15 +173,18 @@ export default function Picture(props) {
           fileInfo.size
         );
 
-        // Share both the message and the file
-        await Sharing.shareAsync(fileUri, {
-          mimeType: "image/jpeg",
-          dialogTitle: message,
-          UTI: "public.jpeg" // For iOS
-        });
-      } else {
-        // If there's no image, just share the text message
-        console.error("There is an error sharing the file", isAvailable);
+        if (fileInfo.exists) {
+          // Use react-native-share which works well on both platforms
+          const options = {
+            title: "Share Scuba SEAsons photo",
+            message: message,
+            url: Platform.OS === "android" ? `file://${fileUri}` : fileUri,
+            type: "image/jpeg"
+          };
+
+          const result = await Share.open(options);
+          console.log("Share result:", result);
+        }
       }
     } catch (error) {
       console.log("Error sharing:", error);
