@@ -127,14 +127,16 @@ export default function Picture(props) {
     setLevelTwoScreen(false);
   };
 
-  const convertBase64 = (cacheDir) => {
-    ImgToBase64.getBase64String(cacheDir)
-      .then((base64String) => {
-        setBase64(base64String);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const convertBase64 = async (cacheDir) => {
+    try {
+      const base64String = await ImgToBase64.getBase64String(cacheDir);
+      const result = `data:image/jpg;base64,${base64String}`;
+
+      return result;
+    } catch (err) {
+      console.log("Base64 conversion error:", err);
+      return null;
+    }
   };
 
   const doShare = async (shareOptions) => {
