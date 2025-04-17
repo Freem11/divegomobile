@@ -140,10 +140,48 @@ export default function Picture(props) {
   };
 
   const doShare = async (shareOptions) => {
+    const { message, url } = shareOptions;
+
     try {
-      const response = await Share.open(shareOptions);
+      // For Expo Share, we need to save the base64 image to a file first
+      const isAvailable = await Sharing.isAvailableAsync();
+      console.log("isAvailable", isAvailable);
+      if (isAvailable && url) {
+        // Extract base64 data
+        const base64Data = url.split(",")[1] || url.split("base64,")[1];
+
+        // Save to a temporary file
+        const fileUri = FileSystem.documentDirectory + "shared-image.jpg";
+        await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+          encoding: FileSystem.EncodingType.Base64
+        });
+
+        // Verify file exists
+        const fileInfo = await FileSystem.getInfoAsync(fileUri);
+        console.log(
+          "File exists:",
+          fileInfo.exists,
+          "File size:",
+          fileInfo.size
+        );
+
+        // Check if sharing is available on the device
+        if (isAvailable) {
+          // Share both the message and the file
+          await Sharing.shareAsync(fileUri, {
+            mimeType: "image/jpeg",
+            dialogTitle: message,
+            UTI: "public.jpeg" // For iOS
+          });
+        } else {
+          console.error("Sharing is not available on this device");
+        }
+      } else {
+        // If there's no image, just share the text message
+        console.error("No image to share");
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error sharing:", error);
     }
 
     setUserN(null);
