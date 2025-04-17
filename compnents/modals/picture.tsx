@@ -48,12 +48,12 @@ interface Photo {
 interface PictureProps {
   pic: Photo;
   dataSetType: string;
-  diveSiteName: string;
+  diveSiteName?: string;
   setVisitProfileVals: (val: any) => void;
 }
 
 const Picture = (props: PictureProps) => {
-  const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
+  const { pic, dataSetType, setVisitProfileVals } = props;
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
@@ -123,7 +123,7 @@ const Picture = (props: PictureProps) => {
 
   const handleDiveSiteMove = async (pic: Photo) => {
     setSelectedDiveSite({
-      SiteName: diveSiteName,
+      SiteName: selectedDiveSite.name,
       Latitude: pic.latitude,
       Longitude: pic.longitude
     });
