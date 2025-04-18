@@ -3,32 +3,32 @@ import { moderateScale } from "react-native-size-matters";
 import {
   insertPhotoLike,
   deletePhotoLike,
-} from "../../supabaseCalls/photoLikeSupabaseCalls";
-import { grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { SelectedPictureContext } from "../contexts/selectedPictureContext";
-import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
-import ImageCasherDynamic from "../helpers/imageCashingDynamic";
+} from "../../../supabaseCalls/photoLikeSupabaseCalls";
+import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
+import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
+import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { ActiveScreenContext } from "../../contexts/activeScreenContext";
+import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { useTranslation } from "react-i18next";
-import abbreviateNumber from '../helpers/abbreviateNumber';
-import ButtonIcon from "../reusables/buttonIcon";
+import abbreviateNumber from '../../helpers/abbreviateNumber';
+import ButtonIcon from "../buttonIcon";
 import * as S from './styles';
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-export default function Picture(props) {
+export default function SeaLifeImageCard(props) {
   const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(

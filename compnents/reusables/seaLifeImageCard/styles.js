@@ -5,7 +5,7 @@ import {
   colors,
   fontSizes,
   activeFonts
-} from '../styles';
+} from '../../styles';
 import { LinearGradient } from "expo-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;

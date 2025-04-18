@@ -17,7 +17,6 @@ import {
 import { getShopByUserID } from "../../supabaseCalls/shopsSupabaseCalls";
 import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import Itinerary from "../itineraries/itinerary";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { ShopContext } from "../../compnents/contexts/shopContext";
@@ -34,6 +33,7 @@ import { EditModeContext } from "../../compnents/contexts/editModeContext";
 import { TripDetailContext } from "../../compnents/contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
 import { useTranslation } from "react-i18next";
+import  ItineraryCard  from '../reusables/itineraryCard';
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -179,19 +179,14 @@ export default function TripListPage(props) {
         data={itineraryList}
         renderItem={({ item }) => (
           <View style={styles.shadowbox}>
-            <Itinerary
-              key={item.id}
-              itinerary={item}
+            <ItineraryCard  
+              isMyShop={true}
+              itinerary={item}    
               setSelectedID={setSelectedID}
               selectedID={selectedID}
-              setShopModal={setShopModal}
-              buttonOneText={t('Common.edit')}
-              buttonOneIcon="pencil"
               buttonOneAction={() => handleEditButton(item)}
-              buttonTwoText={t('Common.delete')}
-              buttonTwoIcon="delete-forever"
               buttonTwoAction={() => handleDeleteButton(item)}
-            />
+              />
           </View>
         )}
       />
@@ -206,6 +201,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // justifyContent: "center",
     height: windowHeight,
+  },
+  page: {
+    width: '96%'
   },
   content: {
     width: "90%",
