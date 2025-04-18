@@ -17,7 +17,6 @@ import {
 import { getShopByUserID } from "../../supabaseCalls/shopsSupabaseCalls";
 import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import Itinerary from "../itineraries/itinerary";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { ShopContext } from "../../compnents/contexts/shopContext";
@@ -188,18 +187,6 @@ export default function TripListPage(props) {
               buttonOneAction={() => handleEditButton(item)}
               buttonTwoAction={() => handleDeleteButton(item)}
               />
-            {/* <Itinerary
-              key={item.id}
-              itinerary={item}
-              setSelectedID={setSelectedID}
-              selectedID={selectedID}
-              setShopModal={setShopModal}
-              buttonOneText={t('Common.edit')}
-              buttonOneIcon="pencil"
-              buttonTwoText={t('Common.delete')}
-              buttonTwoIcon="delete-forever"
-              
-            /> */}
           </View>
         )}
       />

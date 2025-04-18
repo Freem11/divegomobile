@@ -8,6 +8,7 @@ import Popover from 'react-native-popover-view';
 import { Placement } from "react-native-popover-view/dist/Types";
 import { View } from "react-native";
 import IconWithLabel from '../iconWithLabal';
+import { moderateScale } from "react-native-size-matters";
 
 type TripCardViewProps = {
   itinerary:           ItineraryItem
@@ -71,16 +72,17 @@ export default function ItineraryCardView({ itinerary, flipMap, isMyShop, button
                 isVisible={isVisible}
                 onRequestClose={() => setIsVisible(false)}
                 placement={Placement.AUTO}
+                popoverStyle={{borderRadius: moderateScale(10)}}
                 >
                    
                  {isMyShop ?  <>
                   <IconWithLabel 
-                    label="Edit Trip"
+                    label="Edit"
                     iconName="pencil"
                     buttonAction={() => handleButtonPass(buttonOneAction, itinerary)}
                     />
                     <IconWithLabel 
-                    label="Delete Trip"
+                    label="Delete"
                     iconName="trash"
                     buttonAction={() => handleButtonPass(buttonTwoAction, itinerary)}
                     />
