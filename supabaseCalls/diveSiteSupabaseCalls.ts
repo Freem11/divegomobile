@@ -1,3 +1,5 @@
+import { DiveSiteBasic } from "../entities/diveSite";
+import { GPSBubble } from "../entities/GPSBubble";
 import { supabase } from "../supabase";
 
 export const diveSites = async () => {
@@ -19,7 +21,7 @@ export const getDiveSitesWithUser = async (values) => {
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: '',
+    userid: "",
   });
 
   if (error) {
@@ -31,6 +33,23 @@ export const getDiveSitesWithUser = async (values) => {
     // console.log(data)
     return data;
   }
+};
+
+export const getDiveSitesBasic = async (bubble: GPSBubble): Promise<DiveSiteBasic[]> => {
+  const { data, error } = await supabase
+    .from("diveSites")
+    .select("id,lat,lng,name")
+    .gte("lat", bubble.minLat)
+    .gte("lng", bubble.minLng)
+    .lte("lat", bubble.maxLat)
+    .lte("lng", bubble.maxLng);
+
+  if (error || !data) {
+    console.log("couldn't do it,", error);
+    return [];
+  }
+
+  return data;
 };
 
 export const getSiteNamesThatFit = async (value) => {
@@ -74,10 +93,7 @@ export const insertDiveSite = async (values) => {
 };
 
 export const getDiveSiteByName = async (value) => {
-  const { data, error } = await supabase
-    .from("diveSites")
-    .select()
-    .eq("name", value);
+  const { data, error } = await supabase.from("diveSites").select().eq("name", value);
 
   if (error) {
     console.log("couldn't do it 7,", error);
@@ -92,7 +108,7 @@ export const getDiveSiteByName = async (value) => {
 export const getDiveSiteWithUserName = async (values) => {
   const { data, error } = await supabase.rpc("get_single_divesite_info_with_username", {
     sitename: values.siteName,
-    region: values.region
+    region: values.region,
   });
 
   if (error) {
@@ -103,17 +119,13 @@ export const getDiveSiteWithUserName = async (values) => {
   if (data) {
     return data;
   }
-
 };
 
 export const getDiveSitesByIDs = async (valueArray) => {
   let Q1 = valueArray.substring(1, valueArray.length);
   let Q2 = Q1.substring(Q1.length - 1, 0);
 
-  const { data, error } = await supabase
-    .from("diveSites")
-    .select()
-    .or(`id.in.(${Q2})`);
+  const { data, error } = await supabase.from("diveSites").select().or(`id.in.(${Q2})`);
 
   if (error) {
     console.log("couldn't do it 7,", error);
@@ -126,34 +138,31 @@ export const getDiveSitesByIDs = async (valueArray) => {
 };
 
 export const getSingleDiveSiteByNameAndRegion = async (values) => {
-    const query = supabase
-    .from('diveSites')
-    .select('*')
-    .eq('name', values.name);
+  const query = supabase.from("diveSites").select("*").eq("name", values.name);
 
-    if (values.region === undefined){
-    } else {
-      if (values.region !== null) {
-        query.eq('region', values.region);
-      }
+  if (values.region === undefined) {
+  } else {
+    if (values.region !== null) {
+      query.eq("region", values.region);
     }
+  }
 
   const { data, error } = await query;
 
   if (error) {
-    console.log('couldn\'t do it 27,', error);
+    console.log("couldn't do it 27,", error);
     return [];
   }
 
   if (data) {
     return data;
   }
-}
+};
 
 export const updateDiveSite = async (values) => {
   const { data, error } = await supabase
     .from("diveSites")
-    .update({ diveSiteBio: values.bio, diveSiteProfilePhoto: values.photo  })
+    .update({ diveSiteBio: values.bio, diveSiteProfilePhoto: values.photo })
     .eq("id", values.id);
 
   if (error) {
@@ -167,14 +176,10 @@ export const updateDiveSite = async (values) => {
 };
 
 export const getSingleDiveSite = async (lat, lng) => {
-  const { data, error } = await supabase
-    .from('diveSites')
-    .select()
-    .eq('lat', lat)
-    .eq('lng', lng);
+  const { data, error } = await supabase.from("diveSites").select().eq("lat", lat).eq("lng", lng);
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 

@@ -1,6 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { DiveShop } from "../../entities/diveShop";
+import { DiveSiteBasic } from "../../entities/diveSite";
+import { MarkerDiveShop } from "./marker/markerDiveShop";
+import { MarkerDiveSite } from "./marker/markerDiveSite";
+// import image from "../../../png/mapIcons/AnchorBlue.png";
+import image from "../png/mapIcons/AnchorBlue.png";
 
 type MapViewProps = {
   // googleMapApiKey:    string
@@ -11,8 +17,8 @@ type MapViewProps = {
   // tempMarker?:        google.maps.LatLngLiteral | null
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
-  // diveSites?:         DiveSiteBasic[] | null
-  // diveShops?:         DiveShop[] | null
+  diveSites?: DiveSiteBasic[] | null;
+  diveShops?: DiveShop[] | null;
   // heatPoints?:        HeatPoint[] | null
 };
 
@@ -37,6 +43,8 @@ export default function GoogleMapView(props: MapViewProps) {
     longitudeDelta: 0.0421,
   };
 
+  console.log(props.diveSites[0]);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -52,6 +60,18 @@ export default function GoogleMapView(props: MapViewProps) {
         onRegionChangeComplete={() => props.handleBoundsChange()}
         toolbarEnabled={false}
       />
+      {/* {props.diveShops &&
+        props.diveShops.map((diveShop) => {
+          return <MarkerDiveShop key={diveShop.id} id={diveShop.id} latitude={diveShop.lat} longitude={diveShop.lng} />;
+        })} */}
+
+      <Marker
+        key={`-site`}
+        // image={image}
+        title={"My Marker"}
+        coordinate={{ latitude: 49.15015, longitude: -124.792317 }}
+        // onClick={handleClick}
+      ></Marker>
     </View>
   );
 

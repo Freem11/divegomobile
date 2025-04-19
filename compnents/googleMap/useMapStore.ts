@@ -1,31 +1,21 @@
-import MapView, { BoundingBox } from "react-native-maps";
+import MapView from "react-native-maps";
 import { create } from "zustand";
+import { GPSBubble } from "../../entities/GPSBubble";
 
 type State = {
-  map: MapView | null;
-  setMap: (map: MapView) => void;
+  mapRef: MapView | null;
+  setMapRef: (map: MapView) => void;
 
-  boundaries: BoundingBox | null;
-  updateBoundaries: () => void;
+  gpsBubble: GPSBubble | null;
+  setGpsBubble: (newGpsBubble: GPSBubble) => void;
 };
 
 export const useMapStore = create<State>((set, get) => ({
-  map: null,
-  setMap: (newMap) => set({ map: newMap }),
+  mapRef: null,
+  setMapRef: (newMap) => set({ mapRef: newMap }),
 
-  boundaries: null,
-  updateBoundaries: async () => {
-    const state = get();
-    if (!state.map) {
-      return null;
-    }
-
-    const boundaries = await state.map.getMapBoundaries();
-    if (!boundaries) {
-      return null;
-    }
-
-    console.log("boundaries", boundaries);
-    set({ boundaries });
+  gpsBubble: null,
+  setGpsBubble: (newGpsBubble) => {
+    set({ gpsBubble: newGpsBubble });
   },
 }));

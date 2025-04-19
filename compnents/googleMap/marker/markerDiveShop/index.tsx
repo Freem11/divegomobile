@@ -1,30 +1,22 @@
-import React, { useContext } from 'react';
-import { Marker } from '@react-google-maps/api';
-import icon from '../../../../images/mapIcons/DiveCentre24x24.png';
-import { ModalContext } from '../../../reusables/modal/context';
-import ShopModal from '../../../newModals/shopModal';
+import React, { useContext } from "react";
+import { Marker } from "react-native-maps";
+// import image from "../../png/mapIcons/DiveCentre60x60.png";
+import image from "../../../png/mapIcons/DiveCentre60x60.png";
 
 type MarkerDiveShopProps = {
-  id:       number
-  title:    string
-  position: google.maps.LatLngLiteral
+  id: number;
+  latitude: number;
+  longitude: number;
 };
 
 export function MarkerDiveShop(props: MarkerDiveShopProps) {
-  const { modalShow } = useContext(ModalContext);
+  // const { modalShow } = useContext(ModalContext);
 
   return (
     <Marker
-      icon={icon}
-      title={props.title}
-      position={props.position}
-      onClick={() => {
-        modalShow(ShopModal, {
-          id:   props.id,
-          size: 'large',
-        });
-      }}
-    >
-    </Marker>
+      coordinate={{ latitude: props.latitude, longitude: props.longitude }}
+      image={image}
+      // onPress={() => setupShopModal(cluster.properties.siteID)}
+    ></Marker>
   );
 }

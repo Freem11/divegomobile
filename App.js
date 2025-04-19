@@ -1,5 +1,10 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useState, useCallback, useLayoutEffect, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 import "react-native-url-polyfill/auto";
 import { Dimensions, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -123,7 +128,9 @@ export default function App() {
           asyncData?.session?.refresh_token &&
           typeof asyncData.session.refresh_token === "string"
         ) {
-          const newSession = await sessionRefresh(asyncData.session.refresh_token);
+          const newSession = await sessionRefresh(
+            asyncData.session.refresh_token
+          );
 
           if (newSession) {
             setActiveSession(newSession);
@@ -143,7 +150,6 @@ export default function App() {
     prepare();
   }, []);
 
-
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
@@ -162,19 +168,17 @@ export default function App() {
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
         <PinSpotContext.Provider value={{ dragPin, setDragPin }}>
-          <MapZoomContext.Provider value={{ zoomlev, setZoomLev }}>
+          {/* <MapZoomContext.Provider value={{ zoomlev, setZoomLev }}>
             <MapRegionContext.Provider value={{ region, setRegion }}>
-              <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
-                <SessionContext.Provider
-                  value={{ activeSession, setActiveSession }}
-                >
-                  <I18nextProvider i18n={i18n}>
-                    {activeSession ? <MapPage /> : <Authentication />}
-                  </I18nextProvider>
-                </SessionContext.Provider>
-              </MapCenterContext.Provider>
+              <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}> */}
+          <SessionContext.Provider value={{ activeSession, setActiveSession }}>
+            <I18nextProvider i18n={i18n}>
+              {activeSession ? <MapPage /> : <Authentication />}
+            </I18nextProvider>
+          </SessionContext.Provider>
+          {/* </MapCenterContext.Provider>
             </MapRegionContext.Provider>
-          </MapZoomContext.Provider>
+          </MapZoomContext.Provider> */}
         </PinSpotContext.Provider>
       </AppContextProvider>
     </GestureHandlerRootView>

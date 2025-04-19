@@ -1,25 +1,25 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 
-import { MapContext } from "./mapContext";
-import { PhotoContext } from "../contexts/photoContext";
-import { DiveSiteContext } from "../contexts/diveSiteContext";
-import { DiveShopContext } from "../contexts/diveShopContext";
-import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { debounce } from "../reusables/_helpers/debounce";
 import GoogleMapView from "./view";
 import MapView from "react-native-maps";
-import { Text, View } from "react-native";
 import { useMapStore } from "./useMapStore";
+import { GPSBubble } from "../../entities/GPSBubble";
+import { getDiveSitesBasic } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
+import { DiveSiteBasic } from "../../entities/diveSite";
+import { DiveShop } from "../../entities/diveShop";
 
 export default function GoogleMap() {
-  // const mapContext = useContext(MapContext);
-  const updateBoundaries = useMapStore((state) => state.updateBoundaries);
-  const setMap = useMapStore((state) => state.setMap);
+  const setGpsBubble = useMapStore((state) => state.setGpsBubble);
+  const setMapRef = useMapStore((state) => state.setMapRef);
+  const mapRef = useMapStore((state) => state.mapRef);
+
+  const [diveSites, setDiveSites] = useState<DiveSiteBasic[] | null>(null);
+  const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
   // const [tempMarker, setTempMarker] = useState<{ lat: number, lng: number } | null>(null);
   // const { sitesArray } = useContext(SitesArrayContext);
 
-  // const diveSiteContext = useContext(DiveSiteContext);
-  // const diveShopContext = useContext(DiveShopContext);
   // const photoContext = useContext(PhotoContext);
 
   // const center = useMemo(() => ({
@@ -28,28 +28,24 @@ export default function GoogleMap() {
   // }), []);
 
   const handleOnLoad = (map: MapView) => {
-    setMap(map);
+    setMapRef(map);
     console.log("loaded", { map: !!map });
   };
 
   const handleBoundsChange = debounce(async () => {
-    updateBoundaries();
+    if (!mapRef) {
+      return;
+    }
+    const boundaries = await mapRef.getMapBoundaries();
+    const bubble = GPSBubble.createFromBoundaries(boundaries);
+    setGpsBubble(bubble);
+    const [diveSites, diveShops] = await Promise.all([
+      GPSBubble.getItemsInGpsBubble(getDiveSitesBasic, bubble),
+      GPSBubble.getItemsInGpsBubble(getDiveShops, bubble),
+    ]);
+    setDiveShops(diveShops);
+    setDiveSites(diveSites);
   }, 500);
-
-  // useEffect(() => {
-  //   if (mapContext.mapRef) {
-  //     if (diveSiteContext.selectedDiveSite && !diveSiteContext.selectedDiveSite.lat) {
-  //       setTempMarker({
-  //         lat: diveSiteContext.selectedDiveSite.lat,
-  //         lng: diveSiteContext.selectedDiveSite.lng,
-  //       });
-  //     }
-  //   }
-
-  //   setTimeout(() => {
-  //     setTempMarker(null);
-  //   }, 2000);
-  // }, [diveSiteContext.selectedDiveSite]);
 
   return (
     <GoogleMapView
@@ -59,8 +55,8 @@ export default function GoogleMap() {
       onLoad={handleOnLoad}
       handleBoundsChange={handleBoundsChange}
       // heatPoints={photoContext.heatPoints}
-      // diveSites={diveSiteContext.basicCollection.items}
-      // diveShops={diveShopContext.collection.items}
+      diveSites={diveSites}
+      diveShops={diveShops}
     />
   );
 }
