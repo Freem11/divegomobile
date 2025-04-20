@@ -21,7 +21,6 @@ import {
   buttonTextAlt,
   buttonText
 } from "../styles";
-import screenData from "./screenData.json";
 import { moderateScale, s } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
@@ -35,23 +34,21 @@ import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
 import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import BottomDrawer from "./animatedBottomDrawer";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,
   deleteUserFollow,
   checkIfUserFollows,
 } from "../../supabaseCalls/userFollowSupabaseCalls";
 import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function UserProfile(props) {
-  const {} = props;
+  const { } = props;
   const { profile } = useContext(UserProfileContext);
   const { activeSession } = useContext(SessionContext);
   const { selectedProfile, setSelectedProfile } = useContext(
@@ -75,7 +72,7 @@ export default function UserProfile(props) {
   const [followData, setFollowData] = useState(profile[0].UserID);
   const [userFollows, setUserFollows] = useState(false);
   const [userStats, setUserStats] = useState(null);
-
+  const { t } = useTranslation()
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
@@ -146,8 +143,8 @@ export default function UserProfile(props) {
         setFollowData(alreadyFollows[0].id);
       }
     }
-if (selectedProfile){followCheck()}
-  
+    if (selectedProfile) { followCheck() }
+
   };
 
 
@@ -175,7 +172,7 @@ if (selectedProfile){followCheck()}
 
   const profileUpdate = async () => {
     if (profileVals.userName === "") {
-      setUserFail("Your diver name cannot be blank!");
+      setUserFail(t('Validators.requiredDiverName'));
       setProfileVals({ ...profileVals, userName: tempUserName });
     } else {
       try {
@@ -185,13 +182,13 @@ if (selectedProfile){followCheck()}
           bio: profileVals.bio,
           photo: profileVals.profilePhoto,
         });
-        if (success[0].length === 0 && profileVals) {
+        if (success.length === 0 && profileVals) {
           setProfileVals({ ...profileVals, userName: tempUserName });
-          setUserFail("Sorry that diver name has already been taken");
+          setUserFail(t('Validators.userNameTaken'));
         }
       } catch (e) {
         setProfileVals({ ...profileVals, userName: tempUserName });
-        setUserFail("Sorry that diver name has already been taken");
+        setUserFail(t('Validators.userNameTaken'));
         console.log({ title: "Error19", message: e.message });
       }
     }
@@ -201,14 +198,9 @@ if (selectedProfile){followCheck()}
     try {
       const image = await chooseImageHandler();
       if (image) {
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
+        let fileName = await imageUpload(image)
+
         if (profileVals.photo !== null || profileVals.photo === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
@@ -280,9 +272,9 @@ if (selectedProfile){followCheck()}
         style={styles.backButton}
       />
       {visitProfileVals ? (
-        <TouchableWithoutFeedback onPress={()=> handleFollow()}>
+        <TouchableWithoutFeedback onPress={() => handleFollow()}>
           <View style={userFollows ? styles.followButtonAlt : styles.followButton}>
-      <Text style={userFollows ? styles.followButtonTextAlt : styles.followButtonText}>{userFollows ? screenData.UserProfile.userDoesFollow : screenData.UserProfile.UserDoesNotFollow}</Text>
+            <Text style={userFollows ? styles.followButtonTextAlt : styles.followButtonText}>{userFollows ? t('UserProfile.userDoesFollow') : t('UserProfile.UserDoesNotFollow')}</Text>
           </View>
         </TouchableWithoutFeedback>
       ) : (
@@ -379,11 +371,11 @@ if (selectedProfile){followCheck()}
         upperBound={drawerUpperBound}
         drawerHeader={
           (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
-          screenData.UserProfile.drawerHeader
+          t('UserProfile.drawerHeader')
         }
         emptyDrawer={
           (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
-          screenData.UserProfile.emptyDrawer
+          t('UserProfile.emptyDrawer')
         }
       />
     </View>

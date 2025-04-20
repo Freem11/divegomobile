@@ -13,7 +13,7 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from "../styles";
-import screenData from "./screenData.json";
+
 import { getShopByUserID } from "../../supabaseCalls/shopsSupabaseCalls";
 import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
@@ -33,11 +33,12 @@ import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { EditModeContext } from "../../compnents/contexts/editModeContext";
 import { TripDetailContext } from "../../compnents/contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function TripListPage(props) {
-  const {} = props;
+  const { } = props;
   const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
   const { setShop } = useContext(ShopContext);
@@ -47,7 +48,6 @@ export default function TripListPage(props) {
   const { setSitesArray } = useContext(SitesArrayContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -57,11 +57,12 @@ export default function TripListPage(props) {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+  const { t } = useTranslation()
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
 
   useEffect(() => {
-    getItineraries(profile[0].UserID); 
+    getItineraries(profile[0].UserID);
     getShop(profile[0].UserID)
   }, []);
 
@@ -74,7 +75,7 @@ export default function TripListPage(props) {
     try {
       const shop = await getShopByUserID(id);
       if (shop.length > 0) {
-        setFormValues({...formValues, shopID : shop[0].id})
+        setFormValues({ ...formValues, shopID: shop[0].id })
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -110,7 +111,7 @@ export default function TripListPage(props) {
     setPreviousButtonID(activeScreen);
     setActiveScreen("TripCreatorScreen");
     setEditMode({ itineraryInfo, IsEditModeOn: true });
-    setFormValues({...itineraryInfo, shopID : formValues.shopID, OriginalItineraryID: itineraryInfo.id})
+    setFormValues({ ...itineraryInfo, shopID: formValues.shopID, OriginalItineraryID: itineraryInfo.id })
     setSitesArray(itineraryInfo.siteList)
     setLevelOneScreen(false);
     useButtonPressHelper(
@@ -155,13 +156,13 @@ export default function TripListPage(props) {
       <TouchableWithoutFeedback onPress={() => openTripCreatorScreen()}>
         <View style={styles.creatNewButton}>
           <Text style={styles.createNewText}>
-            {screenData.TripList.creatNewTripButton}
+            {t('TripList.newTrip')}
           </Text>
         </View>
       </TouchableWithoutFeedback>
 
       <View style={styles.content}>
-        <Text style={styles.header}>{screenData.TripList.header}</Text>
+        <Text style={styles.header}>{t('TripList.header')}</Text>
       </View>
 
       <FlatList
@@ -184,10 +185,10 @@ export default function TripListPage(props) {
               setSelectedID={setSelectedID}
               selectedID={selectedID}
               setShopModal={setShopModal}
-              buttonOneText="Edit"
+              buttonOneText={t('Common.edit')}
               buttonOneIcon="pencil"
               buttonOneAction={() => handleEditButton(item)}
-              buttonTwoText="Delete"
+              buttonTwoText={t('Common.delete')}
               buttonTwoIcon="delete-forever"
               buttonTwoAction={() => handleDeleteButton(item)}
             />

@@ -43,7 +43,7 @@ export default function GoogleMapView(props: MapViewProps) {
     longitudeDelta: 0.0421,
   };
 
-  console.log(props.diveSites[0]);
+  // console.log(props.diveSites[0]);
 
   return (
     <View style={styles.container}>

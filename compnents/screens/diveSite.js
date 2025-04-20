@@ -20,7 +20,6 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from "../styles";
-import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
 import { PinContext } from "../contexts/staticPinContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
@@ -33,12 +32,9 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
-import { chooseImageHandler } from "./imageUploadHelpers";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
@@ -50,6 +46,7 @@ import {
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -64,7 +61,7 @@ export default function DiveSite() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-
+  const { t } = useTranslation();
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
@@ -186,14 +183,9 @@ export default function DiveSite() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
+        let fileName = await imageUpload(image)
+
         if (
           site.divesiteprofilephoto !== null ||
           site.divesiteprofilephoto === ""
@@ -262,7 +254,7 @@ export default function DiveSite() {
       />
       <TouchableWithoutFeedback onPress={openPicUploader}>
         <View style={styles.contributeButton}>
-          <Text style={styles.contributeButtonText}>Add Sighting</Text>
+          <Text style={styles.contributeButtonText}>{t('DiveSite.addSighting')}</Text>
         </View>
       </TouchableWithoutFeedback>
 
@@ -303,7 +295,7 @@ export default function DiveSite() {
             <ScrollView>
               {site && (
                 <PlainTextInput
-                  placeHolder={`A little about ${site.name}`}
+                  placeHolder={t('DiveSite.aLittleAbout', { siteName: site.name, })}
                   content={site.divesitebio}
                   fontSz={fontSizes.StandardText}
                   isPartnerAccount={isPartnerAccount}
@@ -329,8 +321,8 @@ export default function DiveSite() {
         dataSetType={"DiveSitePhotos"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
-        drawerHeader={screenData.DiveSite.drawerHeader}
-        emptyDrawer={screenData.DiveSite.emptyDrawer}
+        drawerHeader={t('DiveSite.drawerHeader')}
+        emptyDrawer={t('DiveSite.emptyDrawer')}
       />
     </View>
   );

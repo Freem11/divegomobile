@@ -111,8 +111,8 @@ export default function MapPage() {
   const [isOpen, setIsOpen] = useState(false);
 
   const locales = getLocales();
-  console.log("locales", locales);
-
+  // console.log("locales", locales);
+  
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);

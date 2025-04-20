@@ -1,9 +1,12 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import * as S from './styles';
-import TextInputField from '../utils/textInput';
 import { useTranslation } from "react-i18next";
+import SecureTextInput from "../../reusables/secureTextInput";
+import MobileTextInput from "../../reusables/textInput";
+import ButtonIcon from "../../reusables/buttonIcon";
+import Button from "../../reusables/button";
+import { colors } from "../../styles";
 
 interface FormVals {
     email: string;
@@ -38,55 +41,55 @@ export default function LoginPageView({
 
     return (
         <S.Container>
-            <MaterialIcons
-                name="chevron-left"
-                size={48}
-                color="darkgrey"
-                onPress={moveToLandingPage}
+            <ButtonIcon 
+            icon="chevron-left"
+            onPress={moveToLandingPage}
+            size='small'
+            fillColor={colors.neutralGrey}
             />
 
             <S.Content>
-                <S.Header>{t('login.title')}</S.Header>
+                <S.Header>{t('Auth.diveIn')}</S.Header>
 
-                <TextInputField
-                    icon="alternate-email"
-                    placeHolderText={t('login.email')}
-                    secure={false}
+                <S.TextInputWrapper>
+                    <MobileTextInput 
+                    iconLeft="at"
+                    placeholder={t('Common.email')}
+                    value={formVals.email}
                     onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
-                    style={{ marginTop: 60 }}
-                />
-
-                <TextInputField
-                    icon="lock-outline"
-                    placeHolderText={t('login.password')}
-                    setSecureTextEntry={setSecureTextEntry}
-                    secure={secureTextEntry}
-                    onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
-                    style={{ marginTop: 40 }}
-                />
+                    />
+                </S.TextInputWrapper>
+                
+                <S.SecureTextInputWrapper>
+                    <SecureTextInput 
+                        onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
+                        placeholder={t('Common.password')}
+                    />
+                </S.SecureTextInputWrapper>
 
                 {loginFail ? <S.ErrorText>{loginFail}</S.ErrorText> : <S.ErrorText />}
 
                 <S.ButtonBox>
-                    <TouchableWithoutFeedback onPress={handleLogin}>
-                        <S.LoginButton>
-                            <S.LoginText>{t('login.button')}</S.LoginText>
-                            <MaterialIcons name="chevron-right" size={30} color="#fff" />
-                        </S.LoginButton>
-                    </TouchableWithoutFeedback>
+                    <Button 
+                        onPress={handleLogin} 
+                        alt={false} 
+                        size='medium'
+                        title={t('Common.login')} 
+                        iconRight="chevron-right"
+                        />
                 </S.ButtonBox>
             </S.Content>
 
             <S.ForgotBox>
                 <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
-                    <S.PromptLinkText>{t('login.forgot')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('Auth.forgotPassword')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.ForgotBox>
 
             <S.PromptBox>
-                <S.PromptText>{t('login.prompt')}</S.PromptText>
+                <S.PromptText>{t('Auth.noAccount')}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToSignUpPage}>
-                    <S.PromptLinkText>{t('login.promptLink')}</S.PromptLinkText>
+                    <S.PromptLinkText>{t('Common.signup')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.PromptBox>
         </S.Container>

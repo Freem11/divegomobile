@@ -2,18 +2,20 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getLocales } from "expo-localization";
 
-import en from "./en.json";
-import es from "./es.json";
+import en from "./locale/en.json";
+import es from "./locale/es.json";
 
 const resources = {
-  en: { translation: en },
-  es: { translation: es },
+  en: {
+    translation: en,
+  },
+  es: {
+    translation: es,
+  },
 };
 
 export const initI18n = async () => {
-  // const storedLang = await AsyncStorage.getItem(LANG_KEY);
   const locales = getLocales();
-
   const deviceLang = locales?.[0]?.languageCode ?? "en";
   const selectedLanguage = deviceLang in resources ? deviceLang : "en";
 
@@ -21,9 +23,7 @@ export const initI18n = async () => {
     resources,
     lng: selectedLanguage,
     fallbackLng: "en",
-    interpolation: {
-      escapeValue: false,
-    },
+    interpolation: { escapeValue: false },
   });
 };
 

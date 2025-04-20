@@ -9,13 +9,14 @@ import { colors, fontSizes } from "../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 
 export default function PhotoFilterer() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { textvalue, setTextValue } = useContext(SearchTextContext);
-
+  const { t } = useTranslation();
   const handleChange = async (text) => {
     setTextValue(text);
     setFullScreenModal(false);
@@ -30,7 +31,7 @@ export default function PhotoFilterer() {
     <View style={styles.container}>
       <TextInput
         style={styles.suggestInput}
-        placeholder={"Dive Deeper!"}
+        placeholder={t("Photo.diveDeeper")}
         value={textvalue}
         placeholderTextColor="darkgrey"
         color={colors.themeBlack}

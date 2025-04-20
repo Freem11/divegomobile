@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Keyboard, ScrollView } from "react-native";
 import * as S from "./styles";
 import CreateAccountPage from "./signupPage";
@@ -6,14 +6,20 @@ import LandingPage from "./landingPage";
 import LoginPage from "./loginPage";
 import ForgotPage from "./forgotPasswordPage";
 
-const PAGES = { SIGN_UP: 0, LANDING: 1, LOGIN: 2, FORGOT_PASSWORD: 3 };
+const PAGES = { SIGN_UP: 1, LANDING: 2, LOGIN: 3, FORGOT_PASSWORD: 4 };
 
 export default function Authentication() {
   const scrollViewRef = useRef(null);
-  const [carrouselIndex, setCarrouselIndex] = useState(PAGES.LANDING);
+  const [carrouselIndex, setCarrouselIndex] = useState(null);
   const [loginFail, setLoginFail] = useState(null);
   const [regFail, setRegFail] = useState(null);
   const [emailSent, setEmailSent] = useState(null);
+
+  if(!carrouselIndex){
+    setTimeout(() => {
+      setCarrouselIndex(PAGES.LANDING)
+    }, 0.05);
+  }
 
   useEffect(() => {
     Keyboard.dismiss();
@@ -26,10 +32,12 @@ export default function Authentication() {
     setEmailSent(null);
     setCarrouselIndex(pageIndex);
     scrollViewRef.current?.scrollTo({
-      x: S.windowWidth * pageIndex,
+      x: S.windowWidth * (pageIndex-1),
       animated: true,
     });
   };
+
+
 
   return (
     <S.Wrapper>

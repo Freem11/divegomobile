@@ -21,8 +21,20 @@ export const Container = styled.View`
 `;
 
 export const Content = styled.View`
+  flex: 1;
+  justify-content: center;
+  margin-top: -50%;
   margin-horizontal: 7%;
 `;
+
+export const TopInputWrapper = styled.View`
+   margin-top: ${moderateScale(60)}px;
+`;
+
+export const TextInputWrapper = styled.View`
+   margin-top: ${moderateScale(40)}px;
+`;
+
 
 export const Header = styled.Text`
   z-index: 10;
@@ -35,7 +47,6 @@ export const Header = styled.Text`
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${moderateScale(-50)}px;
 `;
 
 export const PromptBox = styled.View`

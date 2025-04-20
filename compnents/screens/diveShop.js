@@ -16,7 +16,6 @@ import {
   colors,
   fontSizes,
 } from "../styles";
-import screenData from "./screenData.json";
 import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedShopContext } from "../contexts/selectedShopContext";
@@ -24,14 +23,12 @@ import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 import { MaterialIcons } from "@expo/vector-icons";
-import { chooseImageHandler } from "./imageUploadHelpers";
-import {
-  uploadphoto,
-  removePhoto,
-} from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
+import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { updateDiveShop } from "../../supabaseCalls/shopsSupabaseCalls";
 import BottomDrawer from "./animatedBottomDrawer";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -47,14 +44,14 @@ export default function DiveShop() {
   const [diveShopVals, setDiveShopVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [isMyShop, setIsMyShop] = useState(false);
-
+  const { t } = useTranslation()
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
   const getItineraries = async (IdNum) => {
     try {
       const itins = await itineraries(IdNum);
-        setItineraryList(itins);
+      setItineraryList(itins);
     } catch (e) {
       console.log({ title: "Error", message: e.message });
     }
@@ -116,14 +113,9 @@ export default function DiveShop() {
     try {
       const image = await chooseImageHandler();
       if (image) {
-        let uri = image.assets[0].uri;
-        let extension = image.assets[0].uri.split(".").pop();
-        const fileName = Date.now() + "." + extension;
 
-        //create new photo file and upload
-        let picture = await fetch(uri);
-        picture = await picture.blob();
-        await uploadphoto(picture, fileName);
+        let fileName = await imageUpload(image)
+
         if (diveShopVals.photo !== null || diveShopVals.photo === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
@@ -214,8 +206,8 @@ export default function DiveShop() {
         dataSetType={"DiveShopTrips"}
         lowerBound={drawerLowerBound}
         upperBound={drawerUpperBound}
-        drawerHeader={screenData.DiveShop.drawerHeader}
-        emptyDrawer={selectedShop[0].orgName + screenData.DiveShop.emptyDrawer}
+        drawerHeader={t('DiveShop.drawerHeader')}
+        emptyDrawer={selectedShop[0].orgName + t('DiveShop.emptyDrawer')}
       />
     </View>
   );

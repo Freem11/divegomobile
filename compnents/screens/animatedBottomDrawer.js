@@ -43,6 +43,7 @@ import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function BottomDrawer(props) {
   const {
@@ -269,7 +270,8 @@ const styles = StyleSheet.create({
     zIndex: 20,
     elevation: 10,
     width: windowWidth,
-    borderColor: "darkgrey",
+    borderTopColor: "darkgrey",
+    borderColor: colors.themeWhite,
     borderWidth: moderateScale(1),
     borderTopRightRadius: moderateScale(10),
     borderTopLeftRadius: moderateScale(10),

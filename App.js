@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import "react-native-url-polyfill/auto";
 import { Dimensions, Platform } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { MapCenterContext } from "./compnents/contexts/mapCenterContext";
@@ -26,7 +26,7 @@ import { i18n, initI18n } from "./i18n";
 
 const { width, height } = Dimensions.get("window");
 
-export default function App() {
+export default function App () {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
@@ -34,13 +34,13 @@ export default function App() {
   const [activeSession, setActiveSession] = useState(null);
   const [mapCenter, setMapCenter] = useState({
     lat: 49.246292,
-    lng: -123.116226,
+    lng: -123.116226
   });
   const [region, setRegion] = useState({
     latitude: mapCenter.lat,
     longitude: mapCenter.lng,
     latitudeDelta: 5,
-    longitudeDelta: 5 * (width / height),
+    longitudeDelta: 5 * (width / height)
   });
   const [zoomlev, setZoomLev] = useState(region.latitudeDelta);
   const [dragPin, setDragPin] = useState({});
@@ -53,11 +53,11 @@ export default function App() {
         setRegion({
           ...region,
           latitude: photoLocation[0].latitude,
-          longitude: photoLocation[0].longitude,
+          longitude: photoLocation[0].longitude
         });
         setDragPin({
           lat: photoLocation[0].latitude,
-          lng: photoLocation[0].longitude,
+          lng: photoLocation[0].longitude
         });
       }
     } catch (e) {
@@ -89,7 +89,7 @@ export default function App() {
     RobotoThin: require("./assets/Roboto/Roboto-Thin.ttf"),
     SFThin: require("./assets/SanFran/SF-Pro-Display-Thin.otf"),
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
-    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
+    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf")
   });
 
   useEffect(() => {
@@ -108,19 +108,18 @@ export default function App() {
       }
 
       try {
-        const storedToken = await AsyncStorage.getItem("token");
+        let storedToken;
 
-        if (!storedToken) {
-          console.log("No token found in AsyncStorage.");
+        try {
+          storedToken = JSON.parse(await SecureStore.getItemAsync("token"));
+        } catch (e) {
+          console.log("Token in SecureStorage is not valid JSON.");
           setAppIsReady(true);
           return;
         }
 
-        let asyncData;
-        try {
-          asyncData = JSON.parse(storedToken);
-        } catch (e) {
-          console.log("Token in AsyncStorage is not valid JSON.");
+        if (!storedToken) {
+          console.log("No token found in SecureStorage.");
           setAppIsReady(true);
           return;
         }

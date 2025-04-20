@@ -6,7 +6,8 @@ export const colors = {
   secondaryYellow: '#fdc500',
   themeWhite: '#ffffff',
   themeBlack: '#00171f',
-  neutralGrey: '#A9A9A9'
+  neutralGrey: '#A9A9A9',
+  buttonPressOverlay: 'rgba(128, 128, 128, 0.25)'
 }
 
 export const fontSizes = {
@@ -17,6 +18,14 @@ export const fontSizes = {
 }
 
 export const buttonSizes = {
+  micro: {
+    height: 20,
+    width: 20
+  },
+  icon: {
+    height: 28,
+    width: 28
+  },
   small: {
     height: 50,
     width: 50
@@ -27,7 +36,7 @@ export const buttonSizes = {
   },
   large : {
     height: 50,
-    width: 220
+    width: 250
   },
 }
 

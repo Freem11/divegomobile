@@ -1,6 +1,6 @@
 {
     "login": {
-        "title": "Dive in...",
+        "title": "Log In",
         "email": "Email",
         "password": "Password",
         "button": "Login",
@@ -31,6 +31,6 @@
     "forgot": {
         "title": "Reset Password",
         "email": "Enter Your Account Email",
-        "button": "Send Recovery Email"
+        "button": "Send Email"
     }
 }

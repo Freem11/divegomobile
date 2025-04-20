@@ -71,6 +71,14 @@ export const SocialText = styled.Text`
   color: ${colors.themeBlack};
 `;
 
+export const ButtonBox = styled.View`
+  padding-top: ${moderateScale(20)}px;
+`;
+
+export const ButtonSpacer = styled.View`
+  padding-vertical: ${moderateScale(10)}px;
+`;
+
 export const LoginButton = styled.View`
   ${primaryButton};
   margin-top: ${windowHeight / 20}px;
@@ -90,7 +98,7 @@ export const RegisterText = styled.Text`
 `;
 
 export const IconRow = styled.View`
-  width: ${moderateScale(240)}px;
+  width: ${moderateScale(200)}px;
   margin-top: ${windowHeight / 30}px;
   align-items: center;
   justify-content: space-around;
@@ -110,16 +118,13 @@ const sharedIconStyle = `
 `;
 
 export const GoogleButton = styled.View`
-  background-color: white;
+  background-color: ${colors.themeBlack};
   border-radius: ${moderateScale(25)}px;
   height: ${moderateScale(48)}px;
   width: ${moderateScale(50)}px;
   align-items: center;
   justify-content: center;
-  elevation: 5;
-  shadow-offset: 1px 2px;
-  shadow-opacity: 1;
-  shadow-radius: ${moderateScale(2)}px;
+   ${sharedIconStyle}
 `;
 
 export const FacebookButton = styled.View`
@@ -128,14 +133,14 @@ export const FacebookButton = styled.View`
 `;
 
 export const AppleButton = styled.View`
-  background-color: white;
+  background-color: ${colors.themeWhite};;
   margin-left: ${moderateScale(6)}px;
   ${sharedIconStyle};
 `;
 
 export const GLogo = {
-  height: moderateScale(62),
-  width: moderateScale(62),
+  height: moderateScale(44),
+  width: moderateScale(44),
 };
 
 export const FLogo = {
@@ -143,6 +148,12 @@ export const FLogo = {
   height: moderateScale(45),
   width: moderateScale(45),
 };
+
+export const ALogo = {
+  height: moderateScale(50),
+  width: moderateScale(50),
+};
+
 
 export const Icon = {
   height: moderateScale(45),
