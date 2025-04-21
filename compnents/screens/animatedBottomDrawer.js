@@ -21,7 +21,7 @@ import {
 import { openURL } from 'expo-linking';
 import { moderateScale } from "react-native-size-matters";
 import SeaLifeImageCard from "../reusables/seaLifeImageCard/seaLifeImageCard";
-import ListItem from "../reusables/listItem";
+import ListItem from '../reusables/listItem/listItem';
 import ItineraryCard from '../reusables/itineraryCard';
 
 import {
@@ -42,6 +42,8 @@ import { TripDetailContext } from "../contexts/tripDetailsContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
 import { MapCenterContext } from "../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../contexts/zoomHelperContext";
+import * as S from './styles';
+import IconWithLabel from "../reusables/iconWithLabal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -168,14 +170,15 @@ export default function BottomDrawer(props) {
           decelerationRate="normal"
           keyExtractor={(item) => `${item.id}-${item.dateTaken}`}
           data={dataSet}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <View>
               {dataSetType === "Trips" ? (
-                <ListItem
-                  buttonAction={() => removeFromSitesArray(item.id)}
-                  key={item.id}
-                  titleText={item.name}
-                ></ListItem>
+                <S.ListItemContainer>
+                <S.ItemHousing>
+                <IconWithLabel  label={item.name} iconName="anchor" fillColor="white" bgColor={colors.primaryBlue} buttonAction={() => removeFromSitesArray(item.id)}  />
+                </S.ItemHousing>
+                    {index < dataSet.length - 1 && <S.VerticalLine />}
+                </S.ListItemContainer>
               ) : null}
 
               {dataSetType === "DiveShopTrips" ? (
