@@ -35,7 +35,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
-import BottomDrawer from "./animatedBottomDrawer";
+import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
 import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,

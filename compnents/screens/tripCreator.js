@@ -27,7 +27,7 @@ import {
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import TextInputField from "../authentication/utils/textInput";
 import PlainTextInput from "./plaintextInput";
-import BottomDrawer from "./animatedBottomDrawer";
+import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";

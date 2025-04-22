@@ -6,12 +6,13 @@ import {
   Text,
   Keyboard,
 } from "react-native";
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect, useRef, useCallback } from "react";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   Easing,
+  runOnJS,
 } from "react-native-reanimated";
 import {
   Gesture,
@@ -20,30 +21,29 @@ import {
 } from "react-native-gesture-handler";
 import { openURL } from 'expo-linking';
 import { moderateScale } from "react-native-size-matters";
-import SeaLifeImageCard from "../reusables/seaLifeImageCard/seaLifeImageCard";
-import ListItem from '../reusables/listItem/listItem';
-import ItineraryCard from '../reusables/itineraryCard';
-
+import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
+import ItineraryCard from '../../reusables/itineraryCard';
 import {
   activeFonts,
   colors,
   fontSizes,
   primaryButton,
   buttonText,
-} from "../styles";
-import { getItineraryDiveSiteByIdArray } from "../../supabaseCalls/itinerarySupabaseCalls";
-import { useMapFlip } from "../itineraries/hooks";
-import { MapHelperContext } from "../contexts/mapHelperContext";
-import { MapConfigContext } from "../contexts/mapConfigContext";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { SitesArrayContext } from "../contexts/sitesArrayContext";
-import { TripDetailContext } from "../contexts/tripDetailsContext";
-import { TripSitesContext } from "../contexts/tripSitesContext";
-import { MapCenterContext } from "../contexts/mapCenterContext";
-import { ZoomHelperContext } from "../contexts/zoomHelperContext";
+  buttonSizes,
+} from '../../styles';
+import { getItineraryDiveSiteByIdArray } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { useMapFlip } from "../../itineraries/hooks";
+import { MapHelperContext } from "../../contexts/mapHelperContext";
+import { MapConfigContext } from "../../contexts/mapConfigContext";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { TripDetailContext } from "../../contexts/tripDetailsContext";
+import { TripSitesContext } from "../../contexts/tripSitesContext";
+import { MapCenterContext } from "../../contexts/mapCenterContext";
+import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
 import * as S from './styles';
-import IconWithLabel from "../reusables/iconWithLabal";
+import IconWithLabel from "../../reusables/iconWithLabal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -79,23 +79,48 @@ export default function BottomDrawer(props) {
 
   const photosRef = useRef(null);
   const boxheight = useSharedValue(lowerBound);
+  const buttonWidth = useSharedValue(moderateScale(buttonSizes.small.width));
   const [bounds, setBounds] = useState({});
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawerState = useCallback((currentDrawerState) => {
+    if(!currentDrawerState){
+      setTimeout(() => { 
+        setIsDrawerOpen(prev => !prev);
+      }, 200);
+    } else {
+      setIsDrawerOpen(prev => !prev);
+    }
+  }, []);
 
   useEffect(() => {
     setBounds({ lower: lowerBound, upper: upperBound });
   }, []);
 
-  const animatedBottomDrawer = Gesture.Pan().onUpdate((event) => {
+  const animatedBottomDrawer = Gesture.Pan()
+  .onUpdate((event) => {
     if (event.translationY < 0) {
       boxheight.value = bounds.upper;
+      buttonWidth.value = buttonSizes.large.width 
     } else {
       boxheight.value = bounds.lower;
+      buttonWidth.value = buttonSizes.small.width
     }
+  }).onEnd(() => {runOnJS(toggleDrawerState)(isDrawerOpen);
   });
 
   const animatedBoxStyle = useAnimatedStyle(() => {
     return {
       height: withTiming(boxheight.value, {
+        duration: 400,
+        easing: Easing.inOut(Easing.linear),
+      }),
+    };
+  });
+
+  const animatedButtonStyle = useAnimatedStyle(() => {
+    return {
+      width: withTiming(buttonWidth.value, {
         duration: 400,
         easing: Easing.inOut(Easing.linear),
       }),
@@ -135,32 +160,26 @@ export default function BottomDrawer(props) {
   };
 
   return (
-    <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
-      <GestureDetector gesture={animatedBottomDrawer}>
+
+    <Animated.View style={[styles.mainHousing, animatedBoxStyle]} >
+     <GestureDetector gesture={animatedBottomDrawer}>
         <View style={styles.handle}>
           <Text style={styles.label}>{drawerHeader}</Text>
-          {/* <View style={styles.tab}></View> */}
         </View>
       </GestureDetector>
+  
+      <S.AnimatedButtonHousing style={animatedButtonStyle} >
+        <IconWithLabel label={isDrawerOpen ? headerButton : null} iconName="plus" buttonAction={onNavigate} />
+      </S.AnimatedButtonHousing>
 
       {dataSet && dataSet.length > 0 ? (
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
           ListFooterComponent={
-            <View style={{ height: moderateScale(50) }}></View>
+            <View style={{ height: moderateScale(60) }}></View>
           }
-          ListHeaderComponent={
-            dataSetType === "Trips" ? (
-              <View style={styles.flatListHeader}>
-                <TouchableWithoutFeedback onPress={() => onNavigate()}>
-                  <View style={styles.selectSitesButton}>
-                    <Text style={styles.selectSitesText}>{headerButton}</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-            ) : null
-          }
+    
           ref={photosRef}
           pagingEnabled
           horizontal={false}
@@ -246,7 +265,7 @@ export default function BottomDrawer(props) {
         />
       ) : (
         <View style={{ alignItems: "center", width: windowWidth }}>
-          {dataSetType === "Trips" ? (
+          {/* {dataSetType === "Trips" ? (
             <View style={styles.flatListHeader}>
               <TouchableWithoutFeedback onPress={() => onNavigate()}>
                 <View style={styles.selectSitesButton}>
@@ -254,7 +273,7 @@ export default function BottomDrawer(props) {
                 </View>
               </TouchableWithoutFeedback>
             </View>
-          ) : null}
+          ) : null} */}
           <Text style={styles.noSightings}>{emptyDrawer}</Text>
         </View>
       )}

@@ -27,7 +27,7 @@ import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 import { itineraries } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { updateDiveShop } from "../../supabaseCalls/shopsSupabaseCalls";
-import BottomDrawer from "./animatedBottomDrawer";
+import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
 import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
