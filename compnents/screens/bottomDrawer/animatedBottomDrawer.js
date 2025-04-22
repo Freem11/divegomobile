@@ -5,6 +5,7 @@ import {
   FlatList,
   Text,
   Keyboard,
+  TouchableHighlight,
 } from "react-native";
 import React, { useState, useContext, useEffect, useRef, useCallback } from "react";
 import Animated, {
@@ -44,6 +45,7 @@ import { MapCenterContext } from "../../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
 import * as S from './styles';
 import IconWithLabel from "../../reusables/iconWithLabal";
+import Icon from "../../../icons/Icon";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -101,7 +103,7 @@ export default function BottomDrawer(props) {
   .onUpdate((event) => {
     if (event.translationY < 0) {
       boxheight.value = bounds.upper;
-      buttonWidth.value = buttonSizes.large.width 
+      buttonWidth.value = buttonSizes.medium.width 
     } else {
       boxheight.value = bounds.lower;
       buttonWidth.value = buttonSizes.small.width
@@ -168,9 +170,14 @@ export default function BottomDrawer(props) {
         </View>
       </GestureDetector>
   
-      <S.AnimatedButtonHousing style={animatedButtonStyle} >
-        <IconWithLabel label={isDrawerOpen ? headerButton : null} iconName="plus" buttonAction={onNavigate} />
+      <S.StyledTouchableHighlight onPress={onNavigate} underlayColor={colors.buttonPressOverlay}>
+      <S.AnimatedButtonHousing style={[{justifyContent: 'space-between'}, animatedButtonStyle]} >
+         <S.IconWrapperLeft>
+         <Icon name={'plus'} fill={colors.primaryBlue} />
+         </S.IconWrapperLeft>
+          {isDrawerOpen ?  <S.StyledButtonText>Dive Sites</S.StyledButtonText> : null }
       </S.AnimatedButtonHousing>
+      </S.StyledTouchableHighlight>
 
       {dataSet && dataSet.length > 0 ? (
         <FlatList
