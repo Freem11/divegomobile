@@ -2,6 +2,32 @@ import styled from 'styled-components/native';
 import { activeFonts, buttonSizes, colors, fontSizes } from "../../styles";
 import { moderateScale } from 'react-native-size-matters'
 import Animated from 'react-native-reanimated';
+import { Dimensions } from "react-native";
+
+const windowWidth = Dimensions.get('window').width;
+
+
+
+export const Handle = styled.View`
+  z-index: 11;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-color: darkgrey;
+  background-color: ${colors.themeWhite};
+  height: ${moderateScale(45)}px;
+  width: 90%;
+  border-top-right-radius: ${moderateScale(15)}px;
+  border-top-left-radius: ${moderateScale(15)}px;
+`;
+
+export const HandleText = styled.Text`
+  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Light};
+  font-size: ${moderateScale(fontSizes.StandardText)};
+  border-top-right-radius: ${moderateScale(15)}px;
+  border-top-left-radius: ${moderateScale(15)}px;
+`;
 
 export const ListItemContainer = styled.View`
   width: 94%;
@@ -16,11 +42,13 @@ export const ItemHousing = styled.View`
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
   position: absolute;
-  bottom: ${moderateScale(25)}px;
+  bottom: ${windowWidth > 600 ? '15px' : '30px'};
   right: ${moderateScale(25)}px;
   border-radius: ${moderateScale(25)}px;
   height: ${moderateScale(buttonSizes.large.height)}px;
   z-index: 2;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ButtonHousing = styled.View`
@@ -48,14 +76,22 @@ export const VerticalLine = styled.View`
 `;
 
 export const StyledButtonText = styled.Text`
-  width: ${moderateScale(150)};
+  width: ${moderateScale(150)}px;
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Thin};
   color: ${colors.primaryBlue};
-  margin-left: ${moderateScale(5)};
+  margin-left: ${moderateScale(10)}px;
 `;
 
 export const IconWrapperLeft = styled.View`
     width: ${moderateScale(24)}px;
-    margin-left: ${moderateScale(10)};
+    margin-left: ${moderateScale(12)}px;
+`;
+
+export const IconWrapper = styled.View`
+    border-radius: ${moderateScale(28)}px;
+    border-width: ${moderateScale(1)}px;
+    width: ${moderateScale(28)}px;
+    height: ${moderateScale(28)}px;
+    margin-right: ${moderateScale(10)}px;
 `;

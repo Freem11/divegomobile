@@ -65,7 +65,7 @@ export default function TripCreatorPage(props) {
   const [itineraryList, setItineraryList] = useState("");
 
   const drawerUpperBound = "80%";
-  const drawerLowerBound = "15%";
+  const drawerLowerBound = "17%";
 
   useEffect(() => {
     getItineraries(profile[0].UserID);

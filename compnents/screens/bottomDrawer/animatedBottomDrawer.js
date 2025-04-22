@@ -98,15 +98,17 @@ export default function BottomDrawer(props) {
   useEffect(() => {
     setBounds({ lower: lowerBound, upper: upperBound });
   }, []);
+  const buttonOpen = moderateScale(buttonSizes.medium.width)
+  const buttonClosed = moderateScale(buttonSizes.small.width)
 
   const animatedBottomDrawer = Gesture.Pan()
   .onUpdate((event) => {
     if (event.translationY < 0) {
       boxheight.value = bounds.upper;
-      buttonWidth.value = buttonSizes.medium.width 
+      buttonWidth.value = buttonOpen 
     } else {
       boxheight.value = bounds.lower;
-      buttonWidth.value = buttonSizes.small.width
+      buttonWidth.value = buttonClosed
     }
   }).onEnd(() => {runOnJS(toggleDrawerState)(isDrawerOpen);
   });
@@ -165,9 +167,13 @@ export default function BottomDrawer(props) {
 
     <Animated.View style={[styles.mainHousing, animatedBoxStyle]} >
      <GestureDetector gesture={animatedBottomDrawer}>
-        <View style={styles.handle}>
-          <Text style={styles.label}>{drawerHeader}</Text>
-        </View>
+        <S.Handle>
+        <S.IconWrapper>
+         <Icon name={isDrawerOpen ? 'chevron-down' : 'chevron-up'} fill={colors.themeBlack} />
+         </S.IconWrapper>
+          <S.HandleText>{drawerHeader}</S.HandleText>
+     
+        </S.Handle>
       </GestureDetector>
   
       <S.StyledTouchableHighlight onPress={onNavigate} underlayColor={colors.buttonPressOverlay}>
@@ -298,11 +304,12 @@ const styles = StyleSheet.create({
     zIndex: 20,
     elevation: 10,
     width: windowWidth,
-    borderTopColor: "darkgrey",
-    borderColor: colors.themeWhite,
+    borderTopColor: colors.themeBlack,
+    borderColor: colors.themeBlack,
+    borderBottomColor: colors.themeWhite,
     borderWidth: moderateScale(1),
-    borderTopRightRadius: moderateScale(10),
-    borderTopLeftRadius: moderateScale(10),
+    borderTopRightRadius: moderateScale(15),
+    borderTopLeftRadius: moderateScale(15),
     backgroundColor: colors.themeWhite,
   },
   page: {
