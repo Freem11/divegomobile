@@ -11,11 +11,12 @@ type ButtonsProps = {
   children: React.ReactElement[];
 };
 
-const Screens: React.FC<ScreensProps> = ({ children }) => (
+const Screens = React.forwardRef<ScrollView, ScreensProps>(({ children }, ref) => (
   <ScrollView
     horizontal
     pagingEnabled
     scrollEnabled={false}
+    ref={ref}
     showsHorizontalScrollIndicator={false}
     keyboardShouldPersistTaps="handled"
     contentContainerStyle={S.PageContainer}
@@ -26,26 +27,28 @@ const Screens: React.FC<ScreensProps> = ({ children }) => (
       </S.PageContent>
     ))}
   </ScrollView>
-);
+));
 
-const Buttons: React.FC<ButtonsProps & { onPress: (index: number) => void }> = ({ children, onPress }) => (
+const Buttons: React.FC<ButtonsProps & { onPress?: (index: number) => void }> = ({ children, onPress }) => (
   <BottomMenu>
-    {children.map((button, index) =>
-      React.cloneElement(button, {
-        key: index,
-        onPress: () => onPress(index),
-      })
-    )}
+  {children.map((button, index) => (
+  <React.Fragment key={index}>
+    {React.cloneElement(button, {
+      onPress: () => onPress(index),
+    })}
+  </React.Fragment>
+))}
   </BottomMenu>
 );
 export type PaginatorProps = {
+  defaultPage?: number;
   children: React.ReactNode;
 };
 
 const Paginator: React.FC<PaginatorProps> & {
   Screens: typeof Screens;
   Buttons: typeof Buttons;
-} = ({ children }) => {
+} = ({ defaultPage, children }) => {
 
 
   const screens = React.Children.toArray(children).find(
@@ -57,28 +60,15 @@ const Paginator: React.FC<PaginatorProps> & {
 
   const onPress = (index: number) => {
     scrollViewRef.current?.scrollTo({ x: index * S.windowWidth, animated: true });
-    setPage(index);
   };
   const scrollViewRef = useRef(null);
-  const [carrouselIndex, setCarrouselIndex] = useState(null);
 
-  if(!carrouselIndex){
+ useEffect(() => {
     setTimeout(() => {
-      setCarrouselIndex(1)
-    }, 0.05);
-  }
+      scrollViewRef.current?.scrollTo({ x: (defaultPage || 0) * S.windowWidth, animated: true });
+    }, 0.01);
+  },[])
 
-  useEffect(() => {
-    Keyboard.dismiss();
-    setPage(carrouselIndex);
-  }, [carrouselIndex]);
-
-  const setPage = (pageIndex) => {
-    scrollViewRef.current?.scrollTo({
-      x: S.windowWidth * (pageIndex-1),
-      animated: true,
-    });
-  };
 
   return (
     <S.Wrapper>

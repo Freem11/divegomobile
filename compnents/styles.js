@@ -24,7 +24,7 @@ export const buttonSizes = {
   },
   icon: {
     height: 28,
-    width: 28
+    width: 100
   },
   small: {
     height: 50,

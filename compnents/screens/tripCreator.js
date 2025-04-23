@@ -369,7 +369,7 @@ export default function TripCreatorPage(props) {
           <View style={{ height: moderateScale(50) }}></View>
         </ScrollView>
 
-        <BottomDrawer
+        {/* <BottomDrawer
           dataSet={tripDiveSites}
           dataSetType={"Trips"}
           lowerBound={drawerLowerBound}
@@ -377,7 +377,7 @@ export default function TripCreatorPage(props) {
           drawerHeader={t('TripCreator.drawerHeader')}
           emptyDrawer={t('TripCreator.emptyDrawer')}
           headerButton={t('TripCreator.selectSitesButton')}
-        />
+        /> */}
 
         <DateTimePickerModal
           isVisible={datePickerVisible}
