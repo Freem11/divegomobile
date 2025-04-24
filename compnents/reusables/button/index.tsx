@@ -15,12 +15,13 @@ export type ButtonProps = {
 
 export default function Button(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, children, ...rest } = props;
+
   return (
     <S.StyledTouchableHighlight underlayColor={colors.buttonPressOverlay} {...rest} onPress={() => props.onPress()}>
     <S.StyledButton {...rest}>
       {iconLeft && 
         <S.IconWrapperLeft>
-          <Icon name={iconRight as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
+          <Icon name={iconLeft as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
         </S.IconWrapperLeft>
       }
 

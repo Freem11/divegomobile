@@ -203,7 +203,6 @@ export default function TripCreatorPage(props) {
   };
 
   return (
-    // <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <Flex>
       <S.BackButtonWrapper>
         <ButtonIcon 
@@ -329,7 +328,6 @@ export default function TripCreatorPage(props) {
           }
         />
       </Flex>
-    // </TouchableWithoutFeedback>
   );
 }
 

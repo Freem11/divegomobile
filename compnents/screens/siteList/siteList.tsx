@@ -9,7 +9,7 @@ import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { colors } from "../../styles";
 import { Keyboard, ScrollView } from "react-native";
-import Icon from "../../../icons/Icon";
+import Button from "../../reusables/button";
 
 export default function SiteList() {
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
@@ -66,16 +66,16 @@ export default function SiteList() {
       )
       })}
       </ScrollView>
-      <S.StyledTouchableHighlight onPress={onNavigate} underlayColor={colors.buttonPressOverlay}>
+
       <S.ButtonHousing>
-         <S.IconWrapperLeft>
-         <Icon name={'plus'} fill={colors.primaryBlue} />
-         </S.IconWrapperLeft>
-           <S.StyledButtonText>Dive Sites</S.StyledButtonText>
-      </S.ButtonHousing>
-      </S.StyledTouchableHighlight>
+            <Button 
+              onPress={onNavigate} 
+              size='medium'
+              alt={true}
+              title="Dive Sites"
+              iconLeft="plus"
+              />
+        </S.ButtonHousing>
       </S.ScrollViewContainer>
     )
   };
-
-
