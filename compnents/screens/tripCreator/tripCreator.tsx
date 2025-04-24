@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
+import * as S from './styles';
+import { Flex } from '../../ui/containes';
 import {
   StyleSheet,
   View,
@@ -18,31 +20,32 @@ import {
   buttonTextAlt,
   authenicationButton,
   buttonText,
-} from "../styles";
+} from "../../styles";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
-} from "../../supabaseCalls/itinerarySupabaseCalls";
-import TextInputField from "../authentication/utils/textInput";
-import PlainTextInput from "./plaintextInput";
+} from "../../../supabaseCalls/itinerarySupabaseCalls";
+import PlainTextInput from "../plaintextInput";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale, s } from "react-native-size-matters";
-import { TripDetailContext } from "../contexts/tripDetailsContext";
-import { SitesArrayContext } from "../contexts/sitesArrayContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
-import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
-import { EditModeContext } from "../contexts/editModeContext";
-import { TripSitesContext } from "../contexts/tripSitesContext";
+import { TripDetailContext } from "../../contexts/tripDetailsContext";
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
+import { EditModeContext } from "../../contexts/editModeContext";
+import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { useTranslation } from "react-i18next";
-import PriceTextInput from '../reusables/priceTextInput';
-import MobileTextInput from "../reusables/textInput";
+import PriceTextInput from '../../reusables/priceTextInput';
+import MobileTextInput from "../../reusables/textInput";
+import ButtonIcon from "../../reusables/buttonIcon";
+import Button from "../../reusables/button";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -137,7 +140,7 @@ export default function TripCreatorPage(props) {
     getTripDiveSites();
   };
 
-  const handleClose = () => {
+  const onClose = () => {
     setEditMode(false);
     setSitesArray([]);
     setTripDiveSites([]);
@@ -200,28 +203,26 @@ export default function TripCreatorPage(props) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
-        <MaterialIcons
-          name="chevron-left"
-          size={moderateScale(48)}
-          color={"darkgrey"}
-          onPress={() => handleClose()}
-          style={{
-            marginTop: "15%",
-            alignSelf: "flex-start",
-            marginLeft: "2%",
-          }}
+    // <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <Flex>
+      <S.BackButtonWrapper>
+        <ButtonIcon 
+        icon="chevron-left"
+        onPress={onClose}
+        size='small'
+        fillColor={colors.neutralGrey}
         />
-
+      </S.BackButtonWrapper>
+      
         {editMode && (
-          <TouchableWithoutFeedback onPress={() => cloneButtonPress()}>
-            <View style={styles.creatNewButton}>
-              <Text style={styles.createNewText}>
-                {t('TripCreator.cloneButton')}
-              </Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <S.TopButtonBox>
+            <Button 
+              onPress={cloneButtonPress} 
+              alt={true} 
+              size='medium'
+              title={t('TripCreator.cloneButton')} 
+              />
+          </S.TopButtonBox>
         )}
 
         <ScrollView contentContainerStyle={styles.content}>
@@ -234,27 +235,21 @@ export default function TripCreatorPage(props) {
           )}
 
           <View style={styles.textBuffer}>
-            <TextInputField
-              icon={"store"}
-              inputValue={formValues && formValues.tripName}
-              placeHolderText={t('TripCreator.tripNamePlaceholder')}
-              secure={false}
-              onChangeText={(text) =>
-                setFormValues({ ...formValues, tripName: text })
-              }
-            />
+          <MobileTextInput 
+              iconLeft="store"
+              placeholder={t('TripCreator.tripNamePlaceholder')}
+              value={formValues.tripName}
+              onChangeText={(text: string) => setFormValues({ ...formValues, BotripNameokingPage: text })}
+              />
           </View>
 
           <View style={styles.textBuffer}>
-            <TextInputField
-              icon={"alternate-email"}
-              inputValue={formValues && formValues.BookingPage}
-              placeHolderText={t('TripCreator.bookingLinkPlaceholder')}
-              secure={false}
-              onChangeText={(text) =>
-                setFormValues({ ...formValues, BookingPage: text })
-              }
-            />
+            <MobileTextInput 
+              iconLeft="link"
+              placeholder={t('TripCreator.bookingLinkPlaceholder')}
+              value={formValues.BookingPage}
+              onChangeText={(text: string) => setFormValues({ ...formValues, BookingPage: text })}
+              />
           </View>
 
           <View style={styles.textBuffer}>
@@ -311,21 +306,14 @@ export default function TripCreatorPage(props) {
             </View>
           </KeyboardAvoidingView>
 
-          <View style={styles.buttonBox}>
-            <TouchableWithoutFeedback onPress={() => handleSubmit()}>
-              <View style={styles.submitButton}>
-                <Text style={styles.submitText}>
-                  {t('TripCreator.submitButton')}
-                </Text>
-                <MaterialIcons
-                  name="chevron-right"
-                  size={30}
-                  color={colors.themeWhite}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-          <View style={{ height: moderateScale(50) }}></View>
+          <S.BottomButtonBox>
+            <Button 
+              onPress={handleSubmit} 
+              size='medium'
+              title={t('TripCreator.submitButton')} 
+              iconRight="chevron-right"
+              />
+          </S.BottomButtonBox>
         </ScrollView>
 
         <DateTimePickerModal
@@ -340,8 +328,8 @@ export default function TripCreatorPage(props) {
               : undefined
           }
         />
-      </View>
-    </TouchableWithoutFeedback>
+      </Flex>
+    // </TouchableWithoutFeedback>
   );
 }
 
@@ -374,8 +362,8 @@ const styles = StyleSheet.create({
     borderColor: "darkgrey",
     borderRadius: moderateScale(10),
     paddingBottom: "2%",
-    marginTop: "5%",
-    backgroundColor: colors.themeWhite,
+    marginTop: "4%",
+    height: "75%"
   },
   buttonBox: {
     zIndex: -1,

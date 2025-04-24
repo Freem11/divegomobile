@@ -11,7 +11,7 @@ import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
 import DiveSiteUploadScreen from '../screens/diveSiteUploader';
-import TripCreatorPage from '../screens/tripCreator';
+import TripCreatorPage from '../screens/tripCreator/tripCreator';
 import NewTripCreatorPage from '../screens/newTripCreator';
 import { colors } from "../styles";
 
