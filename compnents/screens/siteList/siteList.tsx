@@ -54,7 +54,7 @@ export default function SiteList() {
 
     return (
       <S.ScrollViewContainer>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ height: '100%'}}>
       {Array.isArray(tripDiveSites) && tripDiveSites.map((tripDetails, index) => {
         return (
         <S.ListItemContainer key={tripDetails.id}>
