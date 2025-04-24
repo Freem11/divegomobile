@@ -6,27 +6,10 @@ import { Dimensions } from "react-native";
 
 const windowWidth = Dimensions.get('window').width;
 
-
-
-export const Handle = styled.View`
-  z-index: 11;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border-color: darkgrey;
-  background-color: ${colors.themeWhite};
-  height: ${moderateScale(45)}px;
-  width: 90%;
-  border-top-right-radius: ${moderateScale(15)}px;
-  border-top-left-radius: ${moderateScale(15)}px;
-`;
-
-export const HandleText = styled.Text`
-  color: ${colors.themeBlack};
-  font-family: ${activeFonts.Light};
-  font-size: ${moderateScale(fontSizes.StandardText)};
-  border-top-right-radius: ${moderateScale(15)}px;
-  border-top-left-radius: ${moderateScale(15)}px;
+export const ScrollViewContainer = styled.View`
+    width: 100%; 
+    marginTop: 12%; 
+    marginBottom: 1%;
 `;
 
 export const ListItemContainer = styled.View`
@@ -42,10 +25,11 @@ export const ItemHousing = styled.View`
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
   position: absolute;
-  bottom: ${windowWidth > 600 ? '15px' : '30px'};
-  right: ${moderateScale(25)}px;
+  bottom: ${moderateScale(20)}px;
+  right: ${moderateScale(20)}px;
   border-radius: ${moderateScale(25)}px;
   height: ${moderateScale(buttonSizes.large.height)}px;
+  width: ${moderateScale(buttonSizes.medium.width)}px;
   z-index: 2;
   justify-content: center;
   align-items: center;
@@ -53,18 +37,16 @@ export const StyledTouchableHighlight = styled.TouchableHighlight`
 
 export const ButtonHousing = styled.View`
   z-index: 2;
+  width: ${moderateScale(buttonSizes.medium.width)}px;
   height: ${moderateScale(buttonSizes.large.height)}px;
   border-width: ${moderateScale(1)}px;
   border-color: ${colors.neutralGrey};
   border-radius: ${moderateScale(25)}px;
-  margin-bottom: ${moderateScale(10)}px;
   padding-vertical: ${moderateScale(0)}px;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
-
-export const AnimatedButtonHousing = Animated.createAnimatedComponent(ButtonHousing);
 
 export const VerticalLine = styled.View`
   position: absolute;

@@ -11,14 +11,17 @@ export const Wrapper = styled.View`
   background-color: ${colors.themeWhite};
 `;
 
-export const PageContainer = styled.View`
+export const PageContainer = styled.ScrollView`
   align-items: center;
   justify-content: center;
+  height: 100%;
 `;
 
 export const PageContent = styled.View`
   width: ${windowWidth}px;
-  height: ${Platform.OS === "ios" ? windowHeight : windowHeight-moderateScale(35)}px;
+  height: 100%;
   justify-content: center;
   align-items: center;
 `;
+
+// ${Platform.OS === "ios" ? windowHeight : windowHeight-moderateScale(35)}px;

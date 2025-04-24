@@ -8,13 +8,11 @@ import {
 } from '../../styles';
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
-    width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
     height: ${({size}) => moderateScale(buttonSizes[size].height)}px;
     border-radius: ${({size}) => moderateScale(buttonSizes[size].height)/2}px;
 `;
 
 export const StyledButton = styled.View`
-  width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
   height: ${({size}) => moderateScale(buttonSizes[size].height)}px;
   background-color: 'transparent';
   display: flex;

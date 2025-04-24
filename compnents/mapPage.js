@@ -467,13 +467,14 @@ export default function MapPage() {
             </View>
           ) : null}
 
+        {mapConfig === 0 ?
           <BottomMenu>
             <ProfileButton />
             <SiteSearchButton />
             <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
             <DiveSiteButton />
             {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-          </BottomMenu>
+          </BottomMenu> : null}
 
           {/* {mapConfig === 0 ? <View style={styles.iosBottom}/> : null} */}
           <View

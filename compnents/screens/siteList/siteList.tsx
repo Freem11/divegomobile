@@ -4,13 +4,23 @@ import * as S from './styles';
 import { getItineraryDiveSiteByIdArray } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { MapHelperContext } from "../../contexts/mapHelperContext";
+import { MapConfigContext } from "../../contexts/mapConfigContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { colors } from "../../styles";
-import { ScrollView, View } from "react-native";
+import { Keyboard, ScrollView } from "react-native";
+import Icon from "../../../icons/Icon";
 
-export default function SiteList(props) {
+export default function SiteList() {
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   
+  const { setMapHelper } = useContext(MapHelperContext);
+  const { setMapConfig } = useContext(MapConfigContext);
+  const { setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+
   useEffect(() => {
     getTripDiveSites(sitesArray);
   }, []);
@@ -35,9 +45,16 @@ export default function SiteList(props) {
     getTripDiveSites(setSitesArray);
   };
 
+  const onNavigate = () => {
+    Keyboard.dismiss();
+    setMapHelper(true);
+    setMapConfig(3);
+    setLevelTwoScreen(false);
+  };
+
     return (
-      <View style={{width: '100%', marginVertical: '15%'}}>
-      <ScrollView style={{width: '100%'}}>
+      <S.ScrollViewContainer>
+      <ScrollView>
       {Array.isArray(tripDiveSites) && tripDiveSites.map((tripDetails, index) => {
         return (
         <S.ListItemContainer key={tripDetails.id}>
@@ -49,6 +66,16 @@ export default function SiteList(props) {
       )
       })}
       </ScrollView>
-      </View>
+      <S.StyledTouchableHighlight onPress={onNavigate} underlayColor={colors.buttonPressOverlay}>
+      <S.ButtonHousing>
+         <S.IconWrapperLeft>
+         <Icon name={'plus'} fill={colors.primaryBlue} />
+         </S.IconWrapperLeft>
+           <S.StyledButtonText>Dive Sites</S.StyledButtonText>
+      </S.ButtonHousing>
+      </S.StyledTouchableHighlight>
+      </S.ScrollViewContainer>
     )
   };
+
+

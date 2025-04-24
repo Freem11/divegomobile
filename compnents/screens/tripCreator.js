@@ -262,7 +262,7 @@ export default function TripCreatorPage(props) {
           </TouchableWithoutFeedback>
         )}
 
-        <ScrollView style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content}>
           {editMode ? (
             <Text style={styles.header}>
               {t('TripCreator.headerEdit')}
@@ -395,13 +395,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
-    // justifyContent: "center",
-    height: windowHeight,
+    marginTop: '10%'
   },
   content: {
-    height: "180%",
+    height: "100%",
     width: "90%",
-    marginBottom: "20%",
   },
   header: {
     zIndex: 10,

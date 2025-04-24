@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Keyboard, ScrollView } from "react-native";
+import { Dimensions, Keyboard, Platform, ScrollView, View } from "react-native";
 import * as S from "./styles";
 import BottomMenu from "../bottomMenu";
+import { moderateScale } from "react-native-size-matters";
+
+const windowHeight = Dimensions.get("window").height;
 
 type ScreensProps = {
   children: React.ReactNode[];
@@ -19,7 +22,12 @@ const Screens = React.forwardRef<ScrollView, ScreensProps>(({ children }, ref) =
     ref={ref}
     showsHorizontalScrollIndicator={false}
     keyboardShouldPersistTaps="handled"
-    contentContainerStyle={S.PageContainer}
+    contentContainerStyle={{  
+      height:
+      Platform.OS === 'ios'
+        ? windowHeight - moderateScale(85)
+        : windowHeight - moderateScale(75) 
+      }}
   >
     {children.map((child, index) => (
       <S.PageContent key={index}>
@@ -73,14 +81,17 @@ const Paginator: React.FC<PaginatorProps> & {
   return (
     <S.Wrapper>
       {/* Screens */}
+      <View style={{height: Platform.OS === "ios" ? windowHeight-moderateScale(85) : windowHeight-moderateScale(45)}}>
       {screens && React.cloneElement(screens as React.ReactElement, {
         ref: scrollViewRef,
       })}
-
+      </View>
       {/* Buttons */}
+      <View style={{height: Platform.OS === "ios" ? moderateScale(85): moderateScale(15)}}>
       {buttons && React.cloneElement(buttons as React.ReactElement, {
         onPress,
       })}
+       </View>
     </S.Wrapper>
   );
 }
