@@ -39,9 +39,10 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
-import { EditModeContext } from "../../compnents/contexts/editModeContext";
+import { EditModeContext } from "../contexts/editModeContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
 import { useTranslation } from "react-i18next";
+import PriceTextInput from '../reusables/priceTextInput';
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -92,27 +93,27 @@ export default function TripCreatorPage(props) {
   };
 
   //currency formatter stuff
-  const { format: formatCurrency } = Intl.NumberFormat("en-Us", {
-    currency: "USD",
-    style: "currency",
-  });
+  // const { format: formatCurrency } = Intl.NumberFormat("en-Us", {
+  //   currency: "USD",
+  //   style: "currency",
+  // });
 
-  function useATMInput() {
-    const [value, setValue] = useState(
-      editMode ? editMode.itineraryInfo.price : "$0.00"
-    );
-    function handleChange(value) {
-      const decimal = Number(value.replace(/\D/g, "")) / 100;
-      setValue(formatCurrency(decimal || 0).replace("R$\xa0", ""));
-    }
-    return [value, handleChange];
-  }
+  // function useATMInput() {
+  //   const [value, setValue] = useState(
+  //     editMode ? editMode.itineraryInfo.price : "$0.00"
+  //   );
+  //   function handleChange(value) {
+  //     const decimal = Number(value.replace(/\D/g, "")) / 100;
+  //     setValue(formatCurrency(decimal || 0).replace("R$\xa0", ""));
+  //   }
+  //   return [value, handleChange];
+  // }
 
-  const [value, setValue] = useATMInput();
+  // const [value, setValue] = useATMInput();
 
-  useEffect(() => {
-    setFormValues({ ...formValues, price: value });
-  }, [value]);
+  // useEffect(() => {
+  //   setFormValues({ ...formValues, price: value });
+  // }, [value]);
 
   //date picker stuff
   const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -179,7 +180,7 @@ export default function TripCreatorPage(props) {
     setEditMode(false);
     setSitesArray([]);
     setTripDiveSites([]);
-    setValue("$0.00");
+    // setValue("$0.00");
     setFormValues({
       ...formValues,
       BookingPage: "",
@@ -224,7 +225,7 @@ export default function TripCreatorPage(props) {
         siteList: [],
       });
       setSitesArray([]);
-      setValue("$0.00");
+      // setValue("$0.00");
       editMode
         ? setConfirmationType("Trip Edit")
         : setConfirmationType("Trip Submission");
@@ -296,13 +297,11 @@ export default function TripCreatorPage(props) {
           </View>
 
           <View style={styles.textBuffer}>
-            <TextInputField
-              icon={"attach-money"}
-              inputValue={formValues && formValues.price}
-              placeHolderText={t('TripCreator.pricePlaceholder')}
-              secure={false}
-              keyboardConfig="number-pad"
-              onChangeText={setValue}
+            <PriceTextInput
+              iconLeft={"currency-usd"}
+              placeholder={t('TripCreator.pricePlaceholder')}
+              value={formValues && formValues.price}
+              onChangeText={(text: string) => setFormValues({ ...formValues, price: text })}
             />
           </View>
 
