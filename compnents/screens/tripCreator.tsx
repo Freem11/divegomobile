@@ -27,7 +27,6 @@ import {
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import TextInputField from "../authentication/utils/textInput";
 import PlainTextInput from "./plaintextInput";
-import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -43,6 +42,7 @@ import { EditModeContext } from "../contexts/editModeContext";
 import { TripSitesContext } from "../contexts/tripSitesContext";
 import { useTranslation } from "react-i18next";
 import PriceTextInput from '../reusables/priceTextInput';
+import MobileTextInput from "../reusables/textInput";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -92,29 +92,6 @@ export default function TripCreatorPage(props) {
     }
   };
 
-  //currency formatter stuff
-  // const { format: formatCurrency } = Intl.NumberFormat("en-Us", {
-  //   currency: "USD",
-  //   style: "currency",
-  // });
-
-  // function useATMInput() {
-  //   const [value, setValue] = useState(
-  //     editMode ? editMode.itineraryInfo.price : "$0.00"
-  //   );
-  //   function handleChange(value) {
-  //     const decimal = Number(value.replace(/\D/g, "")) / 100;
-  //     setValue(formatCurrency(decimal || 0).replace("R$\xa0", ""));
-  //   }
-  //   return [value, handleChange];
-  // }
-
-  // const [value, setValue] = useATMInput();
-
-  // useEffect(() => {
-  //   setFormValues({ ...formValues, price: value });
-  // }, [value]);
-
   //date picker stuff
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -129,24 +106,8 @@ export default function TripCreatorPage(props) {
     setDatePickerVisible(false);
   };
 
-  const handleDatePickerConfirm = (date) => {
+  const handleDatePickerConfirm = () => {
     let formattedDate = moment(date).format("YYYY-MM-DD");
-
-    if (dateType === "startDate") {
-      if (formValues.endDate.length > 0 && formValues.endDate < formattedDate) {
-        return;
-      }
-    }
-
-    if (dateType === "endDate") {
-      if (
-        formValues.startDate.length > 0 &&
-        formValues.startDate > formattedDate
-      ) {
-        return;
-      }
-    }
-
     setFormValues({ ...formValues, [dateType]: formattedDate });
     hideDatePicker();
   };
@@ -302,18 +263,18 @@ export default function TripCreatorPage(props) {
               placeholder={t('TripCreator.pricePlaceholder')}
               value={formValues && formValues.price}
               onChangeText={(text: string) => setFormValues({ ...formValues, price: text })}
+              keyboardType="number-pad"
             />
           </View>
 
           <View style={styles.textBuffer}>
             <Toucher onPress={() => showDatePicker("startDate")}>
               <View pointerEvents="none">
-                <TextInputField
-                  icon={"calendar-month-outline"}
-                  inputValue={formValues && formValues.startDate}
-                  placeHolderText={t('TripCreator.startDatePlaceholder')}
-                  secure={false}
-                  vectorIcon={"MaterialCommunityIcons"}
+              <MobileTextInput 
+                iconLeft="calendar-start"
+                placeholder={t('TripCreator.startDatePlaceholder')}
+                value={formValues.startDate}
+                onChangeText={(text: string) => setFormValues({ ...formValues, startDate: text })}
                 />
               </View>
             </Toucher>
@@ -322,12 +283,11 @@ export default function TripCreatorPage(props) {
           <View style={styles.textBuffer}>
             <Toucher onPress={() => showDatePicker("endDate")}>
               <View pointerEvents="none">
-                <TextInputField
-                  icon={"calendar-month-outline"}
-                  inputValue={formValues && formValues.endDate}
-                  placeHolderText={t('TripCreator.endDatePlaceholder')}
-                  secure={false}
-                  vectorIcon={"MaterialCommunityIcons"}
+              <MobileTextInput 
+                iconLeft="calendar-end"
+                placeholder={t('TripCreator.endDatePlaceholder')}
+                value={formValues.endDate}
+                onChangeText={(text: string) => setFormValues({ ...formValues, endDate: text })}
                 />
               </View>
             </Toucher>
@@ -368,21 +328,17 @@ export default function TripCreatorPage(props) {
           <View style={{ height: moderateScale(50) }}></View>
         </ScrollView>
 
-        {/* <BottomDrawer
-          dataSet={tripDiveSites}
-          dataSetType={"Trips"}
-          lowerBound={drawerLowerBound}
-          upperBound={drawerUpperBound}
-          drawerHeader={t('TripCreator.drawerHeader')}
-          emptyDrawer={t('TripCreator.emptyDrawer')}
-          headerButton={t('TripCreator.selectSitesButton')}
-        /> */}
-
         <DateTimePickerModal
           isVisible={datePickerVisible}
           mode="date"
           onConfirm={handleDatePickerConfirm}
           onCancel={hideDatePicker}
+          maximumDate={dateType === "startDate" && formValues.endDate? new Date(formValues.endDate) : undefined}
+          minimumDate={
+            dateType === "endDate" && formValues.startDate
+              ? new Date(new Date(formValues.startDate).setDate(new Date(formValues.startDate).getDate() + 1))
+              : undefined
+          }
         />
       </View>
     </TouchableWithoutFeedback>
