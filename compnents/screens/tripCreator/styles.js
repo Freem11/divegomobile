@@ -52,6 +52,13 @@ export const TextBuffer = styled.View`
   margin-bottom: ${moderateScale(20)}px;
 `;
 
+export const MultilineTextInput = styled.TextInput`
+    height: 100%;
+    padding: ${moderateScale(10)}px;
+    font-size: ${fontSizes.StandardText}px;
+    font-family: ${activeFonts.Light}
+`;
+
 export const TopButtonBox = styled.View`
   z-index: -1;
   width: 100%;
@@ -64,7 +71,7 @@ export const BottomButtonBox = styled.View`
   width: 100%;
   position: absolute;
   bottom: 3.5%;
-  left: 59%;
+  left: 57%;
 `;
 
 export const Hint = styled.Text`

@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
+  TextInput,
 } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import {
@@ -27,10 +28,8 @@ import {
   insertItinerary,
   getItineraryDiveSiteByIdArray,
 } from "../../../supabaseCalls/itinerarySupabaseCalls";
-import PlainTextInput from "../plaintextInput";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale, s } from "react-native-size-matters";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
@@ -293,11 +292,10 @@ export default function TripCreatorPage(props) {
             keyboardVerticalOffset={200}
           >
             <View style={styles.descriptionBox}>
-              <PlainTextInput
-                placeHolder={t('TripCreator.tripDescriptionPlaceholder')}
-                content={formValues && formValues.description}
-                fontSz={fontSizes.StandardText}
-                isEditModeOn={true}
+              <S.MultilineTextInput
+                multiline
+                placeholder={t('TripCreator.tripDescriptionPlaceholder')}
+                value={formValues && formValues.description}
                 onChangeText={(text) =>
                   setFormValues({ ...formValues, description: text })
                 }

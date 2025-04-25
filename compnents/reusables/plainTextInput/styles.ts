@@ -6,21 +6,23 @@ import {
   activeFonts,
 } from '../../styles';
 
-export const TextInputWrapper = styled.View`
-  height: ${moderateScale(30)}px;
+export const MainContainer = styled.View`
   display: flex;
-  flex-direction: row;
-  justify-content: left;
-  border-bottom-color: ${colors.neutralGrey};
-  border-bottom-width: ${moderateScale(2)}px;
   position: relative;
+  align-items: end;
 `;
 
 export const StyledTextInput = styled.TextInput`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Light};
+  font-family: ${activeFonts.Regular};
   width: 90%;
 `;
+
+export const StyledTextArea = styled.View`
+    outline: none;
+    padding-right: ${moderateScale(25)}px;
+`;
+
 
 export const IconWrapperLeft = styled.View`
     width: ${moderateScale(24)}px;
