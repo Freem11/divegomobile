@@ -21,7 +21,7 @@ export const FullScreenCenter = styled.View`
 export const BackButtonWrapper = styled.View`
   z-index: 50;
   position: absolute;
-  top: 10%;
+  top: 5%;
   left: 0%;
 `;
 
@@ -43,27 +43,43 @@ export const InputGroupContainer = styled.View`
 export const Header = styled.Text`
   margin: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Thin};
-  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Bold};
+  color: ${colors.neutralGrey};
   align-self: flex-start;
 `;
 
 export const TextBuffer = styled.View`
   margin-bottom: ${moderateScale(20)}px;
+  margin-left: 1%;
+  width: 98%;
+`;
+
+export const TextBufferDates = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${moderateScale(20)}px;
+  width: 96%;
+`;
+
+export const TextLabelDates = styled.View`
+  flex-direction: column;
+  justify-content: center;
+  width: 48%;
 `;
 
 export const MultilineTextInput = styled.TextInput`
-    height: 100%;
-    padding: ${moderateScale(10)}px;
-    font-size: ${fontSizes.StandardText}px;
-    font-family: ${activeFonts.Light}
+  height: 100%;
+  padding: ${moderateScale(10)}px;
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Light}
 `;
 
 export const TopButtonBox = styled.View`
   z-index: -1;
   width: 100%;
   align-items: flex-end;
-  margin-top: ${Platform.OS === 'ios' ? '20%' : '2%'};
+  margin-top: ${Platform.OS === 'ios' ? moderateScale(50) : '2%'};
   margin-left: 53%;
 `;
 
@@ -71,7 +87,7 @@ export const BottomButtonBox = styled.View`
   width: 100%;
   position: absolute;
   bottom: 3.5%;
-  left: 57%;
+  left: 55%;
 `;
 
 export const Hint = styled.Text`
@@ -86,5 +102,16 @@ export const Hint = styled.Text`
   width: 30%;
 `;
 
-
-
+export const DescriptionBox = styled.View`
+  alignItems: center;
+  justifyContent: flex-start;
+  borderWidth: ${moderateScale(1)}px;
+  borderColor: ${colors.neutralGrey};
+  borderRadius: ${moderateScale(10)}px;
+  paddingBottom: 2%;
+  marginTop: 4%;
+  marginLeft: 5%;
+  height: ${windowWidth > 600 ? '75%' : '84%'} ;
+  width: 90%;
+  background-color: ${colors.themeWhite}
+`;

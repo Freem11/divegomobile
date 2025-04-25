@@ -45,6 +45,7 @@ import PriceTextInput from '../../reusables/priceTextInput';
 import MobileTextInput from "../../reusables/textInput";
 import ButtonIcon from "../../reusables/buttonIcon";
 import Button from "../../reusables/button";
+import Label from "../../reusables/label";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -143,7 +144,6 @@ export default function TripCreatorPage(props) {
     setEditMode(false);
     setSitesArray([]);
     setTripDiveSites([]);
-    // setValue("$0.00");
     setFormValues({
       ...formValues,
       BookingPage: "",
@@ -212,7 +212,7 @@ export default function TripCreatorPage(props) {
         />
       </S.BackButtonWrapper>
       
-        {editMode && (
+        {editMode ? (
           <S.TopButtonBox>
             <Button 
               onPress={cloneButtonPress} 
@@ -221,36 +221,40 @@ export default function TripCreatorPage(props) {
               title={t('TripCreator.cloneButton')} 
               />
           </S.TopButtonBox>
-        )}
+        ):   <S.TopButtonBox><View style={{height: moderateScale(30)}}/></S.TopButtonBox>}
 
         <ScrollView contentContainerStyle={styles.content}>
           {editMode ? (
-            <Text style={styles.header}>
+            <S.Header>
               {t('TripCreator.headerEdit')}
-            </Text>
+            </S.Header>
           ) : (
-            <Text style={styles.header}>{t('TripCreator.header')}</Text>
+            <S.Header>{t('TripCreator.header')}</S.Header>
           )}
 
-          <View style={styles.textBuffer}>
+<View style={{width: '87%', marginLeft: '5%'}}>
+          <S.TextBuffer>
+          <Label label="Trip Name"/>
           <MobileTextInput 
               iconLeft="store"
               placeholder={t('TripCreator.tripNamePlaceholder')}
               value={formValues.tripName}
               onChangeText={(text: string) => setFormValues({ ...formValues, BotripNameokingPage: text })}
               />
-          </View>
+          </S.TextBuffer>
 
-          <View style={styles.textBuffer}>
+          <S.TextBuffer>
+          <Label label="Booking Page URL"/>
             <MobileTextInput 
               iconLeft="link"
               placeholder={t('TripCreator.bookingLinkPlaceholder')}
               value={formValues.BookingPage}
               onChangeText={(text: string) => setFormValues({ ...formValues, BookingPage: text })}
               />
-          </View>
+          </S.TextBuffer>
 
-          <View style={styles.textBuffer}>
+          {/* <S.TextBuffer>
+          <Label label="Price"/>
             <PriceTextInput
               iconLeft={"currency-usd"}
               placeholder={t('TripCreator.pricePlaceholder')}
@@ -258,9 +262,11 @@ export default function TripCreatorPage(props) {
               onChangeText={(text: string) => setFormValues({ ...formValues, price: text })}
               keyboardType="number-pad"
             />
-          </View>
+          </S.TextBuffer>
 
-          <View style={styles.textBuffer}>
+          <S.TextBufferDates>
+          <S.TextLabelDates>
+          <Label label="Start Date"/>
             <Toucher onPress={() => showDatePicker("startDate")}>
               <View pointerEvents="none">
               <MobileTextInput 
@@ -271,9 +277,9 @@ export default function TripCreatorPage(props) {
                 />
               </View>
             </Toucher>
-          </View>
-
-          <View style={styles.textBuffer}>
+            </S.TextLabelDates>
+            <S.TextLabelDates>
+            <Label label="End Date"/>
             <Toucher onPress={() => showDatePicker("endDate")}>
               <View pointerEvents="none">
               <MobileTextInput 
@@ -284,14 +290,18 @@ export default function TripCreatorPage(props) {
                 />
               </View>
             </Toucher>
-          </View>
+            </S.TextLabelDates>
+          </S.TextBufferDates> */}
 
+          <Label label="Details"/>
+ </View>
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={'position'}
-            keyboardVerticalOffset={200}
+            keyboardVerticalOffset={moderateScale(100)}
           >
-            <View style={styles.descriptionBox}>
+            
+            <S.DescriptionBox>
               <S.MultilineTextInput
                 multiline
                 placeholder={t('TripCreator.tripDescriptionPlaceholder')}
@@ -300,8 +310,9 @@ export default function TripCreatorPage(props) {
                   setFormValues({ ...formValues, description: text })
                 }
               />
-            </View>
+            </S.DescriptionBox>
           </KeyboardAvoidingView>
+         
 
           <S.BottomButtonBox>
             <Button 
@@ -338,7 +349,7 @@ const styles = StyleSheet.create({
   },
   content: {
     height: "100%",
-    width: "90%",
+    width: "100%",
   },
   header: {
     zIndex: 10,
@@ -359,7 +370,9 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     paddingBottom: "2%",
     marginTop: "4%",
-    height: "75%"
+    marginLeft: "5%",
+    height: "84%",
+    width: "90%"
   },
   buttonBox: {
     zIndex: -1,

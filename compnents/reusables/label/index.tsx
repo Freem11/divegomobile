@@ -1,6 +1,6 @@
 import React from 'react';
 import * as S from './styles';
-import './style.scss';
+
 
 type LabelProps = {
   className?: string
