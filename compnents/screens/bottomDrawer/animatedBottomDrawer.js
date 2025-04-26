@@ -176,14 +176,14 @@ export default function BottomDrawer(props) {
         </S.Handle>
       </GestureDetector>
   
-      <S.StyledTouchableHighlight onPress={onNavigate} underlayColor={colors.buttonPressOverlay}>
+      {/* <S.StyledTouchableHighlight onPress={onNavigate} underlayColor={colors.buttonPressOverlay}>
       <S.AnimatedButtonHousing style={[{justifyContent: 'space-between'}, animatedButtonStyle]} >
          <S.IconWrapperLeft>
          <Icon name={'plus'} fill={colors.primaryBlue} />
          </S.IconWrapperLeft>
           {isDrawerOpen ?  <S.StyledButtonText>Dive Sites</S.StyledButtonText> : null }
       </S.AnimatedButtonHousing>
-      </S.StyledTouchableHighlight>
+      </S.StyledTouchableHighlight> */}
 
       {dataSet && dataSet.length > 0 ? (
         <FlatList
