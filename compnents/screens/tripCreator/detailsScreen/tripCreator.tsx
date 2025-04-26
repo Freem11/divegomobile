@@ -33,6 +33,7 @@ import MobileTextInput from "../../../reusables/textInput";
 import ButtonIcon from "../../../reusables/buttonIcon";
 import Button from "../../../reusables/button";
 import Label from "../../../reusables/label";
+import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -207,7 +208,7 @@ export default function TripCreatorPage(props) {
           </S.TopButtonBox>
         ):   <S.TopButtonBox><View style={{height: moderateScale(30)}}/></S.TopButtonBox>}
 
-      <ScrollView contentContainerStyle={{height: "100%", width: "100%"}}>
+      <ScrollView contentContainerStyle={{width: "100%"}}>
           {editMode ? (
             <S.Header>
               {t('TripCreator.headerEdit')}
@@ -278,15 +279,15 @@ export default function TripCreatorPage(props) {
           </S.TextBufferDates> */}
 
           <Label label="Details"/>
- </S.PageContentContainer>
 
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={'position'}
-            keyboardVerticalOffset={moderateScale(100)}
-          >
+
+      
             
             <S.DescriptionBox>
+            {/* <KeyboardAvoidingView
+            behavior={'position'}
+            keyboardVerticalOffset={moderateScale(100)}
+          > */}
               <S.MultilineTextInput
                 multiline
                 placeholder={t('TripCreator.tripDescriptionPlaceholder')}
@@ -295,8 +296,9 @@ export default function TripCreatorPage(props) {
                   setFormValues({ ...formValues, description: text })
                 }
               />
+              {/* </KeyboardAvoidingView> */}
             </S.DescriptionBox>
-          </KeyboardAvoidingView>
+          
          
 
           <S.BottomButtonBox>
@@ -307,6 +309,7 @@ export default function TripCreatorPage(props) {
               iconRight="chevron-right"
               />
           </S.BottomButtonBox>
+ </S.PageContentContainer>
         </ScrollView>
 
         <DateTimePickerModal

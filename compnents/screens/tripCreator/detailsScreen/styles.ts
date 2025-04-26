@@ -19,7 +19,7 @@ export const FullScreenCenter = styled.View`
 
 export const PageContentContainer = styled.View`
     width: 90%; 
-    marginLeft: 5%;
+    height: 100%;
 `;
 
 export const BackButtonWrapper = styled.View`
@@ -36,7 +36,7 @@ export const ContentContainer = styled.View`
   width: 100%;
   z-index: 15;
   margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;
-  align-items: center;
+  align-items: center;;
 `;
 
 export const InputGroupContainer = styled.View`
@@ -87,35 +87,18 @@ export const TopButtonBox = styled.View`
   margin-left: 53%;
 `;
 
-export const BottomButtonBox = styled.View`
-  width: 100%;
-  position: absolute;
-  bottom: 3.5%;
-  left: 55%;
-`;
-
-export const Hint = styled.Text`
-  align-self: flex-start;
-  text-align: center;
-  color: ${colors.themeBlack};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.ThinItalic};
-  margin-top: 2%;
-  margin-left: ${windowWidth > 600 ? '5%' : '9%'};
-  margin-bottom: 0%;
-  width: 30%;
-`;
-
 export const DescriptionBox = styled.View`
   alignItems: center;
   justifyContent: flex-start;
   borderWidth: ${moderateScale(1)}px;
   borderColor: ${colors.neutralGrey};
   borderRadius: ${moderateScale(10)}px;
-  paddingBottom: 2%;
   marginTop: 4%;
-  marginLeft: 5%;
-  height: ${windowWidth > 600 ? '75%' : '84%'} ;
-  width: 90%;
+  height: ${windowWidth > 600 ? '13%' : '23%'} ;
   background-color: ${colors.themeWhite}
+`;
+
+export const BottomButtonBox = styled.View`
+  marginTop: 5%;
+  align-items: flex-end;
 `;

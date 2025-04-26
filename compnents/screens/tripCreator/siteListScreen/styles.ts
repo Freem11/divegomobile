@@ -6,13 +6,18 @@ import { Dimensions, Platform } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 
 export const ScrollViewContainer = styled.View`
-    height: ${windowWidth > 600 ? '35%' : '50%'};
+    height: ${windowWidth > 600 ? '13%' :  '23%'};
     margin-top: 2%; 
     margin-bottom: 1%;
     border-color: ${colors.neutralGrey};
     border-width: ${moderateScale(1)}px;
     border-style: dotted;
     border-radius: ${moderateScale(5)}px;
+`;
+
+export const PageContentContainer = styled.View`
+    width: 90%; 
+    height: 100%;
 `;
 
 export const ContentContainer = styled.View`
@@ -44,10 +49,8 @@ export const TopButtonBox = styled.View`
 `;
 
 export const BottomButtonBox = styled.View`
-  width: 100%;
-  position: absolute;
-  bottom: 3.5%;
-  left: 58%;
+  marginTop: 5%;
+  align-items: flex-end;
 `;
 
 export const ListItemContainer = styled.View`

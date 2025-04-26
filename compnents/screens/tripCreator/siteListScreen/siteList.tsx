@@ -185,8 +185,7 @@ export default function SiteList() {
 
 
 
-<ScrollView contentContainerStyle={{ height: "100%", width: "100%"}}>
-        <S.ContentContainer>
+<ScrollView contentContainerStyle={{width: "100%"}}>
           {editMode ? (
             <S.Header>
               {t('TripCreator.headerEdit')}
@@ -196,6 +195,7 @@ export default function SiteList() {
           )}
 
 
+<S.PageContentContainer>
 <S.TextBuffer>
           <Label label="Price"/>
             <PriceTextInput
@@ -238,7 +238,6 @@ export default function SiteList() {
 
       <Label label="Dive Sites"/>
 
-      </S.ContentContainer>
 
       <S.ScrollViewContainer>
       <ScrollView>
@@ -275,6 +274,7 @@ export default function SiteList() {
               />
           </S.BottomButtonBox>
 
+          </S.PageContentContainer>
       </ScrollView>
 
       <DateTimePickerModal
