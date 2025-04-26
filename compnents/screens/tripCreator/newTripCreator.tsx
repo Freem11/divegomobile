@@ -1,8 +1,8 @@
 import React from "react";
-import ButtonIcon from "../reusables/buttonIcon";
-import Paginator from "../reusables/paginator";
-import TripCreatorPage from "./tripCreator/tripCreator";
-import SiteList from "./siteList/siteList";
+import ButtonIcon from "../../reusables/buttonIcon";
+import Paginator from "../../reusables/paginator";
+import TripCreatorPage from "./detailsScreen/tripCreator";
+import SiteList from "./siteListScreen/siteList";
 
 export default function NewTripCreatorPage() {
 

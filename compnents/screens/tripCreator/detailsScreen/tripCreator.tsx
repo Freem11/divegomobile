@@ -1,51 +1,38 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as S from './styles';
-import { Flex } from '../../ui/containes';
+import { Flex } from '../../../ui/containes';
 import {
-  StyleSheet,
   View,
-  Text,
   Keyboard,
   Dimensions,
-  TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
-  TextInput,
 } from "react-native";
-import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
-import {
-  activeFonts,
-  colors,
-  fontSizes,
-  screenSecondaryButton,
-  buttonTextAlt,
-  authenicationButton,
-  buttonText,
-} from "../../styles";
+import { colors } from "../../../styles";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
-} from "../../../supabaseCalls/itinerarySupabaseCalls";
+} from "../../../../supabaseCalls/itinerarySupabaseCalls";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { moderateScale, s } from "react-native-size-matters";
-import { TripDetailContext } from "../../contexts/tripDetailsContext";
-import { SitesArrayContext } from "../../contexts/sitesArrayContext";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
-import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
-import { EditModeContext } from "../../contexts/editModeContext";
-import { TripSitesContext } from "../../contexts/tripSitesContext";
+import { TripDetailContext } from "../../../contexts/tripDetailsContext";
+import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
+import { UserProfileContext } from "../../../contexts/userProfileContext";
+import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
+import { ActiveConfirmationIDContext } from "../../../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../../../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../../../contexts/confirmationModalContext";
+import { EditModeContext } from "../../../contexts/editModeContext";
+import { TripSitesContext } from "../../../contexts/tripSitesContext";
 import { useTranslation } from "react-i18next";
-import PriceTextInput from '../../reusables/priceTextInput';
-import MobileTextInput from "../../reusables/textInput";
-import ButtonIcon from "../../reusables/buttonIcon";
-import Button from "../../reusables/button";
-import Label from "../../reusables/label";
+import PriceTextInput from '../../../reusables/priceTextInput';
+import MobileTextInput from "../../../reusables/textInput";
+import ButtonIcon from "../../../reusables/buttonIcon";
+import Button from "../../../reusables/button";
+import Label from "../../../reusables/label";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -67,9 +54,6 @@ export default function TripCreatorPage(props) {
     LevelTwoScreenContext
   );
   const [itineraryList, setItineraryList] = useState("");
-
-  const drawerUpperBound = "80%";
-  const drawerLowerBound = "17%";
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
@@ -137,7 +121,7 @@ export default function TripCreatorPage(props) {
     if (indexLocal > -1) {
       formValues.DiveSites.splice(index, 1);
     }
-    getTripDiveSites();
+    getTripDiveSites(sitesArray);
   };
 
   const onClose = () => {
@@ -188,7 +172,7 @@ export default function TripCreatorPage(props) {
         siteList: [],
       });
       setSitesArray([]);
-      // setValue("$0.00");
+
       editMode
         ? setConfirmationType("Trip Edit")
         : setConfirmationType("Trip Submission");
@@ -223,7 +207,7 @@ export default function TripCreatorPage(props) {
           </S.TopButtonBox>
         ):   <S.TopButtonBox><View style={{height: moderateScale(30)}}/></S.TopButtonBox>}
 
-        <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={{height: "100%", width: "100%"}}>
           {editMode ? (
             <S.Header>
               {t('TripCreator.headerEdit')}
@@ -232,7 +216,7 @@ export default function TripCreatorPage(props) {
             <S.Header>{t('TripCreator.header')}</S.Header>
           )}
 
-<View style={{width: '87%', marginLeft: '5%'}}>
+<S.PageContentContainer>
           <S.TextBuffer>
           <Label label="Trip Name"/>
           <MobileTextInput 
@@ -294,7 +278,8 @@ export default function TripCreatorPage(props) {
           </S.TextBufferDates> */}
 
           <Label label="Details"/>
- </View>
+ </S.PageContentContainer>
+
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={'position'}
@@ -339,62 +324,3 @@ export default function TripCreatorPage(props) {
       </Flex>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    marginTop: '10%'
-  },
-  content: {
-    height: "100%",
-    width: "100%",
-  },
-  header: {
-    zIndex: 10,
-    marginTop: "5%",
-    marginBottom: "8%",
-    fontSize: moderateScale(fontSizes.Header),
-    fontFamily: activeFonts.Bold,
-    color: "darkgrey",
-  },
-  textBuffer: {
-    marginBottom: moderateScale(20),
-  },
-  descriptionBox: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-    borderWidth: moderateScale(1),
-    borderColor: "darkgrey",
-    borderRadius: moderateScale(10),
-    paddingBottom: "2%",
-    marginTop: "4%",
-    marginLeft: "5%",
-    height: "84%",
-    width: "90%"
-  },
-  buttonBox: {
-    zIndex: -1,
-    width: "90%",
-    alignItems: "flex-end",
-    marginTop: "-15%",
-    marginHorizontal: "10%",
-  },
-  submitButton: [
-    authenicationButton,
-    { flexDirection: "row", marginTop: windowHeight / 10 },
-  ],
-  submitText: [buttonText, { marginHorizontal: moderateScale(5) }],
-  creatNewButton: [
-    screenSecondaryButton,
-    { zIndex: 10, position: "absolute", top: "7%", right: "6%" },
-  ],
-  createNewText: [
-    buttonTextAlt,
-    {
-      fontSize: moderateScale(fontSizes.SmallText),
-      marginHorizontal: moderateScale(5),
-    },
-  ],
-});

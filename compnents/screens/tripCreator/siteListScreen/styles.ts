@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { activeFonts, colors, fontSizes } from "../../styles";
+import { activeFonts, colors, fontSizes } from "../../../styles";
 import { moderateScale } from 'react-native-size-matters'
 import { Dimensions, Platform } from "react-native";
 
@@ -15,11 +15,16 @@ export const ScrollViewContainer = styled.View`
     border-radius: ${moderateScale(5)}px;
 `;
 
+export const ContentContainer = styled.View`
+    width: 90%; 
+    marginLeft: 5%;
+`;
+
 export const BackButtonWrapper = styled.View`
-  z-index: 50;
-  position: absolute;
-  top: 5%;
-  left: 2%;
+    z-index: 50;
+    position: absolute;
+    top: 5%;
+    left: 2%;
 `;
 
 export const Header = styled.Text`

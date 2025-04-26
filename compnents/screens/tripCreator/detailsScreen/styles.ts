@@ -5,8 +5,7 @@ import {
   colors,
   fontSizes,
   activeFonts,
-  buttonSizes,
-} from '../../styles';
+} from '../../../styles';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -16,6 +15,11 @@ export const FullScreenCenter = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
+`;
+
+export const PageContentContainer = styled.View`
+    width: 90%; 
+    marginLeft: 5%;
 `;
 
 export const BackButtonWrapper = styled.View`
