@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Keyboard, ScrollView, View } from "react-native";
+import { Keyboard, Platform, ScrollView, View } from "react-native";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import { Flex } from "../../../ui/containes"
 import * as S from './styles';
@@ -29,6 +29,7 @@ import Label from "../../../reusables/label";
 import PriceTextInput from "../../../reusables/priceTextInput";
 import MobileTextInput from "../../../reusables/textInput";
 import EmptyState from "../../../reusables/emptyState";
+import ParallaxDrawer from "../../../reusables/parallaxDrawer";
 
 
 export default function SiteList() {
@@ -161,134 +162,135 @@ export default function SiteList() {
   };
 
     return (
-      <Flex style={{width: "100%", alignItems: 'center'}}>
+      <ParallaxDrawer/>
+//       <Flex style={{width: "100%", alignItems: 'center', marginTop: Platform.OS === "ios" ? 0 : '17%'}}>
 
-<S.BackButtonWrapper>
-        <ButtonIcon 
-        icon="chevron-left"
-        onPress={onClose}
-        size='small'
-        fillColor={colors.neutralGrey}
-        />
-      </S.BackButtonWrapper>
+// <S.BackButtonWrapper>
+//         <ButtonIcon 
+//         icon="chevron-left"
+//         onPress={onClose}
+//         size='small'
+//         fillColor={colors.neutralGrey}
+//         />
+//       </S.BackButtonWrapper>
       
-      {editMode ? (
-          <S.TopButtonBox>
-            <Button 
-              onPress={cloneButtonPress} 
-              alt={true} 
-              size='medium'
-              title={t('TripCreator.cloneButton')} 
-              />
-          </S.TopButtonBox>
-        ):   <S.TopButtonBox><View style={{height: moderateScale(50)}}/></S.TopButtonBox>}
+//       {editMode ? (
+//           <S.TopButtonBox>
+//             <Button 
+//               onPress={cloneButtonPress} 
+//               alt={true} 
+//               size='medium'
+//               title={t('TripCreator.cloneButton')} 
+//               />
+//           </S.TopButtonBox>
+//         ):   <S.TopButtonBox><View style={{height: moderateScale(50)}}/></S.TopButtonBox>}
 
 
 
-<ScrollView contentContainerStyle={{width: "100%"}}>
-          {editMode ? (
-            <S.Header>
-              {t('TripCreator.headerEdit')}
-            </S.Header>
-          ) : (
-            <S.Header>{t('TripCreator.header')}</S.Header>
-          )}
+// <ScrollView contentContainerStyle={{width: "100%"}}>
+//           {editMode ? (
+//             <S.Header>
+//               {t('TripCreator.headerEdit')}
+//             </S.Header>
+//           ) : (
+//             <S.Header>{t('TripCreator.header')}</S.Header>
+//           )}
 
 
-<S.PageContentContainer>
-<S.TextBuffer>
-          <Label label="Price"/>
-            <PriceTextInput
-              iconLeft={"currency-usd"}
-              placeholder={t('TripCreator.pricePlaceholder')}
-              value={formValues && formValues.price}
-              onChangeText={(text: string) => setFormValues({ ...formValues, price: text })}
-              keyboardType="number-pad"
-            />
-          </S.TextBuffer>
+// <S.PageContentContainer>
+// <S.TextBuffer>
+//           <Label label="Price"/>
+//             <PriceTextInput
+//               iconLeft={"currency-usd"}
+//               placeholder={t('TripCreator.pricePlaceholder')}
+//               value={formValues && formValues.price}
+//               onChangeText={(text: string) => setFormValues({ ...formValues, price: text })}
+//               keyboardType="number-pad"
+//             />
+//           </S.TextBuffer>
 
-          <S.TextBufferDates>
-          <S.TextLabelDates>
-          <Label label="Start Date"/>
-            <Toucher onPress={() => showDatePicker("startDate")}>
-              <View pointerEvents="none">
-              <MobileTextInput 
-                iconLeft="calendar-start"
-                placeholder={t('TripCreator.startDatePlaceholder')}
-                value={formValues.startDate}
-                onChangeText={(text: string) => setFormValues({ ...formValues, startDate: text })}
-                />
-              </View>
-            </Toucher>
-            </S.TextLabelDates>
-            <S.TextLabelDates>
-            <Label label="End Date"/>
-            <Toucher onPress={() => showDatePicker("endDate")}>
-              <View pointerEvents="none">
-              <MobileTextInput 
-                iconLeft="calendar-end"
-                placeholder={t('TripCreator.endDatePlaceholder')}
-                value={formValues.endDate}
-                onChangeText={(text: string) => setFormValues({ ...formValues, endDate: text })}
-                />
-              </View>
-            </Toucher>
-            </S.TextLabelDates>
-          </S.TextBufferDates>
+//           <S.TextBufferDates>
+//           <S.TextLabelDates>
+//           <Label label="Start Date"/>
+//             <Toucher onPress={() => showDatePicker("startDate")}>
+//               <View pointerEvents="none">
+//               <MobileTextInput 
+//                 iconLeft="calendar-start"
+//                 placeholder={t('TripCreator.startDatePlaceholder')}
+//                 value={formValues.startDate}
+//                 onChangeText={(text: string) => setFormValues({ ...formValues, startDate: text })}
+//                 />
+//               </View>
+//             </Toucher>
+//             </S.TextLabelDates>
+//             <S.TextLabelDates>
+//             <Label label="End Date"/>
+//             <Toucher onPress={() => showDatePicker("endDate")}>
+//               <View pointerEvents="none">
+//               <MobileTextInput 
+//                 iconLeft="calendar-end"
+//                 placeholder={t('TripCreator.endDatePlaceholder')}
+//                 value={formValues.endDate}
+//                 onChangeText={(text: string) => setFormValues({ ...formValues, endDate: text })}
+//                 />
+//               </View>
+//             </Toucher>
+//             </S.TextLabelDates>
+//           </S.TextBufferDates>
 
-      <Label label="Dive Sites"/>
+//       <Label label="Dive Sites"/>
 
 
-      <S.ScrollViewContainer>
-      <ScrollView>
-        {tripDiveSites.length === 0 && <EmptyState iconName="anchor" text='No Dive Sites Yet.'/>}
-      {Array.isArray(tripDiveSites) && tripDiveSites.map((tripDetails, index) => {
-        return (
-        <S.ListItemContainer key={tripDetails.id}>
-        <S.ItemHousing>
-        <IconWithLabel  label={tripDetails.name} iconName="anchor" fillColor="white" bgColor={colors.primaryBlue} buttonAction={() => removeFromSitesArray(tripDetails.id)}  />
-        </S.ItemHousing>
-            {index < tripDiveSites.length - 1 && <S.VerticalLine />}
-        </S.ListItemContainer>
-      )
-      })}
-      </ScrollView>
+//       <S.ScrollViewContainer>
+//       <ScrollView>
+//         {tripDiveSites.length === 0 && <EmptyState iconName="anchor" text='No Dive Sites Yet.'/>}
+//       {Array.isArray(tripDiveSites) && tripDiveSites.map((tripDetails, index) => {
+//         return (
+//         <S.ListItemContainer key={tripDetails.id}>
+//         <S.ItemHousing>
+//         <IconWithLabel  label={tripDetails.name} iconName="anchor" fillColor="white" bgColor={colors.primaryBlue} buttonAction={() => removeFromSitesArray(tripDetails.id)}  />
+//         </S.ItemHousing>
+//             {index < tripDiveSites.length - 1 && <S.VerticalLine />}
+//         </S.ListItemContainer>
+//       )
+//       })}
+//       </ScrollView>
 
-        <S.ButtonHousing>
-            <Button 
-              onPress={onNavigate} 
-              size='medium'
-              alt={true}
-              title="Dive Sites"
-              iconLeft="plus"
-              />
-        </S.ButtonHousing>
-      </S.ScrollViewContainer>
+//         <S.ButtonHousing>
+//             <Button 
+//               onPress={onNavigate} 
+//               size='medium'
+//               alt={true}
+//               title="Dive Sites"
+//               iconLeft="plus"
+//               />
+//         </S.ButtonHousing>
+//       </S.ScrollViewContainer>
 
-      <S.BottomButtonBox>
-            <Button 
-              onPress={handleSubmit} 
-              size='medium'
-              title={t('TripCreator.submitButton')} 
-              iconRight="chevron-right"
-              />
-          </S.BottomButtonBox>
+//       <S.BottomButtonBox>
+//             <Button 
+//               onPress={handleSubmit} 
+//               size='medium'
+//               title={t('TripCreator.submitButton')} 
+//               iconRight="chevron-right"
+//               />
+//           </S.BottomButtonBox>
 
-          </S.PageContentContainer>
-      </ScrollView>
+//           </S.PageContentContainer>
+//       </ScrollView>
 
-      <DateTimePickerModal
-      isVisible={datePickerVisible}
-          mode="date"
-          onConfirm={handleDatePickerConfirm}
-          onCancel={hideDatePicker}
-          maximumDate={dateType === "startDate" && formValues.endDate? new Date(formValues.endDate) : undefined}
-          minimumDate={
-            dateType === "endDate" && formValues.startDate
-              ? new Date(new Date(formValues.startDate).setDate(new Date(formValues.startDate).getDate() + 1))
-              : undefined
-          }
-        />
-      </Flex>
+//       <DateTimePickerModal
+//       isVisible={datePickerVisible}
+//           mode="date"
+//           onConfirm={handleDatePickerConfirm}
+//           onCancel={hideDatePicker}
+//           maximumDate={dateType === "startDate" && formValues.endDate? new Date(formValues.endDate) : undefined}
+//           minimumDate={
+//             dateType === "endDate" && formValues.startDate
+//               ? new Date(new Date(formValues.startDate).setDate(new Date(formValues.startDate).getDate() + 1))
+//               : undefined
+//           }
+//         />
+//       </Flex>
     )
   };
