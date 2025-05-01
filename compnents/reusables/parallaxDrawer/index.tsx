@@ -6,22 +6,22 @@ import {
   ImageBackground,
 } from 'react-native';
 import Animated, {
-  useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
   withDecay,
   withTiming,
   interpolate,
-  Extrapolate,
+  Easing,
 } from 'react-native-reanimated';
 import {
   GestureHandlerRootView,
-  PanGestureHandler,
 } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
 import { moderateScale } from 'react-native-size-matters';
 import * as S from './styles';
 import ButtonIcon from '../buttonIcon';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -36,53 +36,55 @@ type ParallaxDrawerProps = {
 const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps) => {
   const translateY = useSharedValue(HALF_HEIGHT);
   const contentHeight = useSharedValue(0);
-  const minTranslateY = useSharedValue(0); // Allow downward pull
   const TOP_SECTION_HEIGHT = moderateScale(70); // Define top section height
+  const startY = useSharedValue(0);
 
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart: (_, ctx: any) => {
-      ctx.startY = translateY.value;
-    },
-    onActive: (event, ctx: any) => {
-      const maxTranslateY = SCREEN_HEIGHT; // Prevent drawer from being pulled up past top of screen
-  
-      // Correct minTranslateY to ensure content can fully reveal without clipping
-      const minTranslateY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT; 
-  
-      // Ensure the drawer stops at the bottom and doesn't go past the top
+  const panGesture = Gesture.Pan()
+    .onStart((event) => {
+      startY.value = translateY.value;
+    })
+    .onUpdate((event) => {
+      const maxTranslateY = SCREEN_HEIGHT;
+      const minTranslateY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+
       translateY.value = Math.max(
-        minTranslateY,  // Prevent it from going past the content reveal height
-        Math.min(ctx.startY + event.translationY, maxTranslateY)  // Limit translation
+        minTranslateY,
+        Math.min(startY.value + event.translationY, maxTranslateY)
       );
-    },
-    onEnd: (event) => {
-      const maxTranslateY = SCREEN_HEIGHT; // Prevent drawer from exceeding screen height
-      const minTranslateY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT; // Correct stop point
-  
+    })
+    .onEnd((event) => {
+      const maxTranslateY = SCREEN_HEIGHT;
+      const minTranslateY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+
       if (translateY.value < 0) {
-        translateY.value = withTiming(0, { duration: 300 }); // Bounce back if over-pulled down
+        translateY.value = withTiming(0, { duration: 300 });
         return;
       }
-  
-      // Handle velocity and stop at the correct position
+
       if (event.velocityY < 0) {
-        // Swiping up (reveal content)
         translateY.value = withDecay({
           velocity: event.velocityY,
-          clamp: [minTranslateY, maxTranslateY],  // Ensure it stops at the content height
+          clamp: [minTranslateY, maxTranslateY],
           deceleration: 0.985,
         });
       } else {
-        // Swiping down (bounce back or settle)
-        translateY.value = withTiming(
-          contentHeight.value < SCREEN_HEIGHT
-            ? SCREEN_HEIGHT - contentHeight.value // Show the content or snap to half if expanded
-            : HALF_HEIGHT,
-          { duration: 300 }
+        translateY.value = withDecay(
+          {
+            velocity: event.velocityY,
+            deceleration: 0.985,
+          },
+          () => {
+            if (translateY.value > HALF_HEIGHT) {
+              translateY.value = withTiming(HALF_HEIGHT, {
+                duration: 1600,
+                easing: Easing.out(Easing.exp),
+              });
+            }
+          }
         );
       }
-    },
-  });
+    });
+  
   
   const animatedDrawerStyle = useAnimatedStyle(() => {
     return {
@@ -95,7 +97,6 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
       translateY.value,
       [0, HALF_HEIGHT, SCREEN_HEIGHT],
       [1, 1.25, 3.25],
-      Extrapolate.CLAMP
     );
     return {
       transform: [{ scale }],
@@ -104,6 +105,8 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
 
   return (
     <GestureHandlerRootView style={styles.container}>
+
+    <S.SafeArea>
       <S.BackButtonWrapper>
         <ButtonIcon
           icon="chevron-left"
@@ -111,7 +114,7 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
           size="small"
         />
       </S.BackButtonWrapper>
-
+      </S.SafeArea>
       <Animated.View style={[styles.backgroundContainer, animatedBackgroundStyle]}>
         <ImageBackground
           source={headerImage}
@@ -120,7 +123,7 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
         />
       </Animated.View>
 
-      <PanGestureHandler onGestureEvent={gestureHandler}>
+      <GestureDetector gesture={panGesture}>
         <Animated.View style={[styles.drawer, animatedDrawerStyle]}>
           <View style={styles.topTransparentSection}>
             <Svg
@@ -153,7 +156,7 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
             </View>
           </View>
         </Animated.View>
-      </PanGestureHandler>
+      </GestureDetector>
     </GestureHandlerRootView>
   );
 };

@@ -28,7 +28,7 @@ export const BackButton = styled.View`
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
-  padding-bottom: ${moderateScale(20)}
+  padding-bottom: ${moderateScale(20)}px;
  
 `;
 

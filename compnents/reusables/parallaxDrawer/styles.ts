@@ -72,9 +72,11 @@ export const Hint = styled.Text`
   width: 30%;
 `;
 
+export const SafeArea = styled.SafeAreaView`
+  z-index: 20;
+`;
+
 export const BackButtonWrapper = styled.View`
-  z-index: 50;
-  margin-top: 10%;
   margin-left: 2%;
   align-self: flex-start;
 `;
