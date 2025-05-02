@@ -1,29 +1,40 @@
 import React, { useContext } from "react";
-import TripCreatorPage from "./detailsScreen/tripCreator";
-import SiteList from "./siteListScreen/siteList";
+import TripCreatorPage from "./tripCreator";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { DiveSpotContext } from "../../contexts/diveSpotContext";
+import { EditModeContext } from "../../contexts/editModeContext";
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { TripSitesContext } from "../../contexts/tripSitesContext";
+import { TripDetailContext } from "../../contexts/tripDetailsContext";
 
 
 export default function TripCreatorParallax() {
-
+    const { editMode, setEditMode } = useContext(EditModeContext);
+    const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+    const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+    const { formValues, setFormValues } = useContext(TripDetailContext);
     const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-    const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
     const onClose = async () => {
-        setLevelTwoScreen(false);
-        setAddSiteVals({
-          ...addSiteVals,
-          Site: "",
-          Latitude: "",
-          Longitude: "",
-        });
+      setEditMode(false);
+      setSitesArray([]);
+      setTripDiveSites([]);
+      setFormValues({
+        ...formValues,
+        BookingPage: "",
+        tripName: "",
+        startDate: "",
+        endDate: "",
+        price: 0,
+        description: "",
+        siteList: [],
+      });
+      setLevelTwoScreen(false);
       };
       
     return (
         <ParallaxDrawer
-            headerImage={require('../../png/boat.png')} children={[<TripCreatorPage />, <SiteList/>]} onClose={onClose}
+            headerImage={require('../../png/boat.png')} children={[<TripCreatorPage />]} onClose={onClose}
         />
     )
 }

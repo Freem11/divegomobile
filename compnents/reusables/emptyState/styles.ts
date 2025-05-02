@@ -30,16 +30,16 @@ export const IconSetWrapper = styled.View`
   margin-top: ${windowWidth > 600 ? "10%" : "30%"};
 `;
 export const IconSetWrapperLeft = styled.View`
-  margin-top: ${moderateScale(-20)};
-  margin-right: ${moderateScale(-50)};
+  margin-top: ${moderateScale(-20)}px;
+  margin-right: ${moderateScale(-50)}px;
 `;
 
 export const IconSetWrapperCenter = styled.View`
   z-index:2;
-  margin-top: ${moderateScale(5)};
+  margin-top: ${moderateScale(5)}px;
 `;
 
 export const IconSetWrapperRight = styled.View`
-  margin-top: ${moderateScale(-20)};
-  margin-left: ${moderateScale(-50)};
+  margin-top: ${moderateScale(-20)}px;
+  margin-left: ${moderateScale(-50)}px;
 `;

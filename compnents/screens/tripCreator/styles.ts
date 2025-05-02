@@ -5,9 +5,9 @@ import {
   colors,
   fontSizes,
   activeFonts,
-} from '../../../styles';
+} from '../../styles';
 
-const windowWidth = Dimensions.get('window').width;
+const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('window').height;
 
 export const FullScreenCenter = styled.View`
@@ -17,9 +17,6 @@ export const FullScreenCenter = styled.View`
   background-color: #ffffff;
 `;
 
-export const PageContentContainer = styled.View`
-    width: 90%; 
-`;
 
 export const BackButtonWrapper = styled.View`
   z-index: 50;
@@ -31,17 +28,16 @@ export const BackButtonWrapper = styled.View`
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
-  padding-bottom: ${moderateScale(20)}px;
 `;
 
 export const TopButtonBox = styled.View`
   z-index: 20;
-  margin-left: 5%;
+  margin-right: 7%;
   margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Thin};
   color: ${colors.themeBlack};
-  align-self: flex-start;
+  align-self: flex-end;
 `;
 
 export const Header = styled.Text`
@@ -90,11 +86,47 @@ export const DescriptionBox = styled.View`
   borderWidth: ${moderateScale(1)}px;
   borderColor: ${colors.neutralGrey};
   borderRadius: ${moderateScale(10)}px;
-  marginTop: 4%;
-  background-color: ${colors.themeWhite}
+  margin-top: 4%;
+  background-color: ${colors.themeWhite};
+  margin-bottom: ${moderateScale(20)}px;
+  height: ${moderateScale(300)}px;
 `;
 
 export const BottomButtonBox = styled.View`
   marginTop: 5%;
   align-items: flex-end;
+`;
+
+export const ScrollViewContainer = styled.View`
+  height: ${moderateScale(300)}px;
+  margin-top: 2%; 
+  margin-bottom: 1%;
+  border-color: ${colors.neutralGrey};
+  border-width: ${moderateScale(1)}px;
+  border-radius: ${moderateScale(5)}px;
+`;
+
+export const ListItemContainer = styled.View`
+  width: 94%;
+  margin-left: 3%;
+  margin-vertical: ${moderateScale(4)}px;
+`;
+
+export const ItemHousing = styled.View`
+  padding-bottom: ${moderateScale(24)}px;
+`;
+
+export const VerticalLine = styled.View`
+  position: absolute;
+  top: ${moderateScale(49)}px;
+  left: ${moderateScale(24.5)}px;
+  bottom: ${moderateScale(-10)}px;
+  width: ${moderateScale(2)}px;
+  background-color: ${colors.neutralGrey};
+`;
+
+export const ButtonHousing = styled.View`
+  position: absolute;
+  bottom: ${moderateScale(20)}px;
+  right: ${moderateScale(20)}px;
 `;

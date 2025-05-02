@@ -1,41 +1,40 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as S from './styles';
-import { Flex } from '../../../ui/containes';
 import {
   View,
   Keyboard,
   Dimensions,
-  KeyboardAvoidingView,
   ScrollView,
-  Platform,
 } from "react-native";
-import { colors } from "../../../styles";
+import { colors } from "../../styles";
 import {
   getItinerariesByUserId,
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
-} from "../../../../supabaseCalls/itinerarySupabaseCalls";
+} from "../../../supabaseCalls/itinerarySupabaseCalls";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { moderateScale, s } from "react-native-size-matters";
-import { TripDetailContext } from "../../../contexts/tripDetailsContext";
-import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
-import { UserProfileContext } from "../../../contexts/userProfileContext";
-import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
-import { ActiveConfirmationIDContext } from "../../../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from "../../../contexts/confirmationTypeContext";
-import { ConfirmationModalContext } from "../../../contexts/confirmationModalContext";
-import { EditModeContext } from "../../../contexts/editModeContext";
-import { TripSitesContext } from "../../../contexts/tripSitesContext";
+import { TripDetailContext } from "../../contexts/tripDetailsContext";
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
+import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
+import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
+import { EditModeContext } from "../../contexts/editModeContext";
+import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { useTranslation } from "react-i18next";
-import PriceTextInput from '../../../reusables/priceTextInput';
-import MobileTextInput from "../../../reusables/textInput";
-import ButtonIcon from "../../../reusables/buttonIcon";
-import Button from "../../../reusables/button";
-import Label from "../../../reusables/label";
+import PriceTextInput from '../../reusables/priceTextInput';
+import MobileTextInput from "../../reusables/textInput";
+import Button from "../../reusables/button";
+import Label from "../../reusables/label";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
-import ParallaxDrawer from "../../../reusables/parallaxDrawer";
+import EmptyState from "../../reusables/emptyState";
+import IconWithLabel from "../../reusables/iconWithLabal";
+import { MapHelperContext } from "../../contexts/mapHelperContext";
+import { MapConfigContext } from "../../contexts/mapConfigContext";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -48,7 +47,9 @@ export default function TripCreatorPage(props) {
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-
+  const { setMapHelper } = useContext(MapHelperContext);
+  const { setMapConfig } = useContext(MapConfigContext);
+  
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -125,6 +126,13 @@ export default function TripCreatorPage(props) {
       formValues.DiveSites.splice(index, 1);
     }
     getTripDiveSites(sitesArray);
+  };
+
+  const onNavigate = () => {
+    Keyboard.dismiss();
+    setMapHelper(true);
+    setMapConfig(3);
+    setLevelTwoScreen(false);
   };
 
   const onClose = () => {
@@ -273,14 +281,7 @@ export default function TripCreatorPage(props) {
 
           <Label label="Details"/>
 
-
-      
-            
             <S.DescriptionBox>
-            {/* <KeyboardAvoidingView
-            behavior={'position'}
-            keyboardVerticalOffset={moderateScale(100)}
-          > */}
               <S.MultilineTextInput
                 multiline
                 placeholder={t('TripCreator.tripDescriptionPlaceholder')}
@@ -289,9 +290,47 @@ export default function TripCreatorPage(props) {
                   setFormValues({ ...formValues, description: text })
                 }
               />
-              {/* </KeyboardAvoidingView> */}
             </S.DescriptionBox>
-            </S.InputGroupContainer>       
+
+            <Label label="Dive Sites"/>
+
+
+                <S.ScrollViewContainer>
+                <ScrollView>
+                  {tripDiveSites.length === 0 && <EmptyState iconName="anchor" text='No Dive Sites Yet.'/>}
+                {Array.isArray(tripDiveSites) && tripDiveSites.map((tripDetails, index) => {
+                  return (
+                  <S.ListItemContainer key={tripDetails.id}>
+                  <S.ItemHousing>
+                  <IconWithLabel  label={tripDetails.name} iconName="anchor" fillColor="white" bgColor={colors.primaryBlue} buttonAction={() => removeFromSitesArray(tripDetails.id)}  />
+                  </S.ItemHousing>
+                      {index < tripDiveSites.length - 1 && <S.VerticalLine />}
+                  </S.ListItemContainer>
+                )
+                })}
+                </ScrollView>
+
+                  <S.ButtonHousing>
+                      <Button 
+                        onPress={onNavigate} 
+                        size='medium'
+                        alt={true}
+                        title="Dive Sites"
+                        iconLeft="plus"
+                        />
+                  </S.ButtonHousing>
+                </S.ScrollViewContainer>
+
+                <S.BottomButtonBox>
+                  <Button 
+                    onPress={handleSubmit} 
+                    size='medium'
+                    title={t('TripCreator.submitButton')} 
+                    iconRight="chevron-right"
+                    />
+                </S.BottomButtonBox>
+            </S.InputGroupContainer>   
+
 
         <DateTimePickerModal
           isVisible={datePickerVisible}

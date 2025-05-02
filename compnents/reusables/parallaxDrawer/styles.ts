@@ -1,82 +1,68 @@
 import styled from 'styled-components/native';
-import { Dimensions, Platform } from 'react-native';
+import { Animated, Dimensions, ImageBackground, Platform, SafeAreaView } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import {
-  colors,
-  fontSizes,
-  activeFonts,
-} from '../../styles';
+import { colors } from '../../styles';
+import Svg from "react-native-svg";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowHeight = Dimensions.get('screen').height;
 
-export const FullScreenCenter = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-`;
+const HALF_HEIGHT = windowHeight / 2
 
-export const BackButton = styled.View`
-  z-index: 50;
-  position: absolute;
-  top: 5.5%;
-  left: 2%;
-`;
-
-export const ContentContainer = styled.View`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 15;
-  align-items: center;
-`;
-
-// margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;
-
-export const InputGroupContainer = styled.View`
-  margin-bottom: ${windowHeight / 70}px;
-  width: ${windowWidth * 0.75}px;
-`;
-
-export const Header = styled.Text`
-  margin: 5%;
-  font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Thin};
-  color: ${colors.themeBlack};
-  align-self: flex-start;
-`;
-
-export const TextBuffer = styled.View`
-  margin-bottom: ${moderateScale(20)}px;
-`;
-
-export const ButtonBox = styled.View`
-  z-index: -1;
-  width: 100%;
-  align-items: flex-end;
-  margin-top: ${Platform.OS === 'ios' ? '15%' : '2%'};
-  margin-right: 15%;
-`;
-
-export const Hint = styled.Text`
-  align-self: flex-start;
-  text-align: center;
-  color: ${colors.themeBlack};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.ThinItalic};
-  margin-top: 2%;
-  margin-left: ${windowWidth > 600 ? '5%' : '9%'};
-  margin-bottom: 0%;
-  width: 30%;
-`;
-
-export const SafeArea = styled.SafeAreaView`
+export const SafeArea = styled(SafeAreaView)`
   z-index: 20;
+  margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
 `;
 
 export const BackButtonWrapper = styled.View`
   margin-left: 2%;
   align-self: flex-start;
 `;
+
+export const BackgroundContainer = styled(Animated.View)`
+  position: absolute;
+  top: 0;
+  height: ${HALF_HEIGHT * 1.1}px;
+  width: 100%;
+  z-index: 0;
+`;
+
+export const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground);
+
+export const StyledSvg = styled(Svg)`
+  position: absolute;
+  top: ${({ topOffset }) => `${topOffset}px`};
+  z-index: 5;
+  background-color: transparent;
+`;
+
+export const TopTransparentSection = styled(Animated.View)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: ${moderateScale(100)}px;
+  backgroundColor: 'rgba(255, 255, 255, 0)';
+  z-index: 1;
+`;
+
+export const BottomOpaqueSection = styled(Animated.View)`
+  position: absolute;
+  top: ${moderateScale(75)}px;
+  left: 0;
+  right: 0;
+  backgroundColor: ${colors.themeWhite};
+  z-index: 3;
+`;
+
+export const Content = styled.View`
+  z-index: 3;
+  padding-vertical: 5%;
+  align-items: center;
+  padding-bottom: ${Platform.OS === 'ios' ? moderateScale(50) : moderateScale(80)}px;
+`;
+
+export const EmptyContainer = styled.View`
+`;
+
+
+
