@@ -29,7 +29,6 @@ export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
   padding-bottom: ${moderateScale(20)}px;
- 
 `;
 
 // margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;

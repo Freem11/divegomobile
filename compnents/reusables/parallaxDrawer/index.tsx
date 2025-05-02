@@ -44,27 +44,21 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
       startY.value = translateY.value;
     })
     .onUpdate((event) => {
-      const maxTranslateY = SCREEN_HEIGHT;
-      const minTranslateY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
-
-      translateY.value = Math.max(
-        minTranslateY,
-        Math.min(startY.value + event.translationY, maxTranslateY)
-      );
-    })
+        const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT; // Fully expanded
+        const maxY = HALF_HEIGHT; // Halfway (initial state)
+    
+        // Clamp drag during update
+        const nextY = startY.value + event.translationY;
+        translateY.value = Math.min(maxY, Math.max(minY, nextY));
+      })
     .onEnd((event) => {
-      const maxTranslateY = SCREEN_HEIGHT;
-      const minTranslateY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
-
-      if (translateY.value < 0) {
-        translateY.value = withTiming(0, { duration: 300 });
-        return;
-      }
+        const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+        const maxY = HALF_HEIGHT;
 
       if (event.velocityY < 0) {
         translateY.value = withDecay({
           velocity: event.velocityY,
-          clamp: [minTranslateY, maxTranslateY],
+          clamp: [minY, maxY],
           deceleration: 0.985,
         });
       } else {
@@ -88,6 +82,7 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
   
   const animatedDrawerStyle = useAnimatedStyle(() => {
     return {
+        height: contentHeight.value + TOP_SECTION_HEIGHT, 
       transform: [{ translateY: translateY.value }],
     };
   });
@@ -102,6 +97,8 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
       transform: [{ scale }],
     };
   });
+
+  console.log(children)
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -152,7 +149,15 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
                 contentHeight.value = event.nativeEvent.layout.height;
               }}
             >
-              {children}
+                  {Array.isArray(children) ? children.map((child, index) => (
+                    <View key={index}>
+                        {child}
+                    </View>
+                    )) : (
+                    <View key={0}>
+                        {children}
+                    </View>
+                    )}
             </View>
           </View>
         </Animated.View>
@@ -183,8 +188,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: SCREEN_HEIGHT,
     zIndex: 2,
+    // backgroundColor: 'blue'
     overflow: 'hidden',
   },
   topTransparentSection: {
@@ -201,6 +206,7 @@ const styles = StyleSheet.create({
     top: moderateScale(75),
     left: 0,
     right: 0,
+    // backgroundColor: 'pink',
     backgroundColor: '#fff',
     zIndex: 3,
   },
@@ -208,6 +214,7 @@ const styles = StyleSheet.create({
     zIndex: 3,
     paddingVertical: '5%',
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
+    // backgroundColor: 'green',
   },
 });

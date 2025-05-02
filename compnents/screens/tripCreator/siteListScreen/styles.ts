@@ -6,7 +6,7 @@ import { Dimensions, Platform } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 
 export const ScrollViewContainer = styled.View`
-    height: ${windowWidth > 600 ? '13%' :  '23%'};
+    height: 300px;
     margin-top: 2%; 
     margin-bottom: 1%;
     border-color: ${colors.neutralGrey};
@@ -17,12 +17,12 @@ export const ScrollViewContainer = styled.View`
 
 export const PageContentContainer = styled.View`
     width: 90%; 
-    height: 100%;
 `;
 
 export const ContentContainer = styled.View`
-    width: 90%; 
-    marginLeft: 5%;
+  width: ${windowWidth}px;
+  align-items: center;
+  padding-bottom: ${moderateScale(20)}px;
 `;
 
 export const BackButtonWrapper = styled.View`
