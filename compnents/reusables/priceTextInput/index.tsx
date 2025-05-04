@@ -7,7 +7,7 @@ export type PriceTextInputProps = TextInputProps & {
 };
 
 const PriceTextInput = React.forwardRef<TextInput, PriceTextInputProps>(function PriceTextInput({ error, value: initialValue, ...rest }: PriceTextInputProps, ref) {
-  const [price, setPrice] = useState(initialValue);
+  const [price, setPrice] = useState(initialValue || "");
   const [prevPrice, setPrevPrice] = useState('');
 
   const handlePriceChange = (data: any) => {
