@@ -1,6 +1,7 @@
 import { Dimensions } from "react-native";
 import {
   Easing,
+  runOnJS,
   withDecay,
   withTiming,
   interpolate,
@@ -86,7 +87,7 @@ export const useParallaxDrawer = (onClose: () => void) => {
       if (finished) {
         startY.value = 0;
         translateY.value = 0;
-        onClose();
+        runOnJS(onClose)();
       }
     });
   };

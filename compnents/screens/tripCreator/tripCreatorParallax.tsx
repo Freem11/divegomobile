@@ -38,6 +38,7 @@ export default function TripCreatorParallax() {
       onClose={onClose}
     >
       <TripCreatorPage />
+
     </ParallaxDrawer>
   );
 }

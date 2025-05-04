@@ -36,11 +36,11 @@ const PriceTextInput = React.forwardRef<TextInput, PriceTextInputProps>(function
     if (rest.onChange) rest.onChange(data);
   };
 
-  const handleBlur = (data: any) => {
-    const currPrice = data.nativeEvent.text.replace(/[^0-9.]/g, '');
-    const roundedPrice = Math.round(parseFloat(currPrice) * 100) / 100;
+  const handleBlur = () => {
+    const numericPart = price?.replace(/[^0-9.]/g, '') ?? '';
+    const roundedPrice = Math.round(parseFloat(numericPart) * 100) / 100;
     const formattedPrice = isNaN(roundedPrice) ? '' : `$${roundedPrice.toFixed(2)}`;
-    setPrevPrice(currPrice);
+    setPrevPrice(numericPart);
     setPrice(formattedPrice);
   };
 
