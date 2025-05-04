@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Animated, Dimensions, ImageBackground, Platform, SafeAreaView } from 'react-native';
+import {StyleSheet, Animated, Dimensions, ImageBackground, Platform, SafeAreaView } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { colors } from '../../styles';
 import Svg from "react-native-svg";
@@ -11,11 +11,14 @@ const HALF_HEIGHT = windowHeight / 2
 export const SafeArea = styled(SafeAreaView)`
   z-index: 20;
   margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
+  background-color: grey;
 `;
 
+export const AnimatedSafeArea = Animated.createAnimatedComponent(SafeArea);
+
 export const BackButtonWrapper = styled.View`
-  margin-left: 2%;
-  align-self: flex-start;
+  width: 100%;
+  align-items: flex-start;
 `;
 
 export const BackgroundContainer = styled(Animated.View)`
@@ -65,4 +68,17 @@ export const EmptyContainer = styled.View`
 `;
 
 
-
+export const styles = StyleSheet.create({
+  drawer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
+    overflow: 'hidden',
+  },
+  safeArea: {
+    zIndex: 20,
+    marginTop: Platform.OS === 'ios' ? 0 : '10%',
+  }
+});

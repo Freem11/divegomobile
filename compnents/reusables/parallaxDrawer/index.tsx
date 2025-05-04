@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
   View,
   ImageBackground,
+  SafeAreaView,
 } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -12,6 +13,10 @@ import Animated, {
   withTiming,
   interpolate,
   Easing,
+  Extrapolate,
+  useDerivedValue,
+  useAnimatedReaction,
+  runOnJS,
 } from 'react-native-reanimated';
 import {
   GestureHandlerRootView,
@@ -21,6 +26,7 @@ import { moderateScale } from 'react-native-size-matters';
 import * as S from './styles';
 import ButtonIcon from '../buttonIcon';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { colors } from "../../styles";
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('screen');
@@ -101,7 +107,21 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
     };
   });
 
+  const animatedSafeAreaStyle = useAnimatedStyle(() => {
+    // Assuming drawer at translateY = HALF_HEIGHT (start), to translateY = 0 (top)
+    const opacity = interpolate(
+      translateY.value,
+      [HALF_HEIGHT, 0],
+      [0, 0.35],
+      'clamp'
+    );
+  
+    return {
+      backgroundColor: `rgba(128, 128, 128, ${opacity})`, // grey with animated alpha
+    };
+  });
 
+  
   const closeParallax = () => {
     translateY.value = withTiming(0, { duration: 200 }, (isFinished) => {
       if (isFinished) {
@@ -112,19 +132,21 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
       onClose();
   }
   
+  const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
   return (
     <GestureHandlerRootView>
 
-    <S.SafeArea>
+    <AnimatedSafeAreaView style={[S.styles.safeArea, animatedSafeAreaStyle]}>
       <S.BackButtonWrapper>
         <ButtonIcon
           icon="chevron-left"
           onPress={closeParallax}
           size="small"
+          fillColor={colors.themeWhite}
         />
       </S.BackButtonWrapper>
-      </S.SafeArea>
+      </AnimatedSafeAreaView>
       <S.BackgroundContainer>
         <Animated.View style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}>
           <ImageBackground
@@ -136,7 +158,7 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
       </S.BackgroundContainer>
 
       <GestureDetector gesture={panGesture}>
-        <Animated.View style={[styles.drawer, animatedDrawerStyle]}>
+        <Animated.View style={[S.styles.drawer, animatedDrawerStyle]}>
           <S.TopTransparentSection>
             <S.StyledSvg
               width="100%"
@@ -175,15 +197,3 @@ const ParallaxDrawer = ({ headerImage, children, onClose }: ParallaxDrawerProps)
 };
 
 export default ParallaxDrawer;
-
-const styles = StyleSheet.create({
-  drawer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 2,
-    // backgroundColor: 'blue'
-    overflow: 'hidden',
-  }
-});
