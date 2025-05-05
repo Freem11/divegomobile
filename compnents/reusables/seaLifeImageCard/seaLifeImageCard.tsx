@@ -1,8 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import { Platform } from "react-native";
+import React, { useState, useContext } from "react";
 import { moderateScale } from "react-native-size-matters";
 import {
   insertPhotoLike,
-  deletePhotoLike,
+  deletePhotoLike
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
@@ -22,14 +23,37 @@ import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { useTranslation } from "react-i18next";
-import abbreviateNumber from '../../helpers/abbreviateNumber';
-import ButtonIcon from "../buttonIcon";
-import * as S from './styles';
+import abbreviateNumber from "../../helpers/abbreviateNumber";
+import ButtonIcon from "../../reusables/buttonIcon";
+import * as S from "./styles";
 
-let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-export default function SeaLifeImageCard(props) {
-  const { pic, dataSetType, diveSiteName, setVisitProfileVals } = props;
+interface Photo {
+  UserID: string;
+  UserName: string;
+  commentcount: number;
+  created_at: string;
+  dateTaken: string;
+  id: number;
+  label: string;
+  latitude: number;
+  longitude: number;
+  likecount: number;
+  likedbyuser: boolean;
+  likeid: number | null;
+  month: number;
+  photoFile: string;
+}
+interface PictureProps {
+  pic: Photo;
+  dataSetType: string;
+  diveSiteName?: string;
+  setVisitProfileVals: (val: any) => void;
+}
+
+const SeaLifeImageCard = (props: PictureProps) => {
+  const { pic, dataSetType, setVisitProfileVals } = props;
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
@@ -39,25 +63,6 @@ export default function SeaLifeImageCard(props) {
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { t } = useTranslation();
-  const handleEmail = (pic) => {
-    const to = ["scubaseasons@gmail.com"];
-    email(to, {
-      // Optional additional arguments
-      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photofile} `,
-      body:
-        "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
-      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
-    }).catch(console.error);
-  };
-
-
-
-  const [base64, setBase64] = useState(null);
-  const [userN, setUserN] = useState(null);
-  const [creastureN, setCreastureN] = useState(null);
-  const [photoDate, setPhotoDate] = useState(null);
-  const [mapLocal, setMapLocal] = useState(null);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
@@ -65,12 +70,23 @@ export default function SeaLifeImageCard(props) {
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
+  const { t } = useTranslation();
 
-  const handleCommentModal = (pic) => {
+  const handleCommentModal = (pic: Photo) => {
     // setCommentsModal(true);
     setFullScreenModal(true);
     setActiveTutorialID("CommentsModal");
     setSelectedPicture(pic);
+  };
+
+  const handleEmail = (pic: Photo) => {
+    const to = ["scubaseasons@gmail.com"];
+    email(to, {
+      // Optional additional arguments
+      subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
+      body: "Type of issue: \n \n 1) Animal name not correct \n (Please provide the correct animal name and we will correct the record)\n \n 2)Copy write image claim \n (Please provide proof that you own the submitted photo and we will remove it as you have requested)",
+      checkCanOpen: false // Call Linking.canOpenURL prior to Linking.openURL
+    }).catch(console.error);
   };
 
   const handleLike = async (picId: number) => {
@@ -79,15 +95,15 @@ export default function SeaLifeImageCard(props) {
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
-      let newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
+      const newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
     }
   };
 
-  const handleFollow = async (userName) => {
-    let picOwnerAccount = await grabProfileByUserName(userName);
+  const handleFollow = async (userName: string) => {
+    const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (profile[0].UserID === picOwnerAccount[0].UserID) {
       return;
@@ -105,140 +121,127 @@ export default function SeaLifeImageCard(props) {
     );
   };
 
-  const handleDiveSiteMove = async (pic) => {
+  const handleDiveSiteMove = async (pic: Photo) => {
     setSelectedDiveSite({
-      SiteName: diveSiteName,
+      SiteName: selectedDiveSite.name,
       Latitude: pic.latitude,
-      Longitude: pic.longitude,
+      Longitude: pic.longitude
     });
     setVisitProfileVals(null);
     setSelectedProfile(null);
     setLevelTwoScreen(false);
   };
 
-  const convertBase64 = (cacheDir) => {
-    ImgToBase64.getBase64String(cacheDir)
-      .then((base64String) => {
-        setBase64(base64String);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const doShare = async (shareOptions) => {
+  const convertBase64 = async (photo: string) => {
+    const temp = photo.split("/");
+    const lastIndex = temp.length - 1;
+    const fileName = temp[lastIndex];
+    const cacheDir = FileSystem.cacheDirectory + fileName;
     try {
-      const response = await Share.open(shareOptions);
+      const base64String = await ImgToBase64.getBase64String(cacheDir);
+      const result = `data:image/jpg;base64,${base64String}`;
+
+      return result;
+    } catch (err) {
+      console.log("Base64 conversion error:", err);
+      return null;
+    }
+  };
+
+  const onShare = async (pic: Photo) => {
+    const { photoFile, UserName, label, dateTaken, latitude, longitude } = pic;
+    const localUri = "https://scuba-seasons.web.app";
+    const local = await getPhotoLocation(latitude, longitude);
+    const url = await convertBase64(photoFile);
+    const message = `Checkout this cool pic of a ${label} on Scuba SEAsons! It was taken by ${UserName} at the dive site: ${selectedDiveSite.name}, in${local} on ${dateTaken}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n${localUri}`;
+
+    try {
+      if (url) {
+        // Extract base64 data
+        const base64Data = url.split(",")[1] || url.split("base64,")[1];
+
+        // Save to a temporary file
+        const fileUri = FileSystem.documentDirectory + "shared-image.jpg";
+        await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+          encoding: FileSystem.EncodingType.Base64
+        });
+
+        // Verify file exists
+        const fileInfo = await FileSystem.getInfoAsync(fileUri);
+        // console.log(
+        //   "File exists:",
+        //   fileInfo.exists,
+        //   "File size:",
+        //   fileInfo.size
+        // );
+
+        if (fileInfo.exists) {
+          // Use react-native-share which works well on both platforms
+          const options = {
+            title: "Share Scuba SEAsons photo",
+            message: message,
+            url: Platform.OS === "android" ? `file://${fileUri}` : fileUri,
+            type: "image/jpeg"
+          };
+
+          const result = await Share.open(options);
+          console.log("Share result:", result);
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error sharing:", error);
     }
-
-    setUserN(null);
-    setCreastureN(null);
-    setPhotoDate(null);
-    setMapLocal(null);
   };
 
-  const onShare = async (photofile, userN, seaCreature, picDate, lat, lng) => {
-    let local = await getPhotoLocation(lat, lng);
-
-    setMapLocal(local);
-    setCreastureN(seaCreature);
-    setPhotoDate(picDate);
-    if (userN) {
-      setUserN(userN);
-    } else {
-      setUserN("an unnamed diver");
-    }
-    let temp = photofile.split("/");
-    let lastIndex = temp.length - 1;
-    let fileName = temp[lastIndex];
-    let cacheDir = FileSystem.cacheDirectory + fileName;
-    convertBase64(cacheDir);
-  };
-
-  async function getPhotoLocation(photoLat, photoLng) {
-    let Lat = Number(photoLat);
-    let Lng = Number(photoLng);
+  const getPhotoLocation = async (Lat: number, Lng: number) => {
+    // const Lat = Number(photoLat);
+    // const Lng = Number(photoLng);
 
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${GoogleMapsApiKey}`
       );
       const placeInfo = await res.json();
-      let genAddress = placeInfo.results[1].formatted_address;
-      let fudgedAddress = genAddress.split(",");
-      let bits = [
+      const genAddress = placeInfo.results[1].formatted_address;
+      const fudgedAddress = genAddress.split(",");
+      const bits = [
         fudgedAddress[fudgedAddress.length - 2],
-        fudgedAddress[fudgedAddress.length - 1],
+        fudgedAddress[fudgedAddress.length - 1]
       ].join();
       return bits;
     } catch (err) {
       console.log("error", err);
     }
-  }
+  };
 
-  useEffect(() => {
-    let localUri = `https://divegolanding.web.app`;
-
-    const shareOptions = {
-      message: "",
-      url: "",
-    };
-    if (base64) {
-      shareOptions.message = t('PictureModal.shareMessage', {
-        creature: creastureN,
-        user: userN,
-        diveSite: selectedDiveSite.SiteName,
-        location: mapLocal,
-        date: photoDate,
-        link: localUri
-      })
-      shareOptions.url = `data:image/jpg;base64,${base64}`;
-      doShare(shareOptions);
-    }
-    setBase64(null);
-  }, [base64]);
-
+  // const togglePhotoBoxModal = (photo) => {
+  //   setSelectedPhoto(photo);
+  //   setFullScreenModal(true);
+  //   setActiveTutorialID("PinchAndZoomPhoto");
+  // };
 
   return (
-      <S.Container key={pic.id}>
-        <S.Overlay>
-          <S.TopContentWrapper>
+    <S.Container key={pic.id}>
+      <S.Overlay>
+        <S.TopContentWrapper>
+          <S.IconWrapper>
+            <ButtonIcon icon="share" onPress={() => onShare(pic)} size="icon" />
+          </S.IconWrapper>
 
-            <S.IconWrapper>
-              <ButtonIcon 
-                icon="share"
-                onPress={() =>
-                  onShare(
-                    pic.photofile,
-                    pic.newusername,
-                    pic.label,
-                    pic.dateTaken,
-                    pic.latitude,
-                    pic.longitude
-                  )}
-                size='icon'
-              />
-            </S.IconWrapper>
-
-            <S.IconWrapper>
-              <ButtonIcon 
-                icon="error-outline"
-                onPress={() => handleEmail(pic)}
-                size='micro'
-              />
-            </S.IconWrapper>
-
-          </S.TopContentWrapper>
+          <S.IconWrapper>
+            <ButtonIcon
+              icon="error-outline"
+              onPress={() => handleEmail(pic)}
+              size="micro"
+            />
+          </S.IconWrapper>
+        </S.TopContentWrapper>
 
         <S.ContentWrapper>
+          <S.LabelWrapper>
+            <S.TitleText>{pic.label}</S.TitleText>
 
-        <S.LabelWrapper>
-
-          <S.TitleText>{pic.label}</S.TitleText>
-
-          {dataSetType === "ProfilePhotos" ? (
+            {dataSetType === "ProfilePhotos" ? (
               <S.NavigateTextPressable>
                 <S.NavigateText onPress={() => handleDiveSiteMove(pic)}>
                   View Site
@@ -251,47 +254,44 @@ export default function SeaLifeImageCard(props) {
                 </S.NavigateText>
               </S.NavigateTextPressable>
             )}
-
-        </S.LabelWrapper>
+          </S.LabelWrapper>
 
           <S.CounterWrapper>
             <S.IconWrapper>
-              <ButtonIcon 
+              <ButtonIcon
                 icon="like-hand"
                 onPress={() => handleLike(pic.id)}
-                size='icon'
-                fillColor={picLiked ? 'red' : null}
+                size="icon"
+                fillColor={picLiked ? "red" : null}
               />
             </S.IconWrapper>
 
-            <S.CounterText>{abbreviateNumber(countOfLikes)}</S.CounterText> 
-
+            <S.CounterText>{abbreviateNumber(countOfLikes)}</S.CounterText>
           </S.CounterWrapper>
-            <S.CounterWrapper>
-              <S.IconWrapper>
-                <ButtonIcon 
-                  icon="comment"
-                  onPress={() => handleCommentModal(pic)}
-                  size='icon'
-                />
-              </S.IconWrapper>
+          <S.CounterWrapper>
+            <S.IconWrapper>
+              <ButtonIcon
+                icon="comment"
+                onPress={() => handleCommentModal(pic)}
+                size="icon"
+              />
+            </S.IconWrapper>
 
-              <S.CounterText>{abbreviateNumber(pic.commentcount)}</S.CounterText>  
-            </S.CounterWrapper>
-
+            <S.CounterText>{abbreviateNumber(pic.commentcount)}</S.CounterText>
+          </S.CounterWrapper>
         </S.ContentWrapper>
+      </S.Overlay>
 
-        </S.Overlay>
-
-        <ImageCasherDynamic
-          photoFile={pic.photoFile}
-          id={pic.id}
-          style={{
-            borderRadius: moderateScale(15),
-            resizeMode: "cover"
-          }}
-        />
-
-      </S.Container>
+      <ImageCasherDynamic
+        photoFile={pic.photoFile}
+        id={pic.id}
+        style={{
+          borderRadius: moderateScale(15),
+          resizeMode: "cover"
+        }}
+      />
+    </S.Container>
   );
-}
+};
+
+export default SeaLifeImageCard;
