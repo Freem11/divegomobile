@@ -72,6 +72,8 @@ export default function DiveShop() {
       (selectedShop[0].userId === profile[0].UserID)
     ) {
       setIsMyShop(true);
+    } else {
+      setIsMyShop(false);
     }
 
     setDiveShopVals({
@@ -202,6 +204,7 @@ export default function DiveShop() {
       ></WavyHeaderDynamic>
 
       <BottomDrawer
+        isMyShop={isMyShop}
         dataSet={itineraryList}
         dataSetType={"DiveShopTrips"}
         lowerBound={drawerLowerBound}
