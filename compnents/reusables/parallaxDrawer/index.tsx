@@ -13,7 +13,7 @@ import { useParallaxDrawer } from "./useParallelDrawer";
 
 type ParallaxDrawerProps = {
   headerImage: any;
-  children: React.ReactNode;
+  children: React.ReactElement<{ closeParallax: (mapConfig: number | null) => void }>;
   onClose: () => void;
   onMapFlip?: () => void;
 };
@@ -80,7 +80,11 @@ const ParallaxDrawer = ({
                 contentHeight.value = event.nativeEvent.layout.height;
               }}
             >
-              <S.EmptyContainer>{children}</S.EmptyContainer>
+              <S.EmptyContainer>
+              {React.isValidElement(children)
+                ? React.cloneElement(children, { closeParallax })
+                : children}
+              </S.EmptyContainer>
             </S.Content>
           </S.BottomOpaqueSection>
         </Animated.View>

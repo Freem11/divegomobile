@@ -25,7 +25,7 @@ import PriceTextInput from "../../reusables/priceTextInput";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import Label from "../../reusables/label";
-import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
+import { GestureHandlerRootView, TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { MapHelperContext } from "../../contexts/mapHelperContext";
@@ -37,10 +37,12 @@ const windowHeight = Dimensions.get("window").height;
 type TripCreatorProps = {
   onClose: () => void;
   onMapFlip?: () => void;
+  closeParallax: (mapConfig: number) => void
 };
 export default function TripCreatorPage({
   onClose,
-  onMapFlip
+  onMapFlip,
+  closeParallax
 }: TripCreatorProps) {
 
   const { profile } = useContext(UserProfileContext);
@@ -60,8 +62,6 @@ export default function TripCreatorPage({
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const [itineraryList, setItineraryList] = useState("");
   
-  const { closeParallax } =  useParallaxDrawer(onClose, onMapFlip);
-
   useEffect(() => {
     getItineraries(profile[0].UserID);
     getTripDiveSites(sitesArray);
@@ -321,6 +321,7 @@ export default function TripCreatorPage({
             />
           </S.ButtonHousing>
         </S.ScrollViewContainer>
+       
 
         <S.BottomButtonBox>
           <Button

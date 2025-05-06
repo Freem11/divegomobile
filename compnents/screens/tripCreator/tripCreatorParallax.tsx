@@ -53,8 +53,7 @@ export default function TripCreatorParallax() {
       onMapFlip={onNavigate}
     >
       <TripCreatorPage 
-        onClose={onClose}
-        onMapFlip={onNavigate}
+        onClose={onClose} onMapFlip={onNavigate}
         />
 
     </ParallaxDrawer>
