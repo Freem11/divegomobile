@@ -15,12 +15,14 @@ type ParallaxDrawerProps = {
   headerImage: any;
   children: React.ReactNode;
   onClose: () => void;
+  onMapFlip?: () => void;
 };
 
 const ParallaxDrawer = ({
   headerImage,
   children,
   onClose,
+  onMapFlip
 }: ParallaxDrawerProps) => {
   
   const {
@@ -31,7 +33,7 @@ const ParallaxDrawer = ({
     animatedSafeAreaStyle,
     contentHeight,
     closeParallax,
-  } = useParallaxDrawer(onClose);
+  } = useParallaxDrawer(onClose, onMapFlip);
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
@@ -41,7 +43,7 @@ const ParallaxDrawer = ({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={closeParallax}
+            onPress={() => closeParallax(null)}
             size="small"
             fillColor={colors.themeWhite}
           />

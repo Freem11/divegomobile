@@ -30,11 +30,19 @@ import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
+import  { useParallaxDrawer } from '../../reusables/parallaxDrawer/useParallelDrawer';
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function TripCreatorPage(props) {
-  const {} = props;
+type TripCreatorProps = {
+  onClose: () => void;
+  onMapFlip?: () => void;
+};
+export default function TripCreatorPage({
+  onClose,
+  onMapFlip
+}: TripCreatorProps) {
+
   const { profile } = useContext(UserProfileContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
 
@@ -51,6 +59,8 @@ export default function TripCreatorPage(props) {
   const { t } = useTranslation();
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const [itineraryList, setItineraryList] = useState("");
+  
+  const { closeParallax } =  useParallaxDrawer(onClose, onMapFlip);
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
@@ -121,29 +131,6 @@ export default function TripCreatorPage(props) {
     getTripDiveSites(sitesArray);
   };
 
-  const onNavigate = () => {
-    Keyboard.dismiss();
-    setMapHelper(true);
-    setMapConfig(3);
-    setLevelTwoScreen(false);
-  };
-
-  const onClose = () => {
-    setEditMode(false);
-    setSitesArray([]);
-    setTripDiveSites([]);
-    setFormValues({
-      ...formValues,
-      BookingPage: "",
-      tripName: "",
-      startDate: "",
-      endDate: "",
-      price: 0,
-      description: "",
-      siteList: [],
-    });
-    setLevelTwoScreen(false);
-  };
 
   const handleSubmit = () => {
     if (
@@ -300,7 +287,7 @@ export default function TripCreatorPage(props) {
 
         <S.ScrollViewContainer>
           <ScrollView>
-            {tripDiveSites.length === 0 && (
+            {tripDiveSites && tripDiveSites.length === 0 && (
               <EmptyState iconName="anchor" text="No Dive Sites Yet." />
             )}
             {Array.isArray(tripDiveSites) &&
@@ -326,7 +313,7 @@ export default function TripCreatorPage(props) {
 
           <S.ButtonHousing>
             <Button
-              onPress={onNavigate}
+              onPress={() => closeParallax(3)}
               size="medium"
               alt={true}
               title="Dive Sites"
