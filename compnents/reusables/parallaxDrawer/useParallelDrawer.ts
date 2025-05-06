@@ -7,14 +7,9 @@ import {
   interpolate,
   useSharedValue,
   useAnimatedStyle,
-  cancelAnimation,
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useContext } from "react";
-import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -22,10 +17,6 @@ const TOP_SECTION_HEIGHT = moderateScale(70);
 const DECELERATION = 0.985;
 
 export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) => {
-  const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext)
-  
   const translateY = useSharedValue(HALF_HEIGHT);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
@@ -91,22 +82,14 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     };
   });
 
-  const delayedMapFlip = () => {
-    setTimeout(() => {
-      onMapFlip();
-    }, 300);
-  };
 
   const closeParallax = (mapConfig: number | null) => {
-    cancelAnimation(translateY);
-  
-    translateY.value = 0;
-    startY.value = 0;
-  
-    translateY.value = withTiming(0, { duration: 200 }, (finished) => {
+    translateY.value = withTiming(0, { duration: 1 }, (finished) => {
       if (finished) {
+        translateY.value = 0;
+        startY.value = 0;
         if (mapConfig === 3) {
-          runOnJS(delayedMapFlip)();
+          runOnJS(onMapFlip)();
         } else {
           runOnJS(onClose)();
         }

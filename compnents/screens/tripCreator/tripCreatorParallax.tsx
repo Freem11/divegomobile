@@ -12,9 +12,9 @@ import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 
 export default function TripCreatorParallax() {
-  const { editMode, setEditMode } = useContext(EditModeContext);
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { tripDiveSite, setTripDiveSites } = useContext(TripSitesContext);
+  const { setEditMode } = useContext(EditModeContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
+  const { setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setMapHelper } = useContext(MapHelperContext);

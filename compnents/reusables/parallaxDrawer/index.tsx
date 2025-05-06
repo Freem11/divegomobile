@@ -13,7 +13,7 @@ import { useParallaxDrawer } from "./useParallelDrawer";
 
 type ParallaxDrawerProps = {
   headerImage: any;
-  children: React.ReactElement<{ closeParallax: (mapConfig: number | null) => void }>;
+  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void }>;
   onClose: () => void;
   onMapFlip?: () => void;
 };

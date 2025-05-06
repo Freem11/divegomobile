@@ -14,7 +14,6 @@ import { moderateScale, s } from "react-native-size-matters";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
@@ -25,19 +24,14 @@ import PriceTextInput from "../../reusables/priceTextInput";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import Label from "../../reusables/label";
-import { GestureHandlerRootView, TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
+import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
-import  { useParallaxDrawer } from '../../reusables/parallaxDrawer/useParallelDrawer';
-
-const windowHeight = Dimensions.get("window").height;
 
 type TripCreatorProps = {
   onClose: () => void;
   onMapFlip?: () => void;
-  closeParallax: (mapConfig: number) => void
+  closeParallax?: (mapConfig: number) => void
 };
 export default function TripCreatorPage({
   onClose,
@@ -52,14 +46,11 @@ export default function TripCreatorPage({
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
 
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const { t } = useTranslation();
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const [itineraryList, setItineraryList] = useState("");
   
   useEffect(() => {
