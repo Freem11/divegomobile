@@ -13,7 +13,7 @@ import { useParallaxDrawer } from "./useParallelDrawer";
 
 type ParallaxDrawerProps = {
   headerImage: any;
-  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void }>;
+  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void}>;
   onClose: () => void;
   onMapFlip?: () => void;
 };
@@ -33,6 +33,7 @@ const ParallaxDrawer = ({
     animatedSafeAreaStyle,
     contentHeight,
     closeParallax,
+    restoreParallax
   } = useParallaxDrawer(onClose, onMapFlip);
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
@@ -82,7 +83,7 @@ const ParallaxDrawer = ({
             >
               <S.EmptyContainer>
               {React.isValidElement(children)
-                ? React.cloneElement(children, { closeParallax })
+                ? React.cloneElement(children, { closeParallax, restoreParallax })
                 : children}
               </S.EmptyContainer>
             </S.Content>

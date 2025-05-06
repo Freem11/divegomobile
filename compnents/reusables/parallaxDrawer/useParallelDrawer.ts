@@ -10,6 +10,7 @@ import {
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
+import { useEffect } from "react";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -20,6 +21,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const translateY = useSharedValue(HALF_HEIGHT);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
+  const savedTranslateY = useSharedValue(HALF_HEIGHT);
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
@@ -84,6 +86,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
 
   const closeParallax = (mapConfig: number | null) => {
+    savedTranslateY.value = translateY.value;
     translateY.value = withTiming(0, { duration: 1 }, (finished) => {
       if (finished) {
         translateY.value = 0;
@@ -97,8 +100,14 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     });
   };
   
-  
+  const restoreParallax = () => {
+    translateY.value = withTiming(savedTranslateY.value, {
+      duration: 300,
+      easing: Easing.out(Easing.exp),
+    });
+  };
 
+  
   return {
     SCREEN_WIDTH,
     panGesture,
@@ -106,6 +115,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     animatedBackgroundStyle,
     animatedSafeAreaStyle,
     contentHeight,
-    closeParallax
+    closeParallax,
+    restoreParallax
   };
 };

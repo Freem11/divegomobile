@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import TripCreatorPage from "./tripCreator";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -12,6 +12,7 @@ import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 
 export default function TripCreatorParallax() {
+
   const { setEditMode } = useContext(EditModeContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
@@ -19,8 +20,8 @@ export default function TripCreatorParallax() {
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
-
   
+ 
   const onClose = async () => {
     setEditMode(false);
     setSitesArray([]);

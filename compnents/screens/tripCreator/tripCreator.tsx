@@ -27,16 +27,19 @@ import Label from "../../reusables/label";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 type TripCreatorProps = {
   onClose: () => void;
   onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
+  restoreParallax?: () => void; 
 };
 export default function TripCreatorPage({
   onClose,
   onMapFlip,
-  closeParallax
+  closeParallax,
+  restoreParallax
 }: TripCreatorProps) {
 
   const { profile } = useContext(UserProfileContext);
@@ -53,6 +56,8 @@ export default function TripCreatorPage({
   const { t } = useTranslation();
   const [itineraryList, setItineraryList] = useState("");
   
+  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+
   useEffect(() => {
     getItineraries(profile[0].UserID);
     getTripDiveSites(sitesArray);
@@ -60,6 +65,14 @@ export default function TripCreatorPage({
     setSitesArray(formValues.siteList);
   }, []);
 
+
+  useEffect(() => {
+    if(levelTwoScreen){
+      restoreParallax();
+    }
+  }, [levelTwoScreen]);
+ 
+  
   useEffect(() => {
     setFormValues({ ...formValues, siteList: sitesArray });
     getTripDiveSites(sitesArray);
