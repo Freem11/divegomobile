@@ -1,12 +1,9 @@
-import React from 'react';
-import WavyHeaderDynamic from '../wavyHeaderDynamic';
+import React, { useContext, useEffect } from 'react';
 import * as S from './styles';
-import { Flex } from '../../ui/containes';
 import MobileTextInput from "../../reusables/textInput";
 import Button from '../../reusables/button';
-import ButtonIcon from '../../reusables/buttonIcon';
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 interface DiveSiteVals {
   Site: string;
@@ -15,24 +12,32 @@ interface DiveSiteVals {
 }
 
 interface Props {
-  onClose: () => void;
   onSubmit: () => void;
-  onNavigate: () => void;
   addSiteVals: DiveSiteVals;
   setAddSiteVals: (vals: DiveSiteVals) => void;
   getCurrentLocation: () => void;
+  closeParallax?: (mapConfig: number) => void
+  restoreParallax?: () => void;
 }
 
 export default function DiveSiteUploaderView({
-  onClose,
   onSubmit,
-  onNavigate,
   addSiteVals,
   setAddSiteVals,
   getCurrentLocation,
+  closeParallax,
+  restoreParallax
 }: Props) {
 
   const { t } = useTranslation();
+  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+
+  useEffect(() => {
+    if(levelTwoScreen){
+      restoreParallax();
+    }
+  }, [levelTwoScreen]);
+  
   return (
     <S.ContentContainer>
         <S.Header>{t('DiveSiteAdd.header')}</S.Header>
@@ -77,7 +82,7 @@ export default function DiveSiteUploaderView({
                  />
 
                  <Button 
-                   onPress={onNavigate} 
+                   onPress={() => closeParallax(1)} 
                    alt={true} 
                    size='medium'
                    title={t('DiveSiteAdd.pinButton')}

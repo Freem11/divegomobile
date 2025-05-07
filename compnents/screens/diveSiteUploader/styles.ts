@@ -5,7 +5,6 @@ import {
   colors,
   fontSizes,
   activeFonts,
-  buttonSizes,
 } from '../../styles';
 
 const windowWidth = Dimensions.get('window').width;

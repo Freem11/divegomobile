@@ -10,7 +10,6 @@ import {
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
-import { useEffect } from "react";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -91,7 +90,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
-        if (mapConfig === 3) {
+        if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {
           runOnJS(onClose)();

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as S from "./styles";
-import { View, Keyboard, Dimensions, ScrollView } from "react-native";
+import { View, Keyboard, ScrollView } from "react-native";
 import { colors } from "../../styles";
 import {
   getItinerariesByUserId,
@@ -35,6 +35,7 @@ type TripCreatorProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
 };
+
 export default function TripCreatorPage({
   onClose,
   onMapFlip,
@@ -317,7 +318,7 @@ export default function TripCreatorPage({
 
           <S.ButtonHousing>
             <Button
-              onPress={() => closeParallax(3)}
+              onPress={() => closeParallax(1)}
               size="medium"
               alt={true}
               title="Dive Sites"
