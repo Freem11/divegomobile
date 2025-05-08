@@ -11,7 +11,7 @@ import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
 import DiveSiteUploadScreen from '../screens/diveSiteUploader';
-import TripCreatorPage from '../screens/tripCreator';
+import NewTripCreatorPage from '../screens/tripCreator/newTripCreator';
 import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
@@ -47,7 +47,7 @@ export default function LevelTwoScreen() {
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen === "PictureUploadScreen" && <PicUploader />}
       {activeScreen === "DiveSiteUploadScreen" && <DiveSiteUploadScreen />}
-      {activeScreen === "TripCreatorScreen" && <TripCreatorPage />}
+      {activeScreen === "TripCreatorScreen" && <NewTripCreatorPage />}
     </Animated.View>
   );
 }

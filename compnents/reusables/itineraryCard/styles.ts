@@ -25,7 +25,7 @@ export const Card = styled.View`
       shadow-radius: 2px;
     `,
     android: `
-      elevation: 3;
+      elevation: 0;
     `,
   })}
 `;

@@ -1,0 +1,45 @@
+import styled from 'styled-components/native';
+import { moderateScale } from 'react-native-size-matters';
+import {
+  colors,
+  fontSizes,
+  activeFonts,
+} from '../../styles';
+import { Dimensions } from "react-native";
+
+const windowWidth = Dimensions.get('window').width;
+
+export const EmptyStateWrapper = styled.View`
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyledLabelText = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.neutralGrey};
+`;
+
+export const IconSetWrapper = styled.View`
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: ${windowWidth > 600 ? "10%" : "30%"};
+`;
+export const IconSetWrapperLeft = styled.View`
+  margin-top: ${moderateScale(-20)};
+  margin-right: ${moderateScale(-50)};
+`;
+
+export const IconSetWrapperCenter = styled.View`
+  z-index:2;
+  margin-top: ${moderateScale(5)};
+`;
+
+export const IconSetWrapperRight = styled.View`
+  margin-top: ${moderateScale(-20)};
+  margin-left: ${moderateScale(-50)};
+`;

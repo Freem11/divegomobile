@@ -6,7 +6,7 @@ import readableDate from "../../helpers/readableDate";
 import { colors } from "../../styles";
 import Popover from 'react-native-popover-view';
 import { Placement } from "react-native-popover-view/dist/Types";
-import { View } from "react-native";
+import { View, ViewProps } from "react-native";
 import IconWithLabel from '../iconWithLabal';
 import { moderateScale } from "react-native-size-matters";
 
@@ -23,10 +23,10 @@ export default function ItineraryCardView({ itinerary, flipMap, isMyShop, button
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const iconRef = useRef();
+  const iconRef = useRef<View>(null);
   
-  const ButtonIconWithRef = forwardRef(() => (
-    <View ref={iconRef}>
+  const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
+    <View ref={ref} collapsable={false}>
          <ButtonIcon 
           icon="dots-horizontal"
           size='icon'
