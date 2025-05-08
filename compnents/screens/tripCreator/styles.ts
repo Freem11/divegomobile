@@ -44,18 +44,20 @@ export const Header = styled.Text`
   margin-left: 5%;
   margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Thin};
-  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Medium};
+  color: ${colors.headersBlue};
   align-self: flex-start;
 `;
 
 export const InputGroupContainer = styled.View`
   width: ${windowWidth * 0.8}px;
+  margin-top: ${moderateScale(10)}px;
 `;
 
 
 export const TextBuffer = styled.View`
-  margin-bottom: ${moderateScale(20)}px;
+  margin-top: ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(10)}px;
   margin-left: 1%;
   width: 98%;
 `;
@@ -64,8 +66,9 @@ export const TextBufferDates = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: ${moderateScale(20)}px;
-  width: 96%;
+  margin-top: ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(50)}px;
+  width: 99%;
 `;
 
 export const TextLabelDates = styled.View`
@@ -78,22 +81,24 @@ export const MultilineTextInput = styled.TextInput`
   padding: ${moderateScale(10)}px;
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Light};
+  text-align: center;
+  height: 99%;
 `;
 
 export const DescriptionBox = styled.View`
-  alignItems: center;
-  justifyContent: flex-start;
+  align-items: center;
+  justify-content: center;
   borderWidth: ${moderateScale(1)}px;
   borderColor: ${colors.neutralGrey};
   borderRadius: ${moderateScale(10)}px;
   margin-top: 4%;
   background-color: ${colors.themeWhite};
-  margin-bottom: ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(50)}px;
   height: ${moderateScale(300)}px;
 `;
 
 export const BottomButtonBox = styled.View`
-  marginTop: 5%;
+  margin-top: ${moderateScale(40)}px;
   align-items: flex-end;
 `;
 
@@ -103,7 +108,7 @@ export const ScrollViewContainer = styled.View`
   margin-bottom: 1%;
   border-color: ${colors.neutralGrey};
   border-width: ${moderateScale(1)}px;
-  border-radius: ${moderateScale(5)}px;
+  border-radius: ${moderateScale(10)}px;
 `;
 
 export const ListItemContainer = styled.View`

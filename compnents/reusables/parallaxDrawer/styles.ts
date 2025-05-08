@@ -11,7 +11,7 @@ const HALF_HEIGHT = windowHeight / 2
 export const SafeArea = styled(SafeAreaView)`
   z-index: 20;
   margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
-  background-color: grey;
+  background-color: ${colors.neutralGrey};
 `;
 
 export const AnimatedSafeArea = Animated.createAnimatedComponent(SafeArea);

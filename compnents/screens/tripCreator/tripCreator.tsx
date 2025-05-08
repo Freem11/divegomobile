@@ -77,7 +77,7 @@ export default function TripCreatorPage({
   useEffect(() => {
     setFormValues({ ...formValues, siteList: sitesArray });
     getTripDiveSites(sitesArray);
-    setTripDiveSites(getTripDiveSites(sitesArray));
+    // setTripDiveSites(getTripDiveSites(sitesArray));
   }, [sitesArray]);
 
   const getItineraries = async (IdNum) => {
@@ -111,7 +111,7 @@ export default function TripCreatorPage({
     hideDatePicker();
   };
 
-  const getTripDiveSites = async (siteIds) => {
+  const getTripDiveSites = async (siteIds: number[]) => {
     try {
       const success = await getItineraryDiveSiteByIdArray(siteIds);
       if (success) {
@@ -122,16 +122,15 @@ export default function TripCreatorPage({
     }
   };
 
-  const removeFromSitesArray = async (siteIdNo) => {
+  const removeFromSitesArray = async (siteIdNo: number[]) => {
     const index = sitesArray.indexOf(siteIdNo);
     if (index > -1) {
       sitesArray.splice(index, 1);
     }
     setSitesArray(sitesArray);
-
-    const indexLocal = formValues.DiveSites.indexOf(siteIdNo);
+    const indexLocal = formValues.siteList.indexOf(siteIdNo);
     if (indexLocal > -1) {
-      formValues.DiveSites.splice(index, 1);
+      formValues.siteList.splice(index, 1);
     }
     getTripDiveSites(sitesArray);
   };
@@ -205,8 +204,8 @@ export default function TripCreatorPage({
       )}
 
       <S.InputGroupContainer>
+        <Label label="Details" />
         <S.TextBuffer>
-          <Label label="Trip Name" />
           <MobileTextInput
             iconLeft="store"
             placeholder={t("TripCreator.tripNamePlaceholder")}
@@ -218,7 +217,6 @@ export default function TripCreatorPage({
         </S.TextBuffer>
 
         <S.TextBuffer>
-          <Label label="Booking Page URL" />
           <MobileTextInput
             iconLeft="link"
             placeholder={t("TripCreator.bookingLinkPlaceholder")}
@@ -230,7 +228,6 @@ export default function TripCreatorPage({
         </S.TextBuffer>
 
         <S.TextBuffer>
-          <Label label="Price" />
           <PriceTextInput
             iconLeft={"currency-usd"}
             placeholder={t("TripCreator.pricePlaceholder")}
@@ -244,7 +241,6 @@ export default function TripCreatorPage({
 
         <S.TextBufferDates>
           <S.TextLabelDates>
-            <Label label="Start Date" />
             <Toucher onPress={() => showDatePicker("startDate")}>
               <View pointerEvents="none">
                 <MobileTextInput
@@ -259,7 +255,6 @@ export default function TripCreatorPage({
             </Toucher>
           </S.TextLabelDates>
           <S.TextLabelDates>
-            <Label label="End Date" />
             <Toucher onPress={() => showDatePicker("endDate")}>
               <View pointerEvents="none">
                 <MobileTextInput
@@ -275,12 +270,12 @@ export default function TripCreatorPage({
           </S.TextLabelDates>
         </S.TextBufferDates>
 
-        <Label label="Details" />
+        <Label label="Itinerary" />
 
         <S.DescriptionBox>
           <S.MultilineTextInput
             multiline
-            placeholder={t("TripCreator.tripDescriptionPlaceholder")}
+            placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, '\n')}
             value={formValues && formValues.description}
             onChangeText={(text) =>
               setFormValues({ ...formValues, description: text })
@@ -291,7 +286,7 @@ export default function TripCreatorPage({
         <Label label="Dive Sites" />
 
         <S.ScrollViewContainer>
-          <ScrollView>
+          <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
             {tripDiveSites && tripDiveSites.length === 0 && (
               <EmptyState iconName="anchor" text="No Dive Sites Yet." />
             )}
