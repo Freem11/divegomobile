@@ -5,7 +5,6 @@ import {
   colors,
   fontSizes,
   activeFonts,
-  buttonSizes,
 } from '../../styles';
 
 const windowWidth = Dimensions.get('window').width;
@@ -15,7 +14,7 @@ export const FullScreenCenter = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
+  
 `;
 
 export const BackButton = styled.View`
@@ -26,14 +25,11 @@ export const BackButton = styled.View`
 `;
 
 export const ContentContainer = styled.View`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 15;
-  margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;
+  width: ${windowWidth}px;
   align-items: center;
 `;
+
+// margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;
 
 export const InputGroupContainer = styled.View`
   margin-bottom: ${windowHeight / 70}px;
@@ -41,7 +37,8 @@ export const InputGroupContainer = styled.View`
 `;
 
 export const Header = styled.Text`
-  margin: 5%;
+  margin-left: 5%;
+  margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Thin};
   color: ${colors.themeBlack};
@@ -52,12 +49,21 @@ export const TextBuffer = styled.View`
   margin-bottom: ${moderateScale(20)}px;
 `;
 
+export const ButtonSpread = styled.View`
+  flex-direction: row;
+  width: ${windowWidth}px;
+  align-items: center;
+  justify-content: space-between;
+  padding-horizontal: 7%;
+  
+  
+`;
+
 export const ButtonBox = styled.View`
-  z-index: -1;
   width: 100%;
   align-items: flex-end;
   margin-top: ${Platform.OS === 'ios' ? '15%' : '2%'};
-  margin-right: 15%;
+  padding-horizontal: 7%;
 `;
 
 export const Hint = styled.Text`

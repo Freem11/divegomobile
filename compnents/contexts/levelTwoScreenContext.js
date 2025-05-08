@@ -2,7 +2,7 @@ import { createContext, useState } from 'react';
 
 export const LevelTwoScreenContext = createContext('');
 
-const LevelTwoScreenContextProvider = ({children}) => {
+const LevelTwoScreenContextProvider = ({ children }) => {
     const [levelTwoScreen, setLevelTwoScreen] = useState(false);
 
     return (

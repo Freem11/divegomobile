@@ -3,6 +3,7 @@ import { moderateScale } from "react-native-size-matters";
 
 export const colors = {
   primaryBlue: '#0073E6',
+  headersBlue: '#678FB7',
   secondaryYellow: '#fdc500',
   themeWhite: '#ffffff',
   themeBlack: '#00171f',

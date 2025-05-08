@@ -10,8 +10,8 @@ export const StyledLabelWrapper = styled.View`
 `;
 
 export const StyledLabelText = styled.Text`
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Italic};
-  color: ${colors.neutralGrey};
+  font-size: ${moderateScale(fontSizes.SubHeading)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.headersBlue};
 `;
 

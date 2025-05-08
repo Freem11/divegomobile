@@ -81,7 +81,7 @@ const Paginator: React.FC<PaginatorProps> & {
   return (
     <S.Wrapper>
       {/* Screens */}
-      <View style={{height: Platform.OS === "ios" ? windowHeight-moderateScale(85) : windowHeight-moderateScale(45)}}>
+      <View style={{height: Platform.OS === "ios" ? windowHeight-moderateScale(85) : windowHeight-moderateScale(-25)}}>
       {screens && React.cloneElement(screens as React.ReactElement, {
         ref: scrollViewRef,
       })}
