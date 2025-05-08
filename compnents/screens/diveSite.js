@@ -45,7 +45,7 @@ import {
   updateDiveSite,
 } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
-import BottomDrawer from "./animatedBottomDrawer";
+import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
 import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;

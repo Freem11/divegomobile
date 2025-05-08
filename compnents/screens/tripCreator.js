@@ -27,7 +27,7 @@ import {
 } from "../../supabaseCalls/itinerarySupabaseCalls";
 import TextInputField from "../authentication/utils/textInput";
 import PlainTextInput from "./plaintextInput";
-import BottomDrawer from "./animatedBottomDrawer";
+import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -65,7 +65,7 @@ export default function TripCreatorPage(props) {
   const [itineraryList, setItineraryList] = useState("");
 
   const drawerUpperBound = "80%";
-  const drawerLowerBound = "15%";
+  const drawerLowerBound = "17%";
 
   useEffect(() => {
     getItineraries(profile[0].UserID);
