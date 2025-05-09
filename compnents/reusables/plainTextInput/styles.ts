@@ -10,12 +10,14 @@ export const MainContainer = styled.View`
   display: flex;
   position: relative;
   align-items: end;
+  flex-direction: row;
 `;
 
 export const StyledTextInput = styled.TextInput`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
-  width: 90%;
+  min-width: 20%;
+  max-width: 90%;
 `;
 
 export const StyledTextArea = styled.View`

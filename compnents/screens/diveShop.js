@@ -10,7 +10,8 @@ import {
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import WavyHeaderDynamic from "./wavyHeaderDynamic";
-import PlainTextInput from "./plaintextInput";
+// import PlainTextInput from "./plaintextInput";
+import PlainTextInput from '../reusables/plainTextInput';
 import {
   activeFonts,
   colors,
@@ -85,7 +86,7 @@ export default function DiveShop() {
     if (selectedShop[0]) {
       getItineraries(selectedShop[0].id);
     }
-  }, [selectedShop]);
+  }, [selectedShop, isEditModeOn]);
 
   useEffect(() => {
     if (selectedShop[0]) {
@@ -144,6 +145,16 @@ export default function DiveShop() {
     setLevelOneScreen(false);
   };
 
+let isReadOnly = false
+
+if(isMyShop){
+  isReadOnly = false
+} else if (!isMyShop && !isEditModeOn){
+  isReadOnly = false
+} else if (!isMyShop && isEditModeOn){
+  isReadOnly = true
+}
+
   return (
     <View style={styles.container}>
       <MaterialIcons
@@ -182,7 +193,7 @@ export default function DiveShop() {
             <ScrollView>
               {selectedShop && (
                 <PlainTextInput
-                  placeHolder={`A little about ${selectedShop[0].orgName}`}
+                  placeholder={`A little about ${selectedShop[0].orgName}`}
                   content={diveShopVals && diveShopVals.bio}
                   fontSz={fontSizes.StandardText}
                   isMyShop={isMyShop}
@@ -253,7 +264,7 @@ const styles = StyleSheet.create({
   scrollViewBox: {
     // zIndex: 5,
     marginTop: "3%",
-    marginLeft: "2%",
+    marginHorizontal: "7%",
     height: windowHeight / 6,
     // backgroundColor: "green"
   },
