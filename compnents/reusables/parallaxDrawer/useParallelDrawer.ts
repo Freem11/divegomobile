@@ -10,6 +10,10 @@ import {
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
+import { useContext, useEffect } from "react";
+import LevelOneScreen from "../levelOneScreen";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -21,6 +25,23 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
   const savedTranslateY = useSharedValue(HALF_HEIGHT);
+  const { levelOneScreen } = useContext(LevelOneScreenContext);
+  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+useEffect(() =>{
+  if(levelOneScreen && (savedTranslateY.value === HALF_HEIGHT)){
+    translateY.value = HALF_HEIGHT
+    startY.value = 0
+  }
+
+},[levelOneScreen])
+
+useEffect(() =>{
+  if(levelTwoScreen && (savedTranslateY.value === HALF_HEIGHT)){
+    translateY.value = HALF_HEIGHT
+    startY.value = 0
+  }
+
+},[levelTwoScreen])
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
@@ -86,13 +107,14 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const closeParallax = (mapConfig: number | null) => {
     savedTranslateY.value = translateY.value;
-    translateY.value = withTiming(0, { duration: 1 }, (finished) => {
+    translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {
+          savedTranslateY.value = HALF_HEIGHT
           runOnJS(onClose)();
         }
       }

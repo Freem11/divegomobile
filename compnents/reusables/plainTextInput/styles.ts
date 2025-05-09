@@ -25,7 +25,6 @@ export const StyledTextArea = styled.View`
     padding-right: ${moderateScale(25)}px;
 `;
 
-
 export const IconWrapperLeft = styled.View`
     width: ${moderateScale(24)}px;
     margin-right: ${moderateScale(2)}px;
