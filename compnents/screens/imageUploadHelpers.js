@@ -27,7 +27,6 @@ export const chooseImageHandler = async () => {
 
 
 export const imageUpload = async (image) => {
-  console.log("lol imageUpload", image);
   let uri = image.assets[0].uri;
   let extension = image.assets[0].uri.split(".").pop();
   const fileName = Date.now() + "." + extension;

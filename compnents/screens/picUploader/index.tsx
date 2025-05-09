@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import PicUploaderView from "./view";
 import moment from "moment";
-import { chooseImageHandler, imageUpload} from "../imageUploadHelpers";
+import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { PinContext } from "../../contexts/staticPinContext";
@@ -9,15 +9,15 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
+import { Alert } from "react-native";
 
-const curDate = new Date();
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
 export interface Form {
-  date?:         string
-  photo?:        string
-  animal?:       string
-  diveSiteName?: string
+  date?: string;
+  photo?: string;
+  animal?: string;
+  diveSiteName?: string;
 }
 
 export const INIT_FORM_STATE: Form = {
@@ -34,77 +34,95 @@ export default function PicUploader() {
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
-  const [formState, setFormState] = useState<Form>(INIT_FORM_STATE);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);  
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleDatePickerConfirm = (selectedDate: Date) => {
-    if (selectedDate > curDate) return;
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
     setPinValues({ ...pinValues, PicDate: formattedDate });
-    setDatePickerVisible(false)
+    setDatePickerVisible(false);
   };
 
   const handleImageUpload = async (argPicture) => {
-      setPinValues({
-        ...pinValues,
-        PicFile: `animalphotos/public/${argPicture}`,
-      });
-      setFormState({
-        ...formState,
-        photo: argPicture,
-      });
-
-    // try {
-    //   const image = await chooseImageHandler();
-    //   if (!image) return;
-
-    //   const localUri = image.assets[0].uri;
-    //   setLocalPreviewUri(localUri);   
-    //   setIsUploading(true);         
-
-    //   // const fileName = await imageUpload(image); 
-
-    //   if (pinValues.PicFile) {
-    //     await removePhoto({
-    //       filePath: FILE_PATH,
-    //       fileName: pinValues.PicFile.split("/").pop(),
-    //     });
-    //   }
-
-    //   // setPinValues({
-    //   //   ...pinValues,
-    //   //   PicFile: `animalphotos/public/${fileName}`,
-    //   // });
-    // } catch (e) {
-    //   console.log("Image upload error", e.message);
-    // } finally {
-    //   setIsUploading(false);
-    // }
+    setPinValues({
+      ...pinValues,
+      PicFile: `animalphotos/public/${argPicture}`,
+    });
+    setLocalPreviewUri(argPicture);
   };
 
+  const tryUpload = async () => {
+    let fileName = null;
+    try {
+      fileName = await imageUpload(localPreviewUri);
+      return fileName
+    } catch (e) {
+      return null;
+    }
+  };
   const onSubmit = async () => {
-    // setIsUploading(true);
-    const { PicFile, PicDate, Animal } = pinValues;
-    if (PicFile && PicDate && Animal) {
-      await insertPhotoWaits(pinValues);
+    const { PicDate, Animal, Latitude, Longitude, UserId } = pinValues;
+
+    // Step 1: Validate
+    if (!localPreviewUri || !PicDate || !Animal) {
+      setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      // Step 2: Upload image
+      const fileName = await tryUpload();
+
+      if (!fileName) {
+        throw new Error("Photo upload failed");
+      }
+
+      const fullPath = `animalphotos/public/${fileName}`;
+
+      // Step 3: Insert photo wait entry
+      const { error } = await insertPhotoWaits({
+        photoFile: fullPath,
+        label: Animal,
+        dateTaken: PicDate,
+        latitude: Latitude,
+        longitude: Longitude,
+        UserId,
+      });
+
+      if (error) {
+        // Step 4: Delete uploaded file if DB insertion fails
+        await removePhoto({
+          filePath: FILE_PATH,
+          fileName: fullPath,
+        });
+
+        throw new Error("Database insertion failed");
+      }
+
+      // Step 5: Success
       setConfirmationType("Sea Creature Submission");
       setActiveConfirmationID("ConfirmationSuccess");
+      setConfirmationModal(true);
       resetForm();
-    } else {
+    } catch (err) {
+      // Step 6: Alert user
+      Alert.alert(
+        "Error",
+        err.message || "Something went wrong. Please try again.",
+        [{ text: "OK" }]
+      );
       setActiveConfirmationID("ConfirmationCaution");
+      setConfirmationModal(true);
+    } finally {
+      setIsUploading(false);
     }
-    setConfirmationModal(true);
   };
 
-  const onClose = async () => {
-    // if (pinValues.PicFile) {
-    //   await removePhoto({
-    //     filePath: FILE_PATH,
-    //     fileName: pinValues.PicFile.split("/").pop(),
-    //   });
-    // }
+  const onClose = () => {
     resetForm();
     setLevelTwoScreen(false);
   };

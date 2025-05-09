@@ -9,19 +9,33 @@ import AnimalAutoSuggest from "../../autoSuggest/autoSuggest";
 import { colors } from "../../styles";
 import WavyHeaderUploader from "./wavyHeaderUploader";
 
+interface IProps {
+  pinValues: any;
+  isUploading: boolean;
+  localPreviewUri: string | null;
+  datePickerVisible: boolean;
+  onClose: () => void;
+  onSubmit: () => void;
+  setPinValues: (key: string, value: string) => void;
+  showDatePicker: () => void;
+  hideDatePicker: () => void;
+  handleDatePickerConfirm: (date: Date) => void;
+  onImageSelect: (uri: string) => void;
+}
+
 export default function PicUploaderView({
   pinValues,
-  showDatePicker,
+  isUploading,
+  localPreviewUri,
   datePickerVisible,
+  onClose,
+  onSubmit,
+  setPinValues,
+  onImageSelect,
+  showDatePicker,
   hideDatePicker,
   handleDatePickerConfirm,
-  onImageSelect,
-  onSubmit,
-  onClose,
-  setPinValues,
-  localPreviewUri,
-  isUploading,
-}) {
+}: IProps) {
   const { t } = useTranslation();
 
   return (
@@ -88,7 +102,7 @@ export default function PicUploaderView({
         </S.ButtonBox>
       </S.ContentContainer>
       <WavyHeaderUploader
-        image={pinValues.PicFile || localPreviewUri}
+        image={localPreviewUri}
         onImageSelect={onImageSelect}
         isLoading={isUploading}
        />
