@@ -8,6 +8,7 @@ import WavyHeaderUploader from "../wavyHeaderUploader";
 import TextInputField from "../../authentication/utils/textInput";
 import AnimalAutoSuggest from "../../autoSuggest/autoSuggest";
 import { colors } from "../../styles";
+import { ActivityIndicator } from "react-native";
 
 export default function PicUploaderView({
   pinValues,
@@ -32,7 +33,7 @@ export default function PicUploaderView({
           onPress={onClose}
         />
       </S.BackButton>
-
+      
       {pinValues.PicFile && (
         <S.AddPhotoButton>
           <MaterialIcons

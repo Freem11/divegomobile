@@ -1,10 +1,7 @@
 import React, { useContext, useState } from "react";
 import PicUploaderView from "./view";
 import moment from "moment";
-import {
-  chooseImageHandler,
-  imageUpload,
-} from "../imageUploadHelpers";
+import { chooseImageHandler, imageUpload} from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { PinContext } from "../../contexts/staticPinContext";
@@ -15,6 +12,7 @@ import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext"
 
 const curDate = new Date();
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
+
 export default function PicUploader() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -24,14 +22,11 @@ export default function PicUploader() {
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
-  const showDatePicker = () => setDatePickerVisible(true);
-  const hideDatePicker = () => setDatePickerVisible(false);
-
   const handleDatePickerConfirm = (selectedDate: Date) => {
     if (selectedDate > curDate) return;
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
     setPinValues({ ...pinValues, PicDate: formattedDate });
-    hideDatePicker();
+    setDatePickerVisible(false)
   };
 
   const handleImageUpload = async () => {
@@ -39,7 +34,8 @@ export default function PicUploader() {
       const image = await chooseImageHandler();
       if (image) {
         const fileName = await imageUpload(image);
-
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        
         if (pinValues.PicFile) {
           await removePhoto({
             filePath: FILE_PATH,
@@ -96,9 +92,9 @@ export default function PicUploader() {
   return (
     <PicUploaderView
       pinValues={pinValues}
-      showDatePicker={showDatePicker}
+      showDatePicker={() => setDatePickerVisible(true)}
       datePickerVisible={datePickerVisible}
-      hideDatePicker={hideDatePicker}
+      hideDatePicker={() => setDatePickerVisible(false)}
       handleDatePickerConfirm={handleDatePickerConfirm}
       handleImageUpload={handleImageUpload}
       onSubmit={onSubmit}
