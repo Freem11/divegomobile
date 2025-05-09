@@ -1,0 +1,84 @@
+import styled from 'styled-components/native';
+import {StyleSheet, Animated, Dimensions, ImageBackground, Platform, SafeAreaView } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
+import { colors } from '../../styles';
+import Svg from "react-native-svg";
+
+const windowHeight = Dimensions.get('screen').height;
+
+const HALF_HEIGHT = windowHeight / 2
+
+export const SafeArea = styled(SafeAreaView)`
+  z-index: 20;
+  margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
+  background-color: ${colors.neutralGrey};
+`;
+
+export const AnimatedSafeArea = Animated.createAnimatedComponent(SafeArea);
+
+export const BackButtonWrapper = styled.View`
+  width: 100%;
+  align-items: flex-start;
+`;
+
+export const BackgroundContainer = styled(Animated.View)`
+  position: absolute;
+  top: 0;
+  height: ${HALF_HEIGHT * 1.1}px;
+  width: 100%;
+  z-index: 0;
+`;
+
+export const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground);
+
+export const StyledSvg = styled(Svg)`
+  position: absolute;
+  top: ${({ topOffset }) => `${topOffset}px`};
+  z-index: 5;
+  background-color: transparent;
+`;
+
+export const TopTransparentSection = styled(Animated.View)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: ${moderateScale(100)}px;
+  backgroundColor: 'rgba(255, 255, 255, 0)';
+  z-index: 1;
+`;
+
+export const BottomOpaqueSection = styled(Animated.View)`
+  position: absolute;
+  top: ${moderateScale(75)}px;
+  left: 0;
+  right: 0;
+  backgroundColor: ${colors.themeWhite};
+  z-index: 3;
+`;
+
+export const Content = styled.View`
+  z-index: 3;
+  padding-vertical: 5%;
+  align-items: center;
+  padding-bottom: ${Platform.OS === 'ios' ? moderateScale(50) : moderateScale(80)}px;
+`;
+
+export const EmptyContainer = styled.View`
+`;
+
+
+export const styles = StyleSheet.create({
+  drawer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
+    overflow: 'hidden',
+  },
+  safeArea: {
+    zIndex: 20,
+    marginTop: Platform.OS === 'ios' ? 0 : '10%',
+  }
+});

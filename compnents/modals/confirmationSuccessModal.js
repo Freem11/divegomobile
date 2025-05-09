@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React, { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { moderateScale, scale } from "react-native-size-matters";
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";

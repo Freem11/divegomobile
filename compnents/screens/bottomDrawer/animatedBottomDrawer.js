@@ -5,13 +5,15 @@ import {
   FlatList,
   Text,
   Keyboard,
+  TouchableHighlight,
 } from "react-native";
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect, useRef, useCallback } from "react";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   Easing,
+  runOnJS,
 } from "react-native-reanimated";
 import {
   Gesture,
@@ -20,28 +22,30 @@ import {
 } from "react-native-gesture-handler";
 import { openURL } from 'expo-linking';
 import { moderateScale } from "react-native-size-matters";
-import SeaLifeImageCard from "../reusables/seaLifeImageCard/seaLifeImageCard";
-import ListItem from "../reusables/listItem";
-import ItineraryCard from '../reusables/itineraryCard';
-
+import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
+import ItineraryCard from '../../reusables/itineraryCard';
 import {
   activeFonts,
   colors,
   fontSizes,
   primaryButton,
   buttonText,
-} from "../styles";
-import { getItineraryDiveSiteByIdArray } from "../../supabaseCalls/itinerarySupabaseCalls";
-import { useMapFlip } from "../itineraries/hooks";
-import { MapHelperContext } from "../contexts/mapHelperContext";
-import { MapConfigContext } from "../contexts/mapConfigContext";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { SitesArrayContext } from "../contexts/sitesArrayContext";
-import { TripDetailContext } from "../contexts/tripDetailsContext";
-import { TripSitesContext } from "../contexts/tripSitesContext";
-import { MapCenterContext } from "../contexts/mapCenterContext";
-import { ZoomHelperContext } from "../contexts/zoomHelperContext";
+  buttonSizes,
+} from '../../styles';
+import { getItineraryDiveSiteByIdArray } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { useMapFlip } from "../../itineraries/hooks";
+import { MapHelperContext } from "../../contexts/mapHelperContext";
+import { MapConfigContext } from "../../contexts/mapConfigContext";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { TripDetailContext } from "../../contexts/tripDetailsContext";
+import { TripSitesContext } from "../../contexts/tripSitesContext";
+import { MapCenterContext } from "../../contexts/mapCenterContext";
+import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
+import * as S from './styles';
+import IconWithLabel from "../../reusables/iconWithLabal";
+import Icon from "../../../icons/Icon";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -77,23 +81,50 @@ export default function BottomDrawer(props) {
 
   const photosRef = useRef(null);
   const boxheight = useSharedValue(lowerBound);
+  const buttonWidth = useSharedValue(moderateScale(buttonSizes.small.width));
   const [bounds, setBounds] = useState({});
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawerState = useCallback((currentDrawerState) => {
+    if(!currentDrawerState){
+      setTimeout(() => { 
+        setIsDrawerOpen(prev => !prev);
+      }, 200);
+    } else {
+      setIsDrawerOpen(prev => !prev);
+    }
+  }, []);
 
   useEffect(() => {
     setBounds({ lower: lowerBound, upper: upperBound });
   }, []);
+  const buttonOpen = moderateScale(buttonSizes.medium.width)
+  const buttonClosed = moderateScale(buttonSizes.small.width)
 
-  const animatedBottomDrawer = Gesture.Pan().onUpdate((event) => {
+  const animatedBottomDrawer = Gesture.Pan()
+  .onUpdate((event) => {
     if (event.translationY < 0) {
       boxheight.value = bounds.upper;
+      buttonWidth.value = buttonOpen 
     } else {
       boxheight.value = bounds.lower;
+      buttonWidth.value = buttonClosed
     }
+  }).onEnd(() => {runOnJS(toggleDrawerState)(isDrawerOpen);
   });
 
   const animatedBoxStyle = useAnimatedStyle(() => {
     return {
       height: withTiming(boxheight.value, {
+        duration: 400,
+        easing: Easing.inOut(Easing.linear),
+      }),
+    };
+  });
+
+  const animatedButtonStyle = useAnimatedStyle(() => {
+    return {
+      width: withTiming(buttonWidth.value, {
         duration: 400,
         easing: Easing.inOut(Easing.linear),
       }),
@@ -133,32 +164,35 @@ export default function BottomDrawer(props) {
   };
 
   return (
-    <Animated.View style={[styles.mainHousing, animatedBoxStyle]}>
-      <GestureDetector gesture={animatedBottomDrawer}>
-        <View style={styles.handle}>
-          <Text style={styles.label}>{drawerHeader}</Text>
-          {/* <View style={styles.tab}></View> */}
-        </View>
+
+    <Animated.View style={[styles.mainHousing, animatedBoxStyle]} >
+     <GestureDetector gesture={animatedBottomDrawer}>
+        <S.Handle>
+        <S.IconWrapper>
+         <Icon name={isDrawerOpen ? 'chevron-down' : 'chevron-up'} fill={colors.themeBlack} />
+         </S.IconWrapper>
+          <S.HandleText>{drawerHeader}</S.HandleText>
+     
+        </S.Handle>
       </GestureDetector>
+  
+      {/* <S.StyledTouchableHighlight onPress={onNavigate} underlayColor={colors.buttonPressOverlay}>
+      <S.AnimatedButtonHousing style={[{justifyContent: 'space-between'}, animatedButtonStyle]} >
+         <S.IconWrapperLeft>
+         <Icon name={'plus'} fill={colors.primaryBlue} />
+         </S.IconWrapperLeft>
+          {isDrawerOpen ?  <S.StyledButtonText>Dive Sites</S.StyledButtonText> : null }
+      </S.AnimatedButtonHousing>
+      </S.StyledTouchableHighlight> */}
 
       {dataSet && dataSet.length > 0 ? (
         <FlatList
           style={styles.page}
           contentContainerStyle={styles.pageContainer}
           ListFooterComponent={
-            <View style={{ height: moderateScale(50) }}></View>
+            <View style={{ height: moderateScale(60) }}></View>
           }
-          ListHeaderComponent={
-            dataSetType === "Trips" ? (
-              <View style={styles.flatListHeader}>
-                <TouchableWithoutFeedback onPress={() => onNavigate()}>
-                  <View style={styles.selectSitesButton}>
-                    <Text style={styles.selectSitesText}>{headerButton}</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-            ) : null
-          }
+    
           ref={photosRef}
           pagingEnabled
           horizontal={false}
@@ -168,14 +202,15 @@ export default function BottomDrawer(props) {
           decelerationRate="normal"
           keyExtractor={(item) => `${item.id}-${item.dateTaken}`}
           data={dataSet}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <View>
               {dataSetType === "Trips" ? (
-                <ListItem
-                  buttonAction={() => removeFromSitesArray(item.id)}
-                  key={item.id}
-                  titleText={item.name}
-                ></ListItem>
+                <S.ListItemContainer>
+                <S.ItemHousing>
+                <IconWithLabel  label={item.name} iconName="anchor" fillColor="white" bgColor={colors.primaryBlue} buttonAction={() => removeFromSitesArray(item.id)}  />
+                </S.ItemHousing>
+                    {index < dataSet.length - 1 && <S.VerticalLine />}
+                </S.ListItemContainer>
               ) : null}
 
               {dataSetType === "DiveShopTrips" ? (
@@ -243,7 +278,7 @@ export default function BottomDrawer(props) {
         />
       ) : (
         <View style={{ alignItems: "center", width: windowWidth }}>
-          {dataSetType === "Trips" ? (
+          {/* {dataSetType === "Trips" ? (
             <View style={styles.flatListHeader}>
               <TouchableWithoutFeedback onPress={() => onNavigate()}>
                 <View style={styles.selectSitesButton}>
@@ -251,7 +286,7 @@ export default function BottomDrawer(props) {
                 </View>
               </TouchableWithoutFeedback>
             </View>
-          ) : null}
+          ) : null} */}
           <Text style={styles.noSightings}>{emptyDrawer}</Text>
         </View>
       )}
@@ -269,11 +304,12 @@ const styles = StyleSheet.create({
     zIndex: 20,
     elevation: 10,
     width: windowWidth,
-    borderTopColor: "darkgrey",
-    borderColor: colors.themeWhite,
+    borderTopColor: colors.themeBlack,
+    borderColor: colors.themeBlack,
+    borderBottomColor: colors.themeWhite,
     borderWidth: moderateScale(1),
-    borderTopRightRadius: moderateScale(10),
-    borderTopLeftRadius: moderateScale(10),
+    borderTopRightRadius: moderateScale(15),
+    borderTopLeftRadius: moderateScale(15),
     backgroundColor: colors.themeWhite,
   },
   page: {

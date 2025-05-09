@@ -11,7 +11,8 @@ import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 
 import DiveSiteUploadScreen from '../screens/diveSiteUploader';
-import TripCreatorPage from '../screens/tripCreator';
+import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
+import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
 import PicUploader from "../screens/picUploader/index";
 
@@ -48,8 +49,8 @@ export default function LevelTwoScreen() {
       {activeScreen === "ProfileScreen" && <UserProfile />}
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen === "PictureUploadScreen" && <PicUploader />}
-      {activeScreen === "DiveSiteUploadScreen" && <DiveSiteUploadScreen />}
-      {activeScreen === "TripCreatorScreen" && <TripCreatorPage />}
+      {activeScreen === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
+      {activeScreen === "TripCreatorScreen" && <TripCreatorParallax />}
     </Animated.View>
   );
 }

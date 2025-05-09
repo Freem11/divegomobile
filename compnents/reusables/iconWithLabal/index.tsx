@@ -7,15 +7,18 @@ export type IconWithLabelProps = {
     buttonAction: () => void
     label: string
     iconName: string
+    fillColor?: string
+    bgColor?: string
 };
 
-export default function IconWithLabel(props: IconWithLabelProps) {
+export default function IconWithLabel({ iconName, buttonAction, label, fillColor, ...rest}: IconWithLabelProps) {
+ 
   return (
-    <S.StyledTouchableHighlight onPress={props.buttonAction} underlayColor={colors.buttonPressOverlay}>
+    <S.StyledTouchableHighlight onPress={buttonAction} underlayColor={colors.buttonPressOverlay}>
     <S.StyledHousing>
-      <S.StyledLabelText>{props.label}</S.StyledLabelText>
-      <S.IconWrapper>
-      <Icon name={props.iconName as IconName} fill={colors.neutralGrey}/>
+      <S.StyledLabelText {...rest} >{label}</S.StyledLabelText>
+      <S.IconWrapper {...rest}>
+      <Icon name={iconName as IconName} fill={fillColor === 'white' ?colors.themeWhite : colors.neutralGrey}/>
       </S.IconWrapper>
     </S.StyledHousing>
     </S.StyledTouchableHighlight>

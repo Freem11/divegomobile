@@ -12,6 +12,12 @@ import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
 import Map from "./GoogleMap";
+import BottomMenu from './reusables/bottomMenu';
+import ProfileButton from './FABMenu/profileButton'
+import SiteSearchButton from './FABMenu/siteSearchButton'
+import DiveSiteButton from './FABMenu/diveSiteButton'
+import GuidesButton from './FABMenu/guidesButton'
+import ItineraryListButton from "./FABMenu/itineraryCreatorButton"
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
@@ -381,6 +387,10 @@ export default function MapPage() {
     );
   };
 
+  const PARTNER_ACCOUNT_STATUS =
+  (profile[0] && profile[0].partnerAccount) || false;
+
+
   return (
     <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
       <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
@@ -444,16 +454,29 @@ export default function MapPage() {
                 </TouchableWithoutFeedback>
               </Animated.View>
 
-              <View style={styles.FMenu}>
+
+         
+
+              {/* <View style={styles.FMenu}>
                 <FABMenu
                   style={{ zIndex: 2 }}
                   toggleDiveSites={toggleDiveSites}
                 />
-              </View>
+              </View> */}
           
             </View>
           ) : null}
-          {mapConfig === 0 ? <View style={styles.iosBottom}/> : null}
+
+        {mapConfig === 0 ?
+          <BottomMenu>
+            <ProfileButton />
+            <SiteSearchButton />
+            <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
+            <DiveSiteButton />
+            {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+          </BottomMenu> : null}
+
+          {/* {mapConfig === 0 ? <View style={styles.iosBottom}/> : null} */}
           <View
             pointerEvents={"box-none"}
             style={{
@@ -635,7 +658,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: colors.primaryBlue,
     position: "absolute",
-    top: -moderateScale(60),
+    top: -moderateScale(130),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),

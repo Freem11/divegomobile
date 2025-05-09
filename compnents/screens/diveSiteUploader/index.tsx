@@ -14,11 +14,20 @@ import { ConfirmationModalContext } from "../../contexts/confirmationModalContex
 
 import DiveSiteUploaderView from './view';
 
-export default function DiveSiteUploader() {
-  const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
-  const { setChosenModal } = useContext(ModalSelectContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+type SiteSubmitterProps = {
+  onClose: () => void;
+  onMapFlip?: () => void;
+  closeParallax?: (mapConfig: number) => void
+  restoreParallax?: () => void; 
+};
+
+export default function DiveSiteUploader({
+  onClose,
+  onMapFlip,
+  closeParallax,
+  restoreParallax
+}: SiteSubmitterProps) {
+
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
@@ -58,32 +67,15 @@ export default function DiveSiteUploader() {
     }
   };
 
-  const onNavigate = () => {
-    Keyboard.dismiss();
-    setChosenModal("DiveSite");
-    setMapHelper(true);
-    setMapConfig(1);
-    setLevelTwoScreen(false);
-  };
-
-  const onClose = async () => {
-    setLevelTwoScreen(false);
-    setAddSiteVals({
-      ...addSiteVals,
-      Site: "",
-      Latitude: "",
-      Longitude: "",
-    });
-  };
-
   return (
     <DiveSiteUploaderView
       addSiteVals={addSiteVals}
       setAddSiteVals={setAddSiteVals}
-      onClose={onClose}
       onSubmit={onSubmit}
-      onNavigate={onNavigate}
       getCurrentLocation={getCurrentLocation}
+      closeParallax={closeParallax}
+      restoreParallax={restoreParallax}
     />
   )
+
 }
