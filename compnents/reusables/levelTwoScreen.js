@@ -9,11 +9,13 @@ import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
-import PicUploader from '../screens/picUploader';
+
 import DiveSiteUploadScreen from '../screens/diveSiteUploader';
 import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
 import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
+import PicUploader from "../screens/picUploader/index";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
