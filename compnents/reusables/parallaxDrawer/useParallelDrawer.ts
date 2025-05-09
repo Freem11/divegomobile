@@ -27,12 +27,12 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const savedTranslateY = useSharedValue(HALF_HEIGHT);
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+
 useEffect(() =>{
   if(levelOneScreen && (savedTranslateY.value === HALF_HEIGHT)){
     translateY.value = HALF_HEIGHT
     startY.value = 0
   }
-
 },[levelOneScreen])
 
 useEffect(() =>{
@@ -40,7 +40,6 @@ useEffect(() =>{
     translateY.value = HALF_HEIGHT
     startY.value = 0
   }
-
 },[levelTwoScreen])
 
   const panGesture = Gesture.Pan()

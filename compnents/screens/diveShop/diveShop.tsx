@@ -8,7 +8,7 @@ import { MapCenterContext } from "../../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
 import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
-import { itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { useTranslation } from "react-i18next";
 import ItineraryCard from "../../reusables/itineraryCard";
@@ -18,9 +18,18 @@ import { useMapFlip } from "../../itineraries/hooks";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import Label from "../../reusables/label";
+import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
+import { ActiveScreenContext } from "../../contexts/activeScreenContext";
+import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
+import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
+import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
+import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
+import { TripDetailContext } from "../../contexts/tripDetailsContext";
+import { EditModeContext } from "../../contexts/editModeContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 type DiveShopProps = {
-  onClose: () => void;
+  onClose?: () => void;
   onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
@@ -44,6 +53,16 @@ export default function DiveShopScreen({
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+  const { setEditMode } = useContext(EditModeContext);
+  const { formValues, setFormValues } = useContext(TripDetailContext);
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+  const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [isMyShop, setIsMyShop] = useState(false);
@@ -153,6 +172,41 @@ if(isMyShop){
   isReadOnly = true
 }
 
+const handleEditButton = (itineraryInfo) => {
+  setPreviousButtonID(activeScreen);
+  setActiveScreen("TripCreatorScreen");
+  setEditMode({ itineraryInfo, IsEditModeOn: true });
+  setFormValues({ ...itineraryInfo, shopID: selectedShop[0].id, OriginalItineraryID: itineraryInfo.id })
+  setSitesArray(itineraryInfo.siteList)
+  setLevelOneScreen(false);
+  useButtonPressHelper(
+    "TripCreatorScreen",
+    activeScreen,
+    levelTwoScreen,
+    setLevelTwoScreen
+  );
+};
+
+const handleDeleteButton = (itineraryInfo) => {
+  insertItineraryRequest(
+    {
+      BookingLink: itineraryInfo.BookingPage,
+      TripName: itineraryInfo.tripName,
+      StartDate: itineraryInfo.startDate,
+      EndDate: itineraryInfo.endDate,
+      Price: itineraryInfo.price,
+      TripDesc: itineraryInfo.description,
+      DiveSites: itineraryInfo.siteList,
+      ShopId: itineraryInfo.shopID,
+    },
+    "Delete"
+  );
+  setConfirmationType("Trip Delete");
+  setActiveConfirmationID("ConfirmationSuccess");
+  setConfirmationModal(true);
+};
+
+
   return (
     <S.ContentContainer>
 
@@ -195,7 +249,7 @@ if(isMyShop){
       key={itinerary.id}
       isMyShop={isMyShop}
       itinerary={itinerary}    
-      buttonOneAction={() => useMapFlip(
+      buttonOneAction={isMyShop ? () => handleEditButton(itinerary) : () => useMapFlip(
         itinerary.siteList,
         setSitesArray,
         setZoomHelper,
@@ -203,7 +257,7 @@ if(isMyShop){
         setMapConfig,
         setMapCenter
       )}
-      buttonTwoAction={() => openURL(itinerary.BookingPage)}
+      buttonTwoAction={isMyShop ? () => handleDeleteButton(itinerary) :() => openURL(itinerary.BookingPage)}
     />
   );
 })}
