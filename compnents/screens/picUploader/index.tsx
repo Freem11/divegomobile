@@ -9,10 +9,23 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
-import * as FileSystem from 'expo-file-system';
 
 const curDate = new Date();
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
+
+export interface Form {
+  date?:         string
+  photo?:        string
+  animal?:       string
+  diveSiteName?: string
+}
+
+export const INIT_FORM_STATE: Form = {
+  date: "",
+  photo: "",
+  animal: "",
+  diveSiteName: "",
+};
 
 export default function PicUploader() {
   const { pinValues, setPinValues } = useContext(PinContext);
@@ -21,6 +34,7 @@ export default function PicUploader() {
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
+  const [formState, setFormState] = useState<Form>(INIT_FORM_STATE);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
   const [isUploading, setIsUploading] = useState(false);  
@@ -32,36 +46,46 @@ export default function PicUploader() {
     setDatePickerVisible(false)
   };
 
-const handleImageUpload = async () => {
-  try {
-    const image = await chooseImageHandler();
-    if (!image) return;
-
-    const localUri = image.assets[0].uri;
-    setLocalPreviewUri(localUri);   
-    setIsUploading(true);         
-
-    // const fileName = await imageUpload(image); 
-
-    if (pinValues.PicFile) {
-      await removePhoto({
-        filePath: FILE_PATH,
-        fileName: pinValues.PicFile.split("/").pop(),
+  const handleImageUpload = async (argPicture) => {
+      setPinValues({
+        ...pinValues,
+        PicFile: `animalphotos/public/${argPicture}`,
       });
-    }
+      setFormState({
+        ...formState,
+        photo: argPicture,
+      });
 
-    // setPinValues({
-    //   ...pinValues,
-    //   PicFile: `animalphotos/public/${fileName}`,
-    // });
-  } catch (e) {
-    console.log("Image upload error", e.message);
-  } finally {
-    setIsUploading(false);
-  }
-};
+    // try {
+    //   const image = await chooseImageHandler();
+    //   if (!image) return;
+
+    //   const localUri = image.assets[0].uri;
+    //   setLocalPreviewUri(localUri);   
+    //   setIsUploading(true);         
+
+    //   // const fileName = await imageUpload(image); 
+
+    //   if (pinValues.PicFile) {
+    //     await removePhoto({
+    //       filePath: FILE_PATH,
+    //       fileName: pinValues.PicFile.split("/").pop(),
+    //     });
+    //   }
+
+    //   // setPinValues({
+    //   //   ...pinValues,
+    //   //   PicFile: `animalphotos/public/${fileName}`,
+    //   // });
+    // } catch (e) {
+    //   console.log("Image upload error", e.message);
+    // } finally {
+    //   setIsUploading(false);
+    // }
+  };
 
   const onSubmit = async () => {
+    // setIsUploading(true);
     const { PicFile, PicDate, Animal } = pinValues;
     if (PicFile && PicDate && Animal) {
       await insertPhotoWaits(pinValues);
@@ -75,12 +99,12 @@ const handleImageUpload = async () => {
   };
 
   const onClose = async () => {
-    if (pinValues.PicFile) {
-      await removePhoto({
-        filePath: FILE_PATH,
-        fileName: pinValues.PicFile.split("/").pop(),
-      });
-    }
+    // if (pinValues.PicFile) {
+    //   await removePhoto({
+    //     filePath: FILE_PATH,
+    //     fileName: pinValues.PicFile.split("/").pop(),
+    //   });
+    // }
     resetForm();
     setLevelTwoScreen(false);
   };
@@ -104,7 +128,7 @@ const handleImageUpload = async () => {
       datePickerVisible={datePickerVisible}
       hideDatePicker={() => setDatePickerVisible(false)}
       handleDatePickerConfirm={handleDatePickerConfirm}
-      handleImageUpload={handleImageUpload}
+      onImageSelect={handleImageUpload}
       onSubmit={onSubmit}
       onClose={onClose}
       setPinValues={setPinValues}

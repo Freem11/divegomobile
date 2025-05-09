@@ -27,13 +27,6 @@ export const BackButton = styled.View`
   z-index: 50;
 `;
 
-export const AddPhotoButton = styled.View`
-  position: absolute;
-  top: 32%;
-  right: 5%;
-  z-index: 50;
-`;
-
 export const ContentContainer = styled.View`
   position: absolute;
   top: 0;

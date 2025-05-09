@@ -1,8 +1,10 @@
 import React from "react";
 import { ActivityIndicator, Dimensions } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import Svg, { Path } from "react-native-svg";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
+import { colors } from "../../../styles";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -23,6 +25,17 @@ export default function WavyHeaderUploaderView({
   return (
     <S.Container>
       <S.UploaderBackground>
+        {imageUri && (
+          <S.AddPhotoButton>
+            <MaterialIcons
+              name="add-a-photo"
+              size={30}
+              color={colors.themeWhite}
+              onPress={onPressUpload}
+            />
+          </S.AddPhotoButton>
+        )}
+
         {imageUri ? (
           <S.ImageBackgroundStyled source={{ uri: imageUri }}>
             {isLoading && (

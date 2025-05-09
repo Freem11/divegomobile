@@ -51,6 +51,12 @@ export const SpinnerOverlay = styled.View`
   z-index: 10;
 `;
 
+export const AddPhotoButton = styled.View`
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  z-index: 10;
+`;
 export const CurveWrapper = styled.View`
   justify-content: flex-end;
   height: ${windowWidth > 600 ? "130%" : "150%"};

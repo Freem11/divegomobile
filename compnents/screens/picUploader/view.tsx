@@ -15,7 +15,7 @@ export default function PicUploaderView({
   datePickerVisible,
   hideDatePicker,
   handleDatePickerConfirm,
-  handleImageUpload,
+  onImageSelect,
   onSubmit,
   onClose,
   setPinValues,
@@ -35,17 +35,6 @@ export default function PicUploaderView({
         />
       </S.BackButton>
       
-      {pinValues.PicFile && (
-        <S.AddPhotoButton>
-          <MaterialIcons
-            name="add-a-photo"
-            size={30}
-            color={colors.themeWhite}
-            onPress={handleImageUpload}
-          />
-        </S.AddPhotoButton>
-      )}
-
       <S.ContentContainer>
         <S.Header>{t("PicUploader.header")}</S.Header>
 
@@ -100,7 +89,7 @@ export default function PicUploaderView({
       </S.ContentContainer>
       <WavyHeaderUploader
         image={pinValues.PicFile || localPreviewUri}
-        onImageSelect={() => {}}
+        onImageSelect={onImageSelect}
         isLoading={isUploading}
        />
 
