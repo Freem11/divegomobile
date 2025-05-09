@@ -11,7 +11,7 @@ import {
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import WavyHeaderUploader from "./wavyHeaderUploader";
+import WavyHeaderUploader from "./wavyHeaderUploader_2";
 import TextInputField from "../authentication/utils/textInput";
 import AnimalAutoSuggest from "../autoSuggest/autoSuggest";
 import {

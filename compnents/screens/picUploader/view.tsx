@@ -4,11 +4,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import * as S from "./styles";
 
-import WavyHeaderUploader from "../wavyHeaderUploader";
 import TextInputField from "../../authentication/utils/textInput";
 import AnimalAutoSuggest from "../../autoSuggest/autoSuggest";
 import { colors } from "../../styles";
-import { ActivityIndicator } from "react-native";
+import WavyHeaderUploader from "./wavyHeaderUploader";
 
 export default function PicUploaderView({
   pinValues,
@@ -20,6 +19,8 @@ export default function PicUploaderView({
   onSubmit,
   onClose,
   setPinValues,
+  localPreviewUri,
+  isUploading,
 }) {
   const { t } = useTranslation();
 
@@ -97,12 +98,11 @@ export default function PicUploaderView({
           </S.SubmitButton>
         </S.ButtonBox>
       </S.ContentContainer>
-
       <WavyHeaderUploader
-        image={pinValues.PicFile}
-        setPinValues={setPinValues}
-        pinValues={pinValues}
-      />
+        image={pinValues.PicFile || localPreviewUri}
+        onImageSelect={() => {}}
+        isLoading={isUploading}
+       />
 
       <DateTimePickerModal
         isVisible={datePickerVisible}

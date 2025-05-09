@@ -9,6 +9,7 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
+import * as FileSystem from 'expo-file-system';
 
 const curDate = new Date();
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
@@ -21,6 +22,8 @@ export default function PicUploader() {
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [localPreviewUri, setLocalPreviewUri] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);  
 
   const handleDatePickerConfirm = (selectedDate: Date) => {
     if (selectedDate > curDate) return;
@@ -29,29 +32,34 @@ export default function PicUploader() {
     setDatePickerVisible(false)
   };
 
-  const handleImageUpload = async () => {
-    try {
-      const image = await chooseImageHandler();
-      if (image) {
-        const fileName = await imageUpload(image);
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        
-        if (pinValues.PicFile) {
-          await removePhoto({
-            filePath: FILE_PATH,
-            fileName: pinValues.PicFile.split("/").pop(),
-          });
-        }
+const handleImageUpload = async () => {
+  try {
+    const image = await chooseImageHandler();
+    if (!image) return;
 
-        setPinValues({
-          ...pinValues,
-          PicFile: `animalphotos/public/${fileName}`,
-        });
-      }
-    } catch (e) {
-      console.log("error: Photo Selection Cancelled", e.message);
+    const localUri = image.assets[0].uri;
+    setLocalPreviewUri(localUri);   
+    setIsUploading(true);         
+
+    // const fileName = await imageUpload(image); 
+
+    if (pinValues.PicFile) {
+      await removePhoto({
+        filePath: FILE_PATH,
+        fileName: pinValues.PicFile.split("/").pop(),
+      });
     }
-  };
+
+    // setPinValues({
+    //   ...pinValues,
+    //   PicFile: `animalphotos/public/${fileName}`,
+    // });
+  } catch (e) {
+    console.log("Image upload error", e.message);
+  } finally {
+    setIsUploading(false);
+  }
+};
 
   const onSubmit = async () => {
     const { PicFile, PicDate, Animal } = pinValues;
@@ -69,7 +77,7 @@ export default function PicUploader() {
   const onClose = async () => {
     if (pinValues.PicFile) {
       await removePhoto({
-        filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+        filePath: FILE_PATH,
         fileName: pinValues.PicFile.split("/").pop(),
       });
     }
@@ -100,6 +108,8 @@ export default function PicUploader() {
       onSubmit={onSubmit}
       onClose={onClose}
       setPinValues={setPinValues}
+      isUploading={isUploading}
+      localPreviewUri={localPreviewUri}
     />
   );
 }
