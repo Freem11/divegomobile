@@ -33,13 +33,15 @@ type DiveShopProps = {
   onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
+  isMyShop?: boolean
 };
 
 export default function DiveShopScreen({
   onClose,
   onMapFlip,
   closeParallax,
-  restoreParallax
+  restoreParallax,
+  isMyShop
 }: DiveShopProps) {
   const { profile } = useContext(UserProfileContext);
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
@@ -63,10 +65,7 @@ export default function DiveShopScreen({
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
-  const [isMyShop, setIsMyShop] = useState(false);
   const { t } = useTranslation()
-  const drawerUpperBound = "90%";
-  const drawerLowerBound = "30%";
 
   useEffect(() => {
     if(levelOneScreen){
@@ -94,15 +93,6 @@ export default function DiveShopScreen({
   }, [levelOneScreen]);
 
   useEffect(() => {
-    if (
-      profile[0].partnerAccount &
-      (selectedShop[0].userId === profile[0].UserID)
-    ) {
-      setIsMyShop(true);
-    } else {
-      setIsMyShop(false);
-    }
-
     setDiveShopVals({
       id: selectedShop[0].id,
       bio: selectedShop[0].diveShopBio,

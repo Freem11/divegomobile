@@ -17,8 +17,13 @@ export const SafeArea = styled(SafeAreaView)`
 export const AnimatedSafeArea = Animated.createAnimatedComponent(SafeArea);
 
 export const BackButtonWrapper = styled.View`
-  width: 100%;
+  width: 50%;
   align-items: flex-start;
+`;
+
+export const AltButtonWrapper = styled.View`
+  width: 48%;
+  align-items: flex-end;
 `;
 
 export const BackgroundContainer = styled(Animated.View)`
@@ -80,5 +85,7 @@ export const styles = StyleSheet.create({
   safeArea: {
     zIndex: 20,
     marginTop: Platform.OS === 'ios' ? 0 : '10%',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });
