@@ -43,8 +43,6 @@ export default function DiveShopScreen({
 }: DiveShopProps) {
   const { profile } = useContext(UserProfileContext);
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
-  const [selectedID, setSelectedID] = useState<number | null>(null);
-
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { setMapConfig } = useContext(MapConfigContext);
   const { setMapCenter } = useContext(MapCenterContext);
@@ -69,6 +67,13 @@ export default function DiveShopScreen({
   const { t } = useTranslation()
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
+
+  useEffect(() => {
+    if(levelOneScreen){
+      restoreParallax();
+    }
+  }, [levelOneScreen]);
+ 
 
   const getItineraries = async (IdNum) => {
     try {
@@ -206,6 +211,17 @@ const handleDeleteButton = (itineraryInfo) => {
   setConfirmationModal(true);
 };
 
+const handleMapFlip = async (sites: number[]) => {
+  useMapFlip(
+    sites,
+    setSitesArray,
+    setZoomHelper,
+    setLevelOneScreen,
+    setMapConfig,
+    setMapCenter
+  )
+  closeParallax(1)
+};
 
   return (
     <S.ContentContainer>
@@ -249,14 +265,7 @@ const handleDeleteButton = (itineraryInfo) => {
       key={itinerary.id}
       isMyShop={isMyShop}
       itinerary={itinerary}    
-      buttonOneAction={isMyShop ? () => handleEditButton(itinerary) : () => useMapFlip(
-        itinerary.siteList,
-        setSitesArray,
-        setZoomHelper,
-        setLevelOneScreen,
-        setMapConfig,
-        setMapCenter
-      )}
+      buttonOneAction={isMyShop ? () => handleEditButton(itinerary) : () => handleMapFlip(itinerary.siteList)}
       buttonTwoAction={isMyShop ? () => handleDeleteButton(itinerary) :() => openURL(itinerary.BookingPage)}
     />
   );

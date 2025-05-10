@@ -39,16 +39,13 @@ export default function DiveShopParallax() {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
     setMapHelper(true);
-    setMapConfig(1);
+    setMapConfig(2);
     setLevelOneScreen(false);
   };
 
   return (
-    <ParallaxDrawer headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : mantaImage} onClose={onClose}>
-      <DiveShopScreen 
-          onClose={onClose}
-          // onMapFlip={onNavigate}
-          />
+    <ParallaxDrawer headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : mantaImage} onClose={onClose} onMapFlip={onNavigate}>
+      <DiveShopScreen onMapFlip={onNavigate}/>
     </ParallaxDrawer>
   );
 }
