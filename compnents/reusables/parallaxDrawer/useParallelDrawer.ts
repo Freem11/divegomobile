@@ -7,9 +7,13 @@ import {
   interpolate,
   useSharedValue,
   useAnimatedStyle,
+  useAnimatedReaction,
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
+import { useContext, useEffect } from "react";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -21,6 +25,41 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
   const savedTranslateY = useSharedValue(HALF_HEIGHT);
+
+  const { levelOneScreen } = useContext(LevelOneScreenContext);
+  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+
+  useEffect(() => {
+    if (levelOneScreen && savedTranslateY.value === HALF_HEIGHT) {
+      translateY.value = HALF_HEIGHT;
+      startY.value = 0;
+    }
+  }, [levelOneScreen]);
+
+  useEffect(() => {
+    if (levelTwoScreen && savedTranslateY.value === HALF_HEIGHT) {
+      translateY.value = HALF_HEIGHT;
+      startY.value = 0;
+    }
+  }, [levelTwoScreen]);
+
+  useAnimatedReaction(
+    () => contentHeight.value,
+    (newHeight, prevHeight) => {
+      if (newHeight !== prevHeight && newHeight > 0) {
+        const minY = SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT;
+        const desiredY = Math.max(minY, HALF_HEIGHT);
+  
+        if (translateY.value < minY) {
+          translateY.value = withTiming(minY, { duration: 300 });
+        }
+  
+        if (translateY.value > desiredY || translateY.value === 0) {
+          translateY.value = withTiming(desiredY, { duration: 300 });
+        }
+      }
+    }
+  );
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
@@ -48,7 +87,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
           () => {
             if (translateY.value > HALF_HEIGHT) {
               translateY.value = withTiming(HALF_HEIGHT, {
-                duration: 1600, // 1.6 seconds
+                duration: 1600,
                 easing: Easing.out(Easing.exp),
               });
             }
@@ -83,22 +122,22 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     };
   });
 
-
   const closeParallax = (mapConfig: number | null) => {
     savedTranslateY.value = translateY.value;
-    translateY.value = withTiming(0, { duration: 1 }, (finished) => {
+    translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {
+          savedTranslateY.value = HALF_HEIGHT;
           runOnJS(onClose)();
         }
       }
     });
   };
-  
+
   const restoreParallax = () => {
     translateY.value = withTiming(savedTranslateY.value, {
       duration: 300,
@@ -106,7 +145,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     });
   };
 
-  
   return {
     SCREEN_WIDTH,
     panGesture,
@@ -115,6 +153,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     animatedSafeAreaStyle,
     contentHeight,
     closeParallax,
-    restoreParallax
+    restoreParallax,
   };
 };

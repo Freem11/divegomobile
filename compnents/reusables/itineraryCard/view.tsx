@@ -13,9 +13,9 @@ import { moderateScale } from "react-native-size-matters";
 type TripCardViewProps = {
   itinerary:           ItineraryItem
   flipMap:             (siteList: number[]) => Promise<void>
-  isMyShop?: boolean
-  buttonOneAction:  () => void
-  buttonTwoAction:    () => void  
+  isMyShop?:           boolean
+  buttonOneAction:     () => void
+  buttonTwoAction:     () => void  
 };
 
 export default function ItineraryCardView({ itinerary, flipMap, isMyShop, buttonOneAction, buttonTwoAction }: TripCardViewProps) {

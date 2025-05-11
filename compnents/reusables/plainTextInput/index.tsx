@@ -7,85 +7,41 @@ import { colors } from "../../styles";
 
 type TextInputProps = InputHTMLAttributes<HTMLInputElement>;
 type CustomInputProps = {
-  onSave:              (value: string) => void
+  onChangeText:        (text: string) => void;
   error?:              any
   value?:              string
   tooltipEditText?:    string
   tooltipConfirmText?: string
+  isEditModeOn:        boolean
+  setIsEditModeOn:     React.Dispatch<React.SetStateAction<boolean>>
+  isMyShop:            boolean
 };
 
 const PlainTextInput = React.forwardRef<TextInput, TextInputProps & CustomInputProps>(function PlainTextInput(props: TextInputProps & CustomInputProps, forwardedRef) {
-  const [isEditModeOn, setIsEditModeOn] = useState(false);
+
   const [value, setValue] = useState(props.value);
   const ref = useRef<TextInput>(null);
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  };
-
-  // const determineTooltipEdit = () => {
-  //   if (props.tooltipConfirmText) {
-  //     return (
-  //         <Icon name="pencil" fill="darkgrey" />
-  //     );
-  //   } else {
-  //     return (
-  //       <Icon name="pencil" fill="darkgrey" />
-  //     );
-  //   }
-  // };
-
-  // const determineTooltipConfirm = () => {
-  //   if (props.tooltipConfirmText) {
-  //     return (
-  //         <Icon name="check-bold" fill="green" />
-  //     );
-  //   } else {
-  //     return (
-  //       <Icon name="check-bold" fill="green" />
-  //     );
-  //   }
-  // };
-
   return (
     <S.MainContainer>
-      <S.StyledTextInput type="hidden" name={props.name} value={value} onChange={props.onChange} ref={forwardedRef} />
+      <S.StyledTextInput multiline type="hidden" readOnly={!props.isEditModeOn} name={props.name} value={value} onChange={props.onChange} ref={forwardedRef} placeholder={!props.isEditModeOn && props.placeholder}/>
 
-      <S.StyledTextArea
-        ref={ref}
-        onKeyDown={onKeyDown}
-        suppressContentEditableWarning={true}
-        className="ssrc-plain-text-input__textarea"
-        contentEditable={!props.readOnly && isEditModeOn}
-        onInput={function (e) {
-          setValue(e.currentTarget.innerHTML);
-        }}
-      >
-        {props.value || (!isEditModeOn && props.placeholder)}
-      </S.StyledTextArea>
-
-      {!props.readOnly && isEditModeOn && (
+      {props.isMyShop && !props.isEditModeOn && (
         <ButtonIcon 
         icon={"pencil"}
         onPress={() => {
-          setIsEditModeOn(false);
-          props.onSave(`${value}`);
+          props.setIsEditModeOn(true);
         }}
         size='icon'
         fillColor={colors.neutralGrey}
         />
       )}
 
-      {!props.readOnly && !isEditModeOn && (
+      {props.isMyShop && props.isEditModeOn  && (
            <ButtonIcon 
            icon={"check-bold"}
            onPress={() => {
-            setIsEditModeOn(true);
-            setTimeout(function () {
-              ref.current?.focus();
-            }, 0);
+            props.setIsEditModeOn(false);
           }}
            size='icon'
            fillColor="green"

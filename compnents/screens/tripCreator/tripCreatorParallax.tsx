@@ -6,7 +6,7 @@ import { EditModeContext } from "../../contexts/editModeContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
-import boatImage from "../../png/boat.png";
+import TripImage from '../../png/Trip.jpg'
 import { Keyboard } from "react-native";
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
@@ -49,7 +49,7 @@ export default function TripCreatorParallax() {
 
   return (
     <ParallaxDrawer
-      headerImage={boatImage}
+      headerImage={TripImage}
       onClose={onClose}
       onMapFlip={onNavigate}
     >

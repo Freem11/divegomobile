@@ -14,9 +14,8 @@ export const Card = styled.View`
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(10)}px;
   width: 96%;
-  margin-left: 2%;
-  margin-vertical: ${moderateScale(5)}px;
-  padding: ${moderateScale(10)}px;
+  margin-vertical: ${moderateScale(8)}px;
+  padding: ${moderateScale(7)}px;
     ${Platform.select({
     ios: `
       shadow-color: #000;

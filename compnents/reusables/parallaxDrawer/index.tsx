@@ -16,13 +16,17 @@ type ParallaxDrawerProps = {
   children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void}>;
   onClose: () => void;
   onMapFlip?: () => void;
+  handleImageUpload?: () => void;
+  isMyShop?: boolean
 };
 
 const ParallaxDrawer = ({
   headerImage,
   children,
   onClose,
-  onMapFlip
+  onMapFlip,
+  handleImageUpload,
+  isMyShop
 }: ParallaxDrawerProps) => {
   
   const {
@@ -49,6 +53,16 @@ const ParallaxDrawer = ({
             fillColor={colors.themeWhite}
           />
         </S.BackButtonWrapper>
+        <S.AltButtonWrapper>
+          {isMyShop && (
+            <ButtonIcon
+            icon="camera-plus"
+            onPress={() => handleImageUpload()}
+            size="icon"
+            fillColor={colors.themeWhite}
+          />
+      )}
+      </S.AltButtonWrapper>
       </AnimatedSafeAreaView>
       <S.BackgroundContainer>
         <Animated.View
