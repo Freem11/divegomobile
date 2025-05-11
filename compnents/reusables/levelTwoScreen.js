@@ -9,8 +9,7 @@ import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
-
-import DiveSiteUploadScreen from '../screens/diveSiteUploader';
+import PicUploader from '../screens/picUploader';
 import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
 import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
@@ -57,7 +56,7 @@ export default function LevelTwoScreen() {
 
 const styles = StyleSheet.create({
   modalBody: {
-    backgroundColor: colors.themeBlack,
+    backgroundColor: colors.themeWhite,
     position: "absolute",
     height: windowHeight,
     width: windowWidth,

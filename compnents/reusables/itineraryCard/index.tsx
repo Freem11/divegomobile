@@ -11,13 +11,14 @@ import { ItineraryItem } from '../../entities/itineraryItem';
 // import TripCreatorModal from '../newModals/tripCreatorModal';
 
 type ItineraryCardProps = {
-  itinerary:           ItineraryItem
-  isMyShop ?: boolean
+  itinerary:       ItineraryItem
+  isMyShop?:       boolean
   buttonOneAction: () => void
   buttonTwoAction: () => void
 };
 
 export default function ItineraryCard({ itinerary, isMyShop, buttonOneAction, buttonTwoAction }: ItineraryCardProps) {
+  
   const { setSitesArray } = useContext(SitesArrayContext);
   // const { setMapConfig, mapRef } = useContext(MapContext);
   // const { modalShow, modalCancel } = useContext(ModalContext);

@@ -8,9 +8,9 @@ import Animated, {
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
-
+import DiveShopParallax from '../screens/diveShop/diveShopParallax';
 import DiveSite from '../screens/diveSite';
-import DiveShop from '../screens/diveShop';
+import DiveShop from '../screens/diveShop/diveShop';
 import Settings from '../screens/settings';
 import SearchPage from '../screens/search';
 import TripListPage from '../screens/tripList';
@@ -45,7 +45,7 @@ export default function LevelOneScreen() {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen === "DiveSiteScreen" && <DiveSite/>}
-      {activeScreen === "DiveShopScreen" && <DiveShop/>}
+      {activeScreen === "DiveShopScreen" && <DiveShopParallax/>}
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}
       {activeScreen === "TripListScreen" && <TripListPage/>}
@@ -56,7 +56,7 @@ export default function LevelOneScreen() {
 
 const styles = StyleSheet.create({
   modalBody: {
-    backgroundColor: colors.primaryBlue,
+    backgroundColor: colors.themeWhite,
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
