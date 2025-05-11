@@ -9,7 +9,7 @@ import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
 import DiveShopParallax from '../screens/diveShop/diveShopParallax';
-import DiveSite from '../screens/diveSite';
+import DiveSite from '../screens/diveSite/diveSite';
 import DiveShop from '../screens/diveShop/diveShop';
 import Settings from '../screens/settings';
 import SearchPage from '../screens/search';

@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
-import WavyHeaderDynamic from "./wavyHeaderDynamic";
-import PlainTextInput from "./plaintextInput";
+import WavyHeaderDynamic from "../wavyHeaderDynamic";
+import PlainTextInput from "../plaintextInput";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   activeFonts,
@@ -19,33 +19,33 @@ import {
   fontSizes,
   screenSecondaryButton,
   buttonTextAlt,
-} from "../styles";
+} from '../../styles';
 import { moderateScale } from "react-native-size-matters";
-import { PinContext } from "../contexts/staticPinContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
+import { PinContext } from "../../contexts/staticPinContext";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { AnimalMultiSelectContext } from "../../contexts/animalMultiSelectContext";
+import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
+import { ActiveScreenContext } from "../../contexts/activeScreenContext";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
-import { newGPSBoundaries } from "../helpers/mapHelpers";
-import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { newGPSBoundaries } from "../../helpers/mapHelpers";
+import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
+import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
+import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
   getPhotosByDiveSiteWithExtra,
-} from "../../supabaseCalls/photoSupabaseCalls";
+} from "../../../supabaseCalls/photoSupabaseCalls";
 import {
   getDiveSiteWithUserName,
   updateDiveSite,
-} from "../../supabaseCalls/diveSiteSupabaseCalls";
-import { getItinerariesForDiveSite } from "../../supabaseCalls/itinerarySupabaseCalls";
-import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
+} from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import BottomDrawer from '../bottomDrawer/animatedBottomDrawer';
 import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
