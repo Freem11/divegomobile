@@ -9,6 +9,7 @@ import { getDiveSitesBasic } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { DiveShop } from "../../entities/diveShop";
+import useSupercluster from "use-supercluster";
 
 export default function GoogleMap() {
   const setGpsBubble = useMapStore((state) => state.setGpsBubble);
