@@ -3,6 +3,7 @@ import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import DiveShopScreen from './diveShop';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import mantaImage from "../../png/blackManta.png";
+import noImage from '../../png/NoImage.jpg';
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
@@ -88,7 +89,7 @@ export default function DiveShopParallax() {
 
   return (
     <ParallaxDrawer 
-      headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : mantaImage} 
+      headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : noImage} 
       onClose={onClose} 
       onMapFlip={onNavigate}
       handleImageUpload={handleImageUpload}
