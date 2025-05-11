@@ -54,7 +54,7 @@ export default function LevelTwoScreen() {
 
 const styles = StyleSheet.create({
   modalBody: {
-    backgroundColor: colors.themeBlack,
+    backgroundColor: colors.themeWhite,
     position: "absolute",
     height: windowHeight,
     width: windowWidth,

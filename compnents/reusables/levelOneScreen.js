@@ -56,7 +56,7 @@ export default function LevelOneScreen() {
 
 const styles = StyleSheet.create({
   modalBody: {
-    backgroundColor: colors.primaryBlue,
+    backgroundColor: colors.themeWhite,
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
