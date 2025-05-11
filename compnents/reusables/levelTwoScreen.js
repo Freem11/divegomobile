@@ -13,7 +13,6 @@ import PicUploader from '../screens/picUploader';
 import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
 import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
-import PicUploader from "../screens/picUploader/index";
 
 
 const windowWidth = Dimensions.get("window").width;
