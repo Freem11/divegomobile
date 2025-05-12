@@ -25,6 +25,24 @@ width: 98%;
 align-items: center;
 `;
 
+export const PacketHeader = styled.View`
+  width: 100%;
+  heigth: 50px;
+  font-family ${activeFonts.Light};
+  color: ${colors.neutralGrey}
+  justify-content: start;
+  align-items: center;
+`;
+
+export const PacketHeaderItem = styled.Text`
+  margin-bottom: 5%;
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.headersBlue};
+  align-self: center;
+  text-align: center;
+`;
+
 export const Header = styled.Text`
   margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;

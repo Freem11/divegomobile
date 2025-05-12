@@ -78,9 +78,6 @@ export default function DiveSiteScreen({
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
-console.log('selectedDiveSite', selectedDiveSite)
-
-
   const getTrips = async () => {
     const success = await getItinerariesForDiveSite(selectedDiveSite.id);
   };
@@ -305,23 +302,47 @@ console.log('selectedDiveSite', selectedDiveSite)
               )}
       </S.InputGroupContainer>
 
-      <S.PhotoContainer>   
-      {diveSitePics[0] && diveSitePics[0].photos.map((photo) => {
+      {diveSitePics && diveSitePics.map((photoPacket) => {
+      <S.PhotoContainer key={`${photoPacket.id}-${photoPacket.dateTaken}`}>   
+                  <S.PacketHeader>
+                    <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
+                  </S.PacketHeader>
+                  {/* {photoPacket.photos.length > 0 &&
+                    photoPacket.photos.map((photo) => {
                       return (
                         <SeaLifeImageCard
                           key={`${photo.id}-d`}
                           pic={photo}
                           dataSetType={"DiveSitePhotos"}
-                          diveSiteName={selectedDiveSite.name}
+                          diveSiteName={photoPacket.name}
                         ></SeaLifeImageCard>
                       );
-                    })}
-      </S.PhotoContainer>
+                    })} */}
+        </S.PhotoContainer>
+        })}
     </S.ContentContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  locationHeader: {
+    flexDirection: "row",
+    height: moderateScale(50),
+    width: '100%',
+    alignItems: "center",
+    justifyContent: "space-around",
+    borderBottomWidth: moderateScale(2),
+    borderBottomColor: "darkgrey",
+    borderTopWidth: moderateScale(2),
+    borderTopColor: "darkgrey",
+    marginTop: "5%",
+    marginBottom: "2%",
+    backgroundColor: "lightgray",
+  },
+  headerText: {
+    fontSize: moderateScale(fontSizes.StandardText),
+    fontFamily: activeFonts.Medium,
+  },
   container: {
     flex: 1,
     zIndex: 1,
