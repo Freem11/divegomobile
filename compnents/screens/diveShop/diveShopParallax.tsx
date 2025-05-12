@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import DiveShopScreen from './diveShop';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import mantaImage from "../../png/blackManta.png";
 import noImage from '../../png/NoImage.jpg';
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";

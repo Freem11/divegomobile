@@ -1,50 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import DiveShopScreen from './diveShop';
+import DiveSiteScreen from './diveSite';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import mantaImage from "../../png/blackManta.png";
 import noImage from '../../png/NoImage.jpg';
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
-import { SelectedShopContext } from "../../contexts/selectedShopContext";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 
-export default function DiveShopParallax() {
+export default function DiveSiteParallax() {
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { selectedShop } = useContext(SelectedShopContext);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
   const { setChosenModal } = useContext(ModalSelectContext);
-  const [diveShopVals, setDiveShopVals] = useState(null);
-  const { profile } = useContext(UserProfileContext);
+  const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isMyShop, setIsMyShop] = useState(false);
-  useEffect(() => {
-    if (
-      profile[0].partnerAccount &
-      (selectedShop[0].userId === profile[0].UserID)
-    ) {
-      setIsMyShop(true);
-    } else {
-      setIsMyShop(false);
-    }
 
+  useEffect(() => {
     let photoName = null;
-    if(selectedShop[0].diveShopProfilePhoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop[0].diveShopProfilePhoto.split("/").pop()}`;
+    if(selectedDiveSite.divesiteprofilephoto) {
+      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`;
     }
     
-    setDiveShopVals({
-      id: selectedShop[0].id,
-      bio: selectedShop[0].diveShopBio,
+    setDiveSiteVals({
+      id: selectedDiveSite.id,
+      bio: selectedDiveSite.divesitebio,
       photo: photoName,
     });
 
-  }, [selectedShop]);
+  }, [selectedDiveSite]);
 
   const handleImageUpload = async () => {
     try {
@@ -53,20 +42,20 @@ export default function DiveShopParallax() {
 
         let fileName = await imageUpload(image)
 
-        if (diveShopVals.photo !== null || diveShopVals.photo === "") {
+        if (diveSiteVals.photo !== null || diveSiteVals.photo === "") {
           await removePhoto({
             filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: diveShopVals.photo.split("/").pop(),
+            fileName: diveSiteVals.photo.split("/").pop(),
           });
         }
 
-        setDiveShopVals({
-          ...diveShopVals,
+        setDiveSiteVals({
+          ...diveSiteVals,
           photo: `animalphotos/public/${fileName}`,
         });
         const success = await updateDiveShop({
-          id: diveShopVals.id,
-          bio: diveShopVals.bio,
+          id: diveSiteVals.id,
+          bio: diveSiteVals.bio,
           photo: `animalphotos/public/${fileName}`,
         });
       }
@@ -81,21 +70,21 @@ export default function DiveShopParallax() {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setChosenModal("DiveSite");
-    setMapHelper(true);
-    setMapConfig(2);
+    // setChosenModal("DiveSite");
+    // setMapHelper(true);
+    // setMapConfig(2);
     setLevelOneScreen(false);
   };
 
   return (
     <ParallaxDrawer 
-      headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : noImage} 
+      headerImage={diveSiteVals && diveSiteVals.photo ? { uri: diveSiteVals.photo } : noImage} 
       onClose={onClose} 
       onMapFlip={onNavigate}
       handleImageUpload={handleImageUpload}
       isMyShop={isMyShop}
       >
-      <DiveShopScreen onMapFlip={onNavigate} isMyShop={isMyShop}/>
+      <DiveSiteScreen onMapFlip={onNavigate}/>
     </ParallaxDrawer>
   );
 }

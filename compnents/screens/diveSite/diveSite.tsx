@@ -4,14 +4,9 @@ import {
   View,
   Dimensions,
   Text,
-  ScrollView,
   Platform,
-  TouchableWithoutFeedback,
 } from "react-native";
-import MaskedView from "@react-native-masked-view/masked-view";
-import { LinearGradient } from "expo-linear-gradient";
-import WavyHeaderDynamic from "../wavyHeaderDynamic";
-import PlainTextInput from "../plaintextInput";
+import PlainTextInput from '../../reusables/plainTextInput';
 import { FontAwesome } from "@expo/vector-icons";
 import {
   activeFonts,
@@ -20,6 +15,7 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from '../../styles';
+import * as S from "./styles";
 import { moderateScale } from "react-native-size-matters";
 import { PinContext } from "../../contexts/staticPinContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
@@ -29,7 +25,6 @@ import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext"
 import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { MaterialIcons } from "@expo/vector-icons";
 import email from "react-native-email";
 import { newGPSBoundaries } from "../../helpers/mapHelpers";
 import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
@@ -45,12 +40,24 @@ import {
   updateDiveSite,
 } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
-import BottomDrawer from '../bottomDrawer/animatedBottomDrawer';
 import { useTranslation } from "react-i18next";
+import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function DiveSite() {
+type DiveSiteProps = {
+  onClose?: () => void;
+  onMapFlip?: () => void;
+  closeParallax?: (mapConfig: number) => void
+  restoreParallax?: () => void; 
+};
+
+export default function DiveSiteScreen({
+  onClose,
+  onMapFlip,
+  closeParallax,
+  restoreParallax,
+}: DiveSiteProps) {
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { pinValues, setPinValues } = useContext(PinContext);
@@ -65,14 +72,17 @@ export default function DiveSite() {
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
-  const [site, setSite] = useState("");
+  const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
 
+console.log('selectedDiveSite', selectedDiveSite)
+
+
   const getTrips = async () => {
-    const success = await getItinerariesForDiveSite(site.id);
+    const success = await getItinerariesForDiveSite(selectedDiveSite.id);
   };
 
   const getPhotos = async (site, profile) => {
@@ -93,7 +103,7 @@ export default function DiveSite() {
   }, [selectedDiveSite]);
 
   useEffect(() => {
-    if (!isEditModeOn && site) {
+    if (!isEditModeOn && selectedDiveSite) {
       diveSiteUpdateUpdate();
     }
   }, [isEditModeOn]);
@@ -101,9 +111,9 @@ export default function DiveSite() {
   const diveSiteUpdateUpdate = async () => {
     try {
       const success = await updateDiveSite({
-        id: site.id,
-        bio: site.divesitebio,
-        photo: site.divesiteprofilephoto,
+        id: selectedDiveSite.id,
+        bio: selectedDiveSite.divesitebio,
+        photo: selectedDiveSite.divesiteprofilephoto,
       });
     } catch (e) {
       console.log({ title: "Error19", message: e.message });
@@ -112,32 +122,31 @@ export default function DiveSite() {
 
   useEffect(() => {
     getTrips();
-  }, [site]);
-
-  useEffect(() => {
-    getDiveSite(selectedDiveSite);
   }, [selectedDiveSite]);
+
+  // useEffect(() => {
+  //   getDiveSite(selectedDiveSite);
+  // }, [selectedDiveSite]);
 
   useEffect(() => {
     if (profile[0].partnerAccount) {
       setIsPartnerAccount(true);
     }
-    getDiveSite(selectedDiveSite);
   }, []);
 
-  const getDiveSite = async (chosenSite) => {
-    try {
-      const selectedSite = await getDiveSiteWithUserName({
-        siteName: chosenSite.name,
-        region: chosenSite.region,
-      });
-      if (selectedSite.length > 0) {
-        setSite(selectedSite[0]);
-      }
-    } catch (e) {
-      console.log({ title: "Error98", message: e.message });
-    }
-  };
+  // const getDiveSite = async (chosenSite) => {
+  //   try {
+  //     const selectedSite = await getDiveSiteWithUserName({
+  //       siteName: chosenSite.name,
+  //       region: chosenSite.region,
+  //     });
+  //     if (selectedSite.length > 0) {
+  //       setSite(selectedSite[0]);
+  //     }
+  //   } catch (e) {
+  //     console.log({ title: "Error98", message: e.message });
+  //   }
+  // };
 
   const filterAnchorPhotos = async () => {
     let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
@@ -179,50 +188,46 @@ export default function DiveSite() {
     }
   };
 
-  const handleImageUpload = async () => {
-    try {
-      const image = await chooseImageHandler();
-      if (image) {
+  // const handleImageUpload = async () => {
+  //   try {
+  //     const image = await chooseImageHandler();
+  //     if (image) {
 
-        let fileName = await imageUpload(image)
+  //       let fileName = await imageUpload(image)
 
-        if (
-          site.divesiteprofilephoto !== null ||
-          site.divesiteprofilephoto === ""
-        ) {
-          await removePhoto({
-            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: site.divesiteprofilephoto.split("/").pop(),
-          });
-        }
+  //       if (
+  //         site.divesiteprofilephoto !== null ||
+  //         site.divesiteprofilephoto === ""
+  //       ) {
+  //         await removePhoto({
+  //           filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
+  //           fileName: selectedDiveSite.divesiteprofilephoto.split("/").pop(),
+  //         });
+  //       }
 
-        setSite({
-          ...site,
-          photo: `animalphotos/public/${fileName}`,
-        });
-        const success = await updateDiveSite({
-          id: site.id,
-          bio: site.divesitebio,
-          photo: `animalphotos/public/${fileName}`,
-        });
-      }
-    } catch (e) {
-      console.log("error: Photo Selection Cancelled", e.message);
-    }
-  };
+  //       setSite({
+  //         ...selectedDiveSite,
+  //         photo: `animalphotos/public/${fileName}`,
+  //       });
+  //       const success = await updateDiveSite({
+  //         id: selectedDiveSite.id,
+  //         bio: selectedDiveSite.divesitebio,
+  //         photo: `animalphotos/public/${fileName}`,
+  //       });
+  //     }
+  //   } catch (e) {
+  //     console.log("error: Photo Selection Cancelled", e.message);
+  //   }
+  // };
 
   const handleEmailDS = () => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
       // Optional additional arguments
-      subject: `Reporting issue with Dive Site: "${site.name}" at Latitude: ${site.lat} Longitude: ${site.lng} `,
+      subject: `Reporting issue with Dive Site: "${selectedDiveSite.name}" at Latitude: ${selectedDiveSite.lat} Longitude: ${selectedDiveSite.lng} `,
       body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
-  };
-
-  const onClose = () => {
-    setLevelOneScreen(false);
   };
 
   const openPicUploader = () => {
@@ -243,21 +248,24 @@ export default function DiveSite() {
     );
   };
 
+  console.log("diveSitePics", diveSitePics)
+
   return (
-    <View style={styles.container}>
-      <MaterialIcons
+    <S.ContentContainer>
+      {/* <MaterialIcons
         name="chevron-left"
         size={moderateScale(48)}
         color={colors.themeWhite}
         onPress={() => onClose()}
         style={styles.backButton}
-      />
-      <TouchableWithoutFeedback onPress={openPicUploader}>
+      /> */}
+
+      {/* <TouchableWithoutFeedback onPress={openPicUploader}>
         <View style={styles.contributeButton}>
           <Text style={styles.contributeButtonText}>{t('DiveSite.addSighting')}</Text>
         </View>
-      </TouchableWithoutFeedback>
-
+      </TouchableWithoutFeedback> */}
+{/* 
       {profile[0].partnerAccount && (
         <View style={styles.addPhotoButton}>
           <MaterialIcons
@@ -267,11 +275,11 @@ export default function DiveSite() {
             onPress={() => handleImageUpload()}
           />
         </View>
-      )}
+      )} */}
 
-      <View style={styles.contentContainer}>
+      <S.InputGroupContainer>
         <View style={styles.siteNameContainer}>
-          <Text style={styles.header}>{site.name}</Text>
+          <S.Header>{selectedDiveSite.name}</S.Header>
 
           <FontAwesome
             name="flag"
@@ -281,50 +289,35 @@ export default function DiveSite() {
             onPress={() => handleEmailDS()}
           />
         </View>
-        <Text style={styles.contributor}>Added by: {site.newusername}</Text>
-        <MaskedView
-          maskElement={
-            <LinearGradient
-              style={{ flex: 1 }}
-              colors={["white", "transparent"]}
-              start={{ x: 0.5, y: 0.7 }}
-            ></LinearGradient>
-          }
-        >
-          <View style={styles.scrollViewBox}>
-            <ScrollView>
-              {site && (
+
+        <Text style={styles.contributor}>Added by: {selectedDiveSite.newusername}</Text>
+            {selectedDiveSite && (
                 <PlainTextInput
-                  placeHolder={t('DiveSite.aLittleAbout', { siteName: site.name, })}
-                  content={site.divesitebio}
-                  fontSz={fontSizes.StandardText}
-                  isPartnerAccount={isPartnerAccount}
+                  placeholder={`A little about ${selectedDiveSite.name}`}
+                  content={selectedDiveSite && selectedDiveSite.divesitebio}
+                  isMyShop={isPartnerAccount}
                   isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
                   onChangeText={(bioText) =>
-                    setSite({ ...site, divesitebio: bioText })
+                    setDiveSiteVals({ ...diveSiteVals, bio: bioText })
                   }
                 />
               )}
-            </ScrollView>
-          </View>
-        </MaskedView>
-      </View>
+      </S.InputGroupContainer>
 
-      <WavyHeaderDynamic
-        customStyles={styles.svgCurve}
-        image={site && site.divesiteprofilephoto}
-      ></WavyHeaderDynamic>
-
-      <BottomDrawer
-        dataSet={diveSitePics}
-        dataSetType={"DiveSitePhotos"}
-        lowerBound={drawerLowerBound}
-        upperBound={drawerUpperBound}
-        drawerHeader={t('DiveSite.drawerHeader')}
-        emptyDrawer={t('DiveSite.emptyDrawer')}
-      />
-    </View>
+      <S.PhotoContainer>   
+      {diveSitePics[0] && diveSitePics[0].photos.map((photo) => {
+                      return (
+                        <SeaLifeImageCard
+                          key={`${photo.id}-d`}
+                          pic={photo}
+                          dataSetType={"DiveSitePhotos"}
+                          diveSiteName={selectedDiveSite.name}
+                        ></SeaLifeImageCard>
+                      );
+                    })}
+      </S.PhotoContainer>
+    </S.ContentContainer>
   );
 }
 
