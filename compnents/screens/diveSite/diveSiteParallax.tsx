@@ -23,13 +23,13 @@ export default function DiveSiteParallax() {
 
   useEffect(() => {
     let photoName = null;
-    if(selectedDiveSite.divesiteprofilephoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`;
+    if(selectedDiveSite.diveSiteProfilePhoto) {
+      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`;
     }
-    
+
     setDiveSiteVals({
       id: selectedDiveSite.id,
-      bio: selectedDiveSite.divesitebio,
+      bio: selectedDiveSite.diveSiteBio,
       photo: photoName,
     });
 

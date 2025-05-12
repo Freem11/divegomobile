@@ -54,8 +54,6 @@ interface PictureProps {
 
 const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType, setVisitProfileVals } = props;
-
-  console.log('???????',pic)
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext

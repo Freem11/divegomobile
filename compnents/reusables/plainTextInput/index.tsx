@@ -17,14 +17,14 @@ type CustomInputProps = {
   isMyShop:            boolean
 };
 
-const PlainTextInput = React.forwardRef<TextInput, TextInputProps & CustomInputProps>(function PlainTextInput(props: TextInputProps & CustomInputProps, forwardedRef) {
 
+const PlainTextInput = React.forwardRef<TextInput, TextInputProps & CustomInputProps>(function PlainTextInput(props: TextInputProps & CustomInputProps, forwardedRef) {
   const [value, setValue] = useState(props.value);
   const ref = useRef<TextInput>(null);
 
   return (
     <S.MainContainer>
-      <S.StyledTextInput multiline type="hidden" readOnly={!props.isEditModeOn} name={props.name} value={value} onChange={props.onChange} ref={forwardedRef} placeholder={!props.isEditModeOn && props.placeholder}/>
+      <S.StyledTextInput multiline type="hidden" readOnly={!props.isEditModeOn} name={props.name} value={props.value} onChange={props.onChange} ref={forwardedRef} placeholder={!props.isEditModeOn && props.placeholder}/>
 
       {props.isMyShop && !props.isEditModeOn && (
         <ButtonIcon 

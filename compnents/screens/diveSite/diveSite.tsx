@@ -42,6 +42,8 @@ import {
 import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { useTranslation } from "react-i18next";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
+import Label from "../../reusables/label";
+import Icon from "../../../icons/Icon";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -145,45 +147,45 @@ export default function DiveSiteScreen({
   //   }
   // };
 
-  const filterAnchorPhotos = async () => {
-    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
-      selectedDiveSite.Latitude,
-      selectedDiveSite.Longitude
-    );
+  // const filterAnchorPhotos = async () => {
+  //   let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
+  //     selectedDiveSite.Latitude,
+  //     selectedDiveSite.Longitude
+  //   );
 
-    try {
-      let photos;
-      if (animalMultiSelection.length === 0) {
-        photos = await getPhotosWithUserEmpty({
-          userId: profile[0].UserID,
-          minLat,
-          maxLat,
-          minLng,
-          maxLng,
-        });
-      } else {
-        photos = await getPhotosWithUser({
-          animalMultiSelection,
-          userId: profile[0].UserID,
-          minLat,
-          maxLat,
-          minLng,
-          maxLng,
-        });
-      }
+  //   try {
+  //     let photos;
+  //     if (animalMultiSelection.length === 0) {
+  //       photos = await getPhotosWithUserEmpty({
+  //         userId: profile[0].UserID,
+  //         minLat,
+  //         maxLat,
+  //         minLng,
+  //         maxLng,
+  //       });
+  //     } else {
+  //       photos = await getPhotosWithUser({
+  //         animalMultiSelection,
+  //         userId: profile[0].UserID,
+  //         minLat,
+  //         maxLat,
+  //         minLng,
+  //         maxLng,
+  //       });
+  //     }
 
-      if (photos) {
-        // photos.unshift({ id: 0 });
-        setDiveSitePics(photos);
-        let count = 0;
-        photos.forEach((obj) => {
-          count++;
-        });
-      }
-    } catch (e) {
-      console.log({ title: "Error55", message: e.message });
-    }
-  };
+  //     if (photos) {
+  //       // photos.unshift({ id: 0 });
+  //       setDiveSitePics(photos);
+  //       let count = 0;
+  //       photos.forEach((obj) => {
+  //         count++;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     console.log({ title: "Error55", message: e.message });
+  //   }
+  // };
 
   // const handleImageUpload = async () => {
   //   try {
@@ -245,8 +247,6 @@ export default function DiveSiteScreen({
     );
   };
 
-  console.log("diveSitePics", diveSitePics)
-
   return (
     <S.ContentContainer>
       {/* <MaterialIcons
@@ -287,11 +287,11 @@ export default function DiveSiteScreen({
           />
         </View>
 
-        <Text style={styles.contributor}>Added by: {selectedDiveSite.newusername}</Text>
+        <S.Contributor>Added by: {selectedDiveSite.userName}</S.Contributor>
             {selectedDiveSite && (
                 <PlainTextInput
                   placeholder={`A little about ${selectedDiveSite.name}`}
-                  content={selectedDiveSite && selectedDiveSite.divesitebio}
+                  value={selectedDiveSite.diveSiteBio}
                   isMyShop={isPartnerAccount}
                   isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
@@ -302,24 +302,33 @@ export default function DiveSiteScreen({
               )}
       </S.InputGroupContainer>
 
+      <S.LabelWrapper>
+            <Label label="Sea Life Sightings" />
+        </S.LabelWrapper>
+
       {diveSitePics && diveSitePics.map((photoPacket) => {
-      <S.PhotoContainer key={`${photoPacket.id}-${photoPacket.dateTaken}`}>   
-                  <S.PacketHeader>
-                    <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
-                  </S.PacketHeader>
-                  {/* {photoPacket.photos.length > 0 &&
-                    photoPacket.photos.map((photo) => {
-                      return (
-                        <SeaLifeImageCard
-                          key={`${photo.id}-d`}
-                          pic={photo}
-                          dataSetType={"DiveSitePhotos"}
-                          diveSiteName={photoPacket.name}
-                        ></SeaLifeImageCard>
-                      );
-                    })} */}
-        </S.PhotoContainer>
+  return (
+    <S.PhotoContainer key={`${photoPacket.dateTaken}`}>   
+      <S.PacketHeader>
+        <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
+        <S.IconWrapper>
+        <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
+        </S.IconWrapper>
+      </S.PacketHeader>
+      {photoPacket.photos.length > 0 &&
+        photoPacket.photos.map((photo) => {
+          return (
+            <SeaLifeImageCard
+              key={`${photo.id}-d`}
+              pic={photo}
+              dataSetType={"DiveSitePhotos"}
+              diveSiteName={photoPacket.name}
+            />
+          );
         })}
+    </S.PhotoContainer>
+  );
+})}
     </S.ContentContainer>
   );
 }

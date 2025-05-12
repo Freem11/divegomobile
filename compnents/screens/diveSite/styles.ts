@@ -15,36 +15,37 @@ export const ContentContainer = styled.View`
 `;
 
 export const InputGroupContainer = styled.View`
-  width: 90%;
+  margin-horizontal: 5%;
   align-items: center;
   margin-bottom: ${moderateScale(40)}px;
 `;
 
 export const PhotoContainer = styled.View`
-width: 98%;
-align-items: center;
+  width: 98%;
+  align-items: center;
+  margin-top: ${moderateScale(20)}px;
 `;
 
 export const PacketHeader = styled.View`
   width: 100%;
-  heigth: 50px;
-  font-family ${activeFonts.Light};
-  color: ${colors.neutralGrey}
-  justify-content: start;
+  font-family: ${activeFonts.Light};
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
+  align-content: center;
 `;
 
 export const PacketHeaderItem = styled.Text`
-  margin-bottom: 5%;
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Medium};
-  color: ${colors.headersBlue};
-  align-self: center;
+  margin: 0 2% 1% 0;
+  font-size: ${moderateScale(fontSizes.SubHeading)}px;
+  font-family: ${activeFonts.Thin};
+  color: ${colors.primaryBlue};
+  align-self: flex-start;
   text-align: center;
 `;
 
 export const Header = styled.Text`
-  margin-bottom: 5%;
+;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.headersBlue};
@@ -52,10 +53,23 @@ export const Header = styled.Text`
   text-align: center;
 `;
 
+export const Contributor = styled.Text`
+  margin-bottom: 5%;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Regular};
+  color: ${colors.themeBlack};
+`;
+
 export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(10)}px;
   align-items: center;
+`;
+
+
+export const IconWrapper = styled.View`
+    width: ${moderateScale(24)}px;
+    height: ${moderateScale(24)}px;
 `;
 
 
