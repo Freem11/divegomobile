@@ -13,6 +13,8 @@ import useSupercluster from "use-supercluster";
 
 export default function GoogleMap() {
   const setGpsBubble = useMapStore((state) => state.setGpsBubble);
+  const camera = useMapStore((state) => state.camera);
+  const setCamera = useMapStore((state) => state.setCamera);
   const setMapRef = useMapStore((state) => state.setMapRef);
   const mapRef = useMapStore((state) => state.mapRef);
 
@@ -37,9 +39,12 @@ export default function GoogleMap() {
     if (!mapRef) {
       return;
     }
-    const boundaries = await mapRef.getMapBoundaries();
+
+    const [camera, boundaries] = await Promise.all([mapRef.getCamera(), mapRef.getMapBoundaries()]);
     const bubble = GPSBubble.createFromBoundaries(boundaries);
     setGpsBubble(bubble);
+    setCamera(camera);
+
     const [diveSites, diveShops] = await Promise.all([
       GPSBubble.getItemsInGpsBubble(getDiveSitesBasic, bubble),
       GPSBubble.getItemsInGpsBubble(getDiveShops, bubble),
@@ -48,10 +53,14 @@ export default function GoogleMap() {
     setDiveSites(diveSites);
   }, 500);
 
+  if (!camera) {
+    return null;
+  }
+
   return (
     <GoogleMapView
-      // mapConfig={mapContext.mapConfig}
-      // center={center}
+      mapConfig={1}
+      center={camera.center}
       // tempMarker={tempMarker}
       onLoad={handleOnLoad}
       handleBoundsChange={handleBoundsChange}

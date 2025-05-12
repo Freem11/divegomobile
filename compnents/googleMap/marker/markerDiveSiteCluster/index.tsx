@@ -1,6 +1,6 @@
 import React from "react";
 import { Marker } from "react-native-maps";
-import icon from "../../../../png/mapIcons/AnchorCluster.png";
+import icon from "../../../png/mapIcons/AnchorCluster.png";
 
 type MarkerDiveSiteClusterProps = {
   latitude: number;

@@ -13,13 +13,15 @@ import { ClusterProperty, PointFeatureCategory } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
 import { MarkerDiveSiteCluster } from "./marker/markerDiveSiteCluster";
+import { MarkerDraggable } from "./marker/markerDraggable";
+import { Coordinates } from "../../entities/coordinates";
 
 type MapViewProps = {
   // googleMapApiKey:    string
   // options?:           google.maps.MapOptions
-  // mapConfig:          number
+  mapConfig: number;
   // zoom?:              number
-  // center:             google.maps.LatLngLiteral
+  center: Coordinates;
   // tempMarker?:        google.maps.LatLngLiteral | null
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
@@ -132,22 +134,15 @@ export default function GoogleMapView(props: MapViewProps) {
               <MarkerDiveSite key={cluster.id} id={cluster.properties.id} latitude={latitude} longitude={longitude} />
             );
           }
+
+          if (cluster.properties.category === PointFeatureCategory.DiveShop) {
+            return (
+              <MarkerDiveShop key={cluster.id} id={cluster.properties.id} latitude={latitude} longitude={longitude} />
+            );
+          }
         })}
 
-        {/* {props.diveShops &&
-          props.diveShops.map((diveShop) => {
-            return (
-              <MarkerDiveShop key={diveShop.id} id={diveShop.id} latitude={diveShop.lat} longitude={diveShop.lng} />
-            );
-          })} */}
-
-        {/* <Marker
-          key={`-site`}
-          image={image}
-          title={"My Marker"}
-          coordinate={{ latitude: 37.78825, longitude: -122.4592317 }}
-          // onClick={handleClick}
-        ></Marker> */}
+        {props.mapConfig === 1 && <MarkerDraggable coordinates={props.center} />}
       </MapView>
     </View>
   );
