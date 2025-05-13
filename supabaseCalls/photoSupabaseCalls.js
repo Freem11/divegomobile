@@ -169,7 +169,6 @@ export const getPhotosWithUser = async (values) => {
 };
 
 export const getPhotosWithUserEmpty = async (values) => {
-  console.log('values', values)
   const { data, error } = await supabase.rpc("get_photos_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,

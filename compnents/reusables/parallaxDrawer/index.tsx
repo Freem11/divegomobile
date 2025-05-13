@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, ImageBackground, SafeAreaView } from "react-native";
+import React, { forwardRef, useRef, useState } from "react";
+import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps } from "react-native";
 import Animated from "react-native-reanimated";
 import ButtonIcon from "../buttonIcon";
 import {
@@ -10,6 +10,10 @@ import { colors } from "../../styles";
 import * as S from "./styles";
 import { WavyImg } from "./wavyImg";
 import { useParallaxDrawer } from "./useParallelDrawer";
+import Popover from "react-native-popover-view";
+import { Placement } from "react-native-popover-view/dist/Types";
+import { moderateScale } from "react-native-size-matters";
+import IconWithLabel from "../iconWithLabal";
 
 type ParallaxDrawerProps = {
   headerImage: any;
@@ -18,6 +22,8 @@ type ParallaxDrawerProps = {
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
   isMyShop?: boolean
+  isPartnerAccount?: boolean
+  popoverConent?: () => React.JSX.Element
 };
 
 const ParallaxDrawer = ({
@@ -26,7 +32,8 @@ const ParallaxDrawer = ({
   onClose,
   onMapFlip,
   handleImageUpload,
-  isMyShop
+  isMyShop,
+  popoverConent
 }: ParallaxDrawerProps) => {
   
   const {
@@ -41,7 +48,20 @@ const ParallaxDrawer = ({
   } = useParallaxDrawer(onClose, onMapFlip);
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
+  const [isVisible, setIsVisible] = useState(false);
+  const iconRef = useRef<View>(null);
 
+  const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
+    <View ref={ref} collapsable={false}>
+         <ButtonIcon 
+          icon="more"
+          size='icon'
+          onPress={() => setIsVisible(true)}
+          // fillColor={colors.neutralGrey}
+        />
+    </View>
+  ));
+  
   return (
     <GestureHandlerRootView>
       <AnimatedSafeAreaView style={[S.styles.safeArea, animatedSafeAreaStyle]}>
@@ -53,7 +73,22 @@ const ParallaxDrawer = ({
             fillColor={colors.themeWhite}
           />
         </S.BackButtonWrapper>
+
         <S.AltButtonWrapper>
+        <ButtonIconWithRef ref={iconRef}/>
+        </S.AltButtonWrapper>
+
+        <Popover
+                from={iconRef}
+                isVisible={isVisible}
+                onRequestClose={() => setIsVisible(false)}
+                placement={Placement.AUTO}
+                popoverStyle={{borderRadius: moderateScale(10)}}
+                >
+                {popoverConent()}
+               
+              </Popover>
+        {/* <S.AltButtonWrapper>
           {isMyShop && (
             <ButtonIcon
             icon="camera-plus"
@@ -62,7 +97,7 @@ const ParallaxDrawer = ({
             fillColor={colors.themeWhite}
           />
       )}
-      </S.AltButtonWrapper>
+      </S.AltButtonWrapper> */}
       </AnimatedSafeAreaView>
       <S.BackgroundContainer>
         <Animated.View

@@ -52,6 +52,7 @@ type DiveSiteProps = {
   onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
+  isMyShop?: boolean
 };
 
 export default function DiveSiteScreen({
@@ -59,6 +60,7 @@ export default function DiveSiteScreen({
   onMapFlip,
   closeParallax,
   restoreParallax,
+  isMyShop
 }: DiveSiteProps) {
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
@@ -76,9 +78,6 @@ export default function DiveSiteScreen({
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
-  const [isPartnerAccount, setIsPartnerAccount] = useState(false);
-  const drawerUpperBound = "90%";
-  const drawerLowerBound = "30%";
 
   const getTrips = async () => {
     const success = await getItinerariesForDiveSite(selectedDiveSite.id);
@@ -123,102 +122,6 @@ export default function DiveSiteScreen({
     getTrips();
   }, [selectedDiveSite]);
 
-  // useEffect(() => {
-  //   getDiveSite(selectedDiveSite);
-  // }, [selectedDiveSite]);
-
-  useEffect(() => {
-    if (profile[0].partnerAccount) {
-      setIsPartnerAccount(true);
-    }
-  }, []);
-
-  // const getDiveSite = async (chosenSite) => {
-  //   try {
-  //     const selectedSite = await getDiveSiteWithUserName({
-  //       siteName: chosenSite.name,
-  //       region: chosenSite.region,
-  //     });
-  //     if (selectedSite.length > 0) {
-  //       setSite(selectedSite[0]);
-  //     }
-  //   } catch (e) {
-  //     console.log({ title: "Error98", message: e.message });
-  //   }
-  // };
-
-  // const filterAnchorPhotos = async () => {
-  //   let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
-  //     selectedDiveSite.Latitude,
-  //     selectedDiveSite.Longitude
-  //   );
-
-  //   try {
-  //     let photos;
-  //     if (animalMultiSelection.length === 0) {
-  //       photos = await getPhotosWithUserEmpty({
-  //         userId: profile[0].UserID,
-  //         minLat,
-  //         maxLat,
-  //         minLng,
-  //         maxLng,
-  //       });
-  //     } else {
-  //       photos = await getPhotosWithUser({
-  //         animalMultiSelection,
-  //         userId: profile[0].UserID,
-  //         minLat,
-  //         maxLat,
-  //         minLng,
-  //         maxLng,
-  //       });
-  //     }
-
-  //     if (photos) {
-  //       // photos.unshift({ id: 0 });
-  //       setDiveSitePics(photos);
-  //       let count = 0;
-  //       photos.forEach((obj) => {
-  //         count++;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     console.log({ title: "Error55", message: e.message });
-  //   }
-  // };
-
-  // const handleImageUpload = async () => {
-  //   try {
-  //     const image = await chooseImageHandler();
-  //     if (image) {
-
-  //       let fileName = await imageUpload(image)
-
-  //       if (
-  //         site.divesiteprofilephoto !== null ||
-  //         site.divesiteprofilephoto === ""
-  //       ) {
-  //         await removePhoto({
-  //           filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-  //           fileName: selectedDiveSite.divesiteprofilephoto.split("/").pop(),
-  //         });
-  //       }
-
-  //       setSite({
-  //         ...selectedDiveSite,
-  //         photo: `animalphotos/public/${fileName}`,
-  //       });
-  //       const success = await updateDiveSite({
-  //         id: selectedDiveSite.id,
-  //         bio: selectedDiveSite.divesitebio,
-  //         photo: `animalphotos/public/${fileName}`,
-  //       });
-  //     }
-  //   } catch (e) {
-  //     console.log("error: Photo Selection Cancelled", e.message);
-  //   }
-  // };
-
   const handleEmailDS = () => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
@@ -249,33 +152,16 @@ export default function DiveSiteScreen({
 
   return (
     <S.ContentContainer>
-      {/* <MaterialIcons
-        name="chevron-left"
-        size={moderateScale(48)}
-        color={colors.themeWhite}
-        onPress={() => onClose()}
-        style={styles.backButton}
-      /> */}
+
 
       {/* <TouchableWithoutFeedback onPress={openPicUploader}>
         <View style={styles.contributeButton}>
           <Text style={styles.contributeButtonText}>{t('DiveSite.addSighting')}</Text>
         </View>
       </TouchableWithoutFeedback> */}
-{/* 
-      {profile[0].partnerAccount && (
-        <View style={styles.addPhotoButton}>
-          <MaterialIcons
-            name="add-a-photo"
-            size={moderateScale(30)}
-            color={colors.themeWhite}
-            onPress={() => handleImageUpload()}
-          />
-        </View>
-      )} */}
 
       <S.InputGroupContainer>
-        <View style={styles.siteNameContainer}>
+        <S.SiteNameContainer>
           <S.Header>{selectedDiveSite.name}</S.Header>
 
           <FontAwesome
@@ -285,14 +171,14 @@ export default function DiveSiteScreen({
             style={{ marginTop: "5%", marginLeft: moderateScale(10) }}
             onPress={() => handleEmailDS()}
           />
-        </View>
+        </S.SiteNameContainer>
 
         <S.Contributor>Added by: {selectedDiveSite.userName}</S.Contributor>
             {selectedDiveSite && (
                 <PlainTextInput
                   placeholder={`A little about ${selectedDiveSite.name}`}
                   value={selectedDiveSite.diveSiteBio}
-                  isMyShop={isPartnerAccount}
+                  isMyShop={isMyShop}
                   isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
                   onChangeText={(bioText) =>
@@ -334,83 +220,11 @@ export default function DiveSiteScreen({
 }
 
 const styles = StyleSheet.create({
-  locationHeader: {
-    flexDirection: "row",
-    height: moderateScale(50),
-    width: '100%',
-    alignItems: "center",
-    justifyContent: "space-around",
-    borderBottomWidth: moderateScale(2),
-    borderBottomColor: "darkgrey",
-    borderTopWidth: moderateScale(2),
-    borderTopColor: "darkgrey",
-    marginTop: "5%",
-    marginBottom: "2%",
-    backgroundColor: "lightgray",
-  },
-  headerText: {
-    fontSize: moderateScale(fontSizes.StandardText),
-    fontFamily: activeFonts.Medium,
-  },
-  container: {
-    flex: 1,
-    zIndex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-    height: windowHeight,
-  },
-  contentContainer: {
-    alignItems: "left",
-    zIndex: 1,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight / 2.2,
-    width: "100%",
-    height: 300,
-    // backgroundColor: "pink",
-  },
-  siteNameContainer: {
-    // zIndex: 1,
-    flexDirection: "row",
-    width: "auto",
-    marginTop: Platform.OS === "ios" ? windowHeight / 50 : windowHeight / 50,
-    marginLeft: "8%",
-  },
-  header: {
-    // zIndex: 50,
-    marginTop: "5%",
-    fontSize: moderateScale(fontSizes.Header),
-    fontFamily: activeFonts.Regular,
-    color: colors.themeBlack,
-  },
-  contributor: {
-    // zIndex: 50,
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Thin,
-    color: colors.themeBlack,
-    marginLeft: "12%",
-  },
-  scrollViewBox: {
-    // zIndex: 5,
-    marginTop: "3%",
-    marginLeft: "2%",
-    height: windowHeight / 6,
-    // backgroundColor: "green"
-  },
   contributeButton: [
     { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
     screenSecondaryButton,
   ],
-  backButton: [{ zIndex: 10, position: "absolute", top: "5.5%", left: "2%" }],
   contributeButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
-  addPhotoButton: [
-    { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
-  ],
-  svgCurve: {
-    position: "absolute",
-    bottom: 0,
-    width: Dimensions.get("window").width,
-  },
+
+  
 });

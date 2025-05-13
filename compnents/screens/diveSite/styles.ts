@@ -53,10 +53,16 @@ export const Header = styled.Text`
   text-align: center;
 `;
 
+export const SiteNameContainer = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+`;
+
 export const Contributor = styled.Text`
   margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.Regular};
+  font-family: ${activeFonts.Regular}px;
   color: ${colors.themeBlack};
 `;
 

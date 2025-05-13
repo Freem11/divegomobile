@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import DiveSiteScreen from './diveSite';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
@@ -11,15 +11,37 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import IconWithLabel from "../../reusables/iconWithLabal";
+import { PinContext } from "../../contexts/staticPinContext";
+import { ActiveScreenContext } from "../../contexts/activeScreenContext";
+import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
+import { useTranslation } from "react-i18next";
+import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 export default function DiveSiteParallax() {
+  const { t } = useTranslation();
+  const { profile } = useContext(UserProfileContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveSiteVals, setDiveSiteVals] = useState(null);
-  const [isMyShop, setIsMyShop] = useState(false);
+  const [isPartnerAccount, setIsPartnerAccount] = useState(false);
+  const { pinValues, setPinValues } = useContext(PinContext);
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+    LevelTwoScreenContext
+  );
+  
+  useEffect(() => {
+    if (profile[0].partnerAccount) {
+      setIsPartnerAccount(true);
+    }
+  }, []);
 
   useEffect(() => {
     let photoName = null;
@@ -76,15 +98,53 @@ export default function DiveSiteParallax() {
     setLevelOneScreen(false);
   };
 
+  const openPicUploader = () => {
+    setPinValues({
+      ...pinValues,
+      Latitude: String(selectedDiveSite.lat),
+      Longitude: String(selectedDiveSite.lng),
+      siteName: selectedDiveSite.name,
+    });
+    setLevelOneScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("PictureUploadScreen");
+    useButtonPressHelper(
+      "PictureUploadScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
+    );
+  };
+
+  const popoverConent = () => {
+    return (
+    <>
+    {isPartnerAccount &&
+      <IconWithLabel 
+      label="Change Header Image"
+      iconName="camera-flip-outline"
+      buttonAction={() => handleImageUpload()}
+      />}
+    <IconWithLabel 
+    label={t('DiveSite.addSighting')}
+    iconName="camera-plus"
+    buttonAction={() => openPicUploader()}
+    />
+    </>
+    )
+  };
+
   return (
     <ParallaxDrawer 
       headerImage={diveSiteVals && diveSiteVals.photo ? { uri: diveSiteVals.photo } : noImage} 
       onClose={onClose} 
       onMapFlip={onNavigate}
+      popoverConent={popoverConent}
       handleImageUpload={handleImageUpload}
-      isMyShop={isMyShop}
+      isMyShop={isPartnerAccount}
       >
-      <DiveSiteScreen onMapFlip={onNavigate}/>
+
+      <DiveSiteScreen onMapFlip={onNavigate} isMyShop={isPartnerAccount}/>
     </ParallaxDrawer>
   );
 }

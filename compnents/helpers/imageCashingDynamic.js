@@ -10,8 +10,6 @@ import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 export default function ImageCasherDynamic(Props) {
   const { photoFile, id, style } = Props;
 
-  console.log('photoFile', photoFile)
-
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { setFullScreenModal } = useContext(
     FullScreenModalContext
@@ -92,8 +90,6 @@ export default function ImageCasherDynamic(Props) {
 
     loadImage();
   }, []);
-
-  console.log('picUri', picUri)
 
   if (picUri) {
     Image.getSize(picUri, (width, height) => {
