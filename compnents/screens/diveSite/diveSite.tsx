@@ -202,10 +202,10 @@ export default function DiveSiteScreen({
         </S.IconWrapper>
       </S.PacketHeader>
       {photoPacket.photos.length > 0 &&
-        photoPacket.photos.map((photo) => {
+        photoPacket.photos.map((photo, index) => {
           return (
             <SeaLifeImageCard
-              key={`${photo.id}-d`}
+              key={`${photo.id}-${index}`}
               pic={photo}
               dataSetType={"DiveSitePhotos"}
               diveSiteName={photoPacket.name}

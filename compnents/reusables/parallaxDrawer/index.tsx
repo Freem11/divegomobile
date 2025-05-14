@@ -52,10 +52,10 @@ const ParallaxDrawer = ({
   const iconRef = useRef<View>(null);
 
   const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
-    <View ref={ref} collapsable={false}>
+    <View ref={ref} collapsable={false} style={{marginTop: 3}}>
          <ButtonIcon 
           icon="more"
-          size='icon'
+          size='headerIcon'
           onPress={() => setIsVisible(true)}
           // fillColor={colors.neutralGrey}
         />
@@ -88,16 +88,6 @@ const ParallaxDrawer = ({
                 {popoverConent()}
                
               </Popover>
-        {/* <S.AltButtonWrapper>
-          {isMyShop && (
-            <ButtonIcon
-            icon="camera-plus"
-            onPress={() => handleImageUpload()}
-            size="icon"
-            fillColor={colors.themeWhite}
-          />
-      )}
-      </S.AltButtonWrapper> */}
       </AnimatedSafeAreaView>
       <S.BackgroundContainer>
         <Animated.View

@@ -24,7 +24,7 @@ export const Handle = styled.View`
 export const HandleText = styled.Text`
   color: ${colors.themeBlack};
   font-family: ${activeFonts.Light};
-  font-size: ${moderateScale(fontSizes.StandardText)};
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
   border-top-right-radius: ${moderateScale(15)}px;
   border-top-left-radius: ${moderateScale(15)}px;
 `;
