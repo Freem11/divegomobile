@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
-import WavyHeaderDynamic from "./wavyHeaderDynamic";
-import PlainTextInput from "./plaintextInput";
+import WavyHeaderDynamic from "../wavyHeaderDynamic";
+import PlainTextInput from "../plaintextInput";
 import {
   activeFonts,
   colors,
@@ -20,35 +20,48 @@ import {
   authenicationButton,
   buttonTextAlt,
   buttonText
-} from "../styles";
+} from "../../styles";
 import { moderateScale, s } from "react-native-size-matters";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
-import { SelectedProfileContext } from "../contexts/selectedProfileModalContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { SessionContext } from "../contexts/sessionContext";
-import { getPhotosByUserWithExtra } from "../../supabaseCalls/photoSupabaseCalls";
-import { updateProfile } from "../../supabaseCalls/accountSupabaseCalls";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
+import { ActiveScreenContext } from "../../contexts/activeScreenContext";
+import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import { SessionContext } from "../../contexts/sessionContext";
+import { getPhotosByUserWithExtra } from "../../../supabaseCalls/photoSupabaseCalls";
+import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { MaterialIcons } from "@expo/vector-icons";
-import { registerForPushNotificationsAsync } from "../tutorial/notificationsRegistery";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
-import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
-import BottomDrawer from './bottomDrawer/animatedBottomDrawer';
-import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
+import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
+import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
+import BottomDrawer from '../bottomDrawer/animatedBottomDrawer';
+import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,
   deleteUserFollow,
   checkIfUserFollows,
-} from "../../supabaseCalls/userFollowSupabaseCalls";
-import { getProfileWithStats } from "../../supabaseCalls/accountSupabaseCalls";
+} from "../../../supabaseCalls/userFollowSupabaseCalls";
+import { getProfileWithStats } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function UserProfile(props) {
-  const { } = props;
+type UserProfileProps = {
+  onClose?: () => void;
+  onMapFlip?: () => void;
+  closeParallax?: (mapConfig: number) => void
+  restoreParallax?: () => void; 
+  isMyShop?: boolean
+};
+
+export default function UserProfileScreen({
+  onClose,
+  onMapFlip,
+  closeParallax,
+  restoreParallax,
+  isMyShop
+}: UserProfileProps) {
   const { profile } = useContext(UserProfileContext);
   const { activeSession } = useContext(SessionContext);
   const { selectedProfile, setSelectedProfile } = useContext(
@@ -72,6 +85,7 @@ export default function UserProfile(props) {
   const [followData, setFollowData] = useState(profile[0].UserID);
   const [userFollows, setUserFollows] = useState(false);
   const [userStats, setUserStats] = useState(null);
+
   const { t } = useTranslation()
   const drawerUpperBound = "90%";
   const drawerLowerBound = "30%";
@@ -194,39 +208,12 @@ export default function UserProfile(props) {
     }
   };
 
-  const handleImageUpload = async () => {
-    try {
-      const image = await chooseImageHandler();
-      if (image) {
 
-        let fileName = await imageUpload(image)
-
-        if (profileVals.photo !== null || profileVals.photo === "") {
-          await removePhoto({
-            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: profileVals.photo.split("/").pop(),
-          });
-        }
-
-        setProfileVals({
-          ...profileVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-        const success = await updateProfile({
-          ...profileVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-      }
-    } catch (e) {
-      console.log("error: Photo Selection Cancelled", e.message);
-    }
-  };
-
-  const onClose = () => {
-    setVisitProfileVals(null);
-    setSelectedProfile(null);
-    setLevelTwoScreen(false);
-  };
+  // const onClose = () => {
+  //   setVisitProfileVals(null);
+  //   setSelectedProfile(null);
+  //   setLevelTwoScreen(false);
+  // };
 
   const openSettings = () => {
     setLevelTwoScreen(false);
@@ -264,13 +251,13 @@ export default function UserProfile(props) {
   };
   return (
     <View style={styles.container}>
-      <MaterialIcons
+      {/* <MaterialIcons
         name="chevron-left"
         size={moderateScale(48)}
         color={colors.themeWhite}
         onPress={() => onClose()}
         style={styles.backButton}
-      />
+      /> */}
       {visitProfileVals ? (
         <TouchableWithoutFeedback onPress={() => handleFollow()}>
           <View style={userFollows ? styles.followButtonAlt : styles.followButton}>
@@ -353,16 +340,16 @@ export default function UserProfile(props) {
         </MaskedView>
       </View>
 
-      <WavyHeaderDynamic
+      {/* <WavyHeaderDynamic
         customStyles={styles.svgCurve}
         image={
           visitProfileVals
             ? visitProfileVals && visitProfileVals.photo
             : profileVals && profileVals.photo
         }
-      ></WavyHeaderDynamic>
+      ></WavyHeaderDynamic> */}
 
-      <BottomDrawer
+      {/* <BottomDrawer
         dataSet={profilePhotos}
         dataSetType={"ProfilePhotos"}
         placeHolder={"Say a little about yourself"}
@@ -377,7 +364,7 @@ export default function UserProfile(props) {
           (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
           t('UserProfile.emptyDrawer')
         }
-      />
+      /> */}
     </View>
   );
 }
