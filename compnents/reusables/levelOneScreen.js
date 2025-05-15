@@ -8,9 +8,8 @@ import Animated, {
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
+import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
 import DiveShopParallax from '../screens/diveShop/diveShopParallax';
-import DiveSite from '../screens/diveSite';
-import DiveShop from '../screens/diveShop/diveShop';
 import Settings from '../screens/settings';
 import SearchPage from '../screens/search';
 import TripListPage from '../screens/tripList';
@@ -44,7 +43,7 @@ export default function LevelOneScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "DiveSiteScreen" && <DiveSite/>}
+      {activeScreen === "DiveSiteScreen" && <DiveSiteParallax/>}
       {activeScreen === "DiveShopScreen" && <DiveShopParallax/>}
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}

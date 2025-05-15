@@ -14,6 +14,7 @@ export const MainContainer = styled.View`
 `;
 
 export const StyledTextInput = styled.TextInput`
+  text-align: center;
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
   min-width: 20%;

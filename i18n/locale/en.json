@@ -121,11 +121,12 @@
         "drawerHeader": "Sea Creature Sightings",
         "emptyDrawer": "No sightings at this site yet.",
         "aLittleAbout": "A little about {{siteName}}",
-        "addSighting": "Add Sighting"
+        "addSighting": "Add a Sighting"
     },
     "DiveShop": {
         "drawerHeader": "Offered Dive Trips",
-        "emptyDrawer": " aren't currently offering any Dive Trips"
+        "emptyDrawer": " aren't currently offering any Dive Trips",
+        "addTrip": "Create Diving Trip"
     },
     "Auth": {
         "diveIn": "Dive in...",

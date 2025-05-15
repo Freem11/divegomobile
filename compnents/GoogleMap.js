@@ -104,11 +104,11 @@ export default function Map() {
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
     );
-
     try {
       let photos;
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
+          myCreatures,
           userId: profile[0].UserID,
           minLat,
           maxLat,

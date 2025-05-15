@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
@@ -8,7 +8,6 @@ import {
 } from '../../styles';
 
 const windowWidth = Dimensions.get('screen').width;
-const windowHeight = Dimensions.get('window').height;
 
 export const FullScreenCenter = styled.View`
   flex: 1;
@@ -16,7 +15,6 @@ export const FullScreenCenter = styled.View`
   align-items: center;
   background-color: #ffffff;
 `;
-
 
 export const BackButtonWrapper = styled.View`
   z-index: 50;
@@ -28,16 +26,6 @@ export const BackButtonWrapper = styled.View`
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
-`;
-
-export const TopButtonBox = styled.View`
-  z-index: 20;
-  margin-right: 7%;
-  margin-bottom: 5%;
-  font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Thin};
-  color: ${colors.themeBlack};
-  align-self: flex-end;
 `;
 
 export const Header = styled.Text`
@@ -53,7 +41,6 @@ export const InputGroupContainer = styled.View`
   width: ${windowWidth * 0.8}px;
   margin-top: ${moderateScale(10)}px;
 `;
-
 
 export const TextBuffer = styled.View`
   margin-top: ${moderateScale(20)}px;

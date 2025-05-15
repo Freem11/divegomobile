@@ -22,7 +22,7 @@ export const BackButtonWrapper = styled.View`
 `;
 
 export const AltButtonWrapper = styled.View`
-  width: 48%;
+  width: 47%;
   align-items: flex-end;
 `;
 

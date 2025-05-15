@@ -27,6 +27,10 @@ export const buttonSizes = {
     height: 28,
     width: 28
   },
+  headerIcon: {
+    height: 36,
+    width: 36
+  },
   small: {
     height: 50,
     width: 50

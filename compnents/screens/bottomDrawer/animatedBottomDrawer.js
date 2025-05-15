@@ -240,10 +240,10 @@ export default function BottomDrawer(props) {
                     <Text style={styles.headerText}>{item.dateTaken}</Text>
                   </View>
                   {item.photos.length > 0 &&
-                    item.photos.map((photo) => {
+                    item.photos.map((photo, index) => {
                       return (
                         <SeaLifeImageCard
-                          key={`${photo.id}-d`}
+                          key={`${index}-${photo.id}-d`}
                           pic={photo}
                           dataSetType={dataSetType}
                           diveSiteName={item.name}
