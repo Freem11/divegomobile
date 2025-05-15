@@ -176,27 +176,8 @@ export default function TripCreatorPage({
     }
   };
 
-  const cloneButtonPress = () => {
-    setEditMode(false);
-  };
-
   return (
     <S.ContentContainer>
-      {editMode ? (
-        <S.TopButtonBox>
-          <Button
-            onPress={cloneButtonPress}
-            alt={true}
-            size="medium"
-            title={t("TripCreator.cloneButton")}
-          />
-        </S.TopButtonBox>
-      ) : (
-        <S.TopButtonBox>
-          <View style={{ height: moderateScale(0) }} />
-        </S.TopButtonBox>
-      )}
-
       {editMode ? (
         <S.Header>{t("TripCreator.headerEdit")}</S.Header>
       ) : (

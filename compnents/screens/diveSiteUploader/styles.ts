@@ -40,8 +40,8 @@ export const Header = styled.Text`
   margin-left: 5%;
   margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Thin};
-  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Medium};
+  color: ${colors.headersBlue};
   align-self: flex-start;
 `;
 

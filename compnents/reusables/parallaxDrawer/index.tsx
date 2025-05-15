@@ -73,12 +73,12 @@ const ParallaxDrawer = ({
             fillColor={colors.themeWhite}
           />
         </S.BackButtonWrapper>
-
-        <S.AltButtonWrapper>
+        
+        {popoverConent && <S.AltButtonWrapper>
         <ButtonIconWithRef ref={iconRef}/>
         </S.AltButtonWrapper>
-
-        <Popover
+      }
+        {popoverConent && <Popover
                 from={iconRef}
                 isVisible={isVisible}
                 onRequestClose={() => setIsVisible(false)}
@@ -88,6 +88,7 @@ const ParallaxDrawer = ({
                 {popoverConent()}
                
               </Popover>
+              }
       </AnimatedSafeAreaView>
       <S.BackgroundContainer>
         <Animated.View

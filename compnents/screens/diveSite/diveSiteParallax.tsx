@@ -140,7 +140,6 @@ export default function DiveSiteParallax() {
       onClose={onClose} 
       onMapFlip={onNavigate}
       popoverConent={popoverConent}
-      handleImageUpload={handleImageUpload}
       isMyShop={isPartnerAccount}
       >
 

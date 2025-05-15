@@ -132,34 +132,8 @@ export default function DiveSiteScreen({
     }).catch(console.error);
   };
 
-  const openPicUploader = () => {
-    setPinValues({
-      ...pinValues,
-      Latitude: String(selectedDiveSite.lat),
-      Longitude: String(selectedDiveSite.lng),
-      siteName: selectedDiveSite.name,
-    });
-    setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("PictureUploadScreen");
-    useButtonPressHelper(
-      "PictureUploadScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
-  };
-
   return (
     <S.ContentContainer>
-
-
-      {/* <TouchableWithoutFeedback onPress={openPicUploader}>
-        <View style={styles.contributeButton}>
-          <Text style={styles.contributeButtonText}>{t('DiveSite.addSighting')}</Text>
-        </View>
-      </TouchableWithoutFeedback> */}
-
       <S.InputGroupContainer>
         <S.SiteNameContainer>
           <S.Header>{selectedDiveSite.name}</S.Header>
@@ -219,12 +193,3 @@ export default function DiveSiteScreen({
   );
 }
 
-const styles = StyleSheet.create({
-  contributeButton: [
-    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
-    screenSecondaryButton,
-  ],
-  contributeButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
-
-  
-});
