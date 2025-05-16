@@ -44,6 +44,8 @@ import { useTranslation } from "react-i18next";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Label from "../../reusables/label";
 import Icon from "../../../icons/Icon";
+import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
+import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -71,6 +73,9 @@ export default function DiveSiteScreen({
   );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
+  );
+  const { selectedProfile, setSelectedProfile } = useContext(
+    SelectedProfileContext
   );
   const { t } = useTranslation();
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
@@ -132,6 +137,26 @@ export default function DiveSiteScreen({
     }).catch(console.error);
   };
 
+  const handleProfileMove = async (userName: string) => {
+    const picOwnerAccount = await grabProfileByUserName(userName);
+
+    if (profile[0].UserID === picOwnerAccount[0].UserID) {
+      return;
+    }
+
+    setSelectedProfile(picOwnerAccount);
+    setLevelOneScreen(false);
+    setPreviousButtonID(activeScreen);
+    setActiveScreen("ProfileScreen");
+    useButtonPressHelper(
+      "ProfileScreen",
+      activeScreen,
+      levelTwoScreen,
+      setLevelTwoScreen
+    );
+    closeParallax(1)
+  };
+
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
@@ -170,10 +195,15 @@ export default function DiveSiteScreen({
   return (
     <S.PhotoContainer key={`${photoPacket.dateTaken}`}>   
       <S.PacketHeader>
-        <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
+
+      <S.HeaderWrapper>
         <S.IconWrapper>
         <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
         </S.IconWrapper>
+
+        <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
+      </S.HeaderWrapper>
+
       </S.PacketHeader>
       {photoPacket.photos.length > 0 &&
         photoPacket.photos.map((photo, index) => {
@@ -183,6 +213,7 @@ export default function DiveSiteScreen({
               pic={photo}
               dataSetType={"DiveSitePhotos"}
               diveSiteName={photoPacket.name}
+              profileViewAction={() => handleProfileMove(photo.UserName)}
             />
           );
         })}

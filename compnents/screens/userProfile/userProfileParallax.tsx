@@ -39,7 +39,7 @@ export default function UserProfileParallax() {
 
   useEffect(() => {
     if (
-      (selectedProfile && selectedProfile[0].userId === profile[0].UserID)
+      (selectedProfile && selectedProfile[0].UserID === profile[0].UserID)
     ) {
       setIsMyProfile(true);
     } else {
@@ -53,6 +53,7 @@ export default function UserProfileParallax() {
     
     setProfileVals({
       id: selectedProfile &&  selectedProfile[0].id,
+      name: selectedProfile && selectedProfile[0].UserName,
       bio: selectedProfile &&  selectedProfile[0].profileBio,
       photo: photoName,
     });
@@ -88,7 +89,6 @@ export default function UserProfileParallax() {
   };
   
   const onClose = () => {
-    setSelectedProfile(null);
     setLevelTwoScreen(false);
   };
 
@@ -115,21 +115,19 @@ export default function UserProfileParallax() {
   const popoverConent = () => {
     return (
     <>
-    {/* <IconWithLabel 
+    <IconWithLabel 
     label="Change Header Image"
     iconName="camera-flip-outline"
     buttonAction={() => handleImageUpload()}
     />
     <IconWithLabel 
     label="Open Settings"
-    iconName="diving-scuba-flag"
+    iconName="settings"
     buttonAction={() => openSettingsScreen()}
-    /> */}
+    />
     </>
     )
   };
-
-  console.log(profileVals)
 
   return (
     <ParallaxDrawer 

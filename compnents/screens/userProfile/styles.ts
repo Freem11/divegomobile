@@ -28,10 +28,10 @@ export const PhotoContainer = styled.View`
 `;
 
 export const PacketHeader = styled.View`
-  width: 100%;
+  width: 90%;
   font-family: ${activeFonts.Light};
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   align-content: center;
 `;
@@ -46,7 +46,7 @@ export const PacketHeaderItem = styled.Text`
 `;
 
 export const Header = styled.Text`
-;
+  margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.headersBlue};
@@ -54,8 +54,7 @@ export const Header = styled.Text`
   text-align: center;
 `;
 
-export const SiteNameContainer = styled.View`
-  flex-direction: row;
+export const UserNameContainer = styled.View`
   justify-content: center;
   align-items: flex-start;
 `;
@@ -78,11 +77,11 @@ export const LabelWrapper = styled.View`
   align-items: center;
 `;
 
-
 export const IconWrapper = styled.View`
-    width: ${moderateScale(24)}px;
-    height: ${moderateScale(24)}px;
-      margin-right: ${moderateScale(4)}px;
+  width: ${moderateScale(24)}px;
+  height: ${moderateScale(24)}px;
+  margin-bottom: ${moderateScale(0)}px;
+  margin-right: ${moderateScale(4)}px;
 `;
 
 

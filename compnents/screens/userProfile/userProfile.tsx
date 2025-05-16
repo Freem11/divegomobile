@@ -1,17 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
-  View,
-  Dimensions,
-  Text,
-  ScrollView,
-  Platform,
-  TouchableWithoutFeedback,
+  Dimensions
 } from "react-native";
-import MaskedView from "@react-native-masked-view/masked-view";
-import { LinearGradient } from "expo-linear-gradient";
-import WavyHeaderDynamic from "../wavyHeaderDynamic";
-import PlainTextInput from "../plaintextInput";
+import PlainTextInput from '../../reusables/plainTextInput';
 import {
   activeFonts,
   colors,
@@ -21,7 +13,8 @@ import {
   buttonTextAlt,
   buttonText
 } from "../../styles";
-import { moderateScale, s } from "react-native-size-matters";
+import * as S from "./styles";
+import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
@@ -30,12 +23,10 @@ import { SelectedProfileContext } from "../../contexts/selectedProfileModalConte
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SessionContext } from "../../contexts/sessionContext";
 import { getPhotosByUserWithExtra } from "../../../supabaseCalls/photoSupabaseCalls";
-import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
-import { MaterialIcons } from "@expo/vector-icons";
+import { grabProfileByUserName, updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
 import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
-import BottomDrawer from '../bottomDrawer/animatedBottomDrawer';
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,
@@ -44,6 +35,11 @@ import {
 } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { getProfileWithStats } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useTranslation } from "react-i18next";
+import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
+import Icon from "../../../icons/Icon";
+import Label from "../../reusables/label";
+import { Photo } from "../../entities/photos";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -67,10 +63,11 @@ export default function UserProfileScreen({
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
+  const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [isNotVisitor, setIsNotVisitor] = useState(true);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { setLevelTwoScreen } = useContext(
+  const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { levelOneScreen, setLevelOneScreen } = useContext(
@@ -208,13 +205,6 @@ export default function UserProfileScreen({
     }
   };
 
-
-  // const onClose = () => {
-  //   setVisitProfileVals(null);
-  //   setSelectedProfile(null);
-  //   setLevelTwoScreen(false);
-  // };
-
   const openSettings = () => {
     setLevelTwoScreen(false);
     setPreviousButtonID(activeScreen);
@@ -226,7 +216,6 @@ export default function UserProfileScreen({
       setLevelOneScreen
     );
   };
-
 
   const handleFollow = async () => {
 
@@ -249,16 +238,22 @@ export default function UserProfileScreen({
       }
     }
   };
+
+  const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
+    setSelectedDiveSite({
+      SiteName: photoPacket.name,
+      Latitude: pic.latitude,
+      Longitude: pic.longitude
+    });
+    closeParallax(1)
+    setLevelTwoScreen(false);
+  };
+
   return (
-    <View style={styles.container}>
-      {/* <MaterialIcons
-        name="chevron-left"
-        size={moderateScale(48)}
-        color={colors.themeWhite}
-        onPress={() => onClose()}
-        style={styles.backButton}
-      /> */}
-      {visitProfileVals ? (
+    <S.ContentContainer>
+      <S.InputGroupContainer>
+
+      {/* {visitProfileVals ? (
         <TouchableWithoutFeedback onPress={() => handleFollow()}>
           <View style={userFollows ? styles.followButtonAlt : styles.followButton}>
             <Text style={userFollows ? styles.followButtonTextAlt : styles.followButtonText}>{userFollows ? t('UserProfile.userDoesFollow') : t('UserProfile.UserDoesNotFollow')}</Text>
@@ -283,120 +278,80 @@ export default function UserProfileScreen({
             onPress={() => handleImageUpload()}
           />
         </View>
-      )}
+      )} */}
 
-      <View style={styles.contentContainer}>
-        <View style={styles.nameContainer}>
-          {profileVals && (
-            <PlainTextInput
-              content={
-                visitProfileVals
-                  ? visitProfileVals.userName
-                  : profileVals.userName
-              }
-              fontSz={fontSizes.Header}
-              isEditModeOn={visitProfileVals ? false : isEditModeOn}
-              setIsEditModeOn={setIsEditModeOn}
-              isNotVisitor={isNotVisitor}
-              onChangeText={(nameText) =>
-                setProfileVals({ ...profileVals, userName: nameText })
-              }
-            />
-          )}
-
-          {userFail && userFail.length > 0 ? (
+        <S.UserNameContainer>
+          <S.Header>{selectedProfile[0].UserName}</S.Header>
+          {/* {userFail && userFail.length > 0 ? (
             <Text style={styles.erroMsg}>{userFail}</Text>
           ) : (
             <View style={styles.erroMsgEmpty}></View>
-          )}
-        </View>
-        <MaskedView
-          maskElement={
-            <LinearGradient
-              style={{ flex: 1 }}
-              colors={["white", "transparent"]}
-              start={{ x: 0.5, y: 0.7 }}
-            ></LinearGradient>
-          }
-        >
-          <View style={styles.scrollViewBox}>
-            <ScrollView>
-              {profileVals && (
+          )} */}
+        </S.UserNameContainer>
+   
+             {selectedProfile && (
                 <PlainTextInput
-                  content={
-                    visitProfileVals ? visitProfileVals.bio : profileVals.bio
-                  }
-                  fontSz={fontSizes.StandardText}
-                  isEditModeOn={visitProfileVals ? false : isEditModeOn}
+                  placeholder={`A little about ${selectedProfile[0].UserName}`}
+                  value={selectedProfile[0].profileBio}
+                  isMyShop={isMyShop}
+                  isEditModeOn={isEditModeOn}
                   setIsEditModeOn={setIsEditModeOn}
-                  isNotVisitor={isNotVisitor}
                   onChangeText={(bioText) =>
-                    setProfileVals({ ...profileVals, bio: bioText })
+                    setSelectedProfile({ ...selectedProfile, profileBio: bioText })
                   }
                 />
-              )}
-            </ScrollView>
-          </View>
-        </MaskedView>
-      </View>
+              )} 
 
-      {/* <WavyHeaderDynamic
-        customStyles={styles.svgCurve}
-        image={
-          visitProfileVals
-            ? visitProfileVals && visitProfileVals.photo
-            : profileVals && profileVals.photo
-        }
-      ></WavyHeaderDynamic> */}
+      </S.InputGroupContainer>
 
-      {/* <BottomDrawer
-        dataSet={profilePhotos}
-        dataSetType={"ProfilePhotos"}
-        placeHolder={"Say a little about yourself"}
-        setVisitProfileVals={setVisitProfileVals}
-        lowerBound={drawerLowerBound}
-        upperBound={drawerUpperBound}
-        drawerHeader={
-          (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
-          t('UserProfile.drawerHeader')
-        }
-        emptyDrawer={
-          (visitProfileVals ? visitProfileVals.userName : profile[0].UserName) +
-          t('UserProfile.emptyDrawer')
-        }
-      /> */}
-    </View>
+      <S.LabelWrapper>
+            <Label label="Sea Life Sightings" />
+        </S.LabelWrapper>
+        
+      {profilePhotos && profilePhotos.map((photoPacket, index) => {
+  return (
+    <S.PhotoContainer key={`${photoPacket.id}-${index}`}>   
+      <S.PacketHeader key={`${photoPacket.id}-${index}`}>
+  
+      <S.HeaderWrapper>
+        <S.IconWrapper>
+          <Icon name={'anchor'} fill={colors.primaryBlue}/>
+        </S.IconWrapper>
+
+          <S.PacketHeaderItem>{photoPacket.name}</S.PacketHeaderItem>
+      </S.HeaderWrapper>
+
+      <S.HeaderWrapper>
+        <S.IconWrapper>
+          <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
+        </S.IconWrapper>
+
+          <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
+      </S.HeaderWrapper>
+
+      </S.PacketHeader>
+
+      {photoPacket.photos.length > 0 &&
+        photoPacket.photos.map((photo, index) => {
+          return (
+            <SeaLifeImageCard
+              key={`${photo.id}-${index}`}
+              pic={photo}
+              dataSetType={"DiveSitePhotos"}
+              diveSiteName={photoPacket.name}
+              diveSiteAction={() => handleDiveSiteMove(photo, photoPacket)}
+            />
+          );
+        })}
+    </S.PhotoContainer>
+  );
+})}
+    </S.ContentContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-    height: windowHeight,
-  },
-  contentContainer: {
-    alignItems: "left",
-    zIndex: 15,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    marginTop: Platform.OS === "ios" ? windowHeight / 2.4 : windowHeight / 2.2,
-    width: "100%",
-  },
-  nameContainer: {
-    // zIndex: 1,
-    flexDirection: "row",
-    width: "auto",
-    marginTop: Platform.OS === "ios" ? windowHeight / 50 : windowHeight / 50,
-    marginHorizontal: "0%",
-  },
-  scrollViewBox: {
-    height: windowHeight / 4.5,
-  },
-  backButton: [{ zIndex: 50, position: "absolute", top: "5%", left: "2%" }],
+
   settingsButton: [
     { zIndex: 10, position: "absolute", top: "5%", right: "3%" },
   ],
@@ -413,11 +368,7 @@ const styles = StyleSheet.create({
   ],
   followButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   followButtonTextAlt: [buttonText, { marginHorizontal: moderateScale(5) }],
-  svgCurve: {
-    position: "absolute",
-    bottom: 0,
-    width: Dimensions.get("window").width,
-  },
+
   erroMsg: {
     minHeight: moderateScale(34),
     fontSize: moderateScale(fontSizes.SmallText),

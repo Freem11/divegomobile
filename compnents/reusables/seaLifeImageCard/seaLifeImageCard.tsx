@@ -50,6 +50,9 @@ interface PictureProps {
   dataSetType: string;
   diveSiteName?: string;
   setVisitProfileVals?: (val: any) => void;
+  diveSiteAction?: () => void;
+  profileViewAction?: () => void;
+
 }
 
 const SeaLifeImageCard = (props: PictureProps) => {
@@ -121,16 +124,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
     );
   };
 
-  const handleDiveSiteMove = async (pic: Photo) => {
-    setSelectedDiveSite({
-      SiteName: selectedDiveSite.name,
-      Latitude: pic.latitude,
-      Longitude: pic.longitude
-    });
-    setVisitProfileVals(null);
-    setSelectedProfile(null);
-    setLevelTwoScreen(false);
-  };
 
   const convertBase64 = async (photo: string) => {
     const temp = photo.split("/");
@@ -241,15 +234,15 @@ const SeaLifeImageCard = (props: PictureProps) => {
           <S.LabelWrapper>
             <S.TitleText>{pic.label}</S.TitleText>
 
-            {dataSetType === "ProfilePhotos" ? (
+            {activeScreen === "ProfileScreen" ? (
               <S.NavigateTextPressable>
-                <S.NavigateText onPress={() => handleDiveSiteMove(pic)}>
+                <S.NavigateText onPress={props.diveSiteAction}>
                   View Site
                 </S.NavigateText>
               </S.NavigateTextPressable>
             ) : (
               <S.NavigateTextPressable>
-                <S.NavigateText onPress={() => handleFollow(pic.UserName)}>
+                <S.NavigateText onPress={props.profileViewAction}>
                   {pic.UserName}
                 </S.NavigateText>
               </S.NavigateTextPressable>
