@@ -177,5 +177,14 @@
         "whatYouSaw": "Please tell us what you saw",
         "whenYouSaw": "Please tell us when you saw it",
         "noPicture": "No picture uploaded"
+    },
+    "Toast": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "warningMessage": "Something is missing...",
+        "errorMessage": "Something went wrong...",
+        "successMessage": "Everything went just fine!"
     }
 }

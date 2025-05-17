@@ -6,10 +6,8 @@ import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { PinContext } from "../../contexts/staticPinContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
-import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
-import { Alert } from "react-native";
+import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -30,8 +28,6 @@ export const INIT_FORM_STATE: Form = {
 export default function PicUploader() {
   const { pinValues, setPinValues } = useContext(PinContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
-  const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -71,8 +67,7 @@ export default function PicUploader() {
     const { PicDate, Animal, Latitude, Longitude, UserId } = pinValues;
 
     if (!localPreviewUri || !PicDate || !Animal) {
-      setActiveConfirmationID("ConfirmationCaution");
-      setConfirmationModal(true);
+      showWarning("Please fill in all required fields.");
       return;
     }
 
@@ -101,23 +96,17 @@ export default function PicUploader() {
           fileName: fullPath,
         });
 
-        throw new Error("Database insertion failed");
+        throw new Error("Failed to save a photo");
       }
       // Step 5: Success
       setConfirmationType("Sea Creature Submission");
-      setActiveConfirmationID("ConfirmationSuccess");
-      setConfirmationModal(true);
+      showSuccess("Photo uploaded successfully!");
       resetForm();
       setLevelTwoScreen(false);
-      setLocalPreviewUri(null); 
+      setLocalPreviewUri(null);
     } catch (err) {
-      Alert.alert(
-        "Error",
-        err.message || "Something went wrong. Please try again.",
-        [{ text: "OK" }]
-      );
-      setActiveConfirmationID("ConfirmationCaution");
-      setConfirmationModal(true);
+      console.error("Error uploading image:", err);
+      showError(err.message);
     } finally {
       setIsUploading(false);
     }
