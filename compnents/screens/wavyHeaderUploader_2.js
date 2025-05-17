@@ -6,7 +6,7 @@ import {
   Dimensions,
   ImageBackground,
 } from "react-native";
-import { removePhoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
+import { removePhoto } from "../cloudflareBucketCalls/cloudflareAWSCalls";
 import { chooseImageHandler, imageUpload } from "./imageUploadHelpers";
 import { moderateScale } from "react-native-size-matters";
 import Svg, { Path } from "react-native-svg";

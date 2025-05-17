@@ -81,7 +81,7 @@ export default function TextInputField(props) {
       ) : null}
       {(placeHolderText === "Sea Life Encountered" ||
         placeHolderText === "Search by Dive Site name or Location") &&
-        animal.length > 1 ? (
+        animal?.length > 1 ? (
         <MaterialIcons
           name="highlight-remove"
           size={moderateScale(22)}
