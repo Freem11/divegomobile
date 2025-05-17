@@ -14,6 +14,7 @@ import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterPara
 import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
 
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
 
