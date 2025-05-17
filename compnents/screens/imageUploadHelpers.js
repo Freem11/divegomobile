@@ -41,7 +41,6 @@ export const imageUpload = async (image) => {
   const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
     encoding: FileSystem.EncodingType.Base64,
   });
-
   await uploadphoto(fileInfo, fileName);
 
   return (fileName);

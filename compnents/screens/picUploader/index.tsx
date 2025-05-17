@@ -53,10 +53,16 @@ export default function PicUploader() {
   };
 
   const tryUpload = async () => {
-    let fileName = null;
     try {
-      fileName = await imageUpload(localPreviewUri);
-      return fileName
+      const image = {
+        assets: [
+          {
+            uri: localPreviewUri,
+          },
+        ],
+      };
+      const fileName = await imageUpload(image);
+      return fileName;
     } catch (e) {
       return null;
     }
@@ -64,7 +70,6 @@ export default function PicUploader() {
   const onSubmit = async () => {
     const { PicDate, Animal, Latitude, Longitude, UserId } = pinValues;
 
-    // Step 1: Validate
     if (!localPreviewUri || !PicDate || !Animal) {
       setActiveConfirmationID("ConfirmationCaution");
       setConfirmationModal(true);
@@ -76,14 +81,12 @@ export default function PicUploader() {
     try {
       // Step 2: Upload image
       const fileName = await tryUpload();
-
       if (!fileName) {
         throw new Error("Photo upload failed");
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
 
-      // Step 3: Insert photo wait entry
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
         label: Animal,
@@ -92,9 +95,7 @@ export default function PicUploader() {
         longitude: Longitude,
         UserId,
       });
-
       if (error) {
-        // Step 4: Delete uploaded file if DB insertion fails
         await removePhoto({
           filePath: FILE_PATH,
           fileName: fullPath,
@@ -102,14 +103,14 @@ export default function PicUploader() {
 
         throw new Error("Database insertion failed");
       }
-
       // Step 5: Success
       setConfirmationType("Sea Creature Submission");
       setActiveConfirmationID("ConfirmationSuccess");
       setConfirmationModal(true);
       resetForm();
+      setLevelTwoScreen(false);
+      setLocalPreviewUri(null); 
     } catch (err) {
-      // Step 6: Alert user
       Alert.alert(
         "Error",
         err.message || "Something went wrong. Please try again.",
