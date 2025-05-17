@@ -230,11 +230,6 @@ export default function UserProfileScreen({
 
         <S.UserNameContainer>
           <S.Header>{selectedProfile[0].UserName}</S.Header>
-          {/* {userFail && userFail.length > 0 ? (
-            <Text style={styles.erroMsg}>{userFail}</Text>
-          ) : (
-            <View style={styles.erroMsgEmpty}></View>
-          )} */}
         </S.UserNameContainer>
    
              {selectedProfile && (
@@ -299,7 +294,6 @@ export default function UserProfileScreen({
 }
 
 const styles = StyleSheet.create({
-
   followButton: [
     { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
     screenSecondaryButton,
@@ -310,21 +304,4 @@ const styles = StyleSheet.create({
   ],
   followButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
   followButtonTextAlt: [buttonText, { marginHorizontal: moderateScale(5) }],
-
-  erroMsg: {
-    minHeight: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
-  },
-  erroMsgEmpty: {
-    // height: moderateScale(34),
-    fontSize: moderateScale(fontSizes.SmallText),
-    fontFamily: activeFonts.Italic,
-    color: "maroon",
-    marginHorizontal: "10%",
-    marginTop: "1%",
-  },
 });
