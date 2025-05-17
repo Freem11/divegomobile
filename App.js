@@ -10,6 +10,9 @@ import { Dimensions, Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import Toast from 'react-native-toast-message';
+import * as ScreenOrientation from "expo-screen-orientation";
+import { I18nextProvider } from "react-i18next";
 import { MapCenterContext } from "./compnents/contexts/mapCenterContext";
 import { MapZoomContext } from "./compnents/contexts/mapZoomContext";
 import { MapRegionContext } from "./compnents/contexts/mapRegionContext";
@@ -19,14 +22,13 @@ import MapPage from "./compnents/mapPage";
 import Authentication from "./compnents/authentication";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
-import * as ScreenOrientation from "expo-screen-orientation";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
-import { I18nextProvider } from "react-i18next";
 import { i18n, initI18n } from "./i18n";
+import { toastConfig } from "./compnents/toast";
 
 const { width, height } = Dimensions.get("window");
 
-export default function App () {
+export default function App() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
@@ -178,6 +180,8 @@ export default function App () {
           </MapZoomContext.Provider>
         </PinSpotContext.Provider>
       </AppContextProvider>
+      <Toast config={toastConfig} visibilityTime={2000} />
+      {/* <Toast /> */}
     </GestureHandlerRootView>
   );
 }

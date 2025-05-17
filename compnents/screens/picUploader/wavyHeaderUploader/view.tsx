@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
 import { colors } from "../../../styles";
+import Toast from "react-native-toast-message";
+import { TOAST_MAPS } from "../../../toast";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -19,7 +21,7 @@ export default function WavyHeaderUploaderView({
   isLoading,
   onPressUpload,
 }: ViewProps) {
-    
+
   const { t } = useTranslation();
 
   return (
