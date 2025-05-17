@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import UserProfileScreen from './userProfile';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import noImage from '../../png/NoImage.jpg';
+import noImage from '../../png/NoImage.png';
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
@@ -18,6 +18,9 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
 import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
+import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
+import { SessionContext } from "../../contexts/sessionContext";
 
 export default function UserProfileParallax() {
   const { t } = useTranslation();
@@ -36,6 +39,9 @@ export default function UserProfileParallax() {
   const [profileVals, setProfileVals] = useState(null);
   const { profile } = useContext(UserProfileContext);
   const [isMyProfile, setIsMyProfile] = useState(false);
+  const { activeSession } = useContext(SessionContext);
+  
+  const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
   useEffect(() => {
     if (
@@ -44,6 +50,7 @@ export default function UserProfileParallax() {
       setIsMyProfile(true);
     } else {
       setIsMyProfile(false);
+      followCheck()
     }
 
     let photoName = null;
@@ -59,6 +66,34 @@ export default function UserProfileParallax() {
     });
 
   }, [selectedProfile]);
+
+  async function followCheck() {
+  let follows = await checkIfUserFollows(
+    profile[0].UserID,
+    selectedProfile[0].UserID
+  );
+  if (follows && follows.length > 0) {
+    setIsfFollowing(follows[0].id);
+  }
+}
+
+const handleFollow = async () => {
+
+  let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+  if (!permissionGiven) {
+    return
+  }
+
+  if (isFollowing) {
+    deleteUserFollow(isFollowing);
+  } else {
+      let newRecord = await insertUserFollow(
+        profile[0].UserID,
+        selectedProfile[0].UserID
+      );
+      setIsfFollowing(newRecord[0].id);    
+  }
+};
 
   const handleImageUpload = async () => {
     try {

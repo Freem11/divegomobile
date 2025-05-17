@@ -13,7 +13,6 @@ import { useParallaxDrawer } from "./useParallelDrawer";
 import Popover from "react-native-popover-view";
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
-import IconWithLabel from "../iconWithLabal";
 
 type ParallaxDrawerProps = {
   headerImage: any;
@@ -57,7 +56,6 @@ const ParallaxDrawer = ({
           icon="more"
           size='headerIcon'
           onPress={() => setIsVisible(true)}
-          // fillColor={colors.neutralGrey}
         />
     </View>
   ));

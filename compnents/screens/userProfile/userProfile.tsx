@@ -84,8 +84,6 @@ export default function UserProfileScreen({
   const [userStats, setUserStats] = useState(null);
 
   const { t } = useTranslation()
-  const drawerUpperBound = "90%";
-  const drawerLowerBound = "30%";
 
   const getPhotos = async () => {
 
@@ -102,24 +100,6 @@ export default function UserProfileScreen({
       );
     }
     setProfilePhotos(success);
-  };
-
-  const getProfile = async () => {
-    let userID;
-    if (selectedProfile) {
-      userID = selectedProfile[0].UserID;
-    } else {
-      userID = profile[0].UserID;
-    }
-
-    try {
-      const success = await getProfileWithStats(userID);
-      if (success) {
-        setUserStats(success);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
   };
 
   const getFollowStatus = async () => {
@@ -144,33 +124,13 @@ export default function UserProfileScreen({
     });
     setTempUserName(profile[0].UserName);
 
-    async function followCheck() {
-      let alreadyFollows = await checkIfUserFollows(
-        profile[0].UserID,
-        selectedProfile[0].UserID
-      );
-      if (alreadyFollows && alreadyFollows.length > 0) {
-        setUserFollows(true);
-        setFollowData(alreadyFollows[0].id);
-      }
-    }
-    if (selectedProfile) { followCheck() }
-
   };
 
 
   useEffect(() => {
-    getProfile();
-    getPhotos();
-    getFollowStatus();
-  }, []);
-
-  useEffect(() => {
-    getProfile();
     getPhotos();
     getFollowStatus();
   }, [selectedProfile]);
-
 
 
   useEffect(() => {
@@ -203,18 +163,6 @@ export default function UserProfileScreen({
         console.log({ title: "Error19", message: e.message });
       }
     }
-  };
-
-  const openSettings = () => {
-    setLevelTwoScreen(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("SettingsScreen");
-    useButtonPressHelper(
-      "SettingsScreen",
-      activeScreen,
-      levelOneScreen,
-      setLevelOneScreen
-    );
   };
 
   const handleFollow = async () => {
@@ -352,12 +300,6 @@ export default function UserProfileScreen({
 
 const styles = StyleSheet.create({
 
-  settingsButton: [
-    { zIndex: 10, position: "absolute", top: "5%", right: "3%" },
-  ],
-  addPhotoButton: [
-    { zIndex: 10, position: "absolute", top: "32%", right: "5%" },
-  ],
   followButton: [
     { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
     screenSecondaryButton,
