@@ -200,34 +200,6 @@ export default function UserProfileScreen({
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-
-      {/* {visitProfileVals ? (
-        <TouchableWithoutFeedback onPress={() => handleFollow()}>
-          <View style={userFollows ? styles.followButtonAlt : styles.followButton}>
-            <Text style={userFollows ? styles.followButtonTextAlt : styles.followButtonText}>{userFollows ? t('UserProfile.userDoesFollow') : t('UserProfile.UserDoesNotFollow')}</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      ) : (
-        <View style={styles.settingsButton}>
-          <MaterialIcons
-            name="settings"
-            size={moderateScale(46)}
-            color={colors.themeWhite}
-            onPress={openSettings}
-          />
-        </View>
-      )}
-      {visitProfileVals ? null : (
-        <View style={styles.addPhotoButton}>
-          <MaterialIcons
-            name="add-a-photo"
-            size={moderateScale(30)}
-            color={colors.themeWhite}
-            onPress={() => handleImageUpload()}
-          />
-        </View>
-      )} */}
-
         <S.UserNameContainer>
           <S.Header>{selectedProfile[0].UserName}</S.Header>
         </S.UserNameContainer>
@@ -292,16 +264,3 @@ export default function UserProfileScreen({
     </S.ContentContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  followButton: [
-    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
-    screenSecondaryButton,
-  ],
-  followButtonAlt: [
-    { zIndex: 10, position: "absolute", top: "6%", right: "3%" },
-    authenicationButton,
-  ],
-  followButtonText: [buttonTextAlt, { marginHorizontal: moderateScale(5) }],
-  followButtonTextAlt: [buttonText, { marginHorizontal: moderateScale(5) }],
-});
