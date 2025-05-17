@@ -5,7 +5,7 @@ import { i18n } from "../../i18n";
 
 const VISIBILITY_TIME = 3000;
 
-export const TOAST_MAPS = {
+export const TOAST_MAP = {
   info: 'info',
   error: 'error',
   success: 'success',
@@ -15,7 +15,7 @@ export const TOAST_MAPS = {
 
 export const showWarning = (warningMessage) => {
   Toast.show({
-    type: TOAST_MAPS.info,
+    type: TOAST_MAP.info,
     text1: i18n.t("Toast.warning"),
     text2: warningMessage || i18n.t("Toast.warningMessage"),
     visibilityTime: VISIBILITY_TIME,
@@ -24,7 +24,7 @@ export const showWarning = (warningMessage) => {
 
 export const showError = (errorMessage) => {
   Toast.show({
-    type: TOAST_MAPS.error,
+    type: TOAST_MAP.error,
     text1: i18n.t("Toast.error"),
     text2: errorMessage || i18n.t("Toast.errorMessage"),
     visibilityTime: VISIBILITY_TIME,
@@ -33,7 +33,7 @@ export const showError = (errorMessage) => {
 
 export const showSuccess = (successMessage) => {
   Toast.show({
-    type: TOAST_MAPS.success,
+    type: TOAST_MAP.success,
     text1: i18n.t("Toast.success"), 
     text2: successMessage || i18n.t("Toast.successMessage"),
     visibilityTime: VISIBILITY_TIME,
@@ -42,7 +42,7 @@ export const showSuccess = (successMessage) => {
 
 // still not finished! need to adjust, but its the besic!
 export const toastConfig = {
-  [TOAST_MAPS.one_button]: ({ text1, text2, props }) => (
+  [TOAST_MAP.one_button]: ({ text1, text2, props }) => (
     <View style={[styles.base, styles.info]}>
       <Text style={styles.title}>{text1}</Text>
       <Text style={styles.message}>{text2}</Text>
@@ -52,7 +52,7 @@ export const toastConfig = {
     </View>
   ),
 
-  [TOAST_MAPS.two_buttons]: ({ text1, text2, props }) => (
+  [TOAST_MAP.two_buttons]: ({ text1, text2, props }) => (
     <View style={[styles.base, styles.warning]}>
       <Text style={styles.title}>{text1}</Text>
       <Text style={styles.message}>{text2}</Text>

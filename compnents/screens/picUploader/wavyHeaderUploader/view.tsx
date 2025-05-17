@@ -6,7 +6,7 @@ import * as S from "./styles";
 import { useTranslation } from "react-i18next";
 import { colors } from "../../../styles";
 import Toast from "react-native-toast-message";
-import { TOAST_MAPS } from "../../../toast";
+import { TOAST_MAP } from "../../../toast";
 
 const windowWidth = Dimensions.get("window").width;
 

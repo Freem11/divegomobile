@@ -7,7 +7,7 @@ import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls"
 import { PinContext } from "../../contexts/staticPinContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
-import { showError, showSuccess, showWarning, TOAST_MAPS } from "../../toast";
+import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
