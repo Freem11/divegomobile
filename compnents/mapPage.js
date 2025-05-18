@@ -9,7 +9,6 @@ import {
   Keyboard,
 } from "react-native";
 import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
-import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
 import Map from "./GoogleMap";
 import BottomMenu from './reusables/bottomMenu';
@@ -18,7 +17,6 @@ import SiteSearchButton from './FABMenu/siteSearchButton'
 import DiveSiteButton from './FABMenu/diveSiteButton'
 import GuidesButton from './FABMenu/guidesButton'
 import ItineraryListButton from "./FABMenu/itineraryCreatorButton"
-import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
@@ -76,6 +74,7 @@ import Animated, {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { getLocales } from "expo-localization";
+import { EmailFeedback } from "./feed/emailFeedback";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -116,7 +115,7 @@ export default function MapPage() {
 
   const locales = getLocales();
   // console.log("locales", locales);
-  
+
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
@@ -388,7 +387,7 @@ export default function MapPage() {
   };
 
   const PARTNER_ACCOUNT_STATUS =
-  (profile[0] && profile[0].partnerAccount) || false;
+    (profile[0] && profile[0].partnerAccount) || false;
 
 
   return (
@@ -430,51 +429,16 @@ export default function MapPage() {
               />
             </TouchableWithoutFeedback>
           ) : null}
+          {mapConfig === 0 && <EmailFeedback />}
 
-          {mapConfig === 0 ? (
-            <View style={styles.FMenuAnimate} pointerEvents={"box-none"}>
-              <Animated.View style={[styles.feedback, feedbackReveal]}>
-                <Text style={styles.feedRequest} onPress={() => handleEmail()}>
-                  Send Scuba SEAsons feedback
-                </Text>
-                <TouchableWithoutFeedback
-                  style={{
-                    width: moderateScale(30),
-                    height: moderateScale(23),
-                    marginTop: moderateScale(3),
-                  }}
-                  onPress={startFeedbackAnimations}
-                >
-                  <Octicons
-                    name="paper-airplane"
-                    size={moderateScale(24)}
-                    color="white"
-                    style={{ marginTop: moderateScale(3) }}
-                  />
-                </TouchableWithoutFeedback>
-              </Animated.View>
-
-
-         
-
-              {/* <View style={styles.FMenu}>
-                <FABMenu
-                  style={{ zIndex: 2 }}
-                  toggleDiveSites={toggleDiveSites}
-                />
-              </View> */}
-          
-            </View>
-          ) : null}
-
-        {mapConfig === 0 ?
-          <BottomMenu>
-            <ProfileButton />
-            <SiteSearchButton />
-            <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
-            <DiveSiteButton />
-            {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-          </BottomMenu> : null}
+          {mapConfig === 0 ?
+            <BottomMenu>
+              <ProfileButton />
+              <SiteSearchButton />
+              <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
+              <DiveSiteButton />
+              {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+            </BottomMenu> : null}
 
           {/* {mapConfig === 0 ? <View style={styles.iosBottom}/> : null} */}
           <View
@@ -509,10 +473,10 @@ export default function MapPage() {
                   mapConfig === 1
                     ? onNavigate
                     : mapConfig === 2
-                    ? onShopNavigate
-                    : mapConfig === 3
-                    ? onTripSetNavigate
-                    : null
+                      ? onShopNavigate
+                      : mapConfig === 3
+                        ? onTripSetNavigate
+                        : null
                 }
               >
                 <View style={styles.lowerButtonWrapper}>
@@ -520,10 +484,10 @@ export default function MapPage() {
                     {mapConfig === 1
                       ? "Set Pin"
                       : mapConfig === 2
-                      ? "Return to Shop"
-                      : mapConfig === 3
-                      ? "Sites Complete"
-                      : null}
+                        ? "Return to Shop"
+                        : mapConfig === 3
+                          ? "Sites Complete"
+                          : null}
                   </Text>
                 </View>
               </TouchableWithoutFeedback>
@@ -567,7 +531,7 @@ const styles = StyleSheet.create({
   },
   FMenuAnimate: {
     position: "absolute",
-    bottom: Platform.OS ==="ios" ? moderateScale(15) : moderateScale(0),
+    bottom: Platform.OS === "ios" ? moderateScale(15) : moderateScale(0),
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
