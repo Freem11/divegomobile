@@ -40,14 +40,14 @@ export default function PicUploaderView({
 
   return (
     <S.Container>
-      <S.BackButton>
+      {/* <S.BackButton>
         <MaterialIcons
           name="chevron-left"
           size={40}
           color={colors.themeWhite}
           onPress={onClose}
         />
-      </S.BackButton>
+      </S.BackButton> */}
       
       <S.ContentContainer>
         <S.Header>{t("PicUploader.header")}</S.Header>

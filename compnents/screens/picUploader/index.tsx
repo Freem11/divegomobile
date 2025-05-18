@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { Dispatch, useContext, useState } from "react";
 import PicUploaderView from "./view";
 import moment from "moment";
 import { imageUpload } from "../imageUploadHelpers";
@@ -25,13 +25,32 @@ export const INIT_FORM_STATE: Form = {
   diveSiteName: "",
 };
 
-export default function PicUploader() {
+type PicUploaderProps = {
+  onClose: () => void;
+  onMapFlip?: () => void;
+  closeParallax?: (mapConfig: number) => void
+  restoreParallax?: () => void; 
+  handleImageUpload?: () => void;
+  localPreviewUri: string 
+  setLocalPreviewUri: Dispatch<any>
+};
+
+export default function PicUploader({
+  onClose,
+  onMapFlip,
+  closeParallax,
+  restoreParallax,
+  handleImageUpload,
+  localPreviewUri,
+  setLocalPreviewUri
+}: PicUploaderProps) {
+
   const { pinValues, setPinValues } = useContext(PinContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [localPreviewUri, setLocalPreviewUri] = useState(null);
+  // const [localPreviewUri, setLocalPreviewUri] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
   const handleDatePickerConfirm = (selectedDate: Date) => {
@@ -40,13 +59,13 @@ export default function PicUploader() {
     setDatePickerVisible(false);
   };
 
-  const handleImageUpload = async (argPicture) => {
-    setPinValues({
-      ...pinValues,
-      PicFile: `animalphotos/public/${argPicture}`,
-    });
-    setLocalPreviewUri(argPicture);
-  };
+  // const handleImageUpload = async (argPicture) => {
+  //   setPinValues({
+  //     ...pinValues,
+  //     PicFile: `animalphotos/public/${argPicture}`,
+  //   });
+  //   setLocalPreviewUri(argPicture);
+  // };
 
   const tryUpload = async () => {
     try {
@@ -63,6 +82,7 @@ export default function PicUploader() {
       return null;
     }
   };
+
   const onSubmit = async () => {
     const { PicDate, Animal, Latitude, Longitude, UserId } = pinValues;
 
@@ -110,11 +130,6 @@ export default function PicUploader() {
     } finally {
       setIsUploading(false);
     }
-  };
-
-  const onClose = () => {
-    resetForm();
-    setLevelTwoScreen(false);
   };
 
   const resetForm = () => {
