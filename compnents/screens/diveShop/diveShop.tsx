@@ -215,18 +215,6 @@ const handleMapFlip = async (sites: number[]) => {
 
   return (
     <S.ContentContainer>
-
-      {/* {isMyShop && (
-        <View style={styles.addPhotoButton}>
-          <MaterialIcons
-            name="add-a-photo"
-            size={moderateScale(30)}
-            color={colors.themeWhite}
-            onPress={() => handleImageUpload()}
-          />
-        </View>
-      )} */}
-
       <S.InputGroupContainer>
           <S.Header>{selectedShop[0].orgName}</S.Header>
 
