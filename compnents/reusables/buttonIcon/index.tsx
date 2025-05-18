@@ -5,7 +5,7 @@ import { colors } from "../../styles";
 
 type StandardButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
-export type ButtonProps = {
+export type ButtonIconProps = {
   onPress?:   () => void
   icon?:      React.ReactNode
   disabled?:  boolean
@@ -14,7 +14,7 @@ export type ButtonProps = {
   fillColor?: string
 };
 
-export default function ButtonIcon(props: ButtonProps & StandardButtonProps) {
+export default function ButtonIcon(props: ButtonIconProps & StandardButtonProps) {
   const { children, icon, title, fillColor, ...rest } = props;
   return (
     <S.StyledTouchableHighlight {...rest} underlayColor={colors.buttonPressOverlay} onPress={() => props.onPress()}>

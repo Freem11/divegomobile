@@ -97,7 +97,7 @@
         "newTrip": "New Trip"
     },
     "TripCreator": {
-        "header": "Create a New Dive Trip",
+        "header": "New Trip Creation",
         "headerEdit": "Submit Trip Edits",
         "cloneButton": "Clone This Trip",
         "tripNamePlaceholder": "Your Trip's Name",
@@ -105,7 +105,7 @@
         "pricePlaceholder": "Trip Price",
         "startDatePlaceholder": "Start Date",
         "endDatePlaceholder": "End Date",
-        "tripDescriptionPlaceholder": "Please add any further details about your trip that you think would be helpful in promoting your trip to divers, right here",
+        "tripDescriptionPlaceholder": "Please add any further details about your trip that you think would be helpful in promoting your trip to divers.\\n\\nWe recommend a daily itinerary",
         "submitButton": "Submit",
         "selectSitesButton": "Select Dive Sites",
         "drawerHeader": "Possible Sites in this Trip   (Press to Remove)",
@@ -173,6 +173,18 @@
         "fillEmailAndPassword": "Please fill out both email and password",
         "invalidCredentials": "The credentials you supplied are not valid",
         "passwordFormat": "Your password must be 6 characters or greater",
-        "accountExistMsg": "You have already registered this account, please use the log in page"
+        "accountExistMsg": "You have already registered this account, please use the log in page",
+        "whatYouSaw": "Please tell us what you saw",
+        "whenYouSaw": "Please tell us when you saw it",
+        "noPicture": "No picture uploaded"
+    },
+    "Toast": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "warningMessage": "Something is missing...",
+        "errorMessage": "Something went wrong...",
+        "successMessage": "Everything went just fine!"
     }
 }

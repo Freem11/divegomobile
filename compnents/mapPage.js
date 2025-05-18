@@ -1,31 +1,23 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
-  Keyboard,
-} from "react-native";
+import { StyleSheet, View, Text, TouchableWithoutFeedback, Platform, Dimensions, Keyboard } from "react-native";
 import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
-import Map from "./googleMap";
+import Map from "./GoogleMap";
+import BottomMenu from "./reusables/bottomMenu";
+import ProfileButton from "./FABMenu/profileButton";
+import SiteSearchButton from "./FABMenu/siteSearchButton";
+import DiveSiteButton from "./FABMenu/diveSiteButton";
+import GuidesButton from "./FABMenu/guidesButton";
+import ItineraryListButton from "./FABMenu/itineraryCreatorButton";
 import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
 import LevelOneScreen from "../compnents/reusables/levelOneScreen";
 import LevelTwoScreen from "../compnents/reusables/levelTwoScreen";
-import {
-  grabProfileById,
-  updateProfileFeeback,
-} from "./../supabaseCalls/accountSupabaseCalls";
-import {
-  getPhotosWithUser,
-  getPhotosWithUserEmpty,
-} from "./../supabaseCalls/photoSupabaseCalls";
+import { grabProfileById, updateProfileFeeback } from "./../supabaseCalls/accountSupabaseCalls";
+import { getPhotosWithUser, getPhotosWithUserEmpty } from "./../supabaseCalls/photoSupabaseCalls";
 import { newGPSBoundaries } from "./helpers/mapHelpers";
 import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
@@ -85,9 +77,7 @@ export default function MapPage() {
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
+  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
@@ -112,16 +102,13 @@ export default function MapPage() {
 
   const locales = getLocales();
   // console.log("locales", locales);
-  
+
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
 
   const filterAnchorPhotos = async () => {
-    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
-      selectedDiveSite.Latitude,
-      selectedDiveSite.Longitude
-    );
+    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(selectedDiveSite.Latitude, selectedDiveSite.Longitude);
 
     try {
       let photos;
@@ -242,10 +229,7 @@ export default function MapPage() {
 
   const startFTabAnimation = () => {
     if (fTabY.value === 0) {
-      fTabY.value =
-        windowWidth > 700
-          ? withTiming(moderateScale(-80))
-          : withTiming(moderateScale(-80));
+      fTabY.value = windowWidth > 700 ? withTiming(moderateScale(-80)) : withTiming(moderateScale(-80));
       setLabel("Hide Menu");
       setDirection("down");
     } else {
@@ -375,13 +359,10 @@ export default function MapPage() {
     setShowFilterer(false);
     setPreviousButtonID(activeScreen);
     setActiveScreen("SearchScreen");
-    useButtonPressHelper(
-      "SearchScreen",
-      activeScreen,
-      levelOneScreen,
-      setLevelOneScreen
-    );
+    useButtonPressHelper("SearchScreen", activeScreen, levelOneScreen, setLevelOneScreen);
   };
+
+  const PARTNER_ACCOUNT_STATUS = (profile[0] && profile[0].partnerAccount) || false;
 
   return (
     <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
@@ -397,9 +378,7 @@ export default function MapPage() {
                       <PhotoFilterer />
                     </Animated.View>
 
-                    <TouchableWithoutFeedback
-                      onPress={() => setShowFilterer(!showFilterer)}
-                    >
+                    <TouchableWithoutFeedback onPress={() => setShowFilterer(!showFilterer)}>
                       <View style={styles.pullTab}></View>
                     </TouchableWithoutFeedback>
                   </View>
@@ -446,15 +425,26 @@ export default function MapPage() {
                 </TouchableWithoutFeedback>
               </Animated.View>
 
-              <View style={styles.FMenu}>
+              {/* <View style={styles.FMenu}>
                 <FABMenu
                   style={{ zIndex: 2 }}
                   toggleDiveSites={toggleDiveSites}
                 />
-              </View>
+              </View> */}
             </View>
           ) : null}
-          {mapConfig === 0 ? <View style={styles.iosBottom} /> : null}
+
+          {mapConfig === 0 ? (
+            <BottomMenu>
+              <ProfileButton />
+              <SiteSearchButton />
+              <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
+              <DiveSiteButton />
+              {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+            </BottomMenu>
+          ) : null}
+
+          {/* {mapConfig === 0 ? <View style={styles.iosBottom}/> : null} */}
           <View
             pointerEvents={"box-none"}
             style={{
@@ -474,10 +464,7 @@ export default function MapPage() {
                   marginRight: "10%",
                 }}
               >
-                <CircularButton
-                  buttonAction={handleMapSearchButton}
-                  icon="compass"
-                />
+                <CircularButton buttonAction={handleMapSearchButton} icon="compass" />
               </View>
             ) : null}
 
@@ -585,12 +572,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top:
-      windowWidth > 700
-        ? moderateScale(12)
-        : Platform.OS === "android"
-        ? moderateScale(30)
-        : moderateScale(50),
+    top: windowWidth > 700 ? moderateScale(12) : Platform.OS === "android" ? moderateScale(30) : moderateScale(50),
     zIndex: 3,
   },
   filterer: {
@@ -641,7 +623,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: colors.primaryBlue,
     position: "absolute",
-    top: -moderateScale(60),
+    top: -moderateScale(130),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),

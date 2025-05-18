@@ -2,8 +2,8 @@ import { supabase } from "../supabase";
 
 export const photoWaits = async () => {
   const { data, error } = await supabase
-  .from("photoWait")
-  .select();
+    .from("photoWait")
+    .select();
 
   if (error) {
     console.log("couldn't do it 30,", error);
@@ -17,25 +17,26 @@ export const photoWaits = async () => {
 
 export const insertPhotoWaits = async (values) => {
 
-  // console.log("photo waits gets ", values)
-
   const { data, error } = await supabase
-  .from("photoWait")
-  .insert([
-    {
-      photoFile: values.PicFile,
-      label: values.Animal,
-      dateTaken: values.PicDate,
-      latitude: values.Latitude,
-      longitude: values.Longitude,
-      UserID: values.UserId,
-    },
-  ]);
+    .from("photoWait")
+    .insert([
+      {
+        photoFile: values.photoFile,
+        label: values.label,
+        dateTaken: values.dateTaken,
+        latitude: values.Latitude,
+        longitude: values.Longitude,
+        UserID: values.UserId,
+      },
+    ]);
 
   if (error) {
     console.log("couldn't do it 31,", error);
   }
-
+  return {
+    data,
+    error,
+  };
   // if (data) {
   //   console.log(data);
   // }

@@ -1,0 +1,77 @@
+import React, { useContext } from 'react';
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+// import { ModalContext } from '../reusables/modal/context';
+import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import ItineraryCardView from './view';
+import { ItineraryItem } from '../../entities/itineraryItem';
+// import { MapContext } from '../googleMap/mapContext';
+// import { insertItineraryRequest } from '../../supabaseCalls/itinerarySupabaseCalls';
+// import { toast } from 'react-toastify';
+// import screenData from '../newModals/screenData.json';
+// import TripCreatorModal from '../newModals/tripCreatorModal';
+
+type ItineraryCardProps = {
+  itinerary:       ItineraryItem
+  isMyShop?:       boolean
+  buttonOneAction: () => void
+  buttonTwoAction: () => void
+};
+
+export default function ItineraryCard({ itinerary, isMyShop, buttonOneAction, buttonTwoAction }: ItineraryCardProps) {
+  
+  const { setSitesArray } = useContext(SitesArrayContext);
+  // const { setMapConfig, mapRef } = useContext(MapContext);
+  // const { modalShow, modalCancel } = useContext(ModalContext);
+
+  const flipMap = async (siteList: number[]) => {
+    setSitesArray(siteList);
+
+    const itinerizedDiveSites = await getDiveSitesByIDs(siteList);
+
+    if (!itinerizedDiveSites || itinerizedDiveSites.length === 0) {
+      console.error('No dive sites found or itinerizedDiveSites is undefined.');
+      return; // Exit early if itinerizedDiveSites is undefined or empty
+    }
+
+    // const bounds = new google.maps.LatLngBounds();
+    // itinerizedDiveSites.forEach((site) => {
+    //   bounds.extend({ lat: site.lat, lng: site.lng });
+    // });
+
+    // mapRef?.fitBounds(bounds);
+    // setMapConfig(2);
+    // modalCancel();
+  };
+
+  const handleDeleteButton = async (itinerary: ItineraryItem) => {
+    // const { error } = await insertItineraryRequest(itinerary, 'Delete');
+
+    // if (error) {
+    //   toast.error(screenData.TripCard.deleteTripError);
+    // } else {
+    //   toast.success(screenData.TripCard.deleteTripSuccess);
+    // }
+  };
+
+  const handleEditButton = (itineraryInfo: ItineraryItem) => {
+    if (itineraryInfo) {
+      setSitesArray(itineraryInfo.siteList || []);
+      // modalShow(TripCreatorModal, {
+      //   keepPreviousModal: true,
+      //   size:              'large',
+      //   itineraryInfo,
+      //   isEditModeOn:      true,
+      // });
+    }
+  };
+
+  return (
+    <ItineraryCardView
+      itinerary={itinerary}
+      flipMap={flipMap}
+      isMyShop={isMyShop}
+      buttonOneAction={buttonOneAction}
+      buttonTwoAction={buttonTwoAction}
+    />
+  );
+}

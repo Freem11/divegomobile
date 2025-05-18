@@ -10,9 +10,10 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfile from '../screens/userProfile';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
-import DiveSiteUploadScreen from '../screens/diveSiteUploader';
-import TripCreatorPage from '../screens/tripCreator';
+import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
+import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -46,15 +47,15 @@ export default function LevelTwoScreen() {
       {activeScreen === "ProfileScreen" && <UserProfile />}
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen === "PictureUploadScreen" && <PicUploader />}
-      {activeScreen === "DiveSiteUploadScreen" && <DiveSiteUploadScreen />}
-      {activeScreen === "TripCreatorScreen" && <TripCreatorPage />}
+      {activeScreen === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
+      {activeScreen === "TripCreatorScreen" && <TripCreatorParallax />}
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   modalBody: {
-    backgroundColor: colors.themeBlack,
+    backgroundColor: colors.themeWhite,
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
