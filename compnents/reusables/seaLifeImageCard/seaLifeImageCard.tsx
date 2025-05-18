@@ -49,7 +49,7 @@ interface PictureProps {
   pic: Photo;
   dataSetType: string;
   diveSiteName?: string;
-  setVisitProfileVals: (val: any) => void;
+  setVisitProfileVals?: (val: any) => void;
 }
 
 const SeaLifeImageCard = (props: PictureProps) => {
