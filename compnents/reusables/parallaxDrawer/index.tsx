@@ -16,13 +16,13 @@ import { moderateScale } from "react-native-size-matters";
 
 type ParallaxDrawerProps = {
   headerImage: any;
-  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void}>;
+  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number}>;
   onClose: () => void;
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
   isMyShop?: boolean
   isPartnerAccount?: boolean
-  popoverConent?: () => React.JSX.Element
+  popoverConent?: () => React.JSX.Element,
 };
 
 const ParallaxDrawer = ({
@@ -32,7 +32,7 @@ const ParallaxDrawer = ({
   onMapFlip,
   handleImageUpload,
   isMyShop,
-  popoverConent
+  popoverConent,
 }: ParallaxDrawerProps) => {
   
   const {
@@ -43,7 +43,8 @@ const ParallaxDrawer = ({
     animatedSafeAreaStyle,
     contentHeight,
     closeParallax,
-    restoreParallax
+    restoreParallax,
+    bottomHitCount
   } = useParallaxDrawer(onClose, onMapFlip);
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
@@ -121,7 +122,7 @@ const ParallaxDrawer = ({
             >
               <S.EmptyContainer>
               {React.isValidElement(children)
-                ? React.cloneElement(children, { closeParallax, restoreParallax })
+                ? React.cloneElement(children, { closeParallax, restoreParallax, bottomHitCount })
                 : children}
               </S.EmptyContainer>
             </S.Content>

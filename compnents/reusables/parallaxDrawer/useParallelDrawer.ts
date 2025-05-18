@@ -11,7 +11,7 @@ import {
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
@@ -25,6 +25,8 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
   const savedTranslateY = useSharedValue(HALF_HEIGHT);
+  const [bottomHitCount, setBottomHitCount] = useState(1);
+  const hasHitBottom = useSharedValue(false);
 
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -61,6 +63,14 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }
   );
 
+  const handleDrawerHitBottom = () => {
+    setBottomHitCount(prev => prev + 1);
+
+    setTimeout(() => {
+      hasHitBottom.value = false;
+    }, 1000);
+  };
+
   const panGesture = Gesture.Pan()
     .onStart(() => {
       startY.value = translateY.value;
@@ -70,6 +80,13 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const maxY = HALF_HEIGHT;
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
+
+      const isAtBottom = Math.abs(translateY.value - minY) < 2;
+
+      if (isAtBottom && !hasHitBottom.value) {
+        hasHitBottom.value = true;
+        runOnJS(handleDrawerHitBottom)();
+      }
     })
     .onEnd((event) => {
       const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
@@ -154,5 +171,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     contentHeight,
     closeParallax,
     restoreParallax,
+    bottomHitCount
   };
 };

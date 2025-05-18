@@ -55,6 +55,7 @@ type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   isMyShop?: boolean
+  bottomHitCount?: number;
 };
 
 export default function DiveSiteScreen({
@@ -62,8 +63,12 @@ export default function DiveSiteScreen({
   onMapFlip,
   closeParallax,
   restoreParallax,
-  isMyShop
+  isMyShop,
+  bottomHitCount
 }: DiveSiteProps) {
+
+  console.log('bottomHitCount', bottomHitCount)
+  
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { pinValues, setPinValues } = useContext(PinContext);

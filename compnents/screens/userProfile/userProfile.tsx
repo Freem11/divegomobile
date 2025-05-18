@@ -49,6 +49,7 @@ type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   isMyShop?: boolean
+  bottomHitCount?: number;
 };
 
 export default function UserProfileScreen({
@@ -56,8 +57,12 @@ export default function UserProfileScreen({
   onMapFlip,
   closeParallax,
   restoreParallax,
-  isMyShop
+  isMyShop,
+  bottomHitCount
 }: UserProfileProps) {
+
+  console.log('bottomHitCount', bottomHitCount)
+  
   const { profile } = useContext(UserProfileContext);
   const { activeSession } = useContext(SessionContext);
   const { selectedProfile, setSelectedProfile } = useContext(
@@ -132,6 +137,7 @@ export default function UserProfileScreen({
     getFollowStatus();
   }, [selectedProfile]);
 
+  console.log('success', profilePhotos)
 
   useEffect(() => {
     setUserFail("");

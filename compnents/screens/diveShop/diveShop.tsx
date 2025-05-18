@@ -34,6 +34,7 @@ type DiveShopProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   isMyShop?: boolean
+  bottomHitCount?: number;
 };
 
 export default function DiveShopScreen({
@@ -41,7 +42,8 @@ export default function DiveShopScreen({
   onMapFlip,
   closeParallax,
   restoreParallax,
-  isMyShop
+  isMyShop,
+  bottomHitCount
 }: DiveShopProps) {
   const { profile } = useContext(UserProfileContext);
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
