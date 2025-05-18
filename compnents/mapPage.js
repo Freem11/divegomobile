@@ -75,6 +75,7 @@ import Animated, {
 import * as ScreenOrientation from "expo-screen-orientation";
 import { getLocales } from "expo-localization";
 import { EmailFeedback } from "./feed/emailFeedback";
+import { FeedsButton } from "./feed/iconButton";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -430,6 +431,7 @@ export default function MapPage() {
             </TouchableWithoutFeedback>
           ) : null}
           {mapConfig === 0 && <EmailFeedback />}
+          {mapConfig === 0 && <FeedsButton />}
 
           {mapConfig === 0 ?
             <BottomMenu>
