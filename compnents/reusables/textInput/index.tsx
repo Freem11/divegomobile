@@ -7,7 +7,7 @@ import { colors } from '../../styles';
 export type TextInputProps = {
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   error?: any;
 } & RNTextInputProps;
 

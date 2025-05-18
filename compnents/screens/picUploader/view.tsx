@@ -8,8 +8,13 @@ import TextInputField from "../../authentication/utils/textInput";
 import AnimalAutoSuggest from "../../autoSuggest/autoSuggest";
 import { colors } from "../../styles";
 import WavyHeaderUploader from "./wavyHeaderUploader";
+import MobileTextInput from "../../reusables/textInput";
+import { Form, FormRules } from "./form";
+import { useForm } from "react-hook-form";
+import Button from "../../reusables/button";
 
 interface IProps {
+  values: Form;
   pinValues: any;
   isUploading: boolean;
   localPreviewUri: string | null;
@@ -24,6 +29,7 @@ interface IProps {
 }
 
 export default function PicUploaderView({
+  values,
   pinValues,
   isUploading,
   localPreviewUri,
@@ -38,74 +44,83 @@ export default function PicUploaderView({
 }: IProps) {
   const { t } = useTranslation();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<Form>({
+    values: values,
+  });
+  
   return (
-    <S.Container>
-      {/* <S.BackButton>
-        <MaterialIcons
-          name="chevron-left"
-          size={40}
-          color={colors.themeWhite}
-          onPress={onClose}
-        />
-      </S.BackButton> */}
-      
-      <S.ContentContainer>
+    <S.ContentContainer>     
         <S.Header>{t("PicUploader.header")}</S.Header>
 
-        <S.InputBlock>
-          <S.Label>{t("PicUploader.whatLabel")}</S.Label>
-          <AnimalAutoSuggest
-            pinValues={pinValues}
-            setPinValues={setPinValues}
-            inputValue={pinValues.Animal}
-            icon={"shark"}
-            placeHolderText={t("PicUploader.whatPlaceholder")}
-            secure={false}
-            vectorIcon={"MaterialCommunityIcons"}
-          />
-        </S.InputBlock>
+      <S.InputGroupContainer>
 
-        <S.InputBlock>
-          <S.Label>{t("PicUploader.whenLabel")}</S.Label>
-          <S.TouchOverlay onPress={showDatePicker}>
-            <S.TouchWrapper pointerEvents="none">
-              <TextInputField
-                icon={"calendar-month-outline"}
-                inputValue={pinValues.PicDate}
-                placeHolderText={t("PicUploader.whenPlaceholder")}
+          <S.TextBuffer>
+              <S.Label>{t("PicUploader.whatLabel")}</S.Label>
+              <AnimalAutoSuggest
+                pinValues={pinValues}
+                setPinValues={setPinValues}
+                inputValue={pinValues.Animal}
+                icon={"shark"}
+                placeHolderText={t("PicUploader.whatPlaceholder")}
                 secure={false}
                 vectorIcon={"MaterialCommunityIcons"}
               />
-            </S.TouchWrapper>
-          </S.TouchOverlay>
-        </S.InputBlock>
+          </S.TextBuffer>
+          <S.TextBuffer>
+              <S.Label>{t("PicUploader.whenLabel")}</S.Label>
+              <S.TouchOverlay onPress={showDatePicker}>
+                <S.TouchWrapper pointerEvents="none">
+                  <MobileTextInput 
+                    iconLeft="calendar-month"
+                    placeholder={t('PicUploader.whenPlaceholder')}
+                    {...register('date', FormRules.date)}
+                    />
+                  {/* <TextInputField
+                    icon={"calendar-month-outline"}
+                    inputValue={pinValues.PicDate}
+                    placeHolderText={t("PicUploader.whenPlaceholder")}
+                    secure={false}
+                    vectorIcon={"MaterialCommunityIcons"}
+                  /> */}
+                </S.TouchWrapper>
+              </S.TouchOverlay>
+          </S.TextBuffer>
+          <S.TextBuffer>
+              <S.Label>{t("PicUploader.whereLabel")}</S.Label>
+              <MobileTextInput 
+                    iconLeft="anchor"
+                    placeholder={t('PicUploader.wherePlaceholder')}
+                    {...register('diveSiteName')}
+                    />
+              {/* <TextInputField
+                icon={"anchor"}
+                inputValue={pinValues.siteName}
+                placeHolderText={t("PicUploader.wherePlaceholder")}
+                secure={false}
+              /> */}
+          </S.TextBuffer>
+        </S.InputGroupContainer>
 
-        <S.InputBlock>
-          <S.Label>{t("PicUploader.whereLabel")}</S.Label>
-          <TextInputField
-            icon={"anchor"}
-            inputValue={pinValues.siteName}
-            placeHolderText={t("PicUploader.wherePlaceholder")}
-            secure={false}
-          />
-        </S.InputBlock>
 
         <S.ButtonBox>
-          <S.SubmitButton onPress={onSubmit}>
-            <S.SubmitText>{t("PicUploader.submitButton")}</S.SubmitText>
-            <MaterialIcons
-              name="chevron-right"
-              size={30}
-              color={colors.themeWhite}
-            />
-          </S.SubmitButton>
-        </S.ButtonBox>
-      </S.ContentContainer>
-      <WavyHeaderUploader
+               <Button 
+                 onPress={onSubmit} 
+                 alt={false} 
+                 size='medium'
+                 title={t('PicUploader.submitButton')} 
+                 iconRight="chevron-right"
+                 />
+            </S.ButtonBox>
+            
+      {/* <WavyHeaderUploader
         image={localPreviewUri}
         onImageSelect={onImageSelect}
         isLoading={isUploading}
-       />
+       /> */}
 
       <DateTimePickerModal
         isVisible={datePickerVisible}
@@ -113,6 +128,6 @@ export default function PicUploaderView({
         onConfirm={handleDatePickerConfirm}
         onCancel={hideDatePicker}
       />
-    </S.Container>
+    </S.ContentContainer>
   );
 }
