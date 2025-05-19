@@ -20,6 +20,8 @@ import DropdownItem from './components/dropdownItem';
 
 import getInitialValue from './utils/getInitialValue';
 import getResultValue from './utils/getResultValue';
+import { moderateScale } from "react-native-size-matters";
+import { colors, fontSizes } from "../../styles";
 
 // ----------------------
 // Types
@@ -70,6 +72,7 @@ export type SelectProps = Partial<typeof defaultProps> & {
 const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) => {
   const props = { ...defaultProps, ...incomingProps };
 
+  console.log(props)
   const searchRef = useRef<TextInput>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -207,7 +210,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
       {/* Trigger */}
       <TouchableOpacity onPress={onTriggerClick} style={styles.trigger}>
         {props.iconLeft && (
-          <Text style={styles.iconLeft}>{props.iconLeft}</Text>
+          <View style={styles.iconLeft}>{props.iconLeft}</View>
         )}
 
         <View style={styles.triggerContent}>
@@ -227,6 +230,8 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
             placeholder={getPlaceholder()}
             editable={!props.disabled}
             style={styles.input}
+            multiline={false}
+            numberOfLines={1} 
           />
         </View>
 
@@ -267,34 +272,32 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8,
   },
   trigger: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    borderColor: '#aaa',
-    borderWidth: 1,
-    borderRadius: 6,
-    backgroundColor: '#fff',
+    paddingTop: moderateScale(4),
+    borderColor: colors.neutralGrey,
+    borderBottomWidth: moderateScale(2),
   },
   iconLeft: {
     marginRight: 6,
+    width: moderateScale(24),
+    height: moderateScale(24),
   },
   triggerContent: {
     flex: 1,
     flexDirection: 'row',
-    flexWrap: 'wrap',
     alignItems: 'center',
   },
   input: {
     flex: 1,
     minWidth: 100,
-    paddingVertical: 4,
+    fontSize: moderateScale(fontSizes.StandardText),
   },
   arrow: {
     marginLeft: 6,
-    fontSize: 16,
+    fontSize: moderateScale(fontSizes.SmallText),
   },
   dropdownWrapper: {
     marginTop: 4,

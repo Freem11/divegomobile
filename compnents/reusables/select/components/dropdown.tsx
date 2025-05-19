@@ -6,6 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Values } from '..';
+import { moderateScale } from "react-native-size-matters";
 
 export type DropdownProps = {
   options: Values;

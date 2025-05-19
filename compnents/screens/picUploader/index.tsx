@@ -14,17 +14,21 @@ import { DynamicSelectOptionsAnimals } from "../../entities/DynamicSelectOptions
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
+type dropDownItem = {
+  key: string, label: string
+}
+
 export interface Form {
   date?: string;
   photo?: string;
-  animal?: string;
+  animal?: dropDownItem;
   diveSiteName?: string;
 }
 
 export const INIT_FORM_STATE: Form = {
   date: "",
   photo: "",
-  animal: "",
+  animal: {key: "", label: ""},
   diveSiteName: "",
 };
 
@@ -76,6 +80,8 @@ export default function PicUploader({
   const onSubmit = async (formData: Required<Form>) => {
     const { Animal } = pinValues;
 
+    console.log('formData', formData)
+
     if (!localPreviewUri || !Animal) {
       showWarning("Please fill in all required fields.");
       return;
@@ -94,7 +100,7 @@ export default function PicUploader({
 
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
-        label: Animal,  // need to get reusable select migrated for this one
+        label: formData.animal.label,  // need to get reusable select migrated for this one
         dateTaken: formData.date,
         latitude: selectedDiveSite[0].latitude,
         longitude: selectedDiveSite[0].longitude,

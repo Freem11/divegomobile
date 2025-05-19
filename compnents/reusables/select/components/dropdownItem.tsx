@@ -31,7 +31,7 @@ export default function DropdownItem({ option, selected, onSelect }: DropdownIte
 
 const styles = StyleSheet.create({
   itemWrapper: {
-    marginVertical: 4,
+    marginVertical: 0,
   },
   itemButton: {
     padding: 10,

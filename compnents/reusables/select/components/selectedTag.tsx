@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { moderateScale } from "react-native-size-matters";
+import { colors, fontSizes } from "../../../styles";
 
 type SelectedTagProps = {
   deselctItem: () => void;
@@ -30,21 +32,22 @@ const styles = StyleSheet.create({
   tag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#e0e0e0',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 16,
-    margin: 4,
+    justifyContent: 'center',
+    backgroundColor: colors.buttonPressOverlay,
+    paddingHorizontal: moderateScale(6),
+    paddingVertical: moderateScale(4),
+    marginBottom: moderateScale(4),
+    borderRadius: moderateScale(16),
   },
   label: {
-    marginRight: 6,
-    fontSize: 14,
+    marginHorizontal: moderateScale(4),
+    fontSize: moderateScale(fontSizes.SmallText),
   },
   removeButton: {
-    padding: 4,
+    padding: moderateScale(2),
   },
   removeText: {
-    fontSize: 14,
+    fontSize: moderateScale(fontSizes.SmallText),
     color: '#888',
   },
 });

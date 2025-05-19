@@ -1,10 +1,15 @@
 import { i18n } from "../../../i18n";
 import { FormValidationRules } from "../../utils/forms";
 
+type dropDownItem = {
+  key: string, label: string
+}
+
+
 export interface Form {
   date?: string;
   photo?: string | null;
-  animal?: string;
+  animal?: dropDownItem[];
   diveSiteName?: string;
 }
 

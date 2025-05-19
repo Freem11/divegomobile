@@ -39,8 +39,9 @@ export const TextBuffer = styled.View`
 
 export const Label = styled.Text`
   margin-left: -5%;
+  color: ${colors.headersBlue};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.LightItalic};
+  font-family: ${activeFonts.MediumItalic};
 `;
 
 export const ButtonBox = styled.View`

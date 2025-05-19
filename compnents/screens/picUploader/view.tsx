@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useTranslation } from "react-i18next";
 import * as S from "./styles";
-import AnimalAutoSuggest from "../../autoSuggest/autoSuggest";
 import MobileTextInput from "../../reusables/textInput";
 import { Form, FormRules } from "./form";
 import { Controller, useForm } from "react-hook-form";
@@ -10,6 +9,11 @@ import Button from "../../reusables/button";
 import moment from "moment";
 import DynamicSelect from '../../reusables/dynamicSelect';
 import Icon from "../../../icons/Icon";
+import { colors } from "../../styles";
+
+type dropDownItem = {
+  key: string, label: string
+}
 
 interface IProps {
   values: Form;
@@ -66,31 +70,23 @@ export default function PicUploaderView({
           <S.TextBuffer>
               <S.Label>{t("PicUploader.whatLabel")}</S.Label>
               <Controller
-                control={control}
-                name="animal"
-                rules={FormRules.animal}
-                render={({ field: { onChange, onBlur, value } }) => (
-              <DynamicSelect
-              allowCreate={true}
-              labelInValue={true}
-              modeSelectedTags="on"
-              placeholder={t("PicUploader.whatPlaceholder")}
-              getMoreOptions={getMoreAnimals}
-              iconLeft={(<Icon name="shark" />
+              control={control}
+              name="animal"
+              rules={FormRules.animal}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <DynamicSelect
+                  allowCreate={true}
+                  labelInValue={true}
+                  modeSelectedTags="on"
+                  placeholder={t("PicUploader.whatPlaceholder")}
+                  getMoreOptions={getMoreAnimals}
+                  iconLeft={<Icon name="shark" fill={colors.neutralGrey} />}
+                  error={errors.animal}
+                  value={value}
+                  onChange={onChange}
+                />
               )}
-              error={errors.animal}
             />
-              )}
-            />
-              {/* <AnimalAutoSuggest
-                pinValues={pinValues}
-                setPinValues={setPinValues}
-                inputValue={pinValues.Animal}
-                icon={"shark"}
-                placeHolderText={t("PicUploader.whatPlaceholder")}
-                secure={false}
-                vectorIcon={"MaterialCommunityIcons"}
-              /> */}
           </S.TextBuffer>
 
           
