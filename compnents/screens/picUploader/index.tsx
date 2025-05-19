@@ -10,6 +10,7 @@ import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext"
 import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
+import { DynamicSelectOptionsAnimals } from "../../entities/DynamicSelectOptionsAnimals";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -141,6 +142,7 @@ export default function PicUploader({
       onImageSelect={handleImageUpload}
       onSubmit={onSubmit}
       onClose={onClose}
+      getMoreAnimals={DynamicSelectOptionsAnimals.getMoreOptions}
       setPinValues={setPinValues}
       isUploading={isUploading}
       localPreviewUri={localPreviewUri}

@@ -8,6 +8,8 @@ import { Form, FormRules } from "./form";
 import { Controller, useForm } from "react-hook-form";
 import Button from "../../reusables/button";
 import moment from "moment";
+import DynamicSelect from '../../reusables/dynamicSelect';
+import Icon from "../../../icons/Icon";
 
 interface IProps {
   values: Form;
@@ -17,6 +19,7 @@ interface IProps {
   datePickerVisible: boolean;
   onClose: () => void;
   onSubmit: (data: any) => void
+  getMoreAnimals: (search: string, limit: number, skip: number) => Promise<any>
   setPinValues: (key: string, value: string) => void;
   hideDatePicker: () => void;
   onImageSelect: (uri: string) => void;
@@ -27,6 +30,7 @@ export default function PicUploaderView({
   pinValues,
   localPreviewUri,
   onSubmit,
+  getMoreAnimals,
   setPinValues,
   hideDatePicker,
 }: IProps) {
@@ -61,7 +65,24 @@ export default function PicUploaderView({
 
           <S.TextBuffer>
               <S.Label>{t("PicUploader.whatLabel")}</S.Label>
-              <AnimalAutoSuggest
+              <Controller
+                control={control}
+                name="animal"
+                rules={FormRules.animal}
+                render={({ field: { onChange, onBlur, value } }) => (
+              <DynamicSelect
+              allowCreate={true}
+              labelInValue={true}
+              modeSelectedTags="on"
+              placeholder={t("PicUploader.whatPlaceholder")}
+              getMoreOptions={getMoreAnimals}
+              iconLeft={(<Icon name="shark" />
+              )}
+              error={errors.animal}
+            />
+              )}
+            />
+              {/* <AnimalAutoSuggest
                 pinValues={pinValues}
                 setPinValues={setPinValues}
                 inputValue={pinValues.Animal}
@@ -69,8 +90,10 @@ export default function PicUploaderView({
                 placeHolderText={t("PicUploader.whatPlaceholder")}
                 secure={false}
                 vectorIcon={"MaterialCommunityIcons"}
-              />
+              /> */}
           </S.TextBuffer>
+
+          
           <S.TextBuffer>
               <S.Label>{t("PicUploader.whenLabel")}</S.Label>
               <S.TouchOverlay onPress={() => setDatePickerVisible(true)}>
