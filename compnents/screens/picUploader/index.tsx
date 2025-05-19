@@ -61,7 +61,7 @@ export default function PicUploader({
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const tryUpload = async () => {
+  const tryUpload = async (localPreviewUri: string) => {
     try {
       const image = {
         assets: [
@@ -78,7 +78,6 @@ export default function PicUploader({
   };
 
   const onSubmit = async (formData: Required<Form>) => {
-    console.log('formData', formData, localPreviewUri)
 
     if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning("Please fill in all required fields.");
@@ -89,7 +88,7 @@ export default function PicUploader({
 
     try {
       // Step 2: Upload image
-      const fileName = await tryUpload();
+      const fileName = await tryUpload(localPreviewUri);
       if (!fileName) {
         throw new Error("Photo upload failed");
       }
@@ -98,10 +97,10 @@ export default function PicUploader({
 
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
-        label: formData.animal.label,  // need to get reusable select migrated for this one
+        label: formData.animal.label,
         dateTaken: formData.date,
-        latitude: selectedDiveSite[0].latitude,
-        longitude: selectedDiveSite[0].longitude,
+        latitude: selectedDiveSite.lat,
+        longitude: selectedDiveSite.lng,
         UserId: profile[0].UserID,
       });
       if (error) {
@@ -116,7 +115,7 @@ export default function PicUploader({
       setConfirmationType("Sea Creature Submission");
       showSuccess("Photo uploaded successfully!");
       resetForm();
-      setLevelTwoScreen(false);
+      // setLevelTwoScreen(false);
       setLocalPreviewUri(null);
     } catch (err) {
       console.error("Error uploading image:", err);
