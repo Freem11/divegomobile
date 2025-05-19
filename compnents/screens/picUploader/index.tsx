@@ -8,6 +8,8 @@ import { PinContext } from "../../contexts/staticPinContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { UserProfileContext } from "../../contexts/userProfileContext";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -45,27 +47,14 @@ export default function PicUploader({
   setLocalPreviewUri
 }: PicUploaderProps) {
 
+  const { profile } = useContext(UserProfileContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  // const [localPreviewUri, setLocalPreviewUri] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-
-  const handleDatePickerConfirm = (selectedDate: Date) => {
-    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
-    setPinValues({ ...pinValues, PicDate: formattedDate });
-    setDatePickerVisible(false);
-  };
-
-  // const handleImageUpload = async (argPicture) => {
-  //   setPinValues({
-  //     ...pinValues,
-  //     PicFile: `animalphotos/public/${argPicture}`,
-  //   });
-  //   setLocalPreviewUri(argPicture);
-  // };
 
   const tryUpload = async () => {
     try {
@@ -83,10 +72,10 @@ export default function PicUploader({
     }
   };
 
-  const onSubmit = async () => {
-    const { PicDate, Animal, Latitude, Longitude, UserId } = pinValues;
+  const onSubmit = async (formData: Required<Form>) => {
+    const { Animal } = pinValues;
 
-    if (!localPreviewUri || !PicDate || !Animal) {
+    if (!localPreviewUri || !Animal) {
       showWarning("Please fill in all required fields.");
       return;
     }
@@ -104,11 +93,11 @@ export default function PicUploader({
 
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
-        label: Animal,
-        dateTaken: PicDate,
-        latitude: Latitude,
-        longitude: Longitude,
-        UserId,
+        label: Animal,  // need to get reusable select migrated for this one
+        dateTaken: formData.date,
+        latitude: selectedDiveSite[0].latitude,
+        longitude: selectedDiveSite[0].longitude,
+        UserId: profile[0].UserID,
       });
       if (error) {
         await removePhoto({
@@ -147,16 +136,17 @@ export default function PicUploader({
   return (
     <PicUploaderView
       pinValues={pinValues}
-      showDatePicker={() => setDatePickerVisible(true)}
       datePickerVisible={datePickerVisible}
       hideDatePicker={() => setDatePickerVisible(false)}
-      handleDatePickerConfirm={handleDatePickerConfirm}
       onImageSelect={handleImageUpload}
       onSubmit={onSubmit}
       onClose={onClose}
       setPinValues={setPinValues}
       isUploading={isUploading}
       localPreviewUri={localPreviewUri}
+      values={{
+        diveSiteName: selectedDiveSite?.name,
+      }}
     />
   );
 }

@@ -3,7 +3,7 @@ import { FormValidationRules } from "../../utils/forms";
 
 export interface Form {
   date?: string;
-  photo?: string;
+  photo?: string | null;
   animal?: string;
   diveSiteName?: string;
 }

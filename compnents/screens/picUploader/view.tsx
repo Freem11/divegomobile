@@ -1,17 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { MaterialIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import * as S from "./styles";
-
-import TextInputField from "../../authentication/utils/textInput";
 import AnimalAutoSuggest from "../../autoSuggest/autoSuggest";
-import { colors } from "../../styles";
-import WavyHeaderUploader from "./wavyHeaderUploader";
 import MobileTextInput from "../../reusables/textInput";
 import { Form, FormRules } from "./form";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Button from "../../reusables/button";
+import moment from "moment";
 
 interface IProps {
   values: Form;
@@ -20,38 +16,43 @@ interface IProps {
   localPreviewUri: string | null;
   datePickerVisible: boolean;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (data: any) => void
   setPinValues: (key: string, value: string) => void;
-  showDatePicker: () => void;
   hideDatePicker: () => void;
-  handleDatePickerConfirm: (date: Date) => void;
   onImageSelect: (uri: string) => void;
 }
 
 export default function PicUploaderView({
   values,
   pinValues,
-  isUploading,
   localPreviewUri,
-  datePickerVisible,
-  onClose,
   onSubmit,
   setPinValues,
-  onImageSelect,
-  showDatePicker,
   hideDatePicker,
-  handleDatePickerConfirm,
 }: IProps) {
   const { t } = useTranslation();
-
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
   const {
-    register,
+    control,
+    setValue,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<Form>({
     values: values,
   });
   
+  const handleDatePickerConfirm = (selectedDate: Date) => {
+    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
+    setValue('date', formattedDate);
+    setDatePickerVisible(false);
+  };
+
+  const handleOnSubmit = (data: Form) => {
+    // toast.dismiss();
+    onSubmit(data);
+  };
+
+  console.log('values', values)
   return (
     <S.ContentContainer>     
         <S.Header>{t("PicUploader.header")}</S.Header>
@@ -72,43 +73,49 @@ export default function PicUploaderView({
           </S.TextBuffer>
           <S.TextBuffer>
               <S.Label>{t("PicUploader.whenLabel")}</S.Label>
-              <S.TouchOverlay onPress={showDatePicker}>
+              <S.TouchOverlay onPress={() => setDatePickerVisible(true)}>
                 <S.TouchWrapper pointerEvents="none">
-                  <MobileTextInput 
+                <Controller
+                control={control}
+                name="date"
+                rules={FormRules.date}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <MobileTextInput
                     iconLeft="calendar-month"
                     placeholder={t('PicUploader.whenPlaceholder')}
-                    {...register('date', FormRules.date)}
-                    />
-                  {/* <TextInputField
-                    icon={"calendar-month-outline"}
-                    inputValue={pinValues.PicDate}
-                    placeHolderText={t("PicUploader.whenPlaceholder")}
-                    secure={false}
-                    vectorIcon={"MaterialCommunityIcons"}
-                  /> */}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    editable={false}
+                  />
+                )}
+              />
                 </S.TouchWrapper>
               </S.TouchOverlay>
           </S.TextBuffer>
           <S.TextBuffer>
               <S.Label>{t("PicUploader.whereLabel")}</S.Label>
-              <MobileTextInput 
+              <Controller
+                control={control}
+                name="diveSiteName"
+                rules={FormRules.diveSiteName}
+                render={({ field: { onBlur, value } }) => (
+                  <MobileTextInput
                     iconLeft="anchor"
                     placeholder={t('PicUploader.wherePlaceholder')}
-                    {...register('diveSiteName')}
-                    />
-              {/* <TextInputField
-                icon={"anchor"}
-                inputValue={pinValues.siteName}
-                placeHolderText={t("PicUploader.wherePlaceholder")}
-                secure={false}
-              /> */}
+                    onBlur={onBlur}
+                    value={value}
+                    editable={false}
+                  />
+                )}
+              />
           </S.TextBuffer>
         </S.InputGroupContainer>
 
 
         <S.ButtonBox>
                <Button 
-                 onPress={onSubmit} 
+                 onPress={handleSubmit(handleOnSubmit)} 
                  alt={false} 
                  size='medium'
                  title={t('PicUploader.submitButton')} 
@@ -116,12 +123,6 @@ export default function PicUploaderView({
                  />
             </S.ButtonBox>
             
-      {/* <WavyHeaderUploader
-        image={localPreviewUri}
-        onImageSelect={onImageSelect}
-        isLoading={isUploading}
-       /> */}
-
       <DateTimePickerModal
         isVisible={datePickerVisible}
         mode="date"
