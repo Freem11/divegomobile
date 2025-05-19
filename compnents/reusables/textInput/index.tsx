@@ -15,7 +15,7 @@ const MobileTextInput = React.forwardRef<TextInput, TextInputProps>(function Mob
   { iconLeft, iconRight, error, onChangeText, ...rest }: TextInputProps,
   ref: ForwardedRef<TextInput>
 ) {
-  console.log('rest', rest)
+
   return (
     <S.TextInputWrapper>
       {iconLeft && 

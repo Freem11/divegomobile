@@ -60,7 +60,6 @@ export default function PicUploaderView({
     onSubmit(data);
   };
 
-  console.log('values', values)
   return (
     <S.ContentContainer>     
         <S.Header>{t("PicUploader.header")}</S.Header>

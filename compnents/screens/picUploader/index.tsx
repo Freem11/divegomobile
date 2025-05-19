@@ -78,11 +78,9 @@ export default function PicUploader({
   };
 
   const onSubmit = async (formData: Required<Form>) => {
-    const { Animal } = pinValues;
+    console.log('formData', formData, localPreviewUri)
 
-    console.log('formData', formData)
-
-    if (!localPreviewUri || !Animal) {
+    if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning("Please fill in all required fields.");
       return;
     }

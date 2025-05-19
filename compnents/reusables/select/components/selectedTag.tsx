@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { moderateScale } from "react-native-size-matters";
 import { colors, fontSizes } from "../../../styles";
+import * as S from './styles';
 
 type SelectedTagProps = {
   deselctItem: () => void;
@@ -15,16 +16,15 @@ type SelectedTagProps = {
 
 export default function SelectedTag({ deselctItem, label }: SelectedTagProps) {
   return (
-    <View style={styles.tag}>
-      <Text style={styles.label}>{label}</Text>
-      <TouchableOpacity
+    <S.Tag>
+      <S.Label>{label}</S.Label>
+      <S.RemoveButton
         onPress={deselctItem}
         accessibilityLabel={`Remove ${label}`}
-        style={styles.removeButton}
       >
-        <Text style={styles.removeText}>✕</Text>
-      </TouchableOpacity>
-    </View>
+        <S.RemoveText>✕</S.RemoveText>
+      </S.RemoveButton>
+    </S.Tag>
   );
 }
 

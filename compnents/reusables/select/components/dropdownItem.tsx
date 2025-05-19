@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  AccessibilityRole,
-} from 'react-native';
 import { Option } from '..';
+import * as S from './styles';
 
 export type DropdownItemProps = {
   option: Option;
@@ -16,32 +10,15 @@ export type DropdownItemProps = {
 
 export default function DropdownItem({ option, selected, onSelect }: DropdownItemProps) {
   return (
-    <View style={styles.itemWrapper}>
-      <TouchableOpacity
+    <S.ItemWrapper>
+      <S.ItemButton
         onPress={() => onSelect(option.key)}
-        accessibilityRole="button" // or "option" if using accessibilityStates
+        accessibilityRole="button"
         accessibilityState={{ selected }}
-        style={[styles.itemButton, selected && styles.itemSelected]}
+        selected={selected}
       >
-        <Text style={styles.itemText}>{option.label}</Text>
-      </TouchableOpacity>
-    </View>
+        <S.ItemText>{option.label}</S.ItemText>
+      </S.ItemButton>
+    </S.ItemWrapper>
   );
 }
-
-const styles = StyleSheet.create({
-  itemWrapper: {
-    marginVertical: 0,
-  },
-  itemButton: {
-    padding: 10,
-    borderRadius: 4,
-    backgroundColor: '#eee',
-  },
-  itemSelected: {
-    backgroundColor: '#cce5ff',
-  },
-  itemText: {
-    fontSize: 16,
-  },
-});

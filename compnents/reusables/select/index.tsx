@@ -6,13 +6,8 @@ import React, {
   useCallback,
   forwardRef,
 } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { TextInput } from 'react-native';
+import * as S from './styles';
 
 import Dropdown from './components/dropdown';
 import SelectedTag from './components/selectedTag';
@@ -20,8 +15,6 @@ import DropdownItem from './components/dropdownItem';
 
 import getInitialValue from './utils/getInitialValue';
 import getResultValue from './utils/getResultValue';
-import { moderateScale } from "react-native-size-matters";
-import { colors, fontSizes } from "../../styles";
 
 // ----------------------
 // Types
@@ -71,8 +64,6 @@ export type SelectProps = Partial<typeof defaultProps> & {
 
 const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) => {
   const props = { ...defaultProps, ...incomingProps };
-
-  console.log(props)
   const searchRef = useRef<TextInput>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -206,14 +197,14 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
   };
 
   return (
-    <View style={styles.container} accessibilityRole="list">
+    <S.Container accessibilityRole="list">
       {/* Trigger */}
-      <TouchableOpacity onPress={onTriggerClick} style={styles.trigger}>
+      <S.Trigger onPress={onTriggerClick}>
         {props.iconLeft && (
-          <View style={styles.iconLeft}>{props.iconLeft}</View>
+          <S.IconLeft>{props.iconLeft}</S.IconLeft>
         )}
 
-        <View style={styles.triggerContent}>
+        <S.TriggerContent>
           {showSelectedTags &&
             Array.from(value.values()).map((option) => (
               <SelectedTag
@@ -223,28 +214,27 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
               />
             ))}
 
-          <TextInput
+          <S.Input
             ref={searchRef}
             value={searchValue}
             onChangeText={onSearch}
             placeholder={getPlaceholder()}
             editable={!props.disabled}
-            style={styles.input}
             multiline={false}
             numberOfLines={1} 
           />
-        </View>
+        </S.TriggerContent>
 
         {props.iconSelectArrow && (
-          <Text style={styles.arrow}>
+          <S.Arrow>
             {props.iconSelectArrow === true ? '↓' : props.iconSelectArrow}
-          </Text>
+          </S.Arrow>
         )}
-      </TouchableOpacity>
+      </S.Trigger>
 
       {/* Dropdown */}
       {(isOpen || shouldDisplayCreate) && (
-        <View style={styles.dropdownWrapper}>
+        <S.DropdownWrapper>
           <props.dropdownComponent
             options={options}
             searchText={searchValue}
@@ -260,48 +250,10 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
               />
             ))}
           </props.dropdownComponent>
-        </View>
+        </S.DropdownWrapper>
       )}
-    </View>
+    </S.Container>
   );
-});
-
-// ----------------------
-// Styles
-// ----------------------
-
-const styles = StyleSheet.create({
-  container: {
-  },
-  trigger: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: moderateScale(4),
-    borderColor: colors.neutralGrey,
-    borderBottomWidth: moderateScale(2),
-  },
-  iconLeft: {
-    marginRight: 6,
-    width: moderateScale(24),
-    height: moderateScale(24),
-  },
-  triggerContent: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    minWidth: 100,
-    fontSize: moderateScale(fontSizes.StandardText),
-  },
-  arrow: {
-    marginLeft: 6,
-    fontSize: moderateScale(fontSizes.SmallText),
-  },
-  dropdownWrapper: {
-    marginTop: 4,
-  },
 });
 
 // ----------------------
