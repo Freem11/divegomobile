@@ -10,10 +10,12 @@ import TripImage from '../../png/Trip.jpg'
 import { Keyboard } from "react-native";
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
+import IconWithLabel from "../../reusables/iconWithLabal";
+import { useTranslation } from "react-i18next";
 
 export default function TripCreatorParallax() {
-
-  const { setEditMode } = useContext(EditModeContext);
+  const { t } = useTranslation();
+  const { editMode, setEditMode } = useContext(EditModeContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
@@ -46,12 +48,28 @@ export default function TripCreatorParallax() {
     setLevelTwoScreen(false);
   };
 
+  const cloneButtonPress = () => {
+    setEditMode(false);
+  };
+
+  const popoverConent = () => {
+    return (
+    <>
+    <IconWithLabel 
+    label={t('TripCreator.cloneButton')}
+    iconName="vector-arrange-below"
+    buttonAction={() => cloneButtonPress()}
+    />
+    </>
+    )
+  };
 
   return (
     <ParallaxDrawer
       headerImage={TripImage}
       onClose={onClose}
       onMapFlip={onNavigate}
+      popoverConent={editMode && popoverConent}
     >
       <TripCreatorPage 
         onClose={onClose} onMapFlip={onNavigate}
