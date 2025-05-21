@@ -1,4 +1,3 @@
-// components/FeedItems/styles.ts
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 import { activeFonts, colors } from "../../../../styles";
@@ -32,6 +31,7 @@ export const ImagePreview = styled.Image`
 
 export const ActionsRow = styled.View`
   flex-direction: row;
+  justify-content: space-between;
   margin-top: ${moderateScale(8)}px;
 `;
 
@@ -48,4 +48,10 @@ export const RemoveText = styled(ActionText)`
 
 export const PrimaryText = styled(ActionText)`
   color: #4caf50;
+`;
+
+export const IconWrapper = styled.TouchableOpacity`
+  margin-left: ${moderateScale(12)}px;
+  justify-content: center;
+  align-items: center;
 `;

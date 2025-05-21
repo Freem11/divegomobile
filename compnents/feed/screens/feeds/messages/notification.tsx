@@ -2,6 +2,8 @@ import React from "react";
 import { NotificationFeedItem } from "../../../store/useFeedDataStore";
 import * as S from "./styles";
 import { FeedItemComponentProps } from "./failedPicUpload";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function FeedItemNotification({
   item,
@@ -13,9 +15,13 @@ export default function FeedItemNotification({
       <S.Timestamp>{item.message}</S.Timestamp>
       <S.ActionsRow>
         {item.action && (
-          <S.PrimaryText onPress={item.action}>Open</S.PrimaryText>
+          <S.IconWrapper onPress={item.action}>
+            <FontAwesome name="folder-open-o" size={24} color="black" />
+          </S.IconWrapper>
         )}
-        <S.RemoveText onPress={() => onRemove(item.id)}>Dismiss</S.RemoveText>
+        <S.IconWrapper onPress={() => onRemove(item.id)}>
+          <AntDesign name="delete" size={20} color="red" />
+        </S.IconWrapper>
       </S.ActionsRow>
     </S.Card>
   );
