@@ -50,9 +50,8 @@ export default function FeedList() {
       <MaterialIcons
         name="chevron-left"
         size={moderateScale(48)}
-        color={colors.themeWhite}
+        color={colors.themeBlack}
         onPress={() => closeScreen()}
-        style={styles.backButton}
       />
       {feedItems.length === 0 ? (
         <Text style={styles.emptyMessage}>No feed items yet.</Text>
@@ -86,10 +85,5 @@ const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     gap: moderateScale(12),
-  },
-  backButton: {
-    display: "flex",
-    alignSelf: "flex-start",
-    backgroundColor: colors.themeBlack,
   },
 });
