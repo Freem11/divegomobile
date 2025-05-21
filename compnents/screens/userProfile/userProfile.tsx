@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Dispatch, SetStateAction } from "react";
 import {
   StyleSheet,
   Dimensions
@@ -22,7 +22,7 @@ import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SessionContext } from "../../contexts/sessionContext";
-import { getPhotosByUserWithExtra } from "../../../supabaseCalls/photoSupabaseCalls";
+import { getPhotosByUserWithExtra, getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
 import { grabProfileByUserName, updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
 import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
@@ -40,6 +40,7 @@ import Icon from "../../../icons/Icon";
 import Label from "../../reusables/label";
 import { Photo } from "../../entities/photos";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { Pagination } from "../../../compnents/entities/pagination";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -58,7 +59,7 @@ export default function UserProfileScreen({
   closeParallax,
   restoreParallax,
   isMyShop,
-  bottomHitCount
+  bottomHitCount,
 }: UserProfileProps) {
 
   console.log('bottomHitCount', bottomHitCount)
@@ -92,19 +93,26 @@ export default function UserProfileScreen({
 
   const getPhotos = async () => {
 
-    let success;
+    const pagination = new Pagination({page: bottomHitCount})
+
+    let photos;
     if (selectedProfile && selectedProfile[0].UserID) {
-      success = await getPhotosByUserWithExtra(
+      photos = await getProfilePhotosByUser(
         selectedProfile[0].UserID,
-        profile[0].UserID
+        profile[0].UserID,
+        pagination
       );
     } else {
-      success = await getPhotosByUserWithExtra(
+      photos = await getProfilePhotosByUser(
         profile[0].UserID,
-        profile[0].UserID
+        profile[0].UserID,
+        pagination
       );
     }
-    setProfilePhotos(success);
+
+      console.log('photos', photos)
+
+    setProfilePhotos((prev) => prev ? [...prev, ...photos] : photos);
   };
 
   const getFollowStatus = async () => {
@@ -135,7 +143,8 @@ export default function UserProfileScreen({
   useEffect(() => {
     getPhotos();
     getFollowStatus();
-  }, [selectedProfile]);
+  }, [selectedProfile, bottomHitCount]);
+
 
   console.log('success', profilePhotos)
 
@@ -203,11 +212,26 @@ export default function UserProfileScreen({
     setLevelTwoScreen(false);
   };
 
+
+  const groupedPhotos = {};
+
+  profilePhotos && profilePhotos.forEach(photo => {
+    const key = `${photo.divesitename}_${photo.dateTaken}`;
+    if (!groupedPhotos[key]) {
+      groupedPhotos[key] = {
+        divesitename: photo.divesitename,
+        dateTaken: photo.dateTaken,
+        photos: [],
+      };
+    }
+    groupedPhotos[key].photos.push(photo);
+  });
+
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.UserNameContainer>
-          <S.Header>{selectedProfile[0].UserName}</S.Header>
+          <S.Header>{selectedProfile && selectedProfile[0].UserName}</S.Header>
         </S.UserNameContainer>
    
              {selectedProfile && (
@@ -229,7 +253,7 @@ export default function UserProfileScreen({
             <Label label="Sea Life Sightings" />
         </S.LabelWrapper>
         
-      {profilePhotos && profilePhotos.map((photoPacket, index) => {
+      {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
   return (
     <S.PhotoContainer key={`${photoPacket.id}-${index}`}>   
       <S.PacketHeader key={`${photoPacket.id}-${index}`}>
@@ -239,7 +263,7 @@ export default function UserProfileScreen({
           <Icon name={'anchor'} fill={colors.primaryBlue}/>
         </S.IconWrapper>
 
-          <S.PacketHeaderItem>{photoPacket.name}</S.PacketHeaderItem>
+          <S.PacketHeaderItem>{photoPacket.divesitename}</S.PacketHeaderItem>
       </S.HeaderWrapper>
 
       <S.HeaderWrapper>

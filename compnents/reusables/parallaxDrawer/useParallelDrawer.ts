@@ -14,6 +14,7 @@ import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -30,7 +31,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
-
+  const { setActiveScreen } = useContext(ActiveScreenContext);
   useEffect(() => {
     if (levelOneScreen && savedTranslateY.value === HALF_HEIGHT) {
       translateY.value = HALF_HEIGHT;
@@ -81,7 +82,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
 
-      const isAtBottom = Math.abs(translateY.value - minY) < 2;
+      const isAtBottom = Math.abs(translateY.value - minY) < 1000;
 
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
@@ -145,6 +146,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
+        runOnJS(setActiveScreen)(null);
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {

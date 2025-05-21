@@ -124,6 +124,7 @@ const handleFollow = async () => {
   };
   
   const onClose = () => {
+    setSelectedProfile(null);
     setLevelTwoScreen(false);
   };
 

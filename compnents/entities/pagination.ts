@@ -6,13 +6,14 @@ export class Pagination {
   ipp:  number;
   sort: string;
 
-  static defaultIpp = 20;
+  static defaultIpp = 5;
 
   constructor({ page: page = 0, sort: sort = 'asc', ipp: ipp = Pagination.defaultIpp } = {}) {
     this.page    = page;
     this.sort    = sort;
     this.ipp     = ipp;
   }
+
 
   from() {
     return (this.page - 1) * this.ipp;
