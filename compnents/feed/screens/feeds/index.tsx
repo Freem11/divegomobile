@@ -16,10 +16,12 @@ import { useFeedScreenStore } from "../../store/useScreenStore";
 import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function FeedList() {
+   const { t } = useTranslation();
   const feedItems = useFeedDataStore((state) => state.feedItems);
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
   const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
@@ -54,7 +56,7 @@ export default function FeedList() {
         onPress={() => closeScreen()}
       />
       {feedItems.length === 0 ? (
-        <Text style={styles.emptyMessage}>No feed items yet.</Text>
+        <Text style={styles.emptyMessage}>{t('Feed.noFeeds')}</Text>
       ) : (
         <FlatList
           data={feedItems}
