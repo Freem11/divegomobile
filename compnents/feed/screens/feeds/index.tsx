@@ -22,8 +22,9 @@ const windowHeight = Dimensions.get("window").height;
 export default function FeedList() {
   const feedItems = useFeedDataStore((state) => state.feedItems);
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
-  const closeScreen = useFeedScreenStore((state) => state.closeScreen);
   const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
+  const closeScreen = useFeedScreenStore((state) => state.closeScreen);
+
   useEffect(() => {
     loadFeedItems();
   }, []);
@@ -31,28 +32,28 @@ export default function FeedList() {
   console.log("FeedList", feedItems);
 
   const renderItem = ({ item }: { item: FeedItem }) => {
-  switch (item.type) {
-    case FEED_ITEM_TYPE.FAILED_UPLOAD:
-      return <FeedItemFailedUpload item={item} onRemove={removeFeedItem} />;
-    case FEED_ITEM_TYPE.FAILED_SYNC:
-      return <FeedItemFailedSync item={item} onRemove={removeFeedItem} />;
-    case FEED_ITEM_TYPE.NOTIFICATION:
-      return <FeedItemNotification item={item} onRemove={removeFeedItem} />;
-    default:
-      return null;
-  }
-};
+    switch (item.type) {
+      case FEED_ITEM_TYPE.FAILED_UPLOAD:
+        return <FeedItemFailedUpload item={item} onRemove={removeFeedItem} />;
+      case FEED_ITEM_TYPE.FAILED_SYNC:
+        return <FeedItemFailedSync item={item} onRemove={removeFeedItem} />;
+      case FEED_ITEM_TYPE.NOTIFICATION:
+        return <FeedItemNotification item={item} onRemove={removeFeedItem} />;
+      default:
+        return null;
+    }
+  };
 
 
   return (
     <SafeAreaView style={styles.container}>
-         <MaterialIcons
-              name="chevron-left"
-              size={moderateScale(48)}
-              color={colors.themeWhite}
-              onPress={() => closeScreen()}
-              style={styles.backButton}
-            />
+      <MaterialIcons
+        name="chevron-left"
+        size={moderateScale(48)}
+        color={colors.themeWhite}
+        onPress={() => closeScreen()}
+        style={styles.backButton}
+      />
       {feedItems.length === 0 ? (
         <Text style={styles.emptyMessage}>No feed items yet.</Text>
       ) : (
@@ -70,7 +71,6 @@ export default function FeedList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
     backgroundColor: colors.themeWhite,
     paddingHorizontal: moderateScale(16),
@@ -84,34 +84,12 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     width: "100%",
-  },
-  card: {
-    width: "100%",
-    backgroundColor: "#F2F2F2",
-    borderRadius: 10,
-    padding: moderateScale(15),
-    marginBottom: moderateScale(12),
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  message: {
-    fontSize: moderateScale(14),
-    color: colors.themeBlack,
-    fontFamily: activeFonts.Regular,
+    display: "flex",
+    gap: moderateScale(12),
   },
   backButton: {
     display: "flex",
     alignSelf: "flex-start",
     backgroundColor: colors.themeBlack,
   },
-  timestamp: {
-    fontSize: moderateScale(12),
-    color: "gray",
-    marginTop: moderateScale(4),
-    fontFamily: activeFonts.ThinItalic,
-  },
-
 });

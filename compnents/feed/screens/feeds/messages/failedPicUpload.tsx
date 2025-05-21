@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F2",
     borderRadius: 10,
     padding: moderateScale(15),
-    marginBottom: moderateScale(12),
   },
   message: {
     fontSize: moderateScale(14),
