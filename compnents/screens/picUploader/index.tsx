@@ -70,7 +70,8 @@ export default function PicUploader() {
       showWarning("Please fill in all required fields.");
       return;
     }
-
+    console.log("localPreviewUri", localPreviewUri);
+    // localPreviewUri file:///data/user/0/com.freem11.divegomobile/cache/ImagePicker/67414f78-c609-445b-aa81-bba91b340fa7.jpeg
     setIsUploading(true);
 
     try {
@@ -81,7 +82,7 @@ export default function PicUploader() {
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
-
+      
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
         label: Animal,
@@ -90,6 +91,17 @@ export default function PicUploader() {
         longitude: Longitude,
         UserId,
       });
+
+      console.log("lol", {
+        photoFile: fullPath,
+        label: Animal,
+        dateTaken: PicDate,
+        latitude: Latitude,
+        longitude: Longitude,
+        UserId,
+      })
+
+      // lol {"UserId": "acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd", "dateTaken": "2025-05-20", "label": "test", "latitude": "19.330867", "longitude": "-110.81545", "photoFile": "animalphotos/public/1747864883778.jpeg"}
       if (error) {
         await removePhoto({
           filePath: FILE_PATH,
@@ -105,6 +117,7 @@ export default function PicUploader() {
       setLevelTwoScreen(false);
       setLocalPreviewUri(null);
     } catch (err) {
+
       console.error("Error uploading image:", err);
       showError(err.message);
     } finally {

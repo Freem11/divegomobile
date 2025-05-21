@@ -1,39 +1,120 @@
 import { create } from "zustand";
-export type FeedItem = {
+import { v4 as uuidv4 } from "uuid";
+
+export const FEED_ITEM_TYPE = {
+  FAILED_UPLOAD: "failed_upload",
+  FAILED_SYNC: "failed_sync",
+  NOTIFICATION: "notification",
+} as const;
+
+export type FeedItemType = (typeof FEED_ITEM_TYPE)[keyof typeof FEED_ITEM_TYPE];
+
+export interface BaseFeedItem {
   id: string;
-  type: "failed_request";
-  message: string;
   timestamp: number;
-};
+  type: FeedItemType;
+  title: string;
+  message: string;
+}
+
+export interface FailedUploadFeedItem extends BaseFeedItem {
+  type: typeof FEED_ITEM_TYPE.FAILED_UPLOAD;
+  imageUri: string;
+  supabasePayload: {
+    photoFile: string;
+    label: string;
+    dateTaken: string;
+    latitude: string;
+    longitude: string;
+    UserId: string;
+  };
+  retryCallback: () => Promise<void>;
+}
+
+export interface FailedSyncFeedItem extends BaseFeedItem {
+  type: typeof FEED_ITEM_TYPE.FAILED_SYNC;
+  reason: string;
+  retryCallback: () => Promise<void>;
+}
+
+export interface NotificationFeedItem extends BaseFeedItem {
+  type: typeof FEED_ITEM_TYPE.NOTIFICATION;
+  icon?: string;
+  action?: () => void;
+}
+
+export type FeedItem =
+  | FailedUploadFeedItem
+  | FailedSyncFeedItem
+  | NotificationFeedItem;
+
+// ----------------------
+// Zustand Store Interface
+// ----------------------
 
 interface FeedDataStore {
   feedItems: FeedItem[];
   loadFeedItems: () => void;
   addFeedItem: (item: FeedItem) => void;
+  removeFeedItem: (id: string) => void;
 }
 
 const FEED_ITEMS: FeedItem[] = [
   {
-    id: "1",
-    type: "failed_request",
-    message: "Upload photo failed due to network issue",
+    id: uuidv4(),
+    type: FEED_ITEM_TYPE.FAILED_UPLOAD,
+    title: "Upload Failed",
+    message: "Could not upload image due to network issue",
     timestamp: Date.now(),
+    imageUri:
+      "file:///data/user/0/com.freem11.divegomobile/cache/ImagePicker/67414f78-c609-445b-aa81-bba91b340fa7.jpeg",
+    supabasePayload: {
+      photoFile: "animalphotos/public/xyz.jpg",
+      label: "turtle",
+      dateTaken: "2025-05-21",
+      latitude: "49.2827",
+      longitude: "-123.1207",
+      UserId: "acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd",
+    },
+    retryCallback: async () => {
+      console.log("Retrying upload...");
+    },
+  },
+
+  {
+    id: uuidv4(),
+    type: FEED_ITEM_TYPE.FAILED_SYNC,
+    title: "Sync Error",
+    message: "Sync with backend failed.",
+    timestamp: Date.now(),
+    reason: "Timeout error",
+    retryCallback: async () => console.log("Retrying sync..."),
   },
   {
-    id: "2",
-    type: "failed_request",
-    message: "Profile update failed (offline)",
-    timestamp: Date.now() - 100000,
+    id: uuidv4(),
+    type: FEED_ITEM_TYPE.NOTIFICATION,
+    title: "Reminder",
+    message: "Verify your account email.",
+    timestamp: Date.now(),
+    icon: "bell",
+    action: () => console.log("Opening notification..."),
   },
 ];
 
 export const useFeedDataStore = create<FeedDataStore>((set) => ({
   feedItems: [],
+
   loadFeedItems: () => {
     set({ feedItems: FEED_ITEMS });
   },
+
   addFeedItem: (item) =>
     set((state) => ({
       feedItems: [...state.feedItems, item],
+    })),
+
+  removeFeedItem: (id) =>
+    set((state) => ({
+      feedItems: state.feedItems.filter((item) => item.id !== id),
     })),
 }));

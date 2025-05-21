@@ -7,7 +7,7 @@ export const FEED_SCREEN = {
     } as const;
 
 
-type FeedScreen = typeof FEED_SCREEN[keyof typeof FEED_SCREEN] | typeof FEED_SCREEN[keyof typeof FEED_SCREEN];
+type FeedScreen = typeof FEED_SCREEN[keyof typeof FEED_SCREEN];
 
 interface FeedScreenStore {
   currentScreen: FeedScreen;

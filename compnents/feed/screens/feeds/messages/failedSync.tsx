@@ -1,23 +1,19 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { FailedUploadFeedItem, FeedItem } from "../../../store/useFeedDataStore";
+import { FeedItemComponentProps } from "./failedPicUpload";
+import { FailedSyncFeedItem } from "../../../store/useFeedDataStore";
 import { activeFonts, colors } from "../../../../styles";
 
-export type FeedItemComponentProps = {
-  item: FeedItem;
-  onRemove: (id: string) => void;
-};
-
-export default function FeedItemFailedUpload({
+export default function FeedItemFailedSync({
   item,
   onRemove,
-}: FeedItemComponentProps & { item: FailedUploadFeedItem }) {
+}: FeedItemComponentProps & { item: FailedSyncFeedItem }) {
   return (
     <View style={styles.card}>
       <Text style={styles.message}>{item.title}</Text>
-      <Image source={{ uri: item.imageUri }} style={styles.imagePreview} />
       <Text style={styles.timestamp}>{item.message}</Text>
+      <Text style={styles.timestamp}>Reason: {item.reason}</Text>
       <View style={styles.actionsRow}>
         <TouchableOpacity onPress={item.retryCallback}>
           <Text style={styles.retry}>Retry</Text>
@@ -33,7 +29,7 @@ export default function FeedItemFailedUpload({
 const styles = StyleSheet.create({
   card: {
     width: "100%",
-    backgroundColor: "#F2F2F2",
+    backgroundColor: "#FFEDEE",
     borderRadius: 10,
     padding: moderateScale(15),
     marginBottom: moderateScale(12),
@@ -48,12 +44,6 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(12),
     color: "gray",
     fontFamily: activeFonts.ThinItalic,
-  },
-  imagePreview: {
-    width: "100%",
-    height: 150,
-    borderRadius: 8,
-    marginVertical: moderateScale(8),
   },
   actionsRow: {
     flexDirection: "row",

@@ -8,22 +8,41 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFeedDataStore } from "../../store/useFeedDataStore";
+import { FEED_ITEM_TYPE, FeedItem, useFeedDataStore } from "../../store/useFeedDataStore";
 import { moderateScale } from "react-native-size-matters";
 import { activeFonts, colors } from "../../../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFeedScreenStore } from "../../store/useScreenStore";
+import FeedItemFailedUpload from "./messages/failedPicUpload";
+import FeedItemFailedSync from "./messages/failedSync";
+import FeedItemNotification from "./messages/notification";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function FeedList() {
-  const { feedItems, loadFeedItems } = useFeedDataStore();
+  const feedItems = useFeedDataStore((state) => state.feedItems);
+  const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
   const closeScreen = useFeedScreenStore((state) => state.closeScreen);
+  const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
   useEffect(() => {
     loadFeedItems();
   }, []);
 
   console.log("FeedList", feedItems);
+
+  const renderItem = ({ item }: { item: FeedItem }) => {
+  switch (item.type) {
+    case FEED_ITEM_TYPE.FAILED_UPLOAD:
+      return <FeedItemFailedUpload item={item} onRemove={removeFeedItem} />;
+    case FEED_ITEM_TYPE.FAILED_SYNC:
+      return <FeedItemFailedSync item={item} onRemove={removeFeedItem} />;
+    case FEED_ITEM_TYPE.NOTIFICATION:
+      return <FeedItemNotification item={item} onRemove={removeFeedItem} />;
+    default:
+      return null;
+  }
+};
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -41,14 +60,7 @@ export default function FeedList() {
           data={feedItems}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Text style={styles.message}>{item.message}</Text>
-              <Text style={styles.timestamp}>
-                {new Date(item.timestamp).toLocaleString()}
-              </Text>
-            </View>
-          )}
+          renderItem={renderItem}
         />
       )}
     </SafeAreaView>
