@@ -43,6 +43,8 @@ export default function AnimatedFullScreenModal(props) {
       {activeTutorialID === "OnboardingX" && <OnboardingTest />}
       {activeTutorialID === "PinchAndZoomPhoto" && fullScreenModal && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
+      {activeTutorialID === "EditsScreen" && null}
+
     </Animated.View>
   );
 }

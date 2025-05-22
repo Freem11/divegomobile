@@ -18,6 +18,8 @@ import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
+import { EditsContext } from "../../contexts/editsContext";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 
 export default function DiveShopParallax() {
   const { t } = useTranslation();
@@ -34,6 +36,10 @@ export default function DiveShopParallax() {
   const [diveShopVals, setDiveShopVals] = useState(null);
   const { profile } = useContext(UserProfileContext);
   const [isMyShop, setIsMyShop] = useState(false);
+
+  const { editInfo, setEditInfo } = useContext(EditsContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  
   useEffect(() => {
     if (
       profile[0].partnerAccount &
@@ -110,6 +116,11 @@ export default function DiveShopParallax() {
     );
   };
   
+  const openEditsPage = () => {
+    setEditInfo('DiveShop')
+    setActiveTutorialID("EditsScreen")
+  };
+
   const popoverConent = () => {
     return (
     <>
@@ -117,6 +128,11 @@ export default function DiveShopParallax() {
     label="Change Header Image"
     iconName="camera-flip-outline"
     buttonAction={() => handleImageUpload()}
+    />
+    <IconWithLabel 
+    label="Update Shop Info"
+    iconName="camera-flip-outline"
+    buttonAction={() => openEditsPage()}
     />
     <IconWithLabel 
     label={t('DiveShop.addTrip')}

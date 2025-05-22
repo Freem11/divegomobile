@@ -19,6 +19,9 @@ import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext"
 import { useTranslation } from "react-i18next";
 import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { EditsContext } from "../../contexts/editsContext";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+
 
 export default function DiveSiteParallax() {
   const { t } = useTranslation();
@@ -36,7 +39,9 @@ export default function DiveSiteParallax() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  
+  const { editInfo, setEditInfo } = useContext(EditsContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+
   useEffect(() => {
     if (profile[0].partnerAccount) {
       setIsPartnerAccount(true);
@@ -116,6 +121,11 @@ export default function DiveSiteParallax() {
     );
   };
 
+  const openEditsPage = () => {
+    setEditInfo('DiveSite')
+    setActiveTutorialID("EditsScreen")
+  };
+
   const popoverConent = () => {
     return (
     <>
@@ -124,6 +134,12 @@ export default function DiveSiteParallax() {
       label="Change Header Image"
       iconName="camera-flip-outline"
       buttonAction={() => handleImageUpload()}
+      />}
+    {isPartnerAccount &&
+      <IconWithLabel 
+      label="Update Dive Site Info"
+      iconName="camera-flip-outline"
+      buttonAction={() => openEditsPage()}
       />}
     <IconWithLabel 
     label={t('DiveSite.addSighting')}
