@@ -31,6 +31,7 @@ import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
 import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
+  getDiveSitePhotos,
   getPhotosWithUser,
   getPhotosWithUserEmpty,
   getPhotosByDiveSiteWithExtra,
@@ -46,6 +47,7 @@ import Label from "../../reusables/label";
 import Icon from "../../../icons/Icon";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import { Pagination } from "../../entities/pagination";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -66,8 +68,6 @@ export default function DiveSiteScreen({
   isMyShop,
   bottomHitCount
 }: DiveSiteProps) {
-
-  console.log('bottomHitCount', bottomHitCount)
   
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
@@ -94,21 +94,22 @@ export default function DiveSiteScreen({
   };
 
   const getPhotos = async (site, profile) => {
-    const success = await getPhotosByDiveSiteWithExtra({
-      lat: site.lat,
-      lng: site.lng,
-      userId: profile[0].UserID,
-    });
-    setDiveSitePics(success);
+
+    const pagination = new Pagination({page: bottomHitCount, ipp: 10})
+    
+    const photos = await getDiveSitePhotos(
+      site.lat,
+      site.lng,
+      profile[0].UserID,
+      pagination
+    );
+
+    setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
   };
 
   useEffect(() => {
     getPhotos(selectedDiveSite, profile);
-  }, []);
-
-  useEffect(() => {
-    getPhotos(selectedDiveSite, profile);
-  }, [selectedDiveSite]);
+  }, [selectedDiveSite, bottomHitCount]);
 
   useEffect(() => {
     if (!isEditModeOn && selectedDiveSite) {
@@ -162,6 +163,19 @@ export default function DiveSiteScreen({
     closeParallax(1)
   };
 
+  const groupedPhotos = {};
+
+  diveSitePics && diveSitePics.forEach(photo => {
+    const key = `${photo.dateTaken}`;
+    if (!groupedPhotos[key]) {
+      groupedPhotos[key] = {
+        dateTaken: photo.dateTaken,
+        photos: [],
+      };
+    }
+    groupedPhotos[key].photos.push(photo);
+  });
+  
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
@@ -196,10 +210,10 @@ export default function DiveSiteScreen({
             <Label label="Sea Life Sightings" />
         </S.LabelWrapper>
 
-      {diveSitePics && diveSitePics.map((photoPacket) => {
+      {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
   return (
-    <S.PhotoContainer key={`${photoPacket.dateTaken}`}>   
-      <S.PacketHeader>
+    <S.PhotoContainer key={`${photoPacket.dateTaken}-${index}`}>   
+      <S.PacketHeader key={`${photoPacket.dateTaken}-${index}`}>
 
       <S.HeaderWrapper>
         <S.IconWrapper>
@@ -211,13 +225,12 @@ export default function DiveSiteScreen({
 
       </S.PacketHeader>
       {photoPacket.photos.length > 0 &&
-        photoPacket.photos.map((photo, index) => {
+        photoPacket.photos.map((photo, index) => {       
           return (
             <SeaLifeImageCard
               key={`${photo.id}-${index}`}
               pic={photo}
               dataSetType={"DiveSitePhotos"}
-              diveSiteName={photoPacket.name}
               profileViewAction={() => handleProfileMove(photo.UserName)}
             />
           );

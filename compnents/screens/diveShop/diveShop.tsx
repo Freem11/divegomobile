@@ -45,6 +45,7 @@ export default function DiveShopScreen({
   isMyShop,
   bottomHitCount
 }: DiveShopProps) {
+  
   const { profile } = useContext(UserProfileContext);
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);

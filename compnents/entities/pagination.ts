@@ -6,7 +6,7 @@ export class Pagination {
   ipp:  number;
   sort: string;
 
-  static defaultIpp = 5;
+  static defaultIpp = 20;
 
   constructor({ page: page = 0, sort: sort = 'asc', ipp: ipp = Pagination.defaultIpp } = {}) {
     this.page    = page;

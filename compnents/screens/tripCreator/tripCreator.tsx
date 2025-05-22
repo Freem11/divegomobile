@@ -45,7 +45,6 @@ export default function TripCreatorPage({
   restoreParallax,
   bottomHitCount,
 }: TripCreatorProps) {
-  console.log('bottomHitCount', bottomHitCount)
 
   const { profile } = useContext(UserProfileContext);
   const { editMode, setEditMode } = useContext(EditModeContext);

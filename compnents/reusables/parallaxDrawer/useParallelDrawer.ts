@@ -31,7 +31,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setActiveScreen } = useContext(ActiveScreenContext);
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   useEffect(() => {
     if (levelOneScreen && savedTranslateY.value === HALF_HEIGHT) {
       translateY.value = HALF_HEIGHT;
@@ -82,7 +82,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
 
-      const isAtBottom = Math.abs(translateY.value - minY) < 1000;
+      const isAtBottom = Math.abs(translateY.value - minY) < 2000;
 
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
@@ -140,13 +140,25 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     };
   });
 
+  const updateActiveScreen = (latestScreen: string | null, setActiveScreenFn: React.Dispatch<React.SetStateAction<string | null>>) => {
+    setActiveScreenFn((prev) => {
+      if (prev === latestScreen) {
+        return null;
+      }
+      return prev;
+    });
+  };
+
   const closeParallax = (mapConfig: number | null) => {
+    const currentScreen = activeScreen;
     savedTranslateY.value = translateY.value;
     translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
-        runOnJS(setActiveScreen)(null);
+
+        runOnJS(updateActiveScreen)(currentScreen, setActiveScreen);
+  
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {

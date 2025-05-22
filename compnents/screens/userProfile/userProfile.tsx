@@ -61,8 +61,6 @@ export default function UserProfileScreen({
   isMyShop,
   bottomHitCount,
 }: UserProfileProps) {
-
-  console.log('bottomHitCount', bottomHitCount)
   
   const { profile } = useContext(UserProfileContext);
   const { activeSession } = useContext(SessionContext);
@@ -93,7 +91,7 @@ export default function UserProfileScreen({
 
   const getPhotos = async () => {
 
-    const pagination = new Pagination({page: bottomHitCount})
+    const pagination = new Pagination({page: bottomHitCount, ipp: 10})
 
     let photos;
     if (selectedProfile && selectedProfile[0].UserID) {
@@ -109,8 +107,6 @@ export default function UserProfileScreen({
         pagination
       );
     }
-
-      console.log('photos', photos)
 
     setProfilePhotos((prev) => prev ? [...prev, ...photos] : photos);
   };
@@ -144,9 +140,6 @@ export default function UserProfileScreen({
     getPhotos();
     getFollowStatus();
   }, [selectedProfile, bottomHitCount]);
-
-
-  console.log('success', profilePhotos)
 
   useEffect(() => {
     setUserFail("");
