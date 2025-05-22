@@ -16,10 +16,6 @@ import DropdownItem from './components/dropdownItem';
 import getInitialValue from './utils/getInitialValue';
 import getResultValue from './utils/getResultValue';
 
-// ----------------------
-// Types
-// ----------------------
-
 export type Option<T = object> = {
   key: string;
   label: string;
@@ -58,10 +54,6 @@ export type SelectProps = Partial<typeof defaultProps> & {
   }) => void;
 };
 
-// ----------------------
-// Component
-// ----------------------
-
 const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) => {
   const props = { ...defaultProps, ...incomingProps };
   const searchRef = useRef<TextInput>(null);
@@ -93,20 +85,18 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
     if (typeof props.onChange === 'function') {
       const result = getResultValue(value, props.labelInValue, isMulti);
   
-      // Ensure that we convert any 'string' values to 'Option<object>' if necessary
       let typedResult: string | Option<object> | Option<object>[] | string[];
   
       if (Array.isArray(result)) {
-        // Ensure that each value in the array is of type Option<object>
         typedResult = result.map((item) => {
           if (typeof item === 'string') {
-            return { key: item, label: item }; // convert string to Option<object>
+            return { key: item, label: item };
           }
           return item;
         });
       } else {
         if (typeof result === 'string') {
-          typedResult = { key: result, label: result }; // convert string to Option<object>
+          typedResult = { key: result, label: result };
         } else {
           typedResult = result;
         }
@@ -198,7 +188,6 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
 
   return (
     <S.Container accessibilityRole="list">
-      {/* Trigger */}
       <S.Trigger onPress={onTriggerClick}>
         {props.iconLeft && (
           <S.IconLeft>{props.iconLeft}</S.IconLeft>
@@ -232,7 +221,6 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
         )}
       </S.Trigger>
 
-      {/* Dropdown */}
       {(isOpen || shouldDisplayCreate) && (
         <S.DropdownWrapper>
           <props.dropdownComponent
@@ -256,9 +244,4 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
   );
 });
 
-// ----------------------
-// Exports
-// ----------------------
-
 export default Select;
-// export type { SelectProps };

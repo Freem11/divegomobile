@@ -28,38 +28,26 @@ export const chooseImageHandler = async () => {
 
 export const imageUpload = async (image) => {
   let stage1 = image.assets[0].uri
-  console.log("stage", stage1)
   let uriLink = stage1.uri;
-  console.log("uriLink", uriLink)
   let extension = uriLink.split(".").pop();
-  console.log("extension", extension)
   const fileName = `${Date.now()}.${extension}`;
 
-  console.log("fileName", fileName)
   const newFileUri = FileSystem.documentDirectory + fileName;
-
-  console.log("uriLinks", uriLink, newFileUri)
 
   await FileSystem.moveAsync({
     from: uriLink,
     to: newFileUri,
   });
 
-  console.log("newFileUri", newFileUri)
   const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
     encoding: FileSystem.EncodingType.Base64,
   });
 
-  console.log("fileInfos", fileInfo)
   await uploadphoto(fileInfo, fileName);
 
-  console.log("helper", fileName)
   return (fileName);
 
 }
-
-
-
 
 
 function formatDate(dateTaken) {
