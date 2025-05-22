@@ -32,15 +32,16 @@ export const insertphoto = async (values, monthID) => {
   }
 };
 
-export const getAnimalNamesThatFit = async (value) => {
-  const { data, error } = await supabase
-    .from("photos")
-    .select("label")
-    .ilike("label", "%" + value + "%")
-    .limit(10);
+export const getAnimalNamesThatFit = async (value: string) => {
+  if (value === '') {
+    return [];
+  }
+
+  const { data, error } = await supabase.rpc('get_unique_photo')
+    .ilike('label', '%' + value + '%');
 
   if (error) {
-    console.log("couldn't do it 21,", error);
+    console.log('couldn\'t do it,', error);
     return [];
   }
 
@@ -48,6 +49,23 @@ export const getAnimalNamesThatFit = async (value) => {
     return data;
   }
 };
+
+// export const getAnimalNamesThatFit = async (value) => {
+//   const { data, error } = await supabase
+//     .from("photos")
+//     .select("label")
+//     .ilike("label", "%" + value + "%")
+//     .limit(10);
+
+//   if (error) {
+//     console.log("couldn't do it 21,", error);
+//     return [];
+//   }
+
+//   if (data) {
+//     return data;
+//   }
+// };
 
 export const getPhotosforAnchor = async (value) => {
   const { data, error } = await supabase

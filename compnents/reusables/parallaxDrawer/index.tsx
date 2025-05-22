@@ -15,7 +15,7 @@ import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
 
 type ParallaxDrawerProps = {
-  headerImage: any;
+  headerImage: () => React.JSX.Element | string;
   children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number}>;
   onClose: () => void;
   onMapFlip?: () => void;
@@ -30,9 +30,7 @@ const ParallaxDrawer = ({
   children,
   onClose,
   onMapFlip,
-  handleImageUpload,
-  isMyShop,
-  popoverConent,
+  popoverConent
 }: ParallaxDrawerProps) => {
   
   const {
@@ -93,11 +91,14 @@ const ParallaxDrawer = ({
         <Animated.View
           style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
         >
-          <ImageBackground
-            source={headerImage}
-            style={StyleSheet.absoluteFill}
-            resizeMode="cover"
-          />
+          {typeof(headerImage) === "function" ? headerImage() :
+              <ImageBackground
+              source={headerImage}
+              style={StyleSheet.absoluteFill}
+              resizeMode="cover"
+            />
+            }
+      
         </Animated.View>
       </S.BackgroundContainer>
 

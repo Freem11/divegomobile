@@ -10,9 +10,11 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfileParallax from '../screens/userProfile/userProfileParallax';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
+import PicUploaderParallax from '../screens/picUploader/picUploaderParallax';
 import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
 import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -45,7 +47,7 @@ export default function LevelTwoScreen() {
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen === "ProfileScreen" && <UserProfileParallax />}
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
-      {activeScreen === "PictureUploadScreen" && <PicUploader />}
+      {activeScreen === "PictureUploadScreen" && <PicUploaderParallax />}
       {activeScreen === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
       {activeScreen === "TripCreatorScreen" && <TripCreatorParallax />}
     </Animated.View>
