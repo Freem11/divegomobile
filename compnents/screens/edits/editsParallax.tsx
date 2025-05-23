@@ -45,7 +45,7 @@ useEffect(() => {
     case "DiveShop":
       setLocalPreviewUri(selectedShop[0].diveShopProfilePhoto ? {uri: selectedShop[0].diveShopProfilePhoto} : noImage)
       setInitialFormData({ 
-        dataType: "DiveSite",
+        dataType: "DiveCenter",
         title: "Dive Center Edit",
         id: selectedShop[0].id,
         name: selectedShop[0].orgName,
@@ -58,8 +58,6 @@ useEffect(() => {
       break;
   } 
 },[selectedDiveSite, selectedShop, editInfo])
-
-
 
 
   const onClose = async () => {

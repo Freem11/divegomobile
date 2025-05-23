@@ -142,7 +142,7 @@ export default function DiveSiteParallax() {
     {isPartnerAccount &&
       <IconWithLabel 
       label="Update Dive Site Info"
-      iconName="camera-flip-outline"
+      iconName="page-next-outline"
       buttonAction={() => openEditsPage()}
       />}
     <IconWithLabel 

@@ -135,7 +135,7 @@ export default function DiveShopParallax() {
     />
     <IconWithLabel 
     label="Update Shop Info"
-    iconName="camera-flip-outline"
+    iconName="page-next-outline"
     buttonAction={() => openEditsPage()}
     />
     <IconWithLabel 
