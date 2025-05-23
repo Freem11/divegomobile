@@ -32,7 +32,7 @@ export const ContentContainer = styled.View`
 // margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;
 
 export const InputGroupContainer = styled.View`
-  margin-bottom: ${windowHeight / 70}px;
+  margin-bottom: ${moderateScale(10)}px;
   width: ${windowWidth * 0.75}px;
 `;
 
@@ -46,36 +46,26 @@ export const Header = styled.Text`
 `;
 
 export const TextBuffer = styled.View`
+  margin-top: ${moderateScale(10)}px;
   margin-bottom: ${moderateScale(20)}px;
 `;
 
-export const ButtonSpread = styled.View`
-  flex-direction: row;
-  width: ${windowWidth}px;
-  align-items: center;
-  justify-content: space-between;
-  padding-horizontal: 7%;
-  
-  
-`;
 
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${Platform.OS === 'ios' ? '15%' : '2%'};
+  margin-top: ${moderateScale(10)}px;
   padding-horizontal: 7%;
 `;
 
-export const Hint = styled.Text`
-  align-self: flex-start;
+export const MultilineTextInput = styled.TextInput`
+  padding: ${moderateScale(10)}px;
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Light};
   text-align: center;
-  color: ${colors.themeBlack};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.ThinItalic};
-  margin-top: 2%;
-  margin-left: ${windowWidth > 600 ? '5%' : '9%'};
-  margin-bottom: 0%;
-  width: 30%;
+  borderWidth: ${moderateScale(1)}px;
+  borderColor: ${colors.neutralGrey};
+  borderRadius: ${moderateScale(10)}px;
 `;
 
 export const BackButtonWrapper = styled.View`

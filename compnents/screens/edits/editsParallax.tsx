@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import EdittingScreen from ".";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
@@ -11,6 +11,7 @@ import { EditsContext } from "../../contexts/editsContext";
 
 export type BasicFormData = {
   dataType: string
+  title: string
   id: number
   name: string
   bio: string
@@ -27,21 +28,37 @@ export default function EditScreenParallax() {
 
 console.log('selectedDiveSite', selectedDiveSite)
 console.log('selectedShop', selectedShop)
+console.log('editInfo', editInfo)
 
+useEffect(() => {
   switch(editInfo) {
     case "DiveSite":
-      // setLocalPreviewUri()
-      // setInitialFormData()
+      setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? {uri: selectedDiveSite.diveSiteProfilePhoto} : noImage)
+      setInitialFormData({ 
+        dataType: "DiveSite",
+        title: "Dive Site Edit",
+        id: selectedDiveSite.id,
+        name: selectedDiveSite.name,
+        bio: selectedDiveSite.diveSiteBio
+      })
       break;
     case "DiveShop":
-      // setLocalPreviewUri()
-      // setInitialFormData()
+      setLocalPreviewUri(selectedShop[0].diveShopProfilePhoto ? {uri: selectedShop[0].diveShopProfilePhoto} : noImage)
+      setInitialFormData({ 
+        dataType: "DiveSite",
+        title: "Dive Center Edit",
+        id: selectedShop[0].id,
+        name: selectedShop[0].orgName,
+        bio: selectedShop[0].diveShopBio
+      })
       break;
     case "Profile":
       // setLocalPreviewUri()
       // setInitialFormData()
       break;
   } 
+},[selectedDiveSite, selectedShop, editInfo])
+
 
 
 

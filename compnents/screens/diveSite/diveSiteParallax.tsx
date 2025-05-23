@@ -21,6 +21,7 @@ import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 
 export default function DiveSiteParallax() {
@@ -41,7 +42,8 @@ export default function DiveSiteParallax() {
   );
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  
   useEffect(() => {
     if (profile[0].partnerAccount) {
       setIsPartnerAccount(true);
@@ -122,8 +124,10 @@ export default function DiveSiteParallax() {
   };
 
   const openEditsPage = () => {
-    setEditInfo('DiveSite')
+    setFullScreenModal(true)
+    setEditInfo("DiveSite")
     setActiveTutorialID("EditsScreen")
+  
   };
 
   const popoverConent = () => {

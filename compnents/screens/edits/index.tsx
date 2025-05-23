@@ -52,6 +52,7 @@ export default function EdittingScreen({
       onSubmit={onSubmit}
       closeParallax={closeParallax}
       restoreParallax={restoreParallax}
+      initialFormData={initialFormData}
       values={{
         name: initialFormData?.name,
         bio: initialFormData?.bio

@@ -5,19 +5,23 @@ import Button from '../../reusables/button';
 import { useTranslation } from "react-i18next";
 import { Form, FormRules } from "./form";
 import { Controller, useForm } from "react-hook-form";
+import { BasicFormData } from "./editsParallax";
+import Label from "../../reusables/label";
 
 interface Props {
   values: Form;
   onSubmit: (data: any) => void
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void;
+  initialFormData: BasicFormData
 }
 
 export default function EditScreenView({
   values,
   onSubmit,
   closeParallax,
-  restoreParallax
+  restoreParallax,
+  initialFormData
 }: Props) {
   const {
     control,
@@ -35,11 +39,13 @@ export default function EditScreenView({
     onSubmit(data);
   };
 
+  console.log('values', FormRules.name)
   return (
     <S.ContentContainer>
-        <S.Header>{t('DiveSiteAdd.header')}</S.Header>
+        <S.Header>{initialFormData?.title}</S.Header>
 
           <S.InputGroupContainer>
+          <Label label="Name" />
                 <S.TextBuffer>
                 <Controller
                 control={control}
@@ -47,31 +53,29 @@ export default function EditScreenView({
                 rules={FormRules.name}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <MobileTextInput
-                    iconLeft="calendar-month"
                     placeholder={t('PicUploader.whenPlaceholder')}
                     onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
-                    editable={false}
                   />
                 )}
               />
              </S.TextBuffer>
 
+             <Label label="Biography" />
              <S.TextBuffer>
              <Controller
                 control={control}
                 name="bio"
                 rules={FormRules.bio}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <MobileTextInput
-                    iconLeft="calendar-month"
-                    placeholder={t('PicUploader.whenPlaceholder')}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    editable={false}
-                  />
+                  <S.MultilineTextInput
+                  multiline
+                  placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, '\n')}
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange} 
+                /> 
                 )}
               />
              </S.TextBuffer>

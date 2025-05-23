@@ -11,6 +11,7 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import OnboardingTest from "../tutorial/onboarding";
 import PhotoBoxModel from "../modals/photoBoxModal";
 import CommentsModal from "../modals/commentsModal";
+import EditScreenParallax from '../screens/edits/editsParallax';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -43,7 +44,7 @@ export default function AnimatedFullScreenModal(props) {
       {activeTutorialID === "OnboardingX" && <OnboardingTest />}
       {activeTutorialID === "PinchAndZoomPhoto" && fullScreenModal && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
-      {activeTutorialID === "EditsScreen" && null}
+      {activeTutorialID === "EditsScreen" && <EditScreenParallax/>}
 
     </Animated.View>
   );

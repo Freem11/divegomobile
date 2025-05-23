@@ -20,6 +20,7 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 export default function DiveShopParallax() {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ export default function DiveShopParallax() {
 
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
   
   useEffect(() => {
     if (
@@ -117,8 +119,10 @@ export default function DiveShopParallax() {
   };
   
   const openEditsPage = () => {
+    setFullScreenModal(true)
     setEditInfo('DiveShop')
     setActiveTutorialID("EditsScreen")
+    
   };
 
   const popoverConent = () => {

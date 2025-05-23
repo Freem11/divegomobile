@@ -41,7 +41,7 @@ import EditModeContextProvider from './editModeContext';
 import ActiveScreenContextProvider from './activeScreenContext';
 import LevelOneScreenContextProvider from './levelOneScreenContext';
 import LevelTwoScreenContextProvider from './levelTwoScreenContext';
-import EditsContextProvider from './levelTwoScreenContext';
+import EditsContextProvider from './editsContext';
 
 const providers = [
     MapConfigContextProvider,
