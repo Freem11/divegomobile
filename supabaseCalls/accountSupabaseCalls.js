@@ -45,7 +45,7 @@ if (data) {
 export const updateProfile = async (values) => {
   const response = await supabase
     .from("UserProfiles")
-    .update({ UserName: values.username, profileBio: values.bio, profilePhoto: values.photo  })
+    .update(values)
     .eq("UserID", values.id);
 
   if (response.error) {
