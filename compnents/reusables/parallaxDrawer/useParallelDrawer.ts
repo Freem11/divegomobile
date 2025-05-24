@@ -11,9 +11,10 @@ import {
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -25,10 +26,12 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
   const savedTranslateY = useSharedValue(HALF_HEIGHT);
+  const [bottomHitCount, setBottomHitCount] = useState(1);
+  const hasHitBottom = useSharedValue(false);
 
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
-
+  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   useEffect(() => {
     if (levelOneScreen && savedTranslateY.value === HALF_HEIGHT) {
       translateY.value = HALF_HEIGHT;
@@ -61,6 +64,14 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }
   );
 
+  const handleDrawerHitBottom = () => {
+    setBottomHitCount(prev => prev + 1);
+
+    setTimeout(() => {
+      hasHitBottom.value = false;
+    }, 1000);
+  };
+
   const panGesture = Gesture.Pan()
     .onStart(() => {
       startY.value = translateY.value;
@@ -70,6 +81,13 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const maxY = HALF_HEIGHT;
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
+
+      const isAtBottom = Math.abs(translateY.value - minY) < 2000;
+
+      if (isAtBottom && !hasHitBottom.value) {
+        hasHitBottom.value = true;
+        runOnJS(handleDrawerHitBottom)();
+      }
     })
     .onEnd((event) => {
       const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
@@ -122,12 +140,25 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     };
   });
 
+  const updateActiveScreen = (latestScreen: string | null, setActiveScreenFn: React.Dispatch<React.SetStateAction<string | null>>) => {
+    setActiveScreenFn((prev) => {
+      if (prev === latestScreen) {
+        return null;
+      }
+      return prev;
+    });
+  };
+
   const closeParallax = (mapConfig: number | null) => {
+    const currentScreen = activeScreen;
     savedTranslateY.value = translateY.value;
     translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
+
+        runOnJS(updateActiveScreen)(currentScreen, setActiveScreen);
+  
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {
@@ -154,5 +185,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     contentHeight,
     closeParallax,
     restoreParallax,
+    bottomHitCount
   };
 };

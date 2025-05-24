@@ -24,6 +24,7 @@ export const PhotoContainer = styled.View`
   width: 98%;
   align-items: center;
   margin-top: ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(20)}px;
 `;
 
 export const PacketHeader = styled.View`
@@ -66,6 +67,11 @@ export const Contributor = styled.Text`
   color: ${colors.themeBlack};
 `;
 
+export const HeaderWrapper = styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
 export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(10)}px;
@@ -76,6 +82,7 @@ export const LabelWrapper = styled.View`
 export const IconWrapper = styled.View`
     width: ${moderateScale(24)}px;
     height: ${moderateScale(24)}px;
+      margin-right: ${moderateScale(4)}px;
 `;
 
 

@@ -1,3 +1,4 @@
+import { Pagination } from "../compnents/entities/pagination";
 import { supabase } from "../supabase";
 
 export const getAnimalNames = async () => {
@@ -145,6 +146,54 @@ export const getPhotosByDiveSiteWithExtra = async (values) => {
     return data;
   }
 };
+
+
+export const getDiveSitePhotos = async (lat: number, lng: number, userId: string, pagination?: Pagination) => {
+  const builder = supabase.rpc("get_photos_for_divesite_with_social_info", {
+    lat,
+    lng,
+    connecteduserid: userId
+  });
+
+  if (pagination?.page) {
+    builder.range(pagination.from(), pagination.to());
+  }
+
+  const { data, error } = await builder;
+
+    if (error) {
+    console.error("couldn't do it 98,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
+export const getProfilePhotosByUser = async (userId: string, connectedUserId: string, pagination?: Pagination) => {
+  const builder = supabase.rpc("get_photos_by_userid_with_divesite", {
+    userid: userId,
+    connecteduserid: connectedUserId
+  });
+
+  if (pagination?.page) {
+    builder.range(pagination.from(), pagination.to());
+  }
+
+  const { data, error } = await builder;
+
+    if (error) {
+    console.error("couldn't do it 98,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
+
 
 export const getPhotosByUserWithExtra = async (userId, connectedUserId) => {
   const {
