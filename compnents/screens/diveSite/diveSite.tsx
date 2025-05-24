@@ -121,7 +121,7 @@ export default function DiveSiteScreen({
     try {
       const success = await updateDiveSite({
         id: selectedDiveSite.id,
-        bio: selectedDiveSite.divesitebio,
+        bio: selectedDiveSite.divesiteBio,
         photo: selectedDiveSite.divesiteprofilephoto,
       });
     } catch (e) {

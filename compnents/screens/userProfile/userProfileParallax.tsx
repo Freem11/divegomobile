@@ -102,34 +102,6 @@ const handleFollow = async () => {
       setIsfFollowing(newRecord[0].id);    
   }
 };
-
-  const handleImageUpload = async () => {
-    try {
-      const image = await chooseImageHandler();
-      if (image) {
-
-        let fileName = await imageUpload(image)
-
-        if (profileVals.photo !== null || profileVals.photo === "") {
-          await removePhoto({
-            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: profileVals.photo.split("/").pop(),
-          });
-        }
-
-        setProfileVals({
-          ...profileVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-        const success = await updateProfile({
-          ...profileVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-      }
-    } catch (e) {
-      console.log("error: Photo Selection Cancelled", e.message);
-    }
-  };
   
   const onClose = () => {
     setSelectedProfile(null);
@@ -166,13 +138,8 @@ const handleFollow = async () => {
     return (
     <>
     <IconWithLabel 
-    label="Change Header Image"
-    iconName="camera-flip-outline"
-    buttonAction={() => handleImageUpload()}
-    />
-    <IconWithLabel 
     label="Update My Profile"
-    iconName="page-next-outline"
+    iconName="camera-flip-outline"
     buttonAction={() => openEditsPage()}
     />
     <IconWithLabel 

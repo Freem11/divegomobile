@@ -64,35 +64,6 @@ export default function DiveShopParallax() {
     });
 
   }, [selectedShop]);
-
-  const handleImageUpload = async () => {
-    try {
-      const image = await chooseImageHandler();
-      if (image) {
-
-        let fileName = await imageUpload(image)
-
-        if (diveShopVals.photo !== null || diveShopVals.photo === "") {
-          await removePhoto({
-            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: diveShopVals.photo.split("/").pop(),
-          });
-        }
-
-        setDiveShopVals({
-          ...diveShopVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-        const success = await updateDiveShop({
-          id: diveShopVals.id,
-          bio: diveShopVals.bio,
-          photo: `animalphotos/public/${fileName}`,
-        });
-      }
-    } catch (e) {
-      console.log("error: Photo Selection Cancelled", e.message);
-    }
-  };
   
   const onClose = async () => {
     setLevelOneScreen(false);
@@ -129,13 +100,8 @@ export default function DiveShopParallax() {
     return (
     <>
     <IconWithLabel 
-    label="Change Header Image"
-    iconName="camera-flip-outline"
-    buttonAction={() => handleImageUpload()}
-    />
-    <IconWithLabel 
     label="Update Shop Info"
-    iconName="page-next-outline"
+    iconName="camera-flip-outline"
     buttonAction={() => openEditsPage()}
     />
     <IconWithLabel 

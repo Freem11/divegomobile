@@ -61,7 +61,7 @@ export default function EdittingScreen({
         setIsUploading(true);
 
         try {
-          const fileName = await tryUpload(localPreviewUri.uri);
+          const fileName = await tryUpload(localPreviewUri);
           if (!fileName) {
             throw new Error("Photo upload failed");
           }
@@ -77,11 +77,13 @@ export default function EdittingScreen({
         }
     }
 
+    console.log(formData, localPreviewUri)
+
     if(initialFormData.dataType === "DiveSite"){
       const response = await updateDiveSite({
         id:                   formData.id,
         name:                 formData.name,
-        diveSitebio:          formData.bio,
+        diveSiteBio:          formData.bio,
         diveSiteProfilePhoto: newUri ? newUri : localPreviewUri.uri
       });
       setSupabaseResponse(response);
