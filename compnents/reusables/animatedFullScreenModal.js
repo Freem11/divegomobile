@@ -14,7 +14,7 @@ import CommentsModal from "../modals/commentsModal";
 import EditScreenParallax from '../screens/edits/editsParallax';
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const windowHeight = Dimensions.get("screen").height;
 
 export default function AnimatedFullScreenModal(props) {
   const { activeTutorialID } = useContext(ActiveTutorialIDContext);
@@ -53,7 +53,7 @@ export default function AnimatedFullScreenModal(props) {
 const styles = StyleSheet.create({
   modalBody: {
     position: "absolute",
-    height: "100%",
+    height: windowHeight,
     width: windowWidth,
     zIndex: 50,
     left: 0,

@@ -57,7 +57,10 @@ export default function EdittingScreen({
       return;
     }
     
-    if(formData.uri !== localPreviewUri.uri){
+    const newPhoto = formData.uri.split("/").pop()
+    const existingPhoto = localPreviewUri.uri.split("/").pop()
+
+    if(newPhoto !== existingPhoto){
         setIsUploading(true);
 
         try {
@@ -76,8 +79,6 @@ export default function EdittingScreen({
           setIsUploading(false);
         }
     }
-
-    console.log(formData, localPreviewUri)
 
     if(initialFormData.dataType === "DiveSite"){
       const response = await updateDiveSite({

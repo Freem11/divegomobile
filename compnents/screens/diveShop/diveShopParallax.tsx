@@ -42,6 +42,7 @@ export default function DiveShopParallax() {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   
+  console.log(selectedShop[0].userId, profile[0].UserID)
   useEffect(() => {
     if (
       profile[0].partnerAccount &
@@ -96,6 +97,7 @@ export default function DiveShopParallax() {
     
   };
 
+  console.log(isMyShop)
   const popoverConent = () => {
     return (
     <>

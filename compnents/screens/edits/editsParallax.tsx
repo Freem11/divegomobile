@@ -36,7 +36,7 @@ export default function EditScreenParallax() {
 useEffect(() => {
   switch(editInfo) {
     case "DiveSite":
-      setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? {uri: selectedDiveSite.diveSiteProfilePhoto} : noImage)
+      setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
         dataType: "DiveSite",
         title: "Dive Site Edit",
@@ -49,7 +49,7 @@ useEffect(() => {
       })
       break;
     case "DiveShop":
-      setLocalPreviewUri(selectedShop[0].diveShopProfilePhoto ? {uri: selectedShop[0].diveShopProfilePhoto} : noImage)
+      setLocalPreviewUri(selectedShop[0].diveShopProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop[0].diveShopProfilePhoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
         dataType: "DiveCenter",
         title: "Dive Center Edit",
@@ -62,7 +62,7 @@ useEffect(() => {
       })
       break;
     case "Profile":
-      setLocalPreviewUri(selectedProfile[0].profilePhoto ? {uri: selectedProfile[0].profilePhoto} : noImage)
+      setLocalPreviewUri(selectedProfile[0].profilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile[0].profilePhoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
         dataType: "Profile",
         title: "Edit My Profile",
