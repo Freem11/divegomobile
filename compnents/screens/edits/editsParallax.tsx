@@ -9,6 +9,7 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 
 export type BasicFormData = {
   dataType: string
@@ -24,12 +25,14 @@ export default function EditScreenParallax() {
   const { editInfo } = useContext(EditsContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { selectedShop } = useContext(SelectedShopContext);
-  
+  const { selectedProfile } = useContext(SelectedProfileContext);
+
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
   const [initialFormData, setInitialFormData] = useState<BasicFormData | null>(null);
 
-console.log('selectedDiveSite', selectedDiveSite)
-console.log('selectedShop', selectedShop)
+// console.log('selectedDiveSite', selectedDiveSite)
+// console.log('selectedShop', selectedShop)
+console.log('selectedProfile', selectedProfile)
 console.log('editInfo', editInfo)
 
 useEffect(() => {
@@ -55,11 +58,17 @@ useEffect(() => {
       })
       break;
     case "Profile":
-      // setLocalPreviewUri()
-      // setInitialFormData()
+      setLocalPreviewUri(selectedProfile[0].profilePhoto ? {uri: selectedProfile[0].profilePhoto} : noImage)
+      setInitialFormData({ 
+        dataType: "DiveCenter",
+        title: "Edit My Profile",
+        id: selectedProfile[0].id,
+        name: selectedProfile[0].UserName,
+        bio: selectedProfile[0].profileBio
+      })
       break;
   } 
-},[selectedDiveSite, selectedShop, editInfo, activeTutotialID])
+},[selectedDiveSite, selectedShop, selectedProfile, editInfo, activeTutotialID])
 
 
   const onClose = async () => {

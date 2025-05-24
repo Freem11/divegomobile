@@ -34,13 +34,16 @@ type TripCreatorProps = {
   onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
+  onDrawerHitBottom?: () => void;
+  bottomHitCount?: number;
 };
 
 export default function TripCreatorPage({
   onClose,
   onMapFlip,
   closeParallax,
-  restoreParallax
+  restoreParallax,
+  bottomHitCount,
 }: TripCreatorProps) {
 
   const { profile } = useContext(UserProfileContext);
