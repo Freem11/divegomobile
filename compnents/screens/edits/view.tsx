@@ -39,7 +39,6 @@ export default function EditScreenView({
     onSubmit(data);
   };
 
-  console.log('values', FormRules.name)
   return (
     <S.ContentContainer>
         <S.Header>{initialFormData?.title}</S.Header>
@@ -53,10 +52,11 @@ export default function EditScreenView({
                 rules={FormRules.name}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <MobileTextInput
-                    placeholder={t('PicUploader.whenPlaceholder')}
+                    placeholder={initialFormData?.placeholderName}
                     onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
+                    editable={initialFormData?.dataType === "DiveSite" ? false : true}
                   />
                 )}
               />
@@ -71,7 +71,7 @@ export default function EditScreenView({
                 render={({ field: { onChange, onBlur, value } }) => (
                   <S.MultilineTextInput
                   multiline
-                  placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, '\n')}
+                  placeholder={initialFormData?.placeholderBio}
                   value={value}
                   onBlur={onBlur}
                   onChangeText={onChange} 
@@ -83,7 +83,7 @@ export default function EditScreenView({
 
             <S.ButtonBox>
                <Button 
-                 onPress={() => handleOnSubmit} 
+                 onPress={handleSubmit(handleOnSubmit)} 
                  alt={false} 
                  size='medium'
                  title={t('DiveSiteAdd.submitButton')} 

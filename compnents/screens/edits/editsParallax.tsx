@@ -17,6 +17,9 @@ export type BasicFormData = {
   id: number
   name: string
   bio: string
+  uri: string
+  placeholderName: string
+  placeholderBio: string
 }
 
 export default function EditScreenParallax() {
@@ -30,11 +33,6 @@ export default function EditScreenParallax() {
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
   const [initialFormData, setInitialFormData] = useState<BasicFormData | null>(null);
 
-// console.log('selectedDiveSite', selectedDiveSite)
-// console.log('selectedShop', selectedShop)
-console.log('selectedProfile', selectedProfile)
-console.log('editInfo', editInfo)
-
 useEffect(() => {
   switch(editInfo) {
     case "DiveSite":
@@ -44,7 +42,10 @@ useEffect(() => {
         title: "Dive Site Edit",
         id: selectedDiveSite.id,
         name: selectedDiveSite.name,
-        bio: selectedDiveSite.diveSiteBio
+        bio: selectedDiveSite.diveSiteBio,
+        uri: selectedDiveSite.diveSiteProfilePhoto,
+        placeholderName: 'Dive Site Name cannot be blank!',
+        placeholderBio: `A little about ${selectedDiveSite.name}`
       })
       break;
     case "DiveShop":
@@ -54,17 +55,23 @@ useEffect(() => {
         title: "Dive Center Edit",
         id: selectedShop[0].id,
         name: selectedShop[0].orgName,
-        bio: selectedShop[0].diveShopBio
+        bio: selectedShop[0].diveShopBio,
+        uri: selectedShop[0].diveShopProfilePhoto,
+        placeholderName: 'Dive Centre Name cannot be blank!',
+        placeholderBio: `A little about ${selectedShop[0].orgName}`
       })
       break;
     case "Profile":
       setLocalPreviewUri(selectedProfile[0].profilePhoto ? {uri: selectedProfile[0].profilePhoto} : noImage)
       setInitialFormData({ 
-        dataType: "DiveCenter",
+        dataType: "Profile",
         title: "Edit My Profile",
         id: selectedProfile[0].id,
         name: selectedProfile[0].UserName,
-        bio: selectedProfile[0].profileBio
+        bio: selectedProfile[0].profileBio,
+        uri: selectedProfile[0].profilePhoto,
+        placeholderName: 'You Diver Name cannot be blank!',
+        placeholderBio: `Tell other divers about yourself`
       })
       break;
   } 
@@ -111,6 +118,7 @@ useEffect(() => {
       >
       <EdittingScreen 
           onClose={onClose}
+          setLocalPreviewUri={setLocalPreviewUri}
           localPreviewUri={localPreviewUri}
           initialFormData={initialFormData}
           />

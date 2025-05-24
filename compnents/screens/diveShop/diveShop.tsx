@@ -75,7 +75,6 @@ export default function DiveShopScreen({
       restoreParallax();
     }
   }, [levelOneScreen]);
- 
 
   const getItineraries = async (IdNum) => {
     try {
@@ -221,18 +220,7 @@ const handleMapFlip = async (sites: number[]) => {
       <S.InputGroupContainer>
           <S.Header>{selectedShop[0].orgName}</S.Header>
 
-              {selectedShop && (
-                <PlainTextInput
-                  placeholder={`A little about ${selectedShop[0].orgName}`}
-                  content={diveShopVals && diveShopVals.bio}
-                  isMyShop={isMyShop}
-                  isEditModeOn={isEditModeOn}
-                  setIsEditModeOn={setIsEditModeOn}
-                  onChangeText={(bioText) =>
-                    setDiveShopVals({ ...diveShopVals, bio: bioText })
-                  }
-                />
-              )}
+          <S.Content>{selectedShop[0].diveShopBio}</S.Content>
 
       </S.InputGroupContainer>
 

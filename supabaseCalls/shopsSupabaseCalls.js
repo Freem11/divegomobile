@@ -51,11 +51,13 @@ if (data) {
 }
 };
 
+
 export const updateDiveShop = async (values) => {
-  console.log("updating...", values)
+
+  console.log("supa?", values)
   const { data, error } = await supabase
     .from("shops")
-    .update({ diveShopBio: values.bio, diveShopProfilePhoto: values.photo  })
+    .update(values)
     .eq("id", values.id);
 
   if (error) {
