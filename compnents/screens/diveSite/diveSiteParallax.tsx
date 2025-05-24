@@ -43,7 +43,7 @@ export default function DiveSiteParallax() {
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  
+
   useEffect(() => {
     if (profile[0].partnerAccount) {
       setIsPartnerAccount(true);

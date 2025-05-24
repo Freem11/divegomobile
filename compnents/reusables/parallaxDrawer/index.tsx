@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps } from "react-native";
 import Animated from "react-native-reanimated";
 import ButtonIcon from "../buttonIcon";
@@ -13,6 +13,7 @@ import { useParallaxDrawer } from "./useParallelDrawer";
 import Popover from "react-native-popover-view";
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 type ParallaxDrawerProps = {
   headerImage: () => React.JSX.Element | string;
@@ -47,6 +48,13 @@ const ParallaxDrawer = ({
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
+  const { fullScreenModal } = useContext(FullScreenModalContext);
+  
+useEffect(() => {
+  if(fullScreenModal){
+    setIsVisible(false)
+  }
+},[fullScreenModal])
 
   const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
     <View ref={ref} collapsable={false} style={{marginTop: 3}}>

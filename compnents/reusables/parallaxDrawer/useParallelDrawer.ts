@@ -14,6 +14,7 @@ import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect } from "react";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -28,6 +29,14 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+  const { fullScreenModal } = useContext(FullScreenModalContext);
+  
+  useEffect(() => {
+    if (fullScreenModal && savedTranslateY.value === HALF_HEIGHT) {
+      translateY.value = HALF_HEIGHT;
+      startY.value = 0;
+    }
+  }, [fullScreenModal]);
 
   useEffect(() => {
     if (levelOneScreen && savedTranslateY.value === HALF_HEIGHT) {

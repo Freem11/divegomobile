@@ -8,6 +8,7 @@ import IconWithLabel from "../../reusables/iconWithLabal";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { EditsContext } from "../../contexts/editsContext";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 
 export type BasicFormData = {
   dataType: string
@@ -19,6 +20,7 @@ export type BasicFormData = {
 
 export default function EditScreenParallax() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { activeTutotialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { editInfo } = useContext(EditsContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { selectedShop } = useContext(SelectedShopContext);
@@ -57,11 +59,12 @@ useEffect(() => {
       // setInitialFormData()
       break;
   } 
-},[selectedDiveSite, selectedShop, editInfo])
+},[selectedDiveSite, selectedShop, editInfo, activeTutotialID])
 
 
   const onClose = async () => {
     setFullScreenModal(false);
+    setActiveTutorialID(null);
   };
 
   const popoverConent = () => {
