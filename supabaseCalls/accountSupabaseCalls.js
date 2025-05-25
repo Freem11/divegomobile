@@ -46,13 +46,12 @@ export const updateProfile = async (values) => {
   const response = await supabase
     .from("UserProfiles")
     .update(values)
-    .eq("UserID", values.id);
+    .eq("id", values.id)
 
   if (response.error) {
     console.log("couldn't do it 2,", error);
     return [];
   }
-
     return response;
 };
 

@@ -51,15 +51,25 @@ export default function EdittingScreen({
   };
 
   const onSubmit = async (formData: Required<Form>) => {
-
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
       return;
     }
-    
-    const newPhoto = formData.uri.split("/").pop()
-    const existingPhoto = localPreviewUri.uri.split("/").pop()
 
+    let newPhoto: string
+    if(formData.uri){
+      newPhoto = formData.uri.split("/").pop() || "X"
+    } else {
+      newPhoto = "X"
+    }
+
+    let existingPhoto: string
+    if(localPreviewUri.uri){
+      existingPhoto = localPreviewUri.uri.split("/").pop() || "X"
+    } else {
+      existingPhoto = "X"
+    }
+    
     if(newPhoto !== existingPhoto){
         setIsUploading(true);
 
@@ -79,13 +89,15 @@ export default function EdittingScreen({
           setIsUploading(false);
         }
     }
+     
 
+    console.log("HUH", localPreviewUri, newUri, formData)
     if(initialFormData.dataType === "DiveSite"){
       const response = await updateDiveSite({
         id:                   formData.id,
         name:                 formData.name,
         diveSiteBio:          formData.bio,
-        diveSiteProfilePhoto: newUri ? newUri : localPreviewUri.uri
+        diveSiteProfilePhoto: newUri ? newUri : localPreviewUri.uri || null
       });
       setSupabaseResponse(response);
     } else if (initialFormData.dataType === "DiveCenter"){
@@ -93,7 +105,7 @@ export default function EdittingScreen({
         id:                   formData.id,
         orgName:              formData.name,
         diveShopBio:          formData.bio,
-        diveShopProfilePhoto: newUri ? newUri : localPreviewUri.uri
+        diveShopProfilePhoto: newUri ? newUri : localPreviewUri.uri || null
       });
       setSupabaseResponse(response);
     }  else if (initialFormData.dataType === "Profile"){
@@ -101,7 +113,7 @@ export default function EdittingScreen({
         id:             formData.id,
         UserName:       formData.name,
         profileBio:     formData.bio,
-        profilePhoto:   newUri ? newUri : localPreviewUri.uri
+        profilePhoto:   newUri ? newUri : localPreviewUri.uri || null
       });
       setSupabaseResponse(response);
     }
