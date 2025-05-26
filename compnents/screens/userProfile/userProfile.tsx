@@ -135,7 +135,6 @@ export default function UserProfileScreen({
 
   };
 
-
   useEffect(() => {
     getPhotos();
     getFollowStatus();

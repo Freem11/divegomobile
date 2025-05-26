@@ -38,7 +38,7 @@ useEffect(() => {
     case "DiveSite":
       setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
-        dataType: "DiveSite",
+        dataType: "Dive Site",
         title: "Dive Site Edit",
         id: selectedDiveSite.id,
         name: selectedDiveSite.name,
@@ -51,7 +51,7 @@ useEffect(() => {
     case "DiveShop":
       setLocalPreviewUri(selectedShop[0].diveShopProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop[0].diveShopProfilePhoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
-        dataType: "DiveCenter",
+        dataType: "Dive Center",
         title: "Dive Center Edit",
         id: selectedShop[0].id,
         name: selectedShop[0].orgName,

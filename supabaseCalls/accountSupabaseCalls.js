@@ -47,9 +47,10 @@ export const updateProfile = async (values) => {
     .from("UserProfiles")
     .update(values)
     .eq("id", values.id)
+    .select();
 
   if (response.error) {
-    console.log("couldn't do it 2,", error);
+    console.log("couldn't do it profile update,", error);
     return [];
   }
     return response;

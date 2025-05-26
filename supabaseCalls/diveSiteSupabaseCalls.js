@@ -154,13 +154,14 @@ export const updateDiveSite = async (values) => {
   const response = await supabase
     .from("diveSites")
     .update(values)
-    .eq("id", values.id);
+    .eq("id", values.id)
+    .select();
 
     if (response.error) {
-      console.log('couldn\'t do it,', response.error);
+      console.log("couldn't do it dive site,", error);
+      return [];
     }
-  
-    return response;
+      return response;
 };
 
 export const getSingleDiveSite = async (lat, lng) => {

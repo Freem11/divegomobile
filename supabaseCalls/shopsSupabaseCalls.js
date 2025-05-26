@@ -55,19 +55,17 @@ if (data) {
 export const updateDiveShop = async (values) => {
 
   console.log("supa?", values)
-  const { data, error } = await supabase
+  const response = await supabase
     .from("shops")
     .update(values)
-    .eq("id", values.id);
+    .eq("id", values.id)
+    .select();
 
-  if (error) {
-    console.log("couldn't do it 2,", error);
-    return [];
-  }
-
-  if (data) {
-    return data;
-  }
+    if (response.error) {
+      console.log("couldn't do it dive centre,", error);
+      return [];
+    }
+      return response;
 };
 
 
