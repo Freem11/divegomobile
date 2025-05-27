@@ -151,6 +151,7 @@ const handleFollow = async () => {
     )
   };
 
+  console.log('profileVals', profileVals)
   return (
     <ParallaxDrawer 
       headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage} 

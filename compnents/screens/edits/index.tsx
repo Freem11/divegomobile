@@ -78,7 +78,9 @@ export default function EdittingScreen({
     } else {
       existingPhoto = "X"
     }
-    
+
+    let updatedUri = null;
+
     if(newPhoto !== existingPhoto){
         setIsUploading(true);
 
@@ -89,6 +91,7 @@ export default function EdittingScreen({
           }
 
           const fullPath = `animalphotos/public/${fileName}`;
+          updatedUri = fullPath;
           setNewUri(fullPath)
 
         } catch (err) {
@@ -98,13 +101,13 @@ export default function EdittingScreen({
           setIsUploading(false);
         }
     }
-     
+
     if(initialFormData.dataType === "Dive Site"){
       const response = await updateDiveSite({
         id:                   formData.id,
         name:                 formData.name,
         diveSiteBio:          formData.bio,
-        diveSiteProfilePhoto: newUri ? newUri : localPreviewUri.uri || null
+        diveSiteProfilePhoto: updatedUri ? updatedUri : localPreviewUri.uri || null
       });
       setSelectedDiveSite(response?.data[0])
       if(response){setSupabaseResponse(response);}
@@ -113,7 +116,7 @@ export default function EdittingScreen({
         id:                   formData.id,
         orgName:              formData.name,
         diveShopBio:          formData.bio,
-        diveShopProfilePhoto: newUri ? newUri : localPreviewUri.uri || null
+        diveShopProfilePhoto: updatedUri ? updatedUri : localPreviewUri.uri || null
       });
       setSelectedShop(response?.data)
       if(response){setSupabaseResponse(response);}
@@ -123,9 +126,8 @@ export default function EdittingScreen({
         id:             formData.id,
         UserName:       formData.name,
         profileBio:     formData.bio,
-        profilePhoto:   newUri ? newUri : localPreviewUri.uri || null
+        profilePhoto:   updatedUri ? updatedUri : localPreviewUri.uri || null
       });
-
       setSelectedProfile(response?.data)
       setProfile(response?.data)
       if(response){setSupabaseResponse(response);}
