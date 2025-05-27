@@ -16,8 +16,8 @@ import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { ActiveScreenContext } from "../../contexts/activeScreenContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { EditsContext } from "../../contexts/editsContext";
+import { SavedTranslateYContext } from "../../contexts/savedTranslateYContext";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -28,7 +28,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const translateY = useSharedValue(HALF_HEIGHT);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
-  const savedTranslateY = useSharedValue(0);
+  // const savedTranslateY = useSharedValue(0);
   const [bottomHitCount, setBottomHitCount] = useState(1);
   const hasHitBottom = useSharedValue(false);
 
@@ -38,24 +38,26 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { editInfo, setEditInfo } = useContext(EditsContext);
 
+  const { savedTranslateY, setSavedTranslateY } = useContext(SavedTranslateYContext);
+
   useEffect(() => {
-    if (fullScreenModal && savedTranslateY.value === HALF_HEIGHT) {
-      translateY.value = HALF_HEIGHT;
+    if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
+      translateY.value = 0;
       startY.value = 0;
     }
   }, [fullScreenModal]);
 
 
   useEffect(() => {
-    if (levelOneScreen && savedTranslateY.value === HALF_HEIGHT) {
-      translateY.value = HALF_HEIGHT;
+    if (levelOneScreen && savedTranslateY === HALF_HEIGHT) {
+      translateY.value = 0;
       startY.value = 0;
     }
   }, [levelOneScreen]);
 
   useEffect(() => {
-    if (levelTwoScreen && savedTranslateY.value === HALF_HEIGHT) {
-      translateY.value = HALF_HEIGHT;
+    if (levelTwoScreen && savedTranslateY === HALF_HEIGHT) {
+      translateY.value = 0;
       startY.value = 0;
     }
   }, [levelTwoScreen]);
@@ -165,7 +167,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const closeParallax = (mapConfig: number | null) => {
     const currentScreen = activeScreen;
-    savedTranslateY.value = translateY.value;
+    setSavedTranslateY(translateY.value)
     translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
         translateY.value = 0;
@@ -182,7 +184,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {
-          savedTranslateY.value = HALF_HEIGHT;
+          runOnJS(setSavedTranslateY)(HALF_HEIGHT)
           runOnJS(onClose)();
         }
       }
@@ -190,7 +192,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   };
 
   const restoreParallax = () => {
-    translateY.value = withTiming(savedTranslateY.value, {
+    translateY.value = withTiming(savedTranslateY, {
       duration: 300,
       easing: Easing.out(Easing.exp),
     });
