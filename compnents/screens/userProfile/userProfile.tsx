@@ -135,7 +135,6 @@ export default function UserProfileScreen({
 
   };
 
-
   useEffect(() => {
     getPhotos();
     getFollowStatus();
@@ -224,21 +223,10 @@ export default function UserProfileScreen({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.UserNameContainer>
-          <S.Header>{selectedProfile && selectedProfile[0].UserName}</S.Header>
+          <S.Header>{selectedProfile[0]?.UserName}</S.Header>
         </S.UserNameContainer>
    
-             {selectedProfile && (
-                <PlainTextInput
-                  placeholder={`A little about ${selectedProfile[0].UserName}`}
-                  value={selectedProfile[0].profileBio}
-                  isMyShop={isMyShop}
-                  isEditModeOn={isEditModeOn}
-                  setIsEditModeOn={setIsEditModeOn}
-                  onChangeText={(bioText) =>
-                    setSelectedProfile({ ...selectedProfile, profileBio: bioText })
-                  }
-                />
-              )} 
+        <S.Content>{selectedProfile[0]?.profileBio}</S.Content>
 
       </S.InputGroupContainer>
 

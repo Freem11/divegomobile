@@ -21,6 +21,9 @@ import { SelectedProfileContext } from "../../contexts/selectedProfileModalConte
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
 import { SessionContext } from "../../contexts/sessionContext";
+import { EditsContext } from "../../contexts/editsContext";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 export default function UserProfileParallax() {
   const { t } = useTranslation();
@@ -43,6 +46,11 @@ export default function UserProfileParallax() {
   
   const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
+  const { editInfo, setEditInfo } = useContext(EditsContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+
+  
   useEffect(() => {
     if (
       (selectedProfile && selectedProfile[0].UserID === profile[0].UserID)
@@ -94,34 +102,6 @@ const handleFollow = async () => {
       setIsfFollowing(newRecord[0].id);    
   }
 };
-
-  const handleImageUpload = async () => {
-    try {
-      const image = await chooseImageHandler();
-      if (image) {
-
-        let fileName = await imageUpload(image)
-
-        if (profileVals.photo !== null || profileVals.photo === "") {
-          await removePhoto({
-            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: profileVals.photo.split("/").pop(),
-          });
-        }
-
-        setProfileVals({
-          ...profileVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-        const success = await updateProfile({
-          ...profileVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-      }
-    } catch (e) {
-      console.log("error: Photo Selection Cancelled", e.message);
-    }
-  };
   
   const onClose = () => {
     setSelectedProfile(null);
@@ -148,13 +128,19 @@ const handleFollow = async () => {
     );
   };
   
+  const openEditsPage = () => {
+    setFullScreenModal(true)
+    setEditInfo("Profile")
+    setActiveTutorialID("EditsScreen")
+  };
+
   const popoverConent = () => {
     return (
     <>
     <IconWithLabel 
-    label="Change Header Image"
+    label="Update My Profile"
     iconName="camera-flip-outline"
-    buttonAction={() => handleImageUpload()}
+    buttonAction={() => openEditsPage()}
     />
     <IconWithLabel 
     label="Open Settings"
@@ -165,6 +151,7 @@ const handleFollow = async () => {
     )
   };
 
+  console.log('profileVals', profileVals)
   return (
     <ParallaxDrawer 
       headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage} 

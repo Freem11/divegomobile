@@ -46,10 +46,18 @@ export const PacketHeaderItem = styled.Text`
 `;
 
 export const Header = styled.Text`
-;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.headersBlue};
+  align-self: center;
+  text-align: center;
+`;
+
+export const Content = styled.Text`
+  margin-horizontal: 3%;
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Thin};
+  color: ${colors.themeBlack};
   align-self: center;
   text-align: center;
 `;

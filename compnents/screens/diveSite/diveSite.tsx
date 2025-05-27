@@ -121,7 +121,7 @@ export default function DiveSiteScreen({
     try {
       const success = await updateDiveSite({
         id: selectedDiveSite.id,
-        bio: selectedDiveSite.divesitebio,
+        bio: selectedDiveSite.divesiteBio,
         photo: selectedDiveSite.divesiteprofilephoto,
       });
     } catch (e) {
@@ -192,18 +192,9 @@ export default function DiveSiteScreen({
         </S.SiteNameContainer>
 
         <S.Contributor>Added by: {selectedDiveSite.userName}</S.Contributor>
-            {selectedDiveSite && (
-                <PlainTextInput
-                  placeholder={`A little about ${selectedDiveSite.name}`}
-                  value={selectedDiveSite.diveSiteBio}
-                  isMyShop={isMyShop}
-                  isEditModeOn={isEditModeOn}
-                  setIsEditModeOn={setIsEditModeOn}
-                  onChangeText={(bioText) =>
-                    setDiveSiteVals({ ...diveSiteVals, bio: bioText })
-                  }
-                />
-              )}
+
+        <S.Content>{selectedDiveSite?.diveSiteBio}</S.Content>
+
       </S.InputGroupContainer>
 
       <S.LabelWrapper>

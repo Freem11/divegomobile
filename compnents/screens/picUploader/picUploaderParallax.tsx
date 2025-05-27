@@ -55,10 +55,6 @@ export default function PicUploaderParallax() {
   };
   
   const handleImageUpload = async (argPicture) => {
-    setPinValues({
-      ...pinValues,
-      PicFile: `animalphotos/public/${argPicture}`,
-    });
     setLocalPreviewUri({uri: argPicture});
   };
   
