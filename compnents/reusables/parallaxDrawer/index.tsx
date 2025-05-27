@@ -67,7 +67,6 @@ useEffect(() => {
     </View>
   ));
   
-  console.log('headerImage', headerImage)
   return (
     <GestureHandlerRootView>
       <AnimatedSafeAreaView style={[S.styles.safeArea, animatedSafeAreaStyle]}>

@@ -28,7 +28,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const translateY = useSharedValue(HALF_HEIGHT);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
-  const savedTranslateY = useSharedValue(HALF_HEIGHT);
+  const savedTranslateY = useSharedValue(0);
   const [bottomHitCount, setBottomHitCount] = useState(1);
   const hasHitBottom = useSharedValue(false);
 
