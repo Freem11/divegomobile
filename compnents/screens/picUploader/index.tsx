@@ -4,7 +4,6 @@ import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { PinContext } from "../../contexts/staticPinContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
@@ -14,6 +13,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE } from "../../feed/store/useFeedDataStore";
 import { v4 as uuidv4 } from "uuid";
 import { saveFailedUpload } from "../../feed/store/asyncStore";
+import { useTranslation } from "react-i18next";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -55,12 +55,11 @@ export default function PicUploader({
   localPreviewUri,
   setLocalPreviewUri,
 }: PicUploaderProps) {
+  const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -80,51 +79,62 @@ export default function PicUploader({
     }
   };
 
+  const buildFailedUploadItem = (formData: Required<Form>): FailedUploadFeedItem => {
+    const ID = uuidv4()
+    return {
+      id: ID,
+      type: FEED_ITEM_TYPE.FAILED_UPLOAD,
+      title: t('PicUploader.uploadFailedTitle'),
+      message: t('PicUploader.couldUploadMsg', { animal: formData.animal.label, diveSite: formData.diveSiteName }),
+      timestamp: Date.now(),
+      imageUri: localPreviewUri,
+      // retryCallback: async () => {
+      //   console.log("Retrying upload for item ID:", ID);
+      //   const { isExist } = await checkFileExists(localPreviewUri);
+      //   if (!isExist) {
+      //     showError(t('PicUploader.noPictureFound'));
+      //     return;
+      //   }
+      //   try {
+      //     await onSubmit(formData);
+      //     removeFeedItem(ID);
+      //   } catch (err) {
+      //     console.warn("Retry failed:", err);
+      //     showError(t('PicUploader.retryFailedUpload'));
+      //   }
+      // },
+    };
+  }
+
   const onSubmitOrCache = async (formData: Required<Form>) => {
+
+    console.log("onSubmitOrCache", formData);
     if (!localPreviewUri || !formData.date || !formData.animal) {
-      showWarning("Please fill in all required fields.");
+      showWarning(t('PicUploader.fillRequiredFields'));
       return;
     }
-
     const netState = await NetInfo.fetch();
 
-    if (true || !netState.isConnected || !netState.isInternetReachable) {
-
-      // add to que
-      const failedItemToUpload: FailedUploadFeedItem = {
-        id: uuidv4(),
-        type: FEED_ITEM_TYPE.FAILED_UPLOAD,
-        title: "Upload Failed",
-        message: "Could not upload image due to network issue",
-        timestamp: Date.now(),
-        imageUri: localPreviewUri,
-        retryCallback: async () => {
-          await onSubmit(formData);
-        }
-
-      };
+    if (!netState.isConnected || !netState.isInternetReachable) {
+      const failedItemToUpload = buildFailedUploadItem(formData);
       await saveFailedUpload(failedItemToUpload)
-      showError("You are offline / slow network. Retry from the feed menu when you have a solid network.");
-      // show error and cache the data
+      showError(t('PicUploader.offlineMsg'));
 
-      return;
+    } else {
+      await onSubmit(formData);
     }
-    await onSubmit(formData);
-
   }
-  
+
   const onSubmit = async (formData: Required<Form>) => {
 
 
-    // localPreviewUri file:///data/user/0/com.freem11.divegomobile/cache/ImagePicker/67414f78-c609-445b-aa81-bba91b340fa7.jpeg
     setIsUploading(true);
 
-  
     try {
       // Step 2: Upload image
       const fileName = await tryUpload(localPreviewUri);
       if (!fileName) {
-        throw new Error("Photo upload failed");
+        throw new Error(t('PicUploader.failedUpload'));
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
@@ -147,20 +157,17 @@ export default function PicUploader({
         UserId: profile[0].UserID,
       });
 
-      // lol {"UserId": "acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd", "dateTaken": "2025-05-20", "label": "test", "latitude": "19.330867", "longitude": "-110.81545", "photoFile": "animalphotos/public/1747864883778.jpeg"}
       if (error) {
         await removePhoto({
           filePath: FILE_PATH,
           fileName: fullPath,
         });
 
-        throw new Error("Failed to save a photo");
+        throw new Error(t('PicUploader.failedToSave'));
       }
-      // Step 5: Success
       setConfirmationType("Sea Creature Submission");
-      showSuccess("Photo uploaded successfully!");
+      showSuccess(t('PicUploader.successUpload'));
       resetForm();
-      // setLevelTwoScreen(false);
       setLocalPreviewUri(null);
     } catch (err) {
       console.error("Error uploading image:", err);

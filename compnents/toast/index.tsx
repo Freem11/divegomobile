@@ -55,7 +55,7 @@ export const toastConfig = {
   [TOAST_MAP.two_buttons]: ({ text1, text2, props }) => (
     <View style={[styles.base, styles.warning]}>
       <Text style={styles.title}>{text1}</Text>
-      <Text style={styles.message}>{text2}</Text>
+      <Text style={styles.message} numberOfLines={undefined}>{text2}</Text>
       <View style={styles.buttonRow}>
         <TouchableOpacity onPress={props.onPrimary}>
           <Text style={styles.button}>Retry</Text>
@@ -84,6 +84,9 @@ const styles = StyleSheet.create({
   message: {
     color: '#fff',
     marginBottom: 8,
+    flexShrink: 1,           
+    flexWrap: 'wrap',        
+    includeFontPadding: false,
   },
   button: {
     color: '#fff',

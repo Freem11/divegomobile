@@ -91,7 +91,16 @@
         "whereLabel": "Where you saw it",
         "wherePlaceholder": "Location of Sighting",
         "noPreviewAvailable": "No preview available",
-        "submitButton": "Submit"
+        "submitButton": "Submit",
+        "fillRequiredFields": "Please fill in all required fields.",
+        "uploadFailedTitle": "Upload Failed",
+        "couldUploadMsg": "Couldnt upload {{animal}} on {{ diveSiteName }}",
+        "offlineMsg": "You are offline / slow network. Retry from the feed menu.",
+        "successUpload": "Photo uploaded successfully!",
+        "failedUpload": "Photo upload failed.",
+        "failedToSave": "Failed to save a photo",
+        "noPictureFound": "No picture found, reupload",
+        "retryFailedUpload": "Retry Failed Upload"
     },
     "TripList": {
         "header": "Your Dive Trip Offerings",

@@ -17,11 +17,12 @@ import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
 import { useTranslation } from "react-i18next";
+import { clearFailedUploads } from "../../store/asyncStore";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function FeedList() {
-   const { t } = useTranslation();
+  const { t } = useTranslation();
   const feedItems = useFeedDataStore((state) => state.feedItems);
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
   const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
@@ -31,7 +32,6 @@ export default function FeedList() {
     loadFeedItems();
   }, []);
 
-  console.log("FeedList", feedItems);
 
   const renderItem = ({ item }: { item: FeedItem }) => {
     switch (item.type) {
@@ -46,7 +46,6 @@ export default function FeedList() {
     }
   };
 
-
   return (
     <SafeAreaView style={styles.container}>
       <MaterialIcons
@@ -55,6 +54,7 @@ export default function FeedList() {
         color={colors.themeBlack}
         onPress={() => closeScreen()}
       />
+      
       {feedItems.length === 0 ? (
         <Text style={styles.emptyMessage}>{t('Feed.noFeeds')}</Text>
       ) : (
@@ -72,7 +72,6 @@ export default function FeedList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     backgroundColor: colors.themeWhite,
     paddingHorizontal: moderateScale(16),
     paddingBottom: moderateScale(100),

@@ -54,38 +54,36 @@ interface FeedDataStore {
 }
 
 const FEED_ITEMS: FeedItem[] = [
-  {
-    id: uuidv4(),
-    type: FEED_ITEM_TYPE.FAILED_UPLOAD,
-    title: "Upload Failed",
-    message: "Could not upload image due to network issue",
-    timestamp: Date.now(),
-    imageUri:
-      "file:///data/user/0/com.freem11.divegomobile/cache/ImagePicker/67414f78-c609-445b-aa81-bba91b340fa7.jpeg",
-
-    retryCallback: async () => {
-      console.log("Retrying upload...");
-    },
-  },
-
-  {
-    id: uuidv4(),
-    type: FEED_ITEM_TYPE.FAILED_SYNC,
-    title: "Sync Error",
-    message: "Sync with backend failed.",
-    timestamp: Date.now(),
-    reason: "Timeout error",
-    retryCallback: async () => console.log("Retrying sync..."),
-  },
-  {
-    id: uuidv4(),
-    type: FEED_ITEM_TYPE.NOTIFICATION,
-    title: "Reminder",
-    message: "Verify your account email.",
-    timestamp: Date.now(),
-    icon: "bell",
-    action: () => console.log("Opening notification..."),
-  },
+  // {
+  //   id: uuidv4(),
+  //   type: FEED_ITEM_TYPE.FAILED_UPLOAD,
+  //   title: "Upload Failed",
+  //   message: "Could not upload image due to network issue",
+  //   timestamp: Date.now(),
+  //   imageUri:
+  //     "file:///data/user/0/com.freem11.divegomobile/cache/ImagePicker/67414f78-c609-445b-aa81-bba91b340fa7.jpeg",
+  //   retryCallback: async () => {
+  //     console.log("Retrying upload...");
+  //   },
+  // },
+  // {
+  //   id: uuidv4(),
+  //   type: FEED_ITEM_TYPE.FAILED_SYNC,
+  //   title: "Sync Error",
+  //   message: "Sync with backend failed.",
+  //   timestamp: Date.now(),
+  //   reason: "Timeout error",
+  //   retryCallback: async () => console.log("Retrying sync..."),
+  // },
+  // {
+  //   id: uuidv4(),
+  //   type: FEED_ITEM_TYPE.NOTIFICATION,
+  //   title: "Reminder",
+  //   message: "Verify your account email.",
+  //   timestamp: Date.now(),
+  //   icon: "bell",
+  //   action: () => console.log("Opening notification..."),
+  // },
 ];
 
 export const useFeedDataStore = create<FeedDataStore>((set) => ({
@@ -106,7 +104,6 @@ export const useFeedDataStore = create<FeedDataStore>((set) => ({
       const itemToRemove = state.feedItems.find((item) => item.id === id);
       if (!itemToRemove) return state;
 
-      // Trigger side effects based on type
       if (itemToRemove.type === FEED_ITEM_TYPE.FAILED_UPLOAD) {
         removeFailedUpload(id);
       }
