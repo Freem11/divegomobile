@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
+import { getFailedUploads } from "./asyncStore";
 
 export const FEED_ITEM_TYPE = {
   FAILED_UPLOAD: "failed_upload",
@@ -20,14 +21,7 @@ export interface BaseFeedItem {
 export interface FailedUploadFeedItem extends BaseFeedItem {
   type: typeof FEED_ITEM_TYPE.FAILED_UPLOAD;
   imageUri: string;
-  supabasePayload: {
-    photoFile: string;
-    label: string;
-    dateTaken: string;
-    latitude: string;
-    longitude: string;
-    UserId: string;
-  };
+
   retryCallback: () => Promise<void>;
 }
 
@@ -68,14 +62,7 @@ const FEED_ITEMS: FeedItem[] = [
     timestamp: Date.now(),
     imageUri:
       "file:///data/user/0/com.freem11.divegomobile/cache/ImagePicker/67414f78-c609-445b-aa81-bba91b340fa7.jpeg",
-    supabasePayload: {
-      photoFile: "animalphotos/public/xyz.jpg",
-      label: "turtle",
-      dateTaken: "2025-05-21",
-      latitude: "49.2827",
-      longitude: "-123.1207",
-      UserId: "acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd",
-    },
+
     retryCallback: async () => {
       console.log("Retrying upload...");
     },
@@ -104,8 +91,10 @@ const FEED_ITEMS: FeedItem[] = [
 export const useFeedDataStore = create<FeedDataStore>((set) => ({
   feedItems: [],
 
-  loadFeedItems: () => {
-    set({ feedItems: FEED_ITEMS });
+  loadFeedItems: async () => {
+    const failedItems = await getFailedUploads();
+    console.log("Failed items loaded:", failedItems);
+    set({ feedItems: [...FEED_ITEMS, ...failedItems] });
   },
 
   addFeedItem: (item) =>

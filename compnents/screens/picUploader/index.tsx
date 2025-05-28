@@ -1,6 +1,5 @@
 import React, { Dispatch, useContext, useState } from "react";
 import PicUploaderView from "./view";
-import moment from "moment";
 import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
@@ -11,12 +10,17 @@ import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { DynamicSelectOptionsAnimals } from "../../entities/DynamicSelectOptionsAnimals";
+import NetInfo from "@react-native-community/netinfo";
+import { FailedUploadFeedItem, FEED_ITEM_TYPE } from "../../feed/store/useFeedDataStore";
+import { v4 as uuidv4 } from "uuid";
+import { saveFailedUpload } from "../../feed/store/asyncStore";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
 type dropDownItem = {
-  key: string, label: string
-}
+  key: string;
+  label: string;
+};
 
 export interface Form {
   date?: string;
@@ -28,18 +32,18 @@ export interface Form {
 export const INIT_FORM_STATE: Form = {
   date: "",
   photo: "",
-  animal: {key: "", label: ""},
+  animal: { key: "", label: "" },
   diveSiteName: "",
 };
 
 type PicUploaderProps = {
   onClose: () => void;
   onMapFlip?: () => void;
-  closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void; 
+  closeParallax?: (mapConfig: number) => void;
+  restoreParallax?: () => void;
   handleImageUpload?: () => void;
-  localPreviewUri: string 
-  setLocalPreviewUri: Dispatch<any>
+  localPreviewUri: string;
+  setLocalPreviewUri: Dispatch<any>;
 };
 
 export default function PicUploader({
@@ -49,9 +53,8 @@ export default function PicUploader({
   restoreParallax,
   handleImageUpload,
   localPreviewUri,
-  setLocalPreviewUri
+  setLocalPreviewUri,
 }: PicUploaderProps) {
-
   const { profile } = useContext(UserProfileContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -77,16 +80,46 @@ export default function PicUploader({
     }
   };
 
-  const onSubmit = async (formData: Required<Form>) => {
-
+  const onSubmitOrCache = async (formData: Required<Form>) => {
     if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning("Please fill in all required fields.");
       return;
     }
-    console.log("localPreviewUri", localPreviewUri);
+
+    const netState = await NetInfo.fetch();
+
+    if (true || !netState.isConnected || !netState.isInternetReachable) {
+
+      // add to que
+      const failedItemToUpload: FailedUploadFeedItem = {
+        id: uuidv4(),
+        type: FEED_ITEM_TYPE.FAILED_UPLOAD,
+        title: "Upload Failed",
+        message: "Could not upload image due to network issue",
+        timestamp: Date.now(),
+        imageUri: localPreviewUri,
+        retryCallback: async () => {
+          await onSubmit(formData);
+        }
+
+      };
+      await saveFailedUpload(failedItemToUpload)
+      showError("You are offline / slow network. Retry from the feed menu when you have a solid network.");
+      // show error and cache the data
+
+      return;
+    }
+    await onSubmit(formData);
+
+  }
+  
+  const onSubmit = async (formData: Required<Form>) => {
+
+
     // localPreviewUri file:///data/user/0/com.freem11.divegomobile/cache/ImagePicker/67414f78-c609-445b-aa81-bba91b340fa7.jpeg
     setIsUploading(true);
 
+  
     try {
       // Step 2: Upload image
       const fileName = await tryUpload(localPreviewUri);
@@ -95,7 +128,7 @@ export default function PicUploader({
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
-      
+
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
         label: formData.animal.label,
@@ -107,12 +140,12 @@ export default function PicUploader({
 
       console.log("lol", {
         photoFile: fullPath,
-        label: Animal,
-        dateTaken: PicDate,
-        latitude: Latitude,
-        longitude: Longitude,
-        UserId,
-      })
+        label: formData.animal.label,
+        dateTaken: formData.date,
+        latitude: selectedDiveSite.lat,
+        longitude: selectedDiveSite.lng,
+        UserId: profile[0].UserID,
+      });
 
       // lol {"UserId": "acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd", "dateTaken": "2025-05-20", "label": "test", "latitude": "19.330867", "longitude": "-110.81545", "photoFile": "animalphotos/public/1747864883778.jpeg"}
       if (error) {
@@ -130,7 +163,6 @@ export default function PicUploader({
       // setLevelTwoScreen(false);
       setLocalPreviewUri(null);
     } catch (err) {
-
       console.error("Error uploading image:", err);
       showError(err.message);
     } finally {
@@ -156,7 +188,7 @@ export default function PicUploader({
       datePickerVisible={datePickerVisible}
       hideDatePicker={() => setDatePickerVisible(false)}
       onImageSelect={handleImageUpload}
-      onSubmit={onSubmit}
+      onSubmit={onSubmitOrCache}
       onClose={onClose}
       getMoreAnimals={DynamicSelectOptionsAnimals.getMoreOptions}
       setPinValues={setPinValues}

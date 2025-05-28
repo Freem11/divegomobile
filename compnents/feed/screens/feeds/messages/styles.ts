@@ -55,3 +55,19 @@ export const IconWrapper = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
+
+export const ImageFallback = styled.View`
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  margin-vertical: ${moderateScale(8)}px;
+  background-color: #ccc;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const FallbackText = styled.Text`
+  color: #555;
+  font-family: ${activeFonts.Italic};
+  font-size: ${moderateScale(12)}px;
+`;
