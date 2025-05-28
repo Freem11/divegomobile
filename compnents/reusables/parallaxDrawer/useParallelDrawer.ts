@@ -67,13 +67,11 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     (newHeight, prevHeight) => {
       if (newHeight !== prevHeight && newHeight > 0) {
         const minY = SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT;
-        const desiredY = Math.max(minY, HALF_HEIGHT);
   
-        if (translateY.value < minY) {
-          translateY.value = withTiming(minY, { duration: 300 });
-        }
+        // Always start at HALF_HEIGHT or lower
+        const desiredY = HALF_HEIGHT;
   
-        if (translateY.value > desiredY || translateY.value === 0) {
+        if (translateY.value !== desiredY) {
           translateY.value = withTiming(desiredY, { duration: 300 });
         }
       }
@@ -93,22 +91,26 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       startY.value = translateY.value;
     })
     .onUpdate((event) => {
-      const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
+      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
       const maxY = HALF_HEIGHT;
+    
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
-
+    
       const isAtBottom = Math.abs(translateY.value - minY) < 2000;
-
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
         runOnJS(handleDrawerHitBottom)();
       }
     })
     .onEnd((event) => {
-      const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
+      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
       const maxY = HALF_HEIGHT;
-
+    
       if (event.velocityY < 0) {
         translateY.value = withDecay({
           velocity: event.velocityY,
