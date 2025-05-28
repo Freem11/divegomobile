@@ -24,6 +24,15 @@ export async function getFailedUploads(): Promise<FeedItem[]> {
   }
 }
 
+export const removeFailedUpload = async (id: string) => {
+  const json = await AsyncStorage.getItem(FAILED_UPLOADS_KEY);
+  if (!json) return;
+
+  const items = JSON.parse(json);
+  const filtered = items.filter((item: any) => item.id !== id);
+  await AsyncStorage.setItem(FAILED_UPLOADS_KEY, JSON.stringify(filtered));
+};
+
 export async function clearFailedUploads() {
   try {
     await AsyncStorage.removeItem(FAILED_UPLOADS_KEY);

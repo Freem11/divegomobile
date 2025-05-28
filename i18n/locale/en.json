@@ -90,6 +90,7 @@
         "whenPlaceholder": "Date of Sighting",
         "whereLabel": "Where you saw it",
         "wherePlaceholder": "Location of Sighting",
+        "noPreviewAvailable": "No preview available",
         "submitButton": "Submit"
     },
     "TripList": {

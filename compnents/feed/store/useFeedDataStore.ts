@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
-import { getFailedUploads } from "./asyncStore";
+import { getFailedUploads, removeFailedUpload } from "./asyncStore";
 
 export const FEED_ITEM_TYPE = {
   FAILED_UPLOAD: "failed_upload",
@@ -93,7 +93,6 @@ export const useFeedDataStore = create<FeedDataStore>((set) => ({
 
   loadFeedItems: async () => {
     const failedItems = await getFailedUploads();
-    console.log("Failed items loaded:", failedItems);
     set({ feedItems: [...FEED_ITEMS, ...failedItems] });
   },
 
@@ -102,8 +101,19 @@ export const useFeedDataStore = create<FeedDataStore>((set) => ({
       feedItems: [...state.feedItems, item],
     })),
 
-  removeFeedItem: (id) =>
-    set((state) => ({
-      feedItems: state.feedItems.filter((item) => item.id !== id),
-    })),
+  removeFeedItem: async (id: string) => {
+    set((state) => {
+      const itemToRemove = state.feedItems.find((item) => item.id === id);
+      if (!itemToRemove) return state;
+
+      // Trigger side effects based on type
+      if (itemToRemove.type === FEED_ITEM_TYPE.FAILED_UPLOAD) {
+        removeFailedUpload(id);
+      }
+
+      return {
+        feedItems: state.feedItems.filter((item) => item.id !== id),
+      };
+    });
+  },
 }));

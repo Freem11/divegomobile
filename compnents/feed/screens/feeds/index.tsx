@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: colors.themeWhite,
     paddingHorizontal: moderateScale(16),
+    paddingBottom: moderateScale(100),
     height: windowHeight,
     paddingTop: Platform.OS === "ios" ? moderateScale(15) : moderateScale(10),
   },

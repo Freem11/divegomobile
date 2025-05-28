@@ -4,6 +4,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { FailedUploadFeedItem, FeedItem } from "../../../store/useFeedDataStore";
 import * as S from "./styles";
 import { useFileExists } from "../../../store/useFileExists";
+import { useTranslation } from "react-i18next";
 
 export type FeedItemComponentProps = {
   item: FeedItem;
@@ -15,6 +16,7 @@ export default function FeedItemFailedUpload({
   onRemove,
 }: FeedItemComponentProps & { item: FailedUploadFeedItem }) {
   const { isExist, resolvedUri } = useFileExists(item.imageUri);
+  const { t } = useTranslation();
 
   return (
     <S.Card>
@@ -23,7 +25,7 @@ export default function FeedItemFailedUpload({
         <S.ImagePreview source={{ uri: resolvedUri }} resizeMode="cover" />
       ) : (
         <S.ImageFallback>
-          <S.FallbackText>No preview available</S.FallbackText>
+          <S.FallbackText>{t("PicUploader.noPreviewAvailable")}</S.FallbackText>
         </S.ImageFallback>
       )}
       <S.Timestamp>{item.message}</S.Timestamp>
