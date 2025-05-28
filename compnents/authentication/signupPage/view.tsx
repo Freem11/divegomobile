@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableWithoutFeedback } from "react-native";
+import { SafeAreaView, TouchableWithoutFeedback } from "react-native";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
 import SecureTextInput from "../../reusables/secureTextInput";
@@ -7,6 +7,7 @@ import MobileTextInput from "../../reusables/textInput";
 import ButtonIcon from "../../reusables/buttonIcon";
 import Button from "../../reusables/button";
 import { colors } from "../../styles";
+import Animated from "react-native-reanimated";
 
 interface FormVals {
     name: string;
@@ -35,14 +36,23 @@ export default function CreateAccountPageView({
 }: IProps) {
     const { t } = useTranslation();
 
+    const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
+  
     return (
         <S.Container>
+
+
+    <AnimatedSafeAreaView style={[S.styles.safeArea]}>
+        <S.BackButtonWrapper>
             <ButtonIcon 
-            icon="chevron-left"
-            onPress={moveToLandingPage}
-            size='small'
-            fillColor={colors.neutralGrey}
-            />
+                icon="chevron-left"
+                onPress={moveToLandingPage}
+                size='small'
+                fillColor={colors.neutralGrey}
+                />
+        </S.BackButtonWrapper>
+  </AnimatedSafeAreaView> 
+      
             
             <S.Content>
                 <S.Header>{t("Common.signup")}</S.Header>
