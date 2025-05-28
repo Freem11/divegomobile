@@ -6,7 +6,7 @@ import { EditModeContext } from "../../contexts/editModeContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
-import TripImage from '../../png/Trip.jpg'
+import TripImage from '../../png/Trip.png'
 import { Keyboard } from "react-native";
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";

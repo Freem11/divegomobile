@@ -48,7 +48,6 @@ export default function LevelOneScreen() {
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}
       {activeScreen === "TripListScreen" && <TripListPage/>}
-
     </Animated.View>
   );
 }

@@ -34,7 +34,7 @@ export default function ImageCasherDynamic(Props) {
   };
 
   const [picUri, setPicUri] = useState(null);
-  const [picHeigth, setPicHeigth] = useState(0);
+  const [picHeight, setPicHeight] = useState(0);
   const [picWidth, setPicWidth] = useState(0);
 
   async function findImageInCache(fileName) {
@@ -95,7 +95,7 @@ export default function ImageCasherDynamic(Props) {
     Image.getSize(picUri, (width, height) => {
       let ratio = height / width;
       setPicWidth(scale(345));
-      setPicHeigth(scale(345) * ratio);
+      setPicHeight(scale(345) * ratio);
     });
   }
 
@@ -114,7 +114,7 @@ export default function ImageCasherDynamic(Props) {
       >
         <Image
           source={{ uri: picUri }}
-          style={{ ...style, height: picHeigth, width: picWidth }}
+          style={{ ...style, height: picHeight, width: picWidth }}
         ></Image>
       </TouchableWithoutFeedback>
     );

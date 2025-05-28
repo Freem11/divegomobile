@@ -3,18 +3,19 @@ import { TextInput, TextInputProps as RNTextInputProps } from 'react-native';
 import * as S from './styles';
 import Icon, { IconName } from "../../../icons/Icon";
 import { colors } from '../../styles';
+import { UseFormRegisterReturn } from "react-hook-form";
 
 export type TextInputProps = {
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
-  onChangeText: (text: string) => void;
   error?: any;
 } & RNTextInputProps;
 
 const MobileTextInput = React.forwardRef<TextInput, TextInputProps>(function MobileTextInput(
-  { iconLeft, iconRight, onChangeText, error, ...rest }: TextInputProps,
+  { iconLeft, iconRight, error, onChangeText, ...rest }: TextInputProps,
   ref: ForwardedRef<TextInput>
 ) {
+
   return (
     <S.TextInputWrapper>
       {iconLeft && 
@@ -24,7 +25,7 @@ const MobileTextInput = React.forwardRef<TextInput, TextInputProps>(function Mob
       }
       <S.StyledTextInput 
         ref={ref} 
-        onChangeText={onChangeText} // remove once react-hook-form takes over
+        onChangeText={onChangeText}
         placeholderTextColor={colors.neutralGrey}
         {...rest} 
       />

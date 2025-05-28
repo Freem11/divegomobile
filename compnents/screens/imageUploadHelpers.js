@@ -27,28 +27,27 @@ export const chooseImageHandler = async () => {
 
 
 export const imageUpload = async (image) => {
-  let uri = image.assets[0].uri;
-  let extension = image.assets[0].uri.split(".").pop();
-  const fileName = Date.now() + "." + extension;
+  let stage1 = image.assets[0].uri
+  let uriLink = stage1.uri;
+  let extension = uriLink.split(".").pop();
+  const fileName = `${Date.now()}.${extension}`;
 
   const newFileUri = FileSystem.documentDirectory + fileName;
 
   await FileSystem.moveAsync({
-    from: uri,
+    from: uriLink,
     to: newFileUri,
   });
 
   const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
     encoding: FileSystem.EncodingType.Base64,
   });
+
   await uploadphoto(fileInfo, fileName);
 
   return (fileName);
 
 }
-
-
-
 
 
 function formatDate(dateTaken) {

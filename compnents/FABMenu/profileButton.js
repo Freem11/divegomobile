@@ -9,6 +9,8 @@ import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
+import { UserProfileContext } from "../contexts/userProfileContext";
+import { SelectedProfileContext } from '../contexts/selectedProfileModalContext'
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
@@ -21,7 +23,13 @@ export default function ProfileButton() {
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
  
+  const { profile } = useContext(UserProfileContext);
+  const { selectedProfile, setSelectedProfile } = useContext(
+    SelectedProfileContext
+  );
+
   const handlePress = () => {
+    setSelectedProfile(profile)
     setTiles(true);
     setShowFilterer(false);
     setPreviousButtonID(activeScreen);

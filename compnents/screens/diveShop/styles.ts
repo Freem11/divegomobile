@@ -29,6 +29,15 @@ export const Header = styled.Text`
   text-align: center;
 `;
 
+export const Content = styled.Text`
+  margin-horizontal: 3%;
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Thin};
+  color: ${colors.themeBlack};
+  align-self: center;
+  text-align: center;
+`;
+
 export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(10)}px;

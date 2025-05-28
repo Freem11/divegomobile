@@ -45,14 +45,14 @@ if (data) {
 export const updateProfile = async (values) => {
   const response = await supabase
     .from("UserProfiles")
-    .update({ UserName: values.username, profileBio: values.bio, profilePhoto: values.photo  })
-    .eq("UserID", values.id);
+    .update(values)
+    .eq("id", values.id)
+    .select();
 
   if (response.error) {
-    console.log("couldn't do it 2,", error);
+    console.log("couldn't do it profile update,", error);
     return [];
   }
-
     return response;
 };
 
