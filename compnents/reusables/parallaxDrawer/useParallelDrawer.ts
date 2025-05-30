@@ -42,42 +42,49 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   useEffect(() => {
     if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [fullScreenModal]);
 
 
   useEffect(() => {
     if (levelOneScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [levelOneScreen]);
 
   useEffect(() => {
     if (levelTwoScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [levelTwoScreen]);
+
+  const skipInitialReaction = useSharedValue(true);
 
   useAnimatedReaction(
     () => contentHeight.value,
     (newHeight, prevHeight) => {
-      if (newHeight !== prevHeight && newHeight > 0) {
-        const minY = SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT;
+      if (skipInitialReaction.value) {
+        skipInitialReaction.value = false;
+        return;
+      }
   
-        // Always start at HALF_HEIGHT or lower
-        const desiredY = HALF_HEIGHT;
+      if (
+        newHeight !== prevHeight &&
+        newHeight > 0 &&
+        newHeight < prevHeight  // only react when content height decreases
+      ) {
+        const minTranslateY = Math.min(HALF_HEIGHT, SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT);
   
-        if (translateY.value !== desiredY) {
-          translateY.value = withTiming(desiredY, { duration: 300 });
+        if (translateY.value !== minTranslateY) {
+          translateY.value = withTiming(minTranslateY, { duration: 300 });
         }
       }
     }
   );
-
   const handleDrawerHitBottom = () => {
     setBottomHitCount(prev => prev + 1);
 
