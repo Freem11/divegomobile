@@ -1,14 +1,10 @@
 import {
   StyleSheet,
-  View,
   Dimensions,
-  SafeAreaView,
 } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withTiming,
-  Easing,
   withDecay,
 } from "react-native-reanimated";
 import {
@@ -18,8 +14,6 @@ import * as S from "./styles";
 import * as FileSystem from "expo-file-system";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, { useEffect, useContext } from "react";
-import { scale, moderateScale } from "react-native-size-matters";
-import { MaterialIcons } from "@expo/vector-icons";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
