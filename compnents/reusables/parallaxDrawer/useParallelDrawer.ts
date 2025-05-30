@@ -42,23 +42,23 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   useEffect(() => {
     if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [fullScreenModal]);
 
 
   useEffect(() => {
     if (levelOneScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [levelOneScreen]);
 
   useEffect(() => {
     if (levelTwoScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [levelTwoScreen]);
 
@@ -66,12 +66,10 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     () => contentHeight.value,
     (newHeight, prevHeight) => {
       if (newHeight !== prevHeight && newHeight > 0) {
-        const minY = SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT;
-  
-        // Always start at HALF_HEIGHT or lower
         const desiredY = HALF_HEIGHT;
   
-        if (translateY.value !== desiredY) {
+        // Only snap to half height if drawer is below or near bottom (closed)
+        if (translateY.value >= SCREEN_HEIGHT - 10) {
           translateY.value = withTiming(desiredY, { duration: 300 });
         }
       }
