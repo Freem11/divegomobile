@@ -62,20 +62,29 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }
   }, [levelTwoScreen]);
 
+  const skipInitialReaction = useSharedValue(true);
+
   useAnimatedReaction(
     () => contentHeight.value,
     (newHeight, prevHeight) => {
-      if (newHeight !== prevHeight && newHeight > 0) {
-        const desiredY = HALF_HEIGHT;
+      if (skipInitialReaction.value) {
+        skipInitialReaction.value = false;
+        return;
+      }
   
-        // Only snap to half height if drawer is below or near bottom (closed)
-        if (translateY.value >= SCREEN_HEIGHT - 10) {
-          translateY.value = withTiming(desiredY, { duration: 300 });
+      if (
+        newHeight !== prevHeight &&
+        newHeight > 0 &&
+        newHeight < prevHeight  // only react when content height decreases
+      ) {
+        const minTranslateY = Math.min(HALF_HEIGHT, SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT);
+  
+        if (translateY.value !== minTranslateY) {
+          translateY.value = withTiming(minTranslateY, { duration: 300 });
         }
       }
     }
   );
-
   const handleDrawerHitBottom = () => {
     setBottomHitCount(prev => prev + 1);
 
