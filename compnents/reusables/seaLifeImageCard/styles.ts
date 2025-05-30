@@ -11,9 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 const windowWidth = Dimensions.get("window").width;
 
 export const Container = styled.View`
-  width: ${windowWidth}px;
-  height: ${moderateScale(200)}px;
-  margin-left: 0.75%;
+  margin-left: 0%;
   margin-vertical: 2%;
   position: relative;
 `;

@@ -62,29 +62,52 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }
   }, [levelTwoScreen]);
 
-  const skipInitialReaction = useSharedValue(true);
 
-  useAnimatedReaction(
-    () => contentHeight.value,
-    (newHeight, prevHeight) => {
-      if (skipInitialReaction.value) {
-        skipInitialReaction.value = false;
-        return;
-      }
+  const bottomHitCountRef = useSharedValue(bottomHitCount);
+
+useEffect(() => {
+  bottomHitCountRef.value = bottomHitCount;
+}, [bottomHitCount]);
+
+
+const MIN_SHRINK = moderateScale(150); 
+const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
+
+useAnimatedReaction(
+  () => ({
+    height: contentHeight.value,
+    currentY: translateY.value,
+  }),
+  (newValue, prevValue) => {
+    if (!prevValue) return;
+
+    const { height: newHeight, currentY } = newValue;
+    const { height: prevHeight } = prevValue;
+
+    const shrinkAmount = prevHeight - newHeight;
+    const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
+
+    if(contentShrankSignificantly){
+      lastAdjustedHeightRef.value = newHeight;
+
+      const minTranslateY = Math.min(
+        SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT,
+        HALF_HEIGHT
+      );
   
-      if (
-        newHeight !== prevHeight &&
-        newHeight > 0 &&
-        newHeight < prevHeight  // only react when content height decreases
-      ) {
-        const minTranslateY = Math.min(HALF_HEIGHT, SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT);
-  
-        if (translateY.value !== minTranslateY) {
-          translateY.value = withTiming(minTranslateY, { duration: 300 });
-        }
-      }
+      if (currentY < minTranslateY) {
+        translateY.value = withTiming(minTranslateY, { duration: 300 });
+      } 
     }
-  );
+
+  }
+);
+
+
+
+
+
+
   const handleDrawerHitBottom = () => {
     setBottomHitCount(prev => prev + 1);
 

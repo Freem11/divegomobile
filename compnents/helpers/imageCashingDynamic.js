@@ -8,7 +8,7 @@ import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { SelectedPhotoContext } from "../contexts/selectedPhotoContext";
 
 export default function ImageCasherDynamic(props) {
-  const { photoFile, id, style } = props;
+  const { photoFile, id, style, aspectRatio } = props;
 
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -80,38 +80,38 @@ export default function ImageCasherDynamic(props) {
     };
   }, []);
 
-  useEffect(() => {
-    if (picUri) {
-      Image.getSize(
-        picUri,
-        (width, height) => {
-          const ratio = height / width;
-          setPicWidth(scale(345));
-          setPicHeight(scale(345) * ratio);
-        },
-        (error) => {
-          console.warn("Failed to get image size", error);
-        }
-      );
-    }
-  }, [picUri]);
+  // useEffect(() => {
+  //   if (picUri) {
+  //     Image.getSize(
+  //       picUri,
+  //       (width, height) => {
+  //         const ratio = height / width;
+  //         setPicWidth(scale(345));
+  //         setPicHeight(scale(345) * ratio);
+  //       },
+  //       (error) => {
+  //         console.warn("Failed to get image size", error);
+  //       }
+  //     );
+  //   }
+  // }, [picUri]);
 
-  const togglePhotoBoxModal = (photo) => {
-    setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
-  };
+  // const togglePhotoBoxModal = (photo) => {
+  //   setSelectedPhoto(photo);
+  //   setFullScreenModal(true);
+  //   setActiveTutorialID("PinchAndZoomPhoto");
+  // };
 
   if (!picUri) {
     return null; // You can replace this with a loading spinner if needed
   }
 
   return (
-    <TouchableOpacity key={id} onPress={() => togglePhotoBoxModal(picUri)}>
+    // <TouchableOpacity key={id} onPress={() => togglePhotoBoxModal(picUri)}>
       <Image
         source={{ uri: picUri }}
-        style={{ ...style, height: picHeight, width: picWidth }}
+        style={{ ...style, width: '100%', aspectRatio: aspectRatio }}
       />
-    </TouchableOpacity>
+    // </TouchableOpacity>
   );
 }
