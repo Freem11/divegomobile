@@ -25,7 +25,7 @@ export default function PhotoBoxModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
   let fileName = selectedPhoto && selectedPhoto.split("/").pop();
-  let cacheDir = false;
+  let cacheDir = null;
 
   if (fileName) {
     cacheDir = FileSystem.cacheDirectory + fileName;
@@ -221,6 +221,9 @@ export default function PhotoBoxModal() {
             <Animated.Image
               source={{
                 uri: cacheDir,
+              }}
+              onError={(e) => {
+                console.log('Image load error:', e.nativeEvent.error);
               }}
               style={[
                 animatedPictureStyle,
