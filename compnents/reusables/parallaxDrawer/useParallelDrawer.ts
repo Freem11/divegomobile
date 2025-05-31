@@ -40,12 +40,12 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const { savedTranslateY, setSavedTranslateY } = useContext(SavedTranslateYContext);
 
-  useEffect(() => {
-    if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = HALF_HEIGHT;
-      startY.value = HALF_HEIGHT;
-    }
-  }, [fullScreenModal]);
+  // useEffect(() => {
+  //   if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
+  //     translateY.value = HALF_HEIGHT;
+  //     startY.value = HALF_HEIGHT;
+  //   }
+  // }, [fullScreenModal]);
 
 
   useEffect(() => {
