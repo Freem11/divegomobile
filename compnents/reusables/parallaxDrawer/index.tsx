@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps } from "react-native";
 import Animated from "react-native-reanimated";
 import ButtonIcon from "../buttonIcon";
@@ -13,17 +13,17 @@ import { useParallaxDrawer } from "./useParallelDrawer";
 import Popover from "react-native-popover-view";
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
-import IconWithLabel from "../iconWithLabal";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 type ParallaxDrawerProps = {
-  headerImage: any;
-  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void}>;
+  headerImage: () => React.JSX.Element | string;
+  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number}>;
   onClose: () => void;
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
   isMyShop?: boolean
   isPartnerAccount?: boolean
-  popoverConent?: () => React.JSX.Element
+  popoverConent?: () => React.JSX.Element,
 };
 
 const ParallaxDrawer = ({
@@ -31,8 +31,6 @@ const ParallaxDrawer = ({
   children,
   onClose,
   onMapFlip,
-  handleImageUpload,
-  isMyShop,
   popoverConent
 }: ParallaxDrawerProps) => {
   
@@ -44,12 +42,20 @@ const ParallaxDrawer = ({
     animatedSafeAreaStyle,
     contentHeight,
     closeParallax,
-    restoreParallax
+    restoreParallax,
+    bottomHitCount
   } = useParallaxDrawer(onClose, onMapFlip);
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
+  const { fullScreenModal } = useContext(FullScreenModalContext);
+  
+useEffect(() => {
+  if(fullScreenModal){
+    setIsVisible(false)
+  }
+},[fullScreenModal])
 
   const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
     <View ref={ref} collapsable={false} style={{marginTop: 3}}>
@@ -57,7 +63,6 @@ const ParallaxDrawer = ({
           icon="more"
           size='headerIcon'
           onPress={() => setIsVisible(true)}
-          // fillColor={colors.neutralGrey}
         />
     </View>
   ));
@@ -94,11 +99,14 @@ const ParallaxDrawer = ({
         <Animated.View
           style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
         >
-          <ImageBackground
-            source={headerImage}
-            style={StyleSheet.absoluteFill}
-            resizeMode="cover"
-          />
+          {typeof(headerImage) === "function" ? headerImage() :
+              <ImageBackground
+              source={headerImage}
+              style={StyleSheet.absoluteFill}
+              resizeMode="cover"
+            />
+            }
+      
         </Animated.View>
       </S.BackgroundContainer>
 
@@ -123,7 +131,7 @@ const ParallaxDrawer = ({
             >
               <S.EmptyContainer>
               {React.isValidElement(children)
-                ? React.cloneElement(children, { closeParallax, restoreParallax })
+                ? React.cloneElement(children, { closeParallax, restoreParallax, bottomHitCount })
                 : children}
               </S.EmptyContainer>
             </S.Content>

@@ -11,9 +11,16 @@ import { LinearGradient } from "expo-linear-gradient";
 const windowWidth = Dimensions.get("window").width;
 
 export const Container = styled.View`
-  width: ${windowWidth};
-  margin-left: 0.75%;
+  margin-left: 0%;
   margin-vertical: 2%;
+  position: relative;
+`;
+
+export const BackgroundWrapper = styled.View`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 `;
 
 export const Overlay = styled(LinearGradient).attrs({
@@ -23,20 +30,21 @@ export const Overlay = styled(LinearGradient).attrs({
   end: { x: 0.5, y: 1 },
 })`
   position: absolute;
-  z-index: 1;
-  width: 98.5%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
   height: 100%;
   align-items: center;
+  justify-content: flex-end;
   border-radius: ${moderateScale(10)}px;
-  pointer-events: box-none;
 `;
 
 export const ContentWrapper = styled.View`
   flex-direction: row;
   margin-left: 3%;
   width: 93%;
-  pointer-events: box-none;
-  z-index: 2;
+  z-index: 3;
   position: absolute;
   bottom: ${moderateScale(18)}px;
 `;
@@ -47,15 +55,13 @@ export const TopContentWrapper = styled.View`
   justify-content: flex-end;
   width: 98%;
   height: ${moderateScale(20)}px;
-  z-index: 2;
-  pointer-events: box-none;
+  z-index: 3;
   position: absolute;
   top: ${moderateScale(10)}px;
 `;
 
 export const LabelWrapper = styled.View`
   flex-direction: column;
-  pointer-events: box-none;
   width: ${() => (windowWidth > 600 ? '80%' : '75%')};
 `;
 
@@ -72,7 +78,7 @@ export const IconWrapper = styled.View`
 export const CounterText = styled.Text`
   color: ${colors.themeWhite};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.Bold}px;
+  font-family: ${activeFonts.Bold};
 `;
 
 export const TitleText = styled.Text`
@@ -88,6 +94,5 @@ export const NavigateTextPressable = styled.Pressable`
 export const NavigateText = styled.Text`
   color: ${colors.primaryBlue};
   font-family: ${activeFonts.Light};
-  fontSize: ${moderateScale(fontSizes.SmallText)};
-  pointer-events: box-none;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
 `;

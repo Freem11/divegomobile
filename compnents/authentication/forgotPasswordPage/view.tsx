@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableWithoutFeedback } from "react-native";
+import { SafeAreaView, TouchableWithoutFeedback } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,7 @@ import MobileTextInput from "../../reusables/textInput";
 import ButtonIcon from "../../reusables/buttonIcon";
 import Button from "../../reusables/button";
 import { colors } from "../../styles";
+import Animated from "react-native-reanimated";
 
 interface IProps {
   formVals: { email: string };
@@ -27,16 +28,22 @@ export default function ForgotPageView({
 }: IProps) {
   const { t } = useTranslation();
 
+  const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
+  
   return (
     <S.Container>
 
-        <ButtonIcon 
-          icon="chevron-left"
-          onPress={moveToLoginPage}
-          size='small'
-          fillColor={colors.neutralGrey}
-        />
-            
+  <AnimatedSafeAreaView style={[S.styles.safeArea]}>
+      <S.BackButtonWrapper>
+              <ButtonIcon 
+                icon="chevron-left"
+                onPress={moveToLoginPage}
+                size='small'
+                fillColor={colors.neutralGrey}
+              />
+        </S.BackButtonWrapper>
+  </AnimatedSafeAreaView>      
+
       <S.Content>
         <S.Header>{t("Auth.resetPassword")}</S.Header>
 

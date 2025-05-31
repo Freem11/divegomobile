@@ -14,6 +14,7 @@ export class Pagination {
     this.ipp     = ipp;
   }
 
+
   from() {
     return (this.page - 1) * this.ipp;
   }

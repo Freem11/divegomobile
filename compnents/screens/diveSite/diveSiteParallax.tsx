@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import DiveSiteScreen from './diveSite';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import noImage from '../../png/NoImage.jpg';
+import noImage from '../../png/NoImage.png';
 import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
@@ -19,6 +19,10 @@ import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext"
 import { useTranslation } from "react-i18next";
 import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { EditsContext } from "../../contexts/editsContext";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+
 
 export default function DiveSiteParallax() {
   const { t } = useTranslation();
@@ -36,7 +40,10 @@ export default function DiveSiteParallax() {
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  
+  const { editInfo, setEditInfo } = useContext(EditsContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+
   useEffect(() => {
     if (profile[0].partnerAccount) {
       setIsPartnerAccount(true);
@@ -56,35 +63,6 @@ export default function DiveSiteParallax() {
     });
 
   }, [selectedDiveSite]);
-
-  const handleImageUpload = async () => {
-    try {
-      const image = await chooseImageHandler();
-      if (image) {
-
-        let fileName = await imageUpload(image)
-
-        if (diveSiteVals.photo !== null || diveSiteVals.photo === "") {
-          await removePhoto({
-            filePath: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/`,
-            fileName: diveSiteVals.photo.split("/").pop(),
-          });
-        }
-
-        setDiveSiteVals({
-          ...diveSiteVals,
-          photo: `animalphotos/public/${fileName}`,
-        });
-        const success = await updateDiveShop({
-          id: diveSiteVals.id,
-          bio: diveSiteVals.bio,
-          photo: `animalphotos/public/${fileName}`,
-        });
-      }
-    } catch (e) {
-      console.log("error: Photo Selection Cancelled", e.message);
-    }
-  };
   
   const onClose = async () => {
     setLevelOneScreen(false);
@@ -116,14 +94,20 @@ export default function DiveSiteParallax() {
     );
   };
 
+  const openEditsPage = () => {
+    setFullScreenModal(true)
+    setEditInfo("DiveSite")
+    setActiveTutorialID("EditsScreen")
+  };
+
   const popoverConent = () => {
     return (
     <>
     {isPartnerAccount &&
       <IconWithLabel 
-      label="Change Header Image"
+      label="Update Dive Site Info"
       iconName="camera-flip-outline"
-      buttonAction={() => handleImageUpload()}
+      buttonAction={() => openEditsPage()}
       />}
     <IconWithLabel 
     label={t('DiveSite.addSighting')}

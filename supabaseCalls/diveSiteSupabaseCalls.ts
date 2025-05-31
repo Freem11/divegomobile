@@ -171,19 +171,17 @@ export const getSingleDiveSiteByNameAndRegion = async (values) => {
 };
 
 export const updateDiveSite = async (values) => {
-  const { data, error } = await supabase
+  const response = await supabase
     .from("diveSites")
-    .update({ diveSiteBio: values.bio, diveSiteProfilePhoto: values.photo })
-    .eq("id", values.id);
+    .update(values)
+    .eq("id", values.id)
+    .select();
 
-  if (error) {
-    console.log("couldn't do it 2,", error);
-    return [];
-  }
-
-  if (data) {
-    return data;
-  }
+    if (response.error) {
+      console.log("couldn't do it dive site,", error);
+      return [];
+    }
+      return response;
 };
 
 export const getSingleDiveSite = async (lat, lng) => {

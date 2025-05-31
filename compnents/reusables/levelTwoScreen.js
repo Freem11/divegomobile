@@ -7,9 +7,10 @@ import Animated, {
 } from "react-native-reanimated";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import UserProfile from '../screens/userProfile';
+import UserProfileParallax from '../screens/userProfile/userProfileParallax';
 import PartnerRequestPage from '../screens/partnerRequestPage';
 import PicUploader from '../screens/picUploader';
+import PicUploaderParallax from '../screens/picUploader/picUploaderParallax';
 import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
 import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
@@ -44,9 +45,9 @@ export default function LevelTwoScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "ProfileScreen" && <UserProfile />}
+      {activeScreen === "ProfileScreen" && <UserProfileParallax />}
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
-      {activeScreen === "PictureUploadScreen" && <PicUploader />}
+      {activeScreen === "PictureUploadScreen" && <PicUploaderParallax />}
       {activeScreen === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
       {activeScreen === "TripCreatorScreen" && <TripCreatorParallax />}
     </Animated.View>

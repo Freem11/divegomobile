@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 
 import { debounce } from "../reusables/_helpers/debounce";
 import GoogleMapView from "./view";
@@ -9,9 +9,7 @@ import { getDiveSitesBasic } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { DiveShop } from "../../entities/diveShop";
-import useSupercluster from "use-supercluster";
-import { Text, View } from "react-native";
-import { getHeatPoints, getHeatPointsWithUserEmpty } from "../../supabaseCalls/heatPointSupabaseCalls";
+import { getHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { HeatPoint } from "../../entities/heatPoint";
 
 export default function GoogleMap() {

@@ -19,13 +19,15 @@ type SiteSubmitterProps = {
   onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
+  bottomHitCount?: number;
 };
 
 export default function DiveSiteUploader({
   onClose,
   onMapFlip,
   closeParallax,
-  restoreParallax
+  restoreParallax,
+  bottomHitCount
 }: SiteSubmitterProps) {
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
