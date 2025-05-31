@@ -11,7 +11,7 @@ import {
 import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
 import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
-import Map from "./GoogleMap";
+import GoogleMap from "./googleMap";
 import BottomMenu from './reusables/bottomMenu';
 import ProfileButton from './FABMenu/profileButton'
 import SiteSearchButton from './FABMenu/siteSearchButton'
@@ -541,7 +541,8 @@ export default function MapPage() {
           <AnimatedFullScreenModal />
           <AnimatedModalConfirmation />
 
-          <Map style={{ zIndex: 1 }} />
+           <GoogleMap />
+
         </View>
       </DiveSitesContext.Provider>
     </MapCenterContext.Provider>
