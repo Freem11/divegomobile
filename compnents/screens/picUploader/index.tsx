@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { Dispatch, useContext, useState } from "react";
 import PicUploaderView from "./view";
 import moment from "moment";
 import { imageUpload } from "../imageUploadHelpers";
@@ -8,47 +8,60 @@ import { PinContext } from "../../contexts/staticPinContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
+
+type dropDownItem = {
+  key: string, label: string
+}
 
 export interface Form {
   date?: string;
   photo?: string;
-  animal?: string;
+  animal?: dropDownItem;
   diveSiteName?: string;
 }
 
 export const INIT_FORM_STATE: Form = {
   date: "",
   photo: "",
-  animal: "",
+  animal: {key: "", label: ""},
   diveSiteName: "",
 };
 
-export default function PicUploader() {
+type PicUploaderProps = {
+  onClose: () => void;
+  onMapFlip?: () => void;
+  closeParallax?: (mapConfig: number) => void
+  restoreParallax?: () => void; 
+  handleImageUpload?: () => void;
+  localPreviewUri: string 
+  setLocalPreviewUri: Dispatch<any>
+};
+
+export default function PicUploader({
+  onClose,
+  onMapFlip,
+  closeParallax,
+  restoreParallax,
+  handleImageUpload,
+  localPreviewUri,
+  setLocalPreviewUri
+}: PicUploaderProps) {
+
+  const { profile } = useContext(UserProfileContext);
   const { pinValues, setPinValues } = useContext(PinContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [localPreviewUri, setLocalPreviewUri] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const handleDatePickerConfirm = (selectedDate: Date) => {
-    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
-    setPinValues({ ...pinValues, PicDate: formattedDate });
-    setDatePickerVisible(false);
-  };
-
-  const handleImageUpload = async (argPicture) => {
-    setPinValues({
-      ...pinValues,
-      PicFile: `animalphotos/public/${argPicture}`,
-    });
-    setLocalPreviewUri(argPicture);
-  };
-
-  const tryUpload = async () => {
+  const tryUpload = async (localPreviewUri: string) => {
     try {
       const image = {
         assets: [
@@ -63,10 +76,10 @@ export default function PicUploader() {
       return null;
     }
   };
-  const onSubmit = async () => {
-    const { PicDate, Animal, Latitude, Longitude, UserId } = pinValues;
 
-    if (!localPreviewUri || !PicDate || !Animal) {
+  const onSubmit = async (formData: Required<Form>) => {
+
+    if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning("Please fill in all required fields.");
       return;
     }
@@ -75,7 +88,7 @@ export default function PicUploader() {
 
     try {
       // Step 2: Upload image
-      const fileName = await tryUpload();
+      const fileName = await tryUpload(localPreviewUri);
       if (!fileName) {
         throw new Error("Photo upload failed");
       }
@@ -84,11 +97,11 @@ export default function PicUploader() {
 
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
-        label: Animal,
-        dateTaken: PicDate,
-        latitude: Latitude,
-        longitude: Longitude,
-        UserId,
+        label: formData.animal.label,
+        dateTaken: formData.date,
+        latitude: selectedDiveSite.lat,
+        longitude: selectedDiveSite.lng,
+        UserId: profile[0].UserID,
       });
       if (error) {
         await removePhoto({
@@ -102,7 +115,7 @@ export default function PicUploader() {
       setConfirmationType("Sea Creature Submission");
       showSuccess("Photo uploaded successfully!");
       resetForm();
-      setLevelTwoScreen(false);
+      // setLevelTwoScreen(false);
       setLocalPreviewUri(null);
     } catch (err) {
       console.error("Error uploading image:", err);
@@ -110,11 +123,6 @@ export default function PicUploader() {
     } finally {
       setIsUploading(false);
     }
-  };
-
-  const onClose = () => {
-    resetForm();
-    setLevelTwoScreen(false);
   };
 
   const resetForm = () => {
@@ -132,16 +140,18 @@ export default function PicUploader() {
   return (
     <PicUploaderView
       pinValues={pinValues}
-      showDatePicker={() => setDatePickerVisible(true)}
       datePickerVisible={datePickerVisible}
       hideDatePicker={() => setDatePickerVisible(false)}
-      handleDatePickerConfirm={handleDatePickerConfirm}
       onImageSelect={handleImageUpload}
       onSubmit={onSubmit}
       onClose={onClose}
+      getMoreAnimals={DynamicSelectOptionsAnimals.getMoreOptions}
       setPinValues={setPinValues}
       isUploading={isUploading}
       localPreviewUri={localPreviewUri}
+      values={{
+        diveSiteName: selectedDiveSite?.name,
+      }}
     />
   );
 }

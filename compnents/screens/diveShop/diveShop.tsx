@@ -34,6 +34,7 @@ type DiveShopProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   isMyShop?: boolean
+  bottomHitCount?: number;
 };
 
 export default function DiveShopScreen({
@@ -41,8 +42,10 @@ export default function DiveShopScreen({
   onMapFlip,
   closeParallax,
   restoreParallax,
-  isMyShop
+  isMyShop,
+  bottomHitCount
 }: DiveShopProps) {
+  
   const { profile } = useContext(UserProfileContext);
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
@@ -72,7 +75,6 @@ export default function DiveShopScreen({
       restoreParallax();
     }
   }, [levelOneScreen]);
- 
 
   const getItineraries = async (IdNum) => {
     try {
@@ -218,18 +220,7 @@ const handleMapFlip = async (sites: number[]) => {
       <S.InputGroupContainer>
           <S.Header>{selectedShop[0].orgName}</S.Header>
 
-              {selectedShop && (
-                <PlainTextInput
-                  placeholder={`A little about ${selectedShop[0].orgName}`}
-                  content={diveShopVals && diveShopVals.bio}
-                  isMyShop={isMyShop}
-                  isEditModeOn={isEditModeOn}
-                  setIsEditModeOn={setIsEditModeOn}
-                  onChangeText={(bioText) =>
-                    setDiveShopVals({ ...diveShopVals, bio: bioText })
-                  }
-                />
-              )}
+          <S.Content>{selectedShop[0].diveShopBio}</S.Content>
 
       </S.InputGroupContainer>
 

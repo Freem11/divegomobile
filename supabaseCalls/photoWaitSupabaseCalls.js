@@ -24,8 +24,8 @@ export const insertPhotoWaits = async (values) => {
         photoFile: values.photoFile,
         label: values.label,
         dateTaken: values.dateTaken,
-        latitude: values.Latitude,
-        longitude: values.Longitude,
+        latitude: values.latitude,
+        longitude: values.longitude,
         UserID: values.UserId,
       },
     ]);

@@ -12,57 +12,43 @@ import {
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export const Container = styled.View`
-  flex: 1;
-  background-color: ${colors.themeWhite};
-  align-items: center;
-  justify-content: center;
-  height: ${windowHeight}px;
-`;
-
-export const BackButton = styled.View`
-  position: absolute;
-  top: 5.5%;
-  left: 2%;
-  z-index: 50;
-`;
-
 export const ContentContainer = styled.View`
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 15;
-  margin-top: ${Platform.OS === "ios"
-    ? windowHeight / 2.4
-    : windowHeight / 2.2}px;
-  width: 100%;
+  width: ${windowWidth}px;
   align-items: center;
 `;
 
 export const Header = styled.Text`
-  margin: 5% 5%;
+  margin-left: 5%;
+  margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Thin};
-  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Medium};
+  color: ${colors.headersBlue};
   align-self: flex-start;
+`;
+
+export const InputGroupContainer = styled.View`
+  margin-bottom: ${windowHeight / 70}px;
+  width: ${windowWidth * 0.75}px;
+ 
+`;
+
+export const TextBuffer = styled.View`
+  margin-bottom: ${moderateScale(20)}px;
+  width: ${windowWidth * 0.75}px;
 `;
 
 export const Label = styled.Text`
   margin-left: -5%;
+  color: ${colors.headersBlue};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.LightItalic};
-`;
-
-export const InputBlock = styled.View`
-  margin-bottom: ${moderateScale(20)}px;
-  width: 75%;
+  font-family: ${activeFonts.MediumItalic};
 `;
 
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${windowWidth > 600 ? "-15%" : "-20%"};
-  margin-right: 15%;
+  margin-top: ${Platform.OS === 'ios' ? '15%' : '2%'};
+  padding-horizontal: 7%;
 `;
 
 export const SubmitButton = styled.TouchableOpacity`
@@ -85,3 +71,12 @@ export const svgCurve = {
   bottom: 0,
   width: windowWidth,
 };
+
+
+export const UploadZone = styled.View`
+  flex: 1;
+   width: ${windowWidth};
+  background-color: ${colors.primaryBlue};
+  align-items: center;
+  justify-content: center;
+`;

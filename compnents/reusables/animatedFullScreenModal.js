@@ -9,11 +9,13 @@ import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 
 import OnboardingTest from "../tutorial/onboarding";
-import PhotoBoxModel from "../modals/photoBoxModal";
+import PhotoBoxModel from '../screens/photoBox/photoBoxModal';
 import CommentsModal from "../modals/commentsModal";
+import EditScreenParallax from '../screens/edits/editsParallax';
+import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const windowHeight = Dimensions.get("screen").height;
 
 export default function AnimatedFullScreenModal(props) {
   const { activeTutorialID } = useContext(ActiveTutorialIDContext);
@@ -43,6 +45,8 @@ export default function AnimatedFullScreenModal(props) {
       {activeTutorialID === "OnboardingX" && <OnboardingTest />}
       {activeTutorialID === "PinchAndZoomPhoto" && fullScreenModal && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
+      {activeTutorialID === "EditsScreen" && <EditScreenParallax/>}
+
     </Animated.View>
   );
 }
@@ -50,9 +54,10 @@ export default function AnimatedFullScreenModal(props) {
 const styles = StyleSheet.create({
   modalBody: {
     position: "absolute",
-    height: "100%",
+    height: windowHeight,
     width: windowWidth,
     zIndex: 50,
     left: 0,
+    backgroundColor: colors.themeBlack
   },
 });

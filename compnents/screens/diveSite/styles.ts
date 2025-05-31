@@ -24,6 +24,7 @@ export const PhotoContainer = styled.View`
   width: 98%;
   align-items: center;
   margin-top: ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(20)}px;
 `;
 
 export const PacketHeader = styled.View`
@@ -45,10 +46,18 @@ export const PacketHeaderItem = styled.Text`
 `;
 
 export const Header = styled.Text`
-;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.headersBlue};
+  align-self: center;
+  text-align: center;
+`;
+
+export const Content = styled.Text`
+  margin-horizontal: 3%;
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Thin};
+  color: ${colors.themeBlack};
   align-self: center;
   text-align: center;
 `;
@@ -66,6 +75,11 @@ export const Contributor = styled.Text`
   color: ${colors.themeBlack};
 `;
 
+export const HeaderWrapper = styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
 export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(10)}px;
@@ -76,6 +90,7 @@ export const LabelWrapper = styled.View`
 export const IconWrapper = styled.View`
     width: ${moderateScale(24)}px;
     height: ${moderateScale(24)}px;
+      margin-right: ${moderateScale(4)}px;
 `;
 
 
