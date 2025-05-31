@@ -394,6 +394,7 @@ export default function MapPage() {
   return (
     <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
       <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
+
         <View style={styles.container}>
           {mapConfig in [, , 2] || !mapConfig ? (
             <View style={styles.carrousel} pointerEvents={"box-none"}>
@@ -467,14 +468,16 @@ export default function MapPage() {
             </View>
           ) : null}
 
-        {mapConfig === 0 ?
-          <BottomMenu>
-            <ProfileButton />
-            <SiteSearchButton />
-            <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
-            <DiveSiteButton />
-            {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-          </BottomMenu> : null}
+
+
+          {mapConfig === 0 ?
+            <BottomMenu>
+              <ProfileButton />
+              <SiteSearchButton />
+              <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
+              <DiveSiteButton />
+              {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+            </BottomMenu> : null}
 
           {/* {mapConfig === 0 ? <View style={styles.iosBottom}/> : null} */}
           <View
@@ -541,8 +544,8 @@ export default function MapPage() {
           <AnimatedFullScreenModal />
           <AnimatedModalConfirmation />
 
-           <GoogleMap />
-
+          <GoogleMap style={{ zIndex: 1 }} />
+          
         </View>
       </DiveSitesContext.Provider>
     </MapCenterContext.Provider>
@@ -551,11 +554,11 @@ export default function MapPage() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "transparent",
+    flex: 1, 
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "green",
+    // position: "absolute",
   },
   animalSelect: {
     display: "flex",

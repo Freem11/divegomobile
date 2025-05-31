@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import MapView, { Camera, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
@@ -39,7 +39,7 @@ export default function GoogleMapView(props: MapViewProps) {
       justifyContent: "center",
     },
     map: {
-      width: "100%",
+      width: Dimensions.get("window").width,
       height: "100%",
     },
   });
