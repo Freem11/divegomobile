@@ -18,9 +18,11 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelOneScreen() {
+  const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
+
+
   const { activeScreen } = useContext(ActiveScreenContext);
   const { levelOneScreen } = useContext(LevelOneScreenContext);
-
   const levelOneScreenY = useSharedValue(0);
 
   const modalSlide = useAnimatedStyle(() => {
@@ -43,7 +45,7 @@ export default function LevelOneScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "DiveSiteScreen" && <DiveSiteParallax/>}
+      {activeScreen2 === "DiveSiteScreen" && <DiveSiteParallax/>}
       {activeScreen === "DiveShopScreen" && <DiveShopParallax/>}
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}
