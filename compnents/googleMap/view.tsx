@@ -15,6 +15,8 @@ import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
 import { MarkerDiveSiteCluster } from "./marker/markerDiveSiteCluster";
 import { MarkerDraggable } from "./marker/markerDraggable";
 import { Coordinates } from "../../entities/coordinates";
+import { HeatPoint } from "../../entities/heatPoint";
+import { MarkerHeatPoint } from "./marker/markerHeatPoint";
 
 type MapViewProps = {
   // googleMapApiKey:    string
@@ -25,9 +27,9 @@ type MapViewProps = {
   // tempMarker?:        google.maps.LatLngLiteral | null
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
-  diveSites?: DiveSiteBasic[] | null;
-  diveShops?: DiveShop[] | null;
-  // heatPoints?:        HeatPoint[] | null
+  diveSites?:  DiveSiteBasic[] | null;
+  diveShops?:  DiveShop[] | null;
+  heatPoints?: HeatPoint[] | null
 };
 
 export default function GoogleMapView(props: MapViewProps) {
@@ -170,6 +172,12 @@ export default function GoogleMapView(props: MapViewProps) {
         {props.mapConfig === 1 && camera?.center && (
           <MarkerDraggable coordinate={camera.center} />
         )}
+
+        
+        {props?.heatPoints?.length > 0 && [0, 2].includes(props.mapConfig) && (
+          <MarkerHeatPoint heatPoints={props.heatPoints} />
+        )}
+
       </MapView>
     </View>
   );

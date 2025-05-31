@@ -11,21 +11,25 @@ import { DiveSiteBasic } from "../../entities/diveSite";
 import { DiveShop } from "../../entities/diveShop";
 import useSupercluster from "use-supercluster";
 import { Text, View } from "react-native";
+import { getHeatPoints, getHeatPointsWithUserEmpty } from "../../supabaseCalls/heatPointSupabaseCalls";
+import { HeatPoint } from "../../entities/heatPoint";
 
 export default function GoogleMap() {
-  const setGpsBubble = useMapStore((state) => state.setGpsBubble);
+  const mapAction = useMapStore((state) => state.actions);
+  
   const camera = useMapStore((state) => state.camera);
-  const setCamera = useMapStore((state) => state.setCamera);
-  const setMapRef = useMapStore((state) => state.setMapRef);
   const mapRef = useMapStore((state) => state.mapRef);
+  const mapConfig = useMapStore((state) => state.mapConfig);
+
 
   const [diveSites, setDiveSites] = useState<DiveSiteBasic[] | null>(null);
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
+  const [heatPoints, setHeatPoints] = useState<HeatPoint[] | null>(null);
 
   const handleOnLoad = async (map: MapView) => {
-    setMapRef(map);
+    mapAction.setMapRef(map);
     const camera = await map.getCamera();
-    setCamera(camera);
+    // mapAction.setCamera(camera);
     console.log("loaded", { map: !!map });
   };
 
@@ -36,24 +40,26 @@ export default function GoogleMap() {
 
     const boundaries = await mapRef.getMapBoundaries();
     const bubble = GPSBubble.createFromBoundaries(boundaries);
-    setGpsBubble(bubble);
+    mapAction.setGpsBubble(bubble);
 
-    const [diveSites, diveShops] = await Promise.all([
+    const [diveSites, diveShops, heatPoints] = await Promise.all([
       GPSBubble.getItemsInGpsBubble(getDiveSitesBasic, bubble),
       GPSBubble.getItemsInGpsBubble(getDiveShops, bubble),
+      GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble),
     ]);
     setDiveShops(diveShops);
     setDiveSites(diveSites);
+    setHeatPoints(heatPoints);
   }, 50);
 
   return (
     <GoogleMapView
-      mapConfig={0}
+      mapConfig={mapConfig}
       center={camera?.center}
       // tempMarker={tempMarker}
       onLoad={handleOnLoad}
       handleBoundsChange={handleBoundsChange}
-      // heatPoints={photoContext.heatPoints}
+      heatPoints={heatPoints}
       diveSites={diveSites}
       diveShops={diveShops}
     />
