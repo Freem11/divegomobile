@@ -48,6 +48,7 @@ import Icon from "../../../icons/Icon";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { Pagination } from "../../../entities/pagination";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -58,6 +59,7 @@ type DiveSiteProps = {
   restoreParallax?: () => void; 
   isMyShop?: boolean
   bottomHitCount?: number;
+  selectedDiveSite: DiveSiteWithUserName
 };
 
 export default function DiveSiteScreen({
@@ -66,13 +68,14 @@ export default function DiveSiteScreen({
   closeParallax,
   restoreParallax,
   isMyShop,
-  bottomHitCount
+  bottomHitCount,
+  selectedDiveSite
 }: DiveSiteProps) {
   
   const { profile } = useContext(UserProfileContext);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
+
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
@@ -107,10 +110,13 @@ export default function DiveSiteScreen({
     setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
   };
 
-  useEffect(() => {
-    getPhotos(selectedDiveSite, profile);
-  }, [selectedDiveSite, bottomHitCount]);
 
+  useEffect(() => {
+    if (selectedDiveSite && profile && profile.length > 0) {
+      getPhotos(selectedDiveSite, profile);
+    }
+  }, [selectedDiveSite, profile, bottomHitCount]);
+  
   useEffect(() => {
     if (!isEditModeOn && selectedDiveSite) {
       diveSiteUpdateUpdate();
@@ -121,7 +127,7 @@ export default function DiveSiteScreen({
     try {
       const success = await updateDiveSite({
         id: selectedDiveSite.id,
-        bio: selectedDiveSite.divesiteBio,
+        bio: selectedDiveSite && selectedDiveSite.divesitebio,
         photo: selectedDiveSite.divesiteprofilephoto,
       });
     } catch (e) {
@@ -180,7 +186,7 @@ export default function DiveSiteScreen({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.SiteNameContainer>
-          <S.Header>{selectedDiveSite.name}</S.Header>
+          <S.Header>{selectedDiveSite?.name}</S.Header>
 
           <FontAwesome
             name="flag"
@@ -191,9 +197,9 @@ export default function DiveSiteScreen({
           />
         </S.SiteNameContainer>
 
-        <S.Contributor>Added by: {selectedDiveSite.userName}</S.Contributor>
+        <S.Contributor>Added by: {selectedDiveSite?.newusername}</S.Contributor>
 
-        <S.Content>{selectedDiveSite?.diveSiteBio}</S.Content>
+        <S.Content>{selectedDiveSite?.divesitebio}</S.Content>
 
       </S.InputGroupContainer>
 

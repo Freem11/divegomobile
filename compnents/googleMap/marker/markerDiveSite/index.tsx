@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Marker } from "react-native-maps";
 import icon from "../../../png/mapIcons/AnchorBlue.png";
 import { Coordinates } from "../../../../entities/coordinates";
-import { useActiveScreenStore } from "../../../../store/ussActiveScreenStore";
+import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
+import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 
 type MarkerDiveSiteProps = {
   id: number;
@@ -11,13 +12,19 @@ type MarkerDiveSiteProps = {
 
 export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-
+  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const sitesArray = [];
+
+  const handleScreen = () => {
+    setActiveScreen("DiveSiteScreen", {id: props.id})
+    setLevelOneScreen(true)
+  }
+
   return (
     <Marker
       image={icon}
       coordinate={props.coordinate}
-      onPress={() => setActiveScreen("DiveSiteScreen", {id: props.id})}
+      onPress={handleScreen}
     ></Marker>
   );
 }

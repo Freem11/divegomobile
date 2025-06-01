@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
+import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
 import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
@@ -45,7 +46,7 @@ export default function LevelOneScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen2 === "DiveSiteScreen" && <DiveSiteParallax/>}
+      {activeScreen2 && activeScreen2.screenName === "DiveSiteScreen" && <DiveSiteParallax siteID={activeScreen2.params.id}/>}
       {activeScreen === "DiveShopScreen" && <DiveShopParallax/>}
       {activeScreen === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}

@@ -18,6 +18,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { SavedTranslateYContext } from "../../contexts/savedTranslateYContext";
+import { ActiveSceen, useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -35,7 +36,13 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const { fullScreenModal } = useContext(FullScreenModalContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+
+  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const activeScreen = useActiveScreenStore((state) => state.activeScreen);
+
+
   const { editInfo, setEditInfo } = useContext(EditsContext);
 
   const { savedTranslateY, setSavedTranslateY } = useContext(SavedTranslateYContext);
@@ -102,11 +109,6 @@ useAnimatedReaction(
 
   }
 );
-
-
-
-
-
 
   const handleDrawerHitBottom = () => {
     setBottomHitCount(prev => prev + 1);
@@ -188,25 +190,35 @@ useAnimatedReaction(
     };
   });
 
-  const updateActiveScreen = (latestScreen: string | null, setActiveScreenFn: React.Dispatch<React.SetStateAction<string | null>>) => {
-    setActiveScreenFn((prev) => {
-      if (prev === latestScreen) {
-        return null;
-      }
-      return prev;
-    });
+  const updateActiveScreen = (
+    latestScreen: ActiveSceen | null,
+    currentScreen: ActiveSceen | null,
+    setActiveScreenFn: (screenName: string, params?: {}) => void
+  ) => {
+    const isSame =
+      latestScreen &&
+      currentScreen &&
+      latestScreen.screenName === currentScreen.screenName &&
+      JSON.stringify(latestScreen.params || {}) === JSON.stringify(currentScreen.params || {});
+  
+    if (isSame) {
+      setActiveScreenFn('', {});
+    } else if (latestScreen) {
+      setActiveScreenFn(latestScreen.screenName, latestScreen.params);
+    }
   };
 
   const closeParallax = (mapConfig: number | null) => {
-    const currentScreen = activeScreen;
+    const currentScreen: ActiveSceen = activeScreen;
     setSavedTranslateY(translateY.value)
+    setBottomHitCount(1)
     translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
 
         if(!editInfo){
-          runOnJS(updateActiveScreen)(currentScreen, setActiveScreen);
+          runOnJS(updateActiveScreen)(currentScreen, currentScreen, setActiveScreen);
           runOnJS(setEditInfo)(null);
         } else {
           runOnJS(setEditInfo)(null);

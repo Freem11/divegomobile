@@ -148,7 +148,7 @@ export const getPhotosByDiveSiteWithExtra = async (values) => {
 };
 
 
-export const getDiveSitePhotos = async (lat: number, lng: number, userId: string, pagination?: Pagination) => {
+export const getDiveSitePhotos = async (lat: number, lng: number, userId: string, pagination?: Pagination) => {  
   const builder = supabase.rpc("get_photos_for_divesite_with_social_info", {
     lat,
     lng,

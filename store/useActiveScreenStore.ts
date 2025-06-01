@@ -1,17 +1,17 @@
 import { create } from "zustand";
 
-type ActiveSceen = {
+export type ActiveSceen = {
     screenName: string,
-    parmas?: {}
+    params?: {}
   }
 
 type State = {
   activeScreen: ActiveSceen | null;
-  setActiveScreen: (screenName: string, parmas?: {}) => void;
+  setActiveScreen: (screenName: string, params?: {}) => void;
 
 };
 
 export const useActiveScreenStore = create<State>((set, get) => ({
   activeScreen: null,
-  setActiveScreen: (screenName, parmas={}) => set({activeScreen: {screenName, parmas}}),
+  setActiveScreen: (screenName, params={}) => set({activeScreen: {screenName, params}}),
 }));
