@@ -9,35 +9,42 @@ import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 
 export default function DiveSiteButton() {
   const [butState, setButState] = useState(false);
-  const { activeScreen, setActiveScreen } = useContext(
-    ActiveScreenContext
-    );
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
+  // const { activeScreen, setActiveScreen } = useContext(
+  //   ActiveScreenContext
+  //   );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
 
+  const handleScreen = () => {
+    setActiveScreen("DiveSiteUploadScreen")
+    setLevelTwoScreen(true)
+  }
 
-  const handlePress = () => {
-    setTiles(true);
-    setShowFilterer(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("DiveSiteUploadScreen");
-    useButtonPressHelper(
-      "DiveSiteUploadScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
-  };
+  // const handlePress = () => {
+  //   setTiles(true);
+  //   setShowFilterer(false);
+  //   setPreviousButtonID(activeScreen);
+  //   setActiveScreen("DiveSiteUploadScreen");
+  //   useButtonPressHelper(
+  //     "DiveSiteUploadScreen",
+  //     activeScreen,
+  //     levelTwoScreen,
+  //     setLevelTwoScreen
+  //   );
+  // };
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={handlePress}
+        onPress={handleScreen}
         onPressIn={() => setButState(true)}
         onPressOut={() => setButState(false)}
         style={{

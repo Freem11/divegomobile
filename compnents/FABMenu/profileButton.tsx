@@ -4,52 +4,28 @@ import { moderateScale } from "react-native-size-matters";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { SelectedProfileContext } from '../contexts/selectedProfileModalContext'
-
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  // const { activeScreen, setActiveScreen } = useContext(
-  //   ActiveScreenContext
-  //   );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-
+ 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
  
   const { profile } = useContext(UserProfileContext);
-  const { selectedProfile, setSelectedProfile } = useContext(
-    SelectedProfileContext
-  );
+
 
 
   const handleScreen = () => {
     setActiveScreen("ProfileScreen", {id: profile?.id})
     setLevelTwoScreen(true)
   }
-  // const handlePress = () => {
-  //   setSelectedProfile(profile)
-  //   setTiles(true);
-  //   setShowFilterer(false);
-  //   setPreviousButtonID(activeScreen);
-  //   setActiveScreen("ProfileScreen");
-  //   useButtonPressHelper(
-  //     "ProfileScreen",
-  //     activeScreen,
-  //     levelTwoScreen,
-  //     setLevelTwoScreen
-  //   );
-  // };
 
   return (
     <View style={styles.container}>

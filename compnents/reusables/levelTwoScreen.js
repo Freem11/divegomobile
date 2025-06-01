@@ -53,7 +53,7 @@ export default function LevelTwoScreen() {
       {activeScreen2 && activeScreen2.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen2.params.id}/>}
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen2 && activeScreen2.screenName === "PictureUploadScreen" && <PicUploaderParallax selectedDiveSite={activeScreen2.params.id}/>}
-      {activeScreen === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
+      {activeScreen2 && activeScreen2.screenName === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
       {activeScreen === "TripCreatorScreen" && <TripCreatorParallax />}
     </Animated.View>
   );
