@@ -49,6 +49,7 @@ import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCal
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { Pagination } from "../../../entities/pagination";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -86,7 +87,9 @@ export default function DiveSiteScreen({
     SelectedProfileContext
   );
   const { t } = useTranslation();
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [diveSiteVals, setDiveSiteVals] = useState(null);
@@ -157,17 +160,9 @@ export default function DiveSiteScreen({
       return;
     }
 
-    setSelectedProfile(picOwnerAccount);
+    setActiveScreen("ProfileScreen", {id: picOwnerAccount[0].id})
     setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("ProfileScreen");
-    useButtonPressHelper(
-      "ProfileScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
-    closeParallax(1)
+    setLevelTwoScreen(true);
   };
 
   const groupedPhotos = {};
