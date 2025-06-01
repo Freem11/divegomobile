@@ -5,12 +5,11 @@ import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { PinContext } from "../../contexts/staticPinContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
 const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -40,6 +39,7 @@ type PicUploaderProps = {
   handleImageUpload?: () => void;
   localPreviewUri: string 
   setLocalPreviewUri: Dispatch<any>
+  selectedDiveSite: DiveSiteWithUserName
 };
 
 export default function PicUploader({
@@ -49,14 +49,13 @@ export default function PicUploader({
   restoreParallax,
   handleImageUpload,
   localPreviewUri,
-  setLocalPreviewUri
+  setLocalPreviewUri,
+  selectedDiveSite
 }: PicUploaderProps) {
 
   const { profile } = useContext(UserProfileContext);
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);

@@ -24,6 +24,7 @@ import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 
 type DiveSiteProps = {
@@ -41,7 +42,9 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
@@ -101,15 +104,10 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
       Longitude: String(selectedDiveSite.lng),
       siteName: selectedDiveSite.name,
     });
+
+    setActiveScreen("PictureUploadScreen", {id: selectedDiveSite})
     setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("PictureUploadScreen");
-    useButtonPressHelper(
-      "PictureUploadScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
+    setLevelTwoScreen(true);
   };
 
   const openEditsPage = () => {

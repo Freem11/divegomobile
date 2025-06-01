@@ -12,8 +12,13 @@ import IconWithLabel from "../../reusables/iconWithLabal";
 import * as S from "./styles";
 import Button from "../../reusables/button";
 import { useTranslation } from "react-i18next";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
-export default function PicUploaderParallax() {
+type PicUploaderProps = {
+  selectedDiveSite: DiveSiteWithUserName
+};
+
+export default function PicUploaderParallax(props: PicUploaderProps) {
   const { t } = useTranslation();
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { pinValues, setPinValues } = useContext(PinContext);
@@ -96,6 +101,7 @@ export default function PicUploaderParallax() {
           onMapFlip={onNavigate}
           localPreviewUri={localPreviewUri}
           setLocalPreviewUri={setLocalPreviewUri}
+          selectedDiveSite={props.selectedDiveSite}
           />
     </ParallaxDrawer>
   );
