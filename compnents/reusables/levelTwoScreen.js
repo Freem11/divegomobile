@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { ActiveScreenContext } from "../contexts/activeScreenContext";
+import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfileParallax from '../screens/userProfile/userProfileParallax';
 import PartnerRequestPage from '../screens/partnerRequestPage';
@@ -20,6 +21,8 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelTwoScreen() {
+  const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
+
   const { activeScreen } = useContext(ActiveScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
 
@@ -45,7 +48,7 @@ export default function LevelTwoScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "ProfileScreen" && <UserProfileParallax />}
+      {activeScreen2 && activeScreen2.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen2.params.id}/>}
       {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen === "PictureUploadScreen" && <PicUploaderParallax />}
       {activeScreen === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}

@@ -16,7 +16,7 @@ import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
-import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
+import { grabProfileById, grabProfileByUserId, updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
@@ -25,7 +25,12 @@ import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
-export default function UserProfileParallax() {
+type UserProfileProps = {
+  profileID: number
+};
+
+
+export default function UserProfileParallax(props: UserProfileProps) {
   const { t } = useTranslation();
   const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -50,10 +55,18 @@ export default function UserProfileParallax() {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
-  
+  useEffect(() => {
+    getProfileinfo()
+  }, [props.profileID]);
+
+  const getProfileinfo = async () => {
+    const profileinfo = await grabProfileById(props.profileID)
+    setSelectedProfile(profileinfo)
+  }
+
   useEffect(() => {
     if (
-      (selectedProfile && selectedProfile[0].UserID === profile[0].UserID)
+      (selectedProfile?.userId === profile[0]?.UserID)
     ) {
       setIsMyProfile(true);
     } else {
@@ -62,14 +75,14 @@ export default function UserProfileParallax() {
     }
 
     let photoName = null;
-    if(selectedProfile && selectedProfile[0].profilePhoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile[0].profilePhoto.split("/").pop()}`;
+    if(selectedProfile?.profilePhoto) {
+      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}`;
     }
     
     setProfileVals({
-      id: selectedProfile &&  selectedProfile[0].id,
-      name: selectedProfile && selectedProfile[0].UserName,
-      bio: selectedProfile &&  selectedProfile[0].profileBio,
+      id: selectedProfile?.id,
+      name: selectedProfile?.UserName,
+      bio: selectedProfile?.profileBio,
       photo: photoName,
     });
 
@@ -151,7 +164,6 @@ const handleFollow = async () => {
     )
   };
 
-  console.log('profileVals', profileVals)
   return (
     <ParallaxDrawer 
       headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage} 

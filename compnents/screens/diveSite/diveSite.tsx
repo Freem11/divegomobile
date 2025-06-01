@@ -96,14 +96,15 @@ export default function DiveSiteScreen({
     const success = await getItinerariesForDiveSite(selectedDiveSite.id);
   };
 
+ 
   const getPhotos = async (site, profile) => {
 
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
-    
+   
     const photos = await getDiveSitePhotos(
       site.lat,
       site.lng,
-      profile[0].UserID,
+      profile.UserID,
       pagination
     );
 
@@ -112,7 +113,7 @@ export default function DiveSiteScreen({
 
 
   useEffect(() => {
-    if (selectedDiveSite && profile && profile.length > 0) {
+    if (selectedDiveSite && profile) {
       getPhotos(selectedDiveSite, profile);
     }
   }, [selectedDiveSite, profile, bottomHitCount]);
@@ -152,7 +153,7 @@ export default function DiveSiteScreen({
   const handleProfileMove = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
-    if (profile[0].UserID === picOwnerAccount[0].UserID) {
+    if (profile.UserID === picOwnerAccount[0].UserID) {
       return;
     }
 

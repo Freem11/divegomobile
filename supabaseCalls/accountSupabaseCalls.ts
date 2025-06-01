@@ -1,3 +1,4 @@
+import { ActiveProfile } from "../entities/profile";
 import { supabase } from "../supabase";
 
 export const addDeletedAccountInfo = async (values) => {
@@ -107,21 +108,41 @@ export const deleteProfile = async (id) => {
   }
 };
 
-export const grabProfileById = async (id) => {
+export const grabProfileByUserId = async (id: string) => {
+  console.log("supa", id)
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()
-    .eq("UserID", id)
+    .eq('UserID', id);
 
   if (error) {
-    console.log("couldn't do it 4,", error);
-    return [];
+    console.log('couldn\'t do it,', error);
+    return null;
   }
 
-  if (data) {
-    return data;
+  if (data[0]) {
+    return data[0] as ActiveProfile;
   }
+  return null;
 };
+
+export const grabProfileById = async (id: number) => {
+  const { data, error } = await supabase
+    .from("UserProfiles")
+    .select()
+    .eq('id', id);
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return null;
+  }
+
+  if (data[0]) {
+    return data[0] as ActiveProfile;
+  }
+  return null;
+};
+
 
 export const grabProfileByUserName = async (userName) => {
   const { data, error } = await supabase

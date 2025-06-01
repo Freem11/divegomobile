@@ -26,11 +26,11 @@ import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
 
-type SiteSubmitterProps = {
+type DiveSiteProps = {
   siteID: number
 };
 
-export default function DiveSiteParallax(props: SiteSubmitterProps) {
+export default function DiveSiteParallax(props: DiveSiteProps) {
   const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);

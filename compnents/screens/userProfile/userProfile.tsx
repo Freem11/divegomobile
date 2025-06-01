@@ -83,7 +83,7 @@ export default function UserProfileScreen({
   const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [profilePhotos, setProfilePhotos] = useState(null);
-  const [followData, setFollowData] = useState(profile[0].UserID);
+  const [followData, setFollowData] = useState(profile.UserID);
   const [userFollows, setUserFollows] = useState(false);
   const [userStats, setUserStats] = useState(null);
 
@@ -94,16 +94,16 @@ export default function UserProfileScreen({
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
 
     let photos;
-    if (selectedProfile && selectedProfile[0].UserID) {
+    if (selectedProfile?.UserID) {
       photos = await getProfilePhotosByUser(
-        selectedProfile[0].UserID,
-        profile[0].UserID,
+        selectedProfile.UserID,
+        profile.UserID,
         pagination
       );
     } else {
       photos = await getProfilePhotosByUser(
-        profile[0].UserID,
-        profile[0].UserID,
+        profile.UserID,
+        profile.UserID,
         pagination
       );
     }
@@ -112,16 +112,16 @@ export default function UserProfileScreen({
   };
 
   const getFollowStatus = async () => {
-    if (!selectedProfile || selectedProfile[0].UserID === profile[0].UserID) {
+    if (!selectedProfile || selectedProfile?.UserID === profile[0].UserID) {
       setVisitProfileVals(null);
       setIsNotVisitor(true)
     } else {
       setIsNotVisitor(false)
       setVisitProfileVals({
-        id: selectedProfile[0].UserID,
-        userName: selectedProfile[0].UserName,
-        bio: selectedProfile[0].profileBio,
-        photo: selectedProfile[0].profilePhoto,
+        id: selectedProfile?.UserID,
+        userName: selectedProfile?.UserName,
+        bio: selectedProfile?.profileBio,
+        photo: selectedProfile?.profilePhoto,
       });
     }
 
@@ -223,10 +223,10 @@ export default function UserProfileScreen({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.UserNameContainer>
-          <S.Header>{selectedProfile[0]?.UserName}</S.Header>
+          <S.Header>{selectedProfile?.UserName}</S.Header>
         </S.UserNameContainer>
    
-        <S.Content>{selectedProfile[0]?.profileBio}</S.Content>
+        <S.Content>{selectedProfile?.profileBio}</S.Content>
 
       </S.InputGroupContainer>
 
@@ -263,7 +263,7 @@ export default function UserProfileScreen({
             <SeaLifeImageCard
               key={`${photo.id}-${index}`}
               pic={photo}
-              dataSetType={"DiveSitePhotos"}
+              dataSetType={"ProfilePhotos"}
               diveSiteName={photoPacket.name}
               diveSiteAction={() => handleDiveSiteMove(photo, photoPacket)}
             />

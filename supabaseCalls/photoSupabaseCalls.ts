@@ -172,6 +172,8 @@ export const getDiveSitePhotos = async (lat: number, lng: number, userId: string
 };
 
 export const getProfilePhotosByUser = async (userId: string, connectedUserId: string, pagination?: Pagination) => {
+  console.log(userId, connectedUserId, pagination)
+  
   const builder = supabase.rpc("get_photos_by_userid_with_divesite", {
     userid: userId,
     connecteduserid: connectedUserId

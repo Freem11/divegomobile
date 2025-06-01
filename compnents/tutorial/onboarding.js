@@ -23,7 +23,7 @@ import { SessionContext } from "../contexts/sessionContext";
 import { PinContext } from "../contexts/staticPinContext";
 import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { updateProfile, grabProfileById } from "../../supabaseCalls/accountSupabaseCalls";
+import { updateProfile, grabProfileById, grabProfileByUserId } from "../../supabaseCalls/accountSupabaseCalls";
 import TextInputField from '../authentication/utils/textInput';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from "expo-linear-gradient";
@@ -164,8 +164,7 @@ export default function OnboardingTest() {
           id: sessionUserId,
           username: formVal.userName,
         });
-        let profileCheck = await grabProfileById(sessionUserId)
-        console.log(profileCheck)
+        let profileCheck = await grabProfileByUserId(sessionUserId)
         if (profileCheck.length > 0) {
           setFormVal({ userName: "" });
           if (Array.isArray(profileCheck)) {

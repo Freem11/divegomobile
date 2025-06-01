@@ -25,7 +25,7 @@ import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfi
 import LevelOneScreen from "../compnents/reusables/levelOneScreen";
 import LevelTwoScreen from "../compnents/reusables/levelTwoScreen";
 import {
-  grabProfileById,
+  grabProfileByUserId,
   updateProfileFeeback,
 } from "./../supabaseCalls/accountSupabaseCalls";
 import {
@@ -115,7 +115,6 @@ export default function MapPage() {
   const [isOpen, setIsOpen] = useState(false);
 
   const locales = getLocales();
-  // console.log("locales", locales);
   
   useEffect(() => {
     filterAnchorPhotos();
@@ -313,9 +312,9 @@ export default function MapPage() {
     let sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success = await grabProfileById(sessionUserId);
+      const success = await grabProfileByUserId(sessionUserId);
       if (success) {
-        let bully = success[0] && success[0].UserName;
+        let bully = success && success.UserName;
         if (bully == null || bully === "") {
           setTimeout(() => {
             setActiveTutorialID("OnboardingX");
