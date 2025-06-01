@@ -1,43 +1,38 @@
-import  { useEffect, useRef } from 'react';
+import  { useEffect, useState } from 'react';
 import { HeatPoint } from '../../../../entities/heatPoint';
 import { heatPointToWeightedLocation } from '../../dto/heatPointToWeightedLocation';
-
+import {
+  Heatmap,
+} from "react-native-maps";
 type MarkerHeatPointProps = {
-  map:        google.maps.Map | null
-  options?:   google.maps.visualization.HeatmapLayerOptions
+  // map:        google.maps.Map | null
+  // options?:   google.maps.visualization.HeatmapLayerOptions
   heatPoints: HeatPoint[]
 };
 
-export function MarkerHeatPoint(props: MarkerHeatPointProps) {
-  const ref = useRef<google.maps.visualization.HeatmapLayer | null>(null);
+type WeightedLatLng = {
+  latitude: number;
+  longitude: number;
+  weight?: number;
+};
 
-  const options = {
-    opacity: 1,
-    radius:  16,
-    ...(props.options ?? {}),
-  };
+export function MarkerHeatPoint(props: MarkerHeatPointProps) {
+
+  const [heatPoints, setHeatPoints] = useState<WeightedLatLng[] | null>([]);
 
   useEffect(() => {
-    if (!props.map) {
-      return;
+    if(props.heatPoints) {
+      setHeatPoints(props.heatPoints.map(point => heatPointToWeightedLocation(point)))
     }
+  }, [props.heatPoints])
 
-    options.data = props.heatPoints.map(heatPoint => heatPointToWeightedLocation(heatPoint));
-    if (!ref.current) {
-      ref.current = new google.maps.visualization.HeatmapLayer(options);
-    } else {
-      if (options.data) {
-        ref.current.setData(options.data);
-      }
-    }
-
-    ref.current.setMap(props.map);
-    return () => {
-      if (ref.current) {
-        ref.current.setMap(null);
-      }
-    };
-  }, [props.heatPoints]);
-
-  return null;
+if(heatPoints?.length > 0) {
+  return <Heatmap
+    points={heatPoints}
+    radius={30}
+    // radius={Platform.OS === "ios" ? 30 : 10}
+  />
+} else {
+  return null
+}
 }
