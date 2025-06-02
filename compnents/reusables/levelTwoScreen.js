@@ -46,8 +46,6 @@ export default function LevelTwoScreen() {
     startlevelTwoScreenAnimation();
   }, [levelTwoScreen]);
 
-  console.log('activeScreen2', activeScreen2 )
-
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen2 && activeScreen2.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen2.params.id}/>}

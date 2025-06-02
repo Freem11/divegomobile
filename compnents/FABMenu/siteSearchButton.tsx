@@ -1,38 +1,20 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { PullTabContext } from "../contexts/pullTabContext";
-import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
-import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { useButtonPressHelper } from "./buttonPressHelper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { activeFonts, colors, fontSizes } from "../styles";
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
-  const { activeScreen, setActiveScreen } = useContext(
-    ActiveScreenContext
-    );
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
 
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { setTiles } = useContext(CarrouselTilesContext);
-  const { setShowFilterer } = useContext(PullTabContext);
-
   const handlePress = () => {
-    setTiles(true);
-    setShowFilterer(false);
-
-    setPreviousButtonID(activeScreen);
+    setLevelOneScreen(true);
     setActiveScreen("SearchScreen");
-    useButtonPressHelper(
-      "SearchScreen",
-      activeScreen,
-      levelOneScreen,
-      setLevelOneScreen
-    );
   };
 
   return (
