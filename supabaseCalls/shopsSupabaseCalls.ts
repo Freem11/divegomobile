@@ -94,3 +94,18 @@ export const getShopByUserID = async (value) => {
     return data;
   }
 };
+
+export const getDiveShopById = async (id: number) => {
+  const { data, error } = await supabase
+    .from('shops')
+    .select()
+    .eq('id', id);
+
+  if (error) {
+    console.log('couldn\'t do it 39,', error);
+  }
+
+  if (data) {
+    return data;
+  }
+};

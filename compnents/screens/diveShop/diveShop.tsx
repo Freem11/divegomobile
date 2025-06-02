@@ -27,6 +27,7 @@ import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext"
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { DiveShop } from "../../../entities/diveShop";
 
 type DiveShopProps = {
   onClose?: () => void;
@@ -35,6 +36,7 @@ type DiveShopProps = {
   restoreParallax?: () => void; 
   isMyShop?: boolean
   bottomHitCount?: number;
+  selectedShop: DiveShop
 };
 
 export default function DiveShopScreen({
@@ -43,7 +45,8 @@ export default function DiveShopScreen({
   closeParallax,
   restoreParallax,
   isMyShop,
-  bottomHitCount
+  bottomHitCount,
+  selectedShop
 }: DiveShopProps) {
   
   const { profile } = useContext(UserProfileContext);
@@ -52,7 +55,7 @@ export default function DiveShopScreen({
   const { setMapConfig } = useContext(MapConfigContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
-  const { selectedShop } = useContext(SelectedShopContext);
+  // const { selectedShop } = useContext(SelectedShopContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
@@ -88,29 +91,29 @@ export default function DiveShopScreen({
   useEffect(() => {
     if (levelOneScreen && zoomHelper) {
       setMapCenter({
-        lat: selectedShop[0].lat,
-        lng: selectedShop[0].lng,
+        lat: selectedShop.lat,
+        lng: selectedShop.lng,
       });
     }
   }, [levelOneScreen]);
 
   useEffect(() => {
     setDiveShopVals({
-      id: selectedShop[0].id,
-      bio: selectedShop[0].diveShopBio,
-      photo: selectedShop[0].diveShopProfilePhoto,
+      id: selectedShop.id,
+      bio: selectedShop.diveshopbio,
+      photo: selectedShop.diveshopprofilephoto,
     });
 
-    if (selectedShop[0]) {
-      getItineraries(selectedShop[0].id);
+    if (selectedShop) {
+      getItineraries(selectedShop.id);
     }
   }, [selectedShop, isEditModeOn]);
 
   useEffect(() => {
-    if (selectedShop[0]) {
-      getItineraries(selectedShop[0].id);
+    if (selectedShop) {
+      getItineraries(selectedShop.id);
     }
-  }, [selectedShop[0].id]);
+  }, [selectedShop.id]);
 
   useEffect(() => {
     if (!isEditModeOn && diveShopVals) {
@@ -173,7 +176,7 @@ const handleEditButton = (itineraryInfo) => {
   setPreviousButtonID(activeScreen);
   setActiveScreen("TripCreatorScreen");
   setEditMode({ itineraryInfo, IsEditModeOn: true });
-  setFormValues({ ...itineraryInfo, shopID: selectedShop[0].id, OriginalItineraryID: itineraryInfo.id })
+  setFormValues({ ...itineraryInfo, shopID: selectedShop.id, OriginalItineraryID: itineraryInfo.id })
   setSitesArray(itineraryInfo.siteList)
   setLevelOneScreen(false);
   useButtonPressHelper(
@@ -218,9 +221,9 @@ const handleMapFlip = async (sites: number[]) => {
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-          <S.Header>{selectedShop[0].orgName}</S.Header>
+          <S.Header>{selectedShop?.orgName}</S.Header>
 
-          <S.Content>{selectedShop[0].diveShopBio}</S.Content>
+          <S.Content>{selectedShop?.diveShopBio}</S.Content>
 
       </S.InputGroupContainer>
 
