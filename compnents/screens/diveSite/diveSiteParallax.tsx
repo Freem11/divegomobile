@@ -59,7 +59,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
     getDiveSiteinfo()
 
-    if (profile[0]?.partnerAccount) {
+    if (profile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.siteID]);
