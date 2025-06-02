@@ -50,7 +50,7 @@ export default function LevelOneScreen() {
       {activeScreen2 && activeScreen2.screenName === "DiveShopScreen" && <DiveShopParallax shopID={activeScreen2.params.id}/>}
       {activeScreen2 && activeScreen2.screenName === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}
-      {activeScreen === "TripListScreen" && <TripListPage/>}
+      {activeScreen2 && activeScreen2.screenName === "TripListScreen" && <TripListPage/>}
     </Animated.View>
   );
 }

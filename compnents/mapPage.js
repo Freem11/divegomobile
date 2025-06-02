@@ -387,7 +387,7 @@ export default function MapPage() {
   };
 
   const PARTNER_ACCOUNT_STATUS =
-  (profile[0] && profile[0].partnerAccount) || false;
+  (profile?.partnerAccount) || false;
 
 
   return (

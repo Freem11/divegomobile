@@ -9,35 +9,30 @@ import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
+import { UserProfileContext } from "../contexts/userProfileContext";
 
 export default function ItineraryListButton() {
   const [butState, setButState] = useState(false);
-  const { activeScreen, setActiveScreen } = useContext(
-    ActiveScreenContext
-    );
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
+  const { profile } = useContext(UserProfileContext);
+
   const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
 
-  const handlePress = () => {
-    setTiles(true);
-    setShowFilterer(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("TripListScreen");
-    useButtonPressHelper(
-      "TripListScreen",
-      activeScreen,
-      levelOneScreen,
-      setLevelOneScreen
-    );
-  };
+  const handleScreen = () => {
+    setActiveScreen("TripListScreen", {id: profile?.id})
+    setLevelOneScreen(true)
+  }
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={handlePress}
+        onPress={handleScreen}
         onPressIn={() => setButState(true)}
         onPressOut={() => setButState(false)}
         style={{

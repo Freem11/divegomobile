@@ -17,7 +17,7 @@ export default function FABMenu(props) {
   const { profile } = useContext(UserProfileContext);
 
   const PARTNER_ACCOUNT_STATUS =
-    (profile[0] && profile[0].partnerAccount) || false;
+    (profile && profile.partnerAccount) || false;
 
   return (
     <View

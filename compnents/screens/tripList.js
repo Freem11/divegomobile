@@ -62,8 +62,8 @@ export default function TripListPage(props) {
   const [selectedID, setSelectedID] = useState(null);
 
   useEffect(() => {
-    getItineraries(profile[0].UserID);
-    getShop(profile[0].UserID)
+    getItineraries(profile.UserID);
+    getShop(profile.UserID)
   }, []);
 
   useEffect(() => {
