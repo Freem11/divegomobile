@@ -51,7 +51,7 @@ export default function SettingsPage(props) {
   );
 
   let profileType;
-  if (profile[0].partnerAccount) {
+  if (profile.partnerAccount) {
     profileType = "Partner Account";
   } else {
     profileType = "Diver Account";

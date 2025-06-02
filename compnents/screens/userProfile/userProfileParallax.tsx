@@ -24,6 +24,7 @@ import { SessionContext } from "../../contexts/sessionContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type UserProfileProps = {
   profileID: number
@@ -32,11 +33,13 @@ type UserProfileProps = {
 
 export default function UserProfileParallax(props: UserProfileProps) {
   const { t } = useTranslation();
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
@@ -133,14 +136,8 @@ const handleFollow = async () => {
 
   const openSettingsScreen = () => {
     setLevelTwoScreen(false);
-    setPreviousButtonID(activeScreen);
+    setLevelOneScreen(true);
     setActiveScreen("SettingsScreen");
-    useButtonPressHelper(
-      "SettingsScreen",
-      activeScreen,
-      levelOneScreen,
-      setLevelOneScreen
-    );
   };
   
   const openEditsPage = () => {

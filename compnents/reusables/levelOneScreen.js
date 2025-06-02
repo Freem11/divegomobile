@@ -48,7 +48,7 @@ export default function LevelOneScreen() {
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen2 && activeScreen2.screenName === "DiveSiteScreen" && <DiveSiteParallax siteID={activeScreen2.params.id}/>}
       {activeScreen2 && activeScreen2.screenName === "DiveShopScreen" && <DiveShopParallax shopID={activeScreen2.params.id}/>}
-      {activeScreen === "SettingsScreen" && <Settings/>}
+      {activeScreen2 && activeScreen2.screenName === "SettingsScreen" && <Settings/>}
       {activeScreen === "SearchScreen" && <SearchPage/>}
       {activeScreen === "TripListScreen" && <TripListPage/>}
     </Animated.View>
