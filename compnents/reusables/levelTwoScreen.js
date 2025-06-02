@@ -51,7 +51,7 @@ export default function LevelTwoScreen() {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen2 && activeScreen2.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen2.params.id}/>}
-      {activeScreen === "PartnerRequestScreen" && <PartnerRequestPage />}
+      {activeScreen2 && activeScreen2.screenName === "PartnerRequestScreen" && <PartnerRequestPage />}
       {activeScreen2 && activeScreen2.screenName === "PictureUploadScreen" && <PicUploaderParallax selectedDiveSite={activeScreen2.params.id}/>}
       {activeScreen2 && activeScreen2.screenName === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
       {activeScreen === "TripCreatorScreen" && <TripCreatorParallax />}

@@ -58,8 +58,6 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
-
-  console.log('profileID', props.profileID)
   useEffect(() => {
     getProfileinfo()
   }, [props.profileID]);
