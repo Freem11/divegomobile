@@ -7,6 +7,7 @@ import {
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
+  itineraries
 } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
@@ -28,6 +29,7 @@ import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handle
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { DiveShop } from "../../../entities/diveShop";
 
 type TripCreatorProps = {
   onClose: () => void;
@@ -36,6 +38,7 @@ type TripCreatorProps = {
   restoreParallax?: () => void; 
   onDrawerHitBottom?: () => void;
   bottomHitCount?: number;
+  selectedShop: DiveShop
 };
 
 export default function TripCreatorPage({
@@ -44,6 +47,7 @@ export default function TripCreatorPage({
   closeParallax,
   restoreParallax,
   bottomHitCount,
+  selectedShop
 }: TripCreatorProps) {
 
   const { profile } = useContext(UserProfileContext);
@@ -63,7 +67,7 @@ export default function TripCreatorPage({
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
 
   useEffect(() => {
-    getItineraries(profile[0].UserID);
+    getItineraries(selectedShop);
     getTripDiveSites(sitesArray);
     setTripDiveSites(getTripDiveSites(formValues.siteList));
     setSitesArray(formValues.siteList);
@@ -85,7 +89,7 @@ export default function TripCreatorPage({
 
   const getItineraries = async (IdNum) => {
     try {
-      const itins = await getItinerariesByUserId(IdNum);
+      const itins = await itineraries(IdNum);
       if (itins.length > 0) {
         setItineraryList(itins[0].itineraries);
       }

@@ -28,6 +28,7 @@ import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { DiveShop } from "../../../entities/diveShop";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type DiveShopProps = {
   onClose?: () => void;
@@ -50,6 +51,7 @@ export default function DiveShopScreen({
 }: DiveShopProps) {
   
   const { profile } = useContext(UserProfileContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { setMapConfig } = useContext(MapConfigContext);
@@ -64,7 +66,7 @@ export default function DiveShopScreen({
   );
   const { setEditMode } = useContext(EditModeContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
@@ -173,18 +175,13 @@ if(isMyShop){
 }
 
 const handleEditButton = (itineraryInfo) => {
-  setPreviousButtonID(activeScreen);
-  setActiveScreen("TripCreatorScreen");
+  setLevelOneScreen(false);
+  setLevelTwoScreen(true);
+  setActiveScreen("TripCreatorScreen", {id: selectedShop.id});
   setEditMode({ itineraryInfo, IsEditModeOn: true });
   setFormValues({ ...itineraryInfo, shopID: selectedShop.id, OriginalItineraryID: itineraryInfo.id })
   setSitesArray(itineraryInfo.siteList)
-  setLevelOneScreen(false);
-  useButtonPressHelper(
-    "TripCreatorScreen",
-    activeScreen,
-    levelTwoScreen,
-    setLevelTwoScreen
-  );
+
 };
 
 const handleDeleteButton = (itineraryInfo) => {

@@ -14,7 +14,7 @@ import {
   buttonTextAlt,
 } from "../styles";
 
-import { getShopByUserID } from "../../supabaseCalls/shopsSupabaseCalls";
+import { getShopByUserID, getDiveShopById } from "../../supabaseCalls/shopsSupabaseCalls";
 import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
 import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -34,11 +34,14 @@ import { TripDetailContext } from "../../compnents/contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
 import { useTranslation } from "react-i18next";
 import  ItineraryCard  from '../reusables/itineraryCard';
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
+
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function TripListPage(props) {
   const { } = props;
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
   const { setShop } = useContext(ShopContext);
@@ -46,7 +49,7 @@ export default function TripListPage(props) {
   const { setEditMode } = useContext(EditModeContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setSitesArray } = useContext(SitesArrayContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
@@ -63,7 +66,7 @@ export default function TripListPage(props) {
 
   useEffect(() => {
     getItineraries(profile.UserID);
-    getShop(profile.UserID)
+    getShop(profile.id)
   }, []);
 
   useEffect(() => {
@@ -73,7 +76,7 @@ export default function TripListPage(props) {
 
   const getShop = async (id) => {
     try {
-      const shop = await getShopByUserID(id);
+      const shop = await getDiveShopById(id);
       if (shop.length > 0) {
         setFormValues({ ...formValues, shopID: shop[0].id })
       }
@@ -96,30 +99,17 @@ export default function TripListPage(props) {
 
   const openTripCreatorScreen = () => {
     setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
+    setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");
-    useButtonPressHelper(
-      "TripCreatorScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
   };
 
-
   const handleEditButton = (itineraryInfo) => {
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("TripCreatorScreen");
+    setLevelOneScreen(false);
+    setLevelTwoScreen(true);
+    setActiveScreen("TripCreatorScreen", {id: formValues.shopID});
     setEditMode({ itineraryInfo, IsEditModeOn: true });
     setFormValues({ ...itineraryInfo, shopID: formValues.shopID, OriginalItineraryID: itineraryInfo.id })
     setSitesArray(itineraryInfo.siteList)
-    setLevelOneScreen(false);
-    useButtonPressHelper(
-      "TripCreatorScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
   };
 
   const handleDeleteButton = (itineraryInfo) => {

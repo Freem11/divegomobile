@@ -13,7 +13,11 @@ import { MapConfigContext } from "../../contexts/mapConfigContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useTranslation } from "react-i18next";
 
-export default function TripCreatorParallax() {
+type TripCreatorProps = {
+  shopID: number
+};
+
+export default function TripCreatorParallax(props: TripCreatorProps) {
   const { t } = useTranslation();
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { setSitesArray } = useContext(SitesArrayContext);
@@ -72,7 +76,7 @@ export default function TripCreatorParallax() {
       popoverConent={editMode && popoverConent}
     >
       <TripCreatorPage 
-        onClose={onClose} onMapFlip={onNavigate}
+        onClose={onClose} onMapFlip={onNavigate} selectedShop={props.shopID}
         />
 
     </ParallaxDrawer>

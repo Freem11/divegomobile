@@ -42,7 +42,6 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const { pinValues, setPinValues } = useContext(PinContext);
-  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);

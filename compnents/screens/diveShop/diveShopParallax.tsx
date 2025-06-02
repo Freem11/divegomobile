@@ -8,19 +8,15 @@ import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
-import { getDiveShopById, updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
+import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type DiveCentreProps = {
   shopID: number
@@ -28,12 +24,12 @@ type DiveCentreProps = {
 
 export default function DiveShopParallax(props: DiveCentreProps) {
   const { t } = useTranslation();
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setMapHelper } = useContext(MapHelperContext);
   const { setMapConfig } = useContext(MapConfigContext);
@@ -59,7 +55,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   useEffect(() => {
     if (
       profile.partnerAccount &
-      (selectedShop.userId === profile[0].UserID)
+      (selectedShop.userId === profile.UserID)
     ) {
       setIsMyShop(true);
     } else {
@@ -93,14 +89,8 @@ export default function DiveShopParallax(props: DiveCentreProps) {
 
   const openTripCreatorScreen = () => {
     setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
+    setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");
-    useButtonPressHelper(
-      "TripCreatorScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
   };
   
   const openEditsPage = () => {
