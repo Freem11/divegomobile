@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import EdittingScreen from ".";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import noImage from '../../png/NoImage.jpg';
+import noImage from '../../png/NoImage.png';
 import { chooseImageHandler } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
