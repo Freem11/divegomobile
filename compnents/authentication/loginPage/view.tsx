@@ -89,13 +89,15 @@ export default function LoginPageView({
                 </S.ButtonBox>
             </S.Content>
 
+        
+
+            <S.PromptBox>
             <S.ForgotBox>
                 <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
                     <S.PromptLinkText>{t('Auth.forgotPassword')}</S.PromptLinkText>
                 </TouchableWithoutFeedback>
             </S.ForgotBox>
-
-            <S.PromptBox>
+            
                 <S.PromptText>{t('Auth.noAccount')}</S.PromptText>
                 <TouchableWithoutFeedback onPress={moveToSignUpPage}>
                     <S.PromptLinkText>{t('Common.signup')}</S.PromptLinkText>

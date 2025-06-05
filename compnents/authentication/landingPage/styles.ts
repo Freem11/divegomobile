@@ -11,68 +11,41 @@ import {
   buttonTextAlt,
 } from "../../styles";
 
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get('window').width;
 
-export const StyledScrollView = styled.ScrollView.attrs(() => ({
-  scrollEnabled: false,
-  contentContainerStyle: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}))`
-  z-index: 15;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: ${windowHeight}px;
-  width: 100%;
-`;
-
-export const Container = styled.View`
-  flex: 1;
-  background-color: #fff;
+export const ContentContainer = styled.View`
+  width: ${windowWidth}px;
+  margin-top: -5%;
   align-items: center;
-  justify-content: center;
+  z-index: 1;
+  backgounrd-color: green;
 `;
 
-export const scrollStyle = {
-  zIndex: 15,
-  position: "absolute",
-  top: 0,
-  left: 0,
-  height: windowHeight,
-  width: "100%",
-};
-
-export const scrollContent = {
-  flex: 1,
-  alignItems: "center",
-  justifyContent: "center",
-};
+export const InputGroupContainer = styled.View`
+  margin-bottom: ${windowHeight / 70}px;
+  width: ${windowWidth * 0.75}px;
+`;
 
 export const Header = styled.Text`
-  z-index: 10;
-  margin-top: ${windowWidth > 600
-    ? windowHeight / 2.5
-    : moderateScale(windowHeight / 3.2)}px;
-  margin-right: ${windowWidth / 3}px;
+  margin-left: 15%;
+  margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Regular};
   color: ${colors.themeBlack};
+  align-self: flex-start;
 `;
 
 export const SocialText = styled.Text`
   z-index: 10;
-  margin-top: ${windowHeight / 20}px;
+  margin-top:2%;
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.ThinItalic};
   color: ${colors.themeBlack};
 `;
 
 export const ButtonBox = styled.View`
-  padding-top: ${moderateScale(20)}px;
+  padding-top: ${moderateScale(0)}px;
 `;
 
 export const ButtonSpacer = styled.View`
@@ -99,7 +72,7 @@ export const RegisterText = styled.Text`
 
 export const IconRow = styled.View`
   width: ${moderateScale(200)}px;
-  margin-top: ${windowHeight / 30}px;
+  margin-top: 5%;
   align-items: center;
   justify-content: space-around;
   flex-direction: row;

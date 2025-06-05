@@ -16,9 +16,7 @@ const windowHeight = Dimensions.get("window").height;
 export const Container = styled.View`
   flex: 1;
   background-color: #fff;
-  margin-top: ${windowHeight / 10}px;
-  margin-bottom: ${windowHeight / 25}px;
-  width: ${windowWidth - windowWidth / 10}px;
+  width: ${windowWidth}px;
 `;
 
 export const Content = styled.View`
@@ -63,7 +61,7 @@ export const ButtonBox = styled.View`
   align-items: flex-end;
 `;
 
-export const PromptBox = styled.View`
+export const PromptBox = styled(SafeAreaView)`
   position: absolute;
   bottom: ${moderateScale(10)}px;
   width: 100%;

@@ -31,8 +31,7 @@ export default function LandingPageView ({
   const { t } = useTranslation();
 
   return (
-    <S.Container>
-      <S.StyledScrollView>
+    <S.ContentContainer>
         <S.Header>{t("Auth.diveIn")}</S.Header>
 
         <S.ButtonBox>
@@ -78,9 +77,8 @@ export default function LandingPageView ({
             </TouchableWithoutFeedback>
           )}
         </S.IconRow>
-      </S.StyledScrollView>
 
-      <WavyHeader />
-    </S.Container>
+      {/* <WavyHeader /> */}
+    </S.ContentContainer>
   );
 }

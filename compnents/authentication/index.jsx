@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Keyboard, ScrollView } from "react-native";
 import * as S from "./styles";
 import CreateAccountPage from "./signupPage";
-import LandingPage from "./landingPage";
+import LandingParallax from './landingPage/landingParallax';
 import LoginPage from "./loginPage";
 import ForgotPage from "./forgotPasswordPage";
 
@@ -59,12 +59,12 @@ export default function Authentication() {
           />
         </S.PageContent>
 
-        <S.PageContent>
-          <LandingPage
+        <S.PageContentParallax>
+          <LandingParallax
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
             moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
           />
-        </S.PageContent>
+        </S.PageContentParallax>
 
         <S.PageContent>
           <LoginPage
