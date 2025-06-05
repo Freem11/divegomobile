@@ -73,6 +73,7 @@ export const RegisterText = styled.Text`
 export const IconRow = styled.View`
   width: ${moderateScale(200)}px;
   margin-top: 5%;
+  margin-bottom: 10%;
   align-items: center;
   justify-content: space-around;
   flex-direction: row;

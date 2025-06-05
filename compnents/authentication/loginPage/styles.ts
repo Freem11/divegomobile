@@ -61,7 +61,7 @@ export const ButtonBox = styled.View`
 
 export const ForgotBox = styled.View`
   position: absolute;
-  bottom: ${moderateScale(50)}px;
+  bottom: ${moderateScale(30)}px;
   width: 100%;
   flex-direction: row;
   justify-content: center;
@@ -69,7 +69,7 @@ export const ForgotBox = styled.View`
 
 export const PromptBox = styled(SafeAreaView)`
   position: absolute;
-  bottom: ${moderateScale(10)}px;
+  bottom: ${moderateScale(60)}px;
   width: 100%;
   flex-direction: row;
   gap: 10px;

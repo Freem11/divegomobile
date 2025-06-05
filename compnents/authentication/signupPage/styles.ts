@@ -63,7 +63,7 @@ export const ButtonBox = styled.View`
 
 export const PromptBox = styled(SafeAreaView)`
   position: absolute;
-  bottom: ${moderateScale(10)}px;
+  bottom: ${moderateScale(60)}px;
   width: 100%;
   flex-direction: row;
   gap: 10px;
