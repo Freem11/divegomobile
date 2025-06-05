@@ -54,11 +54,11 @@ export default function SearchToolInput(props) {
     diveSiteData = null;
     diveSiteArray = [];
 
-    if (boundaries.length > 0) {
+    // if (boundaries.length > 0) {
       diveSiteData = await getSiteNamesThatFit(value);
-    } else {
-      diveSiteData = null;
-    }
+    // } else {
+    //   diveSiteData = null;
+    // }
 
     placesData = await getPlaces(value);
 
@@ -67,7 +67,7 @@ export default function SearchToolInput(props) {
         placesArray.push(place.description);
       });
     }
-
+ 
     if (diveSiteData) {
       diveSiteData.forEach((diveSite) => {
         if (!diveSiteArray.includes(diveSite.name)) {
