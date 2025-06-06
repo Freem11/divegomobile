@@ -6,8 +6,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { colors } from "../../styles";
-import {  useFeedScreenStore,  FEED_SCREEN } from "../store/useScreenStore";
+import {  useFeedScreenStore } from "../store/useScreenStore";
 import FeedList from "./feeds";
+import { FEED_SCREEN } from "../store/types";
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("screen");
 

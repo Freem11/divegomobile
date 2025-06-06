@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FeedItem } from "./useFeedDataStore";
+import { FeedItem } from "./types";
 
 const FAILED_UPLOADS_KEY = "FAILED_UPLOADS";
 

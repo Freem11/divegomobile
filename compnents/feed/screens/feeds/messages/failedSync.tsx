@@ -1,8 +1,8 @@
 import React from "react";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { FailedSyncFeedItem } from "../../../store/useFeedDataStore";
 import * as S from "./styles";
 import { FeedItemComponentProps } from "./failedPicUpload";
+import { FailedSyncFeedItem } from "../../../store/types";
 
 export default function FeedItemFailedSync({
   item,

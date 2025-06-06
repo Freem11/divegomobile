@@ -1,9 +1,9 @@
 import React from "react";
-import { NotificationFeedItem } from "../../../store/useFeedDataStore";
 import * as S from "./styles";
 import { FeedItemComponentProps } from "./failedPicUpload";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { NotificationFeedItem } from "../../../store/types";
 
 export default function FeedItemNotification({
   item,

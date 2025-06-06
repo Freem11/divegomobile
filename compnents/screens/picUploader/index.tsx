@@ -10,12 +10,12 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { DynamicSelectOptionsAnimals } from "../../entities/DynamicSelectOptionsAnimals";
 import NetInfo from "@react-native-community/netinfo";
-import { FailedUploadFeedItem, FEED_ITEM_TYPE } from "../../feed/store/useFeedDataStore";
 import { v4 as uuidv4 } from "uuid";
 import { saveFailedUpload } from "../../feed/store/asyncStore";
 import { useTranslation } from "react-i18next";
+import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
 
-const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
+export const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
 type dropDownItem = {
   key: string;
@@ -63,21 +63,20 @@ export default function PicUploader({
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const tryUpload = async (localPreviewUri: string) => {
+  const tryUpload = async (uri: string) => {
     try {
-      const image = {
-        assets: [
-          {
-            uri: localPreviewUri,
-          },
-        ],
-      };
-      const fileName = await imageUpload(image);
-      return fileName;
+      return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
+      console.error("Error uploading image:", e);
       return null;
     }
   };
+
+  const resetAndClose = () => {
+    resetForm();
+    setLocalPreviewUri(null);
+    onClose();
+  }
 
   const buildFailedUploadItem = (formData: Required<Form>): FailedUploadFeedItem => {
     const ID = uuidv4()
@@ -88,50 +87,46 @@ export default function PicUploader({
       message: t('PicUploader.couldUploadMsg', { animal: formData.animal.label, diveSite: formData.diveSiteName }),
       timestamp: Date.now(),
       imageUri: localPreviewUri,
-      // retryCallback: async () => {
-      //   console.log("Retrying upload for item ID:", ID);
-      //   const { isExist } = await checkFileExists(localPreviewUri);
-      //   if (!isExist) {
-      //     showError(t('PicUploader.noPictureFound'));
-      //     return;
-      //   }
-      //   try {
-      //     await onSubmit(formData);
-      //     removeFeedItem(ID);
-      //   } catch (err) {
-      //     console.warn("Retry failed:", err);
-      //     showError(t('PicUploader.retryFailedUpload'));
-      //   }
-      // },
+      retryMetaData: {
+        payloadType: RETRY_TYPE.PIC_UPLOADER,
+        payloads: [
+          {
+            localPreviewUri
+          },
+          {
+            photoFile: null,
+            label: formData.animal.label,
+            dateTaken: formData.date,
+            latitude: selectedDiveSite.lat,
+            longitude: selectedDiveSite.lng,
+            UserId: profile[0].UserID,
+          }
+        ]
+      }
     };
   }
 
   const onSubmitOrCache = async (formData: Required<Form>) => {
-
-    console.log("onSubmitOrCache", formData);
     if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning(t('PicUploader.fillRequiredFields'));
       return;
     }
     const netState = await NetInfo.fetch();
 
-    if (!netState.isConnected || !netState.isInternetReachable) {
+    if (true || !netState.isConnected || !netState.isInternetReachable) {
       const failedItemToUpload = buildFailedUploadItem(formData);
       await saveFailedUpload(failedItemToUpload)
       showError(t('PicUploader.offlineMsg'));
-
+      resetAndClose();
     } else {
       await onSubmit(formData);
     }
   }
 
   const onSubmit = async (formData: Required<Form>) => {
-
-
     setIsUploading(true);
 
     try {
-      // Step 2: Upload image
       const fileName = await tryUpload(localPreviewUri);
       if (!fileName) {
         throw new Error(t('PicUploader.failedUpload'));
@@ -140,15 +135,6 @@ export default function PicUploader({
       const fullPath = `animalphotos/public/${fileName}`;
 
       const { error } = await insertPhotoWaits({
-        photoFile: fullPath,
-        label: formData.animal.label,
-        dateTaken: formData.date,
-        latitude: selectedDiveSite.lat,
-        longitude: selectedDiveSite.lng,
-        UserId: profile[0].UserID,
-      });
-
-      console.log("lol", {
         photoFile: fullPath,
         label: formData.animal.label,
         dateTaken: formData.date,
@@ -167,8 +153,7 @@ export default function PicUploader({
       }
       setConfirmationType("Sea Creature Submission");
       showSuccess(t('PicUploader.successUpload'));
-      resetForm();
-      setLocalPreviewUri(null);
+      resetAndClose()
     } catch (err) {
       console.error("Error uploading image:", err);
       showError(err.message);

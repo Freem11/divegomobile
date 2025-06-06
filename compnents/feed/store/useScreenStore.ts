@@ -1,13 +1,7 @@
-
 import { create } from "zustand";
+import { FEED_SCREEN } from "./types";
 
-export const FEED_SCREEN = {
-    FEED_MESSAGES: "feedMessages",
-    NOTIFICATIONS: "notifications",
-    } as const;
-
-
-type FeedScreen = typeof FEED_SCREEN[keyof typeof FEED_SCREEN];
+type FeedScreen = (typeof FEED_SCREEN)[keyof typeof FEED_SCREEN];
 
 interface FeedScreenStore {
   currentScreen: FeedScreen;

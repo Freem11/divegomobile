@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FEED_ITEM_TYPE, FeedItem, useFeedDataStore } from "../../store/useFeedDataStore";
+import { useFeedDataStore } from "../../store/useFeedDataStore";
 import { moderateScale } from "react-native-size-matters";
 import { activeFonts, colors } from "../../../styles";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -17,7 +17,7 @@ import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
 import { useTranslation } from "react-i18next";
-import { clearFailedUploads } from "../../store/asyncStore";
+import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -26,6 +26,7 @@ export default function FeedList() {
   const feedItems = useFeedDataStore((state) => state.feedItems);
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
   const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
+  const clearFeedItems = useFeedDataStore((state) => state.clearFeedItems);
   const closeScreen = useFeedScreenStore((state) => state.closeScreen);
 
   useEffect(() => {
@@ -48,12 +49,20 @@ export default function FeedList() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <MaterialIcons
-        name="chevron-left"
-        size={moderateScale(48)}
-        color={colors.themeBlack}
-        onPress={() => closeScreen()}
-      />
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <MaterialIcons
+          name="chevron-left"
+          size={moderateScale(48)}
+          color={colors.themeBlack}
+          onPress={() => closeScreen()}
+        />
+        <MaterialIcons
+          name="chevron-left"
+          size={moderateScale(48)}
+          color={colors.themeBlack}
+          onPress={() => clearFeedItems()}
+        />
+      </View>
       
       {feedItems.length === 0 ? (
         <Text style={styles.emptyMessage}>{t('Feed.noFeeds')}</Text>
