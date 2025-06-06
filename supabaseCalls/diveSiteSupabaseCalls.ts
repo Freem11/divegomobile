@@ -202,6 +202,7 @@ export const getSingleDiveSite = async (lat, lng) => {
 };
 
 export const getDiveSiteById = async (id: string | number) => {
+  console.log("supa", id)
   const { data, error } = await supabase.rpc('get_single_divesite_byid_info_with_username', {
     idnum: id,
   });

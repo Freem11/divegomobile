@@ -12,6 +12,7 @@ import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { MapConfigContext } from "../../contexts/mapConfigContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useTranslation } from "react-i18next";
+import { useMapStore } from "../../googleMap/useMapStore";
 
 type TripCreatorProps = {
   shopID: number
@@ -19,13 +20,15 @@ type TripCreatorProps = {
 
 export default function TripCreatorParallax(props: TripCreatorProps) {
   const { t } = useTranslation();
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
+  // const { setMapConfig } = useContext(MapConfigContext);
   
  
   const onClose = async () => {
@@ -48,7 +51,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
   const onNavigate = async() => {
     Keyboard.dismiss();
     setMapHelper(true);
-    setMapConfig(3);
+    setMapConfig(3, 0);
     setLevelTwoScreen(false);
   };
 

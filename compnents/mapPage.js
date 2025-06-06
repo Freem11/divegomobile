@@ -37,7 +37,6 @@ import PhotoMenu from "./photoMenu/photoMenu";
 import Historgram from "./histogram/histogramBody";
 import PhotoFilterer from "./photoMenu/photoFilter";
 import CircularButton from "../compnents/reusables/circularButton";
-import { MapConfigContext } from "./contexts/mapConfigContext";
 import { DiveSitesContext } from "./contexts/diveSiteToggleContext";
 import { MapCenterContext } from "./contexts/mapCenterContext";
 import { PinSpotContext } from "./contexts/pinSpotContext";
@@ -76,6 +75,9 @@ import Animated, {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { getLocales } from "expo-localization";
+import { useMapStore } from "./googleMap/useMapStore";
+import { useActiveScreenStore } from '../store/useActiveScreenStore';
+import { getDiveShopById } from '../supabaseCalls/shopsSupabaseCalls';
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -85,7 +87,12 @@ export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
-  const { mapConfig, setMapConfig } = useContext(MapConfigContext);
+  const shopId = useMapStore((state) => state.itemId);
+  const mapConfig = useMapStore((state) => state.mapConfig);
+  const setActiveScreen2 = useActiveScreenStore((state) => state.setActiveScreen);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
@@ -260,36 +267,41 @@ export default function MapPage() {
 
   const onNavigate = () => {
     if (dragPin) {
-      if (chosenModal === "DiveSite") {
         setAddSiteVals({
           ...addSiteVals,
           Latitude: dragPin.lat.toString(),
           Longitude: dragPin.lng.toString(),
         });
         setMapHelper(true);
-        setMapConfig(0);
+        setMapConfig(0, 0);
 
-        setActiveScreen("DiveSiteUploadScreen");
+        setActiveScreen2("DiveSiteUploadScreen");
         setLevelTwoScreen(true);
         setChosenModal(null);
-      }
+      
     }
   };
 
-  const onShopNavigate = () => {
+  const onShopNavigate = async(id) => {
+    const diveCentreinfo = await getDiveShopById(id)
     setLevelOneScreen(true);
-    setActiveScreen("DiveShopScreen");
+    setActiveScreen2("DiveShopScreen", id);
+   
+    mapRef.animateCamera({
+      center: {latitude: diveCentreinfo[0].lat, longitude: diveCentreinfo[0].lng},
+      zoom: 12,
+    });
     setMapHelper(true);
-    setMapConfig(0);
+    setMapConfig(0, 0);
     setZoomHelper(true);
     setSitesArray([]);
   };
 
   const onTripSetNavigate = () => {
     setLevelTwoScreen(true);
-    setActiveScreen("TripCreatorScreen");
+    setActiveScreen2("TripCreatorScreen");
     setMapHelper(true);
-    setMapConfig(0);
+    setMapConfig(0, 0);
   };
 
   useEffect(() => {
@@ -478,7 +490,6 @@ export default function MapPage() {
               {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
             </BottomMenu> : null}
 
-          {/* {mapConfig === 0 ? <View style={styles.iosBottom}/> : null} */}
           <View
             pointerEvents={"box-none"}
             style={{
@@ -491,7 +502,7 @@ export default function MapPage() {
               zIndex: 2,
             }}
           >
-            {mapConfig in [, 1, , 3] ? (
+            {mapConfig in [, 1, , 3]? (
               <View
                 style={{
                   zIndex: 2,
@@ -505,25 +516,25 @@ export default function MapPage() {
               </View>
             ) : null}
 
-            {mapConfig in [, 1, 2, 3] ? (
+            {(mapConfig in [, 1, 2, 3]) ? (
               <TouchableWithoutFeedback
                 onPress={
-                  mapConfig === 1
-                    ? onNavigate
-                    : mapConfig === 2
-                    ? onShopNavigate
-                    : mapConfig === 3
+                  (mapConfig === 1)
+                    ? () => onNavigate()
+                    : (mapConfig === 2)
+                    ? () => onShopNavigate(shopId)
+                    : (mapConfig === 3)
                     ? onTripSetNavigate
                     : null
                 }
               >
                 <View style={styles.lowerButtonWrapper}>
                   <Text style={styles.lowerButtonText}>
-                    {mapConfig === 1
+                    {(mapConfig === 1)
                       ? "Set Pin"
-                      : mapConfig === 2
+                      : (mapConfig === 2)
                       ? "Return to Shop"
-                      : mapConfig === 3
+                      : (mapConfig === 3)
                       ? "Sites Complete"
                       : null}
                   </Text>

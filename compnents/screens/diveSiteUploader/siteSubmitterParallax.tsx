@@ -4,18 +4,15 @@ import DiveSiteUploader from ".";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { DiveSpotContext } from "../../contexts/diveSpotContext";
 import boatImage from "../../png/boat.png";
-import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
+import { useMapStore } from "../../googleMap/useMapStore";
 
 export default function SiteSubmitterParallax() {
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
-  const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
-  const { setChosenModal } = useContext(ModalSelectContext);
-  
+
   const onClose = async () => {
     setLevelTwoScreen(false);
     setAddSiteVals({
@@ -28,9 +25,7 @@ export default function SiteSubmitterParallax() {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setChosenModal("DiveSite");
-    setMapHelper(true);
-    setMapConfig(1);
+    setMapConfig(1, 0);
     setLevelTwoScreen(false);
   };
 

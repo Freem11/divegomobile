@@ -15,11 +15,8 @@ import ItineraryCard from "../../reusables/itineraryCard";
 import { ItineraryItem } from "../../entities/itineraryItem";
 import { openURL } from "expo-linking";
 import { useMapFlip } from "../../itineraries/hooks";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import Label from "../../reusables/label";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
@@ -29,6 +26,7 @@ import { EditModeContext } from "../../contexts/editModeContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { DiveShop } from "../../../entities/diveShop";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useMapStore } from "../../googleMap/useMapStore";
 
 type DiveShopProps = {
   onClose?: () => void;
@@ -51,10 +49,13 @@ export default function DiveShopScreen({
 }: DiveShopProps) {
   
   const { profile } = useContext(UserProfileContext);
+
+  const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { setMapConfig } = useContext(MapConfigContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   // const { selectedShop } = useContext(SelectedShopContext);
@@ -204,14 +205,15 @@ const handleDeleteButton = (itineraryInfo) => {
 };
 
 const handleMapFlip = async (sites: number[]) => {
-  useMapFlip(
+  console.log('selectedShop', selectedShop.id)
+ const coords = await useMapFlip(
     sites,
     setSitesArray,
-    setZoomHelper,
-    setLevelOneScreen,
-    setMapConfig,
-    setMapCenter
   )
+  setMapConfig(2, selectedShop.id)
+  mapRef.animateCamera({ center: {latitude: coords.moveLat, longitude: coords.moveLng},
+    zoom: 12,
+  });
   closeParallax(1)
 };
 

@@ -4,7 +4,6 @@ import DiveShopScreen from './diveShop';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
 import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
@@ -17,6 +16,7 @@ import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useMapStore } from '../../googleMap/useMapStore';
 
 type DiveCentreProps = {
   shopID: number
@@ -25,14 +25,14 @@ type DiveCentreProps = {
 export default function DiveShopParallax(props: DiveCentreProps) {
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const { profile } = useContext(UserProfileContext);
@@ -83,7 +83,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
     setMapHelper(true);
-    setMapConfig(2);
+    setMapConfig(2, selectedShop.id);
     setLevelOneScreen(false);
   };
 
@@ -97,10 +97,8 @@ export default function DiveShopParallax(props: DiveCentreProps) {
     setFullScreenModal(true)
     setEditInfo('DiveShop')
     setActiveTutorialID("EditsScreen")
-    
   };
 
-  console.log(isMyShop)
   const popoverConent = () => {
     return (
     <>

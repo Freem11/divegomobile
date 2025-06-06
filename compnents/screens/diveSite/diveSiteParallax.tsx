@@ -36,15 +36,11 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { profile } = useContext(UserProfileContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
-  const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
-  const { setChosenModal } = useContext(ModalSelectContext);
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const { pinValues, setPinValues } = useContext(PinContext);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );

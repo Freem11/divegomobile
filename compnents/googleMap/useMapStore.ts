@@ -37,6 +37,7 @@ const mutator = (set, get) => ({
   camera:         null as Camera | null,
   gpsBubble:      null as GPSBubble | null,
   mapConfig:      0 as number,
+  itemId:         0 as number | null,
   draggablePoint: null as Coordinates | null,
 
   actions: {
@@ -52,8 +53,8 @@ const mutator = (set, get) => ({
     setDraggablePoint: (point: Coordinates) => {
       set({ draggablePoint: point })
     },
-    setMapConfig: (config: number) => {
-      set({ mapConfig: config })
+    setMapConfig: (config: number, itemId: number) => {
+      set({ mapConfig: config, itemId: itemId  })
     },
   },
 }
