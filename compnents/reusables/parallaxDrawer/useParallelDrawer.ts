@@ -40,45 +40,73 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const { savedTranslateY, setSavedTranslateY } = useContext(SavedTranslateYContext);
 
-  useEffect(() => {
-    if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
-    }
-  }, [fullScreenModal]);
+  // useEffect(() => {
+  //   if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
+  //     translateY.value = HALF_HEIGHT;
+  //     startY.value = HALF_HEIGHT;
+  //   }
+  // }, [fullScreenModal]);
 
 
   useEffect(() => {
     if (levelOneScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [levelOneScreen]);
 
   useEffect(() => {
     if (levelTwoScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = 0;
-      startY.value = 0;
+      translateY.value = HALF_HEIGHT;
+      startY.value = HALF_HEIGHT;
     }
   }, [levelTwoScreen]);
 
-  useAnimatedReaction(
-    () => contentHeight.value,
-    (newHeight, prevHeight) => {
-      if (newHeight !== prevHeight && newHeight > 0) {
-        const minY = SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT;
-        const desiredY = Math.max(minY, HALF_HEIGHT);
+
+  const bottomHitCountRef = useSharedValue(bottomHitCount);
+
+useEffect(() => {
+  bottomHitCountRef.value = bottomHitCount;
+}, [bottomHitCount]);
+
+
+const MIN_SHRINK = moderateScale(150); 
+const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
+
+useAnimatedReaction(
+  () => ({
+    height: contentHeight.value,
+    currentY: translateY.value,
+  }),
+  (newValue, prevValue) => {
+    if (!prevValue) return;
+
+    const { height: newHeight, currentY } = newValue;
+    const { height: prevHeight } = prevValue;
+
+    const shrinkAmount = prevHeight - newHeight;
+    const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
+
+    if(contentShrankSignificantly){
+      lastAdjustedHeightRef.value = newHeight;
+
+      const minTranslateY = Math.min(
+        SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT,
+        HALF_HEIGHT
+      );
   
-        if (translateY.value < minY) {
-          translateY.value = withTiming(minY, { duration: 300 });
-        }
-  
-        if (translateY.value > desiredY || translateY.value === 0) {
-          translateY.value = withTiming(desiredY, { duration: 300 });
-        }
-      }
+      if (currentY < minTranslateY) {
+        translateY.value = withTiming(minTranslateY, { duration: 300 });
+      } 
     }
-  );
+
+  }
+);
+
+
+
+
+
 
   const handleDrawerHitBottom = () => {
     setBottomHitCount(prev => prev + 1);
@@ -93,22 +121,26 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       startY.value = translateY.value;
     })
     .onUpdate((event) => {
-      const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
+      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
       const maxY = HALF_HEIGHT;
+    
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
-
+    
       const isAtBottom = Math.abs(translateY.value - minY) < 2000;
-
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
         runOnJS(handleDrawerHitBottom)();
       }
     })
     .onEnd((event) => {
-      const minY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
+      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
+      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
       const maxY = HALF_HEIGHT;
-
+    
       if (event.velocityY < 0) {
         translateY.value = withDecay({
           velocity: event.velocityY,
