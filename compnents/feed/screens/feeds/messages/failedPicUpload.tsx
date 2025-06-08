@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AntDesign from '@expo/vector-icons/AntDesign';
 import * as S from "./styles";
 import { useFileExists } from "../../../store/useFileExists";
 import { useTranslation } from "react-i18next";
@@ -9,6 +8,9 @@ import { insertPhotoWaits } from "../../../../../supabaseCalls/photoWaitSupabase
 import { removePhoto } from "../../../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { FILE_PATH } from "../../../../screens/picUploader";
 import { FailedUploadFeedItem, FeedItem, RETRY_TYPE } from "../../../store/types";
+import { checkNetworkStatus } from "../../../store/utils";
+import ButtonIcon from "../../../../reusables/buttonIcon";
+import { colors } from "../../../../styles";
 
 export type FeedItemComponentProps = {
   item: FeedItem;
@@ -23,7 +25,6 @@ export default function FeedItemFailedUpload({
   const { isExist, resolvedUri } = useFileExists(item.imageUri);
   const { t } = useTranslation();
 
-
   const tryUpload = async (uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
@@ -35,14 +36,16 @@ export default function FeedItemFailedUpload({
 
   const uploadPicture = async () => {
     if (!isExist) {
-      showError(t('PicUploader.retryFailedUpload'));
+      showError(t("PicUploader.retryFailedUpload"));
       setIsUploading(false);
       return;
     }
 
-    const fileName = await tryUpload(item.retryMetaData.payloads[0]?.localPreviewUri || "");
+    const fileName = await tryUpload(
+      item.retryMetaData.payloads[0]?.localPreviewUri || ""
+    );
     if (!fileName) {
-      showError(t('PicUploader.retryFailedUpload'));
+      showError(t("PicUploader.retryFailedUpload"));
       setIsUploading(false);
       return;
     }
@@ -64,31 +67,39 @@ export default function FeedItemFailedUpload({
         fileName: fullPath,
       });
 
-      showError(t('PicUploader.retryFailedUpload'));
+      showError(t("PicUploader.retryFailedUpload"));
       setIsUploading(false);
-      return
+      return;
     }
-    showSuccess(t('PicUploader.successUpload'));
+    showSuccess(t("PicUploader.successUpload"));
     setIsUploading(false);
-    onRemove(item.id)
-  }
+    onRemove(item.id);
+  };
 
   const handleOnRetry = async () => {
     setIsUploading(true);
-
+    const { isStableConnection } = await checkNetworkStatus();
+    if (!isStableConnection) {
+      showError(t("PicUploader.offlineMsg"));
+      setIsUploading(false);
+      return;
+    }
     try {
       switch (item.retryMetaData.payloadType) {
-        case RETRY_TYPE.PIC_UPLOADER:
+      case RETRY_TYPE.PIC_UPLOADER:
           await uploadPicture();
-          break;
+          break;  
         default:
-          showWarning(t('Toast.errorMessage'));
-          console.warn("Unknown payload type for retry:", item.retryMetaData.payloadType);
+          showWarning(t("Toast.errorMessage"));
+          console.warn(
+            "Unknown payload type for retry:",
+            item.retryMetaData.payloadType
+          );
       }
     } finally {
       setIsUploading(false);
     }
-  }
+  };
 
   return (
     <S.Card>
@@ -103,17 +114,26 @@ export default function FeedItemFailedUpload({
       <S.Timestamp>{item.message}</S.Timestamp>
       <S.ActionsRow>
         {isLoading ? (
-          <S.IconWrapper onPress={() => showWarning(t('Toast.pleaseWait'))}>
-            <AntDesign name="sync" size={24} color="gray" />
-          </S.IconWrapper>
+          <ButtonIcon
+            icon="replay"
+            onPress={() => showWarning(t("Toast.pleaseWait"))}
+            size="small"
+            fillColor={colors.themeBlack}
+          />
         ) : (
-          <S.IconWrapper onPress={handleOnRetry}>
-            <AntDesign name="sync" size={24} color="green" />
-          </S.IconWrapper>
+          <ButtonIcon
+            icon="replay"
+            onPress={handleOnRetry}
+            size="small"
+            fillColor={colors.themeGreen}
+          />
         )}
-        <S.IconWrapper onPress={() => onRemove(item.id)}>
-          <AntDesign name="delete" size={20} color="red" />
-        </S.IconWrapper>
+        <ButtonIcon
+          icon="trash"
+          onPress={() => onRemove(item.id)}
+          size="small"
+          fillColor={colors.themeRed}
+        />
       </S.ActionsRow>
     </S.Card>
   );

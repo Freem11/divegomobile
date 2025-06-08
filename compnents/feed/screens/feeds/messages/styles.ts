@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { activeFonts, colors } from "../../../../styles";
+import { activeFonts, colors, fontSizes } from "../../../../styles";
 
 export const Card = styled.View<{ bg?: string }>`
   width: 100%;
@@ -10,14 +10,14 @@ export const Card = styled.View<{ bg?: string }>`
 `;
 
 export const Message = styled.Text`
-  font-size: ${moderateScale(14)}px;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
   color: ${colors.themeBlack};
   font-family: ${activeFonts.Regular};
   margin-bottom: ${moderateScale(4)}px;
 `;
 
 export const Timestamp = styled.Text`
-  font-size: ${moderateScale(12)}px;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
   color: gray;
   font-family: ${activeFonts.ThinItalic};
 `;
@@ -36,8 +36,8 @@ export const ActionsRow = styled.View`
 `;
 
 export const ActionText = styled.Text`
-  color: #2196f3;
-  font-size: ${moderateScale(14)}px;
+  color: ${colors.primaryBlue};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Bold};
 `;
 
@@ -47,13 +47,7 @@ export const RemoveText = styled(ActionText)`
 `;
 
 export const PrimaryText = styled(ActionText)`
-  color: #4caf50;
-`;
-
-export const IconWrapper = styled.TouchableOpacity`
-  margin-left: ${moderateScale(12)}px;
-  justify-content: center;
-  align-items: center;
+  color: ${colors.themeGreen};
 `;
 
 export const ImageFallback = styled.View`
@@ -67,7 +61,7 @@ export const ImageFallback = styled.View`
 `;
 
 export const FallbackText = styled.Text`
-  color: #555;
+  color: ${colors.neutralGrey};
   font-family: ${activeFonts.Italic};
-  font-size: ${moderateScale(12)}px;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
 `;

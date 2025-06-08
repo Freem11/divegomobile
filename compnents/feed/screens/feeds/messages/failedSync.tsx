@@ -1,8 +1,9 @@
 import React from "react";
-import AntDesign from '@expo/vector-icons/AntDesign';
 import * as S from "./styles";
 import { FeedItemComponentProps } from "./failedPicUpload";
 import { FailedSyncFeedItem } from "../../../store/types";
+import ButtonIcon from "../../../../reusables/buttonIcon";
+import { colors } from "../../../../styles";
 
 export default function FeedItemFailedSync({
   item,
@@ -15,9 +16,12 @@ export default function FeedItemFailedSync({
       <S.Timestamp>Reason: {item.reason}</S.Timestamp>
       <S.ActionsRow>
         <S.ActionText onPress={item.retryCallback}>Retry</S.ActionText>
-        <S.IconWrapper onPress={() => onRemove(item.id)}>
-          <AntDesign name="delete" size={20} color="red" />
-        </S.IconWrapper>
+        <ButtonIcon
+          icon="trash"
+          onPress={() => onRemove(item.id)}
+          size="small"
+          fillColor={colors.themeRed}
+        />
       </S.ActionsRow>
     </S.Card>
   );

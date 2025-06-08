@@ -9,11 +9,11 @@ import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { DynamicSelectOptionsAnimals } from "../../entities/DynamicSelectOptionsAnimals";
-import NetInfo from "@react-native-community/netinfo";
 import { v4 as uuidv4 } from "uuid";
 import { saveFailedUpload } from "../../feed/store/asyncStore";
 import { useTranslation } from "react-i18next";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
+import { checkNetworkStatus } from "../../feed/store/utils";
 
 export const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -80,6 +80,7 @@ export default function PicUploader({
 
   const buildFailedUploadItem = (formData: Required<Form>): FailedUploadFeedItem => {
     const ID = uuidv4()
+    console.log("buildFailedUploadItem", formData)
     return {
       id: ID,
       type: FEED_ITEM_TYPE.FAILED_UPLOAD,
@@ -111,9 +112,9 @@ export default function PicUploader({
       showWarning(t('PicUploader.fillRequiredFields'));
       return;
     }
-    const netState = await NetInfo.fetch();
+    const { isStableConnection } = await checkNetworkStatus()
 
-    if (true || !netState.isConnected || !netState.isInternetReachable) {
+    if (!isStableConnection) {
       const failedItemToUpload = buildFailedUploadItem(formData);
       await saveFailedUpload(failedItemToUpload)
       showError(t('PicUploader.offlineMsg'));

@@ -1,4 +1,5 @@
 import * as FileSystem from "expo-file-system";
+import NetInfo from "@react-native-community/netinfo";
 
 /**
  * Check if a local file exists at the given URI.
@@ -27,4 +28,14 @@ export async function checkFileExists(
     console.warn("checkFileExists failed:", err);
     return { isExist: false, resolvedUri: null };
   }
+}
+
+export async function checkNetworkStatus() {
+  const state = await NetInfo.fetch();
+  return {
+    isConnected: state.isConnected ?? false,
+    isInternetReachable: state.isInternetReachable ?? false,
+    isStableConnection:
+      (state.isConnected && state.isInternetReachable) ?? false,
+  };
 }

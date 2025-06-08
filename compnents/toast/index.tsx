@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Toast from "react-native-toast-message";
 import { i18n } from "../../i18n";
+import { colors } from "../styles";
 
 const VISIBILITY_TIME = 3000;
 
@@ -40,7 +41,7 @@ export const showSuccess = (successMessage) => {
   });
 }
 
-// still not finished! need to adjust, but its the besic!
+// still not finished! need to adjust, but its the basics!
 export const toastConfig = {
   [TOAST_MAP.one_button]: ({ text1, text2, props }) => (
     <View style={[styles.base, styles.info]}>
@@ -74,36 +75,42 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 16,
     marginVertical: 6,
-    backgroundColor: '#2196F3',
+    backgroundColor: colors.primaryBlue
   },
   title: {
-    color: '#fff',
+    color: colors.themeWhite,
     fontWeight: 'bold',
     marginBottom: 4,
   },
   message: {
-    color: '#fff',
+    color: colors.themeWhite,
     marginBottom: 8,
     flexShrink: 1,           
     flexWrap: 'wrap',        
     includeFontPadding: false,
   },
   button: {
-    color: '#fff',
+    color: colors.themeWhite,
     fontWeight: 'bold',
     paddingVertical: 6,
   },
   buttonSecondary: {
-    color: '#eee',
+    color: colors.neutralGrey,
     fontWeight: 'normal',
     paddingVertical: 6,
     marginLeft: 12,
   },
   info: {
-    backgroundColor: "#2196F3",
+    backgroundColor: colors.primaryBlue,
   },
   warning: {
-    backgroundColor: "#FF9800",
+    backgroundColor: colors.secondaryYellow,
+  },
+  error: {
+    backgroundColor: colors.themeRed,
+  },
+  success: {
+    backgroundColor: colors.themeGreen,
   },
   buttonRow: {
     flexDirection: 'row',

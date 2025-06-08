@@ -11,13 +11,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFeedDataStore } from "../../store/useFeedDataStore";
 import { moderateScale } from "react-native-size-matters";
 import { activeFonts, colors } from "../../../styles";
-import { MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useFeedScreenStore } from "../../store/useScreenStore";
 import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
 import { useTranslation } from "react-i18next";
 import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
+import ButtonIcon from "../../../reusables/buttonIcon";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -50,17 +51,17 @@ export default function FeedList() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <MaterialIcons
-          name="chevron-left"
-          size={moderateScale(48)}
-          color={colors.themeBlack}
+        <ButtonIcon 
+          icon="chevron-left"
           onPress={() => closeScreen()}
+          size='small'
+          fillColor={colors.themeBlack}
         />
-        <MaterialIcons
-          name="chevron-left"
-          size={moderateScale(48)}
-          color={colors.themeBlack}
+        <ButtonIcon 
+          icon="trash"
           onPress={() => clearFeedItems()}
+          size='small'
+          fillColor={colors.themeRed}
         />
       </View>
       

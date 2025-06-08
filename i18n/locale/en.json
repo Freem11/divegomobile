@@ -94,7 +94,7 @@
         "submitButton": "Submit",
         "fillRequiredFields": "Please fill in all required fields.",
         "uploadFailedTitle": "Upload Failed",
-        "couldUploadMsg": "Couldnt upload {{animal}} on {{ diveSiteName }}",
+        "couldUploadMsg": "Couldnt upload {{animal}} on {{diveSite}}",
         "offlineMsg": "You are offline / slow network. Retry from the feed menu.",
         "successUpload": "Photo uploaded successfully!",
         "failedUpload": "Photo upload failed.",
