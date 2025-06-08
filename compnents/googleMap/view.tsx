@@ -17,6 +17,10 @@ import { MarkerDraggable } from "./marker/markerDraggable";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { MarkerHeatPoint } from "./marker/markerHeatPoint";
+import { primaryButtonAlt } from "../styles";
+import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
+import { ReturnToShopButton } from "./navigation/returnToShopButton";
+import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
 
 type MapViewProps = {
   // googleMapApiKey:    string
@@ -43,7 +47,7 @@ export default function GoogleMapView(props: MapViewProps) {
     map: {
       width: Dimensions.get("window").width,
       height: "100%",
-    },
+    }
   });
 
   const region = {
@@ -61,7 +65,6 @@ export default function GoogleMapView(props: MapViewProps) {
   //   </MapView>
   // );
   const [map, setMap] = useState<MapView | null>(null);
-  const [camera, setCamera] = useState<Camera | null>(null);
 
   console.log("Map Viewww");
   // return null;
@@ -168,17 +171,21 @@ export default function GoogleMapView(props: MapViewProps) {
             );
           }
         })}
-
-        {props.mapConfig === 1 && camera?.center && (
-          <MarkerDraggable coordinate={camera.center} />
-        )}
-
-        
         {props?.heatPoints?.length > 0 && [0, 2].includes(props.mapConfig) && (
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
       </MapView>
+
+      {props.mapConfig === 1 && (
+        <MarkerDraggable  />
+      )}
+
+      {props.mapConfig === 1 && <ReturnToSiteSubmitterButton />}
+      {props.mapConfig === 2 && <ReturnToShopButton />}
+      {props.mapConfig === 3 && <ReturnToCreateTripButton />}
+      
+
     </View>
   );
 }

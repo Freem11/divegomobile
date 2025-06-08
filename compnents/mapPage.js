@@ -516,7 +516,8 @@ export default function MapPage() {
               </View>
             ) : null}
 
-            {(mapConfig in [, 1, 2, 3]) ? (
+            {/* moved to googleMap/navigation */}
+            {false && (mapConfig in [, 1, 2, 3]) ? (
               <TouchableWithoutFeedback
                 onPress={
                   (mapConfig === 1)

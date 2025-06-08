@@ -4,40 +4,32 @@ import { useMapStore } from "../../useMapStore";
 import { Coordinates } from "../../../../entities/coordinates";
 import icon from "../../../png/mapIcons/Manta_60.png";
 
+import { Image, StyleSheet, Text, View } from "react-native";
+
+const styles = StyleSheet.create({
+  markerFixed: {
+    left: '50%',
+    marginLeft: -20,
+    marginTop: -48,
+    position: 'absolute',
+    top: '50%'
+  },
+  marker: {
+    height: 48,
+    width: 48
+  }
+})
+
 type MarkerDraggableProps = {
-  coordinate: Coordinates;
 };
 
 export function MarkerDraggable(props: MarkerDraggableProps) {
-  const setDraggablePoint = useMapStore((state) => state.setDraggablePoint);
-
-  useEffect(() => {
-    setDraggablePoint(props.coordinate);
-    return () => {
-      setDraggablePoint(null);
-    };
-  });
-
-  // TODO marker has animated movement - no need this
-  const onDragEnd = (e) => {
-    setDraggablePoint({
-      latitude: e.nativeEvent.coordinate.latitude,
-      longitude: e.nativeEvent.coordinate.longitude,
-    });
-
-    // console.log(e.nativeEvent.coordinate);
-  };
 
   return (
-    <Marker
-      // image={icon}
-      key={"drag"}
-      draggable={true}
-      onDragEnd={onDragEnd}
-      coordinate={{
-        latitude: props.coordinate.latitude,
-        longitude: props.coordinate.longitude,
-      }}
-    ></Marker>
+
+  <View style={styles.markerFixed}>
+    <Image style={styles.marker} source={icon} />
+  </View>
   );
 }
+

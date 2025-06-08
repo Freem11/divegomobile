@@ -13,6 +13,7 @@ import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext"
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 
 import DiveSiteUploaderView from './view';
+import { useMapStore } from "../../googleMap/useMapStore";
 
 type SiteSubmitterProps = {
   onClose: () => void;
@@ -34,6 +35,9 @@ export default function DiveSiteUploader({
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
+  
+  const draggablePoint = useMapStore((state) => state.draggablePoint);
+  const deviceLocation = null//todo
 
   const onSubmit = async () => {
     const { Site, Latitude, Longitude } = addSiteVals;
@@ -71,12 +75,14 @@ export default function DiveSiteUploader({
 
   return (
     <DiveSiteUploaderView
-      addSiteVals={addSiteVals}
-      setAddSiteVals={setAddSiteVals}
       onSubmit={onSubmit}
       getCurrentLocation={getCurrentLocation}
       closeParallax={closeParallax}
       restoreParallax={restoreParallax}
+      values={{
+        Latitude:  draggablePoint ? String(draggablePoint?.latitude) : deviceLocation?.lat,
+        Longitude: draggablePoint ? String(draggablePoint?.longitude) : deviceLocation?.lng,
+      }}
     />
   )
 
