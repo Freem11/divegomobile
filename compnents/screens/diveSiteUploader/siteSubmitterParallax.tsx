@@ -9,12 +9,14 @@ import { useMapStore } from "../../googleMap/useMapStore";
 
 export default function SiteSubmitterParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  
+  const setDraggableConfig = useMapStore((state) => state.actions.setDraggablePoint);
+
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
 
   const onClose = async () => {
     setLevelTwoScreen(false);
+    setDraggableConfig(null)
     setAddSiteVals({
       ...addSiteVals,
       Site: "",

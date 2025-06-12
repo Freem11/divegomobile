@@ -23,7 +23,7 @@ export function ReturnToSiteSubmitterButton() {
 
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
-  const setActiveScreen2 = useActiveScreenStore((state) => state.setActiveScreen);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
@@ -33,7 +33,7 @@ export function ReturnToSiteSubmitterButton() {
     mapAction.setDraggablePoint(camera.center)
     mapAction.setMapConfig(0, 0);
 
-        setActiveScreen2("DiveSiteUploadScreen");
+        setActiveScreen("DiveSiteUploadScreen");
         setLevelTwoScreen(true);
         setChosenModal(null);
       

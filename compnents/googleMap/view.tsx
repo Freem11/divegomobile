@@ -21,6 +21,8 @@ import { primaryButtonAlt } from "../styles";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
+import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
+import { use } from "i18next";
 
 type MapViewProps = {
   // googleMapApiKey:    string
@@ -37,6 +39,9 @@ type MapViewProps = {
 };
 
 export default function GoogleMapView(props: MapViewProps) {
+
+  const [initialRegion, setInitialRegion] = useState(null)
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -50,24 +55,26 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   });
 
-  const region = {
-    latitude: 37.6899333333333,
-    longitude: -122.9951,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+
+  const getCurrentLocation = async () => {
+    try {
+      const photoLocation = await getMostRecentPhoto();
+      if (photoLocation) {
+      setInitialRegion({
+        ...initialRegion, 
+        latitude: photoLocation[0].latitude, 
+        longitude: photoLocation[0].longitude,
+        latitudeDelta: 2,
+        longitudeDelta: 0.4
+      })
+      }
+    } catch (e) {
+      console.log({ title: "Error65", message: e.message });
+    }
   };
 
-  // console.log(props.diveSites[0]);
-
-  // return (
-  //   <MapView region={region}>
-  //     <Marker key={"aa"} coordinate={{ latitude: 49.15015, longitude: -124.792317 }} title={"AA"} description={"BB"} />
-  //   </MapView>
-  // );
   const [map, setMap] = useState<MapView | null>(null);
 
-  console.log("Map Viewww");
-  // return null;
   const onMapLoad = async (map: MapView) => {
     setMap(map);
     if (typeof props.onLoad === "function") {
@@ -82,6 +89,10 @@ export default function GoogleMapView(props: MapViewProps) {
     zoom: 0,
   });
   const { clusters, supercluster } = useSupercluster(clusterConfig);
+
+  useEffect(() => {
+    getCurrentLocation()
+  },[])
 
   useEffect(() => {
     (async () => {
@@ -127,7 +138,7 @@ export default function GoogleMapView(props: MapViewProps) {
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         mapType="hybrid"
-        initialRegion={region}
+        initialRegion={initialRegion}
         maxZoomLevel={16}
         minZoomLevel={1}
         ref={onMapLoad}
@@ -175,16 +186,30 @@ export default function GoogleMapView(props: MapViewProps) {
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
+
+
+    
       </MapView>
 
       {props.mapConfig === 1 && (
         <MarkerDraggable  />
       )}
 
-      {props.mapConfig === 1 && <ReturnToSiteSubmitterButton />}
-      {props.mapConfig === 2 && <ReturnToShopButton />}
-      {props.mapConfig === 3 && <ReturnToCreateTripButton />}
-      
+{props.mapConfig === 1 && 
+        <View style={{ position: "absolute", bottom: '5%', alignSelf: 'center' }}>
+          <ReturnToSiteSubmitterButton />
+        </View>
+        }
+      {props.mapConfig === 2 &&
+        <View style={{ position: "absolute", bottom: '5%', alignSelf: 'center' }}>
+          <ReturnToShopButton />
+        </View>
+         }
+      {props.mapConfig === 3 && 
+        <View style={{ position: "absolute", bottom: '5%', alignSelf: 'center' }}>
+          <ReturnToCreateTripButton />
+        </View>
+       }
 
     </View>
   );

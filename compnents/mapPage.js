@@ -464,18 +464,7 @@ export default function MapPage() {
                     style={{ marginTop: moderateScale(3) }}
                   />
                 </TouchableWithoutFeedback>
-              </Animated.View>
-
-
-         
-
-              {/* <View style={styles.FMenu}>
-                <FABMenu
-                  style={{ zIndex: 2 }}
-                  toggleDiveSites={toggleDiveSites}
-                />
-              </View> */}
-          
+              </Animated.View>    
             </View>
           ) : null}
 
@@ -490,59 +479,6 @@ export default function MapPage() {
               {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
             </BottomMenu> : null}
 
-          <View
-            pointerEvents={"box-none"}
-            style={{
-              position: "absolute",
-              bottom: moderateScale(35),
-              width: "80%",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "row",
-              zIndex: 2,
-            }}
-          >
-            {mapConfig in [, 1, , 3]? (
-              <View
-                style={{
-                  zIndex: 2,
-                  marginRight: "10%",
-                }}
-              >
-                <CircularButton
-                  buttonAction={handleMapSearchButton}
-                  icon="compass"
-                />
-              </View>
-            ) : null}
-
-            {/* moved to googleMap/navigation */}
-            {false && (mapConfig in [, 1, 2, 3]) ? (
-              <TouchableWithoutFeedback
-                onPress={
-                  (mapConfig === 1)
-                    ? () => onNavigate()
-                    : (mapConfig === 2)
-                    ? () => onShopNavigate(shopId)
-                    : (mapConfig === 3)
-                    ? onTripSetNavigate
-                    : null
-                }
-              >
-                <View style={styles.lowerButtonWrapper}>
-                  <Text style={styles.lowerButtonText}>
-                    {(mapConfig === 1)
-                      ? "Set Pin"
-                      : (mapConfig === 2)
-                      ? "Return to Shop"
-                      : (mapConfig === 3)
-                      ? "Sites Complete"
-                      : null}
-                  </Text>
-                </View>
-              </TouchableWithoutFeedback>
-            ) : null}
-          </View>
 
           {mapConfig === 0 && animalMultiSelection.length > 0 ? (
             <View style={styles.Hist} pointerEvents={"none"}>
