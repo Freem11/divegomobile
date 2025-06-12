@@ -11,6 +11,7 @@ import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import { UserProfileContext } from "../contexts/userProfileContext";
+import ButtonIcon from "../reusables/buttonIcon";
 
 export default function ItineraryListButton() {
   const [butState, setButState] = useState(false);
@@ -42,14 +43,13 @@ export default function ItineraryListButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <MaterialCommunityIcons
-            name="diving-scuba-flag"
-            size={moderateScale(34)}
-            color={butState ? "gold" : "white"}
-          />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Trip Creator
-          </Text>
+              <ButtonIcon 
+                icon="diving-scuba-flag"
+                onPress={handleScreen}
+                size='icon'
+                fillColor={colors.themeWhite}
+                title="Trip Creator"
+              />
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
-    marginTop: moderateScale(2)
+    marginTop: moderateScale(5)
   },
   buttonlabel: {
     fontFamily: activeFonts.Medium,

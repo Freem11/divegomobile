@@ -10,6 +10,7 @@ import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
+import ButtonIcon from "../reusables/buttonIcon";
 
 export default function DiveSiteButton() {
   const [butState, setButState] = useState(false);
@@ -54,14 +55,13 @@ export default function DiveSiteButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <MaterialIcons
-            name="add-location-alt"
-            color={butState ? "gold" : "white"}
-            size={moderateScale(34)}
-          />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Site Add
-          </Text>
+              <ButtonIcon 
+                icon="anchor-plus"
+                onPress={handleScreen}
+                size='icon'
+                fillColor={colors.themeWhite}
+                title="Site Add"
+              />
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
-    marginTop: moderateScale(2)
+    marginTop: moderateScale(5)
   },
   buttonlabel: {
     fontFamily: activeFonts.Medium,

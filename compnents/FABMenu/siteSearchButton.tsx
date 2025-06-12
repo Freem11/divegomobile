@@ -5,6 +5,7 @@ import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { MaterialIcons } from "@expo/vector-icons";
 import { activeFonts, colors, fontSizes } from "../styles";
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
+import ButtonIcon from "../reusables/buttonIcon";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
@@ -30,14 +31,13 @@ export default function SiteSearchButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <MaterialIcons
-            name="explore"
-            color={butState ? "gold" : "white"}
-            size={moderateScale(34)}
-          />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-             Search Map
-          </Text>
+              <ButtonIcon 
+                icon="compass-outline"
+                onPress={handlePress}
+                size='icon'
+                fillColor={colors.themeWhite}
+                title="Search Map"
+              />
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
-    marginTop: moderateScale(2)
+    marginTop: moderateScale(5)
   },
   buttonlabel: {
     fontFamily: activeFonts.Medium,

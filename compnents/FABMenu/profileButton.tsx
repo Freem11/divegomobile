@@ -8,6 +8,7 @@ import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
 import { activeFonts, colors, fontSizes } from "../styles";
 import { UserProfileContext } from "../contexts/userProfileContext";
+import ButtonIcon from "../reusables/buttonIcon";
 
 export default function ProfileButton() {
   const [butState, setButState] = useState(false);
@@ -40,14 +41,13 @@ export default function ProfileButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <MaterialCommunityIcons
-            name="account"
-            color={butState ? "gold" : "white"}
-            size={moderateScale(37)}
-          />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Profile
-          </Text>
+              <ButtonIcon 
+                icon="person"
+                onPress={handleScreen}
+                size='icon'
+                fillColor={colors.themeWhite}
+                title="Profile"
+              />
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
+    paddingTop: moderateScale(5)
   },
   buttonlabel: {
     fontFamily: activeFonts.Medium,

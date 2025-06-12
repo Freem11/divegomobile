@@ -8,6 +8,7 @@ import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
+import ButtonIcon from "../reusables/buttonIcon";
 
 export default function GuidesButton() {
   const [butState, setButState] = useState(false);
@@ -43,14 +44,13 @@ export default function GuidesButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <FontAwesome5
-            name="question"
-            color={butState ? "gold" : "darkgrey"}
-            size={moderateScale(32)}
-          />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Guides
-          </Text>
+              <ButtonIcon 
+                icon="question-mark"
+                onPress={() => null}
+                size='icon'
+                fillColor={colors.neutralGrey}
+                title="Guides"
+              />
         </View>
       </TouchableWithoutFeedback>
     </View>

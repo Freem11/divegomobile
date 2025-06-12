@@ -80,8 +80,8 @@ export default function DiveSiteUploader({
       closeParallax={closeParallax}
       restoreParallax={restoreParallax}
       values={{
-        Latitude:  draggablePoint ? String(draggablePoint?.latitude) : deviceLocation?.lat,
-        Longitude: draggablePoint ? String(draggablePoint?.longitude) : deviceLocation?.lng,
+        Latitude:  draggablePoint ? draggablePoint?.latitude : deviceLocation?.lat,
+        Longitude: draggablePoint ? draggablePoint?.longitude : deviceLocation?.lng,
       }}
     />
   )
