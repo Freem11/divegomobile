@@ -46,8 +46,6 @@ export default function DiveSiteUploaderView({
     }
   }, [levelTwoScreen]);
 
-
-  
   return (
     <S.ContentContainer>
         <S.Header>{t('DiveSiteAdd.header')}</S.Header>
@@ -79,9 +77,9 @@ export default function DiveSiteUploaderView({
                   error={errors.Latitude}
                   iconLeft="latitude"
                   placeholder={t('DiveSiteAdd.latPlaceholder')}
-                  value={value}
+                  value={value.toString()}
                   onChangeText={onChange}
-                  // keyboardType="number-pad"
+                  keyboardType="number-pad"
                />
               </S.TextBuffer>
             )}
@@ -98,7 +96,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Longitude}
                   iconLeft="longitude"
                   placeholder={t('DiveSiteAdd.lngPlaceholder')}
-                  value={value}
+                  value={value.toString()}
                   onChangeText={onChange}
                   keyboardType="number-pad"
                />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { debounce } from "../reusables/_helpers/debounce";
 import GoogleMapView from "./view";
@@ -11,6 +11,7 @@ import { DiveSiteBasic } from "../../entities/diveSite";
 import { DiveShop } from "../../entities/diveShop";
 import { getHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { HeatPoint } from "../../entities/heatPoint";
+import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 
 export default function GoogleMap() {
   const mapAction = useMapStore((state) => state.actions);
@@ -19,6 +20,7 @@ export default function GoogleMap() {
   const mapRef = useMapStore((state) => state.mapRef);
   const mapConfig = useMapStore((state) => state.mapConfig);
 
+  const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
   const [diveSites, setDiveSites] = useState<DiveSiteBasic[] | null>(null);
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
@@ -30,6 +32,12 @@ export default function GoogleMap() {
     // mapAction.setCamera(camera);
     console.log("loaded", { map: !!map });
   };
+
+
+
+  useEffect(() => {
+    handleBoundsChange()
+  }, [animalMultiSelection])
 
   const handleBoundsChange = debounce(async () => {
     if (!mapRef) {
@@ -43,7 +51,7 @@ export default function GoogleMap() {
     const [diveSites, diveShops, heatPoints] = await Promise.all([
       GPSBubble.getItemsInGpsBubble(getDiveSitesBasic, bubble),
       GPSBubble.getItemsInGpsBubble(getDiveShops, bubble),
-      GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble),
+      GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , {animal: animalMultiSelection})
     ]);
     setDiveShops(diveShops);
     setDiveSites(diveSites);

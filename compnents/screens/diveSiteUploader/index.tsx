@@ -36,6 +36,8 @@ export default function DiveSiteUploader({
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   
+  const mapAction = useMapStore((state) => state.actions)
+
   const draggablePoint = useMapStore((state) => state.draggablePoint);
   const deviceLocation = null//todo
 
@@ -62,11 +64,10 @@ export default function DiveSiteUploader({
     try {
       const location = await getCurrentCoordinates();
       if (location) {
-        setAddSiteVals({
-          ...addSiteVals,
-          Latitude: location.coords.latitude.toString(),
-          Longitude: location.coords.longitude.toString(),
-        });
+        mapAction.setDraggablePoint({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude
+        })
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
