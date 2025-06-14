@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import {
   StyleSheet,
   View,
@@ -163,18 +163,24 @@ export default function DiveSiteScreen({
     closeParallax(1)
   };
 
-  const groupedPhotos = {};
-
-  diveSitePics && diveSitePics.forEach(photo => {
-    const key = `${photo.dateTaken}`;
-    if (!groupedPhotos[key]) {
-      groupedPhotos[key] = {
-        dateTaken: photo.dateTaken,
-        photos: [],
-      };
-    }
-    groupedPhotos[key].photos.push(photo);
-  });
+  const groupedPhotos = useMemo(() => {
+    if (!diveSitePics) return {};
+  
+    const grouped = {};
+  
+    diveSitePics.forEach(photo => {
+      const key = `${photo.dateTaken}`;
+      if (!grouped[key]) {
+        grouped[key] = {
+          dateTaken: photo.dateTaken,
+          photos: [],
+        };
+      }
+      grouped[key].photos.push(photo);
+    });
+  
+    return grouped;
+  }, [diveSitePics]);
   
   return (
     <S.ContentContainer>

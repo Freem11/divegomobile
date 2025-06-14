@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, Dispatch, SetStateAction } from "react";
+import React, { useState, useContext, useEffect, Dispatch, SetStateAction, useMemo } from "react";
 import {
   StyleSheet,
   Dimensions
@@ -205,19 +205,26 @@ export default function UserProfileScreen({
   };
 
 
-  const groupedPhotos = {};
 
-  profilePhotos && profilePhotos.forEach(photo => {
+const groupedPhotos = useMemo(() => {
+  if (!profilePhotos) return {};
+
+  const grouped = {};
+
+  profilePhotos.forEach(photo => {
     const key = `${photo.divesitename}_${photo.dateTaken}`;
-    if (!groupedPhotos[key]) {
-      groupedPhotos[key] = {
+    if (!grouped[key]) {
+      grouped[key] = {
         divesitename: photo.divesitename,
         dateTaken: photo.dateTaken,
         photos: [],
       };
     }
-    groupedPhotos[key].photos.push(photo);
+    grouped[key].photos.push(photo);
   });
+
+  return grouped;
+}, [profilePhotos]);
 
   return (
     <S.ContentContainer>

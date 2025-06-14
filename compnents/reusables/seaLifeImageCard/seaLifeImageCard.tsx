@@ -28,6 +28,8 @@ import ButtonIcon from "../../reusables/buttonIcon";
 import * as S from "./styles";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
+import FastImage from 'react-native-fast-image';
+import { useCachedImage } from "./useCachedImage";
 
 const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -171,19 +173,28 @@ const SeaLifeImageCard = (props: PictureProps) => {
     setActiveTutorialID("PinchAndZoomPhoto");
   };
 
-  const [aspectRatio, setAspectRatio] = useState(1);
+  // const [aspectRatio, setAspectRatio] = useState(1);
 
-useEffect(() => {
-  const fileName = pic.photoFile?.split("/").pop();;
-  const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
+// useEffect(() => {
+//   const fileName = pic.photoFile?.split("/").pop();;
+//   const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
   
-  if(remoteUri)
-  Image.getSize(remoteUri, (width, height) => {
-    setAspectRatio(width / height);
-  }, (error) => {
-    console.log("Failed to get image size:", error);
-  });
-}, [pic.photoFile]);
+//   if(remoteUri)
+//   Image.getSize(remoteUri, (width, height) => {
+//     setAspectRatio(width / height);
+//   }, (error) => {
+//     console.log("Failed to get image size:", error);
+//   });
+// }, [pic.photoFile]);
+
+const fileName = pic.photoFile?.split("/").pop();
+const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
+
+const { cachedUri, aspectRatio, loading } = useCachedImage({ uri: remoteUri });
+
+
+if (!cachedUri || !aspectRatio || loading) return null;
+
 
   return (
     <S.Container key={pic.id} style={{width: windowWidth, aspectRatio: aspectRatio}}>
@@ -196,16 +207,15 @@ useEffect(() => {
             overflow: 'hidden',
           }}
         >
-          <ImageCasherDynamic
-            photoFile={pic.photoFile}
-            id={pic.id}
-            aspectRatio={aspectRatio}
-            style={{
-              aspectRatio,
-              borderRadius: moderateScale(15),
-              resizeMode: 'cover',
-            }}
-          />
+         <FastImage
+      source={{ uri: cachedUri }}
+      style={{
+        width: '100%',
+        aspectRatio,
+        borderRadius: moderateScale(15),
+      }}
+      resizeMode={FastImage.resizeMode.cover}
+    />
         </TouchableOpacity>
   
         <S.TopContentWrapper>
