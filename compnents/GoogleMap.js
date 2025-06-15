@@ -495,7 +495,7 @@ export default function Map() {
 
     sitesArray.push(siteName);
     setSitesArray(sitesArray);
-    handleMapChange();
+    // handleMapChange();
   };
 
   const removeFromSitesArray = async (siteName) => {

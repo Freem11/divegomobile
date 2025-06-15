@@ -22,14 +22,14 @@ export function ReturnToCreateTripButton() {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   
-  const onTripSetNavigate = () => {
+  const onPress = async () => {
     setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");
     setMapConfig(0, 0);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => {} }>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.lowerButtonWrapper}>
                   <Text style={styles.lowerButtonText}>
                     {"Sites Chosen"}

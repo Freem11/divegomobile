@@ -205,7 +205,6 @@ const handleDeleteButton = (itineraryInfo) => {
 };
 
 const handleMapFlip = async (sites: number[]) => {
-  console.log('selectedShop', selectedShop.id)
  const coords = await useMapFlip(
     sites,
     setSitesArray,

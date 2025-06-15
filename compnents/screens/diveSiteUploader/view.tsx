@@ -77,7 +77,7 @@ export default function DiveSiteUploaderView({
                   error={errors.Latitude}
                   iconLeft="latitude"
                   placeholder={t('DiveSiteAdd.latPlaceholder')}
-                  value={value.toString()}
+                  value={value ? String(value): null}
                   onChangeText={onChange}
                   keyboardType="number-pad"
                />
@@ -96,7 +96,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Longitude}
                   iconLeft="longitude"
                   placeholder={t('DiveSiteAdd.lngPlaceholder')}
-                  value={value.toString()}
+                  value={value ? String(value): null}
                   onChangeText={onChange}
                   keyboardType="number-pad"
                />

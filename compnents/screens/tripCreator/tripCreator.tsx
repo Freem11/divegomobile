@@ -70,7 +70,7 @@ export default function TripCreatorPage({
     getItineraries(selectedShop);
     getTripDiveSites(sitesArray);
     setTripDiveSites(getTripDiveSites(formValues.siteList));
-    setSitesArray(formValues.siteList);
+    // setSitesArray(formValues.siteList);
   }, []);
 
 
@@ -129,17 +129,23 @@ export default function TripCreatorPage({
     }
   };
 
-  const removeFromSitesArray = async (siteIdNo: number[]) => {
-    const index = sitesArray.indexOf(siteIdNo);
+  console.log('sitesArray', sitesArray)
+
+  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
+
+    console.log('siteIdNo', siteIdNo)
+    console.log('sitesArray', siteList)
+    const index = siteList.indexOf(siteIdNo);
     if (index > -1) {
-      sitesArray.splice(index, 1);
+      siteList.splice(index, 1);
     }
-    setSitesArray(sitesArray);
+    setSitesArray(siteList);
+    console.log('sitesArray2', siteList)
     const indexLocal = formValues.siteList.indexOf(siteIdNo);
     if (indexLocal > -1) {
       formValues.siteList.splice(index, 1);
     }
-    getTripDiveSites(sitesArray);
+    getTripDiveSites(siteList);
   };
 
 
@@ -173,6 +179,7 @@ export default function TripCreatorPage({
         description: "",
         siteList: [],
       });
+      console.log("TC submit?")
       setSitesArray([]);
 
       editMode
@@ -289,7 +296,7 @@ export default function TripCreatorPage({
                         fillColor="white"
                         bgColor={colors.primaryBlue}
                         buttonAction={() =>
-                          removeFromSitesArray(tripDetails.id)
+                          removeFromSitesArray(tripDetails.id, sitesArray)
                         }
                       />
                     </S.ItemHousing>

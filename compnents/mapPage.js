@@ -265,45 +265,6 @@ export default function MapPage() {
     }
   };
 
-  const onNavigate = () => {
-    if (dragPin) {
-        setAddSiteVals({
-          ...addSiteVals,
-          Latitude: dragPin.lat.toString(),
-          Longitude: dragPin.lng.toString(),
-        });
-        setMapHelper(true);
-        setMapConfig(0, 0);
-
-        setActiveScreen2("DiveSiteUploadScreen");
-        setLevelTwoScreen(true);
-        setChosenModal(null);
-      
-    }
-  };
-
-  const onShopNavigate = async(id) => {
-    const diveCentreinfo = await getDiveShopById(id)
-    setLevelOneScreen(true);
-    setActiveScreen2("DiveShopScreen", id);
-   
-    mapRef.animateCamera({
-      center: {latitude: diveCentreinfo[0].lat, longitude: diveCentreinfo[0].lng},
-      zoom: 12,
-    });
-    setMapHelper(true);
-    setMapConfig(0, 0);
-    setZoomHelper(true);
-    setSitesArray([]);
-  };
-
-  const onTripSetNavigate = () => {
-    setLevelTwoScreen(true);
-    setActiveScreen2("TripCreatorScreen");
-    setMapHelper(true);
-    setMapConfig(0, 0);
-  };
-
   useEffect(() => {
     if (animalSelection.length > 0) {
       setToken(true);
