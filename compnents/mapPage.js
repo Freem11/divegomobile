@@ -8,8 +8,9 @@ import {
   Dimensions,
   Keyboard,
 } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
-import { Octicons } from "@expo/vector-icons";
 import email from "react-native-email";
 import GoogleMap from "./googleMap";
 import BottomMenu from './reusables/bottomMenu';
@@ -18,7 +19,6 @@ import SiteSearchButton from './FABMenu/siteSearchButton'
 import DiveSiteButton from './FABMenu/diveSiteButton'
 import GuidesButton from './FABMenu/guidesButton'
 import ItineraryListButton from "./FABMenu/itineraryCreatorButton"
-import FABMenu from "./FABMenu/bottomBarMenu";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../compnents/reusables/animatedFullScreenModal";
 import AnimatedModalConfirmation from "../compnents/reusables/animatedModalConfimration";
@@ -64,6 +64,7 @@ import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
 import { scale, moderateScale, s } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
+
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import Animated, {
   useSharedValue,
@@ -78,6 +79,9 @@ import { getLocales } from "expo-localization";
 import { useMapStore } from "./googleMap/useMapStore";
 import { useActiveScreenStore } from '../store/useActiveScreenStore';
 import { getDiveShopById } from '../supabaseCalls/shopsSupabaseCalls';
+import { EmailFeedback } from "./feed/emailFeedback";
+import { FeedsButton } from "./feed/iconButton";
+import FeedScreens from "./feed/screens";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -366,95 +370,69 @@ export default function MapPage() {
   return (
     <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
       <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
+        <SafeAreaProvider>
+          <View style={styles.container}>
+            {mapConfig in [, , 2] || !mapConfig ? (
+              <View style={styles.carrousel} pointerEvents={"box-none"}>
+                <PhotoMenu style={{ zIndex: 3 }} />
+                <View style={styles.filterer} pointerEvents={"box-none"}>
+                  {((areaPics && areaPics.length > 0) || isOpen) && (
+                    <View style={styles.emptyBox} pointerEvents={"box-none"}>
+                      <Animated.View style={[tabPull, styles.closer]}>
+                        <PhotoFilterer />
+                      </Animated.View>
 
-        <View style={styles.container}>
-          {mapConfig in [, , 2] || !mapConfig ? (
-            <View style={styles.carrousel} pointerEvents={"box-none"}>
-              <PhotoMenu style={{ zIndex: 3 }} />
-              <View style={styles.filterer} pointerEvents={"box-none"}>
-                {((areaPics && areaPics.length > 0) || isOpen) && (
-                  <View style={styles.emptyBox} pointerEvents={"box-none"}>
-                    <Animated.View style={[tabPull, styles.closer]}>
-                      <PhotoFilterer />
-                    </Animated.View>
+                      <TouchableWithoutFeedback
+                        onPress={() => setShowFilterer(!showFilterer)}
+                      >
+                        <View style={styles.pullTab}></View>
+                      </TouchableWithoutFeedback>
+                    </View>
+                  )}
 
-                    <TouchableWithoutFeedback
-                      onPress={() => setShowFilterer(!showFilterer)}
-                    >
-                      <View style={styles.pullTab}></View>
-                    </TouchableWithoutFeedback>
+                  <View style={styles.animalSelect} pointerEvents={"box-none"}>
+                    <AnimalTopAutoSuggest transTagsY={transTagsY} />
                   </View>
-                )}
-
-                <View style={styles.animalSelect} pointerEvents={"box-none"}>
-                  <AnimalTopAutoSuggest transTagsY={transTagsY} />
                 </View>
               </View>
-            </View>
-          ) : null}
+            ) : null}
 
-          {mapConfig in [, , 2] || !mapConfig ? (
-            <TouchableWithoutFeedback onPress={startTagAnimations}>
-              <AntDesign
-                name="tags"
-                color="#355D71"
-                size={24}
-                style={{ position: "absolute", left: "87.5%", top: "13%" }}
-              />
-            </TouchableWithoutFeedback>
-          ) : null}
+            {mapConfig in [, , 2] || !mapConfig ? (
+              <TouchableWithoutFeedback onPress={startTagAnimations}>
+                <AntDesign
+                  name="tags"
+                  color="#355D71"
+                  size={24}
+                  style={{ position: "absolute", left: "87.5%", top: "13%" }}
+                />
+              </TouchableWithoutFeedback>
+            ) : null}
+            {mapConfig === 0 && <EmailFeedback />}
+            {mapConfig === 0 && <FeedsButton />}
 
-          {mapConfig === 0 ? (
-            <View style={styles.FMenuAnimate} pointerEvents={"box-none"}>
-              <Animated.View style={[styles.feedback, feedbackReveal]}>
-                <Text style={styles.feedRequest} onPress={() => handleEmail()}>
-                  Send Scuba SEAsons feedback
-                </Text>
-                <TouchableWithoutFeedback
-                  style={{
-                    width: moderateScale(30),
-                    height: moderateScale(23),
-                    marginTop: moderateScale(3),
-                  }}
-                  onPress={startFeedbackAnimations}
-                >
-                  <Octicons
-                    name="paper-airplane"
-                    size={moderateScale(24)}
-                    color="white"
-                    style={{ marginTop: moderateScale(3) }}
-                  />
-                </TouchableWithoutFeedback>
-              </Animated.View>    
-            </View>
-          ) : null}
+            {mapConfig === 0 ?
+              <BottomMenu>
+                <ProfileButton />
+                <SiteSearchButton />
+                <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
+                <DiveSiteButton />
+                {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+              </BottomMenu> : null}
 
+            {mapConfig === 0 && animalMultiSelection.length > 0 ? (
+              <View style={styles.Hist} pointerEvents={"none"}>
+                <Historgram style={{ zIndex: 2 }} />
+              </View>
+            ) : null}
+            <FeedScreens />
+            <LevelOneScreen />
+            <LevelTwoScreen />
+            <AnimatedFullScreenModal />
+            <AnimatedModalConfirmation />
 
-
-          {mapConfig === 0 ?
-            <BottomMenu>
-              <ProfileButton />
-              <SiteSearchButton />
-              <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
-              <DiveSiteButton />
-              {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-            </BottomMenu> : null}
-
-
-          {mapConfig === 0 && animalMultiSelection.length > 0 ? (
-            <View style={styles.Hist} pointerEvents={"none"}>
-              <Historgram style={{ zIndex: 2 }} />
-            </View>
-          ) : null}
-
-          <LevelOneScreen />
-          <LevelTwoScreen />
-          <AnimatedFullScreenModal />
-          <AnimatedModalConfirmation />
-
-          <GoogleMap style={{ zIndex: 1 }} />
-          
-        </View>
+            <GoogleMap style={{ zIndex: 1 }} />
+          </View>
+        </SafeAreaProvider>
       </DiveSitesContext.Provider>
     </MapCenterContext.Provider>
   );
@@ -479,7 +457,7 @@ const styles = StyleSheet.create({
   },
   FMenuAnimate: {
     position: "absolute",
-    bottom: Platform.OS ==="ios" ? moderateScale(15) : moderateScale(0),
+    bottom: Platform.OS === "ios" ? moderateScale(15) : moderateScale(0),
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",

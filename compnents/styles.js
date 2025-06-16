@@ -7,6 +7,8 @@ export const colors = {
   secondaryYellow: '#fdc500',
   themeWhite: '#ffffff',
   themeBlack: '#00171f',
+  themeRed: '#E63946',
+  themeGreen: '#4caf50',
   neutralGrey: '#A9A9A9',
   buttonPressOverlay: 'rgba(128, 128, 128, 0.25)'
 }
@@ -35,11 +37,11 @@ export const buttonSizes = {
     height: 50,
     width: 50
   },
-  medium : {
+  medium: {
     height: 50,
     width: 140
   },
-  large : {
+  large: {
     height: 50,
     width: 250
   },
