@@ -2,11 +2,7 @@ import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
 
 export const useMapFlip = async (
   siteList,
-  setSitesArray,
-  setZoomHelper,
-  setScreen,
-  setMapConfig,
-  setMapCenter
+  setSitesArray
 ) => {
 
   setSitesArray(siteList);
@@ -20,11 +16,7 @@ export const useMapFlip = async (
   });
   let moveLat = lats.reduce((acc, curr) => acc + curr, 0) / lats.length;
   let moveLng = lngs.reduce((acc, curr) => acc + curr, 0) / lngs.length;
-  setZoomHelper(true);
-  setScreen(false);
-  setMapConfig(2);
-  setMapCenter({
-    lat: moveLat,
-    lng: moveLng,
-  });
+
+  return {moveLat, moveLng}
+
 };

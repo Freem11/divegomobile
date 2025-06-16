@@ -49,27 +49,27 @@ useEffect(() => {
       })
       break;
     case "DiveShop":
-      setLocalPreviewUri(selectedShop[0].diveShopProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop[0].diveShopProfilePhoto.split("/").pop()}`} : noImage)
+      setLocalPreviewUri(selectedShop.diveShopProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop.diveShopProfilePhoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
         dataType: "Dive Center",
         title: "Dive Center Edit",
-        id: selectedShop[0].id,
-        name: selectedShop[0].orgName,
-        bio: selectedShop[0].diveShopBio,
-        uri: selectedShop[0].diveShopProfilePhoto,
+        id: selectedShop.id,
+        name: selectedShop.orgName,
+        bio: selectedShop.diveShopBio,
+        uri: selectedShop.diveShopProfilePhoto,
         placeholderName: 'Dive Centre Name cannot be blank!',
-        placeholderBio: `A little about ${selectedShop[0].orgName}`
+        placeholderBio: `A little about ${selectedShop.orgName}`
       })
       break;
     case "Profile":
-      setLocalPreviewUri(selectedProfile[0].profilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile[0].profilePhoto.split("/").pop()}`} : noImage)
+      setLocalPreviewUri(selectedProfile.profilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
         dataType: "Profile",
         title: "Edit My Profile",
-        id: selectedProfile[0].id,
-        name: selectedProfile[0].UserName,
-        bio: selectedProfile[0].profileBio,
-        uri: selectedProfile[0].profilePhoto,
+        id: selectedProfile.id,
+        name: selectedProfile.UserName,
+        bio: selectedProfile.profileBio,
+        uri: selectedProfile.profilePhoto,
         placeholderName: 'You Diver Name cannot be blank!',
         placeholderBio: `Tell other divers about yourself`
       })

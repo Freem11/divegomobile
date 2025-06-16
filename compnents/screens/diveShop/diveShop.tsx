@@ -1,8 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import PlainTextInput from '../../reusables/plainTextInput';
 import * as S from "./styles";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { MapCenterContext } from "../../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
@@ -12,47 +9,45 @@ import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itin
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { useTranslation } from "react-i18next";
 import ItineraryCard from "../../reusables/itineraryCard";
-import { ItineraryItem } from "../../entities/itineraryItem";
 import { openURL } from "expo-linking";
 import { useMapFlip } from "../../itineraries/hooks";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import Label from "../../reusables/label";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { DiveShop } from "../../../entities/diveShop";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useMapStore } from "../../googleMap/useMapStore";
+import { ItineraryItem } from "../../../entities/itineraryItem";
 
 type DiveShopProps = {
-  onClose?: () => void;
-  onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   isMyShop?: boolean
   bottomHitCount?: number;
+  selectedShop: DiveShop
 };
 
 export default function DiveShopScreen({
-  onClose,
-  onMapFlip,
   closeParallax,
   restoreParallax,
   isMyShop,
-  bottomHitCount
+  bottomHitCount,
+  selectedShop
 }: DiveShopProps) {
   
-  const { profile } = useContext(UserProfileContext);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { setMapConfig } = useContext(MapConfigContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
-  const { selectedShop } = useContext(SelectedShopContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
@@ -61,8 +56,6 @@ export default function DiveShopScreen({
   );
   const { setEditMode } = useContext(EditModeContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
@@ -88,29 +81,29 @@ export default function DiveShopScreen({
   useEffect(() => {
     if (levelOneScreen && zoomHelper) {
       setMapCenter({
-        lat: selectedShop[0].lat,
-        lng: selectedShop[0].lng,
+        lat: selectedShop.lat,
+        lng: selectedShop.lng,
       });
     }
   }, [levelOneScreen]);
 
   useEffect(() => {
     setDiveShopVals({
-      id: selectedShop[0].id,
-      bio: selectedShop[0].diveShopBio,
-      photo: selectedShop[0].diveShopProfilePhoto,
+      id: selectedShop.id,
+      bio: selectedShop.diveshopbio,
+      photo: selectedShop.diveshopprofilephoto,
     });
 
-    if (selectedShop[0]) {
-      getItineraries(selectedShop[0].id);
+    if (selectedShop) {
+      getItineraries(selectedShop.id);
     }
   }, [selectedShop, isEditModeOn]);
 
   useEffect(() => {
-    if (selectedShop[0]) {
-      getItineraries(selectedShop[0].id);
+    if (selectedShop) {
+      getItineraries(selectedShop.id);
     }
-  }, [selectedShop[0].id]);
+  }, [selectedShop.id]);
 
   useEffect(() => {
     if (!isEditModeOn && diveShopVals) {
@@ -170,18 +163,13 @@ if(isMyShop){
 }
 
 const handleEditButton = (itineraryInfo) => {
-  setPreviousButtonID(activeScreen);
-  setActiveScreen("TripCreatorScreen");
-  setEditMode({ itineraryInfo, IsEditModeOn: true });
-  setFormValues({ ...itineraryInfo, shopID: selectedShop[0].id, OriginalItineraryID: itineraryInfo.id })
-  setSitesArray(itineraryInfo.siteList)
   setLevelOneScreen(false);
-  useButtonPressHelper(
-    "TripCreatorScreen",
-    activeScreen,
-    levelTwoScreen,
-    setLevelTwoScreen
-  );
+  setLevelTwoScreen(true);
+  setActiveScreen("TripCreatorScreen", {id: selectedShop.id});
+  setEditMode({ itineraryInfo, IsEditModeOn: true });
+  setFormValues({ ...itineraryInfo, shopID: selectedShop.id, OriginalItineraryID: itineraryInfo.id })
+  setSitesArray(itineraryInfo.siteList)
+
 };
 
 const handleDeleteButton = (itineraryInfo) => {
@@ -204,23 +192,23 @@ const handleDeleteButton = (itineraryInfo) => {
 };
 
 const handleMapFlip = async (sites: number[]) => {
-  useMapFlip(
+ const coords = await useMapFlip(
     sites,
     setSitesArray,
-    setZoomHelper,
-    setLevelOneScreen,
-    setMapConfig,
-    setMapCenter
   )
+  setMapConfig(2, selectedShop.id)
+  mapRef.animateCamera({ center: {latitude: coords.moveLat, longitude: coords.moveLng},
+    zoom: 12,
+  });
   closeParallax(1)
 };
 
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-          <S.Header>{selectedShop[0].orgName}</S.Header>
+          <S.Header>{selectedShop?.orgName}</S.Header>
 
-          <S.Content>{selectedShop[0].diveShopBio}</S.Content>
+          <S.Content>{selectedShop?.diveShopBio}</S.Content>
 
       </S.InputGroupContainer>
 

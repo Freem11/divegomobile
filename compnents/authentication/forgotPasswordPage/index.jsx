@@ -4,6 +4,7 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import ForgotPageView from "./view";
 import { supabase } from "../../../supabase";
+import { Platform } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -38,18 +39,14 @@ export default function ForgotPage(props) {
 
   const passwordRecovery = async (email) => {
     setIsEnabled(false);
-    // const resetPasswordURL = Linking.createURL('');
-    // const resetPasswordURL = 'https://localhost:3000/account/password'; //dev
-    const resetPasswordURL =
-      "https://scubaseasons.netlify.app/account/password/";
-    //production
 
+    // const resetPasswordURL = Linking.createURL("account/password/");
+    const resetPasswordURL =
+      "https://scubaseasons.netlify.app/account/password";
     try {
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        options: {
-          redirectTo: resetPasswordURL,
-          skipBrowserRedirect: true,
-        },
+        redirectTo: resetPasswordURL,
+        skipBrowserRedirect: true,
       });
       setEmailSent("Password Reset Email Sent!, Check Your Inbox for it");
 

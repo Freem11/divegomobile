@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import TripCreatorPage from "./tripCreator";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -9,20 +9,24 @@ import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import TripImage from '../../png/Trip.png'
 import { Keyboard } from "react-native";
 import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useTranslation } from "react-i18next";
+import { useMapStore } from "../../googleMap/useMapStore";
 
-export default function TripCreatorParallax() {
+type TripCreatorProps = {
+  shopID: number
+};
+
+export default function TripCreatorParallax(props: TripCreatorProps) {
   const { t } = useTranslation();
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
-  
  
   const onClose = async () => {
     setEditMode(false);
@@ -44,7 +48,7 @@ export default function TripCreatorParallax() {
   const onNavigate = async() => {
     Keyboard.dismiss();
     setMapHelper(true);
-    setMapConfig(3);
+    setMapConfig(3, 0);
     setLevelTwoScreen(false);
   };
 
@@ -71,9 +75,7 @@ export default function TripCreatorParallax() {
       onMapFlip={onNavigate}
       popoverConent={editMode && popoverConent}
     >
-      <TripCreatorPage 
-        onClose={onClose} onMapFlip={onNavigate}
-        />
+      <TripCreatorPage selectedShop={props.shopID}/>
 
     </ParallaxDrawer>
   );

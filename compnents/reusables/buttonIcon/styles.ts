@@ -25,6 +25,7 @@ export const StyledButtonText = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Light};
   color: ${colors.themeWhite};
+  margin-top: ${moderateScale(5)}px;
 `;
 
 export const IconWrapper = styled.View`

@@ -3,14 +3,13 @@ import * as S from "./styles";
 import { View, Keyboard, ScrollView } from "react-native";
 import { colors } from "../../styles";
 import {
-  getItinerariesByUserId,
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
+  itineraries
 } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { moderateScale, s } from "react-native-size-matters";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
@@ -30,20 +29,16 @@ import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 type TripCreatorProps = {
-  onClose: () => void;
-  onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   onDrawerHitBottom?: () => void;
-  bottomHitCount?: number;
+  selectedShop: number
 };
 
 export default function TripCreatorPage({
-  onClose,
-  onMapFlip,
   closeParallax,
   restoreParallax,
-  bottomHitCount,
+  selectedShop
 }: TripCreatorProps) {
 
   const { profile } = useContext(UserProfileContext);
@@ -63,10 +58,10 @@ export default function TripCreatorPage({
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
 
   useEffect(() => {
-    getItineraries(profile[0].UserID);
+    getItineraries(selectedShop);
     getTripDiveSites(sitesArray);
     setTripDiveSites(getTripDiveSites(formValues.siteList));
-    setSitesArray(formValues.siteList);
+    // setSitesArray(formValues.siteList);
   }, []);
 
 
@@ -85,7 +80,7 @@ export default function TripCreatorPage({
 
   const getItineraries = async (IdNum) => {
     try {
-      const itins = await getItinerariesByUserId(IdNum);
+      const itins = await itineraries(IdNum);
       if (itins.length > 0) {
         setItineraryList(itins[0].itineraries);
       }
@@ -125,17 +120,18 @@ export default function TripCreatorPage({
     }
   };
 
-  const removeFromSitesArray = async (siteIdNo: number[]) => {
-    const index = sitesArray.indexOf(siteIdNo);
+  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
+
+    const index = siteList.indexOf(siteIdNo);
     if (index > -1) {
-      sitesArray.splice(index, 1);
+      siteList.splice(index, 1);
     }
-    setSitesArray(sitesArray);
+    setSitesArray(siteList);
     const indexLocal = formValues.siteList.indexOf(siteIdNo);
     if (indexLocal > -1) {
       formValues.siteList.splice(index, 1);
     }
-    getTripDiveSites(sitesArray);
+    getTripDiveSites(siteList);
   };
 
 
@@ -169,6 +165,7 @@ export default function TripCreatorPage({
         description: "",
         siteList: [],
       });
+      console.log("TC submit?")
       setSitesArray([]);
 
       editMode
@@ -285,7 +282,7 @@ export default function TripCreatorPage({
                         fillColor="white"
                         bgColor={colors.primaryBlue}
                         buttonAction={() =>
-                          removeFromSitesArray(tripDetails.id)
+                          removeFromSitesArray(tripDetails.id, sitesArray)
                         }
                       />
                     </S.ItemHousing>

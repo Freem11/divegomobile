@@ -39,7 +39,7 @@ export default function PartnerRequestPage() {
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const { t } = useTranslation();
   useEffect(() => {
-    setFormVals({ ...formVals, UserId: profile[0].UserID });
+    setFormVals({ ...formVals, UserId: profile.UserID });
   }, []);
 
   const [formVals, setFormVals] = useState({

@@ -4,35 +4,35 @@ import DiveShopScreen from './diveShop';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
 import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
-import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
+import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useMapStore } from '../../googleMap/useMapStore';
 
-export default function DiveShopParallax() {
+type DiveCentreProps = {
+  shopID: number
+};
+
+export default function DiveShopParallax(props: DiveCentreProps) {
   const { t } = useTranslation();
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-  const { selectedShop } = useContext(SelectedShopContext);
+  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const { profile } = useContext(UserProfileContext);
@@ -42,11 +42,20 @@ export default function DiveShopParallax() {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   
-  console.log(selectedShop[0].userId, profile[0].UserID)
+  useEffect(() => {
+    getDiveSiteinfo()
+  }, [props.shopID]);
+
+
+  const getDiveSiteinfo = async () => {
+    const diveCentreinfo = await getDiveShopById(props.shopID)
+    setSelectedShop(diveCentreinfo[0])
+  }
+
   useEffect(() => {
     if (
-      profile[0].partnerAccount &
-      (selectedShop[0].userId === profile[0].UserID)
+      profile.partnerAccount &
+      (selectedShop.userId === profile.UserID)
     ) {
       setIsMyShop(true);
     } else {
@@ -54,13 +63,13 @@ export default function DiveShopParallax() {
     }
 
     let photoName = null;
-    if(selectedShop[0].diveShopProfilePhoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop[0].diveShopProfilePhoto.split("/").pop()}`;
+    if(selectedShop.diveShopProfilePhoto) {
+      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop.diveShopProfilePhoto.split("/").pop()}`;
     }
     
     setDiveShopVals({
-      id: selectedShop[0].id,
-      bio: selectedShop[0].diveShopBio,
+      id: selectedShop.id,
+      bio: selectedShop.diveShopBio,
       photo: photoName,
     });
 
@@ -74,30 +83,22 @@ export default function DiveShopParallax() {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
     setMapHelper(true);
-    setMapConfig(2);
+    setMapConfig(2, selectedShop.id);
     setLevelOneScreen(false);
   };
 
   const openTripCreatorScreen = () => {
     setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
+    setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");
-    useButtonPressHelper(
-      "TripCreatorScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
   };
   
   const openEditsPage = () => {
     setFullScreenModal(true)
     setEditInfo('DiveShop')
     setActiveTutorialID("EditsScreen")
-    
   };
 
-  console.log(isMyShop)
   const popoverConent = () => {
     return (
     <>
@@ -123,7 +124,7 @@ export default function DiveShopParallax() {
       popoverConent={isMyShop && popoverConent}
       isMyShop={isMyShop}
       >
-      <DiveShopScreen onMapFlip={onNavigate} isMyShop={isMyShop}/>
+      <DiveShopScreen isMyShop={isMyShop} selectedShop={selectedShop}/>
     </ParallaxDrawer>
   );
 }
