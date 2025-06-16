@@ -1,39 +1,16 @@
-import React, { useState, useContext, useEffect, Dispatch, SetStateAction } from "react";
-import {
-  StyleSheet,
-  Dimensions
-} from "react-native";
-import PlainTextInput from '../../reusables/plainTextInput';
-import {
-  activeFonts,
-  colors,
-  fontSizes,
-  screenSecondaryButton,
-  authenicationButton,
-  buttonTextAlt,
-  buttonText
-} from "../../styles";
+import React, { useState, useContext, useEffect } from "react";
 import * as S from "./styles";
-import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SessionContext } from "../../contexts/sessionContext";
-import { getPhotosByUserWithExtra, getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
-import { grabProfileByUserName, updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
+import { getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
+import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,
-  deleteUserFollow,
-  checkIfUserFollows,
+  deleteUserFollow
 } from "../../../supabaseCalls/userFollowSupabaseCalls";
-import { getProfileWithStats } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useTranslation } from "react-i18next";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Icon from "../../../icons/Icon";
@@ -41,24 +18,15 @@ import Label from "../../reusables/label";
 import { Photo } from "../../../entities/photos";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { Pagination } from "../../../entities/pagination";
-
-const windowHeight = Dimensions.get("window").height;
+import { colors } from "../../styles";
 
 type UserProfileProps = {
-  onClose?: () => void;
-  onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void; 
-  isMyShop?: boolean
   bottomHitCount?: number;
 };
 
 export default function UserProfileScreen({
-  onClose,
-  onMapFlip,
   closeParallax,
-  restoreParallax,
-  isMyShop,
   bottomHitCount,
 }: UserProfileProps) {
   
@@ -69,13 +37,8 @@ export default function UserProfileScreen({
   );
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [isNotVisitor, setIsNotVisitor] = useState(true);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
-  );
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
   );
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);

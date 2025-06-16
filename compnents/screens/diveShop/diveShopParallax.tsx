@@ -124,7 +124,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
       popoverConent={isMyShop && popoverConent}
       isMyShop={isMyShop}
       >
-      <DiveShopScreen onMapFlip={onNavigate} isMyShop={isMyShop} selectedShop={selectedShop}/>
+      <DiveShopScreen isMyShop={isMyShop} selectedShop={selectedShop}/>
     </ParallaxDrawer>
   );
 }

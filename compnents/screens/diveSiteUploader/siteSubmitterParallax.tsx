@@ -33,9 +33,7 @@ export default function SiteSubmitterParallax() {
 
   return (
     <ParallaxDrawer headerImage={boatImage} onClose={onClose} onMapFlip={onNavigate}>
-      <DiveSiteUploader 
-          onClose={onClose}
-          onMapFlip={onNavigate}/>
+      <DiveSiteUploader />
     </ParallaxDrawer>
   );
 }

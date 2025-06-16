@@ -3,20 +3,12 @@ import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import UserProfileScreen from './userProfile';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
-import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
-import { grabProfileById, grabProfileByUserId, updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
+import { grabProfileById} from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
@@ -35,18 +27,14 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
+  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
-  const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
-  const { setChosenModal } = useContext(ModalSelectContext);
+
   const [profileVals, setProfileVals] = useState(null);
   const { profile } = useContext(UserProfileContext);
   const [isMyProfile, setIsMyProfile] = useState(false);
@@ -54,7 +42,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   
   const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
-  const { editInfo, setEditInfo } = useContext(EditsContext);
+  const { setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
@@ -169,7 +157,7 @@ const handleFollow = async () => {
       popoverConent={isMyProfile && popoverConent}
       isMyShop={isMyProfile}
       >
-      <UserProfileScreen onMapFlip={onNavigate} isMyShop={isMyProfile}/>
+      <UserProfileScreen/>
     </ParallaxDrawer>
   );
 }

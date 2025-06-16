@@ -11,21 +11,16 @@ import Label from "../../reusables/label";
 interface Props {
   values: Form;
   onSubmit: (data: any) => void
-  closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void;
   initialFormData: BasicFormData
 }
 
 export default function EditScreenView({
   values,
   onSubmit,
-  closeParallax,
-  restoreParallax,
   initialFormData
 }: Props) {
   const {
     control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<Form>({

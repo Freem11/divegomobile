@@ -3,21 +3,11 @@ import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import DiveSiteScreen from './diveSite';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
-import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
-import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { PinContext } from "../../contexts/staticPinContext";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { useTranslation } from "react-i18next";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
@@ -138,7 +128,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
       isMyShop={isPartnerAccount}
       >
 
-      <DiveSiteScreen onMapFlip={onNavigate} isMyShop={isPartnerAccount} selectedDiveSite={selectedDiveSite}/>
+      <DiveSiteScreen selectedDiveSite={selectedDiveSite}/>
     </ParallaxDrawer>
   );
 }

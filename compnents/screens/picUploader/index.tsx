@@ -1,12 +1,11 @@
 import React, { Dispatch, useContext, useState } from "react";
 import PicUploaderView from "./view";
-import moment from "moment";
 import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { PinContext } from "../../contexts/staticPinContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
-import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
+import { showError, showSuccess, showWarning } from "../../toast";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -33,9 +32,6 @@ export const INIT_FORM_STATE: Form = {
 
 type PicUploaderProps = {
   onClose: () => void;
-  onMapFlip?: () => void;
-  closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void; 
   handleImageUpload?: () => void;
   localPreviewUri: string 
   setLocalPreviewUri: Dispatch<any>
@@ -44,9 +40,6 @@ type PicUploaderProps = {
 
 export default function PicUploader({
   onClose,
-  onMapFlip,
-  closeParallax,
-  restoreParallax,
   handleImageUpload,
   localPreviewUri,
   setLocalPreviewUri,

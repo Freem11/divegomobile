@@ -29,8 +29,6 @@ export default function GoogleMap() {
   const handleOnLoad = async (map: MapView) => {
     mapAction.setMapRef(map);
     const camera = await map.getCamera();
-    // mapAction.setCamera(camera);
-    console.log("loaded", { map: !!map });
   };
 
 

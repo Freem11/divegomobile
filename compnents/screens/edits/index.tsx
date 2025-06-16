@@ -1,12 +1,10 @@
 import React, { useContext, useState } from "react";
 import EditScreenView from './view';
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { updateDiveSite } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
-import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
+import { imageUpload } from "../imageUploadHelpers";
+import { showError, showSuccess, showWarning } from "../../toast";
 import { Form } from "./form";
 import { BasicFormData } from "./editsParallax";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
@@ -16,19 +14,11 @@ import { UserProfileContext } from "../../contexts/userProfileContext";
 
 
 type SiteSubmitterProps = {
-  onClose: () => void;
-  closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void; 
-  setLocalPreviewUri: React.Dispatch<any>
   localPreviewUri: {uri : string} 
   initialFormData: BasicFormData
 };
 
 export default function EdittingScreen({
-  onClose,
-  closeParallax,
-  restoreParallax,
-  setLocalPreviewUri,
   localPreviewUri,
   initialFormData
 }: SiteSubmitterProps) {
@@ -143,8 +133,6 @@ export default function EdittingScreen({
   return (
     <EditScreenView
       onSubmit={onSubmit}
-      closeParallax={closeParallax}
-      restoreParallax={restoreParallax}
       initialFormData={initialFormData}
       values={{
         id: initialFormData?.id,

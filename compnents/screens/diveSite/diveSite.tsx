@@ -1,43 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Text,
-  Platform,
-} from "react-native";
-import PlainTextInput from '../../reusables/plainTextInput';
+import { Dimensions } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import {
-  activeFonts,
   colors,
-  fontSizes,
-  screenSecondaryButton,
-  buttonTextAlt,
 } from '../../styles';
 import * as S from "./styles";
 import { moderateScale } from "react-native-size-matters";
-import { PinContext } from "../../contexts/staticPinContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
-import { AnimalMultiSelectContext } from "../../contexts/animalMultiSelectContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import email from "react-native-email";
-import { newGPSBoundaries } from "../../helpers/mapHelpers";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   getDiveSitePhotos,
-  getPhotosWithUser,
-  getPhotosWithUserEmpty,
-  getPhotosByDiveSiteWithExtra,
 } from "../../../supabaseCalls/photoSupabaseCalls";
 import {
-  getDiveSiteWithUserName,
   updateDiveSite,
 } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
@@ -46,36 +22,21 @@ import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard"
 import Label from "../../reusables/label";
 import Icon from "../../../icons/Icon";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { Pagination } from "../../../entities/pagination";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
-const windowHeight = Dimensions.get("window").height;
-
 type DiveSiteProps = {
-  onClose?: () => void;
-  onMapFlip?: () => void;
-  closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void; 
-  isMyShop?: boolean
   bottomHitCount?: number;
   selectedDiveSite: DiveSiteWithUserName
 };
 
 export default function DiveSiteScreen({
-  onClose,
-  onMapFlip,
-  closeParallax,
-  restoreParallax,
-  isMyShop,
   bottomHitCount,
   selectedDiveSite
 }: DiveSiteProps) {
   
   const { profile } = useContext(UserProfileContext);
-  const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-  const { pinValues, setPinValues } = useContext(PinContext);
 
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -83,16 +44,11 @@ export default function DiveSiteScreen({
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const { selectedProfile, setSelectedProfile } = useContext(
-    SelectedProfileContext
-  );
+
   const { t } = useTranslation();
-  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
-  const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
   const getTrips = async () => {

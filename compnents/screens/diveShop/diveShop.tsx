@@ -1,8 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import PlainTextInput from '../../reusables/plainTextInput';
 import * as S from "./styles";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { MapCenterContext } from "../../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
@@ -12,12 +9,10 @@ import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itin
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { useTranslation } from "react-i18next";
 import ItineraryCard from "../../reusables/itineraryCard";
-import { ItineraryItem } from "../../entities/itineraryItem";
 import { openURL } from "expo-linking";
 import { useMapFlip } from "../../itineraries/hooks";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import Label from "../../reusables/label";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
 import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
@@ -27,10 +22,9 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { DiveShop } from "../../../entities/diveShop";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
+import { ItineraryItem } from "../../../entities/itineraryItem";
 
 type DiveShopProps = {
-  onClose?: () => void;
-  onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   isMyShop?: boolean
@@ -39,8 +33,6 @@ type DiveShopProps = {
 };
 
 export default function DiveShopScreen({
-  onClose,
-  onMapFlip,
   closeParallax,
   restoreParallax,
   isMyShop,
@@ -48,8 +40,6 @@ export default function DiveShopScreen({
   selectedShop
 }: DiveShopProps) {
   
-  const { profile } = useContext(UserProfileContext);
-
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -58,7 +48,6 @@ export default function DiveShopScreen({
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
-  // const { selectedShop } = useContext(SelectedShopContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
@@ -67,8 +56,6 @@ export default function DiveShopScreen({
   );
   const { setEditMode } = useContext(EditModeContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
-  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);

@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { Keyboard } from "react-native";
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
-
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { DiveSpotContext } from "../../contexts/diveSpotContext";
 import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
@@ -16,19 +11,13 @@ import DiveSiteUploaderView from './view';
 import { useMapStore } from "../../googleMap/useMapStore";
 
 type SiteSubmitterProps = {
-  onClose: () => void;
-  onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
-  bottomHitCount?: number;
 };
 
 export default function DiveSiteUploader({
-  onClose,
-  onMapFlip,
   closeParallax,
   restoreParallax,
-  bottomHitCount
 }: SiteSubmitterProps) {
 
   const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);

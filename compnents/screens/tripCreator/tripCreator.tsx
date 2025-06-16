@@ -3,7 +3,6 @@ import * as S from "./styles";
 import { View, Keyboard, ScrollView } from "react-native";
 import { colors } from "../../styles";
 import {
-  getItinerariesByUserId,
   insertItineraryRequest,
   insertItinerary,
   getItineraryDiveSiteByIdArray,
@@ -11,7 +10,6 @@ import {
 } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { moderateScale, s } from "react-native-size-matters";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
@@ -29,24 +27,17 @@ import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handle
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { DiveShop } from "../../../entities/diveShop";
 
 type TripCreatorProps = {
-  onClose: () => void;
-  onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   onDrawerHitBottom?: () => void;
-  bottomHitCount?: number;
-  selectedShop: DiveShop
+  selectedShop: number
 };
 
 export default function TripCreatorPage({
-  onClose,
-  onMapFlip,
   closeParallax,
   restoreParallax,
-  bottomHitCount,
   selectedShop
 }: TripCreatorProps) {
 
@@ -129,18 +120,13 @@ export default function TripCreatorPage({
     }
   };
 
-  console.log('sitesArray', sitesArray)
-
   const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
 
-    console.log('siteIdNo', siteIdNo)
-    console.log('sitesArray', siteList)
     const index = siteList.indexOf(siteIdNo);
     if (index > -1) {
       siteList.splice(index, 1);
     }
     setSitesArray(siteList);
-    console.log('sitesArray2', siteList)
     const indexLocal = formValues.siteList.indexOf(siteIdNo);
     if (indexLocal > -1) {
       formValues.siteList.splice(index, 1);

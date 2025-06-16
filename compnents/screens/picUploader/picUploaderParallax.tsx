@@ -3,9 +3,6 @@ import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import PicUploader from ".";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { PinContext } from "../../contexts/staticPinContext";
-import { MapHelperContext } from "../../contexts/mapHelperContext";
-import { MapConfigContext } from "../../contexts/mapConfigContext";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
 import { chooseImageHandler } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -13,6 +10,7 @@ import * as S from "./styles";
 import Button from "../../reusables/button";
 import { useTranslation } from "react-i18next";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { useMapStore } from "../../googleMap/useMapStore";
 
 type PicUploaderProps = {
   selectedDiveSite: DiveSiteWithUserName
@@ -20,11 +18,9 @@ type PicUploaderProps = {
 
 export default function PicUploaderParallax(props: PicUploaderProps) {
   const { t } = useTranslation();
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { pinValues, setPinValues } = useContext(PinContext);
-  const { setMapHelper } = useContext(MapHelperContext);
-  const { setMapConfig } = useContext(MapConfigContext);
-  const { setChosenModal } = useContext(ModalSelectContext);
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
   
   const onClose = async () => {
@@ -42,9 +38,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setChosenModal("DiveSite");
-    setMapHelper(true);
-    setMapConfig(1);
+    setMapConfig(1, 0);
     setLevelTwoScreen(false);
   };
 
@@ -92,13 +86,11 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
     <ParallaxDrawer 
     headerImage={localPreviewUri ? localPreviewUri : imageUploadZone} 
     onClose={onClose} 
-    onMapFlip={onNavigate}
     popoverConent={localPreviewUri && popoverConent}
     isMyShop={localPreviewUri}
     >
       <PicUploader 
           onClose={onClose}
-          onMapFlip={onNavigate}
           localPreviewUri={localPreviewUri}
           setLocalPreviewUri={setLocalPreviewUri}
           selectedDiveSite={props.selectedDiveSite}
