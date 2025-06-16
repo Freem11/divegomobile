@@ -1,5 +1,5 @@
-import { getAnimalNamesThatFit } from '../../supabaseCalls/photoSupabaseCalls';
-import { DynamicSelectOptions } from '../reusables/dynamicSelect/DynamicSelectOptions';
+import { getAnimalNamesThatFit } from '../supabaseCalls/photoSupabaseCalls';
+import { DynamicSelectOptions } from '../compnents/reusables/dynamicSelect/DynamicSelectOptions';
 
 export class DynamicSelectOptionsAnimals extends DynamicSelectOptions {
   convertItem(item) {

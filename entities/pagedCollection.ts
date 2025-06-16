@@ -50,7 +50,7 @@ export class PagedCollection<T> {
     const result = {
       ...prev,
       isLoading: false,
-      hasMore:   getNewHasMore(items, pagination?.ipp),
+      hasMore:   getNewHasMore(items, prev?.pagination?.ipp),
       items:     getNewItems(items, prev.items, reset),
     };
 

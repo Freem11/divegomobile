@@ -11,7 +11,8 @@ import {
 } from "../../supabaseCalls/authenticateSupabaseCalls";
 import {
   createProfile,
-  grabProfileById
+  grabProfileById,
+  grabProfileByUserId
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { supabase } from "../../supabase";
 import { makeRedirectUri } from "expo-auth-session";
@@ -156,7 +157,7 @@ async function handleSupabaseSetup (
       sanitizeData = sessionToken;
     }
 
-    let profileCheck = await grabProfileById(sanitizeData.user.id);
+    let profileCheck = await grabProfileByUserId(sanitizeData.user.id);
 
     if (profileCheck.length === 0) {
       await createProfile({

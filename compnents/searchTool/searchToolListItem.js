@@ -15,6 +15,7 @@ import { MapCenterContext } from "../contexts/mapCenterContext";
 import { PinSpotContext } from "../contexts/pinSpotContext";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { useMapStore } from "../googleMap/useMapStore";
 
 let GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -31,6 +32,7 @@ export default SearchToolListItem = (props) => {
   const { setDragPin } = useContext(PinSpotContext);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const mapRef = useMapStore((state) => state.mapRef);
 
   Geocoder.init(GoogleMapsApiKey);
 
@@ -38,9 +40,9 @@ export default SearchToolListItem = (props) => {
     Geocoder.from(place)
       .then((json) => {
         var location = json.results[0].geometry.location;
-        setMapCenter({
-          lat: location.lat,
-          lng: location.lng,
+        mapRef.animateCamera({
+          center: {latitude: location.lat, longitude: location.lng},
+          zoom: 12,
         });
         setDragPin({
           lat: location.lat,
@@ -56,7 +58,6 @@ export default SearchToolListItem = (props) => {
   };
 
   const handleDiveSiteOptionSelected = async (diveSite) => {
-    console.log("!!", diveSite)
     if (diveSite !== null) {
       let nameOnly = diveSite.split(" ~ ");
       let diveSiteSet = await getSingleDiveSiteByNameAndRegion({
@@ -64,12 +65,17 @@ export default SearchToolListItem = (props) => {
         region: nameOnly[1],
       });
 
+      mapRef.animateCamera({
+        center: {latitude: diveSiteSet[0].lat, longitude: diveSiteSet[0].lng},
+        zoom: 12,
+      });
+
       if (diveSiteSet) {
-        setSelectedDiveSite({
-          SiteName: diveSiteSet[0].name,
-          Latitude: diveSiteSet[0].lat,
-          Longitude: diveSiteSet[0].lng,
-        });
+        // setSelectedDiveSite({
+        //   SiteName: diveSiteSet[0].name,
+        //   Latitude: diveSiteSet[0].lat,
+        //   Longitude: diveSiteSet[0].lng,
+        // });
         setDragPin({
           lat: diveSiteSet[0].lat,
           lng: diveSiteSet[0].lng,

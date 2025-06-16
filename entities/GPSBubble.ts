@@ -1,10 +1,12 @@
+import { BoundingBox } from "react-native-maps";
+
 export class GPSBubble {
   minLat: number;
   maxLat: number;
   minLng: number;
   maxLng: number;
 
-  constructor({ minLat, maxLat, minLng, maxLng }: { minLat: number, maxLat: number, minLng: number, maxLng: number }) {
+  constructor({ minLat, maxLat, minLng, maxLng }: { minLat: number; maxLat: number; minLng: number; maxLng: number }) {
     this.minLat = minLat;
     this.maxLat = maxLat;
     this.minLng = minLng;
@@ -38,35 +40,35 @@ export class GPSBubble {
   }
 
   /**
- * GPS bubble - some area on the map.
- * If GPS bubble crosses the IDL(International Date Line), we need to get items from both sides of the IDL
- * so we need to do two API request twice
- * @param bubble GPS bubble
- * @param callable - API request to get items
- * @param args - arguments for API request
- * @returns
- */
-  static async getItemsInGpsBubble<T extends (...args: any[]) => any>(callable: T, ...args: Parameters<T>): Promise<ReturnType<T>> {
+   * GPS bubble - some area on the map.
+   * If GPS bubble crosses the IDL(International Date Line), we need to get items from both sides of the IDL
+   * so we need to do two API request twice
+   * @param bubble GPS bubble
+   * @param callable - API request to get items
+   * @param args - arguments for API request
+   * @returns
+   */
+  static async getItemsInGpsBubble<T extends (...args: any[]) => any>(
+    callable: T,
+    ...args: Parameters<T>
+  ): Promise<ReturnType<T>> {
     const [bubble, ...rest] = args as GPSBubble[];
     if (bubble.isIDL()) {
       const american = await callable(bubble.getAmericanBubble(), ...rest);
       const asian = await callable(bubble.getAsianBubble(), ...rest);
 
-      return [
-        ...(american ? american : []),
-        ...(asian ? asian : []),
-      ] as ReturnType<T>;
+      return [...(american ? american : []), ...(asian ? asian : [])] as ReturnType<T>;
     } else {
       return await callable(bubble, ...rest);
     }
   }
 
-  static createFromBoundaries(boundaries: google.maps.LatLngBounds) {
+  static createFromBoundaries(boundaries: BoundingBox) {
     return new GPSBubble({
-      minLat: boundaries.getSouthWest().lat(),
-      maxLat: boundaries.getNorthEast().lat(),
-      minLng: boundaries.getSouthWest().lng(),
-      maxLng: boundaries.getNorthEast().lng(),
+      minLat: boundaries.southWest.latitude,
+      maxLat: boundaries.northEast.latitude,
+      minLng: boundaries.southWest.longitude,
+      maxLng: boundaries.northEast.longitude,
     });
   }
 }

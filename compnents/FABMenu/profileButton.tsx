@@ -3,41 +3,35 @@ import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { PullTabContext } from "../contexts/pullTabContext";
 import { CarrouselTilesContext } from "../contexts/carrouselTilesContext";
-import { MaterialIcons } from "@expo/vector-icons";
-import { ActiveScreenContext } from '../contexts/activeScreenContext';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import { LevelTwoScreenContext } from '../contexts/levelTwoScreenContext';
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { useButtonPressHelper } from "./buttonPressHelper";
 import { activeFonts, colors, fontSizes } from "../styles";
+import { UserProfileContext } from "../contexts/userProfileContext";
+import ButtonIcon from "../reusables/buttonIcon";
 
-export default function DiveSiteButton() {
+export default function ProfileButton() {
   const [butState, setButState] = useState(false);
-  const { activeScreen, setActiveScreen } = useContext(
-    ActiveScreenContext
-    );
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+ 
   const { setTiles } = useContext(CarrouselTilesContext);
   const { setShowFilterer } = useContext(PullTabContext);
+ 
+  const { profile } = useContext(UserProfileContext);
 
 
-  const handlePress = () => {
-    setTiles(true);
-    setShowFilterer(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("DiveSiteUploadScreen");
-    useButtonPressHelper(
-      "DiveSiteUploadScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
-  };
+
+  const handleScreen = () => {
+    setActiveScreen("ProfileScreen", {id: profile?.id})
+    setLevelTwoScreen(true)
+  }
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={handlePress}
+        onPress={handleScreen}
         onPressIn={() => setButState(true)}
         onPressOut={() => setButState(false)}
         style={{
@@ -47,14 +41,13 @@ export default function DiveSiteButton() {
         }}
       >
         <View style={styles.buttonBox}>
-          <MaterialIcons
-            name="add-location-alt"
-            color={butState ? "gold" : "white"}
-            size={moderateScale(34)}
-          />
-          <Text style={butState ? styles.buttonlabelAlt : styles.buttonlabel}>
-            Site Add
-          </Text>
+              <ButtonIcon 
+                icon="person"
+                onPress={handleScreen}
+                size='icon'
+                fillColor={colors.themeWhite}
+                title="Profile"
+              />
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -63,7 +56,7 @@ export default function DiveSiteButton() {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "green",
+    backgroundColor: "green",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -78,18 +71,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
-    marginTop: moderateScale(2)
+    paddingTop: moderateScale(5)
   },
   buttonlabel: {
     fontFamily: activeFonts.Medium,
     color: colors.themeWhite,
     fontSize: fontSizes.SmallText,
-    marginTop: moderateScale(2),
+    marginTop: moderateScale(0),
   },
   buttonlabelAlt: {
     fontFamily: activeFonts.Medium,
     color: colors.secondaryYellow,
     fontSize: fontSizes.SmallText,
-    marginTop: moderateScale(2),
+    marginTop: moderateScale(0),
   },
 });

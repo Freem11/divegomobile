@@ -22,15 +22,13 @@ import {
   addDeletedAccountInfo,
   deleteProfile
 } from "../../supabaseCalls/accountSupabaseCalls";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import email from "react-native-email";
 import * as SecureStore from "expo-secure-store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { useTranslation } from "react-i18next";
@@ -41,9 +39,9 @@ export default function SettingsPage(props) {
   const { } = props;
   const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const { activeSession, setActiveSession } = useContext(SessionContext);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -51,22 +49,16 @@ export default function SettingsPage(props) {
   );
 
   let profileType;
-  if (profile[0].partnerAccount) {
+  if (profile.partnerAccount) {
     profileType = "Partner Account";
   } else {
     profileType = "Diver Account";
   }
 
   const openPartnerAccountScreen = () => {
+    setLevelTwoScreen(true);
     setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
     setActiveScreen("PartnerRequestScreen");
-    useButtonPressHelper(
-      "PartnerRequestScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
   };
 
   const handleLogout = async () => {

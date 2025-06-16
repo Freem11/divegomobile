@@ -1,64 +1,32 @@
-import React, { useState, useContext, useEffect, Dispatch, SetStateAction } from "react";
-import {
-  StyleSheet,
-  Dimensions
-} from "react-native";
-import PlainTextInput from '../../reusables/plainTextInput';
-import {
-  activeFonts,
-  colors,
-  fontSizes,
-  screenSecondaryButton,
-  authenicationButton,
-  buttonTextAlt,
-  buttonText
-} from "../../styles";
+import React, { useState, useContext, useEffect } from "react";
 import * as S from "./styles";
-import { moderateScale } from "react-native-size-matters";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SessionContext } from "../../contexts/sessionContext";
-import { getPhotosByUserWithExtra, getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
-import { grabProfileByUserName, updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
+import { getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
+import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   insertUserFollow,
-  deleteUserFollow,
-  checkIfUserFollows,
+  deleteUserFollow
 } from "../../../supabaseCalls/userFollowSupabaseCalls";
-import { getProfileWithStats } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useTranslation } from "react-i18next";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Icon from "../../../icons/Icon";
 import Label from "../../reusables/label";
-import { Photo } from "../../entities/photos";
+import { Photo } from "../../../entities/photos";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
-import { Pagination } from "../../../compnents/entities/pagination";
-
-const windowHeight = Dimensions.get("window").height;
+import { Pagination } from "../../../entities/pagination";
+import { colors } from "../../styles";
 
 type UserProfileProps = {
-  onClose?: () => void;
-  onMapFlip?: () => void;
   closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void; 
-  isMyShop?: boolean
   bottomHitCount?: number;
 };
 
 export default function UserProfileScreen({
-  onClose,
-  onMapFlip,
   closeParallax,
-  restoreParallax,
-  isMyShop,
   bottomHitCount,
 }: UserProfileProps) {
   
@@ -69,13 +37,8 @@ export default function UserProfileScreen({
   );
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [isNotVisitor, setIsNotVisitor] = useState(true);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
-  );
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
   );
   const [userFail, setUserFail] = useState("");
   const [profileVals, setProfileVals] = useState(null);
@@ -83,7 +46,7 @@ export default function UserProfileScreen({
   const [tempUserName, setTempUserName] = useState("");
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const [profilePhotos, setProfilePhotos] = useState(null);
-  const [followData, setFollowData] = useState(profile[0].UserID);
+  const [followData, setFollowData] = useState(profile.UserID);
   const [userFollows, setUserFollows] = useState(false);
   const [userStats, setUserStats] = useState(null);
 
@@ -94,16 +57,16 @@ export default function UserProfileScreen({
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
 
     let photos;
-    if (selectedProfile && selectedProfile[0].UserID) {
+    if (selectedProfile?.UserID) {
       photos = await getProfilePhotosByUser(
-        selectedProfile[0].UserID,
-        profile[0].UserID,
+        selectedProfile.UserID,
+        profile.UserID,
         pagination
       );
     } else {
       photos = await getProfilePhotosByUser(
-        profile[0].UserID,
-        profile[0].UserID,
+        profile.UserID,
+        profile.UserID,
         pagination
       );
     }
@@ -112,16 +75,16 @@ export default function UserProfileScreen({
   };
 
   const getFollowStatus = async () => {
-    if (!selectedProfile || selectedProfile[0].UserID === profile[0].UserID) {
+    if (!selectedProfile || selectedProfile?.UserID === profile[0].UserID) {
       setVisitProfileVals(null);
       setIsNotVisitor(true)
     } else {
       setIsNotVisitor(false)
       setVisitProfileVals({
-        id: selectedProfile[0].UserID,
-        userName: selectedProfile[0].UserName,
-        bio: selectedProfile[0].profileBio,
-        photo: selectedProfile[0].profilePhoto,
+        id: selectedProfile?.UserID,
+        userName: selectedProfile?.UserName,
+        bio: selectedProfile?.profileBio,
+        photo: selectedProfile?.profilePhoto,
       });
     }
 
@@ -223,10 +186,10 @@ export default function UserProfileScreen({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.UserNameContainer>
-          <S.Header>{selectedProfile[0]?.UserName}</S.Header>
+          <S.Header>{selectedProfile?.UserName}</S.Header>
         </S.UserNameContainer>
    
-        <S.Content>{selectedProfile[0]?.profileBio}</S.Content>
+        <S.Content>{selectedProfile?.profileBio}</S.Content>
 
       </S.InputGroupContainer>
 
@@ -263,7 +226,7 @@ export default function UserProfileScreen({
             <SeaLifeImageCard
               key={`${photo.id}-${index}`}
               pic={photo}
-              dataSetType={"DiveSitePhotos"}
+              dataSetType={"ProfilePhotos"}
               diveSiteName={photoPacket.name}
               diveSiteAction={() => handleDiveSiteMove(photo, photoPacket)}
             />

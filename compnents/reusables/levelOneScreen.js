@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { ActiveScreenContext } from '../contexts/activeScreenContext';
+import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
 import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
@@ -18,9 +19,11 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelOneScreen() {
+  const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
+
+
   const { activeScreen } = useContext(ActiveScreenContext);
   const { levelOneScreen } = useContext(LevelOneScreenContext);
-
   const levelOneScreenY = useSharedValue(0);
 
   const modalSlide = useAnimatedStyle(() => {
@@ -43,11 +46,11 @@ export default function LevelOneScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen === "DiveSiteScreen" && <DiveSiteParallax/>}
-      {activeScreen === "DiveShopScreen" && <DiveShopParallax/>}
-      {activeScreen === "SettingsScreen" && <Settings/>}
-      {activeScreen === "SearchScreen" && <SearchPage/>}
-      {activeScreen === "TripListScreen" && <TripListPage/>}
+      {activeScreen2 && activeScreen2.screenName === "DiveSiteScreen" && <DiveSiteParallax siteID={activeScreen2.params.id}/>}
+      {activeScreen2 && activeScreen2.screenName === "DiveShopScreen" && <DiveShopParallax shopID={activeScreen2.params.id}/>}
+      {activeScreen2 && activeScreen2.screenName === "SettingsScreen" && <Settings/>}
+      {activeScreen2 && activeScreen2.screenName === "SearchScreen" && <SearchPage/>}
+      {activeScreen2 && activeScreen2.screenName === "TripListScreen" && <TripListPage/>}
     </Animated.View>
   );
 }

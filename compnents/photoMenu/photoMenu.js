@@ -10,11 +10,12 @@ import Animated, {
 import { activeFonts, colors, fontSizes } from "../styles";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
-import { MapBoundariesContext } from "../contexts/mapBoundariesContext";
 import { SearchTextContext } from "../contexts/searchTextContext";
 import { AreaPicsContext } from "../contexts/areaPicsContext";
 import { scale, moderateScale } from "react-native-size-matters";
 import PhotoMenuListItem from "./photoMenuListItem";
+import { useMapStore } from '../googleMap/useMapStore';
+
 
 let waiter2;
 let numbPhotos = 0;
@@ -23,7 +24,7 @@ export default function PhotoMenu() {
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
-  const { boundaries } = useContext(MapBoundariesContext);
+  const boundaries = useMapStore((state) => state.gpsBubble);
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
   const { textvalue } = useContext(SearchTextContext);
   const [picMenuSize, setPicMenuSize] = useState(0);
@@ -91,24 +92,24 @@ export default function PhotoMenu() {
   });
 
   const filterPhotosForMapArea = async () => {
-    if (boundaries.length !== 0) {
-      if (boundaries[0] > boundaries[2]) {
+    if (boundaries) {
+      if (boundaries.minLng > boundaries.maxLng) {
         try {
           const AmericanPhotos = await getPhotosforMapArea(
             {
               animal: textvalue,
-              minLat: boundaries[1],
-              maxLat: boundaries[3],
+              minLat: boundaries.minLat,
+              maxLat: boundaries.maxLat,
               minLng: -180,
-              maxLng: boundaries[2],
+              maxLng: boundaries.maxLng,
             },
           );
           const AsianPhotos = await getPhotosforMapArea(
             {
               animal: textvalue,
-              minLat: boundaries[1],
-              maxLat: boundaries[3],
-              minLng: boundaries[0],
+              minLat: boundaries.minLat,
+              maxLat: boundaries.maxLat,
+              minLng: boundaries.minLng,
               maxLng: 180,
             },
           );
@@ -132,10 +133,10 @@ export default function PhotoMenu() {
           const photos = await getPhotosforMapArea(
             {
               animal: textvalue,
-              minLat: boundaries[1],
-              maxLat: boundaries[3],
-              minLng: boundaries[0],
-              maxLng: boundaries[2],
+              minLat: boundaries.minLat,
+              maxLat: boundaries.maxLat,
+              minLng: boundaries.minLng,
+              maxLng: boundaries.maxLng,
             }
           );
           if (photos) {

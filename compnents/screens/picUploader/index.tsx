@@ -5,15 +5,15 @@ import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { PinContext } from "../../contexts/staticPinContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
-import { showError, showSuccess, showWarning, TOAST_MAP } from "../../toast";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { showError, showSuccess, showWarning } from "../../toast";
 import { UserProfileContext } from "../../contexts/userProfileContext";
-import { DynamicSelectOptionsAnimals } from "../../entities/DynamicSelectOptionsAnimals";
 import { v4 as uuidv4 } from "uuid";
 import { saveFailedUpload } from "../../feed/store/asyncStore";
 import { useTranslation } from "react-i18next";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
 import { checkNetworkStatus } from "../../feed/store/utils";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
 
 export const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -48,9 +48,6 @@ type PicUploaderProps = {
 
 export default function PicUploader({
   onClose,
-  onMapFlip,
-  closeParallax,
-  restoreParallax,
   handleImageUpload,
   localPreviewUri,
   setLocalPreviewUri,
