@@ -18,7 +18,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 type ParallaxDrawerProps = {
   headerImage: () => React.JSX.Element | string;
   children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number}>;
-  onClose: () => void;
+  onClose?: () => void;
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
   isMyShop?: boolean
@@ -50,7 +50,7 @@ const ParallaxDrawer = ({
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
   const { fullScreenModal } = useContext(FullScreenModalContext);
-  
+
 useEffect(() => {
   if(fullScreenModal){
     setIsVisible(false)
@@ -70,14 +70,14 @@ useEffect(() => {
   return (
     <GestureHandlerRootView>
       <AnimatedSafeAreaView style={[S.styles.safeArea, animatedSafeAreaStyle]}>
-        <S.BackButtonWrapper>
+      {onClose && <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
             onPress={() => closeParallax(null)}
             size="small"
             fillColor={colors.themeWhite}
           />
-        </S.BackButtonWrapper>
+        </S.BackButtonWrapper>} 
         
         {popoverConent && <S.AltButtonWrapper>
         <ButtonIconWithRef ref={iconRef}/>
