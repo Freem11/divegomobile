@@ -30,6 +30,7 @@ import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
 import FastImage from 'react-native-fast-image';
 import { useCachedImage } from "./useCachedImage";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -66,7 +67,11 @@ const SeaLifeImageCard = (props: PictureProps) => {
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+
   const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
+
+
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -230,7 +235,7 @@ if (!cachedUri || !aspectRatio || loading) return null;
         <S.ContentWrapper>
           <S.LabelWrapper>
             <S.TitleText>{pic.label}</S.TitleText>
-            {activeScreen === "ProfileScreen" ? (
+            {activeScreen2.screenName === "ProfileScreen" ? (
               <S.NavigateTextPressable onPress={props.diveSiteAction}>
                 <S.NavigateText >View Site</S.NavigateText>
               </S.NavigateTextPressable>

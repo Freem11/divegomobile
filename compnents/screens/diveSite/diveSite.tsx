@@ -1,43 +1,18 @@
 import React, { useState, useContext, useEffect, useMemo } from "react";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Text,
-  Platform,
-} from "react-native";
-import PlainTextInput from '../../reusables/plainTextInput';
 import { FontAwesome } from "@expo/vector-icons";
 import {
-  activeFonts,
   colors,
-  fontSizes,
-  screenSecondaryButton,
-  buttonTextAlt,
 } from '../../styles';
 import * as S from "./styles";
 import { moderateScale } from "react-native-size-matters";
-import { PinContext } from "../../contexts/staticPinContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
-import { AnimalMultiSelectContext } from "../../contexts/animalMultiSelectContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import email from "react-native-email";
-import { newGPSBoundaries } from "../../helpers/mapHelpers";
-import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
-import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import {
   getDiveSitePhotos,
-  getPhotosWithUser,
-  getPhotosWithUserEmpty,
-  getPhotosByDiveSiteWithExtra,
 } from "../../../supabaseCalls/photoSupabaseCalls";
 import {
-  getDiveSiteWithUserName,
   updateDiveSite,
 } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
@@ -46,71 +21,61 @@ import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard"
 import Label from "../../reusables/label";
 import Icon from "../../../icons/Icon";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { Pagination } from "../../entities/pagination";
-
-const windowHeight = Dimensions.get("window").height;
+import { Pagination } from "../../../entities/pagination";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type DiveSiteProps = {
-  onClose?: () => void;
-  onMapFlip?: () => void;
-  closeParallax?: (mapConfig: number) => void
-  restoreParallax?: () => void; 
-  isMyShop?: boolean
   bottomHitCount?: number;
+  selectedDiveSite: DiveSiteWithUserName
 };
 
 export default function DiveSiteScreen({
-  onClose,
-  onMapFlip,
-  closeParallax,
-  restoreParallax,
-  isMyShop,
-  bottomHitCount
+  bottomHitCount,
+  selectedDiveSite
 }: DiveSiteProps) {
   
   const { profile } = useContext(UserProfileContext);
-  const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-  const { pinValues, setPinValues } = useContext(PinContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
+
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-  const { selectedProfile, setSelectedProfile } = useContext(
-    SelectedProfileContext
-  );
+
   const { t } = useTranslation();
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   const [diveSitePics, setDiveSitePics] = useState([]);
-  const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
 
   const getTrips = async () => {
     const success = await getItinerariesForDiveSite(selectedDiveSite.id);
   };
 
+ 
   const getPhotos = async (site, profile) => {
 
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
-    
+   
     const photos = await getDiveSitePhotos(
       site.lat,
       site.lng,
-      profile[0].UserID,
+      profile.UserID,
       pagination
     );
 
     setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
   };
 
-  useEffect(() => {
-    getPhotos(selectedDiveSite, profile);
-  }, [selectedDiveSite, bottomHitCount]);
 
+  useEffect(() => {
+    if (selectedDiveSite && profile) {
+      getPhotos(selectedDiveSite, profile);
+    }
+  }, [selectedDiveSite, profile, bottomHitCount]);
+  
   useEffect(() => {
     if (!isEditModeOn && selectedDiveSite) {
       diveSiteUpdateUpdate();
@@ -121,7 +86,7 @@ export default function DiveSiteScreen({
     try {
       const success = await updateDiveSite({
         id: selectedDiveSite.id,
-        bio: selectedDiveSite.divesiteBio,
+        bio: selectedDiveSite && selectedDiveSite.divesitebio,
         photo: selectedDiveSite.divesiteprofilephoto,
       });
     } catch (e) {
@@ -146,21 +111,13 @@ export default function DiveSiteScreen({
   const handleProfileMove = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
-    if (profile[0].UserID === picOwnerAccount[0].UserID) {
+    if (profile.UserID === picOwnerAccount[0].UserID) {
       return;
     }
 
-    setSelectedProfile(picOwnerAccount);
+    setActiveScreen("ProfileScreen", {id: picOwnerAccount[0].id})
     setLevelOneScreen(false);
-    setPreviousButtonID(activeScreen);
-    setActiveScreen("ProfileScreen");
-    useButtonPressHelper(
-      "ProfileScreen",
-      activeScreen,
-      levelTwoScreen,
-      setLevelTwoScreen
-    );
-    closeParallax(1)
+    setLevelTwoScreen(true);
   };
 
   const groupedPhotos = useMemo(() => {
@@ -186,7 +143,7 @@ export default function DiveSiteScreen({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.SiteNameContainer>
-          <S.Header>{selectedDiveSite.name}</S.Header>
+          <S.Header>{selectedDiveSite?.name}</S.Header>
 
           <FontAwesome
             name="flag"
@@ -197,9 +154,9 @@ export default function DiveSiteScreen({
           />
         </S.SiteNameContainer>
 
-        <S.Contributor>Added by: {selectedDiveSite.userName}</S.Contributor>
+        <S.Contributor>Added by: {selectedDiveSite?.newusername}</S.Contributor>
 
-        <S.Content>{selectedDiveSite?.diveSiteBio}</S.Content>
+        <S.Content>{selectedDiveSite?.divesitebio}</S.Content>
 
       </S.InputGroupContainer>
 
