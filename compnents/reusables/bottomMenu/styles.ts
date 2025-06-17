@@ -4,10 +4,11 @@ import { colors } from '../../styles';
 import { Platform } from "react-native";
 
 export const MenuContainer = styled.View`
-  position: absolute;
+  position: relative;
   flex: 1;
   bottom: 0;
   width: 100%;
+  margin-top: -1px;
   height: ${Platform.OS === "ios" ? moderateScale(85) : moderateScale(75)}px;
   background-color: ${colors.primaryBlue};
   z-index: 3;

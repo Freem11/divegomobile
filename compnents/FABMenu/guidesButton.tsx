@@ -59,7 +59,7 @@ export default function GuidesButton() {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "white",
+    // backgroundColor: "green",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",

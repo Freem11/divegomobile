@@ -62,8 +62,9 @@ import { ActiveScreenContext } from "./contexts/activeScreenContext";
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
-import { scale, moderateScale, s } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
+import BottomDrawer from './screens/bottomDrawer/animatedBottomDrawer';
 
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import Animated, {
@@ -410,14 +411,20 @@ export default function MapPage() {
             {mapConfig === 0 && <EmailFeedback />}
             {mapConfig === 0 && <FeedsButton />}
 
+
             {mapConfig === 0 ?
+            <View style={{position: 'absolute', bottom: 0, width: '100%', zIndex: 3}}> 
+             <BottomDrawer/> 
               <BottomMenu>
                 <ProfileButton />
                 <SiteSearchButton />
                 <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
                 <DiveSiteButton />
                 {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-              </BottomMenu> : null}
+              </BottomMenu>     
+          
+               </View>
+              : null}
 
             {mapConfig === 0 && animalMultiSelection.length > 0 ? (
               <View style={styles.Hist} pointerEvents={"none"}>
