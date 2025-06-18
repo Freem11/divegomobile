@@ -34,5 +34,14 @@ export const SeaLifeName = styled.Text`
   color: ${colors.themeWhite};
   align-self: left;
   margin-left: 5%;
-  margin-bottom: 10%
+  margin-bottom: 2%
+`;
+
+export const SubData = styled.Text`
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.themeWhite};
+  align-self: left;
+  margin-left: 5%;
+  margin-bottom: 6%
 `;

@@ -4,7 +4,7 @@ import { NativeViewGestureHandler } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { AreaPicsContext } from '../../../../contexts/areaPicsContext';
 import { SearchTextContext } from '../../../../contexts/searchTextContext';
-import { getPhotosforMapArea } from '../../../../../supabaseCalls/photoSupabaseCalls';
+import { getAnimalsInBubble } from '../../../../../supabaseCalls/photoSupabaseCalls';
 import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from "./styles";
 
@@ -19,48 +19,15 @@ export default function SeaLifeList({ horizontalGestureRef }) {
 
   const getPhotos = async () => {
     if (boundaries) {
-      try {
-        let photos = [];
-
-        if (boundaries.minLng > boundaries.maxLng) {
-          const AmericanPhotos = await getPhotosforMapArea({
-            animal: textvalue,
-            minLat: boundaries.minLat,
-            maxLat: boundaries.maxLat,
-            minLng: -180,
-            maxLng: boundaries.maxLng,
-          });
-
-          const AsianPhotos = await getPhotosforMapArea({
-            animal: textvalue,
-            minLat: boundaries.minLat,
-            maxLat: boundaries.maxLat,
-            minLng: boundaries.minLng,
-            maxLng: 180,
-          });
-
-          photos = [...AsianPhotos, ...AmericanPhotos];
-        } else {
-          photos = await getPhotosforMapArea({
-            animal: textvalue,
-            minLat: boundaries.minLat,
-            maxLat: boundaries.maxLat,
-            minLng: boundaries.minLng,
-            maxLng: boundaries.maxLng,
-          });
-        }
-
-        setAreaPics(photos)
-
-      } catch (e) {
-        console.log({ title: "Error fetching photos", message: e.message });
-      }
-    }
+        let diveSiteData = await getAnimalsInBubble(boundaries);
+ 
+        setAreaPics(diveSiteData);
+     }
   };
 
   useEffect(() => {
     getPhotos();
-  }, [boundaries, textvalue]);
+  }, [boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng, textvalue]);
 
   return (
     <S.VerticalFlatlistContainer>

@@ -1,5 +1,6 @@
 import { Pagination } from "../compnents/entities/pagination";
 import { GPSBubble } from "../entities/GPSBubble";
+import { Animal, Photo } from "../entities/photos";
 import { supabase } from "../supabase";
 
 export const getAnimalNames = async () => {
@@ -301,4 +302,34 @@ export const getMostRecentPhoto = async () => {
   if (data) {
     return data;
   }
+};
+
+export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Photo>, pagination?: Pagination) => {
+  const builder = supabase.rpc('get_unique_photo_in_bounds', {
+    max_lat: bubble.maxLat,
+    min_lat: bubble.minLat,
+    max_lng: bubble.maxLng,
+    min_lng: bubble.minLng,
+  });
+
+  if (filter?.label) {
+    builder.ilike('label', '%' + filter.label + '%');
+  }
+
+  builder.order('times_seen', { ascending: false });
+
+  if (pagination?.page) {
+    builder.range(pagination.from(), pagination.to());
+  }
+
+  const { data, error } = await builder;
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data as Animal[];
+  }
+  return [];
 };

@@ -93,66 +93,10 @@ export default function PhotoMenu() {
 
   const filterPhotosForMapArea = async () => {
     if (boundaries) {
-      if (boundaries.minLng > boundaries.maxLng) {
-        try {
-          const AmericanPhotos = await getPhotosforMapArea(
-            {
-              animal: textvalue,
-              minLat: boundaries.minLat,
-              maxLat: boundaries.maxLat,
-              minLng: -180,
-              maxLng: boundaries.maxLng,
-            },
-          );
-          const AsianPhotos = await getPhotosforMapArea(
-            {
-              animal: textvalue,
-              minLat: boundaries.minLat,
-              maxLat: boundaries.maxLat,
-              minLng: boundaries.minLng,
-              maxLng: 180,
-            },
-          );
+      let diveSiteData = await getAnimalsInBubble(boundaries);
 
-          let photos = [...AsianPhotos, ...AmericanPhotos];
-
-          if (photos) {
-            const animalArray = Array.from(
-              new Set(photos.map((a) => a.label))
-            ).map((label) => {
-              return photos.find((a) => a.label === label);
-            });
-
-            setAreaPics(animalArray);
-          }
-        } catch (e) {
-          console.log({ title: "Error33", message: e.message });
-        }
-      } else {
-        try {
-          const photos = await getPhotosforMapArea(
-            {
-              animal: textvalue,
-              minLat: boundaries.minLat,
-              maxLat: boundaries.maxLat,
-              minLng: boundaries.minLng,
-              maxLng: boundaries.maxLng,
-            }
-          );
-          if (photos) {
-            const animalArray = Array.from(
-              new Set(photos.map((a) => a.label))
-            ).map((label) => {
-              return photos.find((a) => a.label === label);
-            });
-
-            setAreaPics(animalArray);
-          }
-        } catch (e) {
-          console.log({ title: "Error22", message: e.message });
-        }
-      }
-    }
+      setAreaPics(diveSiteData);
+   }
   };
 
   useEffect(() => {

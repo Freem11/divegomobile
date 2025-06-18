@@ -24,12 +24,13 @@ export default function Card(props) {
 
   const sanitized = {
     name: photo.label || photo.name || photo.orgName,
-    photo: photo.photoFile || photo.divesiteprofilephoto || photo.diveShopProfilePhoto || null
+    photo: photo.photofile || photo.divesiteprofilephoto || photo.diveShopProfilePhoto || null,
+    subData: photo.times_seen ? `${photo.times_seen} sighting${photo.times_seen !== 1 ? 's' : ''}` : null
   }
 
   return (
-    <TouchableOpacity onPress={() => photo.label  ? handleAnimalSelect(photo.label) : null}>
-    <S.ImageHousing>
+    <TouchableOpacity onPress={() => photo.label ? handleAnimalSelect(photo.label) : null}>
+    <S.ImageHousing key={photo.id}>
       <ImageCasher
         photoFile={sanitized.photo}
         id={photo.id}
@@ -45,6 +46,7 @@ export default function Card(props) {
         <S.Overlay pointerEvents="none">
             {animalMultiSelection.includes(photo.label) ? <Histogram animal={photo.label} /> : null}
             <S.SeaLifeName>{sanitized.name}</S.SeaLifeName>
+            <S.SubData>{sanitized.subData}</S.SubData>
         </S.Overlay>
     </S.ImageHousing>
     </TouchableOpacity>
