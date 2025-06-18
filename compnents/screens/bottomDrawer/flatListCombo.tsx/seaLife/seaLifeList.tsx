@@ -1,13 +1,12 @@
-// SeaLifeList.tsx
-
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { FlatList, View, Text, Dimensions } from 'react-native';
 import { NativeViewGestureHandler } from 'react-native-gesture-handler';
-import Card from '../card';
-import { AreaPicsContext } from '../../../contexts/areaPicsContext';
-import { SearchTextContext } from '../../../contexts/searchTextContext';
-import { getPhotosforMapArea } from '../../../../supabaseCalls/photoSupabaseCalls';
-import { useMapStore } from '../../../googleMap/useMapStore';
+import Card from '../../card';
+import { AreaPicsContext } from '../../../../contexts/areaPicsContext';
+import { SearchTextContext } from '../../../../contexts/searchTextContext';
+import { getPhotosforMapArea } from '../../../../../supabaseCalls/photoSupabaseCalls';
+import { useMapStore } from '../../../../googleMap/useMapStore';
+import * as S from "./styles";
 
 const { width } = Dimensions.get('window');
 
@@ -64,8 +63,8 @@ export default function SeaLifeList({ horizontalGestureRef }) {
   }, [boundaries, textvalue]);
 
   return (
-    <View style={{ flex: 1, width: width * 0.9, marginLeft: '5%' }}>
-        <Text style={{marginTop: '40%', alignSelf: 'center'}}>Sea  Life</Text>
+    <S.VerticalFlatlistContainer>
+        <S.Header>Nearby Sea Life</S.Header>
       <NativeViewGestureHandler
         ref={verticalGestureRef}
         simultaneousHandlers={horizontalGestureRef}
@@ -75,10 +74,11 @@ export default function SeaLifeList({ horizontalGestureRef }) {
           keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
           renderItem={({ item }) => <Card photo={item} />}
           nestedScrollEnabled
+          showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         />
       </NativeViewGestureHandler>
-    </View>
+    </S.VerticalFlatlistContainer>
   );
 }
 

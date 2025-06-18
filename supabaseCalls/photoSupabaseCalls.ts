@@ -1,4 +1,5 @@
 import { Pagination } from "../compnents/entities/pagination";
+import { GPSBubble } from "../entities/GPSBubble";
 import { supabase } from "../supabase";
 
 export const getAnimalNames = async () => {
@@ -257,17 +258,17 @@ export const getPhotosWithUserEmpty = async (values) => {
   }
 };
 
-export const getHistoData = async (values) => {
-  const { data, error } = await supabase.rpc("histogram3", {
-    animals: values.animals,
-    max_lat: values.maxLat,
-    min_lat: values.minLat,
-    max_lng: values.maxLng,
-    min_lng: values.minLng,
+export const getHistoData = async (bubble: GPSBubble, animal: string[]) => {
+  const { data, error } = await supabase.rpc('histogram3', {
+    animals: animal,
+    max_lat: bubble.maxLat,
+    min_lat: bubble.minLat,
+    max_lng: bubble.maxLng,
+    min_lng: bubble.minLng,
   });
 
   if (error) {
-    console.log("couldn't do it 29,", error);
+    console.log('couldn\'t do it,', error);
     return [];
   }
 

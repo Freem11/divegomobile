@@ -151,7 +151,7 @@ export default function BottomDrawer(props) {
 
           <NativeViewGestureHandler ref={nativeGestureRef}>
             <View style={{ flex: 1 }}>
-              <HorizontalPager nativeGestureRef={nativeGestureRef}/>
+              <HorizontalPager/>
             </View>
           </NativeViewGestureHandler>
         </Animated.View>
