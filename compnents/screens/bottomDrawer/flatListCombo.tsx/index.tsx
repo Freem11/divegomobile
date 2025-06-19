@@ -37,13 +37,15 @@ export default function HorizontalPager() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NativeViewGestureHandler ref={horizontalGestureRef}>
+      <NativeViewGestureHandler ref={horizontalGestureRef} >
         <GHFlatList
           ref={flatListRef} 
           data={outerData}
           keyExtractor={(item) => `page-${item}`}
           horizontal
           pagingEnabled
+           keyboardShouldPersistTaps="always"
+          nestedScrollEnabled={true} 
           showsHorizontalScrollIndicator={false}
           renderItem={renderPage}
           getItemLayout={(data, index) => (

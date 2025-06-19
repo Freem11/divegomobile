@@ -41,6 +41,8 @@ export default function BottomDrawer(props) {
   const buttonWidth = useSharedValue(moderateScale(buttonSizes.small.width));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const verticalGestureRef = useRef();
+
   const bounds = {
     lower: DRAWER_CLOSED,
     upper: DRAWER_OPEN,
@@ -103,7 +105,7 @@ export default function BottomDrawer(props) {
 
       runOnJS(setIsDrawerOpen)(shouldOpen);
     })
-    .simultaneousWithExternalGesture(nativeGestureRef); // <-- Important
+    .simultaneousWithExternalGesture(nativeGestureRef);
 
   const colorProgress = useSharedValue(0);
 
@@ -151,7 +153,7 @@ export default function BottomDrawer(props) {
 
           <NativeViewGestureHandler ref={nativeGestureRef}>
             <View style={{ flex: 1 }}>
-              <HorizontalPager/>
+              <HorizontalPager />
             </View>
           </NativeViewGestureHandler>
         </Animated.View>

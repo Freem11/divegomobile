@@ -1,39 +1,27 @@
-import React, { useContext } from "react";
+import React from "react";
 import ImageCasher from "../../../helpers/imageCashing";
 import { moderateScale } from "react-native-size-matters";
 import * as S from "./styles";
 import Histogram from "../flatListCombo.tsx/histogram";
-import { AnimalMultiSelectContext } from "../../../contexts/animalMultiSelectContext";
 import { TouchableOpacity } from "react-native";
 
-export default function Card(props) {
-  const { photo } = props;
-  const { animalMultiSelection, setAnimalMultiSelection } = useContext(
-    AnimalMultiSelectContext
-  );
+type CardProps = {
+  id: number;
+  name: string;
+  photoPath: string;
+  subData?: string
+  onPressHandler: () => void; 
+  seaLifeSelections?: string[]
+};
 
-  const handleAnimalSelect = (label: string) => {
-    setAnimalMultiSelection((prev) => {
-      if (prev.includes(label)) {
-        return prev.filter(item => item !== label);
-      } else {
-        return [...prev, label];
-      }
-    });
-  };
-
-  const sanitized = {
-    name: photo.label || photo.name || photo.orgName,
-    photo: photo.photofile || photo.divesiteprofilephoto || photo.diveShopProfilePhoto || null,
-    subData: photo.times_seen ? `${photo.times_seen} sighting${photo.times_seen !== 1 ? 's' : ''}` : null
-  }
+export default function Card(props: CardProps) {
 
   return (
-    <TouchableOpacity onPress={() => photo.label ? handleAnimalSelect(photo.label) : null}>
-    <S.ImageHousing key={photo.id}>
+    <TouchableOpacity onPress={props.onPressHandler}>
+    <S.ImageHousing key={props.id}>
       <ImageCasher
-        photoFile={sanitized.photo}
-        id={photo.id}
+        photoFile={props.photoPath}
+        id={props.id}
         style={{
           flex: 1,
           borderBottomRightRadius: moderateScale(14),
@@ -44,9 +32,9 @@ export default function Card(props) {
         }}
       />
         <S.Overlay pointerEvents="none">
-            {animalMultiSelection.includes(photo.label) ? <Histogram animal={photo.label} /> : null}
-            <S.SeaLifeName>{sanitized.name}</S.SeaLifeName>
-            <S.SubData>{sanitized.subData}</S.SubData>
+            {props.seaLifeSelections && props.seaLifeSelections.includes(props.name) ? <Histogram animal={props.name} /> : null}
+            <S.SeaLifeName>{props.name}</S.SeaLifeName>
+            <S.SubData>{props.subData}</S.SubData>
         </S.Overlay>
     </S.ImageHousing>
     </TouchableOpacity>
