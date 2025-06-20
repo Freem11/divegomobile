@@ -4,10 +4,11 @@ import useSearchTool from "./useSearchtool";
 import SearchToolInput from "./searchToolInput";
 import SearchToolList from "./searchToolList";
 import { colors } from "../styles";
+import { moderateScale } from "react-native-size-matters";
 
 const { height } = Dimensions.get("window");
-const INPUT_TOP_MARGIN = 60;
-const INPUT_BAR_HEIGHT = 50;
+const INPUT_TOP_MARGIN = moderateScale(60);
+const INPUT_BAR_HEIGHT = moderateScale(50);
 const LIST_VISUAL_START_Y = INPUT_TOP_MARGIN + INPUT_BAR_HEIGHT ;
 
 export default function SearchTool() {

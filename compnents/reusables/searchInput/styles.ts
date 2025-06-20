@@ -8,7 +8,7 @@ import {
 
 export const TextInputWrapper = styled.View`
   height: ${moderateScale(30)}px;
-  width: 100%;
+  width:  ${moderateScale(300)}px;
   display: flex;
   flex-direction: row;
   justify-content: left;
