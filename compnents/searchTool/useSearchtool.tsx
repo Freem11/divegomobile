@@ -61,10 +61,8 @@ export default function useSearchTool() {
   };
 
   const handleChange = (text: string) => {
-    console.log('text', text)
     if (isClearOn) {
       setIsClearOn(false);
-      return;
     }
     setSearchValue(text);
     handleDataList(text);

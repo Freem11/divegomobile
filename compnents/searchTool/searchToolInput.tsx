@@ -1,12 +1,10 @@
 import React from "react";
-import TextInputField from "../authentication/utils/textInput";
 import * as S from "./styles";
-import  MobileTextInput from '../reusables/textInput';
+import SearchInput from "../reusables/searchInput";
  
 export default function SearchToolInput({ 
-  icon, 
-  placeHolderText, 
-  vectorIcon, 
+  iconLeft, 
+  iconRight,
   searchValue, 
   handleChange, 
   handleClear 
@@ -14,11 +12,12 @@ export default function SearchToolInput({
 
   return (
     <S.SearchInputContainer>
-        <MobileTextInput
-          iconLeft={icon}
+        <SearchInput
+          iconLeft={iconLeft}
+          iconRight={iconRight}
           value={searchValue}
-          placeholder={placeHolderText}
           onChangeText={handleChange}
+          handleClear={handleClear}
         />
     </S.SearchInputContainer>
   );

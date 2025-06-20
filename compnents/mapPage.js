@@ -83,6 +83,7 @@ import { FeedsButton } from "./feed/iconButton";
 import FeedScreens from "./feed/screens";
 import { useTranslation } from "react-i18next";
 import SearchTool from './searchTool';
+import { windowHeight } from "./authentication/styles";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -455,8 +456,10 @@ const styles = StyleSheet.create({
   searchBox: {
     zIndex: 20,
     position: 'absolute',
-    top: moderateScale(60),
-    alignItems: 'center'
+    top: moderateScale(0),
+    width: windowWidth,
+    // backgroundColor: colors.themeWhite,
+    pointerEvents: 'box-none'
   },
   animalSelect: {
     display: "flex",
