@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import {
   StyleSheet,
   View,
-  Text,
+  FlatList,
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
   Keyboard,
 } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
 import email from "react-native-email";
@@ -62,8 +62,9 @@ import { ActiveScreenContext } from "./contexts/activeScreenContext";
 import { ConfirmationModalContext } from "./contexts/confirmationModalContext";
 import { PreviousButtonIDContext } from "./contexts/previousButtonIDContext";
 import { ActiveTutorialIDContext } from "./contexts/activeTutorialIDContext";
-import { scale, moderateScale, s } from "react-native-size-matters";
+import { scale, moderateScale } from "react-native-size-matters";
 import { AntDesign } from "@expo/vector-icons";
+import BottomDrawer from './screens/bottomDrawer/animatedBottomDrawer';
 
 import { useButtonPressHelper } from "./FABMenu/buttonPressHelper";
 import Animated, {
@@ -75,13 +76,14 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { getLocales } from "expo-localization";
 import { useMapStore } from "./googleMap/useMapStore";
 import { useActiveScreenStore } from '../store/useActiveScreenStore';
-import { getDiveShopById } from '../supabaseCalls/shopsSupabaseCalls';
 import { EmailFeedback } from "./feed/emailFeedback";
 import { FeedsButton } from "./feed/iconButton";
 import FeedScreens from "./feed/screens";
+import { useTranslation } from "react-i18next";
+import SearchTool from './searchTool';
+import { windowHeight } from "./authentication/styles";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -125,8 +127,8 @@ export default function MapPage() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const locales = getLocales();
-  
+  const { t } = useTranslation();
+
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
@@ -366,36 +368,40 @@ export default function MapPage() {
   const PARTNER_ACCOUNT_STATUS =
   (profile?.partnerAccount) || false;
 
-
   return (
     <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
       <DiveSitesContext.Provider value={{ diveSitesTog, setDiveSitesTog }}>
-        <SafeAreaProvider>
+
           <View style={styles.container}>
+
+          <SafeAreaView style={styles.searchBox}>
+          <SearchTool/>
+      
+          </SafeAreaView>
+
             {mapConfig in [, , 2] || !mapConfig ? (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
-                <PhotoMenu style={{ zIndex: 3 }} />
-                <View style={styles.filterer} pointerEvents={"box-none"}>
-                  {((areaPics && areaPics.length > 0) || isOpen) && (
-                    <View style={styles.emptyBox} pointerEvents={"box-none"}>
-                      <Animated.View style={[tabPull, styles.closer]}>
-                        <PhotoFilterer />
-                      </Animated.View>
 
-                      <TouchableWithoutFeedback
-                        onPress={() => setShowFilterer(!showFilterer)}
-                      >
-                        <View style={styles.pullTab}></View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  )}
+
+                     {/* <View style={styles.emptyBox} pointerEvents={"box-none"}>
+                       <Animated.View style={[tabPull, styles.closer]}>
+                         <PhotoFilterer />
+                       </Animated.View>
+
+                       <TouchableWithoutFeedback
+                         onPress={() => setShowFilterer(!showFilterer)}
+                       >
+                         <View style={styles.pullTab}></View>
+                       </TouchableWithoutFeedback>
+                     </View> */}
 
                   <View style={styles.animalSelect} pointerEvents={"box-none"}>
                     <AnimalTopAutoSuggest transTagsY={transTagsY} />
                   </View>
-                </View>
+
               </View>
             ) : null}
+
 
             {mapConfig in [, , 2] || !mapConfig ? (
               <TouchableWithoutFeedback onPress={startTagAnimations}>
@@ -407,23 +413,25 @@ export default function MapPage() {
                 />
               </TouchableWithoutFeedback>
             ) : null}
+
             {mapConfig === 0 && <EmailFeedback />}
-            {mapConfig === 0 && <FeedsButton />}
+            {/* {mapConfig === 0 && <FeedsButton />} */}
+
 
             {mapConfig === 0 ?
+            <View style={{position: 'absolute', bottom: 0, width: '100%', zIndex: 3}}> 
+             <BottomDrawer/> 
               <BottomMenu>
                 <ProfileButton />
                 <SiteSearchButton />
                 <CircularButton buttonAction={toggleDiveSites} icon="anchor" />
                 <DiveSiteButton />
                 {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-              </BottomMenu> : null}
+              </BottomMenu>     
+          
+               </View>
+              : null}
 
-            {mapConfig === 0 && animalMultiSelection.length > 0 ? (
-              <View style={styles.Hist} pointerEvents={"none"}>
-                <Historgram style={{ zIndex: 2 }} />
-              </View>
-            ) : null}
             <FeedScreens />
             <LevelOneScreen />
             <LevelTwoScreen />
@@ -432,7 +440,7 @@ export default function MapPage() {
 
             <GoogleMap style={{ zIndex: 1 }} />
           </View>
-        </SafeAreaProvider>
+      
       </DiveSitesContext.Provider>
     </MapCenterContext.Provider>
   );
@@ -444,7 +452,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "green",
-    // position: "absolute",
+  },
+  searchBox: {
+    zIndex: 20,
+    position: 'absolute',
+    top: moderateScale(0),
+    width: windowWidth,
+    // backgroundColor: colors.themeWhite,
+    pointerEvents: 'box-none'
   },
   animalSelect: {
     display: "flex",

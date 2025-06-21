@@ -114,7 +114,6 @@ export const signOut = async () => {
 
 export const userDelete = async (userIdValue) => {
 
-  console.log("supa gets", userIdValue)
   const { data, error } = await supabase.rpc("delete_user", {"userid": userIdValue})
 
   if (error) {

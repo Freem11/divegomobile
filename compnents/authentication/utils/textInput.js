@@ -26,6 +26,8 @@ export default function TextInputField(props) {
     keyboardConfig,
   } = props;
 
+  console.log('animal', animal)
+
   let keyboardValue;
 
   if (keyboardConfig === "number-pad") {

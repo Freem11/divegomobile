@@ -4,6 +4,8 @@ import Animated from "react-native-reanimated";
 import { moderateScale } from "react-native-size-matters";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
+import ButtonIcon from "../../reusables/buttonIcon";
+import { colors } from "../../styles";
 
 type Props = {
     feedbackReveal: any;
@@ -29,12 +31,12 @@ export const FeedsView = ({
                     style={S.inline.touchable}
                     onPress={startFeedbackAnimations}
                 >
-                    <MaterialCommunityIcons
-                        name="message-alert-outline"
-                        size={24}
-                        color="white"
-                        style={{ marginTop: moderateScale(3), marginRight: moderateScale(2) }}
-                    />
+                <ButtonIcon 
+                icon="dive-watch"
+                onPress={() => null}
+                size='icon'
+                fillColor={colors.themeWhite}
+              />
                 </TouchableWithoutFeedback>
             </Animated.View>
         </S.FMenuAnimate>

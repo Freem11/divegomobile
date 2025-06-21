@@ -19,6 +19,7 @@ import FeedItemNotification from "./messages/notification";
 import { useTranslation } from "react-i18next";
 import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
 import ButtonIcon from "../../../reusables/buttonIcon";
+import * as S from "./styles";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -49,13 +50,13 @@ export default function FeedList() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <S.SafeArea>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <ButtonIcon 
           icon="chevron-left"
           onPress={() => closeScreen()}
           size='small'
-          fillColor={colors.themeBlack}
+          fillColor={colors.neutralGrey}
         />
         <ButtonIcon 
           icon="trash"
@@ -75,7 +76,7 @@ export default function FeedList() {
           renderItem={renderItem}
         />
       )}
-    </SafeAreaView>
+    </S.SafeArea>
   );
 }
 

@@ -96,9 +96,9 @@ export default function SearchPage(props) {
                 <SearchToolListItem
                   name={item.title}
                   soureImage={item.source}
-                  setTextSource={setTextSource}
-                  setList={setList}
-                  setSearchValue={setSearchValue}
+                  // setTextSource={setTextSource}
+                  // setList={setList}
+                  // setSearchValue={setSearchValue}
                 />
               )}
             />

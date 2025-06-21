@@ -56,7 +56,7 @@ export default function ProfileButton() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "green",
+    // backgroundColor: "green",
     opacity: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -71,18 +71,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBlue,
     width: moderateScale(80),
     height: moderateScale(55),
-    paddingTop: moderateScale(5)
+    marginTop: moderateScale(5)
   },
   buttonlabel: {
     fontFamily: activeFonts.Medium,
     color: colors.themeWhite,
     fontSize: fontSizes.SmallText,
-    marginTop: moderateScale(0),
+    marginTop: moderateScale(2),
   },
   buttonlabelAlt: {
     fontFamily: activeFonts.Medium,
     color: colors.secondaryYellow,
     fontSize: fontSizes.SmallText,
-    marginTop: moderateScale(0),
+    marginTop: moderateScale(2),
   },
 });
+
