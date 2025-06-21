@@ -165,7 +165,6 @@ export default function TripCreatorPage({
         description: "",
         siteList: [],
       });
-      console.log("TC submit?")
       setSitesArray([]);
 
       editMode

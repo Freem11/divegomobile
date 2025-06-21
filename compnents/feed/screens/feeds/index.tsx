@@ -56,7 +56,7 @@ export default function FeedList() {
           icon="chevron-left"
           onPress={() => closeScreen()}
           size='small'
-          fillColor={colors.themeBlack}
+          fillColor={colors.neutralGrey}
         />
         <ButtonIcon 
           icon="trash"

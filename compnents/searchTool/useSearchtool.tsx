@@ -34,7 +34,6 @@ export default function useSearchTool() {
   };
 
   const handleDataList = async (value: string) => {
-    console.log('value', value)
     const placesData = await getPlaces(value);
     const diveSiteData = await getSiteNamesThatFit(value);
 
@@ -50,7 +49,6 @@ export default function useSearchTool() {
       ...addIconType([...new Set(diveSiteArray)], "anchor"),
     ];
 
-    console.log(megaArray)
     setList(addIndexNumber(megaArray));
   };
 
@@ -107,7 +105,6 @@ export default function useSearchTool() {
   };
 
   const finalizeSelection = () => {
-    console.log("am i going here?")
     setList([]);
     setTextSource(false);
     setSearchValue("");
