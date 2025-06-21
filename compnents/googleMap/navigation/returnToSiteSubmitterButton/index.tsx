@@ -6,7 +6,6 @@ import { useContext } from "react";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 
-
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
   lowerButtonWrapper: [
@@ -23,20 +22,25 @@ export function ReturnToSiteSubmitterButton() {
 
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
+  const screenId = useMapStore((state) => state.itemId);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-
   const onPress = async () => {
     const camera = await mapRef.getCamera();
+    if(screenId === 1){
+      setActiveScreen("DiveSiteUploadScreen");
+      setLevelTwoScreen(true);
+      setChosenModal(null);
+    } else {
+      setActiveScreen("PartnerRequestScreen");
+      setLevelTwoScreen(true);
+      setChosenModal(null);
+    }  
     mapAction.setDraggablePoint(camera.center)
     mapAction.setMapConfig(0, 0);
-
-        setActiveScreen("DiveSiteUploadScreen");
-        setLevelTwoScreen(true);
-        setChosenModal(null);
-      
+   
   };
 
   return (

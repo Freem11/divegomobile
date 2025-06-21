@@ -35,10 +35,10 @@ export const insertDiveSiteWaits = async (values) => {
     console.log("couldn't do it 9,", error);
   }
 
-  if (data) {
-    return data
-    // console.log(data);
-  }
+  return {
+    data,
+    error,
+  };
 };
 
 export const grabDiveSiteWaitById = async (id) => {

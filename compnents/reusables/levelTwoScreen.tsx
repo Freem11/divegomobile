@@ -9,13 +9,11 @@ import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfileParallax from '../screens/userProfile/userProfileParallax';
-import PartnerRequestPage from '../screens/partnerRequestPage';
-import PicUploader from '../screens/picUploader';
 import PicUploaderParallax from '../screens/picUploader/picUploaderParallax';
 import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
 import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
 import { colors } from "../styles";
-
+import PartnerRequestParallax from "../screens/partnerAccountRequest/partnerRequestParallax";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -49,7 +47,7 @@ export default function LevelTwoScreen() {
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen2 && activeScreen2.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen2.params.id}/>}
-      {activeScreen2 && activeScreen2.screenName === "PartnerRequestScreen" && <PartnerRequestPage />}
+      {activeScreen2 && activeScreen2.screenName === "PartnerRequestScreen" && <PartnerRequestParallax />}
       {activeScreen2 && activeScreen2.screenName === "PictureUploadScreen" && <PicUploaderParallax selectedDiveSite={activeScreen2.params.id}/>}
       {activeScreen2 && activeScreen2.screenName === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
       {activeScreen2 && activeScreen2.screenName === "TripCreatorScreen" && <TripCreatorParallax shopID={activeScreen2.params.id}/>}

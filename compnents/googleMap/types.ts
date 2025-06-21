@@ -10,3 +10,8 @@ export type ClusterProperty = {
   category:     PointFeatureCategory
   point_count?: number
 };
+
+export enum ScreenReturn {
+  SiteSubmitter = 1,
+  PartnerRequestPage = 2,
+}

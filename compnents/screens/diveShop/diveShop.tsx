@@ -195,7 +195,7 @@ const handleMapFlip = async (sites: number[]) => {
  const coords = await useMapFlip(
     sites,
     setSitesArray,
-  )
+  ) 
   setMapConfig(2, selectedShop.id)
   mapRef.animateCamera({ center: {latitude: coords.moveLat, longitude: coords.moveLng},
     zoom: 12,
