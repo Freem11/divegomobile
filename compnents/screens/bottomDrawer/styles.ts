@@ -95,3 +95,9 @@ export const IconWrapper = styled.View`
     height: ${moderateScale(28)}px;
     margin-right: ${moderateScale(10)}px;
 `;
+
+export const ButtonBox = styled.View`
+  position: absolute;
+  bottom: ${moderateScale(20)}px;
+  align-self: center;
+`;

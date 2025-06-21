@@ -1,7 +1,7 @@
 import React from "react";
 import {
   View,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import * as S from "./styles";
@@ -20,7 +20,7 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
 
       <S.SearchResultContainer>
       <View style={{ paddingLeft: moderateScale(8), justifyContent: "center" }}>
-        <TouchableWithoutFeedback onPress={onPressItem}>
+        <TouchableOpacity onPress={onPressItem}>
           <S.SearchCard>
             <S.CardIconContainer>
               <S.CardIcon
@@ -37,7 +37,7 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
             </S.LabelContainer>
 
           </S.SearchCard>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </View>
     </S.SearchResultContainer>
   );

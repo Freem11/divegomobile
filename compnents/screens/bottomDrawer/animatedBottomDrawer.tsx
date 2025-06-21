@@ -12,6 +12,7 @@ import Animated, {
   Easing,
   runOnJS,
   interpolateColor,
+  withDelay,
 } from "react-native-reanimated";
 import {
   Gesture,
@@ -34,12 +35,31 @@ const windowHeight = Dimensions.get("window").height;
 const DRAWER_CLOSED = moderateScale(30);
 const DRAWER_OPEN = windowHeight;
 
-export default function BottomDrawer(props) {
-  const { dataSet, emptyDrawer } = props;
+export default function BottomDrawer() {
 
-  const boxheight = useSharedValue(DRAWER_CLOSED);
+  const boxheight = useSharedValue(DRAWER_OPEN);
   const buttonWidth = useSharedValue(moderateScale(buttonSizes.small.width));
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+
+
+  const buttonOpacity = useSharedValue(isDrawerOpen ? 1 : 0);
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      buttonOpacity.value = withDelay(
+        500,
+        withTiming(1, { duration: 300 })
+      );
+    } else {
+      buttonOpacity.value = withTiming(0, { duration: 200 });
+    }
+  }, [isDrawerOpen]);
+
+  const animatedButtonStyle = useAnimatedStyle(() => {
+    return {
+      opacity: buttonOpacity.value,
+    };
+  });
 
   const verticalGestureRef = useRef();
 
@@ -57,6 +77,20 @@ export default function BottomDrawer(props) {
       setIsDrawerOpen((prev) => !prev);
     }
   }, []);
+
+  const closeDrawer = () => {
+    boxheight.value = withTiming(DRAWER_CLOSED, {
+      duration: 300,
+      easing: Easing.out(Easing.cubic),
+    });
+  
+    buttonWidth.value = withTiming(buttonClosed, {
+      duration: 300,
+      easing: Easing.out(Easing.cubic),
+    });
+  
+    runOnJS(setIsDrawerOpen)(false);
+  };
 
   const buttonOpen = moderateScale(buttonSizes.medium.width);
   const buttonClosed = moderateScale(buttonSizes.small.width);
@@ -153,7 +187,7 @@ export default function BottomDrawer(props) {
 
           <NativeViewGestureHandler ref={nativeGestureRef}>
             <View style={{ flex: 1 }}>
-              <HorizontalPager />
+              <HorizontalPager isDrawerOpen={isDrawerOpen} animatedButtonStyle={animatedButtonStyle} closeDrawer={closeDrawer}/>
             </View>
           </NativeViewGestureHandler>
         </Animated.View>

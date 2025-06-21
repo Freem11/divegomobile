@@ -415,7 +415,7 @@ export default function MapPage() {
             ) : null}
 
             {mapConfig === 0 && <EmailFeedback />}
-            {mapConfig === 0 && <FeedsButton />}
+            {/* {mapConfig === 0 && <FeedsButton />} */}
 
 
             {mapConfig === 0 ?

@@ -12,7 +12,7 @@ export const inline = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: colors.primaryBlue,
     position: "absolute",
-    top: -moderateScale(130),
+    top: -moderateScale(160),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),

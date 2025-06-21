@@ -2,20 +2,23 @@ import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
-import { MaterialIcons } from "@expo/vector-icons";
 import { activeFonts, colors, fontSizes } from "../styles";
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import ButtonIcon from "../reusables/buttonIcon";
+import { useFeedScreenStore } from "../feed/store/useScreenStore";
+import { FEED_SCREEN } from "../feed/store/types";
 
 export default function SiteSearchButton() {
   const [butState, setButState] = useState(false);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const openScreen = useFeedScreenStore((state) => state.openScreen);
+  // const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
+  // const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   const handlePress = () => {
-    setLevelOneScreen(true);
-    setActiveScreen("SearchScreen");
+    openScreen(FEED_SCREEN.FEED_MESSAGES)
+    // setLevelOneScreen(true);
+    // setActiveScreen("SearchScreen");
   };
 
   return (
@@ -32,11 +35,11 @@ export default function SiteSearchButton() {
       >
         <View style={styles.buttonBox}>
               <ButtonIcon 
-                icon="compass-outline"
+                icon="dive-watch"
                 onPress={handlePress}
                 size='icon'
                 fillColor={colors.themeWhite}
-                title="Search Map"
+                title="Notifications"
               />
         </View>
       </TouchableWithoutFeedback>
