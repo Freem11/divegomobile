@@ -83,6 +83,7 @@ export const BackButtonWrapper = styled.View`
 export const MainExplainer = styled.Text`
   margin-vertical: 5%;
   margin-horizontal: 5%;
+  margin-bottom: 10%;
   text-align: center;
   font-size: ${moderateScale(fontSizes.SmallText)};
   font-family: ${activeFonts.Bold};

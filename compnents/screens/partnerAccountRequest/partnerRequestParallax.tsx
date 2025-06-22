@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import boatImage from "../../png/boat.png";
+import partnerRayImage from "../../png/partnerRay.jpg";
 import { Keyboard } from "react-native";
 import { useMapStore } from "../../googleMap/useMapStore";
 import PartnerAccountRequestPage from ".";
@@ -25,7 +25,7 @@ export default function PartnerRequestParallax() {
   };
 
   return (
-    <ParallaxDrawer headerImage={boatImage} onClose={onClose} onMapFlip={onNavigate}>
+    <ParallaxDrawer headerImage={partnerRayImage} onClose={onClose} onMapFlip={onNavigate}>
       <PartnerAccountRequestPage />
     </ParallaxDrawer>
   );
