@@ -28,10 +28,11 @@ export default function GoogleMap() {
 
   const handleOnLoad = async (map: MapView) => {
     mapAction.setMapRef(map);
-    const camera = await map.getCamera();
   };
 
-
+  const handleOnMapReady = () => {
+    handleBoundsChange()
+  }
 
   useEffect(() => {
     handleBoundsChange()
@@ -63,6 +64,7 @@ export default function GoogleMap() {
       // tempMarker={tempMarker}
       onLoad={handleOnLoad}
       handleBoundsChange={handleBoundsChange}
+      handleOnMapReady={handleOnMapReady}
       heatPoints={heatPoints}
       diveSites={diveSites}
       diveShops={diveShops}
