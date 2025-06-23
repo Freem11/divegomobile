@@ -1,15 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, View, StyleSheet, Dimensions } from "react-native";
+import { Animated, View, StyleSheet, Dimensions, Platform } from "react-native";
 import useSearchTool from "./useSearchtool";
 import SearchToolInput from "./searchToolInput";
 import SearchToolList from "./searchToolList";
 import { colors } from "../styles";
 import { moderateScale } from "react-native-size-matters";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { height } = Dimensions.get("window");
-const INPUT_TOP_MARGIN = moderateScale(60);
+const INPUT_TOP_MARGIN = moderateScale(0);
 const INPUT_BAR_HEIGHT = moderateScale(50);
 const LIST_VISUAL_START_Y = INPUT_TOP_MARGIN + INPUT_BAR_HEIGHT ;
+
 
 export default function SearchTool() {
   const {
@@ -20,6 +22,8 @@ export default function SearchTool() {
     handleMapOptionSelected,
     handleDiveSiteOptionSelected,
   } = useSearchTool();
+
+  const insets = useSafeAreaInsets();
 
   const shouldBeVisible = list.length > 0 || searchValue.length > 0;
 
@@ -39,6 +43,8 @@ export default function SearchTool() {
       outputRange: ['rgba(255, 255, 255, 0)', colors.themeWhite], 
     }),
     opacity: anim,
+    top: -insets.top,
+    height: height + insets.top,
   };
 
   const listContentAnimatedStyle = {
@@ -53,7 +59,7 @@ export default function SearchTool() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ marginTop: INPUT_TOP_MARGIN, alignSelf: "center", zIndex: 20 }}>
+      <View style={{ paddingTop: Platform.OS === 'android' ? 25 : 0, paddingBottom: 25, alignSelf: "center", zIndex: 20 }}>
         <SearchToolInput
           iconLeft="navigation-variant-outline"
           iconRight="close"
@@ -98,7 +104,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     width: "100%",
-    // 'top' is now fixed, 'height' and 'opacity' are animated by `listContentAnimatedStyle`
-    overflow: 'hidden', // Essential: Clips content that extends beyond the animated height
+    overflow: 'hidden',
   },
 });

@@ -5,15 +5,12 @@ import SiteSearchButton from "./siteSearchButton";
 import GuidesButton from "./guidesButton";
 import ItineraryListButton from "./itineraryCreatorButton";
 import ProfileButton from "./profileButton";
-import CircularButton from '../reusables/circularButton';
 import { UserProfileContext } from "../contexts/userProfileContext";
 
 const windowWidth = Dimensions.get("window").width;
 
-export default function FABMenu(props) {
+export default function FABMenu() {
   
-  const { toggleDiveSites } = props;
-
   const { profile } = useContext(UserProfileContext);
 
   const PARTNER_ACCOUNT_STATUS =
@@ -25,10 +22,6 @@ export default function FABMenu(props) {
     >
       <ProfileButton />
       <SiteSearchButton />
-      <CircularButton
-                    buttonAction={toggleDiveSites}
-                    icon="anchor"
-                  />
       <DiveSiteButton />
       {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
     </View>
