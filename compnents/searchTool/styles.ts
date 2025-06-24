@@ -12,7 +12,7 @@ export const SearchInputContainer = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: ${moderateScale(120)}px;
-  background-color: ${colors.themeWhite};
+  background-color: rgb(232, 232, 232);
 `;
 
 export const SearchResultContainer = styled.View`

@@ -42,7 +42,7 @@ const SearchInput = React.forwardRef<TextInput, SearchInputProps>(function Searc
       {iconRight && value.length > 0 ? 
         <TouchableOpacity onPress={handleClear}>
         <S.IconWrapperRight>
-          <Icon name={iconRight as IconName} fill={colors.neutralGrey}/>
+          <Icon name={iconRight as IconName} fill={colors.themeBlack}/>
         </S.IconWrapperRight>
         </TouchableOpacity>
       :  <S.IconWrapperRight/>}

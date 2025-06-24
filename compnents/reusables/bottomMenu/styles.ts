@@ -9,7 +9,8 @@ export const MenuContainer = styled.View`
   bottom: 0;
   width: 100%;
   margin-top: -1px;
-  height: ${Platform.OS === "ios" ? moderateScale(85) : moderateScale(75)}px;
+  padding-top: ${moderateScale(10)}px;
+  height: ${Platform.OS === "ios" ? moderateScale(75) : moderateScale(75)}px;
   background-color: ${colors.primaryBlue};
   z-index: 3;
   flex-direction: row;
