@@ -8,11 +8,11 @@ const FbWidth = moderateScale(350);
 
 export const inline = StyleSheet.create({
   feedback: {
-    zIndex: 20,
+    zIndex: 2,
     flexDirection: "row",
     backgroundColor: colors.primaryBlue,
     position: "absolute",
-    top: -moderateScale(130),
+    top: -moderateScale(160),
     left: -0.88 * FbWidth,
     padding: moderateScale(5),
     borderTopRightRadius: moderateScale(15),
@@ -42,7 +42,7 @@ export const FMenuAnimate = styled.View`
   align-items: center;
   justify-content: center;
   width: 100%;
-  z-index: 3;
+  z-index: 2;
 `;
 
 export const FeedRequest = styled.Text`

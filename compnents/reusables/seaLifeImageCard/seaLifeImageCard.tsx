@@ -5,21 +5,14 @@ import {
   insertPhotoLike,
   deletePhotoLike
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
-import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-import { useButtonPressHelper } from "../../FABMenu/buttonPressHelper";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
-import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
 import * as FileSystem from "expo-file-system";
 import ImgToBase64 from "react-native-image-base64";
 import email from "react-native-email";
 import Share from "react-native-share";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
-import { PreviousButtonIDContext } from "../../contexts/previousButtonIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { useTranslation } from "react-i18next";
@@ -59,23 +52,15 @@ interface PictureProps {
 }
 
 const SeaLifeImageCard = (props: PictureProps) => {
-  const { pic, setVisitProfileVals } = props;
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
+  const { pic } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
-
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
-
+  const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { profile } = useContext(UserProfileContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
-  const { setSelectedProfile } = useContext(SelectedProfileContext);
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
@@ -105,17 +90,6 @@ const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
-    }
-  };
-
-  const handleFollow = async (userName: string) => {
-    const picOwnerAccount = await grabProfileByUserName(userName);
-    if (profile[0].UserID !== picOwnerAccount[0].UserID) {
-      setSelectedProfile(picOwnerAccount);
-      setLevelOneScreen(false);
-      setPreviousButtonID(activeScreen);
-      setActiveScreen("ProfileScreen");
-      useButtonPressHelper("ProfileScreen", activeScreen, levelTwoScreen, setLevelTwoScreen);
     }
   };
 
