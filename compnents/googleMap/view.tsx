@@ -31,8 +31,15 @@ type MapViewProps = {
   // zoom?:              number
   center: Coordinates;
   // tempMarker?:        google.maps.LatLngLiteral | null
+
+  /**
+   * On load event happens a lot - dont put heavy stuff here
+   * @param map 
+   * @returns 
+   */
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
+  handleOnMapReady: () => void;
   diveSites?:  DiveSiteBasic[] | null;
   diveShops?:  DiveShop[] | null;
   heatPoints?: HeatPoint[] | null
@@ -142,7 +149,7 @@ export default function GoogleMapView(props: MapViewProps) {
         maxZoomLevel={16}
         minZoomLevel={1}
         ref={onMapLoad}
-        onMapReady={(a) => console.log("ready", { a })}
+        onMapReady={() => props.handleOnMapReady()}
         onRegionChangeComplete={() => props.handleBoundsChange()}
         toolbarEnabled={false}
       >

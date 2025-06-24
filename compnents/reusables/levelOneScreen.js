@@ -12,7 +12,6 @@ import { colors } from "../styles";
 import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
 import DiveShopParallax from '../screens/diveShop/diveShopParallax';
 import Settings from '../screens/settings';
-import SearchPage from '../screens/search';
 import TripListPage from '../screens/tripList';
 
 const windowWidth = Dimensions.get("window").width;
@@ -20,9 +19,6 @@ const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelOneScreen() {
   const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
-
-
-  const { activeScreen } = useContext(ActiveScreenContext);
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const levelOneScreenY = useSharedValue(0);
 
@@ -49,7 +45,7 @@ export default function LevelOneScreen() {
       {activeScreen2 && activeScreen2.screenName === "DiveSiteScreen" && <DiveSiteParallax siteID={activeScreen2.params.id}/>}
       {activeScreen2 && activeScreen2.screenName === "DiveShopScreen" && <DiveShopParallax shopID={activeScreen2.params.id}/>}
       {activeScreen2 && activeScreen2.screenName === "SettingsScreen" && <Settings/>}
-      {activeScreen2 && activeScreen2.screenName === "SearchScreen" && <SearchPage/>}
+      {/* {activeScreen2 && activeScreen2.screenName === "SearchScreen" && <SearchPage/>} */}
       {activeScreen2 && activeScreen2.screenName === "TripListScreen" && <TripListPage/>}
     </Animated.View>
   );

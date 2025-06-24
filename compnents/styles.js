@@ -10,7 +10,8 @@ export const colors = {
   themeRed: '#E63946',
   themeGreen: '#4caf50',
   neutralGrey: '#A9A9A9',
-  buttonPressOverlay: 'rgba(128, 128, 128, 0.25)'
+  buttonPressOverlay: 'rgba(128, 128, 128, 0.25)',
+  searchOverlay: 'rgba(128, 128, 128, 0.6)'
 }
 
 export const fontSizes = {

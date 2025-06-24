@@ -13,17 +13,14 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from "../styles";
-
-import { getShopByUserID, getDiveShopById } from "../../supabaseCalls/shopsSupabaseCalls";
+import { getDiveShopById } from "../../supabaseCalls/shopsSupabaseCalls";
 import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCalls/itinerarySupabaseCalls";
-import { useButtonPressHelper } from "../FABMenu/buttonPressHelper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { ShopContext } from "../../compnents/contexts/shopContext";
 import { ShopModalContext } from "../contexts/shopModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
@@ -35,7 +32,6 @@ import { SitesArrayContext } from "../../compnents/contexts/sitesArrayContext";
 import { useTranslation } from "react-i18next";
 import  ItineraryCard  from '../reusables/itineraryCard';
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
-
 
 const windowHeight = Dimensions.get("window").height;
 
