@@ -1,35 +1,44 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Keyboard } from "react-native";
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
-import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabaseCalls";
-import DiveSiteUploaderView from './view';
 import { useMapStore } from "../../googleMap/useMapStore";
+import { createPartnerAccountRequest } from "../../../supabaseCalls/partnerSupabaseCalls";
+import PartnerAccountRequestPageView from "./view";
 import { Form } from "./form";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 
-type SiteSubmitterProps = {
+type PartnerAccountRequestPageProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
 };
 
-export default function DiveSiteUploader({
+export default function PartnerAccountRequestPage({
   closeParallax,
   restoreParallax,
-}: SiteSubmitterProps) {
+}: PartnerAccountRequestPageProps) {
 
-  const { profile } = useContext(UserProfileContext);
-
+  const [formVals, setFormVals] = useState({
+    businessName: "",
+    websiteLink: "",
+    latitude: null,
+    longitude: null,
+    UserId: null,
+  });
+  
   const mapAction = useMapStore((state) => state.actions)
 
   const draggablePoint = useMapStore((state) => state.draggablePoint);
   const deviceLocation = null//todo
 
+  const { profile } = useContext(UserProfileContext);
+  
   const onSubmit = async (formData: Required<Form>) => {
-    const { error } = await insertDiveSiteWaits({
-      name: formData.Site,
-      lat: formData.Latitude,
-      lng: formData.Longitude,
-      UserID: profile.UserID
+    const { error } = await createPartnerAccountRequest({
+      webpageLink : formData.URL,
+      businessName: formData.OrgName,
+      latitude: formData.Latitude,
+      longitude: formData.Longitude,
+      userId: profile.UserId
     }); 
   };
 
@@ -49,7 +58,7 @@ export default function DiveSiteUploader({
   };
 
   return (
-    <DiveSiteUploaderView
+    <PartnerAccountRequestPageView
       onSubmit={onSubmit}
       getCurrentLocation={getCurrentLocation}
       closeParallax={closeParallax}
@@ -60,5 +69,4 @@ export default function DiveSiteUploader({
       }}
     />
   )
-
 }
