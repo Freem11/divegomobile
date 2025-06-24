@@ -13,17 +13,11 @@ import SearchTextContextProvider from './searchTextContext';
 import AnchorPhotosContextProvider from './anchorPhotosContext';
 import ReverseContextProvider from './reverseContext';
 import UserProfileContextProvider from './userProfileContext';
-import MapHelperContextProvider from './mapHelperContext';
 import HeatPointsContextProvider from './heatPointsContext';
 import AnimalMultiSelectContextProvider from './animalMultiSelectContext';
 import SelectedDiveSiteContextProvider from './selectedDiveSiteContext';
 import PictureContextProvider from './pictureContext';
 import AnimalSelectContextProvider from './animalSelectContext';
-import DiveSpotContextProvider from './diveSpotContext';
-import MapBoundariesContextProvider from './mapBoundariesContext';
-import PinContextProvider from './staticPinContext';
-import PullTabContextProvider from './pullTabContext';
-import CarrouselTilesContextProvider from './carrouselTilesContext';
 import CommentsModalContextProvider from './commentsModalContext';
 import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
@@ -35,7 +29,6 @@ import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
 import ConfirmationModalContextProvider from './confirmationModalContext';
 import ConfirmationTypeContextProvider from './confirmationTypeContext';
-import MapConfigContextProvider from './mapConfigContext';
 import ShopContextProvider from './shopContext';
 import EditModeContextProvider from './editModeContext';
 import ActiveScreenContextProvider from './activeScreenContext';
@@ -45,7 +38,6 @@ import EditsContextProvider from './editsContext';
 import SavedTranslateYContextProvider from './savedTranslateYContext';
 
 const providers = [
-    MapConfigContextProvider,
     ZoomHelperContextProvider,
     TripDetailContextProvider,
     TripSitesContextProvider,
@@ -59,17 +51,11 @@ const providers = [
     AnchorPhotosContextProvider,
     ReverseContextProvider,
     UserProfileContextProvider,
-    MapHelperContextProvider,
     HeatPointsContextProvider,
     AnimalMultiSelectContextProvider,
     SelectedDiveSiteContextProvider,
     PictureContextProvider,
     AnimalSelectContextProvider,
-    DiveSpotContextProvider,
-    MapBoundariesContextProvider,
-    PinContextProvider,
-    PullTabContextProvider,
-    CarrouselTilesContextProvider,
     CommentsModalContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,

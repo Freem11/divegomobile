@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as S from "./styles";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { MapCenterContext } from "../../contexts/mapCenterContext";
 import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
 import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
@@ -46,7 +45,6 @@ export default function DiveShopScreen({
   
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { setMapCenter } = useContext(MapCenterContext);
   const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -77,15 +75,6 @@ export default function DiveShopScreen({
       console.log({ title: "Error", message: e.message });
     }
   };
-
-  useEffect(() => {
-    if (levelOneScreen && zoomHelper) {
-      setMapCenter({
-        lat: selectedShop.lat,
-        lng: selectedShop.lng,
-      });
-    }
-  }, [levelOneScreen]);
 
   useEffect(() => {
     setDiveShopVals({

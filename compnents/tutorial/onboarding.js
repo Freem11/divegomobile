@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect, useMemo } from "react";
+import React, { useRef, useState, useContext, useMemo } from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -9,8 +9,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView,
-  Alert
+  KeyboardAvoidingView
 } from "react-native";
 import { activeFonts, colors, fontSizes } from '../styles';
 import { scale, moderateScale } from "react-native-size-matters";
@@ -20,10 +19,8 @@ import { registerForForegroundLocationTrackingsAsync } from "./locationTrackingR
 import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
 import { registerForPushNotificationsAsync } from "./notificationsRegistery";
 import { SessionContext } from "../contexts/sessionContext";
-import { PinContext } from "../contexts/staticPinContext";
-import { DiveSpotContext } from "../contexts/diveSpotContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { updateProfile, grabProfileById, grabProfileByUserId } from "../../supabaseCalls/accountSupabaseCalls";
+import { updateProfile, grabProfileByUserId } from "../../supabaseCalls/accountSupabaseCalls";
 import TextInputField from '../authentication/utils/textInput';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from "expo-linear-gradient";
@@ -39,8 +36,6 @@ export default function OnboardingTest() {
   const [carrouselIndex, setCarrouselIndex] = useState(0);
   const { activeSession } = useContext(SessionContext);
 
-  const { pinValues, setPinValues } = useContext(PinContext);
-  const { addSiteVals, setAddSiteVals } = useContext(DiveSpotContext);
   const { setProfile } = useContext(UserProfileContext);
   const { t } = useTranslation();
 
@@ -172,16 +167,6 @@ export default function OnboardingTest() {
           } else {
             setProfile([profileCheck]);
           }
-          setPinValues({
-            ...pinValues,
-            UserId: profileCheck[0].UserID,
-            UserName: profileCheck[0].UserName,
-          });
-          setAddSiteVals({
-            ...addSiteVals,
-            UserID: profileCheck[0].UserID,
-            UserName: profileCheck[0].UserName,
-          });
           return "success";
         } else {
           setUserFail(t('Validators.diverNameTaken'));

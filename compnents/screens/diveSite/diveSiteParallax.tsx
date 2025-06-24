@@ -6,7 +6,6 @@ import noImage from '../../png/NoImage.png';
 import { Keyboard } from "react-native";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { PinContext } from "../../contexts/staticPinContext";
 import { useTranslation } from "react-i18next";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
@@ -28,7 +27,6 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
-  const { pinValues, setPinValues } = useContext(PinContext);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
@@ -38,7 +36,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
-
+  
   const [selectedDiveSite, setSelectedDiveSite] = useState<DiveSiteWithUserName | null>(null)
 
   useEffect(() => {
@@ -83,14 +81,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   };
 
   const openPicUploader = () => {
-    setPinValues({
-      ...pinValues,
-      Latitude: String(selectedDiveSite.lat),
-      Longitude: String(selectedDiveSite.lng),
-      siteName: selectedDiveSite.name,
-    });
-
-    setActiveScreen("PictureUploadScreen", {id: selectedDiveSite})
+    setActiveScreen("PictureUploadScreen", selectedDiveSite)
     setLevelOneScreen(false);
     setLevelTwoScreen(true);
   };

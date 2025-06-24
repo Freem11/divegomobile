@@ -8,7 +8,6 @@ import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import TripImage from '../../png/Trip.png'
 import { Keyboard } from "react-native";
-import { MapHelperContext } from "../../contexts/mapHelperContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useTranslation } from "react-i18next";
 import { useMapStore } from "../../googleMap/useMapStore";
@@ -26,7 +25,6 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
   const { setTripDiveSites } = useContext(TripSitesContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setMapHelper } = useContext(MapHelperContext);
  
   const onClose = async () => {
     setEditMode(false);
@@ -47,7 +45,6 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
 
   const onNavigate = async() => {
     Keyboard.dismiss();
-    setMapHelper(true);
     setMapConfig(3, 0);
     setLevelTwoScreen(false);
   };
