@@ -109,7 +109,6 @@ export const deleteProfile = async (id) => {
 };
 
 export const grabProfileByUserId = async (id: string) => {
-  console.log("supa", id)
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()

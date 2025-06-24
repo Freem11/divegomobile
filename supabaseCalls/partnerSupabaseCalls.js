@@ -18,9 +18,10 @@ if (error) {
   console.log("couldn't do it 33,", error);
 }
 
-if (data) {
-  console.log(data);
-}
+return {
+  data,
+  error,
+};
 };
 
 

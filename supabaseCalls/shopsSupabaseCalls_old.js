@@ -53,8 +53,6 @@ if (data) {
 
 
 export const updateDiveShop = async (values) => {
-
-  console.log("supa?", values)
   const response = await supabase
     .from("shops")
     .update(values)

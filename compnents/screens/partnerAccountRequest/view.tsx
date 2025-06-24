@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { Controller, useForm } from "react-hook-form";
 import { Form, FormRules } from "./form";
-import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
+import { useMapStore } from "../../googleMap/useMapStore";
 
 interface Props {
   values: Form;
@@ -17,7 +17,7 @@ interface Props {
   restoreParallax?: () => void;
 }
 
-export default function DiveSiteUploaderView({
+export default function PartnerAccountRequestPageView({
   values,
   onSubmit,
   getCurrentLocation,
@@ -39,31 +39,59 @@ export default function DiveSiteUploaderView({
   }, [levelTwoScreen]);
 
   const handleMapFlip = async () => {
-    setMapConfig(1, ScreenReturn.SiteSubmitter)
+    setMapConfig(1, ScreenReturn.PartnerRequestPage)
     closeParallax(1)
   }
-
+  
   return (
     <S.ContentContainer>
-        <S.Header>{t('DiveSiteAdd.header')}</S.Header>
+        <S.Header>{t('PartnerRequestPage.header')}</S.Header>
+
+        <S.MainExplainer>
+            {t('PartnerRequestPage.explanation')}
+          </S.MainExplainer>
 
           <S.InputGroupContainer>
           <Controller
             control={control}
-            name="Site"
-            rules={FormRules.Site}
+            name="OrgName"
+            rules={FormRules.OrgName}
             render={({ field: { onChange, value } }) => (
               <S.TextBuffer>
                 <MobileTextInput 
-                error={errors.Site}
-                iconLeft="diving-scuba-flag"
-                placeholder={t('DiveSiteAdd.siteNamePlaceholder')}
+                error={errors.OrgName}
+                iconLeft="store"
+                placeholder={t('PartnerRequestPage.businessPlaceholder')}
                 onChangeText={onChange}
                 value={value}
                 />
               </S.TextBuffer>
             )}
           />
+            <S.Explainer>
+              {t('PartnerRequestPage.businessExplainer')}
+            </S.Explainer>
+
+          <Controller
+            control={control}
+            name="URL"
+            rules={FormRules.OrgName}
+            render={({ field: { onChange, value } }) => (
+              <S.TextBuffer>
+                <MobileTextInput 
+                error={errors.URL}
+                iconLeft="diving-scuba-flag"
+                placeholder={t('PartnerRequestPage.websitePlaceholder')}
+                onChangeText={onChange}
+                value={value}
+                />
+              </S.TextBuffer>
+            )}
+          />
+            <S.Explainer>
+              {t('PartnerRequestPage.websiteExplainer')}
+            </S.Explainer>
+
           <Controller
             control={control}
             name="Latitude"
@@ -73,7 +101,7 @@ export default function DiveSiteUploaderView({
                 <MobileTextInput 
                   error={errors.Latitude}
                   iconLeft="latitude"
-                  placeholder={t('DiveSiteAdd.latPlaceholder')}
+                  placeholder={t('PartnerRequestPage.latPlaceholder')}
                   value={value ? String(value): null}
                   onChangeText={onChange}
                   keyboardType="number-pad"
@@ -81,7 +109,8 @@ export default function DiveSiteUploaderView({
               </S.TextBuffer>
             )}
           />
-
+          
+           <S.Buffer/>
 
           <Controller
             control={control}
@@ -92,7 +121,7 @@ export default function DiveSiteUploaderView({
                 <MobileTextInput 
                 error={errors.Longitude}
                   iconLeft="longitude"
-                  placeholder={t('DiveSiteAdd.lngPlaceholder')}
+                  placeholder={t('PartnerRequestPage.lngPlaceholder')}
                   value={value ? String(value): null}
                   onChangeText={onChange}
                   keyboardType="number-pad"
@@ -100,6 +129,10 @@ export default function DiveSiteUploaderView({
               </S.TextBuffer>
             )}
           />
+
+            <S.Explainer>
+              {t('PartnerRequestPage.latLngExplainer')}
+            </S.Explainer>
 
            </S.InputGroupContainer>
 
@@ -135,3 +168,4 @@ export default function DiveSiteUploaderView({
     </S.ContentContainer>
   );
 }
+
