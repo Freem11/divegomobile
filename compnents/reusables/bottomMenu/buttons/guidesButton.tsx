@@ -1,13 +1,12 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import { TouchableOpacity } from "react-native";
-import { ActiveScreenContext } from '../contexts/activeScreenContext';
-import { colors } from "../styles";
-import ButtonIcon from "../reusables/buttonIcon";
 import * as S from './styles';
+import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
+import ButtonIcon from "../../buttonIcon";
+import { colors } from "../../../styles";
 
 export default function GuidesButton() {
-  const [butState, setButState] = useState(false);
-  const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
   const handleScreen = () => {
   }
@@ -15,8 +14,6 @@ export default function GuidesButton() {
   return (
       <TouchableOpacity
         onPress={null}
-        // onPressIn={() => setButState(true)}
-        // onPressOut={() => setButState(false)}
       >
         <S.ButtonBox>
               <ButtonIcon 

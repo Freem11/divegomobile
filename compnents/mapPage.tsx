@@ -10,11 +10,11 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { activeFonts, colors, primaryButtonAlt, buttonTextAlt } from "./styles";
 import GoogleMap from "./googleMap";
 import BottomMenu from './reusables/bottomMenu';
-import ProfileButton from './FABMenu/profileButton'
-import SiteSearchButton from './FABMenu/siteSearchButton'
-import DiveSiteButton from './FABMenu/diveSiteButton'
-import GuidesButton from './FABMenu/guidesButton'
-import ItineraryListButton from "./FABMenu/itineraryCreatorButton"
+import ProfileButton from "./reusables/bottomMenu/buttons/profileButton";
+import SiteSearchButton from "./reusables/bottomMenu/buttons/siteSearchButton";
+import DiveSiteButton from "./reusables/bottomMenu/buttons/diveSiteButton";
+import ItineraryListButton from "./reusables/bottomMenu/buttons/itineraryCreatorButton";
+import GuidesButton from "./reusables/bottomMenu/buttons/guidesButton";
 import AnimalTopAutoSuggest from "./animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "./reusables/animatedFullScreenModal";
 import AnimatedModalConfirmation from "./reusables/animatedModalConfimration";
@@ -293,7 +293,7 @@ export default function MapPage() {
                </View>
               : null}
 
-            {mapConfig in [, , 2] || !mapConfig ? (
+            {/* {mapConfig in [, , 2] || !mapConfig ? (
               <View style={styles.carrousel} pointerEvents={"box-none"}>
 
                   <View style={styles.animalSelect} pointerEvents={"box-none"}>
@@ -301,7 +301,7 @@ export default function MapPage() {
                   </View>
 
               </View>
-            ) : null}
+            ) : null} */}
 
 
             {/* {mapConfig in [, , 2] || !mapConfig ? (
