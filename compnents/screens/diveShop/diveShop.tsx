@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as S from "./styles";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { ZoomHelperContext } from "../../contexts/zoomHelperContext";
 import { chooseImageHandler, imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
@@ -45,7 +44,6 @@ export default function DiveShopScreen({
   
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { zoomHelper, setZoomHelper } = useContext(ZoomHelperContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );

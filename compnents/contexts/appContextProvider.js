@@ -1,19 +1,15 @@
 import { combineComponents } from '../combineComponents';
 
-import ZoomHelperContextProvider from './zoomHelperContext';
 import TripDetailContextProvider from './tripDetailsContext';
 import TripSitesContextProvider from './tripSitesContext';
 import SitesArrayContextProvider from './sitesArrayContext';
-import ShopModalContextProvider from './shopModalContext';
 import SelectedShopContextProvider from './selectedShopContext';
 import ModalSelectContextProvider from './modalSelectContext';
 import ProfileModalContextProvider from './profileModalContext';
 import AreaPicsContextProvider from './areaPicsContext';
 import SearchTextContextProvider from './searchTextContext';
 import AnchorPhotosContextProvider from './anchorPhotosContext';
-import ReverseContextProvider from './reverseContext';
 import UserProfileContextProvider from './userProfileContext';
-import HeatPointsContextProvider from './heatPointsContext';
 import AnimalMultiSelectContextProvider from './animalMultiSelectContext';
 import SelectedDiveSiteContextProvider from './selectedDiveSiteContext';
 import PictureContextProvider from './pictureContext';
@@ -38,20 +34,16 @@ import EditsContextProvider from './editsContext';
 import SavedTranslateYContextProvider from './savedTranslateYContext';
 
 const providers = [
-    ZoomHelperContextProvider,
     TripDetailContextProvider,
     TripSitesContextProvider,
     SitesArrayContextProvider,
-    ShopModalContextProvider,
     SelectedShopContextProvider,
     ModalSelectContextProvider,
     ProfileModalContextProvider,
     AreaPicsContextProvider,
     SearchTextContextProvider,
     AnchorPhotosContextProvider,
-    ReverseContextProvider,
     UserProfileContextProvider,
-    HeatPointsContextProvider,
     AnimalMultiSelectContextProvider,
     SelectedDiveSiteContextProvider,
     PictureContextProvider,
