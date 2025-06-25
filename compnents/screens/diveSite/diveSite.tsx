@@ -41,9 +41,7 @@ export default function DiveSiteScreen({
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);

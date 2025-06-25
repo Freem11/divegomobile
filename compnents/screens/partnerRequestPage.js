@@ -30,9 +30,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PartnerRequestPage() {
-  const { setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { profile } = useContext(UserProfileContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);

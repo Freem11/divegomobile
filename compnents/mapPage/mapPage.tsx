@@ -52,6 +52,7 @@ import { useTranslation } from "react-i18next";
 import SearchTool from '../searchTool';
 import * as S from './styles';
 
+
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
 let FbWidth = moderateScale(350);
@@ -65,9 +66,7 @@ export default function MapPage() {
  
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { levelOneScreen, setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
+  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { activeSession } = useContext(SessionContext);
@@ -137,11 +136,6 @@ export default function MapPage() {
       feedbackX.value = withTiming(0);
     }
   };
-
-  const [mapCenter, setMapCenter] = useState({
-    lat: 49.246292,
-    lng: -123.116226,
-  });
 
   const transYtags = useSharedValue(0);
 

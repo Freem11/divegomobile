@@ -12,6 +12,7 @@ import IconWithLabel from "../../reusables/iconWithLabal";
 import { useTranslation } from "react-i18next";
 import { useMapStore } from "../../googleMap/useMapStore";
 
+
 type TripCreatorProps = {
   shopID: number
 };

@@ -7,6 +7,7 @@ import { Keyboard } from "react-native";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
 
+
 export default function SiteSubmitterParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setDraggableConfig = useMapStore((state) => state.actions.setDraggablePoint);

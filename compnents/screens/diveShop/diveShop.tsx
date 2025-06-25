@@ -43,13 +43,11 @@ export default function DiveShopScreen({
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setEditMode } = useContext(EditModeContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);

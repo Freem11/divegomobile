@@ -15,7 +15,6 @@ import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
-
 type DiveSiteProps = {
   siteID: number
 };

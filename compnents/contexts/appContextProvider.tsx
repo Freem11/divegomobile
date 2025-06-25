@@ -17,19 +17,16 @@ import AnimalSelectContextProvider from './animalSelectContext';
 import CommentsModalContextProvider from './commentsModalContext';
 import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
-import PhotoBoxModalContextProvider from './photoBoxModalContext';
 import SelectedPhotoContextProvider from './selectedPhotoContext';
 import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
 import ActiveConfirmationIDContextProvider from './activeConfirmationIDContext';
-import PreviousButtonIDContextProvider from './previousButtonIDContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
 import ConfirmationModalContextProvider from './confirmationModalContext';
 import ConfirmationTypeContextProvider from './confirmationTypeContext';
 import ShopContextProvider from './shopContext';
 import EditModeContextProvider from './editModeContext';
-import ActiveScreenContextProvider from './activeScreenContext';
 import LevelOneScreenContextProvider from './levelOneScreenContext';
-import LevelTwoScreenContextProvider from './levelTwoScreenContext';
+import LevelTwoScreenContextProvider from "./levelTwoScreenContext";
 import EditsContextProvider from './editsContext';
 import SavedTranslateYContextProvider from './savedTranslateYContext';
 
@@ -51,17 +48,14 @@ const providers = [
     CommentsModalContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
-    PhotoBoxModalContextProvider,
     SelectedPhotoContextProvider,
     ActiveTutorialIDContextProvider,
-    PreviousButtonIDContextProvider,
     ActiveConfirmationIDContextProvider,
     FullScreenModalContextProvider,
     ConfirmationModalContextProvider,
     ConfirmationTypeContextProvider,
     ShopContextProvider,
     EditModeContextProvider,
-    ActiveScreenContextProvider,
     LevelOneScreenContextProvider,
     LevelTwoScreenContextProvider,
     EditsContextProvider,

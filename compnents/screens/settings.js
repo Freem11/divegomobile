@@ -44,9 +44,7 @@ export default function SettingsPage(props) {
   const { activeSession, setActiveSession } = useContext(SessionContext);
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   let profileType;
   if (profile.partnerAccount) {

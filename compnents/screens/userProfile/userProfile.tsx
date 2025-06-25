@@ -20,6 +20,7 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { Pagination } from "../../../entities/pagination";
 import { colors } from "../../styles";
 
+
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
   bottomHitCount?: number;

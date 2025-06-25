@@ -48,9 +48,7 @@ export default function TripListPage(props) {
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
+  const {setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { t } = useTranslation()
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);
