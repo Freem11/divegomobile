@@ -82,16 +82,19 @@ export const updateDiveShop = async (values) => {
   }
 };
 
-export const getShopByUserID = async (value) => {
-  const { data, error } = await supabase.from("shops").select().eq("userId", value);
+export const getShopByUserID = async (value: string) => {
+  const { data, error } = await supabase
+    .from('shops')
+    .select()
+    .eq('userId', value);
 
   if (error) {
-    console.log("couldn't do it 39,", error);
+    console.log('couldn\'t do it 39,', error);
     return [];
   }
 
   if (data) {
-    return data;
+    return data as DiveShop[];
   }
 };
 

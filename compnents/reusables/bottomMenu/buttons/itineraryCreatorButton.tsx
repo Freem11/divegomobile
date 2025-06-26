@@ -27,7 +27,7 @@ export default function ItineraryListButton() {
                 onPress={handleScreen}
                 size='icon'
                 fillColor={colors.themeWhite}
-                title="Trip Creator"
+                title="My Centers"
               />
         </S.ButtonBox>
       </TouchableOpacity>

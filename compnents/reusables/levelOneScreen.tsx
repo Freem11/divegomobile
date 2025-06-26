@@ -5,14 +5,13 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { ActiveScreenContext } from '../contexts/activeScreenContext';
 import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
 import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
 import DiveShopParallax from '../screens/diveShop/diveShopParallax';
 import Settings from '../screens/settings';
-import TripListPage from '../screens/tripList';
+import ShopListParallax from "../screens/shopList/shopListParallax";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -46,7 +45,7 @@ export default function LevelOneScreen() {
       {activeScreen2 && activeScreen2.screenName === "DiveShopScreen" && <DiveShopParallax shopID={activeScreen2.params.id}/>}
       {activeScreen2 && activeScreen2.screenName === "SettingsScreen" && <Settings/>}
       {/* {activeScreen2 && activeScreen2.screenName === "SearchScreen" && <SearchPage/>} */}
-      {activeScreen2 && activeScreen2.screenName === "TripListScreen" && <TripListPage/>}
+      {activeScreen2 && activeScreen2.screenName === "TripListScreen" && <ShopListParallax/>}
     </Animated.View>
   );
 }

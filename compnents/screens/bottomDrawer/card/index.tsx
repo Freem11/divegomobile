@@ -4,6 +4,7 @@ import { moderateScale } from "react-native-size-matters";
 import * as S from "./styles";
 import Histogram from "../flatListCombo.tsx/histogram";
 import { TouchableOpacity } from "react-native";
+import { windowWidth } from "../../../authentication/styles";
 
 type CardProps = {
   id: number;
