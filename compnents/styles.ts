@@ -133,14 +133,3 @@ export const screenSecondaryButton = {
   alignItems: 'center',
   justifyContent: 'center',
 }
-
-// export const roundButton = {
-//   borderColor: "darkgrey",
-//   borderWidth: moderateScale(1),
-//   borderRadius: moderateScale(30),
-//   width: moderateScale(55),
-//   height: moderateScale(55),
-//   color: colors.themeWhite,
-//   alignItems: 'center',
-//   justifyContent: 'center',
-// }

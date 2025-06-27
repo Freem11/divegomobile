@@ -6,27 +6,20 @@ import React, {
   useEffect
 } from "react";
 import "react-native-url-polyfill/auto";
-import { Dimensions, Platform } from "react-native";
+import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import Toast from 'react-native-toast-message';
 import * as ScreenOrientation from "expo-screen-orientation";
 import { I18nextProvider } from "react-i18next";
-import { MapCenterContext } from "./compnents/contexts/mapCenterContext";
-import { MapZoomContext } from "./compnents/contexts/mapZoomContext";
-import { MapRegionContext } from "./compnents/contexts/mapRegionContext";
-import { PinSpotContext } from "./compnents/contexts/pinSpotContext";
 import { SessionContext } from "./compnents/contexts/sessionContext";
-import MapPage from "./compnents/mapPage";
+import MapPage from "./compnents/mapPage/mapPage";
 import Authentication from "./compnents/authentication";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
-import { getMostRecentPhoto } from "./supabaseCalls/photoSupabaseCalls";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
-
-const { width, height } = Dimensions.get("window");
 
 export default function App() {
   if (Platform.OS === "ios") {
@@ -34,38 +27,6 @@ export default function App() {
   }
   const [appIsReady, setAppIsReady] = useState(false);
   const [activeSession, setActiveSession] = useState(null);
-  const [mapCenter, setMapCenter] = useState({
-    lat: 49.246292,
-    lng: -123.116226
-  });
-  const [region, setRegion] = useState({
-    latitude: mapCenter.lat,
-    longitude: mapCenter.lng,
-    latitudeDelta: 5,
-    longitudeDelta: 5 * (width / height)
-  });
-  const [zoomlev, setZoomLev] = useState(region.latitudeDelta);
-  const [dragPin, setDragPin] = useState({});
-
-  const getCurrentLocation = async () => {
-    try {
-      // await requestPermissions()
-      const photoLocation = await getMostRecentPhoto();
-      if (photoLocation) {
-        setRegion({
-          ...region,
-          latitude: photoLocation[0].latitude,
-          longitude: photoLocation[0].longitude
-        });
-        setDragPin({
-          lat: photoLocation[0].latitude,
-          lng: photoLocation[0].longitude
-        });
-      }
-    } catch (e) {
-      console.log({ title: "Error65", message: e.message });
-    }
-  };
 
   let [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
@@ -101,8 +62,7 @@ export default function App() {
   useLayoutEffect(() => {
     const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
-      await getCurrentLocation();
-
+ 
       if (Platform.OS === "ios") {
         await ScreenOrientation.lockAsync(
           ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -164,10 +124,6 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-        <PinSpotContext.Provider value={{ dragPin, setDragPin }}>
-          <MapZoomContext.Provider value={{ zoomlev, setZoomLev }}>
-            <MapRegionContext.Provider value={{ region, setRegion }}>
-              <MapCenterContext.Provider value={{ mapCenter, setMapCenter }}>
                 <SessionContext.Provider
                   value={{ activeSession, setActiveSession }}
                 >
@@ -175,10 +131,6 @@ export default function App() {
                     {activeSession ? <MapPage /> : <Authentication />}
                   </I18nextProvider>
                 </SessionContext.Provider>
-              </MapCenterContext.Provider>
-            </MapRegionContext.Provider>
-          </MapZoomContext.Provider>
-        </PinSpotContext.Provider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />
       {/* <Toast /> */}

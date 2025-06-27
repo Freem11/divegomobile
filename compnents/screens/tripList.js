@@ -18,9 +18,7 @@ import { getItinerariesByUserId, insertItineraryRequest } from "../../supabaseCa
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
 import { ShopContext } from "../../compnents/contexts/shopContext";
-import { ShopModalContext } from "../contexts/shopModalContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
-import { PreviousButtonIDContext } from "../contexts/previousButtonIDContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
@@ -41,21 +39,16 @@ export default function TripListPage(props) {
   const tripsRef = useRef(null);
   const { profile } = useContext(UserProfileContext);
   const { setShop } = useContext(ShopContext);
-  const { setShopModal } = useContext(ShopModalContext);
   const { setEditMode } = useContext(EditModeContext);
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setSitesArray } = useContext(SitesArrayContext);
-  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
-  const { setPreviousButtonID } = useContext(PreviousButtonIDContext);
   const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
+  const {setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { t } = useTranslation()
   const [itineraryList, setItineraryList] = useState("");
   const [selectedID, setSelectedID] = useState(null);

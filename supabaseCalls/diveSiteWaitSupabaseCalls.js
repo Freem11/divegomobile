@@ -17,16 +17,13 @@ export const diveSiteWaits = async () => {
 };
 
 export const insertDiveSiteWaits = async (values) => {
-
-  // console.log("divesite waits gets ", values)
-
   const { data, error } = await supabase
   .from("diveSiteWait")
   .insert([
     {
-      name: values.Site,
-      lat: values.Latitude,
-      lng: values.Longitude,
+      name: values.name,
+      lat: values.lat,
+      lng: values.lng,
       UserID: values.UserID
     },
   ]);

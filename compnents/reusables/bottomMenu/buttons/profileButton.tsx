@@ -9,7 +9,7 @@ import { UserProfileContext } from "../../../contexts/userProfileContext";
 
 export default function ProfileButton() {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { profile } = useContext(UserProfileContext);
 
   const handleScreen = () => {
