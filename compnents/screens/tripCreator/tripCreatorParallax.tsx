@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import TripCreatorPage from "./tripCreator";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
@@ -11,6 +10,7 @@ import { Keyboard } from "react-native";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useTranslation } from "react-i18next";
 import { useMapStore } from "../../googleMap/useMapStore";
+import TripCreatorPage from ".";
 
 
 type TripCreatorProps = {
@@ -73,7 +73,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
       onMapFlip={onNavigate}
       popoverConent={editMode && popoverConent}
     >
-      <TripCreatorPage selectedShop={props.shopID}/>
+      <TripCreatorPage itineraryInfo={formValues}/>
 
     </ParallaxDrawer>
   );
