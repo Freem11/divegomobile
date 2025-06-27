@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import UserProfileScreen from './userProfile';
+import UserProfileScreen from ".";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
 import { Keyboard } from "react-native";
@@ -17,6 +17,7 @@ import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+
 
 type UserProfileProps = {
   profileID: number
