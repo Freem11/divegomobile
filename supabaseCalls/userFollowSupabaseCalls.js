@@ -37,7 +37,6 @@ export const deleteUserFollow = async (id) => {
 };
 
 export const checkIfUserFollows = async (userId, followUserId) => {
-
   const { data, error } = await supabase
   .from("followUsers")
   .select()

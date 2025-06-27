@@ -57,7 +57,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   useEffect(() => {
     if (
-      (selectedProfile?.userId === profile[0]?.UserID)
+      (selectedProfile?.user_id === profile?.user_id)
     ) {
       setIsMyProfile(true);
     } else {
@@ -81,31 +81,33 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   async function followCheck() {
   let follows = await checkIfUserFollows(
-    profile[0].UserID,
-    selectedProfile[0].UserID
+    profile.user_id,
+    selectedProfile.user_id
   );
   if (follows && follows.length > 0) {
     setIsfFollowing(follows[0].id);
   }
 }
 
-const handleFollow = async () => {
-
+const addFollow = async () => {
   let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
   if (!permissionGiven) {
     return
   }
+  let newRecord = await insertUserFollow(
+    profile.UserID,
+    selectedProfile.user_id
+  );
+  setIsfFollowing(newRecord.id);    
+}
 
-  if (isFollowing) {
-    deleteUserFollow(isFollowing);
-  } else {
-      let newRecord = await insertUserFollow(
-        profile[0].UserID,
-        selectedProfile[0].UserID
-      );
-      setIsfFollowing(newRecord[0].id);    
+const removeFollow = async () => {
+  let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+  if (!permissionGiven) {
+    return
   }
-};
+  deleteUserFollow(isFollowing);
+}
   
   const onClose = () => {
     setSelectedProfile(null);
@@ -114,10 +116,6 @@ const handleFollow = async () => {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    // setChosenModal("DiveSite");
-    // setMapHelper(true);
-    // setMapConfig(2);
-    // setLevelOneScreen(false);
   };
 
   const openSettingsScreen = () => {
@@ -132,19 +130,38 @@ const handleFollow = async () => {
     setActiveTutorialID("EditsScreen")
   };
 
+ 
   const popoverConent = () => {
     return (
     <>
+    {isMyProfile &&
     <IconWithLabel 
     label="Update My Profile"
     iconName="camera-flip-outline"
     buttonAction={() => openEditsPage()}
     />
+    }
+    {isMyProfile && 
     <IconWithLabel 
     label="Open Settings"
     iconName="settings"
     buttonAction={() => openSettingsScreen()}
     />
+    }
+    {!isMyProfile && !isFollowing &&
+    <IconWithLabel 
+    label={`Follow ${selectedProfile?.UserName}`}
+    iconName="plus"
+    buttonAction={() => addFollow()}
+    />
+    }
+    {!isMyProfile && isFollowing &&
+    <IconWithLabel 
+    label={`UnFollow ${selectedProfile?.UserName}`}
+    iconName="minus"
+    buttonAction={() => removeFollow()}
+    />
+    }
     </>
     )
   };
@@ -154,7 +171,7 @@ const handleFollow = async () => {
       headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage} 
       onClose={onClose} 
       onMapFlip={onNavigate}
-      popoverConent={isMyProfile && popoverConent}
+      popoverConent={popoverConent}
       isMyShop={isMyProfile}
       >
       <UserProfileScreen/>
