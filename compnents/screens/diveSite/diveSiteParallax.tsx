@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import DiveSiteScreen from './diveSite';
+import DiveSiteScreen from '.';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
 import { Keyboard } from "react-native";
