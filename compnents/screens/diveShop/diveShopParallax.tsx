@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import DiveShopScreen from './diveShop';
+import DiveShopScreen from '.';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
