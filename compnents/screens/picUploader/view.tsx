@@ -17,25 +17,21 @@ type dropDownItem = {
 
 interface IProps {
   values: Form;
-  pinValues: any;
   isUploading: boolean;
   localPreviewUri: string | null;
   datePickerVisible: boolean;
   onClose: () => void;
   onSubmit: (data: any) => void
   getMoreAnimals: (search: string, limit: number, skip: number) => Promise<any>
-  setPinValues: (key: string, value: string) => void;
   hideDatePicker: () => void;
   onImageSelect: (uri: string) => void;
 }
 
 export default function PicUploaderView({
   values,
-  pinValues,
   localPreviewUri,
   onSubmit,
   getMoreAnimals,
-  setPinValues,
   hideDatePicker,
 }: IProps) {
   const { t } = useTranslation();

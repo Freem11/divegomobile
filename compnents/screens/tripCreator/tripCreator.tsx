@@ -1,23 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import * as S from "./styles";
-import { View, Keyboard, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { colors } from "../../styles";
-import {
-  insertItineraryRequest,
-  insertItinerary,
-  getItineraryDiveSiteByIdArray,
-  itineraries
-} from "../../../supabaseCalls/itinerarySupabaseCalls";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment";
-import { TripDetailContext } from "../../contexts/tripDetailsContext";
-import { SitesArrayContext } from "../../contexts/sitesArrayContext";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-import { ActiveConfirmationIDContext } from "../../contexts/activeConfirmationIDContext";
-import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
-import { ConfirmationModalContext } from "../../contexts/confirmationModalContext";
-import { EditModeContext } from "../../contexts/editModeContext";
-import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { useTranslation } from "react-i18next";
 import PriceTextInput from "../../reusables/priceTextInput";
 import MobileTextInput from "../../reusables/textInput";
@@ -26,154 +11,46 @@ import Label from "../../reusables/label";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { Controller, useForm } from "react-hook-form";
+import { Form, FormRules } from "./form";
 
 type TripCreatorProps = {
+  values: Form;
+  editMode: boolean
+  onSubmit: (data: any) => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void; 
   onDrawerHitBottom?: () => void;
-  selectedShop: number
+  tripDiveSites: number[]
+  sitesArray: number[]
+  removeFromSitesArray: (siteIdNo: number, siteList: number[]) => void
+  showDatePicker: (value: string) => void
+  hideDatePicker: () => void
+  handleDatePickerConfirm: () => void
+  datePickerVisible: boolean
+  dateType: string
 };
 
-export default function TripCreatorPage({
+export default function TripCreatorPageView({
+  values,
+  editMode,
+  onSubmit,
   closeParallax,
-  restoreParallax,
-  selectedShop
+  tripDiveSites,
+  sitesArray,
+  removeFromSitesArray,
+  showDatePicker,
+  hideDatePicker,
+  handleDatePickerConfirm,
+  datePickerVisible,
+  dateType
 }: TripCreatorProps) {
 
-  const { profile } = useContext(UserProfileContext);
-  const { editMode, setEditMode } = useContext(EditModeContext);
-
-  const [dateType, setDateType] = useState("");
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
-  const { formValues, setFormValues } = useContext(TripDetailContext);
-
-  const { setActiveConfirmationID } = useContext(ActiveConfirmationIDContext);
-  const { setConfirmationModal } = useContext(ConfirmationModalContext);
-  const { setConfirmationType } = useContext(ConfirmationTypeContext);
+  const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
+    values: values
+  });
+  
   const { t } = useTranslation();
-  const [itineraryList, setItineraryList] = useState("");
-  
-  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
-
-  useEffect(() => {
-    getItineraries(selectedShop);
-    getTripDiveSites(sitesArray);
-    setTripDiveSites(getTripDiveSites(formValues.siteList));
-    // setSitesArray(formValues.siteList);
-  }, []);
-
-
-  useEffect(() => {
-    if(levelTwoScreen){
-      restoreParallax();
-    }
-  }, [levelTwoScreen]);
- 
-  
-  useEffect(() => {
-    setFormValues({ ...formValues, siteList: sitesArray });
-    getTripDiveSites(sitesArray);
-    // setTripDiveSites(getTripDiveSites(sitesArray));
-  }, [sitesArray]);
-
-  const getItineraries = async (IdNum) => {
-    try {
-      const itins = await itineraries(IdNum);
-      if (itins.length > 0) {
-        setItineraryList(itins[0].itineraries);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
-  //date picker stuff
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [date, setDate] = useState(new Date());
-
-  const showDatePicker = (value) => {
-    setDateType(value);
-    Keyboard.dismiss();
-    setDatePickerVisible(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-
-  const handleDatePickerConfirm = () => {
-    let formattedDate = moment(date).format("YYYY-MM-DD");
-    setFormValues({ ...formValues, [dateType]: formattedDate });
-    hideDatePicker();
-  };
-
-  const getTripDiveSites = async (siteIds: number[]) => {
-    try {
-      const success = await getItineraryDiveSiteByIdArray(siteIds);
-      if (success) {
-        setTripDiveSites(success);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
-  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
-
-    const index = siteList.indexOf(siteIdNo);
-    if (index > -1) {
-      siteList.splice(index, 1);
-    }
-    setSitesArray(siteList);
-    const indexLocal = formValues.siteList.indexOf(siteIdNo);
-    if (indexLocal > -1) {
-      formValues.siteList.splice(index, 1);
-    }
-    getTripDiveSites(siteList);
-  };
-
-
-  const handleSubmit = () => {
-    if (
-      formValues.tripName === "" ||
-      formValues.BookingPage === "" ||
-      formValues.startDate === "" ||
-      formValues.endDate === "" ||
-      formValues.price === 0 ||
-      formValues.description === "" ||
-      formValues.siteList.length === 0
-    ) {
-      editMode
-        ? setConfirmationType("Trip Edit")
-        : setConfirmationType("Trip Submission");
-      setActiveConfirmationID("ConfirmationCaution");
-      setConfirmationModal(true);
-      return;
-    } else {
-      editMode
-        ? insertItineraryRequest(formValues, "Edit")
-        : insertItinerary(formValues);
-      setFormValues({
-        ...formValues,
-        BookingPage: "",
-        tripName: "",
-        startDate: "",
-        endDate: "",
-        price: 0,
-        description: "",
-        siteList: [],
-      });
-      setSitesArray([]);
-
-      editMode
-        ? setConfirmationType("Trip Edit")
-        : setConfirmationType("Trip Submission");
-      setActiveConfirmationID("ConfirmationSuccess");
-      setConfirmationModal(true);
-    }
-  };
 
   return (
     <S.ContentContainer>
@@ -185,81 +62,116 @@ export default function TripCreatorPage({
 
       <S.InputGroupContainer>
         <Label label="Details" />
-        <S.TextBuffer>
-          <MobileTextInput
-            iconLeft="store"
-            placeholder={t("TripCreator.tripNamePlaceholder")}
-            value={formValues.tripName}
-            onChangeText={(text: string) =>
-              setFormValues({ ...formValues, tripName: text })
-            }
-          />
-        </S.TextBuffer>
-
-        <S.TextBuffer>
-          <MobileTextInput
-            iconLeft="link"
-            placeholder={t("TripCreator.bookingLinkPlaceholder")}
-            value={formValues.BookingPage}
-            onChangeText={(text: string) =>
-              setFormValues({ ...formValues, BookingPage: text })
-            }
-          />
-        </S.TextBuffer>
-
-        <S.TextBuffer>
-          <PriceTextInput
-            iconLeft={"currency-usd"}
-            placeholder={t("TripCreator.pricePlaceholder")}
-            value={formValues && formValues.price}
-            onChangeText={(text: string) =>
-              setFormValues({ ...formValues, price: text })
-            }
-            keyboardType="number-pad"
-          />
-        </S.TextBuffer>
-
-        <S.TextBufferDates>
-          <S.TextLabelDates>
-            <Toucher onPress={() => showDatePicker("startDate")}>
-              <View pointerEvents="none">
-                <MobileTextInput
-                  iconLeft="calendar-start"
-                  placeholder={t("TripCreator.startDatePlaceholder")}
-                  value={formValues.startDate}
-                  onChangeText={(text: string) =>
-                    setFormValues({ ...formValues, startDate: text })
-                  }
+        <Controller
+            control={control}
+            name="Name"
+            rules={FormRules.Name}
+            render={({ field: { onChange, value } }) => (
+              <S.TextBuffer>
+                <MobileTextInput 
+                error={errors.Name}
+                iconLeft="store"
+                placeholder={t("TripCreator.tripNamePlaceholder")}
+                onChangeText={onChange}
+                value={value}
                 />
-              </View>
-            </Toucher>
-          </S.TextLabelDates>
-          <S.TextLabelDates>
-            <Toucher onPress={() => showDatePicker("endDate")}>
-              <View pointerEvents="none">
-                <MobileTextInput
-                  iconLeft="calendar-end"
-                  placeholder={t("TripCreator.endDatePlaceholder")}
-                  value={formValues.endDate}
-                  onChangeText={(text: string) =>
-                    setFormValues({ ...formValues, endDate: text })
-                  }
+              </S.TextBuffer>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="Link"
+            rules={FormRules.Link}
+            render={({ field: { onChange, value } }) => (
+              <S.TextBuffer>
+                <MobileTextInput 
+                error={errors.Link}
+                iconLeft="link"
+                placeholder={t("TripCreator.bookingLinkPlaceholder")}
+                onChangeText={onChange}
+                value={value}
                 />
-              </View>
-            </Toucher>
-          </S.TextLabelDates>
-        </S.TextBufferDates>
+              </S.TextBuffer>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="Price"
+            rules={FormRules.Price}
+            render={({ field: { onChange, value } }) => (
+              <S.TextBuffer>
+                <PriceTextInput 
+                error={errors.Price}
+                iconLeft="currency-usd"
+                placeholder={t("TripCreator.pricePlaceholder")}
+                onChangeText={onChange}
+                value={value ? String(value): null}
+                />
+              </S.TextBuffer>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="Start"
+            rules={FormRules.Start}
+            render={({ field: { onChange, value } }) => (
+              <S.TextBuffer>
+                  <Toucher onPress={() => showDatePicker("startDate")}>
+                  <View pointerEvents="none">
+                    <MobileTextInput 
+                    error={errors.Start}
+                    iconLeft="calendar-start"
+                    placeholder={t("TripCreator.startDatePlaceholder")}
+                    onChangeText={onChange}
+                    value={value}
+                    />
+                  </View>
+                </Toucher>
+              </S.TextBuffer>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="End"
+            rules={FormRules.End}
+            render={({ field: { onChange, value } }) => (
+              <S.TextBuffer>
+                  <Toucher onPress={() => showDatePicker("endDate")}>
+                  <View pointerEvents="none">
+                    <MobileTextInput 
+                    error={errors.End}
+                    iconLeft="calendar-end"
+                    placeholder={t("TripCreator.endDatePlaceholder")}
+                    onChangeText={onChange}
+                    value={value}
+                    />
+                  </View>
+                </Toucher>
+              </S.TextBuffer>
+            )}
+          />
 
         <Label label="Itinerary" />
 
         <S.DescriptionBox>
-          <S.MultilineTextInput
-            multiline
-            placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, '\n')}
-            value={formValues && formValues.description}
-            onChangeText={(text) =>
-              setFormValues({ ...formValues, description: text })
-            }
+        <Controller
+            control={control}
+            name="Details"
+            rules={FormRules.Details}
+            render={({ field: { onChange, value } }) => (
+              <S.MultilineTextInput
+                multiline
+                error={errors.Details}
+                placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, '\n')}
+                onChangeText={onChange}
+                value={value}
+                >
+              </S.MultilineTextInput>
+            )}
           />
         </S.DescriptionBox>
 
@@ -305,7 +217,7 @@ export default function TripCreatorPage({
 
         <S.BottomButtonBox>
           <Button
-            onPress={handleSubmit}
+             onPress={() => handleSubmit(onSubmit)()} 
             size="medium"
             title={t("TripCreator.submitButton")}
             iconRight="chevron-right"
@@ -319,15 +231,15 @@ export default function TripCreatorPage({
         onConfirm={handleDatePickerConfirm}
         onCancel={hideDatePicker}
         maximumDate={
-          dateType === "startDate" && formValues.endDate
-            ? new Date(formValues.endDate)
+          dateType === "startDate" && values.End
+            ? new Date(values.End)
             : undefined
         }
         minimumDate={
-          dateType === "endDate" && formValues.startDate
+          dateType === "endDate" && values.Start
             ? new Date(
-                new Date(formValues.startDate).setDate(
-                  new Date(formValues.startDate).getDate() + 1
+                new Date(values.Start).setDate(
+                  new Date(values.Start).getDate() + 1
                 )
               )
             : undefined

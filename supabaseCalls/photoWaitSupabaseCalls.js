@@ -17,6 +17,7 @@ export const photoWaits = async () => {
 
 export const insertPhotoWaits = async (values) => {
 
+  console.log('values', values)
   const { data, error } = await supabase
     .from("photoWait")
     .insert([

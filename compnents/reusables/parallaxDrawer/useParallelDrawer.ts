@@ -14,8 +14,6 @@ import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import { ActiveScreenContext } from "../../contexts/activeScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { SavedTranslateYContext } from "../../contexts/savedTranslateYContext";
 import { ActiveSceen, useActiveScreenStore } from "../../../store/useActiveScreenStore";
@@ -29,31 +27,18 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const translateY = useSharedValue(HALF_HEIGHT);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
-  // const savedTranslateY = useSharedValue(0);
   const [bottomHitCount, setBottomHitCount] = useState(1);
   const hasHitBottom = useSharedValue(false);
 
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { fullScreenModal } = useContext(FullScreenModalContext);
-
-  // const { activeScreen, setActiveScreen } = useContext(ActiveScreenContext);
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const activeScreen = useActiveScreenStore((state) => state.activeScreen);
 
-
   const { editInfo, setEditInfo } = useContext(EditsContext);
 
   const { savedTranslateY, setSavedTranslateY } = useContext(SavedTranslateYContext);
-
-  // useEffect(() => {
-  //   if (fullScreenModal && savedTranslateY === HALF_HEIGHT) {
-  //     translateY.value = HALF_HEIGHT;
-  //     startY.value = HALF_HEIGHT;
-  //   }
-  // }, [fullScreenModal]);
-
 
   useEffect(() => {
     if (levelOneScreen && savedTranslateY === HALF_HEIGHT) {

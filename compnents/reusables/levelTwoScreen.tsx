@@ -5,7 +5,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { ActiveScreenContext } from "../contexts/activeScreenContext";
 import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import UserProfileParallax from '../screens/userProfile/userProfileParallax';
@@ -19,9 +18,8 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelTwoScreen() {
-  const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
+  const activeScreen = useActiveScreenStore((state) => state.activeScreen);
 
-  const { activeScreen } = useContext(ActiveScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
 
   const levelTwoScreenY = useSharedValue(0);
@@ -46,11 +44,11 @@ export default function LevelTwoScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen2 && activeScreen2.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen2.params.id}/>}
-      {activeScreen2 && activeScreen2.screenName === "PartnerRequestScreen" && <PartnerRequestParallax />}
-      {activeScreen2 && activeScreen2.screenName === "PictureUploadScreen" && <PicUploaderParallax selectedDiveSite={activeScreen2.params.id}/>}
-      {activeScreen2 && activeScreen2.screenName === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
-      {activeScreen2 && activeScreen2.screenName === "TripCreatorScreen" && <TripCreatorParallax shopID={activeScreen2.params.id}/>}
+      {activeScreen && activeScreen.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen.params.id}/>}
+      {activeScreen && activeScreen.screenName === "PartnerRequestScreen" && <PartnerRequestParallax />}
+      {activeScreen && activeScreen.screenName === "PictureUploadScreen" && <PicUploaderParallax selectedDiveSite={activeScreen.params.id}/>}
+      {activeScreen && activeScreen.screenName === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
+      {activeScreen && activeScreen.screenName === "TripCreatorScreen" && <TripCreatorParallax shopID={activeScreen.params.id}/>}
     </Animated.View>
   );
 }

@@ -7,6 +7,7 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import PartnerAccountRequestPage from ".";
 import { ScreenReturn } from "../../googleMap/types";
 
+
 export default function PartnerRequestParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setDraggableConfig = useMapStore((state) => state.actions.setDraggablePoint);

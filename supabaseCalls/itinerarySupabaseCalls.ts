@@ -1,3 +1,4 @@
+import { ItineraryItem } from "../entities/itineraryItem";
 import { supabase } from "../supabase";
 
 export const itineraries = async (IdNo) => {
@@ -47,55 +48,50 @@ export const getItineraryDiveSiteByIdArray = async (siteIds) => {
   }
 };
 
-export const insertItinerary = async (values) => {
-  const { data, error } = await supabase.from("itineraries").insert([
+export const insertItinerary = async (values: ItineraryItem) => {
+  const { data, error } = await supabase.from('itineraries').insert([
     {
-      shopID: values.shopID,
-      tripName: values.tripName,
-      startDate: values.startDate,
-      endDate: values.endDate,
-      price: values.price,
+      shopID:      values.shopID,
+      tripName:    values.tripName,
+      startDate:   values.startDate,
+      endDate:     values.endDate,
+      price:       values.price,
       description: values.description,
-      siteList: values.siteList,
+      siteList:    values.siteList,
       BookingPage: values.BookingPage,
     },
   ]);
 
   if (error) {
-    console.log("couldn't do it 03,", error);
+    console.log('couldn\'t do it 03,', error);
   }
 
-  if (data) {
-    return data;
-    // console.log(data);
-  }
+  return { data, error };
 };
 
-export const insertItineraryRequest = async (values, reqType) => {
-  const { data, error } = await supabase.from("itineraryRequests").insert([
+
+export const insertItineraryRequest = async (values: ItineraryItem, reqType: string) => {
+  const { data, error } = await supabase.from('itineraryRequests').insert([
     {
-      shopID: values.shopID,
-      tripName: values.tripName,
-      startDate: values.startDate,
-      endDate: values.endDate,
-      price: values.price,
-      description: values.description,
-      siteList: values.siteList,
-      BookingPage: values.BookingPage,
-      requestType: reqType,
+      shopID:              values.shopID,
+      tripName:            values.tripName,
+      startDate:           values.startDate,
+      endDate:             values.endDate,
+      price:               values.price,
+      description:         values.description,
+      siteList:            values.siteList,
+      BookingPage:         values.BookingPage,
+      requestType:         reqType,
       OriginalItineraryID: values.OriginalItineraryID,
     },
   ]);
 
   if (error) {
-    console.log("couldn't do it 03,", error);
+    console.log('couldn\'t do it: itinerary edit/delete request,', error);
   }
-
-  if (data) {
-    return data;
-    // console.log(data);
-  }
+  return { data, error };
 };
+
 
 export const getItinerariesForDiveSite = async (IdNo) => {
   const { data, error } = await supabase

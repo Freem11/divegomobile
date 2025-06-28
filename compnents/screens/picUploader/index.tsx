@@ -3,7 +3,6 @@ import PicUploaderView from "./view";
 import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
-import { PinContext } from "../../contexts/staticPinContext";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning } from "../../toast";
 import { UserProfileContext } from "../../contexts/userProfileContext";
@@ -12,8 +11,8 @@ import { saveFailedUpload } from "../../feed/store/asyncStore";
 import { useTranslation } from "react-i18next";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
 import { checkNetworkStatus } from "../../feed/store/utils";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 export const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -54,12 +53,11 @@ export default function PicUploader({
 }: PicUploaderProps) {
   const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
-  const { pinValues, setPinValues } = useContext(PinContext);
   const { setConfirmationType } = useContext(ConfirmationTypeContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-
+  const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);
+  
   const tryUpload = async (uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
@@ -70,7 +68,6 @@ export default function PicUploader({
   };
 
   const resetAndClose = () => {
-    resetForm();
     setLocalPreviewUri(null);
     onClose();
   }
@@ -122,10 +119,12 @@ export default function PicUploader({
   }
 
   const onSubmit = async (formData: Required<Form>) => {
+    console.log(formData)
     setIsUploading(true);
-
+    console.log(localPreviewUri)
     try {
       const fileName = await tryUpload(localPreviewUri);
+      console.log('fileName', fileName)
       if (!fileName) {
         throw new Error(t('PicUploader.failedUpload'));
       }
@@ -160,28 +159,26 @@ export default function PicUploader({
     }
   };
 
-  const resetForm = () => {
-    setPinValues({
-      ...pinValues,
-      PicFile: null,
-      Animal: "",
-      PicDate: "",
-      Latitude: "",
-      Longitude: "",
-      DDVal: "0",
-    });
-  };
+  // const resetForm = () => {
+  //   setPinValues({
+  //     ...pinValues,
+  //     PicFile: null,
+  //     Animal: "",
+  //     PicDate: "",
+  //     Latitude: "",
+  //     Longitude: "",
+  //     DDVal: "0",
+  //   });
+  // };
 
   return (
     <PicUploaderView
-      pinValues={pinValues}
       datePickerVisible={datePickerVisible}
       hideDatePicker={() => setDatePickerVisible(false)}
       onImageSelect={handleImageUpload}
       onSubmit={onSubmitOrCache}
       onClose={onClose}
       getMoreAnimals={DynamicSelectOptionsAnimals.getMoreOptions}
-      setPinValues={setPinValues}
       isUploading={isUploading}
       localPreviewUri={localPreviewUri}
       values={{

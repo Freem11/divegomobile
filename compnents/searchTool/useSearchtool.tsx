@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import { Keyboard } from "react-native";
 import Geocoder from "react-native-geocoding";
 import { getSiteNamesThatFit, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import { PinSpotContext } from "../contexts/pinSpotContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { useMapStore } from "../googleMap/useMapStore";
 import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
@@ -11,7 +10,6 @@ const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 Geocoder.init(GoogleMapsApiKey);
 
 export default function useSearchTool() {
-  const { setDragPin } = useContext(PinSpotContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const mapRef = useMapStore((state) => state.mapRef);
 
@@ -78,7 +76,6 @@ export default function useSearchTool() {
         zoom: 12,
       });
 
-      setDragPin({ lat: location.lat, lng: location.lng });
       finalizeSelection();
     } catch (err) {
       console.warn("Geocoder error:", err);
@@ -97,8 +94,6 @@ export default function useSearchTool() {
         center: { latitude: lat, longitude: lng },
         zoom: 12,
       });
-
-      setDragPin({ lat, lng });
     }
 
     finalizeSelection();

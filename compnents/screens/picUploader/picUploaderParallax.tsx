@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import PicUploader from ".";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { PinContext } from "../../contexts/staticPinContext";
 import { Keyboard } from "react-native";
 import { chooseImageHandler } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -20,20 +19,10 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
   const { t } = useTranslation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { pinValues, setPinValues } = useContext(PinContext);
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
   
   const onClose = async () => {
     setLevelTwoScreen(false);
-      setPinValues({
-        ...pinValues,
-        PicFile: null,
-        Animal: "",
-        PicDate: "",
-        Latitude: "",
-        Longitude: "",
-        DDVal: "0",
-      });
   };
 
   const onNavigate = () => {

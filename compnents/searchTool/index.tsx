@@ -11,7 +11,7 @@ const { height } = Dimensions.get("window");
 const INPUT_TOP_MARGIN = moderateScale(0);
 const INPUT_BAR_HEIGHT = moderateScale(50);
 const LIST_VISUAL_START_Y = INPUT_TOP_MARGIN + INPUT_BAR_HEIGHT ;
-
+const windowWidth = Dimensions.get("window").width;
 
 export default function SearchTool() {
   const {
@@ -59,7 +59,7 @@ export default function SearchTool() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ paddingTop: Platform.OS === 'android' ? 25 : 0, paddingBottom: 25, alignSelf: "center", zIndex: 20 }}>
+      <View style={{ paddingTop: Platform.OS  === 'android' || windowWidth > 700 ? 25 : 0, paddingBottom: 25, alignSelf: "center", zIndex: 20 }}>
         <SearchToolInput
           iconLeft="navigation-variant-outline"
           iconRight="close"

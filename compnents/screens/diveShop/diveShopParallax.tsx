@@ -3,7 +3,6 @@ import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import DiveShopScreen from './diveShop';
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from '../../png/NoImage.png';
-import { MapHelperContext } from "../../contexts/mapHelperContext";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { Keyboard } from "react-native";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
@@ -32,7 +31,6 @@ export default function DiveShopParallax(props: DiveCentreProps) {
     LevelTwoScreenContext
   );
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { setMapHelper } = useContext(MapHelperContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const { profile } = useContext(UserProfileContext);
@@ -82,7 +80,6 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   const onNavigate = () => {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
-    setMapHelper(true);
     setMapConfig(2, selectedShop.id);
     setLevelOneScreen(false);
   };
