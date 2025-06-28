@@ -11,7 +11,8 @@ import { colors } from "../styles";
 import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
 import DiveShopParallax from '../screens/diveShop/diveShopParallax';
 import Settings from '../screens/settings';
-import TripListPage from '../screens/tripList';
+import ShopListParallax from "../screens/shopList/shopListParallax";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -45,7 +46,7 @@ export default function LevelOneScreen() {
       {activeScreen && activeScreen.screenName === "DiveShopScreen" && <DiveShopParallax shopID={activeScreen.params.id}/>}
       {activeScreen && activeScreen.screenName === "SettingsScreen" && <Settings/>}
       {/* {activeScreen && activeScreen.screenName === "SearchScreen" && <SearchPage/>} */}
-      {activeScreen && activeScreen.screenName === "TripListScreen" && <TripListPage/>}
+      {activeScreen && activeScreen.screenName === "TripListScreen" && <ShopListParallax/>}
     </Animated.View>
   );
 }

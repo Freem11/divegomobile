@@ -102,8 +102,8 @@
         "noPictureFound": "No picture found, reupload",
         "retryFailedUpload": "Retry upload failed, you should try to reupload the photo"
     },
-    "TripList": {
-        "header": "Your Dive Trip Offerings",
+    "DiveCenterList": {
+        "header": "My Dive Centers",
         "newTrip": "New Trip"
     },
     "TripCreator": {
