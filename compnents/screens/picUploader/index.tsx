@@ -42,7 +42,7 @@ type PicUploaderProps = {
   restoreParallax?: () => void;
   handleImageUpload?: () => void;
   localPreviewUri: string;
-  setLocalPreviewUri: Dispatch<any>;
+  setLocalPreviewUri: Dispatch<React.SetStateAction<string | null>>;
 };
 
 export default function PicUploader({
