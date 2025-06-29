@@ -13,15 +13,15 @@ import { SelectedProfileContext } from "../../contexts/selectedProfileModalConte
 import { UserProfileContext } from "../../contexts/userProfileContext";
 
 
-type SiteSubmitterProps = {
-  localPreviewUri: {uri : string} 
+type EdittingScreenProps = {
+  localPreviewUri: string | null
   initialFormData: BasicFormData
 };
 
 export default function EdittingScreen({
   localPreviewUri,
   initialFormData
-}: SiteSubmitterProps) {
+}: EdittingScreenProps) {
 
   const [isUploading, setIsUploading] = useState(false);
   const [newUri, setNewUri] = useState(null);
@@ -50,28 +50,31 @@ export default function EdittingScreen({
   };
 
   const onSubmit = async (formData: Required<Form>) => {
+
+    console.log('formData start', formData)
+
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
       return;
     }
 
-    let newPhoto: string
+    let formDataUri: string
     if(formData.uri){
-      newPhoto = formData.uri.split("/").pop() || "X"
+      formDataUri = formData.uri.split("/").pop() || "X"
     } else {
-      newPhoto = "X"
+      formDataUri = "X"
     }
 
-    let existingPhoto: string
-    if(localPreviewUri.uri){
-      existingPhoto = localPreviewUri.uri.split("/").pop() || "X"
+    let uploadedPhotoUri: string
+    if(localPreviewUri){
+      uploadedPhotoUri = localPreviewUri.split("/").pop() || "X"
     } else {
-      existingPhoto = "X"
+      uploadedPhotoUri = "X"
     }
 
     let updatedUri = null;
 
-    if(newPhoto !== existingPhoto){
+    if(formDataUri !== uploadedPhotoUri){
         setIsUploading(true);
 
         try {
@@ -92,13 +95,16 @@ export default function EdittingScreen({
         }
     }
 
+    console.log('formData', formData)
+
     if(initialFormData.dataType === "Dive Site"){
       const response = await updateDiveSite({
         id:                   formData.id,
         name:                 formData.name,
         diveSiteBio:          formData.bio,
-        diveSiteProfilePhoto: updatedUri ? updatedUri : localPreviewUri.uri || null
+        diveSiteProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
+      console.log("data back", response)
       setSelectedDiveSite(response?.data[0])
       if(response){setSupabaseResponse(response);}
     } else if (initialFormData.dataType === "Dive Center"){
@@ -106,7 +112,7 @@ export default function EdittingScreen({
         id:                   formData.id,
         orgName:              formData.name,
         diveShopBio:          formData.bio,
-        diveShopProfilePhoto: updatedUri ? updatedUri : localPreviewUri.uri || null
+        diveShopProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
       setSelectedShop(response?.data)
       if(response){setSupabaseResponse(response);}
@@ -116,7 +122,7 @@ export default function EdittingScreen({
         id:             formData.id,
         UserName:       formData.name,
         profileBio:     formData.bio,
-        profilePhoto:   updatedUri ? updatedUri : localPreviewUri.uri || null
+        profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
       setSelectedProfile(response?.data)
       setProfile(response?.data)

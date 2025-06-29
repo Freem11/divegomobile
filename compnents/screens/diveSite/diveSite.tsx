@@ -31,7 +31,7 @@ export default function DiveSiteScreenView({
   useEffect(() => {
     setSiteVals({
       siteName: selectedDiveSite.name,
-      bio: selectedDiveSite.divesitebio,
+      bio: selectedDiveSite.diveSiteBio,
       user: selectedDiveSite.newusername
     })
   
