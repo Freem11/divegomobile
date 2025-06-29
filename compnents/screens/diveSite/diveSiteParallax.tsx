@@ -14,6 +14,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 
 type DiveSiteProps = {
   siteID: number
@@ -35,9 +36,8 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
+  const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   
-  const [selectedDiveSite, setSelectedDiveSite] = useState<DiveSiteWithUserName | null>(null)
-
   useEffect(() => {
 
     getDiveSiteinfo()

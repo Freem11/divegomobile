@@ -36,14 +36,14 @@ export default function EditScreenParallax() {
 useEffect(() => {
   switch(editInfo) {
     case "DiveSite":
-      setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`} : noImage)
+      setLocalPreviewUri(selectedDiveSite.divesiteprofilephoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`} : noImage)
       setInitialFormData({ 
         dataType: "Dive Site",
         title: "Dive Site Edit",
         id: selectedDiveSite.id,
         name: selectedDiveSite.name,
-        bio: selectedDiveSite.diveSiteBio,
-        uri: selectedDiveSite.diveSiteProfilePhoto,
+        bio: selectedDiveSite.divesitebio,
+        uri: selectedDiveSite.divesiteprofilephoto,
         placeholderName: 'Dive Site Name cannot be blank!',
         placeholderBio: `A little about ${selectedDiveSite.name}`
       })
