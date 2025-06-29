@@ -53,7 +53,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   useEffect(() => {
     if (
       profile.partnerAccount &
-      (selectedShop.userId === profile.UserID)
+      (selectedShop.user_id === profile.UserID)
     ) {
       setIsMyShop(true);
     } else {

@@ -51,8 +51,6 @@ export default function EdittingScreen({
 
   const onSubmit = async (formData: Required<Form>) => {
 
-    console.log('formData start', formData)
-    console.log('localPreviewUri', localPreviewUri)
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
       return;
@@ -71,10 +69,7 @@ export default function EdittingScreen({
     } else {
       uploadedPhotoUri = "X"
     }
-
-
-    console.log(formDataUri, uploadedPhotoUri)
-    
+  
     let updatedUri = null;
 
     if(formDataUri !== uploadedPhotoUri){
@@ -98,8 +93,6 @@ export default function EdittingScreen({
         }
     }
 
-    console.log('formData', formData)
-
     if(initialFormData.dataType === "Dive Site"){
       const response = await updateDiveSite({
         id:                   formData.id,
@@ -116,7 +109,7 @@ export default function EdittingScreen({
         diveShopBio:          formData.bio,
         diveShopProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
-      setSelectedShop(response?.data)
+      setSelectedShop(response?.data[0])
       if(response){setSupabaseResponse(response);}
    
     }  else if (initialFormData.dataType === "Profile"){
@@ -126,7 +119,6 @@ export default function EdittingScreen({
         profileBio:     formData.bio,
         profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
-      console.log("data back", response)
       setSelectedProfile(response?.data[0])
       setProfile(response?.data[0])
       if(response){setSupabaseResponse(response);}

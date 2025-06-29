@@ -41,7 +41,6 @@ export default function UserProfileScreen({
     setLevelTwoScreen(false);
   };
 
-  console.log('selectedProfile', selectedProfile)
   const getPhotos = async () => {
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
 

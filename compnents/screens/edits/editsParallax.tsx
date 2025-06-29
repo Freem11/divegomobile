@@ -62,7 +62,6 @@ useEffect(() => {
       })
       break;
     case "Profile":
-      console.log("ahhhh", selectedProfile, localPreviewUri)
       setLocalPreviewUri(selectedProfile.profilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}` : localPreviewUri)
       setInitialFormData({ 
         dataType: "Profile",
@@ -110,9 +109,6 @@ useEffect(() => {
   const handleImageUpload = async (argPicture: string) => {
     setLocalPreviewUri(argPicture);
   };
-
-  console.log('initialFormData', initialFormData)
-  console.log('localPreviewUri', localPreviewUri)
   
   return (
     <ParallaxDrawer 
