@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { DiveShop } from "../../../entities/diveShop";
 import DiveSiteScreenView from "./diveSite";
 import { Pagination } from "../../../entities/pagination";
 import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
