@@ -30,46 +30,46 @@ export default function EditScreenParallax() {
   const { selectedShop } = useContext(SelectedShopContext);
   const { selectedProfile } = useContext(SelectedProfileContext);
 
-  const [localPreviewUri, setLocalPreviewUri] = useState(null);
+  const [localPreviewUri, setLocalPreviewUri] = useState<string | null>(null);
   const [initialFormData, setInitialFormData] = useState<BasicFormData | null>(null);
 
 useEffect(() => {
   switch(editInfo) {
     case "DiveSite":
-      setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`} : noImage)
+      setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}` : localPreviewUri)
       setInitialFormData({ 
         dataType: "Dive Site",
         title: "Dive Site Edit",
         id: selectedDiveSite.id,
         name: selectedDiveSite.name,
         bio: selectedDiveSite.diveSiteBio,
-        uri: selectedDiveSite.diveSiteProfilePhoto,
+        uri: selectedDiveSite.diveSiteProfilePhoto ? selectedDiveSite.diveSiteProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
         placeholderName: 'Dive Site Name cannot be blank!',
         placeholderBio: `A little about ${selectedDiveSite.name}`
       })
       break;
     case "DiveShop":
-      setLocalPreviewUri(selectedShop.diveShopProfilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop.diveShopProfilePhoto.split("/").pop()}`} : noImage)
+      setLocalPreviewUri(selectedShop.diveShopProfilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop.diveShopProfilePhoto.split("/").pop()}` : localPreviewUri)
       setInitialFormData({ 
         dataType: "Dive Center",
         title: "Dive Center Edit",
         id: selectedShop.id,
         name: selectedShop.orgName,
         bio: selectedShop.diveShopBio,
-        uri: selectedShop.diveShopProfilePhoto,
+        uri: selectedShop.diveShopProfilePhoto ? selectedShop.diveShopProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
         placeholderName: 'Dive Centre Name cannot be blank!',
         placeholderBio: `A little about ${selectedShop.orgName}`
       })
       break;
     case "Profile":
-      setLocalPreviewUri(selectedProfile.profilePhoto ? {uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}`} : noImage)
+      setLocalPreviewUri(selectedProfile.profilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}` : localPreviewUri)
       setInitialFormData({ 
         dataType: "Profile",
         title: "Edit My Profile",
         id: selectedProfile.id,
         name: selectedProfile.UserName,
         bio: selectedProfile.profileBio,
-        uri: selectedProfile.profilePhoto,
+        uri: selectedProfile.profilePhoto ? selectedProfile.profilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
         placeholderName: 'You Diver Name cannot be blank!',
         placeholderBio: `Tell other divers about yourself`
       })
@@ -106,19 +106,17 @@ useEffect(() => {
     }
   };
   
-  const handleImageUpload = async (argPicture) => {
-    setLocalPreviewUri({uri: argPicture});
+  const handleImageUpload = async (argPicture: string) => {
+    setLocalPreviewUri(argPicture);
   };
-
+  
   return (
     <ParallaxDrawer 
-      headerImage={localPreviewUri ? localPreviewUri : noImage} 
+      headerImage={localPreviewUri ? { uri: localPreviewUri } : noImage} 
       onClose={onClose}
       popoverConent={popoverConent}
       >
       <EdittingScreen 
-          onClose={onClose}
-          setLocalPreviewUri={setLocalPreviewUri}
           localPreviewUri={localPreviewUri}
           initialFormData={initialFormData}
           />
