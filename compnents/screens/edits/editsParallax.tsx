@@ -43,7 +43,7 @@ useEffect(() => {
         id: selectedDiveSite.id,
         name: selectedDiveSite.name,
         bio: selectedDiveSite.diveSiteBio,
-        uri: selectedDiveSite.diveSiteProfilePhoto ? selectedDiveSite.diveSiteProfilePhoto : `animalphotos/public/${localPreviewUri?.split("/").pop()}`,
+        uri: selectedDiveSite.diveSiteProfilePhoto ? selectedDiveSite.diveSiteProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
         placeholderName: 'Dive Site Name cannot be blank!',
         placeholderBio: `A little about ${selectedDiveSite.name}`
       })
@@ -56,12 +56,13 @@ useEffect(() => {
         id: selectedShop.id,
         name: selectedShop.orgName,
         bio: selectedShop.diveShopBio,
-        uri: selectedShop.diveShopProfilePhoto ? selectedShop.diveShopProfilePhoto : `animalphotos/public/${localPreviewUri?.split("/").pop()}`,
+        uri: selectedShop.diveShopProfilePhoto ? selectedShop.diveShopProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
         placeholderName: 'Dive Centre Name cannot be blank!',
         placeholderBio: `A little about ${selectedShop.orgName}`
       })
       break;
     case "Profile":
+      console.log("ahhhh", selectedProfile, localPreviewUri)
       setLocalPreviewUri(selectedProfile.profilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}` : localPreviewUri)
       setInitialFormData({ 
         dataType: "Profile",
@@ -69,7 +70,7 @@ useEffect(() => {
         id: selectedProfile.id,
         name: selectedProfile.UserName,
         bio: selectedProfile.profileBio,
-        uri: selectedProfile.profilePhoto ? selectedProfile.profilePhoto : `animalphotos/public/${localPreviewUri?.split("/").pop()}`,
+        uri: selectedProfile.profilePhoto ? selectedProfile.profilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
         placeholderName: 'You Diver Name cannot be blank!',
         placeholderBio: `Tell other divers about yourself`
       })

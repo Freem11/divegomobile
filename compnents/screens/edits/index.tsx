@@ -52,7 +52,7 @@ export default function EdittingScreen({
   const onSubmit = async (formData: Required<Form>) => {
 
     console.log('formData start', formData)
-
+    console.log('localPreviewUri', localPreviewUri)
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
       return;
@@ -72,6 +72,9 @@ export default function EdittingScreen({
       uploadedPhotoUri = "X"
     }
 
+
+    console.log(formDataUri, uploadedPhotoUri)
+    
     let updatedUri = null;
 
     if(formDataUri !== uploadedPhotoUri){
@@ -104,7 +107,6 @@ export default function EdittingScreen({
         diveSiteBio:          formData.bio,
         diveSiteProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
-      console.log("data back", response)
       setSelectedDiveSite(response?.data[0])
       if(response){setSupabaseResponse(response);}
     } else if (initialFormData.dataType === "Dive Center"){
@@ -124,8 +126,9 @@ export default function EdittingScreen({
         profileBio:     formData.bio,
         profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
-      setSelectedProfile(response?.data)
-      setProfile(response?.data)
+      console.log("data back", response)
+      setSelectedProfile(response?.data[0])
+      setProfile(response?.data[0])
       if(response){setSupabaseResponse(response);}
     }
 

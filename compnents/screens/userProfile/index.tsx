@@ -21,6 +21,7 @@ export default function UserProfileScreen({
   const { profile } = useContext(UserProfileContext);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   
+
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
@@ -40,6 +41,7 @@ export default function UserProfileScreen({
     setLevelTwoScreen(false);
   };
 
+  console.log('selectedProfile', selectedProfile)
   const getPhotos = async () => {
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
 
