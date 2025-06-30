@@ -1,16 +1,15 @@
 import { supabase } from "../supabase";
 
 export const createPartnerAccountRequest = async (values) => {
-
   const { data, error } = await supabase
   .from("partnerAccountRequests")
   .insert([
     {
-      webpageLink : values.websiteLink,
+      webpageLink : values.webpageLink,
       businessName: values.businessName,
       latitude: values.latitude,
-      longitude: values.lontitude,
-      userId: values.UserId
+      longitude: values.longitude,
+      userId: values.userId
     },
   ]);
 

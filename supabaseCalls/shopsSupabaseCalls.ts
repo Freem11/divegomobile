@@ -66,7 +66,6 @@ export const getShopByName = async (value) => {
 };
 
 export const updateDiveShop = async (values) => {
-  console.log("updating...", values);
   const { data, error } = await supabase
     .from("shops")
     .update({ diveShopBio: values.bio, diveShopProfilePhoto: values.photo })

@@ -13,7 +13,7 @@ import { useMapStore } from "../../googleMap/useMapStore";
 interface Props {
   values: Form;
   onSubmit: (data: any) => void;
-  getCurrentLocation: () => void;
+  getCurrentLocation: (formData: Required<Form>) => void;
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void;
 }
@@ -29,7 +29,8 @@ export default function PartnerAccountRequestPageView({
   const { t } = useTranslation();
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const { control, handleSubmit, formState: { isSubmitting, errors }, getValues, reset } = useForm<Form>({
     values: values
   });
 
@@ -39,9 +40,10 @@ export default function PartnerAccountRequestPageView({
     }
   }, [levelTwoScreen]);
 
-  const handleMapFlip = async () => {
+  const handleMapFlip = async (formData: Required<Form>) => {
     setMapConfig(1, ScreenReturn.PartnerRequestPage)
     closeParallax(1)
+    setFormValues(formData)
   }
   
   return (
@@ -140,14 +142,20 @@ export default function PartnerAccountRequestPageView({
           <S.ButtonSpread>
 
             <Button 
-                   onPress={getCurrentLocation} 
+                  onPress={() => {
+                    const data = getValues();
+                    getCurrentLocation(data as Required<Form>);
+                  }} 
                    alt={true} 
                    size='medium'
                    title={t('DiveSiteAdd.myLocationButton')}
                  />
 
                  <Button 
-                   onPress={() => handleMapFlip()} 
+                    onPress={() => {
+                      const data = getValues();
+                      handleMapFlip(data as Required<Form>);
+                    }} 
                    alt={true} 
                    size='medium'
                    title={t('DiveSiteAdd.pinButton')}

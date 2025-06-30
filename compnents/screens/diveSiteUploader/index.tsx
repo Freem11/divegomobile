@@ -43,7 +43,7 @@ export default function DiveSiteUploader({
       const location = await getCurrentCoordinates();
       if (location) {
         mapAction.setFormValues({
-          Site: formData.Site || storeFormValues.Site, 
+          Site: formData.Site || storeFormValues?.Site, 
           Latitude: location.coords.latitude,
           Longitude: location.coords.longitude 
         })
