@@ -21,7 +21,7 @@ export const showWarning = (warningMessage) => {
     text2: warningMessage || i18n.t("Toast.warningMessage"),
     visibilityTime: VISIBILITY_TIME,
   });
-}
+};
 
 export const showError = (errorMessage) => {
   Toast.show({
@@ -30,7 +30,7 @@ export const showError = (errorMessage) => {
     text2: errorMessage || i18n.t("Toast.errorMessage"),
     visibilityTime: VISIBILITY_TIME,
   });
-}
+};
 
 export const showSuccess = (successMessage) => {
   Toast.show({
@@ -39,14 +39,34 @@ export const showSuccess = (successMessage) => {
     text2: successMessage || i18n.t("Toast.successMessage"),
     visibilityTime: VISIBILITY_TIME,
   });
-}
+};
 
-// still not finished! need to adjust, but its the basics!
 export const toastConfig = {
+  [TOAST_MAP.success]: ({ text1, text2 }) => (
+    <View style={[styles.base, styles.success]}>
+      <Text style={styles.title}>{text1}</Text>
+      <Text style={styles.message} numberOfLines={0}>{text2}</Text>
+    </View>
+  ),
+
+  [TOAST_MAP.error]: ({ text1, text2 }) => (
+    <View style={[styles.base, styles.error]}>
+      <Text style={styles.title}>{text1}</Text>
+      <Text style={styles.message} numberOfLines={0}>{text2}</Text>
+    </View>
+  ),
+
+  [TOAST_MAP.info]: ({ text1, text2 }) => (
+    <View style={[styles.base, styles.info]}>
+      <Text style={styles.title}>{text1}</Text>
+      <Text style={styles.message} numberOfLines={0}>{text2}</Text>
+    </View>
+  ),
+
   [TOAST_MAP.one_button]: ({ text1, text2, props }) => (
     <View style={[styles.base, styles.info]}>
       <Text style={styles.title}>{text1}</Text>
-      <Text style={styles.message}>{text2}</Text>
+      <Text style={styles.message} numberOfLines={0}>{text2}</Text>
       <TouchableOpacity onPress={props.onPress}>
         <Text style={styles.button}>OK</Text>
       </TouchableOpacity>
@@ -56,7 +76,7 @@ export const toastConfig = {
   [TOAST_MAP.two_buttons]: ({ text1, text2, props }) => (
     <View style={[styles.base, styles.warning]}>
       <Text style={styles.title}>{text1}</Text>
-      <Text style={styles.message} numberOfLines={undefined}>{text2}</Text>
+      <Text style={styles.message} numberOfLines={0}>{text2}</Text>
       <View style={styles.buttonRow}>
         <TouchableOpacity onPress={props.onPrimary}>
           <Text style={styles.button}>Retry</Text>
@@ -75,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 16,
     marginVertical: 6,
-    backgroundColor: colors.primaryBlue
+    backgroundColor: colors.primaryBlue,
   },
   title: {
     color: colors.themeWhite,
@@ -85,8 +105,8 @@ const styles = StyleSheet.create({
   message: {
     color: colors.themeWhite,
     marginBottom: 8,
-    flexShrink: 1,           
-    flexWrap: 'wrap',        
+    flexShrink: 1,
+    flexWrap: 'wrap',
     includeFontPadding: false,
   },
   button: {
@@ -118,4 +138,3 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 });
-

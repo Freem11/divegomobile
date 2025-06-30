@@ -23,6 +23,9 @@ export function ReturnToSiteSubmitterButton() {
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
   const screenId = useMapStore((state) => state.itemId);
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const storeFormValues = useMapStore((state) => state.formValues);
+
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -38,7 +41,8 @@ export function ReturnToSiteSubmitterButton() {
       setLevelTwoScreen(true);
       setChosenModal(null);
     }  
-    mapAction.setDraggablePoint(camera.center)
+
+    mapAction.setFormValues({...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude})
     mapAction.setMapConfig(0, 0);
    
   };

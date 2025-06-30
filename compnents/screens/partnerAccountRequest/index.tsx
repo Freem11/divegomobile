@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Keyboard } from "react-native";
+import { showError, showSuccess } from "../../toast";
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { createPartnerAccountRequest } from "../../../supabaseCalls/partnerSupabaseCalls";
@@ -40,6 +41,12 @@ export default function PartnerAccountRequestPage({
       longitude: formData.Longitude,
       userId: profile.UserId
     }); 
+
+    if (error){
+    showError("We were unable to save your submission, please try again later")
+    return;
+  } 
+    showSuccess(`Partner reuqest for ${formData.OrgName} has been sucessfuly submitted! We will contact you via email, with our descision.`);
   };
 
   const getCurrentLocation = async () => {

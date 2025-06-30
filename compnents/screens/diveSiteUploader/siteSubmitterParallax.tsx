@@ -11,10 +11,12 @@ import { ScreenReturn } from "../../googleMap/types";
 export default function SiteSubmitterParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setDraggableConfig = useMapStore((state) => state.actions.setDraggablePoint);
-
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   const onClose = async () => {
+    setFormValues(null)
     setLevelTwoScreen(false);
     setDraggableConfig(null)
   };
