@@ -52,6 +52,7 @@ import { useTranslation } from "react-i18next";
 import SearchTool from '../searchTool';
 import * as S from './styles';
 import { FeedsButton } from "../feed/iconButton";
+import { ActiveProfile } from "../../entities/profile";
 
 
 const windowWidth = Dimensions.get("window").width;
@@ -150,8 +151,7 @@ export default function MapPage() {
     let sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      // TODO Matt add typing, its now an object and not an array, so add return typing from grabProfileByUserId
-      const success = await grabProfileByUserId(sessionUserId);
+      const success: ActiveProfile = await grabProfileByUserId(sessionUserId);
       if (success) {
         let bully = success && success.UserName;
         if (bully == null || bully === "") {
