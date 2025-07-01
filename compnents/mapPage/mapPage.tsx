@@ -51,6 +51,7 @@ import FeedScreens from "../feed/screens";
 import { useTranslation } from "react-i18next";
 import SearchTool from '../searchTool';
 import * as S from './styles';
+import { FeedsButton } from "../feed/iconButton";
 
 
 const windowWidth = Dimensions.get("window").width;
@@ -223,6 +224,7 @@ export default function MapPage() {
             ) : null}
 
             {mapConfig === 0 && <EmailFeedback />}
+            {mapConfig === 0 && <FeedsButton />}
 
             <FeedScreens />
             <LevelOneScreen />
