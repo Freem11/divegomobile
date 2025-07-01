@@ -8,6 +8,7 @@ import {
   useSharedValue,
   useAnimatedStyle,
   useAnimatedReaction,
+  useDerivedValue,  // <-- added
 } from "react-native-reanimated";
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
@@ -22,6 +23,7 @@ const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const HALF_HEIGHT = SCREEN_HEIGHT / 2;
 const TOP_SECTION_HEIGHT = moderateScale(70);
 const DECELERATION = 0.985;
+const maxPushUp = moderateScale(100);
 
 export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) => {
   const translateY = useSharedValue(HALF_HEIGHT);
@@ -103,13 +105,20 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }, 1000);
   };
 
-  // Worklet helper to compute minimum translateY (top limit)
   const getMinTranslateY = () => {
-    // Negative or zero: how far up drawer can go to show all content + keyboard
-    return Math.min(
-      0,
-      SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
-    );
+    'worklet';
+
+    const totalContentHeight = contentHeight.value + TOP_SECTION_HEIGHT + keyboardHeight.value;
+    const availableHeight = SCREEN_HEIGHT;
+
+    if (totalContentHeight <= availableHeight) {
+      // content fits, clamp to just above content
+      return availableHeight - totalContentHeight;
+    }
+
+    // content taller than screen, allow moving up enough to reveal entire content
+    // Negative translateY value to move drawer further up
+    return availableHeight - totalContentHeight;
   };
 
   const panGesture = Gesture.Pan()
@@ -117,10 +126,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       startY.value = translateY.value;
     })
     .onUpdate((event) => {
-      const minY = Math.min(
-        0,
-        SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
-      );
+      const minY = getMinTranslateY();
       const maxY = HALF_HEIGHT;
 
       const nextY = startY.value + event.translationY;
@@ -133,10 +139,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       }
     })
     .onEnd((event) => {
-      const minY = Math.min(
-        0,
-        SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
-      );
+      const minY = getMinTranslateY();
       const maxY = HALF_HEIGHT;
 
       if (event.velocityY < 0) {
@@ -171,10 +174,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   }));
 
   const animatedBackgroundStyle = useAnimatedStyle(() => {
-    const minTranslateY = Math.min(
-      0,
-      SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
-    );
+    const minTranslateY = getMinTranslateY();  // Use the worklet here
     const scale = interpolate(
       translateY.value,
       [minTranslateY, HALF_HEIGHT, SCREEN_HEIGHT],
@@ -184,11 +184,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   });
 
   const animatedSafeAreaStyle = useAnimatedStyle(() => {
-    const minTranslateY = Math.min(
-      0,
-      SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
-    );
-
+    const minTranslateY = getMinTranslateY(); // Use the worklet here
     const opacity = interpolate(
       translateY.value,
       [HALF_HEIGHT, minTranslateY],
@@ -200,6 +196,25 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     };
   });
 
+  
+  const animatedContentTranslateY = useDerivedValue(() => {
+    const minTranslateY = getMinTranslateY();
+  
+    const progress = (HALF_HEIGHT - translateY.value) / (HALF_HEIGHT - minTranslateY);
+    const clampedProgress = Math.min(Math.max(progress, 0), 1);
+  
+    // Always subtract keyboardHeight.value — it's animated now
+    return -clampedProgress * maxPushUp - keyboardHeight.value;
+  });
+  
+  
+  
+
+  const animatedContentStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: animatedContentTranslateY.value }],
+  }));
+
+  
   const updateActiveScreen = (
     latestScreen: ActiveSceen | null,
     currentScreen: ActiveSceen | null,
@@ -254,36 +269,38 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   // Keyboard show/hide handling to move drawer
   useEffect(() => {
     const onKeyboardShow = (e: RNKeyboardEvent) => {
-      keyboardHeight.value = e.endCoordinates.height;
+      const height = e.endCoordinates.height;
+      // Animate keyboardHeight to new height smoothly
+      keyboardHeight.value = withTiming(height, { duration: 250 });
       isKeyboardVisible.value = true;
-
+  
       const minTranslateY = getMinTranslateY();
-
       translateY.value = withTiming(minTranslateY, { duration: 250 });
       startY.value = minTranslateY;
     };
-
+  
     const onKeyboardHide = () => {
-      keyboardHeight.value = 0;
+      // Animate keyboardHeight back to 0 smoothly
+      keyboardHeight.value = withTiming(0, { duration: 250 });
       isKeyboardVisible.value = false;
-    
+  
       const targetTranslateY = Math.min(
         HALF_HEIGHT,
         SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT
       );
-    
       translateY.value = withTiming(targetTranslateY, { duration: 250 });
       startY.value = targetTranslateY;
     };
-
+  
     const showSub = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
     const hideSub = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
-
+  
     return () => {
       showSub.remove();
       hideSub.remove();
     };
   }, []);
+  
 
   return {
     SCREEN_WIDTH,
@@ -295,5 +312,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     closeParallax,
     restoreParallax,
     bottomHitCount,
+    animatedContentStyle,  // <-- new return value for pushing content up
   };
 };

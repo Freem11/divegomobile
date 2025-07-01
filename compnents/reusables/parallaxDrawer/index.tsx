@@ -21,9 +21,9 @@ type ParallaxDrawerProps = {
   onClose: () => void;
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
-  isMyShop?: boolean
-  isPartnerAccount?: boolean
-  popoverConent?: () => React.JSX.Element,
+  isMyShop?: boolean;
+  isPartnerAccount?: boolean;
+  popoverConent?: () => React.JSX.Element;
 };
 
 const ParallaxDrawer = ({
@@ -31,7 +31,7 @@ const ParallaxDrawer = ({
   children,
   onClose,
   onMapFlip,
-  popoverConent
+  popoverConent,
 }: ParallaxDrawerProps) => {
   
   const {
@@ -43,7 +43,7 @@ const ParallaxDrawer = ({
     contentHeight,
     closeParallax,
     restoreParallax,
-    bottomHitCount
+    bottomHitCount,
   } = useParallaxDrawer(onClose, onMapFlip);
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
@@ -52,18 +52,18 @@ const ParallaxDrawer = ({
   const { fullScreenModal } = useContext(FullScreenModalContext);
   
   useEffect(() => {
-    if(fullScreenModal){
-      setIsVisible(false)
+    if (fullScreenModal) {
+      setIsVisible(false);
     }
-  },[fullScreenModal])
+  }, [fullScreenModal]);
 
   const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
-    <View ref={ref} collapsable={false} style={{marginTop: 3}}>
-         <ButtonIcon 
-          icon="more"
-          size='headerIcon'
-          onPress={() => setIsVisible(true)}
-        />
+    <View ref={ref} collapsable={false} style={{ marginTop: 3 }}>
+      <ButtonIcon 
+        icon="more"
+        size="headerIcon"
+        onPress={() => setIsVisible(true)}
+      />
     </View>
   ));
   
@@ -79,32 +79,36 @@ const ParallaxDrawer = ({
           />
         </S.BackButtonWrapper>
         
-        {popoverConent && <S.AltButtonWrapper>
-          <ButtonIconWithRef ref={iconRef}/>
-        </S.AltButtonWrapper>}
+        {popoverConent && (
+          <S.AltButtonWrapper>
+            <ButtonIconWithRef ref={iconRef} />
+          </S.AltButtonWrapper>
+        )}
         
-        {popoverConent && <Popover
-          from={iconRef}
-          isVisible={isVisible}
-          onRequestClose={() => setIsVisible(false)}
-          placement={Placement.AUTO}
-          popoverStyle={{borderRadius: moderateScale(10)}}
-        >
-          {popoverConent()}
-        </Popover>}
+        {popoverConent && (
+          <Popover
+            from={iconRef}
+            isVisible={isVisible}
+            onRequestClose={() => setIsVisible(false)}
+            placement={Placement.AUTO}
+            popoverStyle={{ borderRadius: moderateScale(10) }}
+          >
+            {popoverConent()}
+          </Popover>
+        )}
       </AnimatedSafeAreaView>
 
       <S.BackgroundContainer>
-        <Animated.View
-          style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
-        >
-          {typeof(headerImage) === "function" ? headerImage() :
-              <ImageBackground
-                source={headerImage}
-                style={StyleSheet.absoluteFill}
-                resizeMode="cover"
-              />
-          }
+        <Animated.View style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}>
+          {typeof headerImage === "function" ? (
+            headerImage()
+          ) : (
+            <ImageBackground
+              source={headerImage}
+              style={StyleSheet.absoluteFill}
+              resizeMode="cover"
+            />
+          )}
         </Animated.View>
       </S.BackgroundContainer>
 
@@ -122,7 +126,6 @@ const ParallaxDrawer = ({
           </S.TopTransparentSection>
 
           <S.BottomOpaqueSection>
-            {/* Wrap content with KeyboardAvoidingView + ScrollView */}
             <KeyboardAvoidingView
               style={{ flex: 1 }}
               behavior={Platform.OS === "ios" ? "padding" : undefined}
