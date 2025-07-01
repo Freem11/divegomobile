@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Keyboard, KeyboardEvent } from "react-native";
 import {
   Easing,
   runOnJS,
@@ -19,17 +19,23 @@ import { SavedTranslateYContext } from "../../contexts/savedTranslateYContext";
 import { ActiveSceen, useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
-const HALF_HEIGHT = SCREEN_HEIGHT / 2;
 const TOP_SECTION_HEIGHT = moderateScale(70);
 const DECELERATION = 0.985;
 
 export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) => {
-  const translateY = useSharedValue(HALF_HEIGHT);
+  const translateY = useSharedValue(SCREEN_HEIGHT / 2);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
   const [bottomHitCount, setBottomHitCount] = useState(1);
   const hasHitBottom = useSharedValue(false);
+  const keyboardOffset = useSharedValue(0);
+  const dynamicScreenHeight = useSharedValue(SCREEN_HEIGHT);
 
+  const getHalfHeight = () => {
+    "worklet";
+    return dynamicScreenHeight.value / 2;
+  };
+  
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
 
@@ -37,67 +43,92 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const activeScreen = useActiveScreenStore((state) => state.activeScreen);
 
   const { editInfo, setEditInfo } = useContext(EditsContext);
-
   const { savedTranslateY, setSavedTranslateY } = useContext(SavedTranslateYContext);
 
   useEffect(() => {
-    if (levelOneScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = HALF_HEIGHT;
-      startY.value = HALF_HEIGHT;
+    if (levelOneScreen && savedTranslateY === SCREEN_HEIGHT / 2) {
+      translateY.value = SCREEN_HEIGHT / 2;
+      startY.value = SCREEN_HEIGHT / 2;
     }
   }, [levelOneScreen]);
 
   useEffect(() => {
-    if (levelTwoScreen && savedTranslateY === HALF_HEIGHT) {
-      translateY.value = HALF_HEIGHT;
-      startY.value = HALF_HEIGHT;
+    if (levelTwoScreen && savedTranslateY === SCREEN_HEIGHT / 2) {
+      translateY.value = SCREEN_HEIGHT / 2;
+      startY.value = SCREEN_HEIGHT / 2;
     }
   }, [levelTwoScreen]);
 
+  useEffect(() => {
+    const onKeyboardShow = (e: KeyboardEvent) => {
+      const height = e.endCoordinates.height;
+      keyboardOffset.value = height;
+      dynamicScreenHeight.value = SCREEN_HEIGHT - height;
+
+      translateY.value = withTiming(translateY.value - height, {
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+      });
+    };
+
+    const onKeyboardHide = () => {
+      dynamicScreenHeight.value = SCREEN_HEIGHT;
+
+      translateY.value = withTiming(translateY.value + keyboardOffset.value, {
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+      });
+      keyboardOffset.value = 0;
+    };
+
+    const showSub = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
+    const hideSub = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const bottomHitCountRef = useSharedValue(bottomHitCount);
+  useEffect(() => {
+    bottomHitCountRef.value = bottomHitCount;
+  }, [bottomHitCount]);
 
-useEffect(() => {
-  bottomHitCountRef.value = bottomHitCount;
-}, [bottomHitCount]);
+  const MIN_SHRINK = moderateScale(150);
+  const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
 
+  useAnimatedReaction(
+    () => ({
+      height: contentHeight.value,
+      currentY: translateY.value,
+    }),
+    (newValue, prevValue) => {
+      if (!prevValue) return;
 
-const MIN_SHRINK = moderateScale(150); 
-const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
+      const { height: newHeight, currentY } = newValue;
+      const { height: prevHeight } = prevValue;
 
-useAnimatedReaction(
-  () => ({
-    height: contentHeight.value,
-    currentY: translateY.value,
-  }),
-  (newValue, prevValue) => {
-    if (!prevValue) return;
+      const shrinkAmount = prevHeight - newHeight;
+      const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
 
-    const { height: newHeight, currentY } = newValue;
-    const { height: prevHeight } = prevValue;
+      if (contentShrankSignificantly) {
+        lastAdjustedHeightRef.value = newHeight;
 
-    const shrinkAmount = prevHeight - newHeight;
-    const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
+        const minTranslateY = Math.min(
+          dynamicScreenHeight.value - newHeight - TOP_SECTION_HEIGHT,
+          getHalfHeight()
+        );
 
-    if(contentShrankSignificantly){
-      lastAdjustedHeightRef.value = newHeight;
-
-      const minTranslateY = Math.min(
-        SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT,
-        HALF_HEIGHT
-      );
-  
-      if (currentY < minTranslateY) {
-        translateY.value = withTiming(minTranslateY, { duration: 300 });
-      } 
+        if (currentY < minTranslateY) {
+          translateY.value = withTiming(minTranslateY, { duration: 300 });
+        }
+      }
     }
-
-  }
-);
+  );
 
   const handleDrawerHitBottom = () => {
-    setBottomHitCount(prev => prev + 1);
-
+    setBottomHitCount((prev) => prev + 1);
     setTimeout(() => {
       hasHitBottom.value = false;
     }, 1000);
@@ -108,14 +139,15 @@ useAnimatedReaction(
       startY.value = translateY.value;
     })
     .onUpdate((event) => {
-      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
-      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
-      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
-      const maxY = HALF_HEIGHT;
-    
+      const rawMinY = dynamicScreenHeight.value - contentHeight.value - TOP_SECTION_HEIGHT;
+      const halfHeight = getHalfHeight();
+      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < halfHeight;
+      const minY = isShortContent ? halfHeight : rawMinY;
+      const maxY = halfHeight;
+
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
-    
+
       const isAtBottom = Math.abs(translateY.value - minY) < 2000;
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
@@ -123,11 +155,12 @@ useAnimatedReaction(
       }
     })
     .onEnd((event) => {
-      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
-      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
-      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
-      const maxY = HALF_HEIGHT;
-    
+      const rawMinY = dynamicScreenHeight.value - contentHeight.value - TOP_SECTION_HEIGHT;
+      const halfHeight = getHalfHeight();
+      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < halfHeight;
+      const minY = isShortContent ? halfHeight : rawMinY;
+      const maxY = halfHeight;
+
       if (event.velocityY < 0) {
         translateY.value = withDecay({
           velocity: event.velocityY,
@@ -138,8 +171,8 @@ useAnimatedReaction(
         translateY.value = withDecay(
           { velocity: event.velocityY, deceleration: DECELERATION },
           () => {
-            if (translateY.value > HALF_HEIGHT) {
-              translateY.value = withTiming(HALF_HEIGHT, {
+            if (translateY.value > maxY) {
+              translateY.value = withTiming(maxY, {
                 duration: 1600,
                 easing: Easing.out(Easing.exp),
               });
@@ -157,7 +190,7 @@ useAnimatedReaction(
   const animatedBackgroundStyle = useAnimatedStyle(() => {
     const scale = interpolate(
       translateY.value,
-      [0, HALF_HEIGHT, SCREEN_HEIGHT],
+      [0, getHalfHeight(), dynamicScreenHeight.value],
       [1, 1.25, 3.25]
     );
     return { transform: [{ scale }] };
@@ -166,7 +199,7 @@ useAnimatedReaction(
   const animatedSafeAreaStyle = useAnimatedStyle(() => {
     const opacity = interpolate(
       translateY.value,
-      [HALF_HEIGHT, 0],
+      [getHalfHeight(), 0],
       [0, 0.35],
       "clamp"
     );
@@ -185,9 +218,9 @@ useAnimatedReaction(
       currentScreen &&
       latestScreen.screenName === currentScreen.screenName &&
       JSON.stringify(latestScreen.params || {}) === JSON.stringify(currentScreen.params || {});
-  
+
     if (isSame) {
-      setActiveScreenFn('', {});
+      setActiveScreenFn("", {});
     } else if (latestScreen) {
       setActiveScreenFn(latestScreen.screenName, latestScreen.params);
     }
@@ -195,25 +228,25 @@ useAnimatedReaction(
 
   const closeParallax = (mapConfig: number | null) => {
     const currentScreen: ActiveSceen = activeScreen;
-    setSavedTranslateY(translateY.value)
-    setBottomHitCount(1)
+    setSavedTranslateY(translateY.value);
+    setBottomHitCount(1);
+
     translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
 
-        if(!editInfo){
+        if (!editInfo) {
           runOnJS(updateActiveScreen)(currentScreen, currentScreen, setActiveScreen);
           runOnJS(setEditInfo)(null);
         } else {
           runOnJS(setEditInfo)(null);
         }
- 
-  
+
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {
-          runOnJS(setSavedTranslateY)(HALF_HEIGHT)
+          runOnJS(setSavedTranslateY)(getHalfHeight());
           runOnJS(onClose)();
         }
       }
@@ -236,6 +269,6 @@ useAnimatedReaction(
     contentHeight,
     closeParallax,
     restoreParallax,
-    bottomHitCount
+    bottomHitCount,
   };
 };
