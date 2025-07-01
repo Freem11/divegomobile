@@ -119,7 +119,7 @@ export default function EdittingScreen({
         profilePhoto:   updatedUri ? updatedUri : localPreviewUri.uri || null
       });
       setSelectedProfile(response?.data)
-      setProfile(response?.data)
+      setProfile(response?.data) // TODO Matt add typing, cuz now its an object and not an array
       if(response){setSupabaseResponse(response);}
     }
 

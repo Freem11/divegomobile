@@ -92,7 +92,7 @@ export default function MapPage() {
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
           myCreatures,
-          userId: profile[0].UserID,
+          userId: profile.UserID,
           minLat,
           maxLat,
           minLng,
@@ -101,7 +101,7 @@ export default function MapPage() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
-          userId: profile[0].UserID,
+          userId: profile.UserID,
           myCreatures,
           minLat,
           maxLat,
@@ -149,6 +149,7 @@ export default function MapPage() {
     let sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
+      // TODO Matt add typing, its now an object and not an array, so add return typing from grabProfileByUserId
       const success = await grabProfileByUserId(sessionUserId);
       if (success) {
         let bully = success && success.UserName;
