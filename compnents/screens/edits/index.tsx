@@ -32,19 +32,11 @@ export default function EdittingScreen({
   const { setSelectedProfile } = useContext(SelectedProfileContext);
   const { setProfile } = useContext(UserProfileContext);
   
-
-  const tryUpload = async (localPreviewUri: string) => {
+  const tryUpload = async (uri: string) => {
     try {
-      const image = {
-        assets: [
-          {
-            uri: localPreviewUri,
-          },
-        ],
-      };
-      const fileName = await imageUpload(image);
-      return fileName;
+      return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
+      console.error("Error uploading image:", e);
       return null;
     }
   };
@@ -100,7 +92,7 @@ export default function EdittingScreen({
         diveSiteBio:          formData.bio,
         diveSiteProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
-      setSelectedDiveSite(response?.data[0])
+      setSelectedDiveSite(response)
       if(response){setSupabaseResponse(response);}
     } else if (initialFormData.dataType === "Dive Center"){
       const response = await updateDiveShop({
@@ -109,7 +101,8 @@ export default function EdittingScreen({
         diveShopBio:          formData.bio,
         diveShopProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
-      setSelectedShop(response?.data[0])
+      console.log('response as edit', response)
+      setSelectedShop(response)
       if(response){setSupabaseResponse(response);}
    
     }  else if (initialFormData.dataType === "Profile"){
@@ -119,8 +112,8 @@ export default function EdittingScreen({
         profileBio:     formData.bio,
         profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
-      setSelectedProfile(response?.data[0])
-      setProfile(response?.data[0])
+      setSelectedProfile(response)
+      setProfile(response)
       if(response){setSupabaseResponse(response);}
     }
 

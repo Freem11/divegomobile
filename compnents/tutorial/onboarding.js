@@ -161,6 +161,7 @@ export default function OnboardingTest() {
         });
         let profileCheck = await grabProfileByUserId(sessionUserId)
         if (profileCheck.length > 0) {
+          // TODO Matt add typing and set up an object instead of an array
           setFormVal({ userName: "" });
           if (Array.isArray(profileCheck)) {
             setProfile(profileCheck);
