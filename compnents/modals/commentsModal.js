@@ -76,12 +76,12 @@ export default function CommentsModal() {
       } else {
         finalContent = commentContent
       }
-      let newComment = await insertPhotoComment(
-        profile[0].UserID,
-        selectedPicture.id,
-        finalContent,
-        userIdentity
-      );
+      // let newComment = await insertPhotoComment(
+      //   profile[0].UserID,
+      //   selectedPicture.id,
+      //   finalContent,
+      //   userIdentity
+      // );
       setIsClearOn(true)
       setCommentContent("");
       setReplyTo(null);

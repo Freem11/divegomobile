@@ -51,6 +51,8 @@ import FeedScreens from "../feed/screens";
 import { useTranslation } from "react-i18next";
 import SearchTool from '../searchTool';
 import * as S from './styles';
+import { FeedsButton } from "../feed/iconButton";
+import { ActiveProfile } from "../../entities/profile";
 
 
 const windowWidth = Dimensions.get("window").width;
@@ -92,7 +94,7 @@ export default function MapPage() {
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
           myCreatures,
-          userId: profile[0].UserID,
+          userId: profile.UserID,
           minLat,
           maxLat,
           minLng,
@@ -101,7 +103,7 @@ export default function MapPage() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
-          userId: profile[0].UserID,
+          userId: profile.UserID,
           myCreatures,
           minLat,
           maxLat,
@@ -149,7 +151,7 @@ export default function MapPage() {
     let sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success = await grabProfileByUserId(sessionUserId);
+      const success: ActiveProfile = await grabProfileByUserId(sessionUserId);
       if (success) {
         let bully = success && success.UserName;
         if (bully == null || bully === "") {
@@ -222,6 +224,7 @@ export default function MapPage() {
             ) : null}
 
             {mapConfig === 0 && <EmailFeedback />}
+            {mapConfig === 0 && <FeedsButton />}
 
             <FeedScreens />
             <LevelOneScreen />

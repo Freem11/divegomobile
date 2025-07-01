@@ -12,6 +12,7 @@ import { FEED_SCREEN } from "../store/types";
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("screen");
 
+// TODO VLAD: change FeedScreens to more generic
 export default function FeedScreens() {
   const currentScreen = useFeedScreenStore((state) => state.currentScreen);
   const isVisible = useFeedScreenStore((state) => state.isVisible);
