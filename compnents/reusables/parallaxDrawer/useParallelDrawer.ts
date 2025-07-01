@@ -35,7 +35,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     "worklet";
     return dynamicScreenHeight.value / 2;
   };
-  
+
   const { levelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
 
@@ -59,36 +59,40 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }
   }, [levelTwoScreen]);
 
-  useEffect(() => {
-    const onKeyboardShow = (e: KeyboardEvent) => {
-      const height = e.endCoordinates.height;
+useEffect(() => {
+  const onKeyboardShow = (e: KeyboardEvent) => {
+    const height = e.endCoordinates.height;
+    const diff = height - keyboardOffset.value;
+    if (diff > 0) {
       keyboardOffset.value = height;
       dynamicScreenHeight.value = SCREEN_HEIGHT - height;
 
-      translateY.value = withTiming(translateY.value - height, {
+      translateY.value = withTiming(translateY.value - diff, {
         duration: 250,
         easing: Easing.out(Easing.ease),
       });
-    };
+    }
+  };
 
-    const onKeyboardHide = () => {
-      dynamicScreenHeight.value = SCREEN_HEIGHT;
+  const onKeyboardHide = () => {
+    dynamicScreenHeight.value = SCREEN_HEIGHT;
 
-      translateY.value = withTiming(translateY.value + keyboardOffset.value, {
-        duration: 250,
-        easing: Easing.out(Easing.ease),
-      });
-      keyboardOffset.value = 0;
-    };
+    translateY.value = withTiming(translateY.value + keyboardOffset.value, {
+      duration: 250,
+      easing: Easing.out(Easing.ease),
+    });
+    keyboardOffset.value = 0;
+  };
 
-    const showSub = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
-    const hideSub = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
+  const showSub = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
+  const hideSub = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
 
-    return () => {
-      showSub.remove();
-      hideSub.remove();
-    };
-  }, []);
+  return () => {
+    showSub.remove();
+    hideSub.remove();
+  };
+}, []);
+
 
   const bottomHitCountRef = useSharedValue(bottomHitCount);
   useEffect(() => {
