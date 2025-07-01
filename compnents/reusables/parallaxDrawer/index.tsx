@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps } from "react-native";
+import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import Animated from "react-native-reanimated";
 import ButtonIcon from "../buttonIcon";
 import {
@@ -51,11 +51,11 @@ const ParallaxDrawer = ({
   const iconRef = useRef<View>(null);
   const { fullScreenModal } = useContext(FullScreenModalContext);
   
-useEffect(() => {
-  if(fullScreenModal){
-    setIsVisible(false)
-  }
-},[fullScreenModal])
+  useEffect(() => {
+    if(fullScreenModal){
+      setIsVisible(false)
+    }
+  },[fullScreenModal])
 
   const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
     <View ref={ref} collapsable={false} style={{marginTop: 3}}>
@@ -80,33 +80,31 @@ useEffect(() => {
         </S.BackButtonWrapper>
         
         {popoverConent && <S.AltButtonWrapper>
-        <ButtonIconWithRef ref={iconRef}/>
-        </S.AltButtonWrapper>
-      }
+          <ButtonIconWithRef ref={iconRef}/>
+        </S.AltButtonWrapper>}
+        
         {popoverConent && <Popover
-                from={iconRef}
-                isVisible={isVisible}
-                onRequestClose={() => setIsVisible(false)}
-                placement={Placement.AUTO}
-                popoverStyle={{borderRadius: moderateScale(10)}}
-                >
-                {popoverConent()}
-               
-              </Popover>
-              }
+          from={iconRef}
+          isVisible={isVisible}
+          onRequestClose={() => setIsVisible(false)}
+          placement={Placement.AUTO}
+          popoverStyle={{borderRadius: moderateScale(10)}}
+        >
+          {popoverConent()}
+        </Popover>}
       </AnimatedSafeAreaView>
+
       <S.BackgroundContainer>
         <Animated.View
           style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
         >
           {typeof(headerImage) === "function" ? headerImage() :
               <ImageBackground
-              source={headerImage}
-              style={StyleSheet.absoluteFill}
-              resizeMode="cover"
-            />
-            }
-      
+                source={headerImage}
+                style={StyleSheet.absoluteFill}
+                resizeMode="cover"
+              />
+          }
         </Animated.View>
       </S.BackgroundContainer>
 
@@ -124,17 +122,30 @@ useEffect(() => {
           </S.TopTransparentSection>
 
           <S.BottomOpaqueSection>
-            <S.Content
-              onLayout={(event) => {
-                contentHeight.value = event.nativeEvent.layout.height;
-              }}
+            {/* Wrap content with KeyboardAvoidingView + ScrollView */}
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+              keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0} // adjust offset as needed
             >
-              <S.EmptyContainer>
-              {React.isValidElement(children)
-                ? React.cloneElement(children, { closeParallax, restoreParallax, bottomHitCount })
-                : children}
-              </S.EmptyContainer>
-            </S.Content>
+              <ScrollView
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ flexGrow: 1 }}
+                showsVerticalScrollIndicator={false}
+              >
+                <S.Content
+                  onLayout={(event) => {
+                    contentHeight.value = event.nativeEvent.layout.height;
+                  }}
+                >
+                  <S.EmptyContainer>
+                    {React.isValidElement(children)
+                      ? React.cloneElement(children, { closeParallax, restoreParallax, bottomHitCount })
+                      : children}
+                  </S.EmptyContainer>
+                </S.Content>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </S.BottomOpaqueSection>
         </Animated.View>
       </GestureDetector>

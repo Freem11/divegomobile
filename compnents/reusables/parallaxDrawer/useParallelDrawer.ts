@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Keyboard, KeyboardEvent as RNKeyboardEvent } from "react-native";
 import {
   Easing,
   runOnJS,
@@ -27,6 +27,9 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   const translateY = useSharedValue(HALF_HEIGHT);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
+  const keyboardHeight = useSharedValue(0);
+  const isKeyboardVisible = useSharedValue(false);
+
   const [bottomHitCount, setBottomHitCount] = useState(1);
   const hasHitBottom = useSharedValue(false);
 
@@ -54,53 +57,59 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }
   }, [levelTwoScreen]);
 
-
   const bottomHitCountRef = useSharedValue(bottomHitCount);
 
-useEffect(() => {
-  bottomHitCountRef.value = bottomHitCount;
-}, [bottomHitCount]);
+  useEffect(() => {
+    bottomHitCountRef.value = bottomHitCount;
+  }, [bottomHitCount]);
 
+  const MIN_SHRINK = moderateScale(150);
+  const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
 
-const MIN_SHRINK = moderateScale(150); 
-const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
+  useAnimatedReaction(
+    () => ({
+      height: contentHeight.value,
+      currentY: translateY.value,
+    }),
+    (newValue, prevValue) => {
+      if (!prevValue) return;
 
-useAnimatedReaction(
-  () => ({
-    height: contentHeight.value,
-    currentY: translateY.value,
-  }),
-  (newValue, prevValue) => {
-    if (!prevValue) return;
+      const { height: newHeight, currentY } = newValue;
+      const { height: prevHeight } = prevValue;
 
-    const { height: newHeight, currentY } = newValue;
-    const { height: prevHeight } = prevValue;
+      const shrinkAmount = prevHeight - newHeight;
+      const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
 
-    const shrinkAmount = prevHeight - newHeight;
-    const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
+      if (contentShrankSignificantly) {
+        lastAdjustedHeightRef.value = newHeight;
 
-    if(contentShrankSignificantly){
-      lastAdjustedHeightRef.value = newHeight;
+        const minTranslateY = Math.min(
+          SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT,
+          HALF_HEIGHT
+        );
 
-      const minTranslateY = Math.min(
-        SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT,
-        HALF_HEIGHT
-      );
-  
-      if (currentY < minTranslateY) {
-        translateY.value = withTiming(minTranslateY, { duration: 300 });
-      } 
+        if (currentY < minTranslateY) {
+          translateY.value = withTiming(minTranslateY, { duration: 300 });
+        }
+      }
     }
-
-  }
-);
+  );
 
   const handleDrawerHitBottom = () => {
-    setBottomHitCount(prev => prev + 1);
+    setBottomHitCount((prev) => prev + 1);
 
     setTimeout(() => {
       hasHitBottom.value = false;
     }, 1000);
+  };
+
+  // Worklet helper to compute minimum translateY (top limit)
+  const getMinTranslateY = () => {
+    // Negative or zero: how far up drawer can go to show all content + keyboard
+    return Math.min(
+      0,
+      SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
+    );
   };
 
   const panGesture = Gesture.Pan()
@@ -108,26 +117,28 @@ useAnimatedReaction(
       startY.value = translateY.value;
     })
     .onUpdate((event) => {
-      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
-      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
-      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
+      const minY = Math.min(
+        0,
+        SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
+      );
       const maxY = HALF_HEIGHT;
-    
+
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
-    
-      const isAtBottom = Math.abs(translateY.value - minY) < 2000;
+
+      const isAtBottom = Math.abs(translateY.value - maxY) < 20; // smaller threshold for "bottom"
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
         runOnJS(handleDrawerHitBottom)();
       }
     })
     .onEnd((event) => {
-      const rawMinY = SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT;
-      const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < HALF_HEIGHT;
-      const minY = isShortContent ? HALF_HEIGHT : rawMinY;
+      const minY = Math.min(
+        0,
+        SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
+      );
       const maxY = HALF_HEIGHT;
-    
+
       if (event.velocityY < 0) {
         translateY.value = withDecay({
           velocity: event.velocityY,
@@ -138,9 +149,14 @@ useAnimatedReaction(
         translateY.value = withDecay(
           { velocity: event.velocityY, deceleration: DECELERATION },
           () => {
-            if (translateY.value > HALF_HEIGHT) {
-              translateY.value = withTiming(HALF_HEIGHT, {
+            if (translateY.value > maxY) {
+              translateY.value = withTiming(maxY, {
                 duration: 1600,
+                easing: Easing.out(Easing.exp),
+              });
+            } else if (translateY.value < minY) {
+              translateY.value = withTiming(minY, {
+                duration: 500,
                 easing: Easing.out(Easing.exp),
               });
             }
@@ -155,18 +171,27 @@ useAnimatedReaction(
   }));
 
   const animatedBackgroundStyle = useAnimatedStyle(() => {
+    const minTranslateY = Math.min(
+      0,
+      SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
+    );
     const scale = interpolate(
       translateY.value,
-      [0, HALF_HEIGHT, SCREEN_HEIGHT],
+      [minTranslateY, HALF_HEIGHT, SCREEN_HEIGHT],
       [1, 1.25, 3.25]
     );
     return { transform: [{ scale }] };
   });
 
   const animatedSafeAreaStyle = useAnimatedStyle(() => {
+    const minTranslateY = Math.min(
+      0,
+      SCREEN_HEIGHT - keyboardHeight.value - contentHeight.value - TOP_SECTION_HEIGHT
+    );
+
     const opacity = interpolate(
       translateY.value,
-      [HALF_HEIGHT, 0],
+      [HALF_HEIGHT, minTranslateY],
       [0, 0.35],
       "clamp"
     );
@@ -185,9 +210,9 @@ useAnimatedReaction(
       currentScreen &&
       latestScreen.screenName === currentScreen.screenName &&
       JSON.stringify(latestScreen.params || {}) === JSON.stringify(currentScreen.params || {});
-  
+
     if (isSame) {
-      setActiveScreenFn('', {});
+      setActiveScreenFn("", {});
     } else if (latestScreen) {
       setActiveScreenFn(latestScreen.screenName, latestScreen.params);
     }
@@ -195,25 +220,24 @@ useAnimatedReaction(
 
   const closeParallax = (mapConfig: number | null) => {
     const currentScreen: ActiveSceen = activeScreen;
-    setSavedTranslateY(translateY.value)
-    setBottomHitCount(1)
-    translateY.value = withTiming(0, { duration: 100 }, (finished) => {
+    setSavedTranslateY(translateY.value);
+    setBottomHitCount(1);
+    translateY.value = withTiming(0, { duration: 100 }, (finished) => { // close anim to top (0)
       if (finished) {
         translateY.value = 0;
         startY.value = 0;
 
-        if(!editInfo){
+        if (!editInfo) {
           runOnJS(updateActiveScreen)(currentScreen, currentScreen, setActiveScreen);
           runOnJS(setEditInfo)(null);
         } else {
           runOnJS(setEditInfo)(null);
         }
- 
-  
+
         if (mapConfig === 1) {
           runOnJS(onMapFlip)();
         } else {
-          runOnJS(setSavedTranslateY)(HALF_HEIGHT)
+          runOnJS(setSavedTranslateY)(HALF_HEIGHT);
           runOnJS(onClose)();
         }
       }
@@ -227,6 +251,40 @@ useAnimatedReaction(
     });
   };
 
+  // Keyboard show/hide handling to move drawer
+  useEffect(() => {
+    const onKeyboardShow = (e: RNKeyboardEvent) => {
+      keyboardHeight.value = e.endCoordinates.height;
+      isKeyboardVisible.value = true;
+
+      const minTranslateY = getMinTranslateY();
+
+      translateY.value = withTiming(minTranslateY, { duration: 250 });
+      startY.value = minTranslateY;
+    };
+
+    const onKeyboardHide = () => {
+      keyboardHeight.value = 0;
+      isKeyboardVisible.value = false;
+    
+      const targetTranslateY = Math.min(
+        HALF_HEIGHT,
+        SCREEN_HEIGHT - contentHeight.value - TOP_SECTION_HEIGHT
+      );
+    
+      translateY.value = withTiming(targetTranslateY, { duration: 250 });
+      startY.value = targetTranslateY;
+    };
+
+    const showSub = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
+    const hideSub = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
   return {
     SCREEN_WIDTH,
     panGesture,
@@ -236,6 +294,6 @@ useAnimatedReaction(
     contentHeight,
     closeParallax,
     restoreParallax,
-    bottomHitCount
+    bottomHitCount,
   };
 };
