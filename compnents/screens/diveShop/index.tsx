@@ -9,6 +9,7 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import { DiveShop } from "../../../entities/diveShop";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { EditModeContext } from "../../contexts/editModeContext";
 
 
 type DiveShopProps = {
@@ -30,7 +31,9 @@ export default function DiveShopScreen({
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
 
+  const { setEditMode } = useContext(EditModeContext);
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -73,9 +76,11 @@ export default function DiveShopScreen({
    };
    
    const handleEditButton = (itineraryInfo: ItineraryItem) => {
+    setEditMode(true);
     setLevelOneScreen(false);
     setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen", {id: selectedShop.id});
+    setFormValues(itineraryInfo)
     setSitesArray(itineraryInfo.siteList)
   };
 

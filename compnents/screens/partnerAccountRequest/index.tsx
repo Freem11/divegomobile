@@ -36,7 +36,7 @@ export default function PartnerAccountRequestPage({
     showError("We were unable to save your submission, please try again later")
     return;
   } 
-    showSuccess(`Partner reuqest for ${formData.OrgName} has been sucessfuly submitted! We will contact you via email, with our descision.`);
+    showSuccess(`Partner request for ${formData.OrgName} has been sucessfuly submitted! We will contact you via email, with our descision.`);
   };
 
   const getCurrentLocation = async (formData: Required<Form>) => {

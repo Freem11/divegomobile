@@ -20,27 +20,19 @@ type TripCreatorProps = {
 export default function TripCreatorParallax(props: TripCreatorProps) {
   const { t } = useTranslation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const storeFormValues = useMapStore((state) => state.formValues);
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
-  const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
  
   const onClose = async () => {
+    setFormValues(null)
     setEditMode(false);
     setSitesArray([]);
     setTripDiveSites([]);
-    setFormValues({
-      ...formValues,
-      BookingPage: "",
-      tripName: "",
-      startDate: "",
-      endDate: "",
-      price: 0,
-      description: "",
-      siteList: [],
-    });
+ 
     setLevelTwoScreen(false);
   };
 
@@ -73,7 +65,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
       onMapFlip={onNavigate}
       popoverConent={editMode && popoverConent}
     >
-      <TripCreatorPage itineraryInfo={formValues}/>
+      <TripCreatorPage itineraryInfo={storeFormValues}/>
 
     </ParallaxDrawer>
   );

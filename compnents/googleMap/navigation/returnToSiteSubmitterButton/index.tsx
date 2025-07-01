@@ -23,7 +23,6 @@ export function ReturnToSiteSubmitterButton() {
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
   const screenId = useMapStore((state) => state.itemId);
-  const setFormValues = useMapStore((state) => state.actions.setFormValues);
   const storeFormValues = useMapStore((state) => state.formValues);
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
