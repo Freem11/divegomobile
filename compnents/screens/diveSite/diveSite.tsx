@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { colors } from '../../styles';
 import * as S from "./styles";
@@ -26,6 +26,16 @@ export default function DiveSiteScreenView({
 }: DiveSiteProps) {
 
   const { t } = useTranslation();
+  const [siteVals, setSiteVals] = useState(null);
+
+  useEffect(() => {
+    setSiteVals({
+      siteName: selectedDiveSite.name,
+      bio: selectedDiveSite.diveSiteBio,
+      user: selectedDiveSite.newusername
+    })
+  
+  },[selectedDiveSite])
 
   const groupedPhotos = {};
 
@@ -44,7 +54,7 @@ export default function DiveSiteScreenView({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.SiteNameContainer>
-          <S.Header>{selectedDiveSite?.name}</S.Header>
+          <S.Header>{siteVals?.siteName}</S.Header>
 
           <FontAwesome
             name="flag"
@@ -55,9 +65,9 @@ export default function DiveSiteScreenView({
           />
         </S.SiteNameContainer>
 
-        <S.Contributor>Added by: {selectedDiveSite?.newusername}</S.Contributor>
+        <S.Contributor>Added by: {siteVals?.user}</S.Contributor>
 
-        <S.Content>{selectedDiveSite?.divesitebio}</S.Content>
+        <S.Content>{siteVals?.bio}</S.Content>
 
       </S.InputGroupContainer>
 

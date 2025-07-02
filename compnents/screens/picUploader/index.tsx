@@ -94,7 +94,7 @@ export default function PicUploader({
             dateTaken: formData.date,
             latitude: selectedDiveSite.lat,
             longitude: selectedDiveSite.lng,
-            UserId: profile[0].UserID,
+            UserId: profile.UserID,
           }
         ]
       }
@@ -102,6 +102,7 @@ export default function PicUploader({
   }
 
   const onSubmitOrCache = async (formData: Required<Form>) => {
+    console.log("1 onSubmitOrCache", formData)
     if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning(t('PicUploader.fillRequiredFields'));
       return;
@@ -130,14 +131,13 @@ export default function PicUploader({
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
-
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
         label: formData.animal.label,
         dateTaken: formData.date,
         latitude: selectedDiveSite.lat,
         longitude: selectedDiveSite.lng,
-        UserId: profile[0].UserID,
+        UserId: profile.UserID,
       });
 
       if (error) {
@@ -153,7 +153,7 @@ export default function PicUploader({
       resetAndClose()
     } catch (err) {
       console.error("Error uploading image:", err);
-      showError(err.message);
+      showError(t('PicUploader.failedToSave'));
     } finally {
       setIsUploading(false);
     }

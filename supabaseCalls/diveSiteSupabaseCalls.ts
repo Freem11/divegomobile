@@ -1,4 +1,4 @@
-import { DiveSiteBasic } from "../entities/diveSite";
+import { DiveSiteBasic, DiveSiteWithUserName } from "../entities/diveSite";
 import { GPSBubble } from "../entities/GPSBubble";
 import { supabase } from "../supabase";
 
@@ -171,17 +171,20 @@ export const getSingleDiveSiteByNameAndRegion = async (values) => {
 };
 
 export const updateDiveSite = async (values) => {
-  const response = await supabase
+  const { data, error } =  await supabase
     .from("diveSites")
     .update(values)
     .eq("id", values.id)
     .select();
 
-    if (response.error) {
-      console.log("couldn't do it dive site,", error);
-      return [];
+    if (error) {
+      console.log("couldn't do it dive shop update,", error);
+      return null;
     }
-      return response;
+  
+    if (data[0]) {
+      return data[0] as DiveSiteWithUserName;
+    }
 };
 
 export const getSingleDiveSite = async (lat, lng) => {
