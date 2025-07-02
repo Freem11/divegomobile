@@ -11,8 +11,7 @@ import { colors } from "../styles";
 import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
 import DiveShopParallax from '../screens/diveShop/diveShopParallax';
 import ShopListParallax from "../screens/shopList/shopListParallax";
-import Settings from "../screens/settings/settings";
-
+import Settings from "../screens/settings";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
