@@ -43,18 +43,22 @@ if (data) {
 }
 };
 
-export const updateProfile = async (values) => {
-  const response = await supabase
+export const updateProfile = async (values: Partial<ActiveProfile>) => {
+  const { data, error } = await supabase
     .from("UserProfiles")
     .update(values)
     .eq("id", values.id)
     .select();
 
-  if (response.error) {
-    console.log("couldn't do it profile update,", error);
-    return [];
-  }
-    return response;
+    if (error) {
+      console.log("couldn't do it profile update,", error);
+      return null;
+    }
+  
+    if (data[0]) {
+      return data[0] as ActiveProfile;
+    }
+
 };
 
 export const updatePushToken = async (values) => {
@@ -63,6 +67,7 @@ export const updatePushToken = async (values) => {
     .update({expo_push_token: values.token})
     .eq("UserID", values.UserID);
 
+    
   if (error) {
     console.error("Error while saving the push token, ", error);
     return [];

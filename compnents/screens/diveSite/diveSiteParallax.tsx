@@ -14,6 +14,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 
 type DiveSiteProps = {
   siteID: number
@@ -35,9 +36,8 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
+  const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   
-  const [selectedDiveSite, setSelectedDiveSite] = useState<DiveSiteWithUserName | null>(null)
-
   useEffect(() => {
 
     getDiveSiteinfo()
@@ -55,13 +55,13 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   useEffect(() => {
     let photoName = null;
-    if(selectedDiveSite?.divesiteprofilephoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`;
+    if(selectedDiveSite?.diveSiteProfilePhoto) {
+      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`;
     }
 
     setDiveSiteVals({
       id: selectedDiveSite?.id,
-      bio: selectedDiveSite?.divesitebio,
+      bio: selectedDiveSite?.diveSiteBio,
       photo: photoName,
     });
 

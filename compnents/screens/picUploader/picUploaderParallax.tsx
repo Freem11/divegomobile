@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { useMapStore } from "../../googleMap/useMapStore";
 
+
 type PicUploaderProps = {
   selectedDiveSite: DiveSiteWithUserName
 };
@@ -19,7 +20,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
   const { t } = useTranslation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const [localPreviewUri, setLocalPreviewUri] = useState<string | null>(null);
+  const [localPreviewUri, setLocalPreviewUri] = useState(null);
   
   const onClose = async () => {
     setLevelTwoScreen(false);
@@ -43,7 +44,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
   };
   
   const handleImageUpload = async (argPicture: string) => {
-    setLocalPreviewUri(argPicture);
+    setLocalPreviewUri({uri: argPicture});
   };
   
   const popoverConent = () => {
