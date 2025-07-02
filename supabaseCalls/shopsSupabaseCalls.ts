@@ -66,7 +66,6 @@ export const getShopByName = async (value) => {
 };
 
 export const updateDiveShop = async (values) => {
-  console.log(values)
   const { data, error } = await supabase
     .from("shops")
     .update(values)
@@ -78,7 +77,6 @@ export const updateDiveShop = async (values) => {
       return null;
     }
   
-    console.log('supa response', data)
     if (data[0]) {
       return data[0] as DiveShop;
     }

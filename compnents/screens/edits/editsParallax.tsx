@@ -33,8 +33,6 @@ export default function EditScreenParallax() {
   const [localPreviewUri, setLocalPreviewUri] = useState<string | null>(null);
   const [initialFormData, setInitialFormData] = useState<BasicFormData | null>(null);
 
-  console.log('selectedShop', selectedShop)
-
 useEffect(() => {
   switch(editInfo) {
     case "DiveSite":

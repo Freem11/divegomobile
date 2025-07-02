@@ -101,7 +101,6 @@ export default function EdittingScreen({
         diveShopBio:          formData.bio,
         diveShopProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
-      console.log('response as edit', response)
       setSelectedShop(response)
       if(response){setSupabaseResponse(response);}
    

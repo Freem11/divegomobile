@@ -54,7 +54,6 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   }
 
   useEffect(() => {
-    console.log('selectedDiveSite', selectedDiveSite)
     let photoName = null;
     if(selectedDiveSite?.diveSiteProfilePhoto) {
       photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`;
