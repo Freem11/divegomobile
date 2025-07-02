@@ -12,15 +12,16 @@ import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 
-type SiteSubmitterProps = {
-  localPreviewUri: string
+
+type EdittingScreenProps = {
+  localPreviewUri: string | null
   initialFormData: BasicFormData
 };
 
 export default function EdittingScreen({
   localPreviewUri,
   initialFormData
-}: SiteSubmitterProps) {
+}: EdittingScreenProps) {
 
   const [isUploading, setIsUploading] = useState(false);
   const [newUri, setNewUri] = useState(null);
@@ -41,28 +42,29 @@ export default function EdittingScreen({
   };
 
   const onSubmit = async (formData: Required<Form>) => {
+
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
       return;
     }
 
-    let newPhoto: string
+    let formDataUri: string
     if(formData.uri){
-      newPhoto = formData.uri.split("/").pop() || "X"
+      formDataUri = formData.uri.split("/").pop() || "X"
     } else {
-      newPhoto = "X"
+      formDataUri = "X"
     }
 
-    let existingPhoto: string
+    let uploadedPhotoUri: string
     if(localPreviewUri){
-      existingPhoto = localPreviewUri.split("/").pop() || "X"
+      uploadedPhotoUri = localPreviewUri.split("/").pop() || "X"
     } else {
-      existingPhoto = "X"
+      uploadedPhotoUri = "X"
     }
-
+  
     let updatedUri = null;
 
-    if(newPhoto !== existingPhoto){
+    if(formDataUri !== uploadedPhotoUri){
         setIsUploading(true);
 
         try {
@@ -88,7 +90,7 @@ export default function EdittingScreen({
         id:                   formData.id,
         name:                 formData.name,
         diveSiteBio:          formData.bio,
-        diveSiteProfilePhoto: updatedUri ? updatedUri : localPreviewUri || null
+        diveSiteProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
       setSelectedDiveSite(response)
       if(response){setSupabaseResponse(response);}
@@ -97,7 +99,7 @@ export default function EdittingScreen({
         id:                   formData.id,
         orgName:              formData.name,
         diveShopBio:          formData.bio,
-        diveShopProfilePhoto: updatedUri ? updatedUri : localPreviewUri || null
+        diveShopProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
       setSelectedShop(response)
       if(response){setSupabaseResponse(response);}
@@ -107,9 +109,8 @@ export default function EdittingScreen({
         id:             formData.id,
         UserName:       formData.name,
         profileBio:     formData.bio,
-        profilePhoto:   updatedUri ? updatedUri : localPreviewUri || null
+        profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
-
       setSelectedProfile(response)
       setProfile(response)
       if(response){setSupabaseResponse(response);}
