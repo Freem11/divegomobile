@@ -140,6 +140,7 @@ export default function PicUploaderView({
       <DateTimePickerModal
         isVisible={datePickerVisible}
         mode="date"
+        date={new Date()}
         onConfirm={handleDatePickerConfirm}
         onCancel={hideDatePicker}
       />
