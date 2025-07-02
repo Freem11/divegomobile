@@ -19,10 +19,7 @@ import SelectedPictureContextProvider from './selectedPictureContext';
 import SelectedProfileContextProvider from './selectedProfileModalContext';
 import SelectedPhotoContextProvider from './selectedPhotoContext';
 import ActiveTutorialIDContextProvider from './activeTutorialIDContext';
-import ActiveConfirmationIDContextProvider from './activeConfirmationIDContext';
 import FullScreenModalContextProvider from './fullScreenModalContext';
-import ConfirmationModalContextProvider from './confirmationModalContext';
-import ConfirmationTypeContextProvider from './confirmationTypeContext';
 import ShopContextProvider from './shopContext';
 import EditModeContextProvider from './editModeContext';
 import LevelOneScreenContextProvider from './levelOneScreenContext';
@@ -50,10 +47,7 @@ const providers = [
     SelectedProfileContextProvider,
     SelectedPhotoContextProvider,
     ActiveTutorialIDContextProvider,
-    ActiveConfirmationIDContextProvider,
     FullScreenModalContextProvider,
-    ConfirmationModalContextProvider,
-    ConfirmationTypeContextProvider,
     ShopContextProvider,
     EditModeContextProvider,
     LevelOneScreenContextProvider,

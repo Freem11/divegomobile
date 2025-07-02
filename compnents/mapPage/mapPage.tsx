@@ -15,7 +15,6 @@ import ItineraryListButton from "../reusables/bottomMenu/buttons/itineraryCreato
 import GuidesButton from "../reusables/bottomMenu/buttons/guidesButton";
 import AnimalTopAutoSuggest from "../animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
-import AnimatedModalConfirmation from "../reusables/animatedModalConfimration";
 import LevelOneScreen from "../reusables/levelOneScreen";
 import LevelTwoScreen from "../reusables/levelTwoScreen";
 import {
@@ -34,7 +33,6 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { moderateScale } from "react-native-size-matters";
 import BottomDrawer from '../screens/bottomDrawer/animatedBottomDrawer';
@@ -51,7 +49,6 @@ import FeedScreens from "../feed/screens";
 import { useTranslation } from "react-i18next";
 import SearchTool from '../searchTool';
 import * as S from './styles';
-import { FeedsButton } from "../feed/iconButton";
 import { ActiveProfile } from "../../entities/profile";
 
 
@@ -65,8 +62,7 @@ export default function MapPage() {
   }
  
   const mapConfig = useMapStore((state) => state.mapConfig);
- 
-  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -176,14 +172,12 @@ export default function MapPage() {
   };
 
   useLayoutEffect(() => {
-    setConfirmationModal(false);
     getProfile();
   }, []);
 
   useEffect(() => {
     setLevelOneScreen(false);
     setLevelTwoScreen(false);
-    setConfirmationModal(false);
     getProfile();
   }, []);
 
@@ -224,13 +218,11 @@ export default function MapPage() {
             ) : null}
 
             {mapConfig === 0 && <EmailFeedback />}
-            {mapConfig === 0 && <FeedsButton />}
-
+         
             <FeedScreens />
             <LevelOneScreen />
             <LevelTwoScreen />
             <AnimatedFullScreenModal />
-            <AnimatedModalConfirmation />
 
      
           </S.Container>

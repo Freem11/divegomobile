@@ -3,7 +3,6 @@ import PicUploaderView from "./view";
 import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
-import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning } from "../../toast";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { v4 as uuidv4 } from "uuid";
@@ -53,7 +52,6 @@ export default function PicUploader({
 }: PicUploaderProps) {
   const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
-  const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);
@@ -148,7 +146,6 @@ export default function PicUploader({
 
         throw new Error(t('PicUploader.failedToSave'));
       }
-      setConfirmationType("Sea Creature Submission");
       showSuccess(t('PicUploader.successUpload'));
       resetAndClose()
     } catch (err) {
