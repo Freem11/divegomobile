@@ -5,6 +5,7 @@ import {
   activeFonts,
   colors,
 } from '../../styles';
+import { Platform } from "react-native";
 
 export const TextInputWrapper = styled.View`
   height: ${moderateScale(24)}px;
@@ -21,6 +22,9 @@ export const StyledTextInput = styled.TextInput`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
   width: ${moderateScale(225)};
+  padding-bottom: ${Platform.OS === "android" ? moderateScale(5) : moderateScale(0)}px;
+  height: ${moderateScale(32)}px;
+  text-align-vertical: center;
 `;
 
 export const IconWrapperLeft = styled.View`
