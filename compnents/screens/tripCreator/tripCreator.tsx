@@ -13,6 +13,7 @@ import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { Controller, useForm } from "react-hook-form";
 import { Form, FormRules } from "./form";
+import { useMapStore } from "../../googleMap/useMapStore";
 
 type TripCreatorProps = {
   values: Form;
@@ -26,7 +27,7 @@ type TripCreatorProps = {
   removeFromSitesArray: (siteIdNo: number, siteList: number[]) => void
   showDatePicker: (value: string) => void
   hideDatePicker: () => void
-  handleDatePickerConfirm: () => void
+  handleDatePickerConfirm: (formData: Required<Form>) => void
   datePickerVisible: boolean
   dateType: string
 };
@@ -46,11 +47,17 @@ export default function TripCreatorPageView({
   dateType
 }: TripCreatorProps) {
 
-  const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
+  const { control, handleSubmit, formState: { isSubmitting, errors }, getValues } = useForm<Form>({
     values: values
   });
   
   const { t } = useTranslation();
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  
+  const handleMapFlip = async (formData: Required<Form>) => {
+    closeParallax(1)
+    setFormValues(formData)
+  }
 
   return (
     <S.ContentContainer>
@@ -107,7 +114,7 @@ export default function TripCreatorPageView({
                 iconLeft="currency-usd"
                 placeholder={t("TripCreator.pricePlaceholder")}
                 onChangeText={onChange}
-                value={value ? String(value): null}
+                value={value}
                 />
               </S.TextBuffer>
             )}
@@ -119,7 +126,7 @@ export default function TripCreatorPageView({
             rules={FormRules.Start}
             render={({ field: { onChange, value } }) => (
               <S.TextBuffer>
-                  <Toucher onPress={() => showDatePicker("startDate")}>
+                  <Toucher onPress={() => showDatePicker("Start")}>
                   <View pointerEvents="none">
                     <MobileTextInput 
                     error={errors.Start}
@@ -140,7 +147,7 @@ export default function TripCreatorPageView({
             rules={FormRules.End}
             render={({ field: { onChange, value } }) => (
               <S.TextBuffer>
-                  <Toucher onPress={() => showDatePicker("endDate")}>
+                  <Toucher onPress={() => showDatePicker("End")}>
                   <View pointerEvents="none">
                     <MobileTextInput 
                     error={errors.End}
@@ -205,7 +212,10 @@ export default function TripCreatorPageView({
 
           <S.ButtonHousing>
             <Button
-              onPress={() => closeParallax(1)}
+              onPress={() => {
+                const data = getValues();
+                handleMapFlip(data as Required<Form>);
+              }} 
               size="medium"
               alt={true}
               title="Dive Sites"
@@ -217,7 +227,7 @@ export default function TripCreatorPageView({
 
         <S.BottomButtonBox>
           <Button
-             onPress={() => handleSubmit(onSubmit)()} 
+            onPress={() => handleSubmit(onSubmit)()} 
             size="medium"
             title={t("TripCreator.submitButton")}
             iconRight="chevron-right"
@@ -228,7 +238,10 @@ export default function TripCreatorPageView({
       <DateTimePickerModal
         isVisible={datePickerVisible}
         mode="date"
-        onConfirm={handleDatePickerConfirm}
+        onConfirm={() => {
+          const data = getValues();
+          handleDatePickerConfirm(data as Required<Form>);
+        }} 
         onCancel={hideDatePicker}
         maximumDate={
           dateType === "startDate" && values.End

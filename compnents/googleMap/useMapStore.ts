@@ -39,6 +39,7 @@ const mutator = (set, get) => ({
   mapConfig:      0 as number,
   itemId:         0 as number | null,
   draggablePoint: null as Coordinates | null,
+  formValues:     {},
 
   actions: {
     setMapRef: (newMap: MapView) => {
@@ -55,6 +56,9 @@ const mutator = (set, get) => ({
     },
     setMapConfig: (config: number, itemId: number) => {
       set({ mapConfig: config, itemId: itemId  })
+    },
+    setFormValues: (values: {}) => {
+      set({ formValues: values })
     },
   },
 }

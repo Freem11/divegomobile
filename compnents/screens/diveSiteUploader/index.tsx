@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Keyboard } from "react-native";
+import { showError, showSuccess } from "../../toast";
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import DiveSiteUploaderView from './view';
@@ -20,9 +21,7 @@ export default function DiveSiteUploader({
   const { profile } = useContext(UserProfileContext);
 
   const mapAction = useMapStore((state) => state.actions)
-
-  const draggablePoint = useMapStore((state) => state.draggablePoint);
-  const deviceLocation = null//todo
+  const storeFormValues = useMapStore((state) => state.formValues);
 
   const onSubmit = async (formData: Required<Form>) => {
     const { error } = await insertDiveSiteWaits({
@@ -31,16 +30,22 @@ export default function DiveSiteUploader({
       lng: formData.Longitude,
       UserID: profile.UserID
     }); 
+    if (error){
+      showError("We were unable to save your submission, please try again later")
+      return;
+    } 
+      showSuccess(`${formData.Site} has been sucessfuly submitted! Please allow up to 24 hours for us to review and approve it.`);
   };
 
-  const getCurrentLocation = async () => {
+  const getCurrentLocation = async (formData: Required<Form>) => {
     Keyboard.dismiss();
     try {
       const location = await getCurrentCoordinates();
       if (location) {
-        mapAction.setDraggablePoint({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude
+        mapAction.setFormValues({
+          Site: formData.Site || storeFormValues?.Site, 
+          Latitude: location.coords.latitude,
+          Longitude: location.coords.longitude 
         })
       }
     } catch (e) {
@@ -55,8 +60,9 @@ export default function DiveSiteUploader({
       closeParallax={closeParallax}
       restoreParallax={restoreParallax}
       values={{
-        Latitude:  draggablePoint ? draggablePoint?.latitude : deviceLocation?.lat,
-        Longitude: draggablePoint ? draggablePoint?.longitude : deviceLocation?.lng,
+        Site: storeFormValues?.Site,
+        Latitude: storeFormValues?.Latitude,
+        Longitude: storeFormValues?.Longitude,
       }}
     />
   )
