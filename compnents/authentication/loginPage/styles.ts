@@ -16,9 +16,7 @@ const windowHeight = Dimensions.get("window").height;
 export const Container = styled.View`
   flex: 1;
   background-color: #fff;
-  margin-top: ${windowHeight / 10}px;
-  margin-bottom: ${windowHeight / 25}px;
-  width: ${windowWidth - windowWidth / 10}px;
+  width: ${windowWidth}px;
 `;
 
 export const SafeArea = styled(SafeAreaView)`
@@ -63,15 +61,15 @@ export const ButtonBox = styled.View`
 
 export const ForgotBox = styled.View`
   position: absolute;
-  bottom: ${moderateScale(40)}px;
+  bottom: ${moderateScale(30)}px;
   width: 100%;
   flex-direction: row;
   justify-content: center;
 `;
 
-export const PromptBox = styled.View`
+export const PromptBox = styled(SafeAreaView)`
   position: absolute;
-  bottom: ${moderateScale(10)}px;
+  bottom: ${moderateScale(60)}px;
   width: 100%;
   flex-direction: row;
   gap: 10px;
