@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { Dimensions } from 'react-native';
-import { FlatList, NativeViewGestureHandler } from 'react-native-gesture-handler';
+import React, { useContext, useEffect } from 'react';
+import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { AreaPicsContext } from '../../../../contexts/areaPicsContext';
 import { SearchTextContext } from '../../../../contexts/searchTextContext';
@@ -9,11 +8,7 @@ import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from "./styles";
 import { AnimalMultiSelectContext } from "../../../../contexts/animalMultiSelectContext";
 
-const { width } = Dimensions.get('window');
-
-export default function SeaLifeList({ horizontalGestureRef }) {
-
-  const verticalGestureRef = useRef();
+export default function SeaLifeList() {
 
   const boundaries = useMapStore((state) => state.gpsBubble);
   const { textvalue } = useContext(SearchTextContext);
@@ -48,10 +43,6 @@ export default function SeaLifeList({ horizontalGestureRef }) {
   return (
     <S.VerticalFlatlistContainer>
         <S.Header>Nearby Sea Life</S.Header>
-      <NativeViewGestureHandler
-        ref={verticalGestureRef}
-        simultaneousHandlers={horizontalGestureRef}
-      >
         <FlatList
           data={areaPics}
           keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
@@ -68,10 +59,6 @@ export default function SeaLifeList({ horizontalGestureRef }) {
           showsVerticalScrollIndicator={false}
            keyboardShouldPersistTaps="always"
         />
-      </NativeViewGestureHandler>
     </S.VerticalFlatlistContainer>
   );
 }
-
-
-

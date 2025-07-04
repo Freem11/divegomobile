@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
-import { Dimensions, TouchableOpacity, View, Text } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { FlatList as GHFlatList, NativeViewGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { FlatList as GHFlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 import SeaLifeList from "./seaLife/seaLifeList";
 import DiveSiteList from "./diveSites/diveSiteList";
 import DiveCenterList from "./diveCenters/diveCenterList";
@@ -10,8 +10,7 @@ import * as S from "../styles";
 import ButtonIcon from "../../../reusables/buttonIcon";
 import { colors } from "../../../styles";
 import { useMapStore } from "../../../googleMap/useMapStore";
-import { GPSBubble } from "../../../../entities/GPSBubble";
-import { BoundingBox, LatLng } from "react-native-maps";
+import { BoundingBox } from "react-native-maps";
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,27 +18,24 @@ const outerData = [0, 1, 2]; // 0 = SeaLife, 1 = Page2, 2 = Page3
 const DOUBLE_TAP_DELAY = 300;
 
 export default function HorizontalPager({isDrawerOpen, animatedButtonStyle, closeDrawer}) {
-  const gpsBubble = useMapStore((state) => state.gpsBubble);
-  const setGpsBubble = useMapStore((state) => state.actions.setGpsBubble);
   const mapRef = useMapStore((state) => state.mapRef);
 
   const lastTap = useRef<number | null>(null);
   const singleTapTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const horizontalGestureRef = useRef(null);
   const flatListRef = useRef(null);
 
   const renderPage = ({ item }) => {
     return (
       <View style={{ width, height }}>
         {item === 0 && (
-          <SeaLifeList horizontalGestureRef={horizontalGestureRef} />
+          <SeaLifeList />
         )}
         {item === 1 && (
-          <DiveSiteList horizontalGestureRef={horizontalGestureRef} />
+          <DiveSiteList />
         )}
         {item === 2 && (
-          <DiveCenterList horizontalGestureRef={horizontalGestureRef} />
+          <DiveCenterList />
         )}
       </View>
     );
@@ -128,14 +124,13 @@ export default function HorizontalPager({isDrawerOpen, animatedButtonStyle, clos
         </S.IconBox> 
       </Animated.View> 
 
-      <NativeViewGestureHandler ref={horizontalGestureRef} >
         <GHFlatList
           ref={flatListRef} 
           data={outerData}
           keyExtractor={(item) => `page-${item}`}
           horizontal
           pagingEnabled
-           keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="always"
           nestedScrollEnabled={true} 
           showsHorizontalScrollIndicator={false}
           renderItem={renderPage}
@@ -143,7 +138,7 @@ export default function HorizontalPager({isDrawerOpen, animatedButtonStyle, clos
             { length: width, offset: width * index, index }
           )} 
         />
-      </NativeViewGestureHandler>
+      
       <Animated.View
         style={[animatedButtonStyle]}
         pointerEvents={isDrawerOpen ? 'auto' : 'none'}
