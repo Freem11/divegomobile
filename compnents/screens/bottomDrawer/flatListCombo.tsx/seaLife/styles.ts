@@ -15,5 +15,5 @@ export const Header = styled.Text`
   font-family: ${activeFonts.Bold};
   color: ${colors.headersBlue};
   align-self: center;
-  margin-top: ${Platform.OS === "ios" ? height*0.2 : height*0.27};
+  margin-top: ${Platform.OS === "ios" ? height*0.2 : height*0.27}px;
 `;
