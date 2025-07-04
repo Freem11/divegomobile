@@ -1,12 +1,12 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { activeFonts, colors, fontSizes } from "../../../../styles";
-import { Dimensions } from "react-native";
-const { width } = Dimensions.get('window');
+import { Dimensions, Platform } from "react-native";
+const { width, height } = Dimensions.get('window');
 
 export const VerticalFlatlistContainer = styled.View`
   flex: 1;
-  width: ${width*0.9};
+  width: ${width*0.9}px;
   margin-left: 5%;
 `;
 
@@ -15,5 +15,5 @@ export const Header = styled.Text`
   font-family: ${activeFonts.Bold};
   color: ${colors.headersBlue};
   align-self: center;
-  margin-top: 50%;
+  margin-top: ${Platform.OS === "ios" ? height*0.2 : height*0.27};
 `;
