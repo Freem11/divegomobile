@@ -238,6 +238,15 @@ export default function TripCreatorPageView({
       <DateTimePickerModal
         isVisible={datePickerVisible}
         mode="date"
+        date={
+          dateType === "startDate"
+            ? values?.Start
+              ? new Date(values.Start)
+              : new Date()
+            : values?.End
+            ? new Date(values.End)
+            : new Date()
+        }
         onConfirm={() => {
           const data = getValues();
           handleDatePickerConfirm(data as Required<Form>);
