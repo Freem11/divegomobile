@@ -4,6 +4,7 @@ import { heatPointToWeightedLocation } from '../../dto/heatPointToWeightedLocati
 import {
   Heatmap,
 } from "react-native-maps";
+import { moderateScale } from "react-native-size-matters";
 type MarkerHeatPointProps = {
   // map:        google.maps.Map | null
   // options?:   google.maps.visualization.HeatmapLayerOptions
@@ -29,7 +30,7 @@ export function MarkerHeatPoint(props: MarkerHeatPointProps) {
 if(heatPoints?.length > 0) {
   return <Heatmap
     points={heatPoints}
-    radius={30}
+    radius={moderateScale(80)}
     // radius={Platform.OS === "ios" ? 30 : 10}
   />
 } else {

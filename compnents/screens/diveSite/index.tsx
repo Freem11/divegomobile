@@ -49,7 +49,7 @@ export default function DiveSiteScreen({
   };
 
   useEffect(() => {
-    if (selectedDiveSite && profile) {
+    if (selectedDiveSite.lat && profile) {
       getPhotos(selectedDiveSite, profile);
     }
   }, [selectedDiveSite, profile, bottomHitCount]);

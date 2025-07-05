@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FlatList, NativeViewGestureHandler } from 'react-native-gesture-handler';
+import React, { useContext, useEffect, useState } from 'react';
+import { FlatList } from 'react-native-gesture-handler'; // Removed NativeViewGestureHandler
 import Card from '../../card';
 import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from './styles';
@@ -7,9 +7,7 @@ import { getDiveSitesWithUser } from '../../../../../supabaseCalls/diveSiteSupab
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
 
-export default function DiveSiteList({ horizontalGestureRef }) {
-
-  const verticalGestureRef = useRef();
+export default function DiveSiteList() {
 
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [diveSites, setDiveSites] = useState([]);
@@ -41,10 +39,6 @@ export default function DiveSiteList({ horizontalGestureRef }) {
   return (
     <S.VerticalFlatlistContainer>
       <S.Header>Nearby Dive Sites</S.Header>
-      <NativeViewGestureHandler 
-        ref={verticalGestureRef}
-        simultaneousHandlers={horizontalGestureRef}
-      >
         <FlatList
           data={diveSites}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
@@ -53,7 +47,6 @@ export default function DiveSiteList({ horizontalGestureRef }) {
           showsVerticalScrollIndicator={false}
            keyboardShouldPersistTaps="always"
         />
-      </NativeViewGestureHandler>
     </S.VerticalFlatlistContainer>
   );
 }

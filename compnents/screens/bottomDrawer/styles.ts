@@ -2,11 +2,10 @@ import styled from 'styled-components/native';
 import { activeFonts, buttonSizes, colors, fontSizes } from "../../styles";
 import { moderateScale } from 'react-native-size-matters'
 import Animated from 'react-native-reanimated';
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 const windowWidth = Dimensions.get('window').width;
-
-
+const windowHeight = Dimensions.get('window').height;
 
 export const Handle = styled.View`
   z-index: 11;
@@ -100,4 +99,10 @@ export const ButtonBox = styled.View`
   position: absolute;
   bottom: ${moderateScale(20)}px;
   align-self: center;
+`;
+
+export const IconBox = styled.View`
+  position: absolute;
+  top: ${Platform.OS === "ios" ? windowHeight*0.19 : windowHeight*.26}px;
+  right: 5%;
 `;
