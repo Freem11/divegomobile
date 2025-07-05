@@ -39,13 +39,11 @@ export const CardIconContainer = styled.View`
   align-content: center;
 `;
 
-export const CardIcon = styled.Image`
-  height: ${moderateScale(20)}px;
-  width: ${moderateScale(20)}px;
-  padding-left: ${moderateScale(20)}px;
+export const CardIcon = styled.View`
+  width: ${moderateScale(30)}px;
+  height: ${moderateScale(28)}px;
   margin-left: ${moderateScale(10)}px;
   margin-right: ${moderateScale(10)}px;
-  margin-top: ${moderateScale(2)}px;
 `;
 
 export const LabelContainer = styled.View`
