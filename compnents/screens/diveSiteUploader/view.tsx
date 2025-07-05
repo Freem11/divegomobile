@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Form, FormRules } from "./form";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
+import { Keyboard } from "react-native";
 
 interface Props {
   values: Form;
