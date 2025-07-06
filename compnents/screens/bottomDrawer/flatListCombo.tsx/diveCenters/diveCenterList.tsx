@@ -16,17 +16,16 @@ export default function DiveCenterList() {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
-  const getDiveCenterData = async () => {
+  const getDiveCenterData = async (filterValue: string) => {
     if (boundaries) {
-       let diveCenterData = await getDiveShops(boundaries);
+       let diveCenterData = await getDiveShops(boundaries, filterValue);
 
       setDiveCenters(diveCenterData);
     }
   };
 
   useEffect(() => {
-    console.log('filterValue', filterValue)
-    getDiveCenterData();
+    getDiveCenterData(filterValue);
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
   const handleDiveCenterSelection = (shopId: number) => {

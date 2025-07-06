@@ -19,17 +19,16 @@ export default function SeaLifeList() {
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
-  const getPhotos = async () => {
+  const getPhotos = async (filterValue: string) => {
     if (boundaries) {
-        let diveSiteData = await getAnimalsInBubble(boundaries);
+        let diveSiteData = await getAnimalsInBubble(boundaries, { label: filterValue } );
  
         setAreaPics(diveSiteData);
      }
   };
 
   useEffect(() => {
-    console.log('filterValue', filterValue)
-    getPhotos();
+    getPhotos(filterValue);
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng, textvalue]);
 
 

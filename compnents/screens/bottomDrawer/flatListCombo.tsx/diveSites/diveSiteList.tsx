@@ -16,21 +16,20 @@ export default function DiveSiteList() {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
-  const getDiveSiteData = async () => {
+  const getDiveSiteData = async (filterValue: string) => {
     if (boundaries) {
        let diveSiteData = await getDiveSitesWithUser({
         minLat: boundaries.minLat,
         maxLat: boundaries.maxLat,
         minLng: boundaries.minLng,
-        maxLng: boundaries.maxLng});
+        maxLng: boundaries.maxLng}, { label: filterValue });
 
       setDiveSites(diveSiteData);
     }
   };
 
   useEffect(() => {
-    console.log('filterValue', filterValue)
-    getDiveSiteData();
+    getDiveSiteData(filterValue);
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
 
