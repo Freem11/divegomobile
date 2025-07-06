@@ -27,12 +27,12 @@ const SearchInput = React.forwardRef<TextInput, SearchInputProps>(function Searc
           <Icon name={iconLeft as IconName} fill={colors.neutralGrey}/>
         </S.IconWrapperLeft>
       }
-      <Animated.View style={[{ opacity: placeholderOpacity }]}>
+      <Animated.View style={value ? null : [{ opacity: placeholderOpacity }]}>
       <S.StyledTextInput 
         ref={ref} 
         onChangeText={onChangeText}
         placeholderTextColor={colors.neutralGrey}
-        placeholder={`Search ${rotatingWord}`}
+        placeholder={value ? null : `Search ${rotatingWord}`}
         value={value}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
