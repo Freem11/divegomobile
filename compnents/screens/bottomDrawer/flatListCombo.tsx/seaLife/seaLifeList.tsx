@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { AreaPicsContext } from '../../../../contexts/areaPicsContext';
@@ -7,11 +7,13 @@ import { getAnimalsInBubble } from '../../../../../supabaseCalls/photoSupabaseCa
 import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from "./styles";
 import { AnimalMultiSelectContext } from "../../../../contexts/animalMultiSelectContext";
+import MobileTextInput from "../../../../reusables/textInput";
 
 export default function SeaLifeList() {
 
   const boundaries = useMapStore((state) => state.gpsBubble);
   const { textvalue } = useContext(SearchTextContext);
+  const [filterValue, setFilterValue] = useState('');
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
 
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
@@ -26,8 +28,9 @@ export default function SeaLifeList() {
   };
 
   useEffect(() => {
+    console.log('filterValue', filterValue)
     getPhotos();
-  }, [boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng, textvalue]);
+  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng, textvalue]);
 
 
   const handleAnimalSelect = (label: string) => {
@@ -44,6 +47,15 @@ export default function SeaLifeList() {
     <S.VerticalFlatlistContainer>
         <S.Header>Nearby Sea Life</S.Header>
         <FlatList
+            ListHeaderComponent={
+            <S.FilterContainer>
+            <MobileTextInput 
+              iconLeft={'shark'}
+              placeholder="Filter Sea Creatures" 
+              onChangeText={(text: string) => setFilterValue( text )}
+              />
+            </S.FilterContainer>
+          }
           data={areaPics}
           keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
           renderItem={({ item }) => 

@@ -6,11 +6,13 @@ import * as S from './styles';
 import { getDiveShops } from "../../../../../supabaseCalls/shopsSupabaseCalls";
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
+import MobileTextInput from "../../../../reusables/textInput";
 
 export default function DiveCenterList() {
   
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [diveCenters, setDiveCenters] = useState([]);
+  const [filterValue, setFilterValue] = useState('');
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
@@ -23,8 +25,9 @@ export default function DiveCenterList() {
   };
 
   useEffect(() => {
+    console.log('filterValue', filterValue)
     getDiveCenterData();
-  }, [boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
+  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
   const handleDiveCenterSelection = (shopId: number) => {
     setActiveScreen("DiveShopScreen", {id: shopId})
@@ -35,6 +38,15 @@ export default function DiveCenterList() {
     <S.VerticalFlatlistContainer>
       <S.Header>Nearby Dive Centers</S.Header>
         <FlatList
+          ListHeaderComponent={
+          <S.FilterContainer>
+          <MobileTextInput 
+            iconLeft={'diving-scuba-flag'}
+            placeholder="Filter Dive Centers" 
+            onChangeText={(text: string) => setFilterValue( text )}
+            />
+          </S.FilterContainer>
+        }
           data={diveCenters}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
           renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={item.diveShopProfilePhoto} onPressHandler={() => handleDiveCenterSelection(item.id)} />}

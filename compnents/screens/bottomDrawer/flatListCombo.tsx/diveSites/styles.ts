@@ -17,3 +17,11 @@ export const Header = styled.Text`
   align-self: center;
   margin-top: ${Platform.OS === "ios" ? height*0.2 : height*0.27}px;
 `;
+
+export const FilterContainer = styled.View`
+  flex: 1;
+  width: ${width*0.85}px;
+  margin-left: 2.5%;
+  padding-top: ${moderateScale(10)}px;
+  padding-bottom: ${moderateScale(5)}px;
+`;
