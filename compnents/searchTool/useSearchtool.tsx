@@ -16,6 +16,8 @@ export default function useSearchTool() {
   const mapRef = useMapStore((state) => state.mapRef);
 
   const [searchValue, setSearchValue] = useState("");
+  const [previousSearchValue, setPreviousSearchValue] = useState("");
+
   const [list, setList] = useState([]);
   const [textSource, setTextSource] = useState(false);
   const [isClearOn, setIsClearOn] = useState(false);
@@ -88,7 +90,7 @@ export default function useSearchTool() {
         zoom: 12,
       });
 
-      finalizeSelection();
+      finalizeSelection(place);
     } catch (err) {
       console.warn("Geocoder error:", err);
     }
@@ -108,7 +110,7 @@ export default function useSearchTool() {
       });
     }
 
-    finalizeSelection();
+    finalizeSelection(diveSite);
   };
 
   const handleSeaLifeOptionSelected = async (seaCreature: string) => {
@@ -125,16 +127,16 @@ export default function useSearchTool() {
         animated: true,
       });
 
-      finalizeSelection();
+      finalizeSelection(seaCreature);
     } catch (err) {
       console.warn("Geocoder error:", err);
     }
   };
 
-  const finalizeSelection = () => {
+  const finalizeSelection = (selection: string) => {
     setList([]);
     setTextSource(false);
-    setSearchValue("");
+    setSearchValue(selection);
     Keyboard.dismiss();
     setLevelOneScreen(false);
   };
@@ -145,6 +147,18 @@ export default function useSearchTool() {
     }
   }, [searchValue]);
 
+  const handleFocus = () => {
+    setPreviousSearchValue(searchValue);
+    setSearchValue("");
+    setList([]);
+  };
+
+  const handleCancelSearch = () => {
+    setSearchValue(previousSearchValue);
+    setList([]); // Optional: clear suggestions
+    Keyboard.dismiss();
+  };
+
   return {
     list,
     searchValue,
@@ -154,5 +168,7 @@ export default function useSearchTool() {
     handleMapOptionSelected,
     handleDiveSiteOptionSelected,
     handleSeaLifeOptionSelected,
+    handleFocus,
+    handleCancelSearch
   };
 }
