@@ -42,6 +42,11 @@ export default function SeaLifeList() {
     });
   };
 
+  const handleClear = () => {
+    setFilterValue('')
+  }
+
+
   return (
     <S.VerticalFlatlistContainer>
         <S.Header>Nearby Sea Life</S.Header>
@@ -50,8 +55,11 @@ export default function SeaLifeList() {
             <S.FilterContainer>
             <MobileTextInput 
               iconLeft={'shark'}
+              iconRight={'close'}
               placeholder="Filter Sea Creatures" 
               onChangeText={(text: string) => setFilterValue( text )}
+              handleClear={() => handleClear()}
+              filterValue={filterValue}
               />
             </S.FilterContainer>
           }

@@ -38,6 +38,10 @@ export default function DiveSiteList() {
     setLevelOneScreen(true)
   }
  
+  const handleClear = () => {
+    setFilterValue('')
+  }
+
   return (
     <S.VerticalFlatlistContainer>
       <S.Header>Nearby Dive Sites</S.Header>
@@ -46,8 +50,11 @@ export default function DiveSiteList() {
           <S.FilterContainer>
           <MobileTextInput 
             iconLeft={'anchor'}
+            iconRight={'close'}
             placeholder="Filter Dive Sites" 
             onChangeText={(text: string) => setFilterValue( text )}
+            handleClear={() => handleClear()}
+            filterValue={filterValue}
             />
           </S.FilterContainer>
         }

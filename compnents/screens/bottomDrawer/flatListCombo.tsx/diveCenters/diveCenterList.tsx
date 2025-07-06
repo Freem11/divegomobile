@@ -33,6 +33,10 @@ export default function DiveCenterList() {
     setLevelOneScreen(true)
   }
   
+  const handleClear = () => {
+    setFilterValue('')
+  }
+
   return (
     <S.VerticalFlatlistContainer>
       <S.Header>Nearby Dive Centers</S.Header>
@@ -41,8 +45,11 @@ export default function DiveCenterList() {
           <S.FilterContainer>
           <MobileTextInput 
             iconLeft={'diving-scuba-flag'}
+            iconRight={'close'}
             placeholder="Filter Dive Centers" 
             onChangeText={(text: string) => setFilterValue( text )}
+            handleClear={() => handleClear()}
+            filterValue={filterValue}
             />
           </S.FilterContainer>
         }

@@ -35,3 +35,9 @@ export const IconWrapperRight = styled.View`
     width: ${moderateScale(24)}px;
     margin-left: ${moderateScale(2)}px;
 `;
+
+
+export const IconWrapperRightClear = styled.View`
+    width: ${moderateScale(24)}px;
+    margin-left: ${moderateScale(-15)}px;
+`;
