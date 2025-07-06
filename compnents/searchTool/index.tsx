@@ -21,6 +21,7 @@ export default function SearchTool() {
     handleClear,
     handleMapOptionSelected,
     handleDiveSiteOptionSelected,
+    handleSeaLifeOptionSelected
   } = useSearchTool();
 
   const insets = useSafeAreaInsets();
@@ -91,7 +92,7 @@ export default function SearchTool() {
           data={list}
           handleMapOptionSelected={handleMapOptionSelected}
           handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
-
+          handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
         />
       </Animated.View>
 

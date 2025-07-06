@@ -52,22 +52,40 @@ export const getAnimalNamesThatFit = async (value: string) => {
   }
 };
 
-// export const getAnimalNamesThatFit = async (value) => {
-//   const { data, error } = await supabase
-//     .from("photos")
-//     .select("label")
-//     .ilike("label", "%" + value + "%")
-//     .limit(10);
+export const getSeaCreatures = async (value: string, limit: number) => {
+  if (value === '') {
+    return [];
+  }
 
-//   if (error) {
-//     console.log("couldn't do it 21,", error);
-//     return [];
-//   }
 
-//   if (data) {
-//     return data;
-//   }
-// };
+  const { data, error } = await supabase.rpc('get_unique_sea_life_with_limit', {
+    search_label: value,
+    limit_count: limit,
+  });
+
+  if (error) {
+    console.log("couldn't do it,", error);
+    return [];
+  }
+
+  return data || [];
+};
+
+export const getCoordsForSeaLife = async (seaLifeName: string) => {
+  const { data, error } = await supabase
+    .from("photos")
+    .select('label, latitude, longitude')
+    .eq("label", seaLifeName);
+
+  if (error) {
+    console.log("couldn't do it Sea Life Coords,", error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+};
 
 export const getPhotosforAnchor = async (value) => {
   const { data, error } = await supabase

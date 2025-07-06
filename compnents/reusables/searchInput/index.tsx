@@ -17,7 +17,7 @@ const SearchInput = React.forwardRef<TextInput, SearchInputProps>(function Searc
   ref: ForwardedRef<TextInput>
 ) {
 
-  const placeholderTerms = ['Places', 'Dive Sites'];
+  const placeholderTerms = ['Places', 'Dive Sites', 'Sea Life'];
   const { rotatingWord, placeholderOpacity, setIsFocused} = useRotatingPlaceholder(placeholderTerms)
 
   return (

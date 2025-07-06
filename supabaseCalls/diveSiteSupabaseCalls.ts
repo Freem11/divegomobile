@@ -62,7 +62,8 @@ export const getSiteNamesThatFit = async (value) => {
   const { data, error } = await supabase
     .from("diveSites")
     .select()
-    .ilike("name", "%" + value + "%");
+    .ilike("name", "%" + value + "%")
+    .limit(4);
 
   if (error) {
     console.log("couldn't do it,", error);

@@ -5,6 +5,8 @@ import { getSiteNamesThatFit, getSingleDiveSiteByNameAndRegion } from "../../sup
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { useMapStore } from "../googleMap/useMapStore";
 import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
+import { getCoordsForSeaLife, getSeaCreatures } from "../../supabaseCalls/photoSupabaseCalls";
+import { s } from "react-native-size-matters";
 
 const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 Geocoder.init(GoogleMapsApiKey);
@@ -18,13 +20,20 @@ export default function useSearchTool() {
   const [textSource, setTextSource] = useState(false);
   const [isClearOn, setIsClearOn] = useState(false);
 
-  const getPlaces = async (text) => {
+  const getPlaces = async (text: string) => {
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${GoogleMapsApiKey}`
       );
       const placeInfo = await res.json();
-      return placeInfo?.predictions || [];
+
+      const filtered = (placeInfo?.predictions || []).filter((prediction) => {
+        const poiTypes = ['establishment', 'point_of_interest', 'tourist_attraction', 'premise'];
+        return !prediction.types.some(type => poiTypes.includes(type));
+      });
+
+      // return filtered;
+      return filtered.slice(0, 4);
     } catch (err) {
       console.error("Google Places API Error:", err);
       return [];
@@ -34,6 +43,7 @@ export default function useSearchTool() {
   const handleDataList = async (value: string) => {
     const placesData = await getPlaces(value);
     const diveSiteData = await getSiteNamesThatFit(value);
+    const seacreatureData = await getSeaCreatures(value, 4);
 
     const placesArray = placesData.map((place) => place.description);
     const diveSiteArray = diveSiteData?.map((diveSite) => {
@@ -41,10 +51,12 @@ export default function useSearchTool() {
         ? `${diveSite.name} ~ ${diveSite.region}`
         : diveSite.name;
     }) || [];
+    const seaLifeArray = seacreatureData.map((place) => place.label);
 
     const megaArray = [
       ...addIconType(placesArray, "compass"),
       ...addIconType([...new Set(diveSiteArray)], "anchor"),
+      ...addIconType([...new Set(seaLifeArray)], "shark"),
     ];
 
     setList(addIndexNumber(megaArray));
@@ -99,6 +111,26 @@ export default function useSearchTool() {
     finalizeSelection();
   };
 
+  const handleSeaLifeOptionSelected = async (seaCreature: string) => {
+    try {
+      const seaLifeSet = await getCoordsForSeaLife(seaCreature);
+
+      const coordinates = seaLifeSet.map(site => ({
+        latitude: site.latitude,
+        longitude: site.longitude,
+      }));
+      
+      mapRef?.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
+      });
+
+      finalizeSelection();
+    } catch (err) {
+      console.warn("Geocoder error:", err);
+    }
+  };
+
   const finalizeSelection = () => {
     setList([]);
     setTextSource(false);
@@ -121,5 +153,6 @@ export default function useSearchTool() {
     handleClear,
     handleMapOptionSelected,
     handleDiveSiteOptionSelected,
+    handleSeaLifeOptionSelected,
   };
 }

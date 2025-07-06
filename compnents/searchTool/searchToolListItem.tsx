@@ -8,11 +8,13 @@ import * as S from "./styles";
 import { colors } from "../styles";
 import Icon from "../../icons/Icon";
 
-export default function SearchToolListItem({ name, soureImage, handleMapOptionSelected, handleDiveSiteOptionSelected }) {
+export default function SearchToolListItem({ name, soureImage, handleMapOptionSelected, handleDiveSiteOptionSelected, handleSeaLifeOptionSelected }) {
 
   const onPressItem = () => {
     if (soureImage === "anchor") {
       handleDiveSiteOptionSelected(name);
+    } else if (soureImage === "shark") {
+      handleSeaLifeOptionSelected(name);
     } else {
       handleMapOptionSelected(name);
     }
@@ -26,7 +28,10 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
             <S.CardIconContainer>
               <S.CardIcon>
             {soureImage === "anchor" ?
-              <Icon name={'anchor'} fill={colors.primaryBlue}/>
+              <Icon name={'anchor'} fill={colors.themeGreen}/>
+              :
+              soureImage === "shark"  ? 
+              <Icon name={'shark'} fill={colors.primaryBlue}/>
               :
               <Icon name={'compass-outline'} fill={colors.themeBlack}/>
               }
