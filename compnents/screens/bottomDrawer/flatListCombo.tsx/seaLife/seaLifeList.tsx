@@ -29,7 +29,7 @@ export default function SeaLifeList() {
 
   useEffect(() => {
     getPhotos(filterValue);
-  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng, textvalue]);
+  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
 
   const handleAnimalSelect = (label: string) => {
