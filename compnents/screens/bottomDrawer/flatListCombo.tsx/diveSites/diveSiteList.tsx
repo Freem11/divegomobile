@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { FlatList } from 'react-native-gesture-handler'; // Removed NativeViewGestureHandler
+import React, { useContext, useEffect, useState, useMemo } from 'react'; // Import useMemo
+import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from './styles';
@@ -42,22 +42,32 @@ export default function DiveSiteList() {
     setFilterValue('')
   }
 
+  const [layoutReady, setLayoutReady] = useState(false);
+
+  const renderListHeader = useMemo(() => (
+    <S.FilterContainer>
+      <MobileTextInput 
+        iconLeft={'anchor'}
+        iconRight={'close'}
+        placeholder="Filter Dive Sites" 
+        onChangeText={(text: string) => setFilterValue( text )}
+        handleClear={() => handleClear()}
+        filterValue={filterValue}
+      />
+    </S.FilterContainer>
+  ), [filterValue, handleClear, setFilterValue]);
+
   return (
-    <S.VerticalFlatlistContainer>
+    <S.VerticalFlatlistContainer
+    onLayout={() => {
+      if (!layoutReady) setLayoutReady(true);
+    }}
+    >
       <S.Header>Nearby Dive Sites</S.Header>
+
+      {layoutReady ? (
         <FlatList
-          ListHeaderComponent={
-          <S.FilterContainer>
-          <MobileTextInput 
-            iconLeft={'anchor'}
-            iconRight={'close'}
-            placeholder="Filter Dive Sites" 
-            onChangeText={(text: string) => setFilterValue( text )}
-            handleClear={() => handleClear()}
-            filterValue={filterValue}
-            />
-          </S.FilterContainer>
-        }
+          ListHeaderComponent={renderListHeader}
           data={diveSites}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
           renderItem={({ item }) => <Card id={item.id} name={item.name} photoPath={item.divesiteprofilephoto} subData={item.times_seen} onPressHandler={() => handleDiveSiteSelection(item.id)}  />}
@@ -65,6 +75,7 @@ export default function DiveSiteList() {
           showsVerticalScrollIndicator={false}
            keyboardShouldPersistTaps="always"
         />
+      ) : null}
     </S.VerticalFlatlistContainer>
   );
 }

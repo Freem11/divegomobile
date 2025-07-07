@@ -109,7 +109,6 @@ export default function useSearchTool() {
         zoom: 12,
       });
     }
-
     finalizeSelection(diveSite);
   };
 
@@ -136,6 +135,7 @@ export default function useSearchTool() {
   const finalizeSelection = (selection: string) => {
     setList([]);
     setTextSource(false);
+    setPreviousSearchValue(selection);
     setSearchValue(selection);
     Keyboard.dismiss();
     setLevelOneScreen(false);
@@ -155,7 +155,7 @@ export default function useSearchTool() {
 
   const handleCancelSearch = () => {
     setSearchValue(previousSearchValue);
-    setList([]); // Optional: clear suggestions
+    setList([]);
     Keyboard.dismiss();
   };
 

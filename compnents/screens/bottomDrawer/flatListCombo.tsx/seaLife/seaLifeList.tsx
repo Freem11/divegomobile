@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { AreaPicsContext } from '../../../../contexts/areaPicsContext';
@@ -46,38 +46,49 @@ export default function SeaLifeList() {
     setFilterValue('')
   }
 
+  const [layoutReady, setLayoutReady] = useState(false);
+
+  const renderListHeader = useMemo(() => (
+    <S.FilterContainer>
+      <MobileTextInput 
+        iconLeft={'shark'}
+        iconRight={'close'}
+        placeholder="Filter Sea Creatures" 
+        onChangeText={(text: string) => setFilterValue(text)}
+        handleClear={handleClear}
+        filterValue={filterValue}
+      />
+    </S.FilterContainer>
+  ), [filterValue, handleClear, setFilterValue]);
 
   return (
-    <S.VerticalFlatlistContainer>
-        <S.Header>Nearby Sea Life</S.Header>
+    <S.VerticalFlatlistContainer
+      onLayout={() => {
+        if (!layoutReady) setLayoutReady(true);
+      }}
+    >
+      <S.Header>Nearby Sea Life</S.Header>
+  
+      {layoutReady ? (
         <FlatList
-            ListHeaderComponent={
-            <S.FilterContainer>
-            <MobileTextInput 
-              iconLeft={'shark'}
-              iconRight={'close'}
-              placeholder="Filter Sea Creatures" 
-              onChangeText={(text: string) => setFilterValue( text )}
-              handleClear={() => handleClear()}
-              filterValue={filterValue}
-              />
-            </S.FilterContainer>
-          }
+          ListHeaderComponent={renderListHeader}
           data={areaPics}
           keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
-          renderItem={({ item }) => 
+          renderItem={({ item }) => (
             <Card 
-            id={item.id} 
-            name={item.label} 
-            photoPath={item.photofile} 
-            onPressHandler={() => handleAnimalSelect(item.label)} 
-            seaLifeSelections={animalMultiSelection} 
-            subData={`${item.times_seen}  Sighting${item.times_seen !== 1 ? 's' : ''}`}
-            />}
-          nestedScrollEnabled={true}
+              id={item.id} 
+              name={item.label} 
+              photoPath={item.photofile} 
+              onPressHandler={() => handleAnimalSelect(item.label)} 
+              seaLifeSelections={animalMultiSelection} 
+              subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? 's' : ''}`}
+            />
+          )}
+          nestedScrollEnabled
           showsVerticalScrollIndicator={false}
-           keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="always"
         />
+      ) : null}
     </S.VerticalFlatlistContainer>
-  );
-}
+  )
+};

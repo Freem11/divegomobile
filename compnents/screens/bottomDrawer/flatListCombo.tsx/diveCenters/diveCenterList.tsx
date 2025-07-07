@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { useMapStore } from '../../../../googleMap/useMapStore';
@@ -9,17 +9,16 @@ import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContex
 import MobileTextInput from "../../../../reusables/textInput";
 
 export default function DiveCenterList() {
-  
+
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [diveCenters, setDiveCenters] = useState([]);
   const [filterValue, setFilterValue] = useState('');
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  
+
   const getDiveCenterData = async (filterValue: string) => {
     if (boundaries) {
-       let diveCenterData = await getDiveShops(boundaries, filterValue);
-
+      let diveCenterData = await getDiveShops(boundaries, filterValue);
       setDiveCenters(diveCenterData);
     }
   };
@@ -32,34 +31,45 @@ export default function DiveCenterList() {
     setActiveScreen("DiveShopScreen", {id: shopId})
     setLevelOneScreen(true)
   }
-  
+
   const handleClear = () => {
     setFilterValue('')
   }
 
+  const [layoutReady, setLayoutReady] = useState(false);
+
+  const renderListHeader = useMemo(() => (
+    <S.FilterContainer>
+      <MobileTextInput
+        iconLeft={'diving-scuba-flag'}
+        iconRight={'close'}
+        placeholder="Filter Dive Centers"
+        onChangeText={(text: string) => setFilterValue( text )}
+        handleClear={() => handleClear()}
+        filterValue={filterValue}
+      />
+    </S.FilterContainer>
+  ), [filterValue, handleClear, setFilterValue]);
+
   return (
-    <S.VerticalFlatlistContainer>
+    <S.VerticalFlatlistContainer
+    onLayout={() => {
+      if (!layoutReady) setLayoutReady(true);
+    }}
+    >
       <S.Header>Nearby Dive Centers</S.Header>
+
+      {layoutReady ? (
         <FlatList
-          ListHeaderComponent={
-          <S.FilterContainer>
-          <MobileTextInput 
-            iconLeft={'diving-scuba-flag'}
-            iconRight={'close'}
-            placeholder="Filter Dive Centers" 
-            onChangeText={(text: string) => setFilterValue( text )}
-            handleClear={() => handleClear()}
-            filterValue={filterValue}
-            />
-          </S.FilterContainer>
-        }
+          ListHeaderComponent={renderListHeader}
           data={diveCenters}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
           renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={item.diveShopProfilePhoto} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
-           keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="always"
         />
+      ) : null}
     </S.VerticalFlatlistContainer>
   );
 }
