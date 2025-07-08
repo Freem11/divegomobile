@@ -9,6 +9,7 @@ import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import email from "react-native-email";
+import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void
@@ -27,6 +28,7 @@ export default function DiveSiteScreen({
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { profile } = useContext(UserProfileContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
+  const [diveSiteTrips, setDiveSiteTrips] = useState([]);
 
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -47,6 +49,18 @@ export default function DiveSiteScreen({
 
     setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
   };
+
+  const getTrips = async (diveSiteId: number) => {
+    const data = await getItinerariesForDiveSite(diveSiteId)
+    setDiveSiteTrips(data)
+  }
+
+
+  useEffect(() => {
+    getTrips(selectedDiveSite.id)
+  },[selectedDiveSite])
+
+
 
   useEffect(() => {
     if (selectedDiveSite.lat && profile) {
