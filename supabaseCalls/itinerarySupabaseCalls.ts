@@ -72,7 +72,6 @@ export const insertItinerary = async (values: ItineraryItem) => {
 
 
 export const insertItineraryRequest = async (values: ItineraryItem, reqType: string) => {
-  console.log('supa', values, reqType)
   const { data, error } = await supabase.from('itineraryRequests').insert([
     {
       shopID:              values.shopID,
@@ -95,18 +94,22 @@ export const insertItineraryRequest = async (values: ItineraryItem, reqType: str
 };
 
 
-export const getItinerariesForDiveSite = async (IdNo) => {
-  const { data, error } = await supabase
+export const getItinerariesForDiveSite = async (IdNo: number, limitTo3: boolean = false) => {
+  let query = supabase
     .from("itineraries")
     .select()
     .contains("siteList", [IdNo]);
 
+  if (limitTo3) {
+    query = query.limit(3);
+  }
+
+  const { data, error } = await query;
+
   if (error) {
-    console.log("couldn't do it 37,", error);
+    console.log("couldn't do it: Dive Site Trips,", error);
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  return data as ItineraryItem[];
 };

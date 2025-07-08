@@ -1,5 +1,5 @@
-import { Pagination } from "../compnents/entities/pagination";
 import { GPSBubble } from "../entities/GPSBubble";
+import { Pagination } from "../entities/pagination";
 import { Animal, Photo } from "../entities/photos";
 import { supabase } from "../supabase";
 
@@ -147,25 +147,42 @@ export const getPhotosforMapArea = async (value) => {
   }
 };
 
-export const getPhotosByDiveSiteWithExtra = async (values) => {
-  const {
-    data,
-    error,
-  } = await supabase.rpc("get_photos_for_divesite_with_socials_groupby_date", {
+type GetPhotosParams = {
+  lat: number;
+  lng: number;
+  userId: string;
+  limit_count?: number;
+};
+
+export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
+  const params: {
+    lat: number;
+    lng: number;
+    connecteduserid: string;
+    limit_count?: number;
+  } = {
     lat: values.lat,
     lng: values.lng,
-    connecteduserid: values.userId
-  });
+    connecteduserid: values.userId,
+  };
+
+  if (typeof values.limit_count === 'number') {
+    params.limit_count = values.limit_count;
+  }
+
+  const { data, error } = await supabase.rpc(
+    "get_photos_for_divesite_with_socials_groupby_date",
+    params
+  );
 
   if (error) {
-    console.error("couldn't do it 30,", error);
+    console.error("couldn't do it: Pulling Grouped Photos,", error);
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  return data || [];
 };
+
 
 
 export const getDiveSitePhotos = async (lat: number, lng: number, userId: string, pagination?: Pagination) => {  
@@ -217,7 +234,7 @@ export const getProfilePhotosByUser = async (userId: string, connectedUserId: st
 
 
 
-export const getPhotosByUserWithExtra = async (userId, connectedUserId) => {
+export const getPhotosByUserWithExtra = async (userId: string, connectedUserId: string) => {
   const {
     data,
     error,
