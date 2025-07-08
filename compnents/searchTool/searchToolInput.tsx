@@ -7,7 +7,8 @@ export default function SearchToolInput({
   iconRight,
   searchValue, 
   handleChange, 
-  handleClear 
+  handleClear,
+  handleFocus
   }) {
 
   return (
@@ -18,6 +19,7 @@ export default function SearchToolInput({
           value={searchValue}
           onChangeText={handleChange}
           handleClear={handleClear}
+          onFocus={handleFocus}
         />
     </S.SearchInputContainer>
   );

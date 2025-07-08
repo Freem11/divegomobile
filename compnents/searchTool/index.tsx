@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, View, StyleSheet, Dimensions, Platform } from "react-native";
+import { Animated, View, StyleSheet, Dimensions, Platform, TouchableWithoutFeedback } from "react-native";
 import useSearchTool from "./useSearchtool";
 import SearchToolInput from "./searchToolInput";
 import SearchToolList from "./searchToolList";
@@ -21,11 +21,14 @@ export default function SearchTool() {
     handleClear,
     handleMapOptionSelected,
     handleDiveSiteOptionSelected,
+    handleSeaLifeOptionSelected,
+    handleFocus,
+    handleCancelSearch
   } = useSearchTool();
 
   const insets = useSafeAreaInsets();
 
-  const shouldBeVisible = list.length > 0 || searchValue.length > 0;
+  const shouldBeVisible = list.length > 0;
 
   const anim = useRef(new Animated.Value(0)).current;
 
@@ -58,6 +61,7 @@ export default function SearchTool() {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={handleCancelSearch}>
     <View style={{ flex: 1 }}>
       <View style={{ paddingTop: Platform.OS  === 'android' || windowWidth > 700 ? 25 : 0, paddingBottom: 25, alignSelf: "center", zIndex: 20 }}>
         <SearchToolInput
@@ -66,6 +70,7 @@ export default function SearchTool() {
           searchValue={searchValue}
           handleChange={handleChange}
           handleClear={handleClear}
+          handleFocus={handleFocus}
         />
       </View>
 
@@ -91,11 +96,12 @@ export default function SearchTool() {
           data={list}
           handleMapOptionSelected={handleMapOptionSelected}
           handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
-
+          handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
         />
       </Animated.View>
 
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

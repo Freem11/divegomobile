@@ -35,10 +35,11 @@ import { supabase } from "../supabase";
 //   }
 // };
 
-export const getDiveShops = async (bubble: GPSBubble): Promise<DiveShop[]> => {
+export const getDiveShops = async (bubble: GPSBubble, filerValue: string): Promise<DiveShop[]> => {
   const { data, error } = await supabase
     .from("shops")
     .select()
+    .ilike("orgName", "%" + filerValue + "%")
     .gte("lat", bubble.minLat)
     .gte("lng", bubble.minLng)
     .lte("lat", bubble.maxLat)

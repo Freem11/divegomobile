@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { Dimensions } from 'react-native';
-import { FlatList, NativeViewGestureHandler } from 'react-native-gesture-handler';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
+import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { AreaPicsContext } from '../../../../contexts/areaPicsContext';
 import { SearchTextContext } from '../../../../contexts/searchTextContext';
@@ -8,31 +7,29 @@ import { getAnimalsInBubble } from '../../../../../supabaseCalls/photoSupabaseCa
 import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from "./styles";
 import { AnimalMultiSelectContext } from "../../../../contexts/animalMultiSelectContext";
+import MobileTextInput from "../../../../reusables/textInput";
 
-const { width } = Dimensions.get('window');
-
-export default function SeaLifeList({ horizontalGestureRef }) {
-
-  const verticalGestureRef = useRef();
+export default function SeaLifeList() {
 
   const boundaries = useMapStore((state) => state.gpsBubble);
   const { textvalue } = useContext(SearchTextContext);
+  const [filterValue, setFilterValue] = useState('');
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
 
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
-  const getPhotos = async () => {
+  const getPhotos = async (filterValue: string) => {
     if (boundaries) {
-        let diveSiteData = await getAnimalsInBubble(boundaries);
+        let diveSiteData = await getAnimalsInBubble(boundaries, { label: filterValue } );
  
         setAreaPics(diveSiteData);
      }
   };
 
   useEffect(() => {
-    getPhotos();
-  }, [boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng, textvalue]);
+    getPhotos(filterValue);
+  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
 
   const handleAnimalSelect = (label: string) => {
@@ -45,33 +42,53 @@ export default function SeaLifeList({ horizontalGestureRef }) {
     });
   };
 
+  const handleClear = () => {
+    setFilterValue('')
+  }
+
+  const [layoutReady, setLayoutReady] = useState(false);
+
+  const renderListHeader = useMemo(() => (
+    <S.FilterContainer>
+      <MobileTextInput 
+        iconLeft={'shark'}
+        iconRight={'close'}
+        placeholder="Filter Sea Creatures" 
+        onChangeText={(text: string) => setFilterValue(text)}
+        handleClear={handleClear}
+        filterValue={filterValue}
+      />
+    </S.FilterContainer>
+  ), [filterValue, handleClear, setFilterValue]);
+
   return (
-    <S.VerticalFlatlistContainer>
-        <S.Header>Nearby Sea Life</S.Header>
-      <NativeViewGestureHandler
-        ref={verticalGestureRef}
-        simultaneousHandlers={horizontalGestureRef}
-      >
+    <S.VerticalFlatlistContainer
+      onLayout={() => {
+        if (!layoutReady) setLayoutReady(true);
+      }}
+    >
+      <S.Header>Nearby Sea Life</S.Header>
+  
+      {layoutReady ? (
         <FlatList
+          ListHeaderComponent={renderListHeader}
           data={areaPics}
           keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
-          renderItem={({ item }) => 
+          renderItem={({ item }) => (
             <Card 
-            id={item.id} 
-            name={item.label} 
-            photoPath={item.photofile} 
-            onPressHandler={() => handleAnimalSelect(item.label)} 
-            seaLifeSelections={animalMultiSelection} 
-            subData={`${item.times_seen}  Sighting${item.times_seen !== 1 ? 's' : ''}`}
-            />}
-          nestedScrollEnabled={true}
+              id={item.id} 
+              name={item.label} 
+              photoPath={item.photofile} 
+              onPressHandler={() => handleAnimalSelect(item.label)} 
+              seaLifeSelections={animalMultiSelection} 
+              subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? 's' : ''}`}
+            />
+          )}
+          nestedScrollEnabled
           showsVerticalScrollIndicator={false}
-           keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="always"
         />
-      </NativeViewGestureHandler>
+      ) : null}
     </S.VerticalFlatlistContainer>
-  );
-}
-
-
-
+  )
+};

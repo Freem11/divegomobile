@@ -1,5 +1,6 @@
 import { DiveSiteBasic, DiveSiteWithUserName } from "../entities/diveSite";
 import { GPSBubble } from "../entities/GPSBubble";
+import { Photo } from "../entities/photos";
 import { supabase } from "../supabase";
 
 export const diveSites = async () => {
@@ -34,8 +35,8 @@ export const getDiveSitesBasic = async (
   return data;
 };
 
-export const getDiveSitesWithUser = async (values) => {
-  const { data, error } = await supabase.rpc("get_divesites_with_username", {
+export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>,) => {
+  const builder = supabase.rpc("get_divesites_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
     max_lng: values.maxLng,
@@ -43,15 +44,19 @@ export const getDiveSitesWithUser = async (values) => {
     userid: "",
   });
 
+  if (filter?.label) {
+    builder.ilike('name', '%' + filter.label + '%');
+  }
+  const { data, error } = await builder;
   if (error) {
-    console.log("couldn't do it divesite1,", error);
+    console.log('couldn\'t do it,', error);
     return [];
   }
 
   if (data) {
-    // console.log(data)
-    return data;
+    return data as DiveSiteWithUserName[];
   }
+  return [];
 };
 
 export const getSiteNamesThatFit = async (value) => {
@@ -62,7 +67,8 @@ export const getSiteNamesThatFit = async (value) => {
   const { data, error } = await supabase
     .from("diveSites")
     .select()
-    .ilike("name", "%" + value + "%");
+    .ilike("name", "%" + value + "%")
+    .limit(4);
 
   if (error) {
     console.log("couldn't do it,", error);

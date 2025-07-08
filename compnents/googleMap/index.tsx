@@ -35,7 +35,6 @@ export default function GoogleMap() {
     handleBoundsChange()
   }
 
-
   useEffect(() => {
     (async() => {
       const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , {animal: animalMultiSelection})

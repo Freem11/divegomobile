@@ -8,6 +8,7 @@ export default function SearchToolList({
   data,
   handleMapOptionSelected,
   handleDiveSiteOptionSelected,
+  handleSeaLifeOptionSelected
 }) {
   if (!data || data.length === 0) return null;
 
@@ -22,6 +23,7 @@ export default function SearchToolList({
             soureImage={item.source}
             handleMapOptionSelected={handleMapOptionSelected}
             handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
+            handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
           />
         )}
       />
