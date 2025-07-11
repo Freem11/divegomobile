@@ -6,9 +6,9 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { ActiveConfirmationIDContext } from '../contexts/activeConfirmationIDContext';
-import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 
+import { ActiveConfirmationIDContext } from "../contexts/activeConfirmationIDContext";
+import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import FailModal from "../modals/confirmationCautionModal";
 import SuccessModal from "../modals/confirmationSuccessModal";
 

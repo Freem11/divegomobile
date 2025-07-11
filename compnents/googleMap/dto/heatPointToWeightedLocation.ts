@@ -1,4 +1,4 @@
-import { HeatPoint } from '../../../entities/heatPoint';
+import { HeatPoint } from "../../../entities/heatPoint";
 
 export const heatPointToWeightedLocation = (heatPoint: HeatPoint) => {
   return {

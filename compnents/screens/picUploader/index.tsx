@@ -1,18 +1,20 @@
 import React, { Dispatch, useContext, useState } from "react";
-import PicUploaderView from "./view";
+import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from "react-i18next";
+
 import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning } from "../../toast";
 import { UserProfileContext } from "../../contexts/userProfileContext";
-import { v4 as uuidv4 } from "uuid";
 import { saveFailedUpload } from "../../feed/store/asyncStore";
-import { useTranslation } from "react-i18next";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
 import { checkNetworkStatus } from "../../feed/store/utils";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+
+import PicUploaderView from "./view";
 
 export const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -58,7 +60,7 @@ export default function PicUploader({
   const [isUploading, setIsUploading] = useState(false);
   const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);
   
-  const tryUpload = async (uri: string) => {
+  const tryUpload = async(uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
@@ -78,8 +80,8 @@ export default function PicUploader({
     return {
       id: ID,
       type: FEED_ITEM_TYPE.FAILED_UPLOAD,
-      title: t('PicUploader.uploadFailedTitle'),
-      message: t('PicUploader.couldUploadMsg', { animal: formData.animal.label, diveSite: formData.diveSiteName }),
+      title: t("PicUploader.uploadFailedTitle"),
+      message: t("PicUploader.couldUploadMsg", { animal: formData.animal.label, diveSite: formData.diveSiteName }),
       timestamp: Date.now(),
       imageUri: localPreviewUri,
       retryMetaData: {
@@ -101,9 +103,9 @@ export default function PicUploader({
     };
   }
 
-  const onSubmitOrCache = async (formData: Required<Form>) => {
+  const onSubmitOrCache = async(formData: Required<Form>) => {
     if (!localPreviewUri || !formData.date || !formData.animal) {
-      showWarning(t('PicUploader.fillRequiredFields'));
+      showWarning(t("PicUploader.fillRequiredFields"));
       return;
     }
     const { isStableConnection } = await checkNetworkStatus()
@@ -111,22 +113,22 @@ export default function PicUploader({
     if (!isStableConnection) {
       const failedItemToUpload = buildFailedUploadItem(formData);
       await saveFailedUpload(failedItemToUpload)
-      showError(t('PicUploader.offlineMsg'));
+      showError(t("PicUploader.offlineMsg"));
       resetAndClose();
     } else {
       await onSubmit(formData);
     }
   }
 
-  const onSubmit = async (formData: Required<Form>) => {
+  const onSubmit = async(formData: Required<Form>) => {
     console.log(formData)
     setIsUploading(true);
     console.log(localPreviewUri)
     try {
       const fileName = await tryUpload(localPreviewUri);
-      console.log('fileName', fileName)
+      console.log("fileName", fileName)
       if (!fileName) {
-        throw new Error(t('PicUploader.failedUpload'));
+        throw new Error(t("PicUploader.failedUpload"));
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
@@ -146,10 +148,10 @@ export default function PicUploader({
           fileName: fullPath,
         });
 
-        throw new Error(t('PicUploader.failedToSave'));
+        throw new Error(t("PicUploader.failedToSave"));
       }
       setConfirmationType("Sea Creature Submission");
-      showSuccess(t('PicUploader.successUpload'));
+      showSuccess(t("PicUploader.successUpload"));
       resetAndClose()
     } catch (err) {
       console.error("Error uploading image:", err);

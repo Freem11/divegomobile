@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import Select, { SelectProps } from '../select';
-import { TextInput } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { TextInput } from "react-native";
+
+import Select, { SelectProps } from "../select";
 
 const defaultProps = {
   searchLimit: 100,
@@ -30,7 +31,7 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
       init();
     }, []);
 
-    const init = async () => {
+    const init = async() => {
       try {
         if (getSelectedOptions) {
           const data = await getSelectedOptions(props.value);
@@ -41,7 +42,7 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
         }
 
         if (!props.disabled) {
-          loadOptions('');
+          loadOptions("");
         }
       } catch (e) {
         setIsFetching(false);
@@ -53,7 +54,7 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
       loadOptions(search, true);
     };
 
-    const loadOptions = async (
+    const loadOptions = async(
       search: string,
       replaceExistingOptions = false
     ) => {

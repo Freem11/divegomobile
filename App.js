@@ -10,9 +10,10 @@ import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { I18nextProvider } from "react-i18next";
+
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import MapPage from "./compnents/mapPage/mapPage";
 import Authentication from "./compnents/authentication";
@@ -28,7 +29,7 @@ export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [activeSession, setActiveSession] = useState(null);
 
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
     SFBlack: require("./assets/SanFran/SF-Pro-Display-Black.otf"),
     RobotoBlackItalic: require("./assets/Roboto/Roboto-BlackItalic.ttf"),
@@ -60,7 +61,7 @@ export default function App() {
   }, []);
 
   useLayoutEffect(() => {
-    const prepare = async () => {
+    const prepare = async() => {
       await SplashScreen.preventAutoHideAsync();
  
       if (Platform.OS === "ios") {
@@ -107,7 +108,7 @@ export default function App() {
     prepare();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
+  const onLayoutRootView = useCallback(async() => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
     }
@@ -124,13 +125,13 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-                <SessionContext.Provider
-                  value={{ activeSession, setActiveSession }}
-                >
-                  <I18nextProvider i18n={i18n}>
-                    {activeSession ? <MapPage /> : <Authentication />}
-                  </I18nextProvider>
-                </SessionContext.Provider>
+        <SessionContext.Provider
+          value={{ activeSession, setActiveSession }}
+        >
+          <I18nextProvider i18n={i18n}>
+            {activeSession ? <MapPage /> : <Authentication />}
+          </I18nextProvider>
+        </SessionContext.Provider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />
       {/* <Toast /> */}

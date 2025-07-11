@@ -1,14 +1,17 @@
-import React, { forwardRef, useRef, useState } from 'react';
-import * as S from './styles'
-import { ItineraryItem } from '../../entities/itineraryItem';
+import React, { forwardRef, useRef, useState } from "react";
+import Popover from "react-native-popover-view";
+import { Placement } from "react-native-popover-view/dist/Types";
+import { View, ViewProps } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+
+import { ItineraryItem } from "../../entities/itineraryItem";
 import ButtonIcon from "../buttonIcon";
 import readableDate from "../../helpers/readableDate";
 import { colors } from "../../styles";
-import Popover from 'react-native-popover-view';
-import { Placement } from "react-native-popover-view/dist/Types";
-import { View, ViewProps } from "react-native";
-import IconWithLabel from '../iconWithLabal';
-import { moderateScale } from "react-native-size-matters";
+import IconWithLabel from "../iconWithLabal";
+
+
+import * as S from "./styles"
 
 type TripCardViewProps = {
   itinerary:           ItineraryItem
@@ -27,12 +30,12 @@ export default function ItineraryCardView({ itinerary, flipMap, isMyShop, button
   
   const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
     <View ref={ref} collapsable={false}>
-         <ButtonIcon 
-          icon="dots-horizontal"
-          size='icon'
-          onPress={() => setIsVisible(true)}
-          fillColor={colors.neutralGrey}
-        />
+      <ButtonIcon 
+        icon="dots-horizontal"
+        size="icon"
+        onPress={() => setIsVisible(true)}
+        fillColor={colors.neutralGrey}
+      />
     </View>
   ));
 
@@ -55,7 +58,7 @@ export default function ItineraryCardView({ itinerary, flipMap, isMyShop, button
           <S.Info>
             <S.TopText>
               {itinerary.startDate && readableDate(itinerary.startDate)}
-              {' - '}
+              {" - "}
               {itinerary.endDate && readableDate(itinerary.endDate)}
             </S.TopText>
             <S.TopText>  •  </S.TopText>
@@ -65,72 +68,76 @@ export default function ItineraryCardView({ itinerary, flipMap, isMyShop, button
 
         <S.Actions>
           
-        <ButtonIconWithRef ref={iconRef}/>
+          <ButtonIconWithRef ref={iconRef}/>
 
-                <Popover
-                from={iconRef}
-                isVisible={isVisible}
-                onRequestClose={() => setIsVisible(false)}
-                placement={Placement.AUTO}
-                popoverStyle={{borderRadius: moderateScale(10)}}
-                >
+          <Popover
+            from={iconRef}
+            isVisible={isVisible}
+            onRequestClose={() => setIsVisible(false)}
+            placement={Placement.AUTO}
+            popoverStyle={{borderRadius: moderateScale(10)}}
+          >
                    
-                 {isMyShop ?  <>
-                  <IconWithLabel 
-                    label="Edit"
-                    iconName="pencil"
-                    buttonAction={() => handleButtonPass(buttonOneAction, itinerary)}
-                    />
-                    <IconWithLabel 
-                    label="Delete"
-                    iconName="trash"
-                    buttonAction={() => handleButtonPass(buttonTwoAction, itinerary)}
-                    />
-                </> 
-                :
-                <>
+            {isMyShop ?  (
+              <>
                 <IconWithLabel 
-                label="View on Map"
-                iconName="anchor"
-                buttonAction={() => handleButtonPress(buttonOneAction)}
+                  label="Edit"
+                  iconName="pencil"
+                  buttonAction={() => handleButtonPass(buttonOneAction, itinerary)}
                 />
-
                 <IconWithLabel 
-                label="Book Trip"
-                iconName="diving-scuba-flag"
-                buttonAction={() => handleButtonPress(buttonTwoAction)}
+                  label="Delete"
+                  iconName="trash"
+                  buttonAction={() => handleButtonPass(buttonTwoAction, itinerary)}
                 />
               </>
-               }
-              </Popover>
+            ) 
+              : (
+                <>
+                  <IconWithLabel 
+                    label="View on Map"
+                    iconName="anchor"
+                    buttonAction={() => handleButtonPress(buttonOneAction)}
+                  />
+
+                  <IconWithLabel 
+                    label="Book Trip"
+                    iconName="diving-scuba-flag"
+                    buttonAction={() => handleButtonPress(buttonTwoAction)}
+                  />
+                </>
+              )}
+          </Popover>
         </S.Actions>
       </S.CardTop>
 
       <S.Description>
-       {isExpanded ? 
-       <S.DescriptionTextExpanded>
-          {itinerary.description}
-        </S.DescriptionTextExpanded>
-         :
-         <S.DescriptionTextCollapsed
-         ellipsizeMode="tail"
-         numberOfLines={isMeasuring === 0 ? undefined : 2}
-         onTextLayout={(e) => {
-           const lines = e.nativeEvent.lines.length;
-            if(lines > 2){
-              setIsOverflowing(true);
-            }
-            setIsMeasuring(2)
-         }}
-       >
-         {itinerary.description}
-       </S.DescriptionTextCollapsed>}
+        {isExpanded ? (
+          <S.DescriptionTextExpanded>
+            {itinerary.description}
+          </S.DescriptionTextExpanded>
+        )
+          : (
+            <S.DescriptionTextCollapsed
+              ellipsizeMode="tail"
+              numberOfLines={isMeasuring === 0 ? undefined : 2}
+              onTextLayout={(e) => {
+                const lines = e.nativeEvent.lines.length;
+                if(lines > 2){
+                  setIsOverflowing(true);
+                }
+                setIsMeasuring(2)
+              }}
+            >
+              {itinerary.description}
+            </S.DescriptionTextCollapsed>
+          )}
 
         {isOverflowing && (
           <S.ShowMoreText
             onPress={() => setIsExpanded(prev => !prev)}
           >
-            {isExpanded ? 'Read less' : 'Read more'}
+            {isExpanded ? "Read less" : "Read more"}
           </S.ShowMoreText>
         )}
       </S.Description>

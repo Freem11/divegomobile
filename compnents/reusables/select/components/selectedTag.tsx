@@ -1,13 +1,15 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-} from 'react-native';
+} from "react-native";
 import { moderateScale } from "react-native-size-matters";
+
 import { colors, fontSizes } from "../../../styles";
-import * as S from './styles';
+
+import * as S from "./styles";
 
 type SelectedTagProps = {
   deselctItem: () => void;
@@ -30,9 +32,9 @@ export default function SelectedTag({ deselctItem, label }: SelectedTagProps) {
 
 const styles = StyleSheet.create({
   tag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: colors.buttonPressOverlay,
     paddingHorizontal: moderateScale(6),
     paddingVertical: moderateScale(4),
@@ -48,6 +50,6 @@ const styles = StyleSheet.create({
   },
   removeText: {
     fontSize: moderateScale(fontSizes.SmallText),
-    color: '#888',
+    color: "#888",
   },
 });

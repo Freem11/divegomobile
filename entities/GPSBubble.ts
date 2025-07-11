@@ -48,7 +48,7 @@ export class GPSBubble {
    * @param args - arguments for API request
    * @returns
    */
-  static async getItemsInGpsBubble<T extends (...args: any[]) => any>(
+  static async getItemsInGpsBubble<T extends(...args: any[]) => any>(
     callable: T,
     ...args: Parameters<T>
   ): Promise<ReturnType<T>> {

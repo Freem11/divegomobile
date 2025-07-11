@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Keyboard, ScrollView } from "react-native";
+
 import * as S from "./styles";
 import CreateAccountPage from "./signupPage";
 import LandingPage from "./landingPage";

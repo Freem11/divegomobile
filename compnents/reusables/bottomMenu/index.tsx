@@ -1,5 +1,6 @@
 import React from "react";
-import * as S from './styles';
+
+import * as S from "./styles";
 
 export type BottomMenuProps = {
   children?: React.ReactNode;

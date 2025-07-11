@@ -7,6 +7,12 @@ import {
   Dimensions,
   TouchableWithoutFeedback
 } from "react-native";
+import email from "react-native-email";
+import * as SecureStore from "expo-secure-store";
+import { MaterialIcons } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
+import { useTranslation } from "react-i18next";
+
 import {
   activeFonts,
   colors,
@@ -22,16 +28,12 @@ import {
   addDeletedAccountInfo,
   deleteProfile
 } from "../../supabaseCalls/accountSupabaseCalls";
-import email from "react-native-email";
-import * as SecureStore from "expo-secure-store";
-import { MaterialIcons } from "@expo/vector-icons";
-import { moderateScale } from "react-native-size-matters";
 import { SessionContext } from "../contexts/sessionContext";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { useTranslation } from "react-i18next";
+
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -59,27 +61,27 @@ export default function SettingsPage(props) {
     setActiveScreen("PartnerRequestScreen");
   };
 
-  const handleLogout = async () => {
+  const handleLogout = async() => {
     await setActiveSession(null);
     await SecureStore.deleteItemAsync("token");
     await signOut();
   };
 
-  const alertHandler = async () => {
+  const alertHandler = async() => {
     Alert.alert(
-      t('SettingsPage.aboutToDeleteAccountTitle'),
-      t('SettingsPage.deleteAccountMessage'),
+      t("SettingsPage.aboutToDeleteAccountTitle"),
+      t("SettingsPage.deleteAccountMessage"),
       [
         {
-          text: t('SettingsPage.deleteAccountButton'),
+          text: t("SettingsPage.deleteAccountButton"),
           onPress: handleAccountDelete,
         },
         {
-          text: t('SettingsPage.cancelDeleteButton'),
-          onPress: () => console.log('no tapped'),
+          text: t("SettingsPage.cancelDeleteButton"),
+          onPress: () => console.log("no tapped"),
         },
         {
-          text: t('SettingsPage.contactSupportButton'),
+          text: t("SettingsPage.contactSupportButton"),
           onPress: handleEmail,
         },
       ]
@@ -105,7 +107,7 @@ export default function SettingsPage(props) {
     }).catch(console.error);
   };
 
-  const handleAccountDelete = async () => {
+  const handleAccountDelete = async() => {
     if (blurb) {
       await addDeletedAccountInfo({
         firstName: first,
@@ -132,10 +134,10 @@ export default function SettingsPage(props) {
         style={{ marginTop: "15%", alignSelf: "flex-start", marginLeft: "2%" }}
       />
       <View style={styles.content}>
-        <Text style={styles.header}>{t('SettingsPage.header')}</Text>
+        <Text style={styles.header}>{t("SettingsPage.header")}</Text>
 
         <Text style={styles.subHeaders}>
-          {t('SettingsPage.subHeading')}
+          {t("SettingsPage.subHeading")}
         </Text>
 
         <View style={styles.dataHousing}>
@@ -145,7 +147,7 @@ export default function SettingsPage(props) {
               onPress={() => openPartnerAccountScreen()}
             >
               <Text style={styles.promptLinkText}>
-                {t('SettingsPage.notPartnerAccount')}
+                {t("SettingsPage.notPartnerAccount")}
               </Text>
             </TouchableWithoutFeedback>
           ) : null}
@@ -155,7 +157,7 @@ export default function SettingsPage(props) {
           <TouchableWithoutFeedback onPress={() => handleLogout()}>
             <View style={styles.loginButton}>
               <Text style={styles.loginText}>
-                {t('SettingsPage.logout')}
+                {t("SettingsPage.logout")}
               </Text>
               <MaterialIcons
                 name="chevron-right"
@@ -168,12 +170,12 @@ export default function SettingsPage(props) {
       </View>
 
       <Text style={styles.subHeadersDanger}>
-        {t('SettingsPage.dangerZoneBar')}
+        {t("SettingsPage.dangerZoneBar")}
       </Text>
       <TouchableWithoutFeedback onPress={alertHandler}>
         <View style={styles.dataHousingDanger}>
           <Text style={styles.dataLabelsDanger}>
-            {t('SettingsPage.delAccount')}
+            {t("SettingsPage.delAccount")}
           </Text>
         </View>
       </TouchableWithoutFeedback>

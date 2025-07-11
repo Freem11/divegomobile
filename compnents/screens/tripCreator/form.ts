@@ -1,5 +1,5 @@
 
-import { FormValidationRules } from '../../../forms/form';
+import { FormValidationRules } from "../../../forms/form";
 
 export interface Form {
   Name?:    string
@@ -12,26 +12,26 @@ export interface Form {
 
 export const FormRules: FormValidationRules<Form> =   {
   Name: {
-    required: 'Trip name is required',
+    required: "Trip name is required",
   },
   Link: {
-    required: 'Link is required',
+    required: "Link is required",
   },
   Price: {
-    required: 'Price is required',
+    required: "Price is required",
     min:      {
       value:   0,
-      message: 'Price must be at least 0',
+      message: "Price must be at least 0",
     },
     pattern:  /^\$\d+(\.\d{1,2})?$/,
   },
   Start: {
-    required: 'Trip Start Date is required',
+    required: "Trip Start Date is required",
   },
   End: {
-    required: 'Trip End Date is required',
+    required: "Trip End Date is required",
   },
   Details: {
-    required: 'Details is required',
+    required: "Details is required",
   },
 };

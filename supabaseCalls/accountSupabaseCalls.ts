@@ -1,18 +1,18 @@
 import { ActiveProfile } from "../entities/profile";
 import { supabase } from "../supabase";
 
-export const addDeletedAccountInfo = async (values) => {
+export const addDeletedAccountInfo = async(values) => {
 
   const { data, error } = await supabase
-  .from("deletedUsers")
-  .insert([
-    {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      uuid: values.UserID
-    },
-  ]);
+    .from("deletedUsers")
+    .insert([
+      {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        uuid: values.UserID
+      },
+    ]);
 
   if (error) {
     console.log("couldn't do it 0,", error);
@@ -23,27 +23,27 @@ export const addDeletedAccountInfo = async (values) => {
   }
 };
 
-export const createProfile = async (values) => {
+export const createProfile = async(values) => {
 
   const { data, error } = await supabase
-  .from("UserProfiles")
-  .insert([
-    {
-      Email: values.email,
-      UserID: values.id
-    },
-  ]);
+    .from("UserProfiles")
+    .insert([
+      {
+        Email: values.email,
+        UserID: values.id
+      },
+    ]);
 
-if (error) {
-  console.log("couldn't do it 1,", error);
-}
+  if (error) {
+    console.log("couldn't do it 1,", error);
+  }
 
-if (data) {
-  console.log(data);
-}
+  if (data) {
+    console.log(data);
+  }
 };
 
-export const updateProfile = async (values) => {
+export const updateProfile = async(values) => {
   const response = await supabase
     .from("UserProfiles")
     .update(values)
@@ -54,10 +54,10 @@ export const updateProfile = async (values) => {
     console.log("couldn't do it profile update,", error);
     return [];
   }
-    return response;
+  return response;
 };
 
-export const updatePushToken = async (values) => {
+export const updatePushToken = async(values) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .update({expo_push_token: values.token})
@@ -73,7 +73,7 @@ export const updatePushToken = async (values) => {
   return []
 }
 
-export const updateProfileFeeback = async (values) => {
+export const updateProfileFeeback = async(values) => {
 
   console.log(values)
 
@@ -92,7 +92,7 @@ export const updateProfileFeeback = async (values) => {
   }
 };
 
-export const deleteProfile = async (id) => {
+export const deleteProfile = async(id) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .delete()
@@ -108,14 +108,14 @@ export const deleteProfile = async (id) => {
   }
 };
 
-export const grabProfileByUserId = async (id: string) => {
+export const grabProfileByUserId = async(id: string) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()
-    .eq('UserID', id);
+    .eq("UserID", id);
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return null;
   }
 
@@ -125,14 +125,14 @@ export const grabProfileByUserId = async (id: string) => {
   return null;
 };
 
-export const grabProfileById = async (id: number) => {
+export const grabProfileById = async(id: number) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()
-    .eq('id', id);
+    .eq("id", id);
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return null;
   }
 
@@ -143,7 +143,7 @@ export const grabProfileById = async (id: number) => {
 };
 
 
-export const grabProfileByUserName = async (userName) => {
+export const grabProfileByUserName = async(userName) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()
@@ -159,7 +159,7 @@ export const grabProfileByUserName = async (userName) => {
   }
 };
 
-export const getProfileWithStats = async (userId) => {
+export const getProfileWithStats = async(userId) => {
   const { data, error } = await supabase.rpc("get_userprofile_with_stats", {
     userid: userId,
   });

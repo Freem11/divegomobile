@@ -1,10 +1,11 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   fontSizes,
   activeFonts,
   colors
-} from '../../styles';
+} from "../../styles";
 
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`

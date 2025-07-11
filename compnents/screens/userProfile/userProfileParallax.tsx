@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import UserProfileScreen from ".";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import noImage from '../../png/NoImage.png';
 import { Keyboard } from "react-native";
+import { useTranslation } from "react-i18next";
+
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import noImage from "../../png/NoImage.png";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useTranslation } from "react-i18next";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { grabProfileById} from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
@@ -17,6 +17,8 @@ import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+
+import UserProfileScreen from ".";
 
 
 type UserProfileProps = {
@@ -51,7 +53,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     getProfileinfo()
   }, [props.profileID]);
 
-  const getProfileinfo = async () => {
+  const getProfileinfo = async() => {
     const profileinfo = await grabProfileById(props.profileID)
     setSelectedProfile(profileinfo)
   }
@@ -81,34 +83,34 @@ export default function UserProfileParallax(props: UserProfileProps) {
   }, [selectedProfile]);
 
   async function followCheck() {
-  let follows = await checkIfUserFollows(
-    profile.user_id,
-    selectedProfile.user_id
-  );
-  if (follows && follows.length > 0) {
-    setIsfFollowing(follows[0].id);
+    const follows = await checkIfUserFollows(
+      profile.user_id,
+      selectedProfile.user_id
+    );
+    if (follows && follows.length > 0) {
+      setIsfFollowing(follows[0].id);
+    }
   }
-}
 
-const addFollow = async () => {
-  let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
-  if (!permissionGiven) {
-    return
+  const addFollow = async() => {
+    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    if (!permissionGiven) {
+      return
+    }
+    const newRecord = await insertUserFollow(
+      profile.UserID,
+      selectedProfile.user_id
+    );
+    setIsfFollowing(newRecord.id);    
   }
-  let newRecord = await insertUserFollow(
-    profile.UserID,
-    selectedProfile.user_id
-  );
-  setIsfFollowing(newRecord.id);    
-}
 
-const removeFollow = async () => {
-  let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
-  if (!permissionGiven) {
-    return
+  const removeFollow = async() => {
+    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    if (!permissionGiven) {
+      return
+    }
+    deleteUserFollow(isFollowing);
   }
-  deleteUserFollow(isFollowing);
-}
   
   const onClose = () => {
     setSelectedProfile(null);
@@ -134,36 +136,36 @@ const removeFollow = async () => {
  
   const popoverConent = () => {
     return (
-    <>
-    {isMyProfile &&
-    <IconWithLabel 
-    label="Update My Profile"
-    iconName="camera-flip-outline"
-    buttonAction={() => openEditsPage()}
-    />
-    }
-    {isMyProfile && 
-    <IconWithLabel 
-    label="Open Settings"
-    iconName="settings"
-    buttonAction={() => openSettingsScreen()}
-    />
-    }
-    {!isMyProfile && !isFollowing &&
-    <IconWithLabel 
-    label={`Follow ${selectedProfile?.UserName}`}
-    iconName="plus"
-    buttonAction={() => addFollow()}
-    />
-    }
-    {!isMyProfile && isFollowing &&
-    <IconWithLabel 
-    label={`UnFollow ${selectedProfile?.UserName}`}
-    iconName="minus"
-    buttonAction={() => removeFollow()}
-    />
-    }
-    </>
+      <>
+        {isMyProfile && (
+          <IconWithLabel 
+            label="Update My Profile"
+            iconName="camera-flip-outline"
+            buttonAction={() => openEditsPage()}
+          />
+        )}
+        {isMyProfile && (
+          <IconWithLabel 
+            label="Open Settings"
+            iconName="settings"
+            buttonAction={() => openSettingsScreen()}
+          />
+        )}
+        {!isMyProfile && !isFollowing && (
+          <IconWithLabel 
+            label={`Follow ${selectedProfile?.UserName}`}
+            iconName="plus"
+            buttonAction={() => addFollow()}
+          />
+        )}
+        {!isMyProfile && isFollowing && (
+          <IconWithLabel 
+            label={`UnFollow ${selectedProfile?.UserName}`}
+            iconName="minus"
+            buttonAction={() => removeFollow()}
+          />
+        )}
+      </>
     )
   };
 
@@ -174,7 +176,7 @@ const removeFollow = async () => {
       onMapFlip={onNavigate}
       popoverConent={popoverConent}
       isMyShop={isMyProfile}
-      >
+    >
       <UserProfileScreen/>
     </ParallaxDrawer>
   );

@@ -2,7 +2,7 @@ import * as FileSystem from "expo-file-system";
 
 async function findImageInCache(fileName) {
   try {
-    let info = await FileSystem.getInfoAsync(fileName);
+    const info = await FileSystem.getInfoAsync(fileName);
     return { ...info, err: false };
   } catch (error) {
     return {

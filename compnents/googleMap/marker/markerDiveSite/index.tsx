@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Marker } from "react-native-maps";
+
 import icon from "../../../png/mapIcons/AnchorBlue.png";
 import iconGold from "../../../png/mapIcons/AnchorGold.png";
 import { Coordinates } from "../../../../entities/coordinates";
@@ -41,6 +42,7 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
       image={sitesArray.includes(props.id) ? iconGold : icon}
       coordinate={props.coordinate}
       onPress={handlePress}
-    ></Marker>
+    >
+    </Marker>
   );
 }

@@ -2,13 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
+
 import { SessionContext } from "../../contexts/sessionContext";
-import LandingPageView from "./view";
 import {
   appleLogin,
   facebookSignIn,
   googleSignIn,
 } from "../../helpers/loginHelpers";
+
+import LandingPageView from "./view";
 
 const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
@@ -23,15 +25,15 @@ export default function LandingPage(props) {
   useEffect(() => {
     Platform.OS === "ios"
       ? GoogleSignin.configure({
-          scopes: ["profile"],
-          iosClientId: googleIOSClientId,
-        })
+        scopes: ["profile"],
+        iosClientId: googleIOSClientId,
+      })
       : GoogleSignin.configure({
-          scopes: ["profile"],
-          webClientId: googleWebClientId,
-        });
+        scopes: ["profile"],
+        webClientId: googleWebClientId,
+      });
 
-    (async () => {
+    (async() => {
       const isApple = await AppleAuthentication.isAvailableAsync();
       setAppleAuthAvailable(isApple);
     })();

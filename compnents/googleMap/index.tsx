@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
+import MapView from "react-native-maps";
 
 import { debounce } from "../reusables/_helpers/debounce";
-import GoogleMapView from "./view";
-import MapView from "react-native-maps";
-import { useMapStore } from "./useMapStore";
 import { GPSBubble } from "../../entities/GPSBubble";
 import { getDiveSitesBasic } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
@@ -12,6 +10,9 @@ import { DiveShop } from "../../entities/diveShop";
 import { getHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { HeatPoint } from "../../entities/heatPoint";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
+
+import { useMapStore } from "./useMapStore";
+import GoogleMapView from "./view";
 
 export default function GoogleMap() {
   const mapAction = useMapStore((state) => state.actions);
@@ -27,7 +28,7 @@ export default function GoogleMap() {
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[] | null>(null);
 
-  const handleOnLoad = async (map: MapView) => {
+  const handleOnLoad = async(map: MapView) => {
     mapAction.setMapRef(map);
   };
 
@@ -43,7 +44,7 @@ export default function GoogleMap() {
     })()
   }, [animalMultiSelection, bubble])
 
-  const handleBoundsChange = debounce(async () => {
+  const handleBoundsChange = debounce(async() => {
     if (!mapRef) {
       return;
     }

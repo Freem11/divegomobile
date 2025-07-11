@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Keyboard } from "react-native";
+
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { createPartnerAccountRequest } from "../../../supabaseCalls/partnerSupabaseCalls";
+import { UserProfileContext } from "../../contexts/userProfileContext";
+
 import PartnerAccountRequestPageView from "./view";
 import { Form } from "./form";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 
 type PartnerAccountRequestPageProps = {
   closeParallax?: (mapConfig: number) => void
@@ -32,7 +34,7 @@ export default function PartnerAccountRequestPage({
 
   const { profile } = useContext(UserProfileContext);
   
-  const onSubmit = async (formData: Required<Form>) => {
+  const onSubmit = async(formData: Required<Form>) => {
     const { error } = await createPartnerAccountRequest({
       webpageLink : formData.URL,
       businessName: formData.OrgName,
@@ -42,7 +44,7 @@ export default function PartnerAccountRequestPage({
     }); 
   };
 
-  const getCurrentLocation = async () => {
+  const getCurrentLocation = async() => {
     Keyboard.dismiss();
     try {
       const location = await getCurrentCoordinates();

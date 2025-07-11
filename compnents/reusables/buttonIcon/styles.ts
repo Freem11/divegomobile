@@ -1,11 +1,12 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
   activeFonts,
   buttonSizes
-} from '../../styles';
+} from "../../styles";
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
     height: ${({size}) => moderateScale(buttonSizes[size].height)}px;

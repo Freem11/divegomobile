@@ -1,4 +1,4 @@
-import { InitialValue, Values } from '..';
+import { InitialValue, Values } from "..";
 
 /**
  * Prepare value passed from outside
@@ -14,12 +14,12 @@ export default function getInitialValue(value: InitialValue, options: Values): V
 
   const valueArray = Array.isArray(value) ? value : [value];
   for (const item of valueArray) {
-    if (typeof item === 'string') {
+    if (typeof item === "string") {
       const option = options.get(item);
       if (option) {
         result.set(item, option);
       }
-    } else if ('key' in item && 'label' in item) {
+    } else if ("key" in item && "label" in item) {
       result.set(item.key, item);
     }
   }

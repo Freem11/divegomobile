@@ -35,7 +35,7 @@ import { supabase } from "../supabase";
 //   }
 // };
 
-export const getDiveShops = async (bubble: GPSBubble): Promise<DiveShop[]> => {
+export const getDiveShops = async(bubble: GPSBubble): Promise<DiveShop[]> => {
   const { data, error } = await supabase
     .from("shops")
     .select()
@@ -52,7 +52,7 @@ export const getDiveShops = async (bubble: GPSBubble): Promise<DiveShop[]> => {
   return data;
 };
 
-export const getShopByName = async (value) => {
+export const getShopByName = async(value) => {
   const { data, error } = await supabase.from("shops").select().eq("orgName", value);
 
   if (error) {
@@ -65,7 +65,7 @@ export const getShopByName = async (value) => {
   }
 };
 
-export const updateDiveShop = async (values) => {
+export const updateDiveShop = async(values) => {
   console.log("updating...", values);
   const { data, error } = await supabase
     .from("shops")
@@ -82,14 +82,14 @@ export const updateDiveShop = async (values) => {
   }
 };
 
-export const getShopByUserID = async (value: string) => {
+export const getShopByUserID = async(value: string) => {
   const { data, error } = await supabase
-    .from('shops')
+    .from("shops")
     .select()
-    .eq('userId', value);
+    .eq("userId", value);
 
   if (error) {
-    console.log('couldn\'t do it 39,', error);
+    console.log("couldn't do it 39,", error);
     return [];
   }
 
@@ -98,14 +98,14 @@ export const getShopByUserID = async (value: string) => {
   }
 };
 
-export const getDiveShopById = async (id: number) => {
+export const getDiveShopById = async(id: number) => {
   const { data, error } = await supabase
-    .from('shops')
+    .from("shops")
     .select()
-    .eq('id', id);
+    .eq("id", id);
 
   if (error) {
-    console.log('couldn\'t do it 39,', error);
+    console.log("couldn't do it 39,", error);
   }
 
   if (data) {

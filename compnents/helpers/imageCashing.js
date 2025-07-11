@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Image } from "react-native";
 import * as FileSystem from "expo-file-system";
+
 import noImage from "../png/NoImage.png"; // image module
 
 export default function ImageCasher({ photoFile, style }) {
@@ -12,7 +13,7 @@ export default function ImageCasher({ photoFile, style }) {
       return;
     }
 
-    const loadImage = async () => {
+    const loadImage = async() => {
       const fileName = photoFile.split("/").pop();
       const cachePath = FileSystem.cacheDirectory + fileName;
       const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;

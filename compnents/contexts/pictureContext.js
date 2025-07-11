@@ -1,15 +1,15 @@
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
-export const PictureContext = createContext('');
+export const PictureContext = createContext("");
 
 const PictureContextProvider = ({children}) => {
-    const [uploadedFile, setUploadedFile] = useState("");
+  const [uploadedFile, setUploadedFile] = useState("");
 
-    return (
-        <PictureContext.Provider value={{ uploadedFile, setUploadedFile }}>
-            {children}
-        </PictureContext.Provider>
-    )
+  return (
+    <PictureContext.Provider value={{ uploadedFile, setUploadedFile }}>
+      {children}
+    </PictureContext.Provider>
+  )
 }
 
 export default PictureContextProvider;

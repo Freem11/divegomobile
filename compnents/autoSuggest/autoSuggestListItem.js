@@ -1,12 +1,13 @@
 import { StyleSheet, View, Text } from "react-native";
-import { activeFonts, colors, fontSizes } from "../styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
+
+import { activeFonts, colors, fontSizes } from "../styles";
 
 const AutoSuggestListItem = (props) => {
   const { name, handleList, setTextSource } = props;
 
-  const handleSelect = async (text) => {
+  const handleSelect = async(text) => {
     setTextSource(true);
     handleList({ animal: text, value: 0 });
   };

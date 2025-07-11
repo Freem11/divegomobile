@@ -1,12 +1,14 @@
 import React from "react";
-import * as S from "./styles";
 import { useTranslation } from "react-i18next";
+
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Icon from "../../../icons/Icon";
 import Label from "../../reusables/label";
 import { Photo } from "../../../entities/photos";
 import { colors } from "../../styles";
 import { ActiveProfile } from "../../../entities/profile";
+
+import * as S from "./styles";
 
 
 type UserProfileProps = {
@@ -49,33 +51,33 @@ export default function UserProfileScreenView({
       </S.InputGroupContainer>
 
       <S.LabelWrapper>
-            <Label label="Sea Life Sightings" />
-        </S.LabelWrapper>
+        <Label label="Sea Life Sightings" />
+      </S.LabelWrapper>
         
       {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
-  return (
-    <S.PhotoContainer key={`${photoPacket.id}-${index}`}>   
-      <S.PacketHeader key={`${photoPacket.id}-${index}`}>
+        return (
+          <S.PhotoContainer key={`${photoPacket.id}-${index}`}>   
+            <S.PacketHeader key={`${photoPacket.id}-${index}`}>
   
-      <S.HeaderWrapper>
-        <S.IconWrapper>
-          <Icon name={'anchor'} fill={colors.primaryBlue}/>
-        </S.IconWrapper>
+              <S.HeaderWrapper>
+                <S.IconWrapper>
+                  <Icon name={"anchor"} fill={colors.primaryBlue}/>
+                </S.IconWrapper>
 
-          <S.PacketHeaderItem>{photoPacket.divesitename}</S.PacketHeaderItem>
-      </S.HeaderWrapper>
+                <S.PacketHeaderItem>{photoPacket.divesitename}</S.PacketHeaderItem>
+              </S.HeaderWrapper>
 
-      <S.HeaderWrapper>
-        <S.IconWrapper>
-          <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
-        </S.IconWrapper>
+              <S.HeaderWrapper>
+                <S.IconWrapper>
+                  <Icon name={"calendar-month"} fill={colors.primaryBlue}/>
+                </S.IconWrapper>
 
-          <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
-      </S.HeaderWrapper>
+                <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
+              </S.HeaderWrapper>
 
-      </S.PacketHeader>
+            </S.PacketHeader>
 
-      {photoPacket.photos.length > 0 &&
+            {photoPacket.photos.length > 0 &&
         photoPacket.photos.map((photo, index) => {
           return (
             <SeaLifeImageCard
@@ -87,9 +89,9 @@ export default function UserProfileScreenView({
             />
           );
         })}
-    </S.PhotoContainer>
-  );
-})}
+          </S.PhotoContainer>
+        );
+      })}
     </S.ContentContainer>
   );
 }

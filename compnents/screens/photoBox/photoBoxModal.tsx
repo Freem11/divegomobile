@@ -3,16 +3,18 @@ import {
   Dimensions,
 } from "react-native";
 import Animated from "react-native-reanimated";
-import {
-  colors,
-} from "../../styles";
-import * as S from "./styles";
 import * as FileSystem from "expo-file-system";
 import { GestureDetector } from "react-native-gesture-handler";
 import React, { useContext } from "react";
+
+import {
+  colors,
+} from "../../styles";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
+
+import * as S from "./styles";
 import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
 
 const windowHeight = Dimensions.get("window").height;
@@ -24,7 +26,7 @@ export default function PhotoBoxModal() {
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
   usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
 
-  let fileName = selectedPhoto && selectedPhoto.split("/").pop();
+  const fileName = selectedPhoto && selectedPhoto.split("/").pop();
   let cacheDir = null;
 
   if (fileName) {
@@ -61,7 +63,7 @@ export default function PhotoBoxModal() {
                 uri: cacheDir,
               }}
               onError={(e) => {
-                console.log('Image load error:', e.nativeEvent.error);
+                console.log("Image load error:", e.nativeEvent.error);
               }}
               style={[
                 animatedPictureStyle,

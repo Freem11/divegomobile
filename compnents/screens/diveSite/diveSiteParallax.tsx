@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState } from "react";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import DiveSiteScreen from '.';
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import noImage from '../../png/NoImage.png';
 import { Keyboard } from "react-native";
+import { useTranslation } from "react-i18next";
+
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import noImage from "../../png/NoImage.png";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { useTranslation } from "react-i18next";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
@@ -14,6 +14,8 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+
+import DiveSiteScreen from ".";
 
 type DiveSiteProps = {
   siteID: number
@@ -48,7 +50,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   }, [props.siteID]);
 
 
-  const getDiveSiteinfo = async () => {
+  const getDiveSiteinfo = async() => {
     const diveSiteinfo = await getDiveSiteById(props.siteID)
     setSelectedDiveSite(diveSiteinfo[0])
   }
@@ -67,7 +69,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   }, [selectedDiveSite]);
   
-  const onClose = async () => {
+  const onClose = async() => {
     setLevelOneScreen(false);
   };
 
@@ -93,19 +95,20 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   const popoverConent = () => {
     return (
-    <>
-    {isPartnerAccount &&
-      <IconWithLabel 
-      label="Update Dive Site Info"
-      iconName="camera-flip-outline"
-      buttonAction={() => openEditsPage()}
-      />}
-    <IconWithLabel 
-    label={t('DiveSite.addSighting')}
-    iconName="camera-plus"
-    buttonAction={() => openPicUploader()}
-    />
-    </>
+      <>
+        {isPartnerAccount && (
+          <IconWithLabel 
+            label="Update Dive Site Info"
+            iconName="camera-flip-outline"
+            buttonAction={() => openEditsPage()}
+          />
+        )}
+        <IconWithLabel 
+          label={t("DiveSite.addSighting")}
+          iconName="camera-plus"
+          buttonAction={() => openPicUploader()}
+        />
+      </>
     )
   };
 
@@ -116,7 +119,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
       onMapFlip={onNavigate}
       popoverConent={popoverConent}
       isMyShop={isPartnerAccount}
-      >
+    >
 
       <DiveSiteScreen selectedDiveSite={selectedDiveSite}/>
     </ParallaxDrawer>

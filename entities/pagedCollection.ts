@@ -1,4 +1,4 @@
-import { Pagination } from './pagination';
+import { Pagination } from "./pagination";
 
 const getNewHasMore = (items: any[], ipp?: number) => {
   ipp = ipp || Pagination.defaultIpp;

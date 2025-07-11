@@ -1,15 +1,15 @@
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
-export const ActiveConfirmationIDContext = createContext('');
+export const ActiveConfirmationIDContext = createContext("");
 
 const ActiveConfirmationIDContextProvider = ({children}) => {
-    const [activeConfirmationID, setActiveConfirmationID] = useState(null);
+  const [activeConfirmationID, setActiveConfirmationID] = useState(null);
 
-    return (
-        <ActiveConfirmationIDContext.Provider value={{ activeConfirmationID, setActiveConfirmationID }}>
-            {children}
-        </ActiveConfirmationIDContext.Provider>
-    )
+  return (
+    <ActiveConfirmationIDContext.Provider value={{ activeConfirmationID, setActiveConfirmationID }}>
+      {children}
+    </ActiveConfirmationIDContext.Provider>
+  )
 }
 
 export default ActiveConfirmationIDContextProvider;

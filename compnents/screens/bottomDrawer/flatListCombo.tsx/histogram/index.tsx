@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import HistogramView from './view';
+import React, { useState, useEffect } from "react";
+
 import { HistogramItem, HistogramSupaData } from "../../../../../entities/histogram";
 import { GPSBubble } from "../../../../../entities/GPSBubble";
 import { useMapStore } from "../../../../googleMap/useMapStore";
 import { getHistoData } from "../../../../../supabaseCalls/photoSupabaseCalls";
+
+import HistogramView from "./view";
 
 type HistogramProps = {
   animal:    string
@@ -19,13 +21,13 @@ export default function Histogram(props: HistogramProps) {
     }
   }, [boundaries]);
 
-  const getHistogramData = async () => {
+  const getHistogramData = async() => {
     if (boundaries) {
       const historgramData = await GPSBubble.getItemsInGpsBubble(getHistoData, boundaries, [props.animal]);
 
       let i = 1;
       const dataArray = [];
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
       if (historgramData) {
         const maxVal = Math.max(...historgramData.map((item: { num: number }) => item.num));

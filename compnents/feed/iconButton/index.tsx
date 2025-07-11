@@ -5,9 +5,11 @@ import {
   withSpring,
 } from "react-native-reanimated";
 import { moderateScale, s } from "react-native-size-matters";
-import { FeedsView } from "./view";
+
 import { useFeedScreenStore } from "../store/useScreenStore";
 import { FEED_SCREEN } from "../store/types";
+
+import { FeedsView } from "./view";
 
 export const FeedsButton = () => {
   const openScreen = useFeedScreenStore((state) => state.openScreen);

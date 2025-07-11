@@ -1,19 +1,21 @@
 import React, { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps } from "react-native";
 import Animated from "react-native-reanimated";
-import ButtonIcon from "../buttonIcon";
 import {
   GestureDetector,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
-import { colors } from "../../styles";
-import * as S from "./styles";
-import { WavyImg } from "./wavyImg";
-import { useParallaxDrawer } from "./useParallelDrawer";
 import Popover from "react-native-popover-view";
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
+
+import ButtonIcon from "../buttonIcon";
+import { colors } from "../../styles";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+
+import * as S from "./styles";
+import { WavyImg } from "./wavyImg";
+import { useParallaxDrawer } from "./useParallelDrawer";
 
 type ParallaxDrawerProps = {
   headerImage: () => React.JSX.Element | string;
@@ -51,19 +53,19 @@ const ParallaxDrawer = ({
   const iconRef = useRef<View>(null);
   const { fullScreenModal } = useContext(FullScreenModalContext);
   
-useEffect(() => {
-  if(fullScreenModal){
-    setIsVisible(false)
-  }
-},[fullScreenModal])
+  useEffect(() => {
+    if(fullScreenModal){
+      setIsVisible(false)
+    }
+  },[fullScreenModal])
 
   const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
     <View ref={ref} collapsable={false} style={{marginTop: 3}}>
-         <ButtonIcon 
-          icon="more"
-          size='headerIcon'
-          onPress={() => setIsVisible(true)}
-        />
+      <ButtonIcon 
+        icon="more"
+        size="headerIcon"
+        onPress={() => setIsVisible(true)}
+      />
     </View>
   ));
   
@@ -79,33 +81,35 @@ useEffect(() => {
           />
         </S.BackButtonWrapper>
         
-        {popoverConent && <S.AltButtonWrapper>
-        <ButtonIconWithRef ref={iconRef}/>
-        </S.AltButtonWrapper>
-      }
-        {popoverConent && <Popover
-                from={iconRef}
-                isVisible={isVisible}
-                onRequestClose={() => setIsVisible(false)}
-                placement={Placement.AUTO}
-                popoverStyle={{borderRadius: moderateScale(10)}}
-                >
-                {popoverConent()}
+        {popoverConent && (
+          <S.AltButtonWrapper>
+            <ButtonIconWithRef ref={iconRef}/>
+          </S.AltButtonWrapper>
+        )}
+        {popoverConent && (
+          <Popover
+            from={iconRef}
+            isVisible={isVisible}
+            onRequestClose={() => setIsVisible(false)}
+            placement={Placement.AUTO}
+            popoverStyle={{borderRadius: moderateScale(10)}}
+          >
+            {popoverConent()}
                
-              </Popover>
-              }
+          </Popover>
+        )}
       </AnimatedSafeAreaView>
       <S.BackgroundContainer>
         <Animated.View
           style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
         >
-          {typeof(headerImage) === "function" ? headerImage() :
-              <ImageBackground
+          {typeof(headerImage) === "function" ? headerImage() : (
+            <ImageBackground
               source={headerImage}
               style={StyleSheet.absoluteFill}
               resizeMode="cover"
             />
-            }
+          )}
       
         </Animated.View>
       </S.BackgroundContainer>
@@ -130,9 +134,9 @@ useEffect(() => {
               }}
             >
               <S.EmptyContainer>
-              {React.isValidElement(children)
-                ? React.cloneElement(children, { closeParallax, restoreParallax, bottomHitCount })
-                : children}
+                {React.isValidElement(children)
+                  ? React.cloneElement(children, { closeParallax, restoreParallax, bottomHitCount })
+                  : children}
               </S.EmptyContainer>
             </S.Content>
           </S.BottomOpaqueSection>

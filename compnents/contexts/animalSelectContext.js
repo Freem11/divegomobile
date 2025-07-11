@@ -1,15 +1,15 @@
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
-export const AnimalSelectContext = createContext('');
+export const AnimalSelectContext = createContext("");
 
 const AnimalSelectContextProvider = ({children}) => {
-    const [animalSelection, setAnimalSelection] = useState("");
+  const [animalSelection, setAnimalSelection] = useState("");
 
-    return (
-        <AnimalSelectContext.Provider value={{ animalSelection, setAnimalSelection }}>
-            {children}
-        </AnimalSelectContext.Provider>
-    )
+  return (
+    <AnimalSelectContext.Provider value={{ animalSelection, setAnimalSelection }}>
+      {children}
+    </AnimalSelectContext.Provider>
+  )
 }
 
 export default AnimalSelectContextProvider;

@@ -8,10 +8,12 @@ import {
   Dimensions,
   KeyboardAvoidingView,
 } from "react-native";
-import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
-import AutoSuggestListItem from "./autoSuggestListItem";
-import TextInputField from "../authentication/utils/textInput";
 import { scale, moderateScale } from "react-native-size-matters";
+
+import { getAnimalNamesThatFit } from "../../supabaseCalls/photoSupabaseCalls";
+import TextInputField from "../authentication/utils/textInput";
+
+import AutoSuggestListItem from "./autoSuggestListItem";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -28,13 +30,13 @@ export default function AnimalAutoSuggest(props) {
   const [list, setList] = useState([]);
   const [textSource, setTextSource] = useState(false);
 
-  const handleList = async (values) => {
+  const handleList = async(values) => {
     if (values.value === 1) {
       setPinValues({ ...pinValues, Animal: values.animal });
 
       if (values.animal.length > 0) {
-        let newfilteredList = await getAnimalNamesThatFit(values.animal);
-        let animalArray = [];
+        const newfilteredList = await getAnimalNamesThatFit(values.animal);
+        const animalArray = [];
         newfilteredList.forEach((animal) => {
           if (!animalArray.includes(animal.label)) {
             animalArray.push(animal.label);
@@ -51,7 +53,7 @@ export default function AnimalAutoSuggest(props) {
     }
   };
 
-  const handleChange = async (text) => {
+  const handleChange = async(text) => {
     if (!textSource) {
       handleList({ animal: text, value: 1 });
     }
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderBottomColor: "darkgrey",
     borderBottomWidth: moderateScale(2),
-    alignItems: 'center',
+    alignItems: "center",
     height: moderateScale(30),
   }
 });

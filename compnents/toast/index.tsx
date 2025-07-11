@@ -1,17 +1,18 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Toast from "react-native-toast-message";
+
 import { i18n } from "../../i18n";
 import { colors } from "../styles";
 
 const VISIBILITY_TIME = 3000;
 
 export const TOAST_MAP = {
-  info: 'info',
-  error: 'error',
-  success: 'success',
-  one_button: 'one_button',
-  two_buttons: 'two_buttons',
+  info: "info",
+  error: "error",
+  success: "success",
+  one_button: "one_button",
+  two_buttons: "two_buttons",
 };
 
 export const showWarning = (warningMessage) => {
@@ -79,24 +80,24 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.themeWhite,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   message: {
     color: colors.themeWhite,
     marginBottom: 8,
     flexShrink: 1,           
-    flexWrap: 'wrap',        
+    flexWrap: "wrap",        
     includeFontPadding: false,
   },
   button: {
     color: colors.themeWhite,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingVertical: 6,
   },
   buttonSecondary: {
     color: colors.neutralGrey,
-    fontWeight: 'normal',
+    fontWeight: "normal",
     paddingVertical: 6,
     marginLeft: 12,
   },
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.themeGreen,
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     gap: 8,
   },
 });

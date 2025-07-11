@@ -1,17 +1,17 @@
 import { supabase } from "../supabase";
 
-export const insertPhotoLike = async (userId, photoId) => {
+export const insertPhotoLike = async(userId, photoId) => {
 
   // console.log("photo waits gets ", values)
 
   const { data, error } = await supabase
-  .from("photoLikes")
-  .insert([
-    {
-      userId: userId,
-      photoId: photoId,
-    },
-  ]);
+    .from("photoLikes")
+    .insert([
+      {
+        userId: userId,
+        photoId: photoId,
+      },
+    ]);
 
   if (error) {
     console.log("couldn't do it 40,", error);
@@ -22,7 +22,7 @@ export const insertPhotoLike = async (userId, photoId) => {
   }
 };
 
-export const deletePhotoLike = async (id) => {
+export const deletePhotoLike = async(id) => {
   const { data, error } = await supabase
     .from("photoLikes")
     .delete()
@@ -38,7 +38,7 @@ export const deletePhotoLike = async (id) => {
   // }
 };
 
-export const grabPhotoLikeById = async (userId, picId) => {
+export const grabPhotoLikeById = async(userId, picId) => {
   const { data, error } = await supabase
     .from("photoLikes")
     .select()
@@ -55,7 +55,7 @@ export const grabPhotoLikeById = async (userId, picId) => {
   }
 };
 
-export const countPhotoLikeById = async (picId) => {
+export const countPhotoLikeById = async(picId) => {
   const { error, count } = await supabase
     .from("photoLikes")
     .select("*", {count: "exact"})

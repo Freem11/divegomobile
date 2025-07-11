@@ -1,6 +1,12 @@
 import { Platform, TouchableOpacity, Image } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { moderateScale } from "react-native-size-matters";
+import * as FileSystem from "expo-file-system";
+import ImgToBase64 from "react-native-image-base64";
+import email from "react-native-email";
+import Share from "react-native-share";
+import { useTranslation } from "react-i18next";
+
 import {
   insertPhotoLike,
   deletePhotoLike
@@ -9,19 +15,15 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
 import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
-import * as FileSystem from "expo-file-system";
-import ImgToBase64 from "react-native-image-base64";
-import email from "react-native-email";
-import Share from "react-native-share";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { useTranslation } from "react-i18next";
 import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
-import * as S from "./styles";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+
+import * as S from "./styles";
 
 const GoogleMapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -80,7 +82,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }).catch(console.error);
   };
 
-  const handleLike = async (picId: number) => {
+  const handleLike = async(picId: number) => {
     if (picLiked) {
       deletePhotoLike(likeData);
       setPicLiked(false);
@@ -93,7 +95,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }
   };
 
-  const convertBase64 = async (photo: string) => {
+  const convertBase64 = async(photo: string) => {
     try {
       const fileName = photo.split("/").pop();
       const cacheDir = FileSystem.cacheDirectory + fileName;
@@ -105,7 +107,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }
   };
 
-  const onShare = async (pic: Photo) => {
+  const onShare = async(pic: Photo) => {
     const { photoFile, UserName, label, dateTaken, latitude, longitude } = pic;
     const local = await getPhotoLocation(latitude, longitude);
     const url = await convertBase64(photoFile);
@@ -130,7 +132,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }
   };
 
-  const getPhotoLocation = async (Lat: number, Lng: number) => {
+  const getPhotoLocation = async(Lat: number, Lng: number) => {
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${Lat},${Lng}&key=${GoogleMapsApiKey}`
@@ -152,17 +154,17 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const [aspectRatio, setAspectRatio] = useState(1);
 
-useEffect(() => {
-  const fileName = pic.photoFile?.split("/").pop();;
-  const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
+  useEffect(() => {
+    const fileName = pic.photoFile?.split("/").pop();;
+    const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
   
-  if(remoteUri)
-  Image.getSize(remoteUri, (width, height) => {
-    setAspectRatio(width / height);
-  }, (error) => {
-    console.log("Failed to get image size:", error);
-  });
-}, [pic.photoFile]);
+    if(remoteUri)
+      Image.getSize(remoteUri, (width, height) => {
+        setAspectRatio(width / height);
+      }, (error) => {
+        console.log("Failed to get image size:", error);
+      });
+  }, [pic.photoFile]);
 
   return (
     <S.Container key={pic.id} style={{width: windowWidth, aspectRatio: aspectRatio}}>
@@ -172,7 +174,7 @@ useEffect(() => {
           style={{
             aspectRatio,
             borderRadius: moderateScale(15),
-            overflow: 'hidden',
+            overflow: "hidden",
           }}
         >
           <ImageCasherDynamic
@@ -182,7 +184,7 @@ useEffect(() => {
             style={{
               aspectRatio,
               borderRadius: moderateScale(15),
-              resizeMode: 'cover',
+              resizeMode: "cover",
             }}
           />
         </TouchableOpacity>

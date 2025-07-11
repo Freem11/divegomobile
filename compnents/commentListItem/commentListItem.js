@@ -1,18 +1,19 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import { useTranslation } from "react-i18next";
+
 import {
   activeFonts,
   colors,
   fontSizes
 } from "../styles";
-import { useTranslation } from "react-i18next";
 
 export default function CommentListItem(props) {
   const { commentDetails, setReplyTo, replyTo, toggleShowReplies, selectedReplyId, nbReplies } = props;
-  let newDate = new Date(commentDetails.created_at);
+  const newDate = new Date(commentDetails.created_at);
   let finalDate = newDate.toLocaleString().substring(0, 10);
-  let lastChar = finalDate.slice(-1)
+  const lastChar = finalDate.slice(-1)
   if (lastChar == ",") {
     finalDate = finalDate.slice(0, -1)
   }
@@ -37,20 +38,17 @@ export default function CommentListItem(props) {
       >
         Reply
       </Text>
-      {
-        nbReplies > 0 ?
-          <Text
-            style={styles.replyTxt}
-            onPress={() => toggleShowReplies(commentDetails)}
-          >
-            {
-              selectedReplyId.includes(commentDetails.id)
-                ? t("Comments.hideReplies")
-                : t("Comments.showReplies", { count: nbReplies })
-            }
-          </Text>
-          : ""
-      }
+      {nbReplies > 0 ? (
+        <Text
+          style={styles.replyTxt}
+          onPress={() => toggleShowReplies(commentDetails)}
+        >
+          {selectedReplyId.includes(commentDetails.id)
+            ? t("Comments.hideReplies")
+            : t("Comments.showReplies", { count: nbReplies })}
+        </Text>
+      )
+        : ""}
 
     </View>
   );

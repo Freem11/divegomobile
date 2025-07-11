@@ -1,9 +1,14 @@
 import React, { useContext } from "react";
+
 import ShopListPage from ".";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";;
-import Center from '../../png/Beach.jpg'
+
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
+
+;
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
+
+import Center from "../../png/Beach.jpg"
 import { useMapStore } from "../../googleMap/useMapStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 
@@ -14,7 +19,7 @@ export default function ShopListParallax() {
   
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
  
-  const onClose = async () => {
+  const onClose = async() => {
     setLevelOneScreen(false);
   };
 

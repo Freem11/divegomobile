@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import DiveSiteUploader from ".";
+import { Keyboard } from "react-native";
+
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import boatImage from "../../png/boat.png";
-import { Keyboard } from "react-native";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
+
+import DiveSiteUploader from ".";
 
 
 export default function SiteSubmitterParallax() {
@@ -14,7 +16,7 @@ export default function SiteSubmitterParallax() {
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const onClose = async () => {
+  const onClose = async() => {
     setLevelTwoScreen(false);
     setDraggableConfig(null)
   };

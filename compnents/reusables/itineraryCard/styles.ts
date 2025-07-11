@@ -1,12 +1,13 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+import { Platform } from "react-native";
+
 import {
   colors,
   fontSizes,
   activeFonts,
   buttonSizes
-} from '../../styles';
-import { Platform } from "react-native";
+} from "../../styles";
 import { windowWidth } from "../../authentication/styles";
 
 export const Card = styled.View`
@@ -17,16 +18,16 @@ export const Card = styled.View`
   margin-vertical: ${moderateScale(8)}px;
   padding: ${moderateScale(7)}px;
     ${Platform.select({
-    ios: `
+      ios: `
       shadow-color: #000;
       shadow-offset: 0px 1px;
       shadow-opacity: 0.1;
       shadow-radius: 2px;
     `,
-    android: `
+      android: `
       elevation: 0;
     `,
-  })}
+    })}
 `;
 
 export const CardTop = styled.View`
@@ -60,7 +61,7 @@ export const TopText = styled.Text`
 `;
 
 export const Actions = styled.View`
-  flex-direction: ${windowWidth > 600 ? 'row' : 'column'};
+  flex-direction: ${windowWidth > 600 ? "row" : "column"};
   justify-content: space-between;
   align-items: center;
 `;

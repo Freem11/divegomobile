@@ -9,6 +9,7 @@ import {
   Ionicons,
   Fontisto
 } from "@expo/vector-icons";
+
 import { activeFonts, colors } from "../../styles";
 
 export default function TextInputField(props) {
@@ -82,15 +83,15 @@ export default function TextInputField(props) {
       {(placeHolderText === "Sea Life Encountered" ||
         placeHolderText === "Search by Dive Site name or Location") &&
         animal?.length > 1 ? (
-        <MaterialIcons
-          name="highlight-remove"
-          size={moderateScale(22)}
-          color="darkgrey"
-          onPress={() => handleClear()}
-        />
-      ) : (
-        <View style={{ width: moderateScale(22) }}></View>
-      )}
+          <MaterialIcons
+            name="highlight-remove"
+            size={moderateScale(22)}
+            color="darkgrey"
+            onPress={() => handleClear()}
+          />
+        ) : (
+          <View style={{ width: moderateScale(22) }}></View>
+        )}
 
       {placeHolderText === "Blow some bubbles" ? (
         <Fontisto

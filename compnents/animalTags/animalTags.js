@@ -4,14 +4,15 @@ import {
   Text,
   TouchableWithoutFeedback,
 } from "react-native";
-import { activeFonts, colors, fontSizes } from "../styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
+
+import { activeFonts, colors, fontSizes } from "../styles";
 
 const AnimalTag = (props) => {
   const { animalMultiSelection, setAnimalMultiSelection, animalName } = props;
 
-  const handleClearTag = async (text) => {
+  const handleClearTag = async(text) => {
     if (animalMultiSelection && animalMultiSelection.includes(text)) {
       setAnimalMultiSelection(
         animalMultiSelection.filter((item) => item !== text)
@@ -20,31 +21,31 @@ const AnimalTag = (props) => {
   };
 
   return (
-      <TouchableWithoutFeedback onPress={() => handleClearTag(animalName)}>
-        <View style={[styles.tagBody]}>
-          <View style={[styles.animalTag]}>
-            <Text
-              style={{
-                color: colors.themeBlack,
-                fontFamily: activeFonts.Light,
-                fontSize: fontSizes.SmallText,
-                textAlign: "center",
-                marginLeft: 4,
-                marginRight: 2
-              }}
-            >
-              {animalName}
-            </Text>
-            <View style={styles.xButton}>
-              <MaterialIcons
-                name="highlight-remove"
-                size={scale(10)}
-                color="darkgrey"
-              />
-            </View>
+    <TouchableWithoutFeedback onPress={() => handleClearTag(animalName)}>
+      <View style={[styles.tagBody]}>
+        <View style={[styles.animalTag]}>
+          <Text
+            style={{
+              color: colors.themeBlack,
+              fontFamily: activeFonts.Light,
+              fontSize: fontSizes.SmallText,
+              textAlign: "center",
+              marginLeft: 4,
+              marginRight: 2
+            }}
+          >
+            {animalName}
+          </Text>
+          <View style={styles.xButton}>
+            <MaterialIcons
+              name="highlight-remove"
+              size={scale(10)}
+              color="darkgrey"
+            />
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

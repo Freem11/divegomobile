@@ -15,6 +15,7 @@ import Animated, {
   useDerivedValue,
   interpolate,
 } from "react-native-reanimated";
+
 import {
   activeFonts,
   colors,

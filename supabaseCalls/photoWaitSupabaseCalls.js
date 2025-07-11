@@ -1,6 +1,6 @@
 import { supabase } from "../supabase";
 
-export const photoWaits = async () => {
+export const photoWaits = async() => {
   const { data, error } = await supabase
     .from("photoWait")
     .select();
@@ -15,9 +15,9 @@ export const photoWaits = async () => {
   }
 };
 
-export const insertPhotoWaits = async (values) => {
+export const insertPhotoWaits = async(values) => {
 
-  console.log('values', values)
+  console.log("values", values)
   const { data, error } = await supabase
     .from("photoWait")
     .insert([
@@ -43,7 +43,7 @@ export const insertPhotoWaits = async (values) => {
   // }
 };
 
-export const grabPhotoWaitById = async (id) => {
+export const grabPhotoWaitById = async(id) => {
   const { data, error } = await supabase
     .from("photoWait")
     .select()
@@ -59,7 +59,7 @@ export const grabPhotoWaitById = async (id) => {
   }
 };
 
-export const deletePhotoWait = async (id) => {
+export const deletePhotoWait = async(id) => {
   const { data, error } = await supabase
     .from("photoWait")
     .delete()

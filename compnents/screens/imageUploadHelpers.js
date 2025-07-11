@@ -1,17 +1,19 @@
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from "expo-file-system";
+
 import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
+
 import { uploadphoto } from "./../cloudflareBucketCalls/cloudflareAWSCalls";
 
-export const chooseImageHandler = async () => {
-  let permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
+export const chooseImageHandler = async() => {
+  const permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
 
   if (!permissionGiven) {
     return
   }
 
-  let chosenImage = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ['images', 'videos'],
+  const chosenImage = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ["images", "videos"],
     allowsEditing: true,
     aspect: [4, 3],
     quality: 1,
@@ -26,10 +28,10 @@ export const chooseImageHandler = async () => {
 }
 
 
-export const imageUpload = async (image) => {
-  let stage1 = image.assets[0].uri
-  let uriLink = stage1.uri;
-  let extension = uriLink.split(".").pop();
+export const imageUpload = async(image) => {
+  const stage1 = image.assets[0].uri
+  const uriLink = stage1.uri;
+  const extension = uriLink.split(".").pop();
   const fileName = `${Date.now()}.${extension}`;
 
   const newFileUri = FileSystem.documentDirectory + fileName;
@@ -52,16 +54,16 @@ export const imageUpload = async (image) => {
 
 function formatDate(dateTaken) {
 
-  let slicedDate = dateTaken.substring(0, 10);
-  let formattedDate1 = slicedDate.replace(":", "-");
-  let formattedDate = formattedDate1.replace(":", "-");
+  const slicedDate = dateTaken.substring(0, 10);
+  const formattedDate1 = slicedDate.replace(":", "-");
+  const formattedDate = formattedDate1.replace(":", "-");
   return formattedDate;
 }
 
 function createFile(dateTaken, fileSize) {
 
 
-  let fileName = dateTaken.substring(
+  const fileName = dateTaken.substring(
     dateTaken.lastIndexOf("/") + 1,
     dateTaken.length
   );

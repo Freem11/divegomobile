@@ -1,16 +1,18 @@
 import React, { useContext, useState } from "react";
-import EditScreenView from './view';
+
 import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { updateDiveSite } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { imageUpload } from "../imageUploadHelpers";
 import { showError, showSuccess, showWarning } from "../../toast";
-import { Form } from "./form";
-import { BasicFormData } from "./editsParallax";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
+
+import { BasicFormData } from "./editsParallax";
+import { Form } from "./form";
+import EditScreenView from "./view";
 
 
 type SiteSubmitterProps = {
@@ -33,7 +35,7 @@ export default function EdittingScreen({
   const { setProfile } = useContext(UserProfileContext);
   
 
-  const tryUpload = async (localPreviewUri: string) => {
+  const tryUpload = async(localPreviewUri: string) => {
     try {
       const image = {
         assets: [
@@ -49,7 +51,7 @@ export default function EdittingScreen({
     }
   };
 
-  const onSubmit = async (formData: Required<Form>) => {
+  const onSubmit = async(formData: Required<Form>) => {
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
       return;
@@ -72,24 +74,24 @@ export default function EdittingScreen({
     let updatedUri = null;
 
     if(newPhoto !== existingPhoto){
-        setIsUploading(true);
+      setIsUploading(true);
 
-        try {
-          const fileName = await tryUpload(localPreviewUri);
-          if (!fileName) {
-            throw new Error("Photo upload failed");
-          }
-
-          const fullPath = `animalphotos/public/${fileName}`;
-          updatedUri = fullPath;
-          setNewUri(fullPath)
-
-        } catch (err) {
-          console.error("Error uploading image:", err);
-          showError(err.message);
-        } finally {
-          setIsUploading(false);
+      try {
+        const fileName = await tryUpload(localPreviewUri);
+        if (!fileName) {
+          throw new Error("Photo upload failed");
         }
+
+        const fullPath = `animalphotos/public/${fileName}`;
+        updatedUri = fullPath;
+        setNewUri(fullPath)
+
+      } catch (err) {
+        console.error("Error uploading image:", err);
+        showError(err.message);
+      } finally {
+        setIsUploading(false);
+      }
     }
 
     if(initialFormData.dataType === "Dive Site"){
@@ -127,7 +129,7 @@ export default function EdittingScreen({
       showError("unable to save updates, please try again later")
       return;
     } 
-      showSuccess(`${initialFormData.dataType} updated sucessfuly!`);
+    showSuccess(`${initialFormData.dataType} updated sucessfuly!`);
   }
 
   return (

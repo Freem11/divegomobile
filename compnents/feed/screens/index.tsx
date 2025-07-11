@@ -5,10 +5,12 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+
 import { colors } from "../../styles";
 import {  useFeedScreenStore } from "../store/useScreenStore";
-import FeedList from "./feeds";
 import { FEED_SCREEN } from "../store/types";
+
+import FeedList from "./feeds";
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("screen");
 

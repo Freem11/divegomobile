@@ -13,8 +13,8 @@ export async function checkFileExists(
     typeof uri === "string"
       ? uri
       : typeof uri === "object" && typeof uri.uri === "string"
-      ? uri.uri
-      : null;
+        ? uri.uri
+        : null;
 
   if (!resolvedUri) return { isExist: false, resolvedUri: null };
 

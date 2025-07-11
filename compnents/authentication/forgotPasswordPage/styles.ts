@@ -1,6 +1,8 @@
 import styled from "styled-components/native";
 import { Dimensions, Platform, SafeAreaView, StyleSheet } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import Animated from "react-native-reanimated";
+
 import {
   fontSizes,
   activeFonts,
@@ -8,7 +10,6 @@ import {
   authenicationButton,
   colors,
 } from "../../styles";
-import Animated from "react-native-reanimated";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -28,9 +29,9 @@ export const Content = styled.View`
   margin-horizontal: 7%;`;
 
 
-  export const SafeArea = styled(SafeAreaView)`
+export const SafeArea = styled(SafeAreaView)`
   z-index: 20;
-  margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
+  margin-top: ${Platform.OS === "ios" ? 0 : "10%"};
   background-color: ${colors.neutralGrey};
 `;
 
@@ -82,17 +83,17 @@ export const LoginText = styled.Text`
 
 export const styles = StyleSheet.create({
   drawer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     zIndex: 2,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   safeArea: {
     zIndex: 20,
-    marginTop: Platform.OS === 'ios' ? 0 : '10%',
-    flexDirection: 'row',
-    alignItems: 'center'
+    marginTop: Platform.OS === "ios" ? 0 : "10%",
+    flexDirection: "row",
+    alignItems: "center"
   }
 });

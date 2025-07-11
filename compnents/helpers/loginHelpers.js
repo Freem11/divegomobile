@@ -4,6 +4,10 @@ import {
   statusCodes
 } from "@react-native-google-signin/google-signin";
 import * as SecureStore from "expo-secure-store";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
+import * as WebBrowser from "expo-web-browser";
+
 import {
   sessionCheck,
   signInStandard,
@@ -15,9 +19,6 @@ import {
   grabProfileByUserId
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { supabase } from "../../supabase";
-import { makeRedirectUri } from "expo-auth-session";
-import * as QueryParams from "expo-auth-session/build/QueryParams";
-import * as WebBrowser from "expo-web-browser";
 import { i18n } from "../../i18n";
 
 const redirectTo = makeRedirectUri();
@@ -39,7 +40,7 @@ const createSessionFromUrl = async url => {
 };
 
 //Sign Ins
-export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
+export const facebookSignIn = async(setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
 
@@ -63,7 +64,7 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
 
       if (res.type === "success") {
         const { url } = res;
-        let data = await createSessionFromUrl(url);
+        const data = await createSessionFromUrl(url);
         handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
       }
     }
@@ -73,7 +74,7 @@ export const facebookSignIn = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
+export const googleSignIn = async(setActiveSession, setIsSignedIn) => {
   try {
     setIsSignedIn(true);
     await GoogleSignin.hasPlayServices();
@@ -101,7 +102,7 @@ export const googleSignIn = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-export const appleLogin = async (setActiveSession, setIsSignedIn) => {
+export const appleLogin = async(setActiveSession, setIsSignedIn) => {
   setIsSignedIn(true);
   try {
     const userInfo = await AppleAuthentication.signInAsync({
@@ -134,7 +135,7 @@ export const appleLogin = async (setActiveSession, setIsSignedIn) => {
   }
 };
 
-async function handleSupabaseSetup (
+async function handleSupabaseSetup(
   sessionToken,
   setActiveSession,
   setIsSignedIn
@@ -157,7 +158,7 @@ async function handleSupabaseSetup (
       sanitizeData = sessionToken;
     }
 
-    let profileCheck = await grabProfileByUserId(sanitizeData.user.id);
+    const profileCheck = await grabProfileByUserId(sanitizeData.user.id);
 
     if (profileCheck.length === 0) {
       await createProfile({
@@ -169,7 +170,7 @@ async function handleSupabaseSetup (
   }
 }
 
-export const handleLogInSubmit = async (
+export const handleLogInSubmit = async(
   formVals,
   setActiveSession,
   setLoginFail
@@ -178,7 +179,7 @@ export const handleLogInSubmit = async (
     setLoginFail(i18n.t("Validators.fillEmailAndPassword"));
     return;
   } else {
-    let accessToken = await signInStandard(formVals);
+    const accessToken = await signInStandard(formVals);
     if (accessToken && accessToken?.data?.session !== null) {
       await SecureStore.setItemAsync(
         "token",
@@ -194,7 +195,7 @@ export const handleLogInSubmit = async (
   }
 };
 
-export const handleSignUpSubmit = async (
+export const handleSignUpSubmit = async(
   formVals,
   setActiveSession,
   setRegFail
@@ -206,13 +207,13 @@ export const handleSignUpSubmit = async (
     setRegFail(i18n.t("Validators.passwordFormat"));
     return;
   } else {
-    let dataPack = {
+    const dataPack = {
       email: formVals.email,
       password: formVals.password,
       name: formVals.name
     };
 
-    let registrationToken = await register(dataPack);
+    const registrationToken = await register(dataPack);
     if (registrationToken.data.session !== null) {
       await createProfile({
         id: registrationToken.data.session.user.id,

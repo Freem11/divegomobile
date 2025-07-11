@@ -5,16 +5,15 @@ import React, {
   useMemo,
   useCallback,
   forwardRef,
-} from 'react';
-import { TextInput } from 'react-native';
-import * as S from './styles';
+} from "react";
+import { TextInput } from "react-native";
 
-import Dropdown from './components/dropdown';
-import SelectedTag from './components/selectedTag';
-import DropdownItem from './components/dropdownItem';
-
-import getInitialValue from './utils/getInitialValue';
-import getResultValue from './utils/getResultValue';
+import * as S from "./styles";
+import Dropdown from "./components/dropdown";
+import SelectedTag from "./components/selectedTag";
+import DropdownItem from "./components/dropdownItem";
+import getInitialValue from "./utils/getInitialValue";
+import getResultValue from "./utils/getResultValue";
 
 export type Option<T = object> = {
   key: string;
@@ -28,7 +27,7 @@ export type Values = Map<string, Option>;
 const defaultProps = {
   maxSelectedOptions: 1,
   allowCreate: false,
-  placeholder: 'Select',
+  placeholder: "Select",
   disabled: false,
   error: null,
   isFetching: false,
@@ -36,13 +35,13 @@ const defaultProps = {
   options: [],
   labelInValue: false,
   debounceTimeout: 400,
-  className: '',
+  className: "",
   iconLeft: null,
   dropdownItemComponent: DropdownItem,
   dropdownComponent: Dropdown,
   iconSelectArrow: true,
-  modeSelectedTags: 'off' as 'on' | 'off' | 'empty',
-  modeDropdownOpen: 'onChange' as 'onClick' | 'onChange',
+  modeSelectedTags: "off" as "on" | "off" | "empty",
+  modeDropdownOpen: "onChange" as "onClick" | "onChange",
   triggerOnChangeWhenReselect: false,
   onSearch: (search: string) => {},
 };
@@ -58,7 +57,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
   const props = { ...defaultProps, ...incomingProps };
   const searchRef = useRef<TextInput>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const options: Values = useMemo(() => {
@@ -70,32 +69,32 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
   );
 
   const isMulti = props.maxSelectedOptions > 1;
-  const showSelectedTags = props.modeSelectedTags === 'on' || isMulti;
+  const showSelectedTags = props.modeSelectedTags === "on" || isMulti;
   const shouldDisplayCreate = props.allowCreate && !!searchValue;
 
   useEffect(() => {
-    if (props.modeSelectedTags === 'off' && !isMulti && value.size > 0) {
+    if (props.modeSelectedTags === "off" && !isMulti && value.size > 0) {
       setSearchValue(Array.from(value.values())[0].label);
     }
   
-    if (props.modeSelectedTags === 'empty') {
-      setSearchValue('');
+    if (props.modeSelectedTags === "empty") {
+      setSearchValue("");
     }
   
-    if (typeof props.onChange === 'function') {
+    if (typeof props.onChange === "function") {
       const result = getResultValue(value, props.labelInValue, isMulti);
   
       let typedResult: string | Option<object> | Option<object>[] | string[];
   
       if (Array.isArray(result)) {
         typedResult = result.map((item) => {
-          if (typeof item === 'string') {
+          if (typeof item === "string") {
             return { key: item, label: item };
           }
           return item;
         });
       } else {
-        if (typeof result === 'string') {
+        if (typeof result === "string") {
           typedResult = { key: result, label: result };
         } else {
           typedResult = result;
@@ -114,7 +113,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
       searchRef.current?.focus();
     }
     if (
-      props.modeDropdownOpen === 'onClick' ||
+      props.modeDropdownOpen === "onClick" ||
       options.size ||
       shouldDisplayCreate
     ) {
@@ -124,7 +123,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
 
   const onSearch = (text: string) => {
     setSearchValue(text);
-    if (props.modeDropdownOpen === 'onChange' && !isOpen) {
+    if (props.modeDropdownOpen === "onChange" && !isOpen) {
       setIsOpen(true);
     }
 
@@ -135,7 +134,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
   };
 
   const selectItem = useCallback((key: string) => {
-    setSearchValue('');
+    setSearchValue("");
 
     setValue((prev) => {
       const option = options.get(key);
@@ -178,7 +177,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
       return updated;
     });
 
-    setSearchValue('');
+    setSearchValue("");
   }, []);
 
   const getPlaceholder = () => {
@@ -216,7 +215,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
 
         {props.iconSelectArrow && (
           <S.Arrow>
-            {props.iconSelectArrow === true ? '↓' : props.iconSelectArrow}
+            {props.iconSelectArrow === true ? "↓" : props.iconSelectArrow}
           </S.Arrow>
         )}
       </S.Trigger>

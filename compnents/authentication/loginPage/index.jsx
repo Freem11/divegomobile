@@ -1,7 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
-import LoginPageView from "./view";
+
 import { SessionContext } from "../../contexts/sessionContext";
 import { handleLogInSubmit } from "../../helpers/loginHelpers";
+
+import LoginPageView from "./view";
 
 export default function LoginPage(props) {
   const {
@@ -31,8 +33,7 @@ export default function LoginPage(props) {
       moveToForgotPasswordPage={moveToForgotPasswordPage}
       moveToSignUpPage={moveToSignUpPage}
       handleLogin={() =>
-        handleLogInSubmit(formVals, setActiveSession, setLoginFail)
-      }
+        handleLogInSubmit(formVals, setActiveSession, setLoginFail)}
     />
   );
 }

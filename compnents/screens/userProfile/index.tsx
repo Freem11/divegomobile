@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
+
 import { UserProfileContext } from "../../contexts/userProfileContext";
-import UserProfileScreenView from "./userProfile";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
 import { Pagination } from "../../../entities/pagination";
 import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+
+import UserProfileScreenView from "./userProfile";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
@@ -30,7 +32,7 @@ export default function UserProfileScreen({
     LevelTwoScreenContext
   );
   
-  const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
+  const handleDiveSiteMove = async(pic: Photo, photoPacket) => {
     setSelectedDiveSite({
       SiteName: photoPacket.name,
       Latitude: pic.latitude,
@@ -40,7 +42,7 @@ export default function UserProfileScreen({
     setLevelTwoScreen(false);
   };
 
-  const getPhotos = async () => {
+  const getPhotos = async() => {
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
 
     let photos;

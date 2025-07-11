@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React, { useContext } from "react";
 import { moderateScale, scale } from "react-native-size-matters";
+import { useTranslation } from "react-i18next";
+
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import {
@@ -9,7 +11,6 @@ import {
   screenSecondaryButton,
   buttonTextAlt,
 } from "../styles";
-import { useTranslation } from "react-i18next";
 export default function FailModal() {
   const { confirmationType } = useContext(ConfirmationTypeContext);
   const { setConfirmationModal } = useContext(ConfirmationModalContext);
@@ -20,19 +21,19 @@ export default function FailModal() {
   let blurb = null;
   switch (confirmationType) {
     case "Trip Submission":
-      blurb = t('CautionModal.tripSubmissionBlurb')
+      blurb = t("CautionModal.tripSubmissionBlurb")
       break;
     case "Sea Creature Submission":
-      blurb = t('CautionModal.seaCreatureSubmissionBlurb')
+      blurb = t("CautionModal.seaCreatureSubmissionBlurb")
       break;
     case "Dive Site":
-      blurb = t('CautionModal.diveSiteBlurb')
+      blurb = t("CautionModal.diveSiteBlurb")
       break;
     case "Partner Account Creation Request":
-      blurb = t('CautionModal.partnerAccountBlurb')
+      blurb = t("CautionModal.partnerAccountBlurb")
       break;
     case "Trip Edit":
-      blurb = t('CautionModal.tripEditBlurb')
+      blurb = t("CautionModal.tripEditBlurb")
       break;
   }
 
@@ -49,7 +50,7 @@ export default function FailModal() {
 
         <TouchableWithoutFeedback onPress={tidyUp}>
           <View style={styles.confirmButton}>
-            <Text style={styles.confirmButtonText}>{t('Common.cancel')}</Text>
+            <Text style={styles.confirmButtonText}>{t("Common.cancel")}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>

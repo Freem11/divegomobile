@@ -1,7 +1,9 @@
-import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
-import * as S from './styles';
+import React, { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+
 import Icon, { IconName } from "../../../icons/Icon";
 import { colors } from "../../styles";
+
+import * as S from "./styles";
 
 type StandardButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 export type ButtonProps = {
@@ -18,22 +20,23 @@ export default function Button(props: ButtonProps & StandardButtonProps) {
 
   return (
     <S.StyledTouchableHighlight underlayColor={colors.buttonPressOverlay} {...rest} onPress={() => props.onPress()}>
-    <S.StyledButton {...rest}>
-      {iconLeft && 
-        <S.IconWrapperLeft>
-          <Icon name={iconLeft as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
-        </S.IconWrapperLeft>
-      }
+      <S.StyledButton {...rest}>
+        {iconLeft && (
+          <S.IconWrapperLeft>
+            <Icon name={iconLeft as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
+          </S.IconWrapperLeft>
+        )}
 
         <S.StyledButtonText alt={props.alt}>
           {props.title}
         </S.StyledButtonText>
 
-        {iconRight && 
+        {iconRight && (
           <S.IconWrapperRight>
             <Icon name={iconRight as IconName} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
-          </S.IconWrapperRight>}
-    </S.StyledButton>
+          </S.IconWrapperRight>
+        )}
+      </S.StyledButton>
     </S.StyledTouchableHighlight>
   );
 }

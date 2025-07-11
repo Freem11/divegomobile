@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, View, StyleSheet, Dimensions, Platform } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { colors } from "../styles";
+
 import useSearchTool from "./useSearchtool";
 import SearchToolInput from "./searchToolInput";
 import SearchToolList from "./searchToolList";
-import { colors } from "../styles";
-import { moderateScale } from "react-native-size-matters";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { height } = Dimensions.get("window");
 const INPUT_TOP_MARGIN = moderateScale(0);
@@ -40,7 +42,7 @@ export default function SearchTool() {
   const backgroundOverlayAnimatedStyle = {
     backgroundColor: anim.interpolate({
       inputRange: [0, 1],
-      outputRange: ['rgba(255, 255, 255, 0)', colors.themeWhite], 
+      outputRange: ["rgba(255, 255, 255, 0)", colors.themeWhite], 
     }),
     opacity: anim,
     top: -insets.top,
@@ -59,7 +61,7 @@ export default function SearchTool() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ paddingTop: Platform.OS  === 'android' || windowWidth > 700 ? 25 : 0, paddingBottom: 25, alignSelf: "center", zIndex: 20 }}>
+      <View style={{ paddingTop: Platform.OS  === "android" || windowWidth > 700 ? 25 : 0, paddingBottom: 25, alignSelf: "center", zIndex: 20 }}>
         <SearchToolInput
           iconLeft="navigation-variant-outline"
           iconRight="close"
@@ -104,6 +106,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     width: "100%",
-    overflow: 'hidden',
+    overflow: "hidden",
   },
 });

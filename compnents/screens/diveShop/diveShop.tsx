@@ -1,11 +1,13 @@
 import React from "react";
-import * as S from "./styles";
 import { useTranslation } from "react-i18next";
-import ItineraryCard from "../../reusables/itineraryCard";
 import { openURL } from "expo-linking";
+
+import ItineraryCard from "../../reusables/itineraryCard";
 import Label from "../../reusables/label";
 import { DiveShop } from "../../../entities/diveShop";
 import { ItineraryItem } from "../../../entities/itineraryItem";
+
+import * as S from "./styles";
 
 type DiveShopProps = {
   isMyShop: boolean;
@@ -30,27 +32,27 @@ export default function DiveShopScreenView({
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-          <S.Header>{selectedShop?.orgName}</S.Header>
+        <S.Header>{selectedShop?.orgName}</S.Header>
 
-          <S.Content>{selectedShop?.diveShopBio}</S.Content>
+        <S.Content>{selectedShop?.diveShopBio}</S.Content>
 
       </S.InputGroupContainer>
 
-        <S.LabelWrapper>
-            <Label label="Dive Trips" />
-        </S.LabelWrapper>
+      <S.LabelWrapper>
+        <Label label="Dive Trips" />
+      </S.LabelWrapper>
 
       {itineraryList && itineraryList.map((itinerary) => {
-  return (
-    <ItineraryCard  
-      key={itinerary.id}
-      isMyShop={isMyShop}
-      itinerary={itinerary}    
-      buttonOneAction={isMyShop ? () => handleEditButton(itinerary) : () => handleMapFlip(itinerary.siteList)}
-      buttonTwoAction={isMyShop ? () => handleDeleteButton(itinerary) :() => openURL(itinerary.BookingPage)}
-    />
-  );
-})}
+        return (
+          <ItineraryCard  
+            key={itinerary.id}
+            isMyShop={isMyShop}
+            itinerary={itinerary}    
+            buttonOneAction={isMyShop ? () => handleEditButton(itinerary) : () => handleMapFlip(itinerary.siteList)}
+            buttonTwoAction={isMyShop ? () => handleDeleteButton(itinerary) :() => openURL(itinerary.BookingPage)}
+          />
+        );
+      })}
 
     </S.ContentContainer>
   );

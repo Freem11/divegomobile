@@ -1,17 +1,20 @@
 import React from "react";
-import * as S from "./styles";
 import { View, ScrollView } from "react-native";
-import { colors } from "../../styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useTranslation } from "react-i18next";
+import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
+import { Controller, useForm } from "react-hook-form";
+
+import { colors } from "../../styles";
 import PriceTextInput from "../../reusables/priceTextInput";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import Label from "../../reusables/label";
-import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { Controller, useForm } from "react-hook-form";
+
+
+import * as S from "./styles";
 import { Form, FormRules } from "./form";
 
 type TripCreatorProps = {
@@ -63,102 +66,102 @@ export default function TripCreatorPageView({
       <S.InputGroupContainer>
         <Label label="Details" />
         <Controller
-            control={control}
-            name="Name"
-            rules={FormRules.Name}
-            render={({ field: { onChange, value } }) => (
-              <S.TextBuffer>
-                <MobileTextInput 
+          control={control}
+          name="Name"
+          rules={FormRules.Name}
+          render={({ field: { onChange, value } }) => (
+            <S.TextBuffer>
+              <MobileTextInput 
                 error={errors.Name}
                 iconLeft="store"
                 placeholder={t("TripCreator.tripNamePlaceholder")}
                 onChangeText={onChange}
                 value={value}
-                />
-              </S.TextBuffer>
-            )}
-          />
+              />
+            </S.TextBuffer>
+          )}
+        />
 
-          <Controller
-            control={control}
-            name="Link"
-            rules={FormRules.Link}
-            render={({ field: { onChange, value } }) => (
-              <S.TextBuffer>
-                <MobileTextInput 
+        <Controller
+          control={control}
+          name="Link"
+          rules={FormRules.Link}
+          render={({ field: { onChange, value } }) => (
+            <S.TextBuffer>
+              <MobileTextInput 
                 error={errors.Link}
                 iconLeft="link"
                 placeholder={t("TripCreator.bookingLinkPlaceholder")}
                 onChangeText={onChange}
                 value={value}
-                />
-              </S.TextBuffer>
-            )}
-          />
+              />
+            </S.TextBuffer>
+          )}
+        />
 
-          <Controller
-            control={control}
-            name="Price"
-            rules={FormRules.Price}
-            render={({ field: { onChange, value } }) => (
-              <S.TextBuffer>
-                <PriceTextInput 
+        <Controller
+          control={control}
+          name="Price"
+          rules={FormRules.Price}
+          render={({ field: { onChange, value } }) => (
+            <S.TextBuffer>
+              <PriceTextInput 
                 error={errors.Price}
                 iconLeft="currency-usd"
                 placeholder={t("TripCreator.pricePlaceholder")}
                 onChangeText={onChange}
                 value={value ? String(value): null}
-                />
-              </S.TextBuffer>
-            )}
-          />
+              />
+            </S.TextBuffer>
+          )}
+        />
 
-          <Controller
-            control={control}
-            name="Start"
-            rules={FormRules.Start}
-            render={({ field: { onChange, value } }) => (
-              <S.TextBuffer>
-                  <Toucher onPress={() => showDatePicker("startDate")}>
-                  <View pointerEvents="none">
-                    <MobileTextInput 
+        <Controller
+          control={control}
+          name="Start"
+          rules={FormRules.Start}
+          render={({ field: { onChange, value } }) => (
+            <S.TextBuffer>
+              <Toucher onPress={() => showDatePicker("startDate")}>
+                <View pointerEvents="none">
+                  <MobileTextInput 
                     error={errors.Start}
                     iconLeft="calendar-start"
                     placeholder={t("TripCreator.startDatePlaceholder")}
                     onChangeText={onChange}
                     value={value}
-                    />
-                  </View>
-                </Toucher>
-              </S.TextBuffer>
-            )}
-          />
+                  />
+                </View>
+              </Toucher>
+            </S.TextBuffer>
+          )}
+        />
 
-          <Controller
-            control={control}
-            name="End"
-            rules={FormRules.End}
-            render={({ field: { onChange, value } }) => (
-              <S.TextBuffer>
-                  <Toucher onPress={() => showDatePicker("endDate")}>
-                  <View pointerEvents="none">
-                    <MobileTextInput 
+        <Controller
+          control={control}
+          name="End"
+          rules={FormRules.End}
+          render={({ field: { onChange, value } }) => (
+            <S.TextBuffer>
+              <Toucher onPress={() => showDatePicker("endDate")}>
+                <View pointerEvents="none">
+                  <MobileTextInput 
                     error={errors.End}
                     iconLeft="calendar-end"
                     placeholder={t("TripCreator.endDatePlaceholder")}
                     onChangeText={onChange}
                     value={value}
-                    />
-                  </View>
-                </Toucher>
-              </S.TextBuffer>
-            )}
-          />
+                  />
+                </View>
+              </Toucher>
+            </S.TextBuffer>
+          )}
+        />
 
         <Label label="Itinerary" />
 
         <S.DescriptionBox>
-        <Controller
+          <Controller
             control={control}
             name="Details"
             rules={FormRules.Details}
@@ -166,10 +169,10 @@ export default function TripCreatorPageView({
               <S.MultilineTextInput
                 multiline
                 error={errors.Details}
-                placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, '\n')}
+                placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, "\n")}
                 onChangeText={onChange}
                 value={value}
-                >
+              >
               </S.MultilineTextInput>
             )}
           />
@@ -178,7 +181,7 @@ export default function TripCreatorPageView({
         <Label label="Dive Sites" />
 
         <S.ScrollViewContainer>
-          <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: "center", alignItems: "center"}}>
             {tripDiveSites && tripDiveSites.length === 0 && (
               <EmptyState iconName="anchor" text="No Dive Sites Yet." />
             )}
@@ -193,8 +196,7 @@ export default function TripCreatorPageView({
                         fillColor="white"
                         bgColor={colors.primaryBlue}
                         buttonAction={() =>
-                          removeFromSitesArray(tripDetails.id, sitesArray)
-                        }
+                          removeFromSitesArray(tripDetails.id, sitesArray)}
                       />
                     </S.ItemHousing>
                     {index < tripDiveSites.length - 1 && <S.VerticalLine />}
@@ -217,7 +219,7 @@ export default function TripCreatorPageView({
 
         <S.BottomButtonBox>
           <Button
-             onPress={() => handleSubmit(onSubmit)()} 
+            onPress={() => handleSubmit(onSubmit)()} 
             size="medium"
             title={t("TripCreator.submitButton")}
             iconRight="chevron-right"
@@ -230,20 +232,16 @@ export default function TripCreatorPageView({
         mode="date"
         onConfirm={handleDatePickerConfirm}
         onCancel={hideDatePicker}
-        maximumDate={
-          dateType === "startDate" && values.End
-            ? new Date(values.End)
-            : undefined
-        }
-        minimumDate={
-          dateType === "endDate" && values.Start
-            ? new Date(
-                new Date(values.Start).setDate(
-                  new Date(values.Start).getDate() + 1
-                )
-              )
-            : undefined
-        }
+        maximumDate={dateType === "startDate" && values.End
+          ? new Date(values.End)
+          : undefined}
+        minimumDate={dateType === "endDate" && values.Start
+          ? new Date(
+            new Date(values.Start).setDate(
+              new Date(values.Start).getDate() + 1
+            )
+          )
+          : undefined}
       />
     </S.ContentContainer>
   );

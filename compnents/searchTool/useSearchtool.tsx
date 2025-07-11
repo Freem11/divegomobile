@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { Keyboard } from "react-native";
 import Geocoder from "react-native-geocoding";
+
 import { getSiteNamesThatFit, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { useMapStore } from "../googleMap/useMapStore";
@@ -18,7 +19,7 @@ export default function useSearchTool() {
   const [textSource, setTextSource] = useState(false);
   const [isClearOn, setIsClearOn] = useState(false);
 
-  const getPlaces = async (text) => {
+  const getPlaces = async(text) => {
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${GoogleMapsApiKey}`
@@ -31,7 +32,7 @@ export default function useSearchTool() {
     }
   };
 
-  const handleDataList = async (value: string) => {
+  const handleDataList = async(value: string) => {
     const placesData = await getPlaces(value);
     const diveSiteData = await getSiteNamesThatFit(value);
 
@@ -66,7 +67,7 @@ export default function useSearchTool() {
     Keyboard.dismiss();
   };
 
-  const handleMapOptionSelected = async (place: string) => {
+  const handleMapOptionSelected = async(place: string) => {
     try {
       const json = await Geocoder.from(place);
       const location = json.results[0].geometry.location;
@@ -82,7 +83,7 @@ export default function useSearchTool() {
     }
   };
 
-  const handleDiveSiteOptionSelected = async (diveSite: string) => {
+  const handleDiveSiteOptionSelected = async(diveSite: string) => {
     if (!diveSite) return;
 
     const [name, region] = diveSite.split(" ~ ");
