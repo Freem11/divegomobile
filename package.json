@@ -9,9 +9,7 @@
     "android:manual": "expo run:android --device",
     "android:clean": "expo start -c && expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "web": "expo start --web"
   },
   "dependencies": {
     "@aws-crypto/client-browser": "^4.0.0",
