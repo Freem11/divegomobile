@@ -1,13 +1,11 @@
 import React from "react";
 import * as S from "./styles";
-import { useTranslation } from "react-i18next";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Icon from "../../../icons/Icon";
 import Label from "../../reusables/label";
 import { Photo } from "../../../entities/photos";
 import { colors } from "../../styles";
 import { ActiveProfile } from "../../../entities/profile";
-
 
 type UserProfileProps = {
   profilePhotos:  Photo[] | null;
@@ -21,8 +19,6 @@ export default function UserProfileScreenView({
   selectedProfile
 }: UserProfileProps) {
   
-  const { t } = useTranslation()
-
   const groupedPhotos = {};
 
   profilePhotos && profilePhotos.forEach(photo => {
@@ -56,23 +52,15 @@ export default function UserProfileScreenView({
   return (
     <S.PhotoContainer key={`${photoPacket.id}-${index}`}>   
       <S.PacketHeader key={`${photoPacket.id}-${index}`}>
-  
-      <S.HeaderWrapper>
-        <S.IconWrapper>
-          <Icon name={'anchor'} fill={colors.primaryBlue}/>
-        </S.IconWrapper>
-
+        <S.HeaderWrapper>
+          <S.IconWrapper>
+            <Icon name={'anchor'} fill={colors.primaryBlue}/>
+          </S.IconWrapper>
           <S.PacketHeaderItem>{photoPacket.divesitename}</S.PacketHeaderItem>
-      </S.HeaderWrapper>
-
-      <S.HeaderWrapper>
-        <S.IconWrapper>
-          <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
-        </S.IconWrapper>
-
-          <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
-      </S.HeaderWrapper>
-
+        </S.HeaderWrapper>
+        <S.HeaderWrapper>
+          <S.PacketHeaderDate>{photoPacket.dateTaken}</S.PacketHeaderDate>
+        </S.HeaderWrapper>
       </S.PacketHeader>
 
       {photoPacket.photos.length > 0 &&

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import Share from "react-native-share";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import UserProfileScreen from ".";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
@@ -7,7 +8,6 @@ import { Keyboard } from "react-native";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useTranslation } from "react-i18next";
 import { grabProfileById} from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
@@ -18,14 +18,11 @@ import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
-
 type UserProfileProps = {
   profileID: number
 };
 
-
 export default function UserProfileParallax(props: UserProfileProps) {
-  const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
@@ -131,7 +128,17 @@ const removeFollow = async () => {
     setActiveTutorialID("EditsScreen")
   };
 
- 
+  const handleShare = async () => {
+    try {
+      await Share.open({
+        title: 'Share Scuba SEAsons Profile',
+        url: 'https://scuba-seasons.web.app',
+      });
+    } catch (error) {
+      console.log('Share error:', error);
+    }
+  };
+
   const popoverConent = () => {
     return (
     <>
@@ -149,6 +156,11 @@ const removeFollow = async () => {
     buttonAction={() => openSettingsScreen()}
     />
     }
+    <IconWithLabel 
+    label="Share Profile"
+    iconName="share"
+    buttonAction={() => handleShare()}
+    />
     {!isMyProfile && !isFollowing &&
     <IconWithLabel 
     label={`Follow ${selectedProfile?.UserName}`}
