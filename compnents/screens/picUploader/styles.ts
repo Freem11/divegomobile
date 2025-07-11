@@ -75,7 +75,7 @@ export const svgCurve = {
 
 export const UploadZone = styled.View`
   flex: 1;
-   width: ${windowWidth};
+  width: ${windowWidth}px;
   background-color: ${colors.primaryBlue};
   align-items: center;
   justify-content: center;

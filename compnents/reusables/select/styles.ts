@@ -30,13 +30,13 @@ export const TriggerContent = styled.View`
 
 export const Input = styled.TextInput`
   flex: 1;
-  min-width: 100;
-  font-size: ${moderateScale(fontSizes.StandardText)};
+  min-width: 100px;
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
 `;
 
 export const Arrow = styled.Text`
   margin-left: ${moderateScale(6)}px;
-  font-size: ${moderateScale(fontSizes.SmallText)};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
 `;
 
 export const DropdownWrapper = styled.View`

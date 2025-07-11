@@ -30,8 +30,7 @@ export function MarkerHeatPoint(props: MarkerHeatPointProps) {
 if(heatPoints?.length > 0) {
   return <Heatmap
     points={heatPoints}
-    radius={moderateScale(80)}
-    // radius={Platform.OS === "ios" ? 30 : 10}
+    radius={40}
   />
 } else {
   return null
