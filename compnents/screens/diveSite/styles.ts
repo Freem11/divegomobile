@@ -12,6 +12,7 @@ const windowWidth = Dimensions.get('screen').width;
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
+  padding-horizontal: 5%;
 `;
 
 export const InputGroupContainer = styled.View`

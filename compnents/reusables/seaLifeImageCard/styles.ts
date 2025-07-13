@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { Dimensions } from "react-native";
 import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
@@ -8,19 +7,9 @@ import {
 } from '../../styles';
 import { LinearGradient } from "expo-linear-gradient";
 
-const windowWidth = Dimensions.get("window").width;
-
 export const Container = styled.View`
-  margin-left: 0%;
   margin-vertical: 2%;
   position: relative;
-`;
-
-export const BackgroundWrapper = styled.View`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
 `;
 
 export const Overlay = styled(LinearGradient).attrs({
@@ -42,43 +31,38 @@ export const Overlay = styled(LinearGradient).attrs({
 
 export const ContentWrapper = styled.View`
   flex-direction: row;
-  margin-left: 3%;
-  width: 93%;
+  align-items: flex-end;
+  justify-content: space-between;
   z-index: 3;
+  width: 100%;
+  padding-horizontal: ${moderateScale(15)}px;
   position: absolute;
-  bottom: ${moderateScale(18)}px;
+  bottom: ${moderateScale(15)}px;
 `;
 
 export const TopContentWrapper = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  width: 98%;
   height: ${moderateScale(20)}px;
   z-index: 3;
   position: absolute;
-  top: ${moderateScale(10)}px;
+  flex-direction: row;
+  gap: ${moderateScale(15)}px;
+  top: ${moderateScale(15)}px;
+  right: ${moderateScale(15)}px;
+  border-radius: ${moderateScale(20)}px;
 `;
 
 export const LabelWrapper = styled.View`
   flex-direction: column;
-  width: ${() => (windowWidth > 600 ? '80%' : '75%')};
+  gap: ${moderateScale(3)}px;
+  flex-shrink: 1;
 `;
 
-export const CounterWrapper = styled.View`
+export const IconsWrapper = styled.View`
   flex-direction: row;
-  align-items: center;
-`;
-
-export const IconWrapper = styled.View`
-  width: ${moderateScale(24)}px;
-  margin-horizontal: ${moderateScale(5)}px;
-`;
-
-export const CounterText = styled.Text`
-  color: ${colors.themeWhite};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.Bold};
+  gap: ${moderateScale(10)}px;
+  position: relative;
+  bottom: -${moderateScale(5)}px;
+  flex-shrink: 0;
 `;
 
 export const TitleText = styled.Text`
