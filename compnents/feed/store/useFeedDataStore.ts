@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import {
   clearFailedUploads,
   getFailedUploads,
@@ -22,7 +21,7 @@ interface FeedDataStore {
 export const useFeedDataStore = create<FeedDataStore>((set) => ({
   feedItems: [],
 
-  loadFeedItems: async() => {
+  loadFeedItems: async () => {
     const failedItems = await getFailedUploads();
     // here you will fetch other feed items from your API or local storage
     const otherFeedItems: FeedItem[] = []; // Replace with actual fetch logic
@@ -34,7 +33,7 @@ export const useFeedDataStore = create<FeedDataStore>((set) => ({
       feedItems: [...state.feedItems, item],
     })),
 
-  removeFeedItem: async(id: string) => {
+  removeFeedItem: async (id: string) => {
     set((state) => {
       const itemToRemove = state.feedItems.find((item) => item.id === id);
       if (!itemToRemove) return state;
@@ -49,7 +48,7 @@ export const useFeedDataStore = create<FeedDataStore>((set) => ({
     });
   },
 
-  clearFeedItems: async() => {
+  clearFeedItems: async () => {
     await clearFailedUploads();
     // here you will clear other feed items from your API or local storage
     set({ feedItems: [] });

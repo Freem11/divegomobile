@@ -1,11 +1,10 @@
-import styled from "styled-components/native";
-import { moderateScale } from "react-native-size-matters"
-import Animated from "react-native-reanimated";
+import styled from 'styled-components/native';
+import { activeFonts, buttonSizes, colors, fontSizes } from "../../styles";
+import { moderateScale } from 'react-native-size-matters'
+import Animated from 'react-native-reanimated';
 import { Dimensions } from "react-native";
 
-import { activeFonts, buttonSizes, colors, fontSizes } from "../../styles";
-
-const windowWidth = Dimensions.get("window").width;
+const windowWidth = Dimensions.get('window').width;
 
 
 
@@ -43,7 +42,7 @@ export const ItemHousing = styled.View`
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
   position: absolute;
-  bottom: ${windowWidth > 600 ? "15px" : "30px"};
+  bottom: ${windowWidth > 600 ? '15px' : '30px'};
   right: ${moderateScale(25)}px;
   border-radius: ${moderateScale(25)}px;
   height: ${moderateScale(buttonSizes.large.height)}px;

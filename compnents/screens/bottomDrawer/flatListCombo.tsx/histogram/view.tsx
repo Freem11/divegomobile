@@ -1,8 +1,6 @@
-import React from "react";
-
-import { HistogramItem } from "../../../../../entities/histogram";
-
+import React from 'react';
 import * as S from "./styles";
+import { HistogramItem } from "../../../../../entities/histogram";
 import DataBar from "./histogramDataBar";
 
 type HistogramViewProps = {

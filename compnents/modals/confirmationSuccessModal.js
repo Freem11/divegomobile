@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { moderateScale, scale } from "react-native-size-matters";
-
 import { ConfirmationTypeContext } from "../contexts/confirmationTypeContext";
 import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import {
@@ -46,7 +45,7 @@ export default function SuccessModal() {
 
         <TouchableWithoutFeedback onPress={tidyUp}>
           <View style={styles.confirmButton}>
-            <Text style={styles.confirmButtonText}>{t("Common.ok")}</Text>
+            <Text style={styles.confirmButtonText}>{t('Common.ok')}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>

@@ -8,27 +8,25 @@ import {
   Keyboard,
   Dimensions
 } from "react-native";
-import React, { useState, useContext, useEffect, Fragment } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { moderateScale } from "react-native-size-matters";
-import { ScrollView } from "react-native-gesture-handler";
-import { useTranslation } from "react-i18next";
-
 import {
   activeFonts,
   colors,
   fontSizes
 } from "../styles";
-import TextInputField from "../authentication/utils/textInput";
+import TextInputField from '../authentication/utils/textInput';
+import React, { useState, useContext, useEffect, Fragment } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
 import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import {
   insertPhotoComment,
   grabPhotoCommentsByPicId,
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
+import { ScrollView } from "react-native-gesture-handler";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-
+import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -51,8 +49,8 @@ export default function CommentsModal() {
     }
   }, [fullScreenModal]);
 
-  const getAllPictureComments = async(picId) => {
-    const picComments = await grabPhotoCommentsByPicId(picId);
+  const getAllPictureComments = async (picId) => {
+    let picComments = await grabPhotoCommentsByPicId(picId);
     setListOfComments(picComments);
   };
 
@@ -64,7 +62,7 @@ export default function CommentsModal() {
     setCommentContent(text)
   };
 
-  const handleCommentInsert = async() => {
+  const handleCommentInsert = async () => {
     let userIdentity = null
     if (replyTo) {
       userIdentity = replyTo[1]
@@ -78,7 +76,7 @@ export default function CommentsModal() {
       } else {
         finalContent = commentContent
       }
-      const newComment = await insertPhotoComment(
+      let newComment = await insertPhotoComment(
         profile[0].UserID,
         selectedPicture.id,
         finalContent,
@@ -93,7 +91,7 @@ export default function CommentsModal() {
   };
 
 
-  const handleCommentModalClose = async() => {
+  const handleCommentModalClose = async () => {
     setReplyTo(null)
     setFullScreenModal(false);
   }
@@ -111,7 +109,7 @@ export default function CommentsModal() {
 
   const toggleShowReplies = (comment) => {
     if (selectedReplyId.includes(comment.id)) {
-      const selectedReplyIdTemp = hideRepliesForChildren(comment.id, selectedReplyId);
+      let selectedReplyIdTemp = hideRepliesForChildren(comment.id, selectedReplyId);
       setSelectedReplyId(selectedReplyIdTemp);
     } else {
       setSelectedReplyId([...selectedReplyId, comment.id]);
@@ -119,8 +117,8 @@ export default function CommentsModal() {
   }
 
   const getCommentListView = (commentId, level = 0) => {
-    const marginLeft = 5 * level;
-    const width = 98 - marginLeft;
+    let marginLeft = 5 * level;
+    let width = 98 - marginLeft;
     const marginStyle = StyleSheet.create({
       commentLevelShift: {
         marginLeft: `${marginLeft}%`,
@@ -134,13 +132,13 @@ export default function CommentsModal() {
           listOfComments.map((commentDeets) => {
             if (commentDeets.replied_to === commentId) {
               let nbReplies = 0;
-              for (const comment of listOfComments) {
+              for (let comment of listOfComments) {
                 if (comment.replied_to === commentDeets.id) {
                   nbReplies++;
                 }
               }
               return (
-                selectedReplyId.includes(commentDeets.replied_to) || commentDeets.replied_to === null ? (
+                selectedReplyId.includes(commentDeets.replied_to) || commentDeets.replied_to === null ?
                   <Fragment key={commentDeets.id}>
                     <CommentListItem
                       commentDetails={commentDeets}
@@ -151,8 +149,7 @@ export default function CommentsModal() {
                       nbReplies={nbReplies}
                     />
                     {getCommentListView(commentDeets.id, level + 1)}
-                  </Fragment>
-                ) : null
+                  </Fragment> : null
               );
             }
           }
@@ -175,9 +172,11 @@ export default function CommentsModal() {
 
           <KeyboardAvoidingView
             behavior="position"
-            keyboardVerticalOffset={Platform.OS === "ios"
-              ? moderateScale(650) - moderateScale(340)
-              : moderateScale(650) - moderateScale(340)}
+            keyboardVerticalOffset={
+              Platform.OS === "ios"
+                ? moderateScale(650) - moderateScale(340)
+                : moderateScale(650) - moderateScale(340)
+            }
             style={styles.keyboardAvoid}
           >
             <View style={styles.commentEntryContainer}>
@@ -190,7 +189,7 @@ export default function CommentsModal() {
               <View style={styles.replyBox}>
                 <TextInputField
                   inputValue={commentContent}
-                  placeHolderText={t("Comments.blowBubbles")}
+                  placeHolderText={t('Comments.blowBubbles')}
                   onChangeText={(text) => handleChange(text)}
                   handleClear={() => handleCommentInsert()}
                 />

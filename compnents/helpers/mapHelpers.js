@@ -1,6 +1,6 @@
 function filterSites(newParams, array) {
 
-  const newArr = [];
+  let newArr = [];
   array.forEach((diveSite) => {
     if (
       diveSite.lat > newParams.southWest.latitude &&
@@ -16,9 +16,9 @@ function filterSites(newParams, array) {
 
 function formatHeatVals(heatValues) {
 
-  const newArr = [];
+  let newArr = [];
   heatValues.forEach((heatPoint) => {
-    const newpt = {
+    let newpt = {
       latitude: heatPoint.lat,
       longitude: heatPoint.lng,
       weight: heatPoint.weight,
@@ -33,18 +33,18 @@ function calculateZoom(width, topLongitude, bottomLongitude) {
   let newZoom =
     Math.log2((360 * (width / 256)) / (topLongitude - bottomLongitude)) + 1;
   
-  if (isNaN(newZoom)) (
-    newZoom = 3
-  )
+    if (isNaN(newZoom)) (
+     newZoom = 3
+    )
   return newZoom;
 }
 
 function newGPSBoundaries(Lat, Lng) {
 
-  const minLat = Lat - 0.005;
-  const maxLat = Lat + 0.005;
-  const minLng = Lng - 0.005;
-  const maxLng = Lng + 0.005;
+      let minLat = Lat - 0.005;
+      let maxLat = Lat + 0.005;
+      let minLng = Lng - 0.005;
+      let maxLng = Lng + 0.005;
 
 
   return { minLat, maxLat, minLng, maxLng };

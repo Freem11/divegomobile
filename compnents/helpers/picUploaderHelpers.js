@@ -1,5 +1,5 @@
 function getToday(DateVal) {
-  const yr0 = DateVal.getFullYear().toString();
+  let yr0 = DateVal.getFullYear().toString();
   let mth0 = (DateVal.getMonth() + 1).toString();
   let dy0 = DateVal.getDate().toString();
 
@@ -11,18 +11,18 @@ function getToday(DateVal) {
     mth0 = "0" + mth0;
   }
 
-  const formattedDate = yr0 + "-" + mth0 + "-" + dy0;
+  let formattedDate = yr0 + "-" + mth0 + "-" + dy0;
 
   return formattedDate;
 }
 
 function getDate(DateVal) {
 
-  const yr0 = strDate.substing(0, 4);
-  const mth0 = strDate.substing(5, 8);
-  const dy0 = strDate.substing(8, 11);
+  let yr0 = strDate.substing(0, 4);
+  let mth0 = strDate.substing(5, 8);
+  let dy0 = strDate.substing(8, 11);
 
-  const formattedDate = yr0 + "-" + mth0 + "-" + dy0;
+  let formattedDate = yr0 + "-" + mth0 + "-" + dy0;
 
   return formattedDate;
 }

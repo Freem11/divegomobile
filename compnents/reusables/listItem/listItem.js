@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-
 import { activeFonts, colors, fontSizes } from "../../styles";
 
 const windowWidth = Dimensions.get("window").width;
@@ -11,9 +10,9 @@ export default function ListItem(props) {
   
   return (
     <TouchableWithoutFeedback onPress={buttonAction}>
-      <View style={styles.container}>
+    <View style={styles.container}>
         <Text style={styles.titleText}>{titleText}</Text>
-      </View>
+    </View>
     </TouchableWithoutFeedback>
   );
 }

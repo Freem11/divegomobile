@@ -1,15 +1,13 @@
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
-import React from "react";
-
-import Icon from "../../../icons/Icon";
-
-import Button from "./index";
+import React from 'react';
+import Button from './index';
+import Icon from '../../../icons/Icon';
 
 const meta = {
-  title:      "Components/Reusables/Button",
+  title:      'Components/Reusables/Button',
   component:  Button,
-  tags:       ["autodocs"],
-  args:       { children: "Button" },
+  tags:       ['autodocs'],
+  args:       { children: 'Button' },
 };
 
 export default meta;
@@ -36,16 +34,16 @@ export const ButtonsWithIcons = {
 export const ButtonsWidthContentAware = {
   render: args => (
     <div className="d-flex">
-      <div className="mx-4" style={{ display: "content" }}>
+      <div className="mx-4" style={{ display: 'content' }}>
         <Button>short</Button>
       </div>
-      <div className="mx-4" style={{ display: "content" }}>
+      <div className="mx-4" style={{ display: 'content' }}>
         <Button>Pretty long label that should probably wrap</Button>
       </div>
-      <div className="mx-4" style={{ display: "content" }}>
+      <div className="mx-4" style={{ display: 'content' }}>
         <Button iconLeft={<Icon name="close" />}>Pretty long label with icon</Button>
       </div>
-      <div className="mx-4" style={{ display: "content" }}>
+      <div className="mx-4" style={{ display: 'content' }}>
         <Button></Button>
       </div>
     </div>

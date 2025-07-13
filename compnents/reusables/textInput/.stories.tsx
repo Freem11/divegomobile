@@ -1,20 +1,19 @@
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
-import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Icon from "../../../icons/Icon";
-
-import Component from "./index";
+import Component from './index';
+import Icon from '../../../icons/Icon';
 
 
 const meta: Meta<typeof Component> = {
-  title:      "Components/Reusables/TextInput",
+  title:      'Components/Reusables/TextInput',
   component:  Component,
-  tags:       ["autodocs"],
+  tags:       ['autodocs'],
   args:       { },
   decorators: [
     Story => (
-      <div style={{ width: "400px" }}>
+      <div style={{ width: '400px' }}>
         <Story />
       </div>
     ),
@@ -38,13 +37,13 @@ export const InputEmptyWithError: Story = {
 
 export const InputWithValue: Story = {
   args: {
-    value: "Lorem ipsum",
+    value: 'Lorem ipsum',
   },
 };
 
 export const InputWithValueAndError: Story = {
   args: {
-    value: "Lorem ipsum",
+    value: 'Lorem ipsum',
     error: true,
   },
 };
@@ -57,7 +56,7 @@ export const InputWithLeftIcon: Story = {
 
 export const InputWithLeftIconAndValue: Story = {
   args: {
-    value:    "Lorem ipsum",
+    value:    'Lorem ipsum',
     iconLeft: <Icon name="explore" />,
   },
 };
@@ -65,7 +64,7 @@ export const InputWithLeftIconAndValue: Story = {
 export const InputWithLeftIconAndValueAndError: Story = {
   args: {
     error:    true,
-    value:    "Lorem ipsum",
+    value:    'Lorem ipsum',
     iconLeft: <Icon name="diving-snorkel" />,
   },
 };
@@ -77,7 +76,7 @@ export const InputWithRightIcon: Story = {
 
 export const InputWithRightIconAndValue: Story = {
   args: {
-    value:     "Lorem ipsum",
+    value:     'Lorem ipsum',
     iconRight: <Icon name="close" />,
   },
 };
@@ -85,7 +84,7 @@ export const InputWithRightIconAndValue: Story = {
 export const InputWithRightIconAndValueAndError: Story = {
   args: {
     error:     true,
-    value:     "Lorem ipsum",
+    value:     'Lorem ipsum',
     iconRight: <Icon name="photo" />,
   },
 };
@@ -99,7 +98,7 @@ export const InputWithBothIcons: Story = {
 
 export const InputWithBothIconsAndValue: Story = {
   args: {
-    value:     "Lorem ipsum",
+    value:     'Lorem ipsum',
     iconLeft:  <Icon name="remove" />,
     iconRight: <Icon name="close" />,
   },
@@ -108,7 +107,7 @@ export const InputWithBothIconsAndValue: Story = {
 export const InputWithBothIconsAndValueAndError: Story = {
   args: {
     error:     true,
-    value:     "Lorem ipsum",
+    value:     'Lorem ipsum',
     iconLeft:  <Icon name="eye" />,
     iconRight: <Icon name="photo" />,
   },

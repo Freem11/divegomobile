@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
-
+import React, { useContext } from 'react';
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import ItineraryCardView from './view';
 import { ItineraryItem } from "../../../entities/itineraryItem";
-
-import ItineraryCardView from "./view";
 
 type ItineraryCardProps = {
   itinerary:       ItineraryItem
@@ -17,13 +15,13 @@ export default function ItineraryCard({ itinerary, isMyShop, buttonOneAction, bu
   
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
-  const flipMap = async(siteList: number[]) => {
+  const flipMap = async (siteList: number[]) => {
     setSitesArray(siteList);
 
     const itinerizedDiveSites = await getDiveSitesByIDs(siteList);
 
     if (!itinerizedDiveSites || itinerizedDiveSites.length === 0) {
-      console.error("No dive sites found or itinerizedDiveSites is undefined.");
+      console.error('No dive sites found or itinerizedDiveSites is undefined.');
       return; // Exit early if itinerizedDiveSites is undefined or empty
     }
   };

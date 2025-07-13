@@ -14,7 +14,7 @@ export const useMapStore = create<State>((set, get) => ({
   setMap: (newMap) => set({ map: newMap }),
 
   boundaries: null,
-  updateBoundaries: async() => {
+  updateBoundaries: async () => {
     const state = get();
     if (!state.map) {
       return null;

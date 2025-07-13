@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import * as Linking from "expo-linking";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
-import { Platform } from "react-native";
-
-import { supabase } from "../../../supabase";
-
 import ForgotPageView from "./view";
+import { supabase } from "../../../supabase";
+import { Platform } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const createSessionFromUrl = async(url) => {
+const createSessionFromUrl = async (url) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
   if (errorCode) throw new Error(errorCode);
   const { access_token, refresh_token } = params;
@@ -39,7 +37,7 @@ export default function ForgotPage(props) {
     setIsEnabled(true);
   }, []);
 
-  const passwordRecovery = async(email) => {
+  const passwordRecovery = async (email) => {
     setIsEnabled(false);
 
     // const resetPasswordURL = Linking.createURL("account/password/");

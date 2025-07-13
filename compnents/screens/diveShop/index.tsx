@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-
+import DiveShopScreenView from "./diveShop";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
@@ -9,8 +9,6 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import { DiveShop } from "../../../entities/diveShop";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-
-import DiveShopScreenView from "./diveShop";
 
 
 type DiveShopProps = {
@@ -40,7 +38,7 @@ export default function DiveShopScreen({
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   
-  const getItineraries = async(IdNum: number) => {
+  const getItineraries = async (IdNum: number) => {
     try {
       const itins = await itineraries(IdNum);
       setItineraryList(itins);
@@ -62,19 +60,19 @@ export default function DiveShopScreen({
   }, [levelOneScreen]);
 
 
-  const handleMapFlip = async(sites: number[]) => {
+  const handleMapFlip = async (sites: number[]) => {
     const coords = await useMapFlip(
-      sites,
-      setSitesArray,
-    ) 
-    setMapConfig(2, selectedShop.id)
-    mapRef.animateCamera({ center: {latitude: coords.moveLat, longitude: coords.moveLng},
-      zoom: 12,
-    });
-    closeParallax(1)
-  };
+       sites,
+       setSitesArray,
+     ) 
+     setMapConfig(2, selectedShop.id)
+     mapRef.animateCamera({ center: {latitude: coords.moveLat, longitude: coords.moveLng},
+       zoom: 12,
+     });
+     closeParallax(1)
+   };
    
-  const handleEditButton = (itineraryInfo: ItineraryItem) => {
+   const handleEditButton = (itineraryInfo: ItineraryItem) => {
     setLevelOneScreen(false);
     setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen", {id: selectedShop.id});

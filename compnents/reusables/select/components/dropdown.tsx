@@ -1,8 +1,6 @@
-import React from "react";
-
-import { Values } from "..";
-
-import * as S from "./styles";
+import React from 'react';
+import { Values } from '..';
+import * as S from './styles';
 
 export type DropdownProps = {
   options: Values;

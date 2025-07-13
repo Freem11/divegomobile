@@ -1,9 +1,8 @@
-import styled from "styled-components/native";
-import { moderateScale } from "react-native-size-matters";
-import { Dimensions } from "react-native";
-
+import styled from 'styled-components/native';
+import { moderateScale } from 'react-native-size-matters';
 import { activeFonts, colors, fontSizes } from "../../../../styles";
-const { width } = Dimensions.get("window");
+import { Dimensions } from "react-native";
+const { width } = Dimensions.get('window');
 
 export const VerticalFlatlistContainer = styled.View`
   flex: 1;

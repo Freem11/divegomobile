@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { checkFileExists } from "./utils";
 
 /**
@@ -11,7 +10,7 @@ export function useFileExists(uri?: string | { uri: string } | null) {
   const [resolvedUri, setResolvedUri] = useState<string | null>(null);
 
   useEffect(() => {
-    const check = async() => {
+    const check = async () => {
       const result = await checkFileExists(uri);
       setIsExist(result.isExist);
       setResolvedUri(result.resolvedUri);

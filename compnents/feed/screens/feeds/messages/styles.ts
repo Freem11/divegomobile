@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-
 import { activeFonts, colors, fontSizes } from "../../../../styles";
 
 export const Card = styled.View<{ bg?: string }>`

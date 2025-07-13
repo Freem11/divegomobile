@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
 import { Dimensions, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-
 import {
   colors,
   fontSizes,
@@ -48,7 +47,7 @@ export const Label = styled.Text`
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${Platform.OS === "ios" ? "15%" : "2%"};
+  margin-top: ${Platform.OS === 'ios' ? '15%' : '2%'};
   padding-horizontal: 7%;
 `;
 

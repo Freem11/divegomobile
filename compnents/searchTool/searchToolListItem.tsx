@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-
 import * as S from "./styles";
 
 export default function SearchToolListItem({ name, soureImage, handleMapOptionSelected, handleDiveSiteOptionSelected }) {
@@ -19,15 +18,17 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
 
   return (
 
-    <S.SearchResultContainer>
+      <S.SearchResultContainer>
       <View style={{ paddingLeft: moderateScale(8), justifyContent: "center" }}>
         <TouchableOpacity onPress={onPressItem}>
           <S.SearchCard>
             <S.CardIconContainer>
               <S.CardIcon
-                source={soureImage === "anchor"
-                  ? require("../png/mapIcons/AnchorBlueA.png")
-                  : require("../png/compass.png")}
+                source={
+                  soureImage === "anchor"
+                    ? require("../png/mapIcons/AnchorBlueA.png")
+                    : require("../png/compass.png")
+                }
               />
             </S.CardIconContainer>
 

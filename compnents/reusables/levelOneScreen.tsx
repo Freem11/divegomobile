@@ -5,13 +5,12 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-
-import { useActiveScreenStore } from "../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
+import { useActiveScreenStore } from '../../store/useActiveScreenStore';
+import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
-import DiveSiteParallax from "../screens/diveSite/diveSiteParallax";
-import DiveShopParallax from "../screens/diveShop/diveShopParallax";
-import Settings from "../screens/settings";
+import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
+import DiveShopParallax from '../screens/diveShop/diveShopParallax';
+import Settings from '../screens/settings';
 import ShopListParallax from "../screens/shopList/shopListParallax";
 
 

@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, Keyboard, Platform, ScrollView, View } from "react-native";
-import { moderateScale } from "react-native-size-matters";
-
-import BottomMenu from "../bottomMenu";
-
 import * as S from "./styles";
+import BottomMenu from "../bottomMenu";
+import { moderateScale } from "react-native-size-matters";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -26,10 +24,10 @@ const Screens = React.forwardRef<ScrollView, ScreensProps>(({ children }, ref) =
     keyboardShouldPersistTaps="handled"
     contentContainerStyle={{  
       height:
-      Platform.OS === "ios"
+      Platform.OS === 'ios'
         ? windowHeight - moderateScale(85)
         : windowHeight - moderateScale(75) 
-    }}
+      }}
   >
     {children.map((child, index) => (
       <S.PageContent key={index}>
@@ -41,13 +39,13 @@ const Screens = React.forwardRef<ScrollView, ScreensProps>(({ children }, ref) =
 
 const Buttons: React.FC<ButtonsProps & { onPress?: (index: number) => void }> = ({ children, onPress }) => (
   <BottomMenu>
-    {children.map((button, index) => (
-      <React.Fragment key={index}>
-        {React.cloneElement(button, {
-          onPress: () => onPress(index),
-        })}
-      </React.Fragment>
-    ))}
+  {children.map((button, index) => (
+  <React.Fragment key={index}>
+    {React.cloneElement(button, {
+      onPress: () => onPress(index),
+    })}
+  </React.Fragment>
+))}
   </BottomMenu>
 );
 export type PaginatorProps = {
@@ -73,7 +71,7 @@ const Paginator: React.FC<PaginatorProps> & {
   };
   const scrollViewRef = useRef(null);
 
-  useEffect(() => {
+ useEffect(() => {
     setTimeout(() => {
       scrollViewRef.current?.scrollTo({ x: (defaultPage || 0) * S.windowWidth, animated: true });
     }, 0.01);
@@ -84,16 +82,16 @@ const Paginator: React.FC<PaginatorProps> & {
     <S.Wrapper>
       {/* Screens */}
       <View style={{height: Platform.OS === "ios" ? windowHeight-moderateScale(85) : windowHeight-moderateScale(-25)}}>
-        {screens && React.cloneElement(screens as React.ReactElement, {
-          ref: scrollViewRef,
-        })}
+      {screens && React.cloneElement(screens as React.ReactElement, {
+        ref: scrollViewRef,
+      })}
       </View>
       {/* Buttons */}
       <View style={{height: Platform.OS === "ios" ? moderateScale(85): moderateScale(15)}}>
-        {buttons && React.cloneElement(buttons as React.ReactElement, {
-          onPress,
-        })}
-      </View>
+      {buttons && React.cloneElement(buttons as React.ReactElement, {
+        onPress,
+      })}
+       </View>
     </S.Wrapper>
   );
 }

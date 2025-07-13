@@ -1,10 +1,9 @@
-import styled from "styled-components/native";
-import { moderateScale } from "react-native-size-matters";
-
+import styled from 'styled-components/native';
+import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
   fontSizes,
-} from "../../../styles";
+} from '../../../styles';
 
 //DropDown
 
@@ -43,7 +42,7 @@ export const ItemWrapper = styled.View`
 export const ItemButton = styled.TouchableOpacity<{ selected: boolean }>`
   padding: 10px;
   border-radius: 4px;
-  background-color: ${({ selected }) => (selected ? "#cce5ff" : "#eee")};
+  background-color: ${({ selected }) => (selected ? '#cce5ff' : '#eee')};
 `;
 
 export const ItemText = styled.Text`

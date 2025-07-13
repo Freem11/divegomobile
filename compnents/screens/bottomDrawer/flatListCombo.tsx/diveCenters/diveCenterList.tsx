@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { FlatList, NativeViewGestureHandler } from "react-native-gesture-handler";
-
-import Card from "../../card";
-import { useMapStore } from "../../../../googleMap/useMapStore";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { FlatList, NativeViewGestureHandler } from 'react-native-gesture-handler';
+import Card from '../../card';
+import { useMapStore } from '../../../../googleMap/useMapStore';
+import * as S from './styles';
 import { getDiveShops } from "../../../../../supabaseCalls/shopsSupabaseCalls";
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
-
-import * as S from "./styles";
 
 export default function DiveCenterList({ horizontalGestureRef }) {
   
@@ -18,9 +16,9 @@ export default function DiveCenterList({ horizontalGestureRef }) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
-  const getDiveCenterData = async() => {
+  const getDiveCenterData = async () => {
     if (boundaries) {
-      const diveCenterData = await getDiveShops(boundaries);
+       let diveCenterData = await getDiveShops(boundaries);
 
       setDiveCenters(diveCenterData);
     }
@@ -48,7 +46,7 @@ export default function DiveCenterList({ horizontalGestureRef }) {
           renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={item.diveShopProfilePhoto} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
+           keyboardShouldPersistTaps="always"
         />
       </NativeViewGestureHandler>
     </S.VerticalFlatlistContainer>

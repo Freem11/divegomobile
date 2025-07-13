@@ -1,7 +1,6 @@
-import styled from "styled-components/native";
-import { moderateScale } from "react-native-size-matters";
+import styled from 'styled-components/native';
+import { moderateScale } from 'react-native-size-matters';
 import { LinearGradient } from "expo-linear-gradient";
-
 import { activeFonts, colors, fontSizes } from "../../../styles";
 
 export const ImageHousing = styled.View`
@@ -13,7 +12,7 @@ export const ImageHousing = styled.View`
 `;
 
 export const Overlay = styled(LinearGradient).attrs({
-  colors: ["rgba(0,0,0,0)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.65)"],
+  colors: ['rgba(0,0,0,0)', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.65)'],
   locations: [0.55, 0.75, 0.85],
   start: { x: 0.5, y: 0 },
   end: { x: 0.5, y: 1 },

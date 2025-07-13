@@ -1,10 +1,9 @@
-import  { useEffect, useState } from "react";
+import  { useEffect, useState } from 'react';
+import { HeatPoint } from '../../../../entities/heatPoint';
+import { heatPointToWeightedLocation } from '../../dto/heatPointToWeightedLocation';
 import {
   Heatmap,
 } from "react-native-maps";
-
-import { HeatPoint } from "../../../../entities/heatPoint";
-import { heatPointToWeightedLocation } from "../../dto/heatPointToWeightedLocation";
 type MarkerHeatPointProps = {
   // map:        google.maps.Map | null
   // options?:   google.maps.visualization.HeatmapLayerOptions
@@ -27,15 +26,13 @@ export function MarkerHeatPoint(props: MarkerHeatPointProps) {
     }
   }, [props.heatPoints])
 
-  if(heatPoints?.length > 0) {
-    return (
-      <Heatmap
-        points={heatPoints}
-        radius={30}
-        // radius={Platform.OS === "ios" ? 30 : 10}
-      />
-    )
-  } else {
-    return null
-  }
+if(heatPoints?.length > 0) {
+  return <Heatmap
+    points={heatPoints}
+    radius={30}
+    // radius={Platform.OS === "ios" ? 30 : 10}
+  />
+} else {
+  return null
+}
 }

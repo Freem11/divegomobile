@@ -1,4 +1,4 @@
-import { Option, Values } from "..";
+import { Option, Values } from '..';
 
 /**
  * Prepare select value to be passed outside

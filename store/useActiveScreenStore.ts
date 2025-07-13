@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
 export type ActiveSceen = {
-  screenName: string,
-  params?: {}
-}
+    screenName: string,
+    params?: {}
+  }
 
 type State = {
   activeScreen: ActiveSceen | null;

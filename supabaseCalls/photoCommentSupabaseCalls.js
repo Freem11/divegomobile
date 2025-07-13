@@ -1,16 +1,16 @@
 import { supabase } from "../supabase";
 
-export const insertPhotoComment = async(userId, photoId, comment, userID) => {
+export const insertPhotoComment = async (userId, photoId, comment, userID) => {
   const { data, error } = await supabase
-    .from("photoComments")
-    .insert([
-      {
-        userId: userId,
-        photoId: photoId,
-        content: comment,
-        replied_to: userID
-      },
-    ]);
+  .from("photoComments")
+  .insert([
+    {
+      userId: userId,
+      photoId: photoId,
+      content: comment,
+      replied_to: userID
+    },
+  ]);
 
   if (error) {
     console.log("couldn't do it 50,", error);
@@ -21,7 +21,7 @@ export const insertPhotoComment = async(userId, photoId, comment, userID) => {
   }
 };
 
-export const deletePhotoComment = async(id) => {
+export const deletePhotoComment = async (id) => {
   const { data, error } = await supabase
     .from("photoComments")
     .delete()
@@ -37,7 +37,7 @@ export const deletePhotoComment = async(id) => {
   // }
 };
 
-export const grabPhotoCommentsByPicId = async(picId) => {
+export const grabPhotoCommentsByPicId = async (picId) => {
   const { data, error } = await supabase.rpc("get_comments_with_user", {
     photoid: picId
   });
@@ -52,7 +52,7 @@ export const grabPhotoCommentsByPicId = async(picId) => {
   }
 };
 
-export const countPhotoCommentById = async(picId) => {
+export const countPhotoCommentById = async (picId) => {
   const { error, count } = await supabase
     .from("photoComments")
     .select("*", {count: "exact"})

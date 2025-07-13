@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import email from "react-native-email";
-
 import { DiveShop } from "../../../entities/diveShop";
+import DiveSiteScreenView from "./diveSite";
 import { Pagination } from "../../../entities/pagination";
 import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -10,8 +9,7 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-
-import DiveSiteScreenView from "./diveSite";
+import email from "react-native-email";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void
@@ -37,7 +35,7 @@ export default function DiveSiteScreen({
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   
-  const getPhotos = async(site, profile) => {
+  const getPhotos = async (site, profile) => {
 
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
    
@@ -58,7 +56,7 @@ export default function DiveSiteScreen({
   }, [selectedDiveSite, profile, bottomHitCount]);
   
   
-  const handleProfileMove = async(userName: string) => {
+  const handleProfileMove = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (profile.UserID === picOwnerAccount[0].UserID) {
@@ -82,10 +80,10 @@ export default function DiveSiteScreen({
   
   return (
     <DiveSiteScreenView
-      selectedDiveSite={selectedDiveSite}
-      diveSitePics={diveSitePics}
-      handleProfileMove={handleProfileMove}
-      handleEmailDS={handleEmailDS}
+        selectedDiveSite={selectedDiveSite}
+        diveSitePics={diveSitePics}
+        handleProfileMove={handleProfileMove}
+        handleEmailDS={handleEmailDS}
     />
   )
 

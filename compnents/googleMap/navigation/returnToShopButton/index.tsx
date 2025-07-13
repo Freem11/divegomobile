@@ -1,10 +1,9 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import { useContext } from "react";
-
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { getDiveShopById } from "../../../../supabaseCalls/shopsSupabaseCalls";
+import { useContext } from "react";
 import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 
@@ -29,7 +28,7 @@ export function ReturnToShopButton() {
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
-  const onPress = async() => {
+  const onPress = async () => {
     const diveCentreinfo = await getDiveShopById(shopId)
     setLevelOneScreen(true);
     setActiveScreen("DiveShopScreen", shopId);
@@ -45,10 +44,10 @@ export function ReturnToShopButton() {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.lowerButtonWrapper}>
-        <Text style={styles.lowerButtonText}>
-          {"Return to Shop"}
-        </Text>
-      </View>
+                  <Text style={styles.lowerButtonText}>
+                    {"Return to Shop"}
+                  </Text>
+                </View>
     </TouchableWithoutFeedback>
   );
 }

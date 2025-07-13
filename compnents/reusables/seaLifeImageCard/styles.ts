@@ -1,13 +1,12 @@
-import styled from "styled-components/native";
+import styled from 'styled-components/native';
 import { Dimensions } from "react-native";
-import { moderateScale } from "react-native-size-matters";
-import { LinearGradient } from "expo-linear-gradient";
-
+import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
   fontSizes,
   activeFonts
-} from "../../styles";
+} from '../../styles';
+import { LinearGradient } from "expo-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -25,7 +24,7 @@ export const BackgroundWrapper = styled.View`
 `;
 
 export const Overlay = styled(LinearGradient).attrs({
-  colors: ["rgba(0,0,0,0)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.75)"],
+  colors: ['rgba(0,0,0,0)', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.75)'],
   locations: [0.55, 0.75, 0.9],
   start: { x: 0.5, y: 0 },
   end: { x: 0.5, y: 1 },
@@ -63,7 +62,7 @@ export const TopContentWrapper = styled.View`
 
 export const LabelWrapper = styled.View`
   flex-direction: column;
-  width: ${() => (windowWidth > 600 ? "80%" : "75%")};
+  width: ${() => (windowWidth > 600 ? '80%' : '75%')};
 `;
 
 export const CounterWrapper = styled.View`

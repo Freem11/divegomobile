@@ -25,7 +25,7 @@ export const userCheck = async() => {
   return user
 };
 
-export const register = async(registerDetails) => {
+export const register = async (registerDetails) => {
   const { data, error } = await supabase.auth.signUp(
     {
       email: registerDetails.email,
@@ -47,7 +47,7 @@ export const register = async(registerDetails) => {
   }
 };
 
-export const signInStandard = async(loginDetails) => {
+export const signInStandard = async (loginDetails) => {
   console.log(loginDetails)
   const { data, error } = await supabase.auth.signInWithPassword({
     email: loginDetails.email,
@@ -88,9 +88,9 @@ export const signInStandard = async(loginDetails) => {
 
 // };
 
-export const signInGoogle = async() => {
+export const signInGoogle = async () => {
   const { user, session, error } = await supabase.auth.signIn({
-    provider: "google"
+    provider: 'google'
   });
 
   console.log(user, session, error)
@@ -104,7 +104,7 @@ export const signInGoogle = async() => {
   }
 };
 
-export const signOut = async() => {
+export const signOut = async () => {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
@@ -112,7 +112,7 @@ export const signOut = async() => {
   }
 };
 
-export const userDelete = async(userIdValue) => {
+export const userDelete = async (userIdValue) => {
 
   const { data, error } = await supabase.rpc("delete_user", {"userid": userIdValue})
 
@@ -122,6 +122,6 @@ export const userDelete = async(userIdValue) => {
   }
 
   if (data) {
-    console.log("user was deleted")
+     console.log("user was deleted")
   }
-}; 
+  }; 

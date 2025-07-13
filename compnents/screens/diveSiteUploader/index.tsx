@@ -1,14 +1,11 @@
 import React, { useContext } from "react";
 import { Keyboard } from "react-native";
-
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabaseCalls";
+import DiveSiteUploaderView from './view';
 import { useMapStore } from "../../googleMap/useMapStore";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-
-import DiveSiteUploaderView from "./view";
 import { Form } from "./form";
-
+import { UserProfileContext } from "../../contexts/userProfileContext";
 
 type SiteSubmitterProps = {
   closeParallax?: (mapConfig: number) => void
@@ -27,7 +24,7 @@ export default function DiveSiteUploader({
   const draggablePoint = useMapStore((state) => state.draggablePoint);
   const deviceLocation = null//todo
 
-  const onSubmit = async(formData: Required<Form>) => {
+  const onSubmit = async (formData: Required<Form>) => {
     const { error } = await insertDiveSiteWaits({
       name: formData.Site,
       lat: formData.Latitude,
@@ -36,7 +33,7 @@ export default function DiveSiteUploader({
     }); 
   };
 
-  const getCurrentLocation = async() => {
+  const getCurrentLocation = async () => {
     Keyboard.dismiss();
     try {
       const location = await getCurrentCoordinates();

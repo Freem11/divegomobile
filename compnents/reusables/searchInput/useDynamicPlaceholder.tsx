@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Animated } from "react-native";
+import { useEffect, useRef, useState } from 'react';
+import { Animated } from 'react-native';
 
 export const useRotatingPlaceholder = (terms, interval = 2500) => {
   const [index, setIndex] = useState(0);

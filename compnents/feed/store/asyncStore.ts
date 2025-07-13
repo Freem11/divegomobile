@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { FeedItem } from "./types";
 
 const FAILED_UPLOADS_KEY = "FAILED_UPLOADS";
@@ -25,7 +24,7 @@ export async function getFailedUploads(): Promise<FeedItem[]> {
   }
 }
 
-export const removeFailedUpload = async(id: string) => {
+export const removeFailedUpload = async (id: string) => {
   const json = await AsyncStorage.getItem(FAILED_UPLOADS_KEY);
   if (!json) return;
 

@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Marker } from "react-native-maps";
-
 import image from "../../../png/mapIcons/DiveCentre60x60.png";
 import { Coordinates } from "../../../../entities/coordinates";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
@@ -25,7 +24,6 @@ export function MarkerDiveShop(props: MarkerDiveShopProps) {
       coordinate={props.coordinate}
       image={image}
       onPress={handleScreen}
-    >
-    </Marker>
+    ></Marker>
   );
 }

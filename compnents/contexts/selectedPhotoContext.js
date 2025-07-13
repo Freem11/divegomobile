@@ -1,15 +1,15 @@
-import { createContext, useState } from "react";
+import { createContext, useState } from 'react';
 
-export const SelectedPhotoContext = createContext("");
+export const SelectedPhotoContext = createContext('');
 
 const SelectedPhotoContextProvider = ({children}) => {
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  return (
-    <SelectedPhotoContext.Provider value={{ selectedPhoto, setSelectedPhoto }}>
-      {children}
-    </SelectedPhotoContext.Provider>
-  )
+    return (
+        <SelectedPhotoContext.Provider value={{ selectedPhoto, setSelectedPhoto }}>
+            {children}
+        </SelectedPhotoContext.Provider>
+    )
 }
 
 export default SelectedPhotoContextProvider;

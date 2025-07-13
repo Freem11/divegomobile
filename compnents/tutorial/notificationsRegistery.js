@@ -1,14 +1,13 @@
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { Alert, Linking } from "react-native";
-
 import {
   grabProfileById,
   updatePushToken,
-} from "../../supabaseCalls/accountSupabaseCalls";
+} from '../../supabaseCalls/accountSupabaseCalls';
 import { i18n } from "../../i18n";
 
-export const registerForPushNotificationsAsync = async(activeSession, runAlert) => {
+export const registerForPushNotificationsAsync = async (activeSession, runAlert) => {
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;

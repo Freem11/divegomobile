@@ -17,7 +17,7 @@ export default function ImageCasherDynamic(props) {
   const fileName = photoFile?.split("/").pop();
   const cacheDir = FileSystem.cacheDirectory + fileName;
   const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
-  const fallbackUri = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/MantaWhite.jpg";
+  const fallbackUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/MantaWhite.jpg`;
 
   const [picUri, setPicUri] = useState(null);
   const [picHeight, setPicHeight] = useState(0);
@@ -108,10 +108,10 @@ export default function ImageCasherDynamic(props) {
 
   return (
     // <TouchableOpacity key={id} onPress={() => togglePhotoBoxModal(picUri)}>
-    <Image
-      source={{ uri: picUri }}
-      style={{ ...style, width: "100%", aspectRatio: aspectRatio }}
-    />
+      <Image
+        source={{ uri: picUri }}
+        style={{ ...style, width: '100%', aspectRatio: aspectRatio }}
+      />
     // </TouchableOpacity>
   );
 }

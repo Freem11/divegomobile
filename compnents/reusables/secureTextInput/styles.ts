@@ -1,11 +1,10 @@
-import styled from "styled-components/native";
-import { moderateScale } from "react-native-size-matters";
-
+import styled from 'styled-components/native';
+import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
   fontSizes,
   activeFonts,
-} from "../../styles";
+} from '../../styles';
 
 export const TextInputWrapper = styled.View`
   height: ${moderateScale(30)}px;

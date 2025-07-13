@@ -1,8 +1,7 @@
 import styled from "styled-components/native";
 import { Dimensions, Platform } from "react-native";
-import { moderateScale } from "react-native-size-matters";
-
-import { colors } from "../../styles";;
+import { colors } from "../../styles";import { moderateScale } from "react-native-size-matters";
+;
 
 export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;

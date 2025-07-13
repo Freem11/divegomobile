@@ -7,17 +7,17 @@ type HeatPointFilter = {
   animal?: string[]
 };
 
-export const getHeatPoints = async(bubble: GPSBubble, filter?: HeatPointFilter) => {
+export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter) => {
   const builder = supabase
-    .from("heatPoints")
-    .select("lat,lng,weight")
-    .gte("lat", bubble.minLat)
-    .gte("lng", bubble.minLng)
-    .lte("lat", bubble.maxLat)
-    .lte("lng", bubble.maxLng);
+    .from('heatPoints')
+    .select('lat,lng,weight')
+    .gte('lat', bubble.minLat)
+    .gte('lng', bubble.minLng)
+    .lte('lat', bubble.maxLat)
+    .lte('lng', bubble.maxLng);
 
   if (filter?.animal?.length) {
-    builder.in("animal", filter.animal);
+    builder.in('animal', filter.animal);
   }
 
 
@@ -213,14 +213,14 @@ export const getHeatPoints = async(bubble: GPSBubble, filter?: HeatPointFilter) 
 // };
 
 /** @deprecated */
-export const getHeatPointsWithUser = async(values) => {
+export const getHeatPointsWithUser = async (values) => {
   const { data, error } = await supabase.rpc("get_heatpoints_with_user", {
     animals: values.animalMultiSelection,
     max_lat: values.maxLat,
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: "",
+    userid: '',
   });
 
   if (error) {
@@ -233,13 +233,13 @@ export const getHeatPointsWithUser = async(values) => {
   }
 };
 /** @deprecated */
-export const getHeatPointsWithUserEmpty = async(values) => {
+export const getHeatPointsWithUserEmpty = async (values) => {
   const { data, error } = await supabase.rpc("get_heatpoints_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: "",
+    userid: '',
   });
 
   if (error) {

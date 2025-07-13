@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-
+import * as S from "./styles";
 import { useFileExists } from "../../../store/useFileExists";
+import { useTranslation } from "react-i18next";
 import { showError, showSuccess, showWarning } from "../../../../toast";
 import { imageUpload } from "../../../../screens/imageUploadHelpers";
 import { insertPhotoWaits } from "../../../../../supabaseCalls/photoWaitSupabaseCalls";
@@ -11,8 +11,6 @@ import { FailedUploadFeedItem, FeedItem, RETRY_TYPE } from "../../../store/types
 import { checkNetworkStatus } from "../../../store/utils";
 import ButtonIcon from "../../../../reusables/buttonIcon";
 import { colors } from "../../../../styles";
-
-import * as S from "./styles";
 
 export type FeedItemComponentProps = {
   item: FeedItem;
@@ -27,7 +25,7 @@ export default function FeedItemFailedUpload({
   const { isExist, resolvedUri } = useFileExists(item.imageUri);
   const { t } = useTranslation();
 
-  const tryUpload = async(uri: string) => {
+  const tryUpload = async (uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
@@ -36,7 +34,7 @@ export default function FeedItemFailedUpload({
     }
   };
 
-  const uploadPicture = async() => {
+  const uploadPicture = async () => {
     if (!isExist) {
       showError(t("PicUploader.retryFailedUpload"));
       setIsUploading(false);
@@ -78,7 +76,7 @@ export default function FeedItemFailedUpload({
     onRemove(item.id);
   };
 
-  const handleOnRetry = async() => {
+  const handleOnRetry = async () => {
     setIsUploading(true);
     const { isStableConnection } = await checkNetworkStatus();
     if (!isStableConnection) {
@@ -88,7 +86,7 @@ export default function FeedItemFailedUpload({
     }
     try {
       switch (item.retryMetaData.payloadType) {
-        case RETRY_TYPE.PIC_UPLOADER:
+      case RETRY_TYPE.PIC_UPLOADER:
           await uploadPicture();
           break;  
         default:

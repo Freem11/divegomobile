@@ -1,20 +1,19 @@
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { Alert, Linking } from "react-native";
-
 import { i18n } from "../../i18n";
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME";
-const foregroundSubscription = null;
+let foregroundSubscription = null;
 
-TaskManager.defineTask(LOCATION_TASK_NAME, async({ data, error }) => {
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
   if (error) {
     console.error("error", error);
     return;
   }
 });
 
-export const registerForForegroundLocationTrackingsAsync = async() => {
+export const registerForForegroundLocationTrackingsAsync = async () => {
   try {
     const forground = await Location.requestForegroundPermissionsAsync();
     return forground.status;
@@ -23,7 +22,7 @@ export const registerForForegroundLocationTrackingsAsync = async() => {
   }
 };
 
-const requestHighAccuracy = async() => {
+const requestHighAccuracy = async () => {
   try {
     const accurate = await Location.enableNetworkProviderAsync();
     return accurate.status;
@@ -32,7 +31,7 @@ const requestHighAccuracy = async() => {
   }
 };
 
-export const getCurrentCoordinates = async() => {
+export const getCurrentCoordinates = async () => {
   const { granted } = await Location.getForegroundPermissionsAsync();
 
   if (!granted) {

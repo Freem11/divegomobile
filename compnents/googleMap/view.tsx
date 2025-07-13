@@ -1,33 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import MapView, { Camera, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import Supercluster from "supercluster";
-import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
-import { use } from "i18next";
-
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
-import image from "../png/mapIcons/AnchorBlue.png";
-import { Coordinates } from "../../entities/coordinates";
-import { HeatPoint } from "../../entities/heatPoint";
-import { primaryButtonAlt } from "../styles";
-import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
-
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
 // import image from "../../../png/mapIcons/AnchorBlue.png";
-
+import image from "../png/mapIcons/AnchorBlue.png";
+import Supercluster from "supercluster";
+import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
 import { ClusterProperty, PointFeatureCategory } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
 import { MarkerDiveSiteCluster } from "./marker/markerDiveSiteCluster";
 import { MarkerDraggable } from "./marker/markerDraggable";
+import { Coordinates } from "../../entities/coordinates";
+import { HeatPoint } from "../../entities/heatPoint";
 import { MarkerHeatPoint } from "./marker/markerHeatPoint";
+import { primaryButtonAlt } from "../styles";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
-
-
+import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
+import { use } from "i18next";
 
 type MapViewProps = {
   // googleMapApiKey:    string
@@ -68,17 +63,17 @@ export default function GoogleMapView(props: MapViewProps) {
   });
 
 
-  const getCurrentLocation = async() => {
+  const getCurrentLocation = async () => {
     try {
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
-        setInitialRegion({
-          ...initialRegion, 
-          latitude: photoLocation[0].latitude, 
-          longitude: photoLocation[0].longitude,
-          latitudeDelta: 2,
-          longitudeDelta: 0.4
-        })
+      setInitialRegion({
+        ...initialRegion, 
+        latitude: photoLocation[0].latitude, 
+        longitude: photoLocation[0].longitude,
+        latitudeDelta: 2,
+        longitudeDelta: 0.4
+      })
       }
     } catch (e) {
       console.log({ title: "Error65", message: e.message });
@@ -87,7 +82,7 @@ export default function GoogleMapView(props: MapViewProps) {
 
   const [map, setMap] = useState<MapView | null>(null);
 
-  const onMapLoad = async(map: MapView) => {
+  const onMapLoad = async (map: MapView) => {
     setMap(map);
     if (typeof props.onLoad === "function") {
       props.onLoad(map);
@@ -107,7 +102,7 @@ export default function GoogleMapView(props: MapViewProps) {
   },[])
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       if (!map) {
         return;
       }
@@ -207,21 +202,21 @@ export default function GoogleMapView(props: MapViewProps) {
         <MarkerDraggable  />
       )}
 
-      {props.mapConfig === 1 && (
-        <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+{props.mapConfig === 1 && 
+        <View style={{ position: "absolute", bottom: '5%', alignSelf: 'center' }}>
           <ReturnToSiteSubmitterButton />
         </View>
-      )}
-      {props.mapConfig === 2 && (
-        <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+        }
+      {props.mapConfig === 2 &&
+        <View style={{ position: "absolute", bottom: '5%', alignSelf: 'center' }}>
           <ReturnToShopButton />
         </View>
-      )}
-      {props.mapConfig === 3 && (
-        <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+         }
+      {props.mapConfig === 3 && 
+        <View style={{ position: "absolute", bottom: '5%', alignSelf: 'center' }}>
           <ReturnToCreateTripButton />
         </View>
-      )}
+       }
 
     </View>
   );

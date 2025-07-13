@@ -1,5 +1,4 @@
 import Supercluster from "supercluster";
-
 import { ClusterProperty, PointFeatureCategory } from "../types";
 import { DiveShop } from "../../../entities/diveShop";
 

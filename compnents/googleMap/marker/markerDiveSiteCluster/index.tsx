@@ -1,6 +1,5 @@
 import React from "react";
 import { Marker } from "react-native-maps";
-
 import icon from "../../../png/mapIcons/AnchorCluster.png";
 import { useMapStore } from "../../useMapStore";
 import { Coordinates } from "../../../../entities/coordinates";
@@ -25,7 +24,6 @@ export function MarkerDiveSiteCluster(props: MarkerDiveSiteClusterProps) {
           zoom: expansionZoom,
         });
       }}
-    >
-    </Marker>
+    ></Marker>
   );
 }

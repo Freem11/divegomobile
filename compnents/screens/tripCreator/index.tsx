@@ -1,17 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
-import moment from "moment";
-
+import { Form } from "./form";
+import TripCreatorPageView from "./tripCreator";
 import { getItineraryDiveSiteByIdArray, insertItinerary, insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
+import moment from "moment";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ItineraryItem } from "../../../entities/itineraryItem";
-
-import TripCreatorPageView from "./tripCreator";
-import { Form } from "./form";
 
 
 type TripCreatorModalProps = {
@@ -32,7 +30,7 @@ export default function TripCreatorPage({
   const { editMode } = useContext(EditModeContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const getTripDiveSites = async(siteIds: number[]) => {
+  const getTripDiveSites = async (siteIds: number[]) => {
     try {
       const success = await getItineraryDiveSiteByIdArray(siteIds);
       if (success) {
@@ -53,14 +51,14 @@ export default function TripCreatorPage({
     getTripDiveSites(sitesArray);
   }, [sitesArray]);
 
-  const onSubmit = async(formData: Required<Form>) => {
+  const onSubmit = async (formData: Required<Form>) => {
     editMode
-      ? await insertItineraryRequest(formData, "Edit")
-      : await insertItinerary(formData);
+    ? await insertItineraryRequest(formData, "Edit")
+    : await insertItinerary(formData);
     setSitesArray([]);
   };
   
-  const removeFromSitesArray = async(siteIdNo: number, siteList: number[]) => {
+  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
 
     const index = siteList.indexOf(siteIdNo);
     if (index > -1) {
@@ -81,26 +79,26 @@ export default function TripCreatorPage({
   }, [levelTwoScreen]);
  
 
-  //date picker stuff
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [dateType, setDateType] = useState("");
+    //date picker stuff
+    const [datePickerVisible, setDatePickerVisible] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [dateType, setDateType] = useState("");
     
-  const showDatePicker = (value: string) => {
-    setDateType(value);
-    Keyboard.dismiss();
-    setDatePickerVisible(true);
-  };
+    const showDatePicker = (value: string) => {
+      setDateType(value);
+      Keyboard.dismiss();
+      setDatePickerVisible(true);
+    };
   
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
+    const hideDatePicker = () => {
+      setDatePickerVisible(false);
+    };
   
-  const handleDatePickerConfirm = () => {
-    const formattedDate = moment(date).format("YYYY-MM-DD");
-    setFormValues({ ...formValues, [dateType]: formattedDate });
-    hideDatePicker();
-  };
+    const handleDatePickerConfirm = () => {
+      let formattedDate = moment(date).format("YYYY-MM-DD");
+      setFormValues({ ...formValues, [dateType]: formattedDate });
+      hideDatePicker();
+    };
 
   return (
     <TripCreatorPageView

@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { FlatList, NativeViewGestureHandler } from "react-native-gesture-handler";
-
-import Card from "../../card";
-import { useMapStore } from "../../../../googleMap/useMapStore";
-import { getDiveSitesWithUser } from "../../../../../supabaseCalls/diveSiteSupabaseCalls";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { FlatList, NativeViewGestureHandler } from 'react-native-gesture-handler';
+import Card from '../../card';
+import { useMapStore } from '../../../../googleMap/useMapStore';
+import * as S from './styles';
+import { getDiveSitesWithUser } from '../../../../../supabaseCalls/diveSiteSupabaseCalls';
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
-
-import * as S from "./styles";
 
 export default function DiveSiteList({ horizontalGestureRef }) {
 
@@ -18,9 +16,9 @@ export default function DiveSiteList({ horizontalGestureRef }) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
-  const getDiveSiteData = async() => {
+  const getDiveSiteData = async () => {
     if (boundaries) {
-      const diveSiteData = await getDiveSitesWithUser({
+       let diveSiteData = await getDiveSitesWithUser({
         minLat: boundaries.minLat,
         maxLat: boundaries.maxLat,
         minLng: boundaries.minLng,
@@ -53,7 +51,7 @@ export default function DiveSiteList({ horizontalGestureRef }) {
           renderItem={({ item }) => <Card id={item.id} name={item.name} photoPath={item.divesiteprofilephoto} subData={item.times_seen} onPressHandler={() => handleDiveSiteSelection(item.id)}  />}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
+           keyboardShouldPersistTaps="always"
         />
       </NativeViewGestureHandler>
     </S.VerticalFlatlistContainer>

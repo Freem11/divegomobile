@@ -5,8 +5,8 @@ import {
   withSpring,
 } from "react-native-reanimated";
 import { moderateScale, s } from "react-native-size-matters";
-import email from "react-native-email";
 
+import email from "react-native-email";
 import { EmailView } from "./view";
 
 export const EmailFeedback = () => {

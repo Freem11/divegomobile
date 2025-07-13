@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
-import { Keyboard } from "react-native";
-
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import partnerRayImage from "../../png/PartnerRay.jpg";
+import { Keyboard } from "react-native";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { ScreenReturn } from "../../googleMap/types";
-
 import PartnerAccountRequestPage from ".";
+import { ScreenReturn } from "../../googleMap/types";
 
 
 export default function PartnerRequestParallax() {
@@ -16,7 +14,7 @@ export default function PartnerRequestParallax() {
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const onClose = async() => {
+  const onClose = async () => {
     setLevelTwoScreen(false);
     setDraggableConfig(null)
   };

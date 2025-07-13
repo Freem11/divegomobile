@@ -1,9 +1,8 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import { useContext } from "react";
-
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
+import { useContext } from "react";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 
@@ -28,7 +27,7 @@ export function ReturnToSiteSubmitterButton() {
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const onPress = async() => {
+  const onPress = async () => {
     const camera = await mapRef.getCamera();
     if(screenId === 1){
       setActiveScreen("DiveSiteUploadScreen");

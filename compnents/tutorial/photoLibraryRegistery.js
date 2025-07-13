@@ -1,9 +1,8 @@
 import * as ImagePicker from "expo-image-picker";
 import { Alert, Linking } from "react-native";
-
 import { i18n } from "../../i18n";
 
-export const registerForPhotoLibraryAccessAsync = async(runAlert) => {
+export const registerForPhotoLibraryAccessAsync = async (runAlert) => {
 
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (status !== "granted" && runAlert === "yes") {

@@ -1,15 +1,15 @@
-import { createContext, useState } from "react";
+import { createContext, useState } from 'react';
 
-export const ActiveTutorialIDContext = createContext("");
+export const ActiveTutorialIDContext = createContext('');
 
 const ActiveTutorialIDContextProvider = ({children}) => {
-  const [activeTutorialID, setActiveTutorialID] = useState(null);
+    const [activeTutorialID, setActiveTutorialID] = useState(null);
 
-  return (
-    <ActiveTutorialIDContext.Provider value={{ activeTutorialID, setActiveTutorialID }}>
-      {children}
-    </ActiveTutorialIDContext.Provider>
-  )
+    return (
+        <ActiveTutorialIDContext.Provider value={{ activeTutorialID, setActiveTutorialID }}>
+            {children}
+        </ActiveTutorialIDContext.Provider>
+    )
 }
 
 export default ActiveTutorialIDContextProvider;

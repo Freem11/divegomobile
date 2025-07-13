@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-
+import ShopListPageView from "./shopList";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { getShopByUserID } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { DiveShop } from "../../../entities/diveShop";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-
-import ShopListPageView from "./shopList";
 
 export default function ShopListPage() {
 
@@ -23,14 +21,14 @@ export default function ShopListPage() {
     }
   }, []);
 
-  const getShops = async(id: string) => {
+  const getShops = async (id: string) => {
     try {
       const shops = await getShopByUserID(id);
       if (shops) {
         setListOfShops(shops);
       }
     } catch (e) {
-      console.log({ title: "Error", message: (e as Error).message });
+      console.log({ title: 'Error', message: (e as Error).message });
     }
   };
 

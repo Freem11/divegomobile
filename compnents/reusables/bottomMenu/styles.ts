@@ -1,8 +1,7 @@
-import styled from "styled-components/native";
-import { moderateScale } from "react-native-size-matters";
+import styled from 'styled-components/native';
+import { moderateScale } from 'react-native-size-matters';
+import { colors } from '../../styles';
 import { Platform } from "react-native";
-
-import { colors } from "../../styles";
 
 export const MenuContainer = styled.View`
   position: relative;

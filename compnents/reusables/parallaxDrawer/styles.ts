@@ -1,17 +1,16 @@
-import styled from "styled-components/native";
-import {StyleSheet, Animated, Dimensions, ImageBackground, Platform, SafeAreaView } from "react-native";
-import { moderateScale } from "react-native-size-matters";
+import styled from 'styled-components/native';
+import {StyleSheet, Animated, Dimensions, ImageBackground, Platform, SafeAreaView } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
+import { colors } from '../../styles';
 import Svg from "react-native-svg";
 
-import { colors } from "../../styles";
-
-const windowHeight = Dimensions.get("screen").height;
+const windowHeight = Dimensions.get('screen').height;
 
 const HALF_HEIGHT = windowHeight / 2
 
 export const SafeArea = styled(SafeAreaView)`
   z-index: 20;
-  margin-top: ${Platform.OS === "ios" ? 0 : "10%"};
+  margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
   background-color: ${colors.neutralGrey};
 `;
 
@@ -67,7 +66,7 @@ export const Content = styled.View`
   z-index: 3;
   padding-vertical: 5%;
   align-items: center;
-  padding-bottom: ${Platform.OS === "ios" ? moderateScale(50) : moderateScale(80)}px;
+  padding-bottom: ${Platform.OS === 'ios' ? moderateScale(50) : moderateScale(80)}px;
 `;
 
 export const EmptyContainer = styled.View`
@@ -76,17 +75,17 @@ export const EmptyContainer = styled.View`
 
 export const styles = StyleSheet.create({
   drawer: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     zIndex: 2,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   safeArea: {
     zIndex: 20,
-    marginTop: Platform.OS === "ios" ? 0 : "10%",
-    flexDirection: "row",
-    alignItems: "center"
+    marginTop: Platform.OS === 'ios' ? 0 : '10%',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });

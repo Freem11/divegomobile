@@ -12,7 +12,6 @@ import {
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
-
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
@@ -58,43 +57,43 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const bottomHitCountRef = useSharedValue(bottomHitCount);
 
-  useEffect(() => {
-    bottomHitCountRef.value = bottomHitCount;
-  }, [bottomHitCount]);
+useEffect(() => {
+  bottomHitCountRef.value = bottomHitCount;
+}, [bottomHitCount]);
 
 
-  const MIN_SHRINK = moderateScale(150); 
-  const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
+const MIN_SHRINK = moderateScale(150); 
+const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
 
-  useAnimatedReaction(
-    () => ({
-      height: contentHeight.value,
-      currentY: translateY.value,
-    }),
-    (newValue, prevValue) => {
-      if (!prevValue) return;
+useAnimatedReaction(
+  () => ({
+    height: contentHeight.value,
+    currentY: translateY.value,
+  }),
+  (newValue, prevValue) => {
+    if (!prevValue) return;
 
-      const { height: newHeight, currentY } = newValue;
-      const { height: prevHeight } = prevValue;
+    const { height: newHeight, currentY } = newValue;
+    const { height: prevHeight } = prevValue;
 
-      const shrinkAmount = prevHeight - newHeight;
-      const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
+    const shrinkAmount = prevHeight - newHeight;
+    const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
 
-      if(contentShrankSignificantly){
-        lastAdjustedHeightRef.value = newHeight;
+    if(contentShrankSignificantly){
+      lastAdjustedHeightRef.value = newHeight;
 
-        const minTranslateY = Math.min(
-          SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT,
-          HALF_HEIGHT
-        );
+      const minTranslateY = Math.min(
+        SCREEN_HEIGHT - newHeight - TOP_SECTION_HEIGHT,
+        HALF_HEIGHT
+      );
   
-        if (currentY < minTranslateY) {
-          translateY.value = withTiming(minTranslateY, { duration: 300 });
-        } 
-      }
-
+      if (currentY < minTranslateY) {
+        translateY.value = withTiming(minTranslateY, { duration: 300 });
+      } 
     }
-  );
+
+  }
+);
 
   const handleDrawerHitBottom = () => {
     setBottomHitCount(prev => prev + 1);
@@ -188,7 +187,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       JSON.stringify(latestScreen.params || {}) === JSON.stringify(currentScreen.params || {});
   
     if (isSame) {
-      setActiveScreenFn("", {});
+      setActiveScreenFn('', {});
     } else if (latestScreen) {
       setActiveScreenFn(latestScreen.screenName, latestScreen.params);
     }

@@ -8,7 +8,7 @@ export class Pagination {
 
   static defaultIpp = 20;
 
-  constructor({ page: page = 0, sort: sort = "asc", ipp: ipp = Pagination.defaultIpp } = {}) {
+  constructor({ page: page = 0, sort: sort = 'asc', ipp: ipp = Pagination.defaultIpp } = {}) {
     this.page    = page;
     this.sort    = sort;
     this.ipp     = ipp;
@@ -29,7 +29,7 @@ export class Pagination {
   }
 
   next() {
-    console.log("CALLING NEXT");
+    console.log('CALLING NEXT');
     this.page++;
     return this;
   }

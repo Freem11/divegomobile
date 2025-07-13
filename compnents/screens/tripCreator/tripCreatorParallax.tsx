@@ -1,17 +1,15 @@
 import React, { useContext } from "react";
-import { Keyboard } from "react-native";
-import { useTranslation } from "react-i18next";
-
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
-import TripImage from "../../png/Trip.png"
+import TripImage from '../../png/Trip.png'
+import { Keyboard } from "react-native";
 import IconWithLabel from "../../reusables/iconWithLabal";
+import { useTranslation } from "react-i18next";
 import { useMapStore } from "../../googleMap/useMapStore";
-
 import TripCreatorPage from ".";
 
 
@@ -29,7 +27,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
   const { formValues, setFormValues } = useContext(TripDetailContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
  
-  const onClose = async() => {
+  const onClose = async () => {
     setEditMode(false);
     setSitesArray([]);
     setTripDiveSites([]);
@@ -58,13 +56,13 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
 
   const popoverConent = () => {
     return (
-      <>
-        <IconWithLabel 
-          label={t("TripCreator.cloneButton")}
-          iconName="vector-arrange-below"
-          buttonAction={() => cloneButtonPress()}
-        />
-      </>
+    <>
+    <IconWithLabel 
+    label={t('TripCreator.cloneButton')}
+    iconName="vector-arrange-below"
+    buttonAction={() => cloneButtonPress()}
+    />
+    </>
     )
   };
 

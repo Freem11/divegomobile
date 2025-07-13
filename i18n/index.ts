@@ -14,7 +14,7 @@ const resources = {
   },
 };
 
-export const initI18n = async() => {
+export const initI18n = async () => {
   const locales = getLocales();
   const deviceLang = locales?.[0]?.languageCode ?? "en";
   const selectedLanguage = deviceLang in resources ? deviceLang : "en";
@@ -27,7 +27,7 @@ export const initI18n = async() => {
   });
 };
 
-export const setLanguage = async(lang: string) => {
+export const setLanguage = async (lang: string) => {
   // function to set the selected language at some point.
   await i18n.changeLanguage(lang);
   // await AsyncStorage.setItem(LANG_KEY, lang);

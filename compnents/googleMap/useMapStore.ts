@@ -1,6 +1,5 @@
 import MapView, { Camera } from "react-native-maps";
 import { create } from "zustand";
-
 import { GPSBubble } from "../../entities/GPSBubble";
 import { Coordinates } from "../../entities/coordinates";
 

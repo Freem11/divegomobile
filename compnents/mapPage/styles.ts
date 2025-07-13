@@ -1,6 +1,5 @@
-import styled from "styled-components/native";
-import { moderateScale } from "react-native-size-matters";
-
+import styled from 'styled-components/native';
+import { moderateScale } from 'react-native-size-matters';
 import { activeFonts, buttonSizes, colors, fontSizes } from "../styles";
 
 export const Container = styled.View`

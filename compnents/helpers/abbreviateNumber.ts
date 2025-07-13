@@ -1,7 +1,7 @@
 export default function abbreviateNumber(number: number) {
   if (number < 1000) return number.toString(); // If the number is less than 1000, no abbreviation needed
 
-  const abbreviations = ["K", "M", "B", "T"]; // Array of abbreviations
+  const abbreviations = ['K', 'M', 'B', 'T']; // Array of abbreviations
   let abbreviationIndex = 0; // Start with the first abbreviation (K)
 
   while (number >= 1000 && abbreviationIndex < abbreviations.length - 1) {

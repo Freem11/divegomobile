@@ -1,9 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-
+import CreateAccountPageView from "./view";
 import { SessionContext } from "../../contexts/sessionContext";
 import { handleSignUpSubmit } from "../../helpers/loginHelpers";
-
-import CreateAccountPageView from "./view";
 
 export default function CreateAccountPage(props) {
   const { regFail, setRegFail, moveToLoginPage, moveToLandingPage } = props;
@@ -30,7 +28,8 @@ export default function CreateAccountPage(props) {
       secureTextEntry={secureTextEntry}
       setSecureTextEntry={setSecureTextEntry}
       handleSignUp={() =>
-        handleSignUpSubmit(formVals, setActiveSession, setRegFail)}
+        handleSignUpSubmit(formVals, setActiveSession, setRegFail)
+      }
     />
   );
 }

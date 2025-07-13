@@ -2,7 +2,7 @@ import { DiveSiteBasic } from "../entities/diveSite";
 import { GPSBubble } from "../entities/GPSBubble";
 import { supabase } from "../supabase";
 
-export const diveSites = async() => {
+export const diveSites = async () => {
   const { data, error } = await supabase.from("diveSites").select();
 
   if (error) {
@@ -15,7 +15,7 @@ export const diveSites = async() => {
   }
 };
 
-export const getDiveSitesBasic = async(
+export const getDiveSitesBasic = async (
   bubble: GPSBubble
 ): Promise<DiveSiteBasic[]> => {
   const { data, error } = await supabase
@@ -34,7 +34,7 @@ export const getDiveSitesBasic = async(
   return data;
 };
 
-export const getDiveSitesWithUser = async(values) => {
+export const getDiveSitesWithUser = async (values) => {
   const { data, error } = await supabase.rpc("get_divesites_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
@@ -54,7 +54,7 @@ export const getDiveSitesWithUser = async(values) => {
   }
 };
 
-export const getSiteNamesThatFit = async(value) => {
+export const getSiteNamesThatFit = async (value) => {
   if (value === "") {
     return [];
   }
@@ -74,7 +74,7 @@ export const getSiteNamesThatFit = async(value) => {
   }
 };
 
-export const insertDiveSite = async(values) => {
+export const insertDiveSite = async (values) => {
   const { data, error } = await supabase.from("diveSites").insert([
     {
       name: values.name,
@@ -94,7 +94,7 @@ export const insertDiveSite = async(values) => {
   }
 };
 
-export const getDiveSiteByName = async(value) => {
+export const getDiveSiteByName = async (value) => {
   const { data, error } = await supabase
     .from("diveSites")
     .select()
@@ -110,7 +110,7 @@ export const getDiveSiteByName = async(value) => {
   }
 };
 
-export const getDiveSiteWithUserName = async(values) => {
+export const getDiveSiteWithUserName = async (values) => {
   const { data, error } = await supabase.rpc(
     "get_single_divesite_info_with_username",
     {
@@ -129,9 +129,9 @@ export const getDiveSiteWithUserName = async(values) => {
   }
 };
 
-export const getDiveSitesByIDs = async(valueArray) => {
-  const Q1 = valueArray.substring(1, valueArray.length);
-  const Q2 = Q1.substring(Q1.length - 1, 0);
+export const getDiveSitesByIDs = async (valueArray) => {
+  let Q1 = valueArray.substring(1, valueArray.length);
+  let Q2 = Q1.substring(Q1.length - 1, 0);
 
   const { data, error } = await supabase
     .from("diveSites")
@@ -148,7 +148,7 @@ export const getDiveSitesByIDs = async(valueArray) => {
   }
 };
 
-export const getSingleDiveSiteByNameAndRegion = async(values) => {
+export const getSingleDiveSiteByNameAndRegion = async (values) => {
   const query = supabase.from("diveSites").select("*").eq("name", values.name);
 
   if (values.region === undefined) {
@@ -170,21 +170,21 @@ export const getSingleDiveSiteByNameAndRegion = async(values) => {
   }
 };
 
-export const updateDiveSite = async(values) => {
+export const updateDiveSite = async (values) => {
   const response = await supabase
     .from("diveSites")
     .update(values)
     .eq("id", values.id)
     .select();
 
-  if (response.error) {
-    console.log("couldn't do it dive site,", error);
-    return [];
-  }
-  return response;
+    if (response.error) {
+      console.log("couldn't do it dive site,", error);
+      return [];
+    }
+      return response;
 };
 
-export const getSingleDiveSite = async(lat, lng) => {
+export const getSingleDiveSite = async (lat, lng) => {
   const { data, error } = await supabase
     .from("diveSites")
     .select()
@@ -201,13 +201,13 @@ export const getSingleDiveSite = async(lat, lng) => {
   }
 };
 
-export const getDiveSiteById = async(id: string | number) => {
-  const { data, error } = await supabase.rpc("get_single_divesite_byid_info_with_username", {
+export const getDiveSiteById = async (id: string | number) => {
+  const { data, error } = await supabase.rpc('get_single_divesite_byid_info_with_username', {
     idnum: id,
   });
 
   if (error) {
-    console.log("couldn't do it 7,", error);
+    console.log('couldn\'t do it 7,', error);
     return [];
   }
 

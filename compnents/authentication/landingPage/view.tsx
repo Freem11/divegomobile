@@ -1,14 +1,12 @@
 import React from "react";
 import { Image, TouchableWithoutFeedback } from "react-native";
-import { useTranslation } from "react-i18next";
-
 import WavyHeader from "../../wavyHeader";
+import * as S from "./styles";
 import googleLogo from "../../png/loginIcons/google.png";
 import facebookLogo from "../../png/loginIcons/facebook.png";
 import appleLogo from "../../png/loginIcons/apple.png";
+import { useTranslation } from "react-i18next";
 import Button from "../../reusables/button";
-
-import * as S from "./styles";
 
 interface IProps {
   isSignedIn: boolean;
@@ -20,7 +18,7 @@ interface IProps {
   onApple: () => void;
 }
 
-export default function LandingPageView({
+export default function LandingPageView ({
   isSignedIn,
   appleAuthAvailable,
   onLogin,
@@ -40,19 +38,19 @@ export default function LandingPageView({
         <S.ButtonBox>
           <S.ButtonSpacer>
             <Button 
-              onPress={onLogin} 
-              alt={false} 
-              size="large"
-              title={t("Common.login")}
-            />
+                onPress={onLogin} 
+                alt={false} 
+                size='large'
+                title={t('Common.login')} 
+                />
           </S.ButtonSpacer>
           <S.ButtonSpacer>
             <Button 
-              onPress={onSignUp} 
-              alt={true} 
-              size="large"
-              title={t("Common.registerAccount")}
-            />
+                onPress={onSignUp} 
+                alt={true} 
+                size='large'
+                title={t("Common.registerAccount")} 
+                />
           </S.ButtonSpacer>
         </S.ButtonBox>
 

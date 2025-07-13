@@ -21,14 +21,12 @@ import {
   NativeViewGestureHandler,
 } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
-
 import {
   activeFonts,
   colors,
   fontSizes,
   buttonSizes,
 } from "../../styles";
-
 import HorizontalPager from "./flatListCombo.tsx";
 
 const windowWidth = Dimensions.get("window").width;

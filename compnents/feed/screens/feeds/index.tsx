@@ -8,19 +8,17 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { moderateScale } from "react-native-size-matters";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next";
-
 import { useFeedDataStore } from "../../store/useFeedDataStore";
+import { moderateScale } from "react-native-size-matters";
 import { activeFonts, colors } from "../../../styles";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useFeedScreenStore } from "../../store/useScreenStore";
-import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
-import ButtonIcon from "../../../reusables/buttonIcon";
-
 import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
+import { useTranslation } from "react-i18next";
+import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
+import ButtonIcon from "../../../reusables/buttonIcon";
 import * as S from "./styles";
 
 const windowHeight = Dimensions.get("window").height;
@@ -57,19 +55,19 @@ export default function FeedList() {
         <ButtonIcon 
           icon="chevron-left"
           onPress={() => closeScreen()}
-          size="small"
+          size='small'
           fillColor={colors.neutralGrey}
         />
         <ButtonIcon 
           icon="trash"
           onPress={() => clearFeedItems()}
-          size="small"
+          size='small'
           fillColor={colors.themeRed}
         />
       </View>
       
       {feedItems.length === 0 ? (
-        <Text style={styles.emptyMessage}>{t("Feed.noFeeds")}</Text>
+        <Text style={styles.emptyMessage}>{t('Feed.noFeeds')}</Text>
       ) : (
         <FlatList
           data={feedItems}

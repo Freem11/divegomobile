@@ -3,7 +3,7 @@ import { GPSBubble } from "../entities/GPSBubble";
 import { Animal, Photo } from "../entities/photos";
 import { supabase } from "../supabase";
 
-export const getAnimalNames = async() => {
+export const getAnimalNames = async () => {
   const { data, error } = await supabase.from("photos").select("label");
 
   if (error) {
@@ -16,7 +16,7 @@ export const getAnimalNames = async() => {
   }
 };
 
-export const insertphoto = async(values, monthID) => {
+export const insertphoto = async (values, monthID) => {
   const { data, error } = await supabase.from("photos").insert([
     {
       photoFile: values.photoFile,
@@ -34,16 +34,16 @@ export const insertphoto = async(values, monthID) => {
   }
 };
 
-export const getAnimalNamesThatFit = async(value: string) => {
-  if (value === "") {
+export const getAnimalNamesThatFit = async (value: string) => {
+  if (value === '') {
     return [];
   }
 
-  const { data, error } = await supabase.rpc("get_unique_photo")
-    .ilike("label", "%" + value + "%");
+  const { data, error } = await supabase.rpc('get_unique_photo')
+    .ilike('label', '%' + value + '%');
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log('couldn\'t do it,', error);
     return [];
   }
 
@@ -69,7 +69,7 @@ export const getAnimalNamesThatFit = async(value: string) => {
 //   }
 // };
 
-export const getPhotosforAnchor = async(value) => {
+export const getPhotosforAnchor = async (value) => {
   const { data, error } = await supabase
     .from("photos")
     .select()
@@ -90,7 +90,7 @@ export const getPhotosforAnchor = async(value) => {
   }
 };
 
-export const getAnimalMultiSelect = async(text) => {
+export const getAnimalMultiSelect = async (text) => {
   const { data, error } = await supabase
     .from("photos")
     .select("id, label")
@@ -107,12 +107,12 @@ export const getAnimalMultiSelect = async(text) => {
   }
 };
 
-export const getPhotosforMapArea = async(value) => {
+export const getPhotosforMapArea = async (value) => {
   const { data, error } = await supabase
     .from("photos")
     .select()
     .ilike("label", "%" + value.animal + "%")
-    .ilike("UserID", "%" + "" + "%")
+    .ilike("UserID", "%" + '' + "%")
     .gte("latitude", value.minLat)
     .gte("longitude", value.minLng)
     .lte("latitude", value.maxLat)
@@ -129,7 +129,7 @@ export const getPhotosforMapArea = async(value) => {
   }
 };
 
-export const getPhotosByDiveSiteWithExtra = async(values) => {
+export const getPhotosByDiveSiteWithExtra = async (values) => {
   const {
     data,
     error,
@@ -150,7 +150,7 @@ export const getPhotosByDiveSiteWithExtra = async(values) => {
 };
 
 
-export const getDiveSitePhotos = async(lat: number, lng: number, userId: string, pagination?: Pagination) => {  
+export const getDiveSitePhotos = async (lat: number, lng: number, userId: string, pagination?: Pagination) => {  
   const builder = supabase.rpc("get_photos_for_divesite_with_social_info", {
     lat,
     lng,
@@ -163,7 +163,7 @@ export const getDiveSitePhotos = async(lat: number, lng: number, userId: string,
 
   const { data, error } = await builder;
 
-  if (error) {
+    if (error) {
     console.error("couldn't do it 98,", error);
     return [];
   }
@@ -173,7 +173,7 @@ export const getDiveSitePhotos = async(lat: number, lng: number, userId: string,
   }
 };
 
-export const getProfilePhotosByUser = async(userId: string, connectedUserId: string, pagination?: Pagination) => {
+export const getProfilePhotosByUser = async (userId: string, connectedUserId: string, pagination?: Pagination) => {
   console.log(userId, connectedUserId, pagination)
   
   const builder = supabase.rpc("get_photos_by_userid_with_divesite", {
@@ -187,7 +187,7 @@ export const getProfilePhotosByUser = async(userId: string, connectedUserId: str
 
   const { data, error } = await builder;
 
-  if (error) {
+    if (error) {
     console.error("couldn't do it 98,", error);
     return [];
   }
@@ -199,7 +199,7 @@ export const getProfilePhotosByUser = async(userId: string, connectedUserId: str
 
 
 
-export const getPhotosByUserWithExtra = async(userId, connectedUserId) => {
+export const getPhotosByUserWithExtra = async (userId, connectedUserId) => {
   const {
     data,
     error,
@@ -218,7 +218,7 @@ export const getPhotosByUserWithExtra = async(userId, connectedUserId) => {
   }
 };
 
-export const getPhotosWithUser = async(values) => {
+export const getPhotosWithUser = async (values) => {
   const { data, error } = await supabase.rpc("get_photos_with_user", {
     animals: values.animalMultiSelection,
     max_lat: values.maxLat,
@@ -239,7 +239,7 @@ export const getPhotosWithUser = async(values) => {
   }
 };
 
-export const getPhotosWithUserEmpty = async(values) => {
+export const getPhotosWithUserEmpty = async (values) => {
   const { data, error } = await supabase.rpc("get_photos_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
@@ -259,8 +259,8 @@ export const getPhotosWithUserEmpty = async(values) => {
   }
 };
 
-export const getHistoData = async(bubble: GPSBubble, animal: string[]) => {
-  const { data, error } = await supabase.rpc("histogram3", {
+export const getHistoData = async (bubble: GPSBubble, animal: string[]) => {
+  const { data, error } = await supabase.rpc('histogram3', {
     animals: animal,
     max_lat: bubble.maxLat,
     min_lat: bubble.minLat,
@@ -269,7 +269,7 @@ export const getHistoData = async(bubble: GPSBubble, animal: string[]) => {
   });
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log('couldn\'t do it,', error);
     return [];
   }
 
@@ -278,7 +278,7 @@ export const getHistoData = async(bubble: GPSBubble, animal: string[]) => {
   }
 };
 
-export const getRecentPhotos = async(today) => {
+export const getRecentPhotos = async (today) => {
   const { data, error } = await supabase.rpc("three_randomz");
 
   if (error) {
@@ -291,7 +291,7 @@ export const getRecentPhotos = async(today) => {
   }
 };
 
-export const getMostRecentPhoto = async() => {
+export const getMostRecentPhoto = async () => {
   const { data, error } = await supabase.rpc("maximum_value");
 
   if (error) {
@@ -304,8 +304,8 @@ export const getMostRecentPhoto = async() => {
   }
 };
 
-export const getAnimalsInBubble = async(bubble: GPSBubble, filter?: Partial<Photo>, pagination?: Pagination) => {
-  const builder = supabase.rpc("get_unique_photo_in_bounds", {
+export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Photo>, pagination?: Pagination) => {
+  const builder = supabase.rpc('get_unique_photo_in_bounds', {
     max_lat: bubble.maxLat,
     min_lat: bubble.minLat,
     max_lng: bubble.maxLng,
@@ -313,10 +313,10 @@ export const getAnimalsInBubble = async(bubble: GPSBubble, filter?: Partial<Phot
   });
 
   if (filter?.label) {
-    builder.ilike("label", "%" + filter.label + "%");
+    builder.ilike('label', '%' + filter.label + '%');
   }
 
-  builder.order("times_seen", { ascending: false });
+  builder.order('times_seen', { ascending: false });
 
   if (pagination?.page) {
     builder.range(pagination.from(), pagination.to());
@@ -324,7 +324,7 @@ export const getAnimalsInBubble = async(bubble: GPSBubble, filter?: Partial<Phot
 
   const { data, error } = await builder;
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log('couldn\'t do it,', error);
     return [];
   }
 

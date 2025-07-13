@@ -1,11 +1,9 @@
 import React from "react";
-
+import * as S from "./styles";
+import { FeedItemComponentProps } from "./failedPicUpload";
 import { FailedSyncFeedItem } from "../../../store/types";
 import ButtonIcon from "../../../../reusables/buttonIcon";
 import { colors } from "../../../../styles";
-
-import { FeedItemComponentProps } from "./failedPicUpload";
-import * as S from "./styles";
 
 export default function FeedItemFailedSync({
   item,
