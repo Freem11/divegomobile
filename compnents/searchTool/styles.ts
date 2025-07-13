@@ -7,7 +7,7 @@ const windowWidth = Dimensions.get("window").width;
 
 export const SearchInputContainer = styled.View`
   z-index: 1;
-  width: ${windowWidth*0.8};
+  width: ${windowWidth*0.8}px;
   padding: ${moderateScale(10)}px;
   align-items: center;
   justify-content: center;

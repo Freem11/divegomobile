@@ -21,7 +21,7 @@ export const TextInputWrapper = styled.View`
 export const StyledTextInput = styled.TextInput`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
-  width: ${moderateScale(225)};
+  width: ${moderateScale(225)}px;
   padding-bottom: ${Platform.OS === "android" ? moderateScale(5) : moderateScale(0)}px;
   height: ${moderateScale(32)}px;
   text-align-vertical: center;

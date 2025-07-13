@@ -51,8 +51,8 @@ export const SubHeader = styled.Text`
 export const DataHousing = styled.View`
   width: 100%;
   margin-top: 5%;
-  borderTopWidth: ${moderateScale(1)};
-  borderBottomWidth: ${moderateScale(1)};
+  borderTopWidth: ${moderateScale(1)}px;
+  borderBottomWidth: ${moderateScale(1)}px;
   borderTopColor: ${colors.neutralGrey};
   borderBottomColor: ${colors.neutralGrey};
 `;
