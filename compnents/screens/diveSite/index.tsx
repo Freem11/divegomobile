@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import DiveSiteScreenView from "./diveSite";
 import { Pagination } from "../../../entities/pagination";
-import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSitePhotos, getDiveSiteSightingCount, getDiveSiteSpeciesCount } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -9,7 +9,7 @@ import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import email from "react-native-email";
-import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void
@@ -61,7 +61,22 @@ export default function DiveSiteScreen({
   },[selectedDiveSite])
 
 
+  useEffect(() => {
+    newStuff(selectedDiveSite)
+  },[])
 
+  const newStuff = async (selectedDiveSite: DiveSiteWithUserName) => {
+  let tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
+  let speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  let sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+
+  console.log('tripCount', tripCount)
+
+  console.log('speciesCount', speciesCount)
+
+  console.log('sightingsCount', sightingsCount)
+  }
+  
   useEffect(() => {
     if (selectedDiveSite.lat && profile) {
       getPhotos(selectedDiveSite, profile);
