@@ -87,12 +87,8 @@ export const LabelWrapper = styled.View`
   align-items: center;
 `;
 
-
 export const IconWrapper = styled.View`
     width: ${moderateScale(24)}px;
     height: ${moderateScale(24)}px;
       margin-right: ${moderateScale(4)}px;
 `;
-
-
-

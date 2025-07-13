@@ -22,6 +22,7 @@
     "@react-native-community/netinfo": "11.4.1",
     "@react-native-google-signin/google-signin": "^10.0.1",
     "@react-native-masked-view/masked-view": "0.3.2",
+    "@stylistic/eslint-plugin": "^5.1.0",
     "@supabase/supabase-js": "^2.47.10",
     "@types/react": "~19.0.10",
     "base-64": "^1.0.0",

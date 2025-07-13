@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import DiveSiteScreenView from "./diveSite";
+import email from "react-native-email";
+
 import { Pagination } from "../../../entities/pagination";
 import { getDiveSitePhotos, getDiveSiteSightingCount, getDiveSiteSpeciesCount } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -8,8 +9,9 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-import email from "react-native-email";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+
+import DiveSiteScreenView from "./diveSite";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void
@@ -35,8 +37,7 @@ export default function DiveSiteScreen({
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  
-  const getPhotos = async (site, profile) => {
+  const getPhotos = async(site, profile) => {
 
     const pagination = new Pagination({page: bottomHitCount, ipp: 10})
    
@@ -50,7 +51,7 @@ export default function DiveSiteScreen({
     setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
   };
 
-  const getTrips = async (diveSiteId: number) => {
+  const getTrips = async(diveSiteId: number) => {
     const data = await getItinerariesForDiveSite(diveSiteId)
     setDiveSiteTrips(data)
   }
@@ -65,16 +66,16 @@ export default function DiveSiteScreen({
     newStuff(selectedDiveSite)
   },[])
 
-  const newStuff = async (selectedDiveSite: DiveSiteWithUserName) => {
-  let tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
-  let speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-  let sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  const newStuff = async(selectedDiveSite: DiveSiteWithUserName) => {
+    const tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
+    const speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+    const sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
 
-  console.log('tripCount', tripCount)
+    console.log("tripCount", tripCount)
 
-  console.log('speciesCount', speciesCount)
+    console.log("speciesCount", speciesCount)
 
-  console.log('sightingsCount', sightingsCount)
+    console.log("sightingsCount", sightingsCount)
   }
   
   useEffect(() => {
@@ -84,7 +85,7 @@ export default function DiveSiteScreen({
   }, [selectedDiveSite, profile, bottomHitCount]);
   
   
-  const handleProfileMove = async (userName: string) => {
+  const handleProfileMove = async(userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (profile.UserID === picOwnerAccount[0].UserID) {
@@ -105,13 +106,14 @@ export default function DiveSiteScreen({
       checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
     }).catch(console.error);
   };
-  
+
+
   return (
     <DiveSiteScreenView
-        selectedDiveSite={selectedDiveSite}
-        diveSitePics={diveSitePics}
-        handleProfileMove={handleProfileMove}
-        handleEmailDS={handleEmailDS}
+      selectedDiveSite={selectedDiveSite}
+      diveSitePics={diveSitePics}
+      handleProfileMove={handleProfileMove}
+      handleEmailDS={handleEmailDS}
     />
   )
 
