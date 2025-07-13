@@ -6,15 +6,18 @@ import reactPlugin from "eslint-plugin-react";
 import reactNativePlugin from "eslint-plugin-react-native";
 import importPlugin from "eslint-plugin-import";
 import prettierConfig from "eslint-config-prettier";
+import stylistic from "@stylistic/eslint-plugin";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config({ ignores: ["dist"] }, prettierConfig, {
-  extends: [
-    js.configs.recommended,
-    ...tseslint.configs.recommended,
-    "prettier"
-  ],
-  files: ["**/*.{ts,tsx}"],
+export default tseslint.config(
+  { ignores: ["dist", "android/**", "ios/**"] }, 
+  prettierConfig,
+  {
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended
+    ],
+  files: ["**/*.{js,jsx,ts,tsx}"],
   languageOptions: {
     ecmaVersion: 2020,
     globals: {
@@ -32,7 +35,8 @@ export default tseslint.config({ ignores: ["dist"] }, prettierConfig, {
     "react-refresh": reactRefresh,
     react: reactPlugin,
     "react-native": reactNativePlugin,
-    import: importPlugin
+    import: importPlugin,
+    "@stylistic": stylistic
   },
   rules: {
     ...reactHooks.configs.recommended.rules,
@@ -47,7 +51,7 @@ export default tseslint.config({ ignores: ["dist"] }, prettierConfig, {
     "react-native/split-platform-components": "warn",
     "react-native/no-inline-styles": "warn",
     "react-native/no-color-literals": "warn",
-    "space-before-function-paren": ["error", "never", { anonymous: false }],
+    "space-before-function-paren": ["error", "never"],
     "import/order": [
       "warn",
       {
@@ -61,6 +65,27 @@ export default tseslint.config({ ignores: ["dist"] }, prettierConfig, {
         ],
         "newlines-between": "always"
       }
-    ]
+    ],
+    "@stylistic/jsx-indent": ["error", 2],
+    "@stylistic/jsx-indent-props": ["error", 2],
+    "@stylistic/jsx-closing-bracket-location": ["error", "tag-aligned"],
+    "@stylistic/jsx-closing-tag-location": ["error"],
+    "@stylistic/jsx-wrap-multilines": ["error", {
+      "declaration": "parens-new-line",
+      "assignment": "parens-new-line", 
+      "return": "parens-new-line",
+      "arrow": "parens-new-line",
+      "condition": "parens-new-line",
+      "logical": "parens-new-line",
+      "prop": "parens-new-line"
+    }],
+    "@stylistic/jsx-first-prop-new-line": ["error", "multiline"],
+    "@stylistic/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
+    "@stylistic/jsx-curly-newline": ["error", {
+      "multiline": "forbid",
+      "singleline": "forbid"
+    }],
+    "@stylistic/jsx-curly-spacing": ["error", "never"],
+    "@stylistic/indent": ["error", 2]
   }
 });
