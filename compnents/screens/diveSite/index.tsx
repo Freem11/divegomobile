@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import DiveSiteScreenView from "./diveSite";
 import { Pagination } from "../../../entities/pagination";
-import { getDiveSitePhotos, getDiveSiteSightingCount, getDiveSiteSpeciesCount } from "../../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSitePhotos, getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteSRecetnNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -70,11 +70,15 @@ export default function DiveSiteScreen({
   let speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
   let sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
 
+  let recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+
   console.log('tripCount', tripCount)
 
   console.log('speciesCount', speciesCount)
 
   console.log('sightingsCount', sightingsCount)
+
+  console.log('recentNine', recentNine)
   }
   
   useEffect(() => {

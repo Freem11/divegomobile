@@ -211,3 +211,20 @@ export const getUserSightingsCount = async (userId: string) => {
   }
   return [];
 };
+
+
+export const getDiveSiteRecentNinePhotos= async (userId: string) => {
+  const { data, error } = await supabase.rpc("get_profile_recent_nine", {
+    user_id: userId
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+  return [];
+};

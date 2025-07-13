@@ -403,3 +403,22 @@ export const getDiveSiteSightingCount = async (values) => {
   }
   return [];
 };
+
+export const getDiveSiteSRecetnNinePhotos= async (values) => {
+  const { data, error } = await supabase.rpc("get_divesite_recent_nine", {
+    lat: values.lat,
+    lng: values.lng,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data;
+  }
+  return [];
+};
+
+
