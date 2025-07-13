@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import email from "react-native-email";
 
 import { Pagination } from "../../../entities/pagination";
-import { getDiveSitePhotos, getDiveSiteSightingCount, getDiveSiteSpeciesCount } from "../../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSitePhotos, getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteSRecetnNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -66,16 +66,20 @@ export default function DiveSiteScreen({
     newStuff(selectedDiveSite)
   },[])
 
-  const newStuff = async(selectedDiveSite: DiveSiteWithUserName) => {
-    const tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
-    const speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-    const sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  const newStuff = async (selectedDiveSite: DiveSiteWithUserName) => {
+  let tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
+  let speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  let sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
 
-    console.log("tripCount", tripCount)
+  let recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
 
-    console.log("speciesCount", speciesCount)
+  console.log('tripCount', tripCount)
 
-    console.log("sightingsCount", sightingsCount)
+  console.log('speciesCount', speciesCount)
+
+  console.log('sightingsCount', sightingsCount)
+
+  console.log('recentNine', recentNine)
   }
   
   useEffect(() => {

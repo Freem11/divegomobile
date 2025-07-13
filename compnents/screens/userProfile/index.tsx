@@ -9,7 +9,7 @@ import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveIndoorLevel } from "react-native-maps";
 import { ActiveProfile } from "../../../entities/profile";
-import { getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
+import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
@@ -36,16 +36,19 @@ export default function UserProfileScreen({
 
   useEffect(() => {
     newStuff(selectedProfile)
-  },[])
+  },[selectedProfile])
 
   const newStuff = async (selectedProfile: ActiveProfile) => {
 
   let speciesCount = await getUserSpeciesCount(selectedProfile.UserID)
   let sightingsCount = await getUserSightingsCount(selectedProfile.UserID)
+  let recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID)
 
   console.log('user speciesCount', speciesCount)
 
   console.log('user sightingsCount', sightingsCount)
+
+  console.log('recentNine', recentNine)
   }
   
   const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
