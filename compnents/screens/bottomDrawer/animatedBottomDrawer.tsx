@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
   Dimensions,
-  Text,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -18,13 +17,10 @@ import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
-  NativeViewGestureHandler,
 } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import {
-  activeFonts,
   colors,
-  fontSizes,
   buttonSizes,
 } from "../../styles";
 import HorizontalPager from "./flatListCombo.tsx";
@@ -40,7 +36,6 @@ export default function BottomDrawer() {
   const boxheight = useSharedValue(DRAWER_OPEN);
   const buttonWidth = useSharedValue(moderateScale(buttonSizes.small.width));
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-
 
   const buttonOpacity = useSharedValue(isDrawerOpen ? 1 : 0);
 
@@ -61,22 +56,10 @@ export default function BottomDrawer() {
     };
   });
 
-  const verticalGestureRef = useRef();
-
   const bounds = {
     lower: DRAWER_CLOSED,
     upper: DRAWER_OPEN,
   };
-
-  const toggleDrawerState = useCallback((currentDrawerState) => {
-    if (!currentDrawerState) {
-      setTimeout(() => {
-        setIsDrawerOpen((prev) => !prev);
-      }, 200);
-    } else {
-      setIsDrawerOpen((prev) => !prev);
-    }
-  }, []);
 
   const closeDrawer = () => {
     boxheight.value = withTiming(DRAWER_CLOSED, {
@@ -96,9 +79,6 @@ export default function BottomDrawer() {
   const buttonClosed = moderateScale(buttonSizes.small.width);
 
   const startHeight = useSharedValue(DRAWER_CLOSED);
-
-  const scrollGestureRef = useRef();
-  const nativeGestureRef = useRef();
 
   const animatedBottomDrawer = Gesture.Pan()
     .minDistance(10)
@@ -139,7 +119,6 @@ export default function BottomDrawer() {
 
       runOnJS(setIsDrawerOpen)(shouldOpen);
     })
-    .simultaneousWithExternalGesture(nativeGestureRef);
 
   const colorProgress = useSharedValue(0);
 
@@ -184,12 +163,9 @@ export default function BottomDrawer() {
               }}
             />
           </View>
-
-          <NativeViewGestureHandler ref={nativeGestureRef}>
-            <View style={{ flex: 1 }}>
-              <HorizontalPager isDrawerOpen={isDrawerOpen} animatedButtonStyle={animatedButtonStyle} closeDrawer={closeDrawer}/>
-            </View>
-          </NativeViewGestureHandler>
+          <View style={{ flex: 1 }}>
+            <HorizontalPager isDrawerOpen={isDrawerOpen} animatedButtonStyle={animatedButtonStyle} closeDrawer={closeDrawer}/>
+          </View>
         </Animated.View>
       </GestureDetector>
     </GestureHandlerRootView>

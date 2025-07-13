@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps } from "react-native";
+import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Animated from "react-native-reanimated";
 import ButtonIcon from "../buttonIcon";
 import {
@@ -68,78 +68,91 @@ useEffect(() => {
   ));
   
   return (
-    <GestureHandlerRootView>
-      <AnimatedSafeAreaView style={[S.styles.safeArea, animatedSafeAreaStyle]}>
-        <S.BackButtonWrapper>
-          <ButtonIcon
-            icon="chevron-left"
-            onPress={() => closeParallax(null)}
-            size="small"
-            fillColor={colors.themeWhite}
-          />
-        </S.BackButtonWrapper>
-        
-        {popoverConent && <S.AltButtonWrapper>
-        <ButtonIconWithRef ref={iconRef}/>
-        </S.AltButtonWrapper>
-      }
-        {popoverConent && <Popover
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={{ flex: 1 }}>
+          <AnimatedSafeAreaView style={[S.styles.safeArea, animatedSafeAreaStyle]}>
+            <S.BackButtonWrapper>
+              <ButtonIcon
+                icon="chevron-left"
+                onPress={() => closeParallax(null)}
+                size="small"
+                fillColor={colors.themeWhite}
+              />
+            </S.BackButtonWrapper>
+  
+            {popoverConent && (
+              <S.AltButtonWrapper>
+                <ButtonIconWithRef ref={iconRef} />
+              </S.AltButtonWrapper>
+            )}
+  
+            {popoverConent && (
+              <Popover
                 from={iconRef}
                 isVisible={isVisible}
                 onRequestClose={() => setIsVisible(false)}
                 placement={Placement.AUTO}
-                popoverStyle={{borderRadius: moderateScale(10)}}
-                >
+                popoverStyle={{ borderRadius: moderateScale(10) }}
+              >
                 {popoverConent()}
-               
               </Popover>
-              }
-      </AnimatedSafeAreaView>
-      <S.BackgroundContainer>
-        <Animated.View
-          style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
-        >
-          {typeof(headerImage) === "function" ? headerImage() :
-              <ImageBackground
-              source={headerImage}
-              style={StyleSheet.absoluteFill}
-              resizeMode="cover"
-            />
-            }
-      
-        </Animated.View>
-      </S.BackgroundContainer>
-
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[S.styles.drawer, animatedDrawerStyle]}>
-          <S.TopTransparentSection>
-            <S.StyledSvg
-              width="100%"
-              height={SCREEN_WIDTH * (320 / 1440)}
-              viewBox="0 0 1440 320"
-              preserveAspectRatio="xMidYMid slice"
+            )}
+          </AnimatedSafeAreaView>
+  
+          <S.BackgroundContainer>
+            <Animated.View
+              style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
             >
-              <WavyImg />
-            </S.StyledSvg>
-          </S.TopTransparentSection>
-
-          <S.BottomOpaqueSection>
-            <S.Content
-              onLayout={(event) => {
-                contentHeight.value = event.nativeEvent.layout.height;
-              }}
-            >
-              <S.EmptyContainer>
-              {React.isValidElement(children)
-                ? React.cloneElement(children, { closeParallax, restoreParallax, bottomHitCount })
-                : children}
-              </S.EmptyContainer>
-            </S.Content>
-          </S.BottomOpaqueSection>
-        </Animated.View>
-      </GestureDetector>
+              {typeof headerImage === "function" ? (
+                headerImage()
+              ) : (
+                <ImageBackground
+                  source={headerImage}
+                  style={StyleSheet.absoluteFill}
+                  resizeMode="cover"
+                />
+              )}
+            </Animated.View>
+          </S.BackgroundContainer>
+  
+          <GestureDetector gesture={panGesture}>
+            <Animated.View style={[S.styles.drawer, animatedDrawerStyle]}>
+              <S.TopTransparentSection>
+                <S.StyledSvg
+                  width="100%"
+                  height={SCREEN_WIDTH * (320 / 1440)}
+                  viewBox="0 0 1440 320"
+                  preserveAspectRatio="xMidYMid slice"
+                >
+                  <WavyImg />
+                </S.StyledSvg>
+              </S.TopTransparentSection>
+  
+              <S.BottomOpaqueSection>
+                <S.Content
+                  onLayout={(event) => {
+                    contentHeight.value = event.nativeEvent.layout.height;
+                  }}
+                >
+                  <S.EmptyContainer>
+                    {React.isValidElement(children)
+                      ? React.cloneElement(children, {
+                          closeParallax,
+                          restoreParallax,
+                          bottomHitCount,
+                        })
+                      : children}
+                  </S.EmptyContainer>
+                </S.Content>
+              </S.BottomOpaqueSection>
+            </Animated.View>
+          </GestureDetector>
+        </View>
+      </TouchableWithoutFeedback>
     </GestureHandlerRootView>
   );
+  
 };
 
 export default ParallaxDrawer;

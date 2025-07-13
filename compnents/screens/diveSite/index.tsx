@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { DiveShop } from "../../../entities/diveShop";
 import DiveSiteScreenView from "./diveSite";
 import { Pagination } from "../../../entities/pagination";
 import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
@@ -50,7 +49,7 @@ export default function DiveSiteScreen({
   };
 
   useEffect(() => {
-    if (selectedDiveSite && profile) {
+    if (selectedDiveSite.lat && profile) {
       getPhotos(selectedDiveSite, profile);
     }
   }, [selectedDiveSite, profile, bottomHitCount]);

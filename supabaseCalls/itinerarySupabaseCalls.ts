@@ -49,6 +49,7 @@ export const getItineraryDiveSiteByIdArray = async (siteIds) => {
 };
 
 export const insertItinerary = async (values: ItineraryItem) => {
+  console.log("supa", values);
   const { data, error } = await supabase.from('itineraries').insert([
     {
       shopID:      values.shopID,
@@ -71,6 +72,7 @@ export const insertItinerary = async (values: ItineraryItem) => {
 
 
 export const insertItineraryRequest = async (values: ItineraryItem, reqType: string) => {
+  console.log('supa', values, reqType)
   const { data, error } = await supabase.from('itineraryRequests').insert([
     {
       shopID:              values.shopID,

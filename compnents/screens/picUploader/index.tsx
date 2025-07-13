@@ -3,7 +3,6 @@ import PicUploaderView from "./view";
 import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
-import { ConfirmationTypeContext } from "../../contexts/confirmationTypeContext";
 import { showError, showSuccess, showWarning } from "../../toast";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { v4 as uuidv4 } from "uuid";
@@ -42,7 +41,7 @@ type PicUploaderProps = {
   restoreParallax?: () => void;
   handleImageUpload?: () => void;
   localPreviewUri: string;
-  setLocalPreviewUri: Dispatch<any>;
+  setLocalPreviewUri: Dispatch<React.SetStateAction<string | null>>;
 };
 
 export default function PicUploader({
@@ -53,7 +52,6 @@ export default function PicUploader({
 }: PicUploaderProps) {
   const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
-  const { setConfirmationType } = useContext(ConfirmationTypeContext);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);
@@ -94,7 +92,7 @@ export default function PicUploader({
             dateTaken: formData.date,
             latitude: selectedDiveSite.lat,
             longitude: selectedDiveSite.lng,
-            UserId: profile[0].UserID,
+            UserId: profile.UserID,
           }
         ]
       }
@@ -102,6 +100,7 @@ export default function PicUploader({
   }
 
   const onSubmitOrCache = async (formData: Required<Form>) => {
+    console.log("1 onSubmitOrCache", formData)
     if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning(t('PicUploader.fillRequiredFields'));
       return;
@@ -130,14 +129,13 @@ export default function PicUploader({
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
-
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
         label: formData.animal.label,
         dateTaken: formData.date,
         latitude: selectedDiveSite.lat,
         longitude: selectedDiveSite.lng,
-        UserId: profile[0].UserID,
+        UserId: profile.UserID,
       });
 
       if (error) {
@@ -148,12 +146,11 @@ export default function PicUploader({
 
         throw new Error(t('PicUploader.failedToSave'));
       }
-      setConfirmationType("Sea Creature Submission");
       showSuccess(t('PicUploader.successUpload'));
       resetAndClose()
     } catch (err) {
       console.error("Error uploading image:", err);
-      showError(err.message);
+      showError(t('PicUploader.failedToSave'));
     } finally {
       setIsUploading(false);
     }

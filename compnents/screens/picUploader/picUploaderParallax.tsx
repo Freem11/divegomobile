@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { useMapStore } from "../../googleMap/useMapStore";
 
+
 type PicUploaderProps = {
   selectedDiveSite: DiveSiteWithUserName
 };
@@ -42,7 +43,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
     }
   };
   
-  const handleImageUpload = async (argPicture) => {
+  const handleImageUpload = async (argPicture: string) => {
     setLocalPreviewUri({uri: argPicture});
   };
   

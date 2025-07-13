@@ -1,36 +1,36 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FlatList, NativeViewGestureHandler } from 'react-native-gesture-handler';
+import React, { useContext, useEffect, useState, useMemo } from 'react'; // Import useMemo
+import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from './styles';
 import { getDiveSitesWithUser } from '../../../../../supabaseCalls/diveSiteSupabaseCalls';
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
+import MobileTextInput from "../../../../reusables/textInput";
 
-export default function DiveSiteList({ horizontalGestureRef }) {
-
-  const verticalGestureRef = useRef();
+export default function DiveSiteList() {
 
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [diveSites, setDiveSites] = useState([]);
+  const [filterValue, setFilterValue] = useState('');
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
-  const getDiveSiteData = async () => {
+  const getDiveSiteData = async (filterValue: string) => {
     if (boundaries) {
        let diveSiteData = await getDiveSitesWithUser({
         minLat: boundaries.minLat,
         maxLat: boundaries.maxLat,
         minLng: boundaries.minLng,
-        maxLng: boundaries.maxLng});
+        maxLng: boundaries.maxLng}, { label: filterValue });
 
       setDiveSites(diveSiteData);
     }
   };
 
   useEffect(() => {
-    getDiveSiteData();
-  }, [boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
+    getDiveSiteData(filterValue);
+  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
 
   const handleDiveSiteSelection = (siteId: number) => {
@@ -38,14 +38,36 @@ export default function DiveSiteList({ horizontalGestureRef }) {
     setLevelOneScreen(true)
   }
  
+  const handleClear = () => {
+    setFilterValue('')
+  }
+
+  const [layoutReady, setLayoutReady] = useState(false);
+
+  const renderListHeader = useMemo(() => (
+    <S.FilterContainer>
+      <MobileTextInput 
+        iconLeft={'anchor'}
+        iconRight={'close'}
+        placeholder="Filter Dive Sites" 
+        onChangeText={(text: string) => setFilterValue( text )}
+        handleClear={() => handleClear()}
+        filterValue={filterValue}
+      />
+    </S.FilterContainer>
+  ), [filterValue, handleClear, setFilterValue]);
+
   return (
-    <S.VerticalFlatlistContainer>
+    <S.VerticalFlatlistContainer
+    onLayout={() => {
+      if (!layoutReady) setLayoutReady(true);
+    }}
+    >
       <S.Header>Nearby Dive Sites</S.Header>
-      <NativeViewGestureHandler 
-        ref={verticalGestureRef}
-        simultaneousHandlers={horizontalGestureRef}
-      >
+
+      {layoutReady ? (
         <FlatList
+          ListHeaderComponent={renderListHeader}
           data={diveSites}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
           renderItem={({ item }) => <Card id={item.id} name={item.name} photoPath={item.divesiteprofilephoto} subData={item.times_seen} onPressHandler={() => handleDiveSiteSelection(item.id)}  />}
@@ -53,7 +75,7 @@ export default function DiveSiteList({ horizontalGestureRef }) {
           showsVerticalScrollIndicator={false}
            keyboardShouldPersistTaps="always"
         />
-      </NativeViewGestureHandler>
+      ) : null}
     </S.VerticalFlatlistContainer>
   );
 }

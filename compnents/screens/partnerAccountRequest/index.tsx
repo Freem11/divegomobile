@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Keyboard } from "react-native";
+import { showError, showSuccess } from "../../toast";
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { createPartnerAccountRequest } from "../../../supabaseCalls/partnerSupabaseCalls";
@@ -17,39 +18,37 @@ export default function PartnerAccountRequestPage({
   restoreParallax,
 }: PartnerAccountRequestPageProps) {
 
-  const [formVals, setFormVals] = useState({
-    businessName: "",
-    websiteLink: "",
-    latitude: null,
-    longitude: null,
-    UserId: null,
-  });
-  
-  const mapAction = useMapStore((state) => state.actions)
-
-  const draggablePoint = useMapStore((state) => state.draggablePoint);
-  const deviceLocation = null//todo
-
   const { profile } = useContext(UserProfileContext);
   
+  const mapAction = useMapStore((state) => state.actions)
+  const storeFormValues = useMapStore((state) => state.formValues);
+
   const onSubmit = async (formData: Required<Form>) => {
     const { error } = await createPartnerAccountRequest({
       webpageLink : formData.URL,
       businessName: formData.OrgName,
       latitude: formData.Latitude,
       longitude: formData.Longitude,
-      userId: profile.UserId
+      userId: profile.UserID
     }); 
+
+    if (error){
+    showError("We were unable to save your submission, please try again later")
+    return;
+  } 
+    showSuccess(`Partner request for ${formData.OrgName} has been sucessfuly submitted! We will contact you via email, with our descision.`);
   };
 
-  const getCurrentLocation = async () => {
+  const getCurrentLocation = async (formData: Required<Form>) => {
     Keyboard.dismiss();
     try {
       const location = await getCurrentCoordinates();
       if (location) {
-        mapAction.setDraggablePoint({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude
+        mapAction.setFormValues({
+          OrgName: formData.OrgName || storeFormValues?.OrgName,
+          URL: formData.URL || storeFormValues?.URL,
+          Latitude: location.coords.latitude,
+          Longitude: location.coords.longitude 
         })
       }
     } catch (e) {
@@ -64,8 +63,10 @@ export default function PartnerAccountRequestPage({
       closeParallax={closeParallax}
       restoreParallax={restoreParallax}
       values={{
-        Latitude:  draggablePoint ? draggablePoint?.latitude : deviceLocation?.lat,
-        Longitude: draggablePoint ? draggablePoint?.longitude : deviceLocation?.lng,
+        OrgName: storeFormValues?.OrgName,
+        URL: storeFormValues?.URL,
+        Latitude: storeFormValues?.Latitude,
+        Longitude: storeFormValues?.Longitude,
       }}
     />
   )

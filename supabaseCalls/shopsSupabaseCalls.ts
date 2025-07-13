@@ -35,10 +35,11 @@ import { supabase } from "../supabase";
 //   }
 // };
 
-export const getDiveShops = async (bubble: GPSBubble): Promise<DiveShop[]> => {
+export const getDiveShops = async (bubble: GPSBubble, filerValue: string): Promise<DiveShop[]> => {
   const { data, error } = await supabase
     .from("shops")
     .select()
+    .ilike("orgName", "%" + filerValue + "%")
     .gte("lat", bubble.minLat)
     .gte("lng", bubble.minLng)
     .lte("lat", bubble.maxLat)
@@ -66,20 +67,20 @@ export const getShopByName = async (value) => {
 };
 
 export const updateDiveShop = async (values) => {
-  console.log("updating...", values);
   const { data, error } = await supabase
     .from("shops")
-    .update({ diveShopBio: values.bio, diveShopProfilePhoto: values.photo })
-    .eq("id", values.id);
+    .update(values)
+    .eq("id", values.id)
+    .select();
 
-  if (error) {
-    console.log("couldn't do it 2,", error);
-    return [];
-  }
-
-  if (data) {
-    return data;
-  }
+    if (error) {
+      console.log("couldn't do it dive shop update,", error);
+      return null;
+    }
+  
+    if (data[0]) {
+      return data[0] as DiveShop;
+    }
 };
 
 export const getShopByUserID = async (value: string) => {

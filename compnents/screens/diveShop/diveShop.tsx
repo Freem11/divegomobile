@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
 import ItineraryCard from "../../reusables/itineraryCard";
@@ -26,6 +26,16 @@ export default function DiveShopScreenView({
 }: DiveShopProps) {
   
   const { t } = useTranslation()
+
+  const [siteVals, setSiteVals] = useState(null);
+
+  useEffect(() => {
+    setSiteVals({
+      siteName: selectedShop.orgName,
+      bio: selectedShop.diveSiteBio,
+    })
+  
+  },[selectedShop])
 
   return (
     <S.ContentContainer>

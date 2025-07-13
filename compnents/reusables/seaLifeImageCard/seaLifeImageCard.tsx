@@ -78,7 +78,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
-      const newRecord = await insertPhotoLike(profile[0].UserID, pic.id);
+      const newRecord = await insertPhotoLike(profile.UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);

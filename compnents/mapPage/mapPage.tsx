@@ -15,7 +15,6 @@ import ItineraryListButton from "../reusables/bottomMenu/buttons/itineraryCreato
 import GuidesButton from "../reusables/bottomMenu/buttons/guidesButton";
 import AnimalTopAutoSuggest from "../animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
-import AnimatedModalConfirmation from "../reusables/animatedModalConfimration";
 import LevelOneScreen from "../reusables/levelOneScreen";
 import LevelTwoScreen from "../reusables/levelTwoScreen";
 import {
@@ -34,7 +33,6 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import { ConfirmationModalContext } from "../contexts/confirmationModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { moderateScale } from "react-native-size-matters";
 import BottomDrawer from '../screens/bottomDrawer/animatedBottomDrawer';
@@ -51,6 +49,7 @@ import FeedScreens from "../feed/screens";
 import { useTranslation } from "react-i18next";
 import SearchTool from '../searchTool';
 import * as S from './styles';
+import { ActiveProfile } from "../../entities/profile";
 
 
 const windowWidth = Dimensions.get("window").width;
@@ -63,8 +62,7 @@ export default function MapPage() {
   }
  
   const mapConfig = useMapStore((state) => state.mapConfig);
- 
-  const { setConfirmationModal } = useContext(ConfirmationModalContext);
+
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -92,7 +90,7 @@ export default function MapPage() {
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
           myCreatures,
-          userId: profile[0].UserID,
+          userId: profile.UserID,
           minLat,
           maxLat,
           minLng,
@@ -101,7 +99,7 @@ export default function MapPage() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
-          userId: profile[0].UserID,
+          userId: profile.UserID,
           myCreatures,
           minLat,
           maxLat,
@@ -149,7 +147,7 @@ export default function MapPage() {
     let sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success = await grabProfileByUserId(sessionUserId);
+      const success: ActiveProfile = await grabProfileByUserId(sessionUserId);
       if (success) {
         let bully = success && success.UserName;
         if (bully == null || bully === "") {
@@ -174,14 +172,12 @@ export default function MapPage() {
   };
 
   useLayoutEffect(() => {
-    setConfirmationModal(false);
     getProfile();
   }, []);
 
   useEffect(() => {
     setLevelOneScreen(false);
     setLevelTwoScreen(false);
-    setConfirmationModal(false);
     getProfile();
   }, []);
 
@@ -222,12 +218,11 @@ export default function MapPage() {
             ) : null}
 
             {mapConfig === 0 && <EmailFeedback />}
-
+         
             <FeedScreens />
             <LevelOneScreen />
             <LevelTwoScreen />
             <AnimatedFullScreenModal />
-            <AnimatedModalConfirmation />
 
      
           </S.Container>

@@ -8,6 +8,7 @@ export interface Form {
   Start?:   string
   End?:     string
   Details?: string
+  SiteList?: number[]
 }
 
 export const FormRules: FormValidationRules<Form> =   {
@@ -23,7 +24,10 @@ export const FormRules: FormValidationRules<Form> =   {
       value:   0,
       message: 'Price must be at least 0',
     },
-    pattern:  /^\$\d+(\.\d{1,2})?$/,
+    pattern: {
+      value: /^\$\d{1,3}(,\d{3})*(\.\d{1,2})?$/,
+      message: 'Enter a valid price',
+    }
   },
   Start: {
     required: 'Trip Start Date is required',

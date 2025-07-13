@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./styles";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Icon from "../../../icons/Icon";
@@ -19,6 +19,16 @@ export default function UserProfileScreenView({
   selectedProfile
 }: UserProfileProps) {
   
+  const [profileVals, setProfileVals] = useState(null);
+
+  useEffect(() => {
+    setProfileVals({
+      userName: selectedProfile?.UserName,
+      bio: selectedProfile?.profileBio,
+    })
+
+  },[selectedProfile])
+
   const groupedPhotos = {};
 
   profilePhotos && profilePhotos.forEach(photo => {
@@ -37,10 +47,10 @@ export default function UserProfileScreenView({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.UserNameContainer>
-          <S.Header>{selectedProfile?.UserName}</S.Header>
+          <S.Header>{profileVals?.userName}</S.Header>
         </S.UserNameContainer>
    
-        <S.Content>{selectedProfile?.profileBio}</S.Content>
+        <S.Content>{profileVals?.bio}</S.Content>
 
       </S.InputGroupContainer>
 
