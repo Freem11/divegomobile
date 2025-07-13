@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import {
   colors,
@@ -28,21 +28,29 @@ export const PhotoContainer = styled.View`
 `;
 
 export const PacketHeader = styled.View`
-  width: 90%;
   font-family: ${activeFonts.Light};
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  align-content: center;
+  width: 100%;
+  padding-horizontal: 5%;
 `;
 
 export const PacketHeaderItem = styled.Text`
-  margin: 0 2% 1% 0;
-  font-size: ${moderateScale(fontSizes.SubHeading)}px;
-  font-family: ${activeFonts.Thin};
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Medium};
   color: ${colors.primaryBlue};
   align-self: flex-start;
   text-align: center;
+`;
+
+export const PacketHeaderDate = styled.Text`
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.neutralGrey};
+  align-self: flex-start;
+  text-align: center;
+  margin-left: ${moderateScale(22)}px;
 `;
 
 export const Header = styled.Text`
@@ -86,8 +94,8 @@ export const LabelWrapper = styled.View`
 `;
 
 export const IconWrapper = styled.View`
-  width: ${moderateScale(24)}px;
-  height: ${moderateScale(24)}px;
+  width: ${moderateScale(18)}px;
+  height: ${moderateScale(18)}px;
   margin-bottom: ${moderateScale(0)}px;
   margin-right: ${moderateScale(4)}px;
 `;
