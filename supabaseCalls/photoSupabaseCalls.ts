@@ -368,3 +368,38 @@ export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Pho
   }
   return [];
 };
+
+
+export const getDiveSiteSpeciesCount = async (values) => {
+  const { data, error } = await supabase.rpc("get_divesite_species", {
+    lat: values.lat,
+    lng: values.lng,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};
+
+export const getDiveSiteSightingCount = async (values) => {
+  const { data, error } = await supabase.rpc("get_divesite_sightings", {
+    lat: values.lat,
+    lng: values.lng,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};

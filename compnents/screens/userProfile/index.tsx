@@ -3,10 +3,13 @@ import { UserProfileContext } from "../../contexts/userProfileContext";
 import UserProfileScreenView from "./userProfile";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSiteSightingCount, getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
 import { Pagination } from "../../../entities/pagination";
 import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { ActiveIndoorLevel } from "react-native-maps";
+import { ActiveProfile } from "../../../entities/profile";
+import { getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
@@ -30,6 +33,20 @@ export default function UserProfileScreen({
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+
+  useEffect(() => {
+    newStuff(selectedProfile)
+  },[])
+
+  const newStuff = async (selectedProfile: ActiveProfile) => {
+
+  let speciesCount = await getUserSpeciesCount(selectedProfile.UserID)
+  let sightingsCount = await getUserSightingsCount(selectedProfile.UserID)
+
+  console.log('user speciesCount', speciesCount)
+
+  console.log('user sightingsCount', sightingsCount)
+  }
   
   const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
     setSelectedDiveSite({

@@ -113,3 +113,20 @@ export const getItinerariesForDiveSite = async (IdNo: number, limitTo3: boolean 
 
   return data as ItineraryItem[];
 };
+
+
+export const getDiveSiteTripCount = async (siteId: number) => {
+  const { data, error } = await supabase.rpc("get_divesite_trip_count", {
+    divesite_id: siteId,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};
