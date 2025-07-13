@@ -179,3 +179,35 @@ export const getProfileWithStats = async (userId) => {
   }
 };
 
+
+export const getUserSpeciesCount = async (userId: string) => {
+  const { data, error } = await supabase.rpc("get_user_species", {
+    user_id: userId,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};
+
+export const getUserSightingsCount = async (userId: string) => {
+  const { data, error } = await supabase.rpc("get_user_sightings", {
+    user_id: userId,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};
