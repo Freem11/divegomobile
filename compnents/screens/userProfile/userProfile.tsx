@@ -6,17 +6,22 @@ import Label from "../../reusables/label";
 import { Photo } from "../../../entities/photos";
 import { colors } from "../../styles";
 import { ActiveProfile } from "../../../entities/profile";
+import Button from "../../reusables/button";
 
 type UserProfileProps = {
   profilePhotos:  Photo[] | null;
   handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
-  selectedProfile: ActiveProfile | null
+  selectedProfile: ActiveProfile | null;
+  speciesCount: number;
+  sightingsCount: number;
 };
 
 export default function UserProfileScreenView({
   profilePhotos,
   handleDiveSiteMove,
-  selectedProfile
+  selectedProfile,
+  speciesCount,
+  sightingsCount
 }: UserProfileProps) {
   
   const [profileVals, setProfileVals] = useState(null);
@@ -58,7 +63,25 @@ export default function UserProfileScreenView({
             <Label label="Sea Life Sightings" />
         </S.LabelWrapper>
         
-      {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
+        <S.StatWrapper>
+        <S.Stats>{sightingsCount} Sightings</S.Stats>
+      </S.StatWrapper>
+
+      <S.StatWrapper>
+        <S.Stats>{speciesCount} Species Sighted</S.Stats>
+      </S.StatWrapper>
+
+
+    <S.ButtonWrapper>
+      <Button 
+        onPress={null} 
+        alt={false} 
+        size='thin'
+        title={'View All'} 
+        />
+    </S.ButtonWrapper>
+
+      {/* {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
   return (
     <S.PhotoContainer key={`${photoPacket.id}-${index}`}>   
       <S.PacketHeader key={`${photoPacket.id}-${index}`}>
@@ -86,8 +109,9 @@ export default function UserProfileScreenView({
           );
         })}
     </S.PhotoContainer>
-  );
-})}
+  ); */}
+{/* })} */}
+
     </S.ContentContainer>
   );
 }

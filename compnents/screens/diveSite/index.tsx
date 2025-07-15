@@ -29,6 +29,9 @@ export default function DiveSiteScreen({
   const { profile } = useContext(UserProfileContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
+  const [tripCount, setTripCount] = useState(0);
+  const [speciesCount, setSpeciesCount] = useState(0);
+  const [sightingsCount, setSightingsCount] = useState(0);
 
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -62,23 +65,24 @@ export default function DiveSiteScreen({
 
 
   useEffect(() => {
-    newStuff(selectedDiveSite)
-  },[])
+    if(selectedDiveSite){
+      newStuff(selectedDiveSite)
+    }
+  },[selectedDiveSite])
 
   const newStuff = async (selectedDiveSite: DiveSiteWithUserName) => {
-  let tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
-  let speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-  let sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+
+  const trips = await getDiveSiteTripCount(selectedDiveSite.id)
+  setTripCount(trips.label_count)
+
+  const species = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  setSpeciesCount(species.distinct_label_count)
+
+  const sightings = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  setSightingsCount(sightings.label_count)
 
   let recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-
-  console.log('tripCount', tripCount)
-
-  console.log('speciesCount', speciesCount)
-
-  console.log('sightingsCount', sightingsCount)
-
-  console.log('recentNine', recentNine)
+  // console.log('recentNine', recentNine)
   }
   
   useEffect(() => {
@@ -116,6 +120,9 @@ export default function DiveSiteScreen({
         diveSitePics={diveSitePics}
         handleProfileMove={handleProfileMove}
         handleEmailDS={handleEmailDS}
+        speciesCount={speciesCount}
+        sightingsCount={sightingsCount}
+        tripCount={tripCount}
     />
   )
 
