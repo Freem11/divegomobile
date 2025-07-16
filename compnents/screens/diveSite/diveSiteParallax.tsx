@@ -118,7 +118,10 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
       isMyShop={isPartnerAccount}
       >
 
-      <DiveSiteScreen selectedDiveSite={selectedDiveSite}/>
+      <DiveSiteScreen 
+      selectedDiveSite={selectedDiveSite}
+      openPicUploader={openPicUploader}
+      />
     </ParallaxDrawer>
   );
 }

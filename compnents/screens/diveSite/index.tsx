@@ -10,23 +10,29 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import email from "react-native-email";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
   bottomHitCount?: number;
+  openPicUploader: () => void;
 };
 
 export default function DiveSiteScreen({
   closeParallax,
   restoreParallax,
   selectedDiveSite,
-  bottomHitCount
+  bottomHitCount,
+  openPicUploader
 }: DiveSiteProps) {
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { profile } = useContext(UserProfileContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
   const [tripCount, setTripCount] = useState(0);
@@ -39,19 +45,25 @@ export default function DiveSiteScreen({
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   
-  const getPhotos = async (site, profile) => {
+  // const getPhotos = async (site, profile) => {
 
-    const pagination = new Pagination({page: bottomHitCount, ipp: 10})
+  //   const pagination = new Pagination({page: bottomHitCount, ipp: 10})
    
-    const photos = await getDiveSitePhotos(
-      site.lat,
-      site.lng,
-      profile.UserID,
-      pagination
-    );
+  //   const photos = await getDiveSitePhotos(
+  //     site.lat,
+  //     site.lng,
+  //     profile.UserID,
+  //     pagination
+  //   );
 
-    setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
+  //   setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
+  // };
+
+  const openAllPhotosPage = () => {
+    setFullScreenModal(true)
+    setActiveTutorialID("DiveSitePhotos")
   };
+
 
   const getTrips = async (diveSiteId: number) => {
     const data = await getItinerariesForDiveSite(diveSiteId)
@@ -85,11 +97,11 @@ export default function DiveSiteScreen({
   // console.log('recentNine', recentNine)
   }
   
-  useEffect(() => {
-    if (selectedDiveSite.lat && profile) {
-      getPhotos(selectedDiveSite, profile);
-    }
-  }, [selectedDiveSite, profile, bottomHitCount]);
+  // useEffect(() => {
+  //   if (selectedDiveSite.lat && profile) {
+  //     getPhotos(selectedDiveSite, profile);
+  //   }
+  // }, [selectedDiveSite, profile, bottomHitCount]);
   
   
   const handleProfileMove = async (userName: string) => {
@@ -123,6 +135,8 @@ export default function DiveSiteScreen({
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
         tripCount={tripCount}
+        openPicUploader={openPicUploader}
+        openAllPhotosPage={openAllPhotosPage}
     />
   )
 

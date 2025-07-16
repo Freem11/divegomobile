@@ -14,13 +14,15 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
-
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
   usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
 
@@ -32,7 +34,8 @@ export default function PhotoBoxModal() {
   }
 
   const onCloseModal = () => {
-    setFullScreenModal(false);
+    setActiveTutorialID("DiveSitePhotos");
+    // setFullScreenModal(false);
   };
 
   return (
