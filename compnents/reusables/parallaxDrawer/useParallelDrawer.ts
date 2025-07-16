@@ -201,14 +201,8 @@ useEffect(() => {
   });
 
   const animatedSafeAreaStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      translateY.value,
-      [getHalfHeight(), 0],
-      [0, 0.35],
-      "clamp"
-    );
     return {
-      backgroundColor: `rgba(128, 128, 128, ${opacity})`,
+      backgroundColor: 'transparent',
     };
   });
 

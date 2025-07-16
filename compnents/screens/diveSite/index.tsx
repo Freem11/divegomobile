@@ -31,6 +31,9 @@ export default function DiveSiteScreen({
   const { profile } = useContext(UserProfileContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
+  const [previewSightings, setPreviewSightings] = useState([]);
+  const [sightingsCount, setSightingsCount] = useState(0);
+  const [speciesCount, setSpeciesCount] = useState(0);
 
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -63,23 +66,23 @@ export default function DiveSiteScreen({
 
 
   useEffect(() => {
-    newStuff(selectedDiveSite)
+    if(selectedDiveSite){
+      newStuff(selectedDiveSite)
+    }
+
   },[])
 
-  const newStuff = async (selectedDiveSite: DiveSiteWithUserName) => {
-  let tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
-  let speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-  let sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  const newStuff = async(selectedDiveSite: DiveSiteWithUserName) => {
+    const tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
+    const speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+    const sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+    const recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
 
-  let recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+    console.log("tripCount", tripCount)
 
-  console.log('tripCount', tripCount)
-
-  console.log('speciesCount', speciesCount)
-
-  console.log('sightingsCount', sightingsCount)
-
-  console.log('recentNine', recentNine)
+    setSightingsCount(sightingsCount.label_count);
+    setSpeciesCount(speciesCount.distinct_label_count)
+    setPreviewSightings(recentNine);
   }
   
   useEffect(() => {
@@ -101,23 +104,13 @@ export default function DiveSiteScreen({
     setLevelTwoScreen(true);
   };
 
-  const handleEmailDS = () => {
-    const to = ["scubaseasons@gmail.com"];
-    email(to, {
-      // Optional additional arguments
-      subject: `Reporting issue with Dive Site: "${selectedDiveSite.name}" at Latitude: ${selectedDiveSite.lat} Longitude: ${selectedDiveSite.lng} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
-      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
-    }).catch(console.error);
-  };
-
-
   return (
     <DiveSiteScreenView
       selectedDiveSite={selectedDiveSite}
-      diveSitePics={diveSitePics}
+      diveSitePics={previewSightings}
       handleProfileMove={handleProfileMove}
-      handleEmailDS={handleEmailDS}
+      sightingsCount={sightingsCount}
+      speciesCount={speciesCount}
     />
   )
 

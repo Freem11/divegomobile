@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { FontAwesome } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from "react";
 
-import Label from "../../reusables/label";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../../reusables/previewGrid";
+import Label from "../../reusables/label-new";
+import Icon from "../../../icons/Icon";
+import { colors } from "../../styles";
 
 import * as S from "./styles";
 
 type DiveSiteProps = {
-  bottomHitCount?: number;
   selectedDiveSite: DiveSiteWithUserName
   diveSitePics: DiveSiteWithUserName[]
   handleProfileMove: (userName: string) => void;
-  handleEmailDS: () => void;
+  sightingsCount: number;
+  speciesCount: number;
 };
 
 export default function DiveSiteScreenView({
-  bottomHitCount,
   selectedDiveSite,
   diveSitePics,
+  sightingsCount,
+  speciesCount,
   handleProfileMove,
-  handleEmailDS
 }: DiveSiteProps) {
 
-  const { t } = useTranslation();
   const [siteVals, setSiteVals] = useState(null);
 
   useEffect(() => {
@@ -37,70 +36,47 @@ export default function DiveSiteScreenView({
   
   },[selectedDiveSite])
 
-  const groupedPhotos = {};
-
-  diveSitePics && diveSitePics.forEach(photo => {
-    const key = `${photo.dateTaken}`;
-    if (!groupedPhotos[key]) {
-      groupedPhotos[key] = {
-        dateTaken: photo.dateTaken,
-        photos: [],
-      };
-    }
-    groupedPhotos[key].photos.push(photo);
-  });
-  
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-        <S.SiteNameContainer>
-          <S.Header>{siteVals?.siteName}</S.Header>
-
-          <FontAwesome
-            name="flag"
-            color="maroon"
-            size={moderateScale(16)}
-            style={{ marginTop: "5%", marginLeft: moderateScale(10) }}
-            onPress={() => handleEmailDS()}
-          />
-        </S.SiteNameContainer>
-
-        <S.Contributor>Added by: {siteVals?.user}</S.Contributor>
+        <S.Header>{siteVals?.siteName}</S.Header>
 
         <S.Content>{siteVals?.bio}</S.Content>
+        {siteVals?.user && (
+          <S.Contributor>Added by {siteVals?.user}</S.Contributor>
+        )}
 
       </S.InputGroupContainer>
 
       <S.LabelWrapper>
-        <Label label="Sea Life Sightings" />
+        <Label label="Sealife Sightings" />
+        <S.SectionCount>
+          {speciesCount ? (
+            `${speciesCount} species`
+          ) : null}
+        </S.SectionCount>
       </S.LabelWrapper>
 
-      {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
-        return (
-          <S.PhotoContainer key={`${photoPacket.dateTaken}-${index}`}>
-            {/*<S.PacketHeader>*/}
-            {/*<S.HeaderWrapper>*/}
-            {/*  <S.IconWrapper>*/}
-            {/*    <Icon name={'calendar-month'} fill={colors.primaryBlue}/>*/}
-            {/*  </S.IconWrapper>*/}
-            {/*  <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>*/}
-            {/*</S.HeaderWrapper>*/}
-            {/*</S.PacketHeader>*/}
-            <PreviewGrid items={photoPacket.photos}/>
-            {/*{photoPacket.photos.length > 0 &&*/}
-            {/*  photoPacket.photos.map((photo, index) => {       */}
-            {/*    return (*/}
-            {/*      <SeaLifeImageCard*/}
-            {/*        key={`${photo.id}-${index}`}*/}
-            {/*        pic={photo}*/}
-            {/*        dataSetType={"DiveSitePhotos"}*/}
-            {/*        profileViewAction={() => handleProfileMove(photo.UserName)}*/}
-            {/*      />*/}
-            {/*    );*/}
-            {/*  })}*/}
-          </S.PhotoContainer>
-        );
-      })}
+      <PreviewGrid items={diveSitePics} />
+
+      <S.SectionFooterWrapper>
+        <S.TotalCount>
+          {sightingsCount ? (
+            `${sightingsCount} total sightings`
+          ) : null}
+        </S.TotalCount>
+        <S.ViewMoreButton>
+          <S.ViewMoreButtonText>
+            {"View More"}
+          </S.ViewMoreButtonText>
+          <Icon 
+            name="chevron-right" 
+            width={moderateScale(24)}
+            height={moderateScale(24)}
+            fill={colors.primaryBlue}
+          />
+        </S.ViewMoreButton>
+      </S.SectionFooterWrapper>
     </S.ContentContainer>
   );
 }

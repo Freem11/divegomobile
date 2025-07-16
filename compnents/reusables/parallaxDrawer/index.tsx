@@ -1,19 +1,17 @@
-import React, { forwardRef, useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, ImageBackground, SafeAreaView, View, ViewProps, TouchableWithoutFeedback, Keyboard } from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { StyleSheet, ImageBackground, SafeAreaView, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
+import { Placement } from "react-native-popover-view/dist/Types";
+import { moderateScale } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
-import ButtonIcon from "../buttonIcon";
-import {
-  GestureDetector,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import { colors } from "../../styles";
+import Popover from "react-native-popover-view";
+
+import ButtonIcon from "../buttonIcon-new";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+
 import * as S from "./styles";
 import { WavyImg } from "./wavyImg";
 import { useParallaxDrawer } from "./useParallelDrawer";
-import Popover from "react-native-popover-view";
-import { Placement } from "react-native-popover-view/dist/Types";
-import { moderateScale } from "react-native-size-matters";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 type ParallaxDrawerProps = {
   headerImage: () => React.JSX.Element | string;
@@ -23,7 +21,7 @@ type ParallaxDrawerProps = {
   handleImageUpload?: () => void;
   isMyShop?: boolean
   isPartnerAccount?: boolean
-  popoverConent?: () => React.JSX.Element,
+  popoverContent?: () => React.JSX.Element,
 };
 
 const ParallaxDrawer = ({
@@ -31,7 +29,7 @@ const ParallaxDrawer = ({
   children,
   onClose,
   onMapFlip,
-  popoverConent
+  popoverContent
 }: ParallaxDrawerProps) => {
   
   const {
@@ -39,66 +37,57 @@ const ParallaxDrawer = ({
     panGesture,
     animatedDrawerStyle,
     animatedBackgroundStyle,
-    animatedSafeAreaStyle,
     contentHeight,
     closeParallax,
     restoreParallax,
     bottomHitCount
   } = useParallaxDrawer(onClose, onMapFlip);
 
-  const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
   const { fullScreenModal } = useContext(FullScreenModalContext);
   
-useEffect(() => {
-  if(fullScreenModal){
-    setIsVisible(false)
-  }
-},[fullScreenModal])
-
-  const ButtonIconWithRef = forwardRef<View, ViewProps & { onPress?: () => void }>((props, ref) => (
-    <View ref={ref} collapsable={false} style={{marginTop: 3}}>
-         <ButtonIcon 
-          icon="more"
-          size='headerIcon'
-          onPress={() => setIsVisible(true)}
-        />
-    </View>
-  ));
+  useEffect(() => {
+    if(fullScreenModal){
+      setIsVisible(false)
+    }
+  },[fullScreenModal])
   
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{ flex: 1 }}>
-          <AnimatedSafeAreaView style={[S.styles.safeArea, animatedSafeAreaStyle]}>
-            <S.BackButtonWrapper>
+          <SafeAreaView style={[S.styles.safeArea]}>
+            <S.HeaderWrapper>
               <ButtonIcon
                 icon="chevron-left"
+                size={30}
                 onPress={() => closeParallax(null)}
-                size="small"
-                fillColor={colors.themeWhite}
               />
-            </S.BackButtonWrapper>
-  
-            {popoverConent && (
-              <S.AltButtonWrapper>
-                <ButtonIconWithRef ref={iconRef} />
-              </S.AltButtonWrapper>
-            )}
-  
-            {popoverConent && (
-              <Popover
-                from={iconRef}
-                isVisible={isVisible}
-                onRequestClose={() => setIsVisible(false)}
-                placement={Placement.AUTO}
-                popoverStyle={{ borderRadius: moderateScale(10) }}
-              >
-                {popoverConent()}
-              </Popover>
-            )}
-          </AnimatedSafeAreaView>
+
+              {popoverContent && (
+                <View ref={iconRef} collapsable={false}>
+                  <ButtonIcon
+                    icon="more"
+                    size={20}
+                    onPress={() => setIsVisible(true)}
+                  />
+                </View>
+              )}
+
+              {popoverContent && (
+                <Popover
+                  from={iconRef}
+                  isVisible={isVisible}
+                  onRequestClose={() => setIsVisible(false)}
+                  placement={Placement.AUTO}
+                  popoverStyle={{ borderRadius: moderateScale(10) }}
+                >
+                  {popoverContent()}
+                </Popover>
+              )}
+            </S.HeaderWrapper>
+          </SafeAreaView>
   
           <S.BackgroundContainer>
             <Animated.View
@@ -138,10 +127,10 @@ useEffect(() => {
                   <S.EmptyContainer>
                     {React.isValidElement(children)
                       ? React.cloneElement(children, {
-                          closeParallax,
-                          restoreParallax,
-                          bottomHitCount,
-                        })
+                        closeParallax,
+                        restoreParallax,
+                        bottomHitCount,
+                      })
                       : children}
                   </S.EmptyContainer>
                 </S.Content>
