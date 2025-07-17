@@ -13,6 +13,8 @@ import PhotoBoxModel from '../screens/photoBox/photoBoxModal';
 import CommentsModal from "../modals/commentsModal";
 import EditScreenParallax from '../screens/edits/editsParallax';
 import DiveSitePhotosPage from '../screens/diveSitePhotos';
+import DiveSiteTripsPage from '../screens/diveSiteTrips';
+import UserProfilePhotosPage from '../screens/userProfilePhotos';
 
 import { colors } from "../styles";
 
@@ -49,8 +51,9 @@ export default function AnimatedFullScreenModal(props) {
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
       {activeTutorialID === "EditsScreen" && <EditScreenParallax/>}
       {activeTutorialID === "DiveSitePhotos" && <DiveSitePhotosPage />}
+      {activeTutorialID === "DiveSiteTrips" && <DiveSiteTripsPage />}
+      {activeTutorialID === "UserProfilePhotos" && <UserProfilePhotosPage />}
       
-
     </Animated.View>
   );
 }

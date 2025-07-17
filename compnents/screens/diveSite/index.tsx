@@ -33,8 +33,7 @@ export default function DiveSiteScreen({
   const { profile } = useContext(UserProfileContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const [diveSitePics, setDiveSitePics] = useState([]);
-  const [diveSiteTrips, setDiveSiteTrips] = useState([]);
+  const [diveSitePics, setDiveSitePics] = useState([]);;
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
@@ -44,37 +43,17 @@ export default function DiveSiteScreen({
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  
-  // const getPhotos = async (site, profile) => {
-
-  //   const pagination = new Pagination({page: bottomHitCount, ipp: 10})
-   
-  //   const photos = await getDiveSitePhotos(
-  //     site.lat,
-  //     site.lng,
-  //     profile.UserID,
-  //     pagination
-  //   );
-
-  //   setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
-  // };
-
   const openAllPhotosPage = () => {
     setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
     setActiveTutorialID("DiveSitePhotos")
   };
 
-
-  const getTrips = async (diveSiteId: number) => {
-    const data = await getItinerariesForDiveSite(diveSiteId)
-    setDiveSiteTrips(data)
-  }
-
-
-  useEffect(() => {
-    getTrips(selectedDiveSite.id)
-  },[selectedDiveSite])
-
+  const openAllTripsPage = () => {
+    setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
+    setActiveTutorialID("DiveSiteTrips")
+  };
 
   useEffect(() => {
     if(selectedDiveSite){
@@ -104,18 +83,6 @@ export default function DiveSiteScreen({
   // }, [selectedDiveSite, profile, bottomHitCount]);
   
   
-  const handleProfileMove = async (userName: string) => {
-    const picOwnerAccount = await grabProfileByUserName(userName);
-
-    if (profile.UserID === picOwnerAccount[0].UserID) {
-      return;
-    }
-
-    setActiveScreen("ProfileScreen", {id: picOwnerAccount[0].id})
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
-  };
-
   const handleEmailDS = () => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
@@ -130,13 +97,13 @@ export default function DiveSiteScreen({
     <DiveSiteScreenView
         selectedDiveSite={selectedDiveSite}
         diveSitePics={diveSitePics}
-        handleProfileMove={handleProfileMove}
         handleEmailDS={handleEmailDS}
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
         tripCount={tripCount}
         openPicUploader={openPicUploader}
         openAllPhotosPage={openAllPhotosPage}
+        openAllTripsPage={openAllTripsPage}
     />
   )
 

@@ -46,12 +46,12 @@ interface PictureProps {
 }
 
 const SeaLifeImageCard = (props: PictureProps) => {
-  const { pic } = props;
+  const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { activeTutorialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { profile } = useContext(UserProfileContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
 
@@ -159,7 +159,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
       <S.ContentWrapper>
         <S.LabelWrapper>
           <S.TitleText>{pic.label}</S.TitleText>
-          {activeScreen2.screenName === "ProfileScreen" ? (
+          {dataSetType === "ProfilePhotos" ? (
             <S.NavigateTextPressable onPress={props.diveSiteAction}>
               <S.NavigateText>View Site</S.NavigateText>
             </S.NavigateTextPressable>

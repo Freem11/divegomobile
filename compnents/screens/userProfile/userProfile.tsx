@@ -14,6 +14,7 @@ type UserProfileProps = {
   selectedProfile: ActiveProfile | null;
   speciesCount: number;
   sightingsCount: number;
+  openAllPhotosPage: () => void;
 };
 
 export default function UserProfileScreenView({
@@ -21,7 +22,8 @@ export default function UserProfileScreenView({
   handleDiveSiteMove,
   selectedProfile,
   speciesCount,
-  sightingsCount
+  sightingsCount,
+  openAllPhotosPage
 }: UserProfileProps) {
   
   const [profileVals, setProfileVals] = useState(null);
@@ -74,7 +76,7 @@ export default function UserProfileScreenView({
 
     <S.ButtonWrapper>
       <Button 
-        onPress={null} 
+        onPress={() => openAllPhotosPage()} 
         alt={false} 
         size='thin'
         title={'View All'} 

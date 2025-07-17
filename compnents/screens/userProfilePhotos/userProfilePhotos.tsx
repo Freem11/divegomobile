@@ -6,24 +6,25 @@ import * as S from "./styles";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
+import { Photo } from "../../../entities/photos";
 
-type DiveSitePhotosPageViewProps = {
-  diveSites: any
+type UserProfilePhotosPageViewProps = {
+  photos: any
   title: string
   setFullScreenModal: React.Dispatch<React.SetStateAction<boolean>>
-  handleProfileMove: (userName: string) => void;
+  handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
 };
 
-export default function DiveSitePhotosPageView({ 
-  diveSites,
+export default function UserProfilePhotosPageView({ 
+  photos,
   title,
   setFullScreenModal,
-  handleProfileMove
- }: DiveSitePhotosPageViewProps) {
+  handleDiveSiteMove
+ }: UserProfilePhotosPageViewProps) {
 
   const { t } = useTranslation();
 
-  console.log('diveSites', diveSites)
+  console.log('photos', photos)
   
   return (
     <S.ContentContainer>
@@ -40,16 +41,22 @@ export default function DiveSitePhotosPageView({
 
       </S.SafeArea>
 
-<S.Header>{title}</S.Header>
+<S.Header>{title}'s Sightings</S.Header>
 
       <FlatList
-        data={diveSites}
+        data={photos}
         keyExtractor={(item, index) => `diveSite-${item.id}-${item.dateTaken}-${index}`}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         renderItem={({ item }) => (
           <S.PhotoContainer>
             <S.PacketHeader>
+              <S.HeaderWrapper>
+                <S.IconWrapper>
+                  <Icon name={'anchor'} fill={colors.primaryBlue}/>
+                </S.IconWrapper>
+                <S.PacketHeaderItem>{item.name}</S.PacketHeaderItem>
+              </S.HeaderWrapper>
               <S.HeaderWrapper>
                 <S.IconWrapper>
                   <Icon name={'calendar-month'} fill={colors.primaryBlue} />
@@ -65,8 +72,8 @@ export default function DiveSitePhotosPageView({
               renderItem={({ item: photo }) => (
                 <SeaLifeImageCard
                   pic={photo}
-                  dataSetType={"DiveSitePhotos"}
-                  profileViewAction={() => handleProfileMove(photo.UserName)}
+                  dataSetType={"ProfilePhotos"}
+                  diveSiteAction={() => handleDiveSiteMove(photo, item)}
                 />
               )}
             />
@@ -74,6 +81,5 @@ export default function DiveSitePhotosPageView({
         )}
       />
     </S.ContentContainer>
-  );
-  
+  ); 
 }

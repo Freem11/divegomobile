@@ -34,6 +34,7 @@ export default function PhotoBoxModal() {
   }
 
   const onCloseModal = () => {
+        //todo: needs to be able to reroute to user profile photos page as well
     setActiveTutorialID("DiveSitePhotos");
     // setFullScreenModal(false);
   };

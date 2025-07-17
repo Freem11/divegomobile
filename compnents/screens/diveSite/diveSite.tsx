@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { colors } from '../../styles';
 import * as S from "./styles";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
-import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Label from "../../reusables/label";
-import Icon from "../../../icons/Icon";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import Button from "../../reusables/button";
 
@@ -14,26 +11,26 @@ type DiveSiteProps = {
   bottomHitCount?: number;
   selectedDiveSite: DiveSiteWithUserName
   diveSitePics: DiveSiteWithUserName[]
-  handleProfileMove: (userName: string) => void;
   handleEmailDS: () => void;
   speciesCount: number;
   sightingsCount: number;
   tripCount: number;
   openPicUploader: () => void;
   openAllPhotosPage: () => void;
+  openAllTripsPage: () => void;
 };
 
 export default function DiveSiteScreenView({
   bottomHitCount,
   selectedDiveSite,
   diveSitePics,
-  handleProfileMove,
   handleEmailDS,
   speciesCount,
   sightingsCount,
   tripCount,
   openPicUploader,
-  openAllPhotosPage
+  openAllPhotosPage,
+  openAllTripsPage
 }: DiveSiteProps) {
 
   const { t } = useTranslation();
@@ -122,7 +119,7 @@ export default function DiveSiteScreenView({
 
 <S.ButtonWrapper>
       <Button 
-            onPress={null} 
+            onPress={() => openAllTripsPage()} 
             alt={false} 
             size='thin'
             title={'View All'} 
