@@ -37,7 +37,7 @@ export default function DiveShopScreenView({
       <S.LabelWrapper>
         <Label label="Trips" />
         <S.SectionCount>
-          {tripsCount ? `${tripsCount} trips` : null}
+          {tripsCount ? `${tripsCount} active trip${tripsCount > 1 ? "s" : ""}` : null}
         </S.SectionCount>
       </S.LabelWrapper>
 
