@@ -17,7 +17,9 @@ export const StatsRow = styled.View`
   margin-top: ${moderateScale(6)}px;
 `;
 
-export const StatsContainer = styled.View``;
+export const StatsContainer = styled.View`
+  margin-top: ${moderateScale(5)}px;
+`;
 
 export const StatRow = styled.View`
   flex-direction: row;
@@ -38,5 +40,13 @@ export const TotalCount = styled.Text`
   color: ${colors.darkGrey};
   font-family: ${activeFonts.Medium};
   font-size: ${moderateScale(14)}px;
+`;
+
+export const EmptyStateContainer = styled.View`
+  width: 100%;
+  padding: ${moderateScale(40)}px ${moderateScale(20)}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 

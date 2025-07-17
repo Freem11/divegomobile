@@ -6,9 +6,10 @@ import { ItineraryItem } from "../../../entities/itineraryItem";
 import SealifePreview from "../../reusables/sealifePreview";
 import Label from "../../reusables/label-new";
 import ItineraryCard from "../../reusables/itineraryCard";
+import GhostButton from "../../reusables/ghostButton";
+import EmptyState from "../../reusables/emptyState-new";
 
 import * as S from "./styles";
-import GhostButton from "../../reusables/ghostButton";
 
 type DiveSiteProps = {
   selectedDiveSite: DiveSiteWithUserName
@@ -68,11 +69,10 @@ export default function DiveSiteScreenView({
         <Label label="Dive Trips" />
       </S.LabelWrapper>
 
-
       <S.ItinerariesWrapper>
-        <S.Stats>{`${tripCount} active trip${tripCount > 1 ? "s": ""}`}</S.Stats>
+        <S.Stats>{`${tripCount} active trip${tripCount === 1 ? "": "s"}`}</S.Stats>
 
-        {itineraries && itineraries.map((itinerary) => (
+        {itineraries && itineraries.length > 0 ? itineraries.map((itinerary) => (
           <ItineraryCard
             key={itinerary.id}
             itinerary={itinerary}
@@ -81,9 +81,17 @@ export default function DiveSiteScreenView({
             handleMapFlip={() => {}}
             handleBooking={() => {}}
           />
-        ))}
+        )) : (
+          <S.EmptyStateWrapper>
+            <EmptyState
+              iconName="boat"
+              title="No Trips Available"
+              subtitle="There are currently no diving trips scheduled for this location. Check back later!"
+            />
+          </S.EmptyStateWrapper>
+        )}
       </S.ItinerariesWrapper>
-      
+
       {tripCount > 3 && (
         <S.ButtonContainer>
           <GhostButton

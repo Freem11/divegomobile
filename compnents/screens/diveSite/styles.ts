@@ -37,8 +37,8 @@ export const Contributor = styled.Text`
 
 export const LabelWrapper = styled.View`
   width: 100%;
-  margin-top: ${moderateScale(30)}px;
-  margin-bottom: ${moderateScale(10)}px;
+  margin-top: ${moderateScale(40)}px;
+  margin-bottom: ${moderateScale(5)}px;
   padding: 0 ${moderateScale(20)}px;
   display: flex;
   flex-direction: row;
@@ -50,7 +50,7 @@ export const Stats = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.darkGrey};
-  margin-bottom: ${moderateScale(10)}px;
+  margin-bottom: ${moderateScale(20)}px;
 `;
 
 export const ItinerariesWrapper = styled.View`
@@ -59,4 +59,8 @@ export const ItinerariesWrapper = styled.View`
 
 export const ButtonContainer = styled.View`
   align-items: center;
+`;
+
+export const EmptyStateWrapper = styled.View`
+  padding: ${moderateScale(40)}px 0;
 `;
