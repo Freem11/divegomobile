@@ -46,7 +46,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
     setEditMode(false);
   };
 
-  const popoverConent = () => {
+  const popoverContent = () => {
     return (
     <>
     <IconWithLabel 
@@ -63,7 +63,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
       headerImage={TripImage}
       onClose={onClose}
       onMapFlip={onNavigate}
-      popoverConent={editMode && popoverConent}
+      popoverContent={editMode && popoverContent}
     >
       <TripCreatorPage itineraryInfo={storeFormValues}/>
 

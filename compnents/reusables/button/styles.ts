@@ -18,7 +18,7 @@ export const StyledButton = styled.View`
   width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
   height: ${({size}) => moderateScale(buttonSizes[size].height)}px;
   background-color: ${({alt}) => (alt ? colors.themeWhite : colors.primaryBlue)};
-  border-radius: ${moderateScale(30)}px;
+  border-radius: ${({ round }) => round ? `${moderateScale(30)}px` : `${moderateScale(10)}px`};
   border-color: ${colors.primaryBlue};
   border-width: ${moderateScale(1)}px;
   display: flex;
@@ -28,8 +28,8 @@ export const StyledButton = styled.View`
 `;
 
 export const StyledButtonText = styled.Text`
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Regular};
+  font-size: ${({ size }) => size === "small" ? `${moderateScale(fontSizes.SmallText)}px` : `${moderateScale(fontSizes.StandardText)}px`};
+  font-family: ${({ size }) => size === "small" ? activeFonts.Medium : activeFonts.Regular};
   color: ${({alt}) => (alt ? colors.primaryBlue : colors.themeWhite)};
 `;
 

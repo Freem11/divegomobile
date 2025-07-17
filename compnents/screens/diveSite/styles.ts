@@ -19,7 +19,6 @@ export const Header = styled.Text`
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
   color: ${colors.themeBlack};
-  margin-bottom: ${moderateScale(20)}px;
 `;
 
 export const Content = styled.Text`
@@ -27,6 +26,7 @@ export const Content = styled.Text`
   font-family: ${activeFonts.Light};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
+  margin-top: ${moderateScale(20)}px;
 `;
 
 export const Contributor = styled.Text`

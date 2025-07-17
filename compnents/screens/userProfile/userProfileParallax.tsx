@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Share from "react-native-share";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import UserProfileScreen from ".";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import noImage from '../../png/NoImage.png';
 import { Keyboard } from "react-native";
+
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import noImage from "../../png/NoImage.png";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -17,6 +17,8 @@ import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+
+import UserProfileScreen from ".";
 
 type UserProfileProps = {
   profileID: number
@@ -48,7 +50,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     getProfileinfo()
   }, [props.profileID]);
 
-  const getProfileinfo = async () => {
+  const getProfileinfo = async() => {
     const profileinfo = await grabProfileById(props.profileID)
     setSelectedProfile(profileinfo)
   }
@@ -78,34 +80,34 @@ export default function UserProfileParallax(props: UserProfileProps) {
   }, [selectedProfile]);
 
   async function followCheck() {
-  let follows = await checkIfUserFollows(
-    profile.user_id,
-    selectedProfile.user_id
-  );
-  if (follows && follows.length > 0) {
-    setIsfFollowing(follows[0].id);
+    const follows = await checkIfUserFollows(
+      profile.user_id,
+      selectedProfile.user_id
+    );
+    if (follows && follows.length > 0) {
+      setIsfFollowing(follows[0].id);
+    }
   }
-}
 
-const addFollow = async () => {
-  let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
-  if (!permissionGiven) {
-    return
+  const addFollow = async() => {
+    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    if (!permissionGiven) {
+      return
+    }
+    const newRecord = await insertUserFollow(
+      profile.UserID,
+      selectedProfile.user_id
+    );
+    setIsfFollowing(newRecord.id);    
   }
-  let newRecord = await insertUserFollow(
-    profile.UserID,
-    selectedProfile.user_id
-  );
-  setIsfFollowing(newRecord.id);    
-}
 
-const removeFollow = async () => {
-  let permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
-  if (!permissionGiven) {
-    return
+  const removeFollow = async() => {
+    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    if (!permissionGiven) {
+      return
+    }
+    deleteUserFollow(isFollowing);
   }
-  deleteUserFollow(isFollowing);
-}
   
   const onClose = () => {
     setSelectedProfile(null);
@@ -128,54 +130,54 @@ const removeFollow = async () => {
     setActiveTutorialID("EditsScreen")
   };
 
-  const handleShare = async () => {
+  const handleShare = async() => {
     try {
       await Share.open({
-        title: 'Share Scuba SEAsons Profile',
-        url: 'https://scuba-seasons.web.app',
+        title: "Share Scuba SEAsons Profile",
+        url: "https://scuba-seasons.web.app",
       });
     } catch (error) {
-      console.log('Share error:', error);
+      console.log("Share error:", error);
     }
   };
 
-  const popoverConent = () => {
+  const popoverContent = () => {
     return (
-    <>
-    {isMyProfile &&
-    <IconWithLabel 
-    label="Update My Profile"
-    iconName="camera-flip-outline"
-    buttonAction={() => openEditsPage()}
-    />
-    }
-    {isMyProfile && 
-    <IconWithLabel 
-    label="Open Settings"
-    iconName="settings"
-    buttonAction={() => openSettingsScreen()}
-    />
-    }
-    <IconWithLabel 
-    label="Share Profile"
-    iconName="share"
-    buttonAction={() => handleShare()}
-    />
-    {!isMyProfile && !isFollowing &&
-    <IconWithLabel 
-    label={`Follow ${selectedProfile?.UserName}`}
-    iconName="plus"
-    buttonAction={() => addFollow()}
-    />
-    }
-    {!isMyProfile && isFollowing &&
-    <IconWithLabel 
-    label={`UnFollow ${selectedProfile?.UserName}`}
-    iconName="minus"
-    buttonAction={() => removeFollow()}
-    />
-    }
-    </>
+      <>
+        {isMyProfile && (
+          <IconWithLabel 
+            label="Update My Profile"
+            iconName="camera-flip-outline"
+            buttonAction={() => openEditsPage()}
+          />
+        )}
+        {isMyProfile && (
+          <IconWithLabel 
+            label="Open Settings"
+            iconName="settings"
+            buttonAction={() => openSettingsScreen()}
+          />
+        )}
+        <IconWithLabel 
+          label="Share Profile"
+          iconName="share"
+          buttonAction={() => handleShare()}
+        />
+        {!isMyProfile && !isFollowing && (
+          <IconWithLabel 
+            label={`Follow ${selectedProfile?.UserName}`}
+            iconName="plus"
+            buttonAction={() => addFollow()}
+          />
+        )}
+        {!isMyProfile && isFollowing && (
+          <IconWithLabel 
+            label={`UnFollow ${selectedProfile?.UserName}`}
+            iconName="minus"
+            buttonAction={() => removeFollow()}
+          />
+        )}
+      </>
     )
   };
 
@@ -184,9 +186,9 @@ const removeFollow = async () => {
       headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage} 
       onClose={onClose} 
       onMapFlip={onNavigate}
-      popoverConent={popoverConent}
+      popoverContent={popoverContent}
       isMyShop={isMyProfile}
-      >
+    >
       <UserProfileScreen/>
     </ParallaxDrawer>
   );

@@ -9,10 +9,11 @@ export const colors = {
   themeBlack: "#00171f",
   themeRed: "#E63946",
   themeGreen: "#4caf50",
+  lightGrey: "#e8e8e8",
   neutralGrey: "#A9A9A9",
   darkGrey: "#706b6b",
   buttonPressOverlay: "rgba(128, 128, 128, 0.25)",
-  headerButtonOverlay: "rgba(0,0,0,0.3)",
+  headerButtonOverlay: "rgba(0,0,0,0.4)",
   searchOverlay: "rgba(128, 128, 128, 0.6)"
 }
 

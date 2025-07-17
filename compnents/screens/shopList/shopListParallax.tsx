@@ -24,7 +24,7 @@ export default function ShopListParallax() {
     setLevelOneScreen(false);
   };
 
-  // const popoverConent = () => {
+  // const popoverContent = () => {
   //   return (
   //   <>
   //   <IconWithLabel 
@@ -41,7 +41,7 @@ export default function ShopListParallax() {
       headerImage={Center}
       onClose={onClose}
       onMapFlip={onNavigate}
-      // popoverConent={popoverConent}
+      // popoverContent={popoverContent}
     >
       <ShopListPage/>
 

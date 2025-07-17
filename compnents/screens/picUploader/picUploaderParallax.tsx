@@ -47,7 +47,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
     setLocalPreviewUri({uri: argPicture});
   };
   
-  const popoverConent = () => {
+  const popoverContent = () => {
     return (
     <>
     <IconWithLabel 
@@ -76,7 +76,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
     <ParallaxDrawer 
     headerImage={localPreviewUri ? localPreviewUri : imageUploadZone} 
     onClose={onClose} 
-    popoverConent={localPreviewUri && popoverConent}
+    popoverContent={localPreviewUri && popoverContent}
     isMyShop={localPreviewUri}
     >
       <PicUploader 
