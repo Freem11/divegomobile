@@ -53,7 +53,7 @@ export default function GoogleMap() {
 
     const [diveSites, diveShops] = await Promise.all([
       GPSBubble.getItemsInGpsBubble(getDiveSitesBasic, bubble),
-      GPSBubble.getItemsInGpsBubble(getDiveShops, bubble),
+      GPSBubble.getItemsInGpsBubble(getDiveShops, bubble, ''),
     ]);
     setDiveShops(diveShops);
     setDiveSites(diveSites);

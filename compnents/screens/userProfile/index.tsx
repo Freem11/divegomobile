@@ -3,13 +3,14 @@ import { UserProfileContext } from "../../contexts/userProfileContext";
 import UserProfileScreenView from "./userProfile";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { getDiveSiteSightingCount, getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
+import { getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
 import { Pagination } from "../../../entities/pagination";
 import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { ActiveIndoorLevel } from "react-native-maps";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
@@ -24,7 +25,9 @@ export default function UserProfileScreen({
   const { profile } = useContext(UserProfileContext);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   
-
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
@@ -86,6 +89,12 @@ export default function UserProfileScreen({
     getPhotos();
   }, [selectedProfile, bottomHitCount]);
 
+  const openAllPhotosPage = () => {
+    setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
+    setActiveTutorialID("UserProfilePhotos")
+  };
+
   return (
     <UserProfileScreenView
       profilePhotos={profilePhotos}
@@ -93,6 +102,7 @@ export default function UserProfileScreen({
       handleDiveSiteMove={handleDiveSiteMove}
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
+      openAllPhotosPage={openAllPhotosPage}
     />
   )
 

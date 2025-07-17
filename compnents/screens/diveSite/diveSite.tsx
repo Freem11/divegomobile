@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { colors } from '../../styles';
 import * as S from "./styles";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
-import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import Label from "../../reusables/label";
-import Icon from "../../../icons/Icon";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import Button from "../../reusables/button";
 
@@ -14,22 +11,26 @@ type DiveSiteProps = {
   bottomHitCount?: number;
   selectedDiveSite: DiveSiteWithUserName
   diveSitePics: DiveSiteWithUserName[]
-  handleProfileMove: (userName: string) => void;
   handleEmailDS: () => void;
   speciesCount: number;
   sightingsCount: number;
   tripCount: number;
+  openPicUploader: () => void;
+  openAllPhotosPage: () => void;
+  openAllTripsPage: () => void;
 };
 
 export default function DiveSiteScreenView({
   bottomHitCount,
   selectedDiveSite,
   diveSitePics,
-  handleProfileMove,
   handleEmailDS,
   speciesCount,
   sightingsCount,
-  tripCount
+  tripCount,
+  openPicUploader,
+  openAllPhotosPage,
+  openAllTripsPage
 }: DiveSiteProps) {
 
   const { t } = useTranslation();
@@ -93,14 +94,14 @@ export default function DiveSiteScreenView({
       <S.ButtonWrapper>
 
           <Button 
-            onPress={null} 
+            onPress={() => openPicUploader()} 
             alt={false} 
             size='thin'
             title={t('DiveSite.addSighting')} 
             />
 
           <Button 
-            onPress={null} 
+            onPress={() => openAllPhotosPage()} 
             alt={false} 
             size='thin'
             title={'View All'} 
@@ -118,43 +119,12 @@ export default function DiveSiteScreenView({
 
 <S.ButtonWrapper>
       <Button 
-            onPress={null} 
+            onPress={() => openAllTripsPage()} 
             alt={false} 
             size='thin'
             title={'View All'} 
             />
 </S.ButtonWrapper>
-     {
-    //  groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
-
-        // return (
-        //   <S.PhotoContainer key={`${photoPacket.dateTaken}-${index}`}>   
-        //     <S.PacketHeader key={`${photoPacket.dateTaken}-${index}`}>
-
-        //     <S.HeaderWrapper>
-        //       <S.IconWrapper>
-        //       <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
-        //       </S.IconWrapper>
-
-        //       <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
-        //     </S.HeaderWrapper>
-
-        //     </S.PacketHeader>
-        //     {photoPacket.photos.length > 0 &&
-        //       photoPacket.photos.map((photo, index) => {       
-        //         return (
-        //           <SeaLifeImageCard
-        //             key={`${photo.id}-${index}`}
-        //             pic={photo}
-        //             dataSetType={"DiveSitePhotos"}
-        //             profileViewAction={() => handleProfileMove(photo.UserName)}
-        //           />
-        //         );
-        //       })}
-        //   </S.PhotoContainer>
-        // );
-      // })
-      }
     </S.ContentContainer>
   );
 }

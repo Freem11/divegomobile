@@ -10,25 +10,30 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import email from "react-native-email";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
   bottomHitCount?: number;
+  openPicUploader: () => void;
 };
 
 export default function DiveSiteScreen({
   closeParallax,
   restoreParallax,
   selectedDiveSite,
-  bottomHitCount
+  bottomHitCount,
+  openPicUploader
 }: DiveSiteProps) {
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { profile } = useContext(UserProfileContext);
-  const [diveSitePics, setDiveSitePics] = useState([]);
-  const [diveSiteTrips, setDiveSiteTrips] = useState([]);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const [diveSitePics, setDiveSitePics] = useState([]);;
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
@@ -38,31 +43,17 @@ export default function DiveSiteScreen({
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  
-  const getPhotos = async (site, profile) => {
-
-    const pagination = new Pagination({page: bottomHitCount, ipp: 10})
-   
-    const photos = await getDiveSitePhotos(
-      site.lat,
-      site.lng,
-      profile.UserID,
-      pagination
-    );
-
-    setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
+  const openAllPhotosPage = () => {
+    setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
+    setActiveTutorialID("DiveSitePhotos")
   };
 
-  const getTrips = async (diveSiteId: number) => {
-    const data = await getItinerariesForDiveSite(diveSiteId)
-    setDiveSiteTrips(data)
-  }
-
-
-  useEffect(() => {
-    getTrips(selectedDiveSite.id)
-  },[selectedDiveSite])
-
+  const openAllTripsPage = () => {
+    setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
+    setActiveTutorialID("DiveSiteTrips")
+  };
 
   useEffect(() => {
     if(selectedDiveSite){
@@ -85,25 +76,13 @@ export default function DiveSiteScreen({
   // console.log('recentNine', recentNine)
   }
   
-  useEffect(() => {
-    if (selectedDiveSite.lat && profile) {
-      getPhotos(selectedDiveSite, profile);
-    }
-  }, [selectedDiveSite, profile, bottomHitCount]);
+  // useEffect(() => {
+  //   if (selectedDiveSite.lat && profile) {
+  //     getPhotos(selectedDiveSite, profile);
+  //   }
+  // }, [selectedDiveSite, profile, bottomHitCount]);
   
   
-  const handleProfileMove = async (userName: string) => {
-    const picOwnerAccount = await grabProfileByUserName(userName);
-
-    if (profile.UserID === picOwnerAccount[0].UserID) {
-      return;
-    }
-
-    setActiveScreen("ProfileScreen", {id: picOwnerAccount[0].id})
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
-  };
-
   const handleEmailDS = () => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
@@ -118,11 +97,13 @@ export default function DiveSiteScreen({
     <DiveSiteScreenView
         selectedDiveSite={selectedDiveSite}
         diveSitePics={diveSitePics}
-        handleProfileMove={handleProfileMove}
         handleEmailDS={handleEmailDS}
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
         tripCount={tripCount}
+        openPicUploader={openPicUploader}
+        openAllPhotosPage={openAllPhotosPage}
+        openAllTripsPage={openAllTripsPage}
     />
   )
 

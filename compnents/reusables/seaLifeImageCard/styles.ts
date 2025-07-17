@@ -80,3 +80,9 @@ export const NavigateText = styled.Text`
   font-family: ${activeFonts.Light};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
 `;
+
+export const PlaceholderText = styled.Text`
+color: ${colors.primaryBlue};
+font-family: ${activeFonts.Light};
+font-size: ${moderateScale(fontSizes.SmallText)}px;
+`;
