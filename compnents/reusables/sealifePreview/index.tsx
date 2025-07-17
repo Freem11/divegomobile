@@ -49,7 +49,7 @@ export default function SealifePreview({
             size="thin"
             title={"Add More"}
             round={false}
-            iconLeft="plus"
+            iconLeft="camera-plus"
             style={{ width: "auto" }}
             onPress={onAddSighting}
           />
@@ -59,7 +59,7 @@ export default function SealifePreview({
       <PreviewGrid items={diveSitePics} />
 
       <S.SectionFooterWrapper>
-        <GhostButton onPress={onViewMore} title={'View More'} />
+        <GhostButton onPress={onViewMore} title={"View More"} />
       </S.SectionFooterWrapper>
     </>
   );

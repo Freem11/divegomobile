@@ -34,13 +34,13 @@ export const StyledButtonText = styled.Text`
 `;
 
 export const IconWrapperLeft = styled.View`
-    width: ${moderateScale(24)}px;
-    margin-left: ${moderateScale(-10)}px;
-    margin-right: ${moderateScale(5)}px;
+  width: ${({ size }) => size === "thin" ? `${moderateScale(18)}px` : `${moderateScale(24)}px`};
+  margin-left: ${moderateScale(-10)}px;
+  margin-right: ${moderateScale(6)}px;
 `;
 
 export const IconWrapperRight = styled.View`
-    width: ${moderateScale(24)}px;
-    margin-left: ${moderateScale(5)}px;
-    margin-right: ${moderateScale(-10)}px;
+  width: ${({ size }) => size === "thin" ? `${moderateScale(18)}px` : `${moderateScale(24)}px`};
+  margin-left: ${moderateScale(6)}px;
+  margin-right: ${moderateScale(-10)}px;
 `;
