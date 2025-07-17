@@ -15,14 +15,14 @@ export const colors = {
   buttonPressOverlay: "rgba(128, 128, 128, 0.25)",
   headerButtonOverlay: "rgba(0,0,0,0.4)",
   searchOverlay: "rgba(128, 128, 128, 0.6)"
-}
+};
 
 export const fontSizes = {
   Header: 28,
   SubHeading: 20,
   StandardText: 18,
   SmallText: 16
-}
+};
 
 export const buttonSizes = {
   micro: {
@@ -38,7 +38,7 @@ export const buttonSizes = {
     width: 36
   },
   thin: {
-    height: 30,
+    height: 40,
     width: 140
   },
   small: {
@@ -53,8 +53,7 @@ export const buttonSizes = {
     height: 50,
     width: 250
   },
-}
-
+};
 
 export const activeFonts = Platform.OS === "android" ? {
   Black: "RobotoBlack",
@@ -82,7 +81,7 @@ export const activeFonts = Platform.OS === "android" ? {
   Regular: "SFRegular",
   Thin: "SFThin",
   ThinItalic: "SFThinItalic",
-}
+};
 
 export const primaryButton = {
   backgroundColor: colors.primaryBlue,
@@ -92,13 +91,13 @@ export const primaryButton = {
   borderRadius: moderateScale(25),
   alignItems: "center",
   justifyContent: "center",
-}
+};
 
 export const buttonText = {
   color: colors.themeWhite,
   fontFamily: activeFonts.Regular,
   fontSize: moderateScale(fontSizes.StandardText)
-}
+};
 
 export const primaryButtonAlt = {
   backgroundColor: colors.themeWhite,
@@ -111,13 +110,13 @@ export const primaryButtonAlt = {
   alignItems: "center",
   justifyContent: "center",
 
-}
+};
 
 export const buttonTextAlt = {
   color: colors.primaryBlue,
   fontFamily: activeFonts.Regular,
   fontSize: moderateScale(fontSizes.StandardText),
-}
+};
 
 export const authenicationButton = {
   backgroundColor: colors.primaryBlue,
@@ -127,7 +126,7 @@ export const authenicationButton = {
   borderRadius: moderateScale(25),
   alignItems: "center",
   justifyContent: "center",
-}
+};
 
 export const screenSecondaryButton = {
   backgroundColor: colors.themeWhite,
@@ -139,4 +138,4 @@ export const screenSecondaryButton = {
   borderRadius: moderateScale(25),
   alignItems: "center",
   justifyContent: "center",
-}
+};

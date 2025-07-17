@@ -1,12 +1,8 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
-import {
-  colors,
-  fontSizes,
-  activeFonts,
-  buttonSizes
-} from '../../styles';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
 import { Platform } from "react-native";
+
+import { colors, fontSizes, activeFonts } from "../../styles";
 import Button from "../button";
 
 export const Card = styled.View`
@@ -73,7 +69,6 @@ export const Description = styled.View`
    width: 100%;
 `;
 
-
 export const DescriptionTextCollapsed = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Regular};
@@ -112,5 +107,4 @@ export const ButtonWrapper = styled.View`
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  height: ${moderateScale(40)}px;
 `;

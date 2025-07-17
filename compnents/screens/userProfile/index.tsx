@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-import UserProfileScreenView from "./userProfile";
+
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
-import { Pagination } from "../../../entities/pagination";
 import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
@@ -12,87 +9,53 @@ import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
+import UserProfileScreenView from "./userProfile";
+
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
   bottomHitCount?: number;
 };
 
-export default function UserProfileScreen({
-  closeParallax,
-  bottomHitCount
-}: UserProfileProps) {
-
-  const { profile } = useContext(UserProfileContext);
+export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-  
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  
-  const { selectedProfile, setSelectedProfile } = useContext(
-    SelectedProfileContext
-  );
-  const [profilePhotos, setProfilePhotos] = useState(null);
-  
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
+  const { selectedProfile, setSelectedProfile } = useContext(SelectedProfileContext);
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
+  const [profilePhotos, setProfilePhotos] = useState(null);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
 
   useEffect(() => {
-    newStuff(selectedProfile)
-  },[selectedProfile])
+    getData(selectedProfile);
+  },[selectedProfile]);
 
-  const newStuff = async (selectedProfile: ActiveProfile) => {
+  const getData = async(selectedProfile: ActiveProfile) => {
+    const species = await getUserSpeciesCount(selectedProfile.UserID);
+    setSpeciesCount(species.distinct_label_count);
 
-  const species = await getUserSpeciesCount(selectedProfile.UserID)
-  setSpeciesCount(species.distinct_label_count)
-  const sightings = await getUserSightingsCount(selectedProfile.UserID)
-  setSightingsCount(sightings.label_count)
+    const sightings = await getUserSightingsCount(selectedProfile.UserID);
+    setSightingsCount(sightings.label_count);
 
-  let recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID)
-  // console.log('recentNine', recentNine)
-  }
-  
-  const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
+    const recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID);
+    setProfilePhotos(recentNine);
+  };
+
+  const handleDiveSiteMove = async(pic: Photo, photoPacket) => {
     setSelectedDiveSite({
       SiteName: photoPacket.name,
       Latitude: pic.latitude,
       Longitude: pic.longitude
     });
-    closeParallax(1)
+    closeParallax(1);
     setLevelTwoScreen(false);
   };
 
-  const getPhotos = async () => {
-    const pagination = new Pagination({page: bottomHitCount, ipp: 10})
-
-    let photos;
-    if (selectedProfile?.UserID) {
-      photos = await getProfilePhotosByUser(
-        selectedProfile.UserID,
-        profile.UserID,
-        pagination
-      );
-    } else {
-      photos = await getProfilePhotosByUser(
-        profile.UserID,
-        profile.UserID,
-        pagination
-      );
-    }
-    setProfilePhotos((prev) => prev ? [...prev, ...photos] : photos);
-  };
-
-  useEffect(() => {
-    getPhotos();
-  }, [selectedProfile, bottomHitCount]);
-
   const openAllPhotosPage = () => {
-    setFullScreenModal(true)
+    setFullScreenModal(true);
     //to do: need to change what modal animation this runs on
-    setActiveTutorialID("UserProfilePhotos")
+    setActiveTutorialID("UserProfilePhotos");
   };
 
   return (
@@ -104,6 +67,6 @@ export default function UserProfileScreen({
       sightingsCount={sightingsCount}
       openAllPhotosPage={openAllPhotosPage}
     />
-  )
+  );
 
 }

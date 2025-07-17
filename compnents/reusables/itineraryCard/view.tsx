@@ -7,7 +7,7 @@ import { ItineraryItem } from "../../../entities/itineraryItem";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 
-import * as S from "./styles"
+import * as S from "./styles";
 import { Menu } from "./Menu";
 
 type TripCardViewProps = {
@@ -17,23 +17,22 @@ type TripCardViewProps = {
   handleEdit: (sites: ItineraryItem) => void;
   handleDelete: (sites: ItineraryItem) => void;
   handleMapFlip: () => void;
-  handleBooking: () => void; 
+  handleBooking: () => void;
 };
 
-export default function ItineraryCardView({ 
-  itinerary, 
+export default function ItineraryCardView({
+  itinerary,
   flipMap,
   isMyShop,
-  handleEdit, 
-  handleDelete, 
-  handleMapFlip, 
+  handleEdit,
+  handleDelete,
+  handleMapFlip,
   handleBooking
 }: TripCardViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-
 
   return (
     <S.Card>
@@ -50,7 +49,7 @@ export default function ItineraryCardView({
           )}
         </S.Header>
         <View style={{ flexDirection: "row", marginRight: -moderateScale(2) }}>
-          <Icon 
+          <Icon
             name={"calendar-month"}
             style={{ width: moderateScale(18), marginRight: moderateScale(4) }}
             fill={colors.darkGrey}
@@ -85,10 +84,10 @@ export default function ItineraryCardView({
               numberOfLines={isMeasuring === 0 ? undefined : 2}
               onTextLayout={(e) => {
                 const lines = e.nativeEvent.lines.length;
-                if(lines > 2){
+                if (lines > 2){
                   setIsOverflowing(true);
                 }
-                setIsMeasuring(2)
+                setIsMeasuring(2);
               }}
             >
               {itinerary.description}
@@ -105,7 +104,7 @@ export default function ItineraryCardView({
         <S.ButtonsContainer>
           <S.ButtonWrapper>
             <S.StyledButton
-              size={"small"}
+              size={"thin"}
               title={"View on Map"}
               iconLeft={"map-outlined"}
               round={false}
@@ -114,7 +113,7 @@ export default function ItineraryCardView({
           </S.ButtonWrapper>
           <S.ButtonWrapper>
             <S.StyledButton
-              size={"small"}
+              size={"thin"}
               title={"Book Trip"}
               round={false}
               alt

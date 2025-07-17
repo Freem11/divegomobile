@@ -8,7 +8,7 @@ import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { grabProfileById} from "../../../supabaseCalls/accountSupabaseCalls";
+import { grabProfileById } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
@@ -39,7 +39,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const { profile } = useContext(UserProfileContext);
   const [isMyProfile, setIsMyProfile] = useState(false);
   const { activeSession } = useContext(SessionContext);
-  
+
   const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
   const { setEditInfo } = useContext(EditsContext);
@@ -47,13 +47,13 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   useEffect(() => {
-    getProfileinfo()
+    getProfileinfo();
   }, [props.profileID]);
 
   const getProfileinfo = async() => {
-    const profileinfo = await grabProfileById(props.profileID)
-    setSelectedProfile(profileinfo)
-  }
+    const profileinfo = await grabProfileById(props.profileID);
+    setSelectedProfile(profileinfo);
+  };
 
   useEffect(() => {
     if (
@@ -62,14 +62,14 @@ export default function UserProfileParallax(props: UserProfileProps) {
       setIsMyProfile(true);
     } else {
       setIsMyProfile(false);
-      followCheck()
+      followCheck();
     }
 
     let photoName = null;
-    if(selectedProfile?.profilePhoto) {
+    if (selectedProfile?.profilePhoto) {
       photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}`;
     }
-    
+
     setProfileVals({
       id: selectedProfile?.id,
       name: selectedProfile?.UserName,
@@ -92,23 +92,23 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const addFollow = async() => {
     const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
     if (!permissionGiven) {
-      return
+      return;
     }
     const newRecord = await insertUserFollow(
       profile.UserID,
       selectedProfile.user_id
     );
-    setIsfFollowing(newRecord.id);    
-  }
+    setIsfFollowing(newRecord.id);
+  };
 
   const removeFollow = async() => {
     const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
     if (!permissionGiven) {
-      return
+      return;
     }
     deleteUserFollow(isFollowing);
-  }
-  
+  };
+
   const onClose = () => {
     setSelectedProfile(null);
     setLevelTwoScreen(false);
@@ -123,11 +123,11 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setLevelOneScreen(true);
     setActiveScreen("SettingsScreen");
   };
-  
+
   const openEditsPage = () => {
-    setFullScreenModal(true)
-    setEditInfo("Profile")
-    setActiveTutorialID("EditsScreen")
+    setFullScreenModal(true);
+    setEditInfo("Profile");
+    setActiveTutorialID("EditsScreen");
   };
 
   const handleShare = async() => {
@@ -145,51 +145,51 @@ export default function UserProfileParallax(props: UserProfileProps) {
     return (
       <>
         {isMyProfile && (
-          <IconWithLabel 
+          <IconWithLabel
             label="Update My Profile"
             iconName="camera-flip-outline"
             buttonAction={() => openEditsPage()}
           />
         )}
         {isMyProfile && (
-          <IconWithLabel 
+          <IconWithLabel
             label="Open Settings"
             iconName="settings"
             buttonAction={() => openSettingsScreen()}
           />
         )}
-        <IconWithLabel 
+        <IconWithLabel
           label="Share Profile"
           iconName="share"
           buttonAction={() => handleShare()}
         />
         {!isMyProfile && !isFollowing && (
-          <IconWithLabel 
+          <IconWithLabel
             label={`Follow ${selectedProfile?.UserName}`}
             iconName="plus"
             buttonAction={() => addFollow()}
           />
         )}
         {!isMyProfile && isFollowing && (
-          <IconWithLabel 
+          <IconWithLabel
             label={`UnFollow ${selectedProfile?.UserName}`}
             iconName="minus"
             buttonAction={() => removeFollow()}
           />
         )}
       </>
-    )
+    );
   };
 
   return (
-    <ParallaxDrawer 
-      headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage} 
-      onClose={onClose} 
+    <ParallaxDrawer
+      headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage}
+      onClose={onClose}
       onMapFlip={onNavigate}
       popoverContent={popoverContent}
       isMyShop={isMyProfile}
     >
-      <UserProfileScreen/>
+      <UserProfileScreen />
     </ParallaxDrawer>
   );
 }

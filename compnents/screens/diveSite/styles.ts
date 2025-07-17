@@ -53,44 +53,10 @@ export const ButtonWrapper= styled.View`
   margin-vertical: 5%;
 `;
 
-export const SectionCount = styled.Text`
-  color: ${colors.primaryBlue};
-  font-family: ${activeFonts.Medium};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-`;
-
-export const SectionFooterWrapper = styled.View`
-  width: 100%;
-  margin-top: ${moderateScale(10)}px;
-  padding: 0 ${moderateScale(20)}px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 export const StatWrapper = styled.View`
   width: 100%;
   margin-left: 5%;
   margin-vertical: ${moderateScale(3)}px;
-`;
-
-export const TotalCount = styled.Text`
-  color: ${colors.darkGrey};
-  font-family: ${activeFonts.Medium};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-`;
-
-export const ViewMoreButtonText = styled.Text`
-  color: ${colors.primaryBlue};
-  font-family: ${activeFonts.Medium};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-`;
-
-export const ViewMoreButton = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  margin-right: -${moderateScale(5)}px;
 `;
 
 export const Stats = styled.Text`
