@@ -1,6 +1,4 @@
 import React from "react";
-import { moderateScale } from "react-native-size-matters";
-import { View } from "react-native";
 
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../previewGrid";
@@ -8,6 +6,7 @@ import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
 import Label from "../label-new";
 import Button from "../button";
+import GhostButton from "../ghostButton";
 
 import * as S from "./styles";
 
@@ -30,21 +29,21 @@ export default function SealifePreview({
     <>
       <S.LabelWrapper>
         <Label label={"Sea Life Sightings"} />
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: moderateScale(6) }}>
-          <View>
-            <View style={{ flexDirection: "row", marginBottom: moderateScale(2) }}>
+        <S.StatsRow>
+          <S.StatsContainer>
+            <S.StatRow>
               <Icon name="eye" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
               <S.TotalCount>
                 {sightingsCount ? `${sightingsCount} sightings` : null}
               </S.TotalCount>
-            </View>
-            <View style={{ flexDirection: "row", marginBottom: moderateScale(2) }}>
+            </S.StatRow>
+            <S.StatRow>
               <Icon name="fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
               <S.TotalCount>
                 {speciesCount ? `${speciesCount} species` : null}
               </S.TotalCount>
-            </View>
-          </View>
+            </S.StatRow>
+          </S.StatsContainer>
 
           <Button
             size="thin"
@@ -54,23 +53,13 @@ export default function SealifePreview({
             style={{ width: "auto" }}
             onPress={onAddSighting}
           />
-        </View>
+        </S.StatsRow>
       </S.LabelWrapper>
 
       <PreviewGrid items={diveSitePics} />
 
       <S.SectionFooterWrapper>
-        <S.ViewMoreButton onPress={onViewMore}>
-          <S.ViewMoreButtonText>
-            {"View More"}
-          </S.ViewMoreButtonText>
-          <Icon
-            name={"chevron-right"}
-            width={moderateScale(24)}
-            height={moderateScale(24)}
-            fill={colors.primaryBlue}
-          />
-        </S.ViewMoreButton>
+        <GhostButton onPress={onViewMore} title={'View More'} />
       </S.SectionFooterWrapper>
     </>
   );

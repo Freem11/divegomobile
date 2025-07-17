@@ -1,12 +1,27 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 
-import { colors, fontSizes, activeFonts } from "../../styles";
+import { colors, activeFonts } from "../../styles";
 
 export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(20)}px;
   padding: 0 ${moderateScale(20)}px;
+`;
+
+export const StatsRow = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: ${moderateScale(6)}px;
+`;
+
+export const StatsContainer = styled.View``;
+
+export const StatRow = styled.View`
+  flex-direction: row;
+  margin-bottom: ${moderateScale(2)}px;
 `;
 
 export const SectionFooterWrapper = styled.View`
@@ -15,7 +30,7 @@ export const SectionFooterWrapper = styled.View`
   padding: 0 ${moderateScale(20)}px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -25,14 +40,3 @@ export const TotalCount = styled.Text`
   font-size: ${moderateScale(14)}px;
 `;
 
-export const ViewMoreButtonText = styled.Text`
-  color: ${colors.primaryBlue};
-  font-family: ${activeFonts.Medium};
-  font-size: ${fontSizes.SmallText}px;
-`;
-
-export const ViewMoreButton = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  margin-right: -${moderateScale(5)}px;
-`;

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
-import Button from "../../reusables/button";
+import { ItineraryItem } from "../../../entities/itineraryItem";
 import SealifePreview from "../../reusables/sealifePreview";
 import Label from "../../reusables/label-new";
+import ItineraryCard from "../../reusables/itineraryCard";
 
 import * as S from "./styles";
+import GhostButton from "../../reusables/ghostButton";
 
 type DiveSiteProps = {
   selectedDiveSite: DiveSiteWithUserName
@@ -14,6 +16,7 @@ type DiveSiteProps = {
   speciesCount: number;
   sightingsCount: number;
   tripCount: number;
+  itineraries: ItineraryItem[];
   openPicUploader: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
@@ -25,6 +28,7 @@ export default function DiveSiteScreenView({
   speciesCount,
   sightingsCount,
   tripCount,
+  itineraries,
   openPicUploader,
   openAllPhotosPage,
   openAllTripsPage
@@ -64,18 +68,30 @@ export default function DiveSiteScreenView({
         <Label label="Dive Trips" />
       </S.LabelWrapper>
 
-      <S.StatWrapper>
-        <S.Stats>{tripCount} Active Trips</S.Stats>
-      </S.StatWrapper>
 
-      <S.ButtonWrapper>
-        <Button
-          onPress={() => openAllTripsPage()}
-          alt={false}
-          size="thin"
-          title={"View All"}
-        />
-      </S.ButtonWrapper>
+      <S.ItinerariesWrapper>
+        <S.Stats>{`${tripCount} active trip${tripCount > 1 ? "s": ""}`}</S.Stats>
+
+        {itineraries && itineraries.map((itinerary) => (
+          <ItineraryCard
+            key={itinerary.id}
+            itinerary={itinerary}
+            handleEdit={() => {}}
+            handleDelete={() => {}}
+            handleMapFlip={() => {}}
+            handleBooking={() => {}}
+          />
+        ))}
+      </S.ItinerariesWrapper>
+      
+      {tripCount > 3 && (
+        <S.ButtonContainer>
+          <GhostButton
+            onPress={() => openAllTripsPage()}
+            title={"View All Trips"}
+          />
+        </S.ButtonContainer>
+      )}
     </S.ContentContainer>
   );
 }

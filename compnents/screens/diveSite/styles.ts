@@ -8,7 +8,6 @@ const windowWidth = Dimensions.get("screen").width;
 
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
-  align-items: center;
 `;
 
 export const InputGroupContainer = styled.View`
@@ -38,7 +37,8 @@ export const Contributor = styled.Text`
 
 export const LabelWrapper = styled.View`
   width: 100%;
-  margin-bottom: ${moderateScale(20)}px;
+  margin-top: ${moderateScale(30)}px;
+  margin-bottom: ${moderateScale(10)}px;
   padding: 0 ${moderateScale(20)}px;
   display: flex;
   flex-direction: row;
@@ -46,21 +46,17 @@ export const LabelWrapper = styled.View`
   align-items: center;
 `;
 
-export const ButtonWrapper= styled.View`
-  width: 100%;
-  justify-content: space-evenly;
-  flex-direction: row;
-  margin-vertical: 5%;
-`;
-
-export const StatWrapper = styled.View`
-  width: 100%;
-  margin-left: 5%;
-  margin-vertical: ${moderateScale(3)}px;
-`;
-
 export const Stats = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.Thin}px;
-  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Medium};
+  color: ${colors.darkGrey};
+  margin-bottom: ${moderateScale(10)}px;
+`;
+
+export const ItinerariesWrapper = styled.View`
+  padding: 0 ${moderateScale(20)}px;
+`;
+
+export const ButtonContainer = styled.View`
+  align-items: center;
 `;

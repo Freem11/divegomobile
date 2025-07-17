@@ -56,7 +56,7 @@ export const Date = styled.Text`
 export const Price = styled.Text`
   font-size: ${moderateScale(15)}px;
   font-family: ${activeFonts.Medium};
-  color: ${colors.themeGreen};
+  color: ${colors.primaryBlue};
 `;
 
 export const Actions = styled.View`

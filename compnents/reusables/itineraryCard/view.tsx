@@ -65,11 +65,10 @@ export default function ItineraryCardView({
           <Icon
             name={"currency-usd"}
             style={{ width: moderateScale(18), marginRight: moderateScale(4) }}
-            fill={colors.themeGreen}
+            fill={colors.primaryBlue}
           />
           <S.Price>{itinerary.price.replace(/\$/g, "")} per person</S.Price>
         </View>
-
       </S.CardTop>
 
       <S.Description>

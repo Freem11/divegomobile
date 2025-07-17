@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
-import { getDiveSiteTripCount } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { ItineraryItem } from "../../../entities/itineraryItem";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
@@ -20,6 +21,7 @@ export default function DiveSiteScreen({ selectedDiveSite, openPicUploader }: Di
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
+  const [itineraries, setItineraries] = useState<ItineraryItem[]>([]);
 
   const openAllPhotosPage = () => {
     setFullScreenModal(true);
@@ -52,6 +54,9 @@ export default function DiveSiteScreen({ selectedDiveSite, openPicUploader }: Di
     const recentNine = await getDiveSiteRecentNinePhotos({ lat: selectedDiveSite.lat, lng: selectedDiveSite.lng });
     setDiveSitePics(recentNine);
 
+    const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
+    setItineraries(diveSiteItineraries);
+
   };
 
   return (
@@ -61,6 +66,7 @@ export default function DiveSiteScreen({ selectedDiveSite, openPicUploader }: Di
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
       tripCount={tripCount}
+      itineraries={itineraries}
       openPicUploader={openPicUploader}
       openAllPhotosPage={openAllPhotosPage}
       openAllTripsPage={openAllTripsPage}
