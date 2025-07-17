@@ -76,17 +76,30 @@ export const Contributor = styled.Text`
   color: ${colors.themeBlack};
 `;
 
-export const HeaderWrapper = styled.View`
- flex-direction: row;
- align-items: center;
+export const ButtonWrapper= styled.View`
+  width: 100%;
+  justify-content: space-evenly;
+  flex-direction: row;
+  margin-vertical: 5%;
 `;
 
 export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(10)}px;
-  align-items: center;
+  margin-left: 5%;
 `;
 
+export const StatWrapper = styled.View`
+  width: 100%;
+  margin-left: 5%;
+  margin-vertical: ${moderateScale(3)}px;
+`;
+
+export const Stats = styled.Text`
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Thin}px;
+  color: ${colors.themeBlack};
+`;
 
 export const IconWrapper = styled.View`
     width: ${moderateScale(24)}px;

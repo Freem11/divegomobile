@@ -34,6 +34,10 @@ export const buttonSizes = {
     height: 36,
     width: 36
   },
+  thin: {
+    height: 30,
+    width: 140
+  },
   small: {
     height: 50,
     width: 50

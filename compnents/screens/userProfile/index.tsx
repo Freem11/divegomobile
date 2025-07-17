@@ -34,21 +34,22 @@ export default function UserProfileScreen({
     LevelTwoScreenContext
   );
 
+  const [speciesCount, setSpeciesCount] = useState(0);
+  const [sightingsCount, setSightingsCount] = useState(0);
+
   useEffect(() => {
     newStuff(selectedProfile)
   },[selectedProfile])
 
   const newStuff = async (selectedProfile: ActiveProfile) => {
 
-  let speciesCount = await getUserSpeciesCount(selectedProfile.UserID)
-  let sightingsCount = await getUserSightingsCount(selectedProfile.UserID)
+  const species = await getUserSpeciesCount(selectedProfile.UserID)
+  setSpeciesCount(species.distinct_label_count)
+  const sightings = await getUserSightingsCount(selectedProfile.UserID)
+  setSightingsCount(sightings.label_count)
+
   let recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID)
-
-  console.log('user speciesCount', speciesCount)
-
-  console.log('user sightingsCount', sightingsCount)
-
-  console.log('recentNine', recentNine)
+  // console.log('recentNine', recentNine)
   }
   
   const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
@@ -85,12 +86,13 @@ export default function UserProfileScreen({
     getPhotos();
   }, [selectedProfile, bottomHitCount]);
 
-
   return (
     <UserProfileScreenView
       profilePhotos={profilePhotos}
       selectedProfile={selectedProfile}
       handleDiveSiteMove={handleDiveSiteMove}
+      speciesCount={speciesCount}
+      sightingsCount={sightingsCount}
     />
   )
 

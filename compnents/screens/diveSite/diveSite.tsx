@@ -8,6 +8,7 @@ import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard"
 import Label from "../../reusables/label";
 import Icon from "../../../icons/Icon";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import Button from "../../reusables/button";
 
 type DiveSiteProps = {
   bottomHitCount?: number;
@@ -15,6 +16,9 @@ type DiveSiteProps = {
   diveSitePics: DiveSiteWithUserName[]
   handleProfileMove: (userName: string) => void;
   handleEmailDS: () => void;
+  speciesCount: number;
+  sightingsCount: number;
+  tripCount: number;
 };
 
 export default function DiveSiteScreenView({
@@ -22,7 +26,10 @@ export default function DiveSiteScreenView({
   selectedDiveSite,
   diveSitePics,
   handleProfileMove,
-  handleEmailDS
+  handleEmailDS,
+  speciesCount,
+  sightingsCount,
+  tripCount
 }: DiveSiteProps) {
 
   const { t } = useTranslation();
@@ -72,37 +79,82 @@ export default function DiveSiteScreenView({
       </S.InputGroupContainer>
 
       <S.LabelWrapper>
-            <Label label="Sea Life Sightings" />
-        </S.LabelWrapper>
+        <Label label="Sea Life Sightings" />
+      </S.LabelWrapper>
 
-      {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
-  return (
-    <S.PhotoContainer key={`${photoPacket.dateTaken}-${index}`}>   
-      <S.PacketHeader key={`${photoPacket.dateTaken}-${index}`}>
+      <S.StatWrapper>
+        <S.Stats>{sightingsCount} Sightings</S.Stats>
+      </S.StatWrapper>
 
-      <S.HeaderWrapper>
-        <S.IconWrapper>
-        <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
-        </S.IconWrapper>
+      <S.StatWrapper>
+        <S.Stats>{speciesCount} Species Sighted</S.Stats>
+      </S.StatWrapper>
 
-        <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
-      </S.HeaderWrapper>
+      <S.ButtonWrapper>
 
-      </S.PacketHeader>
-      {photoPacket.photos.length > 0 &&
-        photoPacket.photos.map((photo, index) => {       
-          return (
-            <SeaLifeImageCard
-              key={`${photo.id}-${index}`}
-              pic={photo}
-              dataSetType={"DiveSitePhotos"}
-              profileViewAction={() => handleProfileMove(photo.UserName)}
+          <Button 
+            onPress={null} 
+            alt={false} 
+            size='thin'
+            title={t('DiveSite.addSighting')} 
             />
-          );
-        })}
-    </S.PhotoContainer>
-  );
-})}
+
+          <Button 
+            onPress={null} 
+            alt={false} 
+            size='thin'
+            title={'View All'} 
+            />
+
+      </S.ButtonWrapper>
+
+      <S.LabelWrapper>
+        <Label label="Dive Trips" />
+      </S.LabelWrapper>
+
+      <S.StatWrapper>
+        <S.Stats>{tripCount} Active Trips</S.Stats>
+      </S.StatWrapper>
+
+<S.ButtonWrapper>
+      <Button 
+            onPress={null} 
+            alt={false} 
+            size='thin'
+            title={'View All'} 
+            />
+</S.ButtonWrapper>
+     {
+    //  groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
+
+        // return (
+        //   <S.PhotoContainer key={`${photoPacket.dateTaken}-${index}`}>   
+        //     <S.PacketHeader key={`${photoPacket.dateTaken}-${index}`}>
+
+        //     <S.HeaderWrapper>
+        //       <S.IconWrapper>
+        //       <Icon name={'calendar-month'} fill={colors.primaryBlue}/>
+        //       </S.IconWrapper>
+
+        //       <S.PacketHeaderItem>{photoPacket.dateTaken}</S.PacketHeaderItem>
+        //     </S.HeaderWrapper>
+
+        //     </S.PacketHeader>
+        //     {photoPacket.photos.length > 0 &&
+        //       photoPacket.photos.map((photo, index) => {       
+        //         return (
+        //           <SeaLifeImageCard
+        //             key={`${photo.id}-${index}`}
+        //             pic={photo}
+        //             dataSetType={"DiveSitePhotos"}
+        //             profileViewAction={() => handleProfileMove(photo.UserName)}
+        //           />
+        //         );
+        //       })}
+        //   </S.PhotoContainer>
+        // );
+      // })
+      }
     </S.ContentContainer>
   );
 }
