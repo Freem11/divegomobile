@@ -86,6 +86,11 @@ export default tseslint.config(
       "singleline": "forbid"
     }],
     "@stylistic/jsx-curly-spacing": ["error", "never"],
+    "@stylistic/object-curly-spacing": ["error", "always"],
+    "@stylistic/no-trailing-spaces": "error",
+    "@stylistic/no-multiple-empty-lines": ["error", { "max": 1 }],
+    "@stylistic/semi": ["error", "always"],
+    "@stylistic/keyword-spacing": ["error", { "before": true, "after": true }],
     "@stylistic/indent": ["error", 2]
   }
 });

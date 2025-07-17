@@ -16,12 +16,12 @@ type ItineraryCardProps = {
 };
 
 export default function ItineraryCard({
-  itinerary, 
-  isMyShop, 
-  handleEdit, 
+  itinerary,
+  isMyShop,
+  handleEdit,
   handleDelete,
-  handleMapFlip, 
-  handleBooking 
+  handleMapFlip,
+  handleBooking
 }: ItineraryCardProps) {
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 

@@ -7,10 +7,6 @@ export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(20)}px;
   padding: 0 ${moderateScale(20)}px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 export const SectionFooterWrapper = styled.View`
@@ -19,20 +15,20 @@ export const SectionFooterWrapper = styled.View`
   padding: 0 ${moderateScale(20)}px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 `;
 
 export const TotalCount = styled.Text`
   color: ${colors.darkGrey};
   font-family: ${activeFonts.Medium};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-size: ${moderateScale(14)}px;
 `;
 
 export const ViewMoreButtonText = styled.Text`
   color: ${colors.primaryBlue};
   font-family: ${activeFonts.Medium};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-size: ${fontSizes.SmallText}px;
 `;
 
 export const ViewMoreButton = styled.TouchableOpacity`

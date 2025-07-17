@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React from "react";
 import { openURL } from "expo-linking";
 
 import ItineraryCard from "../../reusables/itineraryCard";
@@ -28,19 +27,6 @@ export default function DiveShopScreenView({
   handleDeleteButton,
   tripsCount
 }: DiveShopProps) {
-  
-  const { t } = useTranslation()
-
-  const [siteVals, setSiteVals] = useState(null);
-
-  useEffect(() => {
-    setSiteVals({
-      siteName: selectedShop.orgName,
-      bio: selectedShop.diveSiteBio,
-    })
-  
-  },[selectedShop])
-
   return (
     <S.ContentContainer>
       <S.InfoContainer>
@@ -51,15 +37,13 @@ export default function DiveShopScreenView({
       <S.LabelWrapper>
         <Label label="Trips" />
         <S.SectionCount>
-          {tripsCount ? (
-            `${tripsCount} trips`
-          ) : null}
+          {tripsCount ? `${tripsCount} trips` : null}
         </S.SectionCount>
       </S.LabelWrapper>
 
       {itineraryList && itineraryList.map((itinerary) => {
         return (
-          <ItineraryCard  
+          <ItineraryCard
             key={itinerary.id}
             isMyShop={isMyShop}
             itinerary={itinerary}
@@ -70,7 +54,6 @@ export default function DiveShopScreenView({
           />
         );
       })}
-
     </S.ContentContainer>
   );
 }

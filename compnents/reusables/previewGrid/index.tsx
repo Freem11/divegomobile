@@ -3,12 +3,12 @@ import { Dimensions } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
-import {DiveSiteWithUserName} from "../../../entities/diveSite";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
 import * as S from "./styles";
 
 interface PreviewGridProps {
-  items: DiveSiteWithUserName[];
+  items: DiveSiteWithUserName[] | null;
 }
 
 export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
@@ -16,7 +16,7 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
   const containerPadding = 20;
   const gap = 8;
   const numColumns = 3;
-  
+
   const itemSize = useMemo(() => {
     const availableWidth = screenWidth - (containerPadding * 2);
     const totalGaps = gap * (numColumns - 1);
@@ -25,7 +25,7 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
 
   return (
     <S.Container>
-      {items.length > 0 && items.map((item, index) => (
+      {items && items.length > 0 && items.map((item, index) => (
         <S.Item
           key={index}
           style={{
@@ -48,5 +48,5 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
         </S.Item>
       ))}
     </S.Container>
-  )
-}
+  );
+};

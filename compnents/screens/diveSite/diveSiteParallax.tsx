@@ -1,6 +1,7 @@
-import React, {useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
+import email from "react-native-email";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
@@ -16,7 +17,6 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 
 import DiveSiteScreen from ".";
-import email from "react-native-email";
 
 type DiveSiteProps = {
   siteID: number
@@ -39,25 +39,24 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-  
+
   useEffect(() => {
 
-    getDiveSiteinfo()
+    getDiveSiteinfo();
 
     if (profile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.siteID]);
 
-
   const getDiveSiteinfo = async() => {
-    const diveSiteinfo = await getDiveSiteById(props.siteID)
-    setSelectedDiveSite(diveSiteinfo[0])
-  }
+    const diveSiteinfo = await getDiveSiteById(props.siteID);
+    setSelectedDiveSite(diveSiteinfo[0]);
+  };
 
   useEffect(() => {
     let photoName = null;
-    if(selectedDiveSite?.diveSiteProfilePhoto) {
+    if (selectedDiveSite?.diveSiteProfilePhoto) {
       photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}`;
     }
 
@@ -68,7 +67,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
     });
 
   }, [selectedDiveSite]);
-  
+
   const onClose = async() => {
     setLevelOneScreen(false);
   };
@@ -82,15 +81,15 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   };
 
   const openPicUploader = () => {
-    setActiveScreen("PictureUploadScreen", selectedDiveSite)
+    setActiveScreen("PictureUploadScreen", selectedDiveSite);
     setLevelOneScreen(false);
     setLevelTwoScreen(true);
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true)
-    setEditInfo("DiveSite")
-    setActiveTutorialID("EditsScreen")
+    setFullScreenModal(true);
+    setEditInfo("DiveSite");
+    setActiveTutorialID("EditsScreen");
   };
 
   const handleReport = () => {
@@ -124,21 +123,20 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
           buttonAction={() => handleReport()}
         />
       </>
-    )
+    );
   };
 
   return (
-    <ParallaxDrawer 
-      headerImage={diveSiteVals && diveSiteVals.photo ? { uri: diveSiteVals.photo } : noImage} 
-      onClose={onClose} 
+    <ParallaxDrawer
+      headerImage={diveSiteVals && diveSiteVals.photo ? { uri: diveSiteVals.photo } : noImage}
+      onClose={onClose}
       onMapFlip={onNavigate}
       popoverContent={popoverContent}
       isMyShop={isPartnerAccount}
-      >
-
+    >
       <DiveSiteScreen
-      selectedDiveSite={selectedDiveSite}
-      openPicUploader={openPicUploader}
+        selectedDiveSite={selectedDiveSite}
+        openPicUploader={openPicUploader}
       />
     </ParallaxDrawer>
   );
