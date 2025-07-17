@@ -1,28 +1,19 @@
-import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
-import {
-  colors,
-  fontSizes,
-  activeFonts,
-} from '../../styles';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
 
-const windowWidth = Dimensions.get('screen').width;
+import { colors, fontSizes, activeFonts } from "../../styles";
 
 export const ContentContainer = styled.View`
-  width: ${windowWidth}px;
-  align-items: center;
+  width: 100%;
+  padding: 0 ${moderateScale(20)}px;
 `;
 
 export const InputGroupContainer = styled.View`
-  margin-horizontal: 5%;
-  align-items: center;
-  margin-bottom: ${moderateScale(40)}px;
+  margin-bottom: ${moderateScale(30)}px;
 `;
 
 export const PhotoContainer = styled.View`
-  width: 98%;
-  align-items: center;
+  width: 100%;
   margin-top: ${moderateScale(20)}px;
   margin-bottom: ${moderateScale(20)}px;
 `;
@@ -33,7 +24,6 @@ export const PacketHeader = styled.View`
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  padding-horizontal: 5%;
 `;
 
 export const PacketHeaderItem = styled.Text`
