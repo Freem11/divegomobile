@@ -107,13 +107,13 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
     return (
       <>
         {isPartnerAccount && (
-          <IconWithLabel 
+          <IconWithLabel
             label="Update Dive Site Info"
             iconName="camera-flip-outline"
             buttonAction={() => openEditsPage()}
           />
         )}
-        <IconWithLabel 
+        <IconWithLabel
           label={t("DiveSite.addSighting")}
           iconName="camera-plus"
           buttonAction={() => openPicUploader()}
@@ -134,8 +134,12 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
       onMapFlip={onNavigate}
       popoverContent={popoverContent}
       isMyShop={isPartnerAccount}
-    >
-      <DiveSiteScreen selectedDiveSite={selectedDiveSite}/>
+      >
+
+      <DiveSiteScreen
+      selectedDiveSite={selectedDiveSite}
+      openPicUploader={openPicUploader}
+      />
     </ParallaxDrawer>
   );
 }

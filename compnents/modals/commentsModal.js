@@ -27,6 +27,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { useTranslation } from "react-i18next";
+import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -38,6 +39,7 @@ export default function CommentsModal() {
   const [replyTo, setReplyTo] = useState(null);
   const [selectedReplyId, setSelectedReplyId] = useState([]);
   const { profile } = useContext(UserProfileContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedPicture } = useContext(SelectedPictureContext);
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
@@ -93,7 +95,8 @@ export default function CommentsModal() {
 
   const handleCommentModalClose = async () => {
     setReplyTo(null)
-    setFullScreenModal(false);
+    //todo: needs to be able to reroute to user profile photos page as well
+    setActiveTutorialID("DiveSitePhotos");
   }
 
   const hideRepliesForChildren = (parentId, newSelectedReplyId) => {

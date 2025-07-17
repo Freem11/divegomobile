@@ -4,21 +4,27 @@ import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard"
 import Icon from "../../../icons/Icon";
 import Label from "../../reusables/label-new";
 import { Photo } from "../../../entities/photos";
-import { colors } from "../../styles";
 import { ActiveProfile } from "../../../entities/profile";
+import Button from "../../reusables/button";
 
 import * as S from "./styles";
 
 type UserProfileProps = {
   profilePhotos:  Photo[] | null;
   handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
-  selectedProfile: ActiveProfile | null
+  selectedProfile: ActiveProfile | null;
+  speciesCount: number;
+  sightingsCount: number;
+  openAllPhotosPage: () => void;
 };
 
 export default function UserProfileScreenView({
   profilePhotos,
   handleDiveSiteMove,
-  selectedProfile
+  selectedProfile,
+  speciesCount,
+  sightingsCount,
+  openAllPhotosPage
 }: UserProfileProps) {
   
   const [profileVals, setProfileVals] = useState(null);
@@ -30,20 +36,6 @@ export default function UserProfileScreenView({
     })
 
   },[selectedProfile])
-
-  const groupedPhotos = {};
-
-  profilePhotos && profilePhotos.forEach(photo => {
-    const key = `${photo.divesitename}_${photo.dateTaken}`;
-    if (!groupedPhotos[key]) {
-      groupedPhotos[key] = {
-        divesitename: photo.divesitename,
-        dateTaken: photo.dateTaken,
-        photos: [],
-      };
-    }
-    groupedPhotos[key].photos.push(photo);
-  });
 
   return (
     <S.ContentContainer>
@@ -62,7 +54,7 @@ export default function UserProfileScreenView({
         
       {groupedPhotos && Object.values(groupedPhotos).map((photoPacket, index) => {
         return (
-          <S.PhotoContainer key={`${photoPacket.id}-${index}`}>   
+          <S.PhotoContainer key={`${photoPacket.id}-${index}`}>
             <S.PacketHeader key={`${photoPacket.id}-${index}`}>
               <S.HeaderWrapper>
                 <S.IconWrapper>
@@ -90,6 +82,14 @@ export default function UserProfileScreenView({
           </S.PhotoContainer>
         );
       })}
+      <S.ButtonWrapper>
+        <Button
+          onPress={() => openAllPhotosPage()}
+          alt={false}
+          size='thin'
+          title={'View All'}
+        />
+      </S.ButtonWrapper>
     </S.ContentContainer>
   );
 }

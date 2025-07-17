@@ -13,7 +13,7 @@ export const ContentContainer = styled.View`
   flex: 1;
   background-color: ${colors.themeWhite};
   align-items: left;
-  height: ${windowHeight};
+  height: ${windowHeight}px;
 `;
 
 export const SafeArea = styled(SafeAreaView)`

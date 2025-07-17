@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react'; // Import useMemo
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { useMapStore } from '../../../../googleMap/useMapStore';

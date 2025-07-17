@@ -12,6 +12,10 @@ import OnboardingTest from "../tutorial/onboarding";
 import PhotoBoxModel from '../screens/photoBox/photoBoxModal';
 import CommentsModal from "../modals/commentsModal";
 import EditScreenParallax from '../screens/edits/editsParallax';
+import DiveSitePhotosPage from '../screens/diveSitePhotos';
+import DiveSiteTripsPage from '../screens/diveSiteTrips';
+import UserProfilePhotosPage from '../screens/userProfilePhotos';
+
 import { colors } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
@@ -46,7 +50,10 @@ export default function AnimatedFullScreenModal(props) {
       {activeTutorialID === "PinchAndZoomPhoto" && fullScreenModal && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
       {activeTutorialID === "EditsScreen" && <EditScreenParallax/>}
-
+      {activeTutorialID === "DiveSitePhotos" && <DiveSitePhotosPage />}
+      {activeTutorialID === "DiveSiteTrips" && <DiveSiteTripsPage />}
+      {activeTutorialID === "UserProfilePhotos" && <UserProfilePhotosPage />}
+      
     </Animated.View>
   );
 }

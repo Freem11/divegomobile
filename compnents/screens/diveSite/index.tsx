@@ -10,6 +10,8 @@ import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 import DiveSiteScreenView from "./diveSite";
 
@@ -18,18 +20,25 @@ type DiveSiteProps = {
   restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
   bottomHitCount?: number;
+  openPicUploader: () => void;
 };
 
 export default function DiveSiteScreen({
   closeParallax,
   restoreParallax,
   selectedDiveSite,
-  bottomHitCount
+  bottomHitCount,
+  openPicUploader
 }: DiveSiteProps) {
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { profile } = useContext(UserProfileContext);
-  const [diveSitePics, setDiveSitePics] = useState([]);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const [diveSitePics, setDiveSitePics] = useState([]);;
+  const [tripCount, setTripCount] = useState(0);
+  const [speciesCount, setSpeciesCount] = useState(0);
+  const [sightingsCount, setSightingsCount] = useState(0);
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
   const [previewSightings, setPreviewSightings] = useState([]);
   const [sightingsCount, setSightingsCount] = useState(0);
@@ -40,59 +49,47 @@ export default function DiveSiteScreen({
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const getPhotos = async(site, profile) => {
-
-    const pagination = new Pagination({page: bottomHitCount, ipp: 10})
-   
-    const photos = await getDiveSitePhotos(
-      site.lat,
-      site.lng,
-      profile.UserID,
-      pagination
-    );
-
-    setDiveSitePics((prev) => prev ? [...prev, ...photos] : photos);
+  const openAllPhotosPage = () => {
+    setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
+    setActiveTutorialID("DiveSitePhotos")
   };
 
-  const getTrips = async(diveSiteId: number) => {
-    const data = await getItinerariesForDiveSite(diveSiteId)
-    setDiveSiteTrips(data)
-  }
-
-
-  useEffect(() => {
-    getTrips(selectedDiveSite.id)
-  },[selectedDiveSite])
-
+  const openAllTripsPage = () => {
+    setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
+    setActiveTutorialID("DiveSiteTrips")
+  };
 
   useEffect(() => {
     if(selectedDiveSite){
       newStuff(selectedDiveSite)
     }
+  },[selectedDiveSite])
 
-  },[])
+  const newStuff = async (selectedDiveSite: DiveSiteWithUserName) => {
 
-  const newStuff = async(selectedDiveSite: DiveSiteWithUserName) => {
-    const tripCount = await getDiveSiteTripCount(selectedDiveSite.id)
-    const speciesCount = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-    const sightingsCount = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-    const recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  const trips = await getDiveSiteTripCount(selectedDiveSite.id)
+  setTripCount(trips.label_count)
 
-    console.log("tripCount", tripCount)
+  const species = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  setSpeciesCount(species.distinct_label_count)
 
-    setSightingsCount(sightingsCount.label_count);
-    setSpeciesCount(speciesCount.distinct_label_count)
-    setPreviewSightings(recentNine);
+  const sightings = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  setSightingsCount(sightings.label_count)
+
+  let recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
+  // console.log('recentNine', recentNine)
   }
   
-  useEffect(() => {
-    if (selectedDiveSite.lat && profile) {
-      getPhotos(selectedDiveSite, profile);
-    }
-  }, [selectedDiveSite, profile, bottomHitCount]);
+  // useEffect(() => {
+  //   if (selectedDiveSite.lat && profile) {
+  //     getPhotos(selectedDiveSite, profile);
+  //   }
+  // }, [selectedDiveSite, profile, bottomHitCount]);
   
   
-  const handleProfileMove = async(userName: string) => {
+  const handleProfileMove = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (profile.UserID === picOwnerAccount[0].UserID) {
@@ -104,13 +101,26 @@ export default function DiveSiteScreen({
     setLevelTwoScreen(true);
   };
 
+  const handleEmailDS = () => {
+    const to = ["scubaseasons@gmail.com"];
+    email(to, {
+      // Optional additional arguments
+      subject: `Reporting issue with Dive Site: "${selectedDiveSite.name}" at Latitude: ${selectedDiveSite.lat} Longitude: ${selectedDiveSite.lng} `,
+      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
+      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
+    }).catch(console.error);
+  };
+  
   return (
     <DiveSiteScreenView
-      selectedDiveSite={selectedDiveSite}
-      diveSitePics={previewSightings}
-      handleProfileMove={handleProfileMove}
-      sightingsCount={sightingsCount}
-      speciesCount={speciesCount}
+        selectedDiveSite={selectedDiveSite}
+        diveSitePics={diveSitePics}
+        speciesCount={speciesCount}
+        sightingsCount={sightingsCount}
+        tripCount={tripCount}
+        openPicUploader={openPicUploader}
+        openAllPhotosPage={openAllPhotosPage}
+        openAllTripsPage={openAllTripsPage}
     />
   )
 

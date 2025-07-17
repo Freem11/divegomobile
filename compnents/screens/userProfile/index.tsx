@@ -3,13 +3,14 @@ import { UserProfileContext } from "../../contexts/userProfileContext";
 import UserProfileScreenView from "./userProfile";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { getDiveSiteSightingCount, getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
+import { getProfilePhotosByUser } from "../../../supabaseCalls/photoSupabaseCalls";
 import { Pagination } from "../../../entities/pagination";
 import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { ActiveIndoorLevel } from "react-native-maps";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
@@ -24,7 +25,9 @@ export default function UserProfileScreen({
   const { profile } = useContext(UserProfileContext);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   
-
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
@@ -34,21 +37,22 @@ export default function UserProfileScreen({
     LevelTwoScreenContext
   );
 
+  const [speciesCount, setSpeciesCount] = useState(0);
+  const [sightingsCount, setSightingsCount] = useState(0);
+
   useEffect(() => {
     newStuff(selectedProfile)
   },[selectedProfile])
 
   const newStuff = async (selectedProfile: ActiveProfile) => {
 
-  let speciesCount = await getUserSpeciesCount(selectedProfile.UserID)
-  let sightingsCount = await getUserSightingsCount(selectedProfile.UserID)
+  const species = await getUserSpeciesCount(selectedProfile.UserID)
+  setSpeciesCount(species.distinct_label_count)
+  const sightings = await getUserSightingsCount(selectedProfile.UserID)
+  setSightingsCount(sightings.label_count)
+
   let recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID)
-
-  console.log('user speciesCount', speciesCount)
-
-  console.log('user sightingsCount', sightingsCount)
-
-  console.log('recentNine', recentNine)
+  // console.log('recentNine', recentNine)
   }
   
   const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
@@ -85,12 +89,20 @@ export default function UserProfileScreen({
     getPhotos();
   }, [selectedProfile, bottomHitCount]);
 
+  const openAllPhotosPage = () => {
+    setFullScreenModal(true)
+    //to do: need to change what modal animation this runs on
+    setActiveTutorialID("UserProfilePhotos")
+  };
 
   return (
     <UserProfileScreenView
       profilePhotos={profilePhotos}
       selectedProfile={selectedProfile}
       handleDiveSiteMove={handleDiveSiteMove}
+      speciesCount={speciesCount}
+      sightingsCount={sightingsCount}
+      openAllPhotosPage={openAllPhotosPage}
     />
   )
 

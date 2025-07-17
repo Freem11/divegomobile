@@ -1,13 +1,13 @@
-import { TouchableOpacity, Image } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { TouchableOpacity, Image as RNImage } from "react-native";
+import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import {
   insertPhotoLike,
-  deletePhotoLike
+  deletePhotoLike,
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
-import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
 import email from "react-native-email";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
@@ -46,17 +46,39 @@ interface PictureProps {
 }
 
 const SeaLifeImageCard = (props: PictureProps) => {
-  const { pic } = props;
+  const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { activeTutorialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { profile } = useContext(UserProfileContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
+
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
   const [countOfLikes, setCountOfLikes] = useState(pic.likecount);
+
+  const [aspectRatio, setAspectRatio] = useState<number | null>(1);
+
+  // Construct remote image URL
+  const fileName = pic.photoFile?.split("/").pop();
+  const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
+
+  // useEffect(() => {
+  //   if (remoteUri) {
+  //     RNImage.getSize(
+  //       remoteUri,
+  //       (width, height) => {
+  //         setAspectRatio(width / height);
+  //       },
+  //       (error) => {
+  //         console.log("Failed to get image size:", error);
+  //         setAspectRatio(1);
+  //       }
+  //     );
+  //   }
+  // }, [remoteUri]);
 
   const handleCommentModal = (pic: Photo) => {
     setFullScreenModal(true);
@@ -68,13 +90,13 @@ const SeaLifeImageCard = (props: PictureProps) => {
     email(["scubaseasons@gmail.com"], {
       subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
       body: "Type of issue: \n\n1) Animal name not correct\n2) Copyright claim",
-      checkCanOpen: false
+      checkCanOpen: false,
     }).catch(console.error);
   };
 
   const handleLike = async (picId: number) => {
     if (picLiked) {
-      deletePhotoLike(likeData);
+      await deletePhotoLike(likeData);
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
@@ -85,90 +107,87 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }
   };
 
-  const togglePhotoBoxModal = (photo) => {
+  const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
     setFullScreenModal(true);
     setActiveTutorialID("PinchAndZoomPhoto");
   };
 
-  const [aspectRatio, setAspectRatio] = useState(1);
-
-useEffect(() => {
-  const fileName = pic.photoFile?.split("/").pop();;
-  const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
-  
-  if(remoteUri)
-  Image.getSize(remoteUri, (width, height) => {
-    setAspectRatio(width / height);
-  }, (error) => {
-    console.log("Failed to get image size:", error);
-  });
-}, [pic.photoFile]);
+  const containerWidth = windowWidth - windowWidth * 0.07;
+  const containerHeight = aspectRatio
+    ? containerWidth / aspectRatio
+    : moderateScale(200);
 
   return (
-    <S.Container key={pic.id} style={{width: windowWidth - windowWidth * 0.07, aspectRatio: aspectRatio}}>
+    <S.Container key={pic.id} style={{ width: containerWidth, height: containerHeight }}>
       <TouchableOpacity
         onPress={() => togglePhotoBoxModal(pic.photoFile)}
         style={{
-          aspectRatio,
-          overflow: 'hidden',
+          width: "100%",
+          height: "100%",
+          overflow: "hidden",
           borderRadius: moderateScale(10),
+          backgroundColor: "#e0e0e0",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <ImageCasherDynamic
-          photoFile={pic.photoFile}
-          id={pic.id}
-          aspectRatio={aspectRatio}
-          style={{
-            aspectRatio,
-            resizeMode: 'cover',
-          }}
-        />
-      </TouchableOpacity>
-      <S.Overlay pointerEvents="box-none" />
-  
-        <S.TopContentWrapper>
-          <ButtonIcon
-            style={{width: moderateScale(20)}}
-            onPress={() => handleEmail(pic)}
-            icon="error-outline"
-            size="micro"
+        {aspectRatio ? (
+          <Image
+            source={{ uri: remoteUri }}
+            style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+            contentFit="cover"
+            // placeholder={require("../../../assets/icon.png")}
+            transition={1000}
           />
-        </S.TopContentWrapper>
-  
-        <S.ContentWrapper>
-          <S.LabelWrapper>
-            <S.TitleText>{pic.label}</S.TitleText>
-            {activeScreen2.screenName === "ProfileScreen" ? (
-              <S.NavigateTextPressable onPress={props.diveSiteAction}>
-                <S.NavigateText >View Site</S.NavigateText>
-              </S.NavigateTextPressable>
-            ) : (
-              <S.NavigateTextPressable onPress={props.profileViewAction}>
-                <S.NavigateText >{pic.UserName}</S.NavigateText>
-              </S.NavigateTextPressable>
-            )}
-          </S.LabelWrapper>
-  
-          <S.IconsWrapper>
-            <IconCounterButton
-              icon="like-hand"
-              onPress={() => handleLike(pic.id)}
-              size="icon"
-              fillColor={picLiked ? "red" : null}
-              count={abbreviateNumber(countOfLikes)}
-            />
-            <IconCounterButton
-              icon="comment"
-              onPress={() => handleCommentModal(pic)}
-              size="icon"
-              count={abbreviateNumber(pic.commentcount)}
-            />
-          </S.IconsWrapper>
-        </S.ContentWrapper>
+        ) : (
+          <S.PlaceholderText>Loading...</S.PlaceholderText>
+        )}
+      </TouchableOpacity>
+
+      <S.Overlay pointerEvents="box-none" />
+
+      <S.TopContentWrapper>
+        <ButtonIcon
+          style={{ width: moderateScale(20) }}
+          onPress={() => handleEmail(pic)}
+          icon="error-outline"
+          size="micro"
+        />
+      </S.TopContentWrapper>
+
+      <S.ContentWrapper>
+        <S.LabelWrapper>
+          <S.TitleText>{pic.label}</S.TitleText>
+          {dataSetType === "ProfilePhotos" ? (
+            <S.NavigateTextPressable onPress={props.diveSiteAction}>
+              <S.NavigateText>View Site</S.NavigateText>
+            </S.NavigateTextPressable>
+          ) : (
+            <S.NavigateTextPressable onPress={props.profileViewAction}>
+              <S.NavigateText>{pic.UserName}</S.NavigateText>
+            </S.NavigateTextPressable>
+          )}
+        </S.LabelWrapper>
+
+        <S.IconsWrapper>
+          <IconCounterButton
+            icon="like-hand"
+            onPress={() => handleLike(pic.id)}
+            size="icon"
+            fillColor={picLiked ? "red" : undefined}
+            count={abbreviateNumber(countOfLikes)}
+          />
+          <IconCounterButton
+            icon="comment"
+            onPress={() => handleCommentModal(pic)}
+            size="icon"
+            count={abbreviateNumber(pic.commentcount)}
+          />
+        </S.IconsWrapper>
+      </S.ContentWrapper>
     </S.Container>
   );
-  
 };
 
 export default SeaLifeImageCard;

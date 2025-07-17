@@ -46,6 +46,13 @@ export const LabelWrapper = styled.View`
   align-items: center;
 `;
 
+export const ButtonWrapper= styled.View`
+  width: 100%;
+  justify-content: space-evenly;
+  flex-direction: row;
+  margin-vertical: 5%;
+`;
+
 export const SectionCount = styled.Text`
   color: ${colors.primaryBlue};
   font-family: ${activeFonts.Medium};
@@ -60,6 +67,12 @@ export const SectionFooterWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+`;
+
+export const StatWrapper = styled.View`
+  width: 100%;
+  margin-left: 5%;
+  margin-vertical: ${moderateScale(3)}px;
 `;
 
 export const TotalCount = styled.Text`
@@ -80,3 +93,8 @@ export const ViewMoreButton = styled.TouchableOpacity`
   margin-right: -${moderateScale(5)}px;
 `;
 
+export const Stats = styled.Text`
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Thin}px;
+  color: ${colors.themeBlack};
+`;
