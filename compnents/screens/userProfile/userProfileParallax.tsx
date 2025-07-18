@@ -111,6 +111,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   const onClose = () => {
     setSelectedProfile(null);
+    setLevelOneScreen(false);
     setLevelTwoScreen(false);
   };
 

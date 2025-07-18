@@ -215,7 +215,7 @@ export const getUserSightingsCount = async (userId: string) => {
 
 export const getDiveSiteRecentNinePhotos= async (userId: string) => {
   const { data, error } = await supabase.rpc("get_profile_recent_nine", {
-    user_id: userId
+    p_user_id: userId
   });
 
   if (error) {

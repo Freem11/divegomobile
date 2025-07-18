@@ -38,7 +38,9 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
     const sightings = await getUserSightingsCount(selectedProfile.UserID);
     setSightingsCount(sightings.label_count);
 
+    console.log(selectedProfile)
     const recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID);
+    console.log('recentNine', recentNine)
     setProfilePhotos(recentNine);
   };
 
@@ -54,7 +56,6 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
 
   const openAllPhotosPage = () => {
     setFullScreenModal(true);
-    //to do: need to change what modal animation this runs on
     setActiveTutorialID("UserProfilePhotos");
   };
 

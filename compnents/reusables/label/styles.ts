@@ -11,7 +11,7 @@ export const StyledLabelWrapper = styled.View`
 
 export const StyledLabelText = styled.Text`
   font-size: ${moderateScale(fontSizes.SubHeading)}px;
-  font-family: ${activeFonts.Light};
+  font-family: ${activeFonts.Bold};
   color: ${colors.headersBlue};
 `;
 

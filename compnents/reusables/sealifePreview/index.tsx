@@ -5,12 +5,13 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../previewGrid";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
-import Label from "../label-new";
+// import Label from "../label-new";
 import Button from "../button";
 import GhostButton from "../ghostButton";
 import EmptyState from "../emptyState-new";
 
 import * as S from "./styles";
+import Label from "../label";
 
 type SealifePreviewProps = {
   speciesCount: number
@@ -27,6 +28,7 @@ export default function SealifePreview({
   onViewMore,
   onAddSighting,
 }: SealifePreviewProps) {
+
   return (
     <>
       <S.LabelWrapper>
