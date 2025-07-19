@@ -19,7 +19,6 @@ export const Header = styled.Text`
 `;
 
 export const FilterContainer = styled.View`
-  flex: 1;
   width: ${width*0.85}px;
   margin-left: 2.5%;
   padding-top: ${moderateScale(10)}px;

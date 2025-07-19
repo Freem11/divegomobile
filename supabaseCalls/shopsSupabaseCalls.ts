@@ -45,7 +45,7 @@ export const getDiveShops = async (bubble: GPSBubble, filerValue: string = ""): 
     .lte("lng", bubble.maxLng);
 
   if (filerValue && filerValue.trim()) {
-    query = query.ilike("orgname", "%" + filerValue + "%");
+    query = query.ilike("orgName", "%" + filerValue + "%");
   }
 
   const { data, error } = await query;
