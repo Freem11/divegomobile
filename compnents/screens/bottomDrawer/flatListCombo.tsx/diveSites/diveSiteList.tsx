@@ -7,6 +7,7 @@ import { getDiveSitesWithUser } from '../../../../../supabaseCalls/diveSiteSupab
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
 import MobileTextInput from "../../../../reusables/textInput";
+import { SelectedDiveSiteContext } from "../../../../contexts/selectedDiveSiteContext";
 
 export default function DiveSiteList() {
 
@@ -15,7 +16,7 @@ export default function DiveSiteList() {
   const [filterValue, setFilterValue] = useState('');
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  
+
   const getDiveSiteData = async (filterValue: string) => {
     if (boundaries) {
        let diveSiteData = await getDiveSitesWithUser({

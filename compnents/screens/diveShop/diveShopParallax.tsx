@@ -54,7 +54,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
 
   useEffect(() => {
     if (
-      profile.partnerAccount &
+      profile.partnerAccount &&
       (selectedShop.userId === profile.UserID)
     ) {
       setIsMyShop(true);
@@ -82,7 +82,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   const onNavigate = () => {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
-    setMapConfig(2, selectedShop.id);
+    setMapConfig(2, {pageName: 'DiveShop', itemId: selectedShop.id});
     setLevelOneScreen(false);
   };
 

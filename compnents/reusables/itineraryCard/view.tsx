@@ -12,7 +12,6 @@ import { Menu } from "./Menu";
 
 type TripCardViewProps = {
   itinerary:           ItineraryItem
-  flipMap:             (siteList: number[]) => Promise<void>
   isMyShop?:           boolean
   handleEdit: (sites: ItineraryItem) => void;
   handleDelete: (sites: ItineraryItem) => void;
@@ -22,7 +21,6 @@ type TripCardViewProps = {
 
 export default function ItineraryCardView({
   itinerary,
-  flipMap,
   isMyShop,
   handleEdit,
   handleDelete,

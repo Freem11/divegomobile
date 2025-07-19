@@ -32,7 +32,7 @@ export const SectionFooterWrapper = styled.View`
   padding: 0 ${moderateScale(20)}px;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 

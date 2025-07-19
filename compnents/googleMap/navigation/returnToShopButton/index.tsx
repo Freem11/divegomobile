@@ -6,6 +6,7 @@ import { getDiveShopById } from "../../../../supabaseCalls/shopsSupabaseCalls";
 import { useContext } from "react";
 import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
+import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
 
 
 const styles = StyleSheet.create({
@@ -22,22 +23,32 @@ const styles = StyleSheet.create({
 
 export function ReturnToShopButton() {
   const mapRef = useMapStore((state) => state.mapRef);
-  const shopId = useMapStore((state) => state.itemId);
+  const navProps = useMapStore((state) => state.navProps);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   
   const onPress = async () => {
-    const diveCentreinfo = await getDiveShopById(shopId)
-    setLevelOneScreen(true);
-    setActiveScreen("DiveShopScreen", shopId);
-   
-    mapRef.animateCamera({
-      center: {latitude: diveCentreinfo[0].lat, longitude: diveCentreinfo[0].lng},
-      zoom: 12,
-    });
-    setMapConfig(0, 0);
+    if (navProps.pageName === "DiveSite"){
+      const diveSiteInfo = await getDiveSiteById(navProps.itemId)
+      setLevelOneScreen(true);
+      setActiveScreen("DiveSiteScreen", navProps.itemId);
+      mapRef.animateCamera({
+        center: {latitude: diveSiteInfo[0].lat, longitude: diveSiteInfo[0].lng},
+        zoom: 12,
+      });
+    } else {
+      const diveCentreinfo = await getDiveShopById(navProps.itemId)
+      setLevelOneScreen(true);
+      setActiveScreen("DiveShopScreen", navProps.itemId);
+      mapRef.animateCamera({
+        center: {latitude: diveCentreinfo[0].lat, longitude: diveCentreinfo[0].lng},
+        zoom: 12,
+      });
+    }
+ 
+    setMapConfig(0, {pageName: '', itemId: 0});
     setSitesArray([]);
   };
 

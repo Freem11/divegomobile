@@ -37,10 +37,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
 
     const sightings = await getUserSightingsCount(selectedProfile.UserID);
     setSightingsCount(sightings.label_count);
-
-    console.log(selectedProfile)
     const recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID);
-    console.log('recentNine', recentNine)
     setProfilePhotos(recentNine);
   };
 

@@ -12,6 +12,7 @@ import EmptyState from "../emptyState-new";
 
 import * as S from "./styles";
 import Label from "../label";
+import { ActiveProfile } from "../../../entities/profile";
 
 type SealifePreviewProps = {
   speciesCount: number
@@ -19,6 +20,7 @@ type SealifePreviewProps = {
   diveSitePics: DiveSiteWithUserName[] | null
   onViewMore: () => void
   onAddSighting: () => void
+  selectedProfile: ActiveProfile | null
 };
 
 export default function SealifePreview({
@@ -27,6 +29,7 @@ export default function SealifePreview({
   diveSitePics,
   onViewMore,
   onAddSighting,
+  selectedProfile
 }: SealifePreviewProps) {
 
   return (
@@ -53,24 +56,26 @@ export default function SealifePreview({
         <>
           <PreviewGrid items={diveSitePics} />
           <S.SectionFooterWrapper>
-            <GhostButton onPress={onViewMore} title={"View More"} />
+          {!selectedProfile && <GhostButton onPress={onAddSighting} title={"Add a Sighting"} />} 
+          <GhostButton onPress={onViewMore} title={"View More"} />
           </S.SectionFooterWrapper>
         </>
       ) : (
         <S.EmptyStateContainer>
           <EmptyState
             iconName="fish"
-            title={"No sightings yet"}
-            subtitle={"Be the first to spot some sea life here!"}
+            title={selectedProfile ? null : "No sightings yet"}
+            subtitle={selectedProfile ? `${selectedProfile.UserName} hasn't made any sightings yet.` : "Be the first to spot some sea life here!"}
           />
-          <Button
-            size="thin"
-            title={"Add First Sighting"}
-            iconLeft="camera-plus"
-            round={false}
-            style={{ width: "auto", marginTop: moderateScale(15) }}
-            onPress={onAddSighting}
-          />
+         {!selectedProfile &&
+         <Button
+         size="thin"
+         title={"Add First Sighting"}
+         iconLeft="camera-plus"
+         round={false}
+         style={{ width: "auto", marginTop: moderateScale(15) }}
+         onPress={onAddSighting}
+       />} 
         </S.EmptyStateContainer>
       )}
     </>

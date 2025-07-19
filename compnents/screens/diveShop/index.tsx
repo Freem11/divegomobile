@@ -14,7 +14,7 @@ import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls"
 import DiveShopScreenView from "./diveShop";
 
 type DiveShopProps = {
-  closeParallax?: (mapConfig: number) => void
+  closeParallax?: (mapConfig: number) => void;
   restoreParallax?: () => void;
   selectedShop: DiveShop;
   bottomHitCount?: number;
@@ -66,23 +66,25 @@ export default function DiveShopScreen({
   }, [levelOneScreen]);
 
 
-  const handleMapFlip = async(sites: number[]) => {
+  const handleMapFlip = async (sites: number[]) => {
     setSitesArray(sites);
+  
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
-   
+    
     const coordinates = itinerizedDiveSites.map(site => ({
       latitude: site.lat,
       longitude: site.lng,
     }));
-    
+  
     mapRef?.fitToCoordinates(coordinates, {
       edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
       animated: true,
     });
-
-    setMapConfig(2, selectedShop.id)
-    closeParallax(1)
+  
+    setMapConfig(2, { pageName: 'DiveShop', itemId: selectedShop.id });
+    closeParallax(1);
   };
+  
    
   const handleEditButton = (itineraryInfo: ItineraryItem) => {
     setEditMode(true);

@@ -41,17 +41,17 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   useEffect(() => {
-
     getDiveSiteinfo();
-
     if (profile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.siteID]);
 
   const getDiveSiteinfo = async() => {
-    const diveSiteinfo = await getDiveSiteById(props.siteID);
-    setSelectedDiveSite(diveSiteinfo[0]);
+    if(props.siteID){
+      const diveSiteinfo = await getDiveSiteById(props.siteID);
+      setSelectedDiveSite(diveSiteinfo[0]);
+    }
   };
 
   useEffect(() => {

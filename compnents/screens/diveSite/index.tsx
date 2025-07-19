@@ -8,13 +8,26 @@ import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 import DiveSiteScreenView from "./diveSite";
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { useMapStore } from "../../googleMap/useMapStore";
+import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import LevelOneScreen from "../../reusables/levelOneScreen";
 
 type DiveSiteProps = {
+  closeParallax?: (mapConfig: number) => void;
+  restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
   openPicUploader: () => void;
 };
 
-export default function DiveSiteScreen({ selectedDiveSite, openPicUploader }: DiveSiteProps) {
+export default function DiveSiteScreen({ 
+  selectedDiveSite, 
+  openPicUploader, 
+  closeParallax,
+  restoreParallax
+ }: DiveSiteProps) {
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const mapRef = useMapStore((state) => state.mapRef);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const [diveSitePics, setDiveSitePics] = useState([]);
@@ -22,7 +35,8 @@ export default function DiveSiteScreen({ selectedDiveSite, openPicUploader }: Di
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
   const [itineraries, setItineraries] = useState<ItineraryItem[]>([]);
-
+  const { setSitesArray } = useContext(SitesArrayContext);
+  
   const openAllPhotosPage = () => {
     setFullScreenModal(true);
     //to do: need to change what modal animation this runs on
@@ -35,6 +49,30 @@ export default function DiveSiteScreen({ selectedDiveSite, openPicUploader }: Di
     setActiveTutorialID("DiveSiteTrips");
   };
 
+  const handleMapFlip = async (sites: number[]) => {
+    setSitesArray(sites);
+    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
+  
+    const coordinates = itinerizedDiveSites.map(site => ({
+      latitude: site.lat,
+      longitude: site.lng,
+    }));
+  
+    mapRef?.fitToCoordinates(coordinates, {
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      animated: true,
+    });
+  
+    setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id })
+    closeParallax(1)
+  };
+
+  useEffect(() => {
+    if(LevelOneScreen){
+      restoreParallax();
+    }
+  }, [LevelOneScreen]);
+ 
   useEffect(() => {
     if (selectedDiveSite){
       getData(selectedDiveSite);
@@ -70,6 +108,7 @@ export default function DiveSiteScreen({ selectedDiveSite, openPicUploader }: Di
       openPicUploader={openPicUploader}
       openAllPhotosPage={openAllPhotosPage}
       openAllTripsPage={openAllTripsPage}
+      handleMapFlip={handleMapFlip}
     />
   );
 

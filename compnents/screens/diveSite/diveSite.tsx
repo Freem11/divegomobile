@@ -21,6 +21,7 @@ type DiveSiteProps = {
   openPicUploader: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
+  handleMapFlip: (sites: number[]) => void;
 };
 
 export default function DiveSiteScreenView({
@@ -32,28 +33,29 @@ export default function DiveSiteScreenView({
   itineraries,
   openPicUploader,
   openAllPhotosPage,
-  openAllTripsPage
+  openAllTripsPage,
+  handleMapFlip
 }: DiveSiteProps) {
 
   const [siteVals, setSiteVals] = useState(null);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    setSiteVals({
-      siteName: selectedDiveSite.name,
-      bio: selectedDiveSite.diveSiteBio,
-      user: selectedDiveSite.newusername
-    });
+  // useEffect(() => {
+  //   setSiteVals({
+  //     siteName: selectedDiveSite.name,
+  //     bio: selectedDiveSite.diveSiteBio,
+  //     user: selectedDiveSite.newusername
+  //   });
 
-  },[selectedDiveSite]);
+  // },[selectedDiveSite]);
 
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-        <S.Header>{siteVals?.siteName}</S.Header>
-        <S.Content>{siteVals?.bio}</S.Content>
-        {siteVals?.user && (
-          <S.Contributor>Added by {siteVals?.user}</S.Contributor>
+        <S.Header>{selectedDiveSite?.name}</S.Header>
+        <S.Content>{selectedDiveSite?.diveSiteBio}</S.Content>
+        {selectedDiveSite?.newusername && (
+          <S.Contributor>Added by {selectedDiveSite?.newusername}</S.Contributor>
         )}
       </S.InputGroupContainer>
 
@@ -63,6 +65,7 @@ export default function DiveSiteScreenView({
         diveSitePics={diveSitePics}
         onViewMore={openAllPhotosPage}
         onAddSighting={openPicUploader}
+        selectedProfile={null}
       />
 
       <S.LabelWrapper>
@@ -78,7 +81,7 @@ export default function DiveSiteScreenView({
             itinerary={itinerary}
             handleEdit={() => {}}
             handleDelete={() => {}}
-            handleMapFlip={() => {}}
+            handleMapFlip={() => handleMapFlip(itinerary.siteList)}
             handleBooking={() => {}}
           />
         )) : (

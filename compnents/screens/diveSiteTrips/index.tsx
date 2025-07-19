@@ -56,9 +56,7 @@ export default function DiveSiteTripsPage({}: DiveSiteTripsPageProps) {
 
     setFullScreenModal(false)
     setLevelOneScreen(false)
-    // to do: need to pass identifier so map knows if we are returning to a dive shop or dive site page
-    // dive site ID should be passed here but right now return function assumes dive shop
-    setMapConfig(2, shopID)
+    setMapConfig(2, {pageName: 'DiveSite', itemId: selectedDiveSite.id});
   };
   return (
     <DiveSiteTripsPageView

@@ -21,7 +21,7 @@ export const InfoContainer = styled.View`
 export const Header = styled.Text`
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
-  color: ${colors.themeBlack};
+  color: ${colors.headersBlue};
 `;
 
 export const Content = styled.Text`

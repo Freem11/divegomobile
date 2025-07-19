@@ -25,7 +25,7 @@ export function ReturnToCreateTripButton() {
   const onPress = async () => {
     setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");
-    setMapConfig(0, 0);
+    setMapConfig(0, {pageName: '', itemId: 0});
   };
 
   return (

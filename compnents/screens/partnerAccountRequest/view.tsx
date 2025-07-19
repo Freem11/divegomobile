@@ -41,7 +41,7 @@ export default function PartnerAccountRequestPageView({
   }, [levelTwoScreen]);
 
   const handleMapFlip = async (formData: Required<Form>) => {
-    setMapConfig(1, ScreenReturn.PartnerRequestPage)
+    setMapConfig(1, {pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0});
     closeParallax(1)
     setFormValues(formData)
   }

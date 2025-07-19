@@ -38,7 +38,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
 
   const onNavigate = async() => {
     Keyboard.dismiss();
-    setMapConfig(3, 0);
+    setMapConfig(3, {pageName: "DiveShop", itemId: 0})
     setLevelTwoScreen(false);
   };
 

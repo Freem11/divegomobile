@@ -18,6 +18,7 @@ export const Header = styled.Text`
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
   color: ${colors.headersBlue};
+  text-align: center;
 `;
 
 export const Content = styled.Text`
@@ -26,6 +27,7 @@ export const Content = styled.Text`
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
   margin-top: ${moderateScale(20)}px;
+  text-align: center;
 `;
 
 export const Contributor = styled.Text`

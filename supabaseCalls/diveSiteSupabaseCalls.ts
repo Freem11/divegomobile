@@ -216,7 +216,7 @@ export const getDiveSiteById = async (id: string | number) => {
   });
 
   if (error) {
-    console.log('couldn\'t do it 7,', error);
+    console.log('couldn\'t do it 401,', error);
     return [];
   }
 

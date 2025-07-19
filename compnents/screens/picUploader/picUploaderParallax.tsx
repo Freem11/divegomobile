@@ -26,12 +26,6 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
     setLevelTwoScreen(false);
   };
 
-  const onNavigate = () => {
-    Keyboard.dismiss();
-    setMapConfig(1, 0);
-    setLevelTwoScreen(false);
-  };
-
   const handleSelectImage = async () => {
     try {
       const result = await chooseImageHandler();

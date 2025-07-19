@@ -47,6 +47,7 @@ export default function UserProfileScreenView({
         diveSitePics={profilePhotos}
         onViewMore={openAllPhotosPage}
         onAddSighting={openAllPhotosPage}
+        selectedProfile={selectedProfile}
       />
     </S.ContentContainer>
   );

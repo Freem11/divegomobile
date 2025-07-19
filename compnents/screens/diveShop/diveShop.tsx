@@ -2,11 +2,12 @@ import React from "react";
 import { openURL } from "expo-linking";
 
 import ItineraryCard from "../../reusables/itineraryCard";
-import Label from "../../reusables/label-new";
+// import Label from "../../reusables/label-new";
 import { DiveShop } from "../../../entities/diveShop";
 import { ItineraryItem } from "../../../entities/itineraryItem";
 
 import * as S from "./styles";
+import Label from "../../reusables/label";
 
 type DiveShopProps = {
   isMyShop: boolean;

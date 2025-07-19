@@ -23,7 +23,7 @@ export default function PartnerRequestParallax() {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setMapConfig(1, ScreenReturn.PartnerRequestPage);
+    setMapConfig(1, {pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0});
     setLevelTwoScreen(false);
   };
 

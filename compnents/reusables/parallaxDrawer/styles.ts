@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
   },
   safeArea: {
     zIndex: 20,
-    marginTop: Platform.OS === "ios" ? 0 : "10%",
+    marginTop: Platform.OS === "ios" ? 0 : "15%",
     flexDirection: "row",
     alignItems: "center"
   }
