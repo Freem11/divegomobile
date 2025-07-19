@@ -9,14 +9,14 @@ import { colors } from "../styles";
 import DiveSitePhotosPage from "../screens/diveSitePhotos";
 import DiveSiteTripsPage from "../screens/diveSiteTrips";
 import UserProfilePhotosPage from "../screens/userProfilePhotos";
-import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { LevelThreeScreenContext } from "../contexts/levelThreeScreenContext";
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
 
 export default function LevelThreeScreen() {
-  const { activeTutorialID } = useContext(ActiveTutorialIDContext);
+  const activeScreen = useActiveScreenStore((state) => state.activeScreen);
   const { levelThreeScreen } = useContext(LevelThreeScreenContext);
 
   const levelThreeScreenY = useSharedValue(0);
@@ -39,13 +39,11 @@ export default function LevelThreeScreen() {
     startlevelThreeScreenAnimation();
   }, [levelThreeScreen]);
 
-  console.log('activeTutorialID', activeTutorialID)
-
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeTutorialID === "DiveSitePhotos" && <DiveSitePhotosPage />}
-      {activeTutorialID === "DiveSiteTrips" && <DiveSiteTripsPage />}
-      {activeTutorialID === "UserProfilePhotos" && <UserProfilePhotosPage />}
+      {activeScreen && activeScreen.screenName === "DiveSitePhotos" && <DiveSitePhotosPage />}
+      {activeScreen && activeScreen.screenName === "DiveSiteTrips" && <DiveSiteTripsPage />}
+      {activeScreen && activeScreen.screenName === "UserProfilePhotos" && <UserProfilePhotosPage />}
     </Animated.View>
   );
 }

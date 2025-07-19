@@ -4,13 +4,13 @@ import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNin
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import DiveSiteScreenView from "./diveSite";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void;
@@ -27,7 +27,7 @@ export default function DiveSiteScreen({
  }: DiveSiteProps) {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
@@ -40,14 +40,12 @@ export default function DiveSiteScreen({
   
   const openAllPhotosPage = () => {
     setLevelThreeScreen(true);
-    //to do: need to change to active screen rather than activeTutorial
-    setActiveTutorialID("DiveSitePhotos");
+    setActiveScreen("DiveSitePhotos");
   };
 
   const openAllTripsPage = () => {
     setLevelThreeScreen(true);
-      //to do: need to change to active screen rather than activeTutorial
-    setActiveTutorialID("DiveSiteTrips");
+      setActiveScreen("DiveSiteTrips");
   };
 
   const handleMapFlip = async (sites: number[]) => {

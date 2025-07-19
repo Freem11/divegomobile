@@ -99,8 +99,6 @@ export default function CommentsModal() {
 
   const handleCommentModalClose = async () => {
     setReplyTo(null)
-    //todo: needs to be able to reroute to user profile photos page as well
-    setActiveTutorialID("DiveSitePhotos");
     setLevelThreeScreen(true)
     setFullScreenModal(false)
   }

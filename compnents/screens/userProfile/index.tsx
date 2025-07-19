@@ -6,9 +6,9 @@ import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import UserProfileScreenView from "./userProfile";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
@@ -16,8 +16,8 @@ type UserProfileProps = {
 };
 
 export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedProfile } = useContext(SelectedProfileContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setLevelThreeScreen } = useContext(
@@ -53,7 +53,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
 
   const openAllPhotosPage = () => {
     setLevelThreeScreen(true);
-    setActiveTutorialID("UserProfilePhotos");
+    setActiveScreen("UserProfilePhotos");
   };
 
   return (

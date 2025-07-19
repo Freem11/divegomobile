@@ -34,7 +34,6 @@ export default function PhotoBoxModal() {
   }
 
   const onCloseModal = () => {
-    setActiveTutorialID("DiveSitePhotos");
     setFullScreenModal(false);
   };
 
