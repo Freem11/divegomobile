@@ -5,13 +5,12 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-
 import DiveSiteScreenView from "./diveSite";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import LevelOneScreen from "../../reusables/levelOneScreen";
+import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void;
@@ -29,7 +28,9 @@ export default function DiveSiteScreen({
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setLevelThreeScreen } = useContext(
+    LevelThreeScreenContext
+  );
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
@@ -38,14 +39,14 @@ export default function DiveSiteScreen({
   const { setSitesArray } = useContext(SitesArrayContext);
   
   const openAllPhotosPage = () => {
-    setFullScreenModal(true);
-    //to do: need to change what modal animation this runs on
+    setLevelThreeScreen(true);
+    //to do: need to change to active screen rather than activeTutorial
     setActiveTutorialID("DiveSitePhotos");
   };
 
   const openAllTripsPage = () => {
-    setFullScreenModal(true);
-    //to do: need to change what modal animation this runs on
+    setLevelThreeScreen(true);
+      //to do: need to change to active screen rather than activeTutorial
     setActiveTutorialID("DiveSiteTrips");
   };
 

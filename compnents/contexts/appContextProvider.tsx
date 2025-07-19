@@ -24,6 +24,7 @@ import ShopContextProvider from './shopContext';
 import EditModeContextProvider from './editModeContext';
 import LevelOneScreenContextProvider from './levelOneScreenContext';
 import LevelTwoScreenContextProvider from "./levelTwoScreenContext";
+import LevelThreeScreenContextProvider from "./levelThreeScreenContext";
 import EditsContextProvider from './editsContext';
 import SavedTranslateYContextProvider from './savedTranslateYContext';
 
@@ -52,6 +53,7 @@ const providers = [
     EditModeContextProvider,
     LevelOneScreenContextProvider,
     LevelTwoScreenContextProvider,
+    LevelThreeScreenContextProvider,
     EditsContextProvider,
     SavedTranslateYContextProvider,
 ]

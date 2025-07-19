@@ -11,6 +11,7 @@ import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 
 type DiveSiteTripsPageProps = {};
 
@@ -19,6 +20,9 @@ export default function DiveSiteTripsPage({}: DiveSiteTripsPageProps) {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setLevelThreeScreen } = useContext(
+    LevelThreeScreenContext
+  );
   const { profile } = useContext(UserProfileContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
@@ -54,7 +58,7 @@ export default function DiveSiteTripsPage({}: DiveSiteTripsPageProps) {
      animated: true,
    });
 
-    setFullScreenModal(false)
+    setLevelThreeScreen(false)
     setLevelOneScreen(false)
     setMapConfig(2, {pageName: 'DiveSite', itemId: selectedDiveSite.id});
   };
@@ -62,7 +66,7 @@ export default function DiveSiteTripsPage({}: DiveSiteTripsPageProps) {
     <DiveSiteTripsPageView
       diveTrips={diveSiteTrips}
       title={selectedDiveSite.name}
-      setFullScreenModal={setFullScreenModal}
+      setLevelThreeScreen={setLevelThreeScreen}
       handleMapFlip={handleMapFlip}
     />
   )

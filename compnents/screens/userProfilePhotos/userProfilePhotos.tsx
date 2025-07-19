@@ -11,14 +11,14 @@ import { Photo } from "../../../entities/photos";
 type UserProfilePhotosPageViewProps = {
   photos: any
   title: string
-  setFullScreenModal: React.Dispatch<React.SetStateAction<boolean>>
+  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
   handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
 };
 
 export default function UserProfilePhotosPageView({ 
   photos,
   title,
-  setFullScreenModal,
+  setLevelThreeScreen,
   handleDiveSiteMove
  }: UserProfilePhotosPageViewProps) {
 
@@ -33,7 +33,7 @@ export default function UserProfilePhotosPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => setFullScreenModal(false)}
+            onPress={() => setLevelThreeScreen(false)}
             size="small"
             fillColor={"darkgrey"}
           />

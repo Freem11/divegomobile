@@ -11,6 +11,7 @@ import UserProfilePhotosPageView from "./userProfilePhotos";
 import { Photo } from "../../../entities/photos";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useMapStore } from "../../googleMap/useMapStore";
+import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 
 type UserProfilePhotosPageProps = {};
 
@@ -18,12 +19,11 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setLevelThreeScreen } = useContext(
+    LevelThreeScreenContext
+  );
   const { profile } = useContext(UserProfileContext);
   const { selectedProfile } = useContext(SelectedProfileContext);
-  const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
 
@@ -65,7 +65,7 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
       animated: true,
     });
     // todo: need to close parallax here to prevent modal form sticking up when closed
-    setFullScreenModal(false);
+    setLevelThreeScreen(false);
     setLevelTwoScreen(false);
   };
   
@@ -73,7 +73,7 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
     <UserProfilePhotosPageView
       photos={profilePhotos}
       title={selectedProfile && selectedProfile.UserName}
-      setFullScreenModal={setFullScreenModal}
+      setLevelThreeScreen={setLevelThreeScreen}
       handleDiveSiteMove={handleDiveSiteMove}
     />
   )

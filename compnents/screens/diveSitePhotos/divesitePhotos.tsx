@@ -10,14 +10,14 @@ import Icon from "../../../icons/Icon";
 type DiveSitePhotosPageViewProps = {
   diveSites: any
   title: string
-  setFullScreenModal: React.Dispatch<React.SetStateAction<boolean>>
+  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
   handleProfileMove: (userName: string) => void;
 };
 
 export default function DiveSitePhotosPageView({ 
   diveSites,
   title,
-  setFullScreenModal,
+  setLevelThreeScreen,
   handleProfileMove
  }: DiveSitePhotosPageViewProps) {
 
@@ -30,7 +30,7 @@ export default function DiveSitePhotosPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => setFullScreenModal(false)}
+            onPress={() => setLevelThreeScreen(false)}
             size="small"
             fillColor={"darkgrey"}
           />

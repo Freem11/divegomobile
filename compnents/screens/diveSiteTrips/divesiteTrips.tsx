@@ -9,14 +9,14 @@ import * as S from "./styles";
 type DiveSiteTripsPageViewProps = {
   diveTrips: any
   title: string
-  setFullScreenModal: React.Dispatch<React.SetStateAction<boolean>>
+  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
   handleMapFlip: (sites: number[], shopID?: number) => void;
 };
 
 export default function DiveSiteTripsPageView({ 
   diveTrips,
   title,
-  setFullScreenModal,
+  setLevelThreeScreen,
   handleMapFlip,
  }: DiveSiteTripsPageViewProps) {
 
@@ -31,7 +31,7 @@ export default function DiveSiteTripsPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => setFullScreenModal(false)}
+            onPress={() => setLevelThreeScreen(false)}
             size="small"
             fillColor={"darkgrey"}
           />

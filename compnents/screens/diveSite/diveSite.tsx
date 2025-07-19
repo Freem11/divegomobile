@@ -37,7 +37,6 @@ export default function DiveSiteScreenView({
   handleMapFlip
 }: DiveSiteProps) {
 
-  const [siteVals, setSiteVals] = useState(null);
   const { t } = useTranslation();
 
   // useEffect(() => {
