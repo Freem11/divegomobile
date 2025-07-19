@@ -1,22 +1,18 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
-import {
-  colors,
-  fontSizes,
-  activeFonts,
-  buttonSizes
-} from '../../styles';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
 import { Platform } from "react-native";
-import { windowWidth } from "../../authentication/styles";
+
+import { colors, fontSizes, activeFonts } from "../../styles";
+import Button from "../button";
 
 export const Card = styled.View`
-  border-color: #dadada;
+  border-color: ${colors.lightGrey};
   border-width: ${moderateScale(1)}px;
-  border-radius: ${moderateScale(10)}px;
-  width: 96%;
-  margin-vertical: ${moderateScale(8)}px;
-  padding: ${moderateScale(7)}px;
-    ${Platform.select({
+  border-radius: ${moderateScale(12)}px;
+  width: 100%;
+  margin-bottom: ${moderateScale(16)}px;
+  padding: ${moderateScale(15)}px;
+  ${Platform.select({
     ios: `
       shadow-color: #000;
       shadow-offset: 0px 1px;
@@ -31,45 +27,47 @@ export const Card = styled.View`
 
 export const CardTop = styled.View`
   justify-content: space-between;
-  align-items: center;
   margin-bottom: ${moderateScale(5)}px;
-  flex-direction: row;
   width: 100%;
+  gap: ${moderateScale(6)}px;
 `;
 
-export const MainContent = styled.View`
-  flex-direction: column;
+export const Header = styled.View`
+  flex-direction: row;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
 `;
 
 export const Title = styled.Text`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
-  fon-family: ${activeFonts.Bold};
+  font-family: ${activeFonts.Bold};
+  text-wrap: pretty;
+  flex: 1;
+  margin-right: ${moderateScale(8)}px;
 `;
 
-export const Info = styled.View`
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: ${moderateScale(5)}px;
+export const Date = styled.Text`
+  font-size: ${moderateScale(15)}px;
+  font-family: ${activeFonts.Regular};
+  color: ${colors.darkGrey};
 `;
 
-export const TopText = styled.Text`
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-  font-family: ${activeFonts.Thin};
+export const Price = styled.Text`
+  font-size: ${moderateScale(15)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.primaryBlue};
 `;
 
 export const Actions = styled.View`
-  flex-direction: ${windowWidth > 600 ? 'row' : 'column'};
   justify-content: space-between;
   align-items: center;
 `;
 
 export const Description = styled.View`
    flex-direction: column;
-   width: 99%;
+   width: 100%;
 `;
-
 
 export const DescriptionTextCollapsed = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
@@ -79,7 +77,7 @@ export const DescriptionTextCollapsed = styled.Text`
   margin-top: ${moderateScale(10)}px;
 `;
 
-export const DescriptionTextExpanded= styled.Text`
+export const DescriptionTextExpanded = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Regular};
   flex-wrap: wrap;
@@ -88,9 +86,25 @@ export const DescriptionTextExpanded= styled.Text`
 `;
 
 export const ShowMoreText = styled.Text`
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
-  fon-family: ${activeFonts.Regular};
-  text-decoration-line: underline;
+  font-size: ${moderateScale(15)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.darkGrey};
+  text-decoration: underline;
+  text-decoration-color: ${colors.darkGrey};
   margin-top: ${moderateScale(10)}px;
 `;
- 
+
+export const ButtonsContainer = styled.View`
+  flex-direction: row;
+  gap: ${moderateScale(8)}px;
+  width: 100%;
+  margin-top: ${moderateScale(20)}px;
+`;
+
+export const ButtonWrapper = styled.View`
+  flex: 1;
+`;
+
+export const StyledButton = styled(Button)`
+  width: 100%;
+`;

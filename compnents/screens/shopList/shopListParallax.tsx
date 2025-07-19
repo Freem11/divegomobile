@@ -20,11 +20,11 @@ export default function ShopListParallax() {
 
   const onNavigate = async() => {
     Keyboard.dismiss();
-    setMapConfig(3, 0);
+    setMapConfig(3, {pageName: "Diveshop", itemId: 0})
     setLevelOneScreen(false);
   };
 
-  // const popoverConent = () => {
+  // const popoverContent = () => {
   //   return (
   //   <>
   //   <IconWithLabel 
@@ -41,7 +41,7 @@ export default function ShopListParallax() {
       headerImage={Center}
       onClose={onClose}
       onMapFlip={onNavigate}
-      // popoverConent={popoverConent}
+      // popoverContent={popoverContent}
     >
       <ShopListPage/>
 

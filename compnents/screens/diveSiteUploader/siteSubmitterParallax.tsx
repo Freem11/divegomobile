@@ -23,7 +23,7 @@ export default function SiteSubmitterParallax() {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setMapConfig(1, ScreenReturn.SiteSubmitter);
+    setMapConfig(1, {pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1});
     setLevelTwoScreen(false);
   };
 

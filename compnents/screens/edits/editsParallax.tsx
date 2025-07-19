@@ -83,7 +83,7 @@ useEffect(() => {
     setActiveTutorialID(null);
   };
 
-  const popoverConent = () => {
+  const popoverContent = () => {
     return (
     <>
     <IconWithLabel 
@@ -114,7 +114,7 @@ useEffect(() => {
     <ParallaxDrawer 
       headerImage={localPreviewUri ? { uri: localPreviewUri } : noImage} 
       onClose={onClose}
-      popoverConent={popoverConent}
+      popoverContent={popoverContent}
       >
       <EdittingScreen 
           localPreviewUri={localPreviewUri}

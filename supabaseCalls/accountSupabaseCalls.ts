@@ -182,7 +182,7 @@ export const getProfileWithStats = async (userId) => {
 
 export const getUserSpeciesCount = async (userId: string) => {
   const { data, error } = await supabase.rpc("get_user_species", {
-    user_id: userId,
+    p_user_id: userId,
   });
 
   if (error) {
@@ -198,7 +198,7 @@ export const getUserSpeciesCount = async (userId: string) => {
 
 export const getUserSightingsCount = async (userId: string) => {
   const { data, error } = await supabase.rpc("get_user_sightings", {
-    user_id: userId,
+    p_user_id: userId,
   });
 
   if (error) {
@@ -215,7 +215,7 @@ export const getUserSightingsCount = async (userId: string) => {
 
 export const getDiveSiteRecentNinePhotos= async (userId: string) => {
   const { data, error } = await supabase.rpc("get_profile_recent_nine", {
-    user_id: userId
+    p_user_id: userId
   });
 
   if (error) {

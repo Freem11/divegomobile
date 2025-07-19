@@ -1,7 +1,9 @@
-import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
-import * as S from './styles';
+import React, { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+
 import Icon, { IconName } from "../../../icons/Icon";
 import { colors } from "../../styles";
+
+import * as S from "./styles";
 
 type StandardButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
@@ -22,7 +24,7 @@ export default function ButtonIcon(props: ButtonIconProps & StandardButtonProps)
         <S.IconWrapper>
           <Icon name={icon as IconName} fill={fillColor? fillColor : colors.themeWhite}/>
         </S.IconWrapper>
-       {title && <S.StyledButtonText>{title}</S.StyledButtonText>} 
+        {title && <S.StyledButtonText>{title}</S.StyledButtonText>} 
       </S.StyledButton>
     </S.StyledTouchableHighlight>
   );

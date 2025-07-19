@@ -11,38 +11,38 @@ const windowWidth = Dimensions.get('screen').width;
 
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
-  align-items: center;
+  padding: 0 ${moderateScale(20)}px;
 `;
 
-export const InputGroupContainer = styled.View`
-  width: 90%;
-  align-items: center;
-  margin-bottom: ${moderateScale(40)}px;
+export const InfoContainer = styled.View`
+  margin-bottom: ${moderateScale(30)}px;
 `;
 
 export const Header = styled.Text`
-  margin-bottom: 5%;
   font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Medium};
+  font-family: ${activeFonts.Bold};
   color: ${colors.headersBlue};
-  align-self: center;
-  text-align: center;
 `;
 
 export const Content = styled.Text`
-  margin-horizontal: 3%;
   font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Thin};
+  font-family: ${activeFonts.Light};
   color: ${colors.themeBlack};
-  align-self: center;
-  text-align: center;
+  line-height: ${moderateScale(22)}px;
+  margin-top: ${moderateScale(20)}px;
 `;
 
 export const LabelWrapper = styled.View`
   width: 100%;
-  margin-bottom: ${moderateScale(10)}px;
+  margin-bottom: ${moderateScale(20)}px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
 `;
 
-
-
+export const SectionCount = styled.Text`
+  color: ${colors.primaryBlue};
+  font-family: ${activeFonts.Medium};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+`;

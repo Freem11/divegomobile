@@ -22,8 +22,6 @@ export default function DiveSitePhotosPageView({
  }: DiveSitePhotosPageViewProps) {
 
   const { t } = useTranslation();
-
-  console.log('diveSites', diveSites)
   
   return (
     <S.ContentContainer>

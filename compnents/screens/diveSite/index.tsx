@@ -1,110 +1,115 @@
 import React, { useContext, useEffect, useState } from "react";
-import DiveSiteScreenView from "./diveSite";
-import { Pagination } from "../../../entities/pagination";
-import { getDiveSitePhotos, getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteSRecetnNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
+
+import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-import email from "react-native-email";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { ItineraryItem } from "../../../entities/itineraryItem";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
+import DiveSiteScreenView from "./diveSite";
+import { SitesArrayContext } from "../../contexts/sitesArrayContext";
+import { useMapStore } from "../../googleMap/useMapStore";
+import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import LevelOneScreen from "../../reusables/levelOneScreen";
+
 type DiveSiteProps = {
-  closeParallax?: (mapConfig: number) => void
+  closeParallax?: (mapConfig: number) => void;
   restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
-  bottomHitCount?: number;
   openPicUploader: () => void;
 };
 
-export default function DiveSiteScreen({
+export default function DiveSiteScreen({ 
+  selectedDiveSite, 
+  openPicUploader, 
   closeParallax,
-  restoreParallax,
-  selectedDiveSite,
-  bottomHitCount,
-  openPicUploader
-}: DiveSiteProps) {
-
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { profile } = useContext(UserProfileContext);
+  restoreParallax
+ }: DiveSiteProps) {
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const mapRef = useMapStore((state) => state.mapRef);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const [diveSitePics, setDiveSitePics] = useState([]);;
+  const [diveSitePics, setDiveSitePics] = useState([]);
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
-
-  const { setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-
+  const [itineraries, setItineraries] = useState<ItineraryItem[]>([]);
+  const { setSitesArray } = useContext(SitesArrayContext);
+  
   const openAllPhotosPage = () => {
-    setFullScreenModal(true)
+    setFullScreenModal(true);
     //to do: need to change what modal animation this runs on
-    setActiveTutorialID("DiveSitePhotos")
+    setActiveTutorialID("DiveSitePhotos");
   };
 
   const openAllTripsPage = () => {
-    setFullScreenModal(true)
+    setFullScreenModal(true);
     //to do: need to change what modal animation this runs on
-    setActiveTutorialID("DiveSiteTrips")
+    setActiveTutorialID("DiveSiteTrips");
+  };
+
+  const handleMapFlip = async (sites: number[]) => {
+    setSitesArray(sites);
+    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
+  
+    const coordinates = itinerizedDiveSites.map(site => ({
+      latitude: site.lat,
+      longitude: site.lng,
+    }));
+  
+    mapRef?.fitToCoordinates(coordinates, {
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      animated: true,
+    });
+  
+    setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id })
+    closeParallax(1)
   };
 
   useEffect(() => {
-    if(selectedDiveSite){
-      newStuff(selectedDiveSite)
+    if(LevelOneScreen){
+      restoreParallax();
     }
-  },[selectedDiveSite])
+  }, [LevelOneScreen]);
+ 
+  useEffect(() => {
+    if (selectedDiveSite){
+      getData(selectedDiveSite);
+    }
+  },[selectedDiveSite]);
 
-  const newStuff = async (selectedDiveSite: DiveSiteWithUserName) => {
+  const getData = async(selectedDiveSite: DiveSiteWithUserName) => {
+    const trips = await getDiveSiteTripCount(selectedDiveSite.id);
+    setTripCount(trips.label_count);
 
-  const trips = await getDiveSiteTripCount(selectedDiveSite.id)
-  setTripCount(trips.label_count)
+    const species = await getDiveSiteSpeciesCount({ lat: selectedDiveSite.lat, lng: selectedDiveSite.lng });
+    setSpeciesCount(species.distinct_label_count);
 
-  const species = await getDiveSiteSpeciesCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-  setSpeciesCount(species.distinct_label_count)
+    const sightingsCount = await getDiveSiteSightingCount({ lat: selectedDiveSite.lat, lng: selectedDiveSite.lng });
+    setSightingsCount(sightingsCount.label_count);
 
-  const sightings = await getDiveSiteSightingCount({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-  setSightingsCount(sightings.label_count)
+    const recentNine = await getDiveSiteRecentNinePhotos({ lat: selectedDiveSite.lat, lng: selectedDiveSite.lng });
+    setDiveSitePics(recentNine);
 
-  let recentNine = await getDiveSiteSRecetnNinePhotos({lat: selectedDiveSite.lat, lng: selectedDiveSite.lng})
-  // console.log('recentNine', recentNine)
-  }
-  
-  // useEffect(() => {
-  //   if (selectedDiveSite.lat && profile) {
-  //     getPhotos(selectedDiveSite, profile);
-  //   }
-  // }, [selectedDiveSite, profile, bottomHitCount]);
-  
-  
-  const handleEmailDS = () => {
-    const to = ["scubaseasons@gmail.com"];
-    email(to, {
-      // Optional additional arguments
-      subject: `Reporting issue with Dive Site: "${selectedDiveSite.name}" at Latitude: ${selectedDiveSite.lat} Longitude: ${selectedDiveSite.lng} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
-      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
-    }).catch(console.error);
+    const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
+    setItineraries(diveSiteItineraries);
+
   };
-  
+
   return (
     <DiveSiteScreenView
-        selectedDiveSite={selectedDiveSite}
-        diveSitePics={diveSitePics}
-        handleEmailDS={handleEmailDS}
-        speciesCount={speciesCount}
-        sightingsCount={sightingsCount}
-        tripCount={tripCount}
-        openPicUploader={openPicUploader}
-        openAllPhotosPage={openAllPhotosPage}
-        openAllTripsPage={openAllTripsPage}
+      selectedDiveSite={selectedDiveSite}
+      diveSitePics={diveSitePics}
+      speciesCount={speciesCount}
+      sightingsCount={sightingsCount}
+      tripCount={tripCount}
+      itineraries={itineraries}
+      openPicUploader={openPicUploader}
+      openAllPhotosPage={openAllPhotosPage}
+      openAllTripsPage={openAllTripsPage}
+      handleMapFlip={handleMapFlip}
     />
-  )
+  );
 
 }

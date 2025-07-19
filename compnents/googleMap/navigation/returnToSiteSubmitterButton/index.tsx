@@ -22,7 +22,7 @@ export function ReturnToSiteSubmitterButton() {
 
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
-  const screenId = useMapStore((state) => state.itemId);
+  const navProps = useMapStore((state) => state.navProps);
   const storeFormValues = useMapStore((state) => state.formValues);
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -31,7 +31,7 @@ export function ReturnToSiteSubmitterButton() {
 
   const onPress = async () => {
     const camera = await mapRef.getCamera();
-    if(screenId === 1){
+    if(navProps.itemId === 1){
       setActiveScreen("DiveSiteUploadScreen");
       setLevelTwoScreen(true);
       setChosenModal(null);
@@ -42,7 +42,7 @@ export function ReturnToSiteSubmitterButton() {
     }  
 
     mapAction.setFormValues({...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude})
-    mapAction.setMapConfig(0, 0);
+    mapAction.setMapConfig(0, {pageName: '', itemId: 0});
    
   };
 

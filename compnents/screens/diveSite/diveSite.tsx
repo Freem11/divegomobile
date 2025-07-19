@@ -1,130 +1,108 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import * as S from "./styles";
-import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
-import Label from "../../reusables/label";
+
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
-import Button from "../../reusables/button";
+import { ItineraryItem } from "../../../entities/itineraryItem";
+import SealifePreview from "../../reusables/sealifePreview";
+import ItineraryCard from "../../reusables/itineraryCard";
+import GhostButton from "../../reusables/ghostButton";
+import EmptyState from "../../reusables/emptyState-new";
+
+import * as S from "./styles";
+import Label from "../../reusables/label";
 
 type DiveSiteProps = {
-  bottomHitCount?: number;
   selectedDiveSite: DiveSiteWithUserName
   diveSitePics: DiveSiteWithUserName[]
-  handleEmailDS: () => void;
   speciesCount: number;
   sightingsCount: number;
   tripCount: number;
+  itineraries: ItineraryItem[];
   openPicUploader: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
+  handleMapFlip: (sites: number[]) => void;
 };
 
 export default function DiveSiteScreenView({
-  bottomHitCount,
   selectedDiveSite,
   diveSitePics,
-  handleEmailDS,
   speciesCount,
   sightingsCount,
   tripCount,
+  itineraries,
   openPicUploader,
   openAllPhotosPage,
-  openAllTripsPage
+  openAllTripsPage,
+  handleMapFlip
 }: DiveSiteProps) {
 
-  const { t } = useTranslation();
   const [siteVals, setSiteVals] = useState(null);
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    setSiteVals({
-      siteName: selectedDiveSite.name,
-      bio: selectedDiveSite.diveSiteBio,
-      user: selectedDiveSite.newusername
-    })
-  
-  },[selectedDiveSite])
+  // useEffect(() => {
+  //   setSiteVals({
+  //     siteName: selectedDiveSite.name,
+  //     bio: selectedDiveSite.diveSiteBio,
+  //     user: selectedDiveSite.newusername
+  //   });
 
-  const groupedPhotos = {};
+  // },[selectedDiveSite]);
 
-  diveSitePics && diveSitePics.forEach(photo => {
-    const key = `${photo.dateTaken}`;
-    if (!groupedPhotos[key]) {
-      groupedPhotos[key] = {
-        dateTaken: photo.dateTaken,
-        photos: [],
-      };
-    }
-    groupedPhotos[key].photos.push(photo);
-  });
-  
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-        <S.SiteNameContainer>
-          <S.Header>{siteVals?.siteName}</S.Header>
-
-          <FontAwesome
-            name="flag"
-            color="maroon"
-            size={moderateScale(16)}
-            style={{ marginTop: "5%", marginLeft: moderateScale(10) }}
-            onPress={() => handleEmailDS()}
-          />
-        </S.SiteNameContainer>
-
-        <S.Contributor>Added by: {siteVals?.user}</S.Contributor>
-
-        <S.Content>{siteVals?.bio}</S.Content>
-
+        <S.Header>{selectedDiveSite?.name}</S.Header>
+        <S.Content>{selectedDiveSite?.diveSiteBio}</S.Content>
+        {selectedDiveSite?.newusername && (
+          <S.Contributor>Added by {selectedDiveSite?.newusername}</S.Contributor>
+        )}
       </S.InputGroupContainer>
 
-      <S.LabelWrapper>
-        <Label label="Sea Life Sightings" />
-      </S.LabelWrapper>
-
-      <S.StatWrapper>
-        <S.Stats>{sightingsCount} Sightings</S.Stats>
-      </S.StatWrapper>
-
-      <S.StatWrapper>
-        <S.Stats>{speciesCount} Species Sighted</S.Stats>
-      </S.StatWrapper>
-
-      <S.ButtonWrapper>
-
-          <Button 
-            onPress={() => openPicUploader()} 
-            alt={false} 
-            size='thin'
-            title={t('DiveSite.addSighting')} 
-            />
-
-          <Button 
-            onPress={() => openAllPhotosPage()} 
-            alt={false} 
-            size='thin'
-            title={'View All'} 
-            />
-
-      </S.ButtonWrapper>
+      <SealifePreview
+        speciesCount={speciesCount}
+        sightingsCount={sightingsCount}
+        diveSitePics={diveSitePics}
+        onViewMore={openAllPhotosPage}
+        onAddSighting={openPicUploader}
+        selectedProfile={null}
+      />
 
       <S.LabelWrapper>
         <Label label="Dive Trips" />
       </S.LabelWrapper>
 
-      <S.StatWrapper>
-        <S.Stats>{tripCount} Active Trips</S.Stats>
-      </S.StatWrapper>
+      <S.ItinerariesWrapper>
+        <S.Stats>{`${tripCount} active trip${tripCount === 1 ? "": "s"}`}</S.Stats>
 
-<S.ButtonWrapper>
-      <Button 
-            onPress={() => openAllTripsPage()} 
-            alt={false} 
-            size='thin'
-            title={'View All'} 
+        {itineraries && itineraries.length > 0 ? itineraries.map((itinerary) => (
+          <ItineraryCard
+            key={itinerary.id}
+            itinerary={itinerary}
+            handleEdit={() => {}}
+            handleDelete={() => {}}
+            handleMapFlip={() => handleMapFlip(itinerary.siteList)}
+            handleBooking={() => {}}
+          />
+        )) : (
+          <S.EmptyStateWrapper>
+            <EmptyState
+              iconName="boat"
+              title="No Trips Available"
+              subtitle="There are currently no diving trips scheduled for this location. Check back later!"
             />
-</S.ButtonWrapper>
+          </S.EmptyStateWrapper>
+        )}
+      </S.ItinerariesWrapper>
+
+      {tripCount > 3 && (
+        <S.ButtonContainer>
+          <GhostButton
+            onPress={() => openAllTripsPage()}
+            title={"View All Trips"}
+          />
+        </S.ButtonContainer>
+      )}
     </S.ContentContainer>
   );
 }

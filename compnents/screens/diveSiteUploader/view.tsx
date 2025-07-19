@@ -41,7 +41,7 @@ export default function DiveSiteUploaderView({
   }, [levelTwoScreen]);
 
   const handleMapFlip = async (formData: Required<Form>) => {
-    setMapConfig(1, ScreenReturn.SiteSubmitter)
+    setMapConfig(1, {pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1});
     closeParallax(1)
     setFormValues(formData)
   }

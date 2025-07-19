@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import * as S from "./styles";
-import Label from "../../reusables/label";
+
 import { Photo } from "../../../entities/photos";
 import { ActiveProfile } from "../../../entities/profile";
-import Button from "../../reusables/button";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import SealifePreview from "../../reusables/sealifePreview";
+
+import * as S from "./styles";
 
 type UserProfileProps = {
-  profilePhotos:  Photo[] | null;
+  profilePhotos: DiveSiteWithUserName[] | null;
   handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
   selectedProfile: ActiveProfile | null;
   speciesCount: number;
@@ -16,55 +18,37 @@ type UserProfileProps = {
 
 export default function UserProfileScreenView({
   profilePhotos,
-  handleDiveSiteMove,
   selectedProfile,
   speciesCount,
   sightingsCount,
   openAllPhotosPage
 }: UserProfileProps) {
-  
+
   const [profileVals, setProfileVals] = useState(null);
 
   useEffect(() => {
     setProfileVals({
       userName: selectedProfile?.UserName,
       bio: selectedProfile?.profileBio,
-    })
+    });
 
-  },[selectedProfile])
+  },[selectedProfile]);
 
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-        <S.UserNameContainer>
-          <S.Header>{profileVals?.userName}</S.Header>
-        </S.UserNameContainer>
-   
+        <S.Header>{profileVals?.userName}</S.Header>
         <S.Content>{profileVals?.bio}</S.Content>
-
       </S.InputGroupContainer>
 
-      <S.LabelWrapper>
-            <Label label="Sea Life Sightings" />
-        </S.LabelWrapper>
-        
-        <S.StatWrapper>
-        <S.Stats>{sightingsCount} Sightings</S.Stats>
-      </S.StatWrapper>
-
-      <S.StatWrapper>
-        <S.Stats>{speciesCount} Species Sighted</S.Stats>
-      </S.StatWrapper>
-
-
-    <S.ButtonWrapper>
-      <Button 
-        onPress={() => openAllPhotosPage()} 
-        alt={false} 
-        size='thin'
-        title={'View All'} 
-        />
-    </S.ButtonWrapper>
+      <SealifePreview
+        speciesCount={speciesCount}
+        sightingsCount={sightingsCount}
+        diveSitePics={profilePhotos}
+        onViewMore={openAllPhotosPage}
+        onAddSighting={openAllPhotosPage}
+        selectedProfile={selectedProfile}
+      />
     </S.ContentContainer>
   );
 }

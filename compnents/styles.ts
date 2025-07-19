@@ -2,24 +2,27 @@ import { Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 export const colors = {
-  primaryBlue: '#0073E6',
-  headersBlue: '#678FB7',
-  secondaryYellow: '#fdc500',
-  themeWhite: '#ffffff',
-  themeBlack: '#00171f',
-  themeRed: '#E63946',
-  themeGreen: '#4caf50',
-  neutralGrey: '#A9A9A9',
-  buttonPressOverlay: 'rgba(128, 128, 128, 0.25)',
-  searchOverlay: 'rgba(128, 128, 128, 0.6)'
-}
+  primaryBlue: "#0073E6",
+  headersBlue: "#678FB7",
+  secondaryYellow: "#fdc500",
+  themeWhite: "#ffffff",
+  themeBlack: "#00171f",
+  themeRed: "#E63946",
+  themeGreen: "#4caf50",
+  lightGrey: "#e8e8e8",
+  neutralGrey: "#A9A9A9",
+  darkGrey: "#706b6b",
+  buttonPressOverlay: "rgba(128, 128, 128, 0.25)",
+  headerButtonOverlay: "rgba(0,0,0,0.4)",
+  searchOverlay: "rgba(128, 128, 128, 0.6)"
+};
 
 export const fontSizes = {
-  Header: 34,
-  SubHeading: 24,
+  Header: 28,
+  SubHeading: 20,
   StandardText: 18,
-  SmallText: 14
-}
+  SmallText: 16
+};
 
 export const buttonSizes = {
   micro: {
@@ -35,7 +38,7 @@ export const buttonSizes = {
     width: 36
   },
   thin: {
-    height: 30,
+    height: 40,
     width: 140
   },
   small: {
@@ -50,8 +53,7 @@ export const buttonSizes = {
     height: 50,
     width: 250
   },
-}
-
+};
 
 export const activeFonts = Platform.OS === "android" ? {
   Black: "RobotoBlack",
@@ -79,7 +81,7 @@ export const activeFonts = Platform.OS === "android" ? {
   Regular: "SFRegular",
   Thin: "SFThin",
   ThinItalic: "SFThinItalic",
-}
+};
 
 export const primaryButton = {
   backgroundColor: colors.primaryBlue,
@@ -87,15 +89,15 @@ export const primaryButton = {
   height: moderateScale(50),
   color: colors.themeWhite,
   borderRadius: moderateScale(25),
-  alignItems: 'center',
-  justifyContent: 'center',
-}
+  alignItems: "center",
+  justifyContent: "center",
+};
 
 export const buttonText = {
   color: colors.themeWhite,
   fontFamily: activeFonts.Regular,
   fontSize: moderateScale(fontSizes.StandardText)
-}
+};
 
 export const primaryButtonAlt = {
   backgroundColor: colors.themeWhite,
@@ -105,16 +107,16 @@ export const primaryButtonAlt = {
   borderColor: colors.primaryBlue,
   borderWidth: moderateScale(1),
   borderRadius: moderateScale(25),
-  alignItems: 'center',
-  justifyContent: 'center',
+  alignItems: "center",
+  justifyContent: "center",
 
-}
+};
 
 export const buttonTextAlt = {
   color: colors.primaryBlue,
   fontFamily: activeFonts.Regular,
   fontSize: moderateScale(fontSizes.StandardText),
-}
+};
 
 export const authenicationButton = {
   backgroundColor: colors.primaryBlue,
@@ -122,9 +124,9 @@ export const authenicationButton = {
   height: moderateScale(45),
   color: colors.themeWhite,
   borderRadius: moderateScale(25),
-  alignItems: 'center',
-  justifyContent: 'center',
-}
+  alignItems: "center",
+  justifyContent: "center",
+};
 
 export const screenSecondaryButton = {
   backgroundColor: colors.themeWhite,
@@ -134,6 +136,6 @@ export const screenSecondaryButton = {
   borderColor: colors.primaryBlue,
   borderWidth: moderateScale(1),
   borderRadius: moderateScale(25),
-  alignItems: 'center',
-  justifyContent: 'center',
-}
+  alignItems: "center",
+  justifyContent: "center",
+};

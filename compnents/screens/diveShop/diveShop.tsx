@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
-import * as S from "./styles";
-import { useTranslation } from "react-i18next";
-import ItineraryCard from "../../reusables/itineraryCard";
+import React from "react";
 import { openURL } from "expo-linking";
-import Label from "../../reusables/label";
+
+import ItineraryCard from "../../reusables/itineraryCard";
+// import Label from "../../reusables/label-new";
 import { DiveShop } from "../../../entities/diveShop";
 import { ItineraryItem } from "../../../entities/itineraryItem";
+
+import * as S from "./styles";
+import Label from "../../reusables/label";
 
 type DiveShopProps = {
   isMyShop: boolean;
@@ -14,6 +16,7 @@ type DiveShopProps = {
   handleMapFlip: (sites: number[]) => void;
   handleEditButton: (sites: ItineraryItem) => void;
   handleDeleteButton: (sites: ItineraryItem) => void;
+  tripsCount: number;
 };
 
 export default function DiveShopScreenView({
@@ -22,46 +25,36 @@ export default function DiveShopScreenView({
   selectedShop,
   handleMapFlip,
   handleEditButton,
-  handleDeleteButton
+  handleDeleteButton,
+  tripsCount
 }: DiveShopProps) {
-  
-  const { t } = useTranslation()
-
-  const [siteVals, setSiteVals] = useState(null);
-
-  useEffect(() => {
-    setSiteVals({
-      siteName: selectedShop.orgName,
-      bio: selectedShop.diveSiteBio,
-    })
-  
-  },[selectedShop])
-
   return (
     <S.ContentContainer>
-      <S.InputGroupContainer>
-          <S.Header>{selectedShop?.orgName}</S.Header>
+      <S.InfoContainer>
+        <S.Header>{selectedShop?.orgName}</S.Header>
+        {selectedShop?.diveShopBio ? <S.Content>{selectedShop?.diveShopBio}</S.Content> : null}
+      </S.InfoContainer>
 
-          <S.Content>{selectedShop?.diveShopBio}</S.Content>
-
-      </S.InputGroupContainer>
-
-        <S.LabelWrapper>
-            <Label label="Dive Trips" />
-        </S.LabelWrapper>
+      <S.LabelWrapper>
+        <Label label="Trips" />
+        <S.SectionCount>
+          {tripsCount ? `${tripsCount} active trip${tripsCount === 1 ? "" : "s"}` : null}
+        </S.SectionCount>
+      </S.LabelWrapper>
 
       {itineraryList && itineraryList.map((itinerary) => {
-  return (
-    <ItineraryCard  
-      key={itinerary.id}
-      isMyShop={isMyShop}
-      itinerary={itinerary}    
-      buttonOneAction={isMyShop ? () => handleEditButton(itinerary) : () => handleMapFlip(itinerary.siteList)}
-      buttonTwoAction={isMyShop ? () => handleDeleteButton(itinerary) :() => openURL(itinerary.BookingPage)}
-    />
-  );
-})}
-
+        return (
+          <ItineraryCard
+            key={itinerary.id}
+            isMyShop={isMyShop}
+            itinerary={itinerary}
+            handleEdit={handleEditButton}
+            handleDelete={handleDeleteButton}
+            handleMapFlip={() => handleMapFlip(itinerary.siteList)}
+            handleBooking={() => openURL(itinerary.BookingPage)}
+          />
+        );
+      })}
     </S.ContentContainer>
   );
 }

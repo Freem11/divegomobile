@@ -37,7 +37,7 @@ export const Header = styled.Text`
   marginTop: 10%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Medium};
-  color: ${colors.neutralGrey};
+  color: ${colors.headersBlue};
 `;
 
 export const SubHeader = styled.Text`
