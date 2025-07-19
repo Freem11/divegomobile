@@ -30,7 +30,7 @@ export const ContentContainer = styled.View`
 
 export const Header = styled.Text`
   margin-left: 5%;
-  margin-bottom: 5%;
+  margin-bottom: ${moderateScale(30)}px;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.headersBlue};
@@ -71,6 +71,11 @@ export const MultilineTextInput = styled.TextInput`
   text-align: center;
   height: 99%;
 `;
+
+export const InputBox = styled.View`
+  margin-bottom: ${moderateScale(40)}px;
+`;
+
 
 export const DescriptionBox = styled.View`
   align-items: center;

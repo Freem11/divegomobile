@@ -68,6 +68,7 @@ export default function TripCreatorPageView({
       )}
 
       <S.InputGroupContainer>
+      <S.InputBox>
         <Label label="Details" />
         <Controller
             control={control}
@@ -161,7 +162,8 @@ export default function TripCreatorPageView({
               </S.TextBuffer>
             )}
           />
-
+        </S.InputBox>
+        
         <Label label="Itinerary" />
 
         <S.DescriptionBox>
@@ -181,6 +183,7 @@ export default function TripCreatorPageView({
             )}
           />
         </S.DescriptionBox>
+
 
         <Label label="Dive Sites" />
 

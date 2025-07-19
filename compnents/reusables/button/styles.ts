@@ -31,6 +31,7 @@ export const StyledButtonText = styled.Text`
   font-size: ${({ size }) => size === "thin" ? `${moderateScale(fontSizes.SmallText)}px` : `${moderateScale(fontSizes.StandardText)}px`};
   font-family: ${({ size }) => size === "thin" ? activeFonts.Medium : activeFonts.Regular};
   color: ${({ alt }) => (alt ? colors.primaryBlue : colors.themeWhite)};
+  text-align: center;
 `;
 
 export const IconWrapperLeft = styled.View`
