@@ -39,14 +39,7 @@ export default function DiveSiteScreenView({
 
   const { t } = useTranslation();
 
-  // useEffect(() => {
-  //   setSiteVals({
-  //     siteName: selectedDiveSite.name,
-  //     bio: selectedDiveSite.diveSiteBio,
-  //     user: selectedDiveSite.newusername
-  //   });
-
-  // },[selectedDiveSite]);
+  console.log('diveSitePics at view', diveSitePics)
 
   return (
     <S.ContentContainer>

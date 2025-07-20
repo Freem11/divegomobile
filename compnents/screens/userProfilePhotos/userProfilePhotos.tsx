@@ -27,7 +27,6 @@ export default function UserProfilePhotosPageView({
 
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { selectedProfile } = useContext(SelectedProfileContext);
 
   const onClose = async() => {

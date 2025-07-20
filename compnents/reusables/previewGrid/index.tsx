@@ -1,8 +1,6 @@
 import React, { FC, useMemo } from "react";
-import { Dimensions } from "react-native";
+import { Image, Dimensions } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-
-import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
 import * as S from "./styles";
@@ -25,7 +23,9 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
 
   return (
     <S.Container>
-      {items && items.length > 0 && items.map((item, index) => (
+      {items && items.length > 0 && items.map((item, index) => {
+      const fileName = item.photofile?.split("/").pop();
+     return (
         <S.Item
           key={index}
           style={{
@@ -36,17 +36,19 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
             marginBottom: gap,
           }}
         >
-          <ImageCasherDynamic
-            photoFile={item.photofile}
-            style={{
-              height: "100%",
-              width: "100%",
-              borderRadius: moderateScale(8),
-              resizeMode: "cover",
-            }}
-          />
+          <Image
+        source={{ uri: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`}}
+        style={{
+          height: "100%",
+          width: "100%",
+          borderRadius: moderateScale(8),
+          resizeMode: "cover",
+        }}
+      />
         </S.Item>
-      ))}
+      )}
+      )
+      }
     </S.Container>
   );
 };

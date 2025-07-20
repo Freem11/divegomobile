@@ -6,6 +6,7 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import SealifePreview from "../../reusables/sealifePreview";
 
 import * as S from "./styles";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type UserProfileProps = {
   profilePhotos: DiveSiteWithUserName[] | null;
@@ -14,6 +15,7 @@ type UserProfileProps = {
   speciesCount: number;
   sightingsCount: number;
   openAllPhotosPage: () => void;
+  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export default function UserProfileScreenView({
@@ -21,11 +23,13 @@ export default function UserProfileScreenView({
   selectedProfile,
   speciesCount,
   sightingsCount,
-  openAllPhotosPage
+  openAllPhotosPage,
+  setLevelThreeScreen
 }: UserProfileProps) {
 
   const [profileVals, setProfileVals] = useState(null);
-
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  
   useEffect(() => {
     setProfileVals({
       userName: selectedProfile?.UserName,
