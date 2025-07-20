@@ -117,21 +117,21 @@ export default function FeedItemFailedUpload({
           <ButtonIcon
             icon="replay"
             onPress={() => showWarning(t("Toast.pleaseWait"))}
-            size="small"
+            size="headerIcon"
             fillColor={colors.themeBlack}
           />
         ) : (
           <ButtonIcon
             icon="replay"
             onPress={handleOnRetry}
-            size="small"
+            size="headerIcon"
             fillColor={colors.themeGreen}
           />
         )}
         <ButtonIcon
           icon="trash"
           onPress={() => onRemove(item.id)}
-          size="small"
+          size="headerIcon"
           fillColor={colors.themeRed}
         />
       </S.ActionsRow>

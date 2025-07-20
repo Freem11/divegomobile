@@ -4,6 +4,7 @@ import { FeedItemComponentProps } from "./failedPicUpload";
 import { NotificationFeedItem } from "../../../store/types";
 import ButtonIcon from "../../../../reusables/buttonIcon";
 import { colors } from "../../../../styles";
+import { View } from "react-native";
 
 export default function FeedItemNotification({
   item,
@@ -18,16 +19,19 @@ export default function FeedItemNotification({
           <ButtonIcon
             icon="eye"
             onPress={item.action}
-            size="small"
+            size="headerIcon"
             fillColor={colors.themeBlack}
           />
         )}
-        <ButtonIcon
-          icon="trash"
-          onPress={() => onRemove(item.id)}
-          size="small"
-          fillColor={colors.themeRed}
-        />
+        <View style={{ flex: 1, alignItems: "flex-end" }}>
+          <ButtonIcon
+            icon="trash"
+            onPress={() => onRemove(item.id)}
+            size="headerIcon"
+            fillColor={colors.themeRed}
+          />
+        </View>
+
       </S.ActionsRow>
     </S.Card>
   );
