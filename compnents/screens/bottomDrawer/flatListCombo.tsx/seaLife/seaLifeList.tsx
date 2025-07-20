@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../card';
 import { AreaPicsContext } from '../../../../contexts/areaPicsContext';
-import { SearchTextContext } from '../../../../contexts/searchTextContext';
 import { getAnimalsInBubble } from '../../../../../supabaseCalls/photoSupabaseCalls';
 import { useMapStore } from '../../../../googleMap/useMapStore';
 import * as S from "./styles";
@@ -12,7 +11,6 @@ import MobileTextInput from "../../../../reusables/textInput";
 export default function SeaLifeList() {
 
   const boundaries = useMapStore((state) => state.gpsBubble);
-  const { textvalue } = useContext(SearchTextContext);
   const [filterValue, setFilterValue] = useState('');
   const { areaPics, setAreaPics } = useContext(AreaPicsContext);
 
@@ -68,10 +66,10 @@ export default function SeaLifeList() {
       }}
     >
       <S.Header>Nearby Sea Life</S.Header>
-  
+      {renderListHeader}
+
       {layoutReady ? (
         <FlatList
-          ListHeaderComponent={renderListHeader}
           data={areaPics}
           keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
           renderItem={({ item }) => (
