@@ -11,7 +11,7 @@ import * as S from "./styles";
 
 interface PreviewGridProps {
   items: DiveSiteWithUserName[] | null;
-  onAddSighting: () => void;
+  onAddSighting?: () => void;
 }
 
 export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
@@ -52,7 +52,8 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
           />
         </S.Item>
       ))}
-      <S.AddSightingButton
+      {onAddSighting &&
+       <S.AddSightingButton
         onPress={onAddSighting}
         style={{
           width: itemSize,
@@ -70,6 +71,7 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
           Add a Sighting
         </S.AddSightingText>
       </S.AddSightingButton>
+      }
     </S.Container>
   );
 };

@@ -19,7 +19,7 @@ type SealifePreviewProps = {
   sightingsCount: number
   diveSitePics: DiveSiteWithUserName[] | null
   onViewMore: () => void
-  onAddSighting: () => void
+  onAddSighting?: () => void
   selectedProfile: ActiveProfile | null
 };
 
@@ -63,10 +63,10 @@ export default function SealifePreview({
         <S.EmptyStateContainer>
           <EmptyState
             iconName="fish"
-            title={selectedProfile ? null : "No sightings yet"}
-            subtitle={selectedProfile ? `${selectedProfile.UserName} hasn't made any sightings yet.` : "Be the first to spot some sea life here!"}
+            title={"No sightings yet"}
+            subtitle={onAddSighting ? "Be the first to spot some sea life here!" : `${selectedProfile && selectedProfile.UserName} hasn't made any sightings yet.`}
           />
-          {!selectedProfile && (
+          {onAddSighting && (
             <Button
               size="thin"
               title={"Add First Sighting"}
