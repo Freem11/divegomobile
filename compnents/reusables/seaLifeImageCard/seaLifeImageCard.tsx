@@ -145,7 +145,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
         )}
       </TouchableOpacity>
 
-      <S.Overlay pointerEvents="box-none" />
+      <S.Overlay pointerEvents="none" />
 
       <S.TopContentWrapper>
         <ButtonIcon
