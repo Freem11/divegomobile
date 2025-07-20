@@ -1,39 +1,44 @@
 import React, { FC, useMemo } from "react";
 import { Dimensions } from "react-native";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, scale } from "react-native-size-matters";
 
 import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { colors } from "../../styles";
+import Icon from "../../../icons/Icon";
 
 import * as S from "./styles";
 
 interface PreviewGridProps {
   items: DiveSiteWithUserName[] | null;
+  onAddSighting?: () => void;
 }
 
-export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
+export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
   const screenWidth = Dimensions.get("window").width;
-  const containerPadding = 20;
-  const gap = 8;
-  const numColumns = 3;
+  const containerPadding = scale(20);
+  const gap = scale(8);
 
-  const itemSize = useMemo(() => {
+  const { numColumns, itemSize } = useMemo(() => {
     const availableWidth = screenWidth - (containerPadding * 2);
-    const totalGaps = gap * (numColumns - 1);
-    return (availableWidth - totalGaps) / numColumns;
-  }, [screenWidth]);
+    const columns = 3;
+    const totalGaps = gap * (columns - 1);
+    const size = (availableWidth - totalGaps) / columns;
+
+    return { numColumns: columns, itemSize: size };
+  }, [screenWidth, containerPadding, gap]);
 
   return (
     <S.Container>
-      {items && items.length > 0 && items.map((item, index) => (
+      {items && items.length > 0 && items.slice(0,8).map((item, index) => (
         <S.Item
           key={index}
           style={{
             width: itemSize,
             height: itemSize,
-            borderRadius: moderateScale(8),
             marginRight: (index + 1) % numColumns === 0 ? 0 : gap,
             marginBottom: gap,
+            backgroundColor: colors.lightGrey,
           }}
         >
           <ImageCasherDynamic
@@ -47,6 +52,26 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items }) => {
           />
         </S.Item>
       ))}
+      {onAddSighting &&
+       <S.AddSightingButton
+        onPress={onAddSighting}
+        style={{
+          width: itemSize,
+          height: itemSize,
+          marginBottom: gap,
+        }}
+      >
+        <Icon
+          name={"camera-plus"}
+          color={colors.primaryBlue}
+          width={moderateScale(22)}
+          height={moderateScale(22)}
+        />
+        <S.AddSightingText>
+          Add a Sighting
+        </S.AddSightingText>
+      </S.AddSightingButton>
+      }
     </S.Container>
   );
 };
