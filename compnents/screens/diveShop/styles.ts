@@ -46,3 +46,7 @@ export const SectionCount = styled.Text`
   font-family: ${activeFonts.Medium};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
 `;
+
+export const EmptyStateWrapper = styled.View`
+  padding: ${moderateScale(40)}px 0;
+`;

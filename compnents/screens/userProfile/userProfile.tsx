@@ -50,7 +50,6 @@ export default function UserProfileScreenView({
         sightingsCount={sightingsCount}
         diveSitePics={profilePhotos}
         onViewMore={openAllPhotosPage}
-        onAddSighting={openAllPhotosPage}
         selectedProfile={selectedProfile}
       />
     </S.ContentContainer>

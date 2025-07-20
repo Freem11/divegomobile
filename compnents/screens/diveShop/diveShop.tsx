@@ -2,12 +2,12 @@ import React from "react";
 import { openURL } from "expo-linking";
 
 import ItineraryCard from "../../reusables/itineraryCard";
-// import Label from "../../reusables/label-new";
 import { DiveShop } from "../../../entities/diveShop";
 import { ItineraryItem } from "../../../entities/itineraryItem";
+import Label from "../../reusables/label";
+import EmptyState from "../../reusables/emptyState-new";
 
 import * as S from "./styles";
-import Label from "../../reusables/label";
 
 type DiveShopProps = {
   isMyShop: boolean;
@@ -42,7 +42,7 @@ export default function DiveShopScreenView({
         </S.SectionCount>
       </S.LabelWrapper>
 
-      {itineraryList && itineraryList.map((itinerary) => {
+      {itineraryList && itineraryList.length > 0 ? itineraryList.map((itinerary) => {
         return (
           <ItineraryCard
             key={itinerary.id}
@@ -54,7 +54,17 @@ export default function DiveShopScreenView({
             handleBooking={() => openURL(itinerary.BookingPage)}
           />
         );
-      })}
+      }) : (
+        <S.EmptyStateWrapper>
+          <EmptyState
+            iconName="boat"
+            title="No Trips Available"
+            subtitle={selectedShop?.orgName ?
+              `${selectedShop?.orgName} currently aren't offering any trips. Check back later!` :
+              "There are currently no diving trips scheduled for this location. Check back later!"}
+          />
+        </S.EmptyStateWrapper>
+      )}
     </S.ContentContainer>
   );
 }

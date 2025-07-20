@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { ItineraryItem } from "../../../entities/itineraryItem";
@@ -7,9 +6,9 @@ import SealifePreview from "../../reusables/sealifePreview";
 import ItineraryCard from "../../reusables/itineraryCard";
 import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
+import Label from "../../reusables/label";
 
 import * as S from "./styles";
-import Label from "../../reusables/label";
 
 type DiveSiteProps = {
   selectedDiveSite: DiveSiteWithUserName
@@ -36,9 +35,6 @@ export default function DiveSiteScreenView({
   openAllTripsPage,
   handleMapFlip
 }: DiveSiteProps) {
-
-  const { t } = useTranslation();
-
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>

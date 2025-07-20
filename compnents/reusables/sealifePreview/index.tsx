@@ -9,17 +9,17 @@ import { colors } from "../../styles";
 import Button from "../button";
 import GhostButton from "../ghostButton";
 import EmptyState from "../emptyState-new";
-
-import * as S from "./styles";
 import Label from "../label";
 import { ActiveProfile } from "../../../entities/profile";
+
+import * as S from "./styles";
 
 type SealifePreviewProps = {
   speciesCount: number
   sightingsCount: number
   diveSitePics: DiveSiteWithUserName[] | null
   onViewMore: () => void
-  onAddSighting: () => void
+  onAddSighting?: () => void
   selectedProfile: ActiveProfile | null
 };
 
@@ -54,28 +54,28 @@ export default function SealifePreview({
 
       {sightingsCount > 0 ? (
         <>
-          <PreviewGrid items={diveSitePics} />
+          <PreviewGrid items={diveSitePics} onAddSighting={onAddSighting} />
           <S.SectionFooterWrapper>
-          {!selectedProfile && <GhostButton onPress={onAddSighting} title={"Add a Sighting"} />} 
-          <GhostButton onPress={onViewMore} title={"View More"} />
+            <GhostButton onPress={onViewMore} title={"View More"} />
           </S.SectionFooterWrapper>
         </>
       ) : (
         <S.EmptyStateContainer>
           <EmptyState
             iconName="fish"
-            title={selectedProfile ? null : "No sightings yet"}
-            subtitle={selectedProfile ? `${selectedProfile.UserName} hasn't made any sightings yet.` : "Be the first to spot some sea life here!"}
+            title={onAddSighting ? "No sightings yet": null  }
+            subtitle={onAddSighting ? "Be the first to spot some sea life here!" : `${selectedProfile && selectedProfile.UserName} hasn't made any sightings yet.`}
           />
-         {!selectedProfile &&
-         <Button
-         size="thin"
-         title={"Add First Sighting"}
-         iconLeft="camera-plus"
-         round={false}
-         style={{ width: "auto", marginTop: moderateScale(15) }}
-         onPress={onAddSighting}
-       />} 
+          {onAddSighting && (
+            <Button
+              size="thin"
+              title={"Add First Sighting"}
+              iconLeft="camera-plus"
+              round={false}
+              style={{ width: "auto", marginTop: moderateScale(15) }}
+              onPress={onAddSighting}
+            />
+          )}
         </S.EmptyStateContainer>
       )}
     </>
