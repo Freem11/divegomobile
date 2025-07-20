@@ -5,9 +5,10 @@ import {
   fontSizes,
   activeFonts,
 } from '../../styles';
+import { Platform } from "react-native";
 
 export const TextInputWrapper = styled.View`
-  height: ${moderateScale(30)}px;
+  height: ${moderateScale(35)}px;
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -19,6 +20,8 @@ export const TextInputWrapper = styled.View`
 export const StyledTextInput = styled.TextInput`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
+  padding-bottom: ${Platform.OS === "android" ? moderateScale(12) : moderateScale(7)}px;
+  height: ${moderateScale(40)}px;
   width: 82%;
 `;
 
