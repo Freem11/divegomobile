@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FlatList } from "react-native";
 import ButtonIcon from '../../reusables/buttonIcon'
 import { useTranslation } from "react-i18next";
@@ -7,24 +7,33 @@ import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard"
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { Photo } from "../../../entities/photos";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 
 type UserProfilePhotosPageViewProps = {
   photos: any
   title: string
-  setFullScreenModal: React.Dispatch<React.SetStateAction<boolean>>
+  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
   handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
 };
 
 export default function UserProfilePhotosPageView({ 
   photos,
   title,
-  setFullScreenModal,
+  setLevelThreeScreen,
   handleDiveSiteMove
  }: UserProfilePhotosPageViewProps) {
 
   const { t } = useTranslation();
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
+  const { selectedProfile } = useContext(SelectedProfileContext);
 
-  console.log('photos', photos)
+  const onClose = async() => {
+    setActiveScreen("ProfileScreen", {id: selectedProfile.id})
+    setLevelThreeScreen(false)
+  };
   
   return (
     <S.ContentContainer>
@@ -33,7 +42,7 @@ export default function UserProfilePhotosPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => setFullScreenModal(false)}
+            onPress={() => onClose()}
             size="small"
             fillColor={"darkgrey"}
           />

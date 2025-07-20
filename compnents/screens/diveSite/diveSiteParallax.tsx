@@ -34,6 +34,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
+
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);

@@ -4,14 +4,13 @@ import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNin
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-
 import DiveSiteScreenView from "./diveSite";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import LevelOneScreen from "../../reusables/levelOneScreen";
+import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void;
@@ -28,8 +27,10 @@ export default function DiveSiteScreen({
  }: DiveSiteProps) {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const { setLevelThreeScreen } = useContext(
+    LevelThreeScreenContext
+  );
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
@@ -38,15 +39,13 @@ export default function DiveSiteScreen({
   const { setSitesArray } = useContext(SitesArrayContext);
   
   const openAllPhotosPage = () => {
-    setFullScreenModal(true);
-    //to do: need to change what modal animation this runs on
-    setActiveTutorialID("DiveSitePhotos");
+    setLevelThreeScreen(true);
+    setActiveScreen("DiveSitePhotos");
   };
 
   const openAllTripsPage = () => {
-    setFullScreenModal(true);
-    //to do: need to change what modal animation this runs on
-    setActiveTutorialID("DiveSiteTrips");
+    setLevelThreeScreen(true);
+      setActiveScreen("DiveSiteTrips");
   };
 
   const handleMapFlip = async (sites: number[]) => {

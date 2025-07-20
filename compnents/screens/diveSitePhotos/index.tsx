@@ -10,12 +10,16 @@ import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
+import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 
 type DiveSitePhotosPageProps = {};
 
 export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setLevelThreeScreen } = useContext(
+    LevelThreeScreenContext
+  );
   const { profile } = useContext(UserProfileContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setLevelOneScreen } = useContext(
@@ -48,8 +52,9 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
     }
 
     setActiveScreen("ProfileScreen", {id: picOwnerAccount[0].id})
-    setFullScreenModal(false);
+    setLevelThreeScreen(false);
     setLevelTwoScreen(true);
+    setLevelOneScreen(false);
   };
 
     useEffect(() => {
@@ -62,7 +67,7 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
     <DiveSitePhotosPageView
       diveSites={diveSitePics}
       title={selectedDiveSite.name}
-      setFullScreenModal={setFullScreenModal}
+      setLevelThreeScreen={setLevelThreeScreen}
       handleProfileMove={handleProfileMove}
     />
   )
