@@ -23,31 +23,31 @@ import * as S from "./styles";
 
 const windowHeight = Dimensions.get("window").height;
 
-const mockFeedItems = [
-  {
-    id: "1",
-    type: FEED_ITEM_TYPE.FAILED_UPLOAD,
-    title: "Failed to upload image",
-    message: "Please try again later.",
-  },
-  {
-    id: "2",
-    type: FEED_ITEM_TYPE.FAILED_SYNC,
-    title: "Failed to sync data",
-    message: "Check your internet connection.",
-  },
-  {
-    id: "3",
-    type: FEED_ITEM_TYPE.NOTIFICATION,
-    title: "New message received",
-    message: "You have a new message from John.",
-  },
-];
+// const mockFeedItems = [
+//   {
+//     id: "1",
+//     type: FEED_ITEM_TYPE.FAILED_UPLOAD,
+//     title: "Failed to upload image",
+//     message: "Please try again later.",
+//   },
+//   {
+//     id: "2",
+//     type: FEED_ITEM_TYPE.FAILED_SYNC,
+//     title: "Failed to sync data",
+//     message: "Check your internet connection.",
+//   },
+//   {
+//     id: "3",
+//     type: FEED_ITEM_TYPE.NOTIFICATION,
+//     title: "New message received",
+//     message: "You have a new message from John.",
+//   },
+// ];
 
 export default function FeedList() {
   const { t } = useTranslation();
-  //const feedItems = useFeedDataStore((state) => state.feedItems);
-  const feedItems = mockFeedItems;
+  const feedItems = useFeedDataStore((state) => state.feedItems);
+  //const feedItems = mockFeedItems;
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
   const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
   const clearFeedItems = useFeedDataStore((state) => state.clearFeedItems);
