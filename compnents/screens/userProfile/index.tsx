@@ -64,6 +64,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
       openAllPhotosPage={openAllPhotosPage}
+      setLevelThreeScreen={setLevelThreeScreen}
     />
   );
 

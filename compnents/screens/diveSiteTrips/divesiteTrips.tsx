@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FlatList } from "react-native";
 import ButtonIcon from '../../reusables/buttonIcon'
 import { useTranslation } from "react-i18next";
 import ItineraryCard from "../../reusables/itineraryCard";
 import { openURL } from "expo-linking";
 import * as S from "./styles";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 
 type DiveSiteTripsPageViewProps = {
   diveTrips: any
@@ -21,8 +23,13 @@ export default function DiveSiteTripsPageView({
  }: DiveSiteTripsPageViewProps) {
 
   const { t } = useTranslation();
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
-  console.log('diveTrips', diveTrips)
+  const onClose = async() => {
+    setActiveScreen("DiveSiteScreen", {id: selectedDiveSite.id})
+    setLevelThreeScreen(false)
+  };
   
   return (
     <S.ContentContainer>
@@ -31,7 +38,7 @@ export default function DiveSiteTripsPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => setLevelThreeScreen(false)}
+            onPress={() => onClose()}
             size="small"
             fillColor={"darkgrey"}
           />
