@@ -20,6 +20,7 @@ export const TextInputWrapper = styled.View`
 export const StyledTextInput = styled.TextInput`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
+  color: ${colors.themeBlack};
   padding-bottom: ${Platform.OS === "android" ? moderateScale(12) : moderateScale(7)}px;
   height: ${moderateScale(40)}px;
   width: 82%;

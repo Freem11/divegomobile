@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -38,8 +38,6 @@ export default function DiveSiteScreenView({
 }: DiveSiteProps) {
 
   const { t } = useTranslation();
-
-  console.log('diveSitePics at view', diveSitePics)
 
   return (
     <S.ContentContainer>
