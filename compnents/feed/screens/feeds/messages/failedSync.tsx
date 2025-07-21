@@ -19,7 +19,7 @@ export default function FeedItemFailedSync({
         <ButtonIcon
           icon="trash"
           onPress={() => onRemove(item.id)}
-          size="small"
+          size="headerIcon"
           fillColor={colors.themeRed}
         />
       </S.ActionsRow>

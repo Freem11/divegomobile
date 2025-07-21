@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import {StyleSheet, Animated, Dimensions, ImageBackground, Platform, SafeAreaView } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import Svg from "react-native-svg";
-import { colors } from "../../../styles";
+import { colors, fontSizes } from "../../../styles";
 
 const windowHeight = Dimensions.get('screen').height;
 
@@ -89,3 +89,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+export const Header = styled.Text`
+  color: ${colors.headersBlue};
+  font-size: ${moderateScale(fontSizes.Header)}px;
+  align-self: center;
+  margin-bottom: 12px;
+  margin-top: 6px;
+`;
