@@ -19,16 +19,19 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   buttonSizes,
 } from "../../styles";
+
 import HorizontalPager from "./flatListCombo.tsx";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const DRAWER_CLOSED = moderateScale(30);
+const DRAWER_PARTIAL = moderateScale(windowHeight/3);
 const DRAWER_OPEN = windowHeight;
 
 export default function BottomDrawer() {
@@ -66,12 +69,12 @@ export default function BottomDrawer() {
       duration: 300,
       easing: Easing.out(Easing.cubic),
     });
-  
+
     buttonWidth.value = withTiming(buttonClosed, {
       duration: 300,
       easing: Easing.out(Easing.cubic),
     });
-  
+
     runOnJS(setIsDrawerOpen)(false);
   };
 
@@ -118,7 +121,7 @@ export default function BottomDrawer() {
       });
 
       runOnJS(setIsDrawerOpen)(shouldOpen);
-    })
+    });
 
   const colorProgress = useSharedValue(0);
 
@@ -164,7 +167,14 @@ export default function BottomDrawer() {
             />
           </View>
           <View style={{ flex: 1 }}>
-            <HorizontalPager isDrawerOpen={isDrawerOpen} animatedButtonStyle={animatedButtonStyle} closeDrawer={closeDrawer}/>
+            <HorizontalPager
+              isDrawerOpen={isDrawerOpen}
+              animatedButtonStyle={animatedButtonStyle}
+              closeDrawer={closeDrawer}
+              onSearchComplete={() => {
+                boxheight.value = DRAWER_PARTIAL;
+              }}
+            />
           </View>
         </Animated.View>
       </GestureDetector>
