@@ -17,6 +17,7 @@ import AnimalTopAutoSuggest from "../animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
 import LevelOneScreen from "../reusables/levelOneScreen";
 import LevelTwoScreen from "../reusables/levelTwoScreen";
+import LevelThreeScreen from "../reusables/levelThreeScreen";
 import {
   grabProfileByUserId,
   updateProfileFeeback,
@@ -222,6 +223,7 @@ export default function MapPage() {
             <FeedScreens />
             <LevelOneScreen />
             <LevelTwoScreen />
+            <LevelThreeScreen />
             <AnimatedFullScreenModal />
 
      

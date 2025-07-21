@@ -65,10 +65,10 @@ export default function DiveSiteList() {
     }}
     >
       <S.Header>Nearby Dive Sites</S.Header>
-
+      {renderListHeader}
+  
       {layoutReady ? (
         <FlatList
-          ListHeaderComponent={renderListHeader}
           data={diveSites}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
           renderItem={({ item }) => <Card id={item.id} name={item.name} photoPath={item.divesiteprofilephoto} subData={item.times_seen} onPressHandler={() => handleDiveSiteSelection(item.id)}  />}

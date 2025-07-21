@@ -6,10 +6,9 @@ import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-
 import UserProfileScreenView from "./userProfile";
+import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void
@@ -17,12 +16,13 @@ type UserProfileProps = {
 };
 
 export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { selectedProfile, setSelectedProfile } = useContext(SelectedProfileContext);
+  const { selectedProfile } = useContext(SelectedProfileContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-
+  const { setLevelThreeScreen } = useContext(
+    LevelThreeScreenContext
+  );
   const [profilePhotos, setProfilePhotos] = useState(null);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
@@ -52,8 +52,8 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
   };
 
   const openAllPhotosPage = () => {
-    setFullScreenModal(true);
-    setActiveTutorialID("UserProfilePhotos");
+    setLevelThreeScreen(true);
+    setActiveScreen("UserProfilePhotos");
   };
 
   return (
@@ -64,6 +64,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
       openAllPhotosPage={openAllPhotosPage}
+      setLevelThreeScreen={setLevelThreeScreen}
     />
   );
 
