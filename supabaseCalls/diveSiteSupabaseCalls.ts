@@ -224,3 +224,22 @@ export const getDiveSiteById = async (id: string | number) => {
     return data;
   }
 };
+
+export const getMapDiveSiteCount = async (values) => {
+  const { data, error } = await supabase.rpc("get_dive_sites_on_map", {
+    max_lat: values.maxLat,
+    min_lat: values.minLat,
+    max_lng: values.maxLng,
+    min_lng: values.minLng,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};

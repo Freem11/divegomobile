@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { FlatList as GHFlatList, GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,6 +9,9 @@ import * as S from "../styles";
 import DiveCenterList from "./diveCenters/diveCenterList";
 import DiveSiteList from "./diveSites/diveSiteList";
 import SeaLifeList from "./seaLife/seaLifeList";
+import { getMapDiveSiteCount } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
+import { getMapSightingCount, getMapSpeciesCount } from "../../../../supabaseCalls/photoSupabaseCalls";
+import { useMapStore } from "../../../googleMap/useMapStore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -47,7 +50,7 @@ export default function HorizontalPager({ shouldShowButton, animatedButtonStyle,
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, position: 'relative' }}>
       <GHFlatList
         ref={flatListRef}
         data={outerData}

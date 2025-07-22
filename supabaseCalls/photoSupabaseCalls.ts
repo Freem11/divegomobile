@@ -440,3 +440,40 @@ export const getDiveSiteRecentNinePhotos = async (values) => {
 };
 
 
+export const getMapSightingCount = async (values) => {
+  const { data, error } = await supabase.rpc("get_sightings_on_map", {
+    max_lat: values.maxLat,
+    min_lat: values.minLat,
+    max_lng: values.maxLng,
+    min_lng: values.minLng,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};
+
+export const getMapSpeciesCount = async (values) => {
+  const { data, error } = await supabase.rpc("get_species_on_map", {
+    max_lat: values.maxLat,
+    min_lat: values.minLat,
+    max_lng: values.maxLng,
+    min_lng: values.minLng,
+  });
+
+  if (error) {
+    console.log('couldn\'t do it,', error);
+    return [];
+  }
+
+  if (data) {
+    return data[0];
+  }
+  return [];
+};

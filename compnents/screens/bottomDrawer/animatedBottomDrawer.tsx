@@ -26,9 +26,12 @@ import {
   colors,
   buttonSizes,
 } from "../../styles";
-
+import * as S from "./styles";
 import HorizontalPager from "./flatListCombo.tsx";
 import { SearchStatusContext } from "../../contexts/searchStatusContext";
+import { useMapStore } from "../../googleMap/useMapStore";
+import { getMapDiveSiteCount } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import { getMapSightingCount, getMapSpeciesCount } from "../../../supabaseCalls/photoSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -47,6 +50,11 @@ export default function BottomDrawer() {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
+  const boundaries = useMapStore((state) => state.gpsBubble);
+  const [diveSites, setDiveSites] = useState(0);
+  const [species, setSpecies] = useState(0);
+  const [sightings, setSightings] = useState(0);
+  
   useEffect(() => {
     if (searchStatus && boxheight.value === DRAWER_OPEN) {
       boxheight.value = DRAWER_PARTIAL;
@@ -192,6 +200,27 @@ export default function BottomDrawer() {
     };
   });
 
+  useEffect(() => {
+    if(boundaries){
+      let values = {    
+        minLat: boundaries.minLat,
+        maxLat: boundaries.maxLat,
+        minLng: boundaries.minLng,
+        maxLng: boundaries.maxLng
+      }
+      getStats(values)
+    }
+  },[boundaries])
+
+ const getStats = async (values) => {
+  const siteCount = await getMapDiveSiteCount(values)
+  setDiveSites(siteCount.label_count)
+  const speciesCount = await getMapSpeciesCount(values)
+  setSpecies(speciesCount.distinct_label_count)
+  const sightingsCount = await getMapSightingCount(values)
+  setSightings(sightingsCount.label_count)
+ }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={animatedBottomDrawer}>
@@ -206,7 +235,16 @@ export default function BottomDrawer() {
               }}
             />
           </View>
-          <View style={{ flex: 1 }}>
+
+          <S.StatContainer style={{ width: '100%', zIndex: 10, paddingHorizontal: moderateScale(20), paddingVertical: moderateScale(10) }}>
+            <S.Row>
+              <S.StatText>{`${diveSites} Dive Sites`}</S.StatText>
+              <S.StatText>{`${sightings} Sightings`}</S.StatText>
+            </S.Row>
+            <S.StatText>{`${species} Species Sighted`}</S.StatText>
+          </S.StatContainer>
+
+          <View style={{ flex: 1, width: '100%' }}>
             <HorizontalPager
               shouldShowButton={isDrawerOpen}
               animatedButtonStyle={animatedButtonStyle}
@@ -232,6 +270,7 @@ const styles = StyleSheet.create({
     borderWidth: moderateScale(1),
     borderTopRightRadius: moderateScale(25),
     borderTopLeftRadius: moderateScale(25),
+    overflow: "visible", 
   },
   handle: {
     zIndex: 11,
