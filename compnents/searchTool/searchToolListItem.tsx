@@ -8,7 +8,7 @@ import * as S from "./styles";
 import { colors } from "../styles";
 import Icon from "../../icons/Icon";
 
-export default function SearchToolListItem({ name, soureImage, handleMapOptionSelected, handleDiveSiteOptionSelected, handleSeaLifeOptionSelected }) {
+export default function SearchToolListItem({ name, soureImage, handleMapOptionSelected, handleDiveSiteOptionSelected, handleSeaLifeOptionSelected, setSearchStatus }) {
 
   const onPressItem = () => {
     if (soureImage === "anchor") {
@@ -18,6 +18,7 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
     } else {
       handleMapOptionSelected(name);
     }
+    setSearchStatus(true);
   };
 
   return (

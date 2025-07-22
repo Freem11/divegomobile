@@ -8,7 +8,8 @@ export default function SearchToolList({
   data,
   handleMapOptionSelected,
   handleDiveSiteOptionSelected,
-  handleSeaLifeOptionSelected
+  handleSeaLifeOptionSelected,
+  setSearchStatus
 }) {
   if (!data || data.length === 0) return null;
 
@@ -24,6 +25,7 @@ export default function SearchToolList({
             handleMapOptionSelected={handleMapOptionSelected}
             handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
             handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
+            setSearchStatus={setSearchStatus}
           />
         )}
       />

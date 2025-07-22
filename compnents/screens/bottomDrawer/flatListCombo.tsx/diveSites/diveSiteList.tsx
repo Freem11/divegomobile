@@ -7,14 +7,9 @@ import { getDiveSitesWithUser } from "../../../../../supabaseCalls/diveSiteSupab
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
 import MobileTextInput from "../../../../reusables/textInput";
-
 import * as S from "./styles";
 
-interface DiveSiteListProps {
-  onSearchComplete: () => void
-}
-
-export default function DiveSiteList({ onSearchComplete } : DiveSiteListProps) {
+export default function DiveSiteList() {
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [diveSites, setDiveSites] = useState([]);
   const [filterValue, setFilterValue] = useState("");
@@ -40,7 +35,6 @@ export default function DiveSiteList({ onSearchComplete } : DiveSiteListProps) {
   const handleDiveSiteSelection = (siteId: number) => {
     setActiveScreen("DiveSiteScreen", { id: siteId });
     setLevelOneScreen(true);
-    onSearchComplete();
   };
 
   const handleClear = () => {
