@@ -22,16 +22,17 @@ export const Handle = styled.View`
 
 export const StatContainer = styled.View`
   position: absolute;
-  bottom: ${moderateScale(16)}px;
-  width: 70%;
+  top: ${moderateScale(-10)}px;
+  height:${moderateScale(90)}px;
+  width: 78%;
   align-self: center;
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: pink;
   padding: ${moderateScale(10)}px;
   border-radius: ${moderateScale(10)}px;
+
 `;
 
 export const Row = styled.View`
@@ -42,8 +43,8 @@ export const Row = styled.View`
 `;
 
 export const StatText = styled.Text`
-  color: ${colors.themeBlack};
-  font-family: ${activeFonts.Medium};
+  color: ${colors.primaryBlue};
+  font-family: ${activeFonts.Bold};
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   border-top-right-radius: ${moderateScale(15)}px;
   border-top-left-radius: ${moderateScale(15)}px;

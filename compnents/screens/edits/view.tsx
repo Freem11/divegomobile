@@ -7,6 +7,7 @@ import { Form, FormRules } from "./form";
 import { Controller, useForm } from "react-hook-form";
 import { BasicFormData } from "./editsParallax";
 import Label from "../../reusables/label";
+import { colors } from "../../styles";
 
 interface Props {
   values: Form;
@@ -48,6 +49,7 @@ export default function EditScreenView({
                 render={({ field: { onChange, onBlur, value } }) => (
                   <MobileTextInput
                     placeholder={initialFormData?.placeholderName}
+                    placeholderTextColor={colors.neutralGrey}
                     onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
@@ -67,6 +69,7 @@ export default function EditScreenView({
                   <S.MultilineTextInput
                   multiline
                   placeholder={initialFormData?.placeholderBio}
+                  placeholderTextColor={colors.neutralGrey}
                   value={value}
                   onBlur={onBlur}
                   onChangeText={onChange} 

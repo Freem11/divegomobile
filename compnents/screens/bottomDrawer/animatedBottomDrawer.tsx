@@ -12,7 +12,6 @@ import Animated, {
   runOnJS,
   interpolateColor,
   interpolate,
-  withDelay,
   Extrapolation,
 } from "react-native-reanimated";
 import {
@@ -29,9 +28,6 @@ import {
 import * as S from "./styles";
 import HorizontalPager from "./flatListCombo.tsx";
 import { SearchStatusContext } from "../../contexts/searchStatusContext";
-import { useMapStore } from "../../googleMap/useMapStore";
-import { getMapDiveSiteCount } from "../../../supabaseCalls/diveSiteSupabaseCalls";
-import { getMapSightingCount, getMapSpeciesCount } from "../../../supabaseCalls/photoSupabaseCalls";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -50,11 +46,6 @@ export default function BottomDrawer() {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
-  const boundaries = useMapStore((state) => state.gpsBubble);
-  const [diveSites, setDiveSites] = useState(0);
-  const [species, setSpecies] = useState(0);
-  const [sightings, setSightings] = useState(0);
-  
   useEffect(() => {
     if (searchStatus && boxheight.value === DRAWER_OPEN) {
       boxheight.value = DRAWER_PARTIAL;
@@ -64,23 +55,21 @@ export default function BottomDrawer() {
 
   useEffect(() => {
     if (isDrawerOpen) {
-      buttonOpacity.value = withDelay(500, withTiming(1, { duration: 300 }));
+      buttonOpacity.value = withTiming(1, { duration: 300 });
     } else {
       buttonOpacity.value = withTiming(0, { duration: 200 });
     }
   }, [isDrawerOpen]);
 
-
   const animatedButtonStyle = useAnimatedStyle(() => {
     const interpolatedOpacity = interpolate(
       boxheight.value,
-      [DRAWER_PARTIAL, DRAWER_OPEN], 
+      [DRAWER_PARTIAL, DRAWER_OPEN],
       [0, 1],
       Extrapolation.CLAMP
     );
 
     const finalOpacity = interpolatedOpacity * buttonOpacity.value;
-
     const displayStyle = finalOpacity > 0.01 ? "flex" : "none";
 
     return {
@@ -89,18 +78,40 @@ export default function BottomDrawer() {
     };
   });
 
+  const animatedStatsStyle = useAnimatedStyle(() => {
+    const interpolatedOpacity = interpolate(
+      boxheight.value,
+      [DRAWER_PARTIAL - 1, DRAWER_PARTIAL, DRAWER_OPEN],
+      [1, 1, 0],
+      Extrapolation.CLAMP
+    );
+  
+    const finalOpacity = interpolatedOpacity;
+    const displayStyle = finalOpacity > 0.01 ? "flex" : "none";
+  
+    return {
+      opacity: finalOpacity,
+      display: displayStyle,
+    };
+  });
+  
+  
+
   const bounds = {
     lower: DRAWER_CLOSED,
     upper: DRAWER_OPEN,
   };
 
+  const buttonOpen = moderateScale(buttonSizes.medium.width);
+  const buttonClosed = moderateScale(buttonSizes.small.width);
+
   const closeDrawer = () => {
     boxheight.value = withTiming(DRAWER_CLOSED, {
-      duration: 300,
+      duration: 1000,
       easing: Easing.out(Easing.cubic),
     }, (finished) => {
       if (finished) {
-        runOnJS(setIsDrawerOpen)(false); 
+        runOnJS(setIsDrawerOpen)(false);
       }
     });
 
@@ -111,9 +122,6 @@ export default function BottomDrawer() {
 
     buttonOpacity.value = withTiming(0, { duration: 200 });
   };
-
-  const buttonOpen = moderateScale(buttonSizes.medium.width);
-  const buttonClosed = moderateScale(buttonSizes.small.width);
 
   const startHeight = useSharedValue(DRAWER_CLOSED);
 
@@ -131,9 +139,10 @@ export default function BottomDrawer() {
 
       const progress =
         (boxheight.value - bounds.lower) / (bounds.upper - bounds.lower);
+
       buttonWidth.value =
         buttonClosed + (buttonOpen - buttonClosed) * progress;
-      
+
       buttonActiveProgress.value = interpolate(
         boxheight.value,
         [DRAWER_PARTIAL, DRAWER_OPEN],
@@ -142,84 +151,72 @@ export default function BottomDrawer() {
       );
     })
     .onEnd((event) => {
-      const isFastUpward = event.velocityY < -10;
-      const isFastDownward = event.velocityY > 10;
-      const isDrawerMoreOpen = boxheight.value > windowHeight * 0.4;
-    
-      const shouldOpen = isFastUpward || (isDrawerMoreOpen && !isFastDownward);
-      const finalHeight = shouldOpen ? bounds.upper : bounds.lower;
-      const finalButtonWidth = shouldOpen ? buttonOpen : buttonClosed;
-    
-      boxheight.value = withTiming(finalHeight, {
-        duration: 300,
+      const current = boxheight.value;
+      const velocity = event.velocityY;
+      let target;
+
+      if (velocity < -50) {
+        // Swiping Up
+        if (current <= DRAWER_CLOSED + 30) {
+          target = DRAWER_PARTIAL;
+        } else {
+          target = DRAWER_OPEN;
+        }
+      } else if (velocity > 50) {
+        // Swiping Down
+        if (current >= DRAWER_OPEN - 100) {
+          target = DRAWER_PARTIAL;
+        } else {
+          target = DRAWER_CLOSED;
+        }
+      } else {
+        // Snap to nearest
+        const distances = [
+          { pos: DRAWER_CLOSED, dist: Math.abs(current - DRAWER_CLOSED) },
+          { pos: DRAWER_PARTIAL, dist: Math.abs(current - DRAWER_PARTIAL) },
+          { pos: DRAWER_OPEN, dist: Math.abs(current - DRAWER_OPEN) },
+        ];
+        distances.sort((a, b) => a.dist - b.dist);
+        target = distances[0].pos;
+      }
+
+      const isOpen = target === DRAWER_OPEN;
+
+      boxheight.value = withTiming(target, {
+        duration: 1000,
         easing: Easing.out(Easing.cubic),
       }, (finished) => {
         if (finished) {
-          runOnJS(setIsDrawerOpen)(finalHeight === DRAWER_OPEN);
+          runOnJS(setIsDrawerOpen)(isOpen);
         }
       });
-    
-      buttonWidth.value = withTiming(finalButtonWidth, {
-        duration: 300,
-        easing: Easing.out(Easing.cubic),
-      });
 
-      if (shouldOpen) {
-          buttonOpacity.value = withDelay(500, withTiming(1, { duration: 300 }));
-      } else {
-          buttonOpacity.value = withTiming(0, { duration: 200 });
-      }
+      buttonWidth.value = withTiming(
+        target === DRAWER_OPEN ? buttonOpen : buttonClosed,
+        { duration: 300, easing: Easing.out(Easing.cubic) }
+      );
+
+      buttonOpacity.value = withTiming(
+        target === DRAWER_OPEN ? 1 : 0,
+        { duration: 300 }
+      );
     });
-    
-  const colorProgress = useSharedValue(0);
-
-  useEffect(() => {
-    if (isDrawerOpen) {
-      colorProgress.value = withTiming(1, { duration: 1500 });
-    } else {
-      colorProgress.value = withTiming(0, { duration: 750 });
-    }
-  }, [isDrawerOpen]); 
 
   const animatedBoxStyle = useAnimatedStyle(() => {
     const bgColor = interpolateColor(
-      colorProgress.value,
-      [0, 1],
+      boxheight.value,
+      [DRAWER_CLOSED, DRAWER_PARTIAL],
       [colors.primaryBlue, colors.themeWhite]
     );
 
     return {
-      height: withTiming(boxheight.value, {
-        duration: 400,
-        easing: Easing.inOut(Easing.linear),
-      }),
+      height: boxheight.value,
       backgroundColor: bgColor,
       borderTopColor: bgColor,
       borderColor: bgColor,
       borderBottomColor: bgColor,
     };
   });
-
-  useEffect(() => {
-    if(boundaries){
-      let values = {    
-        minLat: boundaries.minLat,
-        maxLat: boundaries.maxLat,
-        minLng: boundaries.minLng,
-        maxLng: boundaries.maxLng
-      }
-      getStats(values)
-    }
-  },[boundaries])
-
- const getStats = async (values) => {
-  const siteCount = await getMapDiveSiteCount(values)
-  setDiveSites(siteCount.label_count)
-  const speciesCount = await getMapSpeciesCount(values)
-  setSpecies(speciesCount.distinct_label_count)
-  const sightingsCount = await getMapSightingCount(values)
-  setSightings(sightingsCount.label_count)
- }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -236,18 +233,11 @@ export default function BottomDrawer() {
             />
           </View>
 
-          <S.StatContainer style={{ width: '100%', zIndex: 10, paddingHorizontal: moderateScale(20), paddingVertical: moderateScale(10) }}>
-            <S.Row>
-              <S.StatText>{`${diveSites} Dive Sites`}</S.StatText>
-              <S.StatText>{`${sightings} Sightings`}</S.StatText>
-            </S.Row>
-            <S.StatText>{`${species} Species Sighted`}</S.StatText>
-          </S.StatContainer>
-
-          <View style={{ flex: 1, width: '100%' }}>
+          <View style={{ flex: 1, width: "100%" }}>
             <HorizontalPager
               shouldShowButton={isDrawerOpen}
               animatedButtonStyle={animatedButtonStyle}
+              animatedStatsStyle={animatedStatsStyle}
               closeDrawer={closeDrawer}
             />
           </View>
@@ -270,7 +260,7 @@ const styles = StyleSheet.create({
     borderWidth: moderateScale(1),
     borderTopRightRadius: moderateScale(25),
     borderTopLeftRadius: moderateScale(25),
-    overflow: "visible", 
+    overflow: "visible",
   },
   handle: {
     zIndex: 11,

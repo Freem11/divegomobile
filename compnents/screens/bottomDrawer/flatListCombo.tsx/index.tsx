@@ -21,11 +21,16 @@ const DOUBLE_TAP_DELAY = 300;
 interface HorizontalPagerProps {
   shouldShowButton: boolean
   animatedButtonStyle: Record<string, any>
+  animatedStatsStyle: Record<string, any>
   closeDrawer: () => void
 }
 
-export default function HorizontalPager({ shouldShowButton, animatedButtonStyle, closeDrawer }: HorizontalPagerProps) {
+export default function HorizontalPager({ shouldShowButton, animatedButtonStyle, animatedStatsStyle, closeDrawer }: HorizontalPagerProps) {
   const flatListRef = useRef(null);
+  const boundaries = useMapStore((state) => state.gpsBubble);
+  const [diveSites, setDiveSites] = useState(0);
+  const [species, setSpecies] = useState(0);
+  const [sightings, setSightings] = useState(0);
 
   const renderPage = ({ item }) => {
     return (
@@ -49,8 +54,40 @@ export default function HorizontalPager({ shouldShowButton, animatedButtonStyle,
     }, 0);
   }, []);
 
+  useEffect(() => {
+    if(boundaries){
+      let values = {    
+        minLat: boundaries.minLat,
+        maxLat: boundaries.maxLat,
+        minLng: boundaries.minLng,
+        maxLng: boundaries.maxLng
+      }
+      getStats(values)
+    }
+  },[boundaries])
+
+ const getStats = async (values) => {
+  const siteCount = await getMapDiveSiteCount(values)
+  setDiveSites(siteCount.label_count)
+  const speciesCount = await getMapSpeciesCount(values)
+  setSpecies(speciesCount.distinct_label_count)
+  const sightingsCount = await getMapSightingCount(values)
+  setSightings(sightingsCount.label_count)
+ }
+
   return (
     <GestureHandlerRootView style={{ flex: 1, position: 'relative' }}>
+
+      <Animated.View style={[animatedStatsStyle]}>
+        <S.StatContainer>
+          <S.Row>
+            <S.StatText>{`${diveSites} Dive Sites`}</S.StatText>
+            <S.StatText>{`${sightings} Sightings`}</S.StatText>
+          </S.Row>
+          <S.StatText>{`${species} Species Sighted`}</S.StatText>
+        </S.StatContainer>
+      </Animated.View>
+
       <GHFlatList
         ref={flatListRef}
         data={outerData}

@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import {
+  activeFonts,
   colors,
   fontSizes,
 } from '../../styles';
@@ -30,8 +31,11 @@ export const TriggerContent = styled.View`
 
 export const Input = styled.TextInput`
   flex: 1;
-  min-width: 100px;
+    width: 82%;
+  height: ${moderateScale(40)}px;
+  font-family: ${activeFonts.Regular};
   font-size: ${moderateScale(fontSizes.StandardText)}px;
+  color: ${colors.themeBlack};
 `;
 
 export const Arrow = styled.Text`
