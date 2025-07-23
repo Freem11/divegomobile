@@ -83,11 +83,16 @@ export default function useSearchTool() {
   const handleMapOptionSelected = async (place: string) => {
     try {
       const json = await Geocoder.from(place);
-      const location = json.results[0].geometry.location;
+      const location = json.results[0].geometry.bounds;
 
-      mapRef.animateCamera({
-        center: { latitude: location.lat, longitude: location.lng },
-        zoom: 12,
+      const coordinates = Object.values(location).map(site => ({
+        latitude: site.lat,
+        longitude: site.lng,
+      }));
+      
+      mapRef?.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
       });
 
       finalizeSelection(place);
@@ -104,10 +109,17 @@ export default function useSearchTool() {
 
     if (diveSiteSet && diveSiteSet[0]) {
       const { lat, lng } = diveSiteSet[0];
-      mapRef.animateCamera({
-        center: { latitude: lat, longitude: lng },
-        zoom: 12,
+      
+      const coordinates = [{
+        latitude: lat,
+        longitude: lng,
+      }];
+
+      mapRef?.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
       });
+      
     }
     finalizeSelection(diveSite);
   };

@@ -20,12 +20,35 @@ export const Handle = styled.View`
   border-top-left-radius: ${moderateScale(15)}px;
 `;
 
-export const HandleText = styled.Text`
-  color: ${colors.themeBlack};
-  font-family: ${activeFonts.Light};
+export const StatContainer = styled.View`
+  position: absolute;
+  top: ${moderateScale(-10)}px;
+  height:${moderateScale(90)}px;
+  width: 78%;
+  align-self: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: ${moderateScale(10)}px;
+  border-radius: ${moderateScale(10)}px;
+
+`;
+
+export const Row = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 ${moderateScale(10)}px;
+`;
+
+export const StatText = styled.Text`
+  color: ${colors.primaryBlue};
+  font-family: ${activeFonts.Bold};
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   border-top-right-radius: ${moderateScale(15)}px;
   border-top-left-radius: ${moderateScale(15)}px;
+  text-align: center;
 `;
 
 export const ListItemContainer = styled.View`

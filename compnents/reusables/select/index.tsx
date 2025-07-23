@@ -15,6 +15,7 @@ import DropdownItem from './components/dropdownItem';
 
 import getInitialValue from './utils/getInitialValue';
 import getResultValue from './utils/getResultValue';
+import { colors } from "../../styles";
 
 export type Option<T = object> = {
   key: string;
@@ -208,6 +209,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
             value={searchValue}
             onChangeText={onSearch}
             placeholder={getPlaceholder()}
+            placeholderTextColor={colors.neutralGrey}
             editable={!props.disabled}
             multiline={false}
             numberOfLines={1} 

@@ -24,6 +24,7 @@ export const StyledTextInput = styled.TextInput`
   text-align-vertical: center;
   padding-bottom: ${Platform.OS === "android" ? moderateScale(12) : moderateScale(7)}px;
   height: ${moderateScale(40)}px;
+  color: ${colors.themeBlack};
 `;
 
 export const IconWrapperLeft = styled.View`

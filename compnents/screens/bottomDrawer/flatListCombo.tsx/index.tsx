@@ -1,29 +1,36 @@
-import React, { useRef } from 'react';
-import { Dimensions, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { FlatList as GHFlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
-import SeaLifeList from "./seaLife/seaLifeList";
-import DiveSiteList from "./diveSites/diveSiteList";
-import DiveCenterList from "./diveCenters/diveCenterList";
-import Button from '../../../reusables/button';
-import * as S from "../styles";
-import ButtonIcon from "../../../reusables/buttonIcon";
-import { colors } from "../../../styles";
-import { useMapStore } from "../../../googleMap/useMapStore";
-import { BoundingBox } from "react-native-maps";
+import React, { useEffect, useRef, useState } from "react";
+import { Dimensions, View } from "react-native";
+import Animated from "react-native-reanimated";
+import { FlatList as GHFlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 
-const { width, height } = Dimensions.get('window');
+import Button from "../../../reusables/button";
+import * as S from "../styles";
+
+import DiveCenterList from "./diveCenters/diveCenterList";
+import DiveSiteList from "./diveSites/diveSiteList";
+import SeaLifeList from "./seaLife/seaLifeList";
+import { getMapDiveSiteCount } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
+import { getMapSightingCount, getMapSpeciesCount } from "../../../../supabaseCalls/photoSupabaseCalls";
+import { useMapStore } from "../../../googleMap/useMapStore";
+
+const { width, height } = Dimensions.get("window");
 
 const outerData = [0, 1, 2]; // 0 = SeaLife, 1 = Page2, 2 = Page3
 const DOUBLE_TAP_DELAY = 300;
 
-export default function HorizontalPager({isDrawerOpen, animatedButtonStyle, closeDrawer}) {
-  const mapRef = useMapStore((state) => state.mapRef);
+interface HorizontalPagerProps {
+  shouldShowButton: boolean
+  animatedButtonStyle: Record<string, any>
+  animatedStatsStyle: Record<string, any>
+  closeDrawer: () => void
+}
 
-  const lastTap = useRef<number | null>(null);
-  const singleTapTimeout = useRef<NodeJS.Timeout | null>(null);
-
+export default function HorizontalPager({ shouldShowButton, animatedButtonStyle, animatedStatsStyle, closeDrawer }: HorizontalPagerProps) {
   const flatListRef = useRef(null);
+  const boundaries = useMapStore((state) => state.gpsBubble);
+  const [diveSites, setDiveSites] = useState(0);
+  const [species, setSpecies] = useState(0);
+  const [sightings, setSightings] = useState(0);
 
   const renderPage = ({ item }) => {
     return (
@@ -47,112 +54,69 @@ export default function HorizontalPager({isDrawerOpen, animatedButtonStyle, clos
     }, 0);
   }, []);
 
-  const handleTap = async () => {
-    const now = Date.now();
-
-    if (lastTap.current && now - lastTap.current < DOUBLE_TAP_DELAY) {
-
-      if (singleTapTimeout.current) {
-        clearTimeout(singleTapTimeout.current);
+  useEffect(() => {
+    if(boundaries){
+      let values = {    
+        minLat: boundaries.minLat,
+        maxLat: boundaries.maxLat,
+        minLng: boundaries.minLng,
+        maxLng: boundaries.maxLng
       }
-      const boundaries = await mapRef.getMapBoundaries();
-      const newBounds = handleZoom(boundaries, 0.4);
-      const region = boundsToRegion(newBounds);
-      mapRef.animateToRegion(region, 300);
-      lastTap.current = null;
-    } else {
-
-      lastTap.current = now;
-      singleTapTimeout.current = setTimeout(async () => {
-        const boundaries = await mapRef.getMapBoundaries();
-        const newBounds = handleZoom(boundaries, 2.5)
-        const region = boundsToRegion(newBounds)
-        mapRef.animateToRegion(region, 300);
-        lastTap.current = null;
-      }, DOUBLE_TAP_DELAY);
+      getStats(values)
     }
-  };
+  },[boundaries])
 
-  function handleZoom(bounds: BoundingBox, zoomFactor: number) {
-    const { northEast, southWest } = bounds;
-  
-    const latSpan = northEast.latitude - southWest.latitude;
-    const lngSpan = northEast.longitude - southWest.longitude;
-  
-    const latExpansion = (latSpan * zoomFactor - latSpan) / 2;
-    const lngExpansion = (lngSpan * zoomFactor - lngSpan) / 2;
-  
-    return {
-      minLat: southWest.latitude - latExpansion,
-      maxLat: northEast.latitude + latExpansion,
-      minLng: southWest.longitude - lngExpansion,
-      maxLng: northEast.longitude  + lngExpansion,
-    };
-  }
-  
-  type boundaries ={
-    minLat: number,
-    maxLat: number,
-    minLng: number, 
-    maxLng: number
-  }
-  
-  function boundsToRegion(bounds: boundaries) {
-    const { minLat, maxLat, minLng, maxLng } = bounds;
-  
-    return {
-      latitude: (minLat + maxLat) / 2,
-      longitude: (minLng + maxLng) / 2,
-      latitudeDelta: maxLat - minLat,
-      longitudeDelta: maxLng - minLng,
-    };
-  }
+ const getStats = async (values) => {
+  const siteCount = await getMapDiveSiteCount(values)
+  setDiveSites(siteCount.label_count)
+  const speciesCount = await getMapSpeciesCount(values)
+  setSpecies(speciesCount.distinct_label_count)
+  const sightingsCount = await getMapSightingCount(values)
+  setSightings(sightingsCount.label_count)
+ }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Animated.View
-        style={[animatedButtonStyle, { zIndex: 99 }]}
-        pointerEvents={isDrawerOpen ? 'auto' : 'none'}
-      >
-        <S.IconBox>
-          <ButtonIcon 
-            icon="plus-minus-variant"
-            onPress={() => handleTap()}
-            size='headerIcon'
-            fillColor={colors.neutralGrey}
-          />
-        </S.IconBox> 
-      </Animated.View> 
+    <GestureHandlerRootView style={{ flex: 1, position: 'relative' }}>
 
-        <GHFlatList
-          ref={flatListRef} 
-          data={outerData}
-          keyExtractor={(item) => `page-${item}`}
-          horizontal
-          pagingEnabled
-          keyboardShouldPersistTaps="always"
-          nestedScrollEnabled={true} 
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderPage}
-          getItemLayout={(data, index) => (
-            { length: width, offset: width * index, index }
-          )} 
-        />
-      
+      <Animated.View style={[animatedStatsStyle]}>
+        <S.StatContainer>
+          <S.Row>
+            <S.StatText>{`${diveSites} Dive Sites`}</S.StatText>
+            <S.StatText>{`${sightings} Sightings`}</S.StatText>
+          </S.Row>
+          <S.StatText>{`${species} Species Sighted`}</S.StatText>
+        </S.StatContainer>
+      </Animated.View>
+
+      <GHFlatList
+        ref={flatListRef}
+        data={outerData}
+        keyExtractor={(item) => `page-${item}`}
+        horizontal
+        pagingEnabled
+        keyboardShouldPersistTaps="always"
+        nestedScrollEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderPage}
+        getItemLayout={(data, index) => (
+          { length: width, offset: width * index, index }
+        )}
+      />
+
       <Animated.View
         style={[animatedButtonStyle]}
-        pointerEvents={isDrawerOpen ? 'auto' : 'none'}
+        pointerEvents={shouldShowButton ? "auto" : "none"}
       >
         <S.ButtonBox>
-          <Button 
+          <Button
             onPress={() => closeDrawer()}
-            alt={false} 
-            size='medium'
-            title={'Map'} 
+            alt={false}
+            size="medium"
+            title={"Map"}
             iconRight="chevron-right"
           />
         </S.ButtonBox>
-      </Animated.View>     
+      </Animated.View>
     </GestureHandlerRootView>
   );
 }

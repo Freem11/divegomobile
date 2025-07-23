@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -11,7 +11,8 @@ import Animated, {
   Easing,
   runOnJS,
   interpolateColor,
-  withDelay,
+  interpolate,
+  Extrapolation,
 } from "react-native-reanimated";
 import {
   Gesture,
@@ -19,64 +20,108 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   buttonSizes,
 } from "../../styles";
+import * as S from "./styles";
 import HorizontalPager from "./flatListCombo.tsx";
+import { SearchStatusContext } from "../../contexts/searchStatusContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const DRAWER_CLOSED = moderateScale(30);
+const DRAWER_PARTIAL = moderateScale(120);
 const DRAWER_OPEN = windowHeight;
 
 export default function BottomDrawer() {
+  const { searchStatus, setSearchStatus } = useContext(SearchStatusContext);
 
   const boxheight = useSharedValue(DRAWER_OPEN);
   const buttonWidth = useSharedValue(moderateScale(buttonSizes.small.width));
+  const buttonOpacity = useSharedValue(1);
+  const buttonActiveProgress = useSharedValue(1);
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
-  const buttonOpacity = useSharedValue(isDrawerOpen ? 1 : 0);
+  useEffect(() => {
+    if (searchStatus && boxheight.value === DRAWER_OPEN) {
+      boxheight.value = DRAWER_PARTIAL;
+    }
+    setSearchStatus(false);
+  }, [searchStatus]);
 
   useEffect(() => {
     if (isDrawerOpen) {
-      buttonOpacity.value = withDelay(
-        500,
-        withTiming(1, { duration: 300 })
-      );
+      buttonOpacity.value = withTiming(1, { duration: 300 });
     } else {
       buttonOpacity.value = withTiming(0, { duration: 200 });
     }
   }, [isDrawerOpen]);
 
   const animatedButtonStyle = useAnimatedStyle(() => {
+    const interpolatedOpacity = interpolate(
+      boxheight.value,
+      [DRAWER_PARTIAL, DRAWER_OPEN],
+      [0, 1],
+      Extrapolation.CLAMP
+    );
+
+    const finalOpacity = interpolatedOpacity * buttonOpacity.value;
+    const displayStyle = finalOpacity > 0.01 ? "flex" : "none";
+
     return {
-      opacity: buttonOpacity.value,
+      opacity: finalOpacity,
+      display: displayStyle,
     };
   });
+
+  const animatedStatsStyle = useAnimatedStyle(() => {
+    const interpolatedOpacity = interpolate(
+      boxheight.value,
+      [DRAWER_PARTIAL - 1, DRAWER_PARTIAL, DRAWER_OPEN],
+      [1, 1, 0],
+      Extrapolation.CLAMP
+    );
+  
+    const finalOpacity = interpolatedOpacity;
+    const displayStyle = finalOpacity > 0.01 ? "flex" : "none";
+  
+    return {
+      opacity: finalOpacity,
+      display: displayStyle,
+    };
+  });
+  
+  
 
   const bounds = {
     lower: DRAWER_CLOSED,
     upper: DRAWER_OPEN,
   };
 
+  const buttonOpen = moderateScale(buttonSizes.medium.width);
+  const buttonClosed = moderateScale(buttonSizes.small.width);
+
   const closeDrawer = () => {
     boxheight.value = withTiming(DRAWER_CLOSED, {
-      duration: 300,
+      duration: 1000,
       easing: Easing.out(Easing.cubic),
+    }, (finished) => {
+      if (finished) {
+        runOnJS(setIsDrawerOpen)(false);
+      }
     });
-  
+
     buttonWidth.value = withTiming(buttonClosed, {
       duration: 300,
       easing: Easing.out(Easing.cubic),
     });
-  
-    runOnJS(setIsDrawerOpen)(false);
-  };
 
-  const buttonOpen = moderateScale(buttonSizes.medium.width);
-  const buttonClosed = moderateScale(buttonSizes.small.width);
+    buttonOpacity.value = withTiming(0, { duration: 200 });
+  };
 
   const startHeight = useSharedValue(DRAWER_CLOSED);
 
@@ -94,54 +139,78 @@ export default function BottomDrawer() {
 
       const progress =
         (boxheight.value - bounds.lower) / (bounds.upper - bounds.lower);
+
       buttonWidth.value =
         buttonClosed + (buttonOpen - buttonClosed) * progress;
+
+      buttonActiveProgress.value = interpolate(
+        boxheight.value,
+        [DRAWER_PARTIAL, DRAWER_OPEN],
+        [0, 1],
+        Extrapolation.CLAMP
+      );
     })
     .onEnd((event) => {
-      const isFastUpward = event.velocityY < -10;
-      const isFastDownward = event.velocityY > 10;
-      const isDrawerMoreOpen = boxheight.value > windowHeight * 0.4;
+      const current = boxheight.value;
+      const velocity = event.velocityY;
+      let target;
 
-      const shouldOpen = isFastUpward || (isDrawerMoreOpen && !isFastDownward);
+      if (velocity < -50) {
+        // Swiping Up
+        if (current <= DRAWER_CLOSED + 30) {
+          target = DRAWER_PARTIAL;
+        } else {
+          target = DRAWER_OPEN;
+        }
+      } else if (velocity > 50) {
+        // Swiping Down
+        if (current >= DRAWER_OPEN - 100) {
+          target = DRAWER_PARTIAL;
+        } else {
+          target = DRAWER_CLOSED;
+        }
+      } else {
+        // Snap to nearest
+        const distances = [
+          { pos: DRAWER_CLOSED, dist: Math.abs(current - DRAWER_CLOSED) },
+          { pos: DRAWER_PARTIAL, dist: Math.abs(current - DRAWER_PARTIAL) },
+          { pos: DRAWER_OPEN, dist: Math.abs(current - DRAWER_OPEN) },
+        ];
+        distances.sort((a, b) => a.dist - b.dist);
+        target = distances[0].pos;
+      }
 
-      const finalHeight = shouldOpen ? bounds.upper : bounds.lower;
-      const finalButtonWidth = shouldOpen ? buttonOpen : buttonClosed;
+      const isOpen = target === DRAWER_OPEN;
 
-      boxheight.value = withTiming(finalHeight, {
-        duration: 300,
+      boxheight.value = withTiming(target, {
+        duration: 1000,
         easing: Easing.out(Easing.cubic),
+      }, (finished) => {
+        if (finished) {
+          runOnJS(setIsDrawerOpen)(isOpen);
+        }
       });
 
-      buttonWidth.value = withTiming(finalButtonWidth, {
-        duration: 300,
-        easing: Easing.out(Easing.cubic),
-      });
+      buttonWidth.value = withTiming(
+        target === DRAWER_OPEN ? buttonOpen : buttonClosed,
+        { duration: 300, easing: Easing.out(Easing.cubic) }
+      );
 
-      runOnJS(setIsDrawerOpen)(shouldOpen);
-    })
-
-  const colorProgress = useSharedValue(0);
-
-  useEffect(() => {
-    if (isDrawerOpen) {
-      colorProgress.value = withTiming(1, { duration: 1500 });
-    } else {
-      colorProgress.value = withTiming(0, { duration: 750 });
-    }
-  }, [isDrawerOpen]);
+      buttonOpacity.value = withTiming(
+        target === DRAWER_OPEN ? 1 : 0,
+        { duration: 300 }
+      );
+    });
 
   const animatedBoxStyle = useAnimatedStyle(() => {
     const bgColor = interpolateColor(
-      colorProgress.value,
-      [0, 1],
+      boxheight.value,
+      [DRAWER_CLOSED, DRAWER_PARTIAL],
       [colors.primaryBlue, colors.themeWhite]
     );
 
     return {
-      height: withTiming(boxheight.value, {
-        duration: 400,
-        easing: Easing.inOut(Easing.linear),
-      }),
+      height: boxheight.value,
       backgroundColor: bgColor,
       borderTopColor: bgColor,
       borderColor: bgColor,
@@ -163,8 +232,14 @@ export default function BottomDrawer() {
               }}
             />
           </View>
-          <View style={{ flex: 1 }}>
-            <HorizontalPager isDrawerOpen={isDrawerOpen} animatedButtonStyle={animatedButtonStyle} closeDrawer={closeDrawer}/>
+
+          <View style={{ flex: 1, width: "100%" }}>
+            <HorizontalPager
+              shouldShowButton={isDrawerOpen}
+              animatedButtonStyle={animatedButtonStyle}
+              animatedStatsStyle={animatedStatsStyle}
+              closeDrawer={closeDrawer}
+            />
           </View>
         </Animated.View>
       </GestureDetector>
@@ -185,6 +260,7 @@ const styles = StyleSheet.create({
     borderWidth: moderateScale(1),
     borderTopRightRadius: moderateScale(25),
     borderTopLeftRadius: moderateScale(25),
+    overflow: "visible",
   },
   handle: {
     zIndex: 11,

@@ -66,6 +66,7 @@ export const MultilineTextInput = styled.TextInput`
   borderWidth: ${moderateScale(1)}px;
   borderColor: ${colors.neutralGrey};
   borderRadius: ${moderateScale(10)}px;
+  color: ${colors.themeBlack};
 `;
 
 export const BackButtonWrapper = styled.View`

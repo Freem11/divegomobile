@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Animated, View, StyleSheet, Dimensions, Platform, TouchableWithoutFeedback } from "react-native";
 import useSearchTool from "./useSearchtool";
 import SearchToolInput from "./searchToolInput";
@@ -6,6 +6,7 @@ import SearchToolList from "./searchToolList";
 import { colors } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SearchStatusContext } from "../contexts/searchStatusContext";
 
 const { height } = Dimensions.get("window");
 const INPUT_TOP_MARGIN = moderateScale(0);
@@ -25,6 +26,10 @@ export default function SearchTool() {
     handleFocus,
     handleCancelSearch
   } = useSearchTool();
+
+  const { setSearchStatus } = useContext(
+    SearchStatusContext
+  );
 
   const insets = useSafeAreaInsets();
 
@@ -97,6 +102,7 @@ export default function SearchTool() {
           handleMapOptionSelected={handleMapOptionSelected}
           handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
           handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
+          setSearchStatus={setSearchStatus}
         />
       </Animated.View>
 
