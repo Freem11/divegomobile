@@ -176,6 +176,7 @@ export default function TripCreatorPageView({
                 multiline
                 error={errors.Details}
                 placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, '\n')}
+                placeholderTextColor={colors.neutralGrey}
                 onChangeText={onChange}
                 value={value}
                 >

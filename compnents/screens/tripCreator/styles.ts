@@ -70,6 +70,7 @@ export const MultilineTextInput = styled.TextInput`
   font-family: ${activeFonts.Light};
   text-align: center;
   height: 99%;
+  color: ${colors.themeBlack};
 `;
 
 export const InputBox = styled.View`
