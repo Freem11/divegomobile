@@ -1,5 +1,6 @@
 import MapView, { Camera } from "react-native-maps";
 import { create } from "zustand";
+
 import { GPSBubble } from "../../entities/GPSBubble";
 import { Coordinates } from "../../entities/coordinates";
 
@@ -37,28 +38,28 @@ const mutator = (set, get) => ({
   camera:         null as Camera | null,
   gpsBubble:      null as GPSBubble | null,
   mapConfig:      0 as number,
-  navProps:       {pageName: '', itemId: 0},
+  navProps:       { pageName: "", itemId: 0 },
   draggablePoint: null as Coordinates | null,
   formValues:     {},
 
   actions: {
     setMapRef: (newMap: MapView) => {
-      set({ mapRef: newMap })
+      set({ mapRef: newMap });
     },
     setGpsBubble: (newGpsBubble: GPSBubble) => {
-      set({ gpsBubble: newGpsBubble })
+      set({ gpsBubble: newGpsBubble });
     },
     setCamera: (newCamera: Camera) => {
-      set({ camera: newCamera })
+      set({ camera: newCamera });
     },
     setDraggablePoint: (point: Coordinates) => {
-      set({ draggablePoint: point })
+      set({ draggablePoint: point });
     },
-    setMapConfig: (config: number, navProps: {pageName: string, itemId: number}) => {
-      set({ mapConfig: config, navProps })
+    setMapConfig: (config: number, navProps: { pageName: string, itemId: number }) => {
+      set({ mapConfig: config, navProps });
     },
     setFormValues: (values: {}) => {
-      set({ formValues: values })
+      set({ formValues: values });
     },
   },
 }

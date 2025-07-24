@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
+import MapView from "react-native-maps";
 
 import { debounce } from "../reusables/_helpers/debounce";
-import GoogleMapView from "./view";
-import MapView from "react-native-maps";
-import { useMapStore } from "./useMapStore";
 import { GPSBubble } from "../../entities/GPSBubble";
 import { getDiveSitesBasic } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
@@ -13,9 +11,12 @@ import { getHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { HeatPoint } from "../../entities/heatPoint";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 
+import { useMapStore } from "./useMapStore";
+import GoogleMapView from "./view";
+
 export default function GoogleMap() {
   const mapAction = useMapStore((state) => state.actions);
-  
+
   const camera = useMapStore((state) => state.camera);
   const mapRef = useMapStore((state) => state.mapRef);
   const bubble = useMapStore((state) => state.gpsBubble);
@@ -27,22 +28,22 @@ export default function GoogleMap() {
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[] | null>(null);
 
-  const handleOnLoad = async (map: MapView) => {
+  const handleOnLoad = async(map: MapView) => {
     mapAction.setMapRef(map);
   };
 
   const handleOnMapReady = () => {
-    handleBoundsChange()
-  }
+    handleBoundsChange();
+  };
 
   useEffect(() => {
     (async() => {
-      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , {animal: animalMultiSelection})
-      setHeatPoints(heatPoints);  
-    })()
-  }, [animalMultiSelection, bubble])
+      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , { animal: animalMultiSelection });
+      setHeatPoints(heatPoints);
+    })();
+  }, [animalMultiSelection, bubble]);
 
-  const handleBoundsChange = debounce(async () => {
+  const handleBoundsChange = debounce(async() => {
     if (!mapRef) {
       return;
     }
@@ -53,7 +54,7 @@ export default function GoogleMap() {
 
     const [diveSites, diveShops] = await Promise.all([
       GPSBubble.getItemsInGpsBubble(getDiveSitesBasic, bubble),
-      GPSBubble.getItemsInGpsBubble(getDiveShops, bubble, ''),
+      GPSBubble.getItemsInGpsBubble(getDiveShops, bubble, ""),
     ]);
     setDiveShops(diveShops);
     setDiveSites(diveSites);

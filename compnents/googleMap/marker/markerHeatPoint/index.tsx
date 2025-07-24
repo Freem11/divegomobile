@@ -1,10 +1,11 @@
-import  { useEffect, useState } from 'react';
-import { HeatPoint } from '../../../../entities/heatPoint';
-import { heatPointToWeightedLocation } from '../../dto/heatPointToWeightedLocation';
+import  { useEffect, useState } from "react";
 import {
   Heatmap,
 } from "react-native-maps";
 import { moderateScale } from "react-native-size-matters";
+
+import { HeatPoint } from "../../../../entities/heatPoint";
+import { heatPointToWeightedLocation } from "../../dto/heatPointToWeightedLocation";
 type MarkerHeatPointProps = {
   // map:        google.maps.Map | null
   // options?:   google.maps.visualization.HeatmapLayerOptions
@@ -22,17 +23,19 @@ export function MarkerHeatPoint(props: MarkerHeatPointProps) {
   const [heatPoints, setHeatPoints] = useState<WeightedLatLng[] | null>([]);
 
   useEffect(() => {
-    if(props.heatPoints) {
-      setHeatPoints(props.heatPoints.map(point => heatPointToWeightedLocation(point)))
+    if (props.heatPoints) {
+      setHeatPoints(props.heatPoints.map(point => heatPointToWeightedLocation(point)));
     }
-  }, [props.heatPoints])
+  }, [props.heatPoints]);
 
-if(heatPoints?.length > 0) {
-  return <Heatmap
-    points={heatPoints}
-    radius={40}
-  />
-} else {
-  return null
-}
+  if (heatPoints?.length > 0) {
+    return (
+      <Heatmap
+        points={heatPoints}
+        radius={40}
+      />
+    );
+  } else {
+    return null;
+  }
 }
