@@ -57,7 +57,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
   const renderListHeader = useMemo(() => (
     <S.FilterContainer>
       <MobileTextInput
-        iconLeft={"shark"}
+        iconLeft={"fish"}
         iconRight={"close"}
         placeholder="Filter Sea Creatures"
         onChangeText={(text: string) => setFilterValue(text)}
