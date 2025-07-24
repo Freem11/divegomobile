@@ -1,13 +1,15 @@
 import React, { useContext } from "react";
 import { FlatList } from "react-native";
-import ButtonIcon from '../../reusables/buttonIcon'
 import { useTranslation } from "react-i18next";
-import * as S from "./styles";
+
+import ButtonIcon from "../../reusables/buttonIcon";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+
+import * as S from "./styles";
 
 type DiveSitePhotosPageViewProps = {
   diveSites: any
@@ -16,26 +18,26 @@ type DiveSitePhotosPageViewProps = {
   handleProfileMove: (userName: string) => void;
 };
 
-export default function DiveSitePhotosPageView({ 
+export default function DiveSitePhotosPageView({
   diveSites,
   title,
   setLevelThreeScreen,
   handleProfileMove
- }: DiveSitePhotosPageViewProps) {
+}: DiveSitePhotosPageViewProps) {
 
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   const onClose = async() => {
-    setActiveScreen("DiveSiteScreen", {id: selectedDiveSite.id})
-    setLevelThreeScreen(false)
+    setActiveScreen("DiveSiteScreen", { id: selectedDiveSite.id });
+    setLevelThreeScreen(false);
   };
- 
+
   return (
     <S.ContentContainer>
 
-<S.SafeArea>
+      <S.SafeArea>
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
@@ -47,7 +49,7 @@ export default function DiveSitePhotosPageView({
 
       </S.SafeArea>
 
-<S.Header>{title}</S.Header>
+      <S.Header>{title}</S.Header>
 
       <FlatList
         data={diveSites}
@@ -59,12 +61,12 @@ export default function DiveSitePhotosPageView({
             <S.PacketHeader>
               <S.HeaderWrapper>
                 <S.IconWrapper>
-                  <Icon name={'calendar-month'} fill={colors.primaryBlue} />
+                  <Icon name={"calendar-month"} fill={colors.primaryBlue} />
                 </S.IconWrapper>
                 <S.PacketHeaderItem>{item.dateTaken}</S.PacketHeaderItem>
               </S.HeaderWrapper>
             </S.PacketHeader>
-  
+
             <FlatList
               data={item.photos}
               keyExtractor={(photo, index) => `photo-${photo.id}-${item.dateTaken}-${index}`}
@@ -82,5 +84,5 @@ export default function DiveSitePhotosPageView({
       />
     </S.ContentContainer>
   );
-  
+
 }

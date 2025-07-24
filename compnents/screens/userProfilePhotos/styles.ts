@@ -1,13 +1,14 @@
-import styled from 'styled-components/native';
-import { Dimensions, Platform, SafeAreaView } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { Dimensions, Platform, SafeAreaView } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
   activeFonts,
-} from '../../styles';
+} from "../../styles";
 
-const windowHeight = Dimensions.get('screen').height;
+const windowHeight = Dimensions.get("screen").height;
 
 export const ContentContainer = styled.View`
   flex: 1;
@@ -18,7 +19,7 @@ export const ContentContainer = styled.View`
 
 export const SafeArea = styled(SafeAreaView)`
   z-index: 20;
-  margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
+  margin-top: ${Platform.OS === "ios" ? 0 : "10%"};
   background-color: ${colors.themeWhite};
 `;
 
@@ -30,6 +31,7 @@ export const BackButtonWrapper = styled.View`
 export const PhotoContainer = styled.View`
   width: 98%;
   align-items: center;
+  margin-left: 3%;
   margin-top: ${moderateScale(20)}px;
   margin-bottom: ${moderateScale(20)}px;
 `;

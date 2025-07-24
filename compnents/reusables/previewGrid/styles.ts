@@ -8,6 +8,8 @@ export const Container = styled.View`
   flex-wrap: wrap;
   width: 100%;
   padding: 0 20px;
+  margin-left: 3%;
+
 `;
 
 export const Item = styled.View`
