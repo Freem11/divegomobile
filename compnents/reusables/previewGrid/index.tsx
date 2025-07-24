@@ -29,49 +29,51 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
   }, [screenWidth, containerPadding, gap]);
 
   return (
-    <S.Container>
-      {items && items.length > 0 && items.slice(0,8).map((item, index) => (
-        <S.Item
-          key={index}
-          style={{
-            width: itemSize,
-            height: itemSize,
-            marginRight: (index + 1) % numColumns === 0 ? 0 : gap,
-            marginBottom: gap,
-            backgroundColor: colors.lightGrey,
-          }}
-        >
-          <ImageCasherDynamic
-            photoFile={item.photofile}
+    <S.Wrapper>
+      <S.Container>
+        {items && items.length > 0 && items.slice(0,8).map((item, index) => (
+          <S.Item
+            key={index}
             style={{
-              height: "100%",
-              width: "100%",
-              borderRadius: moderateScale(8),
-              resizeMode: "cover",
+              width: itemSize,
+              height: itemSize,
+              marginRight: (index + 1) % numColumns === 0 ? 0 : gap,
+              marginBottom: gap,
+              backgroundColor: colors.lightGrey,
             }}
-          />
-        </S.Item>
-      ))}
-      {onAddSighting &&
-       <S.AddSightingButton
-        onPress={onAddSighting}
-        style={{
-          width: itemSize,
-          height: itemSize,
-          marginBottom: gap,
-        }}
-      >
-        <Icon
-          name={"camera-plus"}
-          color={colors.primaryBlue}
-          width={moderateScale(22)}
-          height={moderateScale(22)}
-        />
-        <S.AddSightingText>
-          Add a Sighting
-        </S.AddSightingText>
-      </S.AddSightingButton>
-      }
-    </S.Container>
+          >
+            <ImageCasherDynamic
+              photoFile={item.photofile}
+              style={{
+                height: "100%",
+                width: "100%",
+                borderRadius: moderateScale(8),
+                resizeMode: "cover",
+              }}
+            />
+          </S.Item>
+        ))}
+        {onAddSighting && (
+          <S.AddSightingButton
+            onPress={onAddSighting}
+            style={{
+              width: itemSize,
+              height: itemSize,
+              marginBottom: gap,
+            }}
+          >
+            <Icon
+              name={"camera-plus"}
+              color={colors.primaryBlue}
+              width={moderateScale(22)}
+              height={moderateScale(22)}
+            />
+            <S.AddSightingText>
+              Add a Sighting
+            </S.AddSightingText>
+          </S.AddSightingButton>
+        )}
+      </S.Container>
+    </S.Wrapper>
   );
 };

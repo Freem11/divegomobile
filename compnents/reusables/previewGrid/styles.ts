@@ -3,13 +3,14 @@ import { moderateScale } from "react-native-size-matters";
 
 import { activeFonts, colors } from "../../styles";
 
+export const Wrapper = styled.View`
+  align-self: center;
+`;
+
 export const Container = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  padding: 0 20px;
-  margin-left: 3%;
-
 `;
 
 export const Item = styled.View`

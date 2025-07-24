@@ -1,10 +1,13 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
+import { Dimensions } from "react-native";
 
 import { colors, fontSizes, activeFonts } from "../../styles";
 
+const windowWidth = Dimensions.get("screen").width;
+
 export const ContentContainer = styled.View`
-  width: 100%;
+   width: ${windowWidth}px;
 `;
 
 export const InputGroupContainer = styled.View`
