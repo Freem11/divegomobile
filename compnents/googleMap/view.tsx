@@ -25,6 +25,7 @@ import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton"
 type MapViewProps = {
   mapConfig: number;
   center: Coordinates;
+  zoomLevel: number;
 
   /**
    * On load event happens a lot - dont put heavy stuff here
@@ -110,6 +111,26 @@ export default function GoogleMapView(props: MapViewProps) {
         return;
       }
 
+      let MapZoom: number;
+      if (props.zoomLevel < 5) {
+        MapZoom = 500;
+      } else if (props.zoomLevel < 6) {
+        MapZoom = 350;
+      } else if (props.zoomLevel < 7) {
+        MapZoom = 300;
+      } else if (props.zoomLevel < 8) {
+        MapZoom = 250;
+      } else if (props.zoomLevel < 9) {
+        MapZoom = 200;
+      } else if (props.zoomLevel < 10) {
+        MapZoom = 150;
+      } else if (props.zoomLevel < 11) {
+        MapZoom = 100;
+      } else if (props.zoomLevel < 12) {
+        MapZoom = 50;
+      } else {
+        MapZoom = 25;
+      }
       const points = [] as Supercluster.PointFeature<ClusterProperty>[];
       props.diveSites?.forEach((item) =>
         points.push(diveSiteToPointFeature(item))
@@ -119,7 +140,7 @@ export default function GoogleMapView(props: MapViewProps) {
       );
       setClusterConfig({
         points: points,
-        options: { radius: 300 },
+        options: { radius: MapZoom },
         zoom: camera.zoom,
         bounds: [
           bounds.southWest.longitude,

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import MapView from "react-native-maps";
+import { Dimensions } from "react-native";
 
 import { debounce } from "../reusables/_helpers/debounce";
 import { GPSBubble } from "../../entities/GPSBubble";
@@ -15,6 +16,10 @@ import { useMapStore } from "./useMapStore";
 import GoogleMapView from "./view";
 
 export default function GoogleMap() {
+  const { width: mapPixelWidth } = Dimensions.get("window");
+  const TILE_SIZE = 256;
+  const [zoomLevel, setZoomLevel] = useState(1);
+
   const mapAction = useMapStore((state) => state.actions);
 
   const camera = useMapStore((state) => state.camera);
@@ -36,6 +41,12 @@ export default function GoogleMap() {
     handleBoundsChange();
   };
 
+  const getZoomFromBounds = (neLng: number, swLng: number) => {
+    const lngDelta = Math.abs(neLng - swLng);
+    const zoom = Math.log2((360 * mapPixelWidth) / (lngDelta * TILE_SIZE));
+    return Math.floor(zoom);
+  };
+
   useEffect(() => {
     (async() => {
       const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , { animal: animalMultiSelection });
@@ -51,6 +62,9 @@ export default function GoogleMap() {
     const boundaries = await mapRef.getMapBoundaries();
     const bubble = GPSBubble.createFromBoundaries(boundaries);
     mapAction.setGpsBubble(bubble);
+
+    const zoom = getZoomFromBounds(boundaries.northEast.longitude, boundaries.southWest.longitude);
+    setZoomLevel(zoom);
 
     const [diveSites, diveShops] = await Promise.all([
       GPSBubble.getItemsInGpsBubble(getDiveSitesBasic, bubble),
@@ -71,6 +85,7 @@ export default function GoogleMap() {
       heatPoints={heatPoints}
       diveSites={diveSites}
       diveShops={diveShops}
+      zoomLevel={zoomLevel}
     />
   );
 }
