@@ -31,7 +31,7 @@ export const TriggerContent = styled.View`
 
 export const Input = styled.TextInput`
   flex: 1;
-    width: 82%;
+  min-width: 100px;
   height: ${moderateScale(40)}px;
   font-family: ${activeFonts.Regular};
   font-size: ${moderateScale(fontSizes.StandardText)}px;

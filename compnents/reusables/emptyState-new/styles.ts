@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
+import { Platform } from "react-native";
 
 import { colors, fontSizes, activeFonts } from "../../styles";
 
@@ -11,7 +12,7 @@ export const EmptyStateWrapper = styled.View`
 `;
 
 export const Subtitle = styled.Text`
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-size: ${Platform.OS === "ios" ? (moderateScale(fontSizes.StandardText)) : (moderateScale(fontSizes.SmallText))}px;
   font-family: ${activeFonts.Regular};
   color: ${colors.darkGrey};
   margin-top: ${moderateScale(5)}px;

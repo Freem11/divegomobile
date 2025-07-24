@@ -1,8 +1,10 @@
-import React from 'react';
-import { FlatList, View, StyleSheet, Platform } from 'react-native';
-import SearchToolListItem from './searchToolListItem';
-import { colors } from '../styles';
+import React from "react";
+import { FlatList, View, StyleSheet, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+
+import { colors } from "../styles";
+
+import SearchToolListItem from "./searchToolListItem";
 
 export default function SearchToolList({
   data,
@@ -34,9 +36,10 @@ export default function SearchToolList({
 }
 
 const styles = StyleSheet.create({
+
   listContainer: {
     flex: 1,
-    backgroundColor: colors.themeWhite, 
-    paddingTop: Platform.OS === 'ios' ? moderateScale(5) : moderateScale(30)
+    backgroundColor: colors.themeWhite,
+    paddingTop: Platform.OS === "ios" ? moderateScale(5) : moderateScale(30)
   },
 });

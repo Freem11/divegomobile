@@ -1,7 +1,8 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters'
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+import { Dimensions, Platform } from "react-native";
+
 import { activeFonts, colors, fontSizes } from "../styles";
-import { Dimensions } from "react-native";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -13,6 +14,13 @@ export const SearchInputContainer = styled.View`
   justify-content: center;
   border-radius: ${moderateScale(120)}px;
   background-color: rgb(232, 232, 232);
+`;
+
+export const PositioningWrapper = styled.View`
+  padding-top: ${Platform.OS  === "android" ? moderateScale(50) : windowWidth > 700 ? moderateScale(15) : 0};
+  padding-bottom: 25;
+  align-self: center;
+  z-index: 20; 
 `;
 
 export const SearchResultContainer = styled.View`
@@ -60,6 +68,4 @@ export const SearchResultText = styled.Text`
   text-align: left;
   color: ${colors.themeBlack};
 `;
-
-
 

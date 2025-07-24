@@ -6,8 +6,18 @@ import {
   Dimensions,
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { moderateScale } from "react-native-size-matters";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useTranslation } from "react-i18next";
+
 import GoogleMap from "../googleMap";
-import BottomMenu from '../reusables/bottomMenu';
+import BottomMenu from "../reusables/bottomMenu";
 import ProfileButton from "../reusables/bottomMenu/buttons/profileButton";
 import SiteSearchButton from "../reusables/bottomMenu/buttons/siteSearchButton";
 import DiveSiteButton from "../reusables/bottomMenu/buttons/diveSiteButton";
@@ -35,33 +45,24 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
-import { moderateScale } from "react-native-size-matters";
-import BottomDrawer from '../screens/bottomDrawer/animatedBottomDrawer';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-} from "react-native-reanimated";
-import * as ScreenOrientation from "expo-screen-orientation";
+import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
 import { useMapStore } from "../googleMap/useMapStore";
 import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
-import { useTranslation } from "react-i18next";
-import SearchTool from '../searchTool';
-import * as S from './styles';
+import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
 
+import * as S from "./styles";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
-let FbWidth = moderateScale(350);
+const FbWidth = moderateScale(350);
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
- 
+
   const mapConfig = useMapStore((state) => state.mapConfig);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -80,8 +81,8 @@ export default function MapPage() {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
 
-  const filterAnchorPhotos = async () => {
-    let { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
+  const filterAnchorPhotos = async() => {
+    const { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
     );
@@ -144,13 +145,13 @@ export default function MapPage() {
     };
   });
 
-  const getProfile = async () => {
-    let sessionUserId = activeSession.user.id;
+  const getProfile = async() => {
+    const sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
       const success: ActiveProfile = await grabProfileByUserId(sessionUserId);
       if (success) {
-        let bully = success && success.UserName;
+        const bully = success && success.UserName;
         if (bully == null || bully === "") {
           setTimeout(() => {
             setActiveTutorialID("OnboardingX");
@@ -187,47 +188,49 @@ export default function MapPage() {
 
   return (
     <SafeAreaProvider>
-          <S.Container>
+      <S.Container>
 
-          <GoogleMap style={StyleSheet.absoluteFillObject} />
+        <GoogleMap style={StyleSheet.absoluteFillObject} />
 
-          <S.SafeAreaTop edges={['top']}>
-              <SearchTool />
-          </S.SafeAreaTop>
-      
-            {mapConfig === 0 ?
-            <S.BottomMenu> 
-             <BottomDrawer/> 
+        <S.SafeAreaTop edges={["top"]}>
+          <SearchTool />
+        </S.SafeAreaTop>
+
+        {mapConfig === 0 ? (
+          <S.SafeAreaBottom edges={["bottom"]}>
+            <S.BottomMenu>
+              <BottomDrawer/>
               <BottomMenu>
                 <ProfileButton />
                 <SiteSearchButton />
                 <DiveSiteButton />
                 {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-              </BottomMenu>     
-          
-               </S.BottomMenu>
-              : null}
+              </BottomMenu>
 
-            {mapConfig in [, , 2] || !mapConfig ? (
-              <View style={styles.carrousel} pointerEvents={"box-none"}>
+            </S.BottomMenu>
+          </S.SafeAreaBottom>
+        )
+          : null}
 
-                  <View style={styles.animalSelect} pointerEvents={"box-none"}>
-                    <AnimalTopAutoSuggest transTagsY={transTagsY} />
-                  </View>
+        {mapConfig in [, , 2] || !mapConfig ? (
+          <View style={styles.carrousel} pointerEvents={"box-none"}>
 
-              </View>
-            ) : null}
+            <View style={styles.animalSelect} pointerEvents={"box-none"}>
+              <AnimalTopAutoSuggest transTagsY={transTagsY} />
+            </View>
 
-            {mapConfig === 0 && <EmailFeedback />}
-         
-            <FeedScreens />
-            <LevelOneScreen />
-            <LevelTwoScreen />
-            <LevelThreeScreen />
-            <AnimatedFullScreenModal />
+          </View>
+        ) : null}
 
-     
-          </S.Container>
+        {/* {mapConfig === 0 && <EmailFeedback />} */}
+
+        <FeedScreens />
+        <LevelOneScreen />
+        <LevelTwoScreen />
+        <LevelThreeScreen />
+        <AnimatedFullScreenModal />
+
+      </S.Container>
     </SafeAreaProvider>
   );
 }
@@ -248,7 +251,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     // backgroundColor: "blue",
     height: 105,
-    top: windowWidth > 700 ? moderateScale(90) : Platform.OS === 'android' ? moderateScale(90) : moderateScale(120),
+    top: windowWidth > 700 ? moderateScale(90) : Platform.OS === "android" ? moderateScale(90) : moderateScale(120),
     zIndex: 2,
   },
 });

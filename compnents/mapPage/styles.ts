@@ -1,5 +1,7 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+import { Platform } from "react-native";
+
 import { activeFonts, buttonSizes, colors, fontSizes } from "../styles";
 
 export const Container = styled.View`
@@ -14,7 +16,14 @@ export const SafeAreaTop = styled.SafeAreaView`
     top: 0;
     left: 0;
     right: 0;
-    z-index: 20;
+    z-index: 10;
+`;
+
+export const SafeAreaBottom = styled.SafeAreaView`
+    position: absolute;
+    bottom: ${Platform.OS === "android" ? moderateScale(46) : 0};
+    left: 0;
+    right: 0;
 `;
 
 export const BottomMenu = styled.View`
@@ -24,19 +33,16 @@ export const BottomMenu = styled.View`
     z-index: 3;
 `;
 
-
-
-
 export const StyledTouchableHighlight = styled.TouchableHighlight`
-  width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
-  height: ${({size}) => moderateScale(buttonSizes[size].height)}px;
+  width: ${({ size }) => moderateScale(buttonSizes[size].width)}px;
+  height: ${({ size }) => moderateScale(buttonSizes[size].height)}px;
   border-radius: ${moderateScale(30)}px;
 `;
 
 export const StyledButton = styled.View`
-  width: ${({size}) => moderateScale(buttonSizes[size].width)}px;
-  height: ${({size}) => moderateScale(buttonSizes[size].height)}px;
-  background-color: ${({alt}) => (alt ? colors.themeWhite : colors.primaryBlue)};
+  width: ${({ size }) => moderateScale(buttonSizes[size].width)}px;
+  height: ${({ size }) => moderateScale(buttonSizes[size].height)}px;
+  background-color: ${({ alt }) => (alt ? colors.themeWhite : colors.primaryBlue)};
   border-radius: ${moderateScale(30)}px;
   border-color: ${colors.primaryBlue};
   border-width: ${moderateScale(1)}px;
@@ -49,7 +55,7 @@ export const StyledButton = styled.View`
 export const StyledButtonText = styled.Text`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Regular};
-  color: ${({alt}) => (alt ? colors.primaryBlue : colors.themeWhite)};
+  color: ${({ alt }) => (alt ? colors.primaryBlue : colors.themeWhite)};
 `;
 
 export const IconWrapperLeft = styled.View`

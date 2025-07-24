@@ -5,13 +5,13 @@ import { FlatList as GHFlatList, GestureHandlerRootView } from "react-native-ges
 
 import Button from "../../../reusables/button";
 import * as S from "../styles";
+import { getMapDiveSiteCount } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
+import { getMapSightingCount, getMapSpeciesCount } from "../../../../supabaseCalls/photoSupabaseCalls";
+import { useMapStore } from "../../../googleMap/useMapStore";
 
 import DiveCenterList from "./diveCenters/diveCenterList";
 import DiveSiteList from "./diveSites/diveSiteList";
 import SeaLifeList from "./seaLife/seaLifeList";
-import { getMapDiveSiteCount } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
-import { getMapSightingCount, getMapSpeciesCount } from "../../../../supabaseCalls/photoSupabaseCalls";
-import { useMapStore } from "../../../googleMap/useMapStore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -32,11 +32,15 @@ export default function HorizontalPager({ shouldShowButton, animatedButtonStyle,
   const [species, setSpecies] = useState(0);
   const [sightings, setSightings] = useState(0);
 
+  const scrollToDiveSiteList = () => {
+    flatListRef.current?.scrollToIndex({ index: 1, animated: true });
+  };
+
   const renderPage = ({ item }) => {
     return (
       <View style={{ width, height }}>
         {item === 0 && (
-          <SeaLifeList />
+          <SeaLifeList scrollToDiveSiteList={scrollToDiveSiteList}/>
         )}
         {item === 1 && (
           <DiveSiteList />
@@ -55,28 +59,28 @@ export default function HorizontalPager({ shouldShowButton, animatedButtonStyle,
   }, []);
 
   useEffect(() => {
-    if(boundaries){
-      let values = {    
+    if (boundaries){
+      const values = {
         minLat: boundaries.minLat,
         maxLat: boundaries.maxLat,
         minLng: boundaries.minLng,
         maxLng: boundaries.maxLng
-      }
-      getStats(values)
+      };
+      getStats(values);
     }
-  },[boundaries])
+  },[boundaries]);
 
- const getStats = async (values) => {
-  const siteCount = await getMapDiveSiteCount(values)
-  setDiveSites(siteCount.label_count)
-  const speciesCount = await getMapSpeciesCount(values)
-  setSpecies(speciesCount.distinct_label_count)
-  const sightingsCount = await getMapSightingCount(values)
-  setSightings(sightingsCount.label_count)
- }
+  const getStats = async(values) => {
+    const siteCount = await getMapDiveSiteCount(values);
+    setDiveSites(siteCount.label_count);
+    const speciesCount = await getMapSpeciesCount(values);
+    setSpecies(speciesCount.distinct_label_count);
+    const sightingsCount = await getMapSightingCount(values);
+    setSightings(sightingsCount.label_count);
+  };
 
   return (
-    <GestureHandlerRootView style={{ flex: 1, position: 'relative' }}>
+    <GestureHandlerRootView style={{ flex: 1, position: "relative" }}>
 
       <Animated.View style={[animatedStatsStyle]}>
         <S.StatContainer>

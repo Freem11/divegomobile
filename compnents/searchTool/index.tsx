@@ -1,18 +1,20 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Animated, View, StyleSheet, Dimensions, Platform, TouchableWithoutFeedback } from "react-native";
+import { Animated, View, StyleSheet, Dimensions, TouchableWithoutFeedback, Platform } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { colors } from "../styles";
+import { SearchStatusContext } from "../contexts/searchStatusContext";
+
+import * as S from "./styles";
 import useSearchTool from "./useSearchtool";
 import SearchToolInput from "./searchToolInput";
 import SearchToolList from "./searchToolList";
-import { colors } from "../styles";
-import { moderateScale } from "react-native-size-matters";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { SearchStatusContext } from "../contexts/searchStatusContext";
 
 const { height } = Dimensions.get("window");
 const INPUT_TOP_MARGIN = moderateScale(0);
 const INPUT_BAR_HEIGHT = moderateScale(50);
 const LIST_VISUAL_START_Y = INPUT_TOP_MARGIN + INPUT_BAR_HEIGHT ;
-const windowWidth = Dimensions.get("window").width;
 
 export default function SearchTool() {
   const {
@@ -48,7 +50,7 @@ export default function SearchTool() {
   const backgroundOverlayAnimatedStyle = {
     backgroundColor: anim.interpolate({
       inputRange: [0, 1],
-      outputRange: ['rgba(255, 255, 255, 0)', colors.themeWhite], 
+      outputRange: ["rgba(255, 255, 255, 0)", colors.themeWhite],
     }),
     opacity: anim,
     top: -insets.top,
@@ -67,46 +69,46 @@ export default function SearchTool() {
 
   return (
     <TouchableWithoutFeedback onPress={handleCancelSearch}>
-    <View style={{ flex: 1 }}>
-      <View style={{ paddingTop: Platform.OS  === 'android' || windowWidth > 700 ? 25 : 0, paddingBottom: 25, alignSelf: "center", zIndex: 20 }}>
-        <SearchToolInput
-          iconLeft="navigation-variant-outline"
-          iconRight="close"
-          searchValue={searchValue}
-          handleChange={handleChange}
-          handleClear={handleClear}
-          handleFocus={handleFocus}
+      <View style={{ flex: 1 }}>
+        <S.PositioningWrapper>
+          <SearchToolInput
+            iconLeft="navigation-variant-outline"
+            iconRight="close"
+            searchValue={searchValue}
+            handleChange={handleChange}
+            handleClear={handleClear}
+            handleFocus={handleFocus}
+          />
+        </S.PositioningWrapper>
+
+        <Animated.View
+          pointerEvents={shouldBeVisible ? "auto" : "none"}
+          style={[
+            StyleSheet.absoluteFillObject,
+            backgroundOverlayAnimatedStyle,
+            { zIndex: 10 },
+          ]}
         />
+
+        <Animated.View
+          pointerEvents={shouldBeVisible ? "auto" : "none"}
+          style={[
+            styles.listWrapper,
+            listContentAnimatedStyle,
+            { zIndex: 15 },
+          ]}
+        >
+
+          <SearchToolList
+            data={list}
+            handleMapOptionSelected={handleMapOptionSelected}
+            handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
+            handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
+            setSearchStatus={setSearchStatus}
+          />
+        </Animated.View>
+
       </View>
-
-      <Animated.View
-        pointerEvents={shouldBeVisible ? "auto" : "none"}
-        style={[
-          StyleSheet.absoluteFillObject,
-          backgroundOverlayAnimatedStyle,
-          { zIndex: 10 },
-        ]}
-      />
-
-      <Animated.View
-        pointerEvents={shouldBeVisible ? "auto" : "none"}
-        style={[
-          styles.listWrapper,
-          listContentAnimatedStyle,
-          { zIndex: 15 },
-        ]}
-      >
-
-        <SearchToolList
-          data={list}
-          handleMapOptionSelected={handleMapOptionSelected}
-          handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
-          handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
-          setSearchStatus={setSearchStatus}
-        />
-      </Animated.View>
-
-    </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -116,6 +118,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     width: "100%",
-    overflow: 'hidden',
+    overflow: "hidden",
   },
 });

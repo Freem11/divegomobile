@@ -25,9 +25,10 @@ import {
   colors,
   buttonSizes,
 } from "../../styles";
+import { SearchStatusContext } from "../../contexts/searchStatusContext";
+
 import * as S from "./styles";
 import HorizontalPager from "./flatListCombo.tsx";
-import { SearchStatusContext } from "../../contexts/searchStatusContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -85,17 +86,15 @@ export default function BottomDrawer() {
       [1, 1, 0],
       Extrapolation.CLAMP
     );
-  
+
     const finalOpacity = interpolatedOpacity;
     const displayStyle = finalOpacity > 0.01 ? "flex" : "none";
-  
+
     return {
       opacity: finalOpacity,
       display: displayStyle,
     };
   });
-  
-  
 
   const bounds = {
     lower: DRAWER_CLOSED,

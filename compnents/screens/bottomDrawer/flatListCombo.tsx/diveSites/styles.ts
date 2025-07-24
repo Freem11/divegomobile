@@ -1,8 +1,9 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+import { Dimensions, Platform, StyleSheet } from "react-native";
+
 import { activeFonts, colors, fontSizes } from "../../../../styles";
-import { Dimensions, Platform } from "react-native";
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export const VerticalFlatlistContainer = styled.View`
   flex: 1;
@@ -23,4 +24,8 @@ export const FilterContainer = styled.View`
   margin-left: 2.5%;
   padding-top: ${moderateScale(10)}px;
   padding-bottom: ${moderateScale(5)}px;
+`;
+
+export const EmptyStateWrapper = styled.View`
+  padding-top:${Platform.OS === "android" || width > 700 ? "10%": "30%"};
 `;

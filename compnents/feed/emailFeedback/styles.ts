@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { Dimensions, Platform, StyleSheet } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+
 import { activeFonts, colors } from "../../styles";
 
 const windowWidth = Dimensions.get("window").width;
@@ -37,7 +38,7 @@ export const inline = StyleSheet.create({
 
 export const FMenuAnimate = styled.View`
   position: absolute;
-  bottom: ${Platform.OS === "ios" ? moderateScale(15) : moderateScale(0)}px;
+  bottom: ${Platform.OS === "ios" ? moderateScale(15) : moderateScale(45)}px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
