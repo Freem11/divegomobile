@@ -1,13 +1,15 @@
-import React, { useContext, useEffect } from 'react';
-import * as S from './styles';
-import MobileTextInput from "../../reusables/textInput";
-import Button from '../../reusables/button';
+import React, { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Form, FormRules } from "./form";
 import { Controller, useForm } from "react-hook-form";
-import { BasicFormData } from "./editsParallax";
+
+import MobileTextInput from "../../reusables/textInput";
+import Button from "../../reusables/button";
 import Label from "../../reusables/label";
 import { colors } from "../../styles";
+
+import { Form, FormRules } from "./form";
+import { BasicFormData } from "./editsParallax";
+import * as S from "./styles";
 
 interface Props {
   values: Form;
@@ -27,7 +29,7 @@ export default function EditScreenView({
   } = useForm<Form>({
     values: values,
   });
-  
+
   const { t } = useTranslation();
 
   const handleOnSubmit = (data: Form) => {
@@ -37,57 +39,57 @@ export default function EditScreenView({
 
   return (
     <S.ContentContainer>
-        <S.Header>{initialFormData?.title}</S.Header>
+      <S.Header>{initialFormData?.title}</S.Header>
 
-          <S.InputGroupContainer>
-          <Label label="Name" />
-                <S.TextBuffer>
-                <Controller
-                control={control}
-                name="name"
-                rules={FormRules.name}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <MobileTextInput
-                    placeholder={initialFormData?.placeholderName}
-                    placeholderTextColor={colors.neutralGrey}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    editable={initialFormData?.dataType === "DiveSite" ? false : true}
-                  />
-                )}
+      <S.InputGroupContainer>
+        <Label label="Name" />
+        <S.TextBuffer>
+          <Controller
+            control={control}
+            name="name"
+            rules={FormRules.name}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <MobileTextInput
+                placeholder={initialFormData?.placeholderName}
+                placeholderTextColor={colors.neutralGrey}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+                editable={initialFormData?.dataType === "Dive Site" ? false : true}
               />
-             </S.TextBuffer>
+            )}
+          />
+        </S.TextBuffer>
 
-             <Label label="Biography" />
-             <S.TextBuffer>
-             <Controller
-                control={control}
-                name="bio"
-                rules={FormRules.bio}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <S.MultilineTextInput
-                  multiline
-                  placeholder={initialFormData?.placeholderBio}
-                  placeholderTextColor={colors.neutralGrey}
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange} 
-                /> 
-                )}
+        <Label label="Biography" />
+        <S.TextBuffer>
+          <Controller
+            control={control}
+            name="bio"
+            rules={FormRules.bio}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <S.MultilineTextInput
+                multiline
+                placeholder={initialFormData?.placeholderBio}
+                placeholderTextColor={colors.neutralGrey}
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
               />
-             </S.TextBuffer>
-           </S.InputGroupContainer>
+            )}
+          />
+        </S.TextBuffer>
+      </S.InputGroupContainer>
 
-            <S.ButtonBox>
-               <Button 
-                 onPress={handleSubmit(handleOnSubmit)} 
-                 alt={false} 
-                 size='medium'
-                 title={t('DiveSiteAdd.submitButton')} 
-                 iconRight="chevron-right"
-                 />
-            </S.ButtonBox>
+      <S.ButtonBox>
+        <Button
+          onPress={handleSubmit(handleOnSubmit)}
+          alt={false}
+          size="medium"
+          title={t("DiveSiteAdd.submitButton")}
+          iconRight="chevron-right"
+        />
+      </S.ButtonBox>
 
     </S.ContentContainer>
   );

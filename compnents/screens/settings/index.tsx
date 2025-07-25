@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
-import SettingsPageView from "./settings";
+import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
+import { Alert } from "react-native";
+import email from "react-native-email";
+
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SessionContext } from "../../contexts/sessionContext";
-import * as SecureStore from "expo-secure-store";
 import {
   signOut,
   userDelete
@@ -14,9 +17,8 @@ import {
   addDeletedAccountInfo,
   deleteProfile
 } from "../../../supabaseCalls/accountSupabaseCalls";
-import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
-import email from "react-native-email";
+
+import SettingsPageView from "./settings";
 
 type SettingsPageProps = {};
 
@@ -29,9 +31,8 @@ export default function SettingsPage({}: SettingsPageProps) {
 
   const { t } = useTranslation();
 
-  
   let profileType;
-  if (profile.partnerAccount) {
+  if (profile && profile.partnerAccount) {
     profileType = "Partner Account";
   } else {
     profileType = "Diver Account";
@@ -42,29 +43,28 @@ export default function SettingsPage({}: SettingsPageProps) {
     setLevelOneScreen(false);
     setActiveScreen("PartnerRequestScreen");
   };
-  
-  const handleLogout = async () => {
+
+  const handleLogout = async() => {
     await setActiveSession(null);
     await SecureStore.deleteItemAsync("token");
     await signOut();
   };
 
-
-  const alertHandler = async () => {
+  const alertHandler = async() => {
     Alert.alert(
-      t('SettingsPage.aboutToDeleteAccountTitle'),
-      t('SettingsPage.deleteAccountMessage'),
+      t("SettingsPage.aboutToDeleteAccountTitle"),
+      t("SettingsPage.deleteAccountMessage"),
       [
         {
-          text: t('SettingsPage.deleteAccountButton'),
+          text: t("SettingsPage.deleteAccountButton"),
           onPress: handleAccountDelete,
         },
         {
-          text: t('SettingsPage.cancelDeleteButton'),
-          onPress: () => console.log('no tapped'),
+          text: t("SettingsPage.cancelDeleteButton"),
+          onPress: () => console.log("no tapped"),
         },
         {
-          text: t('SettingsPage.contactSupportButton'),
+          text: t("SettingsPage.contactSupportButton"),
           onPress: handleEmail,
         },
       ]
@@ -75,7 +75,7 @@ export default function SettingsPage({}: SettingsPageProps) {
   let first;
   let last;
 
-  if (activeSession) {
+  if (activeSession && activeSession.user) {
     first = activeSession.user.user_metadata.firstName || "";
     last = activeSession.user.user_metadata.lastName || "";
     blurb = `:${activeSession.user.id}` || null;
@@ -90,7 +90,7 @@ export default function SettingsPage({}: SettingsPageProps) {
     }).catch(console.error);
   };
 
-  const handleAccountDelete = async () => {
+  const handleAccountDelete = async() => {
     if (blurb) {
       await addDeletedAccountInfo({
         firstName: first,
@@ -114,6 +114,6 @@ export default function SettingsPage({}: SettingsPageProps) {
       handleLogout={handleLogout}
       alertHandler={alertHandler}
     />
-  )
+  );
 
 }

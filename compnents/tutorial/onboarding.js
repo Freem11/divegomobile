@@ -11,20 +11,22 @@ import {
   Keyboard,
   KeyboardAvoidingView
 } from "react-native";
-import { activeFonts, colors, fontSizes } from '../styles';
 import { scale, moderateScale } from "react-native-size-matters";
+import MaskedView from "@react-native-masked-view/masked-view";
+import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
+
+import { activeFonts, colors, fontSizes } from "../styles";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import emilio from '../png/guideIcons/EmilioNew.png'
+import emilio from "../png/guideIcons/EmilioNew.png";
+import { SessionContext } from "../contexts/sessionContext";
+import { UserProfileContext } from "../contexts/userProfileContext";
+import { updateProfileUserName, grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
+import TextInputField from "../authentication/utils/textInput";
+
 import { registerForForegroundLocationTrackingsAsync } from "./locationTrackingRegistry";
 import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
 import { registerForPushNotificationsAsync } from "./notificationsRegistery";
-import { SessionContext } from "../contexts/sessionContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { updateProfile, grabProfileByUserId } from "../../supabaseCalls/accountSupabaseCalls";
-import TextInputField from '../authentication/utils/textInput';
-import MaskedView from '@react-native-masked-view/masked-view';
-import { LinearGradient } from "expo-linear-gradient";
-import { useTranslation } from "react-i18next";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -42,51 +44,51 @@ export default function OnboardingTest() {
   const carrouselData = useMemo(() => [
     {
       page: 1,
-      title: t('OnBoarding.welcomeTitle'),
-      content: t('OnBoarding.welcomeContent'),
-      buttonOneText: t('Common.next'),
+      title: t("OnBoarding.welcomeTitle"),
+      content: t("OnBoarding.welcomeContent"),
+      buttonOneText: t("Common.next"),
       buttonTwoText: null,
     },
     {
       page: 2,
-      title: t('OnBoarding.diverNameTitle'),
-      content: t('OnBoarding.diverNameContent'),
-      buttonOneText: t('Common.ok'),
+      title: t("OnBoarding.diverNameTitle"),
+      content: t("OnBoarding.diverNameContent"),
+      buttonOneText: t("Common.ok"),
       buttonTwoText: null,
     },
     {
       page: 3,
-      title: t('OnBoarding.locationTitle'),
-      content: t('OnBoarding.locationContent'),
-      buttonOneText: t('Common.accept'),
-      buttonTwoText: t('Common.optOut'),
+      title: t("OnBoarding.locationTitle"),
+      content: t("OnBoarding.locationContent"),
+      buttonOneText: t("Common.accept"),
+      buttonTwoText: t("Common.optOut"),
     },
     {
       page: 4,
-      title: t('OnBoarding.galleryTitle'),
-      content: t('OnBoarding.galleryContent'),
-      buttonOneText: t('Common.accept'),
-      buttonTwoText: t('Common.optOut'),
+      title: t("OnBoarding.galleryTitle"),
+      content: t("OnBoarding.galleryContent"),
+      buttonOneText: t("Common.accept"),
+      buttonTwoText: t("Common.optOut"),
     },
     {
       page: 5,
-      title: t('OnBoarding.notificationsTitle'),
-      content: t('OnBoarding.notificationsContent'),
-      buttonOneText: t('Common.accept'),
-      buttonTwoText: t('Common.optOut'),
+      title: t("OnBoarding.notificationsTitle"),
+      content: t("OnBoarding.notificationsContent"),
+      buttonOneText: t("Common.accept"),
+      buttonTwoText: t("Common.optOut"),
     },
     {
       page: 6,
-      title: t('OnBoarding.doneTitle'),
-      content: t('OnBoarding.doneContent'),
-      buttonOneText: t('Common.finish'),
+      title: t("OnBoarding.doneTitle"),
+      content: t("OnBoarding.doneContent"),
+      buttonOneText: t("Common.finish"),
       buttonTwoText: null,
     },
   ], [t]);
 
-  const onPress = async () => {
+  const onPress = async() => {
     if (carrouselIndex === 2) {
-      let result = await handleSubmit();
+      const result = await handleSubmit();
       if (result === "success") {
         moveToNextPage();
       } else {
@@ -126,7 +128,7 @@ export default function OnboardingTest() {
 
   const [userFail, setUserFail] = useState("");
 
-  const handleText = async (text) => {
+  const handleText = async(text) => {
     setFormVal({ ...formVal, userName: text });
     setUserFail("");
     SetFormValidation({
@@ -135,7 +137,7 @@ export default function OnboardingTest() {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async() => {
     Keyboard.dismiss();
     if (formVal.userName === "" || formVal.userName === null) {
       userVar = true;
@@ -149,36 +151,26 @@ export default function OnboardingTest() {
     });
 
     if (formVal.userName === "") {
-      setUserFail(t('Validators.requiredDiverName'));
+      setUserFail(t("Validators.requiredDiverName"));
       return "fail";
-    } else {
-      let sessionUserId = activeSession.user.id;
-      // let sessionUserId = 'a93f6831-15b3-4005-b5d2-0e5aefcbda13';
-      try {
-        await updateProfile({
-          id: sessionUserId,
-          username: formVal.userName,
-        });
-        let profileCheck = await grabProfileByUserId(sessionUserId)
-        if (profileCheck.length > 0) {
-          // TODO Matt add typing and set up an object instead of an array
-          setFormVal({ userName: "" });
-          if (Array.isArray(profileCheck)) {
-            setProfile(profileCheck);
-          } else {
-            setProfile([profileCheck]);
-          }
-          return "success";
-        } else {
-          setUserFail(t('Validators.diverNameTaken'));
-          return "fail";
-        }
-      } catch (e) {
-        setUserFail(t('Validators.diverNameTaken'));
-        console.log({ title: "Error19", message: e.message });
-        return "fail";
-      }
     }
+
+    const profileCheck = await grabProfileByUserName(formVal.userName);
+    if (profileCheck.length > 0) {
+      setUserFail(t("Validators.diverNameTaken"));
+      return "fail";
+    }
+
+    const sessionUserId = activeSession.user.id;
+
+    const updatedProfile = await updateProfileUserName({
+      UserID: sessionUserId,
+      UserName: formVal.userName,
+    });
+
+    setProfile(updatedProfile);
+
+    return "success";
   };
 
   return (
@@ -204,12 +196,14 @@ export default function OnboardingTest() {
             {item.page !== 2 ? (
 
               <MaskedView
-                maskElement={
+                maskElement={(
                   <LinearGradient
                     style={{ flex: 1 }}
                     colors={["green", "transparent"]}
-                    start={{ x: 0.5, y: 0.7 }}></LinearGradient>
-                }
+                    start={{ x: 0.5, y: 0.7 }}
+                  >
+                  </LinearGradient>
+                )}
               >
                 <View style={styles.scrollViewBox}>
                   <ScrollView style={styles.scrollView}>
@@ -225,12 +219,12 @@ export default function OnboardingTest() {
               <KeyboardAvoidingView
                 behavior="position"
                 keyboardVerticalOffset={moderateScale(150)}
-                style={{ width: '100%', alignItems: 'center' }}
+                style={{ width: "100%", alignItems: "center" }}
               >
                 <View style={styles.inputBox}>
                   <TextInputField
                     icon={"scuba-diving"}
-                    placeHolderText={t('OnBoarding.diverNamePlaceholder')}
+                    placeHolderText={t("OnBoarding.diverNamePlaceholder")}
                     inputValue={formVal.userName}
                     secure={false}
                     onChangeText={(text) => handleText(text)}
@@ -309,7 +303,7 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Regular,
     fontSize: moderateScale(fontSizes.Header),
     paddingHorizontal: moderateScale(30),
-    marginTop: windowHeight > 700 && windowWidth < 700 ? '-35%' : '-35%',
+    marginTop: windowHeight > 700 && windowWidth < 700 ? "-35%" : "-35%",
     marginBottom: moderateScale(10),
     width: windowWidth,
     color: colors.themeWhite,
@@ -328,7 +322,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: moderateScale(0),
     right: moderateScale(0),
-    pointerEvents: 'none'
+    pointerEvents: "none"
   },
   image: {
     position: "absolute",
@@ -380,7 +374,7 @@ const styles = StyleSheet.create({
     margin: moderateScale(5),
     marginLeft: screenHeight < 800 ? moderateScale(-110) : 0,
     width: screenHeight < 800 ? "50%" : "auto",
-    textAlign: 'center',
+    textAlign: "center",
     padding: moderateScale(7),
     paddingHorizontal: moderateScale(10),
     color: "pink",
@@ -394,6 +388,6 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     width: "70%",
-    marginTop: '-10%',
+    marginTop: "-10%",
   },
 });

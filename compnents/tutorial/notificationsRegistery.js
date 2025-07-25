@@ -1,13 +1,14 @@
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { Alert, Linking } from "react-native";
+
 import {
-  grabProfileById,
+  grabProfileByUserId,
   updatePushToken,
-} from '../../supabaseCalls/accountSupabaseCalls';
+} from "../../supabaseCalls/accountSupabaseCalls";
 import { i18n } from "../../i18n";
 
-export const registerForPushNotificationsAsync = async (activeSession, runAlert) => {
+export const registerForPushNotificationsAsync = async(activeSession, runAlert) => {
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
@@ -41,8 +42,8 @@ export const registerForPushNotificationsAsync = async (activeSession, runAlert)
   }
 
   if (activeSession && activeSession.user) {
-    const user = await grabProfileById(activeSession.user.id);
-    const activeToken = user[0].expo_push_token;
+    const user = await grabProfileByUserId(activeSession.user.id);
+    const activeToken = user.expo_push_token;
 
     if (activeToken === null || !activeToken.includes(tokenE)) {
       updatePushToken({
@@ -52,5 +53,5 @@ export const registerForPushNotificationsAsync = async (activeSession, runAlert)
 
     }
   }
-  return true
+  return true;
 };

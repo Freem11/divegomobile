@@ -149,7 +149,7 @@ export default function MapPage() {
     const sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success: ActiveProfile = await grabProfileByUserId(sessionUserId);
+      const success : ActiveProfile = await grabProfileByUserId(sessionUserId);
       if (success) {
         const bully = success && success.UserName;
         if (bully == null || bully === "") {
@@ -174,10 +174,12 @@ export default function MapPage() {
   };
 
   useLayoutEffect(() => {
+    console.log("hey!!");
     getProfile();
   }, []);
 
   useEffect(() => {
+    console.log("wtf!!");
     setLevelOneScreen(false);
     setLevelTwoScreen(false);
     getProfile();

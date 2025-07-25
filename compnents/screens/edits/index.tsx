@@ -1,17 +1,18 @@
 import React, { useContext, useState } from "react";
-import EditScreenView from './view';
+
 import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { updateDiveSite } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { imageUpload } from "../imageUploadHelpers";
 import { showError, showSuccess, showWarning } from "../../toast";
-import { Form } from "./form";
-import { BasicFormData } from "./editsParallax";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 
+import { BasicFormData } from "./editsParallax";
+import { Form } from "./form";
+import EditScreenView from "./view";
 
 type EdittingScreenProps = {
   localPreviewUri: string | null
@@ -31,8 +32,8 @@ export default function EdittingScreen({
   const { setSelectedShop } = useContext(SelectedShopContext);
   const { setSelectedProfile } = useContext(SelectedProfileContext);
   const { setProfile } = useContext(UserProfileContext);
-  
-  const tryUpload = async (uri: string) => {
+
+  const tryUpload = async(uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
@@ -41,59 +42,59 @@ export default function EdittingScreen({
     }
   };
 
-  const onSubmit = async (formData: Required<Form>) => {
+  const onSubmit = async(formData: Required<Form>) => {
 
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
       return;
     }
 
-    let formDataUri: string
-    if(formData.uri){
-      formDataUri = formData.uri.split("/").pop() || "X"
+    let formDataUri: string;
+    if (formData.uri){
+      formDataUri = formData.uri.split("/").pop() || "X";
     } else {
-      formDataUri = "X"
+      formDataUri = "X";
     }
 
-    let uploadedPhotoUri: string
-    if(localPreviewUri){
-      uploadedPhotoUri = localPreviewUri.split("/").pop() || "X"
+    let uploadedPhotoUri: string;
+    if (localPreviewUri){
+      uploadedPhotoUri = localPreviewUri.split("/").pop() || "X";
     } else {
-      uploadedPhotoUri = "X"
+      uploadedPhotoUri = "X";
     }
-  
+
     let updatedUri = null;
 
-    if(formDataUri !== uploadedPhotoUri){
-        setIsUploading(true);
+    if (formDataUri !== uploadedPhotoUri){
+      setIsUploading(true);
 
-        try {
-          const fileName = await tryUpload(localPreviewUri);
-          if (!fileName) {
-            throw new Error("Photo upload failed");
-          }
-
-          const fullPath = `animalphotos/public/${fileName}`;
-          updatedUri = fullPath;
-          setNewUri(fullPath)
-
-        } catch (err) {
-          console.error("Error uploading image:", err);
-          showError(err.message);
-        } finally {
-          setIsUploading(false);
+      try {
+        const fileName = await tryUpload(localPreviewUri);
+        if (!fileName) {
+          throw new Error("Photo upload failed");
         }
+
+        const fullPath = `animalphotos/public/${fileName}`;
+        updatedUri = fullPath;
+        setNewUri(fullPath);
+
+      } catch (err) {
+        console.error("Error uploading image:", err);
+        showError(err.message);
+      } finally {
+        setIsUploading(false);
+      }
     }
 
-    if(initialFormData.dataType === "Dive Site"){
+    if (initialFormData.dataType === "Dive Site"){
       const response = await updateDiveSite({
         id:                   formData.id,
         name:                 formData.name,
         diveSiteBio:          formData.bio,
         diveSiteProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
-      setSelectedDiveSite(response)
-      if(response){setSupabaseResponse(response);}
+      setSelectedDiveSite(response);
+      if (response){setSupabaseResponse(response);}
     } else if (initialFormData.dataType === "Dive Center"){
       const response = await updateDiveShop({
         id:                   formData.id,
@@ -101,9 +102,9 @@ export default function EdittingScreen({
         diveShopBio:          formData.bio,
         diveShopProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
-      setSelectedShop(response)
-      if(response){setSupabaseResponse(response);}
-   
+      setSelectedShop(response);
+      if (response){setSupabaseResponse(response);}
+
     }  else if (initialFormData.dataType === "Profile"){
       const response = await updateProfile({
         id:             formData.id,
@@ -111,17 +112,17 @@ export default function EdittingScreen({
         profileBio:     formData.bio,
         profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
-      setSelectedProfile(response)
-      setProfile(response)
-      if(response){setSupabaseResponse(response);}
+      setSelectedProfile(response);
+      setProfile(response);
+      if (response){setSupabaseResponse(response);}
     }
 
     if (supabaseResponse && supabaseResponse.error){
-      showError("unable to save updates, please try again later")
+      showError("unable to save updates, please try again later");
       return;
-    } 
-      showSuccess(`${initialFormData.dataType} updated sucessfuly!`);
-  }
+    }
+    showSuccess(`${initialFormData.dataType} updated sucessfuly!`);
+  };
 
   return (
     <EditScreenView
@@ -134,6 +135,6 @@ export default function EdittingScreen({
         uri: initialFormData?.uri
       }}
     />
-  )
+  );
 
 }
