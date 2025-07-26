@@ -4,11 +4,13 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import ForgotPageView from "./view";
 import { supabase } from "../../../supabase";
-import { Platform } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AuthenticationRoutes } from "../authNavigator";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const createSessionFromUrl = async (url) => {
+const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
   if (errorCode) throw new Error(errorCode);
   const { access_token, refresh_token } = params;
@@ -24,20 +26,27 @@ const createSessionFromUrl = async (url) => {
   return data.session;
 };
 
-export default function ForgotPage(props) {
-  const { moveToLoginPage, setEmailSent, emailSent } = props;
+type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<
+  AuthenticationRoutes,
+  "ForgotPassword"
+>;
+
+export default function ForgotPasswordScreen() {
+  const [emailSent, setEmailSent] = useState<string | null>(null);
 
   const [formVals, setFormVals] = useState({ email: "" });
   const [isEnabled, setIsEnabled] = useState(true);
 
-  const url = Linking.useURL();
+  const url = Linking.useLinkingURL();
   if (url) createSessionFromUrl(url);
+
+  const navigation = useNavigation<ForgotPasswordScreenNavigationProp>();
 
   useEffect(() => {
     setIsEnabled(true);
   }, []);
 
-  const passwordRecovery = async (email) => {
+  const passwordRecovery = async (email: string) => {
     setIsEnabled(false);
 
     // const resetPasswordURL = Linking.createURL("account/password/");
@@ -62,7 +71,7 @@ export default function ForgotPage(props) {
 
   return (
     <ForgotPageView
-      moveToLoginPage={moveToLoginPage}
+      moveToLoginPage={() => navigation.goBack()}
       setFormVals={setFormVals}
       formVals={formVals}
       isEnabled={isEnabled}

@@ -9,16 +9,26 @@ import {
   facebookSignIn,
   googleSignIn,
 } from "../../helpers/loginHelpers";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AuthenticationRoutes } from "../authNavigator";
 
 const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
 
-export default function LandingPage(props) {
+type LandingScreenNavigationProp = NativeStackNavigationProp<
+  AuthenticationRoutes,
+  "Landing"
+>;
+
+export default function LandingScreen(props) {
   const { moveToLoginPage, moveToSignUpPage } = props;
 
   const { setActiveSession } = useContext(SessionContext);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
+
+  const navigation = useNavigation<LandingScreenNavigationProp>();
 
   useEffect(() => {
     Platform.OS === "ios"
@@ -41,8 +51,8 @@ export default function LandingPage(props) {
     <LandingPageView
       isSignedIn={isSignedIn}
       appleAuthAvailable={appleAuthAvailable}
-      onLogin={() => moveToLoginPage()}
-      onSignUp={() => moveToSignUpPage()}
+      onLogin={() => navigation.navigate("Login")}
+      onSignUp={() => navigation.navigate("SignUp")}
       onGoogle={() => googleSignIn(setActiveSession, setIsSignedIn)}
       onFacebook={() => facebookSignIn(setActiveSession, setIsSignedIn)}
       onApple={() => appleLogin(setActiveSession, setIsSignedIn)}

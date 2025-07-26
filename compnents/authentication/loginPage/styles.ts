@@ -8,7 +8,6 @@ import {
   activeFonts,
   authenicationButton,
 } from "../../styles";
-import Animated from "react-native-reanimated";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -21,25 +20,17 @@ export const Container = styled.View`
   width: ${windowWidth - windowWidth / 10}px;
 `;
 
-export const SafeArea = styled(SafeAreaView)`
-z-index: 20;
-margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
-background-color: ${colors.neutralGrey};
-`;
-
-export const AnimatedSafeArea = Animated.createAnimatedComponent(SafeArea);
-
 export const BackButtonWrapper = styled.View`
-width: 50%;
-align-items: flex-start;
+  width: 50%;
+  align-items: flex-start;
 `;
 
 export const TextInputWrapper = styled.View`
-   margin-top: ${moderateScale(60)}px;
+  margin-top: ${moderateScale(60)}px;
 `;
 
 export const SecureTextInputWrapper = styled.View`
-   margin-top: ${moderateScale(40)}px;
+  margin-top: ${moderateScale(40)}px;
 `;
 
 export const Content = styled.View`
@@ -108,20 +99,3 @@ export const ErrorText = styled.Text`
   font-family: ${activeFonts.Italic};
   color: maroon;
 `;
-
-export const styles = StyleSheet.create({
-  drawer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 2,
-    overflow: 'hidden',
-  },
-  safeArea: {
-    zIndex: 20,
-    marginTop: Platform.OS === 'ios' ? 0 : '10%',
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
-});

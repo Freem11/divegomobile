@@ -1,7 +1,6 @@
 import React from "react";
-import { SafeAreaView, TouchableWithoutFeedback } from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import { useTranslation } from "react-i18next";
-import Animated from "react-native-reanimated";
 
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
@@ -38,21 +37,16 @@ export default function CreateAccountPageView({
 }: IProps) {
   const { t } = useTranslation();
 
-  const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
-
   return (
     <S.Container>
-
-      <AnimatedSafeAreaView style={[S.styles.safeArea]}>
-        <S.BackButtonWrapper>
-          <ButtonIcon
-            icon="chevron-left"
-            onPress={moveToLandingPage}
-            size="small"
-            fillColor={colors.neutralGrey}
-          />
-        </S.BackButtonWrapper>
-      </AnimatedSafeAreaView>
+      <S.BackButtonWrapper>
+        <ButtonIcon
+          icon="chevron-left"
+          onPress={moveToLandingPage}
+          size="small"
+          fillColor={colors.neutralGrey}
+        />
+      </S.BackButtonWrapper>
 
       <S.Content>
         <S.Header>{t("Common.signup")}</S.Header>
@@ -62,7 +56,9 @@ export default function CreateAccountPageView({
             iconLeft="person"
             placeholder={t("Common.fullName")}
             value={formVals.name}
-            onChangeText={(text: string) => setFormVals({ ...formVals, name: text })}
+            onChangeText={(text: string) =>
+              setFormVals({ ...formVals, name: text })
+            }
           />
         </S.TopInputWrapper>
 
@@ -71,13 +67,17 @@ export default function CreateAccountPageView({
             iconLeft="at"
             placeholder={t("Common.email")}
             value={formVals.email}
-            onChangeText={(text: string) => setFormVals({ ...formVals, email: text })}
+            onChangeText={(text: string) =>
+              setFormVals({ ...formVals, email: text })
+            }
           />
         </S.TextInputWrapper>
 
         <S.TextInputWrapper>
           <SecureTextInput
-            onChangeText={(text: string) => setFormVals({ ...formVals, password: text })}
+            onChangeText={(text: string) =>
+              setFormVals({ ...formVals, password: text })
+            }
             placeholder={t("Common.password")}
           />
         </S.TextInputWrapper>
@@ -93,7 +93,6 @@ export default function CreateAccountPageView({
             iconRight="chevron-right"
           />
         </S.ButtonBox>
-
       </S.Content>
 
       <S.PromptBox>
