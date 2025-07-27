@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { Dimensions, Platform, SafeAreaView, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import {
   colors,
@@ -14,15 +14,22 @@ const windowHeight = Dimensions.get("window").height;
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #fff;
-  margin-top: ${windowHeight / 10}px;
-  margin-bottom: ${windowHeight / 25}px;
-  width: ${windowWidth - windowWidth / 10}px;
+  background-color: ${colors.primaryBlue};
 `;
 
-export const BackButtonWrapper = styled.View`
-  width: 50%;
-  align-items: flex-start;
+export const HeaderContainer = styled.View`
+  flex: 0.25;
+  justify-content: flex-end;
+  padding-left: 24px;
+  padding-bottom: 32px;
+`;
+
+export const ContentContainer = styled.View<{ paddingBottom: number }>`
+  flex: 0.75;
+  background-color: #fff;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding-bottom: ${({ paddingBottom }) => paddingBottom}px;
 `;
 
 export const TextInputWrapper = styled.View`
@@ -36,15 +43,13 @@ export const SecureTextInputWrapper = styled.View`
 export const Content = styled.View`
   flex: 1;
   justify-content: center;
-  margin-top: -50%;
   margin-horizontal: 7%;
 `;
 
 export const Header = styled.Text`
-  z-index: 10;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
-  color: darkgrey;
+  color: ${colors.themeWhite};
 `;
 
 export const ButtonBox = styled.View`
@@ -53,16 +58,12 @@ export const ButtonBox = styled.View`
 `;
 
 export const ForgotBox = styled.View`
-  position: absolute;
-  bottom: ${moderateScale(40)}px;
   width: 100%;
   flex-direction: row;
   justify-content: center;
 `;
 
 export const PromptBox = styled.View`
-  position: absolute;
-  bottom: ${moderateScale(10)}px;
   width: 100%;
   flex-direction: row;
   gap: 10px;

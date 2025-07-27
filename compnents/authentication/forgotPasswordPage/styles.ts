@@ -8,49 +8,43 @@ import {
   authenicationButton,
   colors,
 } from "../../styles";
-import Animated from "react-native-reanimated";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export const Container = styled.View`
   flex: 1;
+  background-color: ${colors.primaryBlue};
+`;
+
+export const HeaderContainer = styled.View`
+  flex: 0.25;
+  justify-content: flex-end;
+  padding-left: 24px;
+  padding-bottom: 32px;
+`;
+
+export const ContentContainer = styled.View`
+  flex: 0.75;
   background-color: #fff;
-  margin-top: ${windowHeight / 10}px;
-  margin-bottom: ${windowHeight / 25}px;
-  width: ${windowWidth - windowWidth / 10}px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
 `;
 
 export const Content = styled.View`
   flex: 1;
   justify-content: center;
-  margin-top: -75%;
-  margin-horizontal: 7%;`;
-
-
-  export const SafeArea = styled(SafeAreaView)`
-  z-index: 20;
-  margin-top: ${Platform.OS === 'ios' ? 0 : '10%'};
-  background-color: ${colors.neutralGrey};
-`;
-
-export const AnimatedSafeArea = Animated.createAnimatedComponent(SafeArea);
-
-export const BackButtonWrapper = styled.View`
-  width: 50%;
-  align-items: flex-start;
+  margin-horizontal: 7%;
 `;
 
 export const TopInputWrapper = styled.View`
-   margin-top: ${moderateScale(60)}px;
+  margin-top: ${moderateScale(60)}px;
 `;
 
 export const Header = styled.Text`
-  z-index: 10;
-  margin-top: 10%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
-  color: darkgrey;
+  color: ${colors.themeWhite};
 `;
 
 export const ErrorText = styled.Text`
@@ -78,21 +72,3 @@ export const LoginText = styled.Text`
   ${buttonText};
   margin-horizontal: ${moderateScale(5)}px;
 `;
-
-
-export const styles = StyleSheet.create({
-  drawer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 2,
-    overflow: 'hidden',
-  },
-  safeArea: {
-    zIndex: 20,
-    marginTop: Platform.OS === 'ios' ? 0 : '10%',
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
-});

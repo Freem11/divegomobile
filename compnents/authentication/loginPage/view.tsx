@@ -1,12 +1,11 @@
 import React from "react";
-import { SafeAreaView, TouchableWithoutFeedback } from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import * as S from "./styles";
 import { useTranslation } from "react-i18next";
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
-import ButtonIcon from "../../reusables/buttonIcon";
 import Button from "../../reusables/button";
-import { colors } from "../../styles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface FormVals {
   email: string;
@@ -37,66 +36,61 @@ export default function LoginPageView({
   moveToForgotPasswordPage,
 }: IProps) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   return (
     <S.Container>
-      <S.BackButtonWrapper>
-        <ButtonIcon
-          icon="chevron-left"
-          onPress={moveToLandingPage}
-          size="small"
-          fillColor={colors.neutralGrey}
-        />
-      </S.BackButtonWrapper>
+      <S.HeaderContainer>
+        <S.Header>{t("Common.welcome")}</S.Header>
+      </S.HeaderContainer>
+      <S.ContentContainer paddingBottom={insets.bottom + 16}>
+        <S.Content>
+          <S.TextInputWrapper>
+            <MobileTextInput
+              iconLeft="at"
+              placeholder={t("Common.email")}
+              value={formVals.email}
+              onChangeText={(text: string) =>
+                setFormVals({ ...formVals, email: text })
+              }
+            />
+          </S.TextInputWrapper>
 
-      <S.Content>
-        <S.Header>{t("Common.login")}</S.Header>
+          <S.SecureTextInputWrapper>
+            <SecureTextInput
+              onChangeText={(text: string) =>
+                setFormVals({ ...formVals, password: text })
+              }
+              placeholder={t("Common.password")}
+            />
+          </S.SecureTextInputWrapper>
 
-        <S.TextInputWrapper>
-          <MobileTextInput
-            iconLeft="at"
-            placeholder={t("Common.email")}
-            value={formVals.email}
-            onChangeText={(text: string) =>
-              setFormVals({ ...formVals, email: text })
-            }
-          />
-        </S.TextInputWrapper>
+          {loginFail ? <S.ErrorText>{loginFail}</S.ErrorText> : <S.ErrorText />}
 
-        <S.SecureTextInputWrapper>
-          <SecureTextInput
-            onChangeText={(text: string) =>
-              setFormVals({ ...formVals, password: text })
-            }
-            placeholder={t("Common.password")}
-          />
-        </S.SecureTextInputWrapper>
+          <S.ButtonBox>
+            <Button
+              onPress={handleLogin}
+              alt={false}
+              size="medium"
+              title={t("Common.login")}
+              iconRight="chevron-right"
+            />
+          </S.ButtonBox>
+        </S.Content>
 
-        {loginFail ? <S.ErrorText>{loginFail}</S.ErrorText> : <S.ErrorText />}
+        <S.ForgotBox>
+          <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
+            <S.PromptLinkText>{t("Auth.forgotPassword")}</S.PromptLinkText>
+          </TouchableWithoutFeedback>
+        </S.ForgotBox>
 
-        <S.ButtonBox>
-          <Button
-            onPress={handleLogin}
-            alt={false}
-            size="medium"
-            title={t("Common.login")}
-            iconRight="chevron-right"
-          />
-        </S.ButtonBox>
-      </S.Content>
-
-      <S.ForgotBox>
-        <TouchableWithoutFeedback onPress={moveToForgotPasswordPage}>
-          <S.PromptLinkText>{t("Auth.forgotPassword")}</S.PromptLinkText>
-        </TouchableWithoutFeedback>
-      </S.ForgotBox>
-
-      <S.PromptBox>
-        <S.PromptText>{t("Auth.noAccount")}</S.PromptText>
-        <TouchableWithoutFeedback onPress={moveToSignUpPage}>
-          <S.PromptLinkText>{t("Common.signup")}</S.PromptLinkText>
-        </TouchableWithoutFeedback>
-      </S.PromptBox>
+        <S.PromptBox>
+          <S.PromptText>{t("Auth.noAccount")}</S.PromptText>
+          <TouchableWithoutFeedback onPress={moveToSignUpPage}>
+            <S.PromptLinkText>{t("Common.signup")}</S.PromptLinkText>
+          </TouchableWithoutFeedback>
+        </S.PromptBox>
+      </S.ContentContainer>
     </S.Container>
   );
 }

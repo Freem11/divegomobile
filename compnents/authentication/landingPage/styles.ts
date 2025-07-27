@@ -124,7 +124,7 @@ export const GoogleButton = styled.View`
   width: ${moderateScale(50)}px;
   align-items: center;
   justify-content: center;
-   ${sharedIconStyle}
+  ${sharedIconStyle}
 `;
 
 export const FacebookButton = styled.View`
@@ -133,7 +133,7 @@ export const FacebookButton = styled.View`
 `;
 
 export const AppleButton = styled.View`
-  background-color: ${colors.themeWhite};;
+  background-color: ${colors.themeWhite};
   margin-left: ${moderateScale(6)}px;
   ${sharedIconStyle};
 `;
@@ -153,7 +153,6 @@ export const ALogo = {
   height: moderateScale(50),
   width: moderateScale(50),
 };
-
 
 export const Icon = {
   height: moderateScale(45),

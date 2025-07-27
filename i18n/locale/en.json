@@ -15,7 +15,10 @@
     "accept": "Accept",
     "optOut": "Opt Out",
     "finish": "Finish",
-    "close": "Close"
+    "close": "Close",
+    "welcome": "Welcome!",
+    "registerNow": "Register Now!",
+    "forgotPassword": "Reset Password!"
   },
   "OnBoarding": {
     "welcomeTitle": "Welcome to Scuba SEAsons!",

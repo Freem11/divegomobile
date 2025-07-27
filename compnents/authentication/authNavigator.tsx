@@ -24,7 +24,7 @@ export default function AuthenticationNavigator() {
     <Stack.Navigator
       initialRouteName="Landing"
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         animation: "slide_from_right",
         gestureEnabled: true,
         contentStyle: {
@@ -32,26 +32,14 @@ export default function AuthenticationNavigator() {
         },
       }}
     >
-      <Stack.Screen
-        name="Landing"
-        component={LandingScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ title: t("Common.login") }}
-      />
+      <Stack.Screen name="Landing" component={LandingScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
-        options={{ title: t("Common.signup") }}
+        options={{ animation: "slide_from_left" }}
       />
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPasswordScreen}
-        options={{ title: t("Common.resetPassword") }}
-      />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );
 }
