@@ -18,46 +18,45 @@ interface IProps {
   onApple: () => void;
 }
 
-export default function LandingPageView ({
+export default function LandingPageView({
   isSignedIn,
   appleAuthAvailable,
   onLogin,
   onSignUp,
   onGoogle,
   onFacebook,
-  onApple
+  onApple,
 }: IProps) {
-
   const { t } = useTranslation();
 
   return (
     <S.Container>
+      <WavyHeader />
       <S.StyledScrollView>
         <S.Header>{t("Auth.diveIn")}</S.Header>
 
         <S.ButtonBox>
           <S.ButtonSpacer>
-            <Button 
-                onPress={onLogin} 
-                alt={false} 
-                size='large'
-                title={t('Common.login')} 
-                />
+            <Button
+              onPress={onLogin}
+              alt={false}
+              size="large"
+              title={t("Common.login")}
+            />
           </S.ButtonSpacer>
           <S.ButtonSpacer>
-            <Button 
-                onPress={onSignUp} 
-                alt={true} 
-                size='large'
-                title={t("Common.registerAccount")} 
-                />
+            <Button
+              onPress={onSignUp}
+              alt={true}
+              size="large"
+              title={t("Common.registerAccount")}
+            />
           </S.ButtonSpacer>
         </S.ButtonBox>
 
         <S.SocialText>{t("Auth.socialText")}</S.SocialText>
 
         <S.IconRow>
-
           <TouchableWithoutFeedback onPress={onGoogle} disabled={isSignedIn}>
             <S.GoogleButton>
               <Image source={googleLogo} style={S.GLogo} />
@@ -79,8 +78,6 @@ export default function LandingPageView ({
           )}
         </S.IconRow>
       </S.StyledScrollView>
-
-      <WavyHeader />
     </S.Container>
   );
 }

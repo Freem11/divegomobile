@@ -7,6 +7,7 @@ import { supabase } from "../../../supabase";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthenticationRoutes } from "../authNavigator";
+import { useTranslation } from "react-i18next";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -49,20 +50,32 @@ export default function ForgotPasswordScreen() {
   const passwordRecovery = async (email: string) => {
     setIsEnabled(false);
 
+    const { t } = useTranslation();
+
     // const resetPasswordURL = Linking.createURL("account/password/");
     const resetPasswordURL =
       "https://scubaseasons.netlify.app/account/password";
     try {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: resetPasswordURL,
-        skipBrowserRedirect: true,
-      });
-      setEmailSent("Password Reset Email Sent!, Check Your Inbox for it");
-
-      if (error) {
-        console.error("Error sending password recovery email:", error.message);
+      if (formVals.email === "") {
+        setEmailSent(t("Validators.fillEmail"));
       } else {
-        console.log("Password recovery email sent:", data);
+        const { data, error } = await supabase.auth.resetPasswordForEmail(
+          email,
+          {
+            redirectTo: resetPasswordURL,
+            skipBrowserRedirect: true,
+          }
+        );
+        setEmailSent("Password Reset Email Sent!, Check Your Inbox for it");
+
+        if (error) {
+          console.error(
+            "Error sending password recovery email:",
+            error.message
+          );
+        } else {
+          console.log("Password recovery email sent:", data);
+        }
       }
     } catch (err) {
       console.error("Unexpected error:", err.message);

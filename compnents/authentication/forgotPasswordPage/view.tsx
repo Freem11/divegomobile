@@ -3,6 +3,7 @@ import * as S from "./styles";
 import { useTranslation } from "react-i18next";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface IProps {
   formVals: { email: string };
@@ -18,17 +19,17 @@ export default function ForgotPageView({
   isEnabled,
   emailSent,
   setFormVals,
-  moveToLoginPage,
   passwordRecovery,
 }: IProps) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   return (
     <S.Container>
       <S.HeaderContainer>
         <S.Header>{t("Common.forgotPassword")}</S.Header>
       </S.HeaderContainer>
-      <S.ContentContainer>
+      <S.ContentContainer paddingBottom={insets.bottom + 16}>
         <S.Content>
           <S.TopInputWrapper>
             <MobileTextInput

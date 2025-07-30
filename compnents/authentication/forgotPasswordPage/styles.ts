@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { Dimensions, Platform, SafeAreaView, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import {
   fontSizes,
@@ -24,11 +24,12 @@ export const HeaderContainer = styled.View`
   padding-bottom: 32px;
 `;
 
-export const ContentContainer = styled.View`
+export const ContentContainer = styled.View<{ paddingBottom: number }>`
   flex: 0.75;
   background-color: #fff;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
+  padding-bottom: ${({ paddingBottom }) => paddingBottom}px;
 `;
 
 export const Content = styled.View`

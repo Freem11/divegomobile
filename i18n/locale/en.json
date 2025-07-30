@@ -188,6 +188,7 @@
     "fillAllFields": "Please fill out all fields",
     "fillEmailAndPassword": "Please fill out both email and password",
     "invalidCredentials": "The credentials you supplied are not valid",
+    "fillEmail": "Please provide an email.",
     "passwordFormat": "Your password must be 6 characters or greater",
     "accountExistMsg": "You have already registered this account, please use the log in page",
     "whatYouSaw": "Please tell us what you saw",

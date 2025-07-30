@@ -24,7 +24,12 @@ export default function AuthenticationNavigator() {
     <Stack.Navigator
       initialRouteName="Landing"
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerTransparent: true,
+        headerTitle: "",
+        headerBackButtonDisplayMode: "minimal", // hide back button label (iOS)
+        headerTintColor: colors.themeWhite,
+        headerShadowVisible: false,
         animation: "slide_from_right",
         gestureEnabled: true,
         contentStyle: {
@@ -32,7 +37,11 @@ export default function AuthenticationNavigator() {
         },
       }}
     >
-      <Stack.Screen name="Landing" component={LandingScreen} />
+      <Stack.Screen
+        name="Landing"
+        component={LandingScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen
         name="SignUp"

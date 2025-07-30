@@ -37,21 +37,6 @@ export const Container = styled.View`
   justify-content: center;
 `;
 
-export const scrollStyle = {
-  zIndex: 15,
-  position: "absolute",
-  top: 0,
-  left: 0,
-  height: windowHeight,
-  width: "100%",
-};
-
-export const scrollContent = {
-  flex: 1,
-  alignItems: "center",
-  justifyContent: "center",
-};
-
 export const Header = styled.Text`
   z-index: 10;
   margin-top: ${windowWidth > 600
@@ -152,16 +137,4 @@ export const FLogo = {
 export const ALogo = {
   height: moderateScale(50),
   width: moderateScale(50),
-};
-
-export const Icon = {
-  height: moderateScale(45),
-  width: moderateScale(45),
-  resizeMode: "contain",
-};
-
-export const Curve = {
-  position: "absolute",
-  bottom: 0,
-  width: Dimensions.get("window").width,
 };
