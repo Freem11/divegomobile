@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { FlatList } from "react-native";
-import ButtonIcon from '../../reusables/buttonIcon'
 import { useTranslation } from "react-i18next";
-import ItineraryCard from "../../reusables/itineraryCard";
 import { openURL } from "expo-linking";
-import * as S from "./styles";
+
+import ItineraryCard from "../../reusables/itineraryCard";
+import ButtonIcon from "../../reusables/buttonIcon";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+
+import * as S from "./styles";
 
 type DiveSiteTripsPageViewProps = {
   diveTrips: any
@@ -15,26 +17,26 @@ type DiveSiteTripsPageViewProps = {
   handleMapFlip: (sites: number[], shopID?: number) => void;
 };
 
-export default function DiveSiteTripsPageView({ 
+export default function DiveSiteTripsPageView({
   diveTrips,
   title,
   setLevelThreeScreen,
   handleMapFlip,
- }: DiveSiteTripsPageViewProps) {
+}: DiveSiteTripsPageViewProps) {
 
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   const onClose = async() => {
-    setActiveScreen("DiveSiteScreen", {id: selectedDiveSite.id})
-    setLevelThreeScreen(false)
+    setActiveScreen("DiveSiteScreen", { id: selectedDiveSite.id });
+    setLevelThreeScreen(false);
   };
-  
+
   return (
     <S.ContentContainer>
 
-<S.SafeArea>
+      <S.SafeArea>
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
@@ -46,7 +48,7 @@ export default function DiveSiteTripsPageView({
 
       </S.SafeArea>
 
-<S.Header>Offered Trips to: {title}</S.Header>
+      <S.Header>Offered Trips to: {title}</S.Header>
 
       <FlatList
         data={diveTrips}
@@ -54,15 +56,15 @@ export default function DiveSiteTripsPageView({
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         renderItem={({ item }) => (
-          <ItineraryCard  
-          key={item.id}
-          itinerary={item}    
-          buttonOneAction={() => handleMapFlip(item.siteList, item.shopID)}
-          buttonTwoAction={() => openURL(item.BookingPage)}
-        />
+          <ItineraryCard
+            key={item.id}
+            itinerary={item}
+            buttonOneAction={() => handleMapFlip(item.siteList, item.shopID)}
+            buttonTwoAction={() => openURL(item.BookingPage)}
+          />
         )}
       />
     </S.ContentContainer>
   );
-  
+
 }

@@ -2,22 +2,24 @@ import React, { useState, useEffect, useContext } from "react";
 import { TouchableOpacity, Image as RNImage } from "react-native";
 import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
+import email from "react-native-email";
+
+import { UserProfileContext } from "../../contexts/userProfileContext";
+import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
 import {
   insertPhotoLike,
   deletePhotoLike,
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
-import { UserProfileContext } from "../../contexts/userProfileContext";
-import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
-import email from "react-native-email";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
-import * as S from "./styles";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
+
+import * as S from "./styles";
 
 interface Photo {
   UserID: string;
@@ -51,7 +53,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
   const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { activeTutorialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { profile } = useContext(UserProfileContext);
   const { setSelectedPicture } = useContext(SelectedPictureContext);
 
@@ -94,7 +96,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }).catch(console.error);
   };
 
-  const handleLike = async (picId: number) => {
+  const handleLike = async(picId: number) => {
     if (picLiked) {
       await deletePhotoLike(likeData);
       setPicLiked(false);
