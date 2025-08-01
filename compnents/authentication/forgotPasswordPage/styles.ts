@@ -14,22 +14,10 @@ const windowHeight = Dimensions.get("window").height;
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${colors.primaryBlue};
-`;
-
-export const HeaderContainer = styled.View`
-  flex: 0.25;
-  justify-content: flex-end;
-  padding-left: 24px;
-  padding-bottom: 32px;
-`;
-
-export const ContentContainer = styled.View<{ paddingBottom: number }>`
-  flex: 0.75;
   background-color: #fff;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
-  padding-bottom: ${({ paddingBottom }) => paddingBottom}px;
+  margin-top: ${windowHeight / 10}px;
+  margin-bottom: ${windowHeight / 25}px;
+  width: ${windowWidth - windowWidth / 10}px;
 `;
 
 export const Content = styled.View`
@@ -43,9 +31,11 @@ export const TopInputWrapper = styled.View`
 `;
 
 export const Header = styled.Text`
+  z-index: 10;
+  margin-top: 10%;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
-  color: ${colors.themeWhite};
+  color: darkgrey;
 `;
 
 export const ErrorText = styled.Text`

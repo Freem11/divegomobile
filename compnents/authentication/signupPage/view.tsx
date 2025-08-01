@@ -7,7 +7,6 @@ import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 
 import * as S from "./styles";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface FormVals {
   name: string;
@@ -35,15 +34,11 @@ export default function CreateAccountPageView({
   moveToLoginPage,
 }: IProps) {
   const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
 
   return (
     <S.Container>
-      <S.HeaderContainer>
-        <S.Header>{t("Common.registerNow")}</S.Header>
-      </S.HeaderContainer>
-      <S.ContentContainer paddingBottom={insets.bottom + 16}>
         <S.Content>
+          <S.Header>{t("Common.signup")}</S.Header>
           <S.TopInputWrapper>
             <MobileTextInput
               iconLeft="person"
@@ -94,7 +89,6 @@ export default function CreateAccountPageView({
             <S.PromptLinkText>{t("Common.login")}</S.PromptLinkText>
           </TouchableWithoutFeedback>
         </S.PromptBox>
-      </S.ContentContainer>
     </S.Container>
   );
 }

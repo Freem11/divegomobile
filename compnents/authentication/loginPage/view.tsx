@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface FormVals {
   email: string;
@@ -36,15 +35,11 @@ export default function LoginPageView({
   moveToForgotPasswordPage,
 }: IProps) {
   const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
 
   return (
     <S.Container>
-      <S.HeaderContainer>
-        <S.Header>{t("Common.welcome")}</S.Header>
-      </S.HeaderContainer>
-      <S.ContentContainer paddingBottom={insets.bottom + 16}>
         <S.Content>
+          <S.Header>{t('Common.login')}</S.Header>
           <S.TextInputWrapper>
             <MobileTextInput
               iconLeft="at"
@@ -90,7 +85,6 @@ export default function LoginPageView({
             <S.PromptLinkText>{t("Common.signup")}</S.PromptLinkText>
           </TouchableWithoutFeedback>
         </S.PromptBox>
-      </S.ContentContainer>
     </S.Container>
   );
 }

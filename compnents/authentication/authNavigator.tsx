@@ -28,7 +28,7 @@ export default function AuthenticationNavigator() {
         headerTransparent: true,
         headerTitle: "",
         headerBackButtonDisplayMode: "minimal", // hide back button label (iOS)
-        headerTintColor: colors.themeWhite,
+        headerTintColor: colors.darkGrey,
         headerShadowVisible: false,
         animation: "slide_from_right",
         gestureEnabled: true,
