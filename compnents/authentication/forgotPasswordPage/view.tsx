@@ -25,7 +25,7 @@ export default function ForgotPageView({
   return (
     <S.Container>
         <S.Content>
-          <S.Header>{t("Common.forgotPassword")}</S.Header>
+          <S.Header>{t("Common.resetPassword")}</S.Header>
           <S.TopInputWrapper>
             <MobileTextInput
               iconLeft="at"
