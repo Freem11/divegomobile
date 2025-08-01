@@ -23,6 +23,7 @@ export const Content = styled.View`
   flex: 1;
   justify-content: center;
   margin-horizontal: 7%;
+  margin-top: -50%;
 `;
 
 export const TopInputWrapper = styled.View`
