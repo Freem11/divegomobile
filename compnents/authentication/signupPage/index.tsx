@@ -23,6 +23,7 @@ export default function SignUpScreen() {
   const { setActiveSession } = useContext(SessionContext);
 
   const navigation = useNavigation<SignUpScreenNavigationProp>();
+  navigation.setOptions({ animation: "slide_from_left" });
 
   useEffect(() => {
     setRegFail(null);

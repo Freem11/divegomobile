@@ -29,6 +29,7 @@ export default function LandingScreen(props) {
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
 
   const navigation = useNavigation<LandingScreenNavigationProp>();
+  navigation.setOptions({ headerShown: false })
 
   useEffect(() => {
     Platform.OS === "ios"

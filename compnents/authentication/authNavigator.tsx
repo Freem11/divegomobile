@@ -37,17 +37,9 @@ export default function AuthenticationNavigator() {
         },
       }}
     >
-      <Stack.Screen
-        name="Landing"
-        component={LandingScreen}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Landing" component={LandingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{ animation: "slide_from_left" }}
-      />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );
