@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import {
   colors,
@@ -55,7 +55,7 @@ export const PromptBox = styled.View`
   flex-direction: row;
   gap: 10px;
   justify-content: center;
-  padding-bottom: 15px;
+  padding-bottom: ${Platform.OS === 'ios' ? 0 : '15px'};
 `;
 
 export const PromptText = styled.Text`
