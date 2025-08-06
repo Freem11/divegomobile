@@ -5,7 +5,6 @@ import LandingScreen from "./landingPage";
 import LoginScreen from "./loginPage";
 import SignUpScreen from "./signupPage";
 import ForgotPasswordScreen from "./forgotPasswordPage";
-import { useTranslation } from "react-i18next";
 
 // All Authentication flow related routes for type safety.
 export type AuthenticationRoutes = {
@@ -18,8 +17,6 @@ export type AuthenticationRoutes = {
 const Stack = createNativeStackNavigator<AuthenticationRoutes>();
 
 export default function AuthenticationNavigator() {
-  const { t } = useTranslation();
-
   return (
     <Stack.Navigator
       initialRouteName="Landing"
