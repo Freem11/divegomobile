@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useLayoutEffect } from "react";
 import { Platform } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
@@ -29,7 +29,10 @@ export default function LandingScreen(props) {
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
 
   const navigation = useNavigation<LandingScreenNavigationProp>();
-  navigation.setOptions({ headerShown: false })
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
   useEffect(() => {
     Platform.OS === "ios"
