@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
 import { Platform } from "react-native";
+import { colors } from "../../styles";
 
 /**
  * Configuration params for all Onboarding related screens except DiverName screen as it's different from others.
@@ -41,7 +42,7 @@ export function OnboardingTemplateLayout(params: OnboardingConfigParams) {
                 maskElement={(
                     <LinearGradient
                         style={{ flex: 1 }}
-                        colors={["green", "transparent"]}
+                        colors={[colors.primaryBlue, "transparent"]}
                         start={{ x: 0.5, y: 0.7 }}
                     >
                     </LinearGradient>
