@@ -7,9 +7,9 @@ export type DiveSiteWithUserName = {
   region:               string
   username:             string
   created_at:           string
-  diveSiteBio:          string
+  divesitebio:          string
   newusername:          string
-  diveSiteProfilePhoto: string
+  divesiteprofilephoto: string
 };
 
 export type DiveSiteBasic = {

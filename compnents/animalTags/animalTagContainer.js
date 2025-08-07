@@ -6,22 +6,26 @@ import {
   Platform,
 } from "react-native";
 import { scale } from "react-native-size-matters";
-import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
-import AnimalTag from "./animalTags";
 import Animated from "react-native-reanimated";
 
-export default function AnimalTopAutoSuggest(props) {
+import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
+
+import AnimalTag from "./animalTags";
+
+export default function AnimalTagsContainer(props) {
   const { transTagsY } = props;
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
- 
+
   return (
-    <View style={{flex: 1, alignSelf: "center", justifyContent: "center", marginTop: Platform.OS === "ios" ? "0.3%" : "0.3%"}} pointerEvents={"box-none"}>
-        <Animated.View
-        style={[transTagsY]} pointerEvents={'box-none'}>
-          <View style={styles.tagContainer} pointerEvents={'box-none'}>
-            {animalMultiSelection.length > 0 &&
+    <View style={{ flex: 1, alignSelf: "center", justifyContent: "center", marginTop: Platform.OS === "ios" ? "0.3%" : "0.3%" }} pointerEvents={"box-none"}>
+      <Animated.View
+        style={[transTagsY]}
+        pointerEvents={"box-none"}
+      >
+        <View style={styles.tagContainer} pointerEvents={"box-none"}>
+          {animalMultiSelection.length > 0 &&
               animalMultiSelection.map((animal) => {
                 return (
                   <AnimalTag
@@ -32,8 +36,8 @@ export default function AnimalTopAutoSuggest(props) {
                   />
                 );
               })}
-          </View>
-        </Animated.View>
+        </View>
+      </Animated.View>
     </View>
   );
 }

@@ -1,11 +1,15 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useContext, useMemo } from "react";
 import { Dimensions } from "react-native";
 import { moderateScale, scale } from "react-native-size-matters";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
+import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
+import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 import * as S from "./styles";
 
@@ -15,6 +19,10 @@ interface PreviewGridProps {
 }
 
 export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+
   const screenWidth = Dimensions.get("window").width;
   const containerPadding = scale(20);
   const gap = scale(8);
@@ -27,6 +35,12 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
 
     return { numColumns: columns, itemSize: size };
   }, [screenWidth, containerPadding, gap]);
+
+  const togglePhotoBoxModal = (photo: string) => {
+    setSelectedPhoto(photo);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
+  };
 
   return (
     <S.Wrapper>
@@ -42,15 +56,17 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
               backgroundColor: colors.lightGrey,
             }}
           >
-            <ImageCasherDynamic
-              photoFile={item.photofile}
-              style={{
-                height: "100%",
-                width: "100%",
-                borderRadius: moderateScale(8),
-                resizeMode: "cover",
-              }}
-            />
+            <TouchableWithoutFeedback onPress={() => togglePhotoBoxModal(item.photofile)}>
+              <ImageCasherDynamic
+                photoFile={item.photofile}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: moderateScale(8),
+                  resizeMode: "cover",
+                }}
+              />
+            </TouchableWithoutFeedback>
           </S.Item>
         ))}
         {onAddSighting && (
