@@ -3,7 +3,7 @@ import React, {
   useState,
   useCallback,
   useLayoutEffect,
-  useEffect
+  useEffect,
 } from "react";
 import "react-native-url-polyfill/auto";
 import { Platform } from "react-native";
@@ -16,11 +16,12 @@ import { I18nextProvider } from "react-i18next";
 
 import { SessionContext } from "./compnents/contexts/sessionContext";
 import MapPage from "./compnents/mapPage/mapPage";
-import Authentication from "./compnents/authentication";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
+import { NavigationContainer } from "@react-navigation/native";
+import AuthenticationNavigator from "./compnents/authentication/authNavigator";
 
 export default function App() {
   if (Platform.OS === "ios") {
@@ -53,7 +54,7 @@ export default function App() {
     RobotoThin: require("./assets/Roboto/Roboto-Thin.ttf"),
     SFThin: require("./assets/SanFran/SF-Pro-Display-Thin.otf"),
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
-    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf")
+    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
   });
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function App() {
   }, []);
 
   useLayoutEffect(() => {
-    const prepare = async() => {
+    const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
 
       if (Platform.OS === "ios") {
@@ -108,7 +109,7 @@ export default function App() {
     prepare();
   }, []);
 
-  const onLayoutRootView = useCallback(async() => {
+  const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
     }
@@ -125,11 +126,15 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-        <SessionContext.Provider
-          value={{ activeSession, setActiveSession }}
-        >
+        <SessionContext.Provider value={{ activeSession, setActiveSession }}>
           <I18nextProvider i18n={i18n}>
-            {activeSession ? <MapPage /> : <Authentication />}
+            {activeSession ? (
+              <MapPage />
+            ) : (
+              <NavigationContainer>
+                <AuthenticationNavigator />
+              </NavigationContainer>
+            )}
           </I18nextProvider>
         </SessionContext.Provider>
       </AppContextProvider>

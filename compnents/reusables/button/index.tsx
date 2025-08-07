@@ -5,26 +5,37 @@ import { buttonSizes, colors } from "../../styles";
 
 import * as S from "./styles";
 
-type StandardButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+type StandardButtonProps = DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+>;
 export type ButtonProps = {
-  onPress?:   () => void
-  iconLeft?:  IconName
-  iconRight?: IconName
-  alt?: boolean
-  size: keyof typeof buttonSizes
-  title?: string
-  round?: boolean
+  onPress?: () => void;
+  iconLeft?: IconName;
+  iconRight?: IconName;
+  alt?: boolean;
+  size: keyof typeof buttonSizes;
+  title?: string;
+  round?: boolean;
 };
 
 export default function Button(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, round = true, ...rest } = props;
 
   return (
-    <S.StyledTouchableHighlight underlayColor={colors.buttonPressOverlay} {...rest} onPress={() => props.onPress()}>
+    <S.StyledTouchableHighlight
+      underlayColor={colors.buttonPressOverlay}
+      round={round}
+      {...rest}
+      onPress={() => props.onPress()}
+    >
       <S.StyledButton round={round} {...rest}>
         {iconLeft && (
           <S.IconWrapperLeft size={props.size}>
-            <Icon name={iconLeft} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
+            <Icon
+              name={iconLeft}
+              fill={props.alt ? colors.primaryBlue : colors.themeWhite}
+            />
           </S.IconWrapperLeft>
         )}
 
@@ -34,7 +45,10 @@ export default function Button(props: ButtonProps & StandardButtonProps) {
 
         {iconRight && (
           <S.IconWrapperRight size={props.size}>
-            <Icon name={iconRight} fill={props.alt ? colors.primaryBlue : colors.themeWhite}/>
+            <Icon
+              name={iconRight}
+              fill={props.alt ? colors.primaryBlue : colors.themeWhite}
+            />
           </S.IconWrapperRight>
         )}
       </S.StyledButton>
