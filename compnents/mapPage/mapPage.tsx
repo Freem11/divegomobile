@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import {
   StyleSheet,
-  View,
   Platform,
   Dimensions,
 } from "react-native";
@@ -23,7 +22,7 @@ import SiteSearchButton from "../reusables/bottomMenu/buttons/siteSearchButton";
 import DiveSiteButton from "../reusables/bottomMenu/buttons/diveSiteButton";
 import ItineraryListButton from "../reusables/bottomMenu/buttons/itineraryCreatorButton";
 import GuidesButton from "../reusables/bottomMenu/buttons/guidesButton";
-import AnimalTopAutoSuggest from "../animalTags/animalTagContainer";
+import AnimalTagsContainer from "../animalTags/animalTagContainer";
 import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
 import LevelOneScreen from "../reusables/levelOneScreen";
 import LevelTwoScreen from "../reusables/levelTwoScreen";
@@ -196,6 +195,10 @@ export default function MapPage() {
 
         <S.SafeAreaTop edges={["top"]}>
           <SearchTool />
+
+          {/* {mapConfig in [, , 2] || !mapConfig ? (
+            <AnimalTagsContainer transTagsY={transTagsY} />
+          ) : null} */}
         </S.SafeAreaTop>
 
         {mapConfig === 0 ? (
@@ -214,16 +217,6 @@ export default function MapPage() {
         )
           : null}
 
-        {mapConfig in [, , 2] || !mapConfig ? (
-          <View style={styles.carrousel} pointerEvents={"box-none"}>
-
-            <View style={styles.animalSelect} pointerEvents={"box-none"}>
-              <AnimalTopAutoSuggest transTagsY={transTagsY} />
-            </View>
-
-          </View>
-        ) : null}
-
         {/* {mapConfig === 0 && <EmailFeedback />} */}
 
         <FeedScreens />
@@ -236,24 +229,3 @@ export default function MapPage() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  animalSelect: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 5,
-    zIndex: 1,
-    // backgroundColor: "pink"
-  },
-  carrousel: {
-    position: "absolute",
-    flexDirection: "column",
-    alignContent: "center",
-    // backgroundColor: "blue",
-    height: 105,
-    top: windowWidth > 700 ? moderateScale(90) : Platform.OS === "android" ? moderateScale(90) : moderateScale(120),
-    zIndex: 2,
-  },
-});

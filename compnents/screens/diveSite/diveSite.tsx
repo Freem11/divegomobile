@@ -39,7 +39,7 @@ export default function DiveSiteScreenView({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.Header>{selectedDiveSite?.name}</S.Header>
-        <S.Content>{selectedDiveSite?.diveSiteBio}</S.Content>
+        <S.Content>{selectedDiveSite?.divesitebio}</S.Content>
         {selectedDiveSite?.newusername && (
           <S.Contributor>Added by {selectedDiveSite?.newusername}</S.Contributor>
         )}
