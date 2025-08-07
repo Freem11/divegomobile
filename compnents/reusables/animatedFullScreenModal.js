@@ -8,7 +8,6 @@ import Animated, {
 
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import OnboardingTest from "../tutorial/onboarding";
 import PhotoBoxModel from "../screens/photoBox/photoBoxModal";
 import CommentsModal from "../modals/commentsModal";
 import EditScreenParallax from "../screens/edits/editsParallax";
