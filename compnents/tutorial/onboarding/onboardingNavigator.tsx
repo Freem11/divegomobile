@@ -7,7 +7,7 @@ import emilio from "../../png/guideIcons/EmilioNew.png";
 import WelcomeScreen from "./Welcome"
 import DiverNameScreen from "./DiverName";
 import { NavigationContainer } from "@react-navigation/native";
-import LocationScreen from "./location";
+import LocationScreen from "./Location";
 import GalleryScreen from "./Gallery";
 import NotificationsScreen from "./Notifications";
 import FinishScreen from "./Finish";
@@ -38,12 +38,7 @@ export default function OnboardingNavigator() {
                     <Stack.Navigator
                         initialRouteName="Welcome"
                         screenOptions={{
-                            headerShown: true,
-                            headerTransparent: true,
-                            headerTitle: "",
-                            headerBackVisible: false, // hide back button label (iOS)
-                            headerTintColor: colors.neutralGrey,
-                            headerShadowVisible: false,
+                            headerShown: false,
                             animation: "slide_from_right",
                         }}
                     >

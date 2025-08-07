@@ -1,16 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { OnboardingRoutes } from "./onboardingNavigator";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableWithoutFeedback
-} from "react-native";
-import styles from "./styles"
-import MaskedView from "@react-native-masked-view/masked-view";
-import { LinearGradient } from "expo-linear-gradient";
-import { useTranslation } from "react-i18next";
+import { OnboardingConfigParams, OnboardingTemplateLayout } from "./OnboardingTemplateLayout";
 
 type WelcomeScreenNavigationProp = NativeStackNavigationProp<
   OnboardingRoutes,
@@ -18,41 +9,18 @@ type WelcomeScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function WelcomeScreen() {
-  const { t } = useTranslation();
   const navigation = useNavigation<WelcomeScreenNavigationProp>();
 
-  return (
-    <View style={styles.pageContent}>
-      <Text style={styles.title}>{t("OnBoarding.welcomeTitle")}</Text>
+  const onPress = async () => {
+    navigation.replace("DiverName");
+  };
 
-      <MaskedView
-        maskElement={(
-          <LinearGradient
-            style={{ flex: 1 }}
-            colors={["green", "transparent"]}
-            start={{ x: 0.5, y: 0.7 }}
-          >
-          </LinearGradient>
-        )}
-      >
-        <View style={styles.scrollViewBox}>
-          <ScrollView style={styles.scrollView}>
-            <Text style={styles.content}>{t("OnBoarding.welcomeContent")}</Text>
-          </ScrollView>
-        </View>
-      </MaskedView>
+  const params: OnboardingConfigParams = {
+    title: "OnBoarding.welcomeTitle",
+    content: "OnBoarding.welcomeContent",
+    buttonOneText: "Common.next",
+    buttonOnePressCallback: onPress
+  };
 
-      <View style={styles.buttonBox}>
-        <TouchableWithoutFeedback onPress={() => onPress(navigation)}>
-          <View style={styles.buttonOne}>
-            <Text style={styles.buttonOneText}>{t("Common.next")}</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
+  return OnboardingTemplateLayout(params);
 }
-
-const onPress = async (navigation: WelcomeScreenNavigationProp) => {
-  navigation.replace("DiverName");
-};

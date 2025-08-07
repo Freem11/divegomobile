@@ -39,15 +39,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  page: {
-    width: "100%",
-    height: windowHeight / 2,
-    // marginTop: "10%",
-    marginBottom: "2%",
-    // backgroundColor: "lightblue",
-  },
   pageContainter: {
-    // alignItems: "center",
     justifyContent: "center",
   },
   pageContent: {
@@ -59,7 +51,6 @@ const styles = StyleSheet.create({
   },
   scrollViewBox: {
     height: windowHeight / 2.5,
-    // backgroundColor: 'pink'
   },
   scrollView: {
     // backgroundColor: 'purple',
@@ -98,7 +89,6 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "3deg" }],
   },
   buttonBox: {
-    // backgroundColor: 'pink',
     width: windowWidth * 0.85,
     height: moderateScale(70),
     position: "absolute",
@@ -149,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     borderColor: "darkblue",
     borderWidth: 1,
-    marginTop: moderateScale(40),
+    marginTop: moderateScale(10),
   },
   inputBox: {
     width: "70%",

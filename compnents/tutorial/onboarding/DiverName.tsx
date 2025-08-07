@@ -16,7 +16,9 @@ import { useTranslation } from "react-i18next";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { updateProfileUserName, grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SessionContext } from "../../contexts/sessionContext";
-import { TFunction } from 'i18next';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { scale } from "react-native-size-matters";
+import { Platform } from "react-native";
 
 type DiverNameScreenNavigationProp = NativeStackNavigationProp<
     OnboardingRoutes,
@@ -26,6 +28,15 @@ type DiverNameScreenNavigationProp = NativeStackNavigationProp<
 export default function DiverNameScreen() {
     const { t } = useTranslation();
     const navigation = useNavigation<DiverNameScreenNavigationProp>();
+
+    /**
+     * For Android only.
+     * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation, 
+     * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+     */
+    const insets = useSafeAreaInsets();
+    const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
+    const buttonBottomPosition: number = (Platform.OS === 'android' && bottomInset) ? bottomInset : scale(20);
 
     const [formVal, setFormVal] = useState({
         userName: "",
@@ -37,7 +48,7 @@ export default function DiverNameScreen() {
 
     const { setProfile } = useContext(UserProfileContext);
 
-    const handleSubmit = async (t: TFunction) => {
+    const handleSubmit = async () => {
         Keyboard.dismiss();
 
         if (formVal.userName === "") {
@@ -68,8 +79,8 @@ export default function DiverNameScreen() {
         setUserFail("");
     };
 
-    const onPress = async (t: TFunction, navigation: DiverNameScreenNavigationProp) => {
-        const result = await handleSubmit(t);
+    const onPress = async () => {
+        const result = await handleSubmit();
         if (result === "success") {
             moveToNextPage();
         } else {
@@ -103,8 +114,8 @@ export default function DiverNameScreen() {
 
             {userFail && <Text style={styles.erroMsg}>{userFail}</Text>}
 
-            <View style={styles.buttonBox}>
-                <TouchableWithoutFeedback onPress={() => onPress(t, navigation)}>
+            <View style={[styles.buttonBox, { bottom: buttonBottomPosition }]}>
+                <TouchableWithoutFeedback onPress={() => onPress()}>
                     <View style={styles.buttonOne}>
                         <Text style={styles.buttonOneText}>{t("Common.ok")}</Text>
                     </View>
