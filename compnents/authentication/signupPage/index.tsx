@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useLayoutEffect } from "react";
 import CreateAccountPageView from "./view";
 import { SessionContext } from "../../contexts/sessionContext";
 import { handleSignUpSubmit } from "../../helpers/loginHelpers";
@@ -23,7 +23,9 @@ export default function SignUpScreen() {
   const { setActiveSession } = useContext(SessionContext);
 
   const navigation = useNavigation<SignUpScreenNavigationProp>();
-  navigation.setOptions({ animation: "slide_from_left" });
+  useLayoutEffect(() => {
+    navigation.setOptions({ animation: "slide_from_left" });
+  }, [navigation]);
 
   useEffect(() => {
     setRegFail(null);
