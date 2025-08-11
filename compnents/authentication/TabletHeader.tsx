@@ -6,6 +6,11 @@ import { buttonSizes, colors } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import ButtonIcon from "../reusables/buttonIcon";
 
+/**
+ * A custom header designed specifically for tablets as some tablet's (especially iPad's) default header will partially truncate 
+ * our scalable back button icon {@link ButtonIcon}.
+ * @returns 
+ */
 function TabletAuthHeader() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
