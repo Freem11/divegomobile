@@ -21,7 +21,7 @@ export default function DiveCenterList() {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
-  const getDiveCenterData = async(filterValue: string) => {
+  const getDiveCenterData = async (filterValue: string) => {
     if (boundaries) {
       const diveCenterData = await getDiveShops(boundaries, filterValue);
       setDiveCenters(diveCenterData);
@@ -54,7 +54,7 @@ export default function DiveCenterList() {
         iconLeft={"diving-scuba-flag"}
         iconRight={"close"}
         placeholder="Filter Dive Centers"
-        onChangeText={(text: string) => setFilterValue( text )}
+        onChangeText={(text: string) => setFilterValue(text)}
         handleClear={() => handleClear()}
         filterValue={filterValue}
       />
@@ -90,8 +90,8 @@ export default function DiveCenterList() {
                 title={"Upgrade My Account"}
                 iconLeft="diving-scuba-flag"
                 round={false}
-                style={{ marginLeft: "10%", marginTop: moderateScale(15),  width: "80%" }}
-                onPress={() =>  handleScreen()}
+                style={{ marginLeft: "10%", width: "80%" }}
+                onPress={() => handleScreen()}
               />
             </S.EmptyStateWrapper>
           )}

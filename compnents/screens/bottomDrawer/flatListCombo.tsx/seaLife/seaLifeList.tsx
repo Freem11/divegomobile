@@ -26,9 +26,9 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
-  const getPhotos = async(filterValue: string) => {
+  const getPhotos = async (filterValue: string) => {
     if (boundaries) {
-      const diveSiteData = await getAnimalsInBubble(boundaries, { label: filterValue } );
+      const diveSiteData = await getAnimalsInBubble(boundaries, { label: filterValue });
 
       setAreaPics(diveSiteData);
     }
@@ -105,7 +105,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
                 title={"Nearby Dive Sites"}
                 iconLeft="fish"
                 round={false}
-                style={{ marginLeft: "10%", marginTop: moderateScale(15),  width: "80%" }}
+                style={{ marginLeft: "10%", width: "80%" }}
                 onPress={() => scrollToDiveSiteList()}
               />
             </S.EmptyStateWrapper>

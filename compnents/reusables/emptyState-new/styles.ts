@@ -9,6 +9,7 @@ export const EmptyStateWrapper = styled.View`
   justify-content: center;
   align-items: center;
   padding: 0 ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(30)}px;
 `;
 
 export const Subtitle = styled.Text`
