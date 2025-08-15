@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { Dimensions, Platform, SafeAreaView, StyleSheet } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
@@ -15,7 +16,7 @@ const windowHeight = Dimensions.get("window").height;
 export const Container = styled.View`
   flex: 1;
   background-color: #fff;
-  margin-top: ${windowHeight / 10}px;
+  margin-top: ${windowHeight / 200}px;
   margin-bottom: ${windowHeight / 25}px;
 `;
 
@@ -49,7 +50,7 @@ export const PromptBox = styled.View`
   flex-direction: row;
   gap: 10px;
   justify-content: center;
-  padding-bottom: ${Platform.OS === 'ios' ? 0 : '15px'};
+  padding-bottom: ${Platform.OS === "ios" ? 0 : "15px"};
 `;
 
 export const PromptText = styled.Text`
