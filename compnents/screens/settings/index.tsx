@@ -17,6 +17,7 @@ import {
   addDeletedAccountInfo,
   deleteProfile
 } from "../../../supabaseCalls/accountSupabaseCalls";
+import { useUserProfileStore } from "../../../store/useUserProfileStore";
 
 import SettingsPageView from "./settings";
 
@@ -27,7 +28,8 @@ export default function SettingsPage({}: SettingsPageProps) {
   const { profile } = useContext(UserProfileContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { activeSession, setActiveSession } = useContext(SessionContext);
+  const userProfileAction = useUserProfileStore(state => state.actions);
+  const userProfile = useUserProfileStore(state => state.profile);
 
   const { t } = useTranslation();
 
@@ -45,9 +47,7 @@ export default function SettingsPage({}: SettingsPageProps) {
   };
 
   const handleLogout = async() => {
-    await setActiveSession(null);
-    await SecureStore.deleteItemAsync("token");
-    await signOut();
+    userProfileAction.logout();
   };
 
   const alertHandler = async() => {
@@ -75,10 +75,10 @@ export default function SettingsPage({}: SettingsPageProps) {
   let first;
   let last;
 
-  if (activeSession && activeSession.user) {
-    first = activeSession.user.user_metadata.firstName || "";
-    last = activeSession.user.user_metadata.lastName || "";
-    blurb = `:${activeSession.user.id}` || null;
+  if (userProfile) {
+    // first = activeSession.user.user_metadata.firstName || "";
+    // last = activeSession.user.user_metadata.lastName || "";
+    blurb = `:${userProfile.UserID}`;
   }
 
   const handleEmail = () => {
@@ -95,13 +95,12 @@ export default function SettingsPage({}: SettingsPageProps) {
       await addDeletedAccountInfo({
         firstName: first,
         lastName: last,
-        email: activeSession.user.email,
-        UserID: activeSession.user.id
+        email: userProfile.Email,
+        UserID: userProfile.UserID
       });
 
-      await deleteProfile(activeSession.user.id);
-      await userDelete(activeSession.user.id);
-      await setActiveSession(null);
+      await deleteProfile(userProfile.UserID);
+      await userDelete(userProfile.UserID);
       await SecureStore.deleteItemAsync("token");
       await signOut();
     }

@@ -38,7 +38,7 @@ export default function OnboardingTest() {
   const [carrouselIndex, setCarrouselIndex] = useState(0);
   const { activeSession } = useContext(SessionContext);
 
-  const { setProfile } = useContext(UserProfileContext);
+  // const { setProfile } = useContext(UserProfileContext);
   const { t } = useTranslation();
 
   const carrouselData = useMemo(() => [
@@ -163,12 +163,12 @@ export default function OnboardingTest() {
 
     const sessionUserId = activeSession.user.id;
 
-    const updatedProfile = await updateProfileUserName({
+    await updateProfileUserName({
       UserID: sessionUserId,
       UserName: formVal.userName,
     });
 
-    setProfile(updatedProfile);
+    // setProfile(updatedProfile);
 
     return "success";
   };

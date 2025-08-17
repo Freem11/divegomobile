@@ -21,13 +21,15 @@ import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
+import { useUserProfileStore } from "./store/useUserProfileStore";
 
 export default function App() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const [appIsReady, setAppIsReady] = useState(false);
-  const [activeSession, setActiveSession] = useState(null);
+  const userProfileAction = useUserProfileStore(state => state.actions);
+  const userProfile = useUserProfileStore(state => state.profile);
 
   const [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
@@ -71,33 +73,8 @@ export default function App() {
       }
 
       try {
-        let storedToken;
 
-        try {
-          storedToken = JSON.parse(await SecureStore.getItemAsync("token"));
-        } catch (e) {
-          console.log("Token in SecureStorage is not valid JSON.");
-          setAppIsReady(true);
-          return;
-        }
-
-        if (!storedToken) {
-          console.log("No token found in SecureStorage.");
-          setAppIsReady(true);
-          return;
-        }
-
-        if (storedToken && typeof storedToken === "string") {
-          const newSession = await sessionRefresh(storedToken);
-
-          if (newSession) {
-            setActiveSession(newSession);
-          } else {
-            console.log("Session refresh failed.");
-          }
-        } else {
-          console.log("No refresh token found in session.");
-        }
+        userProfileAction.initProfile();
       } catch (error) {
         console.log("no dice:", error.message);
       } finally {
@@ -125,13 +102,10 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-        <SessionContext.Provider
-          value={{ activeSession, setActiveSession }}
-        >
-          <I18nextProvider i18n={i18n}>
-            {activeSession ? <MapPage /> : <Authentication />}
-          </I18nextProvider>
-        </SessionContext.Provider>
+
+        <I18nextProvider i18n={i18n}>
+          {userProfile ? <MapPage /> : <Authentication />}
+        </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />
       {/* <Toast /> */}

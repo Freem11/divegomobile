@@ -3,11 +3,11 @@ import { supabase } from "../supabase";
 
 export const sessionCheck = async() => {
   const session = await supabase.auth.getSession();
-  return session
+  return session;
 };
 
 export const sessionRefresh = async(refresh_token) => {
-  const { data, error } = await supabase.auth.refreshSession({refresh_token})
+  const { data, error } = await supabase.auth.refreshSession({ refresh_token });
 
   if (error) {
     console.log("couldn't refresh session,", error);
@@ -22,10 +22,10 @@ export const sessionRefresh = async(refresh_token) => {
 
 export const userCheck = async() => {
   const user = await supabase.auth.user();
-  return user
+  return user;
 };
 
-export const register = async (registerDetails) => {
+export const register = async(registerDetails) => {
   const { data, error } = await supabase.auth.signUp(
     {
       email: registerDetails.email,
@@ -47,11 +47,11 @@ export const register = async (registerDetails) => {
   }
 };
 
-export const signInStandard = async (loginDetails) => {
-  console.log(loginDetails)
+export const signInStandard = async(email, password) => {
+  console.log({ email, password });
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: loginDetails.email,
-    password: loginDetails.password,
+    email: email,
+    password: password,
   });
 
   if (error) {
@@ -75,11 +75,11 @@ export const signInStandard = async (loginDetails) => {
 //         skipBrowserRedirect: true,
 //       }
 //     });
-  
+
 //     if (error) {
 //       console.log("couldn't login,", error);
 //     }
-  
+
 //     if (user && session) {
 //       // console.log(user, session);
 //       return { user, session };
@@ -88,12 +88,12 @@ export const signInStandard = async (loginDetails) => {
 
 // };
 
-export const signInGoogle = async () => {
+export const signInGoogle = async() => {
   const { user, session, error } = await supabase.auth.signIn({
-    provider: 'google'
+    provider: "google"
   });
 
-  console.log(user, session, error)
+  console.log(user, session, error);
   if (error) {
     console.log("couldn't login,", error);
   }
@@ -104,7 +104,7 @@ export const signInGoogle = async () => {
   }
 };
 
-export const signOut = async () => {
+export const signOut = async() => {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
@@ -112,9 +112,9 @@ export const signOut = async () => {
   }
 };
 
-export const userDelete = async (userIdValue) => {
+export const userDelete = async(userIdValue) => {
 
-  const { data, error } = await supabase.rpc("delete_user", {"userid": userIdValue})
+  const { data, error } = await supabase.rpc("delete_user", { "userid": userIdValue });
 
   if (error) {
     console.log("couldn't delete user,", error);
@@ -122,6 +122,6 @@ export const userDelete = async (userIdValue) => {
   }
 
   if (data) {
-     console.log("user was deleted")
+    console.log("user was deleted");
   }
-  }; 
+};

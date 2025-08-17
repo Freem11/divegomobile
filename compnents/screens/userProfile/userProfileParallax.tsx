@@ -19,6 +19,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 import UserProfileScreen from ".";
+import { useUserProfileStore } from "../../../store/useUserProfileStore";
 
 type UserProfileProps = {
   profileID: number
@@ -38,13 +39,13 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const [profileVals, setProfileVals] = useState(null);
   const { profile } = useContext(UserProfileContext);
   const [isMyProfile, setIsMyProfile] = useState(false);
-  const { activeSession } = useContext(SessionContext);
 
   const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
   const { setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const userProfile = useUserProfileStore(state => state.profile);
 
   useEffect(() => {
     getProfileinfo();
@@ -57,7 +58,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   useEffect(() => {
     if (
-      (selectedProfile?.user_id === profile?.user_id)
+      (selectedProfile?.user_id === userProfile?.UserID)
     ) {
       setIsMyProfile(true);
     } else {
@@ -81,7 +82,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   async function followCheck() {
     const follows = await checkIfUserFollows(
-      profile.user_id,
+      profile.UserID,
       selectedProfile.user_id
     );
     if (follows && follows.length > 0) {
@@ -90,7 +91,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   }
 
   const addFollow = async() => {
-    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
     }
@@ -102,7 +103,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const removeFollow = async() => {
-    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
     }
