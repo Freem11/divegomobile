@@ -32,10 +32,14 @@ export async function checkFileExists(
 
 export async function checkNetworkStatus() {
   const state = await NetInfo.fetch();
+  const isConnected = !!state.isConnected;
+
+  const internetReachable =
+    state.isInternetReachable === false ? false : true;
+
   return {
-    isConnected: state.isConnected ?? false,
-    isInternetReachable: state.isInternetReachable ?? false,
-    isStableConnection:
-      (state.isConnected && state.isInternetReachable) ?? false,
+    isConnected,
+    isInternetReachable: state.isInternetReachable ?? null,
+    isStableConnection: isConnected && internetReachable,
   };
 }
