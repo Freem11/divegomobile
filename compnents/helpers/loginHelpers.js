@@ -160,7 +160,7 @@ async function handleSupabaseSetup(
 
     const profileCheck = await grabProfileByUserId(sanitizeData.user.id);
 
-    if (profileCheck.length === 0) {
+    if (!profileCheck) {
       await createProfile({
         id: sanitizeData.user.id,
         email: sanitizeData.user.email
