@@ -186,7 +186,18 @@ export const handleLogInSubmit = async(
         JSON.stringify(accessToken?.data.session.refresh_token)
       );
 
+      const profileCheck = await grabProfileByUserId(accessToken.data.user.id);
+
+      if (!profileCheck) {
+        await createProfile({
+          id: sanitizeData.user.id,
+          email: sanitizeData.user.email
+        });
+        console.log("profile created!");
+      }
+
       setActiveSession(accessToken.data.session);
+
     } else {
       setLoginFail(i18n.t("Validators.invalidCredentials"));
       return;
