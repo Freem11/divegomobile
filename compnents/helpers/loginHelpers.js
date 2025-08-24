@@ -7,6 +7,7 @@ import * as SecureStore from "expo-secure-store";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
+import { Platform } from "react-native";
 
 import {
   sessionCheck,
@@ -65,7 +66,7 @@ export const facebookSignIn = async(setActiveSession, setIsSignedIn) => {
       if (res.type === "success") {
         const { url } = res;
         const data = await createSessionFromUrl(url);
-        handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
+        // handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
       }
     }
   } catch (error) {
@@ -74,22 +75,38 @@ export const facebookSignIn = async(setActiveSession, setIsSignedIn) => {
   }
 };
 
-export const googleSignIn = async(setActiveSession, setIsSignedIn) => {
+export const basicSignIn = async(email, password) => {
+  const response = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  });
+
+  return response;
+};
+
+export const googleSignIn = async() => {
+  // TODO: add ability to sign out and choose another google account
+  // await GoogleSignin.signOut();
+  // await GoogleSignin.revokeAccess();
+  const configParams = {
+    scopes: ["profile"],
+    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID
+  };
+
+  if (Platform.OS === "ios") {
+    configParams.iosClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
+  }
+
   try {
-    setIsSignedIn(true);
-    await GoogleSignin.hasPlayServices();
+    GoogleSignin.configure(configParams);
     const userInfo = await GoogleSignin.signIn();
-    if (userInfo.idToken) {
-      const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: "google",
-        token: userInfo.idToken
-      });
-      handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
-    } else {
-      throw new Error("no ID token present!");
-    }
+    const response = await supabase.auth.signInWithIdToken({
+      provider: "google",
+      token: userInfo.idToken
+    });
+
+    return response;
   } catch (error) {
-    setIsSignedIn(false);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       console.log("Login cancelled");
     } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -100,6 +117,8 @@ export const googleSignIn = async(setActiveSession, setIsSignedIn) => {
       console.log(error);
     }
   }
+
+  return null;
 };
 
 export const appleLogin = async(setActiveSession, setIsSignedIn) => {
@@ -123,7 +142,7 @@ export const appleLogin = async(setActiveSession, setIsSignedIn) => {
       }
 
       if (data) {
-        handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
+        // handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
       }
     } else {
       setIsSignedIn(false);
@@ -135,65 +154,65 @@ export const appleLogin = async(setActiveSession, setIsSignedIn) => {
   }
 };
 
-async function handleSupabaseSetup(
-  sessionToken,
-  setActiveSession,
-  setIsSignedIn
-) {
-  if (sessionToken) {
-    await SecureStore.setItemAsync(
-      "token",
-      JSON.stringify(sessionToken.session.refresh_token)
-    );
-    if (sessionToken.session) {
-      setActiveSession(sessionToken.session);
-    } else {
-      setActiveSession(sessionToken);
-    }
-    setIsSignedIn(false);
-    let sanitizeData;
-    if (sessionToken.session) {
-      sanitizeData = sessionToken.session;
-    } else {
-      sanitizeData = sessionToken;
-    }
+// async function handleSupabaseSetup(
+//   sessionToken,
+//   setActiveSession,
+//   setIsSignedIn
+// ) {
+//   if (sessionToken) {
+//     await SecureStore.setItemAsync(
+//       "token",
+//       JSON.stringify(sessionToken.session.refresh_token)
+//     );
+//     if (sessionToken.session) {
+//       setActiveSession(sessionToken.session);
+//     } else {
+//       setActiveSession(sessionToken);
+//     }
+//     setIsSignedIn(false);
+//     let sanitizeData;
+//     if (sessionToken.session) {
+//       sanitizeData = sessionToken.session;
+//     } else {
+//       sanitizeData = sessionToken;
+//     }
 
-    const profileCheck = await grabProfileByUserId(sanitizeData.user.id);
+//     const profileCheck = await grabProfileByUserId(sanitizeData.user.id);
 
-    if (profileCheck.length === 0) {
-      await createProfile({
-        id: sanitizeData.user.id,
-        email: sanitizeData.user.email
-      });
-      console.log("profile created!");
-    }
-  }
-}
+//     if (profileCheck.length === 0) {
+//       await createProfile({
+//         id: sanitizeData.user.id,
+//         email: sanitizeData.user.email
+//       });
+//       console.log("profile created!");
+//     }
+//   }
+// }
 
-export const handleLogInSubmit = async(
-  formVals,
-  setActiveSession,
-  setLoginFail
-) => {
-  if (formVals.email === "" || formVals.password == "") {
-    setLoginFail(i18n.t("Validators.fillEmailAndPassword"));
-    return;
-  } else {
-    const accessToken = await signInStandard(formVals);
-    if (accessToken && accessToken?.data?.session !== null) {
-      await SecureStore.setItemAsync(
-        "token",
-        JSON.stringify(accessToken?.data.session.refresh_token)
-      );
+// export const handleLogInSubmit = async(
+//   formVals,
+//   setActiveSession,
+//   setLoginFail
+// ) => {
+//   if (formVals.email === "" || formVals.password == "") {
+//     setLoginFail(i18n.t("Validators.fillEmailAndPassword"));
+//     return;
+//   } else {
+//     const accessToken = await signInStandard(formVals);
+//     if (accessToken && accessToken?.data?.session !== null) {
+//       await SecureStore.setItemAsync(
+//         "token",
+//         JSON.stringify(accessToken?.data.session.refresh_token)
+//       );
 
-      setActiveSession(accessToken.data.session);
-    } else {
-      setLoginFail(i18n.t("Validators.invalidCredentials"));
-      return;
-    }
-    await sessionCheck();
-  }
-};
+//       setActiveSession(accessToken.data.session);
+//     } else {
+//       setLoginFail(i18n.t("Validators.invalidCredentials"));
+//       return;
+//     }
+//     await sessionCheck();
+//   }
+// };
 
 export const handleSignUpSubmit = async(
   formVals,

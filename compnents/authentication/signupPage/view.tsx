@@ -19,10 +19,8 @@ interface FormVals {
 
 interface IProps {
   formVals: FormVals;
-  secureTextEntry: boolean;
   regFail: string | null;
   setFormVals: (vals: FormVals) => void;
-  setSecureTextEntry: (val: boolean) => void;
   moveToLandingPage: () => void;
   moveToLoginPage: () => void;
   handleSignUp: () => void;
@@ -37,6 +35,8 @@ export default function CreateAccountPageView({
   moveToLoginPage,
 }: IProps) {
   const { t } = useTranslation();
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 

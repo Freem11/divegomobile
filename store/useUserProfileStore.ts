@@ -4,7 +4,7 @@ import { Session } from "@supabase/supabase-js";
 
 import { ActiveProfile } from "../entities/profile";
 import { createProfile, grabProfileById, grabProfileByUserId } from "../supabaseCalls/accountSupabaseCalls";
-import { sessionCheck, signInStandard, signOut } from "../supabaseCalls/authenticateSupabaseCalls";
+import { sessionCheck, signOut } from "../supabaseCalls/authenticateSupabaseCalls";
 
 const getSession = async() => {
   const session = await sessionCheck();
@@ -75,16 +75,6 @@ const mutator = (set, get) => {
         }
       },
 
-      login: async(email: string, password: string) => {
-        const accessToken = await signInStandard(email, password);
-        if (accessToken && accessToken?.data?.session !== null) {
-          const a = get();
-          a.actions.initProfile();
-        } else {
-          // setLoginFail(i18n.t("Validators.invalidCredentials"));
-          return;
-        }
-      },
       logout: async() => {
         await signOut();
         set({ profile: null, profileInitialized: null });

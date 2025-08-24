@@ -50,6 +50,7 @@ import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
+import { useUserProfileStore } from "../../store/useUserProfileStore";
 
 import * as S from "./styles";
 
@@ -68,11 +69,12 @@ export default function MapPage() {
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { activeSession } = useContext(SessionContext);
-  const { profile, setProfile } = useContext(UserProfileContext);
+  // const { activeSession } = useContext(SessionContext);
+  // const { profile, setProfile } = useContext(UserProfileContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+  const profile = useUserProfileStore(state => state.profile);
 
   const { t } = useTranslation();
 
@@ -90,7 +92,7 @@ export default function MapPage() {
       let photos;
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
-          myCreatures,
+          myCreatures: profile.UserID,
           userId: profile.UserID,
           minLat,
           maxLat,
@@ -145,25 +147,20 @@ export default function MapPage() {
   });
 
   const getProfile = async() => {
-    const sessionUserId = activeSession.user.id;
-    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success : ActiveProfile = await grabProfileByUserId(sessionUserId);
-      if (success) {
-        const bully = success && success.UserName;
-        if (bully == null || bully === "") {
+      if (profile) {
+        if (profile.UserName == null || profile.UserName === "") {
           setTimeout(() => {
             setActiveTutorialID("OnboardingX");
             setFullScreenModal(true);
           }, 500);
         } else {
           setFullScreenModal(false);
-          setProfile(success);
         }
-        if (success[0].feedbackRequested === false) {
+        if (profile.feedbackRequested === false) {
           feedbackRequest = setTimeout(() => {
             startFeedbackAnimations();
-            updateProfileFeeback(success[0]);
+            updateProfileFeeback(profile);
           }, 180000);
         }
       }
