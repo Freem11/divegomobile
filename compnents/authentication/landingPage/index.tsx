@@ -13,11 +13,12 @@ import { useUserProfileStore } from "../../../store/useUserProfileStore";
 
 import LandingPageView from "./view";
 
-const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
-const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
+interface IProps {
+  moveToSignUpPage: () => void;
+  moveToLoginPage: () => void;
+}
 
-export default function LandingPage(props) {
-  const { moveToLoginPage, moveToSignUpPage } = props;
+export default function LandingPage(props: IProps) {
 
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
   const userProfileAction = useUserProfileStore(state => state.actions);
@@ -25,16 +26,6 @@ export default function LandingPage(props) {
   const isSignedIn = !!userProfile;
 
   useEffect(() => {
-    // Platform.OS === "ios"
-    //   ? GoogleSignin.configure({
-    //       scopes: ["profile"],
-    //       iosClientId: googleIOSClientId,
-    //     })
-    //   : GoogleSignin.configure({
-    //       scopes: ["profile"],
-    //       webClientId: googleWebClientId,
-    //     });
-
     (async() => {
       const isApple = await AppleAuthentication.isAvailableAsync();
       setAppleAuthAvailable(isApple);
@@ -45,8 +36,8 @@ export default function LandingPage(props) {
     <LandingPageView
       isSignedIn={isSignedIn}
       appleAuthAvailable={appleAuthAvailable}
-      onLogin={() => moveToLoginPage()}
-      onSignUp={() => moveToSignUpPage()}
+      onLogin={() => props.moveToLoginPage()}
+      onSignUp={() => props.moveToSignUpPage()}
       onGoogle={() => {
         googleSignIn();
         userProfileAction.initProfile(true);

@@ -13,17 +13,9 @@ import { colors } from "../../styles";
 import * as S from "./styles";
 import { Form, FormRules } from "./form";
 
-interface FormVals {
-  email: string;
-  password: string;
-}
 
 interface IProps {
-  formVals: FormVals;
-  secureTextEntry: boolean;
   loginFail: string | null;
-  setFormVals: (vals: FormVals) => void;
-  setSecureTextEntry: (val: boolean) => void;
   moveToLandingPage: () => void;
   moveToForgotPasswordPage: () => void;
   moveToSignUpPage: () => void;

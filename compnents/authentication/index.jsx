@@ -12,7 +12,6 @@ export default function Authentication() {
   const scrollViewRef = useRef(null);
   const [carrouselIndex, setCarrouselIndex] = useState(null);
   const [loginFail, setLoginFail] = useState(null);
-  const [regFail, setRegFail] = useState(null);
   const [emailSent, setEmailSent] = useState(null);
 
   if(!carrouselIndex){
@@ -28,7 +27,6 @@ export default function Authentication() {
 
   const setPage = (pageIndex) => {
     setLoginFail(null);
-    setRegFail(null);
     setEmailSent(null);
     setCarrouselIndex(pageIndex);
     scrollViewRef.current?.scrollTo({
@@ -54,8 +52,6 @@ export default function Authentication() {
           <CreateAccountPage
             moveToLandingPage={() => setPage(PAGES.LANDING)}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
-            regFail={regFail}
-            setRegFail={setRegFail}
           />
         </S.PageContent>
 
@@ -68,8 +64,6 @@ export default function Authentication() {
 
         <S.PageContent>
           <LoginPage
-            loginFail={loginFail}
-            setLoginFail={setLoginFail}
             moveToLandingPage={() => setPage(PAGES.LANDING)}
             moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
             moveToForgotPasswordPage={() => setPage(PAGES.FORGOT_PASSWORD)}

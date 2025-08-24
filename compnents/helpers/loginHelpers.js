@@ -214,39 +214,39 @@ export const appleLogin = async(setActiveSession, setIsSignedIn) => {
 //   }
 // };
 
-export const handleSignUpSubmit = async(
-  formVals,
-  setActiveSession,
-  setRegFail
-) => {
-  if (formVals.email === "" || formVals.password == "" || formVals.name == "") {
-    setRegFail(i18n.t("Validators.fillAllFields"));
-    return;
-  } else if (formVals.password.length < 6) {
-    setRegFail(i18n.t("Validators.passwordFormat"));
-    return;
-  } else {
-    const dataPack = {
-      email: formVals.email,
-      password: formVals.password,
-      name: formVals.name
-    };
+// export const handleSignUpSubmit = async(
+//   formVals,
+//   setActiveSession,
+//   setRegFail
+// ) => {
+//   if (formVals.email === "" || formVals.password == "" || formVals.name == "") {
+//     setRegFail(i18n.t("Validators.fillAllFields"));
+//     return;
+//   } else if (formVals.password.length < 6) {
+//     setRegFail(i18n.t("Validators.passwordFormat"));
+//     return;
+//   } else {
+//     const dataPack = {
+//       email: formVals.email,
+//       password: formVals.password,
+//       name: formVals.name
+//     };
 
-    const registrationToken = await register(dataPack);
-    console.log("registrationToken", registrationToken);
-    if (registrationToken.data.session !== null) {
-      await createProfile({
-        id: registrationToken.data.session.user.id,
-        email: formVals.email
-      });
-      await SecureStore.setItemAsync(
-        "token",
-        JSON.stringify(registrationToken)
-      );
-      setActiveSession(registrationToken.data.session);
-    } else {
-      setRegFail(i18n.t("Validators.accountExistMsg"));
-    }
-    await sessionCheck();
-  }
-};
+//     const registrationToken = await register(dataPack);
+//     console.log("registrationToken", registrationToken);
+//     if (registrationToken.data.session !== null) {
+//       await createProfile({
+//         id: registrationToken.data.session.user.id,
+//         email: formVals.email
+//       });
+//       await SecureStore.setItemAsync(
+//         "token",
+//         JSON.stringify(registrationToken)
+//       );
+//       setActiveSession(registrationToken.data.session);
+//     } else {
+//       setRegFail(i18n.t("Validators.accountExistMsg"));
+//     }
+//     await sessionCheck();
+//   }
+// };

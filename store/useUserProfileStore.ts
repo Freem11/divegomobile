@@ -8,6 +8,7 @@ import { sessionCheck, signOut } from "../supabaseCalls/authenticateSupabaseCall
 
 const getSession = async() => {
   const session = await sessionCheck();
+  // session.data.session.user.
 
   if (session.error) {
     console.log("Unable to initialize session", session.error);

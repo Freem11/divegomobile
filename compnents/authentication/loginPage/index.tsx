@@ -10,13 +10,15 @@ import { i18n } from "../../../i18n";
 import LoginPageView from "./view";
 import { Form } from "./form";
 
-export default function LoginPage(props) {
-  const {
-    moveToLandingPage,
-    moveToSignUpPage,
-    moveToForgotPasswordPage,
-  } = props;
 
+interface IProps {
+  moveToSignUpPage: () => void;
+  moveToLandingPage: () => void;
+  moveToForgotPasswordPage: () => void;
+
+}
+
+export default function LoginPage(props: IProps) {
   const [loginFail, setLoginFail] = useState(null);
   const [formVals, setFormVals] = useState({ email: "", password: "" });
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -49,9 +51,9 @@ export default function LoginPage(props) {
       secureTextEntry={secureTextEntry}
       setSecureTextEntry={setSecureTextEntry}
       loginFail={loginFail}
-      moveToLandingPage={moveToLandingPage}
-      moveToForgotPasswordPage={moveToForgotPasswordPage}
-      moveToSignUpPage={moveToSignUpPage}
+      moveToLandingPage={props.moveToLandingPage}
+      moveToForgotPasswordPage={props.moveToForgotPasswordPage}
+      moveToSignUpPage={props.moveToSignUpPage}
       onSubmit={onSubmit}
     />
   );
