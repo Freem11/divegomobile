@@ -2,15 +2,19 @@ import React, { useContext } from "react";
 
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import Center from "../../png/Beach.jpg";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 
 import SiteReviewCreatorPage from ".";
 
-export default function ShopListParallax() {
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+type SiteReviewerParallaxProps = {
+  selectedDiveSite: number
+};
+
+export default function SiteReveiwerParallax(props: SiteReviewerParallaxProps) {
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   const onClose = async() => {
-    setLevelOneScreen(false);
+    setLevelTwoScreen(false);
   };
 
   return (
@@ -18,7 +22,9 @@ export default function ShopListParallax() {
       headerImage={Center}
       onClose={onClose}
     >
-      <SiteReviewCreatorPage/>
+      <SiteReviewCreatorPage
+        selectedDiveSite={props.selectedDiveSite}
+      />
 
     </ParallaxDrawer>
   );

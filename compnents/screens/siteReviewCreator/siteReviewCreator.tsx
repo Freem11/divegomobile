@@ -10,6 +10,7 @@ import Label from "../../reusables/label";
 import { colors } from "../../styles";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
 import * as S from "./styles";
 import { Form, FormRules } from "./form";
@@ -20,6 +21,7 @@ type ShopReviewCreatorProps = {
   showDatePicker: () => void;
   hideDatePicker: () => void;
   onSubmit: (data: any) => void
+  selectedDiveSite: DiveSiteWithUserName
 };
 
 export default function SiteReviewPageView({
@@ -27,7 +29,8 @@ export default function SiteReviewPageView({
   datePickerVisible,
   showDatePicker,
   hideDatePicker,
-  onSubmit
+  onSubmit,
+  selectedDiveSite
 }: ShopReviewCreatorProps) {
 
   const { control, setValue, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
@@ -46,14 +49,15 @@ export default function SiteReviewPageView({
     // toast.dismiss();
     onSubmit(data);
   };
+
   return (
     <S.ContentContainer>
-
-      <S.Header>{t("DiveCenterList.header")}</S.Header>
+      {selectedDiveSite &&
+      <S.Header>{t("DiveSiteReviewer.header", { siteName: selectedDiveSite.name })}</S.Header>}
 
       <S.InputGroupContainer>
 
-        <Label label="Date Of Your Dive" />
+        <Label label={t("DiveSiteReviewer.diveDate")} />
         <Controller
           control={control}
           name="DiveDate"
@@ -65,7 +69,7 @@ export default function SiteReviewPageView({
                   <MobileTextInput
                     error={errors.DiveDate}
                     iconLeft="calendar-month"
-                    placeholder={t("TripCreator.startDatePlaceholder")}
+                    placeholder={t("DiveSiteReviewer.datePlaceholder")}
                     onChangeText={onChange}
                     value={value}
                   />
@@ -75,13 +79,13 @@ export default function SiteReviewPageView({
           )}
         />
 
-        <Label label="Type Of Dive" />
+        <Label label={t("DiveSiteReviewer.typOfDive")}  />
         {/* Type Of Dive Toggles goes here */}
 
-        <Label label="At The Surface" />
+        <Label label={t("DiveSiteReviewer.atTheSurface")} />
         {/* At The Surface Toggles goes here */}
 
-        <Label label="In The Water" />
+        <Label label={t("DiveSiteReviewer.inTheWater")} />
         {/* Viz Slider goes here */}
 
         {/* Current Slider goes here */}
@@ -90,9 +94,9 @@ export default function SiteReviewPageView({
 
         {/* In the Water Toggles goes here */}
 
-        <Label label="Dive Reveiw Title" />
+        <Label label={t("DiveSiteReviewer.title")}  />
 
-        <Label label="Details" />
+        <Label label={t("DiveSiteReviewer.details")} />
         <Controller
           control={control}
           name="DiveTitle"
@@ -101,8 +105,8 @@ export default function SiteReviewPageView({
             <S.TextBuffer>
               <MobileTextInput
                 error={errors.DiveTitle}
-                iconLeft="store"
-                placeholder={t("TripCreator.tripNamePlaceholder")}
+                iconLeft="pencil"
+                placeholder={t("DiveSiteReviewer.reviewNamePlaceholder")}
                 onChangeText={onChange}
                 value={value}
               />
@@ -110,28 +114,30 @@ export default function SiteReviewPageView({
           )}
         />
 
-        <Label label="Describe Your Dive" />
+        <Label label={t("DiveSiteReviewer.description")} />
 
-        <S.DescriptionBox>
-          <Controller
-            control={control}
-            name="Description"
-            rules={FormRules.Description}
-            render={({ field: { onChange, value } }) => (
-              <S.MultilineTextInput
-                multiline
-                error={errors.Description}
-                placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, "\n")}
-                placeholderTextColor={colors.neutralGrey}
-                onChangeText={onChange}
-                value={value}
-              >
-              </S.MultilineTextInput>
-            )}
-          />
-        </S.DescriptionBox>
+        {selectedDiveSite && (
+          <S.DescriptionBox>
+            <Controller
+              control={control}
+              name="Description"
+              rules={FormRules.Description}
+              render={({ field: { onChange, value } }) => (
+                <S.MultilineTextInput
+                  multiline
+                  error={errors.Description}
+                  placeholder={t("DiveSiteReviewer.reviewDescriptionPlaceholder", { siteName: selectedDiveSite.name }).replace(/\\n/g, "\n")}
+                  placeholderTextColor={colors.neutralGrey}
+                  onChangeText={onChange}
+                  value={value}
+                >
+                </S.MultilineTextInput>
+              )}
+            />
+          </S.DescriptionBox>
+        )}
 
-        <Label label="Add Dive Photos" />
+        <Label label={t("DiveSiteReviewer.addPhotos")} />
         {/* Multi Pic Uploader goes here */}
 
       </S.InputGroupContainer>

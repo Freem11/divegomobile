@@ -103,6 +103,20 @@
         "noPictureFound": "No picture found, reupload",
         "retryFailedUpload": "Retry upload failed, you should try to reupload the photo"
     },
+    "DiveSiteReviewer": {
+        "header": "Reviwing My Dive At: \n{{siteName}}",
+        "diveDate": "Date Of Your Dive",
+        "datePlaceholder": "Dive Date",
+        "typOfDive": "Type Of Dive",
+        "atTheSurface": "At The Surface",
+        "inTheWater": "In The Water",
+        "title": "Dive Review Title",
+        "reviewNamePlaceholder": "Title Of Your Review",
+        "details": "Details",
+        "description": "Describe Your Dive",
+        "reviewDescriptionPlaceholder": "Tell others what it was like to dive at {{siteName}}!",
+        "addPhotos": "Add Dive Photos"
+    },
     "DiveCenterList": {
         "header": "My Dive Centers",
         "newTrip": "New Trip"
@@ -132,6 +146,7 @@
         "drawerHeader": "Sea Creature Sightings",
         "emptyDrawer": "No sightings at this site yet.",
         "aLittleAbout": "A little about {{siteName}}",
+        "addReview": "Review this Dive Site",
         "addSighting": "Add a Sighting",
         "report": "Report an issue"
     },

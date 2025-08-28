@@ -81,6 +81,12 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
     setLevelOneScreen(false);
   };
 
+  const openDiveSiteReviewer = () => {
+    setActiveScreen("DiveSiteReviewerScreen", selectedDiveSite);
+    setLevelOneScreen(false);
+    setLevelTwoScreen(true);
+  };
+
   const openPicUploader = () => {
     setActiveScreen("PictureUploadScreen", selectedDiveSite);
     setLevelOneScreen(false);
@@ -113,6 +119,11 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
             buttonAction={() => openEditsPage()}
           />
         )}
+        <IconWithLabel
+          label={t("DiveSite.addReview")}
+          iconName="diving-scuba-flag"
+          buttonAction={() => openDiveSiteReviewer()}
+        />
         <IconWithLabel
           label={t("DiveSite.addSighting")}
           iconName="camera-plus"
