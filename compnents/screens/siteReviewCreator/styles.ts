@@ -125,3 +125,11 @@ export const ButtonHousing = styled.View`
   bottom: ${moderateScale(20)}px;
   right: ${moderateScale(20)}px;
 `;
+
+export const Label = styled.Text`
+  text-align: center;
+  color: ${colors.headersBlue};
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.MediumItalic};
+  padding-vertical: ${moderateScale(10)}px
+`;

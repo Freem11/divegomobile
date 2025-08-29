@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
@@ -11,6 +11,7 @@ import { colors } from "../../styles";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import ReusableSlider from "../../reusables/slider";
 
 import * as S from "./styles";
 import { Form, FormRules } from "./form";
@@ -22,6 +23,7 @@ type ShopReviewCreatorProps = {
   hideDatePicker: () => void;
   onSubmit: (data: any) => void
   selectedDiveSite: DiveSiteWithUserName
+  unitSystem: string
 };
 
 export default function SiteReviewPageView({
@@ -30,7 +32,8 @@ export default function SiteReviewPageView({
   showDatePicker,
   hideDatePicker,
   onSubmit,
-  selectedDiveSite
+  selectedDiveSite,
+  unitSystem
 }: ShopReviewCreatorProps) {
 
   const { control, setValue, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
@@ -44,6 +47,24 @@ export default function SiteReviewPageView({
   };
 
   const { t } = useTranslation();
+
+  const [visibility, setVisibility] = useState(0);
+  const [currentIntensity, SetCurrentIntensity] = useState(0.0);
+  const [metrics, setMetrics] = useState(unitSystem === "Imperial" ? {
+    highValueViz: 100,
+    lowValueViz: 0,
+    highValueCur: 8,
+    lowValueCur: 0,
+    simpleMetric: "ft",
+    rateMetric: "ft/s"
+  } : {
+    highValueViz: 30,
+    lowValueViz: 0,
+    highValueCur: 2.5,
+    lowValueCur: 0,
+    simpleMetric: "m",
+    rateMetric: "m/s"
+  });
 
   const handleOnSubmit = (data: Form) => {
     // toast.dismiss();
@@ -86,17 +107,21 @@ export default function SiteReviewPageView({
         {/* At The Surface Toggles goes here */}
 
         <Label label={t("DiveSiteReviewer.inTheWater")} />
+
         {/* Viz Slider goes here */}
+        <S.Label>{t("DiveSiteReviewer.viz")}</S.Label>
+        <ReusableSlider sliderType="viz" leftValue={metrics.lowValueViz} rightValue={metrics.highValueViz} unitMeasurement={metrics.simpleMetric} onValueChange={(value) => setVisibility(value)}/>
 
         {/* Current Slider goes here */}
+        <S.Label>{t("DiveSiteReviewer.current")}</S.Label>
+        <ReusableSlider sliderType="cur" leftValue={metrics.lowValueCur} rightValue={metrics.highValueCur} unitMeasurement={metrics.rateMetric} onValueChange={(value) => SetCurrentIntensity(value)}/>
 
         {/* Current Toggles goes here */}
 
         {/* In the Water Toggles goes here */}
 
+        {/* <Label label={t("DiveSiteReviewer.details")} /> */}
         <Label label={t("DiveSiteReviewer.title")}  />
-
-        <Label label={t("DiveSiteReviewer.details")} />
         <Controller
           control={control}
           name="DiveTitle"
