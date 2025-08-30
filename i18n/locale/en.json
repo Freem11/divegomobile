@@ -80,6 +80,7 @@
     "lngPlaceholder": "Longitude",
     "myLocationButton": "Use my location",
     "myLocationexplainer": "This can take up to 30 seconds",
+        "successUpload": "{{site}} has been successfully submitted! Please allow up to 24 hours for us to review and approve it.",
     "pinButton": "Drop a pin",
     "submitButton": "Submit"
   },
@@ -98,7 +99,7 @@
     "uploadFailedTitle": "Upload Failed",
     "couldUploadMsg": "Couldnt upload {{animal}} on {{diveSite}}",
     "offlineMsg": "You are offline / slow network. Retry from the feed menu.",
-    "successUpload": "Photo uploaded successfully!",
+    "successUpload": "Your photo of {{sealife}} uploaded successfully! Please allow up to 24 hours for our team to review and approve it.",
     "failedUpload": "Photo upload failed.",
     "failedToSave": "Failed to save a photo",
     "noPictureFound": "No picture found, reupload",
