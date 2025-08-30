@@ -46,6 +46,8 @@ export default function SiteReviewPageView({
     hideDatePicker();
   };
 
+  // const unitSystem = "Imperial";
+
   const { t } = useTranslation();
 
   const [visibility, setVisibility] = useState(0);
@@ -110,11 +112,11 @@ export default function SiteReviewPageView({
 
         {/* Viz Slider goes here */}
         <S.Label>{t("DiveSiteReviewer.viz")}</S.Label>
-        <ReusableSlider sliderType="viz" leftValue={metrics.lowValueViz} rightValue={metrics.highValueViz} unitMeasurement={metrics.simpleMetric} onValueChange={(value) => setVisibility(value)}/>
+        <ReusableSlider inverted leftValue={metrics.lowValueViz} rightValue={metrics.highValueViz} unitMeasurement={metrics.simpleMetric} onValueChange={(value) => setVisibility(value)}/>
 
         {/* Current Slider goes here */}
         <S.Label>{t("DiveSiteReviewer.current")}</S.Label>
-        <ReusableSlider sliderType="cur" leftValue={metrics.lowValueCur} rightValue={metrics.highValueCur} unitMeasurement={metrics.rateMetric} onValueChange={(value) => SetCurrentIntensity(value)}/>
+        <ReusableSlider leftValue={metrics.lowValueCur} rightValue={metrics.highValueCur} unitMeasurement={metrics.rateMetric} onValueChange={(value) => SetCurrentIntensity(value)}/>
 
         {/* Current Toggles goes here */}
 
