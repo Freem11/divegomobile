@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useSharedValue } from "react-native-reanimated";
+import { moderateScale } from "react-native-size-matters";
 
 import { colors } from "../../styles";
 
@@ -32,15 +33,13 @@ export default function ReusableSlider(props: SliderProps) {
 
   return (
     <S.Wrapper>
-      <View style={{ marginBottom: 10 }}>
-        <S.AnimatedLabel style={animatedColor}>
-          {currentValue.toFixed(1)} {props.unitMeasurement} {props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s" ? currentLabel : null}
-        </S.AnimatedLabel>
-      </View>
+      <S.AnimatedLabel style={animatedColor}>
+        {currentValue.toFixed(1)} {props.unitMeasurement} {props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s" ? currentLabel : null}
+      </S.AnimatedLabel>
       <S.SliderWrapper>
         <S.EndMarker>{props.inverted ? `${props.rightValue}+` : props.leftValue}</S.EndMarker>
         <Slider
-          style={{ width: "90%", height: 40 }}
+          style={{ width: "90%" }}
           step={props.inverted? 1 : 0.5}
           minimumValue={props.leftValue}
           maximumValue={props.rightValue}

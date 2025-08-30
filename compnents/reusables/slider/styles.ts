@@ -3,7 +3,6 @@ import { moderateScale } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
 
 import {
-  colors,
   fontSizes,
   activeFonts,
 } from "../../styles";
@@ -14,6 +13,7 @@ export const Wrapper = styled.View`
   align-items: center;
   justify-content: center;
   margin-left: 5%;
+  padding-bottom: ${moderateScale(10)};
 `;
 
 export const SliderWrapper = styled.View`
@@ -26,6 +26,7 @@ export const SliderWrapper = styled.View`
 export const AnimatedLabel = styled(Animated.Text)`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Bold};
+  margin-bottom: ${moderateScale(10)}
   `;
 
 export const EndMarker = styled.Text`
