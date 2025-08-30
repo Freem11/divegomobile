@@ -173,12 +173,10 @@ export default function MapPage() {
   };
 
   useLayoutEffect(() => {
-    console.log("hey!!");
     getProfile();
   }, []);
 
   useEffect(() => {
-    console.log("wtf!!");
     setLevelOneScreen(false);
     setLevelTwoScreen(false);
     getProfile();
