@@ -25,12 +25,12 @@ export const SliderWrapper = styled.View`
 
 export const AnimatedLabel = styled(Animated.Text)`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Regular};
+  font-family: ${activeFonts.Bold};
   `;
 
 export const EndMarker = styled.Text`
   width: ${moderateScale(45)}px;
   text-align: center;
   font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Regular};
+  font-family: ${activeFonts.Light};
 `;

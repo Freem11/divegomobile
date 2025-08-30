@@ -62,7 +62,7 @@ export default function ReusableSlider({
     const interpolatedColor = interpolateColor(
       progress.value,
       [leftValue, rightValue * 0.25, rightValue * 0.5, rightValue * 0.75, rightValue],
-      ["#007BFF", "#6F42C2", "#DC3545", "red", "#FF0000"]
+      ["#007BFF", "#6F42C2", "#BF40BF", "#DC143C", "#ff000d"]
     );
     return {
       color: interpolatedColor,
