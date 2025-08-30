@@ -13,7 +13,7 @@ export const Wrapper = styled.View`
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-horizontal: 2.5%;
+  margin-left: 5%;
 `;
 
 export const SliderWrapper = styled.View`

@@ -131,5 +131,6 @@ export const Label = styled.Text`
   color: ${colors.headersBlue};
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.MediumItalic};
-  padding-vertical: ${moderateScale(10)}px
+  padding-vertical: ${moderateScale(10)}px;
+  margin-left: 5%;
 `;
