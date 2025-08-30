@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useSharedValue } from "react-native-reanimated";
-import { moderateScale } from "react-native-size-matters";
 
 import { colors } from "../../styles";
 
