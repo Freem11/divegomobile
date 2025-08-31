@@ -47,7 +47,6 @@ export default function ReusableSlider(props: SliderProps) {
     progress.value = newValue;
   }, [props.inverted, props.leftValue, props.rightValue]);
 
-  // Animated style for gradient fill width
   const animatedGradientStyle = useAnimatedStyle(() => {
     const progressPercentage = interpolate(
       progress.value,
@@ -74,10 +73,9 @@ export default function ReusableSlider(props: SliderProps) {
         <S.EndMarkerLeft>{props.leftValue}</S.EndMarkerLeft>
 
         <View style={{ flex: 1, justifyContent: "center" }}>
-          {/* Max track (gray background) */}
           <View
             style={{
-              height: 10, // thicker track height
+              height: 10,
               backgroundColor: colors.buttonPressOverlay,
               borderRadius: 5,
               position: "absolute",
@@ -98,22 +96,21 @@ export default function ReusableSlider(props: SliderProps) {
             ]}
           >
             <LinearGradient
-              colors={["#33ccff", "#0099ff", "#0066ff", "#0033cc", "#001a66"]}
+              colors={["#33ccff", "#0099ff", "#0099ff", "#0066ff", "#0033cc",]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={StyleSheet.absoluteFill}
             />
           </Animated.View>
 
-          {/* Slider with transparent min track */}
           <Slider
-            style={{ flex: 1, height: 40 }} // taller for better alignment
+            style={{ flex: 1, height: 40 }}
             step={props.inverted ? 1 : 0.5}
             minimumValue={props.leftValue}
             maximumValue={props.rightValue}
             minimumTrackTintColor="transparent"
             maximumTrackTintColor="transparent"
-            thumbTintColor={colors.primaryBlue}
+            thumbTintColor="#0033cc"
             onValueChange={(value) => {
               progress.value = value;
               setLiveValue(value);
