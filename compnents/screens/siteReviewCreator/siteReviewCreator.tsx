@@ -182,7 +182,7 @@ export default function SiteReviewPageView({
           </S.ButtonRow>
         </S.TypeOfDiveButtons>
 
-        <Label label={t("DiveSiteReviewer.atTheSurface")} />
+        <Label label={t("DiveSiteReviewer.typeOfWater")} />
         {/* Type of WaterToggles goes here */}
         <S.WaterTypeButtons>
           <S.ButtonRow>
@@ -306,7 +306,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Bottom > Depth Limit"}
+              title={"Bottom > Rec Limit"}
               iconLeft={"warning-diamond"}
               alt
               round={false}

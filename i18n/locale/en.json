@@ -111,6 +111,7 @@
         "current": "Current Intensity (Est.)",
         "currentDirection": "Current Direction",
         "typOfDive": "Type Of Dive",
+        "typeOfWater": "Type Of Water",
         "atTheSurface": "At The Surface",
         "inTheWater": "In The Water",
         "title": "Dive Review Title",
