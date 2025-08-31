@@ -130,24 +130,50 @@ export const ButtonHousing = styled.View`
 export const Label = styled.Text`
   text-align: left;
   color: ${colors.themeBlack};
-  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-size: ${moderateScale(fontSizes.Micro)}px;
   font-family: ${activeFonts.Bold};
 `;
 
 export const StyledButton = styled(Button)`
   flex: 1;
-  padding-horizontal: ${moderateScale(5)}px;
+  padding-horizontal: ${moderateScale(2)}px;
   justify-content: flex-start;
+  width: auto;
 `;
 
 export const ButtonRow = styled.View`
   flex-direction: row;
   width: 100%;
-  padding: ${moderateScale(5)}px
+  padding: ${moderateScale(2)}px
 `;
 
-export const CurrentButtons= styled.View`
+export const TypeOfDiveButtons = styled.View`
   flex: 1;
   padding-vertical: ${moderateScale(10)}px;
-  width: 105%;
+  width: 100%;
 `;
+
+export const WaterTypeButtons = styled.View`
+  flex: 1;
+  padding-vertical: ${moderateScale(10)}px;
+  width: 100%;
+`;
+
+export const AttheSurfaceButtons = styled.View`
+  flex: 1;
+  padding-vertical: ${moderateScale(10)}px;
+  width: 100%;
+`;
+
+export const CurrentButtons = styled.View`
+  flex: 1;
+  padding-vertical: ${moderateScale(10)}px;
+  width: 100%;
+`;
+
+export const InTheWaterButtons = styled.View`
+  flex: 1;
+  padding-vertical: ${moderateScale(10)}px;
+  width: 100%;
+`;
+

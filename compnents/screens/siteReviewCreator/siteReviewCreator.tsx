@@ -127,8 +127,106 @@ export default function SiteReviewPageView({
         <Label label={t("DiveSiteReviewer.typOfDive")}  />
         {/* Type Of Dive Toggles goes here */}
 
+        <S.TypeOfDiveButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Shore"}
+              iconLeft={"island"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Boat"}
+              iconLeft={"sailboat"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Night"}
+              iconLeft={"moon-stars"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Altitude"}
+              iconLeft={"mountains"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Wreak"}
+              iconLeft={"directions-boat"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Cave"}
+              iconLeft={"vinyl-record"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+        </S.TypeOfDiveButtons>
+
+        <Label label={t("DiveSiteReviewer.atTheSurface")} />
+        {/* Type of WaterToggles goes here */}
+        <S.WaterTypeButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Salt"}
+              // iconLeft={"arrow-left-right"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Fresh"}
+              // iconLeft={"circle-arrow-up"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+        </S.WaterTypeButtons>
+
         <Label label={t("DiveSiteReviewer.atTheSurface")} />
         {/* At The Surface Toggles goes here */}
+        <S.AttheSurfaceButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Boat / Surfer Traffic"}
+              // iconLeft={"arrow-left-right"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Surge"}
+              // iconLeft={"circle-arrow-up"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+        </S.AttheSurfaceButtons>
 
         <Label label={t("DiveSiteReviewer.inTheWater")} />
 
@@ -195,6 +293,45 @@ export default function SiteReviewPageView({
           </Animated.View>
         )}
         {/* In the Water Toggles goes here */}
+
+        <S.InTheWaterButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Blue / Black Water"}
+              iconLeft={"GPS-splash"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Bottom > Depth Limit"}
+              iconLeft={"warning-diamond"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Kelp"}
+              iconLeft={"coral"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Pollution"}
+              iconLeft={"beer-bottle"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+        </S.InTheWaterButtons>
 
         {/* <Label label={t("DiveSiteReviewer.details")} /> */}
         {/* <Label label={t("DiveSiteReviewer.title")}  />
