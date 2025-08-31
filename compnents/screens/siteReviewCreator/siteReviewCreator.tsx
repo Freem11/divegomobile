@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
-import { View } from "react-native";
+import { View, Animated } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
+import { moderateScale } from "react-native-size-matters";
 
 import Label from "../../reusables/label";
 import { colors } from "../../styles";
@@ -46,12 +47,15 @@ export default function SiteReviewPageView({
     hideDatePicker();
   };
 
-  // const unitSystem = "Imperial";
-
   const { t } = useTranslation();
 
   const [visibility, setVisibility] = useState(0);
   const [currentIntensity, SetCurrentIntensity] = useState(0.0);
+
+  // New state for animation and conditional rendering
+  const [showCurrentButtons, setShowCurrentButtons] = useState(false);
+  const [heightAnim] = useState(new Animated.Value(0));
+
   const [metrics, setMetrics] = useState(unitSystem === "Imperial" ? {
     highValueViz: 100,
     lowValueViz: 0,
@@ -69,9 +73,27 @@ export default function SiteReviewPageView({
   });
 
   const handleOnSubmit = (data: Form) => {
-    // toast.dismiss();
     onSubmit(data);
   };
+
+  useEffect(() => {
+    if (currentIntensity > 0) {
+      setShowCurrentButtons(true);
+      Animated.timing(heightAnim, {
+        toValue: moderateScale(130),
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(heightAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => {
+        setShowCurrentButtons(false);
+      });
+    }
+  }, [currentIntensity, heightAnim]);
 
   return (
     <S.ContentContainer>
@@ -121,7 +143,6 @@ export default function SiteReviewPageView({
         />
 
         {/* Current Slider goes here */}
-
         <ReusableSlider
           title={<S.Label>{t("DiveSiteReviewer.current")}</S.Label>}
           leftValue={metrics.lowValueCur}
@@ -130,12 +151,53 @@ export default function SiteReviewPageView({
           onValueChange={(value) => SetCurrentIntensity(value)}
         />
 
-        {/* Current Toggles goes here */}
-
+        {showCurrentButtons && (
+          <Animated.View style={{ height: heightAnim, overflow: "hidden", marginBottom: moderateScale(20) }}>
+            <S.Label>{t("DiveSiteReviewer.currentDirection")}</S.Label>
+            <S.CurrentButtons>
+              <S.ButtonRow>
+                <S.StyledButton
+                  size={"thin"}
+                  title={"Lateral"}
+                  iconLeft={"arrow-left-right"}
+                  alt
+                  round={false}
+                  onPress={null}
+                />
+                <S.StyledButton
+                  size={"thin"}
+                  title={"Up-welling"}
+                  iconLeft={"circle-arrow-up"}
+                  alt
+                  round={false}
+                  onPress={null}
+                />
+              </S.ButtonRow>
+              <S.ButtonRow>
+                <S.StyledButton
+                  size={"thin"}
+                  title={"Down-welling"}
+                  iconLeft={"circle-arrow-down"}
+                  alt
+                  round={false}
+                  onPress={null}
+                />
+                <S.StyledButton
+                  size={"thin"}
+                  title={"Contrasting"}
+                  iconLeft={"arrow-left-right-reverse"}
+                  alt
+                  round={false}
+                  onPress={null}
+                />
+              </S.ButtonRow>
+            </S.CurrentButtons>
+          </Animated.View>
+        )}
         {/* In the Water Toggles goes here */}
 
         {/* <Label label={t("DiveSiteReviewer.details")} /> */}
-        <Label label={t("DiveSiteReviewer.title")}  />
+        {/* <Label label={t("DiveSiteReviewer.title")}  />
         <Controller
           control={control}
           name="DiveTitle"
@@ -151,7 +213,7 @@ export default function SiteReviewPageView({
               />
             </S.TextBuffer>
           )}
-        />
+        /> */}
 
         <Label label={t("DiveSiteReviewer.description")} />
 

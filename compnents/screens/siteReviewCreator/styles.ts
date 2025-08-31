@@ -7,6 +7,7 @@ import {
   fontSizes,
   activeFonts,
 } from "../../styles";
+import Button from "../../reusables/button";
 
 const windowWidth = Dimensions.get("screen").width;
 
@@ -127,8 +128,26 @@ export const ButtonHousing = styled.View`
 `;
 
 export const Label = styled.Text`
-  text-align: center;
+  text-align: left;
   color: ${colors.themeBlack};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Bold};
+`;
+
+export const StyledButton = styled(Button)`
+  flex: 1;
+  padding-horizontal: ${moderateScale(5)}px;
+  justify-content: flex-start;
+`;
+
+export const ButtonRow = styled.View`
+  flex-direction: row;
+  width: 100%;
+  padding: ${moderateScale(5)}px
+`;
+
+export const CurrentButtons= styled.View`
+  flex: 1;
+  padding-vertical: ${moderateScale(10)}px;
+  width: 105%;
 `;
