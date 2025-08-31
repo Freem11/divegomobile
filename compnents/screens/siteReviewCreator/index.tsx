@@ -32,7 +32,7 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
 
   getDiveSiteinfo(props.selectedDiveSite);
 
-  const unitSystem = profile.unit_system;
+  const unitSystem = profile && profile.unit_system;
 
   // const unitSystem = "Imperial";
   return (

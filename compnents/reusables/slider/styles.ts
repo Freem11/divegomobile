@@ -5,33 +5,58 @@ import Animated from "react-native-reanimated";
 import {
   fontSizes,
   activeFonts,
+  colors,
 } from "../../styles";
 
 export const Wrapper = styled.View`
-  flex: 1;
-  width: 100%;
+  width: 115%;
+  align-self: center;
   align-items: center;
   justify-content: center;
-  margin-left: 5%;
-  padding-bottom: ${moderateScale(10)};
+  padding-bottom: ${moderateScale(10)}px;
+  margin-vertical: ${moderateScale(20)}px;
 `;
 
-export const SliderWrapper = styled.View`
-  flex: 1;
+export const TopRow = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: ${moderateScale(10)}px;
+`;
+
+export const SliderRow = styled.View`
+  width: 100%;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
 `;
 
 export const AnimatedLabel = styled(Animated.Text)`
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Bold};
-  margin-bottom: ${moderateScale(10)}
   `;
 
-export const EndMarker = styled.Text`
-  width: ${moderateScale(45)}px;
-  text-align: center;
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
+export const EndMarkerRight = styled.Text`
+  width: ${moderateScale(41)}px;
+  text-align: right;
+  color: ${colors.neutralGrey};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Light};
+  padding-left: ${moderateScale(5)}px;
+`;
+
+export const EndMarkerLeft = styled.Text`
+  width: ${moderateScale(15)}px;
+   text-align: left;
+  color: ${colors.neutralGrey};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Light};
+`;
+
+export const Label = styled.Text`
+  text-align: center;
+  color: ${colors.headersBlue};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.MediumItalic};
+  padding-vertical: ${moderateScale(10)}px;
+  margin-left: 5%;
 `;

@@ -55,14 +55,14 @@ export default function SiteReviewPageView({
   const [metrics, setMetrics] = useState(unitSystem === "Imperial" ? {
     highValueViz: 100,
     lowValueViz: 0,
-    highValueCur: 8,
+    highValueCur: 6.5,
     lowValueCur: 0,
     simpleMetric: "ft",
     rateMetric: "ft/s"
   } : {
     highValueViz: 30,
     lowValueViz: 0,
-    highValueCur: 2.5,
+    highValueCur: 2,
     lowValueCur: 0,
     simpleMetric: "m",
     rateMetric: "m/s"
@@ -111,12 +111,24 @@ export default function SiteReviewPageView({
         <Label label={t("DiveSiteReviewer.inTheWater")} />
 
         {/* Viz Slider goes here */}
-        <S.Label>{t("DiveSiteReviewer.viz")}</S.Label>
-        <ReusableSlider inverted leftValue={metrics.lowValueViz} rightValue={metrics.highValueViz} unitMeasurement={metrics.simpleMetric} onValueChange={(value) => setVisibility(value)}/>
+        <ReusableSlider
+          inverted
+          title={<S.Label>{t("DiveSiteReviewer.viz")}</S.Label>}
+          leftValue={metrics.lowValueViz}
+          rightValue={metrics.highValueViz}
+          unitMeasurement={metrics.simpleMetric}
+          onValueChange={(value) => setVisibility(value)}
+        />
 
         {/* Current Slider goes here */}
-        <S.Label>{t("DiveSiteReviewer.current")}</S.Label>
-        <ReusableSlider leftValue={metrics.lowValueCur} rightValue={metrics.highValueCur} unitMeasurement={metrics.rateMetric} onValueChange={(value) => SetCurrentIntensity(value)}/>
+
+        <ReusableSlider
+          title={<S.Label>{t("DiveSiteReviewer.current")}</S.Label>}
+          leftValue={metrics.lowValueCur}
+          rightValue={metrics.highValueCur}
+          unitMeasurement={metrics.rateMetric}
+          onValueChange={(value) => SetCurrentIntensity(value)}
+        />
 
         {/* Current Toggles goes here */}
 

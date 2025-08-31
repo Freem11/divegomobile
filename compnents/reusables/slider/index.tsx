@@ -10,6 +10,7 @@ import { useGetCurrentLabel } from "./useGetCurrentLabel";
 
 type SliderProps = {
   inverted?: boolean;
+  title: React.ReactNode;
   leftValue: number
   rightValue: number
   unitMeasurement: string
@@ -17,9 +18,10 @@ type SliderProps = {
 };
 
 export default function ReusableSlider(props: SliderProps) {
+  const initialValue = props.inverted ? props.rightValue : props.leftValue;
+  const progress = useSharedValue(initialValue);
+  const [currentValue, setCurrentValue] = useState(initialValue);
 
-  const progress = useSharedValue(props.inverted ? props.rightValue : props.leftValue);
-  const [currentValue, setCurrentValue] = useState(props.inverted ? props.rightValue : props.leftValue);
   const animatedColor = useCurrentAnimation(progress, props.leftValue, props.rightValue, props.inverted, props.unitMeasurement);
   const currentLabel = useGetCurrentLabel(props.rightValue, currentValue);
 
@@ -31,29 +33,32 @@ export default function ReusableSlider(props: SliderProps) {
 
   return (
     <S.Wrapper>
-      <S.AnimatedLabel style={animatedColor}>
-        {currentValue.toFixed(1)} {props.unitMeasurement} {props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s" ? currentLabel : null}
-      </S.AnimatedLabel>
-      <S.SliderWrapper>
-        <S.EndMarker>{props.inverted ? `${props.rightValue}+` : props.leftValue}</S.EndMarker>
+      <S.TopRow>
+        {props.title}
+        <S.AnimatedLabel style={animatedColor}>
+          {props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s" ? currentLabel : null} {currentValue.toFixed(1)} {props.unitMeasurement}
+        </S.AnimatedLabel>
+      </S.TopRow>
+      <S.SliderRow>
+        <S.EndMarkerLeft>{props.leftValue}</S.EndMarkerLeft>
         <Slider
-          style={{ width: "90%" }}
-          step={props.inverted? 1 : 0.5}
+          style={{ flex: 1 }}
+          step={props.inverted ? 1 : 0.5}
           minimumValue={props.leftValue}
           maximumValue={props.rightValue}
-          minimumTrackTintColor={colors.neutralGrey}
-          maximumTrackTintColor={colors.neutralGrey}
+          minimumTrackTintColor={colors.primaryBlue}
+          maximumTrackTintColor={colors.buttonPressOverlay}
           thumbTintColor={colors.primaryBlue}
           onValueChange={(value) => {
-            const adjustedValue = props.inverted ? props.leftValue + props.rightValue - value : value;
+            const adjustedValue = value;
             setCurrentValue(adjustedValue);
             props.onValueChange(adjustedValue);
             progress.value = adjustedValue;
           }}
-          value={props.inverted ? props.leftValue + props.rightValue - currentValue : currentValue}
+          value={currentValue}
         />
-        <S.EndMarker>{props.inverted ? props.leftValue : `${props.rightValue}+`}</S.EndMarker>
-      </S.SliderWrapper>
+        <S.EndMarkerRight>{`${props.rightValue}+`}</S.EndMarkerRight>
+      </S.SliderRow>
     </S.Wrapper>
   );
 }
