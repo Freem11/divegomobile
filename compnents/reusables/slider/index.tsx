@@ -119,7 +119,7 @@ export default function ReusableSlider(props: SliderProps) {
               setCurrentValue(value);
               props.onValueChange(value);
             }}
-            value={currentValue}
+            value={liveValue}
           />
         </View>
 
