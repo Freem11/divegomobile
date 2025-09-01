@@ -124,6 +124,8 @@ export default function SiteReviewPageView({
           )}
         />
 
+        <S.Buffer/>
+
         <Label label={t("DiveSiteReviewer.typOfDive")}  />
         {/* Type Of Dive Toggles goes here */}
 
@@ -230,6 +232,47 @@ export default function SiteReviewPageView({
 
         <Label label={t("DiveSiteReviewer.inTheWater")} />
 
+        {/* In the Water Toggles goes here */}
+
+        <S.InTheWaterButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Blue / Black Water"}
+              iconLeft={"GPS-splash"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Bottom > Rec Limit"}
+              iconLeft={"warning-diamond"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={"Kelp"}
+              iconLeft={"coral"}
+              alt
+              round={false}
+              onPress={null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={"Pollution"}
+              iconLeft={"beer-bottle"}
+              alt
+              round={false}
+              onPress={null}
+            />
+          </S.ButtonRow>
+        </S.InTheWaterButtons>
+
         {/* Viz Slider goes here */}
         <ReusableSlider
           inverted
@@ -292,46 +335,6 @@ export default function SiteReviewPageView({
             </S.CurrentButtons>
           </Animated.View>
         )}
-        {/* In the Water Toggles goes here */}
-
-        <S.InTheWaterButtons>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={"Blue / Black Water"}
-              iconLeft={"GPS-splash"}
-              alt
-              round={false}
-              onPress={null}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={"Bottom > Rec Limit"}
-              iconLeft={"warning-diamond"}
-              alt
-              round={false}
-              onPress={null}
-            />
-          </S.ButtonRow>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={"Kelp"}
-              iconLeft={"coral"}
-              alt
-              round={false}
-              onPress={null}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={"Pollution"}
-              iconLeft={"beer-bottle"}
-              alt
-              round={false}
-              onPress={null}
-            />
-          </S.ButtonRow>
-        </S.InTheWaterButtons>
 
         {/* <Label label={t("DiveSiteReviewer.details")} /> */}
         {/* <Label label={t("DiveSiteReviewer.title")}  />
