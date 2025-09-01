@@ -191,7 +191,7 @@ export default function SiteReviewPageView({
             <S.StyledButton
               size={"thin"}
               title={"Salt"}
-              // iconLeft={"arrow-left-right"}
+              iconLeft={"salt-water"}
               alt
               round={false}
               onPress={null}
@@ -199,7 +199,7 @@ export default function SiteReviewPageView({
             <S.StyledButton
               size={"thin"}
               title={"Fresh"}
-              // iconLeft={"circle-arrow-up"}
+              iconLeft={"fresh-water"}
               alt
               round={false}
               onPress={null}
@@ -214,7 +214,7 @@ export default function SiteReviewPageView({
             <S.StyledButton
               size={"thin"}
               title={"Boat / Surfer Traffic"}
-              // iconLeft={"arrow-left-right"}
+              iconLeft={"traffic-light"}
               alt
               round={false}
               onPress={null}
@@ -222,7 +222,7 @@ export default function SiteReviewPageView({
             <S.StyledButton
               size={"thin"}
               title={"Surge"}
-              // iconLeft={"circle-arrow-up"}
+              iconLeft={"waves"}
               alt
               round={false}
               onPress={null}
