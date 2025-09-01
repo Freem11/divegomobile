@@ -125,3 +125,26 @@ export const ButtonHousing = styled.View`
   bottom: ${moderateScale(20)}px;
   right: ${moderateScale(20)}px;
 `;
+
+export const SectionFooterWrapper = styled.View`
+  width: 100%;
+  margin-top: ${moderateScale(10)}px;
+  padding: 0 ${moderateScale(20)}px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+export const EmptyStateContainer = styled.View`
+  width: 100%;
+  padding: ${moderateScale(40)}px ${moderateScale(20)}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+`;
+
+export const PhotosContainer = styled.View`
+  margin-top: 4%;
+`;

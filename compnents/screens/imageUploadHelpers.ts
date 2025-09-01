@@ -27,6 +27,28 @@ export const chooseImageHandler = async() => {
   }
 };
 
+export const multiImageHandler = async() => {
+  const permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
+
+  if (!permissionGiven) {
+    return;
+  }
+
+  const selectedImage = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ["images"],
+    allowsMultipleSelection: true,
+    aspect: [4, 3],
+    quality: 1,
+    exif: true,
+  });
+
+  try {
+    return await selectedImage;
+  } catch (e) {
+    console.log({ title: "Image Upload", message: e.message });
+  }
+};
+
 export const imageUpload = async(image) => {
   try {
     const uriLink = image.assets[0].uri.uri;

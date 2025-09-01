@@ -107,13 +107,15 @@ export default function ImageCasherDynamic(props) {
     }).start();
   };
 
+  const finalUri = photoFile?.startsWith("file") ? photoFile : remoteUri;
+
   // if (!picUri) {
   //   return null; // You can replace this with a loading spinner if needed
   // }
 
   return (
     <Animated.Image
-      source={{ uri: remoteUri }}
+      source={{ uri: finalUri }}
       style={{ ...style, width: "100%", aspectRatio: aspectRatio, opacity: fadeAnim }}
       onLoad={handleImageLoad}
     />
