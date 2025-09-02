@@ -27,8 +27,16 @@ export const StyledButton = styled.View`
   justify-content: center;
 `;
 
+export const TextWrapper = styled.View`
+  width: 90%;
+  flex-direction: row;
+  flex-wrap: wrap; /* Add this property */
+  justify-content: left;
+  align-items: center;
+`;
+
 export const StyledButtonText = styled.Text`
-  font-size: ${({ size }) => size === "thin" ? `${moderateScale(fontSizes.SmallText)}px` : `${moderateScale(fontSizes.StandardText)}px`};
+  font-size: ${({ size }) => size === "thin" ? `${moderateScale(fontSizes.Micro)}px` : `${moderateScale(fontSizes.StandardText)}px`};
   font-family: ${({ size }) => size === "thin" ? activeFonts.Medium : activeFonts.Regular};
   color: ${({ alt }) => (alt ? colors.primaryBlue : colors.themeWhite)};
   text-align: center;

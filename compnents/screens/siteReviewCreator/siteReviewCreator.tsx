@@ -52,7 +52,6 @@ export default function SiteReviewPageView({
   const [visibility, setVisibility] = useState(0);
   const [currentIntensity, SetCurrentIntensity] = useState(0.0);
 
-  // New state for animation and conditional rendering
   const [showCurrentButtons, setShowCurrentButtons] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
 
@@ -133,7 +132,7 @@ export default function SiteReviewPageView({
           <S.ButtonRow>
             <S.StyledButton
               size={"thin"}
-              title={"Shore"}
+              title={t("DiveSiteReviewer.shoreDiveButton")}
               iconLeft={"island"}
               alt
               round={false}
@@ -141,7 +140,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Boat"}
+              title={t("DiveSiteReviewer.boatDiveButton")}
               iconLeft={"sailboat"}
               alt
               round={false}
@@ -149,7 +148,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Night"}
+              title={t("DiveSiteReviewer.nightDiveButton")}
               iconLeft={"moon-stars"}
               alt
               round={false}
@@ -159,7 +158,7 @@ export default function SiteReviewPageView({
           <S.ButtonRow>
             <S.StyledButton
               size={"thin"}
-              title={"Altitude"}
+              title={t("DiveSiteReviewer.altitudeDiveButton")}
               iconLeft={"mountains"}
               alt
               round={false}
@@ -167,7 +166,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Wreak"}
+              title={t("DiveSiteReviewer.wreckDiveButton")}
               iconLeft={"directions-boat"}
               alt
               round={false}
@@ -175,7 +174,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Cave"}
+              title={t("DiveSiteReviewer.caveDiveButton")}
               iconLeft={"vinyl-record"}
               alt
               round={false}
@@ -190,7 +189,7 @@ export default function SiteReviewPageView({
           <S.ButtonRow>
             <S.StyledButton
               size={"thin"}
-              title={"Salt"}
+              title={t("DiveSiteReviewer.saltWaterButton")}
               iconLeft={"salt-water"}
               alt
               round={false}
@@ -198,7 +197,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Fresh"}
+              title={t("DiveSiteReviewer.freshWaterButton")}
               iconLeft={"fresh-water"}
               alt
               round={false}
@@ -213,7 +212,7 @@ export default function SiteReviewPageView({
           <S.ButtonRow>
             <S.StyledButton
               size={"thin"}
-              title={"Boat / Surfer Traffic"}
+              title={t("DiveSiteReviewer.trafficButton")}
               iconLeft={"traffic-light"}
               alt
               round={false}
@@ -221,7 +220,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Surge"}
+              title={t("DiveSiteReviewer.surgeButton")}
               iconLeft={"waves"}
               alt
               round={false}
@@ -238,7 +237,7 @@ export default function SiteReviewPageView({
           <S.ButtonRow>
             <S.StyledButton
               size={"thin"}
-              title={"Blue / Black Water"}
+              title={t("DiveSiteReviewer.noRefsButton")}
               iconLeft={"GPS-splash"}
               alt
               round={false}
@@ -246,7 +245,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Bottom > Rec Limit"}
+              title={t("DiveSiteReviewer.limitsButton")}
               iconLeft={"warning-diamond"}
               alt
               round={false}
@@ -256,7 +255,7 @@ export default function SiteReviewPageView({
           <S.ButtonRow>
             <S.StyledButton
               size={"thin"}
-              title={"Kelp"}
+              title={t("DiveSiteReviewer.kelpButton")}
               iconLeft={"coral"}
               alt
               round={false}
@@ -264,7 +263,7 @@ export default function SiteReviewPageView({
             />
             <S.StyledButton
               size={"thin"}
-              title={"Pollution"}
+              title={t("DiveSiteReviewer.pollutionButton")}
               iconLeft={"beer-bottle"}
               alt
               round={false}
@@ -299,7 +298,7 @@ export default function SiteReviewPageView({
               <S.ButtonRow>
                 <S.StyledButton
                   size={"thin"}
-                  title={"Lateral"}
+                  title={t("DiveSiteReviewer.latCurrentButton")}
                   iconLeft={"arrow-left-right"}
                   alt
                   round={false}
@@ -307,7 +306,7 @@ export default function SiteReviewPageView({
                 />
                 <S.StyledButton
                   size={"thin"}
-                  title={"Up-welling"}
+                  title={t("DiveSiteReviewer.upCurrentButton")}
                   iconLeft={"circle-arrow-up"}
                   alt
                   round={false}
@@ -317,7 +316,7 @@ export default function SiteReviewPageView({
               <S.ButtonRow>
                 <S.StyledButton
                   size={"thin"}
-                  title={"Down-welling"}
+                  title={t("DiveSiteReviewer.downCurrentButton")}
                   iconLeft={"circle-arrow-down"}
                   alt
                   round={false}
@@ -325,7 +324,7 @@ export default function SiteReviewPageView({
                 />
                 <S.StyledButton
                   size={"thin"}
-                  title={"Contrasting"}
+                  title={t("DiveSiteReviewer.contrastCurrentButton")}
                   iconLeft={"arrow-left-right-reverse"}
                   alt
                   round={false}
@@ -335,25 +334,6 @@ export default function SiteReviewPageView({
             </S.CurrentButtons>
           </Animated.View>
         )}
-
-        {/* <Label label={t("DiveSiteReviewer.details")} /> */}
-        {/* <Label label={t("DiveSiteReviewer.title")}  />
-        <Controller
-          control={control}
-          name="DiveTitle"
-          rules={FormRules.DiveTitle}
-          render={({ field: { onChange, value } }) => (
-            <S.TextBuffer>
-              <MobileTextInput
-                error={errors.DiveTitle}
-                iconLeft="pencil"
-                placeholder={t("DiveSiteReviewer.reviewNamePlaceholder")}
-                onChangeText={onChange}
-                value={value}
-              />
-            </S.TextBuffer>
-          )}
-        /> */}
 
         <Label label={t("DiveSiteReviewer.description")} />
 

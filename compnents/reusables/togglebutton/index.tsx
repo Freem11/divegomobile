@@ -35,9 +35,11 @@ export default function ToggleButton(props: ButtonProps & ToggleButtonProps) {
           </S.IconWrapperLeft>
         )}
 
-        <S.StyledButtonText alt={isActive} size={props.size}>
-          {props.title}
-        </S.StyledButtonText>
+        <S.TextWrapper>
+          <S.StyledButtonText alt={isActive} size={props.size}>
+            {props.title}
+          </S.StyledButtonText>
+        </S.TextWrapper>
 
         {iconRight && (
           <S.IconWrapperRight size={props.size}>
