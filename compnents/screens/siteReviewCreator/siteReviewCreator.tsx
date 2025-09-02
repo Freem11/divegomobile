@@ -137,7 +137,7 @@ export default function SiteReviewPageView({
               iconLeft={"island"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -145,7 +145,7 @@ export default function SiteReviewPageView({
               iconLeft={"sailboat"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -153,7 +153,7 @@ export default function SiteReviewPageView({
               iconLeft={"moon-stars"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
           </S.ButtonRow>
           <S.ButtonRow>
@@ -163,7 +163,7 @@ export default function SiteReviewPageView({
               iconLeft={"mountains"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -171,7 +171,7 @@ export default function SiteReviewPageView({
               iconLeft={"directions-boat"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -179,7 +179,7 @@ export default function SiteReviewPageView({
               iconLeft={"vinyl-record"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
           </S.ButtonRow>
         </S.TypeOfDiveButtons>
@@ -194,7 +194,7 @@ export default function SiteReviewPageView({
               iconLeft={"salt-water"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -202,7 +202,7 @@ export default function SiteReviewPageView({
               iconLeft={"fresh-water"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
           </S.ButtonRow>
         </S.WaterTypeButtons>
@@ -217,7 +217,7 @@ export default function SiteReviewPageView({
               iconLeft={"traffic-light"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -225,7 +225,7 @@ export default function SiteReviewPageView({
               iconLeft={"waves"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
           </S.ButtonRow>
         </S.AttheSurfaceButtons>
@@ -242,7 +242,7 @@ export default function SiteReviewPageView({
               iconLeft={"GPS-splash"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -250,7 +250,7 @@ export default function SiteReviewPageView({
               iconLeft={"warning-diamond"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
           </S.ButtonRow>
           <S.ButtonRow>
@@ -260,7 +260,7 @@ export default function SiteReviewPageView({
               iconLeft={"coral"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
             <S.StyledButton
               size={"thin"}
@@ -268,7 +268,7 @@ export default function SiteReviewPageView({
               iconLeft={"beer-bottle"}
               alt
               round={false}
-              onPress={null}
+              onPress={() => null}
             />
           </S.ButtonRow>
         </S.InTheWaterButtons>
@@ -303,7 +303,7 @@ export default function SiteReviewPageView({
                   iconLeft={"arrow-left-right"}
                   alt
                   round={false}
-                  onPress={null}
+                  onPress={() => null}
                 />
                 <S.StyledButton
                   size={"thin"}
@@ -311,7 +311,7 @@ export default function SiteReviewPageView({
                   iconLeft={"circle-arrow-up"}
                   alt
                   round={false}
-                  onPress={null}
+                  onPress={() => null}
                 />
               </S.ButtonRow>
               <S.ButtonRow>
@@ -321,7 +321,7 @@ export default function SiteReviewPageView({
                   iconLeft={"circle-arrow-down"}
                   alt
                   round={false}
-                  onPress={null}
+                  onPress={() => null}
                 />
                 <S.StyledButton
                   size={"thin"}
@@ -329,7 +329,7 @@ export default function SiteReviewPageView({
                   iconLeft={"arrow-left-right-reverse"}
                   alt
                   round={false}
-                  onPress={null}
+                  onPress={() => null}
                 />
               </S.ButtonRow>
             </S.CurrentButtons>
