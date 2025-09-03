@@ -6,12 +6,16 @@ import { View, Animated } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { moderateScale } from "react-native-size-matters";
+import { ImagePickerAsset } from "expo-image-picker";
 
 import Label from "../../reusables/label";
 import { colors } from "../../styles";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { PreviewGrid } from "../../reusables/previewGrid";
+import EmptyState from "../../reusables/emptyState-new";
+import { multiImageHandler } from "../imageUploadHelpers";
 import ReusableSlider from "../../reusables/slider";
 
 import * as S from "./styles";
@@ -36,6 +40,7 @@ export default function SiteReviewPageView({
   selectedDiveSite,
   unitSystem
 }: ShopReviewCreatorProps) {
+  const [images, setImages] = useState([]);
 
   const { control, setValue, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
     values: values
@@ -73,6 +78,23 @@ export default function SiteReviewPageView({
 
   const handleOnSubmit = (data: Form) => {
     onSubmit(data);
+  };
+
+  const handleSelectImages = async() => {
+    try {
+      const result = await multiImageHandler();
+      if (result?.assets?.[0]?.uri) {
+        handlePreviewImages(result?.assets);
+      }
+    } catch (e: any) {
+      console.log("Image selection cancelled", e.message);
+    }
+  };
+
+  const handlePreviewImages = async(pictures: ImagePickerAsset[]) => {
+    const newPicArray = pictures.map((picture) => ({ photofile: picture.uri }));
+
+    setImages((prevImages) => [...prevImages, ...newPicArray]);
   };
 
   useEffect(() => {
@@ -362,6 +384,29 @@ export default function SiteReviewPageView({
         {/* Multi Pic Uploader goes here */}
 
       </S.InputGroupContainer>
+
+      {images && images.length > 0 ? (
+        <S.PhotosContainer>
+          <PreviewGrid items={images} onAddSighting={handleSelectImages} buttonText="Add Dive Photos" />
+        </S.PhotosContainer>
+      ) : (
+        <S.EmptyStateContainer>
+          <EmptyState
+            iconName="camera-plus"
+            title={"You haven't added any photos to your review yet"}
+            subtitle={"Any photos you add will be considered for sea life sightings as well as the dive site's header photo!"}
+          />
+          <Button
+            size="thin"
+            title={"Add Dive Photos"}
+            iconLeft="camera-plus"
+            round={false}
+            style={{ width: "auto", marginTop: moderateScale(15) }}
+            onPress={handleSelectImages}
+          />
+
+        </S.EmptyStateContainer>
+      )}
 
       <S.ButtonBox>
         <Button

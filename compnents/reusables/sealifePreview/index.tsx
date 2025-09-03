@@ -15,7 +15,7 @@ import { ActiveProfile } from "../../../entities/profile";
 import * as S from "./styles";
 
 type SealifePreviewProps = {
-  speciesCount: number
+  speciesCount?: number
   sightingsCount: number
   diveSitePics: DiveSiteWithUserName[] | null
   onViewMore: () => void
@@ -54,7 +54,7 @@ export default function SealifePreview({
 
       {sightingsCount > 0 ? (
         <>
-          <PreviewGrid items={diveSitePics} onAddSighting={onAddSighting} />
+          <PreviewGrid items={diveSitePics} onAddSighting={onAddSighting} buttonText="Add a Sighting" />
           <S.SectionFooterWrapper>
             <GhostButton onPress={onViewMore} title={"View More"} />
           </S.SectionFooterWrapper>

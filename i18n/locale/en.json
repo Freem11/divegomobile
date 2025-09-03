@@ -134,7 +134,7 @@
         "contrastCurrentButton": "Contrasting",
         "description": "Describe Your Dive",
         "reviewDescriptionPlaceholder": "Tell others what it was like to dive at {{siteName}}!",
-        "addPhotos": "Add Dive Photos"
+        "addPhotos": "Dive Photos"
     },
     "DiveCenterList": {
         "header": "My Dive Centers",
