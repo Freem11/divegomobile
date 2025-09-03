@@ -147,4 +147,11 @@ export const EmptyStateContainer = styled.View`
 
 export const PhotosContainer = styled.View`
   margin-top: 4%;
+  `;
+
+export const Label = styled.Text`
+  text-align: center;
+  color: ${colors.themeBlack};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Bold};
 `;

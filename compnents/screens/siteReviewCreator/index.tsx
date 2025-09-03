@@ -32,6 +32,9 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
 
   getDiveSiteinfo(props.selectedDiveSite);
 
+  const unitSystem = profile && profile.unit_system;
+
+  // const unitSystem = "Imperial";
   return (
     <SiteReviewPageView
       datePickerVisible={datePickerVisible}
@@ -40,6 +43,7 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
       onSubmit={() => onSubmit}
       values={null}
       selectedDiveSite={siteInfo}
+      unitSystem={unitSystem}
     />
   );
 }
