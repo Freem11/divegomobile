@@ -7,8 +7,8 @@ import {
   fontSizes,
   activeFonts,
 } from "../../styles";
-import Button from "../../reusables/button";
-// import ToggleButton from "../../reusables/togglebutton";
+// import Button from "../../reusables/button";
+import ToggleButton from "../../reusables/togglebutton";
 
 const windowWidth = Dimensions.get("screen").width;
 
@@ -139,7 +139,7 @@ export const Buffer = styled.View`
     padding-bottom: ${moderateScale(25)}px;
 `;
 
-export const StyledButton = styled(Button)`
+export const StyledButton = styled(ToggleButton)`
   flex: 1;
   padding-horizontal: ${moderateScale(2)}px;
   justify-content: flex-start;
