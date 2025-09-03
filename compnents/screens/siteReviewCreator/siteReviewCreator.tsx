@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
-import { View } from "react-native";
+import { View, Animated } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { moderateScale } from "react-native-size-matters";
@@ -52,12 +52,14 @@ export default function SiteReviewPageView({
     hideDatePicker();
   };
 
-  // const unitSystem = "Imperial";
-
   const { t } = useTranslation();
 
   const [visibility, setVisibility] = useState(0);
   const [currentIntensity, SetCurrentIntensity] = useState(0.0);
+
+  const [showCurrentButtons, setShowCurrentButtons] = useState(false);
+  const [heightAnim] = useState(new Animated.Value(0));
+
   const [metrics, setMetrics] = useState(unitSystem === "Imperial" ? {
     highValueViz: 100,
     lowValueViz: 0,
@@ -75,7 +77,6 @@ export default function SiteReviewPageView({
   });
 
   const handleOnSubmit = (data: Form) => {
-    // toast.dismiss();
     onSubmit(data);
   };
 
@@ -95,6 +96,25 @@ export default function SiteReviewPageView({
 
     setImages((prevImages) => [...prevImages, ...newPicArray]);
   };
+
+  useEffect(() => {
+    if (currentIntensity > 0) {
+      setShowCurrentButtons(true);
+      Animated.timing(heightAnim, {
+        toValue: moderateScale(130),
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(heightAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => {
+        setShowCurrentButtons(false);
+      });
+    }
+  }, [currentIntensity, heightAnim]);
 
   return (
     <S.ContentContainer>
@@ -125,13 +145,154 @@ export default function SiteReviewPageView({
           )}
         />
 
+        <S.Buffer/>
+
         <Label label={t("DiveSiteReviewer.typOfDive")}  />
         {/* Type Of Dive Toggles goes here */}
 
+        <S.TypeOfDiveButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.shoreDiveButton")}
+              iconLeft={"island"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.boatDiveButton")}
+              iconLeft={"sailboat"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.nightDiveButton")}
+              iconLeft={"moon-stars"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+          </S.ButtonRow>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.altitudeDiveButton")}
+              iconLeft={"mountains"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.wreckDiveButton")}
+              iconLeft={"directions-boat"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.caveDiveButton")}
+              iconLeft={"vinyl-record"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+          </S.ButtonRow>
+        </S.TypeOfDiveButtons>
+
+        <Label label={t("DiveSiteReviewer.typeOfWater")} />
+        {/* Type of WaterToggles goes here */}
+        <S.WaterTypeButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.saltWaterButton")}
+              iconLeft={"salt-water"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.freshWaterButton")}
+              iconLeft={"fresh-water"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+          </S.ButtonRow>
+        </S.WaterTypeButtons>
+
         <Label label={t("DiveSiteReviewer.atTheSurface")} />
         {/* At The Surface Toggles goes here */}
+        <S.AttheSurfaceButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.trafficButton")}
+              iconLeft={"traffic-light"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.surgeButton")}
+              iconLeft={"waves"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+          </S.ButtonRow>
+        </S.AttheSurfaceButtons>
 
         <Label label={t("DiveSiteReviewer.inTheWater")} />
+
+        {/* In the Water Toggles goes here */}
+
+        <S.InTheWaterButtons>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.noRefsButton")}
+              iconLeft={"GPS-splash"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.limitsButton")}
+              iconLeft={"warning-diamond"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+          </S.ButtonRow>
+          <S.ButtonRow>
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.kelpButton")}
+              iconLeft={"coral"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+            <S.StyledButton
+              size={"thin"}
+              title={t("DiveSiteReviewer.pollutionButton")}
+              iconLeft={"beer-bottle"}
+              alt
+              round={false}
+              onPress={() => null}
+            />
+          </S.ButtonRow>
+        </S.InTheWaterButtons>
 
         {/* Viz Slider goes here */}
         <ReusableSlider
@@ -144,7 +305,6 @@ export default function SiteReviewPageView({
         />
 
         {/* Current Slider goes here */}
-
         <ReusableSlider
           title={<S.Label>{t("DiveSiteReviewer.current")}</S.Label>}
           leftValue={metrics.lowValueCur}
@@ -153,28 +313,49 @@ export default function SiteReviewPageView({
           onValueChange={(value) => SetCurrentIntensity(value)}
         />
 
-        {/* Current Toggles goes here */}
-
-        {/* In the Water Toggles goes here */}
-
-        {/* <Label label={t("DiveSiteReviewer.details")} /> */}
-        <Label label={t("DiveSiteReviewer.title")}  />
-        <Controller
-          control={control}
-          name="DiveTitle"
-          rules={FormRules.DiveTitle}
-          render={({ field: { onChange, value } }) => (
-            <S.TextBuffer>
-              <MobileTextInput
-                error={errors.DiveTitle}
-                iconLeft="pencil"
-                placeholder={t("DiveSiteReviewer.reviewNamePlaceholder")}
-                onChangeText={onChange}
-                value={value}
-              />
-            </S.TextBuffer>
-          )}
-        />
+        {showCurrentButtons && (
+          <Animated.View style={{ height: heightAnim, overflow: "hidden", marginBottom: moderateScale(20) }}>
+            <S.Label>{t("DiveSiteReviewer.currentDirection")}</S.Label>
+            <S.CurrentButtons>
+              <S.ButtonRow>
+                <S.StyledButton
+                  size={"thin"}
+                  title={t("DiveSiteReviewer.latCurrentButton")}
+                  iconLeft={"arrow-left-right"}
+                  alt
+                  round={false}
+                  onPress={() => null}
+                />
+                <S.StyledButton
+                  size={"thin"}
+                  title={t("DiveSiteReviewer.upCurrentButton")}
+                  iconLeft={"circle-arrow-up"}
+                  alt
+                  round={false}
+                  onPress={() => null}
+                />
+              </S.ButtonRow>
+              <S.ButtonRow>
+                <S.StyledButton
+                  size={"thin"}
+                  title={t("DiveSiteReviewer.downCurrentButton")}
+                  iconLeft={"circle-arrow-down"}
+                  alt
+                  round={false}
+                  onPress={() => null}
+                />
+                <S.StyledButton
+                  size={"thin"}
+                  title={t("DiveSiteReviewer.contrastCurrentButton")}
+                  iconLeft={"arrow-left-right-reverse"}
+                  alt
+                  round={false}
+                  onPress={() => null}
+                />
+              </S.ButtonRow>
+            </S.CurrentButtons>
+          </Animated.View>
+        )}
 
         <Label label={t("DiveSiteReviewer.description")} />
 
