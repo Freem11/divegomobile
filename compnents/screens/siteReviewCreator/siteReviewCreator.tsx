@@ -148,14 +148,28 @@ export default function SiteReviewPageView({
     const conditions = watch("Conditions");
     const existingCondition = conditions.find(c => c.conditionId === conditionId);
 
+    let updatedConditions = conditions;
+
     if (existingCondition) {
-      const updatedConditions = conditions.map(c =>
+      updatedConditions = conditions.map(c =>
         c.conditionId === conditionId ? { ...c, value: sliderValue } : c
       );
-      setValue("Conditions", updatedConditions);
     } else {
-      setValue("Conditions", [...conditions, { conditionId: conditionId, value: sliderValue }]);
+      updatedConditions = [...conditions, { conditionId: conditionId, value: sliderValue }];
     }
+
+    if (conditionId === DiveConditions.CURRENT_INTENSITY && sliderValue === 0) {
+      const dependentConditions = [
+        DiveConditions.CURRENT_LATTERAL,
+        DiveConditions.CURRENT_UP,
+        DiveConditions.CURRENT_DOWN,
+        DiveConditions.CURRENT_CONTRASTING
+      ];
+
+      updatedConditions = updatedConditions.filter(c => !dependentConditions.includes(c.conditionId));
+    }
+
+    setValue("Conditions", updatedConditions);
   };
 
   console.log("Form errors:", errors);
