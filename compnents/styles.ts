@@ -21,8 +21,7 @@ export const fontSizes = {
   Header: 28,
   SubHeading: 20,
   StandardText: 18,
-  SmallText: 16,
-  Micro: 14
+  SmallText: 16
 };
 
 export const buttonSizes = {
