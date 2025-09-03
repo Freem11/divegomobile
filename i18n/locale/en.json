@@ -104,9 +104,11 @@
         "retryFailedUpload": "Retry upload failed, you should try to reupload the photo"
     },
     "DiveSiteReviewer": {
-        "header": "Reviwing My Dive At: \n{{siteName}}",
+        "header": "My Dive At: \n{{siteName}}",
         "diveDate": "Date Of Your Dive",
         "datePlaceholder": "Dive Date",
+        "viz": "Visibility (Est.)",
+        "current": "Current (Est.)",
         "typOfDive": "Type Of Dive",
         "atTheSurface": "At The Surface",
         "inTheWater": "In The Water",

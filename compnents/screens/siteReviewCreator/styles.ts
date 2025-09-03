@@ -125,3 +125,10 @@ export const ButtonHousing = styled.View`
   bottom: ${moderateScale(20)}px;
   right: ${moderateScale(20)}px;
 `;
+
+export const Label = styled.Text`
+  text-align: center;
+  color: ${colors.themeBlack};
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Bold};
+`;
