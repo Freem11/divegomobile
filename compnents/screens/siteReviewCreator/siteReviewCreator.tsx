@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Controller, useForm } from "react-hook-form";
+import { Control, Controller, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import { View, Animated } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -17,34 +17,49 @@ import { PreviewGrid } from "../../reusables/previewGrid";
 import EmptyState from "../../reusables/emptyState-new";
 import { multiImageHandler } from "../imageUploadHelpers";
 import ReusableSlider from "../../reusables/slider";
+import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 
 import * as S from "./styles";
 import { Form, FormRules } from "./form";
 
 type ShopReviewCreatorProps = {
-  values: Form;
   datePickerVisible: boolean;
   showDatePicker: () => void;
   hideDatePicker: () => void;
-  onSubmit: (data: any) => void
-  selectedDiveSite: DiveSiteWithUserName
-  unitSystem: string
+  control: Control<Form, any, Form>
+  setValue: UseFormSetValue<Form>
+  isSubmitting: boolean
+  errors: FieldErrors<Form>
+  watch: UseFormWatch<Form>
+  onSubmit: () => void;
+  selectedDiveSite: DiveSiteWithUserName;
+  unitSystem: string;
 };
 
 export default function SiteReviewPageView({
-  values,
   datePickerVisible,
   showDatePicker,
   hideDatePicker,
+  control,
+  setValue,
+  isSubmitting,
+  errors,
+  watch,
   onSubmit,
   selectedDiveSite,
   unitSystem
 }: ShopReviewCreatorProps) {
   const [images, setImages] = useState([]);
 
-  const { control, setValue, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
-    values: values
-  });
+  // Use the form hook and set default values here.
+  // const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors } } = useForm<Form>({
+  //   defaultValues: {
+  //     DiveDate: "",
+  //     Conditions: [],
+  //     Description: "",
+  //     Photos: []
+  //   }
+  // });
 
   const handleDatePickerConfirm = (selectedDate: Date) => {
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
@@ -54,9 +69,12 @@ export default function SiteReviewPageView({
 
   const { t } = useTranslation();
 
-  const [visibility, setVisibility] = useState(0);
-  const [currentIntensity, SetCurrentIntensity] = useState(0.0);
+  // Remove `useState` for visibility and currentIntensity and use the form's state.
+  // const [visibility, setVisibility] = useState(0);
+  // const [currentIntensity, SetCurrentIntensity] = useState(0.0);
 
+  const conditions = watch("Conditions");
+  const currentIntensity = conditions.find(c => c.conditionId === DiveConditions.CURRENT_INTENSITY)?.value || 0;
   const [showCurrentButtons, setShowCurrentButtons] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
 
@@ -75,10 +93,6 @@ export default function SiteReviewPageView({
     simpleMetric: "m",
     rateMetric: "m/s"
   });
-
-  const handleOnSubmit = (data: Form) => {
-    onSubmit(data);
-  };
 
   const handleSelectImages = async() => {
     try {
@@ -116,10 +130,40 @@ export default function SiteReviewPageView({
     }
   }, [currentIntensity, heightAnim]);
 
+  const handleBooleanConditions = (conditionId: number) => {
+    const conditions = watch("Conditions");
+    const existingCondition = conditions.find(c => c.conditionId === conditionId);
+
+    if (existingCondition) {
+      const updatedConditions = conditions.map(c =>
+        c.conditionId === conditionId ? { ...c, value: c.value === 1 ? 0 : 1 } : c
+      );
+      setValue("Conditions", updatedConditions);
+    } else {
+      setValue("Conditions", [...conditions, { conditionId: conditionId, value: 1 }]);
+    }
+  };
+
+  const handleSliderConditions = (conditionId: number, sliderValue: number) => {
+    const conditions = watch("Conditions");
+    const existingCondition = conditions.find(c => c.conditionId === conditionId);
+
+    if (existingCondition) {
+      const updatedConditions = conditions.map(c =>
+        c.conditionId === conditionId ? { ...c, value: sliderValue } : c
+      );
+      setValue("Conditions", updatedConditions);
+    } else {
+      setValue("Conditions", [...conditions, { conditionId: conditionId, value: sliderValue }]);
+    }
+  };
+
+  console.log("Form errors:", errors);
+
   return (
     <S.ContentContainer>
       {selectedDiveSite &&
-      <S.Header>{t("DiveSiteReviewer.header", { siteName: selectedDiveSite.name })}</S.Header>}
+        <S.Header>{t("DiveSiteReviewer.header", { siteName: selectedDiveSite.name })}</S.Header>}
 
       <S.InputGroupContainer>
 
@@ -145,9 +189,9 @@ export default function SiteReviewPageView({
           )}
         />
 
-        <S.Buffer/>
+        <S.Buffer />
 
-        <Label label={t("DiveSiteReviewer.typOfDive")}  />
+        <Label label={t("DiveSiteReviewer.typOfDive")} />
         {/* Type Of Dive Toggles goes here */}
 
         <S.TypeOfDiveButtons>
@@ -158,7 +202,7 @@ export default function SiteReviewPageView({
               iconLeft={"island"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.SHORE_DIVE)}
             />
             <S.StyledButton
               size={"thin"}
@@ -166,7 +210,7 @@ export default function SiteReviewPageView({
               iconLeft={"sailboat"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.BOAT_DIVE)}
             />
             <S.StyledButton
               size={"thin"}
@@ -174,7 +218,7 @@ export default function SiteReviewPageView({
               iconLeft={"moon-stars"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.NIHGT_DIVE)}
             />
           </S.ButtonRow>
           <S.ButtonRow>
@@ -184,7 +228,7 @@ export default function SiteReviewPageView({
               iconLeft={"mountains"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.ALTITUDE_DIVE)}
             />
             <S.StyledButton
               size={"thin"}
@@ -192,7 +236,7 @@ export default function SiteReviewPageView({
               iconLeft={"directions-boat"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.WREAK_DIVE)}
             />
             <S.StyledButton
               size={"thin"}
@@ -200,7 +244,7 @@ export default function SiteReviewPageView({
               iconLeft={"vinyl-record"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.CAVE_DIVE)}
             />
           </S.ButtonRow>
         </S.TypeOfDiveButtons>
@@ -215,7 +259,7 @@ export default function SiteReviewPageView({
               iconLeft={"salt-water"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.SALT_WATER)}
             />
             <S.StyledButton
               size={"thin"}
@@ -223,7 +267,7 @@ export default function SiteReviewPageView({
               iconLeft={"fresh-water"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.FRESH_WATER)}
             />
           </S.ButtonRow>
         </S.WaterTypeButtons>
@@ -238,7 +282,7 @@ export default function SiteReviewPageView({
               iconLeft={"traffic-light"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.SURFACE_TRAFFIC)}
             />
             <S.StyledButton
               size={"thin"}
@@ -246,7 +290,7 @@ export default function SiteReviewPageView({
               iconLeft={"waves"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.SURGE)}
             />
           </S.ButtonRow>
         </S.AttheSurfaceButtons>
@@ -263,7 +307,7 @@ export default function SiteReviewPageView({
               iconLeft={"GPS-splash"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.NO_REFS)}
             />
             <S.StyledButton
               size={"thin"}
@@ -271,7 +315,7 @@ export default function SiteReviewPageView({
               iconLeft={"warning-diamond"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.MAX_DEPTH)}
             />
           </S.ButtonRow>
           <S.ButtonRow>
@@ -281,7 +325,7 @@ export default function SiteReviewPageView({
               iconLeft={"coral"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.KELP)}
             />
             <S.StyledButton
               size={"thin"}
@@ -289,7 +333,7 @@ export default function SiteReviewPageView({
               iconLeft={"beer-bottle"}
               alt
               round={false}
-              onPress={() => null}
+              onPress={() => handleBooleanConditions(DiveConditions.POLLUTION)}
             />
           </S.ButtonRow>
         </S.InTheWaterButtons>
@@ -301,7 +345,7 @@ export default function SiteReviewPageView({
           leftValue={metrics.lowValueViz}
           rightValue={metrics.highValueViz}
           unitMeasurement={metrics.simpleMetric}
-          onValueChange={(value) => setVisibility(value)}
+          onValueChange={(value) => handleSliderConditions(DiveConditions.VISIBILITY, value)}
         />
 
         {/* Current Slider goes here */}
@@ -310,7 +354,7 @@ export default function SiteReviewPageView({
           leftValue={metrics.lowValueCur}
           rightValue={metrics.highValueCur}
           unitMeasurement={metrics.rateMetric}
-          onValueChange={(value) => SetCurrentIntensity(value)}
+          onValueChange={(value) => handleSliderConditions(DiveConditions.CURRENT_INTENSITY, value)}
         />
 
         {showCurrentButtons && (
@@ -324,7 +368,7 @@ export default function SiteReviewPageView({
                   iconLeft={"arrow-left-right"}
                   alt
                   round={false}
-                  onPress={() => null}
+                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_LATTERAL)}
                 />
                 <S.StyledButton
                   size={"thin"}
@@ -332,7 +376,7 @@ export default function SiteReviewPageView({
                   iconLeft={"circle-arrow-up"}
                   alt
                   round={false}
-                  onPress={() => null}
+                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_UP)}
                 />
               </S.ButtonRow>
               <S.ButtonRow>
@@ -342,7 +386,7 @@ export default function SiteReviewPageView({
                   iconLeft={"circle-arrow-down"}
                   alt
                   round={false}
-                  onPress={() => null}
+                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_DOWN)}
                 />
                 <S.StyledButton
                   size={"thin"}
@@ -350,7 +394,7 @@ export default function SiteReviewPageView({
                   iconLeft={"arrow-left-right-reverse"}
                   alt
                   round={false}
-                  onPress={() => null}
+                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_CONTRASTING)}
                 />
               </S.ButtonRow>
             </S.CurrentButtons>
@@ -410,7 +454,7 @@ export default function SiteReviewPageView({
 
       <S.ButtonBox>
         <Button
-          onPress={handleSubmit(handleOnSubmit)}
+          onPress={onSubmit}
           alt={false}
           size="medium"
           title={t("PicUploader.submitButton")}
