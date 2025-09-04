@@ -39,18 +39,22 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
   });
 
   const onSubmit = async(data: Form) => {
-    console.log(data);
-  };
+    const filteredConditions = data.Conditions.filter(c =>
+      c.value !== 0 || c.conditionId === DiveConditions.VISIBILITY
+    );
 
-  const getDiveSiteinfo = async(siteId: number) => {
-    if (siteId){
-      const diveSiteinfo = await getDiveSiteById(siteId);
-      setSiteInfo(diveSiteinfo[0]);
-    }
+    const submissionData = {
+      ...data,
+      Conditions: filteredConditions
+    };
+
+    console.log("Hey, this is the filtered data!");
+    console.log(submissionData);
+
   };
 
   useEffect(() => {
-    getDiveSiteinfo(props.selectedDiveSite);
+    getDiveSiteById(props.selectedDiveSite);
   }, [props.selectedDiveSite]);
 
   return (
