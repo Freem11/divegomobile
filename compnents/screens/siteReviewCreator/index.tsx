@@ -23,6 +23,7 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
   const [siteInfo, setSiteInfo] = useState(null);
 
   const unitSystem = profile && profile.unit_system;
+  // const unitSystem = "Imperial";
 
   let default_viz = 30;
   if (unitSystem === "Imperial"){
@@ -43,19 +44,44 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
       c.value !== 0 || c.conditionId === DiveConditions.VISIBILITY
     );
 
+    let finalConditions = filteredConditions;
+
+    if (unitSystem === "Imperial") {
+      finalConditions = filteredConditions.map(condition => {
+        if (condition.conditionId === DiveConditions.VISIBILITY) {
+          const convertedValue = condition.value * 0.3048;
+          return {
+            ...condition,
+            value: Math.round(convertedValue)
+          };
+        }
+        if (condition.conditionId === DiveConditions.CURRENT_INTENSITY) {
+          const convertedValue = condition.value * 0.3048;
+          return {
+            ...condition,
+            value: Math.round(convertedValue * 2) / 2
+          };
+        }
+        return condition;
+      });
+    }
+
     const submissionData = {
       ...data,
-      Conditions: filteredConditions
+      Conditions: finalConditions
     };
 
-    console.log("Hey, this is the filtered data!");
-    console.log(submissionData);
-
+    console.log("Submitting final data:", submissionData);
   };
 
-  useEffect(() => {
-    getDiveSiteById(props.selectedDiveSite);
-  }, [props.selectedDiveSite]);
+  const getDiveSiteinfo = async(siteId: number) => {
+    if (siteId){
+      const diveSiteinfo = await getDiveSiteById(siteId);
+      setSiteInfo(diveSiteinfo[0]);
+    }
+  };
+
+  getDiveSiteinfo(props.selectedDiveSite);
 
   return (
     <SiteReviewPageView

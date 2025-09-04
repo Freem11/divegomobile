@@ -172,8 +172,6 @@ export default function SiteReviewPageView({
     setValue("Conditions", updatedConditions);
   };
 
-  console.log("Form errors:", errors);
-
   return (
     <S.ContentContainer>
       {selectedDiveSite &&
