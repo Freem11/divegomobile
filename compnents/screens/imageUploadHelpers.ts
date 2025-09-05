@@ -68,7 +68,34 @@ export const imageUpload = async(image) => {
 
     await uploadphoto(fileInfo, fileName);
 
-    // showSuccess(`THISSSSSSSSSS: ${fileName}`);
+    return fileName;
+
+  } catch (error) {
+    showError(error.message);
+    console.error("Image upload failed:", error);
+    return null;
+  }
+};
+
+export const imageUploadMultiple = async(image, index) => {
+  try {
+    const uriLink = image.assets[0].uri;
+    const extension = uriLink.split(".").pop();
+    const fileName = `${Date.now()}-${index}.${extension}`;
+
+    const newFileUri = FileSystem.documentDirectory + fileName;
+
+    await FileSystem.moveAsync({
+      from: uriLink,
+      to: newFileUri,
+    });
+
+    const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    await uploadphoto(fileInfo, fileName);
+
     return fileName;
 
   } catch (error) {

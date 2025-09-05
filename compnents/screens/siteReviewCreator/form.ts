@@ -1,4 +1,3 @@
-
 import { DiveSiteConditions } from "../../../entities/diveSiteCondidtions";
 import { FormValidationRules } from "../../../forms/form";
 
@@ -6,20 +5,20 @@ export interface Form {
   DiveDate?:    string
   Description?: string
   Conditions: DiveSiteConditions[]
-  Photos: string[]
+  Photos:  string[];
 }
 
 export const FormRules: FormValidationRules<Form> =   {
   DiveDate: {
-    required: "Date name is required",
+    required: "The date of your dive is required",
   },
-  // Description: {
-  //   required: "Description is required",
-  // },
+  Description: {
+    required: "Description is required",
+  },
   Conditions: {
     required: "No Condditions?",
   },
-  // Photos: {
-  //   required: "No Photos?",
-  // },
+  Photos: {
+    required: "No Photos?",
+  },
 };

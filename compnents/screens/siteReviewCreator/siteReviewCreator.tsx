@@ -51,16 +51,6 @@ export default function SiteReviewPageView({
 }: ShopReviewCreatorProps) {
   const [images, setImages] = useState([]);
 
-  // Use the form hook and set default values here.
-  // const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors } } = useForm<Form>({
-  //   defaultValues: {
-  //     DiveDate: "",
-  //     Conditions: [],
-  //     Description: "",
-  //     Photos: []
-  //   }
-  // });
-
   const handleDatePickerConfirm = (selectedDate: Date) => {
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
     setValue("DiveDate", formattedDate);
@@ -68,11 +58,6 @@ export default function SiteReviewPageView({
   };
 
   const { t } = useTranslation();
-
-  // Remove `useState` for visibility and currentIntensity and use the form's state.
-  // const [visibility, setVisibility] = useState(0);
-  // const [currentIntensity, SetCurrentIntensity] = useState(0.0);
-
   const conditions = watch("Conditions");
   const currentIntensity = conditions.find(c => c.conditionId === DiveConditions.CURRENT_INTENSITY)?.value || 0;
   const [showCurrentButtons, setShowCurrentButtons] = useState(false);
@@ -106,9 +91,11 @@ export default function SiteReviewPageView({
   };
 
   const handlePreviewImages = async(pictures: ImagePickerAsset[]) => {
-    const newPicArray = pictures.map((picture) => ({ photofile: picture.uri }));
-
+    const newPicArray = pictures.map((picture) => ( picture.uri ));
     setImages((prevImages) => [...prevImages, ...newPicArray]);
+
+    const currentFormPhotos = watch("Photos");
+    setValue("Photos", [...currentFormPhotos, ...newPicArray]);
   };
 
   useEffect(() => {
@@ -171,6 +158,11 @@ export default function SiteReviewPageView({
 
     setValue("Conditions", updatedConditions);
   };
+
+  const imagesArray = [];
+  images.forEach((image) => {
+    imagesArray.push({ photofile: image });
+  });
 
   return (
     <S.ContentContainer>
@@ -443,7 +435,7 @@ export default function SiteReviewPageView({
 
       {images && images.length > 0 ? (
         <S.PhotosContainer>
-          <PreviewGrid items={images} onAddSighting={handleSelectImages} buttonText="Add Dive Photos" />
+          <PreviewGrid items={imagesArray} onAddSighting={handleSelectImages} buttonText="Add Dive Photos" />
         </S.PhotosContainer>
       ) : (
         <S.EmptyStateContainer>
