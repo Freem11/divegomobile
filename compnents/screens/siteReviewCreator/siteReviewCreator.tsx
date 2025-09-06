@@ -117,35 +117,35 @@ export default function SiteReviewPageView({
     }
   }, [currentIntensity, heightAnim]);
 
-  const handleBooleanConditions = (conditionId: number) => {
+  const handleBooleanConditions = (condition_id: number) => {
     const conditions = watch("Conditions");
-    const existingCondition = conditions.find(c => c.conditionId === conditionId);
+    const existingCondition = conditions.find(c => c.conditionId === condition_id);
 
     if (existingCondition) {
       const updatedConditions = conditions.map(c =>
-        c.conditionId === conditionId ? { ...c, value: c.value === 1 ? 0 : 1 } : c
+        c.conditionId === condition_id ? { ...c, value: c.value === 1 ? 0 : 1 } : c
       );
       setValue("Conditions", updatedConditions);
     } else {
-      setValue("Conditions", [...conditions, { conditionId: conditionId, value: 1 }]);
+      setValue("Conditions", [...conditions, { conditionId: condition_id, value: 1 }]);
     }
   };
 
-  const handleSliderConditions = (conditionId: number, sliderValue: number) => {
+  const handleSliderConditions = (condition_id: number, sliderValue: number) => {
     const conditions = watch("Conditions");
-    const existingCondition = conditions.find(c => c.conditionId === conditionId);
+    const existingCondition = conditions.find(c => c.conditionId === condition_id);
 
     let updatedConditions = conditions;
 
     if (existingCondition) {
       updatedConditions = conditions.map(c =>
-        c.conditionId === conditionId ? { ...c, value: sliderValue } : c
+        c.conditionId === condition_id ? { ...c, value: sliderValue } : c
       );
     } else {
-      updatedConditions = [...conditions, { conditionId: conditionId, value: sliderValue }];
+      updatedConditions = [...conditions, { conditionId: condition_id, value: sliderValue }];
     }
 
-    if (conditionId === DiveConditions.CURRENT_INTENSITY && sliderValue === 0) {
+    if (condition_id === DiveConditions.CURRENT_INTENSITY && sliderValue === 0) {
       const dependentConditions = [
         DiveConditions.CURRENT_LATTERAL,
         DiveConditions.CURRENT_UP,

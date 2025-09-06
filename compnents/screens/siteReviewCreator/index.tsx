@@ -7,6 +7,7 @@ import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { imageUploadMultiple } from "../imageUploadHelpers";
 import { showError } from "../../toast";
+import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
 
 import SiteReviewPageView from "./siteReviewCreator";
 import { Form } from "./form";
@@ -50,8 +51,6 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
 
   const onSubmit = async(data: Form) => {
 
-    console.log("Submitting pre data:", data);
-
     const photoUploadPromises = data.Photos.map(async(photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
@@ -93,7 +92,33 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
         Conditions: finalConditions
       };
 
-      console.log("Submitting final data:", submissionData);
+      const sucessfulReviewInsert = await insertReview({
+        created_by: profile.UserID,
+        dive_date: submissionData.DiveDate,
+        description: submissionData.Description,
+        diveSite_id: props.selectedDiveSite
+      });
+
+      const diveReviewId = sucessfulReviewInsert.data[0].id;
+
+      const reviewConditions = submissionData.Conditions.map(condition => {
+        return {
+          review_id: diveReviewId,
+          condition_id: condition.conditionId,
+          value: condition.value
+        };
+      });
+
+      await insertReviewConditions(reviewConditions);
+
+      const reviewPhotos = submissionData.Photos.map(photo => {
+        return {
+          review_id: diveReviewId,
+          photoPath: photo
+        };
+      });
+
+      await insertReviewPhotos(reviewPhotos);
 
     } catch (error) {
       console.error("Form submission failed due to photo upload errors:", error);
