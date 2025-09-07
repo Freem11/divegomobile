@@ -9,6 +9,7 @@ type LabelProps = {
 };
 
 export default function Label(props: LabelProps) {
+  console.log("Hey",props.label);
   return (
     <S.StyledLabelText>{props.label}</S.StyledLabelText>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { moderateScale } from "react-native-size-matters";
 
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { ItineraryItem } from "../../../entities/itineraryItem";
@@ -7,6 +8,9 @@ import ItineraryCard from "../../reusables/itineraryCard";
 import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
 import Label from "../../reusables/label";
+import ReviewCard from "../../reusables/reviewCard";
+import { Review } from "../../../entities/diveSiteReview";
+import Button from "../../reusables/button";
 
 import * as S from "./styles";
 
@@ -17,6 +21,7 @@ type DiveSiteProps = {
   sightingsCount: number;
   tripCount: number;
   itineraries: ItineraryItem[];
+  reviews: Review[];
   openPicUploader: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
@@ -30,6 +35,7 @@ export default function DiveSiteScreenView({
   sightingsCount,
   tripCount,
   itineraries,
+  reviews,
   openPicUploader,
   openAllPhotosPage,
   openAllTripsPage,
@@ -53,6 +59,36 @@ export default function DiveSiteScreenView({
         onAddSighting={openPicUploader}
         selectedProfile={null}
       />
+
+      <S.LabelWrapper>
+        <Label label="Diver Reviews" />
+      </S.LabelWrapper>
+      {reviews && reviews.length > 0 ? reviews.map((review) => (
+
+        <ReviewCard
+          key={review.id}
+          date={review.dive_date}
+          description={review.description}
+          conditions={review.conditions}
+          userName={review.user_name}
+        />
+      )): (
+        <S.EmptyStateWrapper>
+          <EmptyState
+            iconName="boat"
+            title="No Reviews Here Yet"
+            subtitle={`No one has left a review for ${selectedDiveSite?.name}`}
+          />
+          <Button
+            size="thin"
+            title={"Add First Sighting"}
+            iconLeft="camera-plus"
+            round={false}
+            style={{ width: "auto", marginTop: moderateScale(15) }}
+            onPress={null}
+          />
+        </S.EmptyStateWrapper>
+      )}
 
       <S.LabelWrapper>
         <Label label="Dive Trips" />
