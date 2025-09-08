@@ -38,7 +38,6 @@ export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting, onRemov
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingLeft: scale(16),
           paddingRight: scale(16),
           gap: scale(1),
         }}

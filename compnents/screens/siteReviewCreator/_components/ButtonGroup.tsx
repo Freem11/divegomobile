@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { IconName } from '../../../../icons/Icon'
 import * as S from './styles'
 
@@ -10,41 +10,19 @@ export interface ButtonOption {
 
 export interface ButtonGroupProps {
   options: ButtonOption[]
-  multiple?: boolean
-  onSelectionChange?: (selectedValues: any[]) => void
-  initialSelected?: any[]
+  onButtonPress?: (buttonId: number) => void
+  selectedValues?: any[]
   columns?: number
 }
 
 export default function ButtonGroup({ 
   options, 
-  multiple = false, 
-  onSelectionChange,
-  initialSelected = [],
+  onButtonPress,
+  selectedValues = [],
   columns = 3
 }: ButtonGroupProps) {
-  const [selectedValues, setSelectedValues] = useState<any[]>(initialSelected)
-
   const handleButtonPress = (option: ButtonOption) => {
-    const value = option.value !== undefined ? option.value : option.label
-    let newSelectedValues: any[]
-
-    if (multiple) {
-      if (selectedValues.includes(value)) {
-        newSelectedValues = selectedValues.filter(v => v !== value)
-      } else {
-        newSelectedValues = [...selectedValues, value]
-      }
-    } else {
-      if (selectedValues.includes(value)) {
-        newSelectedValues = []
-      } else {
-        newSelectedValues = [value]
-      }
-    }
-
-    setSelectedValues(newSelectedValues)
-    onSelectionChange?.(newSelectedValues)
+    onButtonPress?.(option.value)
   }
 
   const isSelected = (option: ButtonOption) => {

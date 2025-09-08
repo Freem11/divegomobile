@@ -1,18 +1,19 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { Platform } from "react-native";
 
 import { colors, activeFonts } from "../../styles";
-import Button from "../../reusables/button";
 
 export const ContentContainer = styled.View`
   width: 100%;
   align-items: center;
+  flex: 1;
 `;
 
 export const InputGroupContainer = styled.View`
   width: 100%;
   padding: 0 ${moderateScale(16)}px;
+  flex: 1;
+
 `;
 
 export const Spacer = styled.View`
@@ -29,10 +30,10 @@ export const Label = styled.Text`
 
 
 export const Title = styled.Text`
-  font-size: ${moderateScale(17)}px;
+  font-size: ${moderateScale(20)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.themeBlack};
-  margin-bottom: ${moderateScale(4)}px;
+  margin-bottom: ${moderateScale(8)}px;
   margin-top: ${moderateScale(20)}px;
 `;
 
@@ -62,25 +63,13 @@ export const DescriptionBox = styled.View`
   height: ${moderateScale(200)}px;
 `;
 
-export const ButtonBox = styled.View`
+export const EmptyStateContainer = styled.TouchableOpacity`
   width: 100%;
-  align-items: flex-end;
-  margin-top: ${Platform.OS === "ios" ? `${moderateScale(32)}px` : "2%"};
-  padding-horizontal: ${moderateScale(16)}px;
-`;
-
-export const SubmitButton = styled(Button)`
-  width: 100%;
+  background: ${colors.lighterBlue};
+  height: ${moderateScale(110)}px;
   border-radius: ${moderateScale(8)}px;
-  height: ${moderateScale(52)}px;
-  font-family: ${activeFonts.Medium};
-`;
-
-export const EmptyStateContainer = styled.View`
-  width: 100%;
-  padding: ${moderateScale(40)}px ${moderateScale(20)}px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 4%;
+  margin-top: ${moderateScale(12)}px;
 `;

@@ -18,8 +18,8 @@ export const StyledButton = styled.View`
   height: ${({ size }) => moderateScale(buttonSizes[size].height)}px;
   background-color: ${({ alt }) => (alt ? colors.themeWhite : colors.primaryBlue)};
   border-radius: ${({ round }) => round ? `${moderateScale(30)}px` : `${moderateScale(10)}px`};
-  border-color: ${colors.primaryBlue};
-  border-width: ${moderateScale(1)}px;
+  border-color: ${({ alt }) => (alt ? colors.primaryBlue : colors.primaryBlue)};
+  border-width: ${moderateScale(2)}px;
   padding: 0 ${moderateScale(20)}px;
   display: flex;
   flex-direction: row;
@@ -28,20 +28,20 @@ export const StyledButton = styled.View`
 `;
 
 export const StyledButtonText = styled.Text`
-  font-size: ${({ size }) => size === "thin" ? `${moderateScale(fontSizes.SmallText)}px` : `${moderateScale(fontSizes.StandardText)}px`};
-  font-family: ${({ size }) => size === "thin" ? activeFonts.Medium : activeFonts.Regular};
+  font-size: ${({ size }) => size === "thin" ? `${moderateScale(15)}px` : `${moderateScale(fontSizes.StandardText)}px`};
+  font-family: ${activeFonts.Bold};
   color: ${({ alt }) => (alt ? colors.primaryBlue : colors.themeWhite)};
   text-align: center;
 `;
 
 export const IconWrapperLeft = styled.View`
-  width: ${({ size }) => size === "thin" ? `${moderateScale(18)}px` : `${moderateScale(24)}px`};
+  width: ${moderateScale(24)}px;
   margin-left: ${moderateScale(-10)}px;
   margin-right: ${moderateScale(6)}px;
 `;
 
 export const IconWrapperRight = styled.View`
-  width: ${({ size }) => size === "thin" ? `${moderateScale(18)}px` : `${moderateScale(24)}px`};
+  width: ${moderateScale(24)}px;
   margin-left: ${moderateScale(6)}px;
   margin-right: ${moderateScale(-10)}px;
 `;

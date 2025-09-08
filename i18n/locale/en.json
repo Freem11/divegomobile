@@ -105,6 +105,12 @@
     },
     "DiveSiteReviewer": {
         "header": "Dive Site Review: \n{{siteName}}",
+        "step1Title": "When & How You Dived",
+        "step1Description": "Let's start with the basics - when did you dive and what type of dive was it?",
+        "step2Title": "What Were the Conditions?",
+        "step2Description": "Tell us about the diving conditions you experienced during your dive.",
+        "step3Title": "Share Your Experience",
+        "step3Description": "Describe your dive and share photos to help other divers know what to expect.",
         "diveDate": "Date",
         "datePlaceholder": "Date of your dive ",
         "viz": "Visibility (Est.)",

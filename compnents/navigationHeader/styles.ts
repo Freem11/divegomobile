@@ -44,6 +44,7 @@ export const styles = StyleSheet.create({
   centerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    gap: moderateScale(4),
   },
   title: {
     fontSize: moderateScale(16),
@@ -52,5 +53,6 @@ export const styles = StyleSheet.create({
   subtitle: {
     fontSize: moderateScale(14),
     color: colors.lightGrey,
+    fontFamily: activeFonts.Medium,
   },
 })

@@ -20,7 +20,7 @@ export default function Button(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, round = true, ...rest } = props;
 
   return (
-    <S.StyledTouchableHighlight underlayColor={colors.buttonPressOverlay} {...rest} onPress={() => props.onPress()}>
+    <S.StyledTouchableHighlight underlayColor={colors.themeWhite} {...rest} onPress={() => props.onPress()}>
       <S.StyledButton round={round} {...rest}>
         {iconLeft && (
           <S.IconWrapperLeft size={props.size}>

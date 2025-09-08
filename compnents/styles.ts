@@ -11,6 +11,7 @@ export const colors = {
   themeRed: "#E63946",
   themeGreen: "#4caf50",
   lightGrey: "#AFACAC",
+  lighterGrey: "#e4e4e4",
   neutralGrey: "#A9A9A9",
   darkGrey: "#706b6b",
   buttonPressOverlay: "rgba(128, 128, 128, 0.25)",

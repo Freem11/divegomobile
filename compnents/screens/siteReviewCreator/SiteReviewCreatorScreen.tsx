@@ -1,6 +1,6 @@
 import type { RouteProp } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import moment from "moment";
@@ -139,28 +139,19 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <ScrollView 
-        style={{ flex: 1 }}
-        contentContainerStyle={{ 
-          paddingBottom: 50,
-        }}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'handled'}
-      >
-        <SiteReviewPageView
-          datePickerVisible={datePickerVisible}
-          showDatePicker={() => setDatePickerVisible(true)}
-          hideDatePicker={() => setDatePickerVisible(false)}
-          onSubmit={handleSubmit(onSubmit)}
-          control={control}
-          setValue={setValue}
-          isSubmitting={isSubmitting}
-          errors={errors}
-          watch={watch}
-          selectedDiveSite={siteInfo}
-          unitSystem={unitSystem}
-        />
-      </ScrollView>
+      <SiteReviewPageView
+        datePickerVisible={datePickerVisible}
+        showDatePicker={() => setDatePickerVisible(true)}
+        hideDatePicker={() => setDatePickerVisible(false)}
+        onSubmit={handleSubmit(onSubmit)}
+        control={control}
+        setValue={setValue}
+        isSubmitting={isSubmitting}
+        errors={errors}
+        watch={watch}
+        selectedDiveSite={siteInfo}
+        unitSystem={unitSystem}
+      />
     </View>
   )
 }
