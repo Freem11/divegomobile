@@ -59,9 +59,10 @@ export const insertReviewPhotos = async(values: ReviewPhotosInsert[]) => {
   };
 };
 
-export const getReviewsBySiteId= async(siteId: number) => {
+export const getReviewsBySiteId= async(divesite_id: number) => {
+  console.log("divesite_id", divesite_id);
   const { data, error } = await supabase.rpc("get_review_data_by_divesite_id", {
-    divesite_id: siteId,
+    q_divesite_id: divesite_id,
   });
 
   if (error) {
@@ -69,7 +70,7 @@ export const getReviewsBySiteId= async(siteId: number) => {
     return [];
   }
 
-  console.log("data", data);
+  console.log("supa", data);
 
   if (data) {
     return data as Review[];

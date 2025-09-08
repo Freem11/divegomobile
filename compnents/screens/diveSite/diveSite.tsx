@@ -64,7 +64,7 @@ export default function DiveSiteScreenView({
         <Label label="Diver Reviews" />
       </S.LabelWrapper>
 
-      <S.ItinerariesWrapper>
+      <S.ReviewsWrapper>
         <S.Stats>{`${reviews.length } review${reviews.length  === 1 ? "": "s"}`}</S.Stats>
 
         {reviews && reviews.length > 0 ? reviews.map((review) => (
@@ -77,23 +77,25 @@ export default function DiveSiteScreenView({
             userName={review.user_name}
           />
         )): (
-          <S.EmptyStateWrapper>
+          <S.EmptyStateWrapper key="no-reviews-state">
             <EmptyState
-              iconName="boat"
+              iconName="diving-scuba-flag"
               title="No Reviews Here Yet"
               subtitle={`No one has left a review for ${selectedDiveSite?.name}`}
             />
-            <Button
-              size="thin"
-              title={"Add First Sighting"}
-              iconLeft="camera-plus"
-              round={false}
-              style={{ width: "auto", marginTop: moderateScale(15) }}
-              onPress={null}
-            />
+            <S.ButtonContainer>
+              <Button
+                size="thin"
+                title={"Add First Review"}
+                iconLeft="diving-scuba-flag"
+                round={false}
+                style={{ width: "auto", marginTop: moderateScale(15) }}
+                onPress={null}
+              />
+            </S.ButtonContainer>
           </S.EmptyStateWrapper>
         )}
-      </S.ItinerariesWrapper>
+      </S.ReviewsWrapper>
 
       {reviews.length  > 3 && (
         <S.ButtonContainer>

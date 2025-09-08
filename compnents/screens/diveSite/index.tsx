@@ -80,7 +80,7 @@ export default function DiveSiteScreen({
     if (selectedDiveSite){
       getData(selectedDiveSite);
     }
-  },[selectedDiveSite]);
+  },[selectedDiveSite.id]);
 
   const getData = async(selectedDiveSite: DiveSiteWithUserName) => {
     const trips = await getDiveSiteTripCount(selectedDiveSite.id);
@@ -98,12 +98,10 @@ export default function DiveSiteScreen({
     const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
     setItineraries(diveSiteItineraries);
 
+    console.log("selectedDiveSite", selectedDiveSite.id);
     const diveSiteReviews = await getReviewsBySiteId(selectedDiveSite.id);
     setReviews(diveSiteReviews);
   };
-
-  console.log("selectedDiveSite", selectedDiveSite.id);
-  console.log("reviews", reviews);
 
   return (
     <DiveSiteScreenView

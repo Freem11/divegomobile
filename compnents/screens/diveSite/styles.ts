@@ -55,6 +55,10 @@ export const Stats = styled.Text`
   margin-bottom: ${moderateScale(20)}px;
 `;
 
+export const ReviewsWrapper = styled.View`
+  padding: 0 ${moderateScale(20)}px;
+`;
+
 export const ItinerariesWrapper = styled.View`
   padding: 0 ${moderateScale(20)}px;
 `;
