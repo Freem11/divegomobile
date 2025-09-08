@@ -5,8 +5,6 @@ import Slider from "@react-native-community/slider";
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 
-import { colors } from "../../styles";
-
 import * as S from "./styles";
 import { useCurrentAnimation } from "./currentSliderAnimation";
 import { useGetCurrentLabel } from "./useGetCurrentLabel";
@@ -60,9 +58,17 @@ export default function ReusableSlider(props: SliderProps) {
     <S.Wrapper>
       <S.TopRow>
         <S.Label>{props.title}</S.Label>
-        <S.AnimatedLabel style={animatedColor}>
-          {(props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s") && currentLabel}{" "}
-          {liveValue.toFixed(1)} {props.unitMeasurement}
+        <S.AnimatedLabel>
+          {(props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s") && currentLabel && (
+            <S.LabelTag>
+              <S.LabelTagText>
+                {currentLabel}
+              </S.LabelTagText>
+            </S.LabelTag>
+          )}
+          <S.AnimatedText>
+            {liveValue.toFixed(1)} {props.unitMeasurement}
+          </S.AnimatedText>
         </S.AnimatedLabel>
       </S.TopRow>
 

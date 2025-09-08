@@ -7,13 +7,13 @@ export const useGetCurrentLabel = (rightValue: number, value: number): string =>
   const onePercent = rightValue / 100;
 
   if (value > 0 && value <= onePercent * 25) {
-    return "Weak Drift:";
+    return "Weak Drift";
   } else if (value > onePercent * 20 && value <= onePercent * 50) {
-    return "Typical Drift:";
+    return "Typical Drift";
   } else if (value > onePercent * 40 && value <= onePercent * 75) {
-    return "Strong Drift:";
+    return "Strong Drift";
   } else if (value > onePercent * 75) {
-    return "Extreme Drift:";
+    return "Extreme Drift";
   } else {
     return "";
   }

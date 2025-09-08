@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import Animated from "react-native-reanimated";
 
 import {
   fontSizes,
@@ -34,10 +33,19 @@ export const SliderRow = styled.View`
   align-items: center;
 `;
 
-export const AnimatedLabel = styled(Animated.Text)`
+export const AnimatedLabel = styled.View`
   font-size: ${moderateScale(15)}px;
   font-family: ${activeFonts.Medium};
-  `;
+  gap: ${moderateScale(6)}px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+export const AnimatedText = styled.Text`
+  font-size: ${moderateScale(15)}px;
+  font-family: ${activeFonts.Medium};
+`
 
 export const EndMarkerRight = styled.Text`
   width: ${moderateScale(41)}px;
@@ -55,3 +63,14 @@ export const EndMarkerLeft = styled.Text`
   font-size: ${moderateScale(fontSizes.Micro)}px;
   font-family: ${activeFonts.Regular};
 `;
+
+export const LabelTag = styled.View`
+  background: ${colors.lighterBlue};
+  padding: ${moderateScale(5)}px ${moderateScale(8)}px ;
+  border-radius: ${moderateScale(8)}px;
+  border-color: ${colors.borderActive};
+  border-width: ${moderateScale(1)}px;
+`
+export const LabelTagText = styled.Text`
+  color: ${colors.primaryBlue};
+`

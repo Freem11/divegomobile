@@ -65,14 +65,15 @@ export const DescriptionBox = styled.View`
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${Platform.OS === "ios" ? "15%" : "2%"};
+  margin-top: ${Platform.OS === "ios" ? `${moderateScale(32)}px` : "2%"};
   padding-horizontal: ${moderateScale(16)}px;
 `;
 
 export const SubmitButton = styled(Button)`
   width: 100%;
   border-radius: ${moderateScale(8)}px;
-  height: ${moderateScale(48)}px;
+  height: ${moderateScale(52)}px;
+  font-family: ${activeFonts.Medium};
 `;
 
 export const EmptyStateContainer = styled.View`

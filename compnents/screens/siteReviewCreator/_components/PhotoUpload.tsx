@@ -23,7 +23,7 @@ export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting }) => {
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext) as any;
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
-  const itemSize = scale(110);
+  const itemSize = scale(100);
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
