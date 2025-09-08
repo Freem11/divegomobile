@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import type { StackNavigationProp } from "@react-navigation/stack";
 
-import { NavigationHeader } from "../compnents/reusables/navigationHeader/NavigationHeader";
-import { NavigationButton } from "../compnents/reusables/navigationHeader/NavigationButton";
+import { NavigationHeader } from "../compnents/navigationHeader/NavigationHeader";
+import { NavigationButton } from "../compnents/navigationHeader/NavigationButton";
 import SiteReviewCreatorScreen from "../compnents/screens/siteReviewCreator/SiteReviewCreatorScreen";
 import MapPage from "../compnents/mapPage/mapPage";
-import type {StackNavigationProp} from "@react-navigation/stack";
 
 export type RootStackParamList = {
   Home: undefined;

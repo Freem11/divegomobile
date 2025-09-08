@@ -73,7 +73,7 @@ export default function ReusableSlider(props: SliderProps) {
           <View
             style={{
               height: moderateScale(8),
-              backgroundColor: colors.buttonPressOverlay,
+              backgroundColor: "rgb(230,230,230)",
               borderRadius: moderateScale(8),
               position: "absolute",
               width: "100%",

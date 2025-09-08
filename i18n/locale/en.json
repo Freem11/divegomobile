@@ -132,7 +132,7 @@
         "upCurrentButton": "Up-welling",
         "downCurrentButton": "Down-welling",
         "contrastCurrentButton": "Contrasting",
-        "description": "Describe Your Dive",
+        "description": "Describe your dive",
         "reviewDescriptionPlaceholder": "Tell others what it was like to dive at {{siteName}}!",
         "addPhotos": "Dive Photos"
     },

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { moderateScale } from 'react-native-size-matters'
-import { colors, activeFonts } from '../../styles'
+import { colors, activeFonts } from '../styles'
 
 export const styles = StyleSheet.create({
   navigationButton: {
@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(16),
     fontFamily: activeFonts.Medium,
   },
   subtitle: {

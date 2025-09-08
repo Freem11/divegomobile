@@ -14,7 +14,7 @@ import { SessionContext } from "./compnents/contexts/sessionContext";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import Authentication from "./compnents/authentication";
-import {AppNavigator} from "./providers/navigation";
+import { AppNavigator } from "./providers/navigation";
 import { toastConfig } from "./compnents/toast";
 import { i18n, initI18n } from "./i18n";
 
