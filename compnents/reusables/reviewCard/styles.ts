@@ -9,8 +9,6 @@ export const Card = styled.View`
   border-color: ${colors.lightGrey};
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(12)}px;
-  width: 96%;
-  margin-horizontal: 2%;
   margin-bottom: ${moderateScale(16)}px;
   padding: ${moderateScale(15)}px;
   ${Platform.select({

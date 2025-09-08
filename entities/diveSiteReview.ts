@@ -9,8 +9,8 @@ export type Review = {
   updated_at: string | null;
   updated_by: string | null;
   user_name: string;
-  conditions: ReviewConditionInsert[]
-  photos: ReviewPhotosInsert[]
+  conditions: ReviewCondition[]
+  photos: ReviewPhotos[]
 };
 
 export type ReviewCondition = {

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Text } from "react-native";
 
 import readableDate from "../../helpers/readableDate";
 import { colors } from "../../styles";
@@ -24,9 +23,6 @@ export default function ReviewCardView({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
-  const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-
-  console.log("conditions", conditions);
 
   return (
     <S.Card>

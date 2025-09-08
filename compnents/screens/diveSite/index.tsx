@@ -10,7 +10,7 @@ import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls"
 import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { getReviewsByDiveSiteId, getReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { getReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
 import { Review } from "../../../entities/diveSiteReview";
 
 import DiveSiteScreenView from "./diveSite";
@@ -97,8 +97,6 @@ export default function DiveSiteScreen({
 
     const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
     setItineraries(diveSiteItineraries);
-
-    console.log(selectedDiveSite.id);
 
     const diveSiteReviews = await getReviewsBySiteId(selectedDiveSite.id);
     setReviews(diveSiteReviews);

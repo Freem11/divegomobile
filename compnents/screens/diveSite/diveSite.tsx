@@ -63,31 +63,45 @@ export default function DiveSiteScreenView({
       <S.LabelWrapper>
         <Label label="Diver Reviews" />
       </S.LabelWrapper>
-      {reviews && reviews.length > 0 ? reviews.map((review) => (
 
-        <ReviewCard
-          key={review.id}
-          date={review.dive_date}
-          description={review.description}
-          conditions={review.conditions}
-          userName={review.user_name}
-        />
-      )): (
-        <S.EmptyStateWrapper>
-          <EmptyState
-            iconName="boat"
-            title="No Reviews Here Yet"
-            subtitle={`No one has left a review for ${selectedDiveSite?.name}`}
+      <S.ItinerariesWrapper>
+        <S.Stats>{`${reviews.length } review${reviews.length  === 1 ? "": "s"}`}</S.Stats>
+
+        {reviews && reviews.length > 0 ? reviews.map((review) => (
+
+          <ReviewCard
+            key={review.id}
+            date={review.dive_date}
+            description={review.description}
+            conditions={review.conditions}
+            userName={review.user_name}
           />
-          <Button
-            size="thin"
-            title={"Add First Sighting"}
-            iconLeft="camera-plus"
-            round={false}
-            style={{ width: "auto", marginTop: moderateScale(15) }}
-            onPress={null}
+        )): (
+          <S.EmptyStateWrapper>
+            <EmptyState
+              iconName="boat"
+              title="No Reviews Here Yet"
+              subtitle={`No one has left a review for ${selectedDiveSite?.name}`}
+            />
+            <Button
+              size="thin"
+              title={"Add First Sighting"}
+              iconLeft="camera-plus"
+              round={false}
+              style={{ width: "auto", marginTop: moderateScale(15) }}
+              onPress={null}
+            />
+          </S.EmptyStateWrapper>
+        )}
+      </S.ItinerariesWrapper>
+
+      {reviews.length  > 3 && (
+        <S.ButtonContainer>
+          <GhostButton
+            onPress={() => null}
+            title={"View All Reviews"}
           />
-        </S.EmptyStateWrapper>
+        </S.ButtonContainer>
       )}
 
       <S.LabelWrapper>

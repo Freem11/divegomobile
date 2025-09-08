@@ -1,13 +1,13 @@
 import React from "react";
 
-import { ReviewConditionInsert } from "../../../entities/diveSiteReview";
+import { ReviewCondition } from "../../../entities/diveSiteReview";
 
 import ReviewCardView from "./view";
 
 type ReviewCardProps = {
   date: string;
   description: string;
-  conditions: ReviewConditionInsert[]
+  conditions: ReviewCondition[]
   userName: string;
 
 };

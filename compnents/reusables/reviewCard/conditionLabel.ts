@@ -36,11 +36,11 @@ export function renderLabel(condition: ReviewCondition) {
     case 10:
       return "Surge Encountered";
     case 11:
-      return "No reference points";
+      return "No Reference Points";
     case 12:
-      return "Bottom Depth is greater than AOW";
+      return "Bottom Depth Exceeds AOW";
     case 13:
-      return "Kelp present";
+      return "Kelp Present";
     case 15:
       if (condition.value < 10) {
         return "Poor Vizibility";
