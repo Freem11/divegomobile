@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 import { colors, fontSizes, activeFonts } from "../../styles";
 import Button from "../button";
@@ -9,7 +9,8 @@ export const Card = styled.View`
   border-color: ${colors.lightGrey};
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(12)}px;
-  width: 100%;
+  width: 96%;
+  margin-horizontal: 2%;
   margin-bottom: ${moderateScale(16)}px;
   padding: ${moderateScale(15)}px;
   ${Platform.select({
@@ -94,18 +95,37 @@ export const ShowMoreText = styled.Text`
   margin-top: ${moderateScale(10)}px;
 `;
 
-export const ButtonsContainer = styled.View`
+const { width } = Dimensions.get("window");
+const gapSize = 8;
+const totalGaps = 2;
+const itemWidth = (width - (gapSize * totalGaps)) / 3 - 20;
+
+export const LabelsContainer = styled.View`
   flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: ${moderateScale(8)}px;
-  width: 100%;
   margin-top: ${moderateScale(20)}px;
+  width: 100%;
 `;
 
 export const TagWrapper = styled.View`
   background-color: ${colors.lightGrey};
-  font-size: ${moderateScale(15)}px;
+  font-size: ${moderateScale(fontSizes.Micro)}px;
   font-family: ${activeFonts.Medium};
-  flex: 1;
+  border-radius: ${moderateScale(7)}px;
+  justify-content: center;
+  align-items: center;
+  padding-vertical: ${moderateScale(7)}px;
+  padding-horizontal: ${moderateScale(10)}px;
+`;
+
+export const TagText = styled.Text`
+  font-size: ${moderateScale(fontSizes.Micro)}px;
+  font-family: ${activeFonts.Medium};
+  text-align: center;
+  color: ${colors.primaryBlue};
 `;
 
 export const StyledButton = styled(Button)`

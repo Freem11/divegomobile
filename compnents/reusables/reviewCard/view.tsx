@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import { Text } from "react-native";
 
 import readableDate from "../../helpers/readableDate";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { ReviewCondition } from "../../../entities/diveSiteReview";
-import Label from "../label-new";
 
 import * as S from "./styles";
+import { renderLabel } from "./conditionLabel";
 
 type ReviewCardViewProps = {
   userName: string;
@@ -74,14 +75,21 @@ export default function ReviewCardView({
             {isExpanded ? "Read less" : "Read more"}
           </S.ShowMoreText>
         )}
-        <S.ButtonsContainer>
-          {conditions && conditions.map((condition) => (
-            <S.TagWrapper key={condition.condition_entry_id}>
-              <Label label={condition.condition_type_id}/>
-            </S.TagWrapper>
-          ))}
+        <S.LabelsContainer>
+          {conditions && conditions.map((condition) => {
+            const label = renderLabel(condition);
 
-        </S.ButtonsContainer>
+            if (label){
+              return (
+                <S.TagWrapper key={condition.condition_entry_id}>
+                  <S.TagText>{label}</S.TagText>
+                </S.TagWrapper>
+              );
+            }
+
+          })}
+
+        </S.LabelsContainer>
       </S.Description>
     </S.Card>
   );
