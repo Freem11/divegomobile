@@ -1,30 +1,33 @@
-import React, { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
+import type { RouteProp } from '@react-navigation/native';
+import React, { useContext, useState } from 'react';
+import { ScrollView, View } from 'react-native';
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
 
+import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { RootStackParamList } from "../../../providers/navigation";
 import { UserProfileContext } from "../../contexts/userProfileContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { imageUploadMultiple } from "../imageUploadHelpers";
-import { showError } from "../../toast";
-import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
-
 import SiteReviewPageView from "./siteReviewCreator";
+import { showError } from "../../toast";
 import { Form } from "./form";
 
-type SiteReviewerProps = {
-  selectedDiveSite: number
+
+type SiteReviewCreatorScreenProps = {
+  route: RouteProp<RootStackParamList, 'SiteReviewCreator'>;
 };
 
-export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
+export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScreenProps) {
+  const { selectedDiveSite } = route.params;
   const { t } = useTranslation();
   const { profile } = useContext(UserProfileContext);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [siteInfo, setSiteInfo] = useState(null);
 
   const unitSystem = profile && profile.unit_system;
-  // const unitSystem = "Imperial";
-
+  
   let default_viz = 30;
   if (unitSystem === "Imperial"){
     default_viz = 100;
@@ -50,7 +53,6 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
   };
 
   const onSubmit = async(data: Form) => {
-
     const photoUploadPromises = data.Photos.map(async(photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
@@ -96,7 +98,7 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
         created_by: profile.UserID,
         dive_date: submissionData.DiveDate,
         description: submissionData.Description,
-        diveSite_id: props.selectedDiveSite
+        diveSite_id: selectedDiveSite
       });
 
       const diveReviewId = sucessfulReviewInsert.data[0].id;
@@ -132,21 +134,32 @@ export default function SiteReviewCreatorPage(props: SiteReviewerProps) {
     }
   };
 
-  getDiveSiteinfo(props.selectedDiveSite);
+  getDiveSiteinfo(selectedDiveSite);
 
   return (
-    <SiteReviewPageView
-      datePickerVisible={datePickerVisible}
-      showDatePicker={() => setDatePickerVisible(true)}
-      hideDatePicker={() => setDatePickerVisible(false)}
-      onSubmit={handleSubmit(onSubmit)}
-      control={control}
-      setValue={setValue}
-      isSubmitting={isSubmitting}
-      errors={errors}
-      watch={watch}
-      selectedDiveSite={siteInfo}
-      unitSystem={unitSystem}
-    />
-  );
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={{ 
+          flexGrow: 1,
+        }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps={'handled'}
+      >
+        <SiteReviewPageView
+          datePickerVisible={datePickerVisible}
+          showDatePicker={() => setDatePickerVisible(true)}
+          hideDatePicker={() => setDatePickerVisible(false)}
+          onSubmit={handleSubmit(onSubmit)}
+          control={control}
+          setValue={setValue}
+          isSubmitting={isSubmitting}
+          errors={errors}
+          watch={watch}
+          selectedDiveSite={siteInfo}
+          unitSystem={unitSystem}
+        />
+      </ScrollView>
+    </View>
+  )
 }

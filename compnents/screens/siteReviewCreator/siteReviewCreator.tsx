@@ -166,9 +166,6 @@ export default function SiteReviewPageView({
 
   return (
     <S.ContentContainer>
-      {selectedDiveSite &&
-        <S.Header>{t("DiveSiteReviewer.header", { siteName: selectedDiveSite.name })}</S.Header>}
-
       <S.InputGroupContainer>
 
         <Label label={t("DiveSiteReviewer.diveDate")} />

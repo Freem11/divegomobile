@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
 import email from "react-native-email";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
@@ -15,6 +16,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { NavigationProp } from "../../../providers/navigation";
 
 import DiveSiteScreen from ".";
 
@@ -24,6 +26,7 @@ type DiveSiteProps = {
 
 export default function DiveSiteParallax(props: DiveSiteProps) {
   const { t } = useTranslation();
+  const navigation = useNavigation<NavigationProp>();
   const { profile } = useContext(UserProfileContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
@@ -82,10 +85,11 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   };
 
   const openDiveSiteReviewer = () => {
-    setActiveScreen("DiveSiteReviewerScreen", selectedDiveSite);
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
-  };
+    navigation.navigate('SiteReviewCreator', {
+      selectedDiveSite: selectedDiveSite.id,
+      siteName: selectedDiveSite.name
+    });
+  }
 
   const openPicUploader = () => {
     setActiveScreen("PictureUploadScreen", selectedDiveSite);

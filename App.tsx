@@ -1,27 +1,22 @@
+import React, { useState, useCallback, useLayoutEffect, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, {
-  useState,
-  useCallback,
-  useLayoutEffect,
-  useEffect
-} from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import * as ScreenOrientation from "expo-screen-orientation";
+import * as SplashScreen from "expo-splash-screen";
+import * as SecureStore from "expo-secure-store";
+import { I18nextProvider } from "react-i18next";
+import Toast from "react-native-toast-message";
 import "react-native-url-polyfill/auto";
 import { Platform } from "react-native";
-import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import Toast from "react-native-toast-message";
-import * as ScreenOrientation from "expo-screen-orientation";
-import { I18nextProvider } from "react-i18next";
 
 import { SessionContext } from "./compnents/contexts/sessionContext";
-import MapPage from "./compnents/mapPage/mapPage";
-import Authentication from "./compnents/authentication";
 import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
-import { i18n, initI18n } from "./i18n";
+import Authentication from "./compnents/authentication";
+import {AppNavigator} from "./providers/navigation";
 import { toastConfig } from "./compnents/toast";
-import { createProfile, grabProfileByUserId } from "./supabaseCalls/accountSupabaseCalls";
+import { i18n, initI18n } from "./i18n";
 
 export default function App() {
   if (Platform.OS === "ios") {
@@ -30,6 +25,7 @@ export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [activeSession, setActiveSession] = useState(null);
 
+  /* eslint-disable @typescript-eslint/no-require-imports */
   const [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
     SFBlack: require("./assets/SanFran/SF-Pro-Display-Black.otf"),
@@ -56,6 +52,7 @@ export default function App() {
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
     SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf")
   });
+  /* eslint-enable @typescript-eslint/no-require-imports */
 
   useEffect(() => {
     initI18n();
@@ -90,14 +87,6 @@ export default function App() {
 
         if (storedToken && typeof storedToken === "string") {
           const newSession = await sessionRefresh(storedToken);
-          const profileCheck = await grabProfileByUserId(newSession.user.id);
-
-          if (!profileCheck) {
-            await createProfile({
-              id: newSession.user.id,
-              email: newSession.user.email
-            });
-          }
 
           if (newSession) {
             setActiveSession(newSession);
@@ -138,7 +127,13 @@ export default function App() {
           value={{ activeSession, setActiveSession }}
         >
           <I18nextProvider i18n={i18n}>
-            {activeSession ? <MapPage /> : <Authentication />}
+            {activeSession ? (
+              <NavigationContainer>
+                <AppNavigator />
+              </NavigationContainer>
+            ) : (
+              <Authentication />
+            )}
           </I18nextProvider>
         </SessionContext.Provider>
       </AppContextProvider>
