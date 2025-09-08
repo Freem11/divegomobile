@@ -1,24 +1,20 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 
-import {
-  colors,
-  fontSizes,
-  activeFonts,
-  buttonSizes
-} from "../../styles";
+import { colors, fontSizes, activeFonts, buttonSizes } from "../../styles";
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
   width: ${({ size }) => moderateScale(buttonSizes[size].width)}px;
-  height: ${({ size }) => moderateScale(buttonSizes[size].height)}px;
+  border-radius: ${moderateScale(8)}px;
+  height: ${moderateScale(44)}px;
 `;
 
 export const StyledButton = styled.View`
   width: ${({ size }) => moderateScale(buttonSizes[size].width)}px;
   height: ${({ size }) => moderateScale(buttonSizes[size].height)}px;
-  background-color: ${({ alt }) => (alt ? colors.themeWhite : colors.primaryBlue)};
-  border-radius: ${({ round }) => round ? `${moderateScale(30)}px` : `${moderateScale(10)}px`};
-  border-color: ${colors.primaryBlue};
+  background-color: ${({ active }) => (active ? colors.lighterBlue : colors.themeWhite)};
+  border-color: ${({ active }) => (active ? colors.borderActive : colors.border)};
+  border-radius: ${({ round }) => round ? `${moderateScale(44)}px` : `${moderateScale(8)}px`};
   border-width: ${moderateScale(1)}px;
   padding: 0 ${moderateScale(20)}px;
   display: flex;
@@ -28,9 +24,9 @@ export const StyledButton = styled.View`
 `;
 
 export const TextWrapper = styled.View`
-  width: 90%;
+  width: 100%;
   flex-direction: row;
-  flex-wrap: wrap; /* Add this property */
+  flex-wrap: wrap;
   justify-content: left;
   align-items: center;
 `;
@@ -38,7 +34,7 @@ export const TextWrapper = styled.View`
 export const StyledButtonText = styled.Text`
   font-size: ${({ size }) => size === "thin" ? `${moderateScale(fontSizes.Micro)}px` : `${moderateScale(fontSizes.StandardText)}px`};
   font-family: ${({ size }) => size === "thin" ? activeFonts.Medium : activeFonts.Regular};
-  color: ${({ alt }) => (alt ? colors.primaryBlue : colors.themeWhite)};
+  color: ${colors.themeBlack};
   text-align: left;
 `;
 

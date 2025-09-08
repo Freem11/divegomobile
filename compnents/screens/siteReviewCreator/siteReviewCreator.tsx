@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Control, Controller, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
-import { View, Animated } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment";
 import { moderateScale } from "react-native-size-matters";
 import { ImagePickerAsset } from "expo-image-picker";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { View, Animated } from "react-native";
+import moment from "moment";
 
-import Label from "../../reusables/label";
-import { colors } from "../../styles";
-import MobileTextInput from "../../reusables/textInput";
-import Button from "../../reusables/button";
+import { DiveConditions, DiveSiteConditions } from "../../../entities/diveSiteCondidtions";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../../reusables/previewGrid";
-import EmptyState from "../../reusables/emptyState-new";
 import { multiImageHandler } from "../imageUploadHelpers";
+import MobileTextInput from "../../reusables/textInput";
+import EmptyState from "../../reusables/emptyState-new";
 import ReusableSlider from "../../reusables/slider";
-import { DiveConditions } from "../../../entities/diveSiteCondidtions";
+import Button from "../../reusables/button";
+import { colors } from "../../styles";
 
-import * as S from "./styles";
+import { ButtonGroup } from "./_components";
 import { Form, FormRules } from "./form";
+import * as S from "./styles";
 
 type ShopReviewCreatorProps = {
   datePickerVisible: boolean;
@@ -49,20 +49,11 @@ export default function SiteReviewPageView({
   selectedDiveSite,
   unitSystem
 }: ShopReviewCreatorProps) {
-  const [images, setImages] = useState([]);
-
-  const handleDatePickerConfirm = (selectedDate: Date) => {
-    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
-    setValue("DiveDate", formattedDate);
-    hideDatePicker();
-  };
-
   const { t } = useTranslation();
-  const conditions = watch("Conditions");
-  const currentIntensity = conditions.find(c => c.conditionId === DiveConditions.CURRENT_INTENSITY)?.value || 0;
+
+  const [images, setImages] = useState([]);
   const [showCurrentButtons, setShowCurrentButtons] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
-
   const [metrics, setMetrics] = useState(unitSystem === "Imperial" ? {
     highValueViz: 100,
     lowValueViz: 0,
@@ -78,6 +69,15 @@ export default function SiteReviewPageView({
     simpleMetric: "m",
     rateMetric: "m/s"
   });
+
+  const conditions = watch("Conditions");
+  const currentIntensity = conditions.find(c => c.conditionId === DiveConditions.CURRENT_INTENSITY)?.value || 0;
+
+  const handleDatePickerConfirm = (selectedDate: Date) => {
+    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
+    setValue("DiveDate", formattedDate);
+    hideDatePicker();
+  };
 
   const handleSelectImages = async() => {
     try {
@@ -98,37 +98,8 @@ export default function SiteReviewPageView({
     setValue("Photos", [...currentFormPhotos, ...newPicArray]);
   };
 
-  useEffect(() => {
-    if (currentIntensity > 0) {
-      setShowCurrentButtons(true);
-      Animated.timing(heightAnim, {
-        toValue: moderateScale(130),
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
-    } else {
-      Animated.timing(heightAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: false,
-      }).start(() => {
-        setShowCurrentButtons(false);
-      });
-    }
-  }, [currentIntensity, heightAnim]);
-
-  const handleBooleanConditions = (condition_id: number) => {
-    const conditions = watch("Conditions");
-    const existingCondition = conditions.find(c => c.conditionId === condition_id);
-
-    if (existingCondition) {
-      const updatedConditions = conditions.map(c =>
-        c.conditionId === condition_id ? { ...c, value: c.value === 1 ? 0 : 1 } : c
-      );
-      setValue("Conditions", updatedConditions);
-    } else {
-      setValue("Conditions", [...conditions, { conditionId: condition_id, value: 1 }]);
-    }
+  const handleBooleanConditions = (updatedConditions: DiveSiteConditions[]) => {
+    setValue("Conditions", updatedConditions);
   };
 
   const handleSliderConditions = (condition_id: number, sliderValue: number) => {
@@ -164,17 +135,35 @@ export default function SiteReviewPageView({
     imagesArray.push({ photofile: image });
   });
 
+  useEffect(() => {
+    if (currentIntensity > 0) {
+      setShowCurrentButtons(true);
+      Animated.timing(heightAnim, {
+        toValue: moderateScale(130),
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(heightAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => {
+        setShowCurrentButtons(false);
+      });
+    }
+  }, [currentIntensity, heightAnim]);
+
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
-
-        <Label label={t("DiveSiteReviewer.diveDate")} />
-        <Controller
-          control={control}
-          name="DiveDate"
-          rules={FormRules.DiveDate}
-          render={({ field: { onChange, value } }) => (
-            <S.TextBuffer>
+        <S.Section>
+          <S.Label>{t("DiveSiteReviewer.diveDate")}</S.Label>
+          <Controller
+            control={control}
+            name="DiveDate"
+            rules={FormRules.DiveDate}
+            render={({ field: { onChange, value } }) => (
               <Toucher onPress={() => showDatePicker()}>
                 <View pointerEvents="none">
                   <MobileTextInput
@@ -186,158 +175,126 @@ export default function SiteReviewPageView({
                   />
                 </View>
               </Toucher>
-            </S.TextBuffer>
-          )}
-        />
+            )}
+          />
+        </S.Section>
 
-        <S.Buffer />
+        <S.Section>
+          <S.Label>{t("DiveSiteReviewer.typOfDive")}</S.Label>
+          <ButtonGroup
+            multiple={true}
+            initialSelected={[DiveConditions.SHORE_DIVE]}
+            onSelectionChange={handleBooleanConditions}
+            options={[
+              {
+                label: t("DiveSiteReviewer.shoreDiveButton"),
+                icon: "island",
+                value: DiveConditions.SHORE_DIVE
+              },
+              {
+                label: t("DiveSiteReviewer.boatDiveButton"),
+                icon: "sailboat",
+                value: DiveConditions.BOAT_DIVE
+              },
+              {
+                label: t("DiveSiteReviewer.nightDiveButton"),
+                icon: "moon-stars",
+                value: DiveConditions.NIHGT_DIVE
+              },
+              {
+                label: t("DiveSiteReviewer.altitudeDiveButton"),
+                icon: "mountains",
+                value: DiveConditions.ALTITUDE_DIVE
+              },
+              {
+                label: t("DiveSiteReviewer.wreckDiveButton"),
+                icon: "directions-boat",
+                value: DiveConditions.WREAK_DIVE
+              },
+              {
+                label: t("DiveSiteReviewer.caveDiveButton"),
+                icon: "vinyl-record",
+                value: DiveConditions.CAVE_DIVE
+              }
+            ]}
+          />
+        </S.Section>
 
-        <Label label={t("DiveSiteReviewer.typOfDive")} />
-        {/* Type Of Dive Toggles goes here */}
+        <S.Section>
+          <S.Label>{t("DiveSiteReviewer.typeOfWater")}</S.Label>
+          <ButtonGroup
+            multiple={false}
+            initialSelected={[DiveConditions.SALT_WATER]}
+            onSelectionChange={handleBooleanConditions}
+            options={[
+              {
+                label: t("DiveSiteReviewer.saltWaterButton"),
+                icon: "salt-water",
+                value: DiveConditions.SALT_WATER
+              },
+              {
+                label: t("DiveSiteReviewer.freshWaterButton"),
+                icon: "fresh-water",
+                value: DiveConditions.FRESH_WATER
+              }
+            ]}
+            columns={2}
+          />
+        </S.Section>
 
-        <S.TypeOfDiveButtons>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.shoreDiveButton")}
-              iconLeft={"island"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.SHORE_DIVE)}
+        <S.Section>
+          <S.Label>{t("DiveSiteReviewer.atTheSurface")}</S.Label>
+            <ButtonGroup
+              multiple={true}
+              initialSelected={[DiveConditions.SURFACE_TRAFFIC]}
+              onSelectionChange={handleBooleanConditions}
+              columns={2}
+              options={[
+                {
+                  label: t("DiveSiteReviewer.trafficButton"),
+                  icon: "traffic-light",
+                  value: DiveConditions.SURFACE_TRAFFIC
+                },
+                {
+                  label: t("DiveSiteReviewer.surgeButton"),
+                  icon: "waves",
+                  value: DiveConditions.SURGE
+                }
+              ]}
             />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.boatDiveButton")}
-              iconLeft={"sailboat"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.BOAT_DIVE)}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.nightDiveButton")}
-              iconLeft={"moon-stars"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.NIHGT_DIVE)}
-            />
-          </S.ButtonRow>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.altitudeDiveButton")}
-              iconLeft={"mountains"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.ALTITUDE_DIVE)}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.wreckDiveButton")}
-              iconLeft={"directions-boat"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.WREAK_DIVE)}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.caveDiveButton")}
-              iconLeft={"vinyl-record"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.CAVE_DIVE)}
-            />
-          </S.ButtonRow>
-        </S.TypeOfDiveButtons>
+        </S.Section>
 
-        <Label label={t("DiveSiteReviewer.typeOfWater")} />
-        {/* Type of WaterToggles goes here */}
-        <S.WaterTypeButtons>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.saltWaterButton")}
-              iconLeft={"salt-water"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.SALT_WATER)}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.freshWaterButton")}
-              iconLeft={"fresh-water"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.FRESH_WATER)}
-            />
-          </S.ButtonRow>
-        </S.WaterTypeButtons>
-
-        <Label label={t("DiveSiteReviewer.atTheSurface")} />
-        {/* At The Surface Toggles goes here */}
-        <S.AttheSurfaceButtons>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.trafficButton")}
-              iconLeft={"traffic-light"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.SURFACE_TRAFFIC)}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.surgeButton")}
-              iconLeft={"waves"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.SURGE)}
-            />
-          </S.ButtonRow>
-        </S.AttheSurfaceButtons>
-
-        <Label label={t("DiveSiteReviewer.inTheWater")} />
-
-        {/* In the Water Toggles goes here */}
-
-        <S.InTheWaterButtons>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.noRefsButton")}
-              iconLeft={"GPS-splash"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.NO_REFS)}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.limitsButton")}
-              iconLeft={"warning-diamond"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.MAX_DEPTH)}
-            />
-          </S.ButtonRow>
-          <S.ButtonRow>
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.kelpButton")}
-              iconLeft={"coral"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.KELP)}
-            />
-            <S.StyledButton
-              size={"thin"}
-              title={t("DiveSiteReviewer.pollutionButton")}
-              iconLeft={"beer-bottle"}
-              alt
-              round={false}
-              onPress={() => handleBooleanConditions(DiveConditions.POLLUTION)}
-            />
-          </S.ButtonRow>
-        </S.InTheWaterButtons>
+        <S.Section>
+          <S.Label>{t("DiveSiteReviewer.inTheWater")}</S.Label>
+          <ButtonGroup
+            multiple={true}
+            initialSelected={[DiveConditions.NO_REFS]}
+            onSelectionChange={handleBooleanConditions}
+            columns={2}
+            options={[
+              {
+                label: t("DiveSiteReviewer.noRefsButton"),
+                icon: "GPS-splash",
+                value: DiveConditions.NO_REFS
+              },
+              {
+                label: t("DiveSiteReviewer.limitsButton"),
+                icon: "warning-diamond",
+                value: DiveConditions.MAX_DEPTH
+              },
+              {
+                label: t("DiveSiteReviewer.kelpButton"),
+                icon: "coral",
+                value: DiveConditions.KELP
+              },
+              {
+                label: t("DiveSiteReviewer.pollutionButton"),
+                icon: "beer-bottle",
+                value: DiveConditions.POLLUTION
+              }
+            ]}
+          />
+        </S.Section>
 
         {/* Viz Slider goes here */}
         <ReusableSlider
@@ -402,7 +359,7 @@ export default function SiteReviewPageView({
           </Animated.View>
         )}
 
-        <Label label={t("DiveSiteReviewer.description")} />
+        <S.Label>{t("DiveSiteReviewer.description")}</S.Label>
 
         {selectedDiveSite && (
           <S.DescriptionBox>
@@ -425,7 +382,7 @@ export default function SiteReviewPageView({
           </S.DescriptionBox>
         )}
 
-        <Label label={t("DiveSiteReviewer.addPhotos")} />
+        <S.Label>{t("DiveSiteReviewer.addPhotos")}</S.Label>
         {/* Multi Pic Uploader goes here */}
 
       </S.InputGroupContainer>

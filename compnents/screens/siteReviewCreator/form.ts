@@ -16,7 +16,7 @@ export const FormRules: FormValidationRules<Form> =   {
     required: "Description is required",
   },
   Conditions: {
-    required: "No Condditions?",
+    required: "No Conditions?",
   },
   Photos: {
     required: "No Photos?",

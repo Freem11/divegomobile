@@ -2,8 +2,9 @@ import { Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 export const colors = {
-  primaryBlue: "#0073E6",
+  primaryBlue: "#1E70FE",
   headersBlue: "#678FB7",
+  lighterBlue: "#E3EEFF",
   secondaryYellow: "#fdc500",
   themeWhite: "#ffffff",
   themeBlack: "#00171f",
@@ -14,7 +15,9 @@ export const colors = {
   darkGrey: "#706b6b",
   buttonPressOverlay: "rgba(128, 128, 128, 0.25)",
   headerButtonOverlay: "rgba(0,0,0,0.4)",
-  searchOverlay: "rgba(128, 128, 128, 0.6)"
+  searchOverlay: "rgba(128, 128, 128, 0.6)",
+  border: "rgba(0,0,0,0.15)",
+  borderActive: "rgba(30,112,254,0.5)",
 };
 
 export const fontSizes = {

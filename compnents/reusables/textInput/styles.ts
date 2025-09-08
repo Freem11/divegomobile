@@ -1,44 +1,45 @@
-import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
-import {
-  colors,
-  fontSizes,
-  activeFonts,
-} from '../../styles';
+import styled from 'styled-components/native';
 import { Platform } from "react-native";
 
+import { colors, activeFonts } from '../../styles';
+
 export const TextInputWrapper = styled.View`
-  height: ${moderateScale(35)}px;
+  height: ${moderateScale(44)}px;
   display: flex;
   flex-direction: row;
   justify-content: left;
-  border-bottom-color: ${colors.neutralGrey};
-  border-bottom-width: ${moderateScale(2)}px;
+  border-color: ${colors.border};
+  border-width: ${moderateScale(1)}px;
+  border-radius: ${moderateScale(8)}px;
   position: relative;
 `;
 
 export const StyledTextInput = styled.TextInput`
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-size: ${moderateScale(16)}px;
   font-family: ${activeFonts.Light};
-  width: 90%;
+  width: 100%;
   text-align-vertical: center;
-  padding-bottom: ${Platform.OS === "android" ? moderateScale(12) : moderateScale(7)}px;
-  height: ${moderateScale(40)}px;
+  padding-bottom: ${Platform.OS === "android" ? moderateScale(12) : moderateScale(4)}px;
+  height: ${moderateScale(44)}px;
+  padding-horizontal: ${moderateScale(6)}px;
   color: ${colors.themeBlack};
 `;
 
 export const IconWrapperLeft = styled.View`
-    width: ${moderateScale(24)}px;
-    margin-right: ${moderateScale(2)}px;
+  width: ${moderateScale(20)}px;
+  margin-right: ${moderateScale(4)}px;
+  margin-left: ${moderateScale(10)}px;
 `;
 
 export const IconWrapperRight = styled.View`
-    width: ${moderateScale(24)}px;
-    margin-left: ${moderateScale(2)}px;
+  width: ${moderateScale(20)}px;
+  margin-left: ${moderateScale(4)}px;
+  margin-right: ${moderateScale(10)}px;
 `;
 
 
 export const IconWrapperRightClear = styled.View`
-    width: ${moderateScale(24)}px;
+    width: ${moderateScale(20)}px;
     margin-left: ${moderateScale(-15)}px;
 `;

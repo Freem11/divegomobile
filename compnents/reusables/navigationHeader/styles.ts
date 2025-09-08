@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     height: moderateScale(70),
-    paddingHorizontal: moderateScale(16),
+    paddingHorizontal: moderateScale(14),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
