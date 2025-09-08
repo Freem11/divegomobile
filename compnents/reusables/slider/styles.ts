@@ -13,15 +13,19 @@ export const Wrapper = styled.View`
   align-self: center;
   align-items: center;
   justify-content: center;
-  padding-bottom: ${moderateScale(10)}px;
-  margin-vertical: ${moderateScale(20)}px;
+`;
+
+export const Label = styled.Text`
+  font-size: ${moderateScale(15)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.themeBlack};
+  margin-bottom: ${moderateScale(4)}px;
 `;
 
 export const TopRow = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
-  padding-bottom: ${moderateScale(10)}px;
 `;
 
 export const SliderRow = styled.View`
@@ -31,8 +35,8 @@ export const SliderRow = styled.View`
 `;
 
 export const AnimatedLabel = styled(Animated.Text)`
-  font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Bold};
+  font-size: ${moderateScale(15)}px;
+  font-family: ${activeFonts.Medium};
   `;
 
 export const EndMarkerRight = styled.Text`
@@ -40,7 +44,7 @@ export const EndMarkerRight = styled.Text`
   text-align: right;
   color: ${colors.neutralGrey};
   font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Light};
+  font-family: ${activeFonts.Regular};
   padding-left: ${moderateScale(5)}px;
 `;
 
@@ -49,14 +53,5 @@ export const EndMarkerLeft = styled.Text`
    text-align: left;
   color: ${colors.neutralGrey};
   font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Light};
-`;
-
-export const Label = styled.Text`
-  text-align: center;
-  color: ${colors.headersBlue};
-  font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.MediumItalic};
-  padding-vertical: ${moderateScale(10)}px;
-  margin-left: 5%;
+  font-family: ${activeFonts.Regular};
 `;

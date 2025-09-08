@@ -12,7 +12,7 @@ export const ContentContainer = styled.View`
 
 export const InputGroupContainer = styled.View`
   width: 100%;
-  padding: ${moderateScale(16)}px;
+  padding: ${moderateScale(24)}px ${moderateScale(16)}px;
 `;
 
 export const Label = styled.Text`
@@ -23,7 +23,7 @@ export const Label = styled.Text`
 `;
 
 export const Section = styled.View`
-  margin-bottom: ${moderateScale(25)}px;
+  margin-bottom: ${moderateScale(20)}px;
 `;
 
 export const TextBuffer = styled.View`

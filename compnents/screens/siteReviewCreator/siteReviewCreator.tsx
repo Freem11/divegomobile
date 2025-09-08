@@ -152,7 +152,7 @@ export default function SiteReviewPageView({
         setShowCurrentButtons(false);
       });
     }
-  }, [currentIntensity, heightAnim]);
+  }, [currentIntensity, contentHeight, heightAnim]);
 
   return (
     <S.ContentContainer>
@@ -296,68 +296,63 @@ export default function SiteReviewPageView({
           />
         </S.Section>
 
-        {/* Viz Slider goes here */}
-        <ReusableSlider
-          inverted
-          title={<S.Label>{t("DiveSiteReviewer.viz")}</S.Label>}
-          leftValue={metrics.lowValueViz}
-          rightValue={metrics.highValueViz}
-          unitMeasurement={metrics.simpleMetric}
-          onValueChange={(value) => handleSliderConditions(DiveConditions.VISIBILITY, value)}
-        />
+        <S.Section>
+          <ReusableSlider
+            inverted
+            title={t("DiveSiteReviewer.viz")}
+            leftValue={metrics.lowValueViz}
+            rightValue={metrics.highValueViz}
+            unitMeasurement={metrics.simpleMetric}
+            onValueChange={(value) => handleSliderConditions(DiveConditions.VISIBILITY, value)}
+          />
+        </S.Section>
 
-        {/* Current Slider goes here */}
-        <ReusableSlider
-          title={<S.Label>{t("DiveSiteReviewer.current")}</S.Label>}
-          leftValue={metrics.lowValueCur}
-          rightValue={metrics.highValueCur}
-          unitMeasurement={metrics.rateMetric}
-          onValueChange={(value) => handleSliderConditions(DiveConditions.CURRENT_INTENSITY, value)}
-        />
+        <S.Section>
+          <ReusableSlider
+            title={t("DiveSiteReviewer.current")}
+            leftValue={metrics.lowValueCur}
+            rightValue={metrics.highValueCur}
+            unitMeasurement={metrics.rateMetric}
+            onValueChange={(value) => handleSliderConditions(DiveConditions.CURRENT_INTENSITY, value)}
+          />
+        </S.Section>
 
-        {showCurrentButtons && (
-          <Animated.View style={{ height: heightAnim, overflow: "hidden", marginBottom: moderateScale(20) }}>
-            <S.Label>{t("DiveSiteReviewer.currentDirection")}</S.Label>
-            <S.CurrentButtons>
-              <S.ButtonRow>
-                <S.StyledButton
-                  size={"thin"}
-                  title={t("DiveSiteReviewer.latCurrentButton")}
-                  iconLeft={"arrow-left-right"}
-                  alt
-                  round={false}
-                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_LATTERAL)}
+        <S.Section>
+          {showCurrentButtons && (
+              <Animated.View style={{ height: heightAnim, overflow: "hidden" }}>
+                <S.Label>{t("DiveSiteReviewer.currentDirection")}</S.Label>
+
+                <ButtonGroup
+                  multiple={false}
+                  initialSelected={[DiveConditions.NO_REFS]}
+                  onSelectionChange={handleBooleanConditions}
+                  columns={2}
+                  options={[
+                    {
+                      label: t("DiveSiteReviewer.latCurrentButton"),
+                      icon: "arrow-left-right",
+                      value: DiveConditions.CURRENT_LATTERAL
+                    },
+                    {
+                      label: t("DiveSiteReviewer.upCurrentButton"),
+                      icon: "circle-arrow-up",
+                      value: DiveConditions.CURRENT_UP
+                    },
+                    {
+                      label: t("DiveSiteReviewer.downCurrentButton"),
+                      icon: "circle-arrow-down",
+                      value: DiveConditions.CURRENT_DOWN
+                    },
+                    {
+                      label: t("DiveSiteReviewer.contrastCurrentButton"),
+                      icon: "arrow-left-right-reverse",
+                      value: DiveConditions.CURRENT_CONTRASTING
+                    }
+                  ]}
                 />
-                <S.StyledButton
-                  size={"thin"}
-                  title={t("DiveSiteReviewer.upCurrentButton")}
-                  iconLeft={"circle-arrow-up"}
-                  alt
-                  round={false}
-                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_UP)}
-                />
-              </S.ButtonRow>
-              <S.ButtonRow>
-                <S.StyledButton
-                  size={"thin"}
-                  title={t("DiveSiteReviewer.downCurrentButton")}
-                  iconLeft={"circle-arrow-down"}
-                  alt
-                  round={false}
-                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_DOWN)}
-                />
-                <S.StyledButton
-                  size={"thin"}
-                  title={t("DiveSiteReviewer.contrastCurrentButton")}
-                  iconLeft={"arrow-left-right-reverse"}
-                  alt
-                  round={false}
-                  onPress={() => handleBooleanConditions(DiveConditions.CURRENT_CONTRASTING)}
-                />
-              </S.ButtonRow>
-            </S.CurrentButtons>
-          </Animated.View>
-        )}
+              </Animated.View>
+            )}
+        </S.Section>
 
         <S.Label>{t("DiveSiteReviewer.description")}</S.Label>
 

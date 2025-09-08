@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Slider from "@react-native-community/slider";
+import Animated, { useSharedValue, useAnimatedStyle, interpolate } from "react-native-reanimated";
+import { moderateScale } from "react-native-size-matters";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  interpolate,
-} from "react-native-reanimated";
+import Slider from "@react-native-community/slider";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 
 import { colors } from "../../styles";
@@ -16,7 +13,7 @@ import { useGetCurrentLabel } from "./useGetCurrentLabel";
 
 type SliderProps = {
   inverted?: boolean;
-  title: React.ReactNode;
+  title: string;
   leftValue: number;
   rightValue: number;
   unitMeasurement: string;
@@ -62,7 +59,7 @@ export default function ReusableSlider(props: SliderProps) {
   return (
     <S.Wrapper>
       <S.TopRow>
-        {props.title}
+        <S.Label>{props.title}</S.Label>
         <S.AnimatedLabel style={animatedColor}>
           {(props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s") && currentLabel}{" "}
           {liveValue.toFixed(1)} {props.unitMeasurement}
@@ -75,9 +72,9 @@ export default function ReusableSlider(props: SliderProps) {
         <View style={{ flex: 1, justifyContent: "center" }}>
           <View
             style={{
-              height: 10,
+              height: moderateScale(8),
               backgroundColor: colors.buttonPressOverlay,
-              borderRadius: 5,
+              borderRadius: moderateScale(8),
               position: "absolute",
               width: "100%",
             }}
@@ -96,7 +93,7 @@ export default function ReusableSlider(props: SliderProps) {
             ]}
           >
             <LinearGradient
-              colors={["#33ccff", "#0099ff", "#0099ff", "#0066ff", "#0033cc",]}
+              colors={["#6FF6EF", "#1669F9"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={StyleSheet.absoluteFill}
@@ -104,13 +101,13 @@ export default function ReusableSlider(props: SliderProps) {
           </Animated.View>
 
           <Slider
-            style={{ flex: 1, height: 40 }}
+            style={{ flex: 1, height: moderateScale(10) }}
             step={props.inverted ? 1 : 0.5}
             minimumValue={props.leftValue}
             maximumValue={props.rightValue}
             minimumTrackTintColor="transparent"
             maximumTrackTintColor="transparent"
-            thumbTintColor="#0033cc"
+            thumbTintColor="#0B63FB"
             onValueChange={(value) => {
               progress.value = value;
               setLiveValue(value);

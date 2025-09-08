@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import moment from "moment";
 
 import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
 import { RootStackParamList } from "../../../providers/navigation";
@@ -35,7 +36,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
 
   const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors } } = useForm<Form>({
     defaultValues: {
-      DiveDate: "",
+      DiveDate: moment().format("DD MMM YYYY"),
       Conditions: [{ "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 }, { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }],
       Description: "",
       Photos: []
@@ -141,7 +142,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       <ScrollView 
         style={{ flex: 1 }}
         contentContainerStyle={{ 
-          flexGrow: 1,
+          paddingBottom: 50,
         }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={'handled'}
