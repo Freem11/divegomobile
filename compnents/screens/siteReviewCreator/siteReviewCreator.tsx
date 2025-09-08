@@ -21,7 +21,6 @@ import { colors } from "../../styles";
 import { ButtonGroup } from "./_components";
 import { Form, FormRules } from "./form";
 import * as S from "./styles";
-import {SubmitButton, Title} from "./styles";
 
 type ShopReviewCreatorProps = {
   datePickerVisible: boolean;
@@ -97,6 +96,12 @@ export default function SiteReviewPageView({
 
     const currentFormPhotos = watch("Photos");
     setValue("Photos", [...currentFormPhotos, ...newPicArray]);
+  };
+
+  const handleRemovePhoto = (indexToRemove: number) => {
+    const updatedImages = images.filter((_, index) => index !== indexToRemove);
+    setImages(updatedImages);
+    setValue("Photos", updatedImages);
   };
 
   const handleBooleanConditions = (updatedConditions: DiveSiteConditions[]) => {
@@ -378,7 +383,11 @@ export default function SiteReviewPageView({
       </S.InputGroupContainer>
 
       {images && images.length > 0 ? (
-        <PhotoUpload items={imagesArray} onAddSighting={handleSelectImages} />
+        <PhotoUpload
+          items={imagesArray}
+          onAddSighting={handleSelectImages}
+          onRemovePhoto={handleRemovePhoto}
+        />
       ) : (
         <S.EmptyStateContainer>
           <EmptyState

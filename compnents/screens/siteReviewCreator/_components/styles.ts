@@ -37,3 +37,16 @@ export const AddSightingButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
 `;
+
+export const RemoveButton = styled.TouchableOpacity`
+  position: absolute;
+  top: ${moderateScale(4)}px;
+  right: ${moderateScale(4)}px;
+  width: ${moderateScale(24)}px;
+  height: ${moderateScale(24)}px;
+  border-radius: ${moderateScale(12)}px;
+  background-color: rgba(0, 0, 0, 0.4);
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+`;

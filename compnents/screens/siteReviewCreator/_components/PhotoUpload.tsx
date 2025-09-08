@@ -16,9 +16,10 @@ import * as S from "./styles";
 interface PhotoUploadProps {
   items: DiveSiteWithUserName[] | null;
   onAddSighting?: () => void;
+  onRemovePhoto?: (index: number) => void;
 }
 
-export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting }) => {
+export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting, onRemovePhoto }) => {
   const { setSelectedPhoto } = useContext(SelectedPhotoContext) as any;
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext) as any;
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -77,6 +78,16 @@ export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting }) => {
                 }}
               />
             </TouchableWithoutFeedback>
+            {onRemovePhoto && (
+              <S.RemoveButton onPress={() => onRemovePhoto(index)}>
+                <Icon
+                  name={'close'}
+                  color={'white'}
+                  width={moderateScale(16)}
+                  height={moderateScale(16)}
+                />
+              </S.RemoveButton>
+            )}
           </S.Item>
         ))}
       </ScrollView>
