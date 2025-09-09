@@ -92,8 +92,8 @@ export const Step3: React.FC<Step3Props> = ({
           <Icon
             name={'camera-plus'}
             color={colors.borderActive}
-            width={moderateScale(40)}
-            height={moderateScale(40)}
+            width={moderateScale(50)}
+            height={moderateScale(50)}
           />
         </S.EmptyStateContainer>
       )}

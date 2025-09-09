@@ -53,8 +53,8 @@ export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting, onRemov
             <Icon
               name={'camera-plus'}
               color={colors.borderActive}
-              width={moderateScale(32)}
-              height={moderateScale(32)}
+              width={moderateScale(40)}
+              height={moderateScale(40)}
             />
           </S.AddSightingButton>
         )}
