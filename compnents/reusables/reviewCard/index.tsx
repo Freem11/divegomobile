@@ -9,10 +9,11 @@ type ReviewCardProps = {
   description: string;
   conditions: ReviewCondition[]
   userName: string;
+  photo: string;
 
 };
 
-export default function ReviewCard({ userName, date, description, conditions }: ReviewCardProps) {
+export default function ReviewCard({ userName, photo, date, description, conditions }: ReviewCardProps) {
 
   return (
     <ReviewCardView
@@ -20,6 +21,7 @@ export default function ReviewCard({ userName, date, description, conditions }: 
       date={date}
       description={description}
       conditions={conditions}
+      photo={photo}
     />
   );
 }

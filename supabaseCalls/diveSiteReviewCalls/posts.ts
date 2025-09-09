@@ -1,4 +1,3 @@
-
 import { Review, ReviewConditionInsert, ReviewInsert, ReviewPhotosInsert } from "../../entities/diveSiteReview";
 import { supabase } from "../../supabase";
 
@@ -60,7 +59,6 @@ export const insertReviewPhotos = async(values: ReviewPhotosInsert[]) => {
 };
 
 export const getReviewsBySiteId= async(divesite_id: number) => {
-  console.log("divesite_id", divesite_id);
   const { data, error } = await supabase.rpc("get_review_data_by_divesite_id", {
     q_divesite_id: divesite_id,
   });
@@ -69,8 +67,6 @@ export const getReviewsBySiteId= async(divesite_id: number) => {
     console.log("couldn't do it GET_REVIEWS_FOR_SITE,", error);
     return [];
   }
-
-  console.log("supa", data);
 
   if (data) {
     return data as Review[];

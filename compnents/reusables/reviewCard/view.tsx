@@ -1,24 +1,22 @@
 import React, { useState } from "react";
-import { View } from "react-native";
-import { moderateScale } from "react-native-size-matters";
 
 import readableDate from "../../helpers/readableDate";
-import { colors } from "../../styles";
-import Icon from "../../../icons/Icon";
 import { ReviewCondition } from "../../../entities/diveSiteReview";
 
 import * as S from "./styles";
 import { renderLabel } from "./conditionLabel";
+import Avatar from "./avatarCreator";
 
 type ReviewCardViewProps = {
   userName: string;
   date: string;
   description: string;
-  conditions: ReviewCondition[]
+  conditions: ReviewCondition[];
+  photo: string;
 };
 
 export default function ReviewCardView({
-  userName, date, description, conditions
+  userName,photo , date, description, conditions
 }: ReviewCardViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -28,18 +26,15 @@ export default function ReviewCardView({
     <S.Card>
       <S.CardTop>
         <S.Header>
-          <S.Title>{userName}</S.Title>
+          <Avatar photo={photo}/>
+          <S.TopRow>
+            <S.Title>{userName}</S.Title>
+            <S.Date>
+              {date && readableDate(date)}
+            </S.Date>
+          </S.TopRow>
+
         </S.Header>
-        <View style={{ flexDirection: "row", marginRight: -moderateScale(2) }}>
-          <Icon
-            name={"calendar-month"}
-            style={{ width: moderateScale(18), marginRight: moderateScale(4) }}
-            fill={colors.darkGrey}
-          />
-          <S.Date>
-            {date && readableDate(date)}
-          </S.Date>
-        </View>
       </S.CardTop>
 
       <S.Description>

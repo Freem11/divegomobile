@@ -75,6 +75,7 @@ export default function DiveSiteScreenView({
             description={review.description}
             conditions={review.conditions}
             userName={review.user_name}
+            photo={review.profilePhoto}
           />
         )): (
           <S.EmptyStateWrapper key="no-reviews-state">
@@ -90,7 +91,7 @@ export default function DiveSiteScreenView({
                 iconLeft="diving-scuba-flag"
                 round={false}
                 style={{ width: "auto", marginTop: moderateScale(15) }}
-                onPress={null}
+                onPress={() => null}
               />
             </S.ButtonContainer>
           </S.EmptyStateWrapper>

@@ -98,7 +98,6 @@ export default function DiveSiteScreen({
     const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
     setItineraries(diveSiteItineraries);
 
-    console.log("selectedDiveSite", selectedDiveSite.id);
     const diveSiteReviews = await getReviewsBySiteId(selectedDiveSite.id);
     setReviews(diveSiteReviews);
   };

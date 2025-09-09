@@ -1,9 +1,28 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { Dimensions, Platform } from "react-native";
+import { Platform } from "react-native";
+import { Image } from "expo-image";
 
 import { colors, fontSizes, activeFonts } from "../../styles";
 import Button from "../button";
+
+export const StyledImage = styled(Image)`
+  width: ${moderateScale(45)}px;
+  height: ${moderateScale(45)}px;
+  borderRadius: ${moderateScale(45)}px;
+  marginRight: ${moderateScale(10)}px;
+  resizeMode: cover;
+`;
+
+export const StyledIcon = styled.View`
+  backgroundColor: ${colors.lightGrey};
+  width: ${moderateScale(45)}px;
+  height: ${moderateScale(45)}px;
+  borderRadius: ${moderateScale(24)}px;
+  alignItems: center;
+  justifyContent: center; 
+  marginRight: ${moderateScale(10)}px;
+`;
 
 export const Card = styled.View`
   border-color: ${colors.lightGrey};
@@ -34,6 +53,14 @@ export const CardTop = styled.View`
 export const Header = styled.View`
   flex-direction: row;
   width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+export const TopRow = styled.View`
+  flex-direction: column;
+  width: 100%;
+  height: ${moderateScale(45)}px;
   align-items: flex-start;
   justify-content: space-between;
 `;
@@ -92,11 +119,6 @@ export const ShowMoreText = styled.Text`
   text-decoration-color: ${colors.darkGrey};
   margin-top: ${moderateScale(10)}px;
 `;
-
-const { width } = Dimensions.get("window");
-const gapSize = 8;
-const totalGaps = 2;
-const itemWidth = (width - (gapSize * totalGaps)) / 3 - 20;
 
 export const LabelsContainer = styled.View`
   flex-direction: row;

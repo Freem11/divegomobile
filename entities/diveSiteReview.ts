@@ -11,6 +11,7 @@ export type Review = {
   user_name: string;
   conditions: ReviewCondition[]
   photos: ReviewPhotos[]
+  profilePhoto: string;
 };
 
 export type ReviewCondition = {
