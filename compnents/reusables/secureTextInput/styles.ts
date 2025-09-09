@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
-import { colors, activeFonts } from '../../styles';
+import { colors, activeFonts, fontSizes } from '../../styles';
 import { Platform } from "react-native";
 
 export const TextInputWrapper = styled.View`
@@ -15,7 +15,7 @@ export const TextInputWrapper = styled.View`
 `;
 
 export const StyledTextInput = styled.TextInput`
-  font-size: ${moderateScale(15)}px;
+  font-size: ${moderateScale(fontSizes.Base)}px;
   font-family: ${activeFonts.Light};
   flex: 1;
   text-align-vertical: center;

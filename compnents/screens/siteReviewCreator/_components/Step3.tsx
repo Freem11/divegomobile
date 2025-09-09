@@ -61,8 +61,7 @@ export const Step3: React.FC<Step3Props> = ({
   return (
     <S.InputGroupContainer>
       <S.Title>{t('DiveSiteReviewer.step3Title')}</S.Title>
-      <S.Subtitle>{t('DiveSiteReviewer.step3Description')}</S.Subtitle>
-
+      <S.Subtitle style={{ marginBottom: moderateScale(12)}}>{t('DiveSiteReviewer.step3Description')}</S.Subtitle>
 
       <S.DescriptionBox>
         <Controller

@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 
-import { colors, activeFonts, buttonSizes } from "../../styles";
+import { colors, activeFonts, buttonSizes, fontSizes } from "../../styles";
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
   width: ${({ size }) => moderateScale(buttonSizes[size].width)}px;
@@ -26,21 +26,27 @@ export const StyledButton = styled.View`
 export const DisabledButton = styled(StyledButton)`
   background-color: ${({ alt }) => (alt ? colors.themeWhite : colors.lighterGrey)};
   border-color: ${({ alt }) => (alt ? colors.lighterGrey : colors.lighterGrey)};
+  color: ${({ alt }) => (alt ? colors.lighterGrey : colors.neutralGrey)};
 `;
 
 export const StyledButtonText = styled.Text`
-  font-size: ${moderateScale(15)}px;
-  font-family: ${activeFonts.Bold};
+  font-size: ${moderateScale(fontSizes.Base)}px;
+  font-family: ${activeFonts.Medium};
   color: ${({ alt }) => (alt ? colors.primaryBlue : colors.themeWhite)};
   text-align: center;
   flex: 1;
 `;
 
+export const DisabledButtonText = styled(StyledButtonText)`
+  color: ${({ alt }) => (alt ? colors.lighterGrey : colors.neutralGrey)};
+
+`;
+
 export const IconWrapperLeft = styled.View`
   position: absolute;
   left: ${moderateScale(16)}px;
-  width: ${moderateScale(24)}px;
-  height: ${moderateScale(24)}px;
+  width: ${moderateScale(20)}px;
+  height: ${moderateScale(20)}px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,8 +55,8 @@ export const IconWrapperLeft = styled.View`
 export const IconWrapperRight = styled.View`
   position: absolute;
   right: ${moderateScale(16)}px;
-  width: ${moderateScale(24)}px;
-  height: ${moderateScale(24)}px;
+  width: ${moderateScale(20)}px;
+  height: ${moderateScale(20)}px;
   display: flex;
   align-items: center;
   justify-content: center;

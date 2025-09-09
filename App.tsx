@@ -32,6 +32,7 @@ export default function App() {
     RobotoBlackItalic: require("./assets/Roboto/Roboto-BlackItalic.ttf"),
     SFBlackItalic: require("./assets/SanFran/SF-Pro-Display-BlackItalic.otf"),
     RobotoBold: require("./assets/Roboto/Roboto-Bold.ttf"),
+    SFSemibold: require("./assets/SanFran/SF-Pro-Display-Semibold.otf"),
     SFBold: require("./assets/SanFran/SF-Pro-Display-Bold.otf"),
     RobotoBoldItalic: require("./assets/Roboto/Roboto-BoldItalic.ttf"),
     SFBoldItalic: require("./assets/SanFran/SF-Pro-Display-BoldItalic.otf"),

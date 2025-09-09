@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 
-import { colors, activeFonts } from "../../styles";
+import { colors, activeFonts, fontSizes } from "../../styles";
 
 export const ContentContainer = styled.View`
   width: 100%;
@@ -27,15 +27,15 @@ export const Spacer = styled.View`
 `;
 
 export const Label = styled.Text`
-  font-size: ${moderateScale(15)}px;
-  font-family: ${activeFonts.Medium};
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Semibold};
   color: ${colors.themeBlack};
   margin-bottom: ${moderateScale(10)}px;
   margin-top: ${moderateScale(20)}px;
 `;
 
 export const Title = styled.Text`
-  font-size: ${moderateScale(18)}px;
+  font-size: ${moderateScale(fontSizes.Medium)}px;
   font-family: ${activeFonts.Bold};
   color: ${colors.themeBlack};
   margin-bottom: ${moderateScale(8)}px;
@@ -43,9 +43,9 @@ export const Title = styled.Text`
 `;
 
 export const Subtitle = styled.Text`
-  font-size: ${moderateScale(15)}px;
-  font-family: ${activeFonts.Regular};
-  color: ${colors.neutralGrey};
+  font-size: ${moderateScale(fontSizes.Base)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
   width: 90%;
 `;
@@ -77,5 +77,5 @@ export const EmptyStateContainer = styled.TouchableOpacity`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: ${moderateScale(12)}px;
+  margin-top: ${moderateScale(4)}px;
 `;

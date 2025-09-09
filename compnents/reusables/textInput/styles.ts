@@ -2,7 +2,7 @@ import { moderateScale } from 'react-native-size-matters';
 import styled from 'styled-components/native';
 import { Platform } from "react-native";
 
-import { colors, activeFonts } from '../../styles';
+import { colors, activeFonts, fontSizes } from '../../styles';
 
 export const TextInputWrapper = styled.View`
   height: ${moderateScale(44)}px;
@@ -16,7 +16,7 @@ export const TextInputWrapper = styled.View`
 `;
 
 export const StyledTextInput = styled.TextInput`
-  font-size: ${moderateScale(15)}px;
+  font-size: ${moderateScale(fontSizes.Base)}px;
   font-family: ${activeFonts.Light};
   flex: 1;
   text-align-vertical: center;
@@ -27,7 +27,7 @@ export const StyledTextInput = styled.TextInput`
 `;
 
 export const IconWrapperLeft = styled.View`
-  width: ${moderateScale(20)}px;
+  width: ${moderateScale(16)}px;
   margin-right: ${moderateScale(4)}px;
   margin-left: ${moderateScale(10)}px;
   justify-content: center;

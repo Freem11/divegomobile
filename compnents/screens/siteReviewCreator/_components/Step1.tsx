@@ -108,7 +108,7 @@ export const Step1: React.FC<Step1Props> = ({
           },
           {
             label: t('DiveSiteReviewer.wreckDiveButton'),
-            icon: 'directions-boat',
+            icon: 'anchor-alt',
             value: DiveConditions.WREAK_DIVE
           },
           {

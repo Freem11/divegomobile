@@ -87,7 +87,7 @@ export const Step2: React.FC<Step2Props> = ({
           },
           {
             label: t('DiveSiteReviewer.kelpButton'),
-            icon: 'coral',
+            icon: 'plant',
             value: DiveConditions.KELP
           },
           {

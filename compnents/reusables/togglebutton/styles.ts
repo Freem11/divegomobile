@@ -32,8 +32,8 @@ export const TextWrapper = styled.View`
 `;
 
 export const StyledButtonText = styled.Text`
-  font-size: ${({ size }) => size === "thin" ? `${moderateScale(fontSizes.Micro)}px` : `${moderateScale(fontSizes.StandardText)}px`};
-  font-family: ${({ size }) => size === "thin" ? activeFonts.Medium : activeFonts.Regular};
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Regular};
   color: ${colors.themeBlack};
   text-align: left;
 `;

@@ -21,12 +21,29 @@ export const colors = {
   borderActive: "rgba(30,112,254,0.5)",
 };
 
-export const fontSizes = {
+type FontSizeType = {
   Header: 28,
   SubHeading: 20,
   StandardText: 18,
   SmallText: 16,
-  Micro: 14
+  Micro: 14,
+  Base: 16,
+  Small: 15,
+  Medium: 17,
+  Large: 19,
+}
+
+export const fontSizes: FontSizeType = {
+  Header: 28,
+  SubHeading: 20,
+  StandardText: 18,
+  SmallText: 16,
+  Micro: 14,
+
+  Small: 15,
+  Base: 16,
+  Medium: 17,
+  Large: 19,
 };
 
 export const buttonSizes = {
@@ -64,6 +81,7 @@ export const activeFonts = Platform.OS === "android" ? {
   Black: "RobotoBlack",
   BlackItalic: "RobotoBlackItalic",
   Bold: "RobotoBold",
+  Semibold: "SFSemibold",
   BoldItalic: "RobotoBoldItalic",
   Italic: "RobotoItalic",
   Light: "RobotoLight",
@@ -78,6 +96,7 @@ export const activeFonts = Platform.OS === "android" ? {
   BlackItalic: "SFBlackItalic",
   Bold: "SFBold",
   BoldItalic: "SFBoldItalic",
+  Semibold: "SFSemibold",
   Italic: "SFItalic",
   Light: "SFLight",
   LightItalic: "SFLightItalic",

@@ -15,8 +15,8 @@ export const Wrapper = styled.View`
 `;
 
 export const Label = styled.Text`
-  font-size: ${moderateScale(15)}px;
-  font-family: ${activeFonts.Medium};
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Semibold};
   color: ${colors.themeBlack};
 `;
 
@@ -35,7 +35,7 @@ export const SliderRow = styled.View`
 `;
 
 export const AnimatedLabel = styled.View`
-  font-size: ${moderateScale(15)}px;
+  font-size: ${moderateScale(fontSizes.Small)}px;
   height: ${moderateScale(28)}px;
   font-family: ${activeFonts.Medium};
   gap: ${moderateScale(12)}px;
@@ -70,4 +70,5 @@ export const LabelTag = styled.View`
 `
 export const LabelTagText = styled.Text`
   color: ${colors.primaryBlue};
+  font-family: ${activeFonts.Medium};
 `
