@@ -1,18 +1,12 @@
-import { Control, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import React, { useState } from "react";
-import { ScrollView } from "react-native";
+import { Control, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
+import { ScrollView } from "react-native";
 
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
-import { 
-  ProgressBar, 
-  StepNavigation, 
-  Step1, 
-  Step2, 
-  Step3 
-} from "./_components";
+import { ProgressBar, StepNavigation, Step1, Step2, Step3 } from "./_components";
 import { Form } from "./form";
 import * as S from "./styles";
 
@@ -119,71 +113,6 @@ export default function SiteReviewPageView({
     setValue("Conditions", updatedConditions);
   };
 
-  const validateStep = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        const diveDate = watch("DiveDate");
-        return !!diveDate && diveDate.trim() !== "";
-      case 2:
-        return true;
-      case 3:
-        const description = watch("Description");
-        return !!description && description.trim() !== "";
-      default:
-        return true;
-    }
-  };
-
-  const handleNext = () => {
-    if (currentStep < totalSteps && validateStep(currentStep)) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const renderCurrentStep = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <Step1
-            control={control}
-            setValue={setValue}
-            errors={errors}
-            watch={watch}
-            datePickerVisible={datePickerVisible}
-            showDatePicker={showDatePicker}
-            hideDatePicker={hideDatePicker}
-            handleBooleanConditions={handleBooleanConditions}
-          />
-        );
-      case 2:
-        return (
-          <Step2
-            watch={watch}
-            handleBooleanConditions={handleBooleanConditions}
-            handleSliderConditions={handleSliderConditions}
-            metrics={metrics}
-          />
-        );
-      case 3:
-        return (
-          <Step3
-            control={control}
-            setValue={setValue}
-            watch={watch}
-            errors={errors}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <S.ContentContainer>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
@@ -194,16 +123,42 @@ export default function SiteReviewPageView({
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={'handled'}
       >
-        {renderCurrentStep()}
+        {currentStep === 1 && (
+          <Step1
+            control={control}
+            setValue={setValue}
+            errors={errors}
+            watch={watch}
+            datePickerVisible={datePickerVisible}
+            showDatePicker={showDatePicker}
+            hideDatePicker={hideDatePicker}
+            handleBooleanConditions={handleBooleanConditions}
+          />
+        )}
+        {currentStep === 2 && (
+          <Step2
+            watch={watch}
+            handleBooleanConditions={handleBooleanConditions}
+            handleSliderConditions={handleSliderConditions}
+            metrics={metrics}
+          />
+        )}
+        {currentStep === 3 && (
+          <Step3
+            control={control}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+          />
+        )}
       </ScrollView>
 
       <StepNavigation
         currentStep={currentStep}
         totalSteps={totalSteps}
-        onBack={handleBack}
-        onNext={handleNext}
+        onBack={() => setCurrentStep(currentStep - 1)}
+        onNext={() => setCurrentStep(currentStep + 1)}
         onSubmit={onSubmit}
-        canGoNext={validateStep(currentStep)}
         isSubmitting={isSubmitting}
       />
     </S.ContentContainer>

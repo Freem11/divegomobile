@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconName } from '../../../../icons/Icon'
+import { IconName } from '../../../icons/Icon'
 import * as S from './styles'
 
 export interface ButtonOption {

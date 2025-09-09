@@ -6,7 +6,6 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 
 import * as S from "./styles";
-import { useCurrentAnimation } from "./currentSliderAnimation";
 import { useGetCurrentLabel } from "./useGetCurrentLabel";
 
 type SliderProps = {
@@ -24,14 +23,6 @@ export default function ReusableSlider(props: SliderProps) {
   const [liveValue, setLiveValue] = useState(initialValue);
 
   const progress = useSharedValue(initialValue);
-
-  const animatedColor = useCurrentAnimation(
-    progress,
-    props.leftValue,
-    props.rightValue,
-    props.inverted,
-    props.unitMeasurement
-  );
 
   const currentLabel = useGetCurrentLabel(props.rightValue, liveValue);
 
@@ -59,16 +50,12 @@ export default function ReusableSlider(props: SliderProps) {
       <S.TopRow>
         <S.Label>{props.title}</S.Label>
         <S.AnimatedLabel>
-          {(props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s") && currentLabel && (
-            <S.LabelTag>
-              <S.LabelTagText>
-                {currentLabel}
-              </S.LabelTagText>
-            </S.LabelTag>
-          )}
-          <S.AnimatedText>
+          <S.LabelTag>
+          <S.LabelTagText>
+            {(props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s") ? `${currentLabel} ` : ''}
             {liveValue.toFixed(1)} {props.unitMeasurement}
-          </S.AnimatedText>
+            </S.LabelTagText>
+          </S.LabelTag>
         </S.AnimatedLabel>
       </S.TopRow>
 

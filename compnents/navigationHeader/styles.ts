@@ -44,14 +44,14 @@ export const styles = StyleSheet.create({
   centerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: moderateScale(4),
+    gap: moderateScale(2),
   },
   title: {
     fontSize: moderateScale(16),
     fontFamily: activeFonts.Medium,
   },
   subtitle: {
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(16),
     color: colors.lightGrey,
     fontFamily: activeFonts.Medium,
   },

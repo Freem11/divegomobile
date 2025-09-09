@@ -1,4 +1,5 @@
 import type { RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from "react-i18next";
@@ -23,6 +24,7 @@ type SiteReviewCreatorScreenProps = {
 export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScreenProps) {
   const { selectedDiveSite } = route.params;
   const { t } = useTranslation();
+  const navigation = useNavigation();
   const { profile } = useContext(UserProfileContext);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [siteInfo, setSiteInfo] = useState(null);
@@ -122,6 +124,8 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       });
 
       await insertReviewPhotos(reviewPhotos);
+
+      navigation.goBack();
 
     } catch (error) {
       console.error("Form submission failed due to photo upload errors:", error);

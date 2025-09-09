@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DiveConditions } from '../../../../entities/diveSiteCondidtions'
 import ReusableSlider from '../../../reusables/slider'
-import { ButtonGroup } from './index'
+import ButtonGroup from '../../../reusables/buttonGroup'
 import { Form } from '../form'
 import * as S from '../styles'
 

@@ -18,13 +18,14 @@ export const Label = styled.Text`
   font-size: ${moderateScale(15)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.themeBlack};
-  margin-bottom: ${moderateScale(4)}px;
 `;
 
 export const TopRow = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${moderateScale(4)}px;
 `;
 
 export const SliderRow = styled.View`
@@ -35,17 +36,13 @@ export const SliderRow = styled.View`
 
 export const AnimatedLabel = styled.View`
   font-size: ${moderateScale(15)}px;
+  height: ${moderateScale(28)}px;
   font-family: ${activeFonts.Medium};
-  gap: ${moderateScale(6)}px;
+  gap: ${moderateScale(12)}px;
   align-items: center;
   justify-content: center;
   flex-direction: row;
 `;
-
-export const AnimatedText = styled.Text`
-  font-size: ${moderateScale(15)}px;
-  font-family: ${activeFonts.Medium};
-`
 
 export const EndMarkerRight = styled.Text`
   width: ${moderateScale(41)}px;

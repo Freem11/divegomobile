@@ -5,7 +5,7 @@ import { ImagePickerAsset } from 'expo-image-picker'
 import { useTranslation } from 'react-i18next'
 
 import { multiImageHandler } from '../../imageUploadHelpers'
-import { PhotoUpload } from './PhotoUpload'
+import { PhotoUpload } from './photoUpload'
 import Icon from "../../../../icons/Icon";
 import { colors } from '../../../styles'
 import { Form } from '../form'

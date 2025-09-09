@@ -3,13 +3,13 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import React, { FC, useContext } from "react";
 import { ScrollView } from "react-native";
 
-import { DiveSiteWithUserName } from "../../../../entities/diveSite";
-import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
-import { ActiveTutorialIDContext } from "../../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../../contexts/fullScreenModalContext";
-import ImageCasherDynamic from "../../../helpers/imageCashingDynamic";
-import Icon from "../../../../icons/Icon";
-import { colors} from "../../../styles";
+import { DiveSiteWithUserName } from "../../../../../entities/diveSite";
+import { SelectedPhotoContext } from "../../../../contexts/selectedPhotoContext";
+import { ActiveTutorialIDContext } from "../../../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../../../contexts/fullScreenModalContext";
+import ImageCasherDynamic from "../../../../helpers/imageCashingDynamic";
+import Icon from "../../../../../icons/Icon";
+import { colors} from "../../../../styles";
 
 import * as S from "./styles";
 

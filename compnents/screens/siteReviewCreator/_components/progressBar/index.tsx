@@ -1,26 +1,7 @@
 import React, { useEffect, useRef } from 'react'
-import { moderateScale } from 'react-native-size-matters'
-import styled from 'styled-components/native'
 import { Animated } from 'react-native'
 
-import { colors } from '../../../styles'
-
-const Container = styled.View`
-  width: 100%;
-`
-
-const ProgressBarContainer = styled.View`
-  height: ${moderateScale(3)}px;
-  background-color: ${colors.lighterGrey};
-  border-radius: ${moderateScale(2)}px;
-  overflow: hidden;
-`
-
-const ProgressBarFill = styled(Animated.View)`
-  height: 100%;
-  background-color: ${colors.primaryBlue};
-  border-radius: ${moderateScale(2)}px;
-`
+import * as S from './styles'
 
 interface ProgressBarProps {
   currentStep: number
@@ -47,10 +28,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalStep
   }
 
   return (
-    <Container>
-      <ProgressBarContainer>
-        <ProgressBarFill style={widthStyle} />
-      </ProgressBarContainer>
-    </Container>
+    <S.Container>
+      <S.ProgressBarContainer>
+        <S.ProgressBarFill style={widthStyle} />
+      </S.ProgressBarContainer>
+    </S.Container>
   )
 }

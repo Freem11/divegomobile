@@ -9,7 +9,7 @@ import moment from 'moment'
 
 import { DiveConditions } from '../../../../entities/diveSiteCondidtions'
 import MobileTextInput from '../../../reusables/textInput'
-import { ButtonGroup } from './index'
+import ButtonGroup from '../../../reusables/buttonGroup'
 import * as S from '../styles'
 import { Form } from '../form'
 

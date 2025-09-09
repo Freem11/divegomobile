@@ -28,7 +28,6 @@ export const Label = styled.Text`
   margin-top: ${moderateScale(20)}px;
 `;
 
-
 export const Title = styled.Text`
   font-size: ${moderateScale(20)}px;
   font-family: ${activeFonts.Medium};
