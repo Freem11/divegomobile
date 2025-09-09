@@ -11,10 +11,16 @@ export const ContentContainer = styled.View`
 
 export const InputGroupContainer = styled.View`
   width: 100%;
-  padding: 0 ${moderateScale(16)}px;
+  padding: ${moderateScale(16)}px ${moderateScale(16)}px 0;
   flex: 1;
-
 `;
+
+export const CompleteContainer = styled.View`
+  width: 100%;
+  padding: 40% ${moderateScale(16)}px 0;
+  flex: 1;
+`;
+
 
 export const Spacer = styled.View`
   height: ${moderateScale(32)}px;
@@ -29,8 +35,8 @@ export const Label = styled.Text`
 `;
 
 export const Title = styled.Text`
-  font-size: ${moderateScale(20)}px;
-  font-family: ${activeFonts.Medium};
+  font-size: ${moderateScale(18)}px;
+  font-family: ${activeFonts.Bold};
   color: ${colors.themeBlack};
   margin-bottom: ${moderateScale(8)}px;
   margin-top: ${moderateScale(20)}px;
@@ -40,7 +46,8 @@ export const Subtitle = styled.Text`
   font-size: ${moderateScale(15)}px;
   font-family: ${activeFonts.Regular};
   color: ${colors.neutralGrey};
-  margin-bottom: ${moderateScale(18)}px;
+  line-height: ${moderateScale(22)}px;
+  width: 90%;
 `;
 
 export const MultilineTextInput = styled.TextInput`

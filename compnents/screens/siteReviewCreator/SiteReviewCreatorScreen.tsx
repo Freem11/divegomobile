@@ -28,6 +28,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
   const { profile } = useContext(UserProfileContext);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [siteInfo, setSiteInfo] = useState(null);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const unitSystem = profile && profile.unit_system;
   
@@ -125,7 +126,11 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
 
       await insertReviewPhotos(reviewPhotos);
 
-      navigation.goBack();
+      setIsCompleted(true);
+      
+      setTimeout(() => {
+        navigation.goBack();
+      }, 3000);
 
     } catch (error) {
       console.error("Form submission failed due to photo upload errors:", error);
@@ -155,6 +160,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         watch={watch}
         selectedDiveSite={siteInfo}
         unitSystem={unitSystem}
+        isCompleted={isCompleted}
       />
     </View>
   )

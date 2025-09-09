@@ -10,6 +10,7 @@ interface StepNavigationProps {
   onNext: () => void
   onSubmit: () => void
   isSubmitting?: boolean
+  canSubmit?: boolean
 }
 
 export const StepNavigation: React.FC<StepNavigationProps> = ({
@@ -18,10 +19,16 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({
   onBack,
   onNext,
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
+  canSubmit = true
 }) => {
-  const isLastStep = currentStep === totalSteps
+  const isLastStep = currentStep === (totalSteps - 1)
+  const isCompleteStep = currentStep === totalSteps
   const isFirstStep = currentStep === 1
+
+  if (isCompleteStep) {
+    return;
+  }
 
   return (
     <S.Container>
@@ -43,7 +50,7 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({
             title={isSubmitting ? 'Submitting...' : 'Submit'}
             alt={false}
             size={'thin'}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !canSubmit}
             onPress={onSubmit}
           />
         ) : (

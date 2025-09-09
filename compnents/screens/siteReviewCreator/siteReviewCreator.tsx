@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Control, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
@@ -6,7 +6,7 @@ import { ScrollView } from "react-native";
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
-import { ProgressBar, StepNavigation, Step1, Step2, Step3 } from "./_components";
+import { ProgressBar, StepNavigation, Step1, Step2, Step3, Step4 } from "./_components";
 import { Form } from "./form";
 import * as S from "./styles";
 
@@ -22,6 +22,7 @@ type ShopReviewCreatorProps = {
   onSubmit: () => void;
   selectedDiveSite: DiveSiteWithUserName;
   unitSystem: string;
+  isCompleted?: boolean;
 };
 
 export default function SiteReviewPageView({
@@ -34,10 +35,11 @@ export default function SiteReviewPageView({
   errors,
   watch,
   onSubmit,
-  unitSystem
+  unitSystem,
+  isCompleted = false
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 3;
+  const totalSteps = 4;
 
   const [metrics] = useState(unitSystem === "Imperial" ? {
     highValueViz: 100,
@@ -113,6 +115,15 @@ export default function SiteReviewPageView({
     setValue("Conditions", updatedConditions);
   };
 
+  useEffect(() => {
+    if (isCompleted) {
+      setCurrentStep(4);
+    }
+  }, [isCompleted]);
+
+  const description = watch('Description');
+  const canSubmit = description && description.trim().length > 0;
+
   return (
     <S.ContentContainer>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
@@ -151,6 +162,9 @@ export default function SiteReviewPageView({
             errors={errors}
           />
         )}
+        {currentStep === 4 && (
+          <Step4 />
+        )}
       </ScrollView>
 
       <StepNavigation
@@ -160,6 +174,7 @@ export default function SiteReviewPageView({
         onNext={() => setCurrentStep(currentStep + 1)}
         onSubmit={onSubmit}
         isSubmitting={isSubmitting}
+        canSubmit={canSubmit}
       />
     </S.ContentContainer>
   );
