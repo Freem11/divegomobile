@@ -19,6 +19,18 @@ export const colors = {
   searchOverlay: "rgba(128, 128, 128, 0.6)",
   border: "rgba(0,0,0,0.15)",
   borderActive: "rgba(30,112,254,0.5)",
+  green: "#31AD23",
+  greenLight: "#7fd673",
+  greenLighter: "#eeffe3",
+  yellow: "#f19406",
+  yellowLight: "#fbcb64",
+  yellowLighter: "#fdf7e6",
+  orange: "#e65f11",
+  orangeLight: "#f49a5a",
+  orangeLighter: "#ffefe3",
+  red: "#e1331d",
+  redLight: "#f17768",
+  redLighter: "#fbe5e1"
 };
 
 type FontSizeType = {

@@ -23,8 +23,7 @@ export default function ReusableSlider(props: SliderProps) {
   const [liveValue, setLiveValue] = useState(initialValue);
 
   const progress = useSharedValue(initialValue);
-
-  const currentLabel = useGetCurrentLabel(props.rightValue, liveValue);
+  const labelData = useGetCurrentLabel(props.rightValue, liveValue);
 
   useEffect(() => {
     const newValue = props.inverted ? props.rightValue : props.leftValue;
@@ -45,14 +44,21 @@ export default function ReusableSlider(props: SliderProps) {
     };
   });
 
+  const isCurrentIntensity = props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s";
+
   return (
     <S.Wrapper>
       <S.TopRow>
         <S.Label>{props.title}</S.Label>
         <S.AnimatedLabel>
-          <S.LabelTag>
-          <S.LabelTagText>
-            {(props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s") ? `${currentLabel} ` : ''}
+          <S.LabelTag 
+              style={isCurrentIntensity && {
+                backgroundColor: labelData.styles.backgroundColor,
+                borderColor: labelData.styles.borderColor
+              }}
+          >
+          <S.LabelTagText style={isCurrentIntensity && { color: labelData.styles.textColor }}>
+            {isCurrentIntensity ? `${labelData.label} ` : ''}
             {liveValue.toFixed(1)} {props.unitMeasurement}
             </S.LabelTagText>
           </S.LabelTag>
