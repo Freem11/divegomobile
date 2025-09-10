@@ -1,9 +1,10 @@
 import React, { ForwardedRef } from 'react';
 import { TextInput, TextInputProps as RNTextInputProps, TouchableOpacity } from 'react-native';
-import * as S from './styles';
+
 import Icon, { IconName } from "../../../icons/Icon";
 import { colors } from '../../styles';
-import { UseFormRegisterReturn } from "react-hook-form";
+
+import * as S from './styles';
 
 export type TextInputProps = {
   iconLeft?: React.ReactNode;
@@ -22,7 +23,7 @@ const MobileTextInput = React.forwardRef<TextInput, TextInputProps>(function Mob
     <S.TextInputWrapper>
       {iconLeft && 
         <S.IconWrapperLeft>
-          <Icon name={iconLeft as IconName} fill={colors.neutralGrey}/>
+          <Icon name={iconLeft as IconName} fill={colors.primaryBlue}/>
         </S.IconWrapperLeft>
       }
       <S.StyledTextInput 

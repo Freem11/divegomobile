@@ -14,7 +14,6 @@ import SiteSubmitterParallax from "../screens/diveSiteUploader/siteSubmitterPara
 import TripCreatorParallax from "../screens/tripCreator/tripCreatorParallax";
 import { colors } from "../styles";
 import PartnerRequestParallax from "../screens/partnerAccountRequest/partnerRequestParallax";
-import SiteReveiwerParallax from "../screens/siteReviewCreator/siteReviewCreatorParallax";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -48,7 +47,6 @@ export default function LevelTwoScreen() {
     <Animated.View style={[styles.modalBody, modalSlide]}>
       {activeScreen && activeScreen.screenName === "ProfileScreen" && <UserProfileParallax profileID={activeScreen.params.id}/>}
       {activeScreen && activeScreen.screenName === "PartnerRequestScreen" && <PartnerRequestParallax />}
-      {activeScreen && activeScreen.screenName === "DiveSiteReviewerScreen" && <SiteReveiwerParallax selectedDiveSite={activeScreen.params.id}/>}
       {activeScreen && activeScreen.screenName === "PictureUploadScreen" && <PicUploaderParallax selectedDiveSite={activeScreen.params.id}/>}
       {activeScreen && activeScreen.screenName === "DiveSiteUploadScreen" && <SiteSubmitterParallax />}
       {activeScreen && activeScreen.screenName === "TripCreatorScreen" && <TripCreatorParallax shopID={activeScreen.params.id}/>}

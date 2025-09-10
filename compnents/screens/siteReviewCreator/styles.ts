@@ -1,212 +1,83 @@
 import styled from "styled-components/native";
-import { Dimensions, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
-import {
-  colors,
-  fontSizes,
-  activeFonts,
-} from "../../styles";
-// import Button from "../../reusables/button";
-import ToggleButton from "../../reusables/togglebutton";
-
-const windowWidth = Dimensions.get("screen").width;
-
-export const FullScreenCenter = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-`;
-
-export const BackButtonWrapper = styled.View`
-  z-index: 50;
-  position: absolute;
-  top: 5%;
-  left: 0%;
-`;
+import { colors, activeFonts, fontSizes } from "../../styles";
 
 export const ContentContainer = styled.View`
-  width: ${windowWidth}px;
+  width: 100%;
   align-items: center;
-`;
-
-export const Header = styled.Text`
-  margin-left: 5%;
-  margin-bottom: 5%;
-  font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Medium};
-  color: ${colors.headersBlue};
-  align-self: flex-start;
+  flex: 1;
 `;
 
 export const InputGroupContainer = styled.View`
-  width: ${windowWidth * 0.8}px;
-  margin-top: ${moderateScale(10)}px;
+  width: 100%;
+  padding: ${moderateScale(16)}px ${moderateScale(16)}px 0;
+  flex: 1;
 `;
 
-export const TextBuffer = styled.View`
-  margin-top: ${moderateScale(20)}px;
-  margin-bottom: ${moderateScale(10)}px;
-  margin-left: 1%;
-  width: 98%;
-`;
-
-export const TextBufferDates = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
+export const CompleteContainer = styled.View`
+  width: 100%;
+  padding: 40% ${moderateScale(16)}px 0;
+  flex: 1;
   align-items: center;
-  margin-top: ${moderateScale(20)}px;
-  margin-bottom: ${moderateScale(50)}px;
-  width: 99%;
+  justify-content: center;
 `;
 
-export const TextLabelDates = styled.View`
-  flex-direction: column;
-  justify-content: center;
-  width: 48%;
+
+export const Spacer = styled.View`
+  height: ${moderateScale(32)}px;
+`;
+
+export const Label = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Semibold};
+  color: ${colors.themeBlack};
+  margin-bottom: ${moderateScale(10)}px;
+  margin-top: ${moderateScale(20)}px;
+`;
+
+export const Title = styled.Text`
+  font-size: ${moderateScale(fontSizes.Medium)}px;
+  font-family: ${activeFonts.Bold};
+  color: ${colors.themeBlack};
+  margin-bottom: ${moderateScale(8)}px;
+  margin-top: ${moderateScale(20)}px;
+`;
+
+export const Subtitle = styled.Text`
+  font-size: ${moderateScale(fontSizes.Base)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.themeBlack};
+  line-height: ${moderateScale(22)}px;
+  width: 90%;
 `;
 
 export const MultilineTextInput = styled.TextInput`
   padding: ${moderateScale(10)}px;
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-size: ${moderateScale(16)}px;
   font-family: ${activeFonts.Light};
-  text-align: center;
-  height: 99%;
+  text-align: left;
+  width: 100%;
+  height: 100%;
 `;
 
 export const DescriptionBox = styled.View`
   align-items: center;
   justify-content: center;
-  borderWidth: ${moderateScale(1)}px;
-  borderColor: ${colors.neutralGrey};
-  borderRadius: ${moderateScale(10)}px;
-  margin-top: 4%;
-  background-color: ${colors.themeWhite};
-  margin-bottom: ${moderateScale(50)}px;
-  height: ${moderateScale(300)}px;
-`;
-
-export const ButtonBox = styled.View`
-  width: 100%;
-  align-items: flex-end;
-  margin-top: ${Platform.OS === "ios" ? "15%" : "2%"};
-  padding-horizontal: 7%;
-`;
-
-export const ScrollViewContainer = styled.View`
-  height: ${moderateScale(300)}px;
-  margin-top: 2%; 
-  margin-bottom: 1%;
-  border-color: ${colors.neutralGrey};
   border-width: ${moderateScale(1)}px;
-  border-radius: ${moderateScale(10)}px;
+  border-color: ${colors.border};
+  border-radius: ${moderateScale(8)}px;
+  background-color: ${colors.themeWhite};
+  height: ${moderateScale(200)}px;
 `;
 
-export const ListItemContainer = styled.View`
-  width: 94%;
-  margin-left: 3%;
-  margin-vertical: ${moderateScale(4)}px;
-`;
-
-export const ItemHousing = styled.View`
-  padding-bottom: ${moderateScale(24)}px;
-`;
-
-export const VerticalLine = styled.View`
-  position: absolute;
-  top: ${moderateScale(49)}px;
-  left: ${moderateScale(24.5)}px;
-  bottom: ${moderateScale(-10)}px;
-  width: ${moderateScale(2)}px;
-  background-color: ${colors.neutralGrey};
-`;
-
-export const ButtonHousing = styled.View`
-  position: absolute;
-  bottom: ${moderateScale(20)}px;
-  right: ${moderateScale(20)}px;
-`;
-
-export const SectionFooterWrapper = styled.View`
+export const EmptyStateContainer = styled.TouchableOpacity`
   width: 100%;
-  margin-top: ${moderateScale(10)}px;
-  padding: 0 ${moderateScale(20)}px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-`;
-
-export const EmptyStateContainer = styled.View`
-  width: 100%;
-  padding: ${moderateScale(40)}px ${moderateScale(20)}px;
+  background: ${colors.lighterBlue};
+  height: ${moderateScale(110)}px;
+  border-radius: ${moderateScale(8)}px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 4%;
+  margin-top: ${moderateScale(4)}px;
 `;
-
-export const PhotosContainer = styled.View`
-  margin-top: 4%;
-  `;
-
-export const Label = styled.Text`
-  text-align: left;
-  color: ${colors.themeBlack};
-  font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Bold};
-`;
-
-export const Buffer = styled.View`
-    padding-bottom: ${moderateScale(25)}px;
-`;
-
-export const StyledButton = styled(ToggleButton)`
-  flex: 1;
-  padding-horizontal: ${moderateScale(2)}px;
-  justify-content: flex-start;
-  width: auto;
-`;
-
-export const ButtonRow = styled.View`
-  flex-direction: row;
-  width: 100%;
-  padding: ${moderateScale(2)}px
-`;
-
-export const TypeOfDiveButtons = styled.View`
-  flex: 1;
-  padding-vertical: ${moderateScale(10)}px;
-  padding-bottom: ${moderateScale(30)}px;
-  width: 100%;
-`;
-
-export const WaterTypeButtons = styled.View`
-  flex: 1;
-  padding-vertical: ${moderateScale(10)}px;
-  padding-bottom: ${moderateScale(30)}px;
-  width: 100%;
-`;
-
-export const AttheSurfaceButtons = styled.View`
-  flex: 1;
-  padding-vertical: ${moderateScale(10)}px;
-  padding-bottom: ${moderateScale(30)}px;
-  width: 100%;
-`;
-
-export const CurrentButtons = styled.View`
-  flex: 1;
-  padding-vertical: ${moderateScale(10)}px;
-  padding-bottom: ${moderateScale(30)}px;
-  width: 100%;
-`;
-
-export const InTheWaterButtons = styled.View`
-  flex: 1;
-  padding-vertical: ${moderateScale(10)}px;
-  padding-bottom: ${moderateScale(30)}px;
-  width: 100%;
-`;
-

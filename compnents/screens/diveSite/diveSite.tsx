@@ -1,4 +1,5 @@
 import React from "react";
+import { moderateScale } from "react-native-size-matters";
 
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { ItineraryItem } from "../../../entities/itineraryItem";
@@ -7,6 +8,9 @@ import ItineraryCard from "../../reusables/itineraryCard";
 import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
 import Label from "../../reusables/label";
+import ReviewCard from "../../reusables/reviewCard";
+import { Review } from "../../../entities/diveSiteReview";
+import Button from "../../reusables/button";
 
 import * as S from "./styles";
 
@@ -17,7 +21,9 @@ type DiveSiteProps = {
   sightingsCount: number;
   tripCount: number;
   itineraries: ItineraryItem[];
+  reviews: Review[];
   openPicUploader: () => void;
+  openDiveSiteReviewer: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
   handleMapFlip: (sites: number[]) => void;
@@ -30,7 +36,9 @@ export default function DiveSiteScreenView({
   sightingsCount,
   tripCount,
   itineraries,
+  reviews,
   openPicUploader,
+  openDiveSiteReviewer,
   openAllPhotosPage,
   openAllTripsPage,
   handleMapFlip
@@ -53,6 +61,53 @@ export default function DiveSiteScreenView({
         onAddSighting={openPicUploader}
         selectedProfile={null}
       />
+
+      <S.LabelWrapper>
+        <Label label="Diver Reviews" />
+      </S.LabelWrapper>
+
+      <S.ReviewsWrapper>
+        <S.Stats>{`${reviews.length } review${reviews.length  === 1 ? "": "s"}`}</S.Stats>
+
+        {reviews && reviews.length > 0 ? reviews.map((review) => (
+
+          <ReviewCard
+            key={review.id}
+            date={review.dive_date}
+            description={review.description}
+            conditions={review.conditions}
+            userName={review.user_name}
+            photo={review.profilePhoto}
+          />
+        )): (
+          <S.EmptyStateWrapper key="no-reviews-state">
+            <EmptyState
+              iconName="diving-scuba-flag"
+              title="No Reviews Here Yet"
+              subtitle={`No one has left a review for ${selectedDiveSite?.name}`}
+            />
+            <S.ButtonContainer>
+              <Button
+                size="thin"
+                title={"Add First Review"}
+                iconLeft="diving-scuba-flag"
+                round={false}
+                style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+                onPress={() => openDiveSiteReviewer()}
+              />
+            </S.ButtonContainer>
+          </S.EmptyStateWrapper>
+        )}
+      </S.ReviewsWrapper>
+
+      {reviews.length  > 0 && (
+        <S.ButtonContainer>
+          <GhostButton
+            onPress={() => null}
+            title={"View All Reviews"}
+          />
+        </S.ButtonContainer>
+      )}
 
       <S.LabelWrapper>
         <Label label="Dive Trips" />
