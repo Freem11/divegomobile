@@ -1,7 +1,5 @@
 import React from "react";
-import { View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Image } from "expo-image";
 
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";

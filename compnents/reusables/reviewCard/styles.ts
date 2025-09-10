@@ -15,7 +15,7 @@ export const StyledImage = styled(Image)`
 `;
 
 export const StyledIcon = styled.View`
-  backgroundColor: ${colors.lightGrey};
+  backgroundColor: ${colors.buttonPressOverlay};
   width: ${moderateScale(45)}px;
   height: ${moderateScale(45)}px;
   borderRadius: ${moderateScale(24)}px;
@@ -131,7 +131,7 @@ export const LabelsContainer = styled.View`
 `;
 
 export const TagWrapper = styled.View`
-  background-color: ${colors.lightGrey};
+  background-color: ${colors.lighterBlue};
   font-size: ${moderateScale(fontSizes.Micro)}px;
   font-family: ${activeFonts.Medium};
   border-radius: ${moderateScale(7)}px;

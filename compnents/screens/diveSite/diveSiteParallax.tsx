@@ -85,11 +85,11 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   };
 
   const openDiveSiteReviewer = () => {
-    navigation.navigate('SiteReviewCreator', {
+    navigation.navigate("SiteReviewCreator", {
       selectedDiveSite: selectedDiveSite.id,
       siteName: selectedDiveSite.name
     });
-  }
+  };
 
   const openPicUploader = () => {
     setActiveScreen("PictureUploadScreen", selectedDiveSite);
@@ -153,6 +153,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
       <DiveSiteScreen
         selectedDiveSite={selectedDiveSite}
         openPicUploader={openPicUploader}
+        openDiveSiteReviewer={openDiveSiteReviewer}
       />
     </ParallaxDrawer>
   );

@@ -23,6 +23,7 @@ type DiveSiteProps = {
   itineraries: ItineraryItem[];
   reviews: Review[];
   openPicUploader: () => void;
+  openDiveSiteReviewer: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
   handleMapFlip: (sites: number[]) => void;
@@ -37,6 +38,7 @@ export default function DiveSiteScreenView({
   itineraries,
   reviews,
   openPicUploader,
+  openDiveSiteReviewer,
   openAllPhotosPage,
   openAllTripsPage,
   handleMapFlip
@@ -90,8 +92,8 @@ export default function DiveSiteScreenView({
                 title={"Add First Review"}
                 iconLeft="diving-scuba-flag"
                 round={false}
-                style={{ width: "auto", marginTop: moderateScale(15) }}
-                onPress={() => null}
+                style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+                onPress={() => openDiveSiteReviewer()}
               />
             </S.ButtonContainer>
           </S.EmptyStateWrapper>

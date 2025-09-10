@@ -10,7 +10,7 @@ import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls"
 import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { getReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
 import { Review } from "../../../entities/diveSiteReview";
 
 import DiveSiteScreenView from "./diveSite";
@@ -20,13 +20,15 @@ type DiveSiteProps = {
   restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
   openPicUploader: () => void;
+  openDiveSiteReviewer: () => void;
 };
 
 export default function DiveSiteScreen({
   selectedDiveSite,
   openPicUploader,
   closeParallax,
-  restoreParallax
+  restoreParallax,
+  openDiveSiteReviewer
 }: DiveSiteProps) {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
@@ -98,7 +100,7 @@ export default function DiveSiteScreen({
     const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
     setItineraries(diveSiteItineraries);
 
-    const diveSiteReviews = await getReviewsBySiteId(selectedDiveSite.id);
+    const diveSiteReviews = await getRecentThreeReviewsBySiteId(selectedDiveSite.id);
     setReviews(diveSiteReviews);
   };
 
@@ -112,6 +114,7 @@ export default function DiveSiteScreen({
       itineraries={itineraries}
       reviews={reviews}
       openPicUploader={openPicUploader}
+      openDiveSiteReviewer={openDiveSiteReviewer}
       openAllPhotosPage={openAllPhotosPage}
       openAllTripsPage={openAllTripsPage}
       handleMapFlip={handleMapFlip}

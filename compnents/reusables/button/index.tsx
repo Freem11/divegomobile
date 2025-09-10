@@ -19,8 +19,8 @@ export type ButtonProps = {
 export default function Button(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, round = true, ...rest } = props;
 
-  const ButtonElement = props.disabled ? S.DisabledButton : S.StyledButton
-  const TextElement = props.disabled ? S.DisabledButtonText : S.StyledButtonText
+  const ButtonElement = props.disabled ? S.DisabledButton : S.StyledButton;
+  const TextElement = props.disabled ? S.DisabledButtonText : S.StyledButtonText;
 
   return (
     <S.StyledTouchableHighlight underlayColor={colors.themeWhite} {...rest} onPress={() => props.onPress()}>

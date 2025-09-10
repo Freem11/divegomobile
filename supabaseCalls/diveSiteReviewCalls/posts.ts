@@ -73,3 +73,20 @@ export const getReviewsBySiteId= async(divesite_id: number) => {
   }
   return [] as Review[];
 };
+
+export const getRecentThreeReviewsBySiteId= async(divesite_id: number) => {
+  const { data, error } = await supabase.rpc("get_recent_three_review_data_by_divesite_id", {
+    q_divesite_id: divesite_id,
+  });
+
+  if (error) {
+    console.log("couldn't do it GET_THREE_REVIEWS_FOR_SITE,", error);
+    return [];
+  }
+
+  if (data) {
+    return data as Review[];
+  }
+  return [] as Review[];
+};
+
