@@ -19,6 +19,8 @@ export const CompleteContainer = styled.View`
   width: 100%;
   padding: 40% ${moderateScale(16)}px 0;
   flex: 1;
+  align-items: center;
+  justify-content: center;
 `;
 
 
