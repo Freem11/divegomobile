@@ -6,9 +6,10 @@ import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
-import UserProfileScreenView from "./userProfile";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+
+import UserProfileScreenView from "./userProfile";
 
 type UserProfileProps = {
   closeParallax?: (mapConfig: number) => void

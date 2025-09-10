@@ -1,5 +1,4 @@
-
-import { ReviewConditionInsert, ReviewInsert, ReviewPhotosInsert } from "../../entities/diveSiteReview";
+import { Review, ReviewConditionInsert, ReviewInsert, ReviewPhotosInsert } from "../../entities/diveSiteReview";
 import { supabase } from "../../supabase";
 
 export const insertReview = async(values: ReviewInsert) => {
@@ -27,7 +26,6 @@ export const insertReview = async(values: ReviewInsert) => {
 
 export const insertReviewConditions = async(values: ReviewConditionInsert[]) => {
 
-  console.log("supa vals", values);
   const { data, error } = await supabase
     .from("diveSiteReviewConditions")
     .insert(values)
@@ -45,7 +43,6 @@ export const insertReviewConditions = async(values: ReviewConditionInsert[]) => 
 
 export const insertReviewPhotos = async(values: ReviewPhotosInsert[]) => {
 
-  console.log("supa vals", values);
   const { data, error } = await supabase
     .from("diveSiteReviewPhotos")
     .insert(values)
@@ -59,4 +56,20 @@ export const insertReviewPhotos = async(values: ReviewPhotosInsert[]) => {
     data,
     error,
   };
+};
+
+export const getReviewsBySiteId= async(divesite_id: number) => {
+  const { data, error } = await supabase.rpc("get_review_data_by_divesite_id", {
+    q_divesite_id: divesite_id,
+  });
+
+  if (error) {
+    console.log("couldn't do it GET_REVIEWS_FOR_SITE,", error);
+    return [];
+  }
+
+  if (data) {
+    return data as Review[];
+  }
+  return [] as Review[];
 };
