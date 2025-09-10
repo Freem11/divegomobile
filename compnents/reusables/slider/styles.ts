@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import Animated from "react-native-reanimated";
 
 import {
   fontSizes,
@@ -13,15 +12,20 @@ export const Wrapper = styled.View`
   align-self: center;
   align-items: center;
   justify-content: center;
-  padding-bottom: ${moderateScale(10)}px;
-  margin-vertical: ${moderateScale(20)}px;
+`;
+
+export const Label = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Semibold};
+  color: ${colors.themeBlack};
 `;
 
 export const TopRow = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
-  padding-bottom: ${moderateScale(10)}px;
+  align-items: center;
+  margin-bottom: ${moderateScale(4)}px;
 `;
 
 export const SliderRow = styled.View`
@@ -30,17 +34,22 @@ export const SliderRow = styled.View`
   align-items: center;
 `;
 
-export const AnimatedLabel = styled(Animated.Text)`
-  font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Bold};
-  `;
+export const AnimatedLabel = styled.View`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  height: ${moderateScale(28)}px;
+  font-family: ${activeFonts.Medium};
+  gap: ${moderateScale(12)}px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
 
 export const EndMarkerRight = styled.Text`
   width: ${moderateScale(41)}px;
   text-align: right;
   color: ${colors.neutralGrey};
   font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Light};
+  font-family: ${activeFonts.Regular};
   padding-left: ${moderateScale(5)}px;
 `;
 
@@ -49,14 +58,17 @@ export const EndMarkerLeft = styled.Text`
    text-align: left;
   color: ${colors.neutralGrey};
   font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Light};
+  font-family: ${activeFonts.Regular};
 `;
 
-export const Label = styled.Text`
-  text-align: center;
-  color: ${colors.headersBlue};
-  font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.MediumItalic};
-  padding-vertical: ${moderateScale(10)}px;
-  margin-left: 5%;
-`;
+export const LabelTag = styled.View`
+  background: ${colors.lighterBlue};
+  padding: ${moderateScale(5)}px ${moderateScale(8)}px ;
+  border-radius: ${moderateScale(8)}px;
+  border-color: ${colors.borderActive};
+  border-width: ${moderateScale(1)}px;
+`
+export const LabelTagText = styled.Text`
+  color: ${colors.primaryBlue};
+  font-family: ${activeFonts.Medium};
+`
