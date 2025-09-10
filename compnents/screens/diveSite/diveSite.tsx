@@ -100,7 +100,7 @@ export default function DiveSiteScreenView({
         )}
       </S.ReviewsWrapper>
 
-      {reviews.length  > 3 && (
+      {reviews.length  > 0 && (
         <S.ButtonContainer>
           <GhostButton
             onPress={() => null}
