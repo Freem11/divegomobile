@@ -67,6 +67,16 @@ export const ButtonContainer = styled.View`
   align-items: center;
 `;
 
+export const ReviewsContent = styled.View`
+`;
+
+export const ButtonContainerReviews = styled.View`
+  margin-top: ${moderateScale(-20)}px;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: ${moderateScale(40)}px;
+`;
+
 export const EmptyStateWrapper = styled.View`
   padding: ${moderateScale(40)}px 0;
 `;

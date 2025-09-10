@@ -69,18 +69,32 @@ export default function DiveSiteScreenView({
       <S.ReviewsWrapper>
         <S.Stats>{`${reviews.length } review${reviews.length  === 1 ? "": "s"}`}</S.Stats>
 
-        {reviews && reviews.length > 0 ? reviews.map((review) => (
+        {reviews && reviews.length > 0 ? (
+          <S.ReviewsContent key="has-reviews">
+            <S.ButtonContainerReviews>
+              <Button
+                size="thin"
+                title={"Add My Review"}
+                iconLeft="diving-scuba-flag"
+                round={false}
+                style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+                onPress={() => openDiveSiteReviewer()}
+              />
+            </S.ButtonContainerReviews>
 
-          <ReviewCard
-            key={review.id}
-            date={review.dive_date}
-            description={review.description}
-            conditions={review.conditions}
-            userName={review.user_name}
-            photo={review.profilePhoto}
-          />
-        )): (
-          <S.EmptyStateWrapper key="no-reviews-state">
+            {reviews.map((review) => (
+              <ReviewCard
+                key={review.id}
+                date={review.dive_date}
+                description={review.description}
+                conditions={review.conditions}
+                userName={review.user_name}
+                photo={review.profilePhoto}
+              />
+            ))}
+          </S.ReviewsContent>
+        ) : (
+          <S.EmptyStateWrapper key="no-reviews">
             <EmptyState
               iconName="diving-scuba-flag"
               title="No Reviews Here Yet"
