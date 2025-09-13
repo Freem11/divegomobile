@@ -1,28 +1,21 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { SessionContext } from "../../contexts/sessionContext";
 import { basicSignIn } from "../../helpers/loginHelpers";
 // import { signInStandard } from "../../../supabaseCalls/authenticateSupabaseCalls";
 import { useUserProfileStore } from "../../../store/useUserProfileStore";
-import { supabase } from "../../../supabase";
 import { i18n } from "../../../i18n";
+import { showWarning } from "../../toast";
 
 import LoginPageView from "./view";
 import { Form } from "./form";
-
 
 interface IProps {
   moveToSignUpPage: () => void;
   moveToLandingPage: () => void;
   moveToForgotPasswordPage: () => void;
-
 }
 
 export default function LoginPage(props: IProps) {
-  const [loginFail, setLoginFail] = useState(null);
-  const [formVals, setFormVals] = useState({ email: "", password: "" });
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-
   const userProfileAction = useUserProfileStore(state => state.actions);
 
   const onSubmit = async(data: Form) => {
@@ -30,8 +23,13 @@ export default function LoginPage(props: IProps) {
     const response = await basicSignIn(data.Email, data.Password);
 
     if (response.error) {
-      console.log(response.error);
-      setLoginFail(i18n.t("Validators.invalidCredentials"));
+      console.log("Error: ", response.error);
+      if (response.error.status === 400){
+        showWarning(i18n.t("Validators.invalidCredentials"));
+      } else {
+        showWarning(i18n.t("Common.unknownError"));
+
+      }
       return;
     }
 
@@ -40,17 +38,8 @@ export default function LoginPage(props: IProps) {
     }
   };
 
-  useEffect(() => {
-    setLoginFail(null);
-  }, [formVals]);
-
   return (
     <LoginPageView
-      formVals={formVals}
-      setFormVals={setFormVals}
-      secureTextEntry={secureTextEntry}
-      setSecureTextEntry={setSecureTextEntry}
-      loginFail={loginFail}
       moveToLandingPage={props.moveToLandingPage}
       moveToForgotPasswordPage={props.moveToForgotPasswordPage}
       moveToSignUpPage={props.moveToSignUpPage}

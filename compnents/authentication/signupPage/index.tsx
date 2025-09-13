@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import { FieldErrors } from "react-hook-form";
+import React from "react";
 
 import { register } from "../../../supabaseCalls/authenticateSupabaseCalls";
 import { i18n } from "../../../i18n";
@@ -16,15 +15,18 @@ interface IProps {
 
 export default function CreateAccountPage(props: IProps) {
   const userProfileAction = useUserProfileStore(state => state.actions);
-  const [regFail, setRegFail] = useState(null);
 
   const onSubmit = async(data: Form) => {
 
     const response = await register(data.Email, data.Password, data.Name);
 
     if (response.error) {
-      console.log(response.error);
-      showWarning(i18n.t("Validators.accountExistMsg"));
+      console.log("Error: ", response.error);
+      if (response.error.status === 422){
+        showWarning(i18n.t("Validators.accountExistMsg"));
+      } else {
+        showWarning(i18n.t("Common.unknownError"));
+      }
       return;
     }
 
@@ -33,21 +35,10 @@ export default function CreateAccountPage(props: IProps) {
     }
   };
 
-  const handleError = (errors: FieldErrors<Form>) => {
-    // toast.dismiss();
-    Object.values(errors).forEach((error) => {
-      if (error?.message) {
-        showWarning(error.message);
-
-      }
-    });
-  };
-
   return (
     <CreateAccountPageView
       moveToLandingPage={props.moveToLandingPage}
       moveToLoginPage={props.moveToLoginPage}
-      regFail={regFail}
       onSubmit={onSubmit}
     />
   );

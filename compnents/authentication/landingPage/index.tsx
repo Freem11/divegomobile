@@ -1,9 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Platform } from "react-native";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import React, { useEffect, useState } from "react";
 import * as AppleAuthentication from "expo-apple-authentication";
 
-import { SessionContext } from "../../contexts/sessionContext";
 import {
   appleLogin,
   facebookSignIn,

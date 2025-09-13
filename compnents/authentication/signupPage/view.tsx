@@ -15,7 +15,6 @@ import * as S from "./styles";
 import { Form, FormRules } from "./form";
 
 interface IProps {
-  regFail: string | null;
   moveToLandingPage: () => void;
   moveToLoginPage: () => void;
   onSubmit: (data: Form) => void;
@@ -23,12 +22,12 @@ interface IProps {
 
 export default function CreateAccountPageView(props: IProps) {
   const { t } = useTranslation();
-  const { control, handleSubmit, formState: { isSubmitting, errors }, getValues, reset } = useForm<Form>({});
+  const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({});
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
   const handleError = (errors: FieldErrors<Form>) => {
-    // toast.dismiss();
+    console.log({ errors });
     Object.values(errors).forEach((error) => {
       if (error?.message) {
         showWarning(error.message);
@@ -88,7 +87,7 @@ export default function CreateAccountPageView(props: IProps) {
         <Controller
           control={control}
           name="Password"
-          rules={FormRules.Email}
+          rules={FormRules.Password}
           render={({ field: { onChange } }) => (
             <S.TextInputWrapper>
               <SecureTextInput
@@ -99,8 +98,6 @@ export default function CreateAccountPageView(props: IProps) {
           )}
         />
 
-        {props.regFail ? <S.ErrorText>{props.regFail}</S.ErrorText> : <S.ErrorText />}
-
         <S.ButtonBox>
           <Button
             onPress={handleSubmit(props.onSubmit, handleError)}
@@ -108,6 +105,7 @@ export default function CreateAccountPageView(props: IProps) {
             size="medium"
             title={t("Common.signup")}
             iconRight="chevron-right"
+            disabled={isSubmitting}
           />
         </S.ButtonBox>
 
