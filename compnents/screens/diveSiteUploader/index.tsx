@@ -22,7 +22,7 @@ export default function DiveSiteUploader({
 }: SiteSubmitterProps) {
 
   const { t } = useTranslation();
-  const userProfile = useUserProfile();
+  const { userProfile } = useUserProfile();
 
   const mapAction = useMapStore((state) => state.actions);
   const storeFormValues = useMapStore((state) => state.formValues);

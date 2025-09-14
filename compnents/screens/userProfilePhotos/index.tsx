@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { useTranslation } from "react-i18next";
+
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { useTranslation } from "react-i18next";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { getPhotosByUserWithExtra } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import UserProfilePhotosPageView from "./userProfilePhotos";
 import { Photo } from "../../../entities/photos";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+
+import UserProfilePhotosPageView from "./userProfilePhotos";
 
 type UserProfilePhotosPageProps = {};
 
@@ -22,16 +24,15 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
-  const profile = useUserProfile();
+  const { userProfile } = useUserProfile();
   const { selectedProfile } = useContext(SelectedProfileContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-
 
   const [profilePhotos, setProfilePhotos] = useState([]);
 
   const { t } = useTranslation();
 
-  const getPhotos = async (selectedProfile, profile: ActiveProfile) => {
+  const getPhotos = async(selectedProfile, profile: ActiveProfile) => {
     let photos;
     if (selectedProfile?.UserID) {
       photos = await getPhotosByUserWithExtra(
@@ -47,19 +48,19 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
     setProfilePhotos(photos);
   };
 
-    useEffect(() => {
-    if (selectedProfile && profile) {
-      getPhotos(selectedProfile, profile);
+  useEffect(() => {
+    if (selectedProfile && userProfile) {
+      getPhotos(selectedProfile, userProfile);
     }
-  }, [selectedProfile, profile]);
-  
-  const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
- 
+  }, [selectedProfile, userProfile]);
+
+  const handleDiveSiteMove = async(pic: Photo, photoPacket) => {
+
     const coordinates = [{
       latitude: pic.latitude,
       longitude: pic.longitude,
     }];
-   
+
     mapRef?.fitToCoordinates(coordinates, {
       edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
       animated: true,
@@ -68,7 +69,7 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
     setLevelThreeScreen(false);
     setLevelTwoScreen(false);
   };
-  
+
   return (
     <UserProfilePhotosPageView
       photos={profilePhotos}
@@ -76,6 +77,6 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
       setLevelThreeScreen={setLevelThreeScreen}
       handleDiveSiteMove={handleDiveSiteMove}
     />
-  )
+  );
 
 }

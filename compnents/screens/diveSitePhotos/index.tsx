@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useTranslation } from "react-i18next";
 
-import DiveSitePhotosPageView from "./divesitePhotos";
+import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
+import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
@@ -12,6 +11,8 @@ import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCal
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+
+import DiveSitePhotosPageView from "./divesitePhotos";
 
 type DiveSitePhotosPageProps = {};
 
@@ -21,19 +22,18 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
-  const userProfile = useUserProfile();
+  const { userProfile } = useUserProfile();
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-
   const [diveSitePics, setDiveSitePics] = useState([]);
 
   const { t } = useTranslation();
 
-    const getPhotos = async (site, userProfile:ActiveProfile) => {
+  const getPhotos = async(site, userProfile:ActiveProfile) => {
 
     const photos = await getDiveSitePhotos(
       site.lat,
@@ -44,26 +44,25 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
     setDiveSitePics(photos);
   };
 
-    
-  const handleProfileMove = async (userName: string) => {
+  const handleProfileMove = async(userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (userProfile.UserID === picOwnerAccount[0].UserID) {
       return;
     }
 
-    setActiveScreen("ProfileScreen", {id: picOwnerAccount[0].id})
+    setActiveScreen("ProfileScreen", { id: picOwnerAccount[0].id });
     setLevelThreeScreen(false);
     setLevelTwoScreen(true);
     setLevelOneScreen(false);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     if (selectedDiveSite.lat && userProfile) {
       getPhotos(selectedDiveSite, userProfile);
     }
   }, [selectedDiveSite, userProfile]);
-  
+
   return (
     <DiveSitePhotosPageView
       diveSites={diveSitePics}
@@ -71,6 +70,6 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
       setLevelThreeScreen={setLevelThreeScreen}
       handleProfileMove={handleProfileMove}
     />
-  )
+  );
 
 }

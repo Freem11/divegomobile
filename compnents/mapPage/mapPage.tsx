@@ -27,10 +27,7 @@ import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
 import LevelOneScreen from "../reusables/levelOneScreen";
 import LevelTwoScreen from "../reusables/levelTwoScreen";
 import LevelThreeScreen from "../reusables/levelThreeScreen";
-import {
-  grabProfileByUserId,
-  updateProfileFeeback,
-} from "../../supabaseCalls/accountSupabaseCalls";
+import { updateProfileFeeback } from "../../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
@@ -47,7 +44,6 @@ import { useMapStore } from "../googleMap/useMapStore";
 import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
-import { ActiveProfile } from "../../entities/profile";
 import { useUserProfile } from "../../store/user/useUserProfile";
 
 import * as S from "./styles";
@@ -70,7 +66,7 @@ export default function MapPage() {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-  const profile = useUserProfile();
+  const { userProfile } = useUserProfile();
 
   const { t } = useTranslation();
 
@@ -88,8 +84,8 @@ export default function MapPage() {
       let photos;
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
-          myCreatures: profile.UserID,
-          userId: profile.UserID,
+          myCreatures: userProfile.UserID,
+          userId: userProfile.UserID,
           minLat,
           maxLat,
           minLng,
@@ -98,7 +94,7 @@ export default function MapPage() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
-          userId: profile.UserID,
+          userId: userProfile.UserID,
           myCreatures,
           minLat,
           maxLat,
@@ -144,8 +140,8 @@ export default function MapPage() {
 
   const getProfile = async() => {
     try {
-      if (profile) {
-        if (profile.UserName == null || profile.UserName === "") {
+      if (userProfile) {
+        if (userProfile.UserName == null || userProfile.UserName === "") {
           setTimeout(() => {
             setActiveTutorialID("OnboardingX");
             setFullScreenModal(true);
@@ -153,10 +149,10 @@ export default function MapPage() {
         } else {
           setFullScreenModal(false);
         }
-        if (profile.feedbackRequested === false) {
+        if (userProfile.feedbackRequested === false) {
           feedbackRequest = setTimeout(() => {
             startFeedbackAnimations();
-            updateProfileFeeback(profile);
+            updateProfileFeeback(userProfile);
           }, 180000);
         }
       }
@@ -175,8 +171,7 @@ export default function MapPage() {
     getProfile();
   }, []);
 
-  const PARTNER_ACCOUNT_STATUS =
-  (profile?.partnerAccount) || false;
+  const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
   return (
     <SafeAreaProvider>
@@ -210,7 +205,7 @@ export default function MapPage() {
 
         {/* {mapConfig === 0 && <EmailFeedback />} */}
 
-        {/* <FeedScreens /> */}
+        <FeedScreens />
         <LevelOneScreen />
         <LevelTwoScreen />
         <LevelThreeScreen />

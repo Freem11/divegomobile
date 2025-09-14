@@ -15,9 +15,9 @@ import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import UserProfileScreen from ".";
-import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type UserProfileProps = {
   profileID: number
@@ -42,7 +42,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const { setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const userProfile = useUserProfile();
+  const { userProfile } = useUserProfile();
 
   useEffect(() => {
     getProfileinfo();

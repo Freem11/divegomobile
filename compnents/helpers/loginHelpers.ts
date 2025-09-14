@@ -3,30 +3,26 @@ import {
   GoogleSignin,
   statusCodes
 } from "@react-native-google-signin/google-signin";
-import * as SecureStore from "expo-secure-store";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import { Platform } from "react-native";
-
-import {
-  sessionCheck,
-  signInStandard,
-  register
-} from "../../supabaseCalls/authenticateSupabaseCalls";
-import {
-  createProfile,
-  grabProfileById,
-  grabProfileByUserId
-} from "../../supabaseCalls/accountSupabaseCalls";
-import { supabase } from "../../supabase";
-import { i18n } from "../../i18n";
 import { Session } from "@supabase/supabase-js";
+
+import { sessionCheck } from "../../supabaseCalls/authenticateSupabaseCalls";
+import { supabase } from "../../supabase";
 
 const redirectTo = makeRedirectUri();
 
 export const getSession = async() => {
   const session = await sessionCheck();
+  console.log({ session });
+
+  // if(session.error) {
+  //   storedToken = JSON.parse(await SecureStore.getItemAsync("token"));
+  //   if (storedToken && typeof storedToken === "string") {
+  //     const newSession = await sessionRefresh(storedToken);
+  // }
 
   if (session.error) {
     console.log("Unable to initialize session", session.error);

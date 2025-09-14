@@ -1,6 +1,6 @@
-import { StateCreator } from 'zustand';
-import { DiveSiteBasic } from "../entities/diveSite";
+import { StateCreator } from "zustand";
 
+import { DiveSiteBasic } from "../../entities/diveSite";
 
 export interface DivesiteSlice {
   testDivesite: DiveSiteBasic | null;

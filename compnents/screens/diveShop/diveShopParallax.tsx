@@ -15,9 +15,9 @@ import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import DiveShopScreen from ".";
-import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type DiveCentreProps = {
   shopID: number
@@ -27,7 +27,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  
+
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { levelTwoScreen, setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
@@ -35,25 +35,25 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
-  const userProfile = useUserProfile();
+  const { userProfile } = useUserProfile();
   const [isMyShop, setIsMyShop] = useState(false);
 
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
-  
+
   useEffect(() => {
-    getDiveSiteinfo()
+    getDiveSiteinfo();
   }, [props.shopID]);
 
-
   const getDiveSiteinfo = async() => {
-    const diveCentreinfo = await getDiveShopById(props.shopID)
-    setSelectedShop(diveCentreinfo[0])
-  }
+    const diveCentreinfo = await getDiveShopById(props.shopID);
+    setSelectedShop(diveCentreinfo[0]);
+  };
 
   useEffect(() => {
     if (
+      userProfile &&
       userProfile?.partnerAccount &&
       (selectedShop.userId === userProfile.UserID)
     ) {
@@ -63,10 +63,10 @@ export default function DiveShopParallax(props: DiveCentreProps) {
     }
 
     let photoName = null;
-    if(selectedShop.diveShopProfilePhoto) {
+    if (selectedShop.diveShopProfilePhoto) {
       photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop.diveShopProfilePhoto.split("/").pop()}`;
     }
-    
+
     setDiveShopVals({
       id: selectedShop.id,
       bio: selectedShop.diveShopBio,
@@ -74,7 +74,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
     });
 
   }, [selectedShop]);
-  
+
   const onClose = async() => {
     setLevelOneScreen(false);
   };
@@ -82,7 +82,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   const onNavigate = () => {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
-    setMapConfig(2, {pageName: 'DiveShop', itemId: selectedShop.id});
+    setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
     setLevelOneScreen(false);
   };
 
@@ -91,34 +91,34 @@ export default function DiveShopParallax(props: DiveCentreProps) {
     setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");
   };
-  
+
   const openEditsPage = () => {
-    setFullScreenModal(true)
-    setEditInfo("DiveShop")
-    setActiveTutorialID("EditsScreen")
+    setFullScreenModal(true);
+    setEditInfo("DiveShop");
+    setActiveTutorialID("EditsScreen");
   };
 
   const popoverContent = () => {
     return (
       <>
-        <IconWithLabel 
+        <IconWithLabel
           label="Update Shop Info"
           iconName="camera-flip-outline"
           buttonAction={() => openEditsPage()}
         />
-        <IconWithLabel 
+        <IconWithLabel
           label={t("DiveShop.addTrip")}
           iconName="diving-scuba-flag"
           buttonAction={() => openTripCreatorScreen()}
         />
       </>
-    )
+    );
   };
 
   return (
-    <ParallaxDrawer 
-      headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : noImage} 
-      onClose={onClose} 
+    <ParallaxDrawer
+      headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : noImage}
+      onClose={onClose}
       onMapFlip={onNavigate}
       popoverContent={isMyShop && popoverContent}
       isMyShop={isMyShop}

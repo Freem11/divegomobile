@@ -21,12 +21,12 @@ import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import emilio from "../png/guideIcons/EmilioNew.png";
 import { updateProfileUserName, grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
 import TextInputField from "../authentication/utils/textInput";
+import { useUserHandler } from "../../store/user/useUserHandler";
+import { useUserProfile } from "../../store/user/useUserProfile";
 
 import { registerForForegroundLocationTrackingsAsync } from "./locationTrackingRegistry";
 import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
 import { registerForPushNotificationsAsync } from "./notificationsRegistery";
-import { useUserInit } from "../../store/user/useUserInit";
-import { useUserProfile } from "../../store/user/useUserProfile";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -36,9 +36,9 @@ export default function OnboardingTest() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const carrouselRef = useRef(null);
   const [carrouselIndex, setCarrouselIndex] = useState(0);
-  const profile = useUserProfile();
-  const initUserProfile = useUserInit();
-  
+  const { userProfile } = useUserProfile();
+  const userHandler = useUserHandler();
+
   const { t } = useTranslation();
 
   const carrouselData = useMemo(() => [
@@ -101,7 +101,7 @@ export default function OnboardingTest() {
       await registerForPhotoLibraryAccessAsync("no");
       moveToNextPage();
     } else if (carrouselIndex === 5) {
-      await registerForPushNotificationsAsync(profile.UserID, "no");
+      await registerForPushNotificationsAsync(userProfile.UserID, "no");
       moveToNextPage();
     } else {
       moveToNextPage();
@@ -162,10 +162,10 @@ export default function OnboardingTest() {
     }
 
     await updateProfileUserName({
-      UserID: profile.UserID,
+      UserID: userProfile.UserID,
       UserName: formVal.userName,
     });
-    initUserProfile(true);
+    userHandler.userInit(true);
 
     return "success";
   };

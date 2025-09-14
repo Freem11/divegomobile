@@ -3,7 +3,7 @@ import React from "react";
 import { basicSignIn } from "../../helpers/loginHelpers";
 import { i18n } from "../../../i18n";
 import { showWarning } from "../../toast";
-import { useUserInit } from "../../../store/user/useUserInit";
+import { useUserHandler } from "../../../store/user/useUserHandler";
 
 import LoginPageView from "./view";
 import { Form } from "./form";
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export default function LoginPage(props: IProps) {
-  const initUserProfile = useUserInit();
+  const userHandler = useUserHandler();
 
   const onSubmit = async(data: Form) => {
     const response = await basicSignIn(data.Email, data.Password);
@@ -31,7 +31,7 @@ export default function LoginPage(props: IProps) {
     }
 
     if (response.data.session) {
-      initUserProfile(true);
+      userHandler.userInit(true);
     }
   };
 

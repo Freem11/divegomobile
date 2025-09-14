@@ -17,9 +17,9 @@ import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import * as S from "./styles";
-import { useUserProfile } from "../../../store/user/useUserProfile";
 
 interface Photo {
   UserID: string;
@@ -54,7 +54,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const userProfile = useUserProfile();
+  const { userProfile } = useUserProfile();
   const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);

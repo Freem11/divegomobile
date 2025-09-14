@@ -1,7 +1,7 @@
-import { StateCreator } from 'zustand';
+import { StateCreator } from "zustand";
+
 import { ActiveProfile } from "../../entities/profile";
 import { CombinedSlices } from "../slices";
-
 
 export interface UserSlice {
   userProfile:         ActiveProfile | null,
@@ -14,11 +14,11 @@ export const createUserSlice: StateCreator<CombinedSlices, [], [], UserSlice> = 
   return {
     userProfile:         null as ActiveProfile | null,
     userInitialized: null as boolean | null,
-    
+
     setUserState: (profile: ActiveProfile | null, initialized: boolean) => {
       set({
         userProfile: profile,
         userInitialized: initialized
-      })
+      });
     },
-}};
+  };};

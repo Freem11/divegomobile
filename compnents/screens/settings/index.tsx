@@ -14,10 +14,10 @@ import {
   addDeletedAccountInfo,
   deleteProfile
 } from "../../../supabaseCalls/accountSupabaseCalls";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useUserHandler } from "../../../store/user/useUserHandler";
 
 import SettingsPageView from "./settings";
-import { useUserProfile } from "../../../store/user/useUserProfile";
-import { useUserLogout } from "../../../store/user/useUserLogout";
 
 type SettingsPageProps = {};
 
@@ -25,8 +25,8 @@ export default function SettingsPage({}: SettingsPageProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const userLogout = useUserLogout();
-  const userProfile = useUserProfile();
+  const userHandler = useUserHandler();
+  const { userProfile } = useUserProfile();
 
   const { t } = useTranslation();
 
@@ -44,7 +44,7 @@ export default function SettingsPage({}: SettingsPageProps) {
   };
 
   const handleLogout = async() => {
-    userLogout();
+    userHandler.userLogout();
   };
 
   const alertHandler = async() => {

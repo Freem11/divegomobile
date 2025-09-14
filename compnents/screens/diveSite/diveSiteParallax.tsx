@@ -14,9 +14,9 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import DiveSiteScreen from ".";
-import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type DiveSiteProps = {
   siteID: number
@@ -24,7 +24,7 @@ type DiveSiteProps = {
 
 export default function DiveSiteParallax(props: DiveSiteProps) {
   const { t } = useTranslation();
-  const userProfile = useUserProfile();
+  const { userProfile } = useUserProfile();
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);

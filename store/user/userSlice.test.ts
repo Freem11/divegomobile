@@ -1,4 +1,5 @@
-import { act } from 'react';
+import { act } from "react";
+
 import { useStore } from "..";
 import { mockProfile } from "../../entities/profile";
 
@@ -8,8 +9,8 @@ beforeEach(() => {
   });
 });
 
-describe('UserSlice', () => {
-  it('should set the user profile correctly', () => {
+describe("UserSlice", () => {
+  it("should set the user profile correctly", () => {
     const { setUserState } = useStore.getState();
 
     act(() => {
@@ -19,7 +20,7 @@ describe('UserSlice', () => {
     expect(useStore.getState().userProfile).toEqual(mockProfile);
   });
 
-  it('should set the user profile to null', () => {
+  it("should set the user profile to null", () => {
     const { setUserState } = useStore.getState();
 
     act(() => {

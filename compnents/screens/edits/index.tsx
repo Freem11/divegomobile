@@ -12,7 +12,7 @@ import { SelectedProfileContext } from "../../contexts/selectedProfileModalConte
 import { BasicFormData } from "./editsParallax";
 import { Form } from "./form";
 import EditScreenView from "./view";
-import { useUserInit } from "../../../store/user/useUserInit";
+import { useUserHandler } from "../../../store/user/useUserHandler";
 
 type EdittingScreenProps = {
   localPreviewUri: string | null
@@ -31,7 +31,7 @@ export default function EdittingScreen({
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setSelectedShop } = useContext(SelectedShopContext);
   const { setSelectedProfile } = useContext(SelectedProfileContext);
-  const initUserProfile = useUserInit();
+  const userHandler = useUserHandler();
 
   const tryUpload = async(uri: string) => {
     try {
@@ -113,7 +113,7 @@ export default function EdittingScreen({
         profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
       setSelectedProfile(response);
-      initUserProfile(true);
+      userHandler.userInit(true);
       if (response){setSupabaseResponse(response);}
     }
 

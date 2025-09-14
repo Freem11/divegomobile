@@ -11,9 +11,9 @@ import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/sto
 import { checkNetworkStatus } from "../../feed/store/utils";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import PicUploaderView from "./view";
-import { useUserProfile } from "../../../store/user/useUserProfile";
 
 export const FILE_PATH = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/";
 
@@ -53,7 +53,7 @@ export default function PicUploader({
   setLocalPreviewUri,
 }: PicUploaderProps) {
   const { t } = useTranslation();
-  const userProfile = useUserProfile();
+  const { userProfile } = useUserProfile();
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);

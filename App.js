@@ -18,15 +18,17 @@ import Authentication from "./compnents/authentication";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
-import { createProfile, grabProfileByUserId } from "./supabaseCalls/accountSupabaseCalls";
+import { useUserProfile } from "./store/user/useUserProfile";
+import { useUserHandler } from "./store/user/useUserHandler";
 
 export default function App() {
+
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const [appIsReady, setAppIsReady] = useState(false);
-  const userProfile = useUserProfile();
-  const initUserProfile = useUserInit();
+  const { userProfile } = useUserProfile();
+  const userHandler = useUserHandler();
 
   const [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
@@ -60,6 +62,7 @@ export default function App() {
   }, []);
 
   useLayoutEffect(() => {
+
     const prepare = async() => {
       await SplashScreen.preventAutoHideAsync();
 
@@ -70,40 +73,7 @@ export default function App() {
       }
 
       try {
-
-        try {
-          storedToken = JSON.parse(await SecureStore.getItemAsync("token"));
-        } catch (e) {
-          console.log("Token in SecureStorage is not valid JSON.");
-          setAppIsReady(true);
-          return;
-        }
-
-        if (!storedToken) {
-          console.log("No token found in SecureStorage.");
-          setAppIsReady(true);
-          return;
-        }
-
-        if (storedToken && typeof storedToken === "string") {
-          const newSession = await sessionRefresh(storedToken);
-          const profileCheck = await grabProfileByUserId(newSession.user.id);
-
-          if (!profileCheck) {
-            await createProfile({
-              id: newSession.user.id,
-              email: newSession.user.email
-            });
-          }
-
-          if (newSession) {
-            setActiveSession(newSession);
-          } else {
-            console.log("Session refresh failed.");
-          }
-        } else {
-          console.log("No refresh token found in session.");
-        }
+        userHandler.userInit();
       } catch (error) {
         console.log("no dice:", error.message);
       } finally {

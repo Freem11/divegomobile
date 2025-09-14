@@ -3,7 +3,7 @@ import React from "react";
 import { register } from "../../../supabaseCalls/authenticateSupabaseCalls";
 import { i18n } from "../../../i18n";
 import { showWarning } from "../../toast";
-import { useUserInit } from "../../../store/user/useUserInit";
+import { useUserHandler } from "../../../store/user/useUserHandler";
 
 import CreateAccountPageView from "./view";
 import { Form } from "./form";
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export default function CreateAccountPage(props: IProps) {
-  const initUserProfile = useUserInit();
+  const userHandler = useUserHandler();
 
   const onSubmit = async(data: Form) => {
 
@@ -31,7 +31,7 @@ export default function CreateAccountPage(props: IProps) {
     }
 
     if (response.data.session) {
-      initUserProfile(true);
+      userHandler.userInit(true);
     }
   };
 
