@@ -73,7 +73,7 @@ export default function App() {
       }
 
       try {
-        userHandler.userInit();
+        await userHandler.userInit();
       } catch (error) {
         console.log("no dice:", error.message);
       } finally {
