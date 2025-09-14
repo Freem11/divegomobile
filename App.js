@@ -18,8 +18,7 @@ import Authentication from "./compnents/authentication";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
-import { useUserInit } from "./store/user/useUserInit";
-import { useUserProfile } from "./store/user/useUserProfile";
+import { createProfile, grabProfileByUserId } from "./supabaseCalls/accountSupabaseCalls";
 
 export default function App() {
   if (Platform.OS === "ios") {
@@ -72,7 +71,39 @@ export default function App() {
 
       try {
 
-        initUserProfile();
+        try {
+          storedToken = JSON.parse(await SecureStore.getItemAsync("token"));
+        } catch (e) {
+          console.log("Token in SecureStorage is not valid JSON.");
+          setAppIsReady(true);
+          return;
+        }
+
+        if (!storedToken) {
+          console.log("No token found in SecureStorage.");
+          setAppIsReady(true);
+          return;
+        }
+
+        if (storedToken && typeof storedToken === "string") {
+          const newSession = await sessionRefresh(storedToken);
+          const profileCheck = await grabProfileByUserId(newSession.user.id);
+
+          if (!profileCheck) {
+            await createProfile({
+              id: newSession.user.id,
+              email: newSession.user.email
+            });
+          }
+
+          if (newSession) {
+            setActiveSession(newSession);
+          } else {
+            console.log("Session refresh failed.");
+          }
+        } else {
+          console.log("No refresh token found in session.");
+        }
       } catch (error) {
         console.log("no dice:", error.message);
       } finally {

@@ -62,6 +62,7 @@ export default function PicUploader({
     try {
       return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
+      showError(e.message);
       console.error("Error uploading image:", e);
       return null;
     }
@@ -120,17 +121,19 @@ export default function PicUploader({
   };
 
   const onSubmit = async(formData: Required<Form>) => {
-    console.log(formData);
     setIsUploading(true);
-    console.log(localPreviewUri);
     try {
       const fileName = await tryUpload(localPreviewUri);
-      console.log("fileName", fileName);
       if (!fileName) {
         throw new Error(t("PicUploader.failedUpload"));
       }
 
       const fullPath = `animalphotos/public/${fileName}`;
+
+      if (!selectedDiveSite || !profile) {
+        throw new Error(t("PicUploader.missingData"));
+      }
+
       const { error } = await insertPhotoWaits({
         photoFile: fullPath,
         label: formData.animal.label,
@@ -146,29 +149,18 @@ export default function PicUploader({
           fileName: fullPath,
         });
 
-        throw new Error(t("PicUploader.failedToSave"));
+        throw new Error(error.message);
       }
-      showSuccess(t("PicUploader.successUpload"));
-      resetAndClose();
+      showSuccess(t("PicUploader.successUpload", { sealife: formData.animal.label }));
+      setLocalPreviewUri(null);
+      // resetAndClose();
     } catch (err) {
-      console.error("Error uploading image:", err);
-      showError(t("PicUploader.failedToSave"));
+      console.error("Error uploading image:", err.message);
+      showError(err.message);
     } finally {
       setIsUploading(false);
     }
   };
-
-  // const resetForm = () => {
-  //   setPinValues({
-  //     ...pinValues,
-  //     PicFile: null,
-  //     Animal: "",
-  //     PicDate: "",
-  //     Latitude: "",
-  //     Longitude: "",
-  //     DDVal: "0",
-  //   });
-  // };
 
   return (
     <PicUploaderView
