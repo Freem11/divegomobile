@@ -85,6 +85,8 @@ export default function LoginPageView(props: IProps) {
           )}
         />
 
+        <S.ErrorText />
+
         <S.ButtonBox>
           <Button
             onPress={handleSubmit(props.onSubmit, handleError)}

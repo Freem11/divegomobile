@@ -98,6 +98,8 @@ export default function CreateAccountPageView(props: IProps) {
           )}
         />
 
+        <S.ErrorText />
+
         <S.ButtonBox>
           <Button
             onPress={handleSubmit(props.onSubmit, handleError)}
