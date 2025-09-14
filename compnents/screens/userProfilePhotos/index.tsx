@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
@@ -9,9 +8,10 @@ import { SelectedProfileContext } from "../../contexts/selectedProfileModalConte
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import UserProfilePhotosPageView from "./userProfilePhotos";
 import { Photo } from "../../../entities/photos";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
+import { ActiveProfile } from "../../../entities/profile";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type UserProfilePhotosPageProps = {};
 
@@ -22,7 +22,7 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
-  const { profile } = useContext(UserProfileContext);
+  const profile = useUserProfile();
   const { selectedProfile } = useContext(SelectedProfileContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
@@ -31,7 +31,7 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
 
   const { t } = useTranslation();
 
-  const getPhotos = async (selectedProfile, profile) => {
+  const getPhotos = async (selectedProfile, profile: ActiveProfile) => {
     let photos;
     if (selectedProfile?.UserID) {
       photos = await getPhotosByUserWithExtra(

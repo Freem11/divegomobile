@@ -6,7 +6,7 @@ import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabase
 import DiveSiteUploaderView from './view';
 import { useMapStore } from "../../googleMap/useMapStore";
 import { Form } from "./form";
-import { UserProfileContext } from "../../contexts/userProfileContext";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type SiteSubmitterProps = {
   closeParallax?: (mapConfig: number) => void
@@ -18,7 +18,7 @@ export default function DiveSiteUploader({
   restoreParallax,
 }: SiteSubmitterProps) {
 
-  const { profile } = useContext(UserProfileContext);
+  const userProfile = useUserProfile();
 
   const mapAction = useMapStore((state) => state.actions)
   const storeFormValues = useMapStore((state) => state.formValues);
@@ -28,7 +28,7 @@ export default function DiveSiteUploader({
       name: formData.Site,
       lat: formData.Latitude,
       lng: formData.Longitude,
-      UserID: profile.UserID
+      UserID: userProfile.UserID
     }); 
     if (error){
       showError("We were unable to save your submission, please try again later")

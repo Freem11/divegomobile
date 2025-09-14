@@ -1,23 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import ShopListPageView from "./shopList";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { getShopByUserID } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { DiveShop } from "../../../entities/diveShop";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 export default function ShopListPage() {
 
-  const { profile } = useContext(UserProfileContext);
+  const userProfile = useUserProfile();
   const [listOfShops, setListOfShops] = useState<DiveShop[]>([]);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   
   useEffect(() => {
-    console.log(profile)
-    if (profile) {
-      getShops(profile?.UserID);
+    console.log(userProfile)
+    if (userProfile) {
+      getShops(userProfile.UserID);
     }
   }, []);
 

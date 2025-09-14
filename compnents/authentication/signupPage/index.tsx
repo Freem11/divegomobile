@@ -2,8 +2,8 @@ import React from "react";
 
 import { register } from "../../../supabaseCalls/authenticateSupabaseCalls";
 import { i18n } from "../../../i18n";
-import { useUserProfileStore } from "../../../store/useUserProfileStore";
 import { showWarning } from "../../toast";
+import { useUserInit } from "../../../store/user/useUserInit";
 
 import CreateAccountPageView from "./view";
 import { Form } from "./form";
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export default function CreateAccountPage(props: IProps) {
-  const userProfileAction = useUserProfileStore(state => state.actions);
+  const initUserProfile = useUserInit();
 
   const onSubmit = async(data: Form) => {
 
@@ -31,7 +31,7 @@ export default function CreateAccountPage(props: IProps) {
     }
 
     if (response.data.session) {
-      userProfileAction.initProfile(true);
+      initUserProfile(true);
     }
   };
 

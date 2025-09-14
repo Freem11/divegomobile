@@ -4,7 +4,6 @@ import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import email from "react-native-email";
 
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
 import {
   insertPhotoLike,
@@ -20,6 +19,7 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
 
 import * as S from "./styles";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 interface Photo {
   UserID: string;
@@ -54,7 +54,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { profile } = useContext(UserProfileContext);
+  const userProfile = useUserProfile();
   const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
@@ -102,7 +102,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
-      const newRecord = await insertPhotoLike(profile.UserID, pic.id);
+      const newRecord = await insertPhotoLike(userProfile.UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);

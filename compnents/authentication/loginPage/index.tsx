@@ -1,10 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 
 import { basicSignIn } from "../../helpers/loginHelpers";
-// import { signInStandard } from "../../../supabaseCalls/authenticateSupabaseCalls";
-import { useUserProfileStore } from "../../../store/useUserProfileStore";
 import { i18n } from "../../../i18n";
 import { showWarning } from "../../toast";
+import { useUserInit } from "../../../store/user/useUserInit";
 
 import LoginPageView from "./view";
 import { Form } from "./form";
@@ -16,12 +15,10 @@ interface IProps {
 }
 
 export default function LoginPage(props: IProps) {
-  const userProfileAction = useUserProfileStore(state => state.actions);
+  const initUserProfile = useUserInit();
 
   const onSubmit = async(data: Form) => {
-
     const response = await basicSignIn(data.Email, data.Password);
-
     if (response.error) {
       console.log("Error: ", response.error);
       if (response.error.status === 400){
@@ -34,7 +31,7 @@ export default function LoginPage(props: IProps) {
     }
 
     if (response.data.session) {
-      userProfileAction.initProfile(true);
+      initUserProfile(true);
     }
   };
 

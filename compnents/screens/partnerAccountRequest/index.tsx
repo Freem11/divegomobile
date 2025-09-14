@@ -6,7 +6,7 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import { createPartnerAccountRequest } from "../../../supabaseCalls/partnerSupabaseCalls";
 import PartnerAccountRequestPageView from "./view";
 import { Form } from "./form";
-import { UserProfileContext } from "../../contexts/userProfileContext";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type PartnerAccountRequestPageProps = {
   closeParallax?: (mapConfig: number) => void
@@ -18,7 +18,7 @@ export default function PartnerAccountRequestPage({
   restoreParallax,
 }: PartnerAccountRequestPageProps) {
 
-  const { profile } = useContext(UserProfileContext);
+  const userProfile = useUserProfile();
   
   const mapAction = useMapStore((state) => state.actions)
   const storeFormValues = useMapStore((state) => state.formValues);
@@ -29,7 +29,7 @@ export default function PartnerAccountRequestPage({
       businessName: formData.OrgName,
       latitude: formData.Latitude,
       longitude: formData.Longitude,
-      userId: profile.UserID
+      userId: userProfile.UserID
     }); 
 
     if (error){

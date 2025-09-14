@@ -6,7 +6,8 @@ import {
   facebookSignIn,
   googleSignIn,
 } from "../../helpers/loginHelpers";
-import { useUserProfileStore } from "../../../store/useUserProfileStore";
+import { useUserInit } from "../../../store/user/useUserInit";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import LandingPageView from "./view";
 
@@ -16,11 +17,10 @@ interface IProps {
 }
 
 export default function LandingPage(props: IProps) {
-
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
-  const userProfileAction = useUserProfileStore(state => state.actions);
-  const userProfile = useUserProfileStore(state => state.profile);
+  const userProfile = useUserProfile();
   const isSignedIn = !!userProfile;
+  const initUserProfile = useUserInit();
 
   useEffect(() => {
     (async() => {
@@ -37,15 +37,15 @@ export default function LandingPage(props: IProps) {
       onSignUp={() => props.moveToSignUpPage()}
       onGoogle={() => {
         googleSignIn();
-        userProfileAction.initProfile(true);
+        initUserProfile(true);
       }}
       onFacebook={() => {
         facebookSignIn();
-        userProfileAction.initProfile(true);
+        initUserProfile(true);
       }}
       onApple={() => {
         appleLogin();
-        userProfileAction.initProfile(true);
+        initUserProfile(true);
       }}
     />
   );

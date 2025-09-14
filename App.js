@@ -7,29 +7,27 @@ import React, {
 } from "react";
 import "react-native-url-polyfill/auto";
 import { Platform } from "react-native";
-import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import Toast from "react-native-toast-message";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { I18nextProvider } from "react-i18next";
 
-import { SessionContext } from "./compnents/contexts/sessionContext";
 import MapPage from "./compnents/mapPage/mapPage";
 import Authentication from "./compnents/authentication";
-import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
-import { useUserProfileStore } from "./store/useUserProfileStore";
+import { useUserInit } from "./store/user/useUserInit";
+import { useUserProfile } from "./store/user/useUserProfile";
 
 export default function App() {
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const [appIsReady, setAppIsReady] = useState(false);
-  const userProfileAction = useUserProfileStore(state => state.actions);
-  const userProfile = useUserProfileStore(state => state.profile);
+  const userProfile = useUserProfile();
+  const initUserProfile = useUserInit();
 
   const [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
@@ -74,7 +72,7 @@ export default function App() {
 
       try {
 
-        userProfileAction.initProfile();
+        initUserProfile();
       } catch (error) {
         console.log("no dice:", error.message);
       } finally {

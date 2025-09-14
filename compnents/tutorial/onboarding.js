@@ -19,14 +19,14 @@ import { useTranslation } from "react-i18next";
 import { activeFonts, colors, fontSizes } from "../styles";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import emilio from "../png/guideIcons/EmilioNew.png";
-import { SessionContext } from "../contexts/sessionContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
 import { updateProfileUserName, grabProfileByUserName } from "../../supabaseCalls/accountSupabaseCalls";
 import TextInputField from "../authentication/utils/textInput";
 
 import { registerForForegroundLocationTrackingsAsync } from "./locationTrackingRegistry";
 import { registerForPhotoLibraryAccessAsync } from "./photoLibraryRegistery";
 import { registerForPushNotificationsAsync } from "./notificationsRegistery";
+import { useUserInit } from "../../store/user/useUserInit";
+import { useUserProfile } from "../../store/user/useUserProfile";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -36,9 +36,9 @@ export default function OnboardingTest() {
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const carrouselRef = useRef(null);
   const [carrouselIndex, setCarrouselIndex] = useState(0);
-  const { activeSession } = useContext(SessionContext);
-
-  // const { setProfile } = useContext(UserProfileContext);
+  const profile = useUserProfile();
+  const initUserProfile = useUserInit();
+  
   const { t } = useTranslation();
 
   const carrouselData = useMemo(() => [
@@ -101,7 +101,7 @@ export default function OnboardingTest() {
       await registerForPhotoLibraryAccessAsync("no");
       moveToNextPage();
     } else if (carrouselIndex === 5) {
-      await registerForPushNotificationsAsync(activeSession, "no");
+      await registerForPushNotificationsAsync(profile.UserID, "no");
       moveToNextPage();
     } else {
       moveToNextPage();
@@ -161,14 +161,11 @@ export default function OnboardingTest() {
       return "fail";
     }
 
-    const sessionUserId = activeSession.user.id;
-
     await updateProfileUserName({
-      UserID: sessionUserId,
+      UserID: profile.UserID,
       UserName: formVal.userName,
     });
-
-    // setProfile(updatedProfile);
+    initUserProfile(true);
 
     return "success";
   };

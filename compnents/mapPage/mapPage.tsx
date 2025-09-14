@@ -37,8 +37,6 @@ import {
 } from "../../supabaseCalls/photoSupabaseCalls";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { SessionContext } from "../contexts/sessionContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
@@ -50,7 +48,7 @@ import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
-import { useUserProfileStore } from "../../store/useUserProfileStore";
+import { useUserProfile } from "../../store/user/useUserProfile";
 
 import * as S from "./styles";
 
@@ -69,12 +67,10 @@ export default function MapPage() {
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  // const { activeSession } = useContext(SessionContext);
-  // const { profile, setProfile } = useContext(UserProfileContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-  const profile = useUserProfileStore(state => state.profile);
+  const profile = useUserProfile();
 
   const { t } = useTranslation();
 
@@ -216,7 +212,7 @@ export default function MapPage() {
 
         {/* {mapConfig === 0 && <EmailFeedback />} */}
 
-        <FeedScreens />
+        {/* <FeedScreens /> */}
         <LevelOneScreen />
         <LevelTwoScreen />
         <LevelThreeScreen />

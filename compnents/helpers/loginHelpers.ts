@@ -21,10 +21,26 @@ import {
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { supabase } from "../../supabase";
 import { i18n } from "../../i18n";
+import { Session } from "@supabase/supabase-js";
 
 const redirectTo = makeRedirectUri();
 
-const createSessionFromUrl = async url => {
+export const getSession = async() => {
+  const session = await sessionCheck();
+
+  if (session.error) {
+    console.log("Unable to initialize session", session.error);
+    return null;
+  }
+
+  if (!session.data.session?.user.id) {
+    return null;
+  }
+
+  return session.data.session as Session;
+};
+
+export const createSessionFromUrl = async url => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
 
   if (errorCode) throw new Error(errorCode);
@@ -41,10 +57,8 @@ const createSessionFromUrl = async url => {
 };
 
 //Sign Ins
-export const facebookSignIn = async(setActiveSession, setIsSignedIn) => {
+export const facebookSignIn = async() => {
   try {
-    setIsSignedIn(true);
-
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "facebook",
       options: {
@@ -64,13 +78,12 @@ export const facebookSignIn = async(setActiveSession, setIsSignedIn) => {
       }
 
       if (res.type === "success") {
-        const { url } = res;
-        const data = await createSessionFromUrl(url);
+        // const { url } = res;
+        // const data = await createSessionFromUrl(url);
         // handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
       }
     }
   } catch (error) {
-    setIsSignedIn(false);
     console.log(error);
   }
 };
@@ -121,8 +134,7 @@ export const googleSignIn = async() => {
   return null;
 };
 
-export const appleLogin = async(setActiveSession, setIsSignedIn) => {
-  setIsSignedIn(true);
+export const appleLogin = async() => {
   try {
     const userInfo = await AppleAuthentication.signInAsync({
       requestedScopes: [
@@ -132,24 +144,19 @@ export const appleLogin = async(setActiveSession, setIsSignedIn) => {
     });
 
     if (userInfo.identityToken) {
-      const { data, error } = await supabase.auth.signInWithIdToken({
+      const response = await supabase.auth.signInWithIdToken({
         provider: "apple",
         token: userInfo.identityToken
       });
 
-      if (error) {
-        throw error;
+      if (response.error) {
+        throw response.error;
       }
 
-      if (data) {
-        // handleSupabaseSetup(data, setActiveSession, setIsSignedIn);
-      }
     } else {
-      setIsSignedIn(false);
       throw new Error("no ID token present!");
     }
   } catch (e) {
-    setIsSignedIn(false);
     console.log(e);
   }
 };

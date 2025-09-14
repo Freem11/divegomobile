@@ -7,7 +7,6 @@ import noImage from "../../png/NoImage.png";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
@@ -18,6 +17,7 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
 
 import DiveShopScreen from ".";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type DiveCentreProps = {
   shopID: number
@@ -35,7 +35,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
-  const { profile } = useContext(UserProfileContext);
+  const userProfile = useUserProfile();
   const [isMyShop, setIsMyShop] = useState(false);
 
   const { editInfo, setEditInfo } = useContext(EditsContext);
@@ -54,8 +54,8 @@ export default function DiveShopParallax(props: DiveCentreProps) {
 
   useEffect(() => {
     if (
-      profile.partnerAccount &&
-      (selectedShop.userId === profile.UserID)
+      userProfile?.partnerAccount &&
+      (selectedShop.userId === userProfile.UserID)
     ) {
       setIsMyShop(true);
     } else {

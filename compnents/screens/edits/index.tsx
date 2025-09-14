@@ -8,12 +8,11 @@ import { showError, showSuccess, showWarning } from "../../toast";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 
 import { BasicFormData } from "./editsParallax";
 import { Form } from "./form";
 import EditScreenView from "./view";
-import { useUserProfileStore } from "../../../store/useUserProfileStore";
+import { useUserInit } from "../../../store/user/useUserInit";
 
 type EdittingScreenProps = {
   localPreviewUri: string | null
@@ -32,8 +31,7 @@ export default function EdittingScreen({
   const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setSelectedShop } = useContext(SelectedShopContext);
   const { setSelectedProfile } = useContext(SelectedProfileContext);
-  // const { setProfile } = useContext(UserProfileContext);
-  const userProfileAction = useUserProfileStore(state => state.actions);
+  const initUserProfile = useUserInit();
 
   const tryUpload = async(uri: string) => {
     try {
@@ -115,7 +113,7 @@ export default function EdittingScreen({
         profilePhoto:   updatedUri ? updatedUri : formData.uri
       });
       setSelectedProfile(response);
-      userProfileAction.initProfile();
+      initUserProfile(true);
       if (response){setSupabaseResponse(response);}
     }
 

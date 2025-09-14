@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
@@ -11,6 +10,8 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
+import { ActiveProfile } from "../../../entities/profile";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type DiveSitePhotosPageProps = {};
 
@@ -20,7 +21,7 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
-  const { profile } = useContext(UserProfileContext);
+  const userProfile = useUserProfile();
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
@@ -32,12 +33,12 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
 
   const { t } = useTranslation();
 
-    const getPhotos = async (site, profile) => {
+    const getPhotos = async (site, userProfile:ActiveProfile) => {
 
     const photos = await getDiveSitePhotos(
       site.lat,
       site.lng,
-      profile.UserID,
+      userProfile.UserID,
     );
 
     setDiveSitePics(photos);
@@ -47,7 +48,7 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
   const handleProfileMove = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
-    if (profile.UserID === picOwnerAccount[0].UserID) {
+    if (userProfile.UserID === picOwnerAccount[0].UserID) {
       return;
     }
 
@@ -58,10 +59,10 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
   };
 
     useEffect(() => {
-    if (selectedDiveSite.lat && profile) {
-      getPhotos(selectedDiveSite, profile);
+    if (selectedDiveSite.lat && userProfile) {
+      getPhotos(selectedDiveSite, userProfile);
     }
-  }, [selectedDiveSite, profile]);
+  }, [selectedDiveSite, userProfile]);
   
   return (
     <DiveSitePhotosPageView

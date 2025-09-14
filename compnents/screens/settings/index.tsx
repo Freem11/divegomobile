@@ -1,14 +1,11 @@
 import React, { useContext } from "react";
-import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import email from "react-native-email";
 
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { SessionContext } from "../../contexts/sessionContext";
 import {
   signOut,
   userDelete
@@ -17,24 +14,24 @@ import {
   addDeletedAccountInfo,
   deleteProfile
 } from "../../../supabaseCalls/accountSupabaseCalls";
-import { useUserProfileStore } from "../../../store/useUserProfileStore";
 
 import SettingsPageView from "./settings";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useUserLogout } from "../../../store/user/useUserLogout";
 
 type SettingsPageProps = {};
 
 export default function SettingsPage({}: SettingsPageProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { profile } = useContext(UserProfileContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const userProfileAction = useUserProfileStore(state => state.actions);
-  const userProfile = useUserProfileStore(state => state.profile);
+  const userLogout = useUserLogout();
+  const userProfile = useUserProfile();
 
   const { t } = useTranslation();
 
   let profileType;
-  if (profile && profile.partnerAccount) {
+  if (userProfile?.partnerAccount) {
     profileType = "Partner Account";
   } else {
     profileType = "Diver Account";
@@ -47,7 +44,7 @@ export default function SettingsPage({}: SettingsPageProps) {
   };
 
   const handleLogout = async() => {
-    userProfileAction.logout();
+    userLogout();
   };
 
   const alertHandler = async() => {
@@ -101,7 +98,6 @@ export default function SettingsPage({}: SettingsPageProps) {
 
       await deleteProfile(userProfile.UserID);
       await userDelete(userProfile.UserID);
-      await SecureStore.deleteItemAsync("token");
       await signOut();
     }
   };

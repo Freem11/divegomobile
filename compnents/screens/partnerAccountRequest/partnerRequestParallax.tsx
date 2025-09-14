@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import partnerRayImage from "../../png/partnerRay.jpg";
+import partnerRayImage from "../../png/PartnerRay.jpg";
 import { Keyboard } from "react-native";
 import { useMapStore } from "../../googleMap/useMapStore";
 import PartnerAccountRequestPage from ".";

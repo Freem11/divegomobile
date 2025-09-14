@@ -5,15 +5,15 @@ import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import ButtonIcon from "../../buttonIcon";
 import { colors } from "../../../styles";
 import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
-import { UserProfileContext } from "../../../contexts/userProfileContext";
+import { useUserProfile } from "../../../../store/user/useUserProfile";
 
 export default function ItineraryListButton() {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { profile } = useContext(UserProfileContext);
+  const userProfile = useUserProfile();
   const { levelOneScreen, setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   const handleScreen = () => {
-    setActiveScreen("TripListScreen", {id: profile?.id})
+    setActiveScreen("TripListScreen", {id: userProfile?.id})
     setLevelOneScreen(true)
   }
 

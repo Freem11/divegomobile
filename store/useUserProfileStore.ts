@@ -1,26 +1,12 @@
 import { create } from "zustand";
-import * as SecureStore from "expo-secure-store";
 import { Session } from "@supabase/supabase-js";
 
 import { ActiveProfile } from "../entities/profile";
 import { createProfile, grabProfileById, grabProfileByUserId } from "../supabaseCalls/accountSupabaseCalls";
 import { sessionCheck, signOut } from "../supabaseCalls/authenticateSupabaseCalls";
+import { getSession } from "../compnents/helpers/loginHelpers";
 
-const getSession = async() => {
-  const session = await sessionCheck();
-  // session.data.session.user.
 
-  if (session.error) {
-    console.log("Unable to initialize session", session.error);
-    return null;
-  }
-
-  if (!session.data.session?.user.id) {
-    return null;
-  }
-
-  return session.data.session as Session;
-};
 
 const mutator = (set, get) => {
 
@@ -62,7 +48,7 @@ const mutator = (set, get) => {
               return;
             }
 
-            const profile = await grabProfileById(session.user.id);
+            const profile = await grabProfileByUserId(session.user.id);
             if (!profile) {
               set({ profileInitialized: false });
               console.log("Unable to fetch new profile");
