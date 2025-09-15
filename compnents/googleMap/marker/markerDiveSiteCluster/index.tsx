@@ -23,6 +23,7 @@ export function MarkerDiveSiteCluster(props: MarkerDiveSiteClusterProps) {
 
   return (
     <Marker
+      tracksViewChanges={false}
       coordinate={props.coordinate}
       onPress={() => {
         const expansionZoom = Math.min(props.getExpansionZoom(), 16);
