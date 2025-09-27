@@ -8,9 +8,9 @@ import moment from "moment";
 
 import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
 import { RootStackParamList } from "../../../providers/navigation";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 import { imageUploadMultiple } from "../imageUploadHelpers";
 import SiteReviewPageView from "./siteReviewCreator";
 import { showError } from "../../toast";
@@ -25,12 +25,12 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
   const { selectedDiveSite } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [siteInfo, setSiteInfo] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const unitSystem = profile && profile.unit_system;
+  const unitSystem = userProfile && userProfile.unit_system;
   
   let default_viz = 30;
   if (unitSystem === "Imperial"){
@@ -99,7 +99,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       };
 
       const sucessfulReviewInsert = await insertReview({
-        created_by: profile.UserID,
+        created_by: userProfile.UserID,
         dive_date: submissionData.DiveDate,
         description: submissionData.Description,
         diveSite_id: selectedDiveSite

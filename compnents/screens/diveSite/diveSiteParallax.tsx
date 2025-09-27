@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Keyboard } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+import { NavigationProp } from "../../../providers/navigation";
 import { useTranslation } from "react-i18next";
+import { Keyboard } from "react-native";
 import email from "react-native-email";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
@@ -26,6 +29,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const navigation = useNavigation<NavigationProp>();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
