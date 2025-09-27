@@ -185,19 +185,11 @@ export default function MapPage() {
 
   const getCurrentLocation = async() => {
     try {
-      const location = await getCurrentCoordinates();
-      if (location) {
-
-        const coordinates = Object.values(location)
-          .filter(point => point && point.latitude && point.longitude)
-          .map(point => ({
-            latitude: point.latitude,
-            longitude: point.longitude,
-          }));
-
+      const { coords } = await getCurrentCoordinates();
+      if (coords) {
         mapRef?.animateToRegion({
-          latitude: coordinates[0].latitude,
-          longitude: coordinates[0].longitude,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
           latitudeDelta: 1,
           longitudeDelta: 1,
         }, 500);
