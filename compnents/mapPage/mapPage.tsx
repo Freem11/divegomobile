@@ -41,16 +41,13 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
 import { useMapStore } from "../googleMap/useMapStore";
-import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
+import ButtonIcon from "../reusables/buttonIcon-new";
+import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { useUserProfile } from "../../store/user/useUserProfile";
 
 import * as S from "./styles";
-
-const windowWidth = Dimensions.get("window").width;
-let feedbackRequest = null;
-const FbWidth = moderateScale(350);
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -58,6 +55,7 @@ export default function MapPage() {
   }
 
   const mapConfig = useMapStore((state) => state.mapConfig);
+  const mapRef = useMapStore((state) => state.mapRef);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
@@ -173,6 +171,22 @@ export default function MapPage() {
 
   const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
+  const getCurrentLocation = async() => {
+    try {
+      const { coords } = await getCurrentCoordinates();
+      if (coords) {
+        mapRef?.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
+        }, 500);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
   return (
     <SafeAreaProvider>
       <S.Container>
@@ -190,6 +204,14 @@ export default function MapPage() {
         {mapConfig === 0 ? (
           <S.SafeAreaBottom edges={["bottom"]}>
             <S.BottomMenu>
+              <S.TargetWrapper>
+                <ButtonIcon
+                  icon="target"
+                  size={36}
+                  onPress={() => getCurrentLocation()}
+                  style={{ pointerEvents: "auto" }}
+                />
+              </S.TargetWrapper>
               <BottomDrawer/>
               <BottomMenu>
                 <ProfileButton />
