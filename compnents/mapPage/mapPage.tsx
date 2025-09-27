@@ -14,7 +14,6 @@ import Animated, {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
-import { Zocial } from "@expo/vector-icons";
 
 import GoogleMap from "../googleMap";
 import BottomMenu from "../reusables/bottomMenu";
@@ -47,7 +46,6 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
 import { useMapStore } from "../googleMap/useMapStore";
-import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
@@ -55,10 +53,6 @@ import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 
 import * as S from "./styles";
-
-const windowWidth = Dimensions.get("window").width;
-let feedbackRequest = null;
-const FbWidth = moderateScale(350);
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
