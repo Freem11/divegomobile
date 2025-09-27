@@ -14,6 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
+import { Zocial } from "@expo/vector-icons";
 
 import GoogleMap from "../googleMap";
 import BottomMenu from "../reusables/bottomMenu";
@@ -50,6 +51,8 @@ import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
+import ButtonIcon from "../reusables/buttonIcon-new";
+import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 
 import * as S from "./styles";
 
@@ -63,6 +66,7 @@ export default function MapPage() {
   }
 
   const mapConfig = useMapStore((state) => state.mapConfig);
+  const mapRef = useMapStore((state) => state.mapRef);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
@@ -185,6 +189,30 @@ export default function MapPage() {
   const PARTNER_ACCOUNT_STATUS =
   (profile?.partnerAccount) || false;
 
+  const getCurrentLocation = async() => {
+    try {
+      const location = await getCurrentCoordinates();
+      if (location) {
+
+        const coordinates = Object.values(location)
+          .filter(point => point && point.latitude && point.longitude)
+          .map(point => ({
+            latitude: point.latitude,
+            longitude: point.longitude,
+          }));
+
+        mapRef?.animateToRegion({
+          latitude: coordinates[0].latitude,
+          longitude: coordinates[0].longitude,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
+        }, 500);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
+
   return (
     <SafeAreaProvider>
       <S.Container>
@@ -202,6 +230,14 @@ export default function MapPage() {
         {mapConfig === 0 ? (
           <S.SafeAreaBottom edges={["bottom"]}>
             <S.BottomMenu>
+              <S.TargetWrapper>
+                <ButtonIcon
+                  icon="target"
+                  size={36}
+                  onPress={() => getCurrentLocation()}
+                  style={{ pointerEvents: "auto" }}
+                />
+              </S.TargetWrapper>
               <BottomDrawer/>
               <BottomMenu>
                 <ProfileButton />
