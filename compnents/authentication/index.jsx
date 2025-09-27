@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Keyboard, ScrollView } from "react-native";
+
 import * as S from "./styles";
 import CreateAccountPage from "./signupPage";
 import LandingPage from "./landingPage";
@@ -11,13 +12,10 @@ const PAGES = { SIGN_UP: 1, LANDING: 2, LOGIN: 3, FORGOT_PASSWORD: 4 };
 export default function Authentication() {
   const scrollViewRef = useRef(null);
   const [carrouselIndex, setCarrouselIndex] = useState(null);
-  const [loginFail, setLoginFail] = useState(null);
-  const [regFail, setRegFail] = useState(null);
-  const [emailSent, setEmailSent] = useState(null);
 
-  if(!carrouselIndex){
+  if (!carrouselIndex){
     setTimeout(() => {
-      setCarrouselIndex(PAGES.LANDING)
+      setCarrouselIndex(PAGES.LANDING);
     }, 0.05);
   }
 
@@ -27,17 +25,12 @@ export default function Authentication() {
   }, [carrouselIndex]);
 
   const setPage = (pageIndex) => {
-    setLoginFail(null);
-    setRegFail(null);
-    setEmailSent(null);
     setCarrouselIndex(pageIndex);
     scrollViewRef.current?.scrollTo({
       x: S.windowWidth * (pageIndex-1),
       animated: true,
     });
   };
-
-
 
   return (
     <S.Wrapper>
@@ -54,8 +47,6 @@ export default function Authentication() {
           <CreateAccountPage
             moveToLandingPage={() => setPage(PAGES.LANDING)}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
-            regFail={regFail}
-            setRegFail={setRegFail}
           />
         </S.PageContent>
 
@@ -68,8 +59,6 @@ export default function Authentication() {
 
         <S.PageContent>
           <LoginPage
-            loginFail={loginFail}
-            setLoginFail={setLoginFail}
             moveToLandingPage={() => setPage(PAGES.LANDING)}
             moveToSignUpPage={() => setPage(PAGES.SIGN_UP)}
             moveToForgotPasswordPage={() => setPage(PAGES.FORGOT_PASSWORD)}
@@ -78,8 +67,6 @@ export default function Authentication() {
 
         <S.PageContent>
           <ForgotPage
-            setEmailSent={setEmailSent}
-            emailSent={emailSent}
             moveToLoginPage={() => setPage(PAGES.LOGIN)}
           />
         </S.PageContent>

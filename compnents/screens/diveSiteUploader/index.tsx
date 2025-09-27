@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -6,7 +6,7 @@ import { showError, showSuccess } from "../../toast";
 import { getCurrentCoordinates } from "../../tutorial/locationTrackingRegistry";
 import { insertDiveSiteWaits } from "../../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { UserProfileContext } from "../../contexts/userProfileContext";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import DiveSiteUploaderView from "./view";
 import { Form } from "./form";
@@ -22,7 +22,7 @@ export default function DiveSiteUploader({
 }: SiteSubmitterProps) {
 
   const { t } = useTranslation();
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
 
   const mapAction = useMapStore((state) => state.actions);
   const storeFormValues = useMapStore((state) => state.formValues);
@@ -32,7 +32,7 @@ export default function DiveSiteUploader({
       name: formData.Site,
       lat: formData.Latitude,
       lng: formData.Longitude,
-      UserID: profile.UserID
+      UserID: userProfile.UserID
     });
     if (error){
       showError("We were unable to save your submission, please try again later");

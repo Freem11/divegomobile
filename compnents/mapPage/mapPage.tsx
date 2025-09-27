@@ -27,18 +27,13 @@ import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
 import LevelOneScreen from "../reusables/levelOneScreen";
 import LevelTwoScreen from "../reusables/levelTwoScreen";
 import LevelThreeScreen from "../reusables/levelThreeScreen";
-import {
-  grabProfileByUserId,
-  updateProfileFeeback,
-} from "../../supabaseCalls/accountSupabaseCalls";
+import { updateProfileFeeback } from "../../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "../../supabaseCalls/photoSupabaseCalls";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { SessionContext } from "../contexts/sessionContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
@@ -49,7 +44,7 @@ import { useMapStore } from "../googleMap/useMapStore";
 import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
-import { ActiveProfile } from "../../entities/profile";
+import { useUserProfile } from "../../store/user/useUserProfile";
 
 import * as S from "./styles";
 
@@ -68,11 +63,10 @@ export default function MapPage() {
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { activeSession } = useContext(SessionContext);
-  const { profile, setProfile } = useContext(UserProfileContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+  const { userProfile } = useUserProfile();
 
   const { t } = useTranslation();
 
@@ -90,8 +84,8 @@ export default function MapPage() {
       let photos;
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
-          myCreatures,
-          userId: profile.UserID,
+          myCreatures: userProfile.UserID,
+          userId: userProfile.UserID,
           minLat,
           maxLat,
           minLng,
@@ -100,7 +94,7 @@ export default function MapPage() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
-          userId: profile.UserID,
+          userId: userProfile.UserID,
           myCreatures,
           minLat,
           maxLat,
@@ -145,25 +139,20 @@ export default function MapPage() {
   });
 
   const getProfile = async() => {
-    const sessionUserId = activeSession.user.id;
-    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success : ActiveProfile = await grabProfileByUserId(sessionUserId);
-      if (success) {
-        const bully = success && success.UserName;
-        if (bully == null || bully === "") {
+      if (userProfile) {
+        if (userProfile.UserName == null || userProfile.UserName === "") {
           setTimeout(() => {
             setActiveTutorialID("OnboardingX");
             setFullScreenModal(true);
           }, 500);
         } else {
           setFullScreenModal(false);
-          setProfile(success);
         }
-        if (success[0].feedbackRequested === false) {
+        if (userProfile.feedbackRequested === false) {
           feedbackRequest = setTimeout(() => {
             startFeedbackAnimations();
-            updateProfileFeeback(success[0]);
+            updateProfileFeeback(userProfile);
           }, 180000);
         }
       }
@@ -182,8 +171,7 @@ export default function MapPage() {
     getProfile();
   }, []);
 
-  const PARTNER_ACCOUNT_STATUS =
-  (profile?.partnerAccount) || false;
+  const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
   return (
     <SafeAreaProvider>
