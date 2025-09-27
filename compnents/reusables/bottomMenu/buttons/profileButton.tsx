@@ -5,17 +5,17 @@ import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 import ButtonIcon from "../../buttonIcon";
 import { colors } from "../../../styles";
-import { UserProfileContext } from "../../../contexts/userProfileContext";
+import { useUserProfile } from "../../../../store/user/useUserProfile";
 
 import * as S from "./styles";
 
 export default function ProfileButton() {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
 
   const handleScreen = () => {
-    setActiveScreen("ProfileScreen", { id: profile?.id });
+    setActiveScreen("ProfileScreen", { id: userProfile?.id });
     setLevelTwoScreen(true);
   };
 

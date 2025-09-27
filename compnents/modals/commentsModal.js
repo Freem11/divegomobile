@@ -17,7 +17,6 @@ import TextInputField from '../authentication/utils/textInput';
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { moderateScale } from "react-native-size-matters";
-import { UserProfileContext } from "../contexts/userProfileContext";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import {
   insertPhotoComment,
@@ -39,7 +38,6 @@ export default function CommentsModal() {
   const [listOfComments, setListOfComments] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
   const [selectedReplyId, setSelectedReplyId] = useState([]);
-  const { profile } = useContext(UserProfileContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedPicture } = useContext(SelectedPictureContext);
   const { fullScreenModal, setFullScreenModal } = useContext(
