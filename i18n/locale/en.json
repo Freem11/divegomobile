@@ -14,7 +14,9 @@
         "accept": "Accept",
         "optOut": "Opt Out",
         "finish": "Finish",
-        "close": "Close"
+        "close": "Close",
+        "unknownError": "Sorry, something went wrong. Please try again later"
+
     },
     "OnBoarding": {
         "welcomeTitle": "Welcome to Scuba SEAsons!",

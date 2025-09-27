@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Keyboard } from "react-native";
-import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
+
+import { NavigationProp } from "../../../providers/navigation";
+import { useTranslation } from "react-i18next";
+import { Keyboard } from "react-native";
 import email from "react-native-email";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -16,7 +17,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
-import { NavigationProp } from "../../../providers/navigation";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import DiveSiteScreen from ".";
 
@@ -26,9 +27,9 @@ type DiveSiteProps = {
 
 export default function DiveSiteParallax(props: DiveSiteProps) {
   const { t } = useTranslation();
-  const navigation = useNavigation<NavigationProp>();
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const navigation = useNavigation<NavigationProp>();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
@@ -46,7 +47,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   useEffect(() => {
     getDiveSiteinfo();
-    if (profile?.partnerAccount) {
+    if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.siteID]);
