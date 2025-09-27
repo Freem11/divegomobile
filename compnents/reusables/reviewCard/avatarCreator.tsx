@@ -24,8 +24,8 @@ function Avatar({ photo }: AvatarProps = {}) {
       <S.StyledIcon>
         <Icon
           name={"user"}
-          style={{ width: moderateScale(32), height: moderateScale(32) }}
-          fill={colors.neutralGrey}
+          style={{ width: moderateScale(18), height: moderateScale(18) }}
+          fill={colors.primaryBlue}
         />
       </S.StyledIcon>
     );

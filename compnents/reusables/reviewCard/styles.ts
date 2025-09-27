@@ -1,41 +1,39 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { Platform } from "react-native";
 import { Image } from "expo-image";
 
 import { colors, fontSizes, activeFonts } from "../../styles";
-import Button from "../button";
+import { Platform } from "react-native";
 
 export const StyledImage = styled(Image)`
-  width: ${moderateScale(45)}px;
-  height: ${moderateScale(45)}px;
-  borderRadius: ${moderateScale(45)}px;
-  marginRight: ${moderateScale(10)}px;
-  resizeMode: cover;
+  width: ${moderateScale(40)}px;
+  height: ${moderateScale(40)}px;
+  border-radius: ${moderateScale(40)}px;
+  resize-mode: cover;
 `;
 
 export const StyledIcon = styled.View`
-  backgroundColor: ${colors.buttonPressOverlay};
-  width: ${moderateScale(45)}px;
-  height: ${moderateScale(45)}px;
-  borderRadius: ${moderateScale(24)}px;
-  alignItems: center;
-  justifyContent: center; 
-  marginRight: ${moderateScale(10)}px;
+  background-color: ${colors.lighterBlue};
+  width: ${moderateScale(40)}px;
+  height: ${moderateScale(40)}px;
+  border-radius: ${moderateScale(40)}px;
+  align-items: center;
+  justify-content: center; 
 `;
 
 export const Card = styled.View`
-  border-color: ${colors.lightGrey};
+  border-color: ${colors.border};
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(12)}px;
   margin-bottom: ${moderateScale(16)}px;
   padding: ${moderateScale(15)}px;
+  background-color: #ffffff;
   ${Platform.select({
     ios: `
       shadow-color: #000;
-      shadow-offset: 0px 1px;
-      shadow-opacity: 0.1;
-      shadow-radius: 2px;
+      shadow-offset: 0px 0px;
+      shadow-opacity: 0.04;
+      shadow-radius: 4px;
     `,
     android: `
       elevation: 0;
@@ -43,46 +41,34 @@ export const Card = styled.View`
   })}
 `;
 
-export const CardTop = styled.View`
-  justify-content: space-between;
-  margin-bottom: ${moderateScale(5)}px;
-  width: 100%;
-  gap: ${moderateScale(6)}px;
-`;
-
 export const Header = styled.View`
   flex-direction: row;
   width: 100%;
   align-items: flex-start;
   justify-content: space-between;
+  gap: ${moderateScale(12)}px;
+  height: ${moderateScale(40)}px;
 `;
 
-export const TopRow = styled.View`
+export const UserInfo = styled.View`
   flex-direction: column;
   width: 100%;
-  height: ${moderateScale(45)}px;
+  height: 100%;
+  gap: ${moderateScale(4)}px;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 export const Title = styled.Text`
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
-  font-family: ${activeFonts.Bold};
+  font-size: ${moderateScale(fontSizes.Base)}px;
+  font-family: ${activeFonts.Semibold};
   text-wrap: pretty;
-  flex: 1;
-  margin-right: ${moderateScale(8)}px;
 `;
 
 export const Date = styled.Text`
-  font-size: ${moderateScale(15)}px;
+  font-size: ${moderateScale(fontSizes.XSmall)}px;
   font-family: ${activeFonts.Regular};
-  color: ${colors.darkGrey};
-`;
-
-export const Price = styled.Text`
-  font-size: ${moderateScale(15)}px;
-  font-family: ${activeFonts.Medium};
-  color: ${colors.primaryBlue};
+  color: ${colors.themeBlack};
 `;
 
 export const Actions = styled.View`
@@ -123,31 +109,24 @@ export const ShowMoreText = styled.Text`
 export const LabelsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: ${moderateScale(8)}px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: ${moderateScale(6)}px;
   margin-top: ${moderateScale(20)}px;
   width: 100%;
 `;
 
 export const TagWrapper = styled.View`
   background-color: ${colors.lighterBlue};
-  font-size: ${moderateScale(fontSizes.Micro)}px;
-  font-family: ${activeFonts.Medium};
   border-radius: ${moderateScale(7)}px;
   justify-content: center;
   align-items: center;
-  padding-vertical: ${moderateScale(7)}px;
+  padding-vertical: ${moderateScale(5)}px;
   padding-horizontal: ${moderateScale(10)}px;
 `;
 
 export const TagText = styled.Text`
-  font-size: ${moderateScale(fontSizes.Micro)}px;
+  font-size: ${moderateScale(fontSizes.XSmall)}px;
   font-family: ${activeFonts.Medium};
-  text-align: center;
   color: ${colors.primaryBlue};
-`;
-
-export const StyledButton = styled(Button)`
-  width: 100%;
 `;

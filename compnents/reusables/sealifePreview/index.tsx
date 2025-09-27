@@ -5,11 +5,10 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../previewGrid";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
-// import Label from "../label-new";
+import Label from "../label-new";
 import Button from "../button";
 import GhostButton from "../ghostButton";
 import EmptyState from "../emptyState-new";
-import Label from "../label";
 import { ActiveProfile } from "../../../entities/profile";
 
 import * as S from "./styles";

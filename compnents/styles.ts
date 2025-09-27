@@ -11,13 +11,13 @@ export const colors = {
   themeRed: "#E63946",
   themeGreen: "#4caf50",
   lightGrey: "#AFACAC",
-  lighterGrey: "#e4e4e4",
+  lighterGrey: "#F1F1F1",
   neutralGrey: "#A9A9A9",
   darkGrey: "#706b6b",
   buttonPressOverlay: "rgba(128, 128, 128, 0.25)",
   headerButtonOverlay: "rgba(0,0,0,0.4)",
   searchOverlay: "rgba(128, 128, 128, 0.6)",
-  border: "rgba(0,0,0,0.15)",
+  border: "rgba(0,0,0,0.1)",
   borderActive: "rgba(30,112,254,0.5)",
   green: "#31AD23",
   greenLight: "#7fd673",
@@ -30,7 +30,7 @@ export const colors = {
   orangeLighter: "#ffefe3",
   red: "#e1331d",
   redLight: "#f17768",
-  redLighter: "#fbe5e1"
+  redLighter: "#fbe5e1",
 };
 
 type FontSizeType = {
@@ -39,8 +39,9 @@ type FontSizeType = {
   StandardText: 18,
   SmallText: 16,
   Micro: 14,
-  Base: 16,
+  XSmall: 13,
   Small: 15,
+  Base: 16,
   Medium: 17,
   Large: 19,
 }
@@ -52,6 +53,7 @@ export const fontSizes: FontSizeType = {
   SmallText: 16,
   Micro: 14,
 
+  XSmall: 13,
   Small: 15,
   Base: 16,
   Medium: 17,

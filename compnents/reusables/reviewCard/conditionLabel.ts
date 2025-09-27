@@ -1,9 +1,8 @@
-import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { ReviewCondition } from "../../../entities/diveSiteReview";
 
 export function renderLabel(condition: ReviewCondition) {
   const getStrength = (value) => {
-    if (value <= 0.5) {
+    if (value <= 1) {
       return "Weak";
     } else if (value <= 1.5) {
       return "Moderate";
@@ -22,41 +21,41 @@ export function renderLabel(condition: ReviewCondition) {
     case 2:
       return "Boat Dive";
     case 3:
-      return "Night Diving Possible";
+      return "Night Diving";
     case 4:
-      return "Dive at Altitude";
+      return "Altitude";
     case 5:
       return "Wreck Dive";
     case 6:
       return "Cave Dive";
     case 8:
-      return "Fresh Water Dive";
+      return "Fresh Water";
     case 9:
-      return "Surface Traffic Observed";
+      return "Surface Traffic";
     case 10:
-      return "Surge Encountered";
+      return "Surge";
     case 11:
       return "No Reference Points";
     case 12:
-      return "Bottom Depth Exceeds AOW";
+      return "Bottom Depth > AOW";
     case 13:
       return "Kelp Present";
     case 15:
       if (condition.value < 10) {
-        return "Poor Vizibility";
+        return "Poor Visibility";
       } else if (condition.value > 10 && condition.value < 20) {
-        return "Moderate Vizibility";
+        return "Moderate Visibility";
       } else {
-        return "Great Vizibility";
+        return "Great Visibility";
       }
     case 16:
       return null;
     case 17:
-      return `${getStrength(condition.value)} Latteral Currents`;
+      return `${getStrength(condition.value)} Lateral Currents`;
     case 18:
-      return `${getStrength(condition.value)} Up-wellings`;
+      return `${getStrength(condition.value)} Upwellings`;
     case 19:
-      return `${getStrength(condition.value)} Down-wellings`;
+      return `${getStrength(condition.value)} Downwellings`;
     case 20:
       return `${getStrength(condition.value)} Contrasting Currents`;
     default:
