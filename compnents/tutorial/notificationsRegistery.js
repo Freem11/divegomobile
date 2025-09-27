@@ -8,7 +8,7 @@ import {
 } from "../../supabaseCalls/accountSupabaseCalls";
 import { i18n } from "../../i18n";
 
-export const registerForPushNotificationsAsync = async(activeSession, runAlert) => {
+export const registerForPushNotificationsAsync = async(userId, runAlert) => {
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
@@ -41,14 +41,14 @@ export const registerForPushNotificationsAsync = async(activeSession, runAlert) 
     console.log("error", err);
   }
 
-  if (activeSession && activeSession.user) {
-    const user = await grabProfileByUserId(activeSession.user.id);
+  if (userId) {
+    const user = await grabProfileByUserId(userId);
     const activeToken = user.expo_push_token;
 
     if (activeToken === null || !activeToken.includes(tokenE)) {
       updatePushToken({
         token: activeToken ? [...activeToken, tokenE] : [tokenE],
-        UserID: activeSession.user.id,
+        UserID: userId,
       });
 
     }
