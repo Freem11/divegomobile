@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Control, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import React, {useState, useEffect, useCallback} from "react";
+import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
 
@@ -23,6 +23,7 @@ type ShopReviewCreatorProps = {
   selectedDiveSite: DiveSiteWithUserName;
   unitSystem: string;
   isCompleted?: boolean;
+  trigger: UseFormTrigger<Form>;
 };
 
 export default function SiteReviewPageView({
@@ -36,7 +37,8 @@ export default function SiteReviewPageView({
   watch,
   onSubmit,
   unitSystem,
-  isCompleted = false
+  isCompleted = false,
+  trigger
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
@@ -115,6 +117,31 @@ export default function SiteReviewPageView({
     setValue("Conditions", updatedConditions);
   };
 
+  const handleGoNext = useCallback(async () => {
+    let fieldsToValidate: (keyof Form)[] = [];
+
+    switch (currentStep) {
+      case 1:
+        fieldsToValidate = ['DiveDate'];
+        break;
+      case 2:
+        fieldsToValidate = [];
+        break;
+      case 3:
+        fieldsToValidate = [];
+        break;
+    }
+
+    if (fieldsToValidate.length > 0) {
+      const isValid = await trigger(fieldsToValidate);
+      if (isValid) {
+        setCurrentStep(currentStep + 1);
+      }
+    } else {
+      setCurrentStep(currentStep + 1);
+    }
+  }, [currentStep, trigger])
+
   useEffect(() => {
     if (isCompleted) {
       setCurrentStep(4);
@@ -142,7 +169,10 @@ export default function SiteReviewPageView({
             watch={watch}
             datePickerVisible={datePickerVisible}
             showDatePicker={showDatePicker}
-            hideDatePicker={hideDatePicker}
+            hideDatePicker={() => {
+              hideDatePicker();
+              void trigger(['DiveDate']);
+            }}
             handleBooleanConditions={handleBooleanConditions}
           />
         )}
@@ -171,7 +201,7 @@ export default function SiteReviewPageView({
         currentStep={currentStep}
         totalSteps={totalSteps}
         onBack={() => setCurrentStep(currentStep - 1)}
-        onNext={() => setCurrentStep(currentStep + 1)}
+        onNext={handleGoNext}
         onSubmit={onSubmit}
         isSubmitting={isSubmitting}
         canSubmit={canSubmit}

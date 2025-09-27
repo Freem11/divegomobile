@@ -4,12 +4,16 @@ import { Platform } from "react-native";
 
 import { colors, activeFonts, fontSizes } from '../../styles';
 
-export const TextInputWrapper = styled.View`
+export const Container = styled.View`
+  width: 100%;
+`;
+
+export const TextInputWrapper = styled.View<{ hasError?: boolean }>`
   height: ${moderateScale(44)}px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  border-color: ${colors.border};
+  border-color: ${props => props.hasError ? colors.red : colors.border};
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(8)}px;
   position: relative;
@@ -48,4 +52,12 @@ export const IconWrapperRightClear = styled.View`
     margin-left: ${moderateScale(-15)}px;
     justify-content: center;
     align-items: center;
+`;
+
+export const ErrorText = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.red};
+  margin-top: ${moderateScale(4)}px;
+  margin-left: ${moderateScale(2)}px;
 `;
