@@ -5,18 +5,17 @@ import { Keyboard } from "react-native";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { grabProfileById } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
-import { SessionContext } from "../../contexts/sessionContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import UserProfileScreen from ".";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
@@ -46,15 +45,14 @@ export default function UserProfileParallax(props: UserProfileProps) {
   );
 
   const [profileVals, setProfileVals] = useState(null);
-  const { profile } = useContext(UserProfileContext);
   const [isMyProfile, setIsMyProfile] = useState(false);
-  const { activeSession } = useContext(SessionContext);
 
   const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
   const { setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { userProfile } = useUserProfile();
 
   useEffect(() => {
     getProfileinfo();
@@ -66,9 +64,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   useEffect(() => {
-    if (
-      (selectedProfile?.user_id === profile?.user_id)
-    ) {
+    if (selectedProfile?.user_id === userProfile?.UserID) {
       setIsMyProfile(true);
     } else {
       setIsMyProfile(false);
@@ -91,7 +87,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   async function followCheck() {
     const follows = await checkIfUserFollows(
-      profile.user_id,
+      userProfile.UserID,
       selectedProfile.user_id
     );
     if (follows && follows.length > 0) {
@@ -100,19 +96,19 @@ export default function UserProfileParallax(props: UserProfileProps) {
   }
 
   const addFollow = async () => {
-    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
     }
     const newRecord = await insertUserFollow(
-      profile.UserID,
+      userProfile.UserID,
       selectedProfile.user_id
     );
     setIsfFollowing(newRecord.id);
   };
 
   const removeFollow = async () => {
-    const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
+    const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
     }

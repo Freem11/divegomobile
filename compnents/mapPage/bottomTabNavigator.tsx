@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { UserProfileContext } from "../contexts/userProfileContext";
+
 import HomeScreen from "./HomeScreen";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterParallax from "../screens/diveSiteUploader/siteSubmitterParallax";
@@ -13,6 +13,7 @@ import { colors, fontSizes } from "../styles";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
+import { useUserProfile } from "../../store/user/useUserProfile";
 
 export type BottomTabRoutes = {
     Home: undefined;
@@ -30,8 +31,8 @@ type BottomTabNavigatorProps = {
 const Tab = createBottomTabNavigator<BottomTabRoutes>();
 
 export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
-    const { profile } = useContext(UserProfileContext);
-    const PARTNER_ACCOUNT_STATUS = (profile?.partnerAccount) || false;
+    const { userProfile } = useUserProfile();
+    const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
     const { t } = useTranslation();
     const navigation = useNavigation();
@@ -77,7 +78,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
         >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Profile">
-                {props => <UserProfileParallax {...props} profileID={profile?.id} />}
+                {props => <UserProfileParallax {...props} profileID={userProfile?.id} />}
             </Tab.Screen>
             <Tab.Screen name="Notifications" component={FeedList} />
             <Tab.Screen name="AddSite" component={SiteSubmitterParallax} options={{ tabBarLabel: "Site Add" }} />

@@ -31,6 +31,7 @@ export const BottomMenu = styled.View`
     bottom: 0;
     width: 100%;
     z-index: 3;
+    pointer-events: box-none;
 `;
 
 export const StyledTouchableHighlight = styled.TouchableHighlight`
@@ -68,4 +69,14 @@ export const IconWrapperRight = styled.View`
     width: ${moderateScale(24)}px;
     margin-left: ${moderateScale(5)}px;
     margin-right: ${moderateScale(-10)}px;
+`;
+
+export const TargetWrapper = styled.View`
+    flex: 1; 
+    align-self: flex-end;
+    align-items: flex-end;
+    margin-right: ${moderateScale(10)}px;
+    margin-bottom: ${moderateScale(10)}px;
+    z-index: 10;
+    pointer-events: box-none;
 `;

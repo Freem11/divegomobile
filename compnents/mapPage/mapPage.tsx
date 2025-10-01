@@ -27,18 +27,13 @@ import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
 import LevelOneScreen from "../reusables/levelOneScreen";
 import LevelTwoScreen from "../reusables/levelTwoScreen";
 import LevelThreeScreen from "../reusables/levelThreeScreen";
-import {
-  grabProfileByUserId,
-  updateProfileFeeback,
-} from "../../supabaseCalls/accountSupabaseCalls";
+import { updateProfileFeeback } from "../../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosWithUser,
   getPhotosWithUserEmpty,
 } from "../../supabaseCalls/photoSupabaseCalls";
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
-import { UserProfileContext } from "../contexts/userProfileContext";
-import { SessionContext } from "../contexts/sessionContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
@@ -46,17 +41,14 @@ import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
 import { useMapStore } from "../googleMap/useMapStore";
-import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
-import { ActiveProfile } from "../../entities/profile";
+import ButtonIcon from "../reusables/buttonIcon-new";
+import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
+import { useUserProfile } from "../../store/user/useUserProfile";
 
 import * as S from "./styles";
 import MainNavigator from "./mainNavigator";
-
-const windowWidth = Dimensions.get("window").width;
-let feedbackRequest = null;
-const FbWidth = moderateScale(350);
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -64,18 +56,18 @@ export default function MapPage() {
   }
 
   const mapConfig = useMapStore((state) => state.mapConfig);
+  const mapRef = useMapStore((state) => state.mapRef);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { activeSession } = useContext(SessionContext);
-  const { profile, setProfile } = useContext(UserProfileContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const { userProfile } = useUserProfile();
 
   const { t } = useTranslation();
 
@@ -93,8 +85,8 @@ export default function MapPage() {
       let photos;
       if (animalMultiSelection.length === 0) {
         photos = await getPhotosWithUserEmpty({
-          myCreatures,
-          userId: profile.UserID,
+          myCreatures: userProfile.UserID,
+          userId: userProfile.UserID,
           minLat,
           maxLat,
           minLng,
@@ -103,7 +95,7 @@ export default function MapPage() {
       } else {
         photos = await getPhotosWithUser({
           animalMultiSelection,
-          userId: profile.UserID,
+          userId: userProfile.UserID,
           myCreatures,
           minLat,
           maxLat,
@@ -148,22 +140,22 @@ export default function MapPage() {
   });
 
   const getProfile = async () => {
-    const sessionUserId = activeSession.user.id;
-    // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success: ActiveProfile = await grabProfileByUserId(sessionUserId);
-      if (success) {
-        const bully = success && success.UserName;
-        if (bully == null || bully === "") {
-          setShowOnboarding(true);
+      if (userProfile) {
+        if (userProfile.UserName == null || userProfile.UserName === "") {
+          setTimeout(() => {
+            setShowOnboarding(true);
+
+            setActiveTutorialID("OnboardingX");
+            setFullScreenModal(true);
+          }, 500);
         } else {
           setFullScreenModal(false);
-          setProfile(success);
         }
-        if (success[0].feedbackRequested === false) {
+        if (userProfile.feedbackRequested === false) {
           feedbackRequest = setTimeout(() => {
             startFeedbackAnimations();
-            updateProfileFeeback(success[0]);
+            updateProfileFeeback(userProfile);
           }, 180000);
         }
       }
@@ -181,6 +173,24 @@ export default function MapPage() {
     setLevelTwoScreen(false);
     getProfile();
   }, []);
+
+  const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
+
+  const getCurrentLocation = async () => {
+    try {
+      const { coords } = await getCurrentCoordinates();
+      if (coords) {
+        mapRef?.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
+        }, 500);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   return (
     <MainNavigator showOnboarding={showOnboarding} mapConfig={mapConfig} />
@@ -201,6 +211,14 @@ export default function MapPage() {
     //     {mapConfig === 0 ? (
     //       <S.SafeAreaBottom edges={["bottom"]}>
     //         <S.BottomMenu>
+    // <S.TargetWrapper>
+    //             <ButtonIcon
+    //               icon="target"
+    //               size={36}
+    //               onPress={() => getCurrentLocation()}
+    //               style={{ pointerEvents: "auto" }}
+    //             />
+    //           </S.TargetWrapper>
     //           <BottomDrawer/>
     //           <BottomMenu>
     //             <ProfileButton />
