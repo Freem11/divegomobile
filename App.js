@@ -7,29 +7,30 @@ import React, {
 } from "react";
 import "react-native-url-polyfill/auto";
 import { Platform } from "react-native";
-import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import Toast from "react-native-toast-message";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { I18nextProvider } from "react-i18next";
 
-import { SessionContext } from "./compnents/contexts/sessionContext";
 import MapPage from "./compnents/mapPage/mapPage";
-import { sessionRefresh } from "./supabaseCalls/authenticateSupabaseCalls";
+import Authentication from "./compnents/authentication";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationNavigator from "./compnents/authentication/authNavigator";
-import { createProfile, grabProfileByUserId } from "./supabaseCalls/accountSupabaseCalls";
+import { useUserProfile } from "./store/user/useUserProfile";
+import { useUserHandler } from "./store/user/useUserHandler";
 
 export default function App() {
+
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
   const [appIsReady, setAppIsReady] = useState(false);
-  const [activeSession, setActiveSession] = useState(null);
+  const { userProfile } = useUserProfile();
+  const userHandler = useUserHandler();
 
   const [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
@@ -63,7 +64,8 @@ export default function App() {
   }, []);
 
   useLayoutEffect(() => {
-    const prepare = async () => {
+
+    const prepare = async() => {
       await SplashScreen.preventAutoHideAsync();
 
       if (Platform.OS === "ios") {
@@ -73,41 +75,7 @@ export default function App() {
       }
 
       try {
-        let storedToken;
-
-        try {
-          storedToken = JSON.parse(await SecureStore.getItemAsync("token"));
-        } catch (e) {
-          console.log("Token in SecureStorage is not valid JSON.");
-          setAppIsReady(true);
-          return;
-        }
-
-        if (!storedToken) {
-          console.log("No token found in SecureStorage.");
-          setAppIsReady(true);
-          return;
-        }
-
-        if (storedToken && typeof storedToken === "string") {
-          const newSession = await sessionRefresh(storedToken);
-          const profileCheck = await grabProfileByUserId(newSession.user.id);
-
-          if (!profileCheck) {
-            await createProfile({
-              id: newSession.user.id,
-              email: newSession.user.email
-            });
-          }
-
-          if (newSession) {
-            setActiveSession(newSession);
-          } else {
-            console.log("Session refresh failed.");
-          }
-        } else {
-          console.log("No refresh token found in session.");
-        }
+        await userHandler.userInit();
       } catch (error) {
         console.log("no dice:", error.message);
       } finally {
@@ -135,9 +103,8 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-        <SessionContext.Provider value={{ activeSession, setActiveSession }}>
           <I18nextProvider i18n={i18n}>
-            {activeSession ? (
+            {userProfile ? (
               <MapPage />
             ) : (
               <NavigationContainer>
@@ -145,7 +112,6 @@ export default function App() {
               </NavigationContainer>
             )}
           </I18nextProvider>
-        </SessionContext.Provider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />
       {/* <Toast /> */}

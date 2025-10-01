@@ -1,7 +1,13 @@
-import React, { useState, useContext, useEffect, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
+
+import { register } from "../../../supabaseCalls/authenticateSupabaseCalls";
+import { i18n } from "../../../i18n";
+import { showWarning } from "../../toast";
+import { useUserHandler } from "../../../store/user/useUserHandler";
+
 import CreateAccountPageView from "./view";
-import { SessionContext } from "../../contexts/sessionContext";
-import { handleSignUpSubmit } from "../../helpers/loginHelpers";
+import { Form } from "./form";
+
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthenticationRoutes } from "../authNavigator";
@@ -11,38 +17,43 @@ type SignUpScreenNavigationProp = NativeStackNavigationProp<
   "SignUp"
 >;
 
-export default function SignUpScreen() {
-  const [regFail, setRegFail] = useState<string | null>(null);
+interface IProps {
+  moveToLandingPage: () => void;
+  moveToLoginPage: () => void;
+}
 
-  const [formVals, setFormVals] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { setActiveSession } = useContext(SessionContext);
+export default function SignUpScreen(props: IProps) {
+  const userHandler = useUserHandler();
+
+  const onSubmit = async(data: Form) => {
+
+    const response = await register(data.Email, data.Password, data.Name);
+
+    if (response.error) {
+      console.log("Error: ", response.error);
+      if (response.error.status === 422){
+        showWarning(i18n.t("Validators.accountExistMsg"));
+      } else {
+        showWarning(i18n.t("Common.unknownError"));
+      }
+      return;
+    }
+
+    if (response.data.session) {
+      userHandler.userInit(true);
+    }
+  };
 
   const navigation = useNavigation<SignUpScreenNavigationProp>();
   useLayoutEffect(() => {
     navigation.setOptions({ animation: "slide_from_left" });
   }, [navigation]);
 
-  useEffect(() => {
-    setRegFail(null);
-  }, [formVals]);
-
   return (
     <CreateAccountPageView
       moveToLandingPage={() => navigation.goBack()}
       moveToLoginPage={() => navigation.replace("Login")}
-      regFail={regFail}
-      formVals={formVals}
-      setFormVals={setFormVals}
-      secureTextEntry={secureTextEntry}
-      setSecureTextEntry={setSecureTextEntry}
-      handleSignUp={() =>
-        handleSignUpSubmit(formVals, setActiveSession, setRegFail)
-      }
+      onSubmit={onSubmit}
     />
   );
 }

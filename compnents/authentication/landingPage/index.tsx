@@ -1,51 +1,44 @@
-import React, { useContext, useEffect, useState, useLayoutEffect } from "react";
-import { Platform } from "react-native";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import * as AppleAuthentication from "expo-apple-authentication";
-import { SessionContext } from "../../contexts/sessionContext";
-import LandingPageView from "./view";
+
 import {
   appleLogin,
   facebookSignIn,
   googleSignIn,
 } from "../../helpers/loginHelpers";
+import { useUserHandler } from "../../../store/user/useUserHandler";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+
+import LandingPageView from "./view";
+
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthenticationRoutes } from "../authNavigator";
-
-const googleWebClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
-const googleIOSClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
 
 type LandingScreenNavigationProp = NativeStackNavigationProp<
   AuthenticationRoutes,
   "Landing"
 >;
 
-export default function LandingScreen(props) {
-  const { moveToLoginPage, moveToSignUpPage } = props;
+interface IProps {
+  moveToSignUpPage: () => void;
+  moveToLoginPage: () => void;
+}
 
-  const { setActiveSession } = useContext(SessionContext);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+export default function LandingScreen(props: IProps) {
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
+  const { userProfile } = useUserProfile();
+  const isSignedIn = !!userProfile;
+  const userHandler = useUserHandler();
 
   const navigation = useNavigation<LandingScreenNavigationProp>();
 
-  useLayoutEffect(() => {
+    useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
   useEffect(() => {
-    Platform.OS === "ios"
-      ? GoogleSignin.configure({
-          scopes: ["profile"],
-          iosClientId: googleIOSClientId,
-        })
-      : GoogleSignin.configure({
-          scopes: ["profile"],
-          webClientId: googleWebClientId,
-        });
-
-    (async () => {
+    (async() => {
       const isApple = await AppleAuthentication.isAvailableAsync();
       setAppleAuthAvailable(isApple);
     })();
@@ -57,9 +50,18 @@ export default function LandingScreen(props) {
       appleAuthAvailable={appleAuthAvailable}
       onLogin={() => navigation.navigate("Login")}
       onSignUp={() => navigation.navigate("SignUp")}
-      onGoogle={() => googleSignIn(setActiveSession, setIsSignedIn)}
-      onFacebook={() => facebookSignIn(setActiveSession, setIsSignedIn)}
-      onApple={() => appleLogin(setActiveSession, setIsSignedIn)}
+      onGoogle={async() => {
+        await googleSignIn();
+        userHandler.userInit(true);
+      }}
+      onFacebook={async() => {
+        await facebookSignIn();
+        userHandler.userInit(true);
+      }}
+      onApple={async() => {
+        await appleLogin();
+        userHandler.userInit(true);
+      }}
     />
   );
 }

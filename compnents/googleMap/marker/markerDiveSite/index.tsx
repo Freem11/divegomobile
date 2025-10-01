@@ -47,6 +47,7 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   }
   return (
     <Marker
+      tracksViewChanges={false}
       coordinate={props.coordinate}
       onPress={handlePress}
     >

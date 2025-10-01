@@ -1,7 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
+
+import { basicSignIn } from "../../helpers/loginHelpers";
+import { i18n } from "../../../i18n";
+import { showWarning } from "../../toast";
+import { useUserHandler } from "../../../store/user/useUserHandler";
+
 import LoginPageView from "./view";
-import { SessionContext } from "../../contexts/sessionContext";
-import { handleLogInSubmit } from "../../helpers/loginHelpers";
+import { Form } from "./form";
+
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthenticationRoutes } from "../authNavigator";
@@ -11,32 +17,41 @@ type LoginScreenNavigationProp = NativeStackNavigationProp<
   "Login"
 >;
 
-export default function LoginScreen() {
-  const [loginFail, setLoginFail] = useState<string | null>(null);
+interface IProps {
+  moveToSignUpPage: () => void;
+  moveToLandingPage: () => void;
+  moveToForgotPasswordPage: () => void;
+}
 
-  const [formVals, setFormVals] = useState({ email: "", password: "" });
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { setActiveSession } = useContext(SessionContext);
+export default function LoginScreen(props: IProps) {
+  const userHandler = useUserHandler();
+
+  const onSubmit = async(data: Form) => {
+    const response = await basicSignIn(data.Email, data.Password);
+    if (response.error) {
+      console.log("Error: ", response.error);
+      if (response.error.status === 400){
+        showWarning(i18n.t("Validators.invalidCredentials"));
+      } else {
+        showWarning(i18n.t("Common.unknownError"));
+
+      }
+      return;
+    }
+
+    if (response.data.session) {
+      userHandler.userInit(true);
+    }
+  };
 
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
-  useEffect(() => {
-    setLoginFail(null);
-  }, [formVals]);
-
   return (
     <LoginPageView
-      formVals={formVals}
-      setFormVals={setFormVals}
-      secureTextEntry={secureTextEntry}
-      setSecureTextEntry={setSecureTextEntry}
-      loginFail={loginFail}
       moveToLandingPage={() => navigation.goBack()}
       moveToForgotPasswordPage={() => navigation.navigate("ForgotPassword")}
       moveToSignUpPage={() => navigation.replace("SignUp")}
-      handleLogin={() =>
-        handleLogInSubmit(formVals, setActiveSession, setLoginFail)
-      }
+      onSubmit={onSubmit}
     />
   );
 }
