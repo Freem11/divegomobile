@@ -137,13 +137,13 @@ export default function App() {
       <AppContextProvider>
         <SessionContext.Provider value={{ activeSession, setActiveSession }}>
           <I18nextProvider i18n={i18n}>
-            {activeSession ? (
+            <NavigationContainer>
+            { activeSession ? (
               <MapPage />
-            ) : (
-              <NavigationContainer>
+            ) : ( 
                 <AuthenticationNavigator />
-              </NavigationContainer>
-            )}
+             )} 
+            </NavigationContainer>
           </I18nextProvider>
         </SessionContext.Provider>
       </AppContextProvider>

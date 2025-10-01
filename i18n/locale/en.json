@@ -41,6 +41,14 @@
     "goToSettings": "Go to Settings"
   },
   "MapPage": {},
+  "BottomTabBar": {
+    "home": "Map",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "addsite": "Site Add",
+    "guides": "Guides",
+    "itinerary": "Itinerary"
+  },
   "SettingsPage": {
     "header": "Settings",
     "subHeading": "Account Type",

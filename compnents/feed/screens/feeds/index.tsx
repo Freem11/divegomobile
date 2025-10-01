@@ -20,6 +20,9 @@ import { useTranslation } from "react-i18next";
 import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
 import ButtonIcon from "../../../reusables/buttonIcon";
 import * as S from "./styles";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { BottomTabRoutes } from "../../../mapPage/bottomTabNavigator";
+import { useNavigation } from "@react-navigation/native";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -44,8 +47,14 @@ const windowHeight = Dimensions.get("window").height;
 //   },
 // ];
 
+type FeedListNavigationProp = BottomTabNavigationProp<
+  BottomTabRoutes,
+  "Notifications"
+>;
+
 export default function FeedList() {
   const { t } = useTranslation();
+  const navigation = useNavigation<FeedListNavigationProp>();
   const feedItems = useFeedDataStore((state) => state.feedItems);
   //const feedItems = mockFeedItems;
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
@@ -74,21 +83,21 @@ export default function FeedList() {
   return (
     <S.SafeArea>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <ButtonIcon 
+        <ButtonIcon
           icon="chevron-left"
-          onPress={() => closeScreen()}
+          onPress={() => navigation.goBack()}
           size='small'
           fillColor={colors.neutralGrey}
         />
-        <ButtonIcon 
+        <ButtonIcon
           icon="trash"
           onPress={() => clearFeedItems()}
           size="headerIcon"
           fillColor={colors.themeRed}
         />
       </View>
-       <S.Header>Your Notifications</S.Header>
-      
+      <S.Header>Your Notifications</S.Header>
+
       {feedItems.length === 0 ? (
         <Text style={styles.emptyMessage}>{t('Feed.noFeeds')}</Text>
       ) : (

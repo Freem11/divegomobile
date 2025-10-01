@@ -19,13 +19,23 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
 import UserProfileScreen from ".";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
+import { useNavigation } from "@react-navigation/native";
 
 type UserProfileProps = {
   profileID: number
 };
 
+type UserProfileParallaxNavigationProp = BottomTabNavigationProp<
+  BottomTabRoutes,
+  "Profile"
+>;
+
 export default function UserProfileParallax(props: UserProfileProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
+  const navigation = useNavigation<UserProfileParallaxNavigationProp>();
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(
@@ -50,7 +60,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     getProfileinfo();
   }, [props.profileID]);
 
-  const getProfileinfo = async() => {
+  const getProfileinfo = async () => {
     const profileinfo = await grabProfileById(props.profileID);
     setSelectedProfile(profileinfo);
   };
@@ -89,7 +99,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     }
   }
 
-  const addFollow = async() => {
+  const addFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
     if (!permissionGiven) {
       return;
@@ -101,7 +111,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setIsfFollowing(newRecord.id);
   };
 
-  const removeFollow = async() => {
+  const removeFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(activeSession, "yes");
     if (!permissionGiven) {
       return;
@@ -111,8 +121,9 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   const onClose = () => {
     setSelectedProfile(null);
-    setLevelOneScreen(false);
-    setLevelTwoScreen(false);
+    navigation.goBack();
+    // setLevelOneScreen(false);
+    // setLevelTwoScreen(false);
   };
 
   const onNavigate = () => {
@@ -131,7 +142,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setActiveTutorialID("EditsScreen");
   };
 
-  const handleShare = async() => {
+  const handleShare = async () => {
     try {
       await Share.open({
         title: "Share Scuba SEAsons Profile",

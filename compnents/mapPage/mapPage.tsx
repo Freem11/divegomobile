@@ -52,6 +52,7 @@ import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
 
 import * as S from "./styles";
+import MainNavigator from "./mainNavigator";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -74,13 +75,15 @@ export default function MapPage() {
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
   const { t } = useTranslation();
 
   useEffect(() => {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
 
-  const filterAnchorPhotos = async() => {
+  const filterAnchorPhotos = async () => {
     const { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
@@ -144,18 +147,15 @@ export default function MapPage() {
     };
   });
 
-  const getProfile = async() => {
+  const getProfile = async () => {
     const sessionUserId = activeSession.user.id;
     // let sessionUserId = 'acdc4fb2-17e4-4b0b-b4a3-2a60fdfd97dd'
     try {
-      const success : ActiveProfile = await grabProfileByUserId(sessionUserId);
+      const success: ActiveProfile = await grabProfileByUserId(sessionUserId);
       if (success) {
         const bully = success && success.UserName;
         if (bully == null || bully === "") {
-          setTimeout(() => {
-            setActiveTutorialID("OnboardingX");
-            setFullScreenModal(true);
-          }, 500);
+          setShowOnboarding(true);
         } else {
           setFullScreenModal(false);
           setProfile(success);
@@ -182,48 +182,47 @@ export default function MapPage() {
     getProfile();
   }, []);
 
-  const PARTNER_ACCOUNT_STATUS =
-  (profile?.partnerAccount) || false;
-
   return (
-    <SafeAreaProvider>
-      <S.Container>
+    <MainNavigator showOnboarding={showOnboarding} mapConfig={mapConfig} />
 
-        <GoogleMap style={StyleSheet.absoluteFillObject} />
+    // <SafeAreaProvider>
+    //   <S.Container>
 
-        <S.SafeAreaTop edges={["top"]}>
-          <SearchTool />
+    //     <GoogleMap style={StyleSheet.absoluteFillObject} />
 
-          {/* {mapConfig in [, , 2] || !mapConfig ? (
-            <AnimalTagsContainer transTagsY={transTagsY} />
-          ) : null} */}
-        </S.SafeAreaTop>
+    //     <S.SafeAreaTop edges={["top"]}>
+    //       <SearchTool />
 
-        {mapConfig === 0 ? (
-          <S.SafeAreaBottom edges={["bottom"]}>
-            <S.BottomMenu>
-              <BottomDrawer/>
-              <BottomMenu>
-                <ProfileButton />
-                <SiteSearchButton />
-                <DiveSiteButton />
-                {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-              </BottomMenu>
+    //       {/* {mapConfig in [, , 2] || !mapConfig ? (
+    //         <AnimalTagsContainer transTagsY={transTagsY} />
+    //       ) : null} */}
+    //     </S.SafeAreaTop>
 
-            </S.BottomMenu>
-          </S.SafeAreaBottom>
-        )
-          : null}
+    //     {mapConfig === 0 ? (
+    //       <S.SafeAreaBottom edges={["bottom"]}>
+    //         <S.BottomMenu>
+    //           <BottomDrawer/>
+    //           <BottomMenu>
+    //             <ProfileButton />
+    //             <SiteSearchButton />
+    //             <DiveSiteButton />
+    //             {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+    //           </BottomMenu>
 
-        {/* {mapConfig === 0 && <EmailFeedback />} */}
+    //         </S.BottomMenu>
+    //       </S.SafeAreaBottom>
+    //     )
+    //       : null}
 
-        <FeedScreens />
-        <LevelOneScreen />
-        <LevelTwoScreen />
-        <LevelThreeScreen />
-        <AnimatedFullScreenModal />
+    //     {/* {mapConfig === 0 && <EmailFeedback />} */}
 
-      </S.Container>
-    </SafeAreaProvider>
+    //     <FeedScreens />
+    //     <LevelOneScreen />
+    //     <LevelTwoScreen />
+    //     <LevelThreeScreen />
+    //     <AnimatedFullScreenModal />
+
+    //   </S.Container>
+    // </SafeAreaProvider>
   );
 }

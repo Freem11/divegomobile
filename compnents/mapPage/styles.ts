@@ -21,7 +21,7 @@ export const SafeAreaTop = styled.SafeAreaView`
 
 export const SafeAreaBottom = styled.SafeAreaView`
     position: absolute;
-    bottom: ${Platform.OS === "android" ? moderateScale(46) : 0};
+    bottom: 0;
     left: 0;
     right: 0;
 `;
