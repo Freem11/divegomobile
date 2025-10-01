@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { OnboardingRoutes } from "./onboardingNavigator";
 import { registerForPushNotificationsAsync } from "../notificationsRegistery";
 import { OnboardingConfigParams, OnboardingTemplateLayout } from "./OnboardingTemplateLayout";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type NotificationsScreenNavigationProp = NativeStackNavigationProp<
     OnboardingRoutes,
@@ -16,8 +17,10 @@ export default function NotificationsScreen() {
         navigation.replace("Finish");
     }
 
+    const { userProfile } = useUserProfile();
+
     const onPress = async () => {
-        await registerForPushNotificationsAsync();
+        await registerForPushNotificationsAsync(userProfile.UserID, "no");
         moveToNextPage();
     };
 
