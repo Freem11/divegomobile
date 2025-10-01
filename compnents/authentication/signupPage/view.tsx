@@ -34,18 +34,6 @@ export default function CreateAccountPageView(props: IProps) {
 
   return (
     <S.Container>
-
-      <AnimatedSafeAreaView style={[S.styles.safeArea]}>
-        <S.BackButtonWrapper>
-          <ButtonIcon
-            icon="chevron-left"
-            onPress={props.moveToLandingPage}
-            size="small"
-            fillColor={colors.neutralGrey}
-          />
-        </S.BackButtonWrapper>
-      </AnimatedSafeAreaView>
-
       <S.Content>
         <S.Header>{t("Common.signup")}</S.Header>
 

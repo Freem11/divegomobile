@@ -13,9 +13,9 @@ import { moderateScale } from "react-native-size-matters";
 import TextInputField from "../../authentication/utils/textInput";
 import styles from "./styles"
 import { useTranslation } from "react-i18next";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { updateProfileUserName, grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-import { SessionContext } from "../../contexts/sessionContext";
+import { useUserHandler } from "../../../store/user/useUserHandler";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
 import { Platform } from "react-native";
@@ -44,9 +44,8 @@ export default function DiverNameScreen() {
 
     const [userFail, setUserFail] = useState("");
 
-    const { activeSession } = useContext(SessionContext);
-
-    const { setProfile } = useContext(UserProfileContext);
+      const { userProfile } = useUserProfile();
+  const userHandler = useUserHandler();
 
     const handleSubmit = async () => {
         Keyboard.dismiss();
@@ -62,14 +61,11 @@ export default function DiverNameScreen() {
             return "fail";
         }
 
-        const sessionUserId = activeSession.user.id;
-
-        const updatedProfile = await updateProfileUserName({
-            UserID: sessionUserId,
-            UserName: formVal.userName,
-        });
-
-        setProfile(updatedProfile);
+    await updateProfileUserName({
+      UserID: userProfile.UserID,
+      UserName: formVal.userName,
+    });
+    userHandler.userInit(true);
 
         return "success";
     };

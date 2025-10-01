@@ -14,7 +14,6 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import { I18nextProvider } from "react-i18next";
 
 import MapPage from "./compnents/mapPage/mapPage";
-import Authentication from "./compnents/authentication";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
