@@ -1,19 +1,21 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useContext } from "react";
+import { View, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { moderateScale } from "react-native-size-matters";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
-import HomeScreen from "./HomeScreen";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterParallax from "../screens/diveSiteUploader/siteSubmitterParallax";
 import ShopListParallax from "../screens/shopList/shopListParallax";
 import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
 import { colors, fontSizes } from "../styles";
-import { moderateScale } from "react-native-size-matters";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTranslation } from "react-i18next";
 import { useUserProfile } from "../../store/user/useUserProfile";
 import { useAppNavigation } from "./types";
+
+import HomeScreen from "./HomeScreen";
 
 export type BottomTabRoutes = {
     Home: undefined;
@@ -22,7 +24,7 @@ export type BottomTabRoutes = {
     AddSite: undefined;
     Guides: undefined;
     Itinerary: undefined;
-}
+};
 
 type BottomTabNavigatorProps = {
     showOnboarding: boolean
@@ -38,10 +40,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const navigation = useAppNavigation();
 
     /**
-         * For Android only.
-         * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation, 
-         * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-         */
+           * For Android only.
+           * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
+           * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+           */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
@@ -69,7 +71,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                     tabBarActiveTintColor: colors.themeWhite,
                     tabBarInactiveTintColor: colors.neutralGrey,
                     tabBarIcon: ({ color, size }) => {
-                        return <Icon name={icon} color={color} width={size} height={size} />
+                        return <Icon name={icon} color={color} width={size} height={size} />;
                     },
                     tabBarLabel: label,
                     animation: "shift"
@@ -85,17 +87,16 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
 
             {PARTNER_ACCOUNT_STATUS ?
                 <Tab.Screen name="Itinerary" component={ShopListParallax} /> :
-                <Tab.Screen name="Guides" component={ComingSoonScreen} />
-            }
+                <Tab.Screen name="Guides" component={ComingSoonScreen} />}
         </Tab.Navigator>
 
     );
 
     /**
-     * Returns the icon name and label for each tab based on route.
-     * @param route The route name of the current tab
-     * @returns Object literal containing Icon name and label strings
-     */
+       * Returns the icon name and label for each tab based on route.
+       * @param route The route name of the current tab
+       * @returns Object literal containing Icon name and label strings
+       */
     function getTabProps(route: string): { icon: string; label: string } {
         switch (route) {
             case "Home": return { icon: "shark", label: t("BottomTabBar.home") };
