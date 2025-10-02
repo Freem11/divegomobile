@@ -13,8 +13,8 @@ import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
 import { colors, fontSizes } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
-import { useAppNavigation } from "./types";
 
+import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
 
 export type BottomTabRoutes = {
@@ -40,10 +40,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const navigation = useAppNavigation();
 
     /**
-           * For Android only.
-           * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-           * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-           */
+       * For Android only.
+       * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
+       * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+       */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
@@ -59,12 +59,20 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
             screenOptions={({ route }) => {
                 const { icon, label } = getTabProps(route.name);
 
+                // --- START OF REQUIRED CHANGE ---
+                const isHome = route.name === "Home";
+                // --- END OF REQUIRED CHANGE ---
+
                 return {
                     headerShown: false,
+                    // --- START OF REQUIRED CHANGE ---
+                    // Conditionally set the style to hide the bar on all non-Home screens
                     tabBarStyle: {
                         backgroundColor: colors.primaryBlue,
-                        height: moderateScale(50) + (bottomInset ?? 0),
+                        height: isHome ? moderateScale(50) + (bottomInset ?? 0) : 0, // Set height to 0 if not 'Home'
+                        display: isHome ? "flex" : "none", // Explicitly hide the bar if not 'Home'
                     },
+                    // --- END OF REQUIRED CHANGE ---
                     tabBarLabelStyle: {
                         fontSize: moderateScale(11),
                     },
