@@ -21,7 +21,7 @@ import { MainRoutes } from "../../mapPage/mainNavigator";
 
 import DiveShopScreen from ".";
 
-type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveSite">;
+type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
 
 export default function DiveShopParallax() {
   const route = useRoute<DiveCentreRouteProp>();
