@@ -11,7 +11,7 @@ import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
 import { LevelTwoScreenContext } from "../../../../contexts/levelTwoScreenContext";
-import { useAppNavigation } from "../../../../googleMap/marker/markerDiveSite/types";
+import { useAppNavigation } from "../../../../mapPage/types";
 
 import * as S from "./styles";
 

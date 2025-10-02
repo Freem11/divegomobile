@@ -9,7 +9,7 @@ import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import iconConfig from "../../../../icons/_config.json";
 import { colors } from "../../../styles";
-import { useAppNavigation } from "../markerDiveSite/types";
+import { useAppNavigation } from "../../../mapPage/types";
 
 type MarkerDiveShopProps = {
   id: number;

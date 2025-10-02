@@ -11,7 +11,7 @@ import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
 import iconConfig from "../../../../icons/_config.json";
 
-import { useAppNavigation } from "./types";
+import { useAppNavigation } from "../../../mapPage/types";
 
 type MarkerDiveSiteProps = {
   id: number;
