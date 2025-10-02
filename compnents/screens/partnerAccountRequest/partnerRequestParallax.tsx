@@ -8,6 +8,7 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
 
 import PartnerAccountRequestPage from ".";
+import { useAppNavigation } from "../../mapPage/types";
 
 export default function PartnerRequestParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -16,16 +17,18 @@ export default function PartnerRequestParallax() {
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const onClose = async() => {
+  const navigation = useAppNavigation()
+
+  const onClose = async () => {
     setFormValues(null);
-    setLevelTwoScreen(false);
+    navigation.goBack();
     setDraggableConfig(null);
   };
 
   const onNavigate = () => {
     Keyboard.dismiss();
     setMapConfig(1, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
-    setLevelTwoScreen(false);
+    navigation.navigate("Home")
   };
 
   return (

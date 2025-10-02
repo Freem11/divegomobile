@@ -13,6 +13,7 @@ import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
 import { colors, fontSizes } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
+import { useAppNavigation } from "./types";
 
 import HomeScreen from "./HomeScreen";
 
@@ -36,7 +37,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
     const { t } = useTranslation();
-    const navigation = useNavigation();
+    const navigation = useAppNavigation();
 
     /**
            * For Android only.

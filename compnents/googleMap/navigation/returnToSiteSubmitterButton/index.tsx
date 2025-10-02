@@ -5,6 +5,7 @@ import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { useContext } from "react";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
+import { useAppNavigation } from "../../../mapPage/types";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -29,21 +30,15 @@ export function ReturnToSiteSubmitterButton() {
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
+  const navigation = useAppNavigation();
+
   const onPress = async () => {
     const camera = await mapRef.getCamera();
-    if(navProps.itemId === 1){
-      setActiveScreen("DiveSiteUploadScreen");
-      setLevelTwoScreen(true);
-      setChosenModal(null);
-    } else {
-      setActiveScreen("PartnerRequestScreen");
-      setLevelTwoScreen(true);
-      setChosenModal(null);
-    }  
+    navigation.goBack()
 
-    mapAction.setFormValues({...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude})
-    mapAction.setMapConfig(0, {pageName: '', itemId: 0});
-   
+    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude })
+    mapAction.setMapConfig(0, { pageName: '', itemId: 0 });
+
   };
 
   return (
