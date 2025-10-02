@@ -10,11 +10,12 @@ import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContex
 import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
+import { useAppNavigation } from "../../../../googleMap/marker/markerDiveSite/types";
 
 import * as S from "./styles";
 
 export default function DiveCenterList() {
-
+  const navigation = useAppNavigation();
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [diveCenters, setDiveCenters] = useState([]);
   const [filterValue, setFilterValue] = useState("");
@@ -33,8 +34,9 @@ export default function DiveCenterList() {
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
   const handleDiveCenterSelection = (shopId: number) => {
-    setActiveScreen("DiveShopScreen", { id: shopId });
-    setLevelOneScreen(true);
+    navigation.navigate("DiveCentre", { id: shopId });
+    // setActiveScreen("DiveShopScreen", { id: shopId });
+    // setLevelOneScreen(true);
   };
 
   const handleClear = () => {

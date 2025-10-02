@@ -12,12 +12,12 @@ import * as SplashScreen from "expo-splash-screen";
 import Toast from "react-native-toast-message";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { I18nextProvider } from "react-i18next";
+import { NavigationContainer } from "@react-navigation/native";
 
 import MapPage from "./compnents/mapPage/mapPage";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
 import { i18n, initI18n } from "./i18n";
 import { toastConfig } from "./compnents/toast";
-import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationNavigator from "./compnents/authentication/authNavigator";
 import { useUserProfile } from "./store/user/useUserProfile";
 import { useUserHandler } from "./store/user/useUserHandler";
@@ -85,7 +85,7 @@ export default function App() {
     prepare();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
+  const onLayoutRootView = useCallback(async() => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
     }
@@ -102,15 +102,15 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-          <I18nextProvider i18n={i18n}>
-            <NavigationContainer>
+        <I18nextProvider i18n={i18n}>
+          <NavigationContainer>
             {userProfile ? (
               <MapPage />
-            ) : ( 
-                <AuthenticationNavigator />
-             )} 
-            </NavigationContainer>
-          </I18nextProvider>
+            ) : (
+              <AuthenticationNavigator />
+            )}
+          </NavigationContainer>
+        </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />
       {/* <Toast /> */}

@@ -14,6 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import GoogleMap from "../googleMap";
 import BottomMenu from "../reusables/bottomMenu";
@@ -50,23 +51,25 @@ import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-import * as S from "./styles";
-import BottomTabNavigator from "./bottomTabNavigator";
 import OnboardingNavigator from "../tutorial/onboarding/onboardingNavigator";
-
 import LandingScreen from "../authentication/landingPage";
+import DiveSiteParallax from "../screens/diveSite/diveSiteParallax";
+import DiveShopParallax from "../screens/diveShop/diveShopParallax";
+
+import BottomTabNavigator from "./bottomTabNavigator";
+import * as S from "./styles";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
   mapConfig: number;
-}
+};
 
 export type MainRoutes = {
   Onboarding: undefined;
   BottomTab: undefined;
   GoogleMap: undefined;
+  DiveSite: { id: number };
+  DiveCentre: { id: number };
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
@@ -80,7 +83,8 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       screenOptions={() => ({
         headerShown: false,
         animation: "slide_from_bottom",
-      })}>
+      })}
+    >
 
       <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
       <Stack.Screen name="BottomTab">
@@ -88,6 +92,9 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       </Stack.Screen>
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
+
+      <Stack.Screen name="DiveSite" component={DiveSiteParallax} />
+      <Stack.Screen name="DiveCentre" component={DiveShopParallax} />
 
     </Stack.Navigator>
   );
