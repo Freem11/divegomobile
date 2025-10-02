@@ -18,23 +18,17 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import UserProfileScreen from ".";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
-import { useNavigation } from "@react-navigation/native";
+import { useAppNavigation } from "../../mapPage/types";
 
 type UserProfileProps = {
   profileID: number
 };
 
-type UserProfileParallaxNavigationProp = BottomTabNavigationProp<
-  BottomTabRoutes,
-  "Profile"
->;
 
 export default function UserProfileParallax(props: UserProfileProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  const navigation = useNavigation<UserProfileParallaxNavigationProp>();
+  const navigation = useAppNavigation()
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(
@@ -116,10 +110,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const onClose = () => {
-    setSelectedProfile(null);
     navigation.goBack();
-    // setLevelOneScreen(false);
-    // setLevelTwoScreen(false);
   };
 
   const onNavigate = () => {
@@ -127,15 +118,12 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const openSettingsScreen = () => {
-    setLevelTwoScreen(false);
-    setLevelOneScreen(true);
-    setActiveScreen("SettingsScreen");
+    navigation.navigate("Settings")
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
     setEditInfo("Profile");
-    setActiveTutorialID("EditsScreen");
+    navigation.navigate("EditScreen");
   };
 
   const handleShare = async () => {

@@ -18,11 +18,15 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useUserHandler } from "../../../store/user/useUserHandler";
 
 import SettingsPageView from "./settings";
+import { useAppNavigation } from "../../mapPage/types";
 
 type SettingsPageProps = {};
 
-export default function SettingsPage({}: SettingsPageProps) {
+export default function SettingsPage({ }: SettingsPageProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
+  const navigation = useAppNavigation()
+
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const userHandler = useUserHandler();
@@ -38,16 +42,18 @@ export default function SettingsPage({}: SettingsPageProps) {
   }
 
   const openPartnerAccountScreen = () => {
-    setLevelTwoScreen(true);
-    setLevelOneScreen(false);
-    setActiveScreen("PartnerRequestScreen");
+    navigation.navigate("PartnerRequestUpgrade")
   };
 
-  const handleLogout = async() => {
+  const onClose = () => {
+    navigation.goBack()
+  }
+
+  const handleLogout = async () => {
     userHandler.userLogout();
   };
 
-  const alertHandler = async() => {
+  const alertHandler = async () => {
     Alert.alert(
       t("SettingsPage.aboutToDeleteAccountTitle"),
       t("SettingsPage.deleteAccountMessage"),
@@ -87,7 +93,7 @@ export default function SettingsPage({}: SettingsPageProps) {
     }).catch(console.error);
   };
 
-  const handleAccountDelete = async() => {
+  const handleAccountDelete = async () => {
     if (blurb) {
       await addDeletedAccountInfo({
         firstName: first,
@@ -105,7 +111,7 @@ export default function SettingsPage({}: SettingsPageProps) {
     <SettingsPageView
       profileType={profileType}
       openPartnerAccountScreen={openPartnerAccountScreen}
-      setLevelOneScreen={setLevelOneScreen}
+      onClose={onClose}
       handleLogout={handleLogout}
       alertHandler={alertHandler}
     />

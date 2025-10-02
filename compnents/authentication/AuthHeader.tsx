@@ -7,7 +7,7 @@ import { moderateScale } from "react-native-size-matters";
 import ButtonIcon from "../reusables/buttonIcon";
 
 /**
- * A custom header for Auth flow as thee default header on iOS will partially truncate 
+ * A custom header for Auth flow as the default header on iOS will partially truncate 
  * our scalable back button icon {@link ButtonIcon}.
  * @returns 
  */
@@ -15,17 +15,17 @@ function AuthHeader() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
-// Give extra height to make sure the back arrow always fits.
-const headerHeight = moderateScale(buttonSizes.small.height * 2);
+  // Give extra height to make sure the back arrow always fits.
+  const headerHeight = moderateScale(buttonSizes.small.height * 2);
 
   return (
     <View style={[styles.container, { height: headerHeight, paddingTop: insets.top }]}>
-      <ButtonIcon 
-                icon="chevron-left"
-                onPress={navigation.goBack}
-                size='small'
-                fillColor={colors.neutralGrey}
-              />
+      <ButtonIcon
+        icon="chevron-left"
+        onPress={navigation.goBack}
+        size='small'
+        fillColor={colors.neutralGrey}
+      />
     </View>
   );
 }

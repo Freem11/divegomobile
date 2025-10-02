@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeScreen from "./HomeScreen";
@@ -14,6 +13,7 @@ import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { useUserProfile } from "../../store/user/useUserProfile";
+import { useAppNavigation } from "./types";
 
 export type BottomTabRoutes = {
     Home: undefined;
@@ -35,7 +35,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
     const { t } = useTranslation();
-    const navigation = useNavigation();
+    const navigation = useAppNavigation();
 
     /**
          * For Android only.
