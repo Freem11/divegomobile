@@ -6,14 +6,7 @@ import boatImage from "../../png/boat.png";
 import { Keyboard } from "react-native";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
-import { useNavigation } from "@react-navigation/native";
-
-type SiteSubmitterParallaxNavigationProp = BottomTabNavigationProp<
-  BottomTabRoutes,
-  "AddSite"
->;
+import { useAppNavigation } from "../../mapPage/types";
 
 export default function SiteSubmitterParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -21,7 +14,7 @@ export default function SiteSubmitterParallax() {
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const navigation = useNavigation<SiteSubmitterParallaxNavigationProp>();
+  const navigation = useAppNavigation();
 
   const onClose = async () => {
     setFormValues(null)

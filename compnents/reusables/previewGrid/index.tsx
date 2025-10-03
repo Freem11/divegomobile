@@ -12,20 +12,22 @@ import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 import * as S from "./styles";
+import { useAppNavigation } from "../../mapPage/types";
 
 interface PreviewGridProps {
   items: DiveSiteWithUserName[] | null;
   onAddSighting?: () => void;
 }
 
-export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
+export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting }) => {
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const screenWidth = Dimensions.get("window").width;
   const containerPadding = scale(20);
   const gap = scale(8);
+
+  const navigation = useAppNavigation();
 
   const { numColumns, itemSize } = useMemo(() => {
     const availableWidth = screenWidth - (containerPadding * 2);
@@ -38,14 +40,14 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
+    // FixMe : the photos do not load due to reason : Image load error: /data/user/0/com.freem11.divegomobile/cache/1695744846541.jpg: open failed: ENOENT (No such file or directory)
+    navigation.navigate("PinchAndZoomPhoto");
   };
 
   return (
     <S.Wrapper>
       <S.Container>
-        {items && items.length > 0 && items.slice(0,8).map((item, index) => (
+        {items && items.length > 0 && items.slice(0, 8).map((item, index) => (
           <S.Item
             key={index}
             style={{

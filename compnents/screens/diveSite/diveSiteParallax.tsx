@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 import email from "react-native-email";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import { useRoute, RouteProp } from "@react-navigation/native";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
@@ -19,12 +19,13 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
 
 import DiveSiteScreen from ".";
+import { useAppNavigation } from "../../mapPage/types";
 
 type DiveSiteRouteProp = RouteProp<MainRoutes, "DiveSite">;
 
 export default function DiveSiteParallax() {
   const route = useRoute<DiveSiteRouteProp>();
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   const { id } = route.params;
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();

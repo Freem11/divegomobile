@@ -14,17 +14,18 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { useAppNavigation } from "../../mapPage/types";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal() {
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  
+
+  const navigation = useAppNavigation();
+
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
-  usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
+    usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
 
   let fileName = selectedPhoto && selectedPhoto.split("/").pop();
   let cacheDir = null;
@@ -33,16 +34,12 @@ export default function PhotoBoxModal() {
     cacheDir = FileSystem.cacheDirectory + fileName;
   }
 
-  const onCloseModal = () => {
-    setFullScreenModal(false);
-  };
-
   return (
     <S.ContentContainer>
       <S.BackButtonWrapper>
         <ButtonIcon
           icon="chevron-left"
-          onPress={() => onCloseModal()}
+          onPress={() => navigation.goBack()}
           size="small"
           fillColor={colors.themeWhite}
         />

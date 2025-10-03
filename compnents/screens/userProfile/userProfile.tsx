@@ -15,7 +15,6 @@ type UserProfileProps = {
   speciesCount: number;
   sightingsCount: number;
   openAllPhotosPage: () => void;
-  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export default function UserProfileScreenView({
@@ -24,19 +23,18 @@ export default function UserProfileScreenView({
   speciesCount,
   sightingsCount,
   openAllPhotosPage,
-  setLevelThreeScreen
 }: UserProfileProps) {
 
   const [profileVals, setProfileVals] = useState(null);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  
+
   useEffect(() => {
     setProfileVals({
       userName: selectedProfile?.UserName,
       bio: selectedProfile?.profileBio,
     });
 
-  },[selectedProfile]);
+  }, [selectedProfile]);
 
   return (
     <S.ContentContainer>

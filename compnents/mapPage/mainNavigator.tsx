@@ -11,6 +11,8 @@ import DiveSiteParallax from "../screens/diveSite/diveSiteParallax";
 import DiveShopParallax from "../screens/diveShop/diveShopParallax";
 
 import BottomTabNavigator from "./bottomTabNavigator";
+import UserProfilePhotosPage from "../screens/userProfilePhotos";
+import PhotoBoxModal from "../screens/photoBox/photoBoxModal";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -27,6 +29,8 @@ export type MainRoutes = {
   Home: undefined;
   PartnerRequestUpgrade: undefined;
   EditScreen: undefined;
+  UserProfilePhotos: undefined;
+  PinchAndZoomPhoto: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
@@ -49,17 +53,16 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       </Stack.Screen>
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
+      <Stack.Screen name="Home" component={HomeScreen} />
 
       <Stack.Screen name="DiveSite" component={DiveSiteParallax} />
       <Stack.Screen name="DiveCentre" component={DiveShopParallax} />
 
-      <Stack.Screen name="Home" component={HomeScreen} />
-
       <Stack.Screen name="Settings" component={SettingsPage} />
-
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestParallax} />
-
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
+      <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
+      <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
 
     </Stack.Navigator>
   );
