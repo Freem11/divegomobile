@@ -11,6 +11,7 @@ import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
+import { useAppNavigation } from "../../mapPage/types";
 
 import DiveShopScreenView from "./diveShop";
 
@@ -29,6 +30,7 @@ export default function DiveShopScreen({
   bottomHitCount,
   isMyShop
 }: DiveShopProps) {
+  const navigation = useAppNavigation();
   const [tripsCount, setTripsCount] = useState(0);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -73,6 +75,8 @@ export default function DiveShopScreen({
 
     setSitesArray(sites);
 
+    navigation.navigate("GoogleMap");
+
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
 
     const coordinates = itinerizedDiveSites.map(site => ({
@@ -86,7 +90,7 @@ export default function DiveShopScreen({
     });
 
     setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
-    closeParallax(1);
+    // closeParallax(1);
   };
 
   const handleEditButton = (itineraryInfo: ItineraryItem) => {
