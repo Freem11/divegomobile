@@ -48,6 +48,8 @@ export default function GoogleMapView(props: MapViewProps) {
   const [initialRegion, setInitialRegion] = useState(null);
   const { sitesArray } = useContext(SitesArrayContext);
   const mapRef = useMapStore((state) => state.mapRef);
+  const mapConfig = useMapStore((state) => state.mapConfig);
+  const mapRegion = useMapStore((state) => state.mapRegion);
 
   const styles = StyleSheet.create({
     container: {
