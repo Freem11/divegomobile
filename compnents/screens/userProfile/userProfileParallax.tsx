@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Share from "react-native-share";
 import { Keyboard } from "react-native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
@@ -16,20 +17,27 @@ import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext"
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useAppNavigation } from "../../mapPage/types";
+import { MainRoutes } from "../../mapPage/mainNavigator";
 
 import UserProfileScreen from ".";
-import { useAppNavigation } from "../../mapPage/types";
 
 type UserProfileProps = {
   profileID: number
 };
 
+type ProfileRouteProp = RouteProp<MainRoutes, "UserProfile">;
 
 export default function UserProfileParallax(props: UserProfileProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  const navigation = useAppNavigation()
+  const route = useRoute<ProfileRouteProp>();
+  const navigation = useAppNavigation();
 
+  let id = props.profileID;
+  if (route.params) {
+    id = route.params.id;
+  }
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
@@ -50,10 +58,10 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   useEffect(() => {
     getProfileinfo();
-  }, [props.profileID]);
+  }, [id]);
 
   const getProfileinfo = async () => {
-    const profileinfo = await grabProfileById(props.profileID);
+    const profileinfo = await grabProfileById(id);
     setSelectedProfile(profileinfo);
   };
 
@@ -110,7 +118,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const onClose = () => {
-    navigation.goBack();
+    navigation.navigate("BottomTab");
   };
 
   const onNavigate = () => {
@@ -118,7 +126,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const openSettingsScreen = () => {
-    navigation.navigate("Settings")
+    navigation.navigate("Settings");
   };
 
   const openEditsPage = () => {

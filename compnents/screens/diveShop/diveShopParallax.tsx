@@ -18,6 +18,7 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
+import { useAppNavigation } from "../../mapPage/types";
 
 import DiveShopScreen from ".";
 
@@ -25,7 +26,7 @@ type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
 
 export default function DiveShopParallax() {
   const route = useRoute<DiveCentreRouteProp>();
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   const { id } = route.params;
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -87,7 +88,8 @@ export default function DiveShopParallax() {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
     setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
-    setLevelOneScreen(false);
+    navigation.navigate("BottomTab");
+    // setLevelOneScreen(false);
   };
 
   const openTripCreatorScreen = () => {

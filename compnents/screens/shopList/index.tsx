@@ -5,11 +5,12 @@ import { DiveShop } from "../../../entities/diveShop";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useAppNavigation } from "../../mapPage/types";
 
 import ShopListPageView from "./shopList";
 
 export default function ShopListPage() {
-
+  const navigation = useAppNavigation();
   const { userProfile } = useUserProfile();
   const [listOfShops, setListOfShops] = useState<DiveShop[]>([]);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -22,7 +23,7 @@ export default function ShopListPage() {
     }
   }, []);
 
-  const getShops = async(id: string) => {
+  const getShops = async (id: string) => {
     try {
       const shops = await getShopByUserID(id);
       if (shops) {
@@ -34,8 +35,9 @@ export default function ShopListPage() {
   };
 
   const handleDiveCenterSelection = (shopId: number) => {
-    setActiveScreen("DiveShopScreen", { id: shopId });
-    setLevelOneScreen(true);
+    navigation.navigate("DiveCentre", { id: shopId });
+    // setActiveScreen("DiveShopScreen", { id: shopId });
+    // setLevelOneScreen(true);
   };
 
   return (

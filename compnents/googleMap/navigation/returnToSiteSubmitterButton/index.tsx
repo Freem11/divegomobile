@@ -1,8 +1,9 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { useContext } from "react";
+
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { useContext } from "react";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 import { useAppNavigation } from "../../../mapPage/types";
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
 });
 
 export function ReturnToSiteSubmitterButton() {
-
+  const navigation = useAppNavigation();
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
   const navProps = useMapStore((state) => state.navProps);
@@ -30,14 +31,17 @@ export function ReturnToSiteSubmitterButton() {
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const navigation = useAppNavigation();
-
   const onPress = async () => {
     const camera = await mapRef.getCamera();
-    navigation.goBack()
+    if (navProps.pageName === 1) {
+      navigation.navigate("SiteSubmitter");
+    }
+    if (navProps.pageName === 2) {
+      navigation.navigate("PartnerRequestUpgrade");
+    }
 
-    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude })
-    mapAction.setMapConfig(0, { pageName: '', itemId: 0 });
+    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude });
+    mapAction.setMapConfig(0, { pageName: "", itemId: 0 });
 
   };
 

@@ -10,7 +10,6 @@ import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
 import iconConfig from "../../../../icons/_config.json";
-
 import { useAppNavigation } from "../../../mapPage/types";
 
 type MarkerDiveSiteProps = {

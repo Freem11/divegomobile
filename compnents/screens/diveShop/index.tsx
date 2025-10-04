@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import {insertItineraryRequest, itineraries} from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
@@ -10,6 +10,8 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import { useAppNavigation } from "../../mapPage/types";
+import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 
 import DiveShopScreenView from "./diveShop";
 
@@ -28,9 +30,10 @@ export default function DiveShopScreen({
   bottomHitCount,
   isMyShop
 }: DiveShopProps) {
+  const navigation = useAppNavigation();
   const [tripsCount, setTripsCount] = useState(0);
-
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
@@ -42,8 +45,8 @@ export default function DiveShopScreen({
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setSitesArray } = useContext(SitesArrayContext);
-  
-  const getItineraries = async(IdNum: number) => {
+
+  const getItineraries = async (IdNum: number) => {
     try {
       const itins = await itineraries(IdNum);
       setItineraryList(itins);
@@ -60,39 +63,42 @@ export default function DiveShopScreen({
   }, [selectedShop]);
 
   useEffect(() => {
-    if(levelOneScreen){
+    if (levelOneScreen) {
       restoreParallax();
     }
   }, [levelOneScreen]);
 
-
   const handleMapFlip = async (sites: number[]) => {
     setSitesArray(sites);
-  
+
+    const region = await calculateRegionFromBoundaries(mapRef);
+    console.log("region", region);
+    setMapRegion(region);
+
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
-    
+
     const coordinates = itinerizedDiveSites.map(site => ({
       latitude: site.lat,
       longitude: site.lng,
     }));
-  
+
     mapRef?.fitToCoordinates(coordinates, {
       edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
       animated: true,
     });
-  
-    setMapConfig(2, { pageName: 'DiveShop', itemId: selectedShop.id });
-    closeParallax(1);
+
+    setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
+    navigation.navigate("BottomTab");
+    // closeParallax(1);
   };
-  
-   
+
   const handleEditButton = (itineraryInfo: ItineraryItem) => {
     setEditMode(true);
     setLevelOneScreen(false);
     setLevelTwoScreen(true);
-    setActiveScreen("TripCreatorScreen", {id: selectedShop.id});
-    setFormValues(itineraryInfo)
-    setSitesArray(itineraryInfo.siteList)
+    setActiveScreen("TripCreatorScreen", { id: selectedShop.id });
+    setFormValues(itineraryInfo);
+    setSitesArray(itineraryInfo.siteList);
   };
 
   const handleDeleteButton = (itineraryInfo: ItineraryItem) => {
@@ -110,7 +116,7 @@ export default function DiveShopScreen({
       "Delete"
     );
   };
-  
+
   return (
     <DiveShopScreenView
       isMyShop={isMyShop}
@@ -121,6 +127,6 @@ export default function DiveShopScreen({
       handleDeleteButton={handleDeleteButton}
       tripsCount={tripsCount}
     />
-  )
+  );
 
 }

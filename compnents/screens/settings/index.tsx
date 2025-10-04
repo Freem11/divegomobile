@@ -16,16 +16,16 @@ import {
 } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useUserHandler } from "../../../store/user/useUserHandler";
+import { useAppNavigation } from "../../mapPage/types";
 
 import SettingsPageView from "./settings";
-import { useAppNavigation } from "../../mapPage/types";
 
 type SettingsPageProps = {};
 
 export default function SettingsPage({ }: SettingsPageProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
-  const navigation = useAppNavigation()
+  const navigation = useAppNavigation();
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -42,12 +42,14 @@ export default function SettingsPage({ }: SettingsPageProps) {
   }
 
   const openPartnerAccountScreen = () => {
-    navigation.navigate("PartnerRequestUpgrade")
+    navigation.navigate("PartnerRequestUpgrade");
   };
 
   const onClose = () => {
-    navigation.goBack()
-  }
+    navigation.navigate("UserProfile", { id: userProfile.id });
+    // navigation.navigate("Profile");
+    // navigation.goBack();
+  };
 
   const handleLogout = async () => {
     userHandler.userLogout();

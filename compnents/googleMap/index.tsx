@@ -33,7 +33,7 @@ export default function GoogleMap() {
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[] | null>(null);
 
-  const handleOnLoad = async(map: MapView) => {
+  const handleOnLoad = async (map: MapView) => {
     mapAction.setMapRef(map);
   };
 
@@ -48,13 +48,13 @@ export default function GoogleMap() {
   };
 
   useEffect(() => {
-    (async() => {
-      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , { animal: animalMultiSelection });
+    (async () => {
+      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble, { animal: animalMultiSelection });
       setHeatPoints(heatPoints);
     })();
   }, [animalMultiSelection, bubble]);
 
-  const handleBoundsChange = debounce(async() => {
+  const handleBoundsChange = debounce(async () => {
     if (!mapRef) {
       return;
     }

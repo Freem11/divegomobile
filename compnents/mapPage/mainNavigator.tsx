@@ -5,11 +5,13 @@ import GoogleMap from "../googleMap";
 import OnboardingNavigator from "../tutorial/onboarding/onboardingNavigator";
 import SettingsPage from "../screens/settings";
 import PartnerRequestParallax from "../screens/partnerAccountRequest/partnerRequestParallax";
-import HomeScreen from "./HomeScreen";
 import EditScreenParallax from "../screens/edits/editsParallax";
 import DiveSiteParallax from "../screens/diveSite/diveSiteParallax";
 import DiveShopParallax from "../screens/diveShop/diveShopParallax";
+import SiteSubmitterParallax from "../screens/diveSiteUploader/siteSubmitterParallax";
+import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 
+import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
 
 type MainNavigatorProps = {
@@ -27,16 +29,18 @@ export type MainRoutes = {
   Home: undefined;
   PartnerRequestUpgrade: undefined;
   EditScreen: undefined;
+  SiteSubmitter: undefined;
+  UserProfile: { id: number };
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
 
-export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigatorProps) {
+export default function MainNavigator({ showOnboarding }: MainNavigatorProps) {
 
   return (
     // The Bottom tab bar only needs to show with config = 0, otherwise simply show the Map page.
     <Stack.Navigator
-      initialRouteName={mapConfig === 0 ? "BottomTab" : "GoogleMap"}
+      initialRouteName="BottomTab"
       screenOptions={() => ({
         headerShown: false,
         animation: "slide_from_bottom",
@@ -48,12 +52,16 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         {props => <BottomTabNavigator {...props} showOnboarding={showOnboarding} />}
       </Stack.Screen>
 
-      <Stack.Screen name="GoogleMap" component={GoogleMap} />
+      {/* <Stack.Screen name="GoogleMap" component={GoogleMap} /> */}
 
       <Stack.Screen name="DiveSite" component={DiveSiteParallax} />
       <Stack.Screen name="DiveCentre" component={DiveShopParallax} />
 
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="SiteSubmitter" component={SiteSubmitterParallax} />
+
+      {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+
+      <Stack.Screen name="UserProfile" component={UserProfileParallax} />
 
       <Stack.Screen name="Settings" component={SettingsPage} />
 

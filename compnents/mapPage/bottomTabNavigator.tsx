@@ -13,6 +13,7 @@ import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
 import { colors, fontSizes } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
+import { useMapStore } from "../googleMap/useMapStore";
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
@@ -33,6 +34,7 @@ type BottomTabNavigatorProps = {
 const Tab = createBottomTabNavigator<BottomTabRoutes>();
 
 export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
+    const mapConfig = useMapStore((state) => state.mapConfig);
     const { userProfile } = useUserProfile();
     const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
@@ -40,10 +42,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const navigation = useAppNavigation();
 
     /**
-       * For Android only.
-       * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-       * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-       */
+                 * For Android only.
+                 * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
+                 * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+                 */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
@@ -60,7 +62,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                 const { icon, label } = getTabProps(route.name);
 
                 // --- START OF REQUIRED CHANGE ---
-                const isHome = route.name === "Home";
+                const isHome = route.name === "Home" && mapConfig === 0;
                 // --- END OF REQUIRED CHANGE ---
 
                 return {
@@ -101,10 +103,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     );
 
     /**
-       * Returns the icon name and label for each tab based on route.
-       * @param route The route name of the current tab
-       * @returns Object literal containing Icon name and label strings
-       */
+                 * Returns the icon name and label for each tab based on route.
+                 * @param route The route name of the current tab
+                 * @returns Object literal containing Icon name and label strings
+                 */
     function getTabProps(route: string): { icon: string; label: string } {
         switch (route) {
             case "Home": return { icon: "shark", label: t("BottomTabBar.home") };

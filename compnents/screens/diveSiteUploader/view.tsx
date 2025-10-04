@@ -8,6 +8,7 @@ import Button from "../../reusables/button";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
+import { useAppNavigation } from "../../mapPage/types";
 
 import { Form, FormRules } from "./form";
 import * as S from "./styles";
@@ -29,6 +30,7 @@ export default function DiveSiteUploaderView({
 }: Props) {
 
   const { t } = useTranslation();
+  const navigation = useAppNavigation();
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
@@ -37,14 +39,15 @@ export default function DiveSiteUploaderView({
   });
 
   useEffect(() => {
-    if (levelTwoScreen){
+    if (levelTwoScreen) {
       restoreParallax();
     }
   }, [levelTwoScreen]);
 
-  const handleMapFlip = async(formData: Required<Form>) => {
+  const handleMapFlip = async (formData: Required<Form>) => {
     setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    closeParallax(1);
+    navigation.navigate("Home");
+    // closeParallax(1);
     setFormValues(formData);
   };
 
@@ -87,7 +90,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Latitude}
                 iconLeft="latitude"
                 placeholder={t("DiveSiteAdd.latPlaceholder")}
-                value={value ? String(value): null}
+                value={value ? String(value) : null}
                 onChangeText={onChange}
                 keyboardType="numbers-and-punctuation"
               />
@@ -105,7 +108,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Longitude}
                 iconLeft="longitude"
                 placeholder={t("DiveSiteAdd.lngPlaceholder")}
-                value={value ? String(value): null}
+                value={value ? String(value) : null}
                 onChangeText={onChange}
                 keyboardType="numbers-and-punctuation"
               />
