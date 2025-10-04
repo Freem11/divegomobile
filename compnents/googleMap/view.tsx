@@ -117,7 +117,11 @@ export default function GoogleMapView(props: MapViewProps) {
   const { clusters, supercluster } = useSupercluster(clusterConfig);
 
   useEffect(() => {
-    getCurrentLocation();
+    if (mapRegion) {
+      setInitialRegion(mapRegion);
+    } else {
+      getCurrentLocation();
+    }
   }, []);
 
   useEffect(() => {
