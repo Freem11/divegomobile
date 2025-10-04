@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
@@ -10,6 +10,7 @@ import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
 import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -22,6 +23,7 @@ import { MarkerHeatPoint } from "./marker/markerHeatPoint";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
+import { useMapStore } from "./useMapStore";
 
 type MapViewProps = {
   mapConfig: number;
@@ -44,6 +46,8 @@ type MapViewProps = {
 export default function GoogleMapView(props: MapViewProps) {
 
   const [initialRegion, setInitialRegion] = useState(null);
+  const { sitesArray } = useContext(SitesArrayContext);
+  const mapRef = useMapStore((state) => state.mapRef);
 
   const styles = StyleSheet.create({
     container: {
