@@ -46,7 +46,7 @@ export default function DiveSiteUploaderView({
 
   const handleMapFlip = async (formData: Required<Form>) => {
     setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    navigation.navigate("Home");
+    navigation.navigate("BottomTab");
     // closeParallax(1);
     setFormValues(formData);
   };

@@ -121,7 +121,6 @@ export default function GoogleMapView(props: MapViewProps) {
     } else {
       getCurrentLocation();
     }
-
   }, []);
 
   useEffect(() => {

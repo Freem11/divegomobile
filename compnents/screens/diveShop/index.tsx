@@ -72,7 +72,6 @@ export default function DiveShopScreen({
     setSitesArray(sites);
 
     const region = await calculateRegionFromBoundaries(mapRef);
-    console.log("region", region);
     setMapRegion(region);
 
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
