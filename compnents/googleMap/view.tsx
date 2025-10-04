@@ -9,6 +9,7 @@ import { DiveSiteBasic } from "../../entities/diveSite";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -35,8 +36,8 @@ type MapViewProps = {
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
   handleOnMapReady: () => void;
-  diveSites?:  DiveSiteBasic[] | null;
-  diveShops?:  DiveShop[] | null;
+  diveSites?: DiveSiteBasic[] | null;
+  diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null
 };
 
@@ -57,7 +58,25 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   });
 
-  const getCurrentLocation = async() => {
+  const moveToTrip = async (siteIds: number[]) => {
+    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteIds));
+
+    const coordinates = itinerizedDiveSites.map(site => ({
+      latitude: site.lat,
+      longitude: site.lng,
+    }));
+
+    mapRef?.fitToCoordinates(coordinates, {
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      animated: true,
+    });
+  };
+
+  if (mapConfig === 2) {
+    moveToTrip(sitesArray);
+  }
+
+  const getCurrentLocation = async () => {
     try {
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
@@ -76,7 +95,7 @@ export default function GoogleMapView(props: MapViewProps) {
 
   const [map, setMap] = useState<MapView | null>(null);
 
-  const onMapLoad = async(map: MapView) => {
+  const onMapLoad = async (map: MapView) => {
     setMap(map);
     if (typeof props.onLoad === "function") {
       props.onLoad(map);
@@ -93,10 +112,10 @@ export default function GoogleMapView(props: MapViewProps) {
 
   useEffect(() => {
     getCurrentLocation();
-  },[]);
+  }, []);
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       if (!map) {
         return;
       }
@@ -210,7 +229,7 @@ export default function GoogleMapView(props: MapViewProps) {
       </MapView>
 
       {props.mapConfig === 1 && (
-        <MarkerDraggable  />
+        <MarkerDraggable />
       )}
 
       {props.mapConfig === 1 && (
