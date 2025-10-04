@@ -30,7 +30,7 @@ export default function DiveShopScreen({
   isMyShop
 }: DiveShopProps) {
   const [tripsCount, setTripsCount] = useState(0);
-
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
