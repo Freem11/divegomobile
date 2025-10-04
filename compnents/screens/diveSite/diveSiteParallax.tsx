@@ -17,6 +17,8 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
+import { ModalSelectContext } from "../../contexts/modalSelectContext";
+import { useMapStore } from "../../googleMap/useMapStore";
 
 import DiveSiteScreen from ".";
 
@@ -34,11 +36,12 @@ export default function DiveSiteParallax() {
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
   const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-
+  const { setChosenModal } = useContext(ModalSelectContext);
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -75,14 +78,14 @@ export default function DiveSiteParallax() {
 
   const onClose = async () => {
     navigation.goBack();
+    // navigation.navigate("BottomTab");
     // setLevelOneScreen(false);
   };
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    // setChosenModal("DiveSite");
-    // setMapHelper(true);
-    // setMapConfig(2);
+    setChosenModal("DiveSite");
+    setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id });
     setLevelOneScreen(false);
   };
 

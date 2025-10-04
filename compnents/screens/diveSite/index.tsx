@@ -10,6 +10,8 @@ import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls"
 import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
+import { useAppNavigation } from "../../mapPage/types";
 
 import DiveSiteScreenView from "./diveSite";
 
@@ -26,6 +28,8 @@ export default function DiveSiteScreen({
   closeParallax,
   restoreParallax
 }: DiveSiteProps) {
+  const navigation = useAppNavigation();
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -49,8 +53,15 @@ export default function DiveSiteScreen({
     setActiveScreen("DiveSiteTrips");
   };
 
-  const handleMapFlip = async(sites: number[]) => {
+  const handleMapFlip = async (sites: number[]) => {
+
+    const region = await calculateRegionFromBoundaries(mapRef);
+    setMapRegion(region);
+
     setSitesArray(sites);
+
+    navigation.navigate("GoogleMap");
+
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
 
     const coordinates = itinerizedDiveSites.map(site => ({
@@ -64,22 +75,22 @@ export default function DiveSiteScreen({
     });
 
     setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id });
-    closeParallax(1);
+    // closeParallax(1);
   };
 
   useEffect(() => {
-    if (LevelOneScreen){
+    if (LevelOneScreen) {
       restoreParallax();
     }
   }, [LevelOneScreen]);
 
   useEffect(() => {
-    if (selectedDiveSite){
+    if (selectedDiveSite) {
       getData(selectedDiveSite);
     }
-  },[selectedDiveSite]);
+  }, [selectedDiveSite]);
 
-  const getData = async(selectedDiveSite: DiveSiteWithUserName) => {
+  const getData = async (selectedDiveSite: DiveSiteWithUserName) => {
     const trips = await getDiveSiteTripCount(selectedDiveSite.id);
     setTripCount(trips.label_count);
 

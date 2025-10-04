@@ -34,7 +34,7 @@ export function ReturnToShopButton() {
   const onPress = async () => {
     if (navProps.pageName === "DiveSite") {
       const diveSiteInfo = await getDiveSiteById(navProps.itemId);
-      setLevelOneScreen(true);
+      // setLevelOneScreen(true);
       navigation.navigate("DiveSite", { id: navProps.itemId });
       // setActiveScreen("DiveSiteScreen", navProps.itemId);
       mapRef.animateCamera({
@@ -43,7 +43,7 @@ export function ReturnToShopButton() {
       });
     } else {
       const diveCentreinfo = await getDiveShopById(navProps.itemId);
-      setLevelOneScreen(true);
+      // setLevelOneScreen(true);
       navigation.navigate("DiveCentre", { id: navProps.itemId });
       // setActiveScreen("DiveShopScreen", navProps.itemId);
       mapRef.animateCamera({
