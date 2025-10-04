@@ -1,14 +1,18 @@
 import React, { useContext } from "react";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import DiveSiteUploader from ".";
+import { Keyboard } from "react-native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import boatImage from "../../png/boat.png";
-import { Keyboard } from "react-native";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
-import { useNavigation } from "@react-navigation/native";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
+import { useAppNavigation } from "../../mapPage/types";
+
+import DiveSiteUploader from ".";
 
 type SiteSubmitterParallaxNavigationProp = BottomTabNavigationProp<
   BottomTabRoutes,
@@ -22,18 +26,23 @@ export default function SiteSubmitterParallax() {
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const navigation = useNavigation<SiteSubmitterParallaxNavigationProp>();
+  const appNavigation = useAppNavigation();
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
+  const mapRef = useMapStore((state) => state.mapRef);
 
   const onClose = async () => {
-    setFormValues(null)
-    // setLevelTwoScreen(false);
-    setDraggableConfig(null)
+    setFormValues(null);
+    setDraggableConfig(null);
     navigation.goBack();
   };
 
-  const onNavigate = () => {
+  const onNavigate = async () => {
     Keyboard.dismiss();
+    const region = await calculateRegionFromBoundaries(mapRef);
+    setMapRegion(region);
+
     setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    setLevelTwoScreen(false);
+    appNavigation.navigate("GoogleMap");
   };
 
   return (
