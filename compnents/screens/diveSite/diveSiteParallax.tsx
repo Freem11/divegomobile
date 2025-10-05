@@ -5,7 +5,6 @@ import email from "react-native-email";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -15,6 +14,7 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import DiveSiteScreen from ".";
 
@@ -24,7 +24,7 @@ type DiveSiteProps = {
 
 export default function DiveSiteParallax(props: DiveSiteProps) {
   const { t } = useTranslation();
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
@@ -43,7 +43,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   useEffect(() => {
     getDiveSiteinfo();
-    if (profile?.partnerAccount) {
+    if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.siteID]);
