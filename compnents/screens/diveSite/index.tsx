@@ -78,11 +78,11 @@ export default function DiveSiteScreen({
     // closeParallax(1);
   };
 
-  useEffect(() => {
-    if (LevelOneScreen) {
-      restoreParallax();
-    }
-  }, [LevelOneScreen]);
+  // useEffect(() => {
+  //   if (LevelOneScreen) {
+  //     restoreParallax();
+  //   }
+  // }, [LevelOneScreen]);
 
   useEffect(() => {
     if (selectedDiveSite) {

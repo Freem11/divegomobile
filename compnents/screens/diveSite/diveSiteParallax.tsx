@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 import email from "react-native-email";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
@@ -16,18 +16,21 @@ import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
-import { MainRoutes } from "../../mapPage/mainNavigator";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 
-import DiveSiteScreen from ".";
+import { useDiveSiteNavigation } from "./types";
 
-type DiveSiteRouteProp = RouteProp<MainRoutes, "DiveSite">;
+import DiveSiteScreen from "./index";
 
-export default function DiveSiteParallax() {
-  const route = useRoute<DiveSiteRouteProp>();
+type DiveSiteParallaxProps = {
+  id: number;
+};
+export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
+  // const route = useRoute<DiveSiteRouteProp>();
   const navigation = useNavigation();
-  const { id } = route.params;
+  const diveSiteNavigation = useDiveSiteNavigation();
+  // const { id } = route.params;
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
 
@@ -53,11 +56,11 @@ export default function DiveSiteParallax() {
     if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
-  }, [id]);
+  }, [props.id]);
 
   const getDiveSiteinfo = async () => {
-    if (id) {
-      const diveSiteinfo = await getDiveSiteById(id);
+    if (props.id) {
+      const diveSiteinfo = await getDiveSiteById(props.id);
       setSelectedDiveSite(diveSiteinfo[0]);
     }
   };
@@ -90,15 +93,12 @@ export default function DiveSiteParallax() {
   };
 
   const openPicUploader = () => {
-    setActiveScreen("PictureUploadScreen", selectedDiveSite);
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
+    diveSiteNavigation.navigate("AddSighting", { selectedDiveSite });
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
+    diveSiteNavigation.navigate("EditScreen");
     setEditInfo("DiveSite");
-    setActiveTutorialID("EditsScreen");
   };
 
   const handleReport = () => {

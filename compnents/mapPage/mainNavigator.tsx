@@ -5,12 +5,12 @@ import GoogleMap from "../googleMap";
 import OnboardingNavigator from "../tutorial/onboarding/onboardingNavigator";
 import SettingsPage from "../screens/settings";
 import PartnerRequestParallax from "../screens/partnerAccountRequest/partnerRequestParallax";
-import HomeScreen from "./HomeScreen";
 import EditScreenParallax from "../screens/edits/editsParallax";
-import DiveSiteParallax from "../screens/diveSite/diveSiteParallax";
 import DiveShopParallax from "../screens/diveShop/diveShopParallax";
+import DiveSiteRouter from "../screens/diveSite/diveSiteRouter";
 
 import BottomTabNavigator from "./bottomTabNavigator";
+import HomeScreen from "./HomeScreen";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -50,7 +50,14 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
 
-      <Stack.Screen name="DiveSite" component={DiveSiteParallax} />
+      <Stack.Screen name="DiveSite">
+        {({ route }) => (
+          <DiveSiteRouter
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
+
       <Stack.Screen name="DiveCentre" component={DiveShopParallax} />
 
       <Stack.Screen name="Home" component={HomeScreen} />

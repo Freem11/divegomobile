@@ -1,34 +1,34 @@
 import React, { useContext, useState } from "react";
-import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
+import { RouteProp, useRoute } from "@react-navigation/native";
 
 import Button from "../../reusables/button";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { chooseImageHandler } from "../imageUploadHelpers";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
-import { useMapStore } from "../../googleMap/useMapStore";
+import { DiveSiteRoutes } from "../diveSite/diveSiteNavigator";
+import { useDiveSiteNavigation } from "../diveSite/types";
 
 import * as S from "./styles";
 
 import PicUploader from ".";
 
-type PicUploaderProps = {
-  selectedDiveSite: DiveSiteWithUserName
-};
+type PicUploaderRouteProps = RouteProp<DiveSiteRoutes, "AddSighting">;
 
-export default function PicUploaderParallax(props: PicUploaderProps) {
-  const { t } = useTranslation();
-  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+export default function PicUploaderParallax() {
+  const diveSiteNavigation = useDiveSiteNavigation();
+  const route = useRoute<PicUploaderRouteProps>();
+  const { selectedDiveSite } = route.params;
+  const { t } = useTranslation();;
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
 
-  const onClose = async() => {
-    setLevelTwoScreen(false);
+  const onClose = async () => {
+    diveSiteNavigation.goBack();
   };
 
-  const handleSelectImage = async() => {
+  const handleSelectImage = async () => {
     try {
       const result = await chooseImageHandler();
       if (result?.assets?.[0]?.uri) {
@@ -39,7 +39,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
     }
   };
 
-  const handleImageUpload = async(argPicture: string) => {
+  const handleImageUpload = async (argPicture: string) => {
     setLocalPreviewUri({ uri: argPicture });
   };
 
@@ -79,7 +79,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
         onClose={onClose}
         localPreviewUri={localPreviewUri}
         setLocalPreviewUri={setLocalPreviewUri}
-        selectedDiveSite={props.selectedDiveSite}
+        selectedDiveSite={selectedDiveSite}
       />
     </ParallaxDrawer>
   );

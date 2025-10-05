@@ -60,7 +60,7 @@ export function ReturnToShopButton() {
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.lowerButtonWrapper}>
         <Text style={styles.lowerButtonText}>
-          {"Return to Shop"}
+          {navProps.pageName === "DiveSite" ? "Return to Dive Site" : "Return to Dive Centre"}
         </Text>
       </View>
     </TouchableWithoutFeedback>
