@@ -1,7 +1,10 @@
-import { Octicons } from "@expo/vector-icons";
+import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import Animated from "react-native-reanimated";
 import { moderateScale } from "react-native-size-matters";
+
+import ButtonIcon from "../../reusables/buttonIcon";
+import { colors } from "../../styles";
 
 import * as S from "./styles";
 
@@ -26,10 +29,11 @@ export const EmailView = ({
           style={S.inline.touchable}
           onPress={startFeedbackAnimations}
         >
-          <Octicons
-            name="paper-airplane"
-            size={moderateScale(24)}
-            color="white"
+          <ButtonIcon
+            icon="send-circle-outline"
+            onPress={() => null}
+            size="icon"
+            fillColor={colors.themeWhite}
             style={{ marginTop: moderateScale(3) }}
           />
         </TouchableWithoutFeedback>
