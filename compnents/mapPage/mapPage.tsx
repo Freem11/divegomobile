@@ -50,8 +50,10 @@ import { EmailFeedback } from "../feed/emailFeedback";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
-
+import { getNotifications } from "../../supabaseCalls/feedNotificationsSupabaseCalls";
+import { NotificationsFeedContext } from "../contexts/notificationsFeedContext";
 import * as S from "./styles";
+import NotificationsButton from "../reusables/bottomMenu/buttons/notificationsButton";
 
 const windowWidth = Dimensions.get("window").width;
 let feedbackRequest = null;
@@ -73,6 +75,7 @@ export default function MapPage() {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+  const { notifications, setNotifications } = useContext(NotificationsFeedContext);
 
   const { t } = useTranslation();
 
@@ -180,7 +183,15 @@ export default function MapPage() {
     setLevelOneScreen(false);
     setLevelTwoScreen(false);
     getProfile();
+    getAllNotificationsFeeds();
   }, []);
+
+  const getAllNotificationsFeeds = async() => {
+    const allNotifications = await getNotifications(activeSession.user.id);
+    setNotifications(allNotifications);
+  };
+
+  console.log("mapPage notifications: ", notifications);
 
   const PARTNER_ACCOUNT_STATUS =
   (profile?.partnerAccount) || false;
@@ -205,7 +216,8 @@ export default function MapPage() {
               <BottomDrawer/>
               <BottomMenu>
                 <ProfileButton />
-                <SiteSearchButton />
+                {/* <SiteSearchButton /> */}
+                <NotificationsButton />
                 <DiveSiteButton />
                 {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
               </BottomMenu>

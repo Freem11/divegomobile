@@ -65,3 +65,14 @@ export const FallbackText = styled.Text`
   font-family: ${activeFonts.Italic};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
 `;
+
+export const CommentBlock = styled.View`
+  margin-top: 8px;
+`;
+
+export const CommentText = styled.Text`
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Regular};
+  line-height: ${moderateScale(fontSizes.SmallText) * 1.4}px;
+`;
