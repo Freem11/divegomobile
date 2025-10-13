@@ -6,6 +6,8 @@ import { Photo } from "../../../entities/photos";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
+import { getRecentReviewsByUserId } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { Review } from "../../../entities/diveSiteReview";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 
@@ -27,6 +29,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
   const [profilePhotos, setProfilePhotos] = useState(null);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     getData(selectedProfile);
@@ -40,6 +43,9 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
     setSightingsCount(sightings.label_count);
     const recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID);
     setProfilePhotos(recentNine);
+    
+    const userReviews = await getRecentReviewsByUserId({ userId: selectedProfile.UserID, limit: 3 });
+    setReviews(userReviews);
   };
 
   const handleDiveSiteMove = async(pic: Photo, photoPacket) => {
@@ -66,6 +72,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
       sightingsCount={sightingsCount}
       openAllPhotosPage={openAllPhotosPage}
       setLevelThreeScreen={setLevelThreeScreen}
+      reviews={reviews}
     />
   );
 

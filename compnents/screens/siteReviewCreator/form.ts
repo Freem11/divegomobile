@@ -1,5 +1,6 @@
 import { DiveSiteConditions } from "../../../entities/diveSiteCondidtions";
 import { FormValidationRules } from "../../../forms/form";
+import moment from "moment";
 
 export interface Form {
   DiveDate?:    string
@@ -10,7 +11,20 @@ export interface Form {
 
 export const FormRules: FormValidationRules<Form> =   {
   DiveDate: {
-    required: "The date of your dive is required",
+    required: "Date is required",
+    validate: {
+      validDate: (value) => {
+        if (!value) return "Date is required";
+        const date = moment(value, "YYYY-MM-DD", true);
+        if (!date.isValid()) {
+          return "Please enter a valid date";
+        }
+        if (date.isAfter(moment(), 'day')) {
+          return "Date cannot be in the future";
+        }
+        return true;
+      }
+    }
   },
   Description: {
     required: "Description is required",

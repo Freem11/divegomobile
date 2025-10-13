@@ -11,7 +11,7 @@ import { DiveConditions } from '../../../../entities/diveSiteCondidtions'
 import MobileTextInput from '../../../reusables/textInput'
 import ButtonGroup from '../../../reusables/buttonGroup'
 import * as S from '../styles'
-import { Form } from '../form'
+import { Form, FormRules } from '../form'
 
 interface Step1Props {
   control: Control<Form, any, Form>
@@ -66,6 +66,7 @@ export const Step1: React.FC<Step1Props> = ({
       <Controller
         control={control}
         name={'DiveDate'}
+        rules={FormRules.DiveDate}
         render={({ field: { onChange, value } }) => (
           <Toucher onPress={() => showDatePicker()}>
             <View pointerEvents={'none'} style={{ width: screenWidth - moderateScale(32) }}>

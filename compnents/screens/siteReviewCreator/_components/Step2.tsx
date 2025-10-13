@@ -36,6 +36,7 @@ export const Step2: React.FC<Step2Props> = ({
 
   const conditions = watch('Conditions') || []
   const currentIntensity = conditions.find(c => c.conditionId === DiveConditions.CURRENT_INTENSITY)?.value || 0
+  const visibility = conditions.find(c => c.conditionId === DiveConditions.VISIBILITY)?.value || metrics.highValueViz
 
   const waterConditions = conditions
     .filter(c => [DiveConditions.NO_REFS, DiveConditions.MAX_DEPTH, DiveConditions.KELP, DiveConditions.POLLUTION].includes(c.conditionId))
@@ -106,6 +107,7 @@ export const Step2: React.FC<Step2Props> = ({
         leftValue={metrics.lowValueViz}
         rightValue={metrics.highValueViz}
         unitMeasurement={metrics.simpleMetric}
+        value={visibility}
         onValueChange={(value) => handleSliderConditions(DiveConditions.VISIBILITY, value)}
       />
 
@@ -116,6 +118,7 @@ export const Step2: React.FC<Step2Props> = ({
         leftValue={metrics.lowValueCur}
         rightValue={metrics.highValueCur}
         unitMeasurement={metrics.rateMetric}
+        value={currentIntensity}
         onValueChange={(value) => handleSliderConditions(DiveConditions.CURRENT_INTENSITY, value)}
       />
 

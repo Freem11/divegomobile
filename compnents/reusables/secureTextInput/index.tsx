@@ -27,7 +27,7 @@ const SecureTextInput = React.forwardRef<TextInput, SecureTextInputProps>(functi
   return (
     <S.TextInputWrapper>
       <S.IconWrapperLeft>
-        <Icon name={"lock-outline"} fill={colors.neutralGrey}/>
+        <Icon name={"lock-outline"} fill={colors.primaryBlue}/>
       </S.IconWrapperLeft>
 
       <S.StyledTextInput

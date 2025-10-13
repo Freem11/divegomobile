@@ -15,22 +15,19 @@ type SliderProps = {
   rightValue: number;
   unitMeasurement: string;
   onValueChange: (value: number) => void;
+  value: number;
 };
 
 export default function ReusableSlider(props: SliderProps) {
-  const initialValue = props.inverted ? props.rightValue : props.leftValue;
-  const [currentValue, setCurrentValue] = useState(initialValue);
-  const [liveValue, setLiveValue] = useState(initialValue);
-
-  const progress = useSharedValue(initialValue);
-  const labelData = useGetCurrentLabel(props.rightValue, liveValue);
+  const [dragValue, setDragValue] = useState(props.value);
+  
+  const progress = useSharedValue(props.value);
+  const labelData = useGetCurrentLabel(props.rightValue, dragValue);
 
   useEffect(() => {
-    const newValue = props.inverted ? props.rightValue : props.leftValue;
-    setCurrentValue(newValue);
-    setLiveValue(newValue);
-    progress.value = newValue;
-  }, [props.inverted, props.leftValue, props.rightValue]);
+    setDragValue(props.value);
+    progress.value = props.value;
+  }, [props.value]);
 
   const animatedGradientStyle = useAnimatedStyle(() => {
     const progressPercentage = interpolate(
@@ -59,7 +56,7 @@ export default function ReusableSlider(props: SliderProps) {
           >
           <S.LabelTagText style={isCurrentIntensity && { color: labelData.styles.textColor }}>
             {isCurrentIntensity ? `${labelData.label} ` : ''}
-            {liveValue.toFixed(1)} {props.unitMeasurement}
+            {dragValue.toFixed(1)} {props.unitMeasurement}
             </S.LabelTagText>
           </S.LabelTag>
         </S.AnimatedLabel>
@@ -109,13 +106,12 @@ export default function ReusableSlider(props: SliderProps) {
             thumbTintColor="#0B63FB"
             onValueChange={(value) => {
               progress.value = value;
-              setLiveValue(value);
+              setDragValue(value);
             }}
             onSlidingComplete={(value) => {
-              setCurrentValue(value);
               props.onValueChange(value);
             }}
-            value={liveValue}
+            value={dragValue}
           />
         </View>
 
