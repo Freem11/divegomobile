@@ -91,7 +91,6 @@ export const getRecentThreeReviewsBySiteId= async(divesite_id: number) => {
   return [] as Review[];
 };
 
-
 export const getRecentReviewsByUserId= async({ userId, limit }: { userId: string, limit: number }) => {
   const { data, error } = await supabase.rpc("get_recent_review_data_by_user_id", {
     q_user_id: userId,
