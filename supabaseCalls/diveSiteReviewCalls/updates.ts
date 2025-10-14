@@ -3,8 +3,6 @@ import { ReviewUpdate } from "../../entities/diveSiteReview";
 
 export const updateDiveSiteReview = async(values: ReviewUpdate, review_id: number) => {
 
-  console.log(values);
-
   const { data, error } = await supabase
     .from("diveSiteReviews")
     .update(values)

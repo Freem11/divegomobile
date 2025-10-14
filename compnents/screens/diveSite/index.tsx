@@ -10,7 +10,7 @@ import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls"
 import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
 
 import DiveSiteScreenView from "./diveSite";
