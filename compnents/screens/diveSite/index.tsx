@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -100,6 +100,20 @@ export default function DiveSiteScreen({
       getData(selectedDiveSite);
     }
   },[selectedDiveSite.id]);
+
+  // Refresh reviews when screen comes back into focus (e.g., after editing a review)
+  useFocusEffect(
+    React.useCallback(() => {
+      refreshReviews();
+    }, [selectedDiveSite?.id])
+  );
+
+  const refreshReviews = async() => {
+    if (selectedDiveSite?.id) {
+      const diveSiteReviews = await getRecentThreeReviewsBySiteId(selectedDiveSite.id);
+      setReviews(diveSiteReviews);
+    }
+  };
 
   const getData = async(selectedDiveSite: DiveSiteWithUserName) => {
     const trips = await getDiveSiteTripCount(selectedDiveSite.id);

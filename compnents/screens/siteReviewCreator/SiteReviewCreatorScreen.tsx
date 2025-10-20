@@ -78,7 +78,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const onSubmit = async(data: Form) => {
+  const handleCreate = async (data: Form) => {
     const photoUploadPromises = data.Photos.map(async(photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
@@ -120,53 +120,68 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         Conditions: finalConditions
       };
 
-      let diveReviewId;
+      const sucessfulReviewInsert = await insertReview({
+        created_by: userProfile.UserID,
+        dive_date: submissionData.DiveDate,
+        description: submissionData.Description,
+        diveSite_id: selectedDiveSite
+      });
 
-      if (reviewToEdit) {
-        await updateDiveSiteReview({
-          dive_date: submissionData.DiveDate,
-          description: submissionData.Description,
-        }, reviewToEdit.id);
-        
-        diveReviewId = reviewToEdit.id;
-      } else {
-        const sucessfulReviewInsert = await insertReview({
-          created_by: userProfile.UserID,
-          dive_date: submissionData.DiveDate,
-          description: submissionData.Description,
-          diveSite_id: selectedDiveSite
-        });
+      const diveReviewId = sucessfulReviewInsert.data[0].id;
 
-        diveReviewId = sucessfulReviewInsert.data[0].id;
+      const reviewConditions = submissionData.Conditions.map(condition => {
+        return {
+          review_id: diveReviewId,
+          condition_id: condition.conditionId,
+          value: condition.value
+        };
+      });
 
-        const reviewConditions = submissionData.Conditions.map(condition => {
-          return {
-            review_id: diveReviewId,
-            condition_id: condition.conditionId,
-            value: condition.value
-          };
-        });
+      await insertReviewConditions(reviewConditions);
 
-        await insertReviewConditions(reviewConditions);
+      const reviewPhotos = submissionData.Photos.map(photo => {
+        return {
+          review_id: diveReviewId,
+          photoPath: photo
+        };
+      });
 
-        const reviewPhotos = submissionData.Photos.map(photo => {
-          return {
-            review_id: diveReviewId,
-            photoPath: photo
-          };
-        });
-
-        await insertReviewPhotos(reviewPhotos);
-      }
+      await insertReviewPhotos(reviewPhotos);
 
       setIsCompleted(true);
-      
+
+      setTimeout(() => {
+        navigation.goBack();
+      }, 3000);
+    } catch (error) {
+      console.error("Form submission failed due to photo upload errors:", error);
+    }
+  }
+
+  const handleUpdate = async (data: Form) => {
+    try {
+      await updateDiveSiteReview({
+        dive_date: data.DiveDate,
+        description: data.Description,
+      }, reviewToEdit.review_id);
+
+      setIsCompleted(true);
+
       setTimeout(() => {
         navigation.goBack();
       }, 3000);
 
     } catch (error) {
-      console.error("Form submission failed due to photo upload errors:", error);
+      console.error("Review update failed:", error);
+      showError(t("Review.updateError") || "Failed to update review");
+    }
+  }
+
+  const onSubmit = async (data: Form) => {
+    if (reviewToEdit) {
+      await handleUpdate(data)
+    } else {
+      await handleCreate(data)
     }
   };
 
