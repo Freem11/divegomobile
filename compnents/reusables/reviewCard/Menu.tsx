@@ -15,9 +15,10 @@ interface MenuProps {
   setIsVisible: (isVisible: boolean) => void;
   handleEdit: () => void;
   handleDelete: () => void;
+  isMyReview?: boolean;
 }
 
-export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handleDelete }) => {
+export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handleDelete, isMyReview = false }) => {
   const iconRef = useRef<View>(null);
 
   return (
@@ -28,7 +29,7 @@ export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handl
           size="icon"
           style={{
             height: moderateScale(30),
-            width: moderateScale(30),
+            width: moderateScale(30)
           }}
           onPress={() => setIsVisible(true)}
           fillColor={colors.neutralGrey}
@@ -42,22 +43,33 @@ export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handl
         placement={Placement.AUTO}
         popoverStyle={{borderRadius: moderateScale(10)}}
       >
-        <IconWithLabel
-          label="Edit"
-          iconName="pencil"
-          buttonAction={() => {
-            handleEdit();
-            setIsVisible(false);
-          }}
-        />
-        <IconWithLabel
-          label="Delete"
-          iconName="trash"
-          buttonAction={() => {
-            handleDelete();
-            setIsVisible(false);
-          }}
-        />
+        {!isMyReview && (
+          <IconWithLabel
+            label={'Report'}
+            iconName={'flag'}
+            buttonAction={() => {}}
+          />
+        )}
+        {isMyReview && (
+          <IconWithLabel
+            label={'Edit'}
+            iconName={'pencil'}
+            buttonAction={() => {
+              handleEdit();
+              setIsVisible(false);
+            }}
+          />
+        )}
+        {isMyReview && (
+          <IconWithLabel
+            label={'Delete'}
+            iconName={'trash'}
+            buttonAction={() => {
+              handleDelete();
+              setIsVisible(false);
+            }}
+          />
+        )}
       </Popover>
     </S.Actions>
   )

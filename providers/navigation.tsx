@@ -6,9 +6,11 @@ import { NavigationButton } from "../compnents/navigationHeader/NavigationButton
 import SiteReviewCreatorScreen from "../compnents/screens/siteReviewCreator/SiteReviewCreatorScreen";
 import MapPage from "../compnents/mapPage/mapPage";
 
+import { Review } from "../entities/diveSiteReview";
+
 export type RootStackParamList = {
   Home: undefined;
-  SiteReviewCreator: { selectedDiveSite: number; siteName?: string };
+  SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList, 'RootStack'>();

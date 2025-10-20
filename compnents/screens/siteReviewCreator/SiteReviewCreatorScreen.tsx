@@ -1,11 +1,12 @@
 import type { RouteProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
 import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { updateDiveSiteReview } from "../../../supabaseCalls/diveSiteReviewCalls/updates";
 import { RootStackParamList } from "../../../providers/navigation";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
@@ -20,7 +21,7 @@ type SiteReviewCreatorScreenProps = {
 };
 
 export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScreenProps) {
-  const { selectedDiveSite } = route.params;
+  const { selectedDiveSite, reviewToEdit } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { userProfile } = useUserProfile();
@@ -35,13 +36,34 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     default_viz = 100;
   }
 
-  const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
-    defaultValues: {
+  const getDefaultValues = () => {
+    if (reviewToEdit) {
+      const formConditions = reviewToEdit.conditions?.map(condition => ({
+        conditionId: condition.condition_type_id,
+        value: condition.value
+      })) || [
+        { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 }, 
+        { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }
+      ];
+
+      return {
+        DiveDate: reviewToEdit.dive_date || "",
+        Conditions: formConditions,
+        Description: reviewToEdit.description || "",
+        Photos: reviewToEdit.photos?.map(photo => photo.photoPath) || []
+      };
+    }
+
+    return {
       DiveDate: "",
       Conditions: [{ "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 }, { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }],
       Description: "",
       Photos: []
-    },
+    };
+  };
+
+  const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
+    defaultValues: getDefaultValues(),
     mode: 'onChange',
     reValidateMode: 'onChange'
   });
@@ -98,33 +120,44 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         Conditions: finalConditions
       };
 
-      const sucessfulReviewInsert = await insertReview({
-        created_by: userProfile.UserID,
-        dive_date: submissionData.DiveDate,
-        description: submissionData.Description,
-        diveSite_id: selectedDiveSite
-      });
+      let diveReviewId;
 
-      const diveReviewId = sucessfulReviewInsert.data[0].id;
+      if (reviewToEdit) {
+        await updateDiveSiteReview({
+          dive_date: submissionData.DiveDate,
+          description: submissionData.Description,
+        }, reviewToEdit.id);
+        
+        diveReviewId = reviewToEdit.id;
+      } else {
+        const sucessfulReviewInsert = await insertReview({
+          created_by: userProfile.UserID,
+          dive_date: submissionData.DiveDate,
+          description: submissionData.Description,
+          diveSite_id: selectedDiveSite
+        });
 
-      const reviewConditions = submissionData.Conditions.map(condition => {
-        return {
-          review_id: diveReviewId,
-          condition_id: condition.conditionId,
-          value: condition.value
-        };
-      });
+        diveReviewId = sucessfulReviewInsert.data[0].id;
 
-      await insertReviewConditions(reviewConditions);
+        const reviewConditions = submissionData.Conditions.map(condition => {
+          return {
+            review_id: diveReviewId,
+            condition_id: condition.conditionId,
+            value: condition.value
+          };
+        });
 
-      const reviewPhotos = submissionData.Photos.map(photo => {
-        return {
-          review_id: diveReviewId,
-          photoPath: photo
-        };
-      });
+        await insertReviewConditions(reviewConditions);
 
-      await insertReviewPhotos(reviewPhotos);
+        const reviewPhotos = submissionData.Photos.map(photo => {
+          return {
+            review_id: diveReviewId,
+            photoPath: photo
+          };
+        });
+
+        await insertReviewPhotos(reviewPhotos);
+      }
 
       setIsCompleted(true);
       

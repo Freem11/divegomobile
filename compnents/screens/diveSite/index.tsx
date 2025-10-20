@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -12,6 +13,8 @@ import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext"
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+import { NavigationProp } from "../../../providers/navigation";
 
 import DiveSiteScreenView from "./diveSite";
 
@@ -30,6 +33,8 @@ export default function DiveSiteScreen({
   restoreParallax,
   openDiveSiteReviewer
 }: DiveSiteProps) {
+  const navigation = useNavigation<NavigationProp>();
+  const { userProfile } = useUserProfile();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -52,6 +57,18 @@ export default function DiveSiteScreen({
   const openAllTripsPage = () => {
     setLevelThreeScreen(true);
     setActiveScreen("DiveSiteTrips");
+  };
+
+  const handleEditReview = (review: Review) => {
+    navigation.navigate('SiteReviewCreator', {
+      selectedDiveSite: selectedDiveSite.id,
+      siteName: selectedDiveSite.name,
+      reviewToEdit: review
+    });
+  };
+
+  const handleDeleteReview = (reviewId: number) => {
+    console.log('Report review:', reviewId);
   };
 
   const handleMapFlip = async(sites: number[]) => {
@@ -113,11 +130,14 @@ export default function DiveSiteScreen({
       tripCount={tripCount}
       itineraries={itineraries}
       reviews={reviews}
+      currentUserId={userProfile?.UserID}
       openPicUploader={openPicUploader}
       openDiveSiteReviewer={openDiveSiteReviewer}
       openAllPhotosPage={openAllPhotosPage}
       openAllTripsPage={openAllTripsPage}
       handleMapFlip={handleMapFlip}
+      onEditReview={handleEditReview}
+      onDeleteReview={handleDeleteReview}
     />
   );
 

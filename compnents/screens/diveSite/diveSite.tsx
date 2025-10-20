@@ -22,11 +22,14 @@ type DiveSiteProps = {
   tripCount: number;
   itineraries: ItineraryItem[];
   reviews: Review[];
+  currentUserId?: string;
   openPicUploader: () => void;
   openDiveSiteReviewer: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
   handleMapFlip: (sites: number[]) => void;
+  onEditReview: (review: Review) => void;
+  onDeleteReview: (reviewId: number) => void;
 };
 
 export default function DiveSiteScreenView({
@@ -37,11 +40,14 @@ export default function DiveSiteScreenView({
   tripCount,
   itineraries,
   reviews,
+  currentUserId,
   openPicUploader,
   openDiveSiteReviewer,
   openAllPhotosPage,
   openAllTripsPage,
-  handleMapFlip
+  handleMapFlip,
+  onEditReview,
+  onDeleteReview
 }: DiveSiteProps) {
   return (
     <S.ContentContainer>
@@ -90,6 +96,10 @@ export default function DiveSiteScreenView({
                 conditions={review.conditions}
                 userName={review.user_name}
                 photo={review.profilePhoto}
+                review={review}
+                currentUserId={currentUserId}
+                onEdit={onEditReview}
+                onDelete={onDeleteReview}
               />
             ))}
           </S.ReviewsContent>
