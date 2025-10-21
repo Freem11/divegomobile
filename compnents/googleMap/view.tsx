@@ -167,6 +167,10 @@ export default function GoogleMapView(props: MapViewProps) {
         onRegionChangeComplete={() => props.handleBoundsChange()}
         toolbarEnabled={false}
       >
+        {props?.heatPoints?.length > 0 && [0, 2].includes(props.mapConfig) && (
+          <MarkerHeatPoint heatPoints={props.heatPoints} />
+        )}
+
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const { cluster: isCluster } = cluster.properties;
@@ -203,9 +207,6 @@ export default function GoogleMapView(props: MapViewProps) {
             );
           }
         })}
-        {props?.heatPoints?.length > 0 && [0, 2].includes(props.mapConfig) && (
-          <MarkerHeatPoint heatPoints={props.heatPoints} />
-        )}
 
       </MapView>
 
