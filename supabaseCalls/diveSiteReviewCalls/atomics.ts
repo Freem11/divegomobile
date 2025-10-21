@@ -1,5 +1,5 @@
 import { supabase } from "../../supabase";
-import { ReviewConditionInsert, ReviewPhotosInsert } from "../../entities/diveSiteReview";
+import { ReviewConditionInsert, ReviewPhotoInsert } from "../../entities/diveSiteReview";
 
 export const replaceReviewConditionsAtomic = async(
   review_id: number,
@@ -28,7 +28,7 @@ export const replaceReviewConditionsAtomic = async(
 
 export const replaceReviewPhotosAtomic = async(
   review_id: number,
-  newPhotos: ReviewPhotosInsert[]
+  newPhotos: ReviewPhotoInsert[]
 ) => {
   const photosToInsert = newPhotos.map(({ review_id: _, ...rest }) => rest);
 

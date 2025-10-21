@@ -1,4 +1,4 @@
-import { ReviewConditionInsert, ReviewInsert, ReviewPhotosInsert } from "../../entities/diveSiteReview";
+import { ReviewConditionInsert, ReviewInsert, ReviewPhotoInsert } from "../../entities/diveSiteReview";
 import { supabase } from "../../supabase";
 
 export const insertReview = async(values: ReviewInsert) => {
@@ -41,7 +41,7 @@ export const insertReviewConditions = async(values: ReviewConditionInsert[]) => 
   };
 };
 
-export const insertReviewPhotos = async(values: ReviewPhotosInsert[]) => {
+export const insertReviewPhotos = async(values: ReviewPhotoInsert[]) => {
 
   const { data, error } = await supabase
     .from("diveSiteReviewPhotos")

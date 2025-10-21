@@ -38,7 +38,7 @@ export type ReviewConditionInsert = {
   value: number;
 };
 
-export type ReviewPhotosInsert = {
+export type ReviewPhotoInsert = {
   review_id: number;
   photoPath: string;
 };
