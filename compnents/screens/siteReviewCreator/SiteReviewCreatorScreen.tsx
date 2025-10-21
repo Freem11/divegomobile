@@ -1,6 +1,6 @@
 import type { RouteProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
@@ -180,14 +180,16 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const getDiveSiteinfo = async(siteId: number) => {
+  const getDiveSiteInfo = async(siteId: number) => {
     if (siteId){
-      const diveSiteinfo = await getDiveSiteById(siteId);
-      setSiteInfo(diveSiteinfo[0]);
+      const diveSiteInfo = await getDiveSiteById(siteId);
+      setSiteInfo(diveSiteInfo[0]);
     }
   };
 
-  getDiveSiteinfo(selectedDiveSite);
+  useEffect(() => {
+    void getDiveSiteInfo(selectedDiveSite);
+  }, [selectedDiveSite])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
