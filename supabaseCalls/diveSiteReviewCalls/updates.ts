@@ -1,21 +1,38 @@
 import { supabase } from "../../supabase";
 import { ReviewUpdate, Review } from "../../entities/diveSiteReview";
 
-export const updateDiveSiteReview = async(values: ReviewUpdate, review_id: number) => {
+interface ReviewUpdateResponse {
+  data: Review | null;
+  error: Error | null;
+}
 
-  const { data, error } = await supabase
-    .from("diveSiteReviews")
-    .update(values)
-    .eq("id", review_id)
-    .select()
-    .single();
+export const updateDiveSiteReview = async(values: ReviewUpdate, review_id: number): Promise<ReviewUpdateResponse> => {
+  try {
+    const { data, error } = await supabase
+      .from("diveSiteReviews")
+      .update(values)
+      .eq("id", review_id)
+      .select()
+      .single();
 
-  if (error) {
+    if (error) {
+      console.log("couldn't do it REVIEW_UPDATE,", error);
+
+      return {
+        error: error,
+        data: null
+      };
+    }
+
+    return {
+      data: data as Review,
+      error: null
+    };
+  } catch (error) {
     console.log("couldn't do it REVIEW_UPDATE,", error);
-    return [];
-  }
-
-  if (data) {
-    return data as Review;
+    return {
+      error: error,
+      data: null
+    };
   }
 };

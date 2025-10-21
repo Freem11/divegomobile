@@ -6,11 +6,13 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
 import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { replaceReviewConditionsAtomic } from "../../../supabaseCalls/diveSiteReviewCalls/atomics";
 import { updateDiveSiteReview } from "../../../supabaseCalls/diveSiteReviewCalls/updates";
-import { RootStackParamList } from "../../../providers/navigation";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import { ReviewConditionInsert } from "../../../entities/diveSiteReview";
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { RootStackParamList } from "../../../providers/navigation";
 import { imageUploadMultiple } from "../imageUploadHelpers";
 import SiteReviewPageView from "./siteReviewCreator";
 import { showError } from "../../toast";
@@ -78,6 +80,32 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
+  const formatConditions = (conditions: any[], reviewId: number): ReviewConditionInsert[] => {
+    const filteredConditions = conditions.filter(c => c.value !== 0 || c.conditionId === DiveConditions.VISIBILITY);
+
+    let finalConditions = filteredConditions;
+
+    if (unitSystem === "Imperial") {
+      finalConditions = filteredConditions.map(condition => {
+        if (condition.conditionId === DiveConditions.VISIBILITY) {
+          const convertedValue = condition.value * 0.3048;
+          return { ...condition, value: Math.round(convertedValue) };
+        }
+        if (condition.conditionId === DiveConditions.CURRENT_INTENSITY) {
+          const convertedValue = condition.value * 0.3048;
+          return { ...condition, value: Math.round(convertedValue * 2) / 2 };
+        }
+        return condition;
+      });
+    }
+
+    return finalConditions.map(condition => ({
+      review_id: reviewId,
+      condition_id: Number(condition.conditionId),
+      value: condition.value
+    }));
+  };
+
   const handleCreate = async (data: Form) => {
     const photoUploadPromises = data.Photos.map(async(photo, index) => {
       try {
@@ -98,82 +126,49 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       const newPhotosArray = uploadedFileNames.map(fileName => (fileName));
       data.Photos = newPhotosArray;
 
-      const filteredConditions = data.Conditions.filter(c => c.value !== 0 || c.conditionId === DiveConditions.VISIBILITY);
-
-      let finalConditions = filteredConditions;
-      if (unitSystem === "Imperial") {
-        finalConditions = filteredConditions.map(condition => {
-          if (condition.conditionId === DiveConditions.VISIBILITY) {
-            const convertedValue = condition.value * 0.3048;
-            return { ...condition, value: Math.round(convertedValue) };
-          }
-          if (condition.conditionId === DiveConditions.CURRENT_INTENSITY) {
-            const convertedValue = condition.value * 0.3048;
-            return { ...condition, value: Math.round(convertedValue * 2) / 2 };
-          }
-          return condition;
-        });
-      }
-
-      const submissionData = {
-        ...data,
-        Conditions: finalConditions
-      };
-
-      const sucessfulReviewInsert = await insertReview({
+      const reviewResult = await insertReview({
         created_by: userProfile.UserID,
-        dive_date: submissionData.DiveDate,
-        description: submissionData.Description,
+        dive_date: data.DiveDate,
+        description: data.Description,
         diveSite_id: selectedDiveSite
       });
 
-      const diveReviewId = sucessfulReviewInsert.data[0].id;
+      const reviewId = reviewResult.data[0].id;
+      const conditions = formatConditions(data.Conditions, reviewId);
 
-      const reviewConditions = submissionData.Conditions.map(condition => {
-        return {
-          review_id: diveReviewId,
-          condition_id: condition.conditionId,
-          value: condition.value
-        };
-      });
+      await insertReviewConditions(conditions);
 
-      await insertReviewConditions(reviewConditions);
-
-      const reviewPhotos = submissionData.Photos.map(photo => {
-        return {
-          review_id: diveReviewId,
-          photoPath: photo
-        };
-      });
+      const reviewPhotos = data.Photos.map(photo => ({
+        review_id: reviewId,
+        photoPath: photo
+      }));
 
       await insertReviewPhotos(reviewPhotos);
 
-      setIsCompleted(true);
-
-      setTimeout(() => {
-        navigation.goBack();
-      }, 3000);
     } catch (error) {
       console.error("Form submission failed due to photo upload errors:", error);
+    } finally {
+      setIsCompleted(true);
+      setTimeout(() => navigation.goBack(), 3000);
     }
   }
 
   const handleUpdate = async (data: Form) => {
     try {
-      await updateDiveSiteReview({
-        dive_date: data.DiveDate,
-        description: data.Description,
-      }, reviewToEdit.review_id);
+      await updateDiveSiteReview(
+        { dive_date: data.DiveDate, description: data.Description },
+        reviewToEdit.review_id
+      );
 
-      setIsCompleted(true);
-
-      setTimeout(() => {
-        navigation.goBack();
-      }, 3000);
+      const conditions = formatConditions(data.Conditions, reviewToEdit.review_id);
+      await replaceReviewConditionsAtomic(reviewToEdit.review_id, conditions);
 
     } catch (error) {
       console.error("Review update failed:", error);
-      showError(t("Review.updateError") || "Failed to update review");
+      showError("Failed to update review");
+    } finally {
+      setIsCompleted(true);
+      setTimeout(() => navigation.goBack(), 3000);
     }
   }
 
