@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { View } from 'react-native';
 import { Marker } from "react-native-maps";
 import Svg, { Circle, Path } from 'react-native-svg';
-import image from "../../../png/mapIcons/DiveCentre60x60.png";
 import { Coordinates } from "../../../../entities/coordinates";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
@@ -32,8 +31,8 @@ export function MarkerDiveShop(props: MarkerDiveShopProps) {
 
   return (
     <Marker
+      tracksViewChanges={false}
       coordinate={props.coordinate}
-      image={image}
       onPress={handleScreen}
     >
       <View style={{ width: moderateScale(30), height: moderateScale(30) }}>

@@ -24,23 +24,20 @@ export const addDeletedAccountInfo = async(values) => {
 };
 
 export const createProfile = async(values) => {
-
-  const { data, error } = await supabase
+  const response = await supabase
     .from("UserProfiles")
     .insert([
       {
-        Email: values.email,
-        UserID: values.id
+        Email:  values.email,
+        UserID: values.id,
       },
     ]);
 
-  if (error) {
-    console.log("couldn't do it 1,", error);
+  if (response.error) {
+    console.log("Unable to create profile", response.error);
   }
 
-  if (data) {
-    console.log(data);
-  }
+  return response;
 };
 
 export const updateProfileUserName = async(values: Partial<ActiveProfile>) => {
@@ -148,7 +145,7 @@ export const grabProfileByUserId = async(id: string) => {
   return null;
 };
 
-export const grabProfileById = async(id: number) => {
+export const grabProfileById = async(id: string) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
@@ -23,7 +22,6 @@ export default function DiveSiteTripsPage({}: DiveSiteTripsPageProps) {
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
-  const { profile } = useContext(UserProfileContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { setLevelOneScreen } = useContext(

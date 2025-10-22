@@ -6,12 +6,12 @@ import { imageUpload } from "../imageUploadHelpers";
 import { removePhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { insertPhotoWaits } from "../../../supabaseCalls/photoWaitSupabaseCalls";
 import { showError, showSuccess, showWarning } from "../../toast";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { saveFailedUpload } from "../../feed/store/asyncStore";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
 import { checkNetworkStatus } from "../../feed/store/utils";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import PicUploaderView from "./view";
 
@@ -53,7 +53,7 @@ export default function PicUploader({
   setLocalPreviewUri,
 }: PicUploaderProps) {
   const { t } = useTranslation();
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);
@@ -95,7 +95,7 @@ export default function PicUploader({
             dateTaken: formData.date,
             latitude: selectedDiveSite.lat,
             longitude: selectedDiveSite.lng,
-            UserId: profile.UserID,
+            UserId: userProfile.UserID,
           }
         ]
       }
@@ -140,7 +140,7 @@ export default function PicUploader({
         dateTaken: formData.date,
         latitude: selectedDiveSite.lat,
         longitude: selectedDiveSite.lng,
-        UserId: profile.UserID,
+        UserId: userProfile.UserID,
       });
 
       if (error) {

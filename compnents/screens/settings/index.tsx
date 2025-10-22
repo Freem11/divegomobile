@@ -1,14 +1,11 @@
 import React, { useContext } from "react";
-import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import email from "react-native-email";
 
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { SessionContext } from "../../contexts/sessionContext";
 import {
   signOut,
   userDelete
@@ -17,6 +14,8 @@ import {
   addDeletedAccountInfo,
   deleteProfile
 } from "../../../supabaseCalls/accountSupabaseCalls";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useUserHandler } from "../../../store/user/useUserHandler";
 
 import SettingsPageView from "./settings";
 
@@ -24,15 +23,15 @@ type SettingsPageProps = {};
 
 export default function SettingsPage({}: SettingsPageProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { profile } = useContext(UserProfileContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { activeSession, setActiveSession } = useContext(SessionContext);
+  const userHandler = useUserHandler();
+  const { userProfile } = useUserProfile();
 
   const { t } = useTranslation();
 
   let profileType;
-  if (profile && profile.partnerAccount) {
+  if (userProfile?.partnerAccount) {
     profileType = "Partner Account";
   } else {
     profileType = "Diver Account";
@@ -45,9 +44,7 @@ export default function SettingsPage({}: SettingsPageProps) {
   };
 
   const handleLogout = async() => {
-    await setActiveSession(null);
-    await SecureStore.deleteItemAsync("token");
-    await signOut();
+    userHandler.userLogout();
   };
 
   const alertHandler = async() => {
@@ -75,10 +72,10 @@ export default function SettingsPage({}: SettingsPageProps) {
   let first;
   let last;
 
-  if (activeSession && activeSession.user) {
-    first = activeSession.user.user_metadata.firstName || "";
-    last = activeSession.user.user_metadata.lastName || "";
-    blurb = `:${activeSession.user.id}` || null;
+  if (userProfile) {
+    // first = activeSession.user.user_metadata.firstName || "";
+    // last = activeSession.user.user_metadata.lastName || "";
+    blurb = `:${userProfile.UserID}`;
   }
 
   const handleEmail = () => {
@@ -95,14 +92,12 @@ export default function SettingsPage({}: SettingsPageProps) {
       await addDeletedAccountInfo({
         firstName: first,
         lastName: last,
-        email: activeSession.user.email,
-        UserID: activeSession.user.id
+        email: userProfile.Email,
+        UserID: userProfile.UserID
       });
 
-      await deleteProfile(activeSession.user.id);
-      await userDelete(activeSession.user.id);
-      await setActiveSession(null);
-      await SecureStore.deleteItemAsync("token");
+      await deleteProfile(userProfile.UserID);
+      await userDelete(userProfile.UserID);
       await signOut();
     }
   };

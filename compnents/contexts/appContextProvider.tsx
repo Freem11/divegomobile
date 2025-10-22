@@ -5,11 +5,9 @@ import TripSitesContextProvider from './tripSitesContext';
 import SitesArrayContextProvider from './sitesArrayContext';
 import SelectedShopContextProvider from './selectedShopContext';
 import ModalSelectContextProvider from './modalSelectContext';
-import ProfileModalContextProvider from './profileModalContext';
 import AreaPicsContextProvider from './areaPicsContext';
 import SearchTextContextProvider from './searchTextContext';
 import AnchorPhotosContextProvider from './anchorPhotosContext';
-import UserProfileContextProvider from './userProfileContext';
 import AnimalMultiSelectContextProvider from './animalMultiSelectContext';
 import SelectedDiveSiteContextProvider from './selectedDiveSiteContext';
 import PictureContextProvider from './pictureContext';
@@ -36,11 +34,9 @@ const providers = [
     SitesArrayContextProvider,
     SelectedShopContextProvider,
     ModalSelectContextProvider,
-    ProfileModalContextProvider,
     AreaPicsContextProvider,
     SearchTextContextProvider,
     AnchorPhotosContextProvider,
-    UserProfileContextProvider,
     AnimalMultiSelectContextProvider,
     SelectedDiveSiteContextProvider,
     PictureContextProvider,
