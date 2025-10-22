@@ -1,12 +1,13 @@
+import React from "react";
 import {
   StyleSheet,
   View,
   Text,
   TouchableWithoutFeedback,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import { scale } from "react-native-size-matters";
 
+import ButtonIcon from "../../reusables/buttonIcon";
 import { activeFonts, colors, fontSizes } from "../styles";
 
 const AnimalTag = (props) => {
@@ -37,10 +38,11 @@ const AnimalTag = (props) => {
             {animalName}
           </Text>
           <View style={styles.xButton}>
-            <MaterialIcons
-              name="highlight-remove"
-              size={scale(10)}
-              color="darkgrey"
+            <ButtonIcon
+              icon="close"
+              onPress={() => null}
+              size="icon"
+              fillColor={colors.neutralGrey}
             />
           </View>
         </View>
