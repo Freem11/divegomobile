@@ -44,7 +44,7 @@ import { useMapStore } from "../googleMap/useMapStore";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
-import { getNotifications } from "../../supabaseCalls/feedNotificationsSupabaseCalls";
+import { getNotificationsCount } from "../../supabaseCalls/notificationsSupabaseCalls";
 import { NotificationsFeedContext } from "../contexts/notificationsFeedContext";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
@@ -52,6 +52,8 @@ import { useUserProfile } from "../../store/user/useUserProfile";
 
 import * as S from "./styles";
 import NotificationsButton from "../reusables/bottomMenu/buttons/notificationsButton";
+import { set } from "react-hook-form";
+import { useNotificationsStore } from "../feed/store/useNotificationsStore";
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -70,6 +72,10 @@ export default function MapPage() {
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
   const { notifications, setNotifications } = useContext(NotificationsFeedContext);
   const { userProfile } = useUserProfile();
+  const [notificationsCount, setNotificationsCount] = useState<number>(0);
+  //const { notifications, setNotifications } = useContext(NotificationsFeedContext);
+
+  const initNotifications = useNotificationsStore((s) => s.init);
 
   const { t } = useTranslation();
 
@@ -172,15 +178,16 @@ export default function MapPage() {
     setLevelOneScreen(false);
     setLevelTwoScreen(false);
     getProfile();
-    getAllNotificationsFeeds();
+    getAllNotificationsCount();
+    initNotifications(activeSession.user.id);
+
   }, []);
 
-  const getAllNotificationsFeeds = async() => {
-    const allNotifications = await getNotifications(activeSession.user.id);
-    setNotifications(allNotifications);
+  const getAllNotificationsCount = async() => {
+    const notificationsCount = await getNotificationsCount(activeSession.user.id);
+    console.log("count", notificationsCount);
+    setNotificationsCount(notificationsCount);
   };
-
-  console.log("mapPage notifications: ", notifications);
 
   const PARTNER_ACCOUNT_STATUS =
   (profile?.partnerAccount) || false;
@@ -231,7 +238,7 @@ export default function MapPage() {
               <BottomMenu>
                 <ProfileButton />
                 {/* <SiteSearchButton /> */}
-                <NotificationsButton />
+                <NotificationsButton count={notificationsCount} />
                 <DiveSiteButton />
                 {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
               </BottomMenu>

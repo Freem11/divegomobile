@@ -1,22 +1,29 @@
-import React, { useContext, useMemo } from "react";
+import React from "react";
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
-import * as S from "./styles";
 import { useFeedScreenStore } from "../../../feed/store/useScreenStore";
 import { FEED_SCREEN } from "../../../feed/store/types";
 import ButtonIcon from "../../buttonIcon";
 import { colors } from "../../../styles";
-import { NotificationsFeedContext } from "../../../contexts/notificationsFeedContext";
 
-export default function NotificationsButton() {
+import * as S from "./styles";
+import { useNotificationsStore } from "../../../feed/store/useNotificationsStore";
+
+type NotificationsButtonProps = {
+  count: number;
+};
+
+export default function NotificationsButton({ count }: NotificationsButtonProps) {
   const openScreen = useFeedScreenStore((state) => state.openScreen);
-  const { notifications } = useContext(NotificationsFeedContext);
-  const showBadge = notifications.length > 0;
-  const label = useMemo(
-    () => (notifications.length > 99 ? "99+" : String(notifications.length)),
-    [notifications.length]
-  );
+
+  const count1 = useNotificationsStore((s) => s.count);
+  console.log("NotificationsButton count from store:", count1);
+//const label = count >= 100 ? "99+" : String(count);
+
+  const showBadge = count > 0;
+  const label = count >= 100 ? "99+" : String(count);
+
   const handlePress = () => {
     openScreen(FEED_SCREEN.FEED_MESSAGES);
   };

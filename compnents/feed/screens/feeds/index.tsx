@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -29,6 +29,7 @@ import FeedItemNotification from "./messages/notification";
 import * as S from "./styles";
 import FeedItemPhotoLike from "./messages/photoLike";
 import FeedItemPhotoComment from "./messages/photoComment";
+import { useNotificationsStore } from "../../store/useNotificationsStore";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -39,9 +40,23 @@ export default function FeedList() {
   const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
   const clearFeedItems = useFeedDataStore((state) => state.clearFeedItems);
   const closeScreen = useFeedScreenStore((state) => state.closeScreen);
-  const { notifications, setNotifications } = useContext(
-    NotificationsFeedContext
-  );
+
+  const list = useNotificationsStore((s) => s.list);
+  const loadMore = useNotificationsStore((s) => s.loadMore);
+  const loadFirst = useNotificationsStore((s) => s.loadFirst);
+
+  console.log("FeedList notifications from store:", list);
+
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  // const { notifications, setNotifications } = useContext(
+  //   NotificationsFeedContext
+  // );
+
+  // const getAllNotifications = async () => {
+  //   const notificationsCount = await getNotifications(activeSession.user.id);
+  //   console.log("count", notificationsCount);
+  //   setNotificationsCount(notificationsCount);
+  // };
 
   useEffect(() => {
     loadFeedItems();
@@ -64,9 +79,7 @@ export default function FeedList() {
     console.log("Rendering notification item:", item);
     switch (item.notification_types.code) {
       case "photo_like":
-        return (
-          <FeedItemPhotoLike item={item} />
-        );
+        return <FeedItemPhotoLike item={item} />;
       case "photo_comment":
         return (
           <FeedItemPhotoComment item={item} />
@@ -79,6 +92,7 @@ export default function FeedList() {
         return <FeedItemFailedSync item={item} onRemove={removeFeedItem} />;
       case FEED_ITEM_TYPE.NOTIFICATION:
         return <FeedItemNotification item={item} onRemove={removeFeedItem} />;
+        return <FeedItemPhotoComment item={item} />;
       default:
         return null;
     }
@@ -111,6 +125,22 @@ export default function FeedList() {
 
       {notifications.length === 0 ? (
       {feedItems.length === 0 ? (
+      {!list.items || list.items.length === 0 ? (
+        <Text>No notifications</Text>
+      ) : (
+        <FlatList
+          data={list.items ?? []}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={renderItem}
+          // renderItem={({ item }) => (
+          //   <Text>{item.notification_types?.code}</Text>
+          // )}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => list.hasMore && !list.isLoading && loadMore()}
+        />
+      )}
+
+      {/* {notifications.length === 0 ? (
         <Text style={styles.emptyMessage}>{t("Feed.noFeeds")}</Text>
       ) : (
         <FlatList
@@ -119,7 +149,7 @@ export default function FeedList() {
           contentContainerStyle={styles.listContainer}
           renderItem={renderItem}
         />
-      )}
+      )} */}
     </S.SafeArea>
   );
 }
