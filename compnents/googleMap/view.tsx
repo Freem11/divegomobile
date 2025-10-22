@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, LatLng, Polygon } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
 
@@ -21,6 +21,7 @@ import { MarkerHeatPoint } from "./marker/markerHeatPoint";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
+import  polygonCoords  from "./testfile";
 
 type MapViewProps = {
   mapConfig: number;
@@ -152,6 +153,7 @@ export default function GoogleMapView(props: MapViewProps) {
     })();
   }, [props.diveSites, props.diveShops]);
 
+  console.log(polygonCoords);
   return (
     <View style={styles.container}>
       <MapView
@@ -170,6 +172,12 @@ export default function GoogleMapView(props: MapViewProps) {
         {props?.heatPoints?.length > 0 && [0, 2].includes(props.mapConfig) && (
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
+
+        <Polygon
+          coordinates={polygonCoords}
+          fillColor="rgba(0,115,230,0.5)"
+          strokeColor="rgba(0,55,255,1)"
+        />
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
