@@ -1,5 +1,5 @@
 export type Review = {
-  id: number;
+  review_id: number;
   active: boolean;
   created_at: string;
   created_by: string;

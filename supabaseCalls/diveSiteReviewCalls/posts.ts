@@ -25,7 +25,6 @@ export const insertReview = async(values: ReviewInsert) => {
 };
 
 export const insertReviewConditions = async(values: ReviewConditionInsert[]) => {
-
   const { data, error } = await supabase
     .from("diveSiteReviewConditions")
     .insert(values)
@@ -33,11 +32,16 @@ export const insertReviewConditions = async(values: ReviewConditionInsert[]) => 
 
   if (error) {
     console.log("couldn't do it REVIEW_CONDITIONS_INSERT,", error);
+
+    return {
+      data: null,
+      error,
+    };
   }
 
   return {
     data,
-    error,
+    error: null,
   };
 };
 
