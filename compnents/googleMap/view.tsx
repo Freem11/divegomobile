@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
-import MapView, { PROVIDER_GOOGLE, LatLng, Polygon } from "react-native-maps";
+import { Dimensions, StyleSheet, View, Text } from "react-native";
+import MapView, { Marker, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
 
@@ -9,6 +9,8 @@ import { DiveSiteBasic } from "../../entities/diveSite";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
+import { getMarineEvents } from "../../supabaseCalls/marineEventCalls/gets";
+import { MarineEvent } from "../../entities/marineEvent";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -27,12 +29,6 @@ type MapViewProps = {
   mapConfig: number;
   center: Coordinates;
   zoomLevel: number;
-
-  /**
-   * On load event happens a lot - dont put heavy stuff here
-   * @param map
-   * @returns
-   */
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
   handleOnMapReady: () => void;
@@ -44,6 +40,14 @@ type MapViewProps = {
 export default function GoogleMapView(props: MapViewProps) {
 
   const [initialRegion, setInitialRegion] = useState(null);
+
+  const [marineEvents, setMarineEvents] = useState<MarineEvent[]>(null);
+
+  const getMevents = async() => {
+    const events = await getMarineEvents();
+    console.log(events);
+    setMarineEvents(events);
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -94,6 +98,7 @@ export default function GoogleMapView(props: MapViewProps) {
 
   useEffect(() => {
     getCurrentLocation();
+    getMevents();
   },[]);
 
   useEffect(() => {
@@ -153,7 +158,8 @@ export default function GoogleMapView(props: MapViewProps) {
     })();
   }, [props.diveSites, props.diveShops]);
 
-  console.log(polygonCoords);
+  // console.log((polygonCoords));
+
   return (
     <View style={styles.container}>
       <MapView
@@ -173,11 +179,26 @@ export default function GoogleMapView(props: MapViewProps) {
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
-        <Polygon
+        {/* <Polygon
           coordinates={polygonCoords}
-          fillColor="rgba(0,115,230,0.5)"
-          strokeColor="rgba(0,55,255,1)"
-        />
+          fillColor="rgba(147, 233, 190, 0.5)"
+          strokeColor="rgba(79, 178, 138, 0.25)"
+          tappable
+          onPress={() => console.log("Mexican Sardine Run!")}
+        /> */}
+
+        {marineEvents && marineEvents.map((event) => {
+          return (
+            <Polygon
+              key={event.id}
+              coordinates={event.coordinates}
+              fillColor="rgba(147, 233, 190, 0.5)"
+              strokeColor="rgba(79, 178, 138, 0.25)"
+              tappable
+              onPress={() => console.log(event.id, event.name)}
+            />
+          );
+        })}
 
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
