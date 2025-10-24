@@ -72,6 +72,7 @@ export default function GoogleMap() {
     ]);
     setDiveShops(diveShops);
     setDiveSites(diveSites);
+
   }, 50);
 
   return (

@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
-import { View } from 'react-native';
+import React, { useContext, useState } from "react";
+import { View } from "react-native";
 import { Marker } from "react-native-maps";
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path } from "react-native-svg";
+import { moderateScale } from "react-native-size-matters";
+
 import { Coordinates } from "../../../../entities/coordinates";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
-import iconConfig from '../../../../icons/_config.json';
-import { moderateScale } from "react-native-size-matters";
-
+import iconConfig from "../../../../icons/_config.json";
 
 type MarkerDiveSiteProps = {
   id: number;
@@ -19,24 +19,24 @@ type MarkerDiveSiteProps = {
 export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const mapConfig = useMapStore((state) => state.mapConfig);
-
+  const [tracksViewChanges, setTracksViewChanges] = useState(true);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
-  const pathData = iconConfig.anchor?.[1] ?? '';
+  const pathData = iconConfig.anchor?.[1] ?? "";
 
   const scale = 0.85;
   const center = 256;
   const translate = center * (1 - scale); // 38.4
 
   const handleScreen = () => {
-    setActiveScreen("DiveSiteScreen", {id: props.id})
-    setLevelOneScreen(true)
-  }
+    setActiveScreen("DiveSiteScreen", { id: props.id });
+    setLevelOneScreen(true);
+  };
 
   function handlePress() {
     if (mapConfig !== 3) {
-      handleScreen()
+      handleScreen();
     } else {
       if (sitesArray.includes(props.id)) {
         setSitesArray(prev => prev.filter(id => id !== props.id));
@@ -45,9 +45,11 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
       }
     }
   }
+
   return (
     <Marker
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={() => setTracksViewChanges(false)}
       coordinate={props.coordinate}
       onPress={handlePress}
     >
@@ -55,7 +57,7 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
         <Svg width={moderateScale(30)}height={moderateScale(30)} viewBox="0 0 512 512">
           <Path
             d={pathData as string}
-            fill={sitesArray.includes(props.id) ? 'gold' : 'skyblue'}
+            fill={sitesArray.includes(props.id) ? "gold" : "skyblue"}
             transform={`translate(${translate}, ${translate}) scale(${scale})`}
           />
         </Svg>

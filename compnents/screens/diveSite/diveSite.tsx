@@ -152,7 +152,7 @@ export default function DiveSiteScreenView({
         )) : (
           <S.EmptyStateWrapper>
             <EmptyState
-              iconName="boat"
+              iconName="diving-scuba-flag"
               title="No Trips Available"
               subtitle="There are currently no diving trips scheduled for this location. Check back later!"
             />
