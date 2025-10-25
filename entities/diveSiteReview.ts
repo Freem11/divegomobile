@@ -16,7 +16,7 @@ export type Review = {
 
 export type ReviewCondition = {
   condition_entry_id: number;
-  condition_type_id: number
+  condition_type_id?: number
   value: number;
 };
 

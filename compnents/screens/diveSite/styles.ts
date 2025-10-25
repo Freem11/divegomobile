@@ -26,7 +26,6 @@ export const Content = styled.Text`
   font-family: ${activeFonts.Light};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
-  margin-top: ${moderateScale(20)}px;
   text-align: center;
 `;
 
@@ -34,7 +33,8 @@ export const Contributor = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.darkGrey};
-  margin-top: ${moderateScale(20)}px;
+  margin-top: ${moderateScale(5)}px;
+  text-align: center;
 `;
 
 export const LabelWrapper = styled.View`
@@ -79,4 +79,30 @@ export const ButtonContainerReviews = styled.View`
 
 export const EmptyStateWrapper = styled.View`
   padding: ${moderateScale(40)}px 0;
+`;
+
+export const LabelsContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: ${moderateScale(6)}px;
+  margin-left: ${moderateScale(10)}px;
+  padding-vertical: ${moderateScale(25)}px;
+  width: 95%;
+`;
+
+export const TagWrapper = styled.View`
+  background-color: ${colors.lighterBlue};
+  border-radius: ${moderateScale(7)}px;
+  justify-content: center;
+  align-items: center;
+  padding-vertical: ${moderateScale(5)}px;
+  padding-horizontal: ${moderateScale(10)}px;
+`;
+
+export const TagText = styled.Text`
+  font-size: ${moderateScale(fontSizes.XSmall)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.primaryBlue};
 `;

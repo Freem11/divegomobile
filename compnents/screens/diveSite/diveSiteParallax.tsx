@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-
-import { NavigationProp } from "../../../providers/navigation";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import email from "react-native-email";
 
+import { NavigationProp } from "../../../providers/navigation";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -18,6 +17,8 @@ import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
+import { MetricItem } from "../../../entities/metricItem";
 
 import DiveSiteScreen from ".";
 
@@ -45,12 +46,24 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
+  const [ metricInfo, setMetricInfo ] = useState<MetricItem[]>(null);
+
   useEffect(() => {
     getDiveSiteinfo();
+    getMetrics();
     if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.siteID]);
+
+  const getMetrics = async() => {
+    if (props.siteID){
+      const monthlyMetrics = await allMetrics(props.siteID);
+      setMetricInfo(monthlyMetrics);
+    }
+  };
+
+  console.log("merticInfo", metricInfo);
 
   const getDiveSiteinfo = async() => {
     if (props.siteID){
@@ -155,6 +168,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
         selectedDiveSite={selectedDiveSite}
         openPicUploader={openPicUploader}
         openDiveSiteReviewer={openDiveSiteReviewer}
+        metricInfo={metricInfo}
       />
     </ParallaxDrawer>
   );

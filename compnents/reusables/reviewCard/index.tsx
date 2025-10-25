@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { View } from "react-native";
+import { moderateScale } from "react-native-size-matters";
 
 import readableDate from "../../helpers/readableDate";
 import { Review, ReviewCondition } from "../../../entities/diveSiteReview";
@@ -7,8 +9,6 @@ import * as S from "./styles";
 import { renderLabel } from "./conditionLabel";
 import Avatar from "./avatarCreator";
 import { Menu } from "./Menu";
-import { View } from "react-native";
-import { moderateScale } from "react-native-size-matters";
 
 type ReviewCardViewProps = {
   userName: string;
@@ -40,7 +40,7 @@ export default function ReviewCardView({ userName,photo , date, description, con
             </S.Date>
           </S.UserInfo>
         </View>
-        
+
         <Menu
           isVisible={isPopoverVisible}
           setIsVisible={setIsPopoverVisible}

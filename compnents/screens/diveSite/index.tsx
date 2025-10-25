@@ -15,6 +15,7 @@ import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteRe
 import { Review } from "../../../entities/diveSiteReview";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { NavigationProp } from "../../../providers/navigation";
+import { MetricItem } from "../../../entities/metricItem";
 
 import DiveSiteScreenView from "./diveSite";
 
@@ -22,12 +23,14 @@ type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void;
   restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
+  metricInfo: MetricItem[];
   openPicUploader: () => void;
   openDiveSiteReviewer: () => void;
 };
 
 export default function DiveSiteScreen({
   selectedDiveSite,
+  metricInfo,
   openPicUploader,
   closeParallax,
   restoreParallax,
@@ -60,7 +63,7 @@ export default function DiveSiteScreen({
   };
 
   const handleEditReview = (review: Review) => {
-    navigation.navigate('SiteReviewCreator', {
+    navigation.navigate("SiteReviewCreator", {
       selectedDiveSite: selectedDiveSite.id,
       siteName: selectedDiveSite.name,
       reviewToEdit: review
@@ -68,7 +71,7 @@ export default function DiveSiteScreen({
   };
 
   const handleDeleteReview = (reviewId: number) => {
-    console.log('Report review:', reviewId);
+    console.log("Report review:", reviewId);
   };
 
   const handleMapFlip = async(sites: number[]) => {
@@ -142,6 +145,7 @@ export default function DiveSiteScreen({
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
       tripCount={tripCount}
+      metricInfo={metricInfo}
       itineraries={itineraries}
       reviews={reviews}
       currentUserId={userProfile?.UserID}

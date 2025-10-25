@@ -5,7 +5,6 @@ import { NavigationHeader } from "../compnents/navigationHeader/NavigationHeader
 import { NavigationButton } from "../compnents/navigationHeader/NavigationButton";
 import SiteReviewCreatorScreen from "../compnents/screens/siteReviewCreator/SiteReviewCreatorScreen";
 import MapPage from "../compnents/mapPage/mapPage";
-
 import { Review } from "../entities/diveSiteReview";
 
 export type RootStackParamList = {
@@ -13,7 +12,7 @@ export type RootStackParamList = {
   SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList, 'RootStack'>();
+const Stack = createNativeStackNavigator<RootStackParamList, "RootStack">();
 export type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 export function AppNavigator() {
@@ -23,19 +22,19 @@ export function AppNavigator() {
       initialRouteName="Home"
       screenOptions={{
         headerShown: false,
-        headerTintColor: '#000',
-        headerStyle: { backgroundColor: '#fff' }
+        headerTintColor: "#000",
+        headerStyle: { backgroundColor: "#fff" }
       }}
     >
-      <Stack.Screen name={'Home'} component={MapPage} />
+      <Stack.Screen name={"Home"} component={MapPage} />
       <Stack.Screen
-        name={'SiteReviewCreator'}
+        name={"SiteReviewCreator"}
         component={SiteReviewCreatorScreen}
         options={({ route }) => ({
           headerShown: true,
           header: ({ navigation }) => (
             <NavigationHeader
-              title={'Dive site review'}
+              title={"Dive site review"}
               subtitle={route.params?.siteName}
               left={(
                 <NavigationButton
@@ -44,7 +43,7 @@ export function AppNavigator() {
                 />
               )}
             />
-          )})}
+          ) })}
       />
     </Stack.Navigator>
   );
