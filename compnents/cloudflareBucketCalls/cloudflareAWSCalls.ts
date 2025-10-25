@@ -74,3 +74,28 @@ export const removePhoto = async(values) => {
   }
 
 };
+
+export const removePhotoReviews = async(values) => {
+
+  const shortPath = values.split("/").pop();
+
+  if (shortPath){
+    const input = {
+      "Bucket": "scubaseasons",
+      "Key": shortPath
+    };
+
+    const command = new DeleteObjectCommand(input);
+    const response = await aws3.send(command);
+
+    // if (error) {
+    //   console.log("couldn't upload,", error);
+    // }
+
+    if (response) {
+      console.log(`Deletion of photo: ${shortPath} was sucessful`);
+      return response;
+    }
+  }
+
+};

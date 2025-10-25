@@ -1,12 +1,12 @@
-import type { RouteProp } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import { View } from 'react-native';
+import type { RouteProp } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
 import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
-import { replaceReviewConditionsAtomic } from "../../../supabaseCalls/diveSiteReviewCalls/atomics";
+import { replaceReviewConditionsAtomic, replaceReviewPhotosAtomic } from "../../../supabaseCalls/diveSiteReviewCalls/atomics";
 import { updateDiveSiteReview } from "../../../supabaseCalls/diveSiteReviewCalls/updates";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { ReviewConditionInsert } from "../../../entities/diveSiteReview";
@@ -14,12 +14,16 @@ import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { RootStackParamList } from "../../../providers/navigation";
 import { imageUploadMultiple } from "../imageUploadHelpers";
-import SiteReviewPageView from "./siteReviewCreator";
 import { showError } from "../../toast";
+import { getReviewPhotosByReviewId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
+import { removePhotoReviews } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
+
+import SiteReviewPageView from "./siteReviewCreator";
 import { Form } from "./form";
+import { photoFateDeterminer } from "./photoDeterminer";
 
 type SiteReviewCreatorScreenProps = {
-  route: RouteProp<RootStackParamList, 'SiteReviewCreator'>;
+  route: RouteProp<RootStackParamList, "SiteReviewCreator">;
 };
 
 export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScreenProps) {
@@ -32,7 +36,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
   const [isCompleted, setIsCompleted] = useState(false);
 
   const unitSystem = userProfile && userProfile.unit_system;
-  
+
   let default_viz = 30;
   if (unitSystem === "Imperial"){
     default_viz = 100;
@@ -44,7 +48,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         conditionId: condition.condition_type_id,
         value: condition.value
       })) || [
-        { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 }, 
+        { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 },
         { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }
       ];
 
@@ -66,8 +70,8 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
 
   const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
     defaultValues: getDefaultValues(),
-    mode: 'onChange',
-    reValidateMode: 'onChange'
+    mode: "onChange",
+    reValidateMode: "onChange"
   });
 
   const tryUpload = async(uri: string, index: number) => {
@@ -106,7 +110,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }));
   };
 
-  const handleCreate = async (data: Form) => {
+  const handleCreate = async(data: Form) => {
     const photoUploadPromises = data.Photos.map(async(photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
@@ -151,9 +155,47 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       setIsCompleted(true);
       setTimeout(() => navigation.goBack(), 3000);
     }
-  }
+  };
 
-  const handleUpdate = async (data: Form) => {
+  const handleUpdate = async(data: Form) => {
+
+    const currentPhotos = (await getReviewPhotosByReviewId(reviewToEdit.review_id)).data;
+    const newPhotos = data.Photos;
+
+    const { deletes, uploads } = photoFateDeterminer(currentPhotos, newPhotos);
+
+    const photoUploadPromises = uploads.map(async(photo, index) => {
+      try {
+        const fileName = await tryUpload(photo, index);
+
+        if (!fileName) {
+          throw new Error(t("PicUploader.failedUpload"));
+        }
+        return `animalphotos/public/${fileName}`;
+      } catch (error) {
+        console.error("Upload failed for a photo:", error);
+        throw error;
+      }
+    });
+
+    deletes.map(async(photo) => {
+      try {
+        const fileName = await removePhotoReviews(photo);
+
+        if (!fileName) {
+          throw new Error(t("PicUploader.failedUpload"));
+        }
+        return `animalphotos/public/${fileName}`;
+      } catch (error) {
+        console.error("Upload failed for a photo:", error);
+        throw error;
+      }
+    });
+
+    const uploadedFileNames = await Promise.all(photoUploadPromises);
+    const newPhotosArray = uploadedFileNames.map(fileName => (fileName));
+    data.Photos = newPhotosArray;
+
     try {
       await updateDiveSiteReview(
         { dive_date: data.DiveDate, description: data.Description },
@@ -163,6 +205,13 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       const conditions = formatConditions(data.Conditions, reviewToEdit.review_id);
       await replaceReviewConditionsAtomic(reviewToEdit.review_id, conditions);
 
+      const reviewPhotos = data.Photos.map(photo => ({
+        review_id: reviewToEdit.review_id,
+        photoPath: photo
+      }));
+
+      await replaceReviewPhotosAtomic(reviewToEdit.review_id, reviewPhotos);
+
     } catch (error) {
       console.error("Review update failed:", error);
       showError("Failed to update review");
@@ -170,13 +219,13 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       setIsCompleted(true);
       setTimeout(() => navigation.goBack(), 3000);
     }
-  }
+  };
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async(data: Form) => {
     if (reviewToEdit) {
-      await handleUpdate(data)
+      await handleUpdate(data);
     } else {
-      await handleCreate(data)
+      await handleCreate(data);
     }
   };
 
@@ -189,10 +238,10 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
 
   useEffect(() => {
     void getDiveSiteInfo(selectedDiveSite);
-  }, [selectedDiveSite])
+  }, [selectedDiveSite]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <SiteReviewPageView
         datePickerVisible={datePickerVisible}
         showDatePicker={() => setDatePickerVisible(true)}
@@ -209,5 +258,5 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         trigger={trigger}
       />
     </View>
-  )
+  );
 }

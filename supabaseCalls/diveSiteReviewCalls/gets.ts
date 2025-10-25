@@ -50,3 +50,19 @@ export const getRecentReviewsByUserId= async({ userId, limit }: { userId: string
   }
   return [] as Review[];
 };
+
+export const getReviewPhotosByReviewId = async(reveiw_id: number) => {
+
+  const { data, error } = await supabase.from("diveSiteReviewPhotos")
+    .select()
+    .eq("review_id", reveiw_id);;
+
+  if (error) {
+    console.log("couldn't do it REVIEW_PHOTOS_INSERT,", error);
+  }
+
+  return {
+    data,
+    error,
+  };
+};
