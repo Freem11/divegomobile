@@ -151,7 +151,7 @@ export default function DiveSiteScreenView({
 
             {reviews.map((review) => (
               <ReviewCard
-                key={review.id}
+                key={review.review_id}
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
