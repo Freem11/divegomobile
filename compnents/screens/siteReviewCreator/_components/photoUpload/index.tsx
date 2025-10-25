@@ -7,9 +7,9 @@ import { DiveSiteWithUserName } from "../../../../../entities/diveSite";
 import { SelectedPhotoContext } from "../../../../contexts/selectedPhotoContext";
 import { ActiveTutorialIDContext } from "../../../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../../../contexts/fullScreenModalContext";
-import ImageCasherDynamic from "../../../../helpers/imageCashingDynamic";
 import Icon from "../../../../../icons/Icon";
-import { colors} from "../../../../styles";
+import { colors } from "../../../../styles";
+import ImageCasherDynamicLocal from "../../../../helpers/imageCashingDynamicLocal";
 
 import * as S from "./styles";
 
@@ -29,7 +29,7 @@ export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting, onRemov
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
     setFullScreenModal(true);
-    setActiveTutorialID('PinchAndZoomPhoto');
+    setActiveTutorialID("PinchAndZoomPhoto");
   };
 
   return (
@@ -51,7 +51,7 @@ export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting, onRemov
             }}
           >
             <Icon
-              name={'camera-plus'}
+              name={"camera-plus"}
               color={colors.borderActive}
               width={moderateScale(40)}
               height={moderateScale(40)}
@@ -68,20 +68,20 @@ export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting, onRemov
             }}
           >
             <TouchableWithoutFeedback onPress={() => togglePhotoBoxModal(item.photofile)}>
-              <ImageCasherDynamic
+              <ImageCasherDynamicLocal
                 photoFile={item.photofile}
                 style={{
-                  height: '100%',
-                  width: '100%',
-                  resizeMode: 'cover',
+                  height: "100%",
+                  width: "100%",
+                  resizeMode: "cover",
                 }}
               />
             </TouchableWithoutFeedback>
             {onRemovePhoto && (
               <S.RemoveButton onPress={() => onRemovePhoto(index)}>
                 <Icon
-                  name={'close'}
-                  color={'white'}
+                  name={"close"}
+                  color={"white"}
                   width={moderateScale(16)}
                   height={moderateScale(16)}
                 />

@@ -1,5 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 
 import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegistery";
 import { uploadphoto } from "../cloudflareBucketCalls/cloudflareAWSCalls";
@@ -57,13 +57,22 @@ export const imageUpload = async(image) => {
 
     const newFileUri = FileSystem.documentDirectory + fileName;
 
-    await FileSystem.moveAsync({
-      from: uriLink,
-      to: newFileUri,
-    });
+    try {
+      await FileSystem.copyAsync({
+        from: uriLink,
+        to: newFileUri,
+      });
+
+      await FileSystem.deleteAsync(uriLink);
+
+      console.log(`File successfully moved from ${uriLink} to ${newFileUri}.`);
+
+    } catch (error) {
+      console.error("Error moving file with legacy API:", error);
+    }
 
     const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
-      encoding: FileSystem.EncodingType.Base64,
+      encoding: "base64",
     });
 
     await uploadphoto(fileInfo, fileName);
@@ -85,13 +94,22 @@ export const imageUploadMultiple = async(image, index) => {
 
     const newFileUri = FileSystem.documentDirectory + fileName;
 
-    await FileSystem.moveAsync({
-      from: uriLink,
-      to: newFileUri,
-    });
+    try {
+      await FileSystem.copyAsync({
+        from: uriLink,
+        to: newFileUri,
+      });
+
+      await FileSystem.deleteAsync(uriLink);
+
+      console.log(`File successfully moved from ${uriLink} to ${newFileUri}.`);
+
+    } catch (error) {
+      console.error("Error moving file with legacy API:", error);
+    }
 
     const fileInfo = await FileSystem.readAsStringAsync(newFileUri, {
-      encoding: FileSystem.EncodingType.Base64,
+      encoding: "base64",
     });
 
     await uploadphoto(fileInfo, fileName);
