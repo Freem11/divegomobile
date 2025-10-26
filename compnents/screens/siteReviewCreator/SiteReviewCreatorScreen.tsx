@@ -20,7 +20,7 @@ import { removePhotoReviews } from "../../cloudflareBucketCalls/cloudflareAWSCal
 
 import SiteReviewPageView from "./siteReviewCreator";
 import { Form } from "./form";
-import { photoFateDeterminer } from "./photoDeterminer";
+import { photoFateDeterminer, urlSanitizer } from "./photoManagment";
 
 type SiteReviewCreatorScreenProps = {
   route: RouteProp<RootStackParamList, "SiteReviewCreator">;
@@ -193,21 +193,9 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     });
 
     const uploadedFileNames = await Promise.all(photoUploadPromises);
-    const newPhotosArray = uploadedFileNames.map(fileName => (fileName));
-    //filter out new files as they are going to be added by newPhotosArray
-    const remotePaths =  data.Photos.filter(path =>
-      !path.startsWith("file")
-    );
-    //convert existing photos (with cloudlfare urls) back to "animalphotos/public/" format for re-insertion
-    const convertLinksToNew = remotePaths.map(url => {
-      const lastSlashIndex = url.lastIndexOf("/");
-      const filename = url.substring(lastSlashIndex + 1);
-      return "animalphotos/public/" + filename;
-    });
-    //combine sanitized existing photos with sanitized new photos
-    const combinedPhotos = [ ...convertLinksToNew, ...newPhotosArray];
-    const uniquePhotosSet = new Set(combinedPhotos);
-    data.Photos = [...uniquePhotosSet];
+
+    const { cleanUrls } = urlSanitizer(uploadedFileNames, data.Photos);
+    data.Photos = [...cleanUrls];
 
     try {
       await updateDiveSiteReview(
