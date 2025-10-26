@@ -8,20 +8,30 @@ export type DBPhotoRecord = {
 
 export const photoFateDeterminer = (currentPhotoData: DBPhotoRecord[], newPhotoData: string[] ) => {
 
-  console.log("currentPhotoData", currentPhotoData);
-  console.log("newPhotoData", newPhotoData);
+  const PREFIX = "animalphotos/public/";
+
+  const extractFilename = (pathOrUrl: string) => {
+    return pathOrUrl.split("/").pop() || "";
+  };
 
   const currentPaths = currentPhotoData.map(item => item.photoPath);
   const currentPathsSet = new Set(currentPaths);
 
-  const newPathsSet = new Set(newPhotoData);
+  const newPaths = newPhotoData.map(url => {
+    const filename = extractFilename(url);
+    return PREFIX + filename;
+  });
+  const newPathsSet = new Set(newPaths);
 
   const deletes = currentPaths.filter(path => !newPathsSet.has(path));
-  const uploads = newPhotoData.filter(path => !currentPathsSet.has(path));
+
+  const uploads = newPhotoData.filter(url => {
+    const prefixedPath = PREFIX + extractFilename(url);
+    return !currentPathsSet.has(prefixedPath);
+  });
 
   return {
     deletes,
     uploads
   };
-
 };
