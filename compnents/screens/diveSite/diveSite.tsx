@@ -187,10 +187,10 @@ export default function DiveSiteScreenView({
 
       {reviews.length  > 0 && (
         <S.ButtonContainer>
-          <GhostButton
+          {/* <GhostButton
             onPress={() => null}
             title={"View All Reviews"}
-          />
+          /> */}
         </S.ButtonContainer>
       )}
 

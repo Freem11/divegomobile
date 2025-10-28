@@ -8,10 +8,10 @@ import SealifePreview from "../../reusables/sealifePreview";
 import ReviewCard from "../../reusables/reviewCard";
 import Label from "../../reusables/label-new";
 import EmptyState from "../../reusables/emptyState-new";
-
-import * as S from "./styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+
+import * as S from "./styles";
 
 type UserProfileProps = {
   profilePhotos: DiveSiteWithUserName[] | null;
@@ -60,7 +60,7 @@ export default function UserProfileScreenView({
       />
 
       <S.LabelWrapper>
-        <Label label={'Recent Reviews'} />
+        <Label label={"Recent Reviews"} />
       </S.LabelWrapper>
 
       <S.ReviewsWrapper>
@@ -68,7 +68,7 @@ export default function UserProfileScreenView({
           <S.ReviewsContent>
             {reviews.map((review) => (
               <ReviewCard
-                key={review.id}
+                key={review.review_id}
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
@@ -84,9 +84,9 @@ export default function UserProfileScreenView({
         ) : (
           <S.EmptyStateWrapper>
             <EmptyState
-              iconName={'diving-scuba-flag'}
-              title={'No Reviews Yet'}
-              subtitle={`${profileVals?.userName || 'This user'} hasn't written any dive reviews yet`}
+              iconName={"diving-scuba-flag"}
+              title={"No Reviews Yet"}
+              subtitle={`${profileVals?.userName || "This user"} hasn't written any dive reviews yet`}
             />
           </S.EmptyStateWrapper>
         )}

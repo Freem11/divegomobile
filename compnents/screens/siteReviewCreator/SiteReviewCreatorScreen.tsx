@@ -257,7 +257,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         unitSystem={unitSystem}
         isCompleted={isCompleted}
         trigger={trigger}
-        existingPhotos={reviewToEdit.photos}
+        existingPhotos={reviewToEdit?.photos}
       />
     </View>
   );

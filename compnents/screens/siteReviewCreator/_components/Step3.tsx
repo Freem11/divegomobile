@@ -10,6 +10,7 @@ import { colors } from "../../../styles";
 import { Form } from "../form";
 import * as S from "../styles";
 import { ReviewPhotos } from "../../../../entities/diveSiteReview";
+import { cloudflareBucketUrl } from "../../../globalVariables";
 
 import { PhotoUpload } from "./photoUpload";
 
@@ -64,10 +65,8 @@ export const Step3: React.FC<Step3Props> = ({
   useEffect(() => {
     const tempImagesArray = [];
     existingPhotos?.forEach((image) => {
-      //prod url commented out and test url in in active place
-      // imagesArray.push({ photofile: `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${image.photoPath.split("/").pop()}` });
-      imagesArray.push({ photofile: `https://pub-2c7837e6ce9144f5bba12fc08174562f.r2.dev/${image.photoPath.split("/").pop()}` });
-      tempImagesArray.push(`https://pub-2c7837e6ce9144f5bba12fc08174562f.r2.dev/${image.photoPath.split("/").pop()}`);
+      imagesArray.push({ photofile: `${cloudflareBucketUrl}${image.photoPath.split("/").pop()}` });
+      tempImagesArray.push(`${cloudflareBucketUrl}${image.photoPath.split("/").pop()}`);
       setImages([...images, ...tempImagesArray]);
     });
   },[]);
