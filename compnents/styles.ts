@@ -44,7 +44,7 @@ type FontSizeType = {
   Base: 16,
   Medium: 17,
   Large: 19,
-}
+};
 
 export const fontSizes: FontSizeType = {
   Header: 28,
