@@ -3,10 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Photo } from "../../../entities/photos";
 import { ActiveProfile } from "../../../entities/profile";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { Review } from "../../../entities/diveSiteReview";
 import SealifePreview from "../../reusables/sealifePreview";
+import ReviewCard from "../../reusables/reviewCard";
+import Label from "../../reusables/label-new";
+import EmptyState from "../../reusables/emptyState-new";
 
 import * as S from "./styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type UserProfileProps = {
   profilePhotos: DiveSiteWithUserName[] | null;
@@ -15,7 +20,8 @@ type UserProfileProps = {
   speciesCount: number;
   sightingsCount: number;
   openAllPhotosPage: () => void;
-  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
+  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>;
+  reviews: Review[];
 };
 
 export default function UserProfileScreenView({
@@ -24,12 +30,12 @@ export default function UserProfileScreenView({
   speciesCount,
   sightingsCount,
   openAllPhotosPage,
-  setLevelThreeScreen
+  reviews
 }: UserProfileProps) {
 
   const [profileVals, setProfileVals] = useState(null);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  
+  const { userProfile } = useUserProfile();
+
   useEffect(() => {
     setProfileVals({
       userName: selectedProfile?.UserName,
@@ -52,6 +58,39 @@ export default function UserProfileScreenView({
         onViewMore={openAllPhotosPage}
         selectedProfile={selectedProfile}
       />
+
+      <S.LabelWrapper>
+        <Label label={'Recent Reviews'} />
+      </S.LabelWrapper>
+
+      <S.ReviewsWrapper>
+        {reviews && reviews.length > 0 ? (
+          <S.ReviewsContent>
+            {reviews.map((review) => (
+              <ReviewCard
+                key={review.id}
+                date={review.dive_date}
+                description={review.description}
+                conditions={review.conditions}
+                userName={review.user_name}
+                photo={review.profilePhoto}
+                review={review}
+                currentUserId={userProfile.UserID}
+                onEdit={() => {}}
+                onDelete={() => {}}
+              />
+            ))}
+          </S.ReviewsContent>
+        ) : (
+          <S.EmptyStateWrapper>
+            <EmptyState
+              iconName={'diving-scuba-flag'}
+              title={'No Reviews Yet'}
+              subtitle={`${profileVals?.userName || 'This user'} hasn't written any dive reviews yet`}
+            />
+          </S.EmptyStateWrapper>
+        )}
+      </S.ReviewsWrapper>
     </S.ContentContainer>
   );
 }

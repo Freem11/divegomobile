@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -10,6 +11,11 @@ import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls"
 import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
+import { Review } from "../../../entities/diveSiteReview";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+import { NavigationProp } from "../../../providers/navigation";
+import { MetricItem } from "../../../entities/metricItem";
 
 import DiveSiteScreenView from "./diveSite";
 
@@ -17,15 +23,21 @@ type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void;
   restoreParallax?: () => void;
   selectedDiveSite: DiveSiteWithUserName;
+  metricInfo: MetricItem[];
   openPicUploader: () => void;
+  openDiveSiteReviewer: () => void;
 };
 
 export default function DiveSiteScreen({
   selectedDiveSite,
+  metricInfo,
   openPicUploader,
   closeParallax,
-  restoreParallax
+  restoreParallax,
+  openDiveSiteReviewer
 }: DiveSiteProps) {
+  const navigation = useNavigation<NavigationProp>();
+  const { userProfile } = useUserProfile();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -37,6 +49,7 @@ export default function DiveSiteScreen({
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
   const [itineraries, setItineraries] = useState<ItineraryItem[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const { setSitesArray } = useContext(SitesArrayContext);
 
   const openAllPhotosPage = () => {
@@ -47,6 +60,18 @@ export default function DiveSiteScreen({
   const openAllTripsPage = () => {
     setLevelThreeScreen(true);
     setActiveScreen("DiveSiteTrips");
+  };
+
+  const handleEditReview = (review: Review) => {
+    navigation.navigate("SiteReviewCreator", {
+      selectedDiveSite: selectedDiveSite.id,
+      siteName: selectedDiveSite.name,
+      reviewToEdit: review
+    });
+  };
+
+  const handleDeleteReview = (reviewId: number) => {
+    console.log("Report review:", reviewId);
   };
 
   const handleMapFlip = async(sites: number[]) => {
@@ -77,7 +102,21 @@ export default function DiveSiteScreen({
     if (selectedDiveSite){
       getData(selectedDiveSite);
     }
-  },[selectedDiveSite]);
+  },[selectedDiveSite.id]);
+
+  // Refresh reviews when screen comes back into focus (e.g., after editing a review)
+  useFocusEffect(
+    React.useCallback(() => {
+      refreshReviews();
+    }, [selectedDiveSite?.id])
+  );
+
+  const refreshReviews = async() => {
+    if (selectedDiveSite?.id) {
+      const diveSiteReviews = await getRecentThreeReviewsBySiteId(selectedDiveSite.id);
+      setReviews(diveSiteReviews);
+    }
+  };
 
   const getData = async(selectedDiveSite: DiveSiteWithUserName) => {
     const trips = await getDiveSiteTripCount(selectedDiveSite.id);
@@ -95,6 +134,8 @@ export default function DiveSiteScreen({
     const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
     setItineraries(diveSiteItineraries);
 
+    const diveSiteReviews = await getRecentThreeReviewsBySiteId(selectedDiveSite.id);
+    setReviews(diveSiteReviews);
   };
 
   return (
@@ -104,11 +145,17 @@ export default function DiveSiteScreen({
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
       tripCount={tripCount}
+      metricInfo={metricInfo}
       itineraries={itineraries}
+      reviews={reviews}
+      currentUserId={userProfile?.UserID}
       openPicUploader={openPicUploader}
+      openDiveSiteReviewer={openDiveSiteReviewer}
       openAllPhotosPage={openAllPhotosPage}
       openAllTripsPage={openAllTripsPage}
       handleMapFlip={handleMapFlip}
+      onEditReview={handleEditReview}
+      onDeleteReview={handleDeleteReview}
     />
   );
 

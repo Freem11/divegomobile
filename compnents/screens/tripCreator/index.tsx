@@ -1,18 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
-import { Form } from "./form";
-import TripCreatorPageView from "./tripCreator";
+import moment from "moment";
+
 import { showError, showSuccess } from "../../toast";
 import { getItineraryDiveSiteByIdArray, insertItinerary, insertItineraryRequest } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
-import moment from "moment";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 
+import TripCreatorPageView from "./tripCreator";
+import { Form } from "./form";
 
 type TripCreatorModalProps = {
   closeParallax?: (mapConfig: number) => void
@@ -33,7 +34,7 @@ export default function TripCreatorPage({
   const { editMode } = useContext(EditModeContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const { selectedShop } = useContext(SelectedShopContext);
-  const getTripDiveSites = async (siteIds: number[]) => {
+  const getTripDiveSites = async(siteIds: number[]) => {
     try {
       const success = await getItineraryDiveSiteByIdArray(siteIds);
       if (success) {
@@ -54,11 +55,11 @@ export default function TripCreatorPage({
     getTripDiveSites(sitesArray);
   }, [sitesArray]);
 
-  const onSubmit = async (formData: Required<Form>) => {
+  const onSubmit = async(formData: Required<Form>) => {
 
-    formData = { ...formData, SiteList: sitesArray }
+    formData = { ...formData, SiteList: sitesArray };
 
-    if(editMode){
+    if (editMode){
       const { error } = await insertItineraryRequest({
         OriginalItineraryID: storeFormValues?.OriginalItineraryID,
         shopID: selectedShop.id,
@@ -69,14 +70,14 @@ export default function TripCreatorPage({
         endDate: formData.End,
         description: formData.Details,
         siteList: formData.SiteList
-      }, "Edit")
+      }, "Edit");
       if (error){
-        showError("We were unable to save your submission, please try again later")
+        showError("We were unable to save your submission, please try again later");
         return;
-      } 
+      }
       setSitesArray([]);
-        showSuccess(`Your Trip Edits for: ${formData.Name} has been sucessfuly submitted! Please allow up to 24 hours for us to review and approve it.`);
-      
+      showSuccess(`Your Trip Edits for: ${formData.Name} has been sucessfuly submitted! Please allow up to 24 hours for us to review and approve it.`);
+
     } else {
       const { error } = await insertItinerary({
         shopID: selectedShop.id,
@@ -89,17 +90,17 @@ export default function TripCreatorPage({
         siteList: formData.SiteList
       });
       if (error){
-        showError("We were unable to save your submission, please try again later")
+        showError("We were unable to save your submission, please try again later");
         return;
-      } 
+      }
       setFormValues(null);
       setSitesArray([]);
-        showSuccess(`Your Dive Trip: ${formData.Name} has been sucessfuly submitted!`);
-      
+      showSuccess(`Your Dive Trip: ${formData.Name} has been sucessfuly submitted!`);
+
     }
   };
-  
-  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
+
+  const removeFromSitesArray = async(siteIdNo: number, siteList: number[]) => {
 
     const index = siteList.indexOf(siteIdNo);
     if (index > -1) {
@@ -114,46 +115,45 @@ export default function TripCreatorPage({
   };
 
   useEffect(() => {
-    if(levelTwoScreen){
+    if (levelTwoScreen){
       restoreParallax();
     }
   }, [levelTwoScreen]);
- 
 
-    //date picker stuff
-    const [datePickerVisible, setDatePickerVisible] = useState(false);
-    const [date, setDate] = useState(new Date());
-    const [dateType, setDateType] = useState("");
-    
-    const showDatePicker = (value: string) => {
-      setDateType(value);
-      Keyboard.dismiss();
-      setDatePickerVisible(true);
-    };
-  
-    const hideDatePicker = () => {
-      setDatePickerVisible(false);
-    };
-  
-    const handleDatePickerConfirm = (formData: Required<Form>) => {
-      let formattedDate = moment(date).format("YYYY-MM-DD");
-      setFormValues({ ...formData, [dateType]: formattedDate });
-      hideDatePicker();
-    };
+  //date picker stuff
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [dateType, setDateType] = useState("");
 
-    useEffect(() => {
-      if(itineraryInfo){
-        setFormValues({
-          Name:    itineraryInfo?.tripName || storeFormValues?.Name,
-          Link:    itineraryInfo?.BookingPage || storeFormValues?.Link,
-          Price:   itineraryInfo?.price || storeFormValues?.Price,
-          Start:   itineraryInfo?.startDate || storeFormValues?.Start,
-          End:     itineraryInfo?.endDate || storeFormValues?.End,
-          Details: itineraryInfo?.description || storeFormValues?.Details,
-          OriginalItineraryID: itineraryInfo?.id || storeFormValues?.OriginalItineraryID,
-        })
-      }
-    },[])
+  const showDatePicker = (value: string) => {
+    setDateType(value);
+    Keyboard.dismiss();
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleDatePickerConfirm = (formData: Required<Form>) => {
+    const formattedDate = moment(date).format("YYYY-MM-DD");
+    setFormValues({ ...formData, [dateType]: formattedDate });
+    hideDatePicker();
+  };
+
+  useEffect(() => {
+    if (itineraryInfo){
+      setFormValues({
+        Name:    itineraryInfo?.tripName || storeFormValues?.Name,
+        Link:    itineraryInfo?.BookingPage || storeFormValues?.Link,
+        Price:   itineraryInfo?.price || storeFormValues?.Price,
+        Start:   itineraryInfo?.startDate || storeFormValues?.Start,
+        End:     itineraryInfo?.endDate || storeFormValues?.End,
+        Details: itineraryInfo?.description || storeFormValues?.Details,
+        OriginalItineraryID: itineraryInfo?.id || storeFormValues?.OriginalItineraryID,
+      });
+    }
+  },[]);
 
   return (
     <TripCreatorPageView
@@ -178,5 +178,5 @@ export default function TripCreatorPage({
         Details: storeFormValues?.Details,
       }}
     />
-  )
+  );
 }

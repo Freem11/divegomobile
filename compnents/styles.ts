@@ -2,26 +2,62 @@ import { Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 export const colors = {
-  primaryBlue: "#0073E6",
+  primaryBlue: "#1E70FE",
   headersBlue: "#678FB7",
+  lighterBlue: "#E3EEFF",
   secondaryYellow: "#fdc500",
   themeWhite: "#ffffff",
   themeBlack: "#00171f",
   themeRed: "#E63946",
   themeGreen: "#4caf50",
-  lightGrey: "#e8e8e8",
+  lightGrey: "#AFACAC",
+  lighterGrey: "#F1F1F1",
   neutralGrey: "#A9A9A9",
   darkGrey: "#706b6b",
   buttonPressOverlay: "rgba(128, 128, 128, 0.25)",
   headerButtonOverlay: "rgba(0,0,0,0.4)",
-  searchOverlay: "rgba(128, 128, 128, 0.6)"
+  searchOverlay: "rgba(128, 128, 128, 0.6)",
+  border: "rgba(0,0,0,0.1)",
+  borderActive: "rgba(30,112,254,0.5)",
+  green: "#31AD23",
+  greenLight: "#7fd673",
+  greenLighter: "#eeffe3",
+  yellow: "#f19406",
+  yellowLight: "#fbcb64",
+  yellowLighter: "#fdf7e6",
+  orange: "#e65f11",
+  orangeLight: "#f49a5a",
+  orangeLighter: "#ffefe3",
+  red: "#e1331d",
+  redLight: "#f17768",
+  redLighter: "#fbe5e1",
 };
 
-export const fontSizes = {
+type FontSizeType = {
   Header: 28,
   SubHeading: 20,
   StandardText: 18,
-  SmallText: 16
+  SmallText: 16,
+  Micro: 14,
+  XSmall: 13,
+  Small: 15,
+  Base: 16,
+  Medium: 17,
+  Large: 19,
+}
+
+export const fontSizes: FontSizeType = {
+  Header: 28,
+  SubHeading: 20,
+  StandardText: 18,
+  SmallText: 16,
+  Micro: 14,
+
+  XSmall: 13,
+  Small: 15,
+  Base: 16,
+  Medium: 17,
+  Large: 19,
 };
 
 export const buttonSizes = {
@@ -59,6 +95,7 @@ export const activeFonts = Platform.OS === "android" ? {
   Black: "RobotoBlack",
   BlackItalic: "RobotoBlackItalic",
   Bold: "RobotoBold",
+  Semibold: "SFSemibold",
   BoldItalic: "RobotoBoldItalic",
   Italic: "RobotoItalic",
   Light: "RobotoLight",
@@ -73,6 +110,7 @@ export const activeFonts = Platform.OS === "android" ? {
   BlackItalic: "SFBlackItalic",
   Bold: "SFBold",
   BoldItalic: "SFBoldItalic",
+  Semibold: "SFSemibold",
   Italic: "SFItalic",
   Light: "SFLight",
   LightItalic: "SFLightItalic",

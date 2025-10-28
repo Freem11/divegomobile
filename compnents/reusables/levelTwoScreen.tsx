@@ -5,12 +5,13 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { useActiveScreenStore } from '../../store/useActiveScreenStore';
+
+import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
-import UserProfileParallax from '../screens/userProfile/userProfileParallax';
-import PicUploaderParallax from '../screens/picUploader/picUploaderParallax';
-import SiteSubmitterParallax from '../screens/diveSiteUploader/siteSubmitterParallax';
-import TripCreatorParallax from '../screens/tripCreator/tripCreatorParallax';
+import UserProfileParallax from "../screens/userProfile/userProfileParallax";
+import PicUploaderParallax from "../screens/picUploader/picUploaderParallax";
+import SiteSubmitterParallax from "../screens/diveSiteUploader/siteSubmitterParallax";
+import TripCreatorParallax from "../screens/tripCreator/tripCreatorParallax";
 import { colors } from "../styles";
 import PartnerRequestParallax from "../screens/partnerAccountRequest/partnerRequestParallax";
 
