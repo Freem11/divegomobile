@@ -1,17 +1,18 @@
 import React, { useContext } from "react";
+import { Keyboard } from "react-native";
+import { useTranslation } from "react-i18next";
+
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { TripDetailContext } from "../../contexts/tripDetailsContext";
-import TripImage from '../../png/Trip.png'
-import { Keyboard } from "react-native";
+import TripImage from "../../png/Trip.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { useTranslation } from "react-i18next";
 import { useMapStore } from "../../googleMap/useMapStore";
-import TripCreatorPage from ".";
 
+import TripCreatorPage from ".";
 
 type TripCreatorProps = {
   shopID: number
@@ -26,19 +27,19 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
- 
-  const onClose = async () => {
-    setFormValues(null)
+
+  const onClose = () => {
+    setFormValues(null);
     setEditMode(false);
     setSitesArray([]);
     setTripDiveSites([]);
- 
+
     setLevelTwoScreen(false);
   };
 
   const onNavigate = async() => {
     Keyboard.dismiss();
-    setMapConfig(3, {pageName: "DiveShop", itemId: 0})
+    setMapConfig(3, { pageName: "DiveShop", itemId: 0 });
     setLevelTwoScreen(false);
   };
 
@@ -48,14 +49,14 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
 
   const popoverContent = () => {
     return (
-    <>
-    <IconWithLabel 
-    label={t('TripCreator.cloneButton')}
-    iconName="vector-arrange-below"
-    buttonAction={() => cloneButtonPress()}
-    />
-    </>
-    )
+      <>
+        <IconWithLabel
+          label={t("TripCreator.cloneButton")}
+          iconName="vector-arrange-below"
+          buttonAction={() => cloneButtonPress()}
+        />
+      </>
+    );
   };
 
   return (

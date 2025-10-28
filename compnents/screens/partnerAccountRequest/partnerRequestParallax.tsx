@@ -16,7 +16,7 @@ export default function PartnerRequestParallax() {
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const onClose = async() => {
+  const onClose = () => {
     setFormValues(null);
     setLevelTwoScreen(false);
     setDraggableConfig(null);

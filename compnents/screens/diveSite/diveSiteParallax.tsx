@@ -84,7 +84,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   }, [selectedDiveSite]);
 
-  const onClose = async() => {
+  const onClose = () => {
     setLevelOneScreen(false);
   };
 

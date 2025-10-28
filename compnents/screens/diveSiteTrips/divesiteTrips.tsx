@@ -28,7 +28,7 @@ export default function DiveSiteTripsPageView({
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
-  const onClose = async() => {
+  const onClose = () => {
     setActiveScreen("DiveSiteScreen", { id: selectedDiveSite.id });
     setLevelThreeScreen(false);
   };
