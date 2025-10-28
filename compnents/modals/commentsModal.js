@@ -8,25 +8,26 @@ import {
   Keyboard,
   Dimensions
 } from "react-native";
+import React, { useState, useContext, useEffect, Fragment } from "react";
+import { moderateScale } from "react-native-size-matters";
+import { ScrollView } from "react-native-gesture-handler";
+import { useTranslation } from "react-i18next";
+
+import ButtonIcon from "../reusables/buttonIcon";
 import {
   activeFonts,
   colors,
   fontSizes
 } from "../styles";
-import TextInputField from '../authentication/utils/textInput';
-import React, { useState, useContext, useEffect, Fragment } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { moderateScale } from "react-native-size-matters";
+import TextInputField from "../authentication/utils/textInput";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import {
   insertPhotoComment,
   grabPhotoCommentsByPicId,
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
-import { ScrollView } from "react-native-gesture-handler";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { LevelThreeScreenContext } from "../contexts/levelThreeScreenContext";
-import { useTranslation } from "react-i18next";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 const windowWidth = Dimensions.get("window").width;
@@ -53,32 +54,32 @@ export default function CommentsModal() {
     }
   }, [fullScreenModal]);
 
-  const getAllPictureComments = async (picId) => {
-    let picComments = await grabPhotoCommentsByPicId(picId);
+  const getAllPictureComments = async(picId) => {
+    const picComments = await grabPhotoCommentsByPicId(picId);
     setListOfComments(picComments);
   };
 
   const handleChange = (text) => {
     if (isClearOn) {
-      setIsClearOn(false)
-      return
+      setIsClearOn(false);
+      return;
     }
-    setCommentContent(text)
+    setCommentContent(text);
   };
 
-  const handleCommentInsert = async () => {
-    let userIdentity = null
+  const handleCommentInsert = async() => {
+    let userIdentity = null;
     if (replyTo) {
-      userIdentity = replyTo[1]
+      userIdentity = replyTo[1];
     }
     if (commentContent === null || commentContent === "") {
       return;
     } else {
-      let finalContent
+      let finalContent;
       if (replyTo) {
-        finalContent = "@" + replyTo[0] + " - " + commentContent
+        finalContent = "@" + replyTo[0] + " - " + commentContent;
       } else {
-        finalContent = commentContent
+        finalContent = commentContent;
       }
       // let newComment = await insertPhotoComment(
       //   profile[0].UserID,
@@ -86,20 +87,19 @@ export default function CommentsModal() {
       //   finalContent,
       //   userIdentity
       // );
-      setIsClearOn(true)
+      setIsClearOn(true);
       setCommentContent("");
       setReplyTo(null);
       getAllPictureComments(selectedPicture.id);
-      Keyboard.dismiss()
+      Keyboard.dismiss();
     }
   };
 
-
-  const handleCommentModalClose = async () => {
-    setReplyTo(null)
-    setLevelThreeScreen(true)
-    setFullScreenModal(false)
-  }
+  const handleCommentModalClose = async() => {
+    setReplyTo(null);
+    setLevelThreeScreen(true);
+    setFullScreenModal(false);
+  };
 
   const hideRepliesForChildren = (parentId, newSelectedReplyId) => {
     newSelectedReplyId = [...newSelectedReplyId.filter((id) => parentId !== id)];
@@ -110,20 +110,20 @@ export default function CommentsModal() {
     }
 
     return newSelectedReplyId;
-  }
+  };
 
   const toggleShowReplies = (comment) => {
     if (selectedReplyId.includes(comment.id)) {
-      let selectedReplyIdTemp = hideRepliesForChildren(comment.id, selectedReplyId);
+      const selectedReplyIdTemp = hideRepliesForChildren(comment.id, selectedReplyId);
       setSelectedReplyId(selectedReplyIdTemp);
     } else {
       setSelectedReplyId([...selectedReplyId, comment.id]);
     }
-  }
+  };
 
   const getCommentListView = (commentId, level = 0) => {
-    let marginLeft = 5 * level;
-    let width = 98 - marginLeft;
+    const marginLeft = 5 * level;
+    const width = 98 - marginLeft;
     const marginStyle = StyleSheet.create({
       commentLevelShift: {
         marginLeft: `${marginLeft}%`,
@@ -137,13 +137,13 @@ export default function CommentsModal() {
           listOfComments.map((commentDeets) => {
             if (commentDeets.replied_to === commentId) {
               let nbReplies = 0;
-              for (let comment of listOfComments) {
+              for (const comment of listOfComments) {
                 if (comment.replied_to === commentDeets.id) {
                   nbReplies++;
                 }
               }
               return (
-                selectedReplyId.includes(commentDeets.replied_to) || commentDeets.replied_to === null ?
+                selectedReplyId.includes(commentDeets.replied_to) || commentDeets.replied_to === null ? (
                   <Fragment key={commentDeets.id}>
                     <CommentListItem
                       commentDetails={commentDeets}
@@ -154,14 +154,15 @@ export default function CommentsModal() {
                       nbReplies={nbReplies}
                     />
                     {getCommentListView(commentDeets.id, level + 1)}
-                  </Fragment> : null
+                  </Fragment>
+                ) : null
               );
             }
           }
           )}
       </ScrollView>
-    )
-  }
+    );
+  };
 
   return (
     <View style={styles.commentScreen}>
@@ -177,24 +178,27 @@ export default function CommentsModal() {
 
           <KeyboardAvoidingView
             behavior="position"
-            keyboardVerticalOffset={
-              Platform.OS === "ios"
-                ? moderateScale(650) - moderateScale(340)
-                : moderateScale(650) - moderateScale(340)
-            }
+            keyboardVerticalOffset={Platform.OS === "ios"
+              ? moderateScale(650) - moderateScale(340)
+              : moderateScale(650) - moderateScale(340)}
             style={styles.keyboardAvoid}
           >
             <View style={styles.commentEntryContainer}>
               {replyTo ? (
                 <View style={styles.replyLine}>
                   <Text style={styles.userTxt}>@{replyTo[0]}</Text>
-                  <FontAwesome name="close" color="darkgrey" size={moderateScale(15)} onPress={() => setReplyTo(null)} />
+                  <ButtonIcon
+                    icon="close"
+                    onPress={() => setReplyTo(null)}
+                    size="icon"
+                    fillColor={colors.darkGrey}
+                  />
                 </View>
               ) : null}
               <View style={styles.replyBox}>
                 <TextInputField
                   inputValue={commentContent}
-                  placeHolderText={t('Comments.blowBubbles')}
+                  placeHolderText={t("Comments.blowBubbles")}
                   onChangeText={(text) => handleChange(text)}
                   handleClear={() => handleCommentInsert()}
                 />
