@@ -1,5 +1,5 @@
 export type Review = {
-  id: number;
+  review_id: number;
   active: boolean;
   created_at: string;
   created_by: string;
@@ -16,7 +16,7 @@ export type Review = {
 
 export type ReviewCondition = {
   condition_entry_id: number;
-  condition_type_id: number
+  condition_type_id?: number
   value: number;
 };
 
@@ -38,7 +38,7 @@ export type ReviewConditionInsert = {
   value: number;
 };
 
-export type ReviewPhotosInsert = {
+export type ReviewPhotoInsert = {
   review_id: number;
   photoPath: string;
 };

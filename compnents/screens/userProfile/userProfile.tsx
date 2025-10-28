@@ -11,6 +11,7 @@ import EmptyState from "../../reusables/emptyState-new";
 
 import * as S from "./styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 type UserProfileProps = {
   profilePhotos: DiveSiteWithUserName[] | null;
@@ -29,13 +30,12 @@ export default function UserProfileScreenView({
   speciesCount,
   sightingsCount,
   openAllPhotosPage,
-  setLevelThreeScreen,
   reviews
 }: UserProfileProps) {
 
   const [profileVals, setProfileVals] = useState(null);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  
+  const { userProfile } = useUserProfile();
+
   useEffect(() => {
     setProfileVals({
       userName: selectedProfile?.UserName,
@@ -74,6 +74,10 @@ export default function UserProfileScreenView({
                 conditions={review.conditions}
                 userName={review.user_name}
                 photo={review.profilePhoto}
+                review={review}
+                currentUserId={userProfile.UserID}
+                onEdit={() => {}}
+                onDelete={() => {}}
               />
             ))}
           </S.ReviewsContent>

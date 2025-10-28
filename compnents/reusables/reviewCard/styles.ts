@@ -52,7 +52,6 @@ export const Header = styled.View`
 
 export const UserInfo = styled.View`
   flex-direction: column;
-  width: 100%;
   height: 100%;
   gap: ${moderateScale(4)}px;
   align-items: flex-start;
@@ -68,7 +67,7 @@ export const Title = styled.Text`
 export const Date = styled.Text`
   font-size: ${moderateScale(fontSizes.XSmall)}px;
   font-family: ${activeFonts.Regular};
-  color: ${colors.themeBlack};
+  color: ${colors.darkGrey};
 `;
 
 export const Actions = styled.View`

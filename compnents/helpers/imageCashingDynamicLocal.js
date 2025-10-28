@@ -1,14 +1,10 @@
 import React, { useRef } from "react";
 import { Animated } from "react-native";
 
-import cloudflareBucketUrl from "../globalVariables";
-
-export default function ImageCasherDynamic(props) {
+export default function ImageCasherDynamicLocal(props) {
   const { photoFile, id, style, aspectRatio } = props;
 
-  const fileName = photoFile?.split("/").pop();
-
-  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
+  // const fileName = photoFile?.split("/").pop();
   // const fallbackUri = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/MantaWhite.jpg";
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -23,7 +19,7 @@ export default function ImageCasherDynamic(props) {
 
   return (
     <Animated.Image
-      source={{ uri: remoteUri }}
+      source={{ uri: photoFile }}
       style={{ ...style, width: "100%", aspectRatio: aspectRatio, opacity: fadeAnim }}
       onLoad={handleImageLoad}
     />

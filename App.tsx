@@ -3,7 +3,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { I18nextProvider } from "react-i18next";
 import Toast from "react-native-toast-message";
+import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
+import "web-streams-polyfill";
 import { Platform } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -16,7 +18,6 @@ import { toastConfig } from "./compnents/toast";
 import { i18n, initI18n } from "./i18n";
 import { useUserProfile } from "./store/user/useUserProfile";
 import { useUserHandler } from "./store/user/useUserHandler";
-
 
 export default function App() {
 
@@ -104,12 +105,12 @@ export default function App() {
 
         <I18nextProvider i18n={i18n}>
           {userProfile ? (
-              <NavigationContainer>
-                <AppNavigator />
-              </NavigationContainer>
-            ) : (
-              <Authentication />
-            )}
+            <NavigationContainer>
+              <AppNavigator />
+            </NavigationContainer>
+          ) : (
+            <Authentication />
+          )}
         </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />

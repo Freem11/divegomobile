@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
 
 import { DiveConditions } from "../../../entities/diveSiteCondidtions";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
+import { ReviewPhotos } from "../../../entities/diveSiteReview";
 
 import { ProgressBar, StepNavigation, Step1, Step2, Step3, Step4 } from "./_components";
 import { Form } from "./form";
@@ -24,6 +25,7 @@ type ShopReviewCreatorProps = {
   unitSystem: string;
   isCompleted?: boolean;
   trigger: UseFormTrigger<Form>;
+  existingPhotos: ReviewPhotos[]
 };
 
 export default function SiteReviewPageView({
@@ -38,7 +40,8 @@ export default function SiteReviewPageView({
   onSubmit,
   unitSystem,
   isCompleted = false,
-  trigger
+  trigger,
+  existingPhotos
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
@@ -117,12 +120,12 @@ export default function SiteReviewPageView({
     setValue("Conditions", updatedConditions);
   };
 
-  const handleGoNext = useCallback(async () => {
+  const handleGoNext = useCallback(async() => {
     let fieldsToValidate: (keyof Form)[] = [];
 
     switch (currentStep) {
       case 1:
-        fieldsToValidate = ['DiveDate'];
+        fieldsToValidate = ["DiveDate"];
         break;
       case 2:
         fieldsToValidate = [];
@@ -140,7 +143,7 @@ export default function SiteReviewPageView({
     } else {
       setCurrentStep(currentStep + 1);
     }
-  }, [currentStep, trigger])
+  }, [currentStep, trigger]);
 
   useEffect(() => {
     if (isCompleted) {
@@ -148,18 +151,18 @@ export default function SiteReviewPageView({
     }
   }, [isCompleted]);
 
-  const description = watch('Description');
+  const description = watch("Description");
   const canSubmit = description && description.trim().length > 0;
 
   return (
     <S.ContentContainer>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      
-      <ScrollView 
-        style={{ flex: 1, width: '100%' }}
+
+      <ScrollView
+        style={{ flex: 1, width: "100%" }}
         contentContainerStyle={{ paddingBottom: moderateScale(120) }}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'handled'}
+        keyboardShouldPersistTaps={"handled"}
       >
         {currentStep === 1 && (
           <Step1
@@ -171,7 +174,7 @@ export default function SiteReviewPageView({
             showDatePicker={showDatePicker}
             hideDatePicker={() => {
               hideDatePicker();
-              void trigger(['DiveDate']);
+              void trigger(["DiveDate"]);
             }}
             handleBooleanConditions={handleBooleanConditions}
           />
@@ -190,6 +193,7 @@ export default function SiteReviewPageView({
             setValue={setValue}
             watch={watch}
             errors={errors}
+            existingPhotos={existingPhotos}
           />
         )}
         {currentStep === 4 && (
