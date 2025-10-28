@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Animated } from "react-native";
 
-import cloudflareBucketUrl from "../globalVariables";
+import { cloudflareBucketUrl } from "../globalVariables";
 
 export default function ImageCasherDynamic(props) {
   const { photoFile, id, style, aspectRatio } = props;

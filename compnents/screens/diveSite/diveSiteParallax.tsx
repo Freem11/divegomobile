@@ -63,8 +63,6 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
     }
   };
 
-  console.log("merticInfo", metricInfo);
-
   const getDiveSiteinfo = async() => {
     if (props.siteID){
       const diveSiteinfo = await getDiveSiteById(props.siteID);

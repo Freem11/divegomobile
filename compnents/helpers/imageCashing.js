@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Image } from "react-native";
 import * as FileSystem from "expo-file-system/legacy";
 
-import cloudflareBucketUrl from "../globalVariables";
+import { cloudflareBucketUrl } from "../globalVariables";
 import noImage from "../png/NoImage.png"; // image module
 
 export default function ImageCasher({ photoFile, style }) {
