@@ -12,6 +12,7 @@ import {
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
+
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
@@ -59,40 +60,39 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     }
   }, [levelTwoScreen]);
 
-useEffect(() => {
-  const onKeyboardShow = (e: KeyboardEvent) => {
-    const height = e.endCoordinates.height;
-    const diff = height - keyboardOffset.value;
-    if (diff > 0) {
-      keyboardOffset.value = height;
-      dynamicScreenHeight.value = SCREEN_HEIGHT - height;
+  useEffect(() => {
+    const onKeyboardShow = (e: KeyboardEvent) => {
+      const height = e.endCoordinates.height;
+      const diff = height - keyboardOffset.value;
+      if (diff > 0) {
+        keyboardOffset.value = height;
+        dynamicScreenHeight.value = SCREEN_HEIGHT - height;
 
-      translateY.value = withTiming(translateY.value - diff, {
+        translateY.value = withTiming(translateY.value - diff, {
+          duration: 250,
+          easing: Easing.out(Easing.ease),
+        });
+      }
+    };
+
+    const onKeyboardHide = () => {
+      dynamicScreenHeight.value = SCREEN_HEIGHT;
+
+      translateY.value = withTiming(translateY.value + keyboardOffset.value, {
         duration: 250,
         easing: Easing.out(Easing.ease),
       });
-    }
-  };
+      keyboardOffset.value = 0;
+    };
 
-  const onKeyboardHide = () => {
-    dynamicScreenHeight.value = SCREEN_HEIGHT;
+    const showSub = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
+    const hideSub = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
 
-    translateY.value = withTiming(translateY.value + keyboardOffset.value, {
-      duration: 250,
-      easing: Easing.out(Easing.ease),
-    });
-    keyboardOffset.value = 0;
-  };
-
-  const showSub = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
-  const hideSub = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
-
-  return () => {
-    showSub.remove();
-    hideSub.remove();
-  };
-}, []);
-
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const bottomHitCountRef = useSharedValue(bottomHitCount);
   useEffect(() => {
@@ -202,7 +202,7 @@ useEffect(() => {
 
   const animatedSafeAreaStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
     };
   });
 
@@ -224,6 +224,24 @@ useEffect(() => {
     }
   };
 
+  const cleanupAndClose = (
+    mapConfig: number | null,
+    currentScreen: ActiveSceen
+  ) => {
+    runOnJS(setSavedTranslateY)(getHalfHeight());
+    runOnJS(setEditInfo)(null);
+
+    if (!editInfo) {
+      runOnJS(updateActiveScreen)(currentScreen, currentScreen, setActiveScreen);
+    }
+
+    if (mapConfig === 1) {
+      runOnJS(onMapFlip)();
+    }
+
+    runOnJS(onClose)();
+  };
+
   const closeParallax = (mapConfig: number | null) => {
     const currentScreen: ActiveSceen = activeScreen;
     setSavedTranslateY(translateY.value);
@@ -234,19 +252,7 @@ useEffect(() => {
         translateY.value = 0;
         startY.value = 0;
 
-        if (!editInfo) {
-          runOnJS(updateActiveScreen)(currentScreen, currentScreen, setActiveScreen);
-          runOnJS(setEditInfo)(null);
-        } else {
-          runOnJS(setEditInfo)(null);
-        }
-
-        if (mapConfig === 1) {
-          runOnJS(onMapFlip)();
-        } else {
-          runOnJS(setSavedTranslateY)(getHalfHeight());
-          runOnJS(onClose)();
-        }
+        runOnJS(cleanupAndClose)(mapConfig, currentScreen);
       }
     });
   };

@@ -1,26 +1,24 @@
+import React, { useState, useCallback, useLayoutEffect, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, {
-  useState,
-  useCallback,
-  useLayoutEffect,
-  useEffect,
-} from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { I18nextProvider } from "react-i18next";
+import Toast from "react-native-toast-message";
+import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
+import "web-streams-polyfill";
 import { Platform } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import Toast from "react-native-toast-message";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { I18nextProvider } from "react-i18next";
 
 import MapPage from "./compnents/mapPage/mapPage";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
-import { i18n, initI18n } from "./i18n";
+import { AppNavigator } from "./providers/navigation";
 import { toastConfig } from "./compnents/toast";
-import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationNavigator from "./compnents/authentication/authNavigator";
 import { useUserProfile } from "./store/user/useUserProfile";
 import { useUserHandler } from "./store/user/useUserHandler";
+import { initI18n, i18n } from "./i18n";
 
 export default function App() {
 
@@ -31,12 +29,14 @@ export default function App() {
   const { userProfile } = useUserProfile();
   const userHandler = useUserHandler();
 
+  /* eslint-disable @typescript-eslint/no-require-imports */
   const [fontsLoaded] = useFonts({
     RobotoBlack: require("./assets/Roboto/Roboto-Black.ttf"),
     SFBlack: require("./assets/SanFran/SF-Pro-Display-Black.otf"),
     RobotoBlackItalic: require("./assets/Roboto/Roboto-BlackItalic.ttf"),
     SFBlackItalic: require("./assets/SanFran/SF-Pro-Display-BlackItalic.otf"),
     RobotoBold: require("./assets/Roboto/Roboto-Bold.ttf"),
+    SFSemibold: require("./assets/SanFran/SF-Pro-Display-Semibold.otf"),
     SFBold: require("./assets/SanFran/SF-Pro-Display-Bold.otf"),
     RobotoBoldItalic: require("./assets/Roboto/Roboto-BoldItalic.ttf"),
     SFBoldItalic: require("./assets/SanFran/SF-Pro-Display-BoldItalic.otf"),
@@ -57,6 +57,7 @@ export default function App() {
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
     SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
   });
+  /* eslint-enable @typescript-eslint/no-require-imports */
 
   useEffect(() => {
     initI18n();
@@ -103,13 +104,13 @@ export default function App() {
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
           <I18nextProvider i18n={i18n}>
+          <NavigationContainer>
             {userProfile ? (
               <MapPage />
             ) : (
-              <NavigationContainer>
-                <AuthenticationNavigator />
-              </NavigationContainer>
+              <AuthenticationNavigator />
             )}
+          </NavigationContainer>
           </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />

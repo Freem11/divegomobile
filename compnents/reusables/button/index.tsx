@@ -22,14 +22,12 @@ export type ButtonProps = {
 export default function Button(props: ButtonProps & StandardButtonProps) {
   const { iconLeft, iconRight, round = true, ...rest } = props;
 
+  const ButtonElement = props.disabled ? S.DisabledButton : S.StyledButton;
+  const TextElement = props.disabled ? S.DisabledButtonText : S.StyledButtonText;
+
   return (
-    <S.StyledTouchableHighlight
-      underlayColor={colors.buttonPressOverlay}
-      round={round}
-      {...rest}
-      onPress={() => props.onPress()}
-    >
-      <S.StyledButton round={round} {...rest}>
+    <S.StyledTouchableHighlight underlayColor={colors.themeWhite} {...rest} onPress={() => props.onPress()}>
+      <ButtonElement round={round} {...rest}>
         {iconLeft && (
           <S.IconWrapperLeft size={props.size}>
             <Icon
@@ -39,9 +37,9 @@ export default function Button(props: ButtonProps & StandardButtonProps) {
           </S.IconWrapperLeft>
         )}
 
-        <S.StyledButtonText alt={props.alt} size={props.size}>
+        <TextElement alt={props.alt} size={props.size}>
           {props.title}
-        </S.StyledButtonText>
+        </TextElement>
 
         {iconRight && (
           <S.IconWrapperRight size={props.size}>
@@ -51,7 +49,7 @@ export default function Button(props: ButtonProps & StandardButtonProps) {
             />
           </S.IconWrapperRight>
         )}
-      </S.StyledButton>
+      </ButtonElement>
     </S.StyledTouchableHighlight>
   );
 }

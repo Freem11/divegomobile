@@ -75,7 +75,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
 
   }, [selectedShop]);
 
-  const onClose = async() => {
+  const onClose = () => {
     setLevelOneScreen(false);
   };
 

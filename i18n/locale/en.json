@@ -83,131 +83,172 @@
         "myLocationButton": "Use my location",
         "myLocationexplainer": "This can take up to 30 seconds",
         "successUpload": "{{site}} has been successfully submitted! Please allow up to 24 hours for us to review and approve it.",
-    "pinButton": "Drop a pin",
-    "submitButton": "Submit"
-  },
-  "PicUploader": {
-    "header": "Your Sea Creature Sighting",
-    "uploadButton": "Upload a Photo",
-    "whatLabel": "What you saw",
-    "whatPlaceholder": "Sea Life Encountered",
-    "whenLabel": "When you saw it",
-    "whenPlaceholder": "Date of Sighting",
-    "whereLabel": "Where you saw it",
-    "wherePlaceholder": "Location of Sighting",
-    "noPreviewAvailable": "No preview available",
-    "submitButton": "Submit",
-    "fillRequiredFields": "Please fill in all required fields.",
-    "uploadFailedTitle": "Upload Failed",
-    "couldUploadMsg": "Couldnt upload {{animal}} on {{diveSite}}",
-    "offlineMsg": "You are offline / slow network. Retry from the feed menu.",
-    "successUpload": "Your photo of {{sealife}} uploaded successfully! Please allow up to 24 hours for our team to review and approve it.",
-    "failedUpload": "Photo upload failed.",
-    "failedToSave": "Failed to save a photo",
-    "noPictureFound": "No picture found, reupload",
-    "retryFailedUpload": "Retry upload failed, you should try to reupload the photo"
-  },
-  "DiveCenterList": {
-    "header": "My Dive Centers",
-    "newTrip": "New Trip"
-  },
-  "TripCreator": {
-    "header": "New Trip Creation",
-    "headerEdit": "Submit Trip Edits",
-    "cloneButton": "Clone This Trip",
-    "tripNamePlaceholder": "Your Trip's Name",
-    "bookingLinkPlaceholder": "Link to your trip's booking page",
-    "pricePlaceholder": "Trip Price",
-    "startDatePlaceholder": "Start Date",
-    "endDatePlaceholder": "End Date",
-    "tripDescriptionPlaceholder": "Please add any further details about your trip that you think would be helpful in promoting your trip to divers.\\n\\nWe recommend a daily itinerary",
-    "submitButton": "Submit",
-    "selectSitesButton": "Select Dive Sites",
-    "drawerHeader": "Possible Sites in this Trip   (Press to Remove)",
-    "emptyDrawer": "No Dive Sites have been added to this Trip yet."
-  },
-  "UserProfile": {
-    "drawerHeader": "'s Sea Creature Encounters",
-    "emptyDrawer": " hasn't posted any sightings yet.",
-    "userDoesFollow": "Following",
-    "UserDoesNotFollow": "Follow"
-  },
-  "DiveSite": {
-    "drawerHeader": "Sea Creature Sightings",
-    "emptyDrawer": "No sightings at this site yet.",
-    "aLittleAbout": "A little about {{siteName}}",
-    "addSighting": "Add a Sighting",
-    "report": "Report an issue"
-  },
-  "DiveShop": {
-    "drawerHeader": "Offered Dive Trips",
-    "emptyDrawer": " aren't currently offering any Dive Trips",
-    "addTrip": "Create Diving Trip"
-  },
-  "Auth": {
-    "diveIn": "Dive in...",
-    "noAccount": "Don't have an account ?",
-    "forgotPassword": "Forgot your password ?",
-    "socialText": "Social Sign In:",
-    "alreadyHaveAccount": "Already have an account ?",
-    "resetPassword": "Reset Password",
-    "enterAccountEmail": "Enter Your Account Email",
-    "sendRecoverEmail": "Send Email"
-  },
-  "Photo": {
-    "diveDeeper": "Dive Deeper!"
-  },
-  "CautionModal": {
-    "cannotComplete": "Your {{confirmationType}} cannot be completed just yet.",
-    "tripSubmissionBlurb": "Trip Submission is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.",
-    "seaCreatureSubmissionBlurb": "In order to sucessfully submit your sea creature sighting, please provide a photo as well as the name of the species of sea creature in the photo as well as the date it was photographed. \n \n Note: The location will be automatically assumed to be the dive site you opened this page from.",
-    "diveSiteBlurb": "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.",
-    "partnerAccountBlurb": "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.",
-    "tripEditBlurb": "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it."
-  },
-  "PictureModal": {
-    "beFirstToComment": "Be the first to comment",
-    "commentOrViewAll": "Comment / View all ${{count}} Comments",
-    "shareMessage": "Check out this cool pic of a {{creature}} on Scuba SEAsons! It was taken by {{user}} at the dive site: {{diveSite}}, in {{location}} on {{date}}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n{{link}}",
-    "goToLocation": "Go to this location!",
-    "addedBy": "Added by: {{user}}"
-  },
-  "ConfirmSuccessModal": {
-    "succesfullySubmitted": "Your {{confirmationType}} was successully submitted!",
-    "allow24HoursToProcess": "Please allow up to 24 hours for it to be reviewed and approved.",
-    "checkOpeningBlurb": "Check it by opening up your dive center on the map.",
-    "waitTillProccessOrBeContacted": "We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies."
-  },
-  "Comments": {
-    "hideReplies": "Hide Replies",
-    "viewReplies": "Show {{ count }} Replies",
-    "blowBubbles": "Blow some bubbles"
-  },
-  "Validators": {
-    "requiredDiverName": "Your diver name cannot be blank!",
-    "diverNameTaken": "Sorry that diver name has already been taken",
-    "fillAllFields": "Please fill out all fields",
-    "fillEmailAndPassword": "Please fill out both email and password",
-    "invalidCredentials": "The credentials you supplied are not valid",
-    "fillEmail": "Please provide an email.",
-    "passwordFormat": "Your password must be 6 characters or greater",
-    "accountExistMsg": "You have already registered this account, please use the log in page",
-    "whatYouSaw": "Please tell us what you saw",
-    "whenYouSaw": "Please tell us when you saw it",
-    "noPicture": "No picture uploaded"
-  },
-  "Toast": {
-    "success": "Success",
-    "error": "Error",
-    "warning": "Warning",
-    "info": "Info",
-    "warningMessage": "Something is missing...",
-    "errorMessage": "Something went wrong...",
-    "successMessage": "Everything went just fine!",
-    "pleaseWait": "Please wait..."
-  },
-  "Feed": {
-    "noFeeds": "No feed items yet.",
-    "openNotifications": "Open Notifications List"
-  }
+        "pinButton": "Drop a pin",
+        "submitButton": "Submit"
+    },
+    "PicUploader": {
+        "header": "Your Sea Creature Sighting",
+        "uploadButton": "Upload a Photo",
+        "whatLabel": "What you saw",
+        "whatPlaceholder": "Sea Life Encountered",
+        "whenLabel": "When you saw it",
+        "whenPlaceholder": "Date of Sighting",
+        "whereLabel": "Where you saw it",
+        "wherePlaceholder": "Location of Sighting",
+        "noPreviewAvailable": "No preview available",
+        "submitButton": "Submit",
+        "fillRequiredFields": "Please fill in all required fields.",
+        "uploadFailedTitle": "Upload Failed",
+        "couldUploadMsg": "Couldnt upload {{animal}} on {{diveSite}}",
+        "offlineMsg": "You are offline / slow network. Retry from the feed menu.",
+        "successUpload": "Your photo of {{sealife}} uploaded successfully! Please allow up to 24 hours for our team to review and approve it.",
+        "failedUpload": "Photo upload failed.",
+        "failedToSave": "Failed to save a photo",
+        "noPictureFound": "No picture found, reupload",
+        "retryFailedUpload": "Retry upload failed, you should try to reupload the photo"
+    },
+    "DiveSiteReviewer": {
+        "header": "Dive Site Review: \n{{siteName}}",
+        "step1Title": "When & how you dived",
+        "step1Description": "Let's start with the basics - when did you dive and what type of dive was it?",
+        "step2Title": "What were the conditions?",
+        "step2Description": "Tell us about the diving conditions you experienced during your dive.",
+        "step3Title": "Share your experience",
+        "step3Description": "Describe your dive and share photos to help other divers know what to expect.",
+        "diveDate": "Date",
+        "datePlaceholder": "Date of your dive ",
+        "viz": "Visibility (Est.)",
+        "current": "Current Intensity (Est.)",
+        "currentDirection": "Current Direction",
+        "typOfDive": "Type of dive",
+        "shoreDiveButton": "Shore",
+        "boatDiveButton": "Boat",
+        "nightDiveButton": "Night",
+        "altitudeDiveButton": "Altitude",
+        "wreckDiveButton": "Wreck",
+        "caveDiveButton": "Cave",
+        "typeOfWater": "Water type",
+        "saltWaterButton": "Salt",
+        "freshWaterButton": "Fresh",
+        "atTheSurface": "At the surface",
+        "trafficButton": "Boat / Surfer Traffic",
+        "surgeButton": "Surge",
+        "inTheWater": "In the water",
+        "noRefsButton": "Blue / Black Water",
+        "limitsButton": "Depth > AOW Limit",
+        "kelpButton": "Kelp",
+        "pollutionButton": "Pollution",
+        "latCurrentButton": "Lateral",
+        "upCurrentButton": "Up-welling",
+        "downCurrentButton": "Down-welling",
+        "contrastCurrentButton": "Contrasting",
+        "description": "Describe your dive",
+        "reviewDescriptionPlaceholder": "Tell others what it was like to dive at {{siteName}}!",
+        "addPhotos": "Dive Photos",
+        "completeTitle": "Review Submitted!",
+        "completeDescription": "Your dive site review has been successfully submitted and will help fellow divers plan their next adventure."
+    },
+    "DiveCenterList": {
+        "header": "My Dive Centers",
+        "newTrip": "New Trip"
+    },
+    "TripCreator": {
+        "header": "New Trip Creation",
+        "headerEdit": "Submit Trip Edits",
+        "cloneButton": "Clone This Trip",
+        "tripNamePlaceholder": "Your Trip's Name",
+        "bookingLinkPlaceholder": "Link to your trip's booking page",
+        "pricePlaceholder": "Trip Price",
+        "startDatePlaceholder": "Start Date",
+        "endDatePlaceholder": "End Date",
+        "tripDescriptionPlaceholder": "Please add any further details about your trip that you think would be helpful in promoting your trip to divers.\\n\\nWe recommend a daily itinerary",
+        "submitButton": "Submit",
+        "selectSitesButton": "Select Dive Sites",
+        "drawerHeader": "Possible Sites in this Trip   (Press to Remove)",
+        "emptyDrawer": "No Dive Sites have been added to this Trip yet."
+    },
+    "UserProfile": {
+        "drawerHeader": "'s Sea Creature Encounters",
+        "emptyDrawer": " hasn't posted any sightings yet.",
+        "userDoesFollow": "Following",
+        "UserDoesNotFollow": "Follow"
+    },
+    "DiveSite": {
+        "drawerHeader": "Sea Creature Sightings",
+        "emptyDrawer": "No sightings at this site yet.",
+        "aLittleAbout": "A little about {{siteName}}",
+        "addReview": "Review this Dive Site",
+        "addSighting": "Add a Sighting",
+        "report": "Report an issue"
+    },
+    "DiveShop": {
+        "drawerHeader": "Offered Dive Trips",
+        "emptyDrawer": " aren't currently offering any Dive Trips",
+        "addTrip": "Create Diving Trip"
+    },
+    "Auth": {
+        "diveIn": "Dive in...",
+        "noAccount": "Don't have an account ?",
+        "forgotPassword": "Forgot your password ?",
+        "socialText": "Social Sign In:",
+        "alreadyHaveAccount": "Already have an account ?",
+        "resetPassword": "Reset Password",
+        "enterAccountEmail": "Enter Your Account Email",
+        "sendRecoverEmail": "Send Email"
+    },
+    "Photo": {
+        "diveDeeper": "Dive Deeper!"
+    },
+    "CautionModal": {
+        "cannotComplete": "Your {{confirmationType}} cannot be completed just yet.",
+        "tripSubmissionBlurb": "Trip Submission is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it.",
+        "seaCreatureSubmissionBlurb": "In order to sucessfully submit your sea creature sighting, please provide a photo as well as the name of the species of sea creature in the photo as well as the date it was photographed. \n \n Note: The location will be automatically assumed to be the dive site you opened this page from.",
+        "diveSiteBlurb": "Your dive site submission is still missing required information, please make changes and when the indicator to turns green your submission will be ready to submit.",
+        "partnerAccountBlurb": "Your request is still missing required information, please ensure that you fill out all four fields to sucessfully complete your request.",
+        "tripEditBlurb": "Trip edit request is still missing required information, please ensure that you fill out any fields highlighted in pink to sucessfully complete it."
+    },
+    "PictureModal": {
+        "beFirstToComment": "Be the first to comment",
+        "commentOrViewAll": "Comment / View all ${{count}} Comments",
+        "shareMessage": "Check out this cool pic of a {{creature}} on Scuba SEAsons! It was taken by {{user}} at the dive site: {{diveSite}}, in {{location}} on {{date}}.\nMaybe we should start contributing our pics as well!\n\nLearn more about it here:\n{{link}}",
+        "goToLocation": "Go to this location!",
+        "addedBy": "Added by: {{user}}"
+    },
+    "ConfirmSuccessModal": {
+        "succesfullySubmitted": "Your {{confirmationType}} was successully submitted!",
+        "allow24HoursToProcess": "Please allow up to 24 hours for it to be reviewed and approved.",
+        "checkOpeningBlurb": "Check it by opening up your dive center on the map.",
+        "waitTillProccessOrBeContacted": "We are reviewing your submission. Please allow up to 24 hours for it to be reviewed and approved. \n \n We may contact you if we need to confirm any discrepancies."
+    },
+    "Comments": {
+        "hideReplies": "Hide Replies",
+        "viewReplies": "Show {{ count }} Replies",
+        "blowBubbles": "Blow some bubbles"
+    },
+    "Validators": {
+        "requiredDiverName": "Your diver name cannot be blank!",
+        "diverNameTaken": "Sorry that diver name has already been taken",
+        "fillAllFields": "Please fill out all fields",
+        "fillEmailAndPassword": "Please fill out both email and password",
+        "invalidCredentials": "The credentials you supplied are not valid",
+        "passwordFormat": "Your password must be 6 characters or greater",
+        "accountExistMsg": "You have already registered this account, please use the log in page",
+        "whatYouSaw": "Please tell us what you saw",
+        "whenYouSaw": "Please tell us when you saw it",
+        "noPicture": "No picture uploaded"
+    },
+    "Toast": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "warningMessage": "Something is missing...",
+        "errorMessage": "Something went wrong...",
+        "successMessage": "Everything went just fine!",
+        "pleaseWait": "Please wait..."
+    },
+    "Feed": {
+        "noFeeds": "No feed items yet.",
+        "openNotifications": "Open Notifications List"
+    }
 }
