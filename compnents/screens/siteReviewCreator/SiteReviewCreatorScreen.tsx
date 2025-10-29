@@ -179,7 +179,14 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     });
 
     const photoDeletePromises = deletes.map(async(photo) => {
-      if ((currentPhotos.photoPath === photo) && (currentPhotos.decision === "Header Photo" ||  currentPhotos.decision === "Sighting")){
+      const isGated = currentPhotos.some(
+        (currentPhoto) =>
+          currentPhoto.photoPath === photo &&
+          (currentPhoto.decision === "Header Photo" ||
+            currentPhoto.decision === "Sighting")
+      );
+
+      if (isGated) {
         return null;
       } else {
         try {
