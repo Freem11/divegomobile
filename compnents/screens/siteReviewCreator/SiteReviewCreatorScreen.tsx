@@ -178,20 +178,25 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       }
     });
 
-    deletes.map(async(photo) => {
-      try {
-        const fileName = await removePhotoReviews(photo);
+    const photoDeletePromises = deletes.map(async(photo) => {
+      if ((currentPhotos.photoPath === photo) && (currentPhotos.decision === "Header Photo" ||  currentPhotos.decision === "Sighting")){
+        return null;
+      } else {
+        try {
+          const fileName = await removePhotoReviews(photo);
 
-        if (!fileName) {
-          throw new Error(t("PicUploader.failedUpload"));
+          if (!fileName) {
+            throw new Error(t("PicUploader.failedUpload"));
+          }
+          return `animalphotos/public/${fileName}`;
+        } catch (error) {
+          console.error("Upload failed for a photo:", error);
+          throw error;
         }
-        return `animalphotos/public/${fileName}`;
-      } catch (error) {
-        console.error("Upload failed for a photo:", error);
-        throw error;
       }
     });
 
+    await Promise.all(photoDeletePromises);
     const uploadedFileNames = await Promise.all(photoUploadPromises);
 
     const { cleanUrls } = urlSanitizer(uploadedFileNames, data.Photos);
