@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import NetInfo from "@react-native-community/netinfo";
 
 /**
@@ -13,8 +13,8 @@ export async function checkFileExists(
     typeof uri === "string"
       ? uri
       : typeof uri === "object" && typeof uri.uri === "string"
-      ? uri.uri
-      : null;
+        ? uri.uri
+        : null;
 
   if (!resolvedUri) return { isExist: false, resolvedUri: null };
 

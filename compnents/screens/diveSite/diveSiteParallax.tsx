@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Keyboard } from "react-native";
-import { useTranslation } from "react-i18next";
-import email from "react-native-email";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+import { Keyboard } from "react-native";
+import email from "react-native-email";
+import { useRoute, RouteProp } from "@react-navigation/native";
 
+import { NavigationProp } from "../../../providers/navigation";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -16,18 +18,25 @@ import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
+import { MetricItem } from "../../../entities/metricItem";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 
 import { useDiveSiteNavigation } from "./types";
 
 import DiveSiteScreen from "./index";
+import { useAppNavigation } from "../../mapPage/types";
+import { MainRoutes } from "../../mapPage/mainNavigator";
 
 type DiveSiteParallaxProps = {
   id: number;
 };
+
+type DiveSiteRouteProp = RouteProp<MainRoutes, "DiveSite">;
+
 export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
-  // const route = useRoute<DiveSiteRouteProp>();
+  const route = useRoute<DiveSiteRouteProp>();
   const navigation = useNavigation();
   const diveSiteNavigation = useDiveSiteNavigation();
   // const { id } = route.params;
@@ -35,6 +44,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const { userProfile } = useUserProfile();
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+  // const navigation = useNavigation<NavigationProp>();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
@@ -51,12 +61,22 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
+  const [metricInfo, setMetricInfo] = useState<MetricItem[]>(null);
+
   useEffect(() => {
     getDiveSiteinfo();
+    getMetrics();
     if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.id]);
+
+  const getMetrics = async () => {
+    if (props.id) {
+      const monthlyMetrics = await allMetrics(props.id);
+      setMetricInfo(monthlyMetrics);
+    }
+  };
 
   const getDiveSiteinfo = async () => {
     if (props.id) {
@@ -92,6 +112,13 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     setLevelOneScreen(false);
   };
 
+  const openDiveSiteReviewer = () => {
+    navigation.navigate("SiteReviewCreator", {
+      selectedDiveSite: selectedDiveSite.id,
+      siteName: selectedDiveSite.name
+    });
+  };
+
   const openPicUploader = () => {
     diveSiteNavigation.navigate("AddSighting", { selectedDiveSite });
   };
@@ -122,6 +149,11 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
           />
         )}
         <IconWithLabel
+          label={t("DiveSite.addReview")}
+          iconName="diving-scuba-flag"
+          buttonAction={() => openDiveSiteReviewer()}
+        />
+        <IconWithLabel
           label={t("DiveSite.addSighting")}
           iconName="camera-plus"
           buttonAction={() => openPicUploader()}
@@ -146,6 +178,8 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
       <DiveSiteScreen
         selectedDiveSite={selectedDiveSite}
         openPicUploader={openPicUploader}
+        openDiveSiteReviewer={openDiveSiteReviewer}
+        metricInfo={metricInfo}
       />
     </ParallaxDrawer>
   );

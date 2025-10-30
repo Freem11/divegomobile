@@ -24,7 +24,7 @@ export default function ButtonIcon(props: ButtonIconProps & StandardButtonProps)
         <S.IconWrapper>
           <Icon name={icon as IconName} fill={fillColor? fillColor : colors.themeWhite}/>
         </S.IconWrapper>
-        {title && <S.StyledButtonText>{title}</S.StyledButtonText>} 
+        {title && <S.StyledButtonText>{title}</S.StyledButtonText>}
       </S.StyledButton>
     </S.StyledTouchableHighlight>
   );

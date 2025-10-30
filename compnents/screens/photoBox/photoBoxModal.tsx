@@ -3,46 +3,44 @@ import {
   Dimensions,
 } from "react-native";
 import Animated from "react-native-reanimated";
+import { GestureDetector } from "react-native-gesture-handler";
+import React, { useContext } from "react";
+
 import {
   colors,
 } from "../../styles";
-import * as S from "./styles";
-import * as FileSystem from "expo-file-system";
-import { GestureDetector } from "react-native-gesture-handler";
-import React, { useContext } from "react";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
+
+import * as S from "./styles";
 import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
+import { useAppNavigation } from "../../mapPage/types";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal() {
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  
-  const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
-  usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
 
-  let fileName = selectedPhoto && selectedPhoto.split("/").pop();
+  const navigation = useAppNavigation();
+
+  const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
+    usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
+
+  const fileName = selectedPhoto && selectedPhoto.split("/").pop();
   let cacheDir = null;
 
   if (fileName) {
-    cacheDir = FileSystem.cacheDirectory + fileName;
+    cacheDir = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
   }
-
-  const onCloseModal = () => {
-    setFullScreenModal(false);
-  };
 
   return (
     <S.ContentContainer>
       <S.BackButtonWrapper>
         <ButtonIcon
           icon="chevron-left"
-          onPress={() => onCloseModal()}
+          onPress={() => navigation.goBack()}
           size="small"
           fillColor={colors.themeWhite}
         />
@@ -63,7 +61,7 @@ export default function PhotoBoxModal() {
                 uri: cacheDir,
               }}
               onError={(e) => {
-                console.log('Image load error:', e.nativeEvent.error);
+                console.log("Image load error:", e.nativeEvent.error);
               }}
               style={[
                 animatedPictureStyle,
@@ -94,5 +92,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
 

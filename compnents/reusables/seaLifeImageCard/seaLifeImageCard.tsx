@@ -18,8 +18,10 @@ import { windowWidth } from "../paginator/styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { cloudflareBucketUrl } from "../../globalVariables";
 
 import * as S from "./styles";
+import { useAppNavigation } from "../../mapPage/types";
 
 interface Photo {
   UserID: string;
@@ -50,7 +52,6 @@ interface PictureProps {
 const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
@@ -65,7 +66,9 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   // Construct remote image URL
   const fileName = pic.photoFile?.split("/").pop();
-  const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
+  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
+
+  const navigation = useAppNavigation();
 
   // useEffect(() => {
   //   if (remoteUri) {
@@ -96,7 +99,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }).catch(console.error);
   };
 
-  const handleLike = async(picId: number) => {
+  const handleLike = async (picId: number) => {
     if (picLiked) {
       await deletePhotoLike(likeData);
       setPicLiked(false);
@@ -111,8 +114,8 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
+    // FixMe : the photos do not load due to reason : Image load error: /data/user/0/com.freem11.divegomobile/cache/1695744846541.jpg: open failed: ENOENT (No such file or directory)
+    navigation.navigate("PinchAndZoomPhoto")
   };
 
   const containerWidth = windowWidth - windowWidth * 0.07;

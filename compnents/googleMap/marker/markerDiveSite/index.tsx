@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View } from "react-native";
 import { Marker } from "react-native-maps";
 import Svg, { Path } from "react-native-svg";
@@ -23,7 +23,7 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   const navigation = useAppNavigation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const mapConfig = useMapStore((state) => state.mapConfig);
-
+  const [tracksViewChanges, setTracksViewChanges] = useState(true);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
@@ -50,9 +50,11 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
       }
     }
   }
+
   return (
     <Marker
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={() => setTracksViewChanges(false)}
       coordinate={props.coordinate}
       onPress={handlePress}
     >

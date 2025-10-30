@@ -26,7 +26,6 @@ export const Content = styled.Text`
   font-family: ${activeFonts.Light};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
-  margin-top: ${moderateScale(20)}px;
   text-align: center;
 `;
 
@@ -34,7 +33,8 @@ export const Contributor = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Medium};
   color: ${colors.darkGrey};
-  margin-top: ${moderateScale(20)}px;
+  margin-top: ${moderateScale(5)}px;
+  text-align: center;
 `;
 
 export const LabelWrapper = styled.View`
@@ -55,6 +55,10 @@ export const Stats = styled.Text`
   margin-bottom: ${moderateScale(20)}px;
 `;
 
+export const ReviewsWrapper = styled.View`
+  padding: 0 ${moderateScale(20)}px;
+`;
+
 export const ItinerariesWrapper = styled.View`
   padding: 0 ${moderateScale(20)}px;
 `;
@@ -63,6 +67,42 @@ export const ButtonContainer = styled.View`
   align-items: center;
 `;
 
+export const ReviewsContent = styled.View`
+`;
+
+export const ButtonContainerReviews = styled.View`
+  margin-top: ${moderateScale(-20)}px;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: ${moderateScale(40)}px;
+`;
+
 export const EmptyStateWrapper = styled.View`
   padding: ${moderateScale(40)}px 0;
+`;
+
+export const LabelsContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: ${moderateScale(6)}px;
+  margin-left: ${moderateScale(10)}px;
+  padding-vertical: ${moderateScale(25)}px;
+  width: 95%;
+`;
+
+export const TagWrapper = styled.View`
+  background-color: ${colors.lighterBlue};
+  border-radius: ${moderateScale(7)}px;
+  justify-content: center;
+  align-items: center;
+  padding-vertical: ${moderateScale(5)}px;
+  padding-horizontal: ${moderateScale(10)}px;
+`;
+
+export const TagText = styled.Text`
+  font-size: ${moderateScale(fontSizes.XSmall)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.primaryBlue};
 `;

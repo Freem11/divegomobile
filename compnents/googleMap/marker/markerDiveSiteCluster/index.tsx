@@ -1,12 +1,13 @@
-import React from 'react';
-import { View } from 'react-native';
-import { Marker } from 'react-native-maps';
-import Svg, { Circle, Path } from 'react-native-svg';
-import { useMapStore } from '../../useMapStore';
-import { Coordinates } from '../../../../entities/coordinates';
-import iconConfig from '../../../../icons/_config.json';
-import { colors } from "../../../styles";
+import React, { useState } from "react";
+import { View } from "react-native";
+import { Marker } from "react-native-maps";
+import Svg, { Circle, Path } from "react-native-svg";
 import { moderateScale } from "react-native-size-matters";
+
+import { useMapStore } from "../../useMapStore";
+import { Coordinates } from "../../../../entities/coordinates";
+import iconConfig from "../../../../icons/_config.json";
+import { colors } from "../../../styles";
 
 type MarkerDiveSiteClusterProps = {
   coordinate: Coordinates;
@@ -15,7 +16,8 @@ type MarkerDiveSiteClusterProps = {
 
 export function MarkerDiveSiteCluster(props: MarkerDiveSiteClusterProps) {
   const mapRef = useMapStore((state) => state.mapRef);
-  const pathData = iconConfig.anchors?.[1] ?? '';
+  const pathData = iconConfig.anchors?.[1] ?? "";
+  const [tracksViewChanges, setTracksViewChanges] = useState(true);
 
   const scale = 0.85;
   const center = 256;
@@ -23,7 +25,8 @@ export function MarkerDiveSiteCluster(props: MarkerDiveSiteClusterProps) {
 
   return (
     <Marker
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={() => setTracksViewChanges(false)}
       coordinate={props.coordinate}
       onPress={() => {
         const expansionZoom = Math.min(props.getExpansionZoom(), 16);

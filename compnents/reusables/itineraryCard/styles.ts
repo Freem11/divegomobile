@@ -6,7 +6,7 @@ import { colors, fontSizes, activeFonts } from "../../styles";
 import Button from "../button";
 
 export const Card = styled.View`
-  border-color: ${colors.lightGrey};
+  border-color: ${colors.border};
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(12)}px;
   width: 100%;

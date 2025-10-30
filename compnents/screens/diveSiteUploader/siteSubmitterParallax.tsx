@@ -5,10 +5,10 @@ import { useNavigation } from "@react-navigation/native";
 
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import boatImage from "../../png/boat.png";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
 import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 import { useAppNavigation } from "../../mapPage/types";
 

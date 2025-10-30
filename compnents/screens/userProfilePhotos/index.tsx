@@ -2,11 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { getPhotosByUserWithExtra } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { Photo } from "../../../entities/photos";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
@@ -14,13 +11,12 @@ import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import UserProfilePhotosPageView from "./userProfilePhotos";
+import { useAppNavigation } from "../../mapPage/types";
 
 type UserProfilePhotosPageProps = {};
 
-export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
+export default function UserProfilePhotosPage({ }: UserProfilePhotosPageProps) {
   const mapRef = useMapStore((state) => state.mapRef);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
@@ -32,7 +28,9 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
 
   const { t } = useTranslation();
 
-  const getPhotos = async(selectedProfile, profile: ActiveProfile) => {
+  const navigation = useAppNavigation();
+
+  const getPhotos = async (selectedProfile, profile: ActiveProfile) => {
     let photos;
     if (selectedProfile?.UserID) {
       photos = await getPhotosByUserWithExtra(
@@ -54,7 +52,7 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
     }
   }, [selectedProfile, userProfile]);
 
-  const handleDiveSiteMove = async(pic: Photo, photoPacket) => {
+  const handleDiveSiteMove = async (pic: Photo, photoPacket) => {
 
     const coordinates = [{
       latitude: pic.latitude,
@@ -74,7 +72,7 @@ export default function UserProfilePhotosPage({}: UserProfilePhotosPageProps) {
     <UserProfilePhotosPageView
       photos={profilePhotos}
       title={selectedProfile && selectedProfile.UserName}
-      setLevelThreeScreen={setLevelThreeScreen}
+      onClose={navigation.goBack}
       handleDiveSiteMove={handleDiveSiteMove}
     />
   );

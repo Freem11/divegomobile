@@ -2,17 +2,19 @@ import React, { useContext } from "react";
 
 import ShopListPage from ".";
 
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
+
 ;
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
+
+import Center from "../../png/Beach.jpg";
+import { useMapStore } from "../../googleMap/useMapStore";
+import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 
 import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { useMapStore } from "../../googleMap/useMapStore";
-import Center from "../../png/Beach.jpg";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
 
 type ShopListParallaxNavigationProp = BottomTabNavigationProp<
   BottomTabRoutes,

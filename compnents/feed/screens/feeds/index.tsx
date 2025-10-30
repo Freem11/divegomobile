@@ -7,22 +7,20 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useFeedDataStore } from "../../store/useFeedDataStore";
 import { moderateScale } from "react-native-size-matters";
+import { useTranslation } from "react-i18next";
+
+import { useFeedDataStore } from "../../store/useFeedDataStore";
 import { activeFonts, colors } from "../../../styles";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useFeedScreenStore } from "../../store/useScreenStore";
+import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
+import ButtonIcon from "../../../reusables/buttonIcon";
+
 import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
-import { useTranslation } from "react-i18next";
-import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
-import ButtonIcon from "../../../reusables/buttonIcon";
 import * as S from "./styles";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { BottomTabRoutes } from "../../../mapPage/bottomTabNavigator";
-import { useNavigation } from "@react-navigation/native";
+import { useAppNavigation } from "../../../mapPage/types";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -47,14 +45,10 @@ const windowHeight = Dimensions.get("window").height;
 //   },
 // ];
 
-type FeedListNavigationProp = BottomTabNavigationProp<
-  BottomTabRoutes,
-  "Notifications"
->;
 
 export default function FeedList() {
   const { t } = useTranslation();
-  const navigation = useNavigation<FeedListNavigationProp>();
+  const navigation = useAppNavigation();
   const feedItems = useFeedDataStore((state) => state.feedItems);
   //const feedItems = mockFeedItems;
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
@@ -65,7 +59,6 @@ export default function FeedList() {
   useEffect(() => {
     loadFeedItems();
   }, []);
-
 
   const renderItem = ({ item }: { item: FeedItem }) => {
     switch (item.type) {
@@ -99,7 +92,7 @@ export default function FeedList() {
       <S.Header>Your Notifications</S.Header>
 
       {feedItems.length === 0 ? (
-        <Text style={styles.emptyMessage}>{t('Feed.noFeeds')}</Text>
+        <Text style={styles.emptyMessage}>{t("Feed.noFeeds")}</Text>
       ) : (
         <FlatList
           data={feedItems}

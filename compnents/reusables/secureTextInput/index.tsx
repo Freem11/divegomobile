@@ -1,5 +1,5 @@
-import React, { ForwardedRef, useRef } from "react";
-import { TextInput, TextInputProps as RNTextInputProps } from "react-native";
+import React, { ForwardedRef } from "react";
+import { TextInput, TextInputProps as RNTextInputProps, TouchableOpacity } from "react-native";
 
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
@@ -27,7 +27,7 @@ const SecureTextInput = React.forwardRef<TextInput, SecureTextInputProps>(functi
   return (
     <S.TextInputWrapper>
       <S.IconWrapperLeft>
-        <Icon name={"lock-outline"} fill={colors.neutralGrey}/>
+        <Icon name={"lock-outline"} fill={colors.primaryBlue}/>
       </S.IconWrapperLeft>
 
       <S.StyledTextInput
@@ -37,9 +37,14 @@ const SecureTextInput = React.forwardRef<TextInput, SecureTextInputProps>(functi
         placeholderTextColor={colors.neutralGrey}
         {...rest}
       />
-      <S.IconWrapperRight onPress={() => onClick()}>
-        {secure ? <Icon name={"eye-off"} fill={colors.neutralGrey} onPress={() => onClick()}/>: <Icon name={"eye"} fill={colors.neutralGrey} onPress={() => onClick()}/>}
-      </S.IconWrapperRight>
+      <TouchableOpacity onPress={() => onClick()}>
+        <S.IconWrapperRight>
+          {secure ? 
+            <Icon name={"eye-off"} fill={colors.neutralGrey}/>
+            : <Icon name={"eye"} fill={colors.neutralGrey}/>
+          }
+        </S.IconWrapperRight>
+      </TouchableOpacity>
     </S.TextInputWrapper>
   );
 });
