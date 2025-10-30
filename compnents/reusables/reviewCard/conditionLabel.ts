@@ -1,0 +1,64 @@
+import { ReviewCondition } from "../../../entities/diveSiteReview";
+
+export function renderLabel(condition: ReviewCondition) {
+  const getStrength = (value) => {
+    if (value <= 1) {
+      return "Weak";
+    } else if (value <= 1.5) {
+      return "Moderate";
+    } else if (value <= 2) {
+      return "Strong";
+    } else {
+      return "Dangerous";
+    }
+  };
+
+  switch (condition.condition_type_id) {
+    case 1:
+    case 7:
+    case 14:
+      return null;
+    case 2:
+      return "Boat Dive";
+    case 3:
+      return "Night Diving";
+    case 4:
+      return "Altitude";
+    case 5:
+      return "Wreck Dive";
+    case 6:
+      return "Cave Dive";
+    case 8:
+      return "Fresh Water";
+    case 9:
+      return "Surface Traffic";
+    case 10:
+      return "Surge";
+    case 11:
+      return "No Reference Points";
+    case 12:
+      return "Bottom Depth > AOW";
+    case 13:
+      return "Kelp Present";
+    case 15:
+      if (condition.value < 10) {
+        return "Poor Visibility";
+      } else if (condition.value > 10 && condition.value < 20) {
+        return "Moderate Visibility";
+      } else {
+        return "Great Visibility";
+      }
+    case 16:
+      return null;
+    case 17:
+      return `${getStrength(condition.value)} Lateral Currents`;
+    case 18:
+      return `${getStrength(condition.value)} Upwellings`;
+    case 19:
+      return `${getStrength(condition.value)} Downwellings`;
+    case 20:
+      return `${getStrength(condition.value)} Contrasting Currents`;
+    default:
+      return null;
+  }
+}

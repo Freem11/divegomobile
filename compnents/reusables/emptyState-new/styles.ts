@@ -25,7 +25,7 @@ export const IconWrapper = styled.View`
   width: ${moderateScale(50)}px;
 `;
 export const IconContainer = styled.View`
-  background: ${colors.lightGrey};
+  background: ${colors.border};
   height: ${moderateScale(100)}px;
   width: ${moderateScale(100)}px;
   border-radius: ${moderateScale(130)}px;

@@ -57,7 +57,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
   const renderListHeader = useMemo(() => (
     <S.FilterContainer>
       <MobileTextInput
-        iconLeft={"fish"}
+        iconLeft={"shark"}
         iconRight={"close"}
         placeholder="Filter Sea Creatures"
         onChangeText={(text: string) => setFilterValue(text)}
@@ -96,14 +96,14 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
           ListEmptyComponent={(
             <S.EmptyStateWrapper>
               <EmptyState
-                iconName="fish"
+                iconName="shark"
                 title="No Sea Life Sightings in this area!"
                 subtitle={"Currently no one has submitted any sea life sightings in this area, if you have, please add it to the dive site you were diving at!"}
               />
               <Button
                 size="thin"
                 title={"Nearby Dive Sites"}
-                iconLeft="fish"
+                iconLeft="shark"
                 round={false}
                 style={{ marginLeft: "10%", width: "80%" }}
                 onPress={() => scrollToDiveSiteList()}

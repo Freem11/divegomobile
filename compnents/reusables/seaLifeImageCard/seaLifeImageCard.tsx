@@ -18,6 +18,7 @@ import { windowWidth } from "../paginator/styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { cloudflareBucketUrl } from "../../globalVariables";
 
 import * as S from "./styles";
 import { useAppNavigation } from "../../mapPage/types";
@@ -65,7 +66,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   // Construct remote image URL
   const fileName = pic.photoFile?.split("/").pop();
-  const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
+  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
 
   const navigation = useAppNavigation();
 

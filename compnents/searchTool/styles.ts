@@ -18,7 +18,7 @@ export const SearchInputContainer = styled.View`
 
 export const PositioningWrapper = styled.View`
   padding-top: ${Platform.OS  === "android" ? moderateScale(50) : windowWidth > 700 ? moderateScale(15) : 0};
-  padding-bottom: 25;
+  padding-bottom: 25px;
   align-self: center;
   z-index: 20; 
 `;

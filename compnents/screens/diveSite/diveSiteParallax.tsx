@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Keyboard } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
+import { Keyboard } from "react-native";
 import email from "react-native-email";
 import { useRoute, RouteProp } from "@react-navigation/native";
 
+import { NavigationProp } from "../../../providers/navigation";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -16,6 +18,8 @@ import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
+import { MetricItem } from "../../../entities/metricItem";
 import { MainRoutes } from "../../mapPage/mainNavigator";
 
 import DiveSiteScreen from ".";
@@ -31,6 +35,7 @@ export default function DiveSiteParallax() {
   const { userProfile } = useUserProfile();
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+  // const navigation = useNavigation<NavigationProp>();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
@@ -46,12 +51,22 @@ export default function DiveSiteParallax() {
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
+  const [metricInfo, setMetricInfo] = useState<MetricItem[]>(null);
+
   useEffect(() => {
     getDiveSiteinfo();
+    getMetrics();
     if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [id]);
+
+  const getMetrics = async () => {
+    if (id) {
+      const monthlyMetrics = await allMetrics(props.siteID);
+      setMetricInfo(monthlyMetrics);
+    }
+  };
 
   const getDiveSiteinfo = async () => {
     if (id) {
@@ -87,6 +102,13 @@ export default function DiveSiteParallax() {
     setLevelOneScreen(false);
   };
 
+  const openDiveSiteReviewer = () => {
+    navigation.navigate("SiteReviewCreator", {
+      selectedDiveSite: selectedDiveSite.id,
+      siteName: selectedDiveSite.name
+    });
+  };
+
   const openPicUploader = () => {
     setActiveScreen("PictureUploadScreen", selectedDiveSite);
     setLevelOneScreen(false);
@@ -120,6 +142,11 @@ export default function DiveSiteParallax() {
           />
         )}
         <IconWithLabel
+          label={t("DiveSite.addReview")}
+          iconName="diving-scuba-flag"
+          buttonAction={() => openDiveSiteReviewer()}
+        />
+        <IconWithLabel
           label={t("DiveSite.addSighting")}
           iconName="camera-plus"
           buttonAction={() => openPicUploader()}
@@ -144,6 +171,8 @@ export default function DiveSiteParallax() {
       <DiveSiteScreen
         selectedDiveSite={selectedDiveSite}
         openPicUploader={openPicUploader}
+        openDiveSiteReviewer={openDiveSiteReviewer}
+        metricInfo={metricInfo}
       />
     </ParallaxDrawer>
   );

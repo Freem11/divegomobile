@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import DiveSiteUploader from ".";
+import { Keyboard } from "react-native";
+
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import boatImage from "../../png/boat.png";
-import { Keyboard } from "react-native";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
 import { useAppNavigation } from "../../mapPage/types";
+import DiveSiteUploader from ".";
 
 export default function SiteSubmitterParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);

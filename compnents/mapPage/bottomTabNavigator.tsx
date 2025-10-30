@@ -101,7 +101,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
         switch (route) {
             case "Home": return { icon: "shark", label: t("BottomTabBar.home") };
             case "Profile": return { icon: "person", label: t("BottomTabBar.profile") };
-            case "Notifications": return { icon: "dive-watch", label: t("BottomTabBar.notifications") };
+            case "Notifications": return { icon: "bell-ring-outline", label: t("BottomTabBar.notifications") };
             case "AddSite": return { icon: "anchor-plus", label: t("BottomTabBar.addsite") };
             case "Guides": return { icon: "question-mark", label: t("BottomTabBar.guides") };
             case "Itinerary": return { icon: "diving-scuba-flag", label: t("BottomTabBar.itinerary") };

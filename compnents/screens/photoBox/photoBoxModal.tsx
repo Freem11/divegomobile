@@ -3,16 +3,17 @@ import {
   Dimensions,
 } from "react-native";
 import Animated from "react-native-reanimated";
+import { GestureDetector } from "react-native-gesture-handler";
+import React, { useContext } from "react";
+
 import {
   colors,
 } from "../../styles";
-import * as S from "./styles";
-import * as FileSystem from "expo-file-system";
-import { GestureDetector } from "react-native-gesture-handler";
-import React, { useContext } from "react";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
+
+import * as S from "./styles";
 import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
 import { useAppNavigation } from "../../mapPage/types";
 
@@ -27,11 +28,11 @@ export default function PhotoBoxModal() {
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
     usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
 
-  let fileName = selectedPhoto && selectedPhoto.split("/").pop();
+  const fileName = selectedPhoto && selectedPhoto.split("/").pop();
   let cacheDir = null;
 
   if (fileName) {
-    cacheDir = FileSystem.cacheDirectory + fileName;
+    cacheDir = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
   }
 
   return (
@@ -60,7 +61,7 @@ export default function PhotoBoxModal() {
                 uri: cacheDir,
               }}
               onError={(e) => {
-                console.log('Image load error:', e.nativeEvent.error);
+                console.log("Image load error:", e.nativeEvent.error);
               }}
               style={[
                 animatedPictureStyle,
@@ -91,5 +92,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
 
