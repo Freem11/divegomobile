@@ -14,6 +14,7 @@ Geocoder.init(GoogleMapsApiKey);
 
 export default function useSearchTool() {
   const activeSearchValueRef = useRef("");
+  const skipNextSearchRef = useRef(false);
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setAnimalMultiSelection } = useContext(
@@ -50,12 +51,19 @@ export default function useSearchTool() {
 
   const handleDataList = async(value: string) => {
 
+    if (value === activeSearchValueRef.current && activeSearchValueRef.current !== "") {
+      console.log(`Defense: Blocking search for final selected value: ${value}`);
+      return;
+    }
+
     const requestValue = value;
     activeSearchValueRef.current = requestValue;
 
-    const placesData = await getPlaces(value);
-    const diveSiteData = await getSiteNamesThatFit(value);
-    const seacreatureData = await getSeaCreatures(value, 4);
+    const [placesData, diveSiteData, seacreatureData] = await Promise.all([
+      getPlaces(requestValue),
+      getSiteNamesThatFit(requestValue),
+      getSeaCreatures(requestValue, 4),
+    ]);
 
     if (activeSearchValueRef.current !== requestValue) {
       console.log(`Ignoring stale results for: ${requestValue}`);
@@ -80,6 +88,12 @@ export default function useSearchTool() {
   };
 
   const handleChange = (text: string) => {
+    if (skipNextSearchRef.current) {
+      skipNextSearchRef.current = false;
+      setSearchValue(text);
+      return;
+    }
+
     if (isClearOn) {
       setIsClearOn(false);
     }
@@ -168,9 +182,12 @@ export default function useSearchTool() {
   };
 
   const finalizeSelection = (selection: string) => {
+    skipNextSearchRef.current = true;
+
     activeSearchValueRef.current = selection;
     setList([]);
     Keyboard.dismiss();
+
     setTextSource(false);
     setPreviousSearchValue(selection);
     setSearchValue(selection);
