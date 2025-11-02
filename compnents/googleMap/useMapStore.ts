@@ -59,7 +59,12 @@ const mutator = (set, get) => ({
       set({ mapConfig: config, navProps });
     },
     setFormValues: (values: {}) => {
-      set({ formValues: values });
+      set((state) => ({
+        formValues: {
+          ...state.formValues,
+          ...values,
+        }
+      }));
     },
   },
 }
