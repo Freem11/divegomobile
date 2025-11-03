@@ -130,7 +130,7 @@ export default function PicUploader({
 
       const fullPath = `animalphotos/public/${fileName}`;
 
-      if (!selectedDiveSite || !profile) {
+      if (!selectedDiveSite || !userProfile) {
         throw new Error(t("PicUploader.missingData"));
       }
 
