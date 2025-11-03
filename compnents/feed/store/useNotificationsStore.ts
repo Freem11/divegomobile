@@ -1,24 +1,23 @@
 import { create } from "zustand";
 import type { Notification } from "./types";
-//import { Pagination, PagedCollection } from "../../utils/pagination";
-//import { fetchNotificationsPageOffset, fetchNotificationsCount } from "../../";
 import { PagedCollection } from "../../../entities/pagedCollection";
 import { Pagination } from "../../../entities/pagination";
 import {
   fetchNotificationsPageOffset,
   getNotificationsCount,
+  markAllNotificationsSeen,
+  markNotificationSeen,
 } from "../../../supabaseCalls/notificationsSupabaseCalls";
 
 interface NotifState {
   userId: string | null;
   count: number;
   list: PagedCollection<Notification>;
-
   init: (userId: string) => Promise<void>;
+  refreshCount: () => Promise<void>;
   loadFirst: () => Promise<void>;
   loadMore: () => Promise<void>;
-  refreshCount: () => Promise<void>;
-  markAllSeen: () => Promise<void>; // добавишь при необходимости
+  markOneSeen: (id: number) => Promise<void>;
   reset: () => void;
 }
 
@@ -29,11 +28,7 @@ export const useNotificationsStore = create<NotifState>((set, get) => ({
     items: [],
     hasMore: true,
     isLoading: false,
-    pagination: new Pagination({
-      page: 1,
-      sort: "desc",
-      ipp: Pagination.defaultIpp,
-    }),
+    pagination: new Pagination({ page: 1, sort: "desc" }),
   }),
 
   async init(userId) {
@@ -48,98 +43,54 @@ export const useNotificationsStore = create<NotifState>((set, get) => ({
     set({ count });
   },
 
-  //   async loadFirst() {
-  //     const { userId, list } = get();
-  //     if (!userId) return;
-
-  //     const pagination = new Pagination({ page: 1, sort: list.pagination.sort, ipp: list.pagination.ipp });
-
-  //     set({ list: { ...list, isLoading: true, pagination } });
-
-  //     const { items, hasMore } = await fetchNotificationsPageOffset({ userId, pagination });
-
-  //     set((state) => PagedCollection.updateItems(
-  //       { ...state.list, isLoading: false, hasMore },
-  //       items,
-  //       /* reset */ true,
-  //       pagination
-  //     ));
-  //   },
-
   async loadFirst() {
-    const { userId, list } = get();
+    const { userId } = get();
     if (!userId) return;
+    const pagination = new Pagination({ page: 1, sort: "desc" });
+    set((s) => ({ list: { ...s.list, isLoading: true, pagination } }));
 
-    const pagination = new Pagination({
-      page: 1,
-      sort: list.pagination.sort,
-      ipp: list.pagination.ipp,
-    });
-
-    // флаг загрузки
-    set((state) => ({ list: { ...state.list, isLoading: true, pagination } }));
-
-    const { items } = await fetchNotificationsPageOffset({
-      userId,
-      pagination,
-    });
-
-    // ВАЖНО: вернуть partial state — { list: ... }
-    set((state) => ({
-      list: PagedCollection.updateItems(
-        { ...state.list, isLoading: false }, // prev: PagedCollection<T>
-        items, // items: T[]
-        /* reset */ true, // после первой страницы — reset
-        pagination
-      ),
-    }));
+    try {
+      const { items, hasMore } = await fetchNotificationsPageOffset({
+        userId,
+        pagination,
+      });
+      set((s) => ({
+        list: PagedCollection.updateItems(
+          { ...s.list, isLoading: false, hasMore },
+          items,
+          true,
+          pagination
+        ),
+      }));
+    } catch {
+      set((s) => ({ list: { ...s.list, isLoading: false } }));
+    }
   },
 
-  //   async loadMore() {
-  //     const { userId, list } = get();
-  //     if (!userId || list.isLoading || !list.hasMore) return;
-
-  //     const pagination = list.pagination.next();
-
-  //     set({ list: { ...list, isLoading: true, pagination } });
-
-  //     const { items, hasMore } = await fetchNotificationsPageOffset({
-  //       userId,
-  //       pagination,
-  //     });
-
-  //     set((state) =>
-  //       PagedCollection.updateItems(
-  //         { ...state.list, isLoading: false, hasMore },
-  //         items,
-  //         /* reset */ false,
-  //         pagination
-  //       )
-  //     );
-  //   },
-
-  async loadMore() {
+ async loadMore() {
     const { userId, list } = get();
     if (!userId || list.isLoading || !list.hasMore) return;
-
     const pagination = list.pagination.next();
+    set((s) => ({ list: { ...s.list, isLoading: true, pagination } }));
 
-    set((state) => ({ list: { ...state.list, isLoading: true, pagination } }));
-
-    const { items } = await fetchNotificationsPageOffset({
-      userId,
-      pagination,
-    });
-
-    set((state) => ({
-      list: PagedCollection.updateItems(
-        { ...state.list, isLoading: false }, // prev
-        items,
-        /* reset */ false, // при догрузке аппендим
-        pagination
-      ),
-    }));
+    try {
+      const { items, hasMore } = await fetchNotificationsPageOffset({
+        userId,
+        pagination,
+      });
+      set((s) => ({
+        list: PagedCollection.updateItems(
+          { ...s.list, isLoading: false, hasMore },
+          items,
+          false,
+          pagination
+        ),
+      }));
+    } catch {
+      set((s) => ({ list: { ...s.list, isLoading: false } }));
+    }
   },
+
 
   reset() {
     set({
@@ -158,6 +109,72 @@ export const useNotificationsStore = create<NotifState>((set, get) => ({
   },
 
   async markAllSeen() {
-    // опционально: реализуй как в прошлом ответе, если нужно
+    const { userId } = get();
+    if (!userId) return;
+    set((s) => ({
+      count: 0,
+      list: new PagedCollection<Notification>({
+        ...s.list,
+        items: (s.list.items ?? []).map((n) =>
+          n.is_seen ? n : { ...n, is_seen: true }
+        ),
+      }),
+    }));
+
+    try {
+      await markAllNotificationsSeen(userId);
+    } catch (e) {
+      console.warn("markAllSeen failed", e);
+    }
+  },
+
+  async reload(reset = true) {
+    const { userId, list } = get();
+    if (!userId) return;
+
+    const pagination = reset
+      ? new Pagination({
+        page: 1,
+        sort: list.pagination.sort,
+        ipp: list.pagination.ipp,
+    })
+      : list.pagination;
+
+    set({ list: { ...list, isLoading: true, pagination } });
+    const { items, hasMore } = await fetchNotificationsPageOffset({
+      userId,
+      pagination,
+    });
+
+    set({
+      list: new PagedCollection({
+        ...list,
+        items,
+        hasMore,
+        isLoading: false,
+        pagination,
+      }),
+    });
+  },
+
+  async markOneSeen(id) {
+    const { list, count } = get();
+
+    set({
+      count: Math.max(0, count - 1),
+      list: new PagedCollection({
+        ...list,
+        items:
+          list.items?.map((n) =>
+            n.id === id ? { ...n, is_seen: true } : n
+          ) ?? [],
+      }),
+    });
+
+    try {
+      await markNotificationSeen(id);
+    } catch (e) {
+      console.warn("markOneSeen error", e);
+    }
   },
 }));

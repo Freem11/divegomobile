@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Controller, useForm } from "react-hook-form";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
@@ -152,7 +151,6 @@ export default function DiveSiteUploaderView({
 
       <S.ButtonBox>
         <Button
-          onPress={() => handleSubmit(onSubmit)()}
           onPress={() => handleSubmit(onSubmit, handleError)()}
           disabled={isSubmitting}
           alt={false}

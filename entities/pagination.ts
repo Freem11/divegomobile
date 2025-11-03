@@ -1,5 +1,3 @@
-
-
 export class Pagination {
   // ipp - items per page
   page: number;
@@ -29,7 +27,7 @@ export class Pagination {
   }
 
   to() {
-    return this.from() + this.ipp - 1; // Supabase .range end включителен
+    return this.from() + this.ipp - 1;
   }
 
   prev() {

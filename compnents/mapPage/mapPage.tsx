@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
-import {
-  StyleSheet,
-  Platform,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Platform, Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { moderateScale } from "react-native-size-matters";
 import Animated, {
@@ -14,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
+import { set } from "react-hook-form";
 
 import GoogleMap from "../googleMap";
 import BottomMenu from "../reusables/bottomMenu";
@@ -49,11 +46,10 @@ import { NotificationsFeedContext } from "../contexts/notificationsFeedContext";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { useUserProfile } from "../../store/user/useUserProfile";
+import NotificationsButton from "../reusables/bottomMenu/buttons/notificationsButton";
+import { useNotificationsStore } from "../feed/store/useNotificationsStore";
 
 import * as S from "./styles";
-import NotificationsButton from "../reusables/bottomMenu/buttons/notificationsButton";
-import { set } from "react-hook-form";
-import { useNotificationsStore } from "../feed/store/useNotificationsStore";
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -70,10 +66,8 @@ export default function MapPage() {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
-  const { notifications, setNotifications } = useContext(NotificationsFeedContext);
+
   const { userProfile } = useUserProfile();
-  const [notificationsCount, setNotificationsCount] = useState<number>(0);
-  //const { notifications, setNotifications } = useContext(NotificationsFeedContext);
 
   const initNotifications = useNotificationsStore((s) => s.init);
 
@@ -83,7 +77,7 @@ export default function MapPage() {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
 
-  const filterAnchorPhotos = async() => {
+  const filterAnchorPhotos = async () => {
     const { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
@@ -147,7 +141,7 @@ export default function MapPage() {
     };
   });
 
-  const getProfile = async() => {
+  const getProfile = async () => {
     try {
       if (userProfile) {
         if (userProfile.UserName == null || userProfile.UserName === "") {
@@ -178,31 +172,25 @@ export default function MapPage() {
     setLevelOneScreen(false);
     setLevelTwoScreen(false);
     getProfile();
-    getAllNotificationsCount();
-    initNotifications(activeSession.user.id);
-
+    initNotifications(userProfile.UserID);
   }, []);
 
-  const getAllNotificationsCount = async() => {
-    const notificationsCount = await getNotificationsCount(activeSession.user.id);
-    console.log("count", notificationsCount);
-    setNotificationsCount(notificationsCount);
-  };
 
-  const PARTNER_ACCOUNT_STATUS =
-  (profile?.partnerAccount) || false;
-  const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
+  const PARTNER_ACCOUNT_STATUS = userProfile?.partnerAccount || false;
 
-  const getCurrentLocation = async() => {
+  const getCurrentLocation = async () => {
     try {
       const { coords } = await getCurrentCoordinates();
       if (coords) {
-        mapRef?.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          latitudeDelta: 1,
-          longitudeDelta: 1,
-        }, 500);
+        mapRef?.animateToRegion(
+          {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            latitudeDelta: 1,
+            longitudeDelta: 1,
+          },
+          500
+        );
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
@@ -212,7 +200,6 @@ export default function MapPage() {
   return (
     <SafeAreaProvider>
       <S.Container>
-
         <GoogleMap style={StyleSheet.absoluteFillObject} />
 
         <S.SafeAreaTop edges={["top"]}>
@@ -234,19 +221,20 @@ export default function MapPage() {
                   style={{ pointerEvents: "auto" }}
                 />
               </S.TargetWrapper>
-              <BottomDrawer/>
+              <BottomDrawer />
               <BottomMenu>
                 <ProfileButton />
-                {/* <SiteSearchButton /> */}
-                <NotificationsButton count={notificationsCount} />
+                <NotificationsButton />
                 <DiveSiteButton />
-                {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+                {PARTNER_ACCOUNT_STATUS ? (
+                  <ItineraryListButton />
+                ) : (
+                  <GuidesButton />
+                )}
               </BottomMenu>
-
             </S.BottomMenu>
           </S.SafeAreaBottom>
-        )
-          : null}
+        ) : null}
 
         {/* {mapConfig === 0 && <EmailFeedback />} */}
 
@@ -255,7 +243,6 @@ export default function MapPage() {
         <LevelTwoScreen />
         <LevelThreeScreen />
         <AnimatedFullScreenModal />
-
       </S.Container>
     </SafeAreaProvider>
   );

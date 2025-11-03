@@ -1,155 +1,107 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import {
-  Dimensions,
+  ActivityIndicator,
   FlatList,
   Text,
   View,
   StyleSheet,
   Platform,
+  Dimensions,
+  RefreshControl,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
 
-import { useFeedDataStore } from "../../store/useFeedDataStore";
 import { activeFonts, colors } from "../../../styles";
 import { useFeedScreenStore } from "../../store/useScreenStore";
-import { NotificationsFeedContext } from "../../../contexts/notificationsFeedContext";
-import FeedItemFailedUpload from "./messages/failedPicUpload";
-import FeedItemFailedSync from "./messages/failedSync";
-import FeedItemNotification from "./messages/notification";
-import { useTranslation } from "react-i18next";
-import { FEED_ITEM_TYPE, FeedItem, Notification } from "../../store/types";
 import ButtonIcon from "../../../reusables/buttonIcon";
-import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
-import ButtonIcon from "../../../reusables/buttonIcon";
-
-import FeedItemFailedUpload from "./messages/failedPicUpload";
-import FeedItemFailedSync from "./messages/failedSync";
-import FeedItemNotification from "./messages/notification";
 import * as S from "./styles";
+
+import { useNotificationsStore } from "../../store/useNotificationsStore";
 import FeedItemPhotoLike from "./messages/photoLike";
 import FeedItemPhotoComment from "./messages/photoComment";
-import { useNotificationsStore } from "../../store/useNotificationsStore";
+import type { Notification } from "../../store/types";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function FeedList() {
   const { t } = useTranslation();
-  // const feedItems = useFeedDataStore((state) => state.feedItems);
-  const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
-  const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
-  const clearFeedItems = useFeedDataStore((state) => state.clearFeedItems);
-  const closeScreen = useFeedScreenStore((state) => state.closeScreen);
+  const closeScreen = useFeedScreenStore((s) => s.closeScreen);
 
   const list = useNotificationsStore((s) => s.list);
   const loadMore = useNotificationsStore((s) => s.loadMore);
   const loadFirst = useNotificationsStore((s) => s.loadFirst);
+  const markAllSeen = useNotificationsStore((s) => s.markAllSeen);
+  const markOneSeen = useNotificationsStore((s) => s.markOneSeen);
 
-  console.log("FeedList notifications from store:", list);
-
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  // const { notifications, setNotifications } = useContext(
-  //   NotificationsFeedContext
-  // );
-
-  // const getAllNotifications = async () => {
-  //   const notificationsCount = await getNotifications(activeSession.user.id);
-  //   console.log("count", notificationsCount);
-  //   setNotificationsCount(notificationsCount);
-  // };
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    loadFeedItems();
+    loadFirst();
   }, []);
 
-  // const renderItem = ({ item }: { item: FeedItem }) => {
-  //   switch (item.type) {
-  //     case FEED_ITEM_TYPE.FAILED_UPLOAD:
-  //       return <FeedItemFailedUpload item={item} onRemove={removeFeedItem} />;
-  //     case FEED_ITEM_TYPE.FAILED_SYNC:
-  //       return <FeedItemFailedSync item={item} onRemove={removeFeedItem} />;
-  //     case FEED_ITEM_TYPE.NOTIFICATION:
-  //       return <FeedItemNotification item={item} onRemove={removeFeedItem} />;
-  //     default:
-  //       return null;
-  //   }
-  // };
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadFirst();
+    setRefreshing(false);
+  };
+
+  const onUsernamePress = (n: Notification) => {
+    // openUserProfile(n.sender?.user_id);
+    if (!n.is_seen) {
+      markOneSeen(n.id);
+    }
+  };
 
   const renderItem = ({ item }: { item: Notification }) => {
-    console.log("Rendering notification item:", item);
-    switch (item.notification_types.code) {
+    const code = item.notification_types?.code;
+    switch (code) {
       case "photo_like":
-        return <FeedItemPhotoLike item={item} />;
+        return <FeedItemPhotoLike item={item} onUsernamePress={onUsernamePress}/>;
       case "photo_comment":
-        return (
-          <FeedItemPhotoComment item={item} />
-        );
-  const renderItem = ({ item }: { item: FeedItem }) => {
-    switch (item.type) {
-      case FEED_ITEM_TYPE.FAILED_UPLOAD:
-        return <FeedItemFailedUpload item={item} onRemove={removeFeedItem} />;
-      case FEED_ITEM_TYPE.FAILED_SYNC:
-        return <FeedItemFailedSync item={item} onRemove={removeFeedItem} />;
-      case FEED_ITEM_TYPE.NOTIFICATION:
-        return <FeedItemNotification item={item} onRemove={removeFeedItem} />;
-        return <FeedItemPhotoComment item={item} />;
+        return <FeedItemPhotoComment item={item} onUsernamePress={onUsernamePress}/>;
       default:
         return null;
     }
   };
 
   return (
-    <S.SafeArea>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+    <S.SafeArea style={styles.container}>
+      <View style={styles.headerRow}>
         <ButtonIcon
           icon="chevron-left"
-          onPress={() => closeScreen()}
+          onPress={closeScreen}
           size="small"
           fillColor={colors.neutralGrey}
         />
-        <ButtonIcon
-          icon="trash"
-          onPress={() => clearFeedItems()}
-          size="headerIcon"
-          fillColor={colors.themeRed}
-        />
+        <Text style={styles.title}>Your Notifications</Text>
       </View>
-      <S.Header>Your Notifications</S.Header>
-
-      {notifications.length === 0 ? (
-      {feedItems.length === 0 ? (
       {!list.items || list.items.length === 0 ? (
-        <Text>No notifications</Text>
+        list.isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.emptyMessage}>{t("Feed.noFeeds")}</Text>
+        )
       ) : (
         <FlatList
-          data={list.items ?? []}
+          data={list.items}
           keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}
-          // renderItem={({ item }) => (
-          //   <Text>{item.notification_types?.code}</Text>
-          // )}
-          onEndReachedThreshold={0.5}
-          onEndReached={() => list.hasMore && !list.isLoading && loadMore()}
+          onEndReachedThreshold={0.3}
+          onEndReached={loadMore}
+          ItemSeparatorComponent={() => <View style={{ height: moderateScale(12) }} />}
+          ListFooterComponent={
+            list.isLoading ? (
+              <View style={{ padding: moderateScale(12) }}>
+                <ActivityIndicator />
+              </View>
+            ) : null
+          }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
-
-      {/* {notifications.length === 0 ? (
-        <Text style={styles.emptyMessage}>{t("Feed.noFeeds")}</Text>
-      ) : (
-        <FlatList
-          data={notifications}
-          keyExtractor={(item) => String(item.id)}
-          contentContainerStyle={styles.listContainer}
-          renderItem={renderItem}
-        />
-      )} */}
     </S.SafeArea>
   );
 }
@@ -159,18 +111,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.themeWhite,
     paddingHorizontal: moderateScale(16),
-    paddingBottom: moderateScale(100),
-    height: windowHeight,
+    paddingBottom: moderateScale(12),
     paddingTop: Platform.OS === "ios" ? moderateScale(15) : moderateScale(10),
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: moderateScale(18),
+    fontFamily: activeFonts.Thin,
+    color: colors.themeBlack,
+    marginVertical: moderateScale(8),
   },
   emptyMessage: {
     fontSize: moderateScale(16),
     fontFamily: activeFonts.Thin,
     color: colors.themeBlack,
-  },
-  listContainer: {
-    width: "100%",
-    display: "flex",
-    gap: moderateScale(12),
   },
 });

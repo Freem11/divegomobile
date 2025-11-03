@@ -95,15 +95,36 @@ export async function fetchNotificationsPageOffset(params: {
       notification_follow ( notification_id )
     `)
     .eq("recipient_id", userId)
-    .order("created_at", { ascending: pagination.sort === "asc" })
-    .range(pagination.from(), pagination.to()); // offset-пагинация
+    .eq("is_seen", false)
+    .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
+    .range(pagination.from(), pagination.to());
 
   if (error) throw error;
 
-  // Приводим data к RawNotification[] и нормализуем
   const raw = (data ?? []) as RawNotification[];
-  const items = raw.map(normalizeNotification); // ← ТУТ главная магия
+  const items = raw.map(normalizeNotification);
 
-  const hasMore = items.length === pagination.ipp; // если меньше — страниц больше нет
+  const hasMore = items.length === pagination.ipp;
   return { items, hasMore };
+}
+
+export async function markAllNotificationsSeen(userId: string) {
+  const { error } = await supabase
+    .from("ui_notifications")
+    .update({ is_seen: true })
+    .eq("recipient_id", userId)
+    .eq("is_seen", false);
+
+  if (error) throw error;
+}
+
+export async function markNotificationSeen(notificationId: number) {
+  const { error } = await supabase
+    .from("ui_notifications")
+    .update({ is_seen: true })
+    .eq("id", notificationId)
+    .eq("is_seen", false);
+
+  if (error) throw error;
 }

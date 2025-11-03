@@ -1,41 +1,29 @@
 import React from "react";
 import * as S from "./styles";
-import { FeedItemComponentProps } from "./failedPicUpload";
-import { Notification, PhotoLikeFeedItem } from "../../../store/types";
-import ButtonIcon from "../../../../reusables/buttonIcon";
-import { colors } from "../../../../styles";
-import { View } from "react-native";
+import { Notification } from "../../../store/types";
+import {  Text } from "react-native";
 
-type Props = { item: Notification };
+type Props = {
+  item: Notification;
+  onUsernamePress: (n: Notification) => void;
+};
 
-export default function FeedItemPhotoLike({ item }: Props) {
+export default function FeedItemPhotoLike({ item, onUsernamePress }: Props) {
 
   const username = item?.sender?.username ?? "Unknown user";
 
   return (
-    <S.Card bg="#FFFBEA">
-      {/* <S.Message>{item.title}</S.Message> */}
-      <S.Message>{`${username} liked your photo`}</S.Message>
-      <S.ActionsRow>
-
-        {/* {item.action && (
-          <ButtonIcon
-            icon="eye"
-            onPress={item.action}
-            size="headerIcon"
-            fillColor={colors.themeBlack}
-          />
-        )} */}
-        <View style={{ flex: 1, alignItems: "flex-end" }}>
-          {/* <ButtonIcon
-            icon="trash"
-            onPress={() => onRemove(item.id)}
-            size="headerIcon"
-            fillColor={colors.themeRed}
-          /> */}
-        </View>
-
-      </S.ActionsRow>
+    <S.Card bg={item.is_seen ? "#FFFFFF" : "#FFFBEA"}>
+      <Text>
+        <Text
+          style={{ fontWeight: "700", textDecorationLine: "underline" }}
+          onPress={() => onUsernamePress(item)}
+        >
+          {item.id + " " + username}
+        </Text>
+        {" liked your photo"}
+      </Text>
     </S.Card>
+
   );
 }
