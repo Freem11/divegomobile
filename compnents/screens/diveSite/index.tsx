@@ -14,12 +14,12 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
 import { useUserProfile } from "../../../store/user/useUserProfile";
-import { NavigationProp } from "../../../providers/navigation";
 import { MetricItem } from "../../../entities/metricItem";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 import { useAppNavigation } from "../../mapPage/types";
 
 import DiveSiteScreenView from "./diveSite";
+import { useDiveSiteNavigation } from "./types";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void;
@@ -41,6 +41,7 @@ export default function DiveSiteScreen({
 
   const { userProfile } = useUserProfile();
   const navigation = useAppNavigation();
+  const diveSiteNavigation = useDiveSiteNavigation();
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
@@ -67,7 +68,7 @@ export default function DiveSiteScreen({
   };
 
   const handleEditReview = (review: Review) => {
-    navigation.navigate("SiteReviewCreator", {
+    diveSiteNavigation.navigate("SiteReviewCreator", {
       selectedDiveSite: selectedDiveSite.id,
       siteName: selectedDiveSite.name,
       reviewToEdit: review

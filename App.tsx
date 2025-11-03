@@ -13,7 +13,6 @@ import * as ScreenOrientation from "expo-screen-orientation";
 
 import MapPage from "./compnents/mapPage/mapPage";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
-import { AppNavigator } from "./providers/navigation";
 import { toastConfig } from "./compnents/toast";
 import AuthenticationNavigator from "./compnents/authentication/authNavigator";
 import { useUserProfile } from "./store/user/useUserProfile";

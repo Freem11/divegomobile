@@ -35,7 +35,7 @@ export function ReturnToShopButton() {
     if (navProps.pageName === "DiveSite") {
       const diveSiteInfo = await getDiveSiteById(navProps.itemId);
       // setLevelOneScreen(true);
-      navigation.navigate("DiveSite", { id: navProps.itemId });
+      navigation.navigate("DiveSiteNavigator", { id: navProps.itemId });
       // setActiveScreen("DiveSiteScreen", navProps.itemId);
       mapRef.animateCamera({
         center: { latitude: diveSiteInfo[0].lat, longitude: diveSiteInfo[0].lng },

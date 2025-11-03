@@ -23,7 +23,7 @@ export type MainRoutes = {
   Onboarding: undefined;
   BottomTab: undefined;
   GoogleMap: undefined;
-  DiveSite: { id: number };
+  DiveSiteNavigator: { id: number };
   DiveCentre: { id: number };
   Settings: undefined;
   Home: undefined;
@@ -55,7 +55,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       <Stack.Screen name="Home" component={HomeScreen} />
 
-      <Stack.Screen name="DiveSite">
+      <Stack.Screen name="DiveSiteNavigator">
         {({ route }) => (
           <DiveSiteRouter
             id={route.params.id}

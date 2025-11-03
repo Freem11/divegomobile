@@ -7,6 +7,11 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import GoogleMap from "../../googleMap";
 
 import DiveSiteParallax from "./diveSiteParallax";
+import { Review } from "../../../entities/diveSiteReview";
+import { NavigationButton } from "../../navigationHeader/NavigationButton";
+import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
+import SiteReviewCreatorScreen from "../siteReviewCreator/SiteReviewCreatorScreen";
+
 
 type DiveSiteNavigatorProps = {
   id: number;
@@ -17,6 +22,7 @@ export type DiveSiteRoutes = {
   EditScreen: undefined;
   AddSighting: { selectedDiveSite: DiveSiteWithUserName };
   GoogleMap: undefined;
+  SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
 };
 
 const Stack = createNativeStackNavigator<DiveSiteRoutes>();
@@ -48,7 +54,25 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
 
-      {/* Dive site review Navigator */}
+      <Stack.Screen
+        name={"SiteReviewCreator"}
+        component={SiteReviewCreatorScreen}
+        options={({ route }) => ({
+          headerShown: true,
+          header: ({ navigation }) => (
+            <NavigationHeader
+              title={"Dive site review"}
+              subtitle={route.params?.siteName}
+              left={(
+                <NavigationButton
+                  onPress={() => navigation.goBack()}
+                  iconName="close"
+                />
+              )}
+            />
+          )
+        })}
+      />
 
     </Stack.Navigator>
   );
