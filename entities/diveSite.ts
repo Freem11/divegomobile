@@ -10,6 +10,7 @@ export type DiveSiteWithUserName = {
   divesitebio:          string
   newusername:          string
   divesiteprofilephoto: string
+  photofile:            string
 };
 
 export type DiveSiteBasic = {

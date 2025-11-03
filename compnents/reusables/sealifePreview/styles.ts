@@ -7,14 +7,7 @@ export const LabelWrapper = styled.View`
   width: 100%;
   margin-bottom: ${moderateScale(20)}px;
   padding: 0 ${moderateScale(20)}px;
-`;
-
-export const StatsRow = styled.View`
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: ${moderateScale(6)}px;
+  align-items: flex-start;
 `;
 
 export const StatsContainer = styled.View`

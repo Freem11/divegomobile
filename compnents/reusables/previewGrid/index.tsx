@@ -16,9 +16,10 @@ import * as S from "./styles";
 interface PreviewGridProps {
   items: DiveSiteWithUserName[] | null;
   onAddSighting?: () => void;
+  buttonText: string
 }
 
-export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
+export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting, buttonText }) => {
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -85,7 +86,7 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting }) => {
               height={moderateScale(22)}
             />
             <S.AddSightingText>
-              Add a Sighting
+              {buttonText}
             </S.AddSightingText>
           </S.AddSightingButton>
         )}

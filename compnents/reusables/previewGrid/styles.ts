@@ -23,7 +23,7 @@ export const AddSightingButton = styled.TouchableOpacity`
   border-radius: ${moderateScale(8)}px;
   align-items: center;
   justify-content: center;
-  gap: ${moderateScale(6)};
+  gap: ${moderateScale(6)}px;
   border: 1px dashed ${colors.primaryBlue};
 `;
 
