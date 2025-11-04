@@ -34,7 +34,7 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   const translate = center * (1 - scale); // 38.4
 
   const handleScreen = () => {
-    navigation.navigate("DiveSite", { id: props.id });
+    navigation.navigate("DiveSiteNavigator", { id: props.id });
     // setActiveScreen("DiveSiteScreen", {id: props.id})
     // setLevelOneScreen(true)
   };

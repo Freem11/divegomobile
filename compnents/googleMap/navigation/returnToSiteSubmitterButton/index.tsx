@@ -1,8 +1,9 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { useContext } from "react";
+
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { useContext } from "react";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 import { useAppNavigation } from "../../../mapPage/types";
@@ -34,10 +35,11 @@ export function ReturnToSiteSubmitterButton() {
 
   const onPress = async () => {
     const camera = await mapRef.getCamera();
-    navigation.goBack()
+    // navigation.navigate("SiteSubmitter");
+    navigation.goBack();
 
-    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude })
-    mapAction.setMapConfig(0, { pageName: '', itemId: 0 });
+    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude });
+    mapAction.setMapConfig(0, { pageName: "", itemId: 0 });
 
   };
 

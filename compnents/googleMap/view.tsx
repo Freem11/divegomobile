@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
@@ -9,6 +9,8 @@ import { DiveSiteBasic } from "../../entities/diveSite";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -21,6 +23,8 @@ import { MarkerHeatPoint } from "./marker/markerHeatPoint";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
+import { useMapStore } from "./useMapStore";
+import { useFocusEffect } from '@react-navigation/native';
 
 type MapViewProps = {
   mapConfig: number;
@@ -35,14 +39,18 @@ type MapViewProps = {
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
   handleOnMapReady: () => void;
-  diveSites?:  DiveSiteBasic[] | null;
-  diveShops?:  DiveShop[] | null;
+  diveSites?: DiveSiteBasic[] | null;
+  diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null
 };
 
 export default function GoogleMapView(props: MapViewProps) {
 
   const [initialRegion, setInitialRegion] = useState(null);
+  const { sitesArray } = useContext(SitesArrayContext);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const mapConfig = useMapStore((state) => state.mapConfig);
+  const mapRegion = useMapStore((state) => state.mapRegion);
 
   const styles = StyleSheet.create({
     container: {
@@ -57,7 +65,25 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   });
 
-  const getCurrentLocation = async() => {
+  const moveToTrip = async (siteIds: number[]) => {
+    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteIds));
+
+    const coordinates = itinerizedDiveSites.map(site => ({
+      latitude: site.lat,
+      longitude: site.lng,
+    }));
+
+    mapRef?.fitToCoordinates(coordinates, {
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      animated: true,
+    });
+  };
+
+  if (mapConfig === 2) {
+    moveToTrip(sitesArray);
+  }
+
+  const getCurrentLocation = async () => {
     try {
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
@@ -76,7 +102,7 @@ export default function GoogleMapView(props: MapViewProps) {
 
   const [map, setMap] = useState<MapView | null>(null);
 
-  const onMapLoad = async(map: MapView) => {
+  const onMapLoad = async (map: MapView) => {
     setMap(map);
     if (typeof props.onLoad === "function") {
       props.onLoad(map);
@@ -92,11 +118,27 @@ export default function GoogleMapView(props: MapViewProps) {
   const { clusters, supercluster } = useSupercluster(clusterConfig);
 
   useEffect(() => {
-    getCurrentLocation();
-  },[]);
+    if (mapRegion) {
+      setInitialRegion(mapRegion);
+    } else {
+      getCurrentLocation();
+    }
+  }, [mapRegion]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (mapRegion && mapRef) {
+        mapRef.animateToRegion(mapRegion, 10);
+      }
+
+      return () => {
+        // Optional: cleanup when unfocused
+      };
+    }, [mapRegion])
+  );
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       if (!map) {
         return;
       }
@@ -211,7 +253,7 @@ export default function GoogleMapView(props: MapViewProps) {
       </MapView>
 
       {props.mapConfig === 1 && (
-        <MarkerDraggable  />
+        <MarkerDraggable />
       )}
 
       {props.mapConfig === 1 && (

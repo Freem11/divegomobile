@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { moderateScale } from "react-native-size-matters";
 
 import Card from "../../card";
 import { useMapStore } from "../../../../googleMap/useMapStore";
@@ -42,7 +41,7 @@ export default function DiveSiteList() {
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
   const handleDiveSiteSelection = (siteId: number) => {
-    navigation.navigate("DiveSite", { id: siteId });
+    navigation.navigate("DiveSiteNavigator", { id: siteId });
     // setActiveScreen("DiveSiteScreen", { id: siteId });
     // setLevelOneScreen(true);
   };

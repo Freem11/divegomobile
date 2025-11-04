@@ -20,17 +20,25 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
 import { MetricItem } from "../../../entities/metricItem";
+import { ModalSelectContext } from "../../contexts/modalSelectContext";
+import { useMapStore } from "../../googleMap/useMapStore";
+
+import { useDiveSiteNavigation } from "./types";
+
+import DiveSiteScreen from "./index";
+import { useAppNavigation } from "../../mapPage/types";
 import { MainRoutes } from "../../mapPage/mainNavigator";
 
-import DiveSiteScreen from ".";
-import { useAppNavigation } from "../../mapPage/types";
+type DiveSiteParallaxProps = {
+  id: number;
+};
 
 type DiveSiteRouteProp = RouteProp<MainRoutes, "DiveSite">;
 
-export default function DiveSiteParallax() {
+export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const route = useRoute<DiveSiteRouteProp>();
-  const navigation = useAppNavigation();
-  const { id } = route.params;
+  const diveSiteNavigation = useDiveSiteNavigation();
+  // const { id } = route.params;
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
 
@@ -40,11 +48,12 @@ export default function DiveSiteParallax() {
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
   const { setLevelTwoScreen } = useContext(
     LevelTwoScreenContext
   );
-
+  const { setChosenModal } = useContext(ModalSelectContext);
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setFullScreenModal } = useContext(FullScreenModalContext);
@@ -59,18 +68,18 @@ export default function DiveSiteParallax() {
     if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
-  }, [id]);
+  }, [props.id]);
 
   const getMetrics = async () => {
-    if (id) {
-      const monthlyMetrics = await allMetrics(props.siteID);
+    if (props.id) {
+      const monthlyMetrics = await allMetrics(props.id);
       setMetricInfo(monthlyMetrics);
     }
   };
 
   const getDiveSiteinfo = async () => {
-    if (id) {
-      const diveSiteinfo = await getDiveSiteById(id);
+    if (props.id) {
+      const diveSiteinfo = await getDiveSiteById(props.id);
       setSelectedDiveSite(diveSiteinfo[0]);
     }
   };
@@ -90,35 +99,31 @@ export default function DiveSiteParallax() {
   }, [selectedDiveSite]);
 
   const onClose = async () => {
-    navigation.goBack();
+    diveSiteNavigation.goBack();
     // setLevelOneScreen(false);
   };
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    // setChosenModal("DiveSite");
-    // setMapHelper(true);
-    // setMapConfig(2);
+    setChosenModal("DiveSite");
+    setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id });
     setLevelOneScreen(false);
   };
 
   const openDiveSiteReviewer = () => {
-    navigation.navigate("SiteReviewCreator", {
+    diveSiteNavigation.navigate("SiteReviewCreator", {
       selectedDiveSite: selectedDiveSite.id,
       siteName: selectedDiveSite.name
     });
   };
 
   const openPicUploader = () => {
-    setActiveScreen("PictureUploadScreen", selectedDiveSite);
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
+    diveSiteNavigation.navigate("AddSighting", { selectedDiveSite });
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
+    diveSiteNavigation.navigate("EditScreen");
     setEditInfo("DiveSite");
-    setActiveTutorialID("EditsScreen");
   };
 
   const handleReport = () => {
