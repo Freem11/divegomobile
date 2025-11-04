@@ -9,6 +9,7 @@ import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useAppNavigation } from "../../../mapPage/types";
+import { useDiveSiteNavigation } from "../../../screens/diveSite/types";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
 
 export function ReturnToShopButton() {
   const navigation = useAppNavigation();
+  const diveSiteNavigation = useDiveSiteNavigation();
   const mapRef = useMapStore((state) => state.mapRef);
   const navProps = useMapStore((state) => state.navProps);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -35,7 +37,7 @@ export function ReturnToShopButton() {
     if (navProps.pageName === "DiveSite") {
       const diveSiteInfo = await getDiveSiteById(navProps.itemId);
       // setLevelOneScreen(true);
-      navigation.navigate("DiveSiteNavigator", { id: navProps.itemId });
+      diveSiteNavigation.goBack();
       // setActiveScreen("DiveSiteScreen", navProps.itemId);
       mapRef.animateCamera({
         center: { latitude: diveSiteInfo[0].lat, longitude: diveSiteInfo[0].lng },

@@ -24,6 +24,7 @@ import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterB
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
 import { useMapStore } from "./useMapStore";
+import { useFocusEffect } from '@react-navigation/native';
 
 type MapViewProps = {
   mapConfig: number;
@@ -122,7 +123,19 @@ export default function GoogleMapView(props: MapViewProps) {
     } else {
       getCurrentLocation();
     }
-  }, []);
+  }, [mapRegion]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (mapRegion && mapRef) {
+        mapRef.animateToRegion(mapRegion, 10);
+      }
+
+      return () => {
+        // Optional: cleanup when unfocused
+      };
+    }, [mapRegion])
+  );
 
   useEffect(() => {
     (async () => {

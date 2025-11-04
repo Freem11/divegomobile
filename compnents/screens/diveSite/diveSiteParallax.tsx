@@ -37,7 +37,6 @@ type DiveSiteRouteProp = RouteProp<MainRoutes, "DiveSite">;
 
 export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const route = useRoute<DiveSiteRouteProp>();
-  const navigation = useNavigation();
   const diveSiteNavigation = useDiveSiteNavigation();
   // const { id } = route.params;
   const { t } = useTranslation();
@@ -100,8 +99,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   }, [selectedDiveSite]);
 
   const onClose = async () => {
-    navigation.goBack();
-    // navigation.navigate("BottomTab");
+    diveSiteNavigation.goBack();
     // setLevelOneScreen(false);
   };
 
@@ -113,7 +111,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   };
 
   const openDiveSiteReviewer = () => {
-    navigation.navigate("SiteReviewCreator", {
+    diveSiteNavigation.navigate("SiteReviewCreator", {
       selectedDiveSite: selectedDiveSite.id,
       siteName: selectedDiveSite.name
     });
