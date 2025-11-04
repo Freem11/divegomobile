@@ -3,11 +3,8 @@ import { useContext } from "react";
 
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
-import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { getDiveShopById } from "../../../../supabaseCalls/shopsSupabaseCalls";
-import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
-import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useAppNavigation } from "../../../mapPage/types";
 import { useDiveSiteNavigation } from "../../../screens/diveSite/types";
 
@@ -28,21 +25,12 @@ export function ReturnToShopButton() {
   const diveSiteNavigation = useDiveSiteNavigation();
   const mapRef = useMapStore((state) => state.mapRef);
   const navProps = useMapStore((state) => state.navProps);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const { setSitesArray } = useContext(SitesArrayContext);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   const onPress = async () => {
     if (navProps.pageName === "DiveSite") {
-      const diveSiteInfo = await getDiveSiteById(navProps.itemId);
-      // setLevelOneScreen(true);
       diveSiteNavigation.goBack();
-      // setActiveScreen("DiveSiteScreen", navProps.itemId);
-      mapRef.animateCamera({
-        center: { latitude: diveSiteInfo[0].lat, longitude: diveSiteInfo[0].lng },
-        zoom: 12,
-      });
     } else {
       const diveCentreinfo = await getDiveShopById(navProps.itemId);
       // setLevelOneScreen(true);
