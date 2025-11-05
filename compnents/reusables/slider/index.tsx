@@ -1,0 +1,122 @@
+import Animated, { useSharedValue, useAnimatedStyle, interpolate } from "react-native-reanimated";
+import { moderateScale } from "react-native-size-matters";
+import { LinearGradient } from "expo-linear-gradient";
+import Slider from "@react-native-community/slider";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet } from "react-native";
+
+import * as S from "./styles";
+import { useGetCurrentLabel } from "./useGetCurrentLabel";
+
+type SliderProps = {
+  inverted?: boolean;
+  title: string;
+  leftValue: number;
+  rightValue: number;
+  unitMeasurement: string;
+  onValueChange: (value: number) => void;
+  value: number;
+};
+
+export default function ReusableSlider(props: SliderProps) {
+  const [dragValue, setDragValue] = useState(props.value);
+  
+  const progress = useSharedValue(props.value);
+  const labelData = useGetCurrentLabel(props.rightValue, dragValue);
+
+  useEffect(() => {
+    setDragValue(props.value);
+    progress.value = props.value;
+  }, [props.value]);
+
+  const animatedGradientStyle = useAnimatedStyle(() => {
+    const progressPercentage = interpolate(
+      progress.value,
+      [props.leftValue, props.rightValue],
+      [0, 1]
+    );
+
+    return {
+      width: `${progressPercentage * 100}%`,
+    };
+  });
+
+  const isCurrentIntensity = props.unitMeasurement === "m/s" || props.unitMeasurement === "ft/s";
+
+  return (
+    <S.Wrapper>
+      <S.TopRow>
+        <S.Label>{props.title}</S.Label>
+        <S.AnimatedLabel>
+          <S.LabelTag 
+              style={isCurrentIntensity && {
+                backgroundColor: labelData.styles.backgroundColor,
+                borderColor: labelData.styles.borderColor
+              }}
+          >
+          <S.LabelTagText style={isCurrentIntensity && { color: labelData.styles.textColor }}>
+            {isCurrentIntensity ? `${labelData.label} ` : ''}
+            {dragValue.toFixed(1)} {props.unitMeasurement}
+            </S.LabelTagText>
+          </S.LabelTag>
+        </S.AnimatedLabel>
+      </S.TopRow>
+
+      <S.SliderRow>
+        <S.EndMarkerLeft>{props.leftValue}</S.EndMarkerLeft>
+
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <View
+            style={{
+              height: moderateScale(8),
+              backgroundColor: "rgb(230,230,230)",
+              borderRadius: moderateScale(8),
+              position: "absolute",
+              width: "100%",
+            }}
+          />
+
+          {/* Animated gradient fill */}
+          <Animated.View
+            style={[
+              {
+                height: 10,
+                borderRadius: 5,
+                overflow: "hidden",
+                position: "absolute",
+              },
+              animatedGradientStyle,
+            ]}
+          >
+            <LinearGradient
+              colors={["#6FF6EF", "#1669F9"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={StyleSheet.absoluteFill}
+            />
+          </Animated.View>
+
+          <Slider
+            style={{ flex: 1, height: moderateScale(10) }}
+            step={props.inverted ? 1 : 0.5}
+            minimumValue={props.leftValue}
+            maximumValue={props.rightValue}
+            minimumTrackTintColor="transparent"
+            maximumTrackTintColor="transparent"
+            thumbTintColor="#0B63FB"
+            onValueChange={(value) => {
+              progress.value = value;
+              setDragValue(value);
+            }}
+            onSlidingComplete={(value) => {
+              props.onValueChange(value);
+            }}
+            value={dragValue}
+          />
+        </View>
+
+        <S.EndMarkerRight>{`${props.rightValue}+`}</S.EndMarkerRight>
+      </S.SliderRow>
+    </S.Wrapper>
+  );
+}

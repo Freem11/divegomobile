@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Keyboard } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
+import { Keyboard } from "react-native";
 import email from "react-native-email";
 
+import { NavigationProp } from "../../../providers/navigation";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
@@ -15,6 +16,9 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
+import { MetricItem } from "../../../entities/metricItem";
 
 import DiveSiteScreen from ".";
 
@@ -24,8 +28,9 @@ type DiveSiteProps = {
 
 export default function DiveSiteParallax(props: DiveSiteProps) {
   const { t } = useTranslation();
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
+  const navigation = useNavigation<NavigationProp>();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
@@ -41,12 +46,22 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
+  const [ metricInfo, setMetricInfo ] = useState<MetricItem[]>(null);
+
   useEffect(() => {
     getDiveSiteinfo();
-    if (profile?.partnerAccount) {
+    getMetrics();
+    if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
   }, [props.siteID]);
+
+  const getMetrics = async() => {
+    if (props.siteID){
+      const monthlyMetrics = await allMetrics(props.siteID);
+      setMetricInfo(monthlyMetrics);
+    }
+  };
 
   const getDiveSiteinfo = async() => {
     if (props.siteID){
@@ -69,7 +84,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   }, [selectedDiveSite]);
 
-  const onClose = async() => {
+  const onClose = () => {
     setLevelOneScreen(false);
   };
 
@@ -79,6 +94,13 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
     // setMapHelper(true);
     // setMapConfig(2);
     setLevelOneScreen(false);
+  };
+
+  const openDiveSiteReviewer = () => {
+    navigation.navigate("SiteReviewCreator", {
+      selectedDiveSite: selectedDiveSite.id,
+      siteName: selectedDiveSite.name
+    });
   };
 
   const openPicUploader = () => {
@@ -114,6 +136,11 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
           />
         )}
         <IconWithLabel
+          label={t("DiveSite.addReview")}
+          iconName="diving-scuba-flag"
+          buttonAction={() => openDiveSiteReviewer()}
+        />
+        <IconWithLabel
           label={t("DiveSite.addSighting")}
           iconName="camera-plus"
           buttonAction={() => openPicUploader()}
@@ -138,6 +165,8 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
       <DiveSiteScreen
         selectedDiveSite={selectedDiveSite}
         openPicUploader={openPicUploader}
+        openDiveSiteReviewer={openDiveSiteReviewer}
+        metricInfo={metricInfo}
       />
     </ParallaxDrawer>
   );

@@ -24,7 +24,7 @@ export default function PicUploaderParallax(props: PicUploaderProps) {
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
 
-  const onClose = async() => {
+  const onClose = () => {
     setLevelTwoScreen(false);
   };
 

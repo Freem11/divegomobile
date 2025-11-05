@@ -4,7 +4,6 @@ import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import email from "react-native-email";
 
-import { UserProfileContext } from "../../contexts/userProfileContext";
 import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
 import {
   insertPhotoLike,
@@ -18,6 +17,8 @@ import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
+import { useUserProfile } from "../../../store/user/useUserProfile";
+import { cloudflareBucketUrl } from "../../globalVariables";
 
 import * as S from "./styles";
 
@@ -54,7 +55,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { profile } = useContext(UserProfileContext);
+  const { userProfile } = useUserProfile();
   const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
@@ -65,7 +66,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   // Construct remote image URL
   const fileName = pic.photoFile?.split("/").pop();
-  const remoteUri = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
+  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
 
   // useEffect(() => {
   //   if (remoteUri) {
@@ -102,7 +103,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
-      const newRecord = await insertPhotoLike(profile.UserID, pic.id);
+      const newRecord = await insertPhotoLike(userProfile.UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);

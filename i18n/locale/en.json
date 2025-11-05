@@ -14,7 +14,9 @@
         "accept": "Accept",
         "optOut": "Opt Out",
         "finish": "Finish",
-        "close": "Close"
+        "close": "Close",
+        "unknownError": "Sorry, something went wrong. Please try again later"
+
     },
     "OnBoarding": {
         "welcomeTitle": "Welcome to Scuba SEAsons!",
@@ -103,6 +105,47 @@
         "noPictureFound": "No picture found, reupload",
         "retryFailedUpload": "Retry upload failed, you should try to reupload the photo"
     },
+    "DiveSiteReviewer": {
+        "header": "Dive Site Review: \n{{siteName}}",
+        "step1Title": "When & how you dived",
+        "step1Description": "Let's start with the basics - when did you dive and what type of dive was it?",
+        "step2Title": "What were the conditions?",
+        "step2Description": "Tell us about the diving conditions you experienced during your dive.",
+        "step3Title": "Share your experience",
+        "step3Description": "Describe your dive and share photos to help other divers know what to expect.",
+        "diveDate": "Date",
+        "datePlaceholder": "Date of your dive ",
+        "viz": "Visibility (Est.)",
+        "current": "Current Intensity (Est.)",
+        "currentDirection": "Current Direction",
+        "typOfDive": "Type of dive",
+        "shoreDiveButton": "Shore",
+        "boatDiveButton": "Boat",
+        "nightDiveButton": "Night",
+        "altitudeDiveButton": "Altitude",
+        "wreckDiveButton": "Wreck",
+        "caveDiveButton": "Cave",
+        "typeOfWater": "Water type",
+        "saltWaterButton": "Salt",
+        "freshWaterButton": "Fresh",
+        "atTheSurface": "At the surface",
+        "trafficButton": "Boat / Surfer Traffic",
+        "surgeButton": "Surge",
+        "inTheWater": "In the water",
+        "noRefsButton": "Blue / Black Water",
+        "limitsButton": "Depth > AOW Limit",
+        "kelpButton": "Kelp",
+        "pollutionButton": "Pollution",
+        "latCurrentButton": "Lateral",
+        "upCurrentButton": "Up-welling",
+        "downCurrentButton": "Down-welling",
+        "contrastCurrentButton": "Contrasting",
+        "description": "Describe your dive",
+        "reviewDescriptionPlaceholder": "Tell others what it was like to dive at {{siteName}}!",
+        "addPhotos": "Dive Photos",
+        "completeTitle": "Review Submitted!",
+        "completeDescription": "Your dive site review has been successfully submitted and will help fellow divers plan their next adventure."
+    },
     "DiveCenterList": {
         "header": "My Dive Centers",
         "newTrip": "New Trip"
@@ -132,6 +175,7 @@
         "drawerHeader": "Sea Creature Sightings",
         "emptyDrawer": "No sightings at this site yet.",
         "aLittleAbout": "A little about {{siteName}}",
+        "addReview": "Review this Dive Site",
         "addSighting": "Add a Sighting",
         "report": "Report an issue"
     },

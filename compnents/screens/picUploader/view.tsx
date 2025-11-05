@@ -77,7 +77,7 @@ export default function PicUploaderView({
                 modeSelectedTags="on"
                 placeholder={t("PicUploader.whatPlaceholder")}
                 getMoreOptions={getMoreAnimals}
-                iconLeft={<Icon name="fish" fill={colors.neutralGrey} />}
+                iconLeft={<Icon name="shark" fill={colors.neutralGrey} />}
                 error={errors.animal}
                 value={value}
                 onChange={onChange}

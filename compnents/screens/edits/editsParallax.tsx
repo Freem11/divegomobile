@@ -79,7 +79,7 @@ export default function EditScreenParallax() {
     }
   },[selectedDiveSite, selectedShop, selectedProfile, editInfo, activeTutotialID]);
 
-  const onClose = async() => {
+  const onClose = () => {
     setFullScreenModal(false);
     setActiveTutorialID(null);
   };

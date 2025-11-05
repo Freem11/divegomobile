@@ -57,7 +57,7 @@ export default function DiveShopScreenView({
       }) : (
         <S.EmptyStateWrapper>
           <EmptyState
-            iconName="boat"
+            iconName="diving-scuba-flag"
             title="No Trips Available"
             subtitle={selectedShop?.orgName ?
               `${selectedShop?.orgName} currently aren't offering any trips. Check back later!` :

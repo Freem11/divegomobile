@@ -1,14 +1,8 @@
 import React from "react";
 import { Platform, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import {
-  MaterialIcons,
-  FontAwesome6,
-  MaterialCommunityIcons,
-  Entypo,
-  Ionicons,
-  Fontisto
-} from "@expo/vector-icons";
+
+import ButtonIcon from "../../reusables/buttonIcon";
 import { activeFonts, colors } from "../../styles";
 
 export default function TextInputField(props) {
@@ -19,7 +13,6 @@ export default function TextInputField(props) {
     setSecureTextEntry,
     inputValue,
     onChangeText,
-    vectorIcon,
     handleClear,
     animal,
     style = {},
@@ -40,23 +33,12 @@ export default function TextInputField(props) {
 
   return (
     <View style={styles.container} {...style}>
-      {!vectorIcon ? (
-        <MaterialIcons name={icon} size={moderateScale(24)} color="darkgrey" />
-      ) : null}
-      {vectorIcon === "MaterialCommunityIcons" ? (
-        <MaterialCommunityIcons
-          name={icon}
-          size={moderateScale(24)}
-          color="darkgrey"
-        />
-      ) : null}
-      {vectorIcon === "Entypo" ? (
-        <Entypo name={icon} size={moderateScale(24)} color="darkgrey" />
-      ) : null}
-      {vectorIcon === "Ionicons" ? (
-        <Ionicons name={icon} size={moderateScale(24)} color="darkgrey" />
-      ) : null}
-
+      <ButtonIcon
+        icon={icon}
+        onPress={() => null}
+        size="icon"
+        fillColor={colors.darkGrey}
+      />
       <TextInput
         style={styles.input}
         value={inputValue}
@@ -71,10 +53,11 @@ export default function TextInputField(props) {
       />
       {placeHolderText === "Password" ? (
         <TouchableOpacity onPress={() => setSecureTextEntry(!secure)}>
-          <FontAwesome6
-            name={secure ? "eye-slash" : "eye"}
-            size={moderateScale(22)}
-            color="darkgrey"
+          <ButtonIcon
+            icon={secure ? "eye-slash" : "eye"}
+            onPress={() => null}
+            size="icon"
+            fillColor={colors.darkGrey}
             style={{ marginLeft: moderateScale(1) }}
           />
         </TouchableOpacity>
@@ -82,22 +65,22 @@ export default function TextInputField(props) {
       {(placeHolderText === "Sea Life Encountered" ||
         placeHolderText === "Search by Dive Site name or Location") &&
         animal?.length > 1 ? (
-        <MaterialIcons
-          name="highlight-remove"
-          size={moderateScale(22)}
-          color="darkgrey"
-          onPress={() => handleClear()}
-        />
-      ) : (
-        <View style={{ width: moderateScale(22) }}></View>
-      )}
+          <ButtonIcon
+            icon="close"
+            onPress={() => handleClear()}
+            size="icon"
+            fillColor={colors.darkGrey}
+          />
+        ) : (
+          <View style={{ width: moderateScale(22) }}></View>
+        )}
 
       {placeHolderText === "Blow some bubbles" ? (
-        <Fontisto
-          name="snorkel"
-          size={moderateScale(22)}
-          color="darkgrey"
+        <ButtonIcon
+          icon="diving-snorkel"
           onPress={() => handleClear()}
+          size="icon"
+          fillColor={colors.darkGrey}
         />
       ) : (
         <View style={{ width: moderateScale(22) }}></View>

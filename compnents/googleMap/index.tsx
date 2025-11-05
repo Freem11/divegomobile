@@ -49,7 +49,7 @@ export default function GoogleMap() {
 
   useEffect(() => {
     (async() => {
-      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , { animal: animalMultiSelection });
+      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , { animal: animalMultiSelection && [animalMultiSelection] });
       setHeatPoints(heatPoints);
     })();
   }, [animalMultiSelection, bubble]);
@@ -72,6 +72,7 @@ export default function GoogleMap() {
     ]);
     setDiveShops(diveShops);
     setDiveSites(diveSites);
+
   }, 50);
 
   return (

@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
+import { showWarning } from "../../toast";
 
 import { Form, FormRules } from "./form";
 import * as S from "./styles";
@@ -35,6 +36,15 @@ export default function DiveSiteUploaderView({
     defaultValues: values
   });
 
+  const handleError = (errors: FieldErrors<Form>) => {
+    console.log({ errors });
+    Object.values(errors).forEach((error) => {
+      if (error?.message) {
+        showWarning(error.message);
+      }
+    });
+  };
+
   useEffect(() => {
     if (levelTwoScreen){
       restoreParallax();
@@ -42,9 +52,10 @@ export default function DiveSiteUploaderView({
   }, [levelTwoScreen]);
 
   const handleMapFlip = async(formData: Required<Form>) => {
+    setFormValues(formData);
     setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
     closeParallax(1);
-    setFormValues(formData);
+
   };
 
   useEffect(() => {
@@ -141,7 +152,8 @@ export default function DiveSiteUploaderView({
 
       <S.ButtonBox>
         <Button
-          onPress={() => handleSubmit(onSubmit)()}
+          onPress={() => handleSubmit(onSubmit, handleError)()}
+          disabled={isSubmitting}
           alt={false}
           size="medium"
           title={t("DiveSiteAdd.submitButton")}
