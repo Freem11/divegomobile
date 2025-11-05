@@ -4,9 +4,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import * as S from "./styles";
+
 import { colors } from "../styles";
 import Icon from "../../icons/Icon";
+
+import * as S from "./styles";
 
 export default function SearchToolListItem({ name, soureImage, handleMapOptionSelected, handleDiveSiteOptionSelected, handleSeaLifeOptionSelected, setSearchStatus }) {
 
@@ -22,20 +24,19 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
   };
 
   return (
-      <S.SearchResultContainer>
+    <S.SearchResultContainer>
       <View style={{ paddingLeft: moderateScale(8), justifyContent: "center" }}>
         <TouchableOpacity onPress={onPressItem}>
           <S.SearchCard>
             <S.CardIconContainer>
               <S.CardIcon>
-            {soureImage === "anchor" ?
-              <Icon name={'anchor'} fill={colors.themeGreen}/>
-              :
-              soureImage === "shark"  ? 
-              <Icon name={'shark'} fill={colors.primaryBlue}/>
-              :
-              <Icon name={'compass-outline'} fill={colors.themeBlack}/>
-              }
+                {soureImage === "anchor" ?
+                  <Icon name={"anchor"} fill={colors.themeGreen}/>
+                  :
+                  soureImage === "shark"  ?
+                    <Icon name={"shark"} fill={colors.primaryBlue}/>
+                    :
+                    <Icon name={"compass-outline"} fill={colors.themeBlack}/>}
               </S.CardIcon>
             </S.CardIconContainer>
 

@@ -1,8 +1,9 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { useContext } from "react";
+
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { useContext } from "react";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 
@@ -23,15 +24,16 @@ export function ReturnToSiteSubmitterButton() {
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
   const navProps = useMapStore((state) => state.navProps);
-  const storeFormValues = useMapStore((state) => state.formValues);
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const onPress = async () => {
+  const onPress = async() => {
+    const latestFormValues = useMapStore.getState().formValues;
+
     const camera = await mapRef.getCamera();
-    if(navProps.itemId === 1){
+    if (navProps.itemId === 1){
       setActiveScreen("DiveSiteUploadScreen");
       setLevelTwoScreen(true);
       setChosenModal(null);
@@ -39,11 +41,11 @@ export function ReturnToSiteSubmitterButton() {
       setActiveScreen("PartnerRequestScreen");
       setLevelTwoScreen(true);
       setChosenModal(null);
-    }  
+    }
 
-    mapAction.setFormValues({...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude})
-    mapAction.setMapConfig(0, {pageName: '', itemId: 0});
-   
+    mapAction.setFormValues({ ...latestFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude });
+    mapAction.setMapConfig(0, { pageName: "", itemId: 0 });
+
   };
 
   return (
