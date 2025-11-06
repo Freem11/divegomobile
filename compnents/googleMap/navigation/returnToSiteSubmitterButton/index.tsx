@@ -1,8 +1,9 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { useContext } from "react";
+
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { useContext } from "react";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 import { useAppNavigation } from "../../../mapPage/types";
@@ -24,7 +25,6 @@ export function ReturnToSiteSubmitterButton() {
   const mapRef = useMapStore((state) => state.mapRef);
   const mapAction = useMapStore((state) => state.actions);
   const navProps = useMapStore((state) => state.navProps);
-  const storeFormValues = useMapStore((state) => state.formValues);
 
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setChosenModal } = useContext(ModalSelectContext);
@@ -33,11 +33,13 @@ export function ReturnToSiteSubmitterButton() {
   const navigation = useAppNavigation();
 
   const onPress = async () => {
+    const latestFormValues = useMapStore.getState().formValues;
+
     const camera = await mapRef.getCamera();
     navigation.goBack()
 
-    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude })
-    mapAction.setMapConfig(0, { pageName: '', itemId: 0 });
+    mapAction.setFormValues({ ...latestFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude });
+    mapAction.setMapConfig(0, { pageName: "", itemId: 0 });
 
   };
 
