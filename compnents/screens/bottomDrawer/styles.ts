@@ -126,6 +126,6 @@ export const ButtonBox = styled.View`
 
 export const IconBox = styled.View`
   position: absolute;
-  top: ${Platform.OS === "ios" ? windowHeight*0.19 : windowHeight*.26}px;
+  top: ${Platform.OS === "ios" ? windowHeight * 0.19 : windowHeight * .26}px;
   right: 5%;
 `;

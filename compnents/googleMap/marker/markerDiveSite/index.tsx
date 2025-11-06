@@ -11,12 +11,16 @@ import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
 import iconConfig from "../../../../icons/_config.json";
 
+import { useAppNavigation } from "../../../mapPage/types";
+
 type MarkerDiveSiteProps = {
   id: number;
   coordinate: Coordinates;
 };
 
 export function MarkerDiveSite(props: MarkerDiveSiteProps) {
+
+  const navigation = useAppNavigation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const mapConfig = useMapStore((state) => state.mapConfig);
   const [tracksViewChanges, setTracksViewChanges] = useState(true);
@@ -30,8 +34,9 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   const translate = center * (1 - scale); // 38.4
 
   const handleScreen = () => {
-    setActiveScreen("DiveSiteScreen", { id: props.id });
-    setLevelOneScreen(true);
+    navigation.navigate("DiveSite", { id: props.id });
+    // setActiveScreen("DiveSiteScreen", {id: props.id})
+    // setLevelOneScreen(true)
   };
 
   function handlePress() {
@@ -54,7 +59,7 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
       onPress={handlePress}
     >
       <View style={{ width: moderateScale(30), height: moderateScale(30) }}>
-        <Svg width={moderateScale(30)}height={moderateScale(30)} viewBox="0 0 512 512">
+        <Svg width={moderateScale(30)} height={moderateScale(30)} viewBox="0 0 512 512">
           <Path
             d={pathData as string}
             fill={sitesArray.includes(props.id) ? "gold" : "skyblue"}

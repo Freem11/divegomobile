@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import email from "react-native-email";
+import { useRoute, RouteProp } from "@react-navigation/native";
 
 import { NavigationProp } from "../../../providers/navigation";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
@@ -19,18 +20,22 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
 import { MetricItem } from "../../../entities/metricItem";
+import { MainRoutes } from "../../mapPage/mainNavigator";
 
 import DiveSiteScreen from ".";
+import { useAppNavigation } from "../../mapPage/types";
 
-type DiveSiteProps = {
-  siteID: number
-};
+type DiveSiteRouteProp = RouteProp<MainRoutes, "DiveSite">;
 
-export default function DiveSiteParallax(props: DiveSiteProps) {
+export default function DiveSiteParallax() {
+  const route = useRoute<DiveSiteRouteProp>();
+  const navigation = useAppNavigation();
+  const { id } = route.params;
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
+
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const navigation = useNavigation<NavigationProp>();
+  // const navigation = useNavigation<NavigationProp>();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
@@ -46,7 +51,7 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
-  const [ metricInfo, setMetricInfo ] = useState<MetricItem[]>(null);
+  const [metricInfo, setMetricInfo] = useState<MetricItem[]>(null);
 
   useEffect(() => {
     getDiveSiteinfo();
@@ -54,18 +59,18 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
     if (userProfile?.partnerAccount) {
       setIsPartnerAccount(true);
     }
-  }, [props.siteID]);
+  }, [id]);
 
-  const getMetrics = async() => {
-    if (props.siteID){
+  const getMetrics = async () => {
+    if (id) {
       const monthlyMetrics = await allMetrics(props.siteID);
       setMetricInfo(monthlyMetrics);
     }
   };
 
-  const getDiveSiteinfo = async() => {
-    if (props.siteID){
-      const diveSiteinfo = await getDiveSiteById(props.siteID);
+  const getDiveSiteinfo = async () => {
+    if (id) {
+      const diveSiteinfo = await getDiveSiteById(id);
       setSelectedDiveSite(diveSiteinfo[0]);
     }
   };
@@ -84,8 +89,9 @@ export default function DiveSiteParallax(props: DiveSiteProps) {
 
   }, [selectedDiveSite]);
 
-  const onClose = () => {
-    setLevelOneScreen(false);
+  const onClose = async () => {
+    navigation.goBack();
+    // setLevelOneScreen(false);
   };
 
   const onNavigate = () => {

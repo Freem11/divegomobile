@@ -65,7 +65,7 @@ export default function App() {
 
   useLayoutEffect(() => {
 
-    const prepare = async() => {
+    const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
 
       if (Platform.OS === "ios") {
@@ -103,7 +103,7 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-          <I18nextProvider i18n={i18n}>
+        <I18nextProvider i18n={i18n}>
           <NavigationContainer>
             {userProfile ? (
               <MapPage />
@@ -111,7 +111,7 @@ export default function App() {
               <AuthenticationNavigator />
             )}
           </NavigationContainer>
-          </I18nextProvider>
+        </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />
       {/* <Toast /> */}

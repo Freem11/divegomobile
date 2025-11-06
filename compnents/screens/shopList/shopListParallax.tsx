@@ -11,6 +11,13 @@ import { useTranslation } from "react-i18next";
 import Center from "../../png/Beach.jpg";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
+
+type ShopListParallaxNavigationProp = BottomTabNavigationProp<
+  BottomTabRoutes,
+  "Itinerary"
+>;
 
 export default function ShopListParallax() {
   const { t } = useTranslation();
@@ -18,13 +25,13 @@ export default function ShopListParallax() {
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
-  const onClose = () => {
+  const onClose = async () => {
     setLevelOneScreen(false);
   };
 
-  const onNavigate = async() => {
+  const onNavigate = async () => {
     Keyboard.dismiss();
-    setMapConfig(3, { pageName: "Diveshop", itemId: 0 });
+    setMapConfig(3, { pageName: "Diveshop", itemId: 0 })
     setLevelOneScreen(false);
   };
 
@@ -45,9 +52,9 @@ export default function ShopListParallax() {
       headerImage={Center}
       onClose={onClose}
       onMapFlip={onNavigate}
-      // popoverContent={popoverContent}
+    // popoverContent={popoverContent}
     >
-      <ShopListPage/>
+      <ShopListPage />
 
     </ParallaxDrawer>
   );

@@ -16,10 +16,10 @@ export type AuthenticationRoutes = {
   ForgotPassword: undefined;
 };
 
-const Stack = createNativeStackNavigator<AuthenticationRoutes>();
+export const Stack = createNativeStackNavigator<AuthenticationRoutes>();
 
 export default function AuthenticationNavigator() {
-  
+
   return (
     <Stack.Navigator
       initialRouteName="Landing"

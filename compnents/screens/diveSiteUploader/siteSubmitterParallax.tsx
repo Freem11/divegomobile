@@ -6,7 +6,7 @@ import boatImage from "../../png/boat.png";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
-
+import { useAppNavigation } from "../../mapPage/types";
 import DiveSiteUploader from ".";
 
 export default function SiteSubmitterParallax() {
@@ -15,11 +15,13 @@ export default function SiteSubmitterParallax() {
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+  const navigation = useAppNavigation();
 
-  const onClose = () => {
-    setFormValues(null);
-    setLevelTwoScreen(false);
-    setDraggableConfig(null);
+  const onClose = async () => {
+    setFormValues(null)
+    // setLevelTwoScreen(false);
+    setDraggableConfig(null)
+    navigation.goBack();
   };
 
   const onNavigate = () => {

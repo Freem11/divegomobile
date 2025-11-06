@@ -8,18 +8,18 @@ import * as S from "./styles";
 type SettingsPageViewProps = {
   profileType: string;
   openPartnerAccountScreen: () => void;
-  setLevelOneScreen: (status: boolean) => void;
+  onClose: () => void
   handleLogout: () => void;
   alertHandler: () => void;
 };
 
-export default function SettingsPageView({ 
+export default function SettingsPageView({
   profileType,
   openPartnerAccountScreen,
-  setLevelOneScreen,
+  onClose,
   handleLogout,
   alertHandler
- }: SettingsPageViewProps) {
+}: SettingsPageViewProps) {
 
   const { t } = useTranslation();
 
@@ -29,7 +29,7 @@ export default function SettingsPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => setLevelOneScreen(false)}
+            onPress={onClose}
             size="small"
             fillColor={"darkgrey"}
           />
@@ -47,41 +47,41 @@ export default function SettingsPageView({
         <S.DataHousing>
           {profileType === "Diver Account" ? (
             <>
-            <S.DataLabels>{profileType}</S.DataLabels>
-            <TouchableWithoutFeedback
-              onPress={() => openPartnerAccountScreen()}
-            >
-              <S.PromptLinkText>
-                {t('SettingsPage.notPartnerAccount')}
-              </S.PromptLinkText>
-            </TouchableWithoutFeedback>
+              <S.DataLabels>{profileType}</S.DataLabels>
+              <TouchableWithoutFeedback
+                onPress={() => openPartnerAccountScreen()}
+              >
+                <S.PromptLinkText>
+                  {t('SettingsPage.notPartnerAccount')}
+                </S.PromptLinkText>
+              </TouchableWithoutFeedback>
             </>
-          ) :  <S.DataLabelsAlt>{profileType}</S.DataLabelsAlt>}
+          ) : <S.DataLabelsAlt>{profileType}</S.DataLabelsAlt>}
         </S.DataHousing>
 
         <S.ButtonBox>
-          <Button 
-              onPress={() => handleLogout()}
-              alt={false} 
-              size='medium'
-              title={t('SettingsPage.logout')} 
-              iconRight="chevron-right"
-            />
+          <Button
+            onPress={() => handleLogout()}
+            alt={false}
+            size='medium'
+            title={t('SettingsPage.logout')}
+            iconRight="chevron-right"
+          />
         </S.ButtonBox>
       </S.InputGroupContainer>
 
       <S.InputGroupContainerDanger>
-            <S.SubHeaderDanger>
-              {t('SettingsPage.dangerZoneBar')}
-            </S.SubHeaderDanger>
+        <S.SubHeaderDanger>
+          {t('SettingsPage.dangerZoneBar')}
+        </S.SubHeaderDanger>
 
-            <TouchableWithoutFeedback onPress={alertHandler}>
-                <S.DataHousingDanger>
-                  <S.DataLabelsDanger>
-                    {t('SettingsPage.delAccount')}
-                  </S.DataLabelsDanger>
-                </S.DataHousingDanger>
-            </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={alertHandler}>
+          <S.DataHousingDanger>
+            <S.DataLabelsDanger>
+              {t('SettingsPage.delAccount')}
+            </S.DataLabelsDanger>
+          </S.DataHousingDanger>
+        </TouchableWithoutFeedback>
       </S.InputGroupContainerDanger>
 
     </S.ContentContainer>
