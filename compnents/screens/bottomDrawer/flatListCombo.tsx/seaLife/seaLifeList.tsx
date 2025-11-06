@@ -40,10 +40,10 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
 
   const handleAnimalSelect = (label: string) => {
     setAnimalMultiSelection((prev) => {
-      if (prev.includes(label)) {
-        return prev.filter(item => item !== label);
+      if (prev === label) {
+        return;
       } else {
-        return [...prev, label];
+        return label;
       }
     });
   };

@@ -206,6 +206,7 @@ export default function GoogleMapView(props: MapViewProps) {
               />
             );
           }
+          return null;
         })}
 
       </MapView>
