@@ -209,6 +209,8 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     const { cleanUrls } = urlSanitizer(uploadedFileNames, data.Photos);
     data.Photos = [...cleanUrls];
 
+    //add decision here
+
     try {
       await updateDiveSiteReview(
         { dive_date: data.DiveDate, description: data.Description },
@@ -218,10 +220,20 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       const conditions = formatConditions(data.Conditions, reviewToEdit.review_id);
       await replaceReviewConditionsAtomic(reviewToEdit.review_id, conditions);
 
-      const reviewPhotos = data.Photos.map(photo => ({
-        review_id: reviewToEdit.review_id,
-        photoPath: photo
-      }));
+      const reviewPhotos = data.Photos.map(photo => {
+
+        const existingPhoto = currentPhotos.find(
+          (current) => current.photoPath === photo
+        );
+
+        return {
+          review_id: reviewToEdit.review_id,
+          photoPath: photo,
+          decision: existingPhoto
+            ? existingPhoto.decision
+            : null
+        };
+      });
 
       await replaceReviewPhotosAtomic(reviewToEdit.review_id, reviewPhotos);
 
