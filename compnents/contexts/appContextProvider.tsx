@@ -26,6 +26,7 @@ import LevelThreeScreenContextProvider from "./levelThreeScreenContext";
 import EditsContextProvider from './editsContext';
 import SavedTranslateYContextProvider from './savedTranslateYContext';
 import SearchStatusContextProvider from "./searchStatusContext";
+import NotificationsFeedContextProvider from "./notificationsFeedContext";
 
 const providers = [
     TripDetailContextProvider,
@@ -54,6 +55,7 @@ const providers = [
     EditsContextProvider,
     SavedTranslateYContextProvider,
     SearchStatusContextProvider,
+    NotificationsFeedContextProvider,
 ]
 
 export const AppContextProvider = combineComponents(...providers);

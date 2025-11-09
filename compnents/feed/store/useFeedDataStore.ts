@@ -41,6 +41,9 @@ export const useFeedDataStore = create<FeedDataStore>((set) => ({
       if (itemToRemove.type === FEED_ITEM_TYPE.FAILED_UPLOAD) {
         removeFailedUpload(id);
       }
+      // if (itemToRemove.type === FEED_ITEM_TYPE.PHOTOLIKE) {
+      //   removeLikedPhoto(id);
+      // }
 
       return {
         feedItems: state.feedItems.filter((item) => item.id !== id),

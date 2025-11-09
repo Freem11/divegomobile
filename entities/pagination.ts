@@ -1,5 +1,3 @@
-
-
 export class Pagination {
   // ipp - items per page
   page: number;
@@ -8,19 +6,28 @@ export class Pagination {
 
   static defaultIpp = 20;
 
-  constructor({ page: page = 0, sort: sort = 'asc', ipp: ipp = Pagination.defaultIpp } = {}) {
+  constructor({ page: page = 1, sort: sort = 'asc', ipp: ipp = Pagination.defaultIpp } = {}) {
     this.page    = page;
     this.sort    = sort;
     this.ipp     = ipp;
   }
 
 
+  // from() {
+  //   return (this.page - 1) * this.ipp;
+  // }
+
+  // to() {
+  //   return (this.page * this.ipp) - 1;
+  // }
+
   from() {
-    return (this.page - 1) * this.ipp;
+    const p = Math.max(1, this.page);
+    return (p - 1) * this.ipp;
   }
 
   to() {
-    return (this.page * this.ipp) - 1;
+    return this.from() + this.ipp - 1;
   }
 
   prev() {
