@@ -20,7 +20,7 @@ import { removePhotoReviews } from "../../cloudflareBucketCalls/cloudflareAWSCal
 
 import SiteReviewPageView from "./siteReviewCreator";
 import { Form } from "./form";
-import { photoFateDeterminer, urlSanitizer } from "./photoManagment";
+import { photoFateDeterminer } from "./photoManagment";
 
 type SiteReviewCreatorScreenProps = {
   route: RouteProp<RootStackParamList, "SiteReviewCreator">;
@@ -158,20 +158,20 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
   };
 
   const handleUpdate = async(data: Form) => {
+    const PREFIX = "animalphotos/public/";
 
     const currentPhotos = (await getReviewPhotosByReviewId(reviewToEdit.review_id)).data;
     const newPhotos = data.Photos;
 
-    const { deletes, uploads } = photoFateDeterminer(currentPhotos, newPhotos);
+    const { deletes, uploads, reviewPhotos } = photoFateDeterminer(reviewToEdit.review_id, currentPhotos, newPhotos);
 
     const photoUploadPromises = uploads.map(async(photo, index) => {
       try {
-        const fileName = await tryUpload(photo, index);
-
+        const fileName = await tryUpload(photo.photoPath, index);
         if (!fileName) {
           throw new Error(t("PicUploader.failedUpload"));
         }
-        return `animalphotos/public/${fileName}`;
+        return `${PREFIX}${fileName}`;
       } catch (error) {
         console.error("Upload failed for a photo:", error);
         throw error;
@@ -190,14 +190,10 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         return null;
       } else {
         try {
-          const fileName = await removePhotoReviews(photo);
-
-          if (!fileName) {
-            throw new Error(t("PicUploader.failedUpload"));
-          }
-          return `animalphotos/public/${fileName}`;
+          await removePhotoReviews(photo);
+          return true;
         } catch (error) {
-          console.error("Upload failed for a photo:", error);
+          console.error("Delete failed for a photo:", error);
           throw error;
         }
       }
@@ -206,10 +202,18 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     await Promise.all(photoDeletePromises);
     const uploadedFileNames = await Promise.all(photoUploadPromises);
 
-    const { cleanUrls } = urlSanitizer(uploadedFileNames, data.Photos);
-    data.Photos = [...cleanUrls];
+    const keptExistingRecords = reviewPhotos.filter(record => record.id !== 0);
 
-    //add decision here
+    const newUploadedRecords = uploadedFileNames
+      .filter((path): path is string => !!path)
+      .map(path => ({
+        review_id: reviewToEdit.review_id,
+        photoPath: path,
+        decision: null,
+        id: 0
+      }));
+
+    const finalPhotoRecords = [ ...keptExistingRecords, ...newUploadedRecords ];
 
     try {
       await updateDiveSiteReview(
@@ -220,22 +224,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       const conditions = formatConditions(data.Conditions, reviewToEdit.review_id);
       await replaceReviewConditionsAtomic(reviewToEdit.review_id, conditions);
 
-      const reviewPhotos = data.Photos.map(photo => {
-
-        const existingPhoto = currentPhotos.find(
-          (current) => current.photoPath === photo
-        );
-
-        return {
-          review_id: reviewToEdit.review_id,
-          photoPath: photo,
-          decision: existingPhoto
-            ? existingPhoto.decision
-            : null
-        };
-      });
-
-      await replaceReviewPhotosAtomic(reviewToEdit.review_id, reviewPhotos);
+      await replaceReviewPhotosAtomic(reviewToEdit.review_id, finalPhotoRecords);
 
     } catch (error) {
       console.error("Review update failed:", error);

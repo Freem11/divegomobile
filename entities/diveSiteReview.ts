@@ -43,6 +43,13 @@ export type ReviewPhotoInsert = {
   photoPath: string;
 };
 
+export type ReviewPhotoEdit = {
+  id: number;
+  review_id: number;
+  photoPath: string;
+  decision: string;
+};
+
 export type ReviewUpdate = {
   dive_date: string;
   description: string;
