@@ -105,9 +105,8 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
+    diveShopNavigation.navigate("EditScreen");
     setEditInfo("DiveShop");
-    setActiveTutorialID("EditsScreen");
   };
 
   const popoverContent = () => {
