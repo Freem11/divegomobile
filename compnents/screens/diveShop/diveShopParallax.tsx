@@ -18,16 +18,20 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
+import { useAppNavigation } from "../../mapPage/types";
 
 import DiveShopScreen from ".";
-import { useAppNavigation } from "../../mapPage/types";
+
+type DiveShopParallaxProps = {
+  id: number;
+};
 
 type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
 
-export default function DiveShopParallax() {
+export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const route = useRoute<DiveCentreRouteProp>();
   const navigation = useAppNavigation();
-  const { id } = route.params;
+  // const { id } = route.params;
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -48,10 +52,10 @@ export default function DiveShopParallax() {
 
   useEffect(() => {
     getDiveSiteinfo();
-  }, [id]);
+  }, [props.id]);
 
   const getDiveSiteinfo = async () => {
-    const diveCentreinfo = await getDiveShopById(id);
+    const diveCentreinfo = await getDiveShopById(props.id);
     setSelectedShop(diveCentreinfo[0]);
   };
 
@@ -81,7 +85,6 @@ export default function DiveShopParallax() {
 
   const onClose = async () => {
     navigation.goBack();
-    // setLevelOneScreen(false);
   };
 
   const onNavigate = () => {
