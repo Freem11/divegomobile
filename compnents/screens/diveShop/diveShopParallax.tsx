@@ -20,6 +20,8 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
 import { useAppNavigation } from "../../mapPage/types";
 
+import { useDiveShopNavigation } from "./types";
+
 import DiveShopScreen from ".";
 
 type DiveShopParallaxProps = {
@@ -30,6 +32,7 @@ type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
 
 export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const route = useRoute<DiveCentreRouteProp>();
+  const diveShopNavigation = useDiveShopNavigation();
   const navigation = useAppNavigation();
   // const { id } = route.params;
   const { t } = useTranslation();
@@ -84,7 +87,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   }, [selectedShop]);
 
   const onClose = async () => {
-    navigation.goBack();
+    diveShopNavigation.goBack();
   };
 
   const onNavigate = () => {
@@ -95,6 +98,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   };
 
   const openTripCreatorScreen = () => {
+    diveShopNavigation.navigate("TripCreator", { id: null });
     setLevelOneScreen(false);
     setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");

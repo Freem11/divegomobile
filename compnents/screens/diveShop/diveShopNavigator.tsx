@@ -7,20 +7,20 @@ import GoogleMap from "../../googleMap";
 
 import DiveShopeParallax from "./diveShopParallax";
 
-type DiveSiteNavigatorProps = {
+type DiveShopNavigatorProps = {
   id: number;
 };
 
-export type DiveSiteRoutes = {
+export type DiveShopRoutes = {
   DiveCentre: undefined;
   EditScreen: undefined;
   GoogleMap: undefined;
-  TripCreator: undefined;
+  TripCreator: { id: number | null };
 };
 
-const Stack = createNativeStackNavigator<DiveSiteRoutes>();
+const Stack = createNativeStackNavigator<DiveShopRoutes>();
 
-export default function DiveShopNavigator(props: DiveSiteNavigatorProps) {
+export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
 
   return (
     <Stack.Navigator

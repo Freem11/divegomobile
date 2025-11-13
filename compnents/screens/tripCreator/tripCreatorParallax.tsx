@@ -7,19 +7,20 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
-import { TripDetailContext } from "../../contexts/tripDetailsContext";
 import TripImage from "../../png/Trip.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useMapStore } from "../../googleMap/useMapStore";
+import { useDiveShopNavigation } from "../diveShop/types";
 
 import TripCreatorPage from ".";
 
 type TripCreatorProps = {
-  shopID: number
+  itineraryID: number
 };
 
 export default function TripCreatorParallax(props: TripCreatorProps) {
   const { t } = useTranslation();
+  const diveShopNavigation = useDiveShopNavigation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
   const storeFormValues = useMapStore((state) => state.formValues);
@@ -34,10 +35,10 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
     setSitesArray([]);
     setTripDiveSites([]);
 
-    setLevelTwoScreen(false);
+    diveShopNavigation.goBack();
   };
 
-  const onNavigate = async() => {
+  const onNavigate = async () => {
     Keyboard.dismiss();
     setMapConfig(3, { pageName: "DiveShop", itemId: 0 });
     setLevelTwoScreen(false);
@@ -66,7 +67,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
       onMapFlip={onNavigate}
       popoverContent={editMode && popoverContent}
     >
-      <TripCreatorPage itineraryInfo={storeFormValues}/>
+      <TripCreatorPage itineraryInfo={storeFormValues} />
 
     </ParallaxDrawer>
   );
