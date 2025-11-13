@@ -5,7 +5,6 @@ import Card from "../../card";
 import { useMapStore } from "../../../../googleMap/useMapStore";
 import { getDiveSitesWithUser } from "../../../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useActiveScreenStore } from "../../../../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../../../../contexts/levelOneScreenContext";
 import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
@@ -20,7 +19,6 @@ export default function DiveSiteList() {
   const [diveSites, setDiveSites] = useState([]);
   const [filterValue, setFilterValue] = useState("");
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   const getDiveSiteData = async (filterValue: string) => {
@@ -42,8 +40,6 @@ export default function DiveSiteList() {
 
   const handleDiveSiteSelection = (siteId: number) => {
     navigation.navigate("DiveSiteNavigator", { id: siteId });
-    // setActiveScreen("DiveSiteScreen", { id: siteId });
-    // setLevelOneScreen(true);
   };
 
   const handleClear = () => {

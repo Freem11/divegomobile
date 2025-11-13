@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { moderateScale } from "react-native-size-matters";
 
 import Card from "../../card";
 import { useMapStore } from "../../../../googleMap/useMapStore";
@@ -34,9 +33,7 @@ export default function DiveCenterList() {
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
   const handleDiveCenterSelection = (shopId: number) => {
-    navigation.navigate("DiveCentre", { id: shopId });
-    // setActiveScreen("DiveShopScreen", { id: shopId });
-    // setLevelOneScreen(true);
+    navigation.navigate("DiveShopNavigator", { id: shopId });
   };
 
   const handleClear = () => {

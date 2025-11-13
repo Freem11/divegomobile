@@ -14,6 +14,7 @@ import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator"
 import { useAppNavigation } from "../../mapPage/types";
 
 import DiveShopScreenView from "./diveShop";
+import { useDiveShopNavigation } from "./types";
 
 type DiveShopProps = {
   closeParallax?: (mapConfig: number) => void;
@@ -31,6 +32,7 @@ export default function DiveShopScreen({
   isMyShop
 }: DiveShopProps) {
   const navigation = useAppNavigation();
+  const diveShopNavigation = useDiveShopNavigation();
   const [tripsCount, setTripsCount] = useState(0);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -95,9 +97,7 @@ export default function DiveShopScreen({
 
   const handleEditButton = (itineraryInfo: ItineraryItem) => {
     setEditMode(true);
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
-    setActiveScreen("TripCreatorScreen", { id: selectedShop.id });
+    diveShopNavigation.navigate("TripCreator", { id: itineraryInfo.id });
     setFormValues(itineraryInfo);
     setSitesArray(itineraryInfo.siteList);
   };

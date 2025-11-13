@@ -8,10 +8,12 @@ import PartnerRequestParallax from "../screens/partnerAccountRequest/partnerRequ
 import EditScreenParallax from "../screens/edits/editsParallax";
 import DiveShopParallax from "../screens/diveShop/diveShopParallax";
 import DiveSiteRouter from "../screens/diveSite/diveSiteRouter";
-
-import BottomTabNavigator from "./bottomTabNavigator";
 import UserProfilePhotosPage from "../screens/userProfilePhotos";
 import PhotoBoxModal from "../screens/photoBox/photoBoxModal";
+import DiveShopNavigator from "../screens/diveShop/diveShopNavigator";
+import DiveShopRouter from "../screens/diveShop/diveShopRouter";
+
+import BottomTabNavigator from "./bottomTabNavigator";
 import HomeScreen from "./HomeScreen";
 
 type MainNavigatorProps = {
@@ -24,7 +26,7 @@ export type MainRoutes = {
   BottomTab: undefined;
   GoogleMap: undefined;
   DiveSiteNavigator: { id: number };
-  DiveCentre: { id: number };
+  DiveShopNavigator: { id: number };
   Settings: undefined;
   Home: undefined;
   PartnerRequestUpgrade: undefined;
@@ -63,7 +65,13 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
-      <Stack.Screen name="DiveCentre" component={DiveShopParallax} />
+      <Stack.Screen name="DiveShopNavigator">
+        {({ route }) => (
+          <DiveShopRouter
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
 
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestParallax} />

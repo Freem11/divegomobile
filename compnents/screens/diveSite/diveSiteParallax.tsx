@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import email from "react-native-email";
 import { useRoute, RouteProp } from "@react-navigation/native";
 
-import { NavigationProp } from "../../../providers/navigation";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -22,12 +20,11 @@ import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
 import { MetricItem } from "../../../entities/metricItem";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { useMapStore } from "../../googleMap/useMapStore";
+import { MainRoutes } from "../../mapPage/mainNavigator";
 
 import { useDiveSiteNavigation } from "./types";
 
 import DiveSiteScreen from "./index";
-import { useAppNavigation } from "../../mapPage/types";
-import { MainRoutes } from "../../mapPage/mainNavigator";
 
 type DiveSiteParallaxProps = {
   id: number;
@@ -100,7 +97,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   const onClose = async () => {
     diveSiteNavigation.goBack();
-    // setLevelOneScreen(false);
   };
 
   const onNavigate = () => {

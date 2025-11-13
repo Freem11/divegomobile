@@ -5,12 +5,9 @@ import Svg, { Path } from "react-native-svg";
 import { moderateScale } from "react-native-size-matters";
 
 import { Coordinates } from "../../../../entities/coordinates";
-import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
 import iconConfig from "../../../../icons/_config.json";
-
 import { useAppNavigation } from "../../../mapPage/types";
 
 type MarkerDiveSiteProps = {
@@ -19,12 +16,9 @@ type MarkerDiveSiteProps = {
 };
 
 export function MarkerDiveSite(props: MarkerDiveSiteProps) {
-
   const navigation = useAppNavigation();
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const mapConfig = useMapStore((state) => state.mapConfig);
   const [tracksViewChanges, setTracksViewChanges] = useState(true);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const pathData = iconConfig.anchor?.[1] ?? "";
@@ -35,8 +29,6 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
 
   const handleScreen = () => {
     navigation.navigate("DiveSiteNavigator", { id: props.id });
-    // setActiveScreen("DiveSiteScreen", {id: props.id})
-    // setLevelOneScreen(true)
   };
 
   function handlePress() {
