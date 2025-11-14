@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { DiveShop } from "../../../entities/diveShop";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
@@ -37,7 +35,6 @@ export default function DiveShopScreen({
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
 
   const { setEditMode } = useContext(EditModeContext);
@@ -45,7 +42,6 @@ export default function DiveShopScreen({
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setSitesArray } = useContext(SitesArrayContext);
 
   const getItineraries = async (IdNum: number) => {
