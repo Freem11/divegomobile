@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
@@ -24,7 +25,6 @@ import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterB
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
 import { useMapStore } from "./useMapStore";
-import { useFocusEffect } from '@react-navigation/native';
 
 type MapViewProps = {
   mapConfig: number;
@@ -45,7 +45,7 @@ type MapViewProps = {
 };
 
 export default function GoogleMapView(props: MapViewProps) {
-
+  const [timoutId, setTimoutId] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const { sitesArray } = useContext(SitesArrayContext);
   const mapRef = useMapStore((state) => state.mapRef);
@@ -128,13 +128,19 @@ export default function GoogleMapView(props: MapViewProps) {
   useFocusEffect(
     React.useCallback(() => {
       if (mapRegion && mapRef) {
-        mapRef.animateToRegion(mapRegion, 10);
+        const timerId = setTimeout(() => {
+          mapRef.animateToRegion(mapRegion, 10);
+        }, 500);
+        setTimoutId(timerId);
+
       }
 
       return () => {
-        // Optional: cleanup when unfocused
+        if (timoutId) {
+          clearTimeout(timoutId);
+        }
       };
-    }, [mapRegion])
+    }, [mapRef, mapRegion])
   );
 
   useEffect(() => {
