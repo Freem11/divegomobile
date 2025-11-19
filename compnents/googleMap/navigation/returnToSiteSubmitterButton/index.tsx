@@ -1,15 +1,11 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import { useContext } from "react";
-
-import { useContext } from "react";
+import React, { useContext } from "react";
 
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
-import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { ModalSelectContext } from "../../../contexts/modalSelectContext";
-import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
-import { useAppNavigation } from "../../../mapPage/types";
 import { useDiveSiteNavigation } from "../../../screens/diveSite/types";
+import { usePartnerRequestNavigation } from "../../../screens/partnerAccountRequest/types";
+import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -24,27 +20,22 @@ const styles = StyleSheet.create({
 });
 
 export function ReturnToSiteSubmitterButton() {
-
-  const mapRef = useMapStore((state) => state.mapRef);
-  const mapAction = useMapStore((state) => state.actions);
   const navProps = useMapStore((state) => state.navProps);
-
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setChosenModal } = useContext(ModalSelectContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-
-  const navigation = useDiveSiteNavigation();
+  const siteSubmitterNavigation = useDiveSiteNavigation();
+  const partnerRequestNavigation = usePartnerRequestNavigation();
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const { setSitesArray } = useContext(SitesArrayContext);
 
   const onPress = async () => {
-    const latestFormValues = useMapStore.getState().formValues;
 
-    const camera = await mapRef.getCamera();
-    // navigation.navigate("SiteSubmitter");
-    navigation.goBack();
+    if (navProps.pageName === "PartnerRequestPage") {
+      partnerRequestNavigation.goBack();
+    } else {
+      siteSubmitterNavigation.goBack();
+    };
 
-    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude });
-    mapAction.setMapConfig(0, { pageName: "", itemId: 0 });
-
+    setMapConfig(0, { pageName: "", itemId: 0 });
+    setSitesArray([]);
   };
 
   return (
@@ -56,4 +47,4 @@ export function ReturnToSiteSubmitterButton() {
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
