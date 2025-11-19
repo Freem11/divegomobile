@@ -63,7 +63,7 @@ export default function DiveSiteUploaderView({
     navigation.navigate("GoogleMap");
 
     setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    closeParallax(1);
+    // closeParallax(1);
     setFormValues(formData);
   };
 
