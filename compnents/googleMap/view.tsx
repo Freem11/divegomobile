@@ -51,6 +51,7 @@ export default function GoogleMapView(props: MapViewProps) {
   const mapRef = useMapStore((state) => state.mapRef);
   const mapConfig = useMapStore((state) => state.mapConfig);
   const mapRegion = useMapStore((state) => state.mapRegion);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
 
   const styles = StyleSheet.create({
     container: {
@@ -140,6 +141,7 @@ export default function GoogleMapView(props: MapViewProps) {
         if (timoutId) {
           clearTimeout(timoutId);
         }
+        setMapRegion(null);
       };
     }, [mapRef, mapRegion])
   );
