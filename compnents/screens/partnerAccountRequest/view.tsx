@@ -47,15 +47,16 @@ export default function PartnerAccountRequestPageView({
   }, [levelTwoScreen]);
 
   const handleMapFlip = async (formData: Required<Form>) => {
+    if (mapRef) {
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
 
-    const region = await calculateRegionFromBoundaries(mapRef);
-    setMapRegion(region);
+      navigation.navigate("GoogleMap");
 
-    navigation.navigate("GoogleMap");
-
-    setMapConfig(1, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
-    closeParallax(1);
-    setFormValues(formData);
+      setMapConfig(1, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
+      closeParallax(1);
+      setFormValues(formData);
+    }
   };
 
   return (

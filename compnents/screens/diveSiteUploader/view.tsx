@@ -57,14 +57,16 @@ export default function DiveSiteUploaderView({
   }, [levelTwoScreen]);
 
   const handleMapFlip = async (formData: Required<Form>) => {
-    const region = await calculateRegionFromBoundaries(mapRef);
-    setMapRegion(region);
+    if (mapRef) {
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
 
-    navigation.navigate("GoogleMap");
+      navigation.navigate("GoogleMap");
 
-    setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    // closeParallax(1);
-    setFormValues(formData);
+      setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
+      setFormValues(formData);
+    }
+
   };
 
   useEffect(() => {

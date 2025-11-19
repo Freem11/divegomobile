@@ -103,6 +103,7 @@ export default function GoogleMapView(props: MapViewProps) {
   const [map, setMap] = useState<MapView | null>(null);
 
   const onMapLoad = async (map: MapView) => {
+
     setMap(map);
     if (typeof props.onLoad === "function") {
       props.onLoad(map);
@@ -200,10 +201,18 @@ export default function GoogleMapView(props: MapViewProps) {
     })();
   }, [props.diveSites, props.diveShops]);
 
+  if (!initialRegion) {
+    return (
+      <View style={styles.container}>
+        {/* Or a Loading indicator */}
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <MapView
-        key={1}
+        key={props.mapConfig}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         mapType="hybrid"
@@ -219,7 +228,7 @@ export default function GoogleMapView(props: MapViewProps) {
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
-        {clusters.map((cluster) => {
+        {clusters?.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const { cluster: isCluster } = cluster.properties;
 
@@ -254,25 +263,26 @@ export default function GoogleMapView(props: MapViewProps) {
               />
             );
           }
+          return null;
         })}
 
       </MapView>
 
-      {props.mapConfig === 1 && (
+      {props?.mapConfig === 1 && (
         <MarkerDraggable />
       )}
 
-      {props.mapConfig === 1 && (
+      {props?.mapConfig === 1 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToSiteSubmitterButton />
         </View>
       )}
-      {props.mapConfig === 2 && (
+      {props?.mapConfig === 2 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToShopButton />
         </View>
       )}
-      {props.mapConfig === 3 && (
+      {props?.mapConfig === 3 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToCreateTripButton />
         </View>

@@ -38,11 +38,13 @@ export default function SiteSubmitterParallax() {
 
   const onNavigate = async () => {
     Keyboard.dismiss();
-    const region = await calculateRegionFromBoundaries(mapRef);
-    setMapRegion(region);
+    if (mapRef) {
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
 
-    setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    appNavigation.navigate("GoogleMap");
+      setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
+      appNavigation.navigate("GoogleMap");
+    }
   };
 
   return (

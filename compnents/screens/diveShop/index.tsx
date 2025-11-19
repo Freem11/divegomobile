@@ -67,28 +67,28 @@ export default function DiveShopScreen({
   }, [levelOneScreen]);
 
   const handleMapFlip = async (sites: number[]) => {
+    if (mapRef) {
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
 
-    const region = await calculateRegionFromBoundaries(mapRef);
-    setMapRegion(region);
+      setSitesArray(sites);
 
-    setSitesArray(sites);
+      navigation.navigate("GoogleMap");
 
-    navigation.navigate("GoogleMap");
+      const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
 
-    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
+      const coordinates = itinerizedDiveSites.map(site => ({
+        latitude: site.lat,
+        longitude: site.lng,
+      }));
 
-    const coordinates = itinerizedDiveSites.map(site => ({
-      latitude: site.lat,
-      longitude: site.lng,
-    }));
+      mapRef?.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
+      });
 
-    mapRef?.fitToCoordinates(coordinates, {
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-      animated: true,
-    });
-
-    setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
-    // closeParallax(1);
+      setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
+    }
   };
 
   const handleEditButton = (itineraryInfo: ItineraryItem) => {
