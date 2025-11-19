@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { DiveShop } from "../../../entities/diveShop";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { EditModeContext } from "../../contexts/editModeContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
@@ -37,7 +35,6 @@ export default function DiveShopScreen({
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
 
   const { setEditMode } = useContext(EditModeContext);
@@ -45,7 +42,6 @@ export default function DiveShopScreen({
   const { levelOneScreen, setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const { setSitesArray } = useContext(SitesArrayContext);
 
   const getItineraries = async (IdNum: number) => {
@@ -71,28 +67,28 @@ export default function DiveShopScreen({
   }, [levelOneScreen]);
 
   const handleMapFlip = async (sites: number[]) => {
+    if (mapRef) {
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
 
-    const region = await calculateRegionFromBoundaries(mapRef);
-    setMapRegion(region);
+      setSitesArray(sites);
 
-    setSitesArray(sites);
+      navigation.navigate("GoogleMap");
 
-    navigation.navigate("GoogleMap");
+      const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
 
-    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
+      const coordinates = itinerizedDiveSites.map(site => ({
+        latitude: site.lat,
+        longitude: site.lng,
+      }));
 
-    const coordinates = itinerizedDiveSites.map(site => ({
-      latitude: site.lat,
-      longitude: site.lng,
-    }));
+      mapRef?.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
+      });
 
-    mapRef?.fitToCoordinates(coordinates, {
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-      animated: true,
-    });
-
-    setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
-    // closeParallax(1);
+      setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
+    }
   };
 
   const handleEditButton = (itineraryInfo: ItineraryItem) => {

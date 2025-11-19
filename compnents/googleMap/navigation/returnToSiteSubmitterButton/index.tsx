@@ -7,6 +7,7 @@ import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { ModalSelectContext } from "../../../contexts/modalSelectContext";
 import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 import { useAppNavigation } from "../../../mapPage/types";
+import { useDiveSiteNavigation } from "../../../screens/diveSite/types";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -31,7 +32,7 @@ export function ReturnToSiteSubmitterButton() {
   const { setChosenModal } = useContext(ModalSelectContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const navigation = useAppNavigation();
+  const navigation = useDiveSiteNavigation();
 
   const onPress = async () => {
     const camera = await mapRef.getCamera();

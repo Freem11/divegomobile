@@ -7,12 +7,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
-import SiteSubmitterParallax from "../screens/diveSiteUploader/siteSubmitterParallax";
 import ShopListParallax from "../screens/shopList/shopListParallax";
 import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
 import { colors, fontSizes } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
+import SiteSubmitterRouter from "../screens/diveSiteUploader/siteSubmitterRouter";
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
@@ -40,10 +40,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const navigation = useAppNavigation();
 
     /**
-                     * For Android only.
-                     * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-                     * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-                     */
+                           * For Android only.
+                           * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
+                           * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+                           */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
@@ -83,7 +83,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                 {props => <UserProfileParallax {...props} profileID={userProfile?.id} />}
             </Tab.Screen>
             <Tab.Screen name="Notifications" component={FeedList} />
-            <Tab.Screen name="AddSite" component={SiteSubmitterParallax} options={{ tabBarLabel: "Site Add" }} />
+            <Tab.Screen name="AddSite" component={SiteSubmitterRouter} options={{ tabBarLabel: "Site Add" }} />
 
             {PARTNER_ACCOUNT_STATUS ?
                 <Tab.Screen name="Itinerary" component={ShopListParallax} options={{ tabBarLabel: "My Centres" }} /> :
@@ -93,10 +93,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     );
 
     /**
-                 * Returns the icon name and label for each tab based on route.
-                 * @param route The route name of the current tab
-                 * @returns Object literal containing Icon name and label strings
-                 */
+                       * Returns the icon name and label for each tab based on route.
+                       * @param route The route name of the current tab
+                       * @returns Object literal containing Icon name and label strings
+                       */
     function getTabProps(route: string): { icon: string; label: string } {
         switch (route) {
             case "Home": return { icon: "shark", label: t("BottomTabBar.home") };
