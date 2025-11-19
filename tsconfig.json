@@ -1,4 +1,6 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  },
   "extends": "expo/tsconfig.base"
 }

@@ -34,22 +34,20 @@ export default function OnboardingNavigator() {
                 style={{ transform: [{ rotate: "3deg" }] }}
             />
             <S.ScreenContainer>
-                <NavigationContainer>
-                    <Stack.Navigator
-                        initialRouteName="Welcome"
-                        screenOptions={{
-                            headerShown: false,
-                            animation: "slide_from_right",
-                        }}
-                    >
-                        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-                        <Stack.Screen name="DiverName" component={DiverNameScreen} />
-                        <Stack.Screen name="Location" component={LocationScreen} />
-                        <Stack.Screen name="Gallery" component={GalleryScreen} />
-                        <Stack.Screen name="Notifications" component={NotificationsScreen} />
-                        <Stack.Screen name="Finish" component={FinishScreen} />
-                    </Stack.Navigator>
-                </NavigationContainer>
+                <Stack.Navigator
+                    initialRouteName="Welcome"
+                    screenOptions={{
+                        headerShown: false,
+                        animation: "slide_from_right",
+                    }}
+                >
+                    <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                    <Stack.Screen name="DiverName" component={DiverNameScreen} />
+                    <Stack.Screen name="Location" component={LocationScreen} />
+                    <Stack.Screen name="Gallery" component={GalleryScreen} />
+                    <Stack.Screen name="Notifications" component={NotificationsScreen} />
+                    <Stack.Screen name="Finish" component={FinishScreen} />
+                </Stack.Navigator>
             </S.ScreenContainer>
         </S.Container>
     );

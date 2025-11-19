@@ -48,6 +48,7 @@ import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { useUserProfile } from "../../store/user/useUserProfile";
 
 import * as S from "./styles";
+import MainNavigator from "./mainNavigator";
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -64,6 +65,8 @@ export default function MapPage() {
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { userProfile } = useUserProfile();
 
   const { t } = useTranslation();
@@ -72,7 +75,7 @@ export default function MapPage() {
     filterAnchorPhotos();
   }, [selectedDiveSite]);
 
-  const filterAnchorPhotos = async() => {
+  const filterAnchorPhotos = async () => {
     const { minLat, maxLat, minLng, maxLng } = newGPSBoundaries(
       selectedDiveSite.Latitude,
       selectedDiveSite.Longitude
@@ -136,11 +139,13 @@ export default function MapPage() {
     };
   });
 
-  const getProfile = async() => {
+  const getProfile = async () => {
     try {
       if (userProfile) {
         if (userProfile.UserName == null || userProfile.UserName === "") {
           setTimeout(() => {
+            setShowOnboarding(true);
+
             setActiveTutorialID("OnboardingX");
             setFullScreenModal(true);
           }, 500);
@@ -171,7 +176,7 @@ export default function MapPage() {
 
   const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
-  const getCurrentLocation = async() => {
+  const getCurrentLocation = async () => {
     try {
       const { coords } = await getCurrentCoordinates();
       if (coords) {
@@ -188,52 +193,54 @@ export default function MapPage() {
   };
 
   return (
-    <SafeAreaProvider>
-      <S.Container>
+    <MainNavigator showOnboarding={showOnboarding} mapConfig={mapConfig} />
 
-        <GoogleMap style={StyleSheet.absoluteFillObject} />
+    // <SafeAreaProvider>
+    //   <S.Container>
 
-        <S.SafeAreaTop edges={["top"]}>
-          <SearchTool />
+    //     <GoogleMap style={StyleSheet.absoluteFillObject} />
 
-          {/* {mapConfig in [, , 2] || !mapConfig ? (
-            <AnimalTagsContainer transTagsY={transTagsY} />
-          ) : null} */}
-        </S.SafeAreaTop>
+    //     <S.SafeAreaTop edges={["top"]}>
+    //       <SearchTool />
 
-        {mapConfig === 0 ? (
-          <S.SafeAreaBottom edges={["bottom"]}>
-            <S.BottomMenu>
-              <S.TargetWrapper>
-                <ButtonIcon
-                  icon="target"
-                  size={36}
-                  onPress={() => getCurrentLocation()}
-                  style={{ pointerEvents: "auto" }}
-                />
-              </S.TargetWrapper>
-              <BottomDrawer/>
-              <BottomMenu>
-                <ProfileButton />
-                <SiteSearchButton />
-                <DiveSiteButton />
-                {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-              </BottomMenu>
+    //       {/* {mapConfig in [, , 2] || !mapConfig ? (
+    //         <AnimalTagsContainer transTagsY={transTagsY} />
+    //       ) : null} */}
+    //     </S.SafeAreaTop>
 
-            </S.BottomMenu>
-          </S.SafeAreaBottom>
-        )
-          : null}
+    //     {mapConfig === 0 ? (
+    //       <S.SafeAreaBottom edges={["bottom"]}>
+    //         <S.BottomMenu>
+    // <S.TargetWrapper>
+    //             <ButtonIcon
+    //               icon="target"
+    //               size={36}
+    //               onPress={() => getCurrentLocation()}
+    //               style={{ pointerEvents: "auto" }}
+    //             />
+    //           </S.TargetWrapper>
+    //           <BottomDrawer/>
+    //           <BottomMenu>
+    //             <ProfileButton />
+    //             <SiteSearchButton />
+    //             <DiveSiteButton />
+    //             {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
+    //           </BottomMenu>
 
-        {/* {mapConfig === 0 && <EmailFeedback />} */}
+    //         </S.BottomMenu>
+    //       </S.SafeAreaBottom>
+    //     )
+    //       : null}
 
-        <FeedScreens />
-        <LevelOneScreen />
-        <LevelTwoScreen />
-        <LevelThreeScreen />
-        <AnimatedFullScreenModal />
+    //     {/* {mapConfig === 0 && <EmailFeedback />} */}
 
-      </S.Container>
-    </SafeAreaProvider>
+    //     <FeedScreens />
+    //     <LevelOneScreen />
+    //     <LevelTwoScreen />
+    //     <LevelThreeScreen />
+    //     <AnimatedFullScreenModal />
+
+    //   </S.Container>
+    // </SafeAreaProvider>
   );
 }

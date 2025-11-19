@@ -36,13 +36,15 @@ export default function UserProfileScreenView({
   const [profileVals, setProfileVals] = useState(null);
   const { userProfile } = useUserProfile();
 
+  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
   useEffect(() => {
     setProfileVals({
       userName: selectedProfile?.UserName,
       bio: selectedProfile?.profileBio,
     });
 
-  },[selectedProfile]);
+  }, [selectedProfile]);
 
   return (
     <S.ContentContainer>
@@ -76,8 +78,8 @@ export default function UserProfileScreenView({
                 photo={review.profilePhoto}
                 review={review}
                 currentUserId={userProfile.UserID}
-                onEdit={() => {}}
-                onDelete={() => {}}
+                onEdit={() => { }}
+                onDelete={() => { }}
               />
             ))}
           </S.ReviewsContent>

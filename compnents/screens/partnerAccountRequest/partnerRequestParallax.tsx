@@ -6,6 +6,7 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import partnerRayImage from "../../png/partnerRay.jpg";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
+import { useAppNavigation } from "../../mapPage/types";
 
 import PartnerAccountRequestPage from ".";
 
@@ -16,16 +17,18 @@ export default function PartnerRequestParallax() {
 
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
-  const onClose = () => {
+  const navigation = useAppNavigation();
+
+  const onClose = async () => {
     setFormValues(null);
-    setLevelTwoScreen(false);
+    navigation.goBack();
     setDraggableConfig(null);
   };
 
   const onNavigate = () => {
     Keyboard.dismiss();
     setMapConfig(1, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
-    setLevelTwoScreen(false);
+    navigation.navigate("Home");
   };
 
   return (

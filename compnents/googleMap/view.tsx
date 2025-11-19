@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
+import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -21,6 +24,7 @@ import { MarkerHeatPoint } from "./marker/markerHeatPoint";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
+import { useMapStore } from "./useMapStore";
 
 type MapViewProps = {
   mapConfig: number;
@@ -35,14 +39,19 @@ type MapViewProps = {
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
   handleOnMapReady: () => void;
-  diveSites?:  DiveSiteBasic[] | null;
-  diveShops?:  DiveShop[] | null;
+  diveSites?: DiveSiteBasic[] | null;
+  diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null
 };
 
 export default function GoogleMapView(props: MapViewProps) {
-
+  const [timoutId, setTimoutId] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
+  const { sitesArray } = useContext(SitesArrayContext);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const mapConfig = useMapStore((state) => state.mapConfig);
+  const mapRegion = useMapStore((state) => state.mapRegion);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
 
   const styles = StyleSheet.create({
     container: {
@@ -57,7 +66,25 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   });
 
-  const getCurrentLocation = async() => {
+  const moveToTrip = async (siteIds: number[]) => {
+    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteIds));
+
+    const coordinates = itinerizedDiveSites.map(site => ({
+      latitude: site.lat,
+      longitude: site.lng,
+    }));
+
+    mapRef?.fitToCoordinates(coordinates, {
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      animated: true,
+    });
+  };
+
+  if (mapConfig === 2) {
+    moveToTrip(sitesArray);
+  }
+
+  const getCurrentLocation = async () => {
     try {
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
@@ -76,7 +103,8 @@ export default function GoogleMapView(props: MapViewProps) {
 
   const [map, setMap] = useState<MapView | null>(null);
 
-  const onMapLoad = async(map: MapView) => {
+  const onMapLoad = async (map: MapView) => {
+
     setMap(map);
     if (typeof props.onLoad === "function") {
       props.onLoad(map);
@@ -92,11 +120,34 @@ export default function GoogleMapView(props: MapViewProps) {
   const { clusters, supercluster } = useSupercluster(clusterConfig);
 
   useEffect(() => {
-    getCurrentLocation();
-  },[]);
+    if (mapRegion) {
+      setInitialRegion(mapRegion);
+    } else {
+      getCurrentLocation();
+    }
+  }, [mapRegion]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (mapRegion && mapRef) {
+        const timerId = setTimeout(() => {
+          mapRef.animateToRegion(mapRegion, 10);
+        }, 500);
+        setTimoutId(timerId);
+
+      }
+
+      return () => {
+        if (timoutId) {
+          clearTimeout(timoutId);
+        }
+        setMapRegion(null);
+      };
+    }, [mapRef, mapRegion])
+  );
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       if (!map) {
         return;
       }
@@ -152,10 +203,18 @@ export default function GoogleMapView(props: MapViewProps) {
     })();
   }, [props.diveSites, props.diveShops]);
 
+  if (!initialRegion) {
+    return (
+      <View style={styles.container}>
+        {/* Or a Loading indicator */}
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <MapView
-        key={1}
+        key={props.mapConfig}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         mapType="hybrid"
@@ -171,7 +230,7 @@ export default function GoogleMapView(props: MapViewProps) {
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
-        {clusters.map((cluster) => {
+        {clusters?.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const { cluster: isCluster } = cluster.properties;
 
@@ -211,21 +270,21 @@ export default function GoogleMapView(props: MapViewProps) {
 
       </MapView>
 
-      {props.mapConfig === 1 && (
-        <MarkerDraggable  />
+      {props?.mapConfig === 1 && (
+        <MarkerDraggable />
       )}
 
-      {props.mapConfig === 1 && (
+      {props?.mapConfig === 1 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToSiteSubmitterButton />
         </View>
       )}
-      {props.mapConfig === 2 && (
+      {props?.mapConfig === 2 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToShopButton />
         </View>
       )}
-      {props.mapConfig === 3 && (
+      {props?.mapConfig === 3 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToCreateTripButton />
         </View>

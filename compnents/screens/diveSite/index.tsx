@@ -14,10 +14,12 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
 import { useUserProfile } from "../../../store/user/useUserProfile";
-import { NavigationProp } from "../../../providers/navigation";
 import { MetricItem } from "../../../entities/metricItem";
+import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
+import { useAppNavigation } from "../../mapPage/types";
 
 import DiveSiteScreenView from "./diveSite";
+import { useDiveSiteNavigation } from "./types";
 
 type DiveSiteProps = {
   closeParallax?: (mapConfig: number) => void;
@@ -36,8 +38,11 @@ export default function DiveSiteScreen({
   restoreParallax,
   openDiveSiteReviewer
 }: DiveSiteProps) {
-  const navigation = useNavigation<NavigationProp>();
+
   const { userProfile } = useUserProfile();
+  const navigation = useAppNavigation();
+  const diveSiteNavigation = useDiveSiteNavigation();
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
@@ -63,7 +68,7 @@ export default function DiveSiteScreen({
   };
 
   const handleEditReview = (review: Review) => {
-    navigation.navigate("SiteReviewCreator", {
+    diveSiteNavigation.navigate("SiteReviewCreator", {
       selectedDiveSite: selectedDiveSite.id,
       siteName: selectedDiveSite.name,
       reviewToEdit: review
@@ -74,35 +79,42 @@ export default function DiveSiteScreen({
     console.log("Report review:", reviewId);
   };
 
-  const handleMapFlip = async(sites: number[]) => {
-    setSitesArray(sites);
-    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
+  const handleMapFlip = async (sites: number[]) => {
+    if (mapRef) {
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
 
-    const coordinates = itinerizedDiveSites.map(site => ({
-      latitude: site.lat,
-      longitude: site.lng,
-    }));
+      setSitesArray(sites);
 
-    mapRef?.fitToCoordinates(coordinates, {
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-      animated: true,
-    });
+      navigation.navigate("GoogleMap");
 
-    setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id });
-    closeParallax(1);
+      const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
+
+      const coordinates = itinerizedDiveSites.map(site => ({
+        latitude: site.lat,
+        longitude: site.lng,
+      }));
+
+      mapRef?.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
+      });
+
+      setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id });
+    }
   };
 
-  useEffect(() => {
-    if (LevelOneScreen){
-      restoreParallax();
-    }
-  }, [LevelOneScreen]);
+  // useEffect(() => {
+  //   if (LevelOneScreen) {
+  //     restoreParallax();
+  //   }
+  // }, [LevelOneScreen]);
 
   useEffect(() => {
-    if (selectedDiveSite){
+    if (selectedDiveSite) {
       getData(selectedDiveSite);
     }
-  },[selectedDiveSite.id]);
+  }, [selectedDiveSite.id]);
 
   // Refresh reviews when screen comes back into focus (e.g., after editing a review)
   useFocusEffect(
@@ -111,14 +123,14 @@ export default function DiveSiteScreen({
     }, [selectedDiveSite?.id])
   );
 
-  const refreshReviews = async() => {
+  const refreshReviews = async () => {
     if (selectedDiveSite?.id) {
       const diveSiteReviews = await getRecentThreeReviewsBySiteId(selectedDiveSite.id);
       setReviews(diveSiteReviews);
     }
   };
 
-  const getData = async(selectedDiveSite: DiveSiteWithUserName) => {
+  const getData = async (selectedDiveSite: DiveSiteWithUserName) => {
     const trips = await getDiveSiteTripCount(selectedDiveSite.id);
     setTripCount(trips.label_count);
 

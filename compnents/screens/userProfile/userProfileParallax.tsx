@@ -18,13 +18,17 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import UserProfileScreen from ".";
+import { useAppNavigation } from "../../mapPage/types";
 
 type UserProfileProps = {
   profileID: number
 };
 
+
 export default function UserProfileParallax(props: UserProfileProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+
+  const navigation = useAppNavigation()
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setLevelTwoScreen } = useContext(
@@ -48,7 +52,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     getProfileinfo();
   }, [props.profileID]);
 
-  const getProfileinfo = async() => {
+  const getProfileinfo = async () => {
     const profileinfo = await grabProfileById(props.profileID);
     setSelectedProfile(profileinfo);
   };
@@ -85,7 +89,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     }
   }
 
-  const addFollow = async() => {
+  const addFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
@@ -97,7 +101,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setIsfFollowing(newRecord.id);
   };
 
-  const removeFollow = async() => {
+  const removeFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
@@ -106,9 +110,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const onClose = () => {
-    setSelectedProfile(null);
-    setLevelOneScreen(false);
-    setLevelTwoScreen(false);
+    navigation.goBack();
   };
 
   const onNavigate = () => {
@@ -116,18 +118,15 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const openSettingsScreen = () => {
-    setLevelTwoScreen(false);
-    setLevelOneScreen(true);
-    setActiveScreen("SettingsScreen");
+    navigation.navigate("Settings")
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
     setEditInfo("Profile");
-    setActiveTutorialID("EditsScreen");
+    navigation.navigate("EditScreen");
   };
 
-  const handleShare = async() => {
+  const handleShare = async () => {
     try {
       await Share.open({
         title: "Share Scuba SEAsons Profile",

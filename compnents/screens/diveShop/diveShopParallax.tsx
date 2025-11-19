@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
+import { RouteProp, useRoute } from "@react-navigation/native";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
@@ -16,14 +17,24 @@ import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { MainRoutes } from "../../mapPage/mainNavigator";
+import { useAppNavigation } from "../../mapPage/types";
+
+import { useDiveShopNavigation } from "./types";
 
 import DiveShopScreen from ".";
 
-type DiveCentreProps = {
-  shopID: number
+type DiveShopParallaxProps = {
+  id: number;
 };
 
-export default function DiveShopParallax(props: DiveCentreProps) {
+type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
+
+export default function DiveShopParallax(props: DiveShopParallaxProps) {
+  const route = useRoute<DiveCentreRouteProp>();
+  const diveShopNavigation = useDiveShopNavigation();
+  const navigation = useAppNavigation();
+  // const { id } = route.params;
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -44,10 +55,10 @@ export default function DiveShopParallax(props: DiveCentreProps) {
 
   useEffect(() => {
     getDiveSiteinfo();
-  }, [props.shopID]);
+  }, [props.id]);
 
-  const getDiveSiteinfo = async() => {
-    const diveCentreinfo = await getDiveShopById(props.shopID);
+  const getDiveSiteinfo = async () => {
+    const diveCentreinfo = await getDiveShopById(props.id);
     setSelectedShop(diveCentreinfo[0]);
   };
 
@@ -75,8 +86,8 @@ export default function DiveShopParallax(props: DiveCentreProps) {
 
   }, [selectedShop]);
 
-  const onClose = () => {
-    setLevelOneScreen(false);
+  const onClose = async () => {
+    diveShopNavigation.goBack();
   };
 
   const onNavigate = () => {
@@ -87,15 +98,15 @@ export default function DiveShopParallax(props: DiveCentreProps) {
   };
 
   const openTripCreatorScreen = () => {
+    diveShopNavigation.navigate("TripCreator", { id: null });
     setLevelOneScreen(false);
     setLevelTwoScreen(true);
     setActiveScreen("TripCreatorScreen");
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
+    diveShopNavigation.navigate("EditScreen");
     setEditInfo("DiveShop");
-    setActiveTutorialID("EditsScreen");
   };
 
   const popoverContent = () => {
@@ -123,7 +134,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
       popoverContent={isMyShop && popoverContent}
       isMyShop={isMyShop}
     >
-      <DiveShopScreen isMyShop={isMyShop} selectedShop={selectedShop}/>
+      <DiveShopScreen isMyShop={isMyShop} selectedShop={selectedShop} />
     </ParallaxDrawer>
   );
 }

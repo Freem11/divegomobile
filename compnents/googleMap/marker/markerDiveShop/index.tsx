@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
-import { View } from 'react-native';
+import React, { } from "react";
+import { View } from "react-native";
 import { Marker } from "react-native-maps";
-import Svg, { Circle, Path } from 'react-native-svg';
-import { Coordinates } from "../../../../entities/coordinates";
-import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
-import iconConfig from '../../../../icons/_config.json';
-import { colors } from "../../../styles";
+import Svg, { Circle, Path } from "react-native-svg";
 import { moderateScale } from "react-native-size-matters";
+
+import { Coordinates } from "../../../../entities/coordinates";
+import iconConfig from "../../../../icons/_config.json";
+import { colors } from "../../../styles";
+import { useAppNavigation } from "../../../mapPage/types";
 
 type MarkerDiveShopProps = {
   id: number;
@@ -15,19 +15,16 @@ type MarkerDiveShopProps = {
 };
 
 export function MarkerDiveShop(props: MarkerDiveShopProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-
-  const pathData = iconConfig["dive-centre"]?.[1] ?? '';
+  const navigation = useAppNavigation();
+  const pathData = iconConfig["dive-centre"]?.[1] ?? "";
 
   const scale = 0.85;
   const center = 256;
   const translate = center * (1 - scale); // 38.4
 
   const handleScreen = () => {
-    setActiveScreen("DiveShopScreen", {id: props.id})
-    setLevelOneScreen(true)
-  }
+    navigation.navigate("DiveShopNavigator", { id: props.id });
+  };
 
   return (
     <Marker

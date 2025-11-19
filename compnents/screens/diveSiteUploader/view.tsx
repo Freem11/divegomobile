@@ -8,6 +8,8 @@ import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { ScreenReturn } from "../../googleMap/types";
 import { showWarning } from "../../toast";
+import { useAppNavigation } from "../../mapPage/types";
+import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 
 import { Form, FormRules } from "./form";
 import * as S from "./styles";
@@ -29,7 +31,10 @@ export default function DiveSiteUploaderView({
 }: Props) {
 
   const { t } = useTranslation();
+  const navigation = useAppNavigation();
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
   const { control, handleSubmit, formState: { isSubmitting, errors }, getValues, reset } = useForm<Form>({
@@ -46,15 +51,21 @@ export default function DiveSiteUploaderView({
   };
 
   useEffect(() => {
-    if (levelTwoScreen){
+    if (levelTwoScreen) {
       restoreParallax();
     }
   }, [levelTwoScreen]);
 
-  const handleMapFlip = async(formData: Required<Form>) => {
-    setFormValues(formData);
-    setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    closeParallax(1);
+  const handleMapFlip = async (formData: Required<Form>) => {
+    if (mapRef) {
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
+
+      navigation.navigate("GoogleMap");
+
+      setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
+      setFormValues(formData);
+    }
 
   };
 
@@ -97,7 +108,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Latitude}
                 iconLeft="latitude"
                 placeholder={t("DiveSiteAdd.latPlaceholder")}
-                value={value ? String(value): null}
+                value={value ? String(value) : null}
                 onChangeText={onChange}
                 keyboardType="numbers-and-punctuation"
               />
@@ -115,7 +126,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Longitude}
                 iconLeft="longitude"
                 placeholder={t("DiveSiteAdd.lngPlaceholder")}
-                value={value ? String(value): null}
+                value={value ? String(value) : null}
                 onChangeText={onChange}
                 keyboardType="numbers-and-punctuation"
               />
