@@ -21,6 +21,9 @@ const styles = StyleSheet.create({
 
 export function ReturnToSiteSubmitterButton() {
   const navProps = useMapStore((state) => state.navProps);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const mapAction = useMapStore((state) => state.actions);
+  const storeFormValues = useMapStore((state) => state.formValues);
   const siteSubmitterNavigation = useDiveSiteNavigation();
   const partnerRequestNavigation = usePartnerRequestNavigation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -28,12 +31,15 @@ export function ReturnToSiteSubmitterButton() {
 
   const onPress = async () => {
 
+    const camera = await mapRef.getCamera();
+
     if (navProps.pageName === "PartnerRequestPage") {
       partnerRequestNavigation.goBack();
     } else {
       siteSubmitterNavigation.goBack();
     };
 
+    mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude });
     setMapConfig(0, { pageName: "", itemId: 0 });
     setSitesArray([]);
   };

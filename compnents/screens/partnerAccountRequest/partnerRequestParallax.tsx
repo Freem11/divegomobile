@@ -13,12 +13,18 @@ export default function PartnerRequestParallax() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setDraggableConfig = useMapStore((state) => state.actions.setDraggablePoint);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const mapAction = useMapStore((state) => state.actions);
 
   const navigation = useAppNavigation();
 
   const onClose = async () => {
-    setFormValues(null);
+    setFormValues({
+      Site: "",
+      Latitude: null,
+      Longitude: null
+    });
     navigation.goBack();
+    mapAction.setFormValues(null);
     setDraggableConfig(null);
   };
 

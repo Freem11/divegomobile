@@ -91,11 +91,12 @@ export default function DiveShopScreen({
     }
   };
 
-  const handleEditButton = (itineraryInfo: ItineraryItem) => {
-    setEditMode(true);
-    diveShopNavigation.navigate("TripCreator", { id: itineraryInfo.id });
-    setFormValues(itineraryInfo);
-    setSitesArray(itineraryInfo.siteList);
+  const handleEditButton = (id: number) => {
+    console.log("editbutton", id);
+    // setEditMode(true);
+    diveShopNavigation.navigate("TripCreator", { id });
+    // setFormValues(itineraryInfo);
+    // setSitesArray(itineraryInfo.siteList);
   };
 
   const handleDeleteButton = (itineraryInfo: ItineraryItem) => {

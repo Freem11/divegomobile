@@ -24,14 +24,17 @@ export default function SiteSubmitterParallax() {
   const setDraggableConfig = useMapStore((state) => state.actions.setDraggablePoint);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
 
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const navigation = useNavigation<SiteSubmitterParallaxNavigationProp>();
   const appNavigation = useAppNavigation();
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const mapRef = useMapStore((state) => state.mapRef);
 
   const onClose = async () => {
-    setFormValues(null);
+    setFormValues({
+      Site: "",
+      Latitude: null,
+      Longitude: null
+    });
     setDraggableConfig(null);
     navigation.goBack();
   };

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -11,11 +11,13 @@ import TripImage from "../../png/Trip.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useDiveShopNavigation } from "../diveShop/types";
+import { getTripById } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { ItineraryItem } from "../../../entities/itineraryItem";
 
 import TripCreatorPage from ".";
 
 type TripCreatorProps = {
-  itineraryID: number
+  id: number | null
 };
 
 export default function TripCreatorParallax(props: TripCreatorProps) {
@@ -28,6 +30,26 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+
+  const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
+
+  console.log("props?", props.id);
+  useEffect(() => {
+    getDiveSiteinfo();
+  }, [props.id]);
+
+  const getDiveSiteinfo = async () => {
+    if (props.id) {
+      const tripInfo = await getTripById(props.id);
+      setSelectedTrip(tripInfo[0]);
+      if (tripInfo) {
+        setEditMode(true);
+      }
+    }
+  };
+
+  console.log("selectedTrip", selectedTrip);
+  console.log("editMode", editMode);
 
   const onClose = () => {
     setFormValues(null);
@@ -67,7 +89,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
       onMapFlip={onNavigate}
       popoverContent={editMode && popoverContent}
     >
-      <TripCreatorPage itineraryInfo={storeFormValues} />
+      <TripCreatorPage itineraryInfo={selectedTrip} />
 
     </ParallaxDrawer>
   );
