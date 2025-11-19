@@ -9,6 +9,7 @@ const windowWidth = Dimensions.get("screen").width;
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   width: ${windowWidth}px;
+  padding-bottom: 5%;
 `;
 
 export const InputGroupContainer = styled.View`

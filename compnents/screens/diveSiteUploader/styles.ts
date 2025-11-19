@@ -1,14 +1,15 @@
-import styled from 'styled-components/native';
-import { Dimensions, Platform } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { Dimensions, Platform } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
   activeFonts,
-} from '../../styles';
+} from "../../styles";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export const FullScreenCenter = styled.View`
   flex: 1;
@@ -27,6 +28,7 @@ export const BackButton = styled.View`
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
+  padding-bottom: 15%;
 `;
 
 // margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;
@@ -62,7 +64,7 @@ export const ButtonSpread = styled.View`
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
-  margin-top: ${Platform.OS === 'ios' ? '15%' : '2%'};
+  margin-top: ${Platform.OS === "ios" ? "15%" : "2%"};
   padding-horizontal: 7%;
 `;
 
@@ -73,7 +75,7 @@ export const Hint = styled.Text`
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.ThinItalic};
   margin-top: 2%;
-  margin-left: ${windowWidth > 600 ? '5%' : '9%'};
+  margin-left: ${windowWidth > 600 ? "5%" : "9%"};
   margin-bottom: 0%;
   width: 30%;
 `;
