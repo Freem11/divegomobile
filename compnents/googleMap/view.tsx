@@ -12,6 +12,10 @@ import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
 import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
+import SearchTool from "../searchTool";
+import * as S from "../mapPage/styles";
+import ButtonIcon from "../reusables/buttonIcon-new";
+import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -80,15 +84,7 @@ export default function GoogleMapView(props: MapViewProps) {
     });
   };
 
-  if (mapConfig === 2) {
-    moveToTrip(sitesArray);
-  }
-
-  if (mapConfig === 3 && sitesArray.length > 0) {
-    moveToTrip(sitesArray);
-  }
-
-  const getCurrentLocation = async () => {
+  const getStartLocation = async () => {
     try {
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
@@ -105,6 +101,21 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   };
 
+  const getCurrentLocation = async () => {
+    try {
+      const { coords } = await getCurrentCoordinates();
+      if (coords) {
+        mapRef?.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
+        }, 500);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
   const [map, setMap] = useState<MapView | null>(null);
 
   const onMapLoad = async (map: MapView) => {
@@ -127,7 +138,7 @@ export default function GoogleMapView(props: MapViewProps) {
     if (mapRegion) {
       setInitialRegion(mapRegion);
     } else {
-      getCurrentLocation();
+      getStartLocation();
     }
   }, [mapRegion]);
 
@@ -139,6 +150,14 @@ export default function GoogleMapView(props: MapViewProps) {
         }, 500);
         setTimoutId(timerId);
 
+      }
+
+      if (mapConfig === 2) {
+        moveToTrip(sitesArray);
+      }
+
+      if (mapConfig === 3 && sitesArray.length > 0) {
+        moveToTrip(sitesArray);
       }
 
       return () => {
@@ -274,12 +293,26 @@ export default function GoogleMapView(props: MapViewProps) {
 
       </MapView>
 
+      {(props?.mapConfig !== 0 && props?.mapConfig !== 2) && (
+        <S.SafeAreaTop edges={["top"]}>
+          <SearchTool />
+        </S.SafeAreaTop>
+      )}
+
       {props?.mapConfig === 1 && (
         <MarkerDraggable />
       )}
 
       {props?.mapConfig === 1 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+          <S.TargetWrapperAlt>
+            <ButtonIcon
+              icon="target"
+              size={36}
+              onPress={() => getCurrentLocation()}
+              style={{ pointerEvents: "auto" }}
+            />
+          </S.TargetWrapperAlt>
           <ReturnToSiteSubmitterButton />
         </View>
       )}
@@ -290,6 +323,14 @@ export default function GoogleMapView(props: MapViewProps) {
       )}
       {props?.mapConfig === 3 && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+          <S.TargetWrapperAlt>
+            <ButtonIcon
+              icon="target"
+              size={36}
+              onPress={() => getCurrentLocation()}
+              style={{ pointerEvents: "auto" }}
+            />
+          </S.TargetWrapperAlt>
           <ReturnToCreateTripButton />
         </View>
       )}
