@@ -63,7 +63,6 @@ export default function TripCreatorPageView({
   const handleMapFlip = async (formData: Required<Form>) => {
     setMapConfig(3, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
     navigation.navigate("GoogleMap");
-    // closeParallax(1);
     setFormValues(formData);
   };
 
@@ -203,7 +202,7 @@ export default function TripCreatorPageView({
             {Array.isArray(tripDiveSites) &&
               tripDiveSites.map((tripDetails, index) => {
                 return (
-                  <S.ListItemContainer key={tripDetails.id}>
+                  <S.ListItemContainer key={index}>
                     <S.ItemHousing>
                       <IconWithLabel
                         label={tripDetails.name}

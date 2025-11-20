@@ -3,7 +3,7 @@ import { Keyboard } from "react-native";
 import moment from "moment";
 
 import { showError, showSuccess } from "../../toast";
-import { insertItinerary, insertItineraryRequest } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { getItineraryDiveSiteByIdArray, insertItinerary, insertItineraryRequest } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { EditModeContext } from "../../contexts/editModeContext";
@@ -31,7 +31,7 @@ export default function TripCreatorPage({
 
   const storeFormValues = useMapStore((state) => state.formValues);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
-  const { tripDiveSites } = useContext(TripSitesContext);
+  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { editMode } = useContext(EditModeContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
@@ -44,6 +44,9 @@ export default function TripCreatorPage({
 
   useEffect(() => {
     setFormValues({ ...storeFormValues, siteList: sitesArray });
+    const diveSites = getTripDiveSites(sitesArray);
+
+    setTripDiveSites(diveSites);
   }, [sitesArray]);
 
   const onSubmit = async (formData: Required<Form>) => {

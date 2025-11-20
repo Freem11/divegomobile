@@ -35,11 +35,13 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
     if (mapConfig !== 3) {
       handleScreen();
     } else {
+      setTracksViewChanges(false);
       if (sitesArray.includes(props.id)) {
         setSitesArray(prev => prev.filter(id => id !== props.id));
       } else {
         setSitesArray(prev => [...prev, props.id]);
       }
+      setTracksViewChanges(true);
     }
   }
 
