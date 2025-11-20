@@ -13,9 +13,11 @@ import Label from "../../reusables/label";
 import EmptyState from "../../reusables/emptyState";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useMapStore } from "../../googleMap/useMapStore";
+import { ScreenReturn } from "../../googleMap/types";
 
 import { Form, FormRules } from "./form";
 import * as S from "./styles";
+import { useTripCreatorNavigation } from "./types";
 
 type TripCreatorProps = {
   values: Form;
@@ -54,10 +56,14 @@ export default function TripCreatorPageView({
   });
 
   const { t } = useTranslation();
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const navigation = useTripCreatorNavigation();
 
-  const handleMapFlip = async(formData: Required<Form>) => {
-    closeParallax(1);
+  const handleMapFlip = async (formData: Required<Form>) => {
+    setMapConfig(3, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
+    navigation.navigate("GoogleMap");
+    // closeParallax(1);
     setFormValues(formData);
   };
 

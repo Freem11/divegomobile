@@ -3,7 +3,7 @@ import { Keyboard } from "react-native";
 import moment from "moment";
 
 import { showError, showSuccess } from "../../toast";
-import { getItineraryDiveSiteByIdArray, insertItinerary, insertItineraryRequest } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { insertItinerary, insertItineraryRequest } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { TripSitesContext } from "../../contexts/tripSitesContext";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { EditModeContext } from "../../contexts/editModeContext";
@@ -19,42 +19,31 @@ type TripCreatorModalProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void;
   itineraryInfo?: ItineraryItem
+  getTripDiveSites: (siteIds: number[]) => void
 };
 
 export default function TripCreatorPage({
   closeParallax,
   restoreParallax,
   itineraryInfo,
+  getTripDiveSites,
 }: TripCreatorModalProps) {
 
   const storeFormValues = useMapStore((state) => state.formValues);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
-  const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+  const { tripDiveSites } = useContext(TripSitesContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
   const { editMode } = useContext(EditModeContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const { selectedShop } = useContext(SelectedShopContext);
 
-  console.log("itineraryInfo", itineraryInfo);
-  const getTripDiveSites = async (siteIds: number[]) => {
-    try {
-      const success = await getItineraryDiveSiteByIdArray(siteIds);
-      if (success) {
-        setTripDiveSites(success);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
   useEffect(() => {
-    getTripDiveSites(sitesArray);
-    setTripDiveSites(getTripDiveSites(itineraryInfo?.siteList || storeFormValues?.siteList));
-  }, [itineraryInfo]);
+
+    setSitesArray(itineraryInfo?.siteList || []);
+  }, []);
 
   useEffect(() => {
     setFormValues({ ...storeFormValues, siteList: sitesArray });
-    getTripDiveSites(sitesArray);
   }, [sitesArray]);
 
   const onSubmit = async (formData: Required<Form>) => {

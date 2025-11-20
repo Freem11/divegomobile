@@ -11,7 +11,7 @@ import TripImage from "../../png/Trip.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useDiveShopNavigation } from "../diveShop/types";
-import { getTripById } from "../../../supabaseCalls/itinerarySupabaseCalls";
+import { getItineraryDiveSiteByIdArray, getTripById } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
 
 import TripCreatorPage from ".";
@@ -25,7 +25,6 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
   const diveShopNavigation = useDiveShopNavigation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
-  const storeFormValues = useMapStore((state) => state.formValues);
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { setSitesArray } = useContext(SitesArrayContext);
   const { setTripDiveSites } = useContext(TripSitesContext);
@@ -33,7 +32,6 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
 
   const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
 
-  console.log("props?", props.id);
   useEffect(() => {
     getDiveSiteinfo();
   }, [props.id]);
@@ -48,11 +46,33 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
     }
   };
 
-  console.log("selectedTrip", selectedTrip);
-  console.log("editMode", editMode);
+  useEffect(() => {
+    if (selectedTrip) {
+      getTripDiveSites(selectedTrip.siteList);
+    }
+
+  }, [selectedTrip]);
+
+  const getTripDiveSites = async (siteIds: number[]) => {
+    try {
+      const success = await getItineraryDiveSiteByIdArray(siteIds);
+      if (success) {
+        setTripDiveSites(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   const onClose = () => {
-    setFormValues(null);
+    setFormValues({
+      Name: "",
+      Link: "",
+      Details: "",
+      Price: "",
+      Start: "",
+      End: ""
+    });
     setEditMode(false);
     setSitesArray([]);
     setTripDiveSites([]);
@@ -89,7 +109,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
       onMapFlip={onNavigate}
       popoverContent={editMode && popoverContent}
     >
-      <TripCreatorPage itineraryInfo={selectedTrip} />
+      <TripCreatorPage itineraryInfo={selectedTrip} getTripDiveSites={getTripDiveSites} />
 
     </ParallaxDrawer>
   );
