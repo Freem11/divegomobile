@@ -19,12 +19,14 @@ type TripCreatorModalProps = {
   closeParallax?: (mapConfig: number) => void
   restoreParallax?: () => void;
   itineraryInfo?: ItineraryItem
+  getTripDiveSites: (siteIds: number[]) => void
 };
 
 export default function TripCreatorPage({
   closeParallax,
   restoreParallax,
   itineraryInfo,
+  getTripDiveSites,
 }: TripCreatorModalProps) {
 
   const storeFormValues = useMapStore((state) => state.formValues);
@@ -34,32 +36,19 @@ export default function TripCreatorPage({
   const { editMode } = useContext(EditModeContext);
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const { selectedShop } = useContext(SelectedShopContext);
-  const getTripDiveSites = async(siteIds: number[]) => {
-    try {
-      const success = await getItineraryDiveSiteByIdArray(siteIds);
-      if (success) {
-        setTripDiveSites(success);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
-  useEffect(() => {
-    getTripDiveSites(sitesArray);
-    setTripDiveSites(getTripDiveSites(storeFormValues?.siteList));
-  }, []);
 
   useEffect(() => {
     setFormValues({ ...storeFormValues, siteList: sitesArray });
-    getTripDiveSites(sitesArray);
+    const diveSites = getTripDiveSites(sitesArray);
+
+    setTripDiveSites(diveSites);
   }, [sitesArray]);
 
-  const onSubmit = async(formData: Required<Form>) => {
+  const onSubmit = async (formData: Required<Form>) => {
 
     formData = { ...formData, SiteList: sitesArray };
 
-    if (editMode){
+    if (editMode) {
       const { error } = await insertItineraryRequest({
         OriginalItineraryID: storeFormValues?.OriginalItineraryID,
         shopID: selectedShop.id,
@@ -71,7 +60,7 @@ export default function TripCreatorPage({
         description: formData.Details,
         siteList: formData.SiteList
       }, "Edit");
-      if (error){
+      if (error) {
         showError("We were unable to save your submission, please try again later");
         return;
       }
@@ -89,7 +78,7 @@ export default function TripCreatorPage({
         description: formData.Details,
         siteList: formData.SiteList
       });
-      if (error){
+      if (error) {
         showError("We were unable to save your submission, please try again later");
         return;
       }
@@ -100,7 +89,7 @@ export default function TripCreatorPage({
     }
   };
 
-  const removeFromSitesArray = async(siteIdNo: number, siteList: number[]) => {
+  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
 
     const index = siteList.indexOf(siteIdNo);
     if (index > -1) {
@@ -115,7 +104,7 @@ export default function TripCreatorPage({
   };
 
   useEffect(() => {
-    if (levelTwoScreen){
+    if (levelTwoScreen) {
       restoreParallax();
     }
   }, [levelTwoScreen]);
@@ -142,18 +131,18 @@ export default function TripCreatorPage({
   };
 
   useEffect(() => {
-    if (itineraryInfo){
+    if (itineraryInfo) {
       setFormValues({
-        Name:    itineraryInfo?.tripName || storeFormValues?.Name,
-        Link:    itineraryInfo?.BookingPage || storeFormValues?.Link,
-        Price:   itineraryInfo?.price || storeFormValues?.Price,
-        Start:   itineraryInfo?.startDate || storeFormValues?.Start,
-        End:     itineraryInfo?.endDate || storeFormValues?.End,
+        Name: itineraryInfo?.tripName || storeFormValues?.Name,
+        Link: itineraryInfo?.BookingPage || storeFormValues?.Link,
+        Price: itineraryInfo?.price || storeFormValues?.Price,
+        Start: itineraryInfo?.startDate || storeFormValues?.Start,
+        End: itineraryInfo?.endDate || storeFormValues?.End,
         Details: itineraryInfo?.description || storeFormValues?.Details,
         OriginalItineraryID: itineraryInfo?.id || storeFormValues?.OriginalItineraryID,
       });
     }
-  },[]);
+  }, [itineraryInfo]);
 
   return (
     <TripCreatorPageView
@@ -170,11 +159,11 @@ export default function TripCreatorPage({
       datePickerVisible={datePickerVisible}
       dateType={dateType}
       values={{
-        Name:    storeFormValues?.Name,
-        Link:    storeFormValues?.Link,
-        Price:   storeFormValues?.Price,
-        Start:   storeFormValues?.Start,
-        End:     storeFormValues?.End,
+        Name: storeFormValues?.Name,
+        Link: storeFormValues?.Link,
+        Price: storeFormValues?.Price,
+        Start: storeFormValues?.Start,
+        End: storeFormValues?.End,
         Details: storeFormValues?.Details,
       }}
     />

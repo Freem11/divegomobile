@@ -1,9 +1,10 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import React, { useContext } from "react";
+
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
-import { useContext } from "react";
-import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
-import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { useMapStore } from "../../useMapStore";
+import { useTripCreatorNavigation } from "../../../screens/tripCreator/types";
+import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -18,23 +19,25 @@ const styles = StyleSheet.create({
 });
 
 export function ReturnToCreateTripButton() {
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const mapAction = useMapStore((state) => state.actions);
+  const storeFormValues = useMapStore((state) => state.formValues);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  
+  const tripCreatorNavigation = useTripCreatorNavigation();
+  const { sitesArray } = useContext(SitesArrayContext);
+
   const onPress = async () => {
-    setLevelTwoScreen(true);
-    setActiveScreen("TripCreatorScreen");
-    setMapConfig(0, {pageName: '', itemId: 0});
+    mapAction.setFormValues({ ...storeFormValues, Sitelist: sitesArray });
+    tripCreatorNavigation.goBack();
+    setMapConfig(0, { pageName: "", itemId: 0 });
   };
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.lowerButtonWrapper}>
-                  <Text style={styles.lowerButtonText}>
-                    {"Sites Chosen"}
-                  </Text>
-                </View>
+        <Text style={styles.lowerButtonText}>
+          {"Sites Chosen"}
+        </Text>
+      </View>
     </TouchableWithoutFeedback>
   );
 }

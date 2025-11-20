@@ -40,16 +40,11 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const { userProfile } = useUserProfile();
 
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  // const navigation = useNavigation<NavigationProp>();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
-  const { setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
   const { setChosenModal } = useContext(ModalSelectContext);
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);

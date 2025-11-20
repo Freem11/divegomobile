@@ -54,7 +54,6 @@ export default function PartnerAccountRequestPageView({
       navigation.navigate("GoogleMap");
 
       setMapConfig(1, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
-      closeParallax(1);
       setFormValues(formData);
     }
   };

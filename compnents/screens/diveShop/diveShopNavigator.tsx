@@ -2,8 +2,8 @@ import React, { } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import EditScreenParallax from "../edits/editsParallax";
-import TripCreatorParallax from "../tripCreator/tripCreatorParallax";
 import GoogleMap from "../../googleMap";
+import TripCreatorRouter from "../tripCreator/tripCreatorRouter";
 
 import DiveShopeParallax from "./diveShopParallax";
 
@@ -42,7 +42,13 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
 
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
 
-      <Stack.Screen name="TripCreator" component={TripCreatorParallax} />
+      <Stack.Screen name="TripCreator">
+        {({ route }) => (
+          <TripCreatorRouter
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
