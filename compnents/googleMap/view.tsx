@@ -84,6 +84,10 @@ export default function GoogleMapView(props: MapViewProps) {
     moveToTrip(sitesArray);
   }
 
+  if (mapConfig === 3 && sitesArray.length > 0) {
+    moveToTrip(sitesArray);
+  }
+
   const getCurrentLocation = async () => {
     try {
       const photoLocation = await getMostRecentPhoto();

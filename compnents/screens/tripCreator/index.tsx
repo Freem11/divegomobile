@@ -38,11 +38,6 @@ export default function TripCreatorPage({
   const { selectedShop } = useContext(SelectedShopContext);
 
   useEffect(() => {
-
-    setSitesArray(itineraryInfo?.siteList || []);
-  }, []);
-
-  useEffect(() => {
     setFormValues({ ...storeFormValues, siteList: sitesArray });
     const diveSites = getTripDiveSites(sitesArray);
 

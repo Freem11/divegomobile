@@ -40,6 +40,7 @@ export default function TripCreatorParallax(props: TripCreatorProps) {
     if (props.id) {
       const tripInfo = await getTripById(props.id);
       setSelectedTrip(tripInfo[0]);
+      setSitesArray(tripInfo[0].siteList);
       if (tripInfo) {
         setEditMode(true);
       }
