@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import moment from "moment";
 
-import { showError, showSuccess } from "../../toast";
-import { getItineraryDiveSiteByIdArray, insertItinerary, insertItineraryRequest } from "../../../supabaseCalls/itinerarySupabaseCalls";
-import { TripSitesContext } from "../../contexts/tripSitesContext";
-import { SitesArrayContext } from "../../contexts/sitesArrayContext";
-import { EditModeContext } from "../../contexts/editModeContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { ItineraryItem } from "../../../entities/itineraryItem";
-import { useMapStore } from "../../googleMap/useMapStore";
-import { SelectedShopContext } from "../../contexts/selectedShopContext";
+import { showError, showSuccess } from "../../../toast";
+import { insertItinerary, insertItineraryRequest } from "../../../../supabaseCalls/itinerarySupabaseCalls";
+import { TripSitesContext } from "../../../contexts/tripSitesContext";
+import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
+import { EditModeContext } from "../../../contexts/editModeContext";
+import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
+import { ItineraryItem } from "../../../../entities/itineraryItem";
+import { useMapStore } from "../../../googleMap/useMapStore";
+import { SelectedShopContext } from "../../../contexts/selectedShopContext";
 
 import TripCreatorPageView from "./tripCreator";
 import { Form } from "./form";

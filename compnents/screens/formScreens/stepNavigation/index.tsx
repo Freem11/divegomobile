@@ -1,7 +1,7 @@
-import React from 'react'
-import { View } from 'react-native'
+import React from "react";
+import { View } from "react-native";
 
-import * as S from './styles'
+import * as S from "./styles";
 
 interface StepNavigationProps {
   currentStep: number
@@ -22,9 +22,9 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({
   isSubmitting = false,
   canSubmit = true
 }) => {
-  const isLastStep = currentStep === (totalSteps - 1)
-  const isCompleteStep = currentStep === totalSteps
-  const isFirstStep = currentStep === 1
+  const isLastStep = currentStep === (totalSteps - 1);
+  const isCompleteStep = currentStep === totalSteps;
+  const isFirstStep = currentStep === 1;
 
   if (isCompleteStep) {
     return;
@@ -32,38 +32,38 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({
 
   return (
     <S.Container>
-      <S.ButtonContainer style={{ justifyContent: currentStep === 1 ? 'flex-end' : 'space-between' }}>
+      <S.ButtonContainer style={{ justifyContent: currentStep === 1 ? "flex-end" : "space-between" }}>
         {!isFirstStep && (
           <S.BackButton
-            title={'Back'}
+            title={"Back"}
             alt={true}
-            size={'thin'}
+            size={"thin"}
             disabled={isSubmitting}
             onPress={onBack}
-            iconLeft={'chevron-left'}
+            iconLeft={"chevron-left"}
           />
         )}
         {isFirstStep && <View style={{ flex: 1 }} />}
-        
+
         {isLastStep ? (
           <S.NextButton
-            title={isSubmitting ? 'Submitting...' : 'Submit'}
+            title={isSubmitting ? "Submitting..." : "Submit"}
             alt={false}
-            size={'thin'}
+            size={"thin"}
             disabled={isSubmitting || !canSubmit}
             onPress={onSubmit}
           />
         ) : (
           <S.NextButton
-            title={'Next'}
+            title={"Next"}
             alt={false}
-            size={'thin'}
+            size={"thin"}
             disabled={isSubmitting}
             onPress={onNext}
-            iconRight={'chevron-right'}
+            iconRight={"chevron-right"}
           />
         )}
       </S.ButtonContainer>
     </S.Container>
-  )
-}
+  );
+};

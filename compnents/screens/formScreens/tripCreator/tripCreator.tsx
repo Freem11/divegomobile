@@ -5,15 +5,15 @@ import { useTranslation } from "react-i18next";
 import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import { Controller, useForm } from "react-hook-form";
 
-import { colors } from "../../styles";
-import PriceTextInput from "../../reusables/priceTextInput";
-import MobileTextInput from "../../reusables/textInput";
-import Button from "../../reusables/button";
-import Label from "../../reusables/label";
-import EmptyState from "../../reusables/emptyState";
-import IconWithLabel from "../../reusables/iconWithLabal";
-import { useMapStore } from "../../googleMap/useMapStore";
-import { ScreenReturn } from "../../googleMap/types";
+import { colors } from "../../../styles";
+import PriceTextInput from "../../../reusables/priceTextInput";
+import MobileTextInput from "../../../reusables/textInput";
+import Button from "../../../reusables/button";
+import Label from "../../../reusables/label";
+import EmptyState from "../../../reusables/emptyState";
+import IconWithLabel from "../../../reusables/iconWithLabal";
+import { useMapStore } from "../../../googleMap/useMapStore";
+import { ScreenReturn } from "../../../googleMap/types";
 
 import { Form, FormRules } from "./form";
 import * as S from "./styles";

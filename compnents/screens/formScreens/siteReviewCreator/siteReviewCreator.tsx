@@ -3,13 +3,15 @@ import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch } f
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
 
-import { DiveConditions } from "../../../entities/diveSiteCondidtions";
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
-import { ReviewPhotos } from "../../../entities/diveSiteReview";
+import { DiveConditions } from "../../../../entities/diveSiteCondidtions";
+import { DiveSiteWithUserName } from "../../../../entities/diveSite";
+import { ReviewPhotos } from "../../../../entities/diveSiteReview";
+import { ProgressBar } from "../progressBar";
+import { StepNavigation } from "../stepNavigation";
+import * as S from "../styles";
 
-import { ProgressBar, StepNavigation, Step1, Step2, Step3, Step4 } from "./_components";
+import { Step1, Step2, Step3, Step4 } from "./_components";
 import { Form } from "./form";
-import * as S from "./styles";
 
 type ShopReviewCreatorProps = {
   datePickerVisible: boolean;
@@ -120,7 +122,7 @@ export default function SiteReviewPageView({
     setValue("Conditions", updatedConditions);
   };
 
-  const handleGoNext = useCallback(async() => {
+  const handleGoNext = useCallback(async () => {
     let fieldsToValidate: (keyof Form)[] = [];
 
     switch (currentStep) {

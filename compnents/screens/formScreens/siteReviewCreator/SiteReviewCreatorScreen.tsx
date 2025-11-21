@@ -5,18 +5,18 @@ import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
-import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../supabaseCalls/diveSiteReviewCalls/posts";
-import { replaceReviewConditionsAtomic, replaceReviewPhotosAtomic } from "../../../supabaseCalls/diveSiteReviewCalls/atomics";
-import { updateDiveSiteReview } from "../../../supabaseCalls/diveSiteReviewCalls/updates";
-import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
-import { ReviewConditionInsert } from "../../../entities/diveSiteReview";
-import { DiveConditions } from "../../../entities/diveSiteCondidtions";
-import { useUserProfile } from "../../../store/user/useUserProfile";
-import { RootStackParamList } from "../../../providers/navigation";
-import { imageUploadMultiple } from "../imageUploadHelpers";
-import { showError } from "../../toast";
-import { getReviewPhotosByReviewId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
-import { removePhotoReviews } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
+import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { replaceReviewConditionsAtomic, replaceReviewPhotosAtomic } from "../../../../supabaseCalls/diveSiteReviewCalls/atomics";
+import { updateDiveSiteReview } from "../../../../supabaseCalls/diveSiteReviewCalls/updates";
+import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
+import { ReviewConditionInsert } from "../../../../entities/diveSiteReview";
+import { DiveConditions } from "../../../../entities/diveSiteCondidtions";
+import { useUserProfile } from "../../../../store/user/useUserProfile";
+import { RootStackParamList } from "../../../../providers/navigation";
+import { imageUploadMultiple } from "../../imageUploadHelpers";
+import { showError } from "../../../toast";
+import { getReviewPhotosByReviewId } from "../../../../supabaseCalls/diveSiteReviewCalls/gets";
+import { removePhotoReviews } from "../../../cloudflareBucketCalls/cloudflareAWSCalls";
 
 import SiteReviewPageView from "./siteReviewCreator";
 import { Form } from "./form";
@@ -38,7 +38,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
   const unitSystem = userProfile && userProfile.unit_system;
 
   let default_viz = 30;
-  if (unitSystem === "Imperial"){
+  if (unitSystem === "Imperial") {
     default_viz = 100;
   }
 
@@ -48,9 +48,9 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         conditionId: condition.condition_type_id,
         value: condition.value
       })) || [
-        { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 },
-        { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }
-      ];
+          { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 },
+          { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }
+        ];
 
       return {
         DiveDate: reviewToEdit.dive_date || "",
@@ -74,7 +74,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     reValidateMode: "onChange"
   });
 
-  const tryUpload = async(uri: string, index: number) => {
+  const tryUpload = async (uri: string, index: number) => {
     try {
       return await imageUploadMultiple({ assets: [{ uri }] }, index);
     } catch (e) {
@@ -110,8 +110,8 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }));
   };
 
-  const handleCreate = async(data: Form) => {
-    const photoUploadPromises = data.Photos.map(async(photo, index) => {
+  const handleCreate = async (data: Form) => {
+    const photoUploadPromises = data.Photos.map(async (photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
 
@@ -157,14 +157,14 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const handleUpdate = async(data: Form) => {
+  const handleUpdate = async (data: Form) => {
 
     const currentPhotos = (await getReviewPhotosByReviewId(reviewToEdit.review_id)).data;
     const newPhotos = data.Photos;
 
     const { deletes, uploads } = photoFateDeterminer(currentPhotos, newPhotos);
 
-    const photoUploadPromises = uploads.map(async(photo, index) => {
+    const photoUploadPromises = uploads.map(async (photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
 
@@ -178,7 +178,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       }
     });
 
-    const photoDeletePromises = deletes.map(async(photo) => {
+    const photoDeletePromises = deletes.map(async (photo) => {
       const isGated = currentPhotos.some(
         (currentPhoto) =>
           currentPhoto.photoPath === photo &&
@@ -234,7 +234,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const onSubmit = async(data: Form) => {
+  const onSubmit = async (data: Form) => {
     if (reviewToEdit) {
       await handleUpdate(data);
     } else {
@@ -242,8 +242,8 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const getDiveSiteInfo = async(siteId: number) => {
-    if (siteId){
+  const getDiveSiteInfo = async (siteId: number) => {
+    if (siteId) {
       const diveSiteInfo = await getDiveSiteById(siteId);
       setSiteInfo(diveSiteInfo[0]);
     }

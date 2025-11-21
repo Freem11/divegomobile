@@ -23,7 +23,6 @@ export const CompleteContainer = styled.View`
   justify-content: center;
 `;
 
-
 export const Spacer = styled.View`
   height: ${moderateScale(32)}px;
 `;

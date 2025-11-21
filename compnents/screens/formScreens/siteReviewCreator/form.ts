@@ -1,15 +1,16 @@
-import { DiveSiteConditions } from "../../../entities/diveSiteCondidtions";
-import { FormValidationRules } from "../../../forms/form";
 import moment from "moment";
 
+import { DiveSiteConditions } from "../../../../entities/diveSiteCondidtions";
+import { FormValidationRules } from "../../../../forms/form";
+
 export interface Form {
-  DiveDate?:    string
+  DiveDate?: string
   Description?: string
   Conditions: DiveSiteConditions[]
-  Photos:  string[];
+  Photos: string[];
 }
 
-export const FormRules: FormValidationRules<Form> =   {
+export const FormRules: FormValidationRules<Form> = {
   DiveDate: {
     required: "Date is required",
     validate: {
@@ -19,7 +20,7 @@ export const FormRules: FormValidationRules<Form> =   {
         if (!date.isValid()) {
           return "Please enter a valid date";
         }
-        if (date.isAfter(moment(), 'day')) {
+        if (date.isAfter(moment(), "day")) {
           return "Date cannot be in the future";
         }
         return true;

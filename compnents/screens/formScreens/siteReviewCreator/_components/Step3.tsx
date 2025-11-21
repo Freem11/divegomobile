@@ -4,15 +4,14 @@ import { moderateScale } from "react-native-size-matters";
 import { ImagePickerAsset } from "expo-image-picker";
 import { useTranslation } from "react-i18next";
 
-import { multiImageHandler } from "../../imageUploadHelpers";
-import Icon from "../../../../icons/Icon";
-import { colors } from "../../../styles";
+import { multiImageHandler } from "../../../imageUploadHelpers";
+import Icon from "../../../../../icons/Icon";
+import { colors } from "../../../../styles";
 import { Form } from "../form";
-import * as S from "../styles";
-import { ReviewPhotos } from "../../../../entities/diveSiteReview";
-import { cloudflareBucketUrl } from "../../../globalVariables";
-
-import { PhotoUpload } from "./photoUpload";
+import * as S from "../../styles";
+import { ReviewPhotos } from "../../../../../entities/diveSiteReview";
+import { cloudflareBucketUrl } from "../../../../globalVariables";
+import { PhotoUpload } from "../../photoUpload";
 
 interface Step3Props {
   control: Control<Form, any, Form>
@@ -32,7 +31,7 @@ export const Step3: React.FC<Step3Props> = ({
   const { t } = useTranslation();
   const [images, setImages] = useState([]);
 
-  const handleSelectImages = async() => {
+  const handleSelectImages = async () => {
     try {
       const result = await multiImageHandler();
       if (result?.assets?.[0]?.uri) {
@@ -43,8 +42,8 @@ export const Step3: React.FC<Step3Props> = ({
     }
   };
 
-  const handlePreviewImages = async(pictures: ImagePickerAsset[]) => {
-    const newPicArray = pictures.map((picture) => ( picture.uri ));
+  const handlePreviewImages = async (pictures: ImagePickerAsset[]) => {
+    const newPicArray = pictures.map((picture) => (picture.uri));
     setImages((prevImages) => [...prevImages, ...newPicArray]);
 
     const currentFormPhotos = watch("Photos");
@@ -69,7 +68,7 @@ export const Step3: React.FC<Step3Props> = ({
       tempImagesArray.push(`${cloudflareBucketUrl}${image.photoPath.split("/").pop()}`);
       setImages([...images, ...tempImagesArray]);
     });
-  },[]);
+  }, []);
 
   return (
     <S.InputGroupContainer>

@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { EditModeContext } from "../../contexts/editModeContext";
-import { SitesArrayContext } from "../../contexts/sitesArrayContext";
-import { TripSitesContext } from "../../contexts/tripSitesContext";
+import ParallaxDrawer from "../../../reusables/parallaxDrawer";
+import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
+import { EditModeContext } from "../../../contexts/editModeContext";
+import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
+import { TripSitesContext } from "../../../contexts/tripSitesContext";
 import TripImage from "../../png/Trip.png";
-import IconWithLabel from "../../reusables/iconWithLabal";
-import { useMapStore } from "../../googleMap/useMapStore";
-import { useDiveShopNavigation } from "../diveShop/types";
-import { getItineraryDiveSiteByIdArray, getTripById } from "../../../supabaseCalls/itinerarySupabaseCalls";
-import { ItineraryItem } from "../../../entities/itineraryItem";
+import IconWithLabel from "../../../reusables/iconWithLabal";
+import { useMapStore } from "../../../googleMap/useMapStore";
+import { useDiveShopNavigation } from "../../diveShop/types";
+import { getItineraryDiveSiteByIdArray, getTripById } from "../../../../supabaseCalls/itinerarySupabaseCalls";
+import { ItineraryItem } from "../../../../entities/itineraryItem";
 
 import TripCreatorPage from ".";
 

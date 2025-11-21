@@ -1,7 +1,7 @@
 import React, { } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import GoogleMap from "../../googleMap";
+import GoogleMap from "../../../googleMap";
 
 import TripCreatorParallax from "./tripCreatorParallax";
 

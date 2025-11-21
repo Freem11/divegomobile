@@ -3,13 +3,13 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import React, { FC, useContext } from "react";
 import { ScrollView } from "react-native";
 
-import { DiveSiteWithUserName } from "../../../../../entities/diveSite";
-import { SelectedPhotoContext } from "../../../../contexts/selectedPhotoContext";
-import { ActiveTutorialIDContext } from "../../../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../../../contexts/fullScreenModalContext";
-import Icon from "../../../../../icons/Icon";
-import { colors } from "../../../../styles";
-import ImageCasherDynamicLocal from "../../../../helpers/imageCashingDynamicLocal";
+import { DiveSiteWithUserName } from "../../../../entities/diveSite";
+import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
+import { ActiveTutorialIDContext } from "../../../contexts/activeTutorialIDContext";
+import { FullScreenModalContext } from "../../../contexts/fullScreenModalContext";
+import Icon from "../../../../icons/Icon";
+import { colors } from "../../../styles";
+import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
 
 import * as S from "./styles";
 
@@ -19,7 +19,7 @@ interface PhotoUploadProps {
   onRemovePhoto?: (index: number) => void;
 }
 
-export const PhotoUpload:FC<PhotoUploadProps> = ({ items, onAddSighting, onRemovePhoto }) => {
+export const PhotoUpload: FC<PhotoUploadProps> = ({ items, onAddSighting, onRemovePhoto }) => {
   const { setSelectedPhoto } = useContext(SelectedPhotoContext) as any;
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext) as any;
   const { setFullScreenModal } = useContext(FullScreenModalContext);
