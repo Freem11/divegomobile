@@ -10,12 +10,14 @@ interface Step2Props {
   control: Control<Form, any, Form>
   watch: UseFormWatch<Form>
   errors: FieldErrors<Form>
+  values: Form
 }
 
 export const Step2: React.FC<Step2Props> = ({
   control,
   watch,
-  errors
+  errors,
+  values
 }) => {
   const { t } = useTranslation();
 

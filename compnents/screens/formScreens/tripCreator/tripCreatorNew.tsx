@@ -9,6 +9,10 @@ import { ProgressBar } from "../progressBar";
 import { StepNavigation } from "../stepNavigation";
 import * as S from "../styles";
 import { ItineraryItem } from "../../../../entities/itineraryItem";
+import GoogleMap from "../../../googleMap";
+import { useMapStore } from "../../../googleMap/useMapStore";
+import { ScreenReturn } from "../../../googleMap/types";
+import { useDiveShopNavigation } from "../../diveShop/types";
 
 import { Step1, Step2, Step3, Step4 } from "./_components";
 import { Form } from "./form";
@@ -28,6 +32,8 @@ type ShopReviewCreatorProps = {
   trigger: UseFormTrigger<Form>;
   selectedTrip: ItineraryItem;
   tripDiveSites: DiveSiteWithUserName[];
+  removeFromSitesArray: (siteIdNo: number, siteList: number[]) => void;
+  sitesArray: number[];
 };
 
 export default function TripCreatorPageView({
@@ -44,10 +50,22 @@ export default function TripCreatorPageView({
   isCompleted = false,
   trigger,
   selectedTrip,
-  tripDiveSites
+  tripDiveSites,
+  removeFromSitesArray,
+  sitesArray
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
+
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const diveShopNavigation = useDiveShopNavigation();
+
+  const handleMapFlip = async (formData: Required<Form>) => {
+    setMapConfig(3, { pageName: ScreenReturn.TripCreator as unknown as string, itemId: 1 });
+    diveShopNavigation.navigate("GoogleMap");
+    setFormValues(formData);
+  };
 
   const handleGoNext = useCallback(async () => {
     let fieldsToValidate: (keyof Form)[] = [];
@@ -82,10 +100,6 @@ export default function TripCreatorPageView({
 
   const description = watch("Details");
   const canSubmit = description && description.trim().length > 0;
-
-  console.log("currentStep", currentStep);
-
-  console.log("selectedTrip", selectedTrip);
 
   return (
     <S.ContentContainer>
@@ -142,10 +156,25 @@ export default function TripCreatorPageView({
             watch={watch}
             errors={errors}
             tripDiveSites={tripDiveSites}
+            handleMapFlip={handleMapFlip}
+            removeFromSitesArray={removeFromSitesArray}
+            sitesArray={sitesArray}
+            values={{
+              Name: selectedTrip?.tripName,
+              Link: selectedTrip?.BookingPage,
+              Price: selectedTrip?.price,
+              Start: selectedTrip?.startDate,
+              End: selectedTrip?.endDate,
+              Details: selectedTrip?.description,
+              SiteList: selectedTrip?.siteList
+            }}
           />
         )}
         {currentStep === 4 && (
           <Step4 />
+        )}
+        {currentStep === 5 && (
+          <GoogleMap />
         )}
       </ScrollView>
 

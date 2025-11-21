@@ -178,8 +178,8 @@
         "step2Title": "Day to Day Itinerary",
         "step2Description": "Please provide the day to day activites.",
         "tripDescriptionPlaceholder": "Trip day to day itinerary",
-        "step3Title": "This Trip's Dive Sites",
-        "step3Description": "A list of all potenital dives sites including back up sites",
+        "step3Title": "This Trip's (Potential) Dive Sites",
+        "step3Description": "Add your dive sites by tapping the blue anchors, they will turn gold when added to your trip",
         "emptyState": "No Dive Sites have been added to this Trip yet.",
 
         "cloneButton": "Clone This Trip",

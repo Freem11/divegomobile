@@ -15,6 +15,8 @@ import { EditModeContext } from "../../../contexts/editModeContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../../contexts/tripSitesContext";
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
+import { useMapStore } from "../../../googleMap/useMapStore";
+import { ScreenReturn } from "../../../googleMap/types";
 
 import TripCreatorPageView from "./tripCreatorNew";
 import { Form } from "./form";
@@ -29,6 +31,8 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const navigation = useNavigation();
   const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
   const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName[]>();
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const storeFormValues = useMapStore((state) => state.formValues);
 
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
@@ -52,6 +56,26 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
       Details: selectedTrip?.description
     }
   });
+
+  useEffect(() => {
+    setFormValues({ ...storeFormValues, siteList: sitesArray });
+    getTripDiveSites(sitesArray);
+
+  }, [sitesArray]);
+
+  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
+
+    const index = siteList.indexOf(siteIdNo);
+    if (index > -1) {
+      siteList.splice(index, 1);
+    }
+    setSitesArray(siteList);
+    const indexLocal = storeFormValues.siteList.indexOf(siteIdNo);
+    if (indexLocal > -1) {
+      storeFormValues.siteList.splice(index, 1);
+    }
+    getTripDiveSites(siteList);
+  };
 
   const showDatePicker = (value: string) => {
     setDateType(value);
@@ -159,6 +183,8 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
         trigger={trigger}
         selectedTrip={selectedTrip}
         tripDiveSites={tripDiveSites}
+        removeFromSitesArray={removeFromSitesArray}
+        sitesArray={sitesArray}
       />
     </View>
   );

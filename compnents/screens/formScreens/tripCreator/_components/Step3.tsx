@@ -1,17 +1,14 @@
 import React, { } from "react";
-import { Control, Controller, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { Control, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
-import { FlatList } from "react-native-gesture-handler";
 
 import { Form } from "../form";
 import * as S from "../../styles";
-import { ReviewPhotos } from "../../../../../entities/diveSiteReview";
 import EmptyState from "../../../../reusables/emptyState-new";
-import Button from "../../../../reusables/button";
 import { AddSitesButton } from "../../addDiveSiteButton";
-import { DiveSitesCard } from "../../../../reusables/diveSiteCard";
 import { DiveSiteWithUserName } from "../../../../../entities/diveSite";
+import { DiveSitesCard } from "../../../../reusables/addDiveSiteButton";
 
 interface Step3Props {
   control: Control<Form, any, Form>
@@ -19,6 +16,10 @@ interface Step3Props {
   watch: UseFormWatch<Form>
   errors: FieldErrors<Form>
   tripDiveSites: DiveSiteWithUserName[]
+  handleMapFlip: (formData: Required<Form>) => void;
+  removeFromSitesArray: (siteIdNo: number, siteList: number[]) => void;
+  sitesArray: number[]
+  values: Required<Form>
 }
 
 export const Step3: React.FC<Step3Props> = ({
@@ -26,18 +27,20 @@ export const Step3: React.FC<Step3Props> = ({
   setValue,
   watch,
   errors,
-  tripDiveSites
+  tripDiveSites,
+  handleMapFlip,
+  removeFromSitesArray = () => { },
+  sitesArray,
+  values
 }) => {
   const { t } = useTranslation();
-
-  console.log("tripDiveSites", tripDiveSites);
 
   return (
     <S.InputGroupContainer>
       <S.Title>{t("TripCreator.step3Title")}</S.Title>
       <S.Subtitle style={{ marginBottom: moderateScale(12) }}>{t("TripCreator.step3Description")}</S.Subtitle>
 
-      <AddSitesButton />
+      <AddSitesButton onAddSites={handleMapFlip} formValues={values} />
 
       <S.DiveSiteListWrapper>
         {tripDiveSites && tripDiveSites.map((diveSite) => (
@@ -46,7 +49,9 @@ export const Step3: React.FC<Step3Props> = ({
             diveSiteId={diveSite.id}
             diveSiteName={diveSite.name}
             diveSitePhoto={diveSite.divesiteprofilephoto}
-            onPress={null}
+            sitesArray={sitesArray}
+            onPress={() => removeFromSitesArray(diveSite.id, sitesArray)}
+
           />
         ))}
       </S.DiveSiteListWrapper>
