@@ -28,7 +28,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
-  const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName>();
+  const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName[]>();
 
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
@@ -159,7 +159,6 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
         trigger={trigger}
         selectedTrip={selectedTrip}
         tripDiveSites={tripDiveSites}
-        existingPhotos={reviewToEdit?.photos}
       />
     </View>
   );

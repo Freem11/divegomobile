@@ -28,7 +28,6 @@ type ShopReviewCreatorProps = {
   trigger: UseFormTrigger<Form>;
   selectedTrip: ItineraryItem;
   tripDiveSites: DiveSiteWithUserName[];
-  existingPhotos: ReviewPhotos[]
 };
 
 export default function TripCreatorPageView({
@@ -45,8 +44,7 @@ export default function TripCreatorPageView({
   isCompleted = false,
   trigger,
   selectedTrip,
-  tripDiveSites,
-  existingPhotos
+  tripDiveSites
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
