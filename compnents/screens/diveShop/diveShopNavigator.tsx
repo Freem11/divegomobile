@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import EditScreenParallax from "../edits/editsParallax";
 import GoogleMap from "../../googleMap";
-import TripCreatorRouter from "../tripCreator/tripCreatorRouter";
+import TripCreatorRouter from "../formScreens/tripCreator/tripCreatorRouter";
 
 import DiveShopeParallax from "./diveShopParallax";
 

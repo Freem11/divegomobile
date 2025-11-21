@@ -7,7 +7,7 @@ import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 import { EditModeContext } from "../../../contexts/editModeContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../../contexts/tripSitesContext";
-import TripImage from "../../png/Trip.png";
+import TripImage from "../../../png/Trip.png";
 import IconWithLabel from "../../../reusables/iconWithLabal";
 import { useMapStore } from "../../../googleMap/useMapStore";
 import { useDiveShopNavigation } from "../../diveShop/types";

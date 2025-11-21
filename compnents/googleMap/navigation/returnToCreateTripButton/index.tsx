@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
-import { useTripCreatorNavigation } from "../../../screens/tripCreator/types";
+import { useTripCreatorNavigation } from "../../../screens/formScreens/tripCreator/types";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 
 const styles = StyleSheet.create({
