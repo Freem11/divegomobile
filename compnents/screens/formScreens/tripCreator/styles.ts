@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 import {
@@ -8,7 +8,7 @@ import {
   activeFonts,
 } from "../../../styles";
 
-const windowWidth = Dimensions.get("screen").width;
+const { width, height } = Dimensions.get("window");
 
 export const FullScreenCenter = styled.View`
   flex: 1;
@@ -25,7 +25,7 @@ export const BackButtonWrapper = styled.View`
 `;
 
 export const ContentContainer = styled.View`
-  width: ${windowWidth}px;
+  width: ${width}px;
   align-items: center;
 `;
 
@@ -39,7 +39,7 @@ export const Header = styled.Text`
 `;
 
 export const InputGroupContainer = styled.View`
-  width: ${windowWidth * 0.8}px;
+  width: ${width * 0.8}px;
   margin-top: ${moderateScale(10)}px;
 `;
 
@@ -86,6 +86,7 @@ export const DescriptionBox = styled.View`
   borderRadius: ${moderateScale(10)}px;
   margin-top: 4%;
   background-color: ${colors.themeWhite};
+  margin-top: ${moderateScale(40)}px;
   margin-bottom: ${moderateScale(50)}px;
   height: ${moderateScale(300)}px;
 `;
@@ -127,4 +128,8 @@ export const ButtonHousing = styled.View`
   position: absolute;
   bottom: ${moderateScale(20)}px;
   right: ${moderateScale(20)}px;
+`;
+
+export const EmptyStateWrapper = styled.View`
+  padding-top:${Platform.OS === "android" || width > 700 ? "2%" : "10%"};
 `;

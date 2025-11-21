@@ -1,49 +1,57 @@
 import type { RouteProp } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Keyboard, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
-import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../../supabaseCalls/diveSiteReviewCalls/posts";
-import { replaceReviewConditionsAtomic, replaceReviewPhotosAtomic } from "../../../../supabaseCalls/diveSiteReviewCalls/atomics";
-import { updateDiveSiteReview } from "../../../../supabaseCalls/diveSiteReviewCalls/updates";
 import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
-import { ReviewConditionInsert } from "../../../../entities/diveSiteReview";
-import { DiveConditions } from "../../../../entities/diveSiteCondidtions";
 import { useUserProfile } from "../../../../store/user/useUserProfile";
 import { RootStackParamList } from "../../../../providers/navigation";
-import { imageUploadMultiple } from "../../imageUploadHelpers";
 import { showError } from "../../../toast";
-import { getReviewPhotosByReviewId } from "../../../../supabaseCalls/diveSiteReviewCalls/gets";
-import { removePhotoReviews } from "../../../cloudflareBucketCalls/cloudflareAWSCalls";
+import { ItineraryItem } from "../../../../entities/itineraryItem";
+import { getItineraryDiveSiteByIdArray, getTripById } from "../../../../supabaseCalls/itinerarySupabaseCalls";
+import { EditModeContext } from "../../../contexts/editModeContext";
+import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
+import { TripSitesContext } from "../../../contexts/tripSitesContext";
+import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 
-import SiteReviewPageView from "./siteReviewCreator";
+import TripCreatorPageView from "./tripCreatorNew";
 import { Form } from "./form";
-import { photoFateDeterminer, urlSanitizer } from "./photoManagment";
-import TripCreatorPageView from "./tripCreator";
 
-type SiteReviewCreatorScreenProps = {
-  route: RouteProp<RootStackParamList, "SiteReviewCreator">;
+type TripCreatorScreenProps = {
+  route: RouteProp<RootStackParamList, "TripCreator">;
 };
 
-export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScreenProps) {
-  const { selectedDiveSite, reviewToEdit } = route.params;
+export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
+  const { selectedDiveSite, reviewToEdit, id } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { userProfile } = useUserProfile();
+  const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
+  const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName>();
+
+  const { editMode, setEditMode } = useContext(EditModeContext);
+  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  // const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
+
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [siteInfo, setSiteInfo] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const unitSystem = userProfile && userProfile.unit_system;
-
-  let default_viz = 30;
-  if (unitSystem === "Imperial") {
-    default_viz = 100;
-  }
-
   const [dateType, setDateType] = useState("");
+
+  const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    values: {
+      Name: selectedTrip?.tripName,
+      Link: selectedTrip?.BookingPage,
+      Price: selectedTrip?.price,
+      Start: selectedTrip?.startDate,
+      End: selectedTrip?.endDate,
+      Details: selectedTrip?.description
+    }
+  });
 
   const showDatePicker = (value: string) => {
     setDateType(value);
@@ -55,10 +63,38 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     setDatePickerVisible(false);
   };
 
-  const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
-    mode: "onChange",
-    reValidateMode: "onChange"
-  });
+  useEffect(() => {
+    getDiveSiteinfo();
+  }, [id]);
+
+  const getDiveSiteinfo = async () => {
+    if (id) {
+      const tripInfo = await getTripById(id);
+      setSelectedTrip(tripInfo[0]);
+      setSitesArray(tripInfo[0].siteList);
+      if (tripInfo) {
+        setEditMode(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (selectedTrip) {
+      getTripDiveSites(selectedTrip.siteList);
+    }
+
+  }, [selectedTrip]);
+
+  const getTripDiveSites = async (siteIds: number[]) => {
+    try {
+      const success = await getItineraryDiveSiteByIdArray(siteIds);
+      if (success) {
+        setTripDiveSites(success);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
 
   const handleCreate = async (data: Form) => {
 
@@ -119,10 +155,10 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         isSubmitting={isSubmitting}
         errors={errors}
         watch={watch}
-        selectedDiveSite={siteInfo}
-        unitSystem={unitSystem}
         isCompleted={isCompleted}
         trigger={trigger}
+        selectedTrip={selectedTrip}
+        tripDiveSites={tripDiveSites}
         existingPhotos={reviewToEdit?.photos}
       />
     </View>

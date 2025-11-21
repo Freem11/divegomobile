@@ -1,7 +1,6 @@
-import React from "react";
-import { View, Dimensions } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Dimensions, Pressable } from "react-native";
 import { Control, Controller, FieldErrors, UseFormWatch } from "react-hook-form";
-import { TouchableWithoutFeedback as Toucher } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
@@ -11,6 +10,8 @@ import MobileTextInput from "../../../../reusables/textInput";
 import * as S from "../../styles";
 import { Form, FormRules } from "../form";
 import PriceTextInput from "../../../../reusables/priceTextInput";
+import { register } from "../../../../../supabaseCalls/authenticateSupabaseCalls";
+import { ItineraryItem } from "../../../../../entities/itineraryItem";
 
 interface Step1Props {
   control: Control<Form, any, Form>
@@ -21,6 +22,7 @@ interface Step1Props {
   datePickerVisible: boolean
   showDatePicker: (value: string) => void
   hideDatePicker: () => void
+  values: Form
 }
 
 export const Step1: React.FC<Step1Props> = ({
@@ -32,6 +34,7 @@ export const Step1: React.FC<Step1Props> = ({
   datePickerVisible,
   showDatePicker,
   hideDatePicker,
+  values
 }) => {
   const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;
@@ -45,7 +48,7 @@ export const Step1: React.FC<Step1Props> = ({
   return (
     <S.InputGroupContainer>
       <S.Title>{t("TripCreator.step1Title")}</S.Title>
-      <S.Subtitle>{t("DiveSiteReviewer.step1Description")}</S.Subtitle>
+      <S.Subtitle>{t("TripCreator.step1Description")}</S.Subtitle>
 
       <S.Label>{t("TripCreator.tripName")}</S.Label>
       <Controller
@@ -95,45 +98,49 @@ export const Step1: React.FC<Step1Props> = ({
         )}
       />
 
-      <S.Label>{t("DiveSiteReviewer.startDate")}</S.Label>
-      <Controller
-        control={control}
-        name="Start"
-        rules={FormRules.Start}
-        render={({ field: { onChange, value } }) => (
-          <Toucher onPress={() => showDatePicker("Start")}>
-            <View pointerEvents="none" style={{ width: screenWidth - moderateScale(32) }}>
-              <MobileTextInput
-                error={errors.Start}
-                iconLeft="calendar-start"
-                placeholder={t("TripCreator.startDatePlaceholder")}
-                onChangeText={onChange}
-                value={value}
-              />
-            </View>
-          </Toucher>
-        )}
-      />
-
-      <S.Label>{t("DiveSiteReviewer.endDate")}</S.Label>
-      <Controller
-        control={control}
-        name="End"
-        rules={FormRules.End}
-        render={({ field: { onChange, value } }) => (
-          <Toucher onPress={() => showDatePicker("End")}>
-            <View pointerEvents="none" style={{ width: screenWidth - moderateScale(32) }}>
-              <MobileTextInput
-                error={errors.End}
-                iconLeft="calendar-end"
-                placeholder={t("TripCreator.endDatePlaceholder")}
-                onChangeText={onChange}
-                value={value}
-              />
-            </View>
-          </Toucher>
-        )}
-      />
+      <S.DateBox>
+        <S.Wrapper>
+          <S.Label>{t("TripCreator.startDate")}</S.Label>
+          <Controller
+            control={control}
+            name="Start"
+            rules={FormRules.Start}
+            render={({ field: { onChange, value } }) => (
+              <Pressable onPress={() => showDatePicker("Start")} style={{ width: screenWidth / 2 - moderateScale(32) }}>
+                <MobileTextInput
+                  error={errors.Start}
+                  iconLeft="calendar-start"
+                  placeholder={t("TripCreator.startDatePlaceholder")}
+                  onChangeText={onChange}
+                  value={value}
+                  pointerEvents="none"
+                  onPress={() => showDatePicker("Start")}
+                />
+              </Pressable>
+            )}
+          />
+        </S.Wrapper>
+        <S.Wrapper>
+          <S.Label>{t("TripCreator.endDate")}</S.Label>
+          <Controller
+            control={control}
+            name="End"
+            rules={FormRules.End}
+            render={({ field: { onChange, value } }) => (
+              <Pressable onPress={() => showDatePicker("End")} style={{ width: screenWidth / 2 - moderateScale(32) }}>
+                <MobileTextInput
+                  error={errors.End}
+                  iconLeft="calendar-end"
+                  placeholder={t("TripCreator.endDatePlaceholder")}
+                  onChangeText={onChange}
+                  value={value}
+                  pointerEvents="none"
+                />
+              </Pressable>
+            )}
+          />
+        </S.Wrapper>
+      </S.DateBox>
 
       <DateTimePickerModal
         isVisible={datePickerVisible}

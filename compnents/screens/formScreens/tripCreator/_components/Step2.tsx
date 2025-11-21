@@ -21,8 +21,8 @@ export const Step2: React.FC<Step2Props> = ({
 
   return (
     <S.InputGroupContainer>
-      <S.Title>{t("DiveSiteReviewer.step2Title")}</S.Title>
-      <S.Subtitle>{t("DiveSiteReviewer.step2Description")}</S.Subtitle>
+      <S.Title>{t("TripCreator.step2Title")}</S.Title>
+      <S.Subtitle>{t("TripCreator.step2Description")}</S.Subtitle>
 
       <S.DescriptionBox>
         <Controller
@@ -33,7 +33,7 @@ export const Step2: React.FC<Step2Props> = ({
             <S.MultilineTextInput
               multiline
               error={errors.Details}
-              placeholder={t("TripCreator.tripDescriptionPlaceholder").replace(/\\n/g, "\n")}
+              placeholder={t("TripCreator.tripDescriptionPlaceholder")}
               placeholderTextColor={colors.neutralGrey}
               onChangeText={onChange}
               value={value}

@@ -8,6 +8,7 @@ import { ReviewPhotos } from "../../../../entities/diveSiteReview";
 import { ProgressBar } from "../progressBar";
 import { StepNavigation } from "../stepNavigation";
 import * as S from "../styles";
+import { ItineraryItem } from "../../../../entities/itineraryItem";
 
 import { Step1, Step2, Step3, Step4 } from "./_components";
 import { Form } from "./form";
@@ -15,7 +16,7 @@ import { Form } from "./form";
 type ShopReviewCreatorProps = {
   datePickerVisible: boolean;
   dateType: string;
-  showDatePicker: () => void;
+  showDatePicker: (value: string) => void;
   hideDatePicker: () => void;
   control: Control<Form, any, Form>
   setValue: UseFormSetValue<Form>
@@ -23,10 +24,10 @@ type ShopReviewCreatorProps = {
   errors: FieldErrors<Form>
   watch: UseFormWatch<Form>
   onSubmit: () => void;
-  selectedDiveSite: DiveSiteWithUserName;
-  unitSystem: string;
   isCompleted?: boolean;
   trigger: UseFormTrigger<Form>;
+  selectedTrip: ItineraryItem;
+  tripDiveSites: DiveSiteWithUserName[];
   existingPhotos: ReviewPhotos[]
 };
 
@@ -43,6 +44,8 @@ export default function TripCreatorPageView({
   onSubmit,
   isCompleted = false,
   trigger,
+  selectedTrip,
+  tripDiveSites,
   existingPhotos
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -82,6 +85,10 @@ export default function TripCreatorPageView({
   const description = watch("Details");
   const canSubmit = description && description.trim().length > 0;
 
+  console.log("currentStep", currentStep);
+
+  console.log("selectedTrip", selectedTrip);
+
   return (
     <S.ContentContainer>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
@@ -105,14 +112,29 @@ export default function TripCreatorPageView({
               hideDatePicker();
               void trigger(["Start", "End"]);
             }}
+            values={{
+              Name: selectedTrip?.tripName,
+              Link: selectedTrip?.BookingPage,
+              Price: selectedTrip?.price,
+              Start: selectedTrip?.startDate,
+              End: selectedTrip?.endDate,
+              Details: selectedTrip?.description,
+            }}
           />
         )}
         {currentStep === 2 && (
           <Step2
             watch={watch}
-            handleBooleanConditions={handleBooleanConditions}
-            handleSliderConditions={handleSliderConditions}
-            metrics={metrics}
+            control={control}
+            errors={errors}
+            values={{
+              Name: selectedTrip?.tripName,
+              Link: selectedTrip?.BookingPage,
+              Price: selectedTrip?.price,
+              Start: selectedTrip?.startDate,
+              End: selectedTrip?.endDate,
+              Details: selectedTrip?.description,
+            }}
           />
         )}
         {currentStep === 3 && (
@@ -121,7 +143,7 @@ export default function TripCreatorPageView({
             setValue={setValue}
             watch={watch}
             errors={errors}
-            existingPhotos={existingPhotos}
+            tripDiveSites={tripDiveSites}
           />
         )}
         {currentStep === 4 && (

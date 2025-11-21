@@ -164,7 +164,7 @@
         "header": "Trip Creator: \nNew Trip",
         "headerEdit": "Trip Creator: \nEdit Trip",
         "step1Title": "High Level Details",
-        "step1Description": "Let's start with your trip's basics information",
+        "step1Description": "Let's start with your trip's basic information",
         "tripName": "Trip's Name",
         "tripNamePlaceholder": "Your Trip's Name",
         "bookingLink": "Booking Page Link",
@@ -172,19 +172,21 @@
         "price": "Trip's Price",
         "pricePlaceholder": "Price of you trip",
         "startDate": "Start Date",
-        "startDatePlaceholder": "Your trips's start date",
+        "startDatePlaceholder": "Trips's start date",
         "endDate": "End Date",
-        "endDatePlaceholder": "Your trips's end date",
+        "endDatePlaceholder": "Trips's end date",
         "step2Title": "Day to Day Itinerary",
         "step2Description": "Please provide the day to day activites.",
         "tripDescriptionPlaceholder": "Trip day to day itinerary",
-
+        "step3Title": "This Trip's Dive Sites",
+        "step3Description": "A list of all potenital dives sites including back up sites",
+        "emptyState": "No Dive Sites have been added to this Trip yet.",
 
         "cloneButton": "Clone This Trip",
         "submitButton": "Submit",
         "selectSitesButton": "Select Dive Sites",
         "drawerHeader": "Possible Sites in this Trip   (Press to Remove)",
-        "emptyDrawer": "No Dive Sites have been added to this Trip yet."
+        
     },
     "UserProfile": {
         "drawerHeader": "'s Sea Creature Encounters",

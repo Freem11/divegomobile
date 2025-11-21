@@ -1,7 +1,9 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
+import { Dimensions, Platform } from "react-native";
 
 import { colors, activeFonts, fontSizes } from "../../styles";
+const { width, height } = Dimensions.get("window");
 
 export const ContentContainer = styled.View`
   width: 100%;
@@ -67,7 +69,8 @@ export const DescriptionBox = styled.View`
   border-color: ${colors.border};
   border-radius: ${moderateScale(8)}px;
   background-color: ${colors.themeWhite};
-  height: ${moderateScale(200)}px;
+  height: ${moderateScale(400)}px;
+  margin-top: ${moderateScale(20)}px;
 `;
 
 export const EmptyStateContainer = styled.TouchableOpacity`
@@ -79,4 +82,22 @@ export const EmptyStateContainer = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   margin-top: ${moderateScale(4)}px;
+`;
+
+export const DateBox = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const Wrapper = styled.View`
+  flex: 1;
+  flex-direction: column;
+`;
+
+export const EmptyStateWrapper = styled.View`
+  padding-top:${Platform.OS === "android" || width > 700 ? "2%" : "10%"};
+`;
+
+export const DiveSiteListWrapper = styled.View`
+  padding-top: 5%;
 `;
