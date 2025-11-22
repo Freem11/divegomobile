@@ -91,8 +91,8 @@ export default function DiveShopScreen({
     }
   };
 
-  const handleEditButton = (id: number) => {
-    diveShopNavigation.navigate("TripCreator", { id });
+  const handleEditButton = (id: number, name: string) => {
+    diveShopNavigation.navigate("TripCreator", { id, subTitle: name });
   };
 
   const handleDeleteButton = (itineraryInfo: ItineraryItem) => {

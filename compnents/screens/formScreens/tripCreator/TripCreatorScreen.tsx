@@ -53,12 +53,14 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
       Price: selectedTrip?.price,
       Start: selectedTrip?.startDate,
       End: selectedTrip?.endDate,
-      Details: selectedTrip?.description
+      Details: selectedTrip?.description,
+      SiteList: selectedTrip?.siteList
     }
   });
 
   useEffect(() => {
-    setFormValues({ ...storeFormValues, siteList: sitesArray });
+    setFormValues({ ...storeFormValues, SiteList: sitesArray });
+    setValue("SiteList", sitesArray);
     getTripDiveSites(sitesArray);
 
   }, [sitesArray]);
@@ -89,17 +91,19 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
 
   useEffect(() => {
     getDiveSiteinfo();
+    if (!id) {
+      setSitesArray([]);
+    }
   }, [id]);
 
   const getDiveSiteinfo = async () => {
-    if (id) {
-      const tripInfo = await getTripById(id);
-      setSelectedTrip(tripInfo[0]);
-      setSitesArray(tripInfo[0].siteList);
-      if (tripInfo) {
-        setEditMode(true);
-      }
+    const tripInfo = await getTripById(id);
+    setSelectedTrip(tripInfo[0]);
+    setSitesArray(tripInfo[0].siteList);
+    if (tripInfo) {
+      setEditMode(true);
     }
+
   };
 
   useEffect(() => {
@@ -121,7 +125,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   };
 
   const handleCreate = async (data: Form) => {
-
+    console.log("submitting...", data);
     try {
       //code
 
@@ -133,14 +137,13 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     }
   };
 
-  const handleUpdate = async (data: Form) => {
-
+  const handleEdit = async (data: Form) => {
+    console.log("submitting...", data);
     try {
       //code
 
     } catch (error) {
-      console.error("Trip update failed:", error);
-      showError("Failed to update trip");
+      console.error("Form submission failed due to photo upload errors:", error);
     } finally {
       setIsCompleted(true);
       setTimeout(() => navigation.goBack(), 3000);
@@ -148,11 +151,12 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   };
 
   const onSubmit = async (data: Form) => {
-    if (reviewToEdit) {
-      await handleUpdate(data);
+    if (editMode) {
+      await handleEdit(data);
     } else {
       await handleCreate(data);
     }
+
   };
 
   const getDiveSiteInfo = async (siteId: number) => {

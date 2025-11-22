@@ -88,7 +88,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   };
 
   const openTripCreatorScreen = () => {
-    diveShopNavigation.navigate("TripCreator", { id: null });
+    diveShopNavigation.navigate("TripCreator", { id: null, subTitle: "New Trip" });
   };
 
   const openEditsPage = () => {

@@ -14,7 +14,7 @@ type DiveShopProps = {
   itineraryList: ItineraryItem[];
   selectedShop: DiveShop;
   handleMapFlip: (sites: number[]) => void;
-  handleEditButton: (id: number) => void;
+  handleEditButton: (id: number, name: string) => void;
   handleDeleteButton: (sites: ItineraryItem) => void;
   tripsCount: number;
 };
@@ -48,7 +48,7 @@ export default function DiveShopScreenView({
             key={itinerary.id}
             isMyShop={isMyShop}
             itinerary={itinerary}
-            handleEdit={() => handleEditButton(itinerary.id)}
+            handleEdit={() => handleEditButton(itinerary.id, itinerary.tripName)}
             handleDelete={handleDeleteButton}
             handleMapFlip={() => handleMapFlip(itinerary.siteList)}
             handleBooking={() => openURL(itinerary.BookingPage)}

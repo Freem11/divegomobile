@@ -18,7 +18,7 @@ export type DiveShopRoutes = {
   DiveCentre: undefined;
   EditScreen: undefined;
   GoogleMap: undefined;
-  TripCreator: { id: number | null };
+  TripCreator: { id: number | null, subTitle: string };
 };
 
 const Stack = createNativeStackNavigator<DiveShopRoutes>();
@@ -53,7 +53,7 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
           header: ({ navigation }) => (
             <NavigationHeader
               title={"Trip Creator"}
-              subtitle={"New Trip"}
+              subtitle={route.params.subTitle}
               left={(
                 <NavigationButton
                   onPress={() => navigation.goBack()}

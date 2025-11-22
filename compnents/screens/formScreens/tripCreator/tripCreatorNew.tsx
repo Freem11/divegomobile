@@ -4,7 +4,6 @@ import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
 
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
-import { ReviewPhotos } from "../../../../entities/diveSiteReview";
 import { ProgressBar } from "../progressBar";
 import { StepNavigation } from "../stepNavigation";
 import * as S from "../styles";
