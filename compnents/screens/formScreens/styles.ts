@@ -103,7 +103,7 @@ export const DiveSiteListWrapper = styled.View`
 `;
 
 export const CloneTripBox = styled.View`
- padding-top: 10%;
+  padding-top: ${moderateScale(20)};
   flex-direction: row;
   justify-content: center;
 `;

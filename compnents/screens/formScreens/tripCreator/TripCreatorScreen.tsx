@@ -90,6 +90,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     getDiveSiteinfo();
     if (!id) {
       setSitesArray([]);
+      setEditMode(false);
     }
   }, [id]);
 
