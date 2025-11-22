@@ -1,6 +1,7 @@
 import { FormValidationRules } from "../../../../forms/form";
 
 export interface Form {
+  Id?: number
   Name?: string
   Link?: string
   Price?: string

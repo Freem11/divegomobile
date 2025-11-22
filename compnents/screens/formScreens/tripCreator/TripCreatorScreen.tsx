@@ -10,7 +10,7 @@ import { useUserProfile } from "../../../../store/user/useUserProfile";
 import { RootStackParamList } from "../../../../providers/navigation";
 import { showError } from "../../../toast";
 import { ItineraryItem } from "../../../../entities/itineraryItem";
-import { getItineraryDiveSiteByIdArray, getTripById } from "../../../../supabaseCalls/itinerarySupabaseCalls";
+import { getItineraryDiveSiteByIdArray, getTripById, insertItinerary, insertItineraryRequest } from "../../../../supabaseCalls/itinerarySupabaseCalls";
 import { EditModeContext } from "../../../contexts/editModeContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { TripSitesContext } from "../../../contexts/tripSitesContext";
@@ -26,7 +26,7 @@ type TripCreatorScreenProps = {
 };
 
 export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
-  const { selectedDiveSite, reviewToEdit, id } = route.params;
+  const { selectedDiveSite, reviewToEdit, id, shopId } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
@@ -48,6 +48,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     mode: "onChange",
     reValidateMode: "onChange",
     values: {
+      Id: selectedTrip?.id,
       Name: selectedTrip?.tripName,
       Link: selectedTrip?.BookingPage,
       Price: selectedTrip?.price,
@@ -125,9 +126,17 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   };
 
   const handleCreate = async (data: Form) => {
-    console.log("submitting...", data);
     try {
-      //code
+      await insertItinerary({
+        shopID: data.Id,
+        tripName: data.Name,
+        BookingPage: data.Link,
+        price: data.Price,
+        startDate: data.Start,
+        endDate: data.End,
+        description: data.Details,
+        siteList: data.SiteList
+      });
 
     } catch (error) {
       console.error("Form submission failed due to photo upload errors:", error);
@@ -138,12 +147,20 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   };
 
   const handleEdit = async (data: Form) => {
-    console.log("submitting...", data);
     try {
-      //code
-
+      await insertItineraryRequest({
+        OriginalItineraryID: data.Id,
+        shopID: shopId,
+        tripName: data.Name,
+        BookingPage: data.Link,
+        price: data.Price,
+        startDate: data.Start,
+        endDate: data.End,
+        description: data.Details,
+        siteList: data.SiteList
+      }, "Edit");
     } catch (error) {
-      console.error("Form submission failed due to photo upload errors:", error);
+      console.error("Trip edit submission failed:", error);
     } finally {
       setIsCompleted(true);
       setTimeout(() => navigation.goBack(), 3000);
@@ -189,6 +206,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
         tripDiveSites={tripDiveSites}
         removeFromSitesArray={removeFromSitesArray}
         sitesArray={sitesArray}
+        editMode={editMode}
       />
     </View>
   );

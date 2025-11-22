@@ -33,6 +33,7 @@ type ShopReviewCreatorProps = {
   tripDiveSites: DiveSiteWithUserName[];
   removeFromSitesArray: (siteIdNo: number, siteList: number[]) => void;
   sitesArray: number[];
+  editMode: boolean;
 };
 
 export default function TripCreatorPageView({
@@ -51,7 +52,8 @@ export default function TripCreatorPageView({
   selectedTrip,
   tripDiveSites,
   removeFromSitesArray,
-  sitesArray
+  sitesArray,
+  editMode
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
@@ -124,6 +126,7 @@ export default function TripCreatorPageView({
               void trigger(["Start", "End"]);
             }}
             values={{
+              Id: selectedTrip?.id,
               Name: selectedTrip?.tripName,
               Link: selectedTrip?.BookingPage,
               Price: selectedTrip?.price,
@@ -139,6 +142,7 @@ export default function TripCreatorPageView({
             control={control}
             errors={errors}
             values={{
+              Id: selectedTrip?.id,
               Name: selectedTrip?.tripName,
               Link: selectedTrip?.BookingPage,
               Price: selectedTrip?.price,
@@ -159,6 +163,7 @@ export default function TripCreatorPageView({
             removeFromSitesArray={removeFromSitesArray}
             sitesArray={sitesArray}
             values={{
+              Id: selectedTrip?.id,
               Name: selectedTrip?.tripName,
               Link: selectedTrip?.BookingPage,
               Price: selectedTrip?.price,
@@ -170,7 +175,9 @@ export default function TripCreatorPageView({
           />
         )}
         {currentStep === 4 && (
-          <Step4 />
+          <Step4
+            editMode={editMode}
+          />
         )}
         {currentStep === 5 && (
           <GoogleMap />

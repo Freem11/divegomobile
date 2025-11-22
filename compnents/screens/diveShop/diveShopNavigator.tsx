@@ -18,7 +18,7 @@ export type DiveShopRoutes = {
   DiveCentre: undefined;
   EditScreen: undefined;
   GoogleMap: undefined;
-  TripCreator: { id: number | null, subTitle: string };
+  TripCreator: { id: number | null, subTitle: string, shopId: number };
 };
 
 const Stack = createNativeStackNavigator<DiveShopRoutes>();

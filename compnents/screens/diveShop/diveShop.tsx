@@ -48,7 +48,7 @@ export default function DiveShopScreenView({
             key={itinerary.id}
             isMyShop={isMyShop}
             itinerary={itinerary}
-            handleEdit={() => handleEditButton(itinerary.id, itinerary.tripName)}
+            handleEdit={() => handleEditButton(itinerary.id, itinerary.tripName, selectedShop.id)}
             handleDelete={handleDeleteButton}
             handleMapFlip={() => handleMapFlip(itinerary.siteList)}
             handleBooking={() => openURL(itinerary.BookingPage)}

@@ -6,10 +6,15 @@ import LottieView from "lottie-react-native";
 
 import * as S from "../../styles";
 
-export const Step4: React.FC = () => {
+interface Step4Props {
+  editMode: boolean
+}
+
+export const Step4: React.FC<Step4Props> = ({ editMode }) => {
   const { t } = useTranslation();
   const animationRef = useRef<LottieView>(null);
 
+  console.log("editMode", editMode);
   return (
     <S.CompleteContainer>
       <View
@@ -35,11 +40,11 @@ export const Step4: React.FC = () => {
       </View>
 
       <S.Title style={{ textAlign: "center" }}>
-        {t("DiveSiteReviewer.completeTitle")}
+        {editMode ? t("TripCreator.completeEditTitle") : t("TripCreator.completeTitle")}
       </S.Title>
 
       <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32) }}>
-        {t("DiveSiteReviewer.completeDescription")}
+        {editMode ? t("TripCreator.completeEditDescription") : t("TripCreator.completeDescription")}
       </S.Subtitle>
     </S.CompleteContainer>
   );
