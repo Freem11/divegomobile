@@ -1,12 +1,12 @@
-import React, { } from "react";
+import React, { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import EditScreenParallax from "../edits/editsParallax";
 import GoogleMap from "../../googleMap";
-import TripCreatorRouter from "../formScreens/tripCreator/tripCreatorRouter";
 import TripCreatorScreen from "../formScreens/tripCreator/TripCreatorScreen";
 import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
+import { EditModeContext } from "../../contexts/editModeContext";
 
 import DiveShopeParallax from "./diveShopParallax";
 
@@ -24,6 +24,7 @@ export type DiveShopRoutes = {
 const Stack = createNativeStackNavigator<DiveShopRoutes>();
 
 export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
+  const { editMode } = useContext(EditModeContext);
 
   return (
     <Stack.Navigator
@@ -53,7 +54,7 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
           header: ({ navigation }) => (
             <NavigationHeader
               title={"Trip Creator"}
-              subtitle={route.params.subTitle}
+              subtitle={editMode ? route.params.subTitle : "New Trip"}
               left={(
                 <NavigationButton
                   onPress={() => navigation.goBack()}
@@ -64,13 +65,6 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
           )
         })}
       />
-      {/* <Stack.Screen name="TripCreator">
-        {({ route }) => (
-          <TripCreatorScreen
-            id={route.params.id}
-          />
-        )}
-      </Stack.Screen> */}
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}

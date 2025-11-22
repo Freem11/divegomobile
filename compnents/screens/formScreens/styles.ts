@@ -101,3 +101,9 @@ export const EmptyStateWrapper = styled.View`
 export const DiveSiteListWrapper = styled.View`
   padding-top: 5%;
 `;
+
+export const CloneTripBox = styled.View`
+ padding-top: 10%;
+  flex-direction: row;
+  justify-content: center;
+`;

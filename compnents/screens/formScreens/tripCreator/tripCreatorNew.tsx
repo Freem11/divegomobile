@@ -34,6 +34,7 @@ type ShopReviewCreatorProps = {
   removeFromSitesArray: (siteIdNo: number, siteList: number[]) => void;
   sitesArray: number[];
   editMode: boolean;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export default function TripCreatorPageView({
@@ -53,7 +54,8 @@ export default function TripCreatorPageView({
   tripDiveSites,
   removeFromSitesArray,
   sitesArray,
-  editMode
+  editMode,
+  setEditMode
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
@@ -119,6 +121,8 @@ export default function TripCreatorPageView({
             dateType={dateType}
             errors={errors}
             watch={watch}
+            editMode={editMode}
+            setEditMode={setEditMode}
             datePickerVisible={datePickerVisible}
             showDatePicker={showDatePicker}
             hideDatePicker={() => {
@@ -141,6 +145,8 @@ export default function TripCreatorPageView({
             watch={watch}
             control={control}
             errors={errors}
+            editMode={editMode}
+            setEditMode={setEditMode}
             values={{
               Id: selectedTrip?.id,
               Name: selectedTrip?.tripName,
@@ -158,6 +164,8 @@ export default function TripCreatorPageView({
             setValue={setValue}
             watch={watch}
             errors={errors}
+            editMode={editMode}
+            setEditMode={setEditMode}
             tripDiveSites={tripDiveSites}
             handleMapFlip={handleMapFlip}
             removeFromSitesArray={removeFromSitesArray}

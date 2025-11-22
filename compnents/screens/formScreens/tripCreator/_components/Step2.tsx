@@ -5,9 +5,12 @@ import { useTranslation } from "react-i18next";
 import { Form, FormRules } from "../form";
 import * as S from "../../styles";
 import { colors } from "../../../../styles";
+import { CloneTripButton } from "../../cloneTripButton";
 
 interface Step2Props {
   control: Control<Form, any, Form>
+  editMode: boolean
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
   watch: UseFormWatch<Form>
   errors: FieldErrors<Form>
   values: Form
@@ -15,6 +18,8 @@ interface Step2Props {
 
 export const Step2: React.FC<Step2Props> = ({
   control,
+  editMode,
+  setEditMode,
   watch,
   errors,
   values
@@ -44,6 +49,12 @@ export const Step2: React.FC<Step2Props> = ({
           )}
         />
       </S.DescriptionBox>
+
+      {editMode && (
+        <S.CloneTripBox>
+          <CloneTripButton setEditMode={setEditMode} />
+        </S.CloneTripBox>
+      )}
 
     </S.InputGroupContainer>
   );

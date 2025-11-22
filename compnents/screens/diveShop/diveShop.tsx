@@ -14,7 +14,7 @@ type DiveShopProps = {
   itineraryList: ItineraryItem[];
   selectedShop: DiveShop;
   handleMapFlip: (sites: number[]) => void;
-  handleEditButton: (id: number, name: string) => void;
+  handleEditButton: (id: number, name: string, shopId: number) => void;
   handleDeleteButton: (sites: ItineraryItem) => void;
   tripsCount: number;
 };

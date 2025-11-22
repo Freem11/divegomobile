@@ -9,12 +9,15 @@ import EmptyState from "../../../../reusables/emptyState-new";
 import { AddSitesButton } from "../../addDiveSiteButton";
 import { DiveSiteWithUserName } from "../../../../../entities/diveSite";
 import { DiveSitesCard } from "../../../../reusables/addDiveSiteButton";
+import { CloneTripButton } from "../../cloneTripButton";
 
 interface Step3Props {
   control: Control<Form, any, Form>
   setValue: UseFormSetValue<Form>
   watch: UseFormWatch<Form>
   errors: FieldErrors<Form>
+  editMode: boolean
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
   tripDiveSites: DiveSiteWithUserName[]
   handleMapFlip: (formData: Required<Form>) => void;
   removeFromSitesArray: (siteIdNo: number, siteList: number[]) => void;
@@ -27,6 +30,8 @@ export const Step3: React.FC<Step3Props> = ({
   setValue,
   watch,
   errors,
+  editMode,
+  setEditMode,
   tripDiveSites,
   handleMapFlip,
   removeFromSitesArray = () => { },
@@ -65,6 +70,12 @@ export const Step3: React.FC<Step3Props> = ({
           />
 
         </S.EmptyStateWrapper>
+      )}
+
+      {editMode && (
+        <S.CloneTripBox>
+          <CloneTripButton setEditMode={setEditMode} />
+        </S.CloneTripBox>
       )}
 
     </S.InputGroupContainer>

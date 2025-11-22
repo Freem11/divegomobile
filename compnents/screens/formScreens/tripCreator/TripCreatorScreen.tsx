@@ -6,17 +6,13 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
 import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
-import { useUserProfile } from "../../../../store/user/useUserProfile";
 import { RootStackParamList } from "../../../../providers/navigation";
-import { showError } from "../../../toast";
 import { ItineraryItem } from "../../../../entities/itineraryItem";
 import { getItineraryDiveSiteByIdArray, getTripById, insertItinerary, insertItineraryRequest } from "../../../../supabaseCalls/itinerarySupabaseCalls";
 import { EditModeContext } from "../../../contexts/editModeContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
-import { TripSitesContext } from "../../../contexts/tripSitesContext";
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import { useMapStore } from "../../../googleMap/useMapStore";
-import { ScreenReturn } from "../../../googleMap/types";
 
 import TripCreatorPageView from "./tripCreatorNew";
 import { Form } from "./form";
@@ -26,7 +22,7 @@ type TripCreatorScreenProps = {
 };
 
 export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
-  const { selectedDiveSite, reviewToEdit, id, shopId } = route.params;
+  const { selectedDiveSite, id, shopId } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
@@ -36,7 +32,6 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
 
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
-  // const { tripDiveSites, setTripDiveSites } = useContext(TripSitesContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [siteInfo, setSiteInfo] = useState(null);
@@ -207,6 +202,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
         removeFromSitesArray={removeFromSitesArray}
         sitesArray={sitesArray}
         editMode={editMode}
+        setEditMode={setEditMode}
       />
     </View>
   );

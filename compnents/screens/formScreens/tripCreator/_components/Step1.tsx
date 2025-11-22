@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { } from "react";
 import { Dimensions, Pressable } from "react-native";
 import { Control, Controller, FieldErrors, UseFormWatch } from "react-hook-form";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -10,8 +10,7 @@ import MobileTextInput from "../../../../reusables/textInput";
 import * as S from "../../styles";
 import { Form, FormRules } from "../form";
 import PriceTextInput from "../../../../reusables/priceTextInput";
-import { register } from "../../../../../supabaseCalls/authenticateSupabaseCalls";
-import { ItineraryItem } from "../../../../../entities/itineraryItem";
+import { CloneTripButton } from "../../cloneTripButton";
 
 interface Step1Props {
   control: Control<Form, any, Form>
@@ -19,6 +18,8 @@ interface Step1Props {
   dateType: string
   errors: FieldErrors<Form>
   watch: UseFormWatch<Form>
+  editMode: boolean;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
   datePickerVisible: boolean
   showDatePicker: (value: string) => void
   hideDatePicker: () => void
@@ -31,6 +32,8 @@ export const Step1: React.FC<Step1Props> = ({
   dateType,
   errors,
   watch,
+  editMode,
+  setEditMode,
   datePickerVisible,
   showDatePicker,
   hideDatePicker,
@@ -141,6 +144,12 @@ export const Step1: React.FC<Step1Props> = ({
           />
         </S.Wrapper>
       </S.DateBox>
+
+      {editMode && (
+        <S.CloneTripBox>
+          <CloneTripButton setEditMode={setEditMode} />
+        </S.CloneTripBox>
+      )}
 
       <DateTimePickerModal
         isVisible={datePickerVisible}
