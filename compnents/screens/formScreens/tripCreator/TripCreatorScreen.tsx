@@ -63,14 +63,15 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
 
   const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
 
+    console.log(siteIdNo, siteList);
     const index = siteList.indexOf(siteIdNo);
     if (index > -1) {
       siteList.splice(index, 1);
     }
     setSitesArray(siteList);
-    const indexLocal = storeFormValues.siteList.indexOf(siteIdNo);
+    const indexLocal = siteList.indexOf(siteIdNo);
     if (indexLocal > -1) {
-      storeFormValues.siteList.splice(index, 1);
+      siteList.splice(index, 1);
     }
     getTripDiveSites(siteList);
   };
