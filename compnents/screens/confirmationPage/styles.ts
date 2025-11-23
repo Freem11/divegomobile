@@ -7,10 +7,13 @@ const { width, height } = Dimensions.get("window");
 
 export const CompleteContainer = styled.View`
   width: 100%;
-  padding: 40% ${moderateScale(16)}px 0;
+  margin-top: -40%;
+  padding: 0 ${moderateScale(16)}px;
+  background-color: ${colors.themeWhite};
   flex: 1;
   align-items: center;
   justify-content: center;
+  z-index: -1;
 `;
 
 export const Title = styled.Text`

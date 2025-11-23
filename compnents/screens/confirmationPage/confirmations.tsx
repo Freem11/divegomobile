@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import LottieView from "lottie-react-native";
 
 import { useDiveShopNavigation } from "../diveShop/types";
+import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 
 import * as S from "./styles";
 
@@ -25,36 +26,43 @@ export default function Confirmations(props: Step4Props) {
   }, []);
 
   return (
-    <S.CompleteContainer>
-      <View
-        style={{
-          width: moderateScale(200),
-          height: moderateScale(100),
-          alignSelf: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          overflow: "hidden",
-        }}
-      >
-        <LottieView
-          ref={animationRef}
-          source={require("../../../assets/lottie-animation.json")}
-          autoPlay
-          loop={false}
+    <>
+      <NavigationHeader
+        title={"Trip Creator"}
+        subtitle={"Delete Trip Request"}
+      />
+      <S.CompleteContainer>
+
+        <View
           style={{
-            width: moderateScale(240),
-            height: moderateScale(240),
+            width: moderateScale(200),
+            height: moderateScale(100),
+            alignSelf: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            overflow: "hidden",
           }}
-        />
-      </View>
+        >
+          <LottieView
+            ref={animationRef}
+            source={require("../../../assets/lottie-animation.json")}
+            autoPlay
+            loop={false}
+            style={{
+              width: moderateScale(240),
+              height: moderateScale(240),
+            }}
+          />
+        </View>
 
-      <S.Title style={{ textAlign: "center" }}>
-        {props.title}
-      </S.Title>
+        <S.Title style={{ textAlign: "center" }}>
+          {props.title}
+        </S.Title>
 
-      <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32) }}>
-        {props.subTitle}
-      </S.Subtitle>
-    </S.CompleteContainer>
+        <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32) }}>
+          {props.subTitle}
+        </S.Subtitle>
+      </S.CompleteContainer>
+    </>
   );
 };
