@@ -6,6 +6,7 @@ import { colors } from "../../../styles";
 
 export const Container = styled.View`
   width: 100%;
+  z-index: 20;
 `;
 
 export const ProgressBarContainer = styled.View`

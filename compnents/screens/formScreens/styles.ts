@@ -5,8 +5,13 @@ import { Dimensions, Platform } from "react-native";
 import { colors, activeFonts, fontSizes } from "../../styles";
 const { width, height } = Dimensions.get("window");
 
-export const ContentContainer = styled.View`
+interface ContentContainerProps {
+  insets: number;
+}
+
+export const ContentContainer = styled.View<ContentContainerProps>`
   width: 100%;
+  margin-top: ${({ insets }) => `${moderateScale(insets.top) * 0.68}px`};
   align-items: center;
   flex: 1;
 `;
@@ -70,7 +75,18 @@ export const DescriptionBox = styled.View`
   border-color: ${colors.border};
   border-radius: ${moderateScale(8)}px;
   background-color: ${colors.themeWhite};
-  height: ${moderateScale(400)}px;
+  height: ${moderateScale(200)}px;
+  margin-top: ${moderateScale(20)}px;
+`;
+
+export const TripDetailsBox = styled.View`
+  align-items: center;
+  justify-content: center;
+  border-width: ${moderateScale(1)}px;
+  border-color: ${colors.border};
+  border-radius: ${moderateScale(8)}px;
+  background-color: ${colors.themeWhite};
+  height: ${height * 0.42}px;
   margin-top: ${moderateScale(20)}px;
 `;
 

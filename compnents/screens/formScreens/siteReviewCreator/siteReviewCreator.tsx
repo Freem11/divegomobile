@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { DiveConditions } from "../../../../entities/diveSiteCondidtions";
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
@@ -45,6 +46,7 @@ export default function SiteReviewPageView({
   trigger,
   existingPhotos
 }: ShopReviewCreatorProps) {
+  const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
 
@@ -157,7 +159,7 @@ export default function SiteReviewPageView({
   const canSubmit = description && description.trim().length > 0;
 
   return (
-    <S.ContentContainer>
+    <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
 
       <ScrollView

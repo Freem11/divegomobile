@@ -29,7 +29,7 @@ export const Step2: React.FC<Step2Props> = ({
       <S.Title>{t("TripCreator.step2Title")}</S.Title>
       <S.Subtitle>{t("TripCreator.step2Description")}</S.Subtitle>
 
-      <S.DescriptionBox>
+      <S.TripDetailsBox>
         <Controller
           control={control}
           name="Details"
@@ -46,7 +46,7 @@ export const Step2: React.FC<Step2Props> = ({
             </S.MultilineTextInput>
           )}
         />
-      </S.DescriptionBox>
+      </S.TripDetailsBox>
 
       {editMode && (
         <S.CloneTripBox>

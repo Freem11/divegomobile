@@ -19,18 +19,18 @@ export const Container = styled.View`
 export const ButtonContainer = styled.View`
   flex-direction: row;
   width: 100%;
-  gap: ${moderateScale(16)}px;
 `;
 
 export const BackButton = styled(Button)`
   flex: 1;
-  height: ${moderateScale(48)}px;
+  height: ${moderateScale(65)}px;
   width: ${moderateScale(140)}px;
   border-radius: ${moderateScale(8)}px;
+  align-self: flex-start;
 `;
 
 export const NextButton = styled(Button)`
-  height: ${moderateScale(48)}px;
+  height: ${moderateScale(65)}px;
   border-radius: ${moderateScale(8)}px;
   width: ${moderateScale(140)}px;
   align-self: flex-end;

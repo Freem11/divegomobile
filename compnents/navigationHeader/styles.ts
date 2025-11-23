@@ -26,6 +26,7 @@ export const styles = StyleSheet.create({
   },
   safeArea: {
     backgroundColor: "#FFF",
+    height: moderateScale(70),
   },
   container: {
     height: moderateScale(70),
@@ -33,7 +34,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderBottomWidth: 1,
     borderColor: colors.border,
   },
   sideContainer: {

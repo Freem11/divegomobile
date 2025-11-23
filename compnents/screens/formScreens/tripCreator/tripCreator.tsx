@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import { ProgressBar } from "../progressBar";
@@ -63,6 +64,7 @@ export default function TripCreatorPageView({
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
   const diveShopNavigation = useDiveShopNavigation();
+  const insets = useSafeAreaInsets();
 
   const handleMapFlip = async (formData: Required<Form>) => {
     setMapConfig(3, { pageName: ScreenReturn.TripCreator as unknown as string, itemId: 1 });
@@ -105,7 +107,7 @@ export default function TripCreatorPageView({
   const canSubmit = description && description.trim().length > 0;
 
   return (
-    <S.ContentContainer>
+    <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
 
       <ScrollView
