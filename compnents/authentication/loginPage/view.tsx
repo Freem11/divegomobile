@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, TouchableWithoutFeedback } from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
