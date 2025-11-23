@@ -20,9 +20,7 @@ export const Step2: React.FC<Step2Props> = ({
   control,
   editMode,
   setEditMode,
-  watch,
   errors,
-  values
 }) => {
   const { t } = useTranslation();
 

@@ -14,7 +14,6 @@ export const Step4: React.FC<Step4Props> = ({ editMode }) => {
   const { t } = useTranslation();
   const animationRef = useRef<LottieView>(null);
 
-  console.log("editMode", editMode);
   return (
     <S.CompleteContainer>
       <View

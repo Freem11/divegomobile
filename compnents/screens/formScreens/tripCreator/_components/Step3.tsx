@@ -26,10 +26,6 @@ interface Step3Props {
 }
 
 export const Step3: React.FC<Step3Props> = ({
-  control,
-  setValue,
-  watch,
-  errors,
   editMode,
   setEditMode,
   tripDiveSites,

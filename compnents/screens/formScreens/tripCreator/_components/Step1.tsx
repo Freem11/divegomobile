@@ -31,13 +31,11 @@ export const Step1: React.FC<Step1Props> = ({
   setValue,
   dateType,
   errors,
-  watch,
   editMode,
   setEditMode,
   datePickerVisible,
   showDatePicker,
   hideDatePicker,
-  values
 }) => {
   const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;

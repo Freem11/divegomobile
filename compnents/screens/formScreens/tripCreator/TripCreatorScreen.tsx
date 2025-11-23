@@ -5,7 +5,6 @@ import { Keyboard, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
-import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
 import { RootStackParamList } from "../../../../providers/navigation";
 import { ItineraryItem } from "../../../../entities/itineraryItem";
 import { getItineraryDiveSiteByIdArray, getTripById, insertItinerary, insertItineraryRequest } from "../../../../supabaseCalls/itinerarySupabaseCalls";
@@ -14,7 +13,7 @@ import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import { useMapStore } from "../../../googleMap/useMapStore";
 
-import TripCreatorPageView from "./tripCreatorNew";
+import TripCreatorPageView from "./tripCreator";
 import { Form } from "./form";
 
 type TripCreatorScreenProps = {
@@ -22,7 +21,7 @@ type TripCreatorScreenProps = {
 };
 
 export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
-  const { selectedDiveSite, id, shopId } = route.params;
+  const { id, shopId } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
@@ -34,7 +33,6 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [siteInfo, setSiteInfo] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
 
   const [dateType, setDateType] = useState("");
@@ -172,17 +170,6 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     }
 
   };
-
-  const getDiveSiteInfo = async (siteId: number) => {
-    if (siteId) {
-      const diveSiteInfo = await getDiveSiteById(siteId);
-      setSiteInfo(diveSiteInfo[0]);
-    }
-  };
-
-  useEffect(() => {
-    void getDiveSiteInfo(selectedDiveSite);
-  }, [selectedDiveSite]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
