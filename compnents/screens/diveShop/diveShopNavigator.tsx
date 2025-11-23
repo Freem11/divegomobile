@@ -20,7 +20,7 @@ export type DiveShopRoutes = {
   EditScreen: undefined;
   GoogleMap: undefined;
   TripCreator: { id: number | null, subTitle: string, shopId: number };
-  ConfirmationScreen: { title: string, subTitle: string };
+  ConfirmationScreen: { title: string, subTitle: string, returnNav: () => void };
 };
 
 const Stack = createNativeStackNavigator<DiveShopRoutes>();
@@ -53,6 +53,7 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
           <Confirmations
             title={route.params.title}
             subTitle={route.params.subTitle}
+            returnNav={route.params.returnNav}
           />
         )}
       </Stack.Screen>

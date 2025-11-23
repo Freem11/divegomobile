@@ -112,7 +112,7 @@ export default function DiveShopScreen({
       },
       "Delete"
     );
-    diveShopNavigation.navigate("ConfirmationScreen", { title: t("TripCreator.completeDeleteTitle"), subTitle: t("TripCreator.completeDeleteDescription") });
+    diveShopNavigation.navigate("ConfirmationScreen", { title: t("TripCreator.completeDeleteTitle"), subTitle: t("TripCreator.completeDeleteDescription"), returnNav: () => diveShopNavigation.goBack() });
   };
 
   return (

@@ -4,7 +4,6 @@ import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
 import LottieView from "lottie-react-native";
 
-import { useDiveShopNavigation } from "../diveShop/types";
 import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 
 import * as S from "./styles";
@@ -12,16 +11,16 @@ import * as S from "./styles";
 interface Step4Props {
   title: string
   subTitle: string
+  returnNav: () => void
 }
 
 export default function Confirmations(props: Step4Props) {
   const { t } = useTranslation();
   const animationRef = useRef<LottieView>(null);
-  const diveShopNavigation = useDiveShopNavigation();
 
   useEffect(() => {
     setTimeout(() => {
-      diveShopNavigation.navigate("DiveCentre");
+      props.returnNav();
     }, 3000);
   }, []);
 
