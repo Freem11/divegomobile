@@ -98,6 +98,7 @@ export default function DiveShopScreen({
   const handleDeleteButton = (itineraryInfo: ItineraryItem) => {
     insertItineraryRequest(
       {
+        OriginalItineraryID: itineraryInfo.id,
         BookingPage: itineraryInfo.BookingPage,
         tripName: itineraryInfo.tripName,
         startDate: itineraryInfo.startDate,
