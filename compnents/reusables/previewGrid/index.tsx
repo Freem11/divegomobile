@@ -10,9 +10,9 @@ import Icon from "../../../icons/Icon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
-import { useAppNavigation } from "../../mapPage/types";
 
 interface PreviewGridProps {
   items: DiveSiteWithUserName[] | null;
@@ -84,8 +84,8 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
             <Icon
               name={"camera-plus"}
               color={colors.primaryBlue}
-              width={moderateScale(22)}
-              height={moderateScale(22)}
+              width={scale(22)}
+              height={scale(22)}
             />
             <S.AddSightingText>
               {buttonText}
