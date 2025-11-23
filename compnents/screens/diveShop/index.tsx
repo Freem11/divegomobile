@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { insertItineraryRequest, itineraries } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { ItineraryItem } from "../../../entities/itineraryItem";
@@ -29,6 +30,7 @@ export default function DiveShopScreen({
   bottomHitCount,
   isMyShop
 }: DiveShopProps) {
+  const { t } = useTranslation();
   const navigation = useAppNavigation();
   const diveShopNavigation = useDiveShopNavigation();
   const [tripsCount, setTripsCount] = useState(0);
@@ -110,6 +112,7 @@ export default function DiveShopScreen({
       },
       "Delete"
     );
+    diveShopNavigation.navigate("ConfirmationScreen", { title: t("TripCreator.completeDeleteTitle"), subTitle: t("TripCreator.completeDeleteDescription") });
   };
 
   return (

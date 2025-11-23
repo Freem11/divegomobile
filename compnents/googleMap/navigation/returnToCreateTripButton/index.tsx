@@ -22,7 +22,7 @@ export function ReturnToCreateTripButton() {
   const mapAction = useMapStore((state) => state.actions);
   const storeFormValues = useMapStore((state) => state.formValues);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  const diveShopNavigation = useDiveShopNavigation();;
+  const diveShopNavigation = useDiveShopNavigation();
   const { sitesArray } = useContext(SitesArrayContext);
 
   const onPress = async () => {

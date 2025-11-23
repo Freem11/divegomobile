@@ -185,11 +185,11 @@
         "completeDescription": "Your new dive trip has been successfully submitted and will allow divers join you on this adventure.",
         "completeEditTitle": "Dive Trip Edit Request Submitted!",
         "completeEditDescription": "Your dive trip edits have been successfully submitted we will update your adventure shortly.",
+        "completeDeleteTitle": "Dive Trip Delete Request Submitted!",
+        "completeDeleteDescription": "Your dive trip delete request has been successfully submitted we will reviews and delete it if there are no issues.",
    
         "cloneButton": "Clone This Trip",
-        "submitButton": "Submit",
-        "selectSitesButton": "Select Dive Sites",
-        "drawerHeader": "Possible Sites in this Trip   (Press to Remove)",
+        "selectSitesButton": "Select Dive Sites"
         
     },
     "UserProfile": {

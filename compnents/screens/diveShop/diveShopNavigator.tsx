@@ -7,6 +7,7 @@ import TripCreatorScreen from "../formScreens/tripCreator/TripCreatorScreen";
 import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
 import { EditModeContext } from "../../contexts/editModeContext";
+import Confirmations from "../confirmationPage/confirmations";
 
 import DiveShopeParallax from "./diveShopParallax";
 
@@ -19,6 +20,7 @@ export type DiveShopRoutes = {
   EditScreen: undefined;
   GoogleMap: undefined;
   TripCreator: { id: number | null, subTitle: string, shopId: number };
+  ConfirmationScreen: { title: string, subTitle: string };
 };
 
 const Stack = createNativeStackNavigator<DiveShopRoutes>();
@@ -45,6 +47,15 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
       </Stack.Screen>
 
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
+
+      <Stack.Screen name="ConfirmationScreen">
+        {({ route }) => (
+          <Confirmations
+            title={route.params.title}
+            subTitle={route.params.subTitle}
+          />
+        )}
+      </Stack.Screen>
 
       <Stack.Screen
         name={"TripCreator"}
