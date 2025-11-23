@@ -123,7 +123,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const handleCreate = async (data: Form) => {
     try {
       await insertItinerary({
-        shopID: data.Id,
+        shopID: shopId,
         tripName: data.Name,
         BookingPage: data.Link,
         price: data.Price,
