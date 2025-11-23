@@ -74,7 +74,7 @@ export const ButtonContainerReviews = styled.View`
   margin-top: ${moderateScale(-20)}px;
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: ${moderateScale(40)}px;
+  padding-vertical: ${moderateScale(30)}px;
 `;
 
 export const EmptyStateWrapper = styled.View`

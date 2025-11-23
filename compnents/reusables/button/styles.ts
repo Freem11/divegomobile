@@ -9,6 +9,9 @@ export const StyledTouchableHighlight = styled.TouchableHighlight`
   border-radius: ${({ round }) =>
     round ? `${moderateScale(30)}px` : `${moderateScale(10)}px`};
   overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  padding-vertical: ${moderateScale(10)}px;
 `;
 
 export const StyledButton = styled.View`
