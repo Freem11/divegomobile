@@ -1,8 +1,6 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useContext } from "react";
 
-import { useContext } from "react";
-
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
