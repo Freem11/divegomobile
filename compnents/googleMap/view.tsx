@@ -45,7 +45,8 @@ type MapViewProps = {
   handleOnMapReady: () => void;
   diveSites?: DiveSiteBasic[] | null;
   diveShops?: DiveShop[] | null;
-  heatPoints?: HeatPoint[] | null
+  heatPoints?: HeatPoint[] | null;
+  initConfig?: number;
 };
 
 export default function GoogleMapView(props: MapViewProps) {

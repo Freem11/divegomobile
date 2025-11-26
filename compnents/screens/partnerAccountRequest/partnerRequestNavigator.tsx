@@ -7,7 +7,7 @@ import PartnerRequestParallax from "./partnerRequestParallax";
 
 export type PartnerRequestRoutes = {
   PartnerRequest: undefined;
-  GoogleMap: undefined;
+  GoogleMap: { initConfig: number };
 };
 
 const Stack = createNativeStackNavigator<PartnerRequestRoutes>();
@@ -24,7 +24,13 @@ export default function PartnerRequestNavigator() {
     >
       <Stack.Screen name="PartnerRequest" component={PartnerRequestParallax} />
 
-      <Stack.Screen name="GoogleMap" component={GoogleMap} />
+      <Stack.Screen name="GoogleMap">
+        {({ route }) => (
+          <GoogleMap
+            initConfig={4}
+          />
+        )}
+      </Stack.Screen>
       {/* Map Navigator - view trip & limited dive site*/}
 
     </Stack.Navigator>

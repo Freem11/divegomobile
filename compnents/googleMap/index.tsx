@@ -15,7 +15,11 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { useMapStore } from "./useMapStore";
 import GoogleMapView from "./view";
 
-export default function GoogleMap() {
+type GoogleMapProps = {
+  initConfig?: number;
+};
+
+export default function GoogleMap(props: GoogleMapProps) {
   const { width: mapPixelWidth } = Dimensions.get("window");
   const TILE_SIZE = 256;
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -33,7 +37,7 @@ export default function GoogleMap() {
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[] | null>(null);
 
-  const handleOnLoad = async(map: MapView) => {
+  const handleOnLoad = async (map: MapView) => {
     mapAction.setMapRef(map);
   };
 
@@ -48,13 +52,13 @@ export default function GoogleMap() {
   };
 
   useEffect(() => {
-    (async() => {
-      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble , { animal: animalMultiSelection && [animalMultiSelection] });
+    (async () => {
+      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble, { animal: animalMultiSelection && [animalMultiSelection] });
       setHeatPoints(heatPoints);
     })();
   }, [animalMultiSelection, bubble]);
 
-  const handleBoundsChange = debounce(async() => {
+  const handleBoundsChange = debounce(async () => {
     if (!mapRef) {
       return;
     }
@@ -87,6 +91,7 @@ export default function GoogleMap() {
       diveSites={diveSites}
       diveShops={diveShops}
       zoomLevel={zoomLevel}
+      initConfig={props.initConfig}
     />
   );
 }

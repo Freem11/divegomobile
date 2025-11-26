@@ -20,7 +20,7 @@ export type DiveSiteRoutes = {
   DiveSite: undefined;
   EditScreen: undefined;
   AddSighting: { selectedDiveSite: DiveSiteWithUserName };
-  GoogleMap: undefined;
+  GoogleMap: { initConfig: number };
   SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
 };
 
@@ -50,7 +50,13 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
 
       <Stack.Screen name="AddSighting" component={PicUploaderParallax} />
 
-      <Stack.Screen name="GoogleMap" component={GoogleMap} />
+      <Stack.Screen name="GoogleMap">
+        {({ route }) => (
+          <GoogleMap
+            initConfig={1}
+          />
+        )}
+      </Stack.Screen>
       {/* Map Navigator - view trip & limited dive site*/}
 
       <Stack.Screen
