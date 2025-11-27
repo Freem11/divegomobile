@@ -10,9 +10,7 @@ import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import PhotoBoxModel from "../screens/photoBox/photoBoxModal";
 import CommentsModal from "../modals/commentsModal";
-import EditScreenParallax from "../screens/edits/editsParallax";
 import { colors } from "../styles";
-import OnboardingNavigator from "../tutorial/onboarding/onboardingNavigator";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -42,7 +40,6 @@ export default function AnimatedFullScreenModal(props) {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeTutorialID === "OnboardingX" && <OnboardingNavigator />}
       {activeTutorialID === "PinchAndZoomPhoto" && fullScreenModal && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
     </Animated.View>

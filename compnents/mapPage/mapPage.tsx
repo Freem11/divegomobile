@@ -12,8 +12,6 @@ import {
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
 
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { updateProfileFeeback } from "../../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosWithUser,
@@ -22,8 +20,6 @@ import {
 import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
-import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { useMapStore } from "../googleMap/useMapStore";
 import { useUserProfile } from "../../store/user/useUserProfile";
 
@@ -36,10 +32,6 @@ export default function MapPage() {
 
   const mapConfig = useMapStore((state) => state.mapConfig);
 
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const [anchPhotos, setAnchPhotos] = useState(null);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
@@ -123,13 +115,9 @@ export default function MapPage() {
         if (userProfile.UserName == null || userProfile.UserName === "") {
           setTimeout(() => {
             setShowOnboarding(true);
-
-            setActiveTutorialID("OnboardingX");
-            setFullScreenModal(true);
           }, 500);
-        } else {
-          setFullScreenModal(false);
         }
+
         if (userProfile.feedbackRequested === false) {
           feedbackRequest = setTimeout(() => {
             startFeedbackAnimations();

@@ -1,8 +1,7 @@
-import { useContext } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { OnboardingRoutes } from "./onboardingNavigator";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { OnboardingConfigParams, OnboardingTemplateLayout } from "./OnboardingTemplateLayout";
+import { useAppNavigation } from "../../mapPage/types";
 
 type FinishScreenNavigationProp = NativeStackNavigationProp<
   OnboardingRoutes,
@@ -10,10 +9,12 @@ type FinishScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function FinishScreen() {
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const navigation = useAppNavigation();
 
   const onPress = async () => {
-    setFullScreenModal(false);
+    // Simply going back from the FinishScreen (the last one) will finish the OnboardingFlow as all screens 
+    // throughout the Onboarding flow were being replaced in the back stack instead of adding on top of each other.
+    navigation.goBack();
   };
 
   const params: OnboardingConfigParams = {
