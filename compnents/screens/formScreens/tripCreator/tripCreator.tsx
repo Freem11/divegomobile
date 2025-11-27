@@ -11,7 +11,7 @@ import * as S from "../styles";
 import { ItineraryItem } from "../../../../entities/itineraryItem";
 import GoogleMap from "../../../googleMap";
 import { useMapStore } from "../../../googleMap/useMapStore";
-import { ScreenReturn } from "../../../googleMap/types";
+import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
 import { useDiveShopNavigation } from "../../diveShop/types";
 
 import { Step1, Step2, Step3, Step4 } from "./_components";
@@ -61,14 +61,18 @@ export default function TripCreatorPageView({
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
 
+  const initConfig = useMapStore((state) => state.initConfig);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
+
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
   const diveShopNavigation = useDiveShopNavigation();
   const insets = useSafeAreaInsets();
 
   const handleMapFlip = async (formData: Required<Form>) => {
-    setMapConfig(3, { pageName: ScreenReturn.TripCreator as unknown as string, itemId: 1 });
-    diveShopNavigation.navigate("GoogleMap");
+    setInitConfig(MapConfigurations.TripBuild);
+    setMapConfig(MapConfigurations.TripBuild, { pageName: ScreenReturn.TripCreator as unknown as string, itemId: 1 });
+    diveShopNavigation.navigate("GoogleMap", { initConfig });
     setFormValues(formData);
   };
 

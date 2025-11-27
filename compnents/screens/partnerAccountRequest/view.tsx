@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { ScreenReturn } from "../../googleMap/types";
+import { MapConfigurations, ScreenReturn } from "../../googleMap/types";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useAppNavigation } from "../../mapPage/types";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
@@ -53,7 +53,7 @@ export default function PartnerAccountRequestPageView({
 
       navigation.navigate("GoogleMap");
 
-      setMapConfig(1, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
+      setMapConfig(MapConfigurations.PinDrop, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
       setFormValues(formData);
     }
   };

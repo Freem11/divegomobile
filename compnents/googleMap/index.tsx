@@ -4,32 +4,36 @@ import { Dimensions } from "react-native";
 
 import { debounce } from "../reusables/_helpers/debounce";
 import { GPSBubble } from "../../entities/GPSBubble";
-import { getDiveSitesBasic } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { getDiveSitesBasic, getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { DiveShop } from "../../entities/diveShop";
 import { getHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { HeatPoint } from "../../entities/heatPoint";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
 import { useMapStore } from "./useMapStore";
 import GoogleMapView from "./view";
+import { MapConfigurations } from "./types";
 
 type GoogleMapProps = {
-  initConfig?: number;
+  initConfig?: MapConfigurations;
 };
 
 export default function GoogleMap(props: GoogleMapProps) {
   const { width: mapPixelWidth } = Dimensions.get("window");
   const TILE_SIZE = 256;
   const [zoomLevel, setZoomLevel] = useState(1);
-
+  const { sitesArray } = useContext(SitesArrayContext);
   const mapAction = useMapStore((state) => state.actions);
 
   const camera = useMapStore((state) => state.camera);
   const mapRef = useMapStore((state) => state.mapRef);
   const bubble = useMapStore((state) => state.gpsBubble);
+  const mapRegion = useMapStore((state) => state.mapRegion);
   const mapConfig = useMapStore((state) => state.mapConfig);
+  const initConfig = useMapStore((state) => state.initConfig);
 
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
@@ -41,8 +45,41 @@ export default function GoogleMap(props: GoogleMapProps) {
     mapAction.setMapRef(map);
   };
 
+  const moveToTrip = async (siteIds: number[]) => {
+    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteIds));
+
+    const coordinates = itinerizedDiveSites.map(site => ({
+      latitude: site.lat,
+      longitude: site.lng,
+    }));
+
+    mapRef?.fitToCoordinates(coordinates, {
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      animated: true,
+    });
+  };
+
   const handleOnMapReady = () => {
     handleBoundsChange();
+
+    switch (initConfig) {
+      case MapConfigurations.Default:
+        if (mapRegion && mapRef) {
+          mapRef.animateToRegion(mapRegion, 10);
+        }
+        break;
+      case MapConfigurations.PinDrop:
+        console.log("Pin drop");
+        break;
+      case MapConfigurations.TripView:
+        moveToTrip(sitesArray);
+        break;
+      case MapConfigurations.TripBuild:
+        if (sitesArray.length > 0) {
+          moveToTrip(sitesArray);
+        }
+        break;
+    }
   };
 
   const getZoomFromBounds = (neLng: number, swLng: number) => {

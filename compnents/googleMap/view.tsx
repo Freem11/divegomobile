@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
@@ -19,7 +19,7 @@ import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
-import { ClusterProperty, PointFeatureCategory } from "./types";
+import { ClusterProperty, MapConfigurations, PointFeatureCategory } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
 import { MarkerDiveSiteCluster } from "./marker/markerDiveSiteCluster";
@@ -46,7 +46,7 @@ type MapViewProps = {
   diveSites?: DiveSiteBasic[] | null;
   diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null;
-  initConfig?: number;
+  initConfig?: MapConfigurations;
 };
 
 export default function GoogleMapView(props: MapViewProps) {
@@ -57,6 +57,8 @@ export default function GoogleMapView(props: MapViewProps) {
   const mapConfig = useMapStore((state) => state.mapConfig);
   const mapRegion = useMapStore((state) => state.mapRegion);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
+  const initConfig = useMapStore((state) => state.initConfig);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
 
   const styles = StyleSheet.create({
     container: {
@@ -143,22 +145,41 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   }, [mapRegion]);
 
+  useEffect(() => {
+
+  }, []);
+
+  const clearMapInits = async () => {
+    setInitConfig(MapConfigurations.Default);
+  };
+
   useFocusEffect(
-    React.useCallback(() => {
-      if (mapRegion && mapRef) {
-        const timerId = setTimeout(() => {
-          mapRef.animateToRegion(mapRegion, 10);
-        }, 500);
-        setTimoutId(timerId);
+    useCallback(() => {
+      console.log("hey", initConfig);
+      switch (initConfig) {
+        case MapConfigurations.Default:
+          // if (mapRegion && mapRef) {
+          //   mapRef.animateToRegion(mapRegion, 10);
+          // }
+          break;
+        case MapConfigurations.PinDrop:
+          console.log("Pin drop");
+          break;
+        case MapConfigurations.TripView:
+          console.log("Trip View");
+          moveToTrip(sitesArray);
+          break;
+        case MapConfigurations.TripBuild:
+          if (sitesArray.length > 0) {
+            const newTimeoutId = setTimeout(() => {
+              moveToTrip(sitesArray);
+              clearMapInits();
+            }, 1000);
 
-      }
+            setTimoutId(newTimeoutId);
 
-      if (mapConfig === 2) {
-        moveToTrip(sitesArray);
-      }
-
-      if (mapConfig === 3 && sitesArray.length > 0) {
-        moveToTrip(sitesArray);
+          }
+          break;
       }
 
       return () => {
@@ -167,7 +188,7 @@ export default function GoogleMapView(props: MapViewProps) {
         }
         setMapRegion(null);
       };
-    }, [mapRef, mapRegion])
+    }, [initConfig])
   );
 
   useEffect(() => {
@@ -294,17 +315,17 @@ export default function GoogleMapView(props: MapViewProps) {
 
       </MapView>
 
-      {(props?.mapConfig !== 0 && props?.mapConfig !== 2) && (
+      {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
         <S.SafeAreaTop edges={["top"]}>
           <SearchTool />
         </S.SafeAreaTop>
       )}
 
-      {props?.mapConfig === 1 && (
+      {props?.mapConfig === MapConfigurations.PinDrop && (
         <MarkerDraggable />
       )}
 
-      {props?.mapConfig === 1 && (
+      {props?.mapConfig === MapConfigurations.PinDrop && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <S.TargetWrapperAlt>
             <ButtonIcon
@@ -317,12 +338,12 @@ export default function GoogleMapView(props: MapViewProps) {
           <ReturnToSiteSubmitterButton />
         </View>
       )}
-      {props?.mapConfig === 2 && (
+      {props?.mapConfig === MapConfigurations.TripView && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToShopButton />
         </View>
       )}
-      {props?.mapConfig === 3 && (
+      {props?.mapConfig === MapConfigurations.TripBuild && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <S.TargetWrapperAlt>
             <ButtonIcon

@@ -11,6 +11,7 @@ import { EditModeContext } from "../../contexts/editModeContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 import { useAppNavigation } from "../../mapPage/types";
+import { MapConfigurations } from "../../googleMap/types";
 
 import DiveShopScreenView from "./diveShop";
 import { useDiveShopNavigation } from "./types";
@@ -89,7 +90,7 @@ export default function DiveShopScreen({
         animated: true,
       });
 
-      setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
+      setMapConfig(MapConfigurations.TripView, { pageName: "DiveShop", itemId: selectedShop.id });
     }
   };
 

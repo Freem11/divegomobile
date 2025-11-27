@@ -17,6 +17,7 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MetricItem } from "../../../entities/metricItem";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 import { useAppNavigation } from "../../mapPage/types";
+import { MapConfigurations } from "../../googleMap/types";
 
 import DiveSiteScreenView from "./diveSite";
 import { useDiveSiteNavigation } from "./types";
@@ -100,7 +101,7 @@ export default function DiveSiteScreen({
         animated: true,
       });
 
-      setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id });
+      setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
     }
   };
 

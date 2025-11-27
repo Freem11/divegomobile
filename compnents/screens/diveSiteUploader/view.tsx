@@ -6,7 +6,7 @@ import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { ScreenReturn } from "../../googleMap/types";
+import { MapConfigurations, ScreenReturn } from "../../googleMap/types";
 import { showWarning } from "../../toast";
 import { useAppNavigation } from "../../mapPage/types";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
@@ -63,7 +63,7 @@ export default function DiveSiteUploaderView({
 
       navigation.navigate("GoogleMap");
 
-      setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
+      setMapConfig(MapConfigurations.PinDrop, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
       setFormValues(formData);
     }
 

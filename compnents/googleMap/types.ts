@@ -1,3 +1,10 @@
+export enum MapConfigurations {
+  Default = 0,
+  PinDrop = 1,
+  TripView = 2,
+  TripBuild = 3
+};
+
 export enum PointFeatureCategory {
   DiveSite = 1,
   DiveShop = 2,
