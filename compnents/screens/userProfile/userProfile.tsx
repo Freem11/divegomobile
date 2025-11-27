@@ -14,7 +14,6 @@ import * as S from "./styles";
 
 type UserProfileProps = {
   profilePhotos: DiveSiteWithUserName[] | null;
-  handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
   selectedProfile: ActiveProfile | null;
   speciesCount: number;
   sightingsCount: number;

@@ -11,6 +11,7 @@ import {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
+
 import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { updateProfileFeeback } from "../../supabaseCalls/accountSupabaseCalls";
@@ -24,7 +25,6 @@ import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { useMapStore } from "../googleMap/useMapStore";
-import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { useUserProfile } from "../../store/user/useUserProfile";
 
 import MainNavigator from "./mainNavigator";
@@ -35,7 +35,6 @@ export default function MapPage() {
   }
 
   const mapConfig = useMapStore((state) => state.mapConfig);
-  const mapRef = useMapStore((state) => state.mapRef);
 
   const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
@@ -153,73 +152,7 @@ export default function MapPage() {
     getProfile();
   }, []);
 
-  const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
-
-  const getCurrentLocation = async () => {
-    try {
-      const { coords } = await getCurrentCoordinates();
-      if (coords) {
-        mapRef?.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          latitudeDelta: 1,
-          longitudeDelta: 1,
-        }, 500);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-
   return (
     <MainNavigator showOnboarding={showOnboarding} mapConfig={mapConfig} />
-
-    // <SafeAreaProvider>
-    //   <S.Container>
-
-    //     <GoogleMap style={StyleSheet.absoluteFillObject} />
-
-    //     <S.SafeAreaTop edges={["top"]}>
-    //       <SearchTool />
-
-    //       {/* {mapConfig in [, , 2] || !mapConfig ? (
-    //         <AnimalTagsContainer transTagsY={transTagsY} />
-    //       ) : null} */}
-    //     </S.SafeAreaTop>
-
-    //     {mapConfig === 0 ? (
-    //       <S.SafeAreaBottom edges={["bottom"]}>
-    //         <S.BottomMenu>
-    // <S.TargetWrapper>
-    //             <ButtonIcon
-    //               icon="target"
-    //               size={36}
-    //               onPress={() => getCurrentLocation()}
-    //               style={{ pointerEvents: "auto" }}
-    //             />
-    //           </S.TargetWrapper>
-    //           <BottomDrawer/>
-    //           <BottomMenu>
-    //             <ProfileButton />
-    //             <SiteSearchButton />
-    //             <DiveSiteButton />
-    //             {PARTNER_ACCOUNT_STATUS ? <ItineraryListButton /> : <GuidesButton />}
-    //           </BottomMenu>
-
-    //         </S.BottomMenu>
-    //       </S.SafeAreaBottom>
-    //     )
-    //       : null}
-
-    //     {/* {mapConfig === 0 && <EmailFeedback />} */}
-
-    //     <FeedScreens />
-    //     <LevelOneScreen />
-    //     <LevelTwoScreen />
-    //     <LevelThreeScreen />
-    //     <AnimatedFullScreenModal />
-
-    //   </S.Container>
-    // </SafeAreaProvider>
   );
 }

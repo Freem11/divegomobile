@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import email from "react-native-email";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
@@ -30,8 +29,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const diveSiteNavigation = useDiveSiteNavigation();
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
-
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
@@ -88,7 +85,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
-    setLevelOneScreen(false);
   };
 
   const openDiveSiteReviewer = () => {

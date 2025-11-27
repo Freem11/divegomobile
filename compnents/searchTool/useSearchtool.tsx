@@ -3,7 +3,6 @@ import { Keyboard } from "react-native";
 import Geocoder from "react-native-geocoding";
 
 import { getSiteNamesThatFit, getSingleDiveSiteByNameAndRegion } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
 import { useMapStore } from "../googleMap/useMapStore";
 import { addIconType, addIndexNumber } from "../helpers/optionHelpers";
 import { getCoordsForSeaLife, getSeaCreatures } from "../../supabaseCalls/photoSupabaseCalls";
@@ -16,7 +15,6 @@ export default function useSearchTool() {
   const activeSearchValueRef = useRef("");
   const skipNextSearchRef = useRef(false);
 
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
   );
@@ -29,7 +27,7 @@ export default function useSearchTool() {
   const [textSource, setTextSource] = useState(false);
   const [isClearOn, setIsClearOn] = useState(false);
 
-  const getPlaces = async(text: string) => {
+  const getPlaces = async (text: string) => {
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${GoogleMapsApiKey}`
@@ -49,7 +47,7 @@ export default function useSearchTool() {
     }
   };
 
-  const handleDataList = async(value: string) => {
+  const handleDataList = async (value: string) => {
 
     if (value === activeSearchValueRef.current && activeSearchValueRef.current !== "") {
       console.log(`Defense: Blocking search for final selected value: ${value}`);
@@ -110,7 +108,7 @@ export default function useSearchTool() {
     activeSearchValueRef.current = "";
   };
 
-  const handleMapOptionSelected = async(place: string) => {
+  const handleMapOptionSelected = async (place: string) => {
 
     setList([]);
     try {
@@ -133,7 +131,7 @@ export default function useSearchTool() {
     finalizeSelection(place);
   };
 
-  const handleDiveSiteOptionSelected = async(diveSite: string) => {
+  const handleDiveSiteOptionSelected = async (diveSite: string) => {
     if (!diveSite) return;
 
     setList([]);
@@ -158,7 +156,7 @@ export default function useSearchTool() {
     finalizeSelection(diveSite);
   };
 
-  const handleSeaLifeOptionSelected = async(seaCreature: string) => {
+  const handleSeaLifeOptionSelected = async (seaCreature: string) => {
 
     setList([]);
     setAnimalMultiSelection(seaCreature);
@@ -191,7 +189,6 @@ export default function useSearchTool() {
     setTextSource(false);
     setPreviousSearchValue(selection);
     setSearchValue(selection);
-    setLevelOneScreen(false);
   };
 
   useEffect(() => {
