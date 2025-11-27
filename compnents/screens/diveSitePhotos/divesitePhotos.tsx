@@ -6,7 +6,6 @@ import ButtonIcon from "../../reusables/buttonIcon";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 
 import * as S from "./styles";
@@ -26,7 +25,6 @@ export default function DiveSitePhotosPageView({
 }: DiveSitePhotosPageViewProps) {
 
   const { t } = useTranslation();
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
 
   return (

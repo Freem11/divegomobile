@@ -7,8 +7,6 @@ import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supaba
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
 import { useUserProfile } from "../../../store/user/useUserProfile";
@@ -45,10 +43,6 @@ export default function DiveSiteScreen({
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
-  );
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);

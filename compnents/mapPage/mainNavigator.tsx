@@ -14,6 +14,7 @@ import PartnerRequestRouter from "../screens/partnerAccountRequest/partnerReques
 import BottomTabNavigator from "./bottomTabNavigator";
 import HomeScreen from "./HomeScreen";
 import SiteSubmitterNavigator from "../screens/diveSiteUploader/siteSubmitterNavigator";
+import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -33,6 +34,7 @@ export type MainRoutes = {
   EditScreen: undefined;
   UserProfilePhotos: undefined;
   PinchAndZoomPhoto: undefined;
+  UserProfile: { id: number };
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
@@ -80,6 +82,13 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
+      <Stack.Screen name="UserProfile">
+        {({ route }) => (
+          <UserProfileParallax
+            profileID={route.params.id}
+          />
+        )}
+      </Stack.Screen>
 
     </Stack.Navigator>
   );

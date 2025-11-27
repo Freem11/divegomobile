@@ -13,6 +13,7 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import DiveSitePhotosPageView from "./divesitePhotos";
 import { useDiveSiteNavigation } from "../diveSite/types";
+import { useAppNavigation } from "../../mapPage/types";
 
 type DiveSitePhotosPageProps = {};
 
@@ -28,6 +29,7 @@ export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const diveSiteNavigation = useDiveSiteNavigation();
+  const mainNavigation = useAppNavigation();
 
   const [diveSitePics, setDiveSitePics] = useState([]);
 
@@ -51,10 +53,7 @@ export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
       return;
     }
 
-    setActiveScreen("ProfileScreen", { id: picOwnerAccount[0].id });
-    setLevelThreeScreen(false);
-    setLevelTwoScreen(true);
-    setLevelOneScreen(false);
+    mainNavigation.navigate("UserProfile", { id: picOwnerAccount[0].id });
   };
 
   const onClose = async () => {
