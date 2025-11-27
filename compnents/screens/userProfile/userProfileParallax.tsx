@@ -2,38 +2,26 @@ import React, { useContext, useEffect, useState } from "react";
 import Share from "react-native-share";
 import { Keyboard } from "react-native";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { grabProfileById } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
 import { EditsContext } from "../../contexts/editsContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useAppNavigation } from "../../mapPage/types";
 
 import UserProfileScreen from ".";
-import { useAppNavigation } from "../../mapPage/types";
 
 type UserProfileProps = {
   profileID: number
 };
 
-
 export default function UserProfileParallax(props: UserProfileProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const navigation = useAppNavigation();
 
-  const navigation = useAppNavigation()
-
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
@@ -44,8 +32,6 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
   const { setEditInfo } = useContext(EditsContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { userProfile } = useUserProfile();
 
   useEffect(() => {
@@ -118,7 +104,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const openSettingsScreen = () => {
-    navigation.navigate("Settings")
+    navigation.navigate("Settings");
   };
 
   const openEditsPage = () => {

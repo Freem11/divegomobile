@@ -8,7 +8,6 @@ import SealifePreview from "../../reusables/sealifePreview";
 import ReviewCard from "../../reusables/reviewCard";
 import Label from "../../reusables/label-new";
 import EmptyState from "../../reusables/emptyState-new";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import * as S from "./styles";
@@ -35,8 +34,6 @@ export default function UserProfileScreenView({
 
   const [profileVals, setProfileVals] = useState(null);
   const { userProfile } = useUserProfile();
-
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
   useEffect(() => {
     setProfileVals({
