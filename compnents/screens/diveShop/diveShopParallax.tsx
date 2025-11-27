@@ -3,16 +3,13 @@ import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 import { RouteProp, useRoute } from "@react-navigation/native";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { EditsContext } from "../../contexts/editsContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
@@ -30,10 +27,7 @@ type DiveShopParallaxProps = {
 type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
 
 export default function DiveShopParallax(props: DiveShopParallaxProps) {
-  const route = useRoute<DiveCentreRouteProp>();
   const diveShopNavigation = useDiveShopNavigation();
-  const navigation = useAppNavigation();
-  // const { id } = route.params;
   const { t } = useTranslation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
@@ -43,7 +37,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const { userProfile } = useUserProfile();
   const [isMyShop, setIsMyShop] = useState(false);
 
-  const { editInfo, setEditInfo } = useContext(EditsContext);
+  const { setEditInfo } = useContext(EditsContext);
 
   useEffect(() => {
     getDiveSiteinfo();

@@ -23,10 +23,8 @@ type DiveShopProps = {
 };
 
 export default function DiveShopScreen({
-  closeParallax,
   restoreParallax,
   selectedShop,
-  bottomHitCount,
   isMyShop
 }: DiveShopProps) {
   const { t } = useTranslation();
