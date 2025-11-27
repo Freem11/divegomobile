@@ -22,7 +22,6 @@ import {
 import TextInputField from "../authentication/utils/textInput";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import {
-  insertPhotoComment,
   grabPhotoCommentsByPicId,
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import CommentListItem from "../commentListItem/commentListItem";
@@ -39,7 +38,6 @@ export default function CommentsModal() {
   const [listOfComments, setListOfComments] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
   const [selectedReplyId, setSelectedReplyId] = useState([]);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedPicture } = useContext(SelectedPictureContext);
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext

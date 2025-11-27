@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import {
-  StyleSheet,
   Platform,
-  Dimensions,
 } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { moderateScale } from "react-native-size-matters";
-import Animated, {
+import {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
@@ -14,19 +11,8 @@ import Animated, {
 } from "react-native-reanimated";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
-
-import GoogleMap from "../googleMap";
-import BottomMenu from "../reusables/bottomMenu";
-import ProfileButton from "../reusables/bottomMenu/buttons/profileButton";
-import SiteSearchButton from "../reusables/bottomMenu/buttons/siteSearchButton";
-import DiveSiteButton from "../reusables/bottomMenu/buttons/diveSiteButton";
-import ItineraryListButton from "../reusables/bottomMenu/buttons/itineraryCreatorButton";
-import GuidesButton from "../reusables/bottomMenu/buttons/guidesButton";
-import AnimalTagsContainer from "../animalTags/animalTagContainer";
-import AnimatedFullScreenModal from "../reusables/animatedFullScreenModal";
-import LevelOneScreen from "../reusables/levelOneScreen";
-import LevelTwoScreen from "../reusables/levelTwoScreen";
-import LevelThreeScreen from "../reusables/levelThreeScreen";
+import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
+import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { updateProfileFeeback } from "../../supabaseCalls/accountSupabaseCalls";
 import {
   getPhotosWithUser,
@@ -36,18 +22,11 @@ import { newGPSBoundaries } from "../helpers/mapHelpers";
 import { SelectedDiveSiteContext } from "../contexts/selectedDiveSiteContext";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { LevelOneScreenContext } from "../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../contexts/levelTwoScreenContext";
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
-import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
 import { useMapStore } from "../googleMap/useMapStore";
-import FeedScreens from "../feed/screens";
-import SearchTool from "../searchTool";
-import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { useUserProfile } from "../../store/user/useUserProfile";
 
-import * as S from "./styles";
 import MainNavigator from "./mainNavigator";
 
 export default function MapPage() {
