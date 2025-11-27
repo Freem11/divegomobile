@@ -148,28 +148,6 @@ export default function GoogleMapView(props: MapViewProps) {
 
   }, []);
 
-  const clearMapInits = async () => {
-    setInitConfig(MapConfigurations.Default);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      const newTimeoutId = setTimeout(() => {
-        moveToTrip(sitesArray);
-        clearMapInits();
-      }, 1000);
-
-      setTimoutId(newTimeoutId);
-
-      return () => {
-        if (timoutId) {
-          clearTimeout(timoutId);
-        }
-        setMapRegion(null);
-      };
-    }, [initConfig])
-  );
-
   useEffect(() => {
     (async () => {
       if (!map) {
