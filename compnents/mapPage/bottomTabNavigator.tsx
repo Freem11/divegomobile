@@ -16,6 +16,7 @@ import SiteSubmitterRouter from "../screens/diveSiteUploader/siteSubmitterRouter
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
+import { Platform } from "react-native";
 
 export type BottomTabRoutes = {
     Home: undefined;
@@ -59,6 +60,15 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
             screenOptions={({ route }) => {
                 const { icon, label } = getTabProps(route.name);
 
+                const isTablet = (Platform.OS === "ios" && (Platform as any).isPad) || (Platform.OS === "android" && (Platform as any).isTablet);
+                const tabBarIconHeightSurplus = isTablet
+                    ? moderateScale(5)
+                    : moderateScale(0);
+
+                const tabBarIconMargin = isTablet
+                    ? moderateScale(4)
+                    : moderateScale(0);
+
                 return {
                     headerShown: false,
                     tabBarStyle: {
@@ -71,10 +81,15 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                     tabBarActiveTintColor: colors.themeWhite,
                     tabBarInactiveTintColor: colors.neutralGrey,
                     tabBarIcon: ({ color, size }) => {
-                        return <Icon name={icon} color={color} width={size} height={size} />;
+                        return <Icon name={icon} color={color} width={size + tabBarIconHeightSurplus} height={size + tabBarIconHeightSurplus} />;
+                    },
+                    tabBarIconStyle: {
+                        marginTop: tabBarIconMargin,
+                        marginBottom: tabBarIconMargin,
                     },
                     tabBarLabel: label,
-                    animation: "shift"
+                    animation: "shift",
+                    tabBarLabelPosition: "below-icon",
                 };
             }}
         >
