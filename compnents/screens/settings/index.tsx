@@ -1,11 +1,8 @@
-import React, { useContext } from "react";
+import React, { } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import email from "react-native-email";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import {
   signOut,
   userDelete
@@ -16,19 +13,14 @@ import {
 } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useUserHandler } from "../../../store/user/useUserHandler";
-
-import SettingsPageView from "./settings";
 import { useAppNavigation } from "../../mapPage/types";
 
-type SettingsPageProps = {};
+import SettingsPageView from "./settings";
 
-export default function SettingsPage({ }: SettingsPageProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+export default function SettingsPage() {
 
-  const navigation = useAppNavigation()
+  const navigation = useAppNavigation();
 
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const userHandler = useUserHandler();
   const { userProfile } = useUserProfile();
 
@@ -42,12 +34,12 @@ export default function SettingsPage({ }: SettingsPageProps) {
   }
 
   const openPartnerAccountScreen = () => {
-    navigation.navigate("PartnerRequestUpgrade")
+    navigation.navigate("PartnerRequestUpgrade");
   };
 
   const onClose = () => {
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
 
   const handleLogout = async () => {
     userHandler.userLogout();

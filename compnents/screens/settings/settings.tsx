@@ -1,8 +1,10 @@
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
-import Button from '../../reusables/button';
-import ButtonIcon from '../../reusables/buttonIcon'
 import { useTranslation } from "react-i18next";
+
+import Button from "../../reusables/button";
+import ButtonIcon from "../../reusables/buttonIcon";
+
 import * as S from "./styles";
 
 type SettingsPageViewProps = {
@@ -38,10 +40,10 @@ export default function SettingsPageView({
       </S.SafeArea>
 
       <S.InputGroupContainer>
-        <S.Header>{t('SettingsPage.header')}</S.Header>
+        <S.Header>{t("SettingsPage.header")}</S.Header>
 
         <S.SubHeader>
-          {t('SettingsPage.subHeading')}
+          {t("SettingsPage.subHeading")}
         </S.SubHeader>
 
         <S.DataHousing>
@@ -52,7 +54,7 @@ export default function SettingsPageView({
                 onPress={() => openPartnerAccountScreen()}
               >
                 <S.PromptLinkText>
-                  {t('SettingsPage.notPartnerAccount')}
+                  {t("SettingsPage.notPartnerAccount")}
                 </S.PromptLinkText>
               </TouchableWithoutFeedback>
             </>
@@ -63,8 +65,8 @@ export default function SettingsPageView({
           <Button
             onPress={() => handleLogout()}
             alt={false}
-            size='medium'
-            title={t('SettingsPage.logout')}
+            size="medium"
+            title={t("SettingsPage.logout")}
             iconRight="chevron-right"
           />
         </S.ButtonBox>
@@ -72,13 +74,13 @@ export default function SettingsPageView({
 
       <S.InputGroupContainerDanger>
         <S.SubHeaderDanger>
-          {t('SettingsPage.dangerZoneBar')}
+          {t("SettingsPage.dangerZoneBar")}
         </S.SubHeaderDanger>
 
         <TouchableWithoutFeedback onPress={alertHandler}>
           <S.DataHousingDanger>
             <S.DataLabelsDanger>
-              {t('SettingsPage.delAccount')}
+              {t("SettingsPage.delAccount")}
             </S.DataLabelsDanger>
           </S.DataHousingDanger>
         </TouchableWithoutFeedback>

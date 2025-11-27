@@ -7,8 +7,6 @@ import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard"
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { Photo } from "../../../entities/photos";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 
 import * as S from "./styles";
 
@@ -27,7 +25,6 @@ export default function UserProfilePhotosPageView({
 }: UserProfilePhotosPageViewProps) {
 
   const { t } = useTranslation();
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
 
   return (
     <S.ContentContainer>
