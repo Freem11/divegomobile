@@ -9,7 +9,6 @@ import { Review } from "../../../entities/diveSiteReview";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
 import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 import SiteReviewCreatorScreen from "../formScreens/siteReviewCreator/SiteReviewCreatorScreen";
-import { MapConfigurations } from "../../googleMap/types";
 
 import DiveSiteParallax from "./diveSiteParallax";
 
@@ -21,7 +20,7 @@ export type DiveSiteRoutes = {
   DiveSite: undefined;
   EditScreen: undefined;
   AddSighting: { selectedDiveSite: DiveSiteWithUserName };
-  GoogleMap: { initConfig: MapConfigurations };
+  GoogleMap: undefined;
   SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
 };
 
@@ -51,13 +50,7 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
 
       <Stack.Screen name="AddSighting" component={PicUploaderParallax} />
 
-      <Stack.Screen name="GoogleMap">
-        {({ route }) => (
-          <GoogleMap
-            initConfig={MapConfigurations.PinDrop}
-          />
-        )}
-      </Stack.Screen>
+      <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
 
       <Stack.Screen

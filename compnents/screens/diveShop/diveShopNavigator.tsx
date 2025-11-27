@@ -8,7 +8,6 @@ import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
 import { EditModeContext } from "../../contexts/editModeContext";
 import Confirmations from "../confirmationPage/confirmations";
-import { MapConfigurations } from "../../googleMap/types";
 
 import DiveShopeParallax from "./diveShopParallax";
 
@@ -19,7 +18,7 @@ type DiveShopNavigatorProps = {
 export type DiveShopRoutes = {
   DiveCentre: undefined;
   EditScreen: undefined;
-  GoogleMap: { initConfig: MapConfigurations };
+  GoogleMap: undefined;
   TripCreator: { id: number | null, subTitle: string, shopId: number };
   ConfirmationScreen: { title: string, subTitle: string, returnNav: () => void };
 };
@@ -79,13 +78,7 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
         })}
       />
 
-      <Stack.Screen name="GoogleMap">
-        {({ route }) => (
-          <GoogleMap
-            initConfig={MapConfigurations.TripBuild}
-          />
-        )}
-      </Stack.Screen>
+      <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
     </Stack.Navigator>
   );

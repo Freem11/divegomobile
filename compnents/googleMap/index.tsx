@@ -17,11 +17,7 @@ import { useMapStore } from "./useMapStore";
 import GoogleMapView from "./view";
 import { MapConfigurations } from "./types";
 
-type GoogleMapProps = {
-  initConfig?: MapConfigurations;
-};
-
-export default function GoogleMap(props: GoogleMapProps) {
+export default function GoogleMap() {
   const { width: mapPixelWidth } = Dimensions.get("window");
   const TILE_SIZE = 256;
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -128,7 +124,6 @@ export default function GoogleMap(props: GoogleMapProps) {
       diveSites={diveSites}
       diveShops={diveShops}
       zoomLevel={zoomLevel}
-      initConfig={props.initConfig}
     />
   );
 }
