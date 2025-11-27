@@ -2,13 +2,12 @@ import React, { } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import GoogleMap from "../../googleMap";
-import { MapConfigurations } from "../../googleMap/types";
 
 import SiteSubmitterParallax from "./siteSubmitterParallax";
 
 export type SiteSubmitterRoutes = {
   SiteSubmitter: undefined;
-  GoogleMap: { initConfig: MapConfigurations };
+  GoogleMap: undefined;
 };
 
 const Stack = createNativeStackNavigator<SiteSubmitterRoutes>();
@@ -25,13 +24,7 @@ export default function SiteSubmitterNavigator() {
     >
       <Stack.Screen name="SiteSubmitter" component={SiteSubmitterParallax} />
 
-      <Stack.Screen name="GoogleMap">
-        {({ route }) => (
-          <GoogleMap
-            initConfig={MapConfigurations.TripBuild}
-          />
-        )}
-      </Stack.Screen>
+      <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
 
     </Stack.Navigator>
