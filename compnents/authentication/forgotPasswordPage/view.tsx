@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";

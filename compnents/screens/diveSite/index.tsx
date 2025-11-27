@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -7,8 +7,6 @@ import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supaba
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
-import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
@@ -17,6 +15,7 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MetricItem } from "../../../entities/metricItem";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 import { useAppNavigation } from "../../mapPage/types";
+import { MapConfigurations } from "../../googleMap/types";
 
 import DiveSiteScreenView from "./diveSite";
 import { useDiveSiteNavigation } from "./types";
@@ -45,6 +44,7 @@ export default function DiveSiteScreen({
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
@@ -81,6 +81,7 @@ export default function DiveSiteScreen({
 
   const handleMapFlip = async (sites: number[]) => {
     if (mapRef) {
+      setInitConfig(MapConfigurations.TripView);
       const region = await calculateRegionFromBoundaries(mapRef);
       setMapRegion(region);
 
@@ -88,27 +89,9 @@ export default function DiveSiteScreen({
 
       navigation.navigate("GoogleMap");
 
-      const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
-
-      const coordinates = itinerizedDiveSites.map(site => ({
-        latitude: site.lat,
-        longitude: site.lng,
-      }));
-
-      mapRef?.fitToCoordinates(coordinates, {
-        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-        animated: true,
-      });
-
-      setMapConfig(2, { pageName: "DiveSite", itemId: selectedDiveSite.id });
+      setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
     }
   };
-
-  // useEffect(() => {
-  //   if (LevelOneScreen) {
-  //     restoreParallax();
-  //   }
-  // }, [LevelOneScreen]);
 
   useEffect(() => {
     if (selectedDiveSite) {

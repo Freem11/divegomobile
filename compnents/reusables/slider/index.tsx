@@ -20,7 +20,7 @@ type SliderProps = {
 
 export default function ReusableSlider(props: SliderProps) {
   const [dragValue, setDragValue] = useState(props.value);
-  
+
   const progress = useSharedValue(props.value);
   const labelData = useGetCurrentLabel(props.rightValue, dragValue);
 
@@ -48,15 +48,15 @@ export default function ReusableSlider(props: SliderProps) {
       <S.TopRow>
         <S.Label>{props.title}</S.Label>
         <S.AnimatedLabel>
-          <S.LabelTag 
-              style={isCurrentIntensity && {
-                backgroundColor: labelData.styles.backgroundColor,
-                borderColor: labelData.styles.borderColor
-              }}
+          <S.LabelTag
+            style={isCurrentIntensity && {
+              backgroundColor: labelData.styles.backgroundColor,
+              borderColor: labelData.styles.borderColor
+            }}
           >
-          <S.LabelTagText style={isCurrentIntensity && { color: labelData.styles.textColor }}>
-            {isCurrentIntensity ? `${labelData.label} ` : ''}
-            {dragValue.toFixed(1)} {props.unitMeasurement}
+            <S.LabelTagText style={isCurrentIntensity && { color: labelData.styles.textColor }}>
+              {isCurrentIntensity ? `${labelData.label} ` : ""}
+              {dragValue.toFixed(1)} {props.unitMeasurement}
             </S.LabelTagText>
           </S.LabelTag>
         </S.AnimatedLabel>

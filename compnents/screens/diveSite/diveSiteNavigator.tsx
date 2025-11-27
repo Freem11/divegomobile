@@ -1,17 +1,16 @@
-import React, { } from "react";
+import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import EditScreenParallax from "../edits/editsParallax";
 import PicUploaderParallax from "../picUploader/picUploaderParallax";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import GoogleMap from "../../googleMap";
-
-import DiveSiteParallax from "./diveSiteParallax";
 import { Review } from "../../../entities/diveSiteReview";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
 import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
-import SiteReviewCreatorScreen from "../siteReviewCreator/SiteReviewCreatorScreen";
+import SiteReviewCreatorScreen from "../formScreens/siteReviewCreator/SiteReviewCreatorScreen";
 
+import DiveSiteParallax from "./diveSiteParallax";
 
 type DiveSiteNavigatorProps = {
   id: number;

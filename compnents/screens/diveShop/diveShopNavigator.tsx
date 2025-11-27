@@ -1,9 +1,13 @@
-import React, { } from "react";
+import React, { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import EditScreenParallax from "../edits/editsParallax";
 import GoogleMap from "../../googleMap";
-import TripCreatorRouter from "../tripCreator/tripCreatorRouter";
+import TripCreatorScreen from "../formScreens/tripCreator/TripCreatorScreen";
+import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
+import { NavigationButton } from "../../navigationHeader/NavigationButton";
+import { EditModeContext } from "../../contexts/editModeContext";
+import Confirmations from "../confirmationPage/confirmations";
 
 import DiveShopeParallax from "./diveShopParallax";
 
@@ -15,12 +19,14 @@ export type DiveShopRoutes = {
   DiveCentre: undefined;
   EditScreen: undefined;
   GoogleMap: undefined;
-  TripCreator: { id: number | null };
+  TripCreator: { id: number | null, subTitle: string, shopId: number };
+  ConfirmationScreen: { title: string, subTitle: string, returnNav: () => void };
 };
 
 const Stack = createNativeStackNavigator<DiveShopRoutes>();
 
 export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
+  const { editMode } = useContext(EditModeContext);
 
   return (
     <Stack.Navigator
@@ -42,13 +48,35 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
 
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
 
-      <Stack.Screen name="TripCreator">
+      <Stack.Screen name="ConfirmationScreen">
         {({ route }) => (
-          <TripCreatorRouter
-            id={route.params.id}
+          <Confirmations
+            title={route.params.title}
+            subTitle={route.params.subTitle}
+            returnNav={route.params.returnNav}
           />
         )}
       </Stack.Screen>
+
+      <Stack.Screen
+        name={"TripCreator"}
+        component={TripCreatorScreen}
+        options={({ route }) => ({
+          headerShown: true,
+          header: ({ navigation }) => (
+            <NavigationHeader
+              title={"Trip Creator"}
+              subtitle={editMode ? route.params.subTitle : "New Trip"}
+              left={(
+                <NavigationButton
+                  onPress={() => navigation.goBack()}
+                  iconName="close"
+                />
+              )}
+            />
+          )
+        })}
+      />
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}

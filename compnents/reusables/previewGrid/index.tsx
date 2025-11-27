@@ -8,11 +8,9 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
-import { useAppNavigation } from "../../mapPage/types";
 
 interface PreviewGridProps {
   items: DiveSiteWithUserName[] | null;
@@ -22,7 +20,6 @@ interface PreviewGridProps {
 
 export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, buttonText }) => {
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const screenWidth = Dimensions.get("window").width;
   const containerPadding = scale(20);
@@ -41,7 +38,6 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
-    // FixMe : the photos do not load due to reason : Image load error: /data/user/0/com.freem11.divegomobile/cache/1695744846541.jpg: open failed: ENOENT (No such file or directory)
     navigation.navigate("PinchAndZoomPhoto");
   };
 
@@ -84,8 +80,8 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
             <Icon
               name={"camera-plus"}
               color={colors.primaryBlue}
-              width={moderateScale(22)}
-              height={moderateScale(22)}
+              width={scale(22)}
+              height={scale(22)}
             />
             <S.AddSightingText>
               {buttonText}

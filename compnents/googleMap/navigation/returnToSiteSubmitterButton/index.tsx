@@ -6,6 +6,7 @@ import { useMapStore } from "../../useMapStore";
 import { useDiveSiteNavigation } from "../../../screens/diveSite/types";
 import { usePartnerRequestNavigation } from "../../../screens/partnerAccountRequest/types";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
+import { MapConfigurations } from "../../types";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -40,7 +41,7 @@ export function ReturnToSiteSubmitterButton() {
     };
 
     mapAction.setFormValues({ ...storeFormValues, Latitude: camera.center.latitude, Longitude: camera.center.longitude });
-    setMapConfig(0, { pageName: "", itemId: 0 });
+    setMapConfig(MapConfigurations.Default, { pageName: "", itemId: 0 });
     setSitesArray([]);
   };
 

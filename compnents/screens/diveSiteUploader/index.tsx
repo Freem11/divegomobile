@@ -27,21 +27,21 @@ export default function DiveSiteUploader({
   const mapAction = useMapStore((state) => state.actions);
   const storeFormValues = useMapStore((state) => state.formValues);
 
-  const onSubmit = async(formData: Required<Form>) => {
+  const onSubmit = async (formData: Required<Form>) => {
     const { error } = await insertDiveSiteWaits({
       name: formData.Site,
       lat: formData.Latitude,
       lng: formData.Longitude,
       UserID: userProfile.UserID
     });
-    if (error){
+    if (error) {
       showError("We were unable to save your submission, please try again later");
       return;
     }
     showSuccess(t("DiveSiteAdd.successUpload", { site: formData.Site }));
   };
 
-  const getCurrentLocation = async(formData: Required<Form>) => {
+  const getCurrentLocation = async (formData: Required<Form>) => {
     Keyboard.dismiss();
     try {
       const location = await getCurrentCoordinates();
