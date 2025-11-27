@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { MapConfigurations } from "../../googleMap/types";
 
@@ -19,7 +17,6 @@ type DiveSiteTripsPageProps = {};
 export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
   const mapRef = useMapStore((state) => state.mapRef);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
@@ -28,7 +25,6 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
 
   const { t } = useTranslation();

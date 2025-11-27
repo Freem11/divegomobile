@@ -9,11 +9,9 @@ import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
 import Label from "../../reusables/label";
 import ReviewCard from "../../reusables/reviewCard";
-import { Review, ReviewCondition } from "../../../entities/diveSiteReview";
+import { Review } from "../../../entities/diveSiteReview";
 import Button from "../../reusables/button";
 import { MetricItem } from "../../../entities/metricItem";
-import { DiveConditions } from "../../../entities/diveSiteCondidtions";
-import { renderLabel } from "../../reusables/reviewCard/conditionLabel";
 
 import * as S from "./styles";
 import { renderStatLabel } from "./statsLabels";

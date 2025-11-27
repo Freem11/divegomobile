@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { MapConfigurations, ScreenReturn } from "../../googleMap/types";
 import { showWarning } from "../../toast";
@@ -32,7 +31,6 @@ export default function DiveSiteUploaderView({
 
   const { t } = useTranslation();
   const navigation = useAppNavigation();
-  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const mapRef = useMapStore((state) => state.mapRef);
   const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
@@ -50,12 +48,6 @@ export default function DiveSiteUploaderView({
       }
     });
   };
-
-  useEffect(() => {
-    if (levelTwoScreen) {
-      restoreParallax();
-    }
-  }, [levelTwoScreen]);
 
   const handleMapFlip = async (formData: Required<Form>) => {
     if (mapRef) {

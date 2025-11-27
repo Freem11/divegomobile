@@ -2,25 +2,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import email from "react-native-email";
-import { useRoute, RouteProp } from "@react-navigation/native";
 
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
 import { MetricItem } from "../../../entities/metricItem";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { MainRoutes } from "../../mapPage/mainNavigator";
 import { MapConfigurations } from "../../googleMap/types";
 
 import { useDiveSiteNavigation } from "./types";
@@ -31,12 +25,9 @@ type DiveSiteParallaxProps = {
   id: number;
 };
 
-type DiveSiteRouteProp = RouteProp<MainRoutes, "DiveSite">;
-
 export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
-  const route = useRoute<DiveSiteRouteProp>();
+
   const diveSiteNavigation = useDiveSiteNavigation();
-  // const { id } = route.params;
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
 
@@ -47,9 +38,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
   const { setChosenModal } = useContext(ModalSelectContext);
-  const { editInfo, setEditInfo } = useContext(EditsContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setEditInfo } = useContext(EditsContext);
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 

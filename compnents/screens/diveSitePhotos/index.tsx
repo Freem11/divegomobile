@@ -6,7 +6,6 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
@@ -16,9 +15,8 @@ import DiveSitePhotosPageView from "./divesitePhotos";
 
 type DiveSitePhotosPageProps = {};
 
-export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
+export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
   );
@@ -33,7 +31,7 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
 
   const { t } = useTranslation();
 
-  const getPhotos = async(site, userProfile:ActiveProfile) => {
+  const getPhotos = async (site, userProfile: ActiveProfile) => {
 
     const photos = await getDiveSitePhotos(
       site.lat,
@@ -44,7 +42,7 @@ export default function DiveSitePhotosPage({}: DiveSitePhotosPageProps) {
     setDiveSitePics(photos);
   };
 
-  const handleProfileMove = async(userName: string) => {
+  const handleProfileMove = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (userProfile.UserID === picOwnerAccount[0].UserID) {
