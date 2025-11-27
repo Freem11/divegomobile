@@ -1,17 +1,14 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
-import { useFocusEffect } from "@react-navigation/native";
 
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
-import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import SearchTool from "../searchTool";
 import * as S from "../mapPage/styles";
 import ButtonIcon from "../reusables/buttonIcon-new";
@@ -49,15 +46,9 @@ type MapViewProps = {
 };
 
 export default function GoogleMapView(props: MapViewProps) {
-  const [timoutId, setTimoutId] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
-  const { sitesArray } = useContext(SitesArrayContext);
   const mapRef = useMapStore((state) => state.mapRef);
-  const mapConfig = useMapStore((state) => state.mapConfig);
   const mapRegion = useMapStore((state) => state.mapRegion);
-  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
-  const initConfig = useMapStore((state) => state.initConfig);
-  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
 
   const styles = StyleSheet.create({
     container: {
@@ -71,20 +62,6 @@ export default function GoogleMapView(props: MapViewProps) {
       height: "100%",
     }
   });
-
-  const moveToTrip = async (siteIds: number[]) => {
-    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteIds));
-
-    const coordinates = itinerizedDiveSites.map(site => ({
-      latitude: site.lat,
-      longitude: site.lng,
-    }));
-
-    mapRef?.fitToCoordinates(coordinates, {
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-      animated: true,
-    });
-  };
 
   const getStartLocation = async () => {
     try {

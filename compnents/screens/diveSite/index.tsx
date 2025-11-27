@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { getDiveSiteSightingCount, getDiveSiteSpeciesCount, getDiveSiteRecentNinePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
@@ -7,8 +7,6 @@ import { getDiveSiteTripCount, getItinerariesForDiveSite } from "../../../supaba
 import { ItineraryItem } from "../../../entities/itineraryItem";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
-import LevelOneScreen from "../../reusables/levelOneScreen";
 import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { getRecentThreeReviewsBySiteId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
@@ -91,27 +89,9 @@ export default function DiveSiteScreen({
 
       navigation.navigate("GoogleMap");
 
-      const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
-
-      const coordinates = itinerizedDiveSites.map(site => ({
-        latitude: site.lat,
-        longitude: site.lng,
-      }));
-
-      mapRef?.fitToCoordinates(coordinates, {
-        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-        animated: true,
-      });
-
       setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
     }
   };
-
-  // useEffect(() => {
-  //   if (LevelOneScreen) {
-  //     restoreParallax();
-  //   }
-  // }, [LevelOneScreen]);
 
   useEffect(() => {
     if (selectedDiveSite) {
