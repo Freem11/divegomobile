@@ -14,25 +14,20 @@ import * as S from "./styles";
 type DiveSitePhotosPageViewProps = {
   diveSites: any
   title: string
-  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
+  onClose: () => void
   handleProfileMove: (userName: string) => void;
 };
 
 export default function DiveSitePhotosPageView({
   diveSites,
   title,
-  setLevelThreeScreen,
+  onClose,
   handleProfileMove
 }: DiveSitePhotosPageViewProps) {
 
   const { t } = useTranslation();
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-
-  const onClose = () => {
-    setActiveScreen("DiveSiteScreen", { id: selectedDiveSite.id });
-    setLevelThreeScreen(false);
-  };
 
   return (
     <S.ContentContainer>
@@ -41,7 +36,7 @@ export default function DiveSitePhotosPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => onClose()}
+            onPress={onClose}
             size="small"
             fillColor={"darkgrey"}
           />

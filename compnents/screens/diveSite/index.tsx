@@ -58,13 +58,11 @@ export default function DiveSiteScreen({
   const { setSitesArray } = useContext(SitesArrayContext);
 
   const openAllPhotosPage = () => {
-    setLevelThreeScreen(true);
-    setActiveScreen("DiveSitePhotos");
+    diveSiteNavigation.navigate("DiveSitePhotos");
   };
 
   const openAllTripsPage = () => {
-    setLevelThreeScreen(true);
-    setActiveScreen("DiveSiteTrips");
+    diveSiteNavigation.navigate("DiveSiteTrips");
   };
 
   const handleEditReview = (review: Review) => {

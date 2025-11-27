@@ -6,9 +6,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { colors } from "../styles";
-import DiveSitePhotosPage from "../screens/diveSitePhotos";
-import DiveSiteTripsPage from "../screens/diveSiteTrips";
-import UserProfilePhotosPage from "../screens/userProfilePhotos";
 import { LevelThreeScreenContext } from "../contexts/levelThreeScreenContext";
 import { useActiveScreenStore } from "../../store/useActiveScreenStore";
 
@@ -41,9 +38,7 @@ export default function LevelThreeScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen && activeScreen.screenName === "DiveSitePhotos" && <DiveSitePhotosPage />}
-      {activeScreen && activeScreen.screenName === "DiveSiteTrips" && <DiveSiteTripsPage />}
-      {activeScreen && activeScreen.screenName === "UserProfilePhotos" && <UserProfilePhotosPage />}
+
     </Animated.View>
   );
 }

@@ -8,7 +8,6 @@ import Animated, {
 import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
-import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -38,7 +37,7 @@ export default function LevelOneScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen && activeScreen.screenName === "DiveSiteScreen" && <DiveSiteParallax siteID={activeScreen.params.id} />}
+
     </Animated.View>
   );
 }

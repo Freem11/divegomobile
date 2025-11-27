@@ -11,6 +11,7 @@ import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext"
 import { MapConfigurations } from "../../googleMap/types";
 
 import DiveSiteTripsPageView from "./divesiteTrips";
+import { useDiveSiteNavigation } from "../diveSite/types";
 
 type DiveSiteTripsPageProps = {};
 
@@ -25,6 +26,7 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
   const { setLevelOneScreen } = useContext(
     LevelOneScreenContext
   );
+  const diveSiteNavigation = useDiveSiteNavigation();
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
 
   const { t } = useTranslation();
@@ -32,6 +34,10 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
   const getTrips = async (diveSiteId: number) => {
     const data = await getItinerariesForDiveSite(diveSiteId);
     setDiveSiteTrips(data);
+  };
+
+  const onClose = async () => {
+    diveSiteNavigation.goBack();
   };
 
   useEffect(() => {
@@ -60,7 +66,7 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
     <DiveSiteTripsPageView
       diveTrips={diveSiteTrips}
       title={selectedDiveSite.name}
-      setLevelThreeScreen={setLevelThreeScreen}
+      onClose={onClose}
       handleMapFlip={handleMapFlip}
     />
   );

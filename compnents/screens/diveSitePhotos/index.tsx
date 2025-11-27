@@ -12,6 +12,7 @@ import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import DiveSitePhotosPageView from "./divesitePhotos";
+import { useDiveSiteNavigation } from "../diveSite/types";
 
 type DiveSitePhotosPageProps = {};
 
@@ -26,6 +27,7 @@ export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
     LevelOneScreenContext
   );
   const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+  const diveSiteNavigation = useDiveSiteNavigation();
 
   const [diveSitePics, setDiveSitePics] = useState([]);
 
@@ -55,6 +57,10 @@ export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
     setLevelOneScreen(false);
   };
 
+  const onClose = async () => {
+    diveSiteNavigation.goBack();
+  };
+
   useEffect(() => {
     if (selectedDiveSite.lat && userProfile) {
       getPhotos(selectedDiveSite, userProfile);
@@ -65,7 +71,7 @@ export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
     <DiveSitePhotosPageView
       diveSites={diveSitePics}
       title={selectedDiveSite.name}
-      setLevelThreeScreen={setLevelThreeScreen}
+      onClose={onClose}
       handleProfileMove={handleProfileMove}
     />
   );
