@@ -18,7 +18,6 @@ type UserProfileProps = {
   speciesCount: number;
   sightingsCount: number;
   openAllPhotosPage: () => void;
-  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>;
   reviews: Review[];
 };
 

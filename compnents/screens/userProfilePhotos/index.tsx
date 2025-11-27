@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { getPhotosByUserWithExtra } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { Photo } from "../../../entities/photos";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
@@ -17,12 +15,8 @@ type UserProfilePhotosPageProps = {};
 
 export default function UserProfilePhotosPage({ }: UserProfilePhotosPageProps) {
   const mapRef = useMapStore((state) => state.mapRef);
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
-  );
   const { userProfile } = useUserProfile();
   const { selectedProfile } = useContext(SelectedProfileContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   const [profilePhotos, setProfilePhotos] = useState([]);
 
@@ -64,8 +58,6 @@ export default function UserProfilePhotosPage({ }: UserProfilePhotosPageProps) {
       animated: true,
     });
     // todo: need to close parallax here to prevent modal form sticking up when closed
-    setLevelThreeScreen(false);
-    setLevelTwoScreen(false);
   };
 
   return (

@@ -18,14 +18,9 @@ type DiveSiteTripsPageProps = {};
 export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
   const mapRef = useMapStore((state) => state.mapRef);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
-  );
   const { setSitesArray } = useContext(SitesArrayContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
+
   const diveSiteNavigation = useDiveSiteNavigation();
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
 
@@ -44,7 +39,7 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
     getTrips(selectedDiveSite.id);
   }, [selectedDiveSite]);
 
-  const handleMapFlip = async (sites: number[], shopID: number) => {
+  const handleMapFlip = async (sites: number[]) => {
     setSitesArray(sites);
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
 
@@ -58,8 +53,6 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
       animated: true,
     });
 
-    setLevelThreeScreen(false);
-    setLevelOneScreen(false);
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
   };
   return (

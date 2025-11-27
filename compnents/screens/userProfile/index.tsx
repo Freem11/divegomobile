@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
 import { getRecentReviewsByUserId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
@@ -17,7 +16,6 @@ type UserProfileProps = {
 
 export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
   const { selectedProfile } = useContext(SelectedProfileContext);
-  const { setLevelThreeScreen } = useContext(LevelThreeScreenContext);
 
   const [profilePhotos, setProfilePhotos] = useState(null);
   const [speciesCount, setSpeciesCount] = useState(0);
@@ -54,7 +52,6 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
       openAllPhotosPage={openAllPhotosPage}
-      setLevelThreeScreen={setLevelThreeScreen}
       reviews={reviews}
     />
   );
