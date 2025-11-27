@@ -155,32 +155,12 @@ export default function GoogleMapView(props: MapViewProps) {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("hey", initConfig);
-      switch (initConfig) {
-        case MapConfigurations.Default:
-          // if (mapRegion && mapRef) {
-          //   mapRef.animateToRegion(mapRegion, 10);
-          // }
-          break;
-        case MapConfigurations.PinDrop:
-          console.log("Pin drop");
-          break;
-        case MapConfigurations.TripView:
-          console.log("Trip View");
-          moveToTrip(sitesArray);
-          break;
-        case MapConfigurations.TripBuild:
-          if (sitesArray.length > 0) {
-            const newTimeoutId = setTimeout(() => {
-              moveToTrip(sitesArray);
-              clearMapInits();
-            }, 1000);
+      const newTimeoutId = setTimeout(() => {
+        moveToTrip(sitesArray);
+        clearMapInits();
+      }, 1000);
 
-            setTimoutId(newTimeoutId);
-
-          }
-          break;
-      }
+      setTimoutId(newTimeoutId);
 
       return () => {
         if (timoutId) {

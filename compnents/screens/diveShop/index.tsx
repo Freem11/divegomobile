@@ -37,6 +37,7 @@ export default function DiveShopScreen({
   const [tripsCount, setTripsCount] = useState(0);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
 
@@ -71,6 +72,7 @@ export default function DiveShopScreen({
 
   const handleMapFlip = async (sites: number[]) => {
     if (mapRef) {
+      setInitConfig(MapConfigurations.TripView);
       const region = await calculateRegionFromBoundaries(mapRef);
       setMapRegion(region);
 

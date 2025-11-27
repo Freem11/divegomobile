@@ -34,6 +34,7 @@ export default function DiveSiteUploaderView({
   const navigation = useAppNavigation();
   const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const mapRef = useMapStore((state) => state.mapRef);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
@@ -58,6 +59,7 @@ export default function DiveSiteUploaderView({
 
   const handleMapFlip = async (formData: Required<Form>) => {
     if (mapRef) {
+      setInitConfig(MapConfigurations.PinDrop);
       const region = await calculateRegionFromBoundaries(mapRef);
       setMapRegion(region);
 

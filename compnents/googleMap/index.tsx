@@ -69,7 +69,6 @@ export default function GoogleMap(props: GoogleMapProps) {
         }
         break;
       case MapConfigurations.PinDrop:
-        console.log("Pin drop");
         break;
       case MapConfigurations.TripView:
         moveToTrip(sitesArray);

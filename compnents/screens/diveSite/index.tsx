@@ -46,6 +46,7 @@ export default function DiveSiteScreen({
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelThreeScreen } = useContext(
     LevelThreeScreenContext
@@ -82,6 +83,7 @@ export default function DiveSiteScreen({
 
   const handleMapFlip = async (sites: number[]) => {
     if (mapRef) {
+      setInitConfig(MapConfigurations.TripView);
       const region = await calculateRegionFromBoundaries(mapRef);
       setMapRegion(region);
 
