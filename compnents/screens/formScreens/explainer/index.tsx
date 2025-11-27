@@ -1,5 +1,5 @@
 import { moderateScale } from "react-native-size-matters";
-import React, { FC, useRef, useState, forwardRef } from "react"; // 👈 1. Import forwardRef
+import React, { useRef, useState, forwardRef } from "react";
 import Popover from "react-native-popover-view";
 import { View } from "react-native";
 import { Placement } from "react-native-popover-view/dist/Types";

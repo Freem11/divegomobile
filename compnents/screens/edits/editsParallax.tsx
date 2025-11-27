@@ -1,18 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import noImage from "../../png/NoImage.png";
 import { chooseImageHandler } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { EditsContext } from "../../contexts/editsContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import { useAppNavigation } from "../../mapPage/types";
 
 import EdittingScreen from ".";
-import { useAppNavigation } from "../../mapPage/types";
 
 export type BasicFormData = {
   dataType: string
@@ -26,8 +24,6 @@ export type BasicFormData = {
 };
 
 export default function EditScreenParallax() {
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { activeTutotialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { editInfo } = useContext(EditsContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { selectedShop } = useContext(SelectedShopContext);
@@ -78,7 +74,7 @@ export default function EditScreenParallax() {
         });
         break;
     }
-  }, [selectedDiveSite, selectedShop, selectedProfile, editInfo, activeTutotialID]);
+  }, [selectedDiveSite, selectedShop, selectedProfile, editInfo]);
 
   const navigation = useAppNavigation();
 

@@ -61,7 +61,6 @@ export default function TripCreatorPageView({
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
 
-  const initConfig = useMapStore((state) => state.initConfig);
   const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
 
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -72,7 +71,7 @@ export default function TripCreatorPageView({
   const handleMapFlip = async (formData: Required<Form>) => {
     setInitConfig(MapConfigurations.TripBuild);
     setMapConfig(MapConfigurations.TripBuild, { pageName: ScreenReturn.TripCreator as unknown as string, itemId: 1 });
-    diveShopNavigation.navigate("GoogleMap", { initConfig });
+    diveShopNavigation.navigate("GoogleMap");
     setFormValues(formData);
   };
 

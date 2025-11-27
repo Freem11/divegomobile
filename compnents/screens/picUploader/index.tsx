@@ -1,4 +1,4 @@
-import React, { Dispatch, useContext, useState } from "react";
+import React, { Dispatch, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +10,6 @@ import { saveFailedUpload } from "../../feed/store/asyncStore";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
 import { checkNetworkStatus } from "../../feed/store/utils";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
@@ -59,7 +58,6 @@ export default function PicUploader({
   const { userProfile } = useUserProfile();
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  // const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);
 
   const tryUpload = async (uri: string) => {
     try {

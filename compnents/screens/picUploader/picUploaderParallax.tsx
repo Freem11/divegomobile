@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteProp, useRoute } from "@react-navigation/native";
 
 import Button from "../../reusables/button";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { chooseImageHandler } from "../imageUploadHelpers";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { DiveSiteRoutes } from "../diveSite/diveSiteNavigator";
 import { useDiveSiteNavigation } from "../diveSite/types";
@@ -21,7 +20,6 @@ export default function PicUploaderParallax() {
   const route = useRoute<PicUploaderRouteProps>();
   const { selectedDiveSite } = route.params;
   const { t } = useTranslation();;
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const [localPreviewUri, setLocalPreviewUri] = useState(null);
 
   const onClose = async () => {
