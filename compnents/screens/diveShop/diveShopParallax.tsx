@@ -12,13 +12,12 @@ import IconWithLabel from "../../reusables/iconWithLabal";
 import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { EditsContext } from "../../contexts/editsContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
 import { useAppNavigation } from "../../mapPage/types";
+import { MapConfigurations } from "../../googleMap/types";
 
 import { useDiveShopNavigation } from "./types";
 
@@ -36,13 +35,8 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const navigation = useAppNavigation();
   // const { id } = route.params;
   const { t } = useTranslation();
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
@@ -50,8 +44,6 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const [isMyShop, setIsMyShop] = useState(false);
 
   const { editInfo, setEditInfo } = useContext(EditsContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   useEffect(() => {
     getDiveSiteinfo();
@@ -90,18 +82,15 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
     diveShopNavigation.goBack();
   };
 
+  //Needs Navigator
   const onNavigate = () => {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
-    setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
-    setLevelOneScreen(false);
+    setMapConfig(MapConfigurations.TripView, { pageName: "DiveShop", itemId: selectedShop.id });
   };
 
   const openTripCreatorScreen = () => {
-    diveShopNavigation.navigate("TripCreator", { id: null });
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
-    setActiveScreen("TripCreatorScreen");
+    diveShopNavigation.navigate("TripCreator", { id: null, subTitle: "New Trip", shopId: selectedShop.id });
   };
 
   const openEditsPage = () => {

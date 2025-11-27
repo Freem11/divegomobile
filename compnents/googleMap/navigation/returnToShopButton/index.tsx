@@ -6,6 +6,7 @@ import { useMapStore } from "../../useMapStore";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useDiveSiteNavigation } from "../../../screens/diveSite/types";
 import { useDiveShopNavigation } from "../../../screens/diveShop/types";
+import { MapConfigurations } from "../../types";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -33,7 +34,7 @@ export function ReturnToShopButton() {
     } else {
       diveShopNavigation.goBack();
     };
-    setMapConfig(0, { pageName: "", itemId: 0 });
+    setMapConfig(MapConfigurations.Default, { pageName: "", itemId: 0 });
     setSitesArray([]);
   };
 

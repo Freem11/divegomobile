@@ -67,8 +67,9 @@ export const LabelTag = styled.View`
   border-radius: ${moderateScale(8)}px;
   border-color: ${colors.borderActive};
   border-width: ${moderateScale(1)}px;
-`
+`;
 export const LabelTagText = styled.Text`
   color: ${colors.primaryBlue};
   font-family: ${activeFonts.Medium};
-`
+  font-size: ${moderateScale(fontSizes.XSmall)}px;
+`;

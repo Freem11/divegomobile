@@ -4,14 +4,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GoogleMap from "../googleMap";
 import OnboardingNavigator from "../tutorial/onboarding/onboardingNavigator";
 import SettingsPage from "../screens/settings";
-import PartnerRequestParallax from "../screens/partnerAccountRequest/partnerRequestParallax";
 import EditScreenParallax from "../screens/edits/editsParallax";
-import DiveShopParallax from "../screens/diveShop/diveShopParallax";
 import DiveSiteRouter from "../screens/diveSite/diveSiteRouter";
 import UserProfilePhotosPage from "../screens/userProfilePhotos";
 import PhotoBoxModal from "../screens/photoBox/photoBoxModal";
-import DiveShopNavigator from "../screens/diveShop/diveShopNavigator";
 import DiveShopRouter from "../screens/diveShop/diveShopRouter";
+import PartnerRequestRouter from "../screens/partnerAccountRequest/partnerRequestRouter";
 
 import BottomTabNavigator from "./bottomTabNavigator";
 import HomeScreen from "./HomeScreen";
@@ -74,7 +72,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       </Stack.Screen>
 
       <Stack.Screen name="Settings" component={SettingsPage} />
-      <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestParallax} />
+      <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />

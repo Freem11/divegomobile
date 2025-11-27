@@ -9,6 +9,7 @@ import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
 import iconConfig from "../../../../icons/_config.json";
 import { useAppNavigation } from "../../../mapPage/types";
+import { MapConfigurations } from "../../types";
 
 type MarkerDiveSiteProps = {
   id: number;
@@ -32,14 +33,16 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   };
 
   function handlePress() {
-    if (mapConfig !== 3) {
+    if (mapConfig !== MapConfigurations.TripBuild) {
       handleScreen();
     } else {
+      setTracksViewChanges(false);
       if (sitesArray.includes(props.id)) {
         setSitesArray(prev => prev.filter(id => id !== props.id));
       } else {
         setSitesArray(prev => [...prev, props.id]);
       }
+      setTracksViewChanges(true);
     }
   }
 

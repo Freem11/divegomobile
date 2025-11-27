@@ -4,13 +4,16 @@ import { create } from "zustand";
 import { GPSBubble } from "../../entities/GPSBubble";
 import { Coordinates } from "../../entities/coordinates";
 
+import { MapConfigurations } from "./types";
+
 type region = { latitude: number, latitudeDelta: number, longitude: number, longitudeDelta: number };
 
 const mutator = (set, get) => ({
   mapRef: null as MapView | null,
   camera: null as Camera | null,
   gpsBubble: null as GPSBubble | null,
-  mapConfig: 0 as number,
+  mapConfig: MapConfigurations.Default,
+  initConfig: MapConfigurations.Default,
   navProps: { pageName: "", itemId: 0 },
   draggablePoint: null as Coordinates | null,
   formValues: {},
@@ -29,8 +32,11 @@ const mutator = (set, get) => ({
     setDraggablePoint: (point: Coordinates) => {
       set({ draggablePoint: point });
     },
-    setMapConfig: (config: number, navProps: { pageName: string, itemId: number }) => {
+    setMapConfig: (config: MapConfigurations, navProps: { pageName: string, itemId: number }) => {
       set({ mapConfig: config, navProps });
+    },
+    setInitConfig: (config: MapConfigurations) => {
+      set({ initConfig: config });
     },
     setFormValues: (values: {}) => {
       set((state) => ({

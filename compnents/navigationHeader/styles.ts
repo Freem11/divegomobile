@@ -1,16 +1,17 @@
-import { StyleSheet } from 'react-native'
-import { moderateScale } from 'react-native-size-matters'
-import { colors, activeFonts, fontSizes } from '../styles'
+import { StyleSheet } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+
+import { colors, activeFonts, fontSizes } from "../styles";
 
 export const styles = StyleSheet.create({
   navigationButton: {
     width: moderateScale(40),
     height: moderateScale(40),
     borderRadius: moderateScale(20),
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
+    backgroundColor: "#FFF",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -24,26 +25,26 @@ export const styles = StyleSheet.create({
     height: moderateScale(20),
   },
   safeArea: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
+    height: moderateScale(70),
   },
   container: {
     height: moderateScale(70),
     paddingHorizontal: moderateScale(14),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderColor: colors.border,
   },
   sideContainer: {
     width: moderateScale(44),
     height: moderateScale(44),
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   centerContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     gap: moderateScale(2),
   },
   title: {
@@ -54,5 +55,6 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(fontSizes.Small),
     color: colors.lightGrey,
     fontFamily: activeFonts.Medium,
+    textAlign: "center"
   },
-})
+});

@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
-import { Dimensions, Platform, SafeAreaView } from "react-native";
+import { Dimensions, Platform } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { moderateScale } from "react-native-size-matters";
 
 import {
