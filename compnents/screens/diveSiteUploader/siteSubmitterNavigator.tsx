@@ -7,7 +7,7 @@ import SiteSubmitterParallax from "./siteSubmitterParallax";
 
 export type SiteSubmitterRoutes = {
   SiteSubmitter: undefined;
-  GoogleMap: { initConfig: number };
+  GoogleMap: undefined;
 };
 
 const Stack = createNativeStackNavigator<SiteSubmitterRoutes>();
@@ -24,13 +24,7 @@ export default function SiteSubmitterNavigator() {
     >
       <Stack.Screen name="SiteSubmitter" component={SiteSubmitterParallax} />
 
-      <Stack.Screen name="GoogleMap">
-        {({ route }) => (
-          <GoogleMap
-            initConfig={3}
-          />
-        )}
-      </Stack.Screen>
+      <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
 
     </Stack.Navigator>

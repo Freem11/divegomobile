@@ -17,6 +17,7 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MainRoutes } from "../../mapPage/mainNavigator";
 import { useAppNavigation } from "../../mapPage/types";
+import { MapConfigurations } from "../../googleMap/types";
 
 import { useDiveShopNavigation } from "./types";
 
@@ -81,10 +82,11 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
     diveShopNavigation.goBack();
   };
 
+  //Needs Navigator
   const onNavigate = () => {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
-    setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
+    setMapConfig(MapConfigurations.TripView, { pageName: "DiveShop", itemId: selectedShop.id });
   };
 
   const openTripCreatorScreen = () => {

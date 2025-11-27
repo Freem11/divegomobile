@@ -5,6 +5,7 @@ import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useDiveShopNavigation } from "../../../screens/diveShop/types";
+import { MapConfigurations } from "../../types";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,
@@ -28,7 +29,7 @@ export function ReturnToCreateTripButton() {
   const onPress = async () => {
     mapAction.setFormValues({ ...storeFormValues, Sitelist: sitesArray });
     diveShopNavigation.goBack();
-    setMapConfig(0, { pageName: "", itemId: 0 });
+    setMapConfig(MapConfigurations.Default, { pageName: "", itemId: 0 });
   };
 
   return (

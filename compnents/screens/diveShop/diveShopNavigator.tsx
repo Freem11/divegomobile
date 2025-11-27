@@ -18,7 +18,7 @@ type DiveShopNavigatorProps = {
 export type DiveShopRoutes = {
   DiveCentre: undefined;
   EditScreen: undefined;
-  GoogleMap: { initConfig: number };
+  GoogleMap: undefined;
   TripCreator: { id: number | null, subTitle: string, shopId: number };
   ConfirmationScreen: { title: string, subTitle: string, returnNav: () => void };
 };
@@ -78,13 +78,7 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
         })}
       />
 
-      <Stack.Screen name="GoogleMap">
-        {({ route }) => (
-          <GoogleMap
-            initConfig={2}
-          />
-        )}
-      </Stack.Screen>
+      <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
     </Stack.Navigator>
   );

@@ -4,7 +4,7 @@ import { Keyboard } from "react-native";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import partnerRayImage from "../../png/partnerRay.jpg";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { ScreenReturn } from "../../googleMap/types";
+import { MapConfigurations, ScreenReturn } from "../../googleMap/types";
 import { useAppNavigation } from "../../mapPage/types";
 
 import PartnerAccountRequestPage from ".";
@@ -30,7 +30,7 @@ export default function PartnerRequestParallax() {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setMapConfig(1, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
+    setMapConfig(MapConfigurations.PinDrop, { pageName: ScreenReturn.PartnerRequestPage as unknown as string, itemId: 0 });
     navigation.navigate("Home");
   };
 

@@ -1,17 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
-import { useFocusEffect } from "@react-navigation/native";
 
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
-import { getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
-import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import SearchTool from "../searchTool";
 import * as S from "../mapPage/styles";
 import ButtonIcon from "../reusables/buttonIcon-new";
@@ -19,7 +16,7 @@ import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
-import { ClusterProperty, PointFeatureCategory } from "./types";
+import { ClusterProperty, MapConfigurations, PointFeatureCategory } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
 import { MarkerDiveSiteCluster } from "./marker/markerDiveSiteCluster";
@@ -46,17 +43,12 @@ type MapViewProps = {
   diveSites?: DiveSiteBasic[] | null;
   diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null;
-  initConfig?: number;
 };
 
 export default function GoogleMapView(props: MapViewProps) {
-  const [timoutId, setTimoutId] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
-  const { sitesArray } = useContext(SitesArrayContext);
   const mapRef = useMapStore((state) => state.mapRef);
-  const mapConfig = useMapStore((state) => state.mapConfig);
   const mapRegion = useMapStore((state) => state.mapRegion);
-  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
 
   const styles = StyleSheet.create({
     container: {
@@ -70,20 +62,6 @@ export default function GoogleMapView(props: MapViewProps) {
       height: "100%",
     }
   });
-
-  const moveToTrip = async (siteIds: number[]) => {
-    const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(siteIds));
-
-    const coordinates = itinerizedDiveSites.map(site => ({
-      latitude: site.lat,
-      longitude: site.lng,
-    }));
-
-    mapRef?.fitToCoordinates(coordinates, {
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-      animated: true,
-    });
-  };
 
   const getStartLocation = async () => {
     try {
@@ -143,32 +121,9 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   }, [mapRegion]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (mapRegion && mapRef) {
-        const timerId = setTimeout(() => {
-          mapRef.animateToRegion(mapRegion, 10);
-        }, 500);
-        setTimoutId(timerId);
+  useEffect(() => {
 
-      }
-
-      if (mapConfig === 2) {
-        moveToTrip(sitesArray);
-      }
-
-      if (mapConfig === 3 && sitesArray.length > 0) {
-        moveToTrip(sitesArray);
-      }
-
-      return () => {
-        if (timoutId) {
-          clearTimeout(timoutId);
-        }
-        setMapRegion(null);
-      };
-    }, [mapRef, mapRegion])
-  );
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -294,17 +249,17 @@ export default function GoogleMapView(props: MapViewProps) {
 
       </MapView>
 
-      {(props?.mapConfig !== 0 && props?.mapConfig !== 2) && (
+      {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
         <S.SafeAreaTop edges={["top"]}>
           <SearchTool />
         </S.SafeAreaTop>
       )}
 
-      {props?.mapConfig === 1 && (
+      {props?.mapConfig === MapConfigurations.PinDrop && (
         <MarkerDraggable />
       )}
 
-      {props?.mapConfig === 1 && (
+      {props?.mapConfig === MapConfigurations.PinDrop && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <S.TargetWrapperAlt>
             <ButtonIcon
@@ -317,12 +272,12 @@ export default function GoogleMapView(props: MapViewProps) {
           <ReturnToSiteSubmitterButton />
         </View>
       )}
-      {props?.mapConfig === 2 && (
+      {props?.mapConfig === MapConfigurations.TripView && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToShopButton />
         </View>
       )}
-      {props?.mapConfig === 3 && (
+      {props?.mapConfig === MapConfigurations.TripBuild && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <S.TargetWrapperAlt>
             <ButtonIcon
