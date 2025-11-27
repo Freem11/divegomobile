@@ -9,9 +9,6 @@ import { useActiveScreenStore } from '../../store/useActiveScreenStore';
 import { LevelOneScreenContext } from '../contexts/levelOneScreenContext';
 import { colors } from "../styles";
 import DiveSiteParallax from '../screens/diveSite/diveSiteParallax';
-import DiveShopParallax from '../screens/diveShop/diveShopParallax';
-import ShopListParallax from "../screens/shopList/shopListParallax";
-import Settings from "../screens/settings";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -41,11 +38,7 @@ export default function LevelOneScreen() {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeScreen && activeScreen.screenName === "DiveSiteScreen" && <DiveSiteParallax siteID={activeScreen.params.id}/>}
-      {activeScreen && activeScreen.screenName === "DiveShopScreen" && <DiveShopParallax shopID={activeScreen.params.id}/>}
-      {activeScreen && activeScreen.screenName === "SettingsScreen" && <Settings/>}
-      {/* {activeScreen && activeScreen.screenName === "SearchScreen" && <SearchPage/>} */}
-      {activeScreen && activeScreen.screenName === "TripListScreen" && <ShopListParallax/>}
+      {activeScreen && activeScreen.screenName === "DiveSiteScreen" && <DiveSiteParallax siteID={activeScreen.params.id} />}
     </Animated.View>
   );
 }

@@ -13,6 +13,7 @@ import PartnerRequestRouter from "../screens/partnerAccountRequest/partnerReques
 
 import BottomTabNavigator from "./bottomTabNavigator";
 import HomeScreen from "./HomeScreen";
+import SiteSubmitterNavigator from "../screens/diveSiteUploader/siteSubmitterNavigator";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -25,6 +26,7 @@ export type MainRoutes = {
   GoogleMap: undefined;
   DiveSiteNavigator: { id: number };
   DiveShopNavigator: { id: number };
+  SiteSubmitterNavigator: undefined;
   Settings: undefined;
   Home: undefined;
   PartnerRequestUpgrade: undefined;
@@ -70,6 +72,8 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
           />
         )}
       </Stack.Screen>
+
+      <Stack.Screen name="SiteSubmitterNavigator" component={SiteSubmitterNavigator} />
 
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
