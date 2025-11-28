@@ -8,7 +8,6 @@ import Animated, {
 
 import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import PhotoBoxModel from "../screens/photoBox/photoBoxModal";
 import CommentsModal from "../modals/commentsModal";
 import { colors } from "../styles";
 
@@ -40,7 +39,6 @@ export default function AnimatedFullScreenModal(props) {
 
   return (
     <Animated.View style={[styles.modalBody, modalSlide]}>
-      {activeTutorialID === "PinchAndZoomPhoto" && fullScreenModal && <PhotoBoxModel />}
       {activeTutorialID === "CommentsModal" && <CommentsModal />}
     </Animated.View>
   );
