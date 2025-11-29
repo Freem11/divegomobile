@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { } from "react";
 import { View, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
+import { Platform } from "react-native";
 
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import ShopListParallax from "../screens/shopList/shopListParallax";
@@ -16,7 +16,6 @@ import SiteSubmitterRouter from "../screens/diveSiteUploader/siteSubmitterRouter
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
-import { Platform } from "react-native";
 
 export type BottomTabRoutes = {
     Home: undefined;
@@ -41,10 +40,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const navigation = useAppNavigation();
 
     /**
-                           * For Android only.
-                           * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-                           * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-                           */
+                               * For Android only.
+                               * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
+                               * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+                               */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
@@ -108,10 +107,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     );
 
     /**
-                       * Returns the icon name and label for each tab based on route.
-                       * @param route The route name of the current tab
-                       * @returns Object literal containing Icon name and label strings
-                       */
+                           * Returns the icon name and label for each tab based on route.
+                           * @param route The route name of the current tab
+                           * @returns Object literal containing Icon name and label strings
+                           */
     function getTabProps(route: string): { icon: string; label: string } {
         switch (route) {
             case "Home": return { icon: "shark", label: t("BottomTabBar.home") };

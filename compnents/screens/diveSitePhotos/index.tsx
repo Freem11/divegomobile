@@ -1,27 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
-
-import DiveSitePhotosPageView from "./divesitePhotos";
 import { useDiveSiteNavigation } from "../diveSite/types";
 import { useAppNavigation } from "../../mapPage/types";
 
-type DiveSitePhotosPageProps = {};
+import DiveSitePhotosPageView from "./divesitePhotos";
 
-export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
+export default function DiveSitePhotosPage() {
   const { userProfile } = useUserProfile();
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
   const diveSiteNavigation = useDiveSiteNavigation();
   const mainNavigation = useAppNavigation();
 

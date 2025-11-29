@@ -26,7 +26,6 @@ import {
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { LevelThreeScreenContext } from "../contexts/levelThreeScreenContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -40,9 +39,6 @@ export default function CommentsModal() {
   const { selectedPicture } = useContext(SelectedPictureContext);
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
-  );
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
   );
   const { t } = useTranslation();
   useEffect(() => {
@@ -78,12 +74,12 @@ export default function CommentsModal() {
       } else {
         finalContent = commentContent;
       }
-      // let newComment = await insertPhotoComment(
-      //   profile[0].UserID,
-      //   selectedPicture.id,
-      //   finalContent,
-      //   userIdentity
-      // );
+      const newComment = await insertPhotoComment(
+        profile[0].UserID,
+        selectedPicture.id,
+        finalContent,
+        userIdentity
+      );
       setIsClearOn(true);
       setCommentContent("");
       setReplyTo(null);
@@ -94,7 +90,6 @@ export default function CommentsModal() {
 
   const handleCommentModalClose = async() => {
     setReplyTo(null);
-    setLevelThreeScreen(true);
     setFullScreenModal(false);
   };
 

@@ -18,9 +18,9 @@ import { windowWidth } from "../paginator/styles";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { cloudflareBucketUrl } from "../../globalVariables";
+import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
-import { useAppNavigation } from "../../mapPage/types";
 
 interface Photo {
   UserID: string;
@@ -52,7 +52,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { userProfile } = useUserProfile();
   const { setSelectedPicture } = useContext(SelectedPictureContext);
@@ -85,10 +85,13 @@ const SeaLifeImageCard = (props: PictureProps) => {
   // }, [remoteUri]);
 
   const handleCommentModal = (pic: Photo) => {
+    console.log("pic", pic);
     setFullScreenModal(true);
     setActiveTutorialID("CommentsModal");
     setSelectedPicture(pic);
   };
+
+  console.log("fullScreenModal", fullScreenModal);
 
   const handleEmail = (pic: Photo) => {
     email(["scubaseasons@gmail.com"], {
@@ -113,8 +116,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
-    // FixMe : the photos do not load due to reason : Image load error: /data/user/0/com.freem11.divegomobile/cache/1695744846541.jpg: open failed: ENOENT (No such file or directory)
-    navigation.navigate("PinchAndZoomPhoto")
+    navigation.navigate("PinchAndZoomPhoto");
   };
 
   const containerWidth = windowWidth - windowWidth * 0.07;

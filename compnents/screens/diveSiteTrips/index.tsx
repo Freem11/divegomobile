@@ -1,17 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { MapConfigurations } from "../../googleMap/types";
+import { useDiveSiteNavigation } from "../diveSite/types";
 
 import DiveSiteTripsPageView from "./divesiteTrips";
-import { useDiveSiteNavigation } from "../diveSite/types";
 
 type DiveSiteTripsPageProps = {};
 
