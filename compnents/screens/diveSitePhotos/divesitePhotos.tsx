@@ -7,6 +7,7 @@ import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard"
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
+import AnimatedFullScreenModal from "../../reusables/animatedFullScreenModal";
 
 import * as S from "./styles";
 
@@ -75,6 +76,8 @@ export default function DiveSitePhotosPageView({
           </S.PhotoContainer>
         )}
       />
+
+      <AnimatedFullScreenModal />
     </S.ContentContainer>
   );
 

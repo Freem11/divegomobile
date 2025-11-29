@@ -189,6 +189,7 @@ export default function CommentsModal() {
               ) : null}
               <View style={styles.replyBox}>
                 <TextInputField
+                  icon={"send-circle-outline"}
                   inputValue={commentContent}
                   placeHolderText={t("Comments.blowBubbles")}
                   onChangeText={(text) => handleChange(text)}
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "transparent",
     zIndex: 26,
     left: 0,
   },
