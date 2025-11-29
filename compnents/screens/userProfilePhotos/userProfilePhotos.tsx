@@ -6,7 +6,6 @@ import ButtonIcon from "../../reusables/buttonIcon";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
-import { Photo } from "../../../entities/photos";
 
 import * as S from "./styles";
 
@@ -14,7 +13,7 @@ type UserProfilePhotosPageViewProps = {
   photos: any
   title: string
   onClose: () => void;
-  handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
+  handleDiveSiteMove: (latitude: number, longitude: number) => void;
 };
 
 export default function UserProfilePhotosPageView({
@@ -73,7 +72,7 @@ export default function UserProfilePhotosPageView({
                 <SeaLifeImageCard
                   pic={photo}
                   dataSetType={"ProfilePhotos"}
-                  diveSiteAction={() => handleDiveSiteMove(photo, item)}
+                  diveSiteAction={() => handleDiveSiteMove(photo.latitude, photo.longitude)}
                 />
               )}
             />
