@@ -85,13 +85,10 @@ const SeaLifeImageCard = (props: PictureProps) => {
   // }, [remoteUri]);
 
   const handleCommentModal = (pic: Photo) => {
-    console.log("pic", pic);
     setFullScreenModal(true);
     setActiveTutorialID("CommentsModal");
     setSelectedPicture(pic);
   };
-
-  console.log("fullScreenModal", fullScreenModal);
 
   const handleEmail = (pic: Photo) => {
     email(["scubaseasons@gmail.com"], {
