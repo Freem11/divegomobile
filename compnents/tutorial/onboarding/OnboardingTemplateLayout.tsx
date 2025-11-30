@@ -4,14 +4,16 @@ import {
     ScrollView,
     TouchableWithoutFeedback
 } from "react-native";
-import styles from "./styles"
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
 import { Platform } from "react-native";
+
 import { colors } from "../../styles";
+
+import styles from "./styles";
 
 /**
  * Configuration params for all Onboarding related screens except DiverName screen as it's different from others.
@@ -20,19 +22,19 @@ export type OnboardingConfigParams = {
     title: string, content: string,
     buttonOneText: string, buttonOnePressCallback: () => void,
     buttonTwoText?: string, buttonTwoPressCallback?: () => void
-}
+};
 
 export function OnboardingTemplateLayout(params: OnboardingConfigParams) {
     const { t } = useTranslation();
 
     /**
      * For Android only.
-     * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation, 
+     * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
      * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
      */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
-    const buttonBottomPosition: number = (Platform.OS === 'android' && bottomInset) ? bottomInset : scale(20);
+    const buttonBottomPosition: number = (Platform.OS === "android" && bottomInset) ? bottomInset : scale(20);
 
     return (
         <View style={styles.pageContent}>
@@ -62,15 +64,15 @@ export function OnboardingTemplateLayout(params: OnboardingConfigParams) {
                     </View>
                 </TouchableWithoutFeedback>
 
-                {
-                    params.buttonTwoText && <TouchableWithoutFeedback onPress={params.buttonTwoPressCallback}>
+                {params.buttonTwoText && (
+                    <TouchableWithoutFeedback onPress={params.buttonTwoPressCallback}>
                         <View style={styles.buttonTwo}>
                             <Text style={styles.buttonTwoText}>
                                 {t(params.buttonTwoText)}
                             </Text>
                         </View>
                     </TouchableWithoutFeedback>
-                }
+                )}
             </View>
         </View>
     );
