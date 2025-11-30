@@ -1,13 +1,14 @@
-import React, { useContext } from "react";
-import { View } from 'react-native';
+import React, { useContext, useEffect, useState } from "react";
+import { View } from "react-native";
 import { Marker } from "react-native-maps";
-import Svg, { Circle, Path } from 'react-native-svg';
+import Svg, { Circle, Path } from "react-native-svg";
+import { moderateScale } from "react-native-size-matters";
+
 import { Coordinates } from "../../../../entities/coordinates";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
-import iconConfig from '../../../../icons/_config.json';
+import iconConfig from "../../../../icons/_config.json";
 import { colors } from "../../../styles";
-import { moderateScale } from "react-native-size-matters";
 
 type MarkerDiveShopProps = {
   id: number;
@@ -18,20 +19,28 @@ export function MarkerDiveShop(props: MarkerDiveShopProps) {
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
-  const pathData = iconConfig["dive-centre"]?.[1] ?? '';
+  const pathData = iconConfig["dive-centre"]?.[1] ?? "";
 
   const scale = 0.85;
   const center = 256;
   const translate = center * (1 - scale); // 38.4
 
   const handleScreen = () => {
-    setActiveScreen("DiveShopScreen", {id: props.id})
-    setLevelOneScreen(true)
-  }
+    setActiveScreen("DiveShopScreen", { id: props.id });
+    setLevelOneScreen(true);
+  };
+
+  const [tracksChanges, setTracksChanges] = useState(true);
+
+  useEffect(() => {
+    // To give Android enough time to render the icon before it gets locked
+    const timeout = setTimeout(() => setTracksChanges(false), 500);
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Marker
-      tracksViewChanges={false}
+      tracksViewChanges={tracksChanges}
       coordinate={props.coordinate}
       onPress={handleScreen}
     >
