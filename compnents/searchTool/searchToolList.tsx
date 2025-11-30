@@ -40,6 +40,6 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     backgroundColor: colors.themeWhite,
-    paddingTop: Platform.OS === "ios" ? moderateScale(5) : moderateScale(30)
+    paddingTop: Platform.OS === "ios" ? moderateScale(5) : moderateScale(60)
   },
 });
