@@ -13,8 +13,6 @@ import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { SavedTranslateYContext } from "../../contexts/savedTranslateYContext";
 import { ActiveSceen, useActiveScreenStore } from "../../../store/useActiveScreenStore";
@@ -37,28 +35,11 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
     return dynamicScreenHeight.value / 2;
   };
 
-  const { levelOneScreen } = useContext(LevelOneScreenContext);
-  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
-
   const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const activeScreen = useActiveScreenStore((state) => state.activeScreen);
 
   const { editInfo, setEditInfo } = useContext(EditsContext);
   const { savedTranslateY, setSavedTranslateY } = useContext(SavedTranslateYContext);
-
-  useEffect(() => {
-    if (levelOneScreen && savedTranslateY === SCREEN_HEIGHT / 2) {
-      translateY.value = SCREEN_HEIGHT / 2;
-      startY.value = SCREEN_HEIGHT / 2;
-    }
-  }, [levelOneScreen]);
-
-  useEffect(() => {
-    if (levelTwoScreen && savedTranslateY === SCREEN_HEIGHT / 2) {
-      translateY.value = SCREEN_HEIGHT / 2;
-      startY.value = SCREEN_HEIGHT / 2;
-    }
-  }, [levelTwoScreen]);
 
   useEffect(() => {
     const onKeyboardShow = (e: KeyboardEvent) => {

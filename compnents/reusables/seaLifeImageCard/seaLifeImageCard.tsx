@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { TouchableOpacity, Image as RNImage } from "react-native";
+import React, { useState, useContext } from "react";
+import { TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import email from "react-native-email";
@@ -15,13 +15,12 @@ import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { cloudflareBucketUrl } from "../../globalVariables";
+import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
-import { useAppNavigation } from "../../mapPage/types";
 
 interface Photo {
   UserID: string;
@@ -53,7 +52,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { userProfile } = useUserProfile();
   const { setSelectedPicture } = useContext(SelectedPictureContext);
@@ -114,8 +113,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
-    // FixMe : the photos do not load due to reason : Image load error: /data/user/0/com.freem11.divegomobile/cache/1695744846541.jpg: open failed: ENOENT (No such file or directory)
-    navigation.navigate("PinchAndZoomPhoto")
+    navigation.navigate("PinchAndZoomPhoto");
   };
 
   const containerWidth = windowWidth - windowWidth * 0.07;

@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { MapConfigurations, ScreenReturn } from "../../googleMap/types";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useAppNavigation } from "../../mapPage/types";
@@ -31,7 +30,6 @@ export default function PartnerAccountRequestPageView({
 
   const { t } = useTranslation();
   const navigation = useAppNavigation();
-  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
   const mapRef = useMapStore((state) => state.mapRef);
   const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
@@ -40,12 +38,6 @@ export default function PartnerAccountRequestPageView({
   const { control, handleSubmit, formState: { isSubmitting, errors }, getValues, reset } = useForm<Form>({
     values: values
   });
-
-  useEffect(() => {
-    if (levelTwoScreen) {
-      restoreParallax();
-    }
-  }, [levelTwoScreen]);
 
   const handleMapFlip = async (formData: Required<Form>) => {
     if (mapRef) {

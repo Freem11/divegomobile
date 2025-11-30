@@ -6,7 +6,6 @@ import { ItineraryItem } from "../../../entities/itineraryItem";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { DiveShop } from "../../../entities/diveShop";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 import { useAppNavigation } from "../../mapPage/types";
 import { MapConfigurations } from "../../googleMap/types";
@@ -37,9 +36,6 @@ export default function DiveShopScreen({
   const mapRef = useMapStore((state) => state.mapRef);
 
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
-  const { levelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
   const { setSitesArray } = useContext(SitesArrayContext);
 
   const getItineraries = async (IdNum: number) => {
@@ -57,12 +53,6 @@ export default function DiveShopScreen({
       getItineraries(selectedShop.id);
     }
   }, [selectedShop]);
-
-  useEffect(() => {
-    if (levelOneScreen) {
-      restoreParallax();
-    }
-  }, [levelOneScreen]);
 
   const handleMapFlip = async (sites: number[]) => {
     if (mapRef) {

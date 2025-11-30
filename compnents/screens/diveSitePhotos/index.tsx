@@ -1,31 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { getDiveSitePhotos } from "../../../supabaseCalls/photoSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
-import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useDiveSiteNavigation } from "../diveSite/types";
+import { useAppNavigation } from "../../mapPage/types";
+import { getSingleDiveSite } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 
 import DiveSitePhotosPageView from "./divesitePhotos";
 
-type DiveSitePhotosPageProps = {};
-
-export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
-  );
+export default function DiveSitePhotosPage() {
   const { userProfile } = useUserProfile();
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+  const diveSiteNavigation = useDiveSiteNavigation();
+  const mainNavigation = useAppNavigation();
 
   const [diveSitePics, setDiveSitePics] = useState([]);
 
@@ -49,10 +40,11 @@ export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
       return;
     }
 
-    setActiveScreen("ProfileScreen", { id: picOwnerAccount[0].id });
-    setLevelThreeScreen(false);
-    setLevelTwoScreen(true);
-    setLevelOneScreen(false);
+    mainNavigation.navigate("UserProfile", { id: picOwnerAccount[0].id });
+  };
+
+  const onClose = async () => {
+    diveSiteNavigation.goBack();
   };
 
   useEffect(() => {
@@ -65,7 +57,7 @@ export default function DiveSitePhotosPage({ }: DiveSitePhotosPageProps) {
     <DiveSitePhotosPageView
       diveSites={diveSitePics}
       title={selectedDiveSite.name}
-      setLevelThreeScreen={setLevelThreeScreen}
+      onClose={onClose}
       handleProfileMove={handleProfileMove}
     />
   );

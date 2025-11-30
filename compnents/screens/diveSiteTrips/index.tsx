@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { getItinerariesForDiveSite } from "../../../supabaseCalls/itinerarySupabaseCalls";
 import { SitesArrayContext } from "../../contexts/sitesArrayContext";
 import { getDiveSitesByIDs } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
 import { MapConfigurations } from "../../googleMap/types";
+import { useDiveSiteNavigation } from "../diveSite/types";
 
 import DiveSiteTripsPageView from "./divesiteTrips";
 
@@ -17,14 +16,10 @@ type DiveSiteTripsPageProps = {};
 export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
   const mapRef = useMapStore((state) => state.mapRef);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
-  );
   const { setSitesArray } = useContext(SitesArrayContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { setLevelOneScreen } = useContext(
-    LevelOneScreenContext
-  );
+
+  const diveSiteNavigation = useDiveSiteNavigation();
   const [diveSiteTrips, setDiveSiteTrips] = useState([]);
 
   const { t } = useTranslation();
@@ -34,11 +29,15 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
     setDiveSiteTrips(data);
   };
 
+  const onClose = async () => {
+    diveSiteNavigation.goBack();
+  };
+
   useEffect(() => {
     getTrips(selectedDiveSite.id);
   }, [selectedDiveSite]);
 
-  const handleMapFlip = async (sites: number[], shopID: number) => {
+  const handleMapFlip = async (sites: number[]) => {
     setSitesArray(sites);
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
 
@@ -52,15 +51,13 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
       animated: true,
     });
 
-    setLevelThreeScreen(false);
-    setLevelOneScreen(false);
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
   };
   return (
     <DiveSiteTripsPageView
       diveTrips={diveSiteTrips}
       title={selectedDiveSite.name}
-      setLevelThreeScreen={setLevelThreeScreen}
+      onClose={onClose}
       handleMapFlip={handleMapFlip}
     />
   );

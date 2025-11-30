@@ -27,6 +27,7 @@ export const BackButtonWrapper = styled.View`
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
+  padding-bottom: 10%;
 `;
 
 export const Header = styled.Text`

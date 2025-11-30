@@ -1,12 +1,9 @@
 import { moderateScale, scale } from "react-native-size-matters";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 import { ScrollView } from "react-native";
 
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
-import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
-import { ActiveTutorialIDContext } from "../../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../../contexts/fullScreenModalContext";
 import Icon from "../../../../icons/Icon";
 import { colors } from "../../../styles";
 import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
@@ -20,17 +17,7 @@ interface PhotoUploadProps {
 }
 
 export const PhotoUpload: FC<PhotoUploadProps> = ({ items, onAddSighting, onRemovePhoto }) => {
-  const { setSelectedPhoto } = useContext(SelectedPhotoContext) as any;
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext) as any;
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
-
   const itemSize = scale(100);
-
-  const togglePhotoBoxModal = (photo: string) => {
-    setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
-  };
 
   return (
     <S.Wrapper>
@@ -67,7 +54,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({ items, onAddSighting, onRemo
               backgroundColor: colors.lightGrey,
             }}
           >
-            <TouchableWithoutFeedback onPress={() => togglePhotoBoxModal(item.photofile)}>
+            <TouchableWithoutFeedback>
               <ImageCasherDynamicLocal
                 photoFile={item.photofile}
                 style={{

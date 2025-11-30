@@ -1,26 +1,17 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 
-import * as S from "./styles";
 import GoogleMap from "../googleMap";
 import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
 import SearchTool from "../searchTool";
-import {
-    StyleSheet,
-    Platform,
-    Dimensions,
-} from "react-native";
 import { useMapStore } from "../googleMap/useMapStore";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { BottomTabRoutes } from "./bottomTabNavigator";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 
-type HomeScreenNavigationProp = BottomTabNavigationProp<
-    BottomTabRoutes,
-    "Home"
->;
+import * as S from "./styles";
 
 export default function HomeScreen() {
+    const mapRegion = useMapStore((state) => state.mapRegion);
     const mapConfig = useMapStore((state) => state.mapConfig);
     const mapRef = useMapStore((state) => state.mapRef);
 
@@ -59,7 +50,7 @@ export default function HomeScreen() {
                             style={{ pointerEvents: "auto" }}
                         />
                     </S.TargetWrapper>
-                    <BottomDrawer />
+                    <BottomDrawer mapRegion={mapRegion} mapConfig={mapConfig} />
                 </S.SafeAreaBottom>
             )
                 : null}

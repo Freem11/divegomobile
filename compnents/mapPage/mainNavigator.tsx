@@ -13,6 +13,8 @@ import PartnerRequestRouter from "../screens/partnerAccountRequest/partnerReques
 
 import BottomTabNavigator from "./bottomTabNavigator";
 import HomeScreen from "./HomeScreen";
+import SiteSubmitterNavigator from "../screens/diveSiteUploader/siteSubmitterNavigator";
+import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -25,12 +27,14 @@ export type MainRoutes = {
   GoogleMap: undefined;
   DiveSiteNavigator: { id: number };
   DiveShopNavigator: { id: number };
+  SiteSubmitterNavigator: undefined;
   Settings: undefined;
   Home: undefined;
   PartnerRequestUpgrade: undefined;
   EditScreen: undefined;
   UserProfilePhotos: undefined;
   PinchAndZoomPhoto: undefined;
+  UserProfile: { id: number };
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
@@ -71,11 +75,20 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
+      <Stack.Screen name="SiteSubmitterNavigator" component={SiteSubmitterNavigator} />
+
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
+      <Stack.Screen name="UserProfile">
+        {({ route }) => (
+          <UserProfileParallax
+            profileID={route.params.id}
+          />
+        )}
+      </Stack.Screen>
 
     </Stack.Navigator>
   );
