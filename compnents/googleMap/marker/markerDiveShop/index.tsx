@@ -1,4 +1,4 @@
-import React, { } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Marker } from "react-native-maps";
 import Svg, { Circle, Path } from "react-native-svg";
@@ -26,9 +26,17 @@ export function MarkerDiveShop(props: MarkerDiveShopProps) {
     navigation.navigate("DiveShopNavigator", { id: props.id });
   };
 
+  const [tracksChanges, setTracksChanges] = useState(true);
+
+  useEffect(() => {
+    // To allow Android to render the icon before tracksViewChanges locks it
+    const timeout = setTimeout(() => setTracksChanges(false), 500);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <Marker
-      tracksViewChanges={false}
+      tracksViewChanges={tracksChanges}
       coordinate={props.coordinate}
       onPress={handleScreen}
     >
