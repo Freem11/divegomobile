@@ -27,6 +27,7 @@ export default function LandingPageView(props: IProps) {
 
   return (
     <S.Container>
+      <WavyHeader />
       <S.StyledScrollView>
         <S.Header>{t("Auth.diveIn")}</S.Header>
 
@@ -76,8 +77,6 @@ export default function LandingPageView(props: IProps) {
           )}
         </S.IconRow>
       </S.StyledScrollView>
-
-      <WavyHeader />
     </S.Container>
   );
 }

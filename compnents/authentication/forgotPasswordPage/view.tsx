@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
-import ButtonIcon from "../../reusables/buttonIcon";
 import Button from "../../reusables/button";
 import { colors } from "../../styles";
 import { showWarning } from "../../toast";
@@ -39,18 +38,6 @@ export default function ForgotPageView(props: IProps) {
 
   return (
     <S.Container>
-
-      <AnimatedSafeAreaView style={[S.styles.safeArea]}>
-        <S.BackButtonWrapper>
-          <ButtonIcon
-            icon="chevron-left"
-            onPress={props.moveToLoginPage}
-            size="small"
-            fillColor={colors.neutralGrey}
-          />
-        </S.BackButtonWrapper>
-      </AnimatedSafeAreaView>
-
       <S.Content>
         <S.Header>{t("Auth.resetPassword")}</S.Header>
 

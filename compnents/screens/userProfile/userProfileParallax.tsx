@@ -2,20 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import Share from "react-native-share";
 import { Keyboard } from "react-native";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { grabProfileById } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { checkIfUserFollows, deleteUserFollow, insertUserFollow } from "../../../supabaseCalls/userFollowSupabaseCalls";
 import { registerForPushNotificationsAsync } from "../../tutorial/notificationsRegistery";
 import { EditsContext } from "../../contexts/editsContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useAppNavigation } from "../../mapPage/types";
 
 import UserProfileScreen from ".";
 
@@ -24,12 +20,8 @@ type UserProfileProps = {
 };
 
 export default function UserProfileParallax(props: UserProfileProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const navigation = useAppNavigation();
 
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
   );
@@ -40,15 +32,13 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const [isFollowing, setIsfFollowing] = useState<string | null>(null);
 
   const { setEditInfo } = useContext(EditsContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
   const { userProfile } = useUserProfile();
 
   useEffect(() => {
     getProfileinfo();
   }, [props.profileID]);
 
-  const getProfileinfo = async() => {
+  const getProfileinfo = async () => {
     const profileinfo = await grabProfileById(props.profileID);
     setSelectedProfile(profileinfo);
   };
@@ -85,7 +75,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     }
   }
 
-  const addFollow = async() => {
+  const addFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
@@ -97,7 +87,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setIsfFollowing(newRecord.id);
   };
 
-  const removeFollow = async() => {
+  const removeFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) {
       return;
@@ -106,9 +96,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const onClose = () => {
-    setSelectedProfile(null);
-    setLevelOneScreen(false);
-    setLevelTwoScreen(false);
+    navigation.goBack();
   };
 
   const onNavigate = () => {
@@ -116,18 +104,15 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const openSettingsScreen = () => {
-    setLevelTwoScreen(false);
-    setLevelOneScreen(true);
-    setActiveScreen("SettingsScreen");
+    navigation.navigate("Settings");
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
     setEditInfo("Profile");
-    setActiveTutorialID("EditsScreen");
+    navigation.navigate("EditScreen");
   };
 
-  const handleShare = async() => {
+  const handleShare = async () => {
     try {
       await Share.open({
         title: "Share Scuba SEAsons Profile",

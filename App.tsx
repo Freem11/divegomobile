@@ -11,13 +11,13 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import * as ScreenOrientation from "expo-screen-orientation";
 
-import Authentication from "./compnents/authentication";
+import MapPage from "./compnents/mapPage/mapPage";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
-import { AppNavigator } from "./providers/navigation";
 import { toastConfig } from "./compnents/toast";
-import { i18n, initI18n } from "./i18n";
+import AuthenticationNavigator from "./compnents/authentication/authNavigator";
 import { useUserProfile } from "./store/user/useUserProfile";
 import { useUserHandler } from "./store/user/useUserHandler";
+import { initI18n, i18n } from "./i18n";
 
 export default function App() {
 
@@ -54,7 +54,7 @@ export default function App() {
     RobotoThin: require("./assets/Roboto/Roboto-Thin.ttf"),
     SFThin: require("./assets/SanFran/SF-Pro-Display-Thin.otf"),
     RobotoThinItalic: require("./assets/Roboto/Roboto-ThinItalic.ttf"),
-    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf")
+    SFThinItalic: require("./assets/SanFran/SF-Pro-Display-ThinItalic.otf"),
   });
   /* eslint-enable @typescript-eslint/no-require-imports */
 
@@ -64,7 +64,7 @@ export default function App() {
 
   useLayoutEffect(() => {
 
-    const prepare = async() => {
+    const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
 
       if (Platform.OS === "ios") {
@@ -85,7 +85,7 @@ export default function App() {
     prepare();
   }, []);
 
-  const onLayoutRootView = useCallback(async() => {
+  const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
     }
@@ -102,15 +102,14 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
-
         <I18nextProvider i18n={i18n}>
-          {userProfile ? (
-            <NavigationContainer>
-              <AppNavigator />
-            </NavigationContainer>
-          ) : (
-            <Authentication />
-          )}
+          <NavigationContainer>
+            {userProfile ? (
+              <MapPage />
+            ) : (
+              <AuthenticationNavigator />
+            )}
+          </NavigationContainer>
         </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />

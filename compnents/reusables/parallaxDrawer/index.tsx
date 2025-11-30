@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, ImageBackground, SafeAreaView, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { StyleSheet, ImageBackground, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
@@ -16,7 +17,7 @@ import { useParallaxDrawer } from "./useParallelDrawer";
 
 type ParallaxDrawerProps = {
   headerImage: () => React.JSX.Element | string;
-  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number}>;
+  children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number }>;
   onClose: () => void;
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
@@ -32,7 +33,7 @@ const ParallaxDrawer = ({
   onMapFlip,
   popoverContent
 }: ParallaxDrawerProps) => {
-  
+
   const {
     SCREEN_WIDTH,
     panGesture,
@@ -48,21 +49,21 @@ const ParallaxDrawer = ({
   const iconRef = useRef<View>(null);
   const { fullScreenModal } = useContext(FullScreenModalContext);
   const navigation = useNavigation();
-  
+
   useEffect(() => {
     if (fullScreenModal) {
-      setIsVisible(false)
+      setIsVisible(false);
     }
-  },[fullScreenModal])
+  }, [fullScreenModal]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      setIsVisible(false)
-    })
+    const unsubscribe = navigation.addListener("blur", () => {
+      setIsVisible(false);
+    });
 
-    return unsubscribe
-  }, [navigation])
-  
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -98,7 +99,7 @@ const ParallaxDrawer = ({
               )}
             </S.HeaderWrapper>
           </SafeAreaView>
-  
+
           <S.BackgroundContainer>
             <Animated.View
               style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
@@ -114,7 +115,7 @@ const ParallaxDrawer = ({
               )}
             </Animated.View>
           </S.BackgroundContainer>
-  
+
           <GestureDetector gesture={panGesture}>
             <Animated.View style={[S.styles.drawer, animatedDrawerStyle]}>
               <S.TopTransparentSection>
@@ -127,7 +128,7 @@ const ParallaxDrawer = ({
                   <WavyImg />
                 </S.StyledSvg>
               </S.TopTransparentSection>
-  
+
               <S.BottomOpaqueSection>
                 <S.Content
                   onLayout={(event) => {
@@ -151,7 +152,7 @@ const ParallaxDrawer = ({
       </TouchableWithoutFeedback>
     </GestureHandlerRootView>
   );
-  
+
 };
 
 export default ParallaxDrawer;

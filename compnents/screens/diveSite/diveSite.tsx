@@ -9,11 +9,9 @@ import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
 import Label from "../../reusables/label";
 import ReviewCard from "../../reusables/reviewCard";
-import { Review, ReviewCondition } from "../../../entities/diveSiteReview";
+import { Review } from "../../../entities/diveSiteReview";
 import Button from "../../reusables/button";
 import { MetricItem } from "../../../entities/metricItem";
-import { DiveConditions } from "../../../entities/diveSiteCondidtions";
-import { renderLabel } from "../../reusables/reviewCard/conditionLabel";
 
 import * as S from "./styles";
 import { renderStatLabel } from "./statsLabels";
@@ -77,7 +75,7 @@ export default function DiveSiteScreenView({
   //19 = downwelling -> most common of the 4
   //20 = contrasting -> most common of the 4
 
-  const customOrder = [8,1,5,4,6,12,15,20,19,18,17,13,3,9,10,11,14];
+  const customOrder = [8, 1, 5, 4, 6, 12, 15, 20, 19, 18, 17, 13, 3, 9, 10, 11, 14];
 
   return (
     <S.ContentContainer>
@@ -88,31 +86,31 @@ export default function DiveSiteScreenView({
         )}
         <S.LabelsContainer>
           {metricInfo &&
-  [...metricInfo]
-    .sort((a, b) => {
-      const idA = a.condition_id;
-      const idB = b.condition_id;
+            [...metricInfo]
+              .sort((a, b) => {
+                const idA = a.condition_id;
+                const idB = b.condition_id;
 
-      const positionA = customOrder.indexOf(idA);
-      const positionB = customOrder.indexOf(idB);
+                const positionA = customOrder.indexOf(idA);
+                const positionB = customOrder.indexOf(idB);
 
-      return positionA - positionB;
-    }).map((metric) => {
-      const label = renderStatLabel({
-        condition_entry_id: metric.condition_id,
-        condition_type_id: metric.condition_id,
-        value: metric.sum_value_other ?? metric.average_value_15_16
-      });
+                return positionA - positionB;
+              }).map((metric) => {
+                const label = renderStatLabel({
+                  condition_entry_id: metric.condition_id,
+                  condition_type_id: metric.condition_id,
+                  value: metric.sum_value_other ?? metric.average_value_15_16
+                });
 
-      if (label) {
-        return (
-          <S.TagWrapper key={`${metric.condition_id}-${metric.divesite_id}-${metric.review_month}`}>
-            <S.TagText>{label}</S.TagText>
-          </S.TagWrapper>
-        );
-      }
+                if (label) {
+                  return (
+                    <S.TagWrapper key={`${metric.condition_id}-${metric.divesite_id}-${metric.review_month}`}>
+                      <S.TagText>{label}</S.TagText>
+                    </S.TagWrapper>
+                  );
+                }
 
-    })}
+              })}
 
         </S.LabelsContainer>
 
@@ -134,7 +132,7 @@ export default function DiveSiteScreenView({
       </S.LabelWrapper>
 
       <S.ReviewsWrapper>
-        <S.Stats>{`${reviews.length } review${reviews.length  === 1 ? "": "s"}`}</S.Stats>
+        <S.Stats>{`${reviews.length} review${reviews.length === 1 ? "" : "s"}`}</S.Stats>
 
         {reviews && reviews.length > 0 ? (
           <S.ReviewsContent key="has-reviews">
@@ -144,7 +142,7 @@ export default function DiveSiteScreenView({
                 title={"Add My Review"}
                 iconLeft="diving-scuba-flag"
                 round={false}
-                style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+                style={{ width: moderateScale(240) }}
                 onPress={() => openDiveSiteReviewer()}
               />
             </S.ButtonContainerReviews>
@@ -185,7 +183,7 @@ export default function DiveSiteScreenView({
         )}
       </S.ReviewsWrapper>
 
-      {reviews.length  > 0 && (
+      {reviews.length > 0 && (
         <S.ButtonContainer>
           {/* <GhostButton
             onPress={() => null}
@@ -199,16 +197,16 @@ export default function DiveSiteScreenView({
       </S.LabelWrapper>
 
       <S.ItinerariesWrapper>
-        <S.Stats>{`${tripCount} active trip${tripCount === 1 ? "": "s"}`}</S.Stats>
+        <S.Stats>{`${tripCount} active trip${tripCount === 1 ? "" : "s"}`}</S.Stats>
 
         {itineraries && itineraries.length > 0 ? itineraries.map((itinerary) => (
           <ItineraryCard
             key={itinerary.id}
             itinerary={itinerary}
-            handleEdit={() => {}}
-            handleDelete={() => {}}
+            handleEdit={() => { }}
+            handleDelete={() => { }}
             handleMapFlip={() => handleMapFlip(itinerary.siteList)}
-            handleBooking={() => {}}
+            handleBooking={() => { }}
           />
         )) : (
           <S.EmptyStateWrapper>

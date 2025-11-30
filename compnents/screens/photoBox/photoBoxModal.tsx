@@ -15,12 +15,16 @@ import ButtonIcon from "../../reusables/buttonIcon";
 
 import * as S from "./styles";
 import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
+import { useAppNavigation } from "../../mapPage/types";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal() {
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
+
+  const navigation = useAppNavigation();
+
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
     usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
 
@@ -31,16 +35,12 @@ export default function PhotoBoxModal() {
     cacheDir = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
   }
 
-  const onCloseModal = () => {
-    setFullScreenModal(false);
-  };
-
   return (
     <S.ContentContainer>
       <S.BackButtonWrapper>
         <ButtonIcon
           icon="chevron-left"
-          onPress={() => onCloseModal()}
+          onPress={() => navigation.goBack()}
           size="small"
           fillColor={colors.themeWhite}
         />

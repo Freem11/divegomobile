@@ -5,7 +5,6 @@ import { openURL } from "expo-linking";
 
 import ItineraryCard from "../../reusables/itineraryCard";
 import ButtonIcon from "../../reusables/buttonIcon";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 
 import * as S from "./styles";
@@ -13,25 +12,19 @@ import * as S from "./styles";
 type DiveSiteTripsPageViewProps = {
   diveTrips: any
   title: string
-  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>
+  onClose: () => void;
   handleMapFlip: (sites: number[], shopID?: number) => void;
 };
 
 export default function DiveSiteTripsPageView({
   diveTrips,
   title,
-  setLevelThreeScreen,
+  onClose,
   handleMapFlip,
 }: DiveSiteTripsPageViewProps) {
 
   const { t } = useTranslation();
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-
-  const onClose = () => {
-    setActiveScreen("DiveSiteScreen", { id: selectedDiveSite.id });
-    setLevelThreeScreen(false);
-  };
 
   return (
     <S.ContentContainer>
@@ -40,7 +33,7 @@ export default function DiveSiteTripsPageView({
         <S.BackButtonWrapper>
           <ButtonIcon
             icon="chevron-left"
-            onPress={() => onClose()}
+            onPress={onClose}
             size="small"
             fillColor={"darkgrey"}
           />

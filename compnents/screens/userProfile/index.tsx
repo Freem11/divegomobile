@@ -1,15 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
-import { Photo } from "../../../entities/photos";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
 import { getRecentReviewsByUserId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
-import { LevelThreeScreenContext } from "../../contexts/levelThreeScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
+import { useAppNavigation } from "../../mapPage/types";
 
 import UserProfileScreenView from "./userProfile";
 
@@ -19,23 +15,20 @@ type UserProfileProps = {
 };
 
 export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { selectedProfile } = useContext(SelectedProfileContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
-  );
+
   const [profilePhotos, setProfilePhotos] = useState(null);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
   const [reviews, setReviews] = useState<Review[]>([]);
 
+  const navigation = useAppNavigation();
+
   useEffect(() => {
     getData(selectedProfile);
-  },[selectedProfile]);
+  }, [selectedProfile]);
 
-  const getData = async(selectedProfile: ActiveProfile) => {
+  const getData = async (selectedProfile: ActiveProfile) => {
     const species = await getUserSpeciesCount(selectedProfile.UserID);
     setSpeciesCount(species.distinct_label_count);
 
@@ -48,30 +41,17 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
     setReviews(userReviews);
   };
 
-  const handleDiveSiteMove = async(pic: Photo, photoPacket) => {
-    setSelectedDiveSite({
-      SiteName: photoPacket.name,
-      Latitude: pic.latitude,
-      Longitude: pic.longitude
-    });
-    closeParallax(1);
-    setLevelTwoScreen(false);
-  };
-
   const openAllPhotosPage = () => {
-    setLevelThreeScreen(true);
-    setActiveScreen("UserProfilePhotos");
+    navigation.navigate("UserProfilePhotos");
   };
 
   return (
     <UserProfileScreenView
       profilePhotos={profilePhotos}
       selectedProfile={selectedProfile}
-      handleDiveSiteMove={handleDiveSiteMove}
       speciesCount={speciesCount}
       sightingsCount={sightingsCount}
       openAllPhotosPage={openAllPhotosPage}
-      setLevelThreeScreen={setLevelThreeScreen}
       reviews={reviews}
     />
   );

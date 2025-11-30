@@ -6,6 +6,7 @@
         "registerAccount": "Create New Account",
         "email": "Email",
         "password": "Password",
+        "resetPassword": "Reset Password",
         "cancel": "Cancel",
         "ok": "OK",
         "edit": "Edit",
@@ -15,6 +16,7 @@
         "optOut": "Opt Out",
         "finish": "Finish",
         "close": "Close",
+        "forgotPassword": "Reset Password!",
         "unknownError": "Sorry, something went wrong. Please try again later"
 
     },
@@ -41,7 +43,15 @@
         "goToSettings": "Go to Settings"
     },
     "MapPage": {},
-    "SettingsPage": {
+    "BottomTabBar": {
+    "home": "Map",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "addsite": "Site Add",
+    "guides": "Guides",
+    "itinerary": "Itinerary"
+  },
+  "SettingsPage": {
         "header": "Settings",
         "subHeading": "Account Type",
         "notPartnerAccount": "Request upgrade to Partner Account?",
@@ -151,19 +161,36 @@
         "newTrip": "New Trip"
     },
     "TripCreator": {
-        "header": "New Trip Creation",
-        "headerEdit": "Submit Trip Edits",
-        "cloneButton": "Clone This Trip",
+        "header": "Trip Creator: \nNew Trip",
+        "headerEdit": "Trip Creator: \nEdit Trip",
+        "step1Title": "High Level Details",
+        "step1Description": "Let's start with your trip's basic information",
+        "tripName": "Trip's Name",
         "tripNamePlaceholder": "Your Trip's Name",
+        "bookingLink": "Booking Page Link",
         "bookingLinkPlaceholder": "Link to your trip's booking page",
-        "pricePlaceholder": "Trip Price",
-        "startDatePlaceholder": "Start Date",
-        "endDatePlaceholder": "End Date",
-        "tripDescriptionPlaceholder": "Please add any further details about your trip that you think would be helpful in promoting your trip to divers.\\n\\nWe recommend a daily itinerary",
-        "submitButton": "Submit",
-        "selectSitesButton": "Select Dive Sites",
-        "drawerHeader": "Possible Sites in this Trip   (Press to Remove)",
-        "emptyDrawer": "No Dive Sites have been added to this Trip yet."
+        "price": "Trip's Price",
+        "pricePlaceholder": "Price of you trip",
+        "startDate": "Start Date",
+        "startDatePlaceholder": "Trip's start date",
+        "endDate": "End Date",
+        "endDatePlaceholder": "Trip's end date",
+        "step2Title": "Day to Day Itinerary",
+        "step2Description": "Please provide the day to day activites.",
+        "tripDescriptionPlaceholder": "Trip day to day itinerary",
+        "step3Title": "This Trip's (Potential) Dive Sites",
+        "step3Description": "Add your dive sites by tapping the blue anchors, they will turn gold when added to your trip",
+        "emptyState": "No Dive Sites have been added to this Trip yet.",
+        "completeTitle": "New Dive Trip Submitted!",
+        "completeDescription": "Your new dive trip has been successfully submitted and will allow divers join you on this adventure.",
+        "completeEditTitle": "Dive Trip Edit Request Submitted!",
+        "completeEditDescription": "Your dive trip edits have been successfully submitted we will update your adventure shortly.",
+        "completeDeleteTitle": "Dive Trip Delete Request Submitted!",
+        "completeDeleteDescription": "Your dive trip delete request has been successfully submitted we will reviews and delete it if there are no issues.",
+   
+        "cloneButton": "Clone This Trip",
+        "selectSitesButton": "Select Dive Sites"
+        
     },
     "UserProfile": {
         "drawerHeader": "'s Sea Creature Encounters",

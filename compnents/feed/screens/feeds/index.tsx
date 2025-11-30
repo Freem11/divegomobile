@@ -20,6 +20,7 @@ import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
 import * as S from "./styles";
+import { useAppNavigation } from "../../../mapPage/types";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -44,8 +45,10 @@ const windowHeight = Dimensions.get("window").height;
 //   },
 // ];
 
+
 export default function FeedList() {
   const { t } = useTranslation();
+  const navigation = useAppNavigation();
   const feedItems = useFeedDataStore((state) => state.feedItems);
   //const feedItems = mockFeedItems;
   const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
@@ -75,8 +78,8 @@ export default function FeedList() {
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <ButtonIcon
           icon="chevron-left"
-          onPress={() => closeScreen()}
-          size="small"
+          onPress={() => navigation.goBack()}
+          size='small'
           fillColor={colors.neutralGrey}
         />
         <ButtonIcon

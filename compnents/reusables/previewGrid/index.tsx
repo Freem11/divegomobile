@@ -8,8 +8,7 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
+import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
 
@@ -19,14 +18,14 @@ interface PreviewGridProps {
   buttonText: string
 }
 
-export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting, buttonText }) => {
+export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, buttonText }) => {
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
 
   const screenWidth = Dimensions.get("window").width;
   const containerPadding = scale(20);
   const gap = scale(8);
+
+  const navigation = useAppNavigation();
 
   const { numColumns, itemSize } = useMemo(() => {
     const availableWidth = screenWidth - (containerPadding * 2);
@@ -39,14 +38,13 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting, buttonT
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
+    navigation.navigate("PinchAndZoomPhoto");
   };
 
   return (
     <S.Wrapper>
       <S.Container>
-        {items && items.length > 0 && items.slice(0,8).map((item, index) => (
+        {items && items.length > 0 && items.slice(0, 8).map((item, index) => (
           <S.Item
             key={index}
             style={{
@@ -82,8 +80,8 @@ export const PreviewGrid:FC<PreviewGridProps> = ({ items, onAddSighting, buttonT
             <Icon
               name={"camera-plus"}
               color={colors.primaryBlue}
-              width={moderateScale(22)}
-              height={moderateScale(22)}
+              width={scale(22)}
+              height={scale(22)}
             />
             <S.AddSightingText>
               {buttonText}

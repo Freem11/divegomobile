@@ -6,6 +6,10 @@ import { supabase } from "../../../supabase";
 import { createSessionFromUrl } from "../../helpers/loginHelpers";
 import { showError, showSuccess } from "../../toast";
 
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AuthenticationRoutes } from "../authNavigator";
+
 import { Form } from "./form";
 import ForgotPageView from "./view";
 
@@ -15,12 +19,19 @@ interface IProps {
   moveToLoginPage: () => void;
 }
 
-export default function ForgotPage(props: IProps) {
+type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<
+  AuthenticationRoutes,
+  "ForgotPassword"
+>;
+
+export default function ForgotPasswordScreen(props: IProps) {
 
   const url = Linking.useURL();
   if (url){
     createSessionFromUrl(url);
   }
+
+  const navigation = useNavigation<ForgotPasswordScreenNavigationProp>();
 
   const onSubmit = async(form: Form) => {
 
@@ -42,7 +53,7 @@ export default function ForgotPage(props: IProps) {
 
   return (
     <ForgotPageView
-      moveToLoginPage={props.moveToLoginPage}
+      moveToLoginPage={() => navigation.goBack()}
       onSubmit={onSubmit}
       defaultFormValues={{
         Email:""

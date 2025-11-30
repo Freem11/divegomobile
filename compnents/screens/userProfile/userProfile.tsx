@@ -8,19 +8,16 @@ import SealifePreview from "../../reusables/sealifePreview";
 import ReviewCard from "../../reusables/reviewCard";
 import Label from "../../reusables/label-new";
 import EmptyState from "../../reusables/emptyState-new";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import * as S from "./styles";
 
 type UserProfileProps = {
   profilePhotos: DiveSiteWithUserName[] | null;
-  handleDiveSiteMove: (pic: Photo, photoPacket: any) => void;
   selectedProfile: ActiveProfile | null;
   speciesCount: number;
   sightingsCount: number;
   openAllPhotosPage: () => void;
-  setLevelThreeScreen: React.Dispatch<React.SetStateAction<boolean>>;
   reviews: Review[];
 };
 
@@ -42,7 +39,7 @@ export default function UserProfileScreenView({
       bio: selectedProfile?.profileBio,
     });
 
-  },[selectedProfile]);
+  }, [selectedProfile]);
 
   return (
     <S.ContentContainer>
@@ -76,8 +73,8 @@ export default function UserProfileScreenView({
                 photo={review.profilePhoto}
                 review={review}
                 currentUserId={userProfile.UserID}
-                onEdit={() => {}}
-                onDelete={() => {}}
+                onEdit={() => { }}
+                onDelete={() => { }}
               />
             ))}
           </S.ReviewsContent>

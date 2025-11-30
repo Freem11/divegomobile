@@ -1,13 +1,14 @@
-import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { Dimensions } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
   activeFonts,
-} from '../../styles';
+} from "../../styles";
 
-const windowWidth = Dimensions.get('screen').width;
+const windowWidth = Dimensions.get("screen").width;
 
 export const FullScreenCenter = styled.View`
   flex: 1;
@@ -26,6 +27,7 @@ export const BackButtonWrapper = styled.View`
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;
   align-items: center;
+  padding-bottom: 10%;
 `;
 
 export const Header = styled.Text`

@@ -1,11 +1,8 @@
-import React, { useContext } from "react";
+import React, { } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import email from "react-native-email";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import {
   signOut,
   userDelete
@@ -16,15 +13,14 @@ import {
 } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useUserHandler } from "../../../store/user/useUserHandler";
+import { useAppNavigation } from "../../mapPage/types";
 
 import SettingsPageView from "./settings";
 
-type SettingsPageProps = {};
+export default function SettingsPage() {
 
-export default function SettingsPage({}: SettingsPageProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+  const navigation = useAppNavigation();
+
   const userHandler = useUserHandler();
   const { userProfile } = useUserProfile();
 
@@ -38,16 +34,18 @@ export default function SettingsPage({}: SettingsPageProps) {
   }
 
   const openPartnerAccountScreen = () => {
-    setLevelTwoScreen(true);
-    setLevelOneScreen(false);
-    setActiveScreen("PartnerRequestScreen");
+    navigation.navigate("PartnerRequestUpgrade");
   };
 
-  const handleLogout = async() => {
+  const onClose = () => {
+    navigation.goBack();
+  };
+
+  const handleLogout = async () => {
     userHandler.userLogout();
   };
 
-  const alertHandler = async() => {
+  const alertHandler = async () => {
     Alert.alert(
       t("SettingsPage.aboutToDeleteAccountTitle"),
       t("SettingsPage.deleteAccountMessage"),
@@ -87,7 +85,7 @@ export default function SettingsPage({}: SettingsPageProps) {
     }).catch(console.error);
   };
 
-  const handleAccountDelete = async() => {
+  const handleAccountDelete = async () => {
     if (blurb) {
       await addDeletedAccountInfo({
         firstName: first,
@@ -105,7 +103,7 @@ export default function SettingsPage({}: SettingsPageProps) {
     <SettingsPageView
       profileType={profileType}
       openPartnerAccountScreen={openPartnerAccountScreen}
-      setLevelOneScreen={setLevelOneScreen}
+      onClose={onClose}
       handleLogout={handleLogout}
       alertHandler={alertHandler}
     />

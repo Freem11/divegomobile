@@ -12,13 +12,13 @@ const devAwsSecretKey = process.env.EXPO_PUBLIC_AWS_R2_DEV_SECRET_KEY;
 
 let awsAccessKeyId = devAwsAccessKeyId;
 let awsSecretKey = devAwsSecretKey;
-let awsAccountId =  devAwsAccountId;
+let awsAccountId = devAwsAccountId;
 let cloudflareBucketUrl = devCloudflareBucketUrl;
 
 // const useProdKeys = false;
 const useProdKeys = true;
 
-if (useProdKeys){
+if (useProdKeys) {
   awsAccessKeyId = prodAwsAccessKeyId;
   awsSecretKey = prodAwsSecretKey;
   awsAccountId = prodAwsAccountId;
