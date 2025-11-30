@@ -91,16 +91,18 @@ export default function TextInputField(props) {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         flexDirection: "row",
         borderBottomColor: "darkgrey",
         borderBottomWidth: moderateScale(2),
         alignItems: "center",
         backgroundColor: colors.themeWhite,
         borderRadius: moderateScale(5),
+        alignItems: "center"
     },
     input: {
         width: "83%",
-        height: moderateScale(30),
+        height: moderateScale(40),
         fontFamily: activeFonts.Regular,
     },
 });
