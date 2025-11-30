@@ -41,8 +41,6 @@ import { useMapStore } from "../googleMap/useMapStore";
 import FeedScreens from "../feed/screens";
 import SearchTool from "../searchTool";
 import { ActiveProfile } from "../../entities/profile";
-import { getNotificationsCount } from "../../supabaseCalls/notificationsSupabaseCalls";
-import { NotificationsFeedContext } from "../contexts/notificationsFeedContext";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { useUserProfile } from "../../store/user/useUserProfile";
@@ -70,6 +68,7 @@ export default function MapPage() {
   const { userProfile } = useUserProfile();
 
   const initNotifications = useNotificationsStore((s) => s.init);
+  const count = useNotificationsStore((s) => s.count);
 
   const { t } = useTranslation();
 
@@ -175,7 +174,6 @@ export default function MapPage() {
     initNotifications(userProfile.UserID);
   }, []);
 
-
   const PARTNER_ACCOUNT_STATUS = userProfile?.partnerAccount || false;
 
   const getCurrentLocation = async () => {
@@ -224,7 +222,7 @@ export default function MapPage() {
               <BottomDrawer />
               <BottomMenu>
                 <ProfileButton />
-                <NotificationsButton />
+                <NotificationsButton countProps={count} />
                 <DiveSiteButton />
                 {PARTNER_ACCOUNT_STATUS ? (
                   <ItineraryListButton />

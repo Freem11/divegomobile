@@ -36,7 +36,7 @@ export async function getNotifications(userId) {
       `
     )
     .eq("recipient_id", userId)
-    .eq("is_seen", false)
+    //.eq("is_seen", false)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -63,7 +63,7 @@ export async function getNotificationsCount(userId: string) {
 
 export async function fetchNotificationsPageOffset(params: {
   userId: string;
-  pagination: Pagination; // page/ipp/sort
+  pagination: Pagination;
 }) {
   const { userId, pagination } = params;
 
@@ -76,10 +76,11 @@ export async function fetchNotificationsPageOffset(params: {
       archived_at,
 
       notification_types:notification_type_id ( code ),
-      sender:sender_id ( user_id, username:"UserName" ),
+      sender:sender_id ( id, user_id, username:"UserName", profilePhoto ),
 
       notification_photo_like (
         photo_id,
+        photo_path,
         photo:photo_id ( id, label, photoFile )
       ),
       notification_photo_comment (
@@ -95,7 +96,7 @@ export async function fetchNotificationsPageOffset(params: {
       notification_follow ( notification_id )
     `)
     .eq("recipient_id", userId)
-    .eq("is_seen", false)
+    //.eq("is_seen", false)
     .order("created_at", { ascending: false })
     .order("id", { ascending: false })
     .range(pagination.from(), pagination.to());
@@ -112,7 +113,7 @@ export async function fetchNotificationsPageOffset(params: {
 export async function markAllNotificationsSeen(userId: string) {
   const { error } = await supabase
     .from("ui_notifications")
-    .update({ is_seen: true })
+    .update({ is_seen: true, seen_at: new Date().toISOString() })
     .eq("recipient_id", userId)
     .eq("is_seen", false);
 
@@ -122,9 +123,132 @@ export async function markAllNotificationsSeen(userId: string) {
 export async function markNotificationSeen(notificationId: number) {
   const { error } = await supabase
     .from("ui_notifications")
-    .update({ is_seen: true })
+    .update({ is_seen: true, seen_at: new Date().toISOString() })
     .eq("id", notificationId)
     .eq("is_seen", false);
 
   if (error) throw error;
+}
+
+export async function getPhotoOwnerId(photoId: number): Promise<string | null> {
+  try {
+    const { data, error } = await supabase
+      .from("photos")
+      .select("UserID")
+      .eq("id", photoId)
+      .single();
+
+    if (error || !data) {
+      console.warn("⚠️ Photo not found or Supabase error:", error?.message);
+      return null;
+    }
+
+    return data.UserID;
+  } catch (e) {
+    console.error("❌ getPhotoOwnerId error:", e);
+    return null;
+  }
+}
+
+
+export async function createPhotoLikeNotification({
+  senderId,
+  recipientId,
+  photoId,
+  photoPath
+}: {
+  senderId: string;
+  recipientId: string;
+  photoId: number;
+  photoPath?: string;
+}) {
+  try {
+    if (!senderId || !recipientId || senderId === recipientId) {
+      console.log("⚠️ Invalid sender or recipient, skipping notification");
+      return;
+    }
+    const { data: existing} = await supabase
+      .from("notification_photo_like")
+      .select("id")
+      .eq("photo_path", photoPath)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      console.log("ℹ️ Notification already exists, skip insert");
+      return;
+    }
+
+    const { data: notif, error: notifErr } = await supabase
+      .from("ui_notifications")
+      .insert([
+        {
+          sender_id: senderId,
+          recipient_id: recipientId,
+          notification_type_id: 1,
+          is_seen: false,
+          created_at: new Date().toISOString(),
+        },
+      ])
+      .select()
+      .single();
+
+    if (notifErr) {
+      console.error("❌ createPhotoLikeNotification error:", notifErr.message);
+      return;
+    }
+
+    const { error: linkErr } = await supabase
+      .from("notification_photo_like")
+      .insert([
+        {
+          notification_id: notif.id,
+          photo_id: photoId,
+          photo_path: photoPath,
+        },
+      ]);
+
+    if (linkErr) {
+      console.error("❌ notification_photo_like insert error:", linkErr.message);
+    } else {
+      console.log("✅ Notification created for photo", photoId);
+    }
+  } catch (err) {
+    console.error("❌ createPhotoLikeNotification fatal error:", err);
+  }
+}
+
+export async function deletePhotoLikeNotification({
+  senderId,
+  recipientId,
+  photoId,
+}: {
+  senderId: string;
+  recipientId: string;
+  photoId: number;
+}) {
+  try {
+    const { data, error } = await supabase
+      .from("notification_photo_like")
+      .select("notification_id, ui_notifications!inner(id)")
+      .eq("photo_id", photoId);
+
+    if (error) {
+      console.error("❌ deletePhotoLikeNotification query error:", error.message);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.log("ℹ️ No notification found for this photo like");
+      return;
+    }
+
+    const notifId = data[0].notification_id;
+
+    await supabase.from("notification_photo_like").delete().eq("photo_id", photoId);
+    await supabase.from("ui_notifications").delete().eq("id", notifId);
+
+    console.log("🗑️ Notification deleted for photo", photoId);
+  } catch (err) {
+    console.error("❌ deletePhotoLikeNotification fatal error:", err);
+  }
 }

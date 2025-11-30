@@ -78,8 +78,10 @@ export interface Photo {
 }
 
 export interface Sender {
+  id: number;
   user_id: string;
   username: string;
+  profilePhoto: string | null;
 }
 
 export interface NotificationTypes {
@@ -89,6 +91,7 @@ export interface NotificationTypes {
 export interface NotificationPhotoLike {
   photo_id: number;
   photo: Photo | null;
+  photo_path?: string;
 }
 
 export interface NotificationPhotoComment {

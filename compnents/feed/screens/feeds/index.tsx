@@ -1,4 +1,8 @@
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+} from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -8,6 +12,7 @@ import {
   Platform,
   Dimensions,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
@@ -21,6 +26,11 @@ import { useNotificationsStore } from "../../store/useNotificationsStore";
 import FeedItemPhotoLike from "./messages/photoLike";
 import FeedItemPhotoComment from "./messages/photoComment";
 import type { Notification } from "../../store/types";
+import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
+import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
+import { FullScreenModalContext } from "../../../contexts/fullScreenModalContext";
+import { ActiveTutorialIDContext } from "../../../contexts/activeTutorialIDContext";
+import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -31,8 +41,19 @@ export default function FeedList() {
   const list = useNotificationsStore((s) => s.list);
   const loadMore = useNotificationsStore((s) => s.loadMore);
   const loadFirst = useNotificationsStore((s) => s.loadFirst);
-  const markAllSeen = useNotificationsStore((s) => s.markAllSeen);
   const markOneSeen = useNotificationsStore((s) => s.markOneSeen);
+  const newCount = useNotificationsStore((s) => s.count);
+
+  const [activeTab, setActiveTab] = useState<"new" | "old">("new");
+  const items = list.items ?? [];
+  const newItems = items.filter((n) => !n.is_seen);
+  const oldItems = items.filter((n) => n.is_seen);
+
+  const data = activeTab === "new" ? newItems : oldItems;
+
+  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -46,8 +67,23 @@ export default function FeedList() {
     setRefreshing(false);
   };
 
-  const onUsernamePress = (n: Notification) => {
-    // openUserProfile(n.sender?.user_id);
+  const togglePhotoBoxModal = (n: Notification) => {
+    setSelectedPhoto(n.notification_photo_like.photo.photoFile);
+    setFullScreenModal(true);
+    setActiveTutorialID("PinchAndZoomPhoto");
+  };
+
+  const setActiveScreen = useActiveScreenStore(
+    (state) => state.setActiveScreen
+  );
+  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
+
+  const goToUserProfile = (n: Notification) => {
+    setActiveScreen("ProfileScreen", { id: n.sender.id });
+    setLevelTwoScreen(true);
+  };
+
+  const onTrashPress = (n: Notification) => {
     if (!n.is_seen) {
       markOneSeen(n.id);
     }
@@ -57,9 +93,23 @@ export default function FeedList() {
     const code = item.notification_types?.code;
     switch (code) {
       case "photo_like":
-        return <FeedItemPhotoLike item={item} onUsernamePress={onUsernamePress}/>;
+        return (
+          <FeedItemPhotoLike
+            item={item}
+            onUsernamePress={goToUserProfile}
+            onPhotoPress={togglePhotoBoxModal}
+            onTrashPress={onTrashPress}
+          />
+        );
       case "photo_comment":
-        return <FeedItemPhotoComment item={item} onUsernamePress={onUsernamePress}/>;
+        return (
+          <FeedItemPhotoComment
+            item={item}
+            onUsernamePress={goToUserProfile}
+            onPhotoPress={togglePhotoBoxModal}
+            onTrashPress={onTrashPress}
+          />
+        );
       default:
         return null;
     }
@@ -74,27 +124,73 @@ export default function FeedList() {
           size="small"
           fillColor={colors.neutralGrey}
         />
+      </View>
+      <View style={styles.secondHeaderRow}>
         <Text style={styles.title}>Your Notifications</Text>
       </View>
-      {!list.items || list.items.length === 0 ? (
-        list.isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <Text style={styles.emptyMessage}>{t("Feed.noFeeds")}</Text>
-        )
+      <View style={styles.tabsRow}>
+        <TouchableOpacity
+          style={[
+            styles.tab,
+            activeTab === "new" && styles.tabActive,
+          ]}
+          onPress={() => setActiveTab("new")}
+        >
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "new" && styles.tabLabelActive,
+            ]}
+          >
+            New ({newCount})
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.tab,
+            activeTab === "old" && styles.tabActive,
+          ]}
+          onPress={() => setActiveTab("old")}
+        >
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "old" && styles.tabLabelActive,
+            ]}
+          >
+            Old
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {(!list.items || list.items.length === 0) && list.isLoading ? (
+        <ActivityIndicator />
+      ) : (!list.items || list.items.length === 0) && !list.isLoading ? (
+        <Text style={styles.emptyMessage}>{t("Feed.noNotifications")}</Text>
       ) : (
         <FlatList
-          data={list.items}
+          data={data}
           keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}
           onEndReachedThreshold={0.3}
           onEndReached={loadMore}
-          ItemSeparatorComponent={() => <View style={{ height: moderateScale(12) }} />}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: moderateScale(12) }} />
+          )}
           ListFooterComponent={
             list.isLoading ? (
               <View style={{ padding: moderateScale(12) }}>
                 <ActivityIndicator />
               </View>
+            ) : null
+          }
+          ListEmptyComponent={
+            !list.isLoading ? (
+              <Text style={styles.emptyMessage}>
+                {activeTab === "new"
+                  ? "No new notifications"
+                  : "No old notifications"}
+              </Text>
             ) : null
           }
           refreshControl={
@@ -111,23 +207,58 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.themeWhite,
     paddingHorizontal: moderateScale(16),
-    paddingBottom: moderateScale(12),
+    paddingBottom: moderateScale(16),
     paddingTop: Platform.OS === "ios" ? moderateScale(15) : moderateScale(10),
   },
   headerRow: {
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: moderateScale(20),
+  },
+  secondHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: moderateScale(20),
   },
   title: {
-    fontSize: moderateScale(18),
-    fontFamily: activeFonts.Thin,
-    color: colors.themeBlack,
+    fontSize: moderateScale(24),
+    fontFamily: activeFonts.Bold,
+    color: colors.headersBlue,
     marginVertical: moderateScale(8),
   },
   emptyMessage: {
     fontSize: moderateScale(16),
-    fontFamily: activeFonts.Thin,
+    fontFamily: activeFonts.Medium,
     color: colors.themeBlack,
+  },
+  tabsRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: moderateScale(16),
+    gap: moderateScale(12),
+  },
+  tab: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: moderateScale(6),
+    paddingHorizontal: moderateScale(14),
+    borderRadius: moderateScale(16),
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.themeWhite,
+  },
+  tabActive: {
+    backgroundColor: colors.headersBlue,
+    borderColor: colors.headersBlue,
+  },
+  tabLabel: {
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Medium,
+    color: colors.headersBlue,
+  },
+  tabLabelActive: {
+    color: colors.themeWhite,
   },
 });

@@ -8,24 +8,15 @@ import ButtonIcon from "../../buttonIcon";
 import { colors } from "../../../styles";
 
 import * as S from "./styles";
-import { useNotificationsStore } from "../../../feed/store/useNotificationsStore";
 
-export default function NotificationsButton() {
+export default function NotificationsButton({ countProps }: { countProps: number }) {
   const openScreen = useFeedScreenStore((state) => state.openScreen);
-  const refreshCount = useNotificationsStore((s) => s.refreshCount);
-
-  const count = useNotificationsStore((s) => s.count);
-
-  const showBadge = count > 0;
-  const label = count >= 100 ? "99+" : String(count);
+  const showBadge = countProps > 0;
+  const label = countProps >= 100 ? "99+" : String(countProps);
 
   const handlePress = () => {
     openScreen(FEED_SCREEN.NOTIFICATIONS);
   };
-
-  useEffect(() => {
-    refreshCount();
-  }, [refreshCount]);
 
   return (
     <TouchableOpacity onPress={() => handlePress()}>

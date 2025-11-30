@@ -11,7 +11,7 @@ export const insertPhotoLike = async(userId, photoId) => {
         userId: userId,
         photoId: photoId,
       },
-    ]);
+    ]).select();
 
   if (error) {
     console.log("couldn't do it 40,", error);

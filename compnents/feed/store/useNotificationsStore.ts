@@ -17,8 +17,10 @@ interface NotifState {
   refreshCount: () => Promise<void>;
   loadFirst: () => Promise<void>;
   loadMore: () => Promise<void>;
+  markAllSeen: () => Promise<void>;
   markOneSeen: (id: number) => Promise<void>;
   reset: () => void;
+  reload: () => Promise<void>;
 }
 
 export const useNotificationsStore = create<NotifState>((set, get) => ({
@@ -67,7 +69,7 @@ export const useNotificationsStore = create<NotifState>((set, get) => ({
     }
   },
 
- async loadMore() {
+  async loadMore() {
     const { userId, list } = get();
     if (!userId || list.isLoading || !list.hasMore) return;
     const pagination = list.pagination.next();
@@ -90,7 +92,6 @@ export const useNotificationsStore = create<NotifState>((set, get) => ({
       set((s) => ({ list: { ...s.list, isLoading: false } }));
     }
   },
-
 
   reset() {
     set({
@@ -137,7 +138,7 @@ export const useNotificationsStore = create<NotifState>((set, get) => ({
         page: 1,
         sort: list.pagination.sort,
         ipp: list.pagination.ipp,
-    })
+      })
       : list.pagination;
 
     set({ list: { ...list, isLoading: true, pagination } });
@@ -165,9 +166,8 @@ export const useNotificationsStore = create<NotifState>((set, get) => ({
       list: new PagedCollection({
         ...list,
         items:
-          list.items?.map((n) =>
-            n.id === id ? { ...n, is_seen: true } : n
-          ) ?? [],
+          list.items?.map((n) => (n.id === id ? { ...n, is_seen: true } : n)) ??
+          [],
       }),
     });
 

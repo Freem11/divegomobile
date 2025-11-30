@@ -76,3 +76,11 @@ export const CommentText = styled.Text`
   font-family: ${activeFonts.Regular};
   line-height: ${moderateScale(fontSizes.SmallText) * 1.4}px;
 `;
+
+export const PlaceholderAvatar = styled.View`
+  width: 42px;
+  height: 42px;
+  border-radius: 21px;
+  background-color: #e8e8e8;
+  margin-right: 10px;
+`;

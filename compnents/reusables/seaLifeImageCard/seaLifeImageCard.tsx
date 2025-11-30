@@ -19,6 +19,7 @@ import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { cloudflareBucketUrl } from "../../globalVariables";
+import { createPhotoLikeNotification, deletePhotoLikeNotification } from "../../../supabaseCalls/notificationsSupabaseCalls";
 
 import * as S from "./styles";
 
@@ -102,11 +103,22 @@ const SeaLifeImageCard = (props: PictureProps) => {
       await deletePhotoLike(likeData);
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
+      await deletePhotoLikeNotification({
+        senderId: userProfile.UserID,
+        recipientId: pic.UserID,
+        photoId: pic.id,
+      });
     } else {
       const newRecord = await insertPhotoLike(userProfile.UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
+      await createPhotoLikeNotification({
+        senderId: userProfile.UserID,
+        recipientId: pic.UserID,
+        photoId: pic.id,
+        photoPath: pic.photoFile,
+      });
     }
   };
 
