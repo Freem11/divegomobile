@@ -22,13 +22,10 @@ import {
 import TextInputField from "../authentication/utils/textInput";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import {
-  insertPhotoComment,
   grabPhotoCommentsByPicId,
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
-import { LevelThreeScreenContext } from "../contexts/levelThreeScreenContext";
-import { ActiveTutorialIDContext } from "../contexts/activeTutorialIDContext";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -39,13 +36,9 @@ export default function CommentsModal() {
   const [listOfComments, setListOfComments] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
   const [selectedReplyId, setSelectedReplyId] = useState([]);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { selectedPicture } = useContext(SelectedPictureContext);
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
-  );
-  const { setLevelThreeScreen } = useContext(
-    LevelThreeScreenContext
   );
   const { t } = useTranslation();
   useEffect(() => {
@@ -81,12 +74,12 @@ export default function CommentsModal() {
       } else {
         finalContent = commentContent;
       }
-      // let newComment = await insertPhotoComment(
-      //   profile[0].UserID,
-      //   selectedPicture.id,
-      //   finalContent,
-      //   userIdentity
-      // );
+      const newComment = await insertPhotoComment(
+        profile[0].UserID,
+        selectedPicture.id,
+        finalContent,
+        userIdentity
+      );
       setIsClearOn(true);
       setCommentContent("");
       setReplyTo(null);
@@ -97,7 +90,6 @@ export default function CommentsModal() {
 
   const handleCommentModalClose = async() => {
     setReplyTo(null);
-    setLevelThreeScreen(true);
     setFullScreenModal(false);
   };
 
@@ -197,6 +189,7 @@ export default function CommentsModal() {
               ) : null}
               <View style={styles.replyBox}>
                 <TextInputField
+                  icon={"send-circle-outline"}
                   inputValue={commentContent}
                   placeHolderText={t("Comments.blowBubbles")}
                   onChangeText={(text) => handleChange(text)}
@@ -216,7 +209,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "transparent",
     zIndex: 26,
     left: 0,
   },

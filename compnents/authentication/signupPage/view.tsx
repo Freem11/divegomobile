@@ -1,12 +1,11 @@
 import React from "react";
-import { SafeAreaView, TouchableWithoutFeedback } from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import { useTranslation } from "react-i18next";
 import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
-import ButtonIcon from "../../reusables/buttonIcon";
 import Button from "../../reusables/button";
 import { colors } from "../../styles";
 import { showWarning } from "../../toast";
@@ -24,8 +23,6 @@ export default function CreateAccountPageView(props: IProps) {
   const { t } = useTranslation();
   const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({});
 
-  const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
-
   const handleError = (errors: FieldErrors<Form>) => {
     console.log({ errors });
     Object.values(errors).forEach((error) => {
@@ -37,18 +34,6 @@ export default function CreateAccountPageView(props: IProps) {
 
   return (
     <S.Container>
-
-      <AnimatedSafeAreaView style={[S.styles.safeArea]}>
-        <S.BackButtonWrapper>
-          <ButtonIcon
-            icon="chevron-left"
-            onPress={props.moveToLandingPage}
-            size="small"
-            fillColor={colors.neutralGrey}
-          />
-        </S.BackButtonWrapper>
-      </AnimatedSafeAreaView>
-
       <S.Content>
         <S.Header>{t("Common.signup")}</S.Header>
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Animated, View, StyleSheet, Dimensions, TouchableWithoutFeedback, Platform } from "react-native";
+import { Animated, View, StyleSheet, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

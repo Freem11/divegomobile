@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { } from "react";
 import { Keyboard } from "react-native";
 
 import { showError, showSuccess } from "../../toast";
@@ -25,23 +25,23 @@ export default function PartnerAccountRequestPage({
   const mapAction = useMapStore((state) => state.actions);
   const storeFormValues = useMapStore((state) => state.formValues);
 
-  const onSubmit = async(formData: Required<Form>) => {
+  const onSubmit = async (formData: Required<Form>) => {
     const { error } = await createPartnerAccountRequest({
-      webpageLink : formData.URL,
+      webpageLink: formData.URL,
       businessName: formData.OrgName,
       latitude: formData.Latitude,
       longitude: formData.Longitude,
       userId: userProfile.UserID
     });
 
-    if (error){
+    if (error) {
       showError("We were unable to save your submission, please try again later");
       return;
     }
     showSuccess(`Partner request for ${formData.OrgName} has been sucessfuly submitted! We will contact you via email, with our descision.`);
   };
 
-  const getCurrentLocation = async(formData: Required<Form>) => {
+  const getCurrentLocation = async (formData: Required<Form>) => {
     Keyboard.dismiss();
     try {
       const location = await getCurrentCoordinates();

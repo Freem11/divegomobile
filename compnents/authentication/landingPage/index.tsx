@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import * as AppleAuthentication from "expo-apple-authentication";
 
 import {
@@ -11,16 +11,31 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import LandingPageView from "./view";
 
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AuthenticationRoutes } from "../authNavigator";
+
+type LandingScreenNavigationProp = NativeStackNavigationProp<
+  AuthenticationRoutes,
+  "Landing"
+>;
+
 interface IProps {
   moveToSignUpPage: () => void;
   moveToLoginPage: () => void;
 }
 
-export default function LandingPage(props: IProps) {
+export default function LandingScreen(props: IProps) {
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
   const { userProfile } = useUserProfile();
   const isSignedIn = !!userProfile;
   const userHandler = useUserHandler();
+
+  const navigation = useNavigation<LandingScreenNavigationProp>();
+
+    useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
   useEffect(() => {
     (async() => {
@@ -33,8 +48,8 @@ export default function LandingPage(props: IProps) {
     <LandingPageView
       isSignedIn={isSignedIn}
       appleAuthAvailable={appleAuthAvailable}
-      onLogin={() => props.moveToLoginPage()}
-      onSignUp={() => props.moveToSignUpPage()}
+      onLogin={() => navigation.navigate("Login")}
+      onSignUp={() => navigation.navigate("SignUp")}
       onGoogle={async() => {
         await googleSignIn();
         userHandler.userInit(true);

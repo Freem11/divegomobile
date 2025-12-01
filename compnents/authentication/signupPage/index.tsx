@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 
 import { register } from "../../../supabaseCalls/authenticateSupabaseCalls";
 import { i18n } from "../../../i18n";
@@ -8,12 +8,21 @@ import { useUserHandler } from "../../../store/user/useUserHandler";
 import CreateAccountPageView from "./view";
 import { Form } from "./form";
 
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AuthenticationRoutes } from "../authNavigator";
+
+type SignUpScreenNavigationProp = NativeStackNavigationProp<
+  AuthenticationRoutes,
+  "SignUp"
+>;
+
 interface IProps {
   moveToLandingPage: () => void;
   moveToLoginPage: () => void;
 }
 
-export default function CreateAccountPage(props: IProps) {
+export default function SignUpScreen(props: IProps) {
   const userHandler = useUserHandler();
 
   const onSubmit = async(data: Form) => {
@@ -35,10 +44,15 @@ export default function CreateAccountPage(props: IProps) {
     }
   };
 
+  const navigation = useNavigation<SignUpScreenNavigationProp>();
+  useLayoutEffect(() => {
+    navigation.setOptions({ animation: "slide_from_left" });
+  }, [navigation]);
+
   return (
     <CreateAccountPageView
-      moveToLandingPage={props.moveToLandingPage}
-      moveToLoginPage={props.moveToLoginPage}
+      moveToLandingPage={() => navigation.goBack()}
+      moveToLoginPage={() => navigation.replace("Login")}
       onSubmit={onSubmit}
     />
   );

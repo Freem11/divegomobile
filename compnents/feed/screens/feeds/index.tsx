@@ -21,6 +21,7 @@ import { activeFonts, colors } from "../../../styles";
 import { useFeedScreenStore } from "../../store/useScreenStore";
 import ButtonIcon from "../../../reusables/buttonIcon";
 import * as S from "./styles";
+import { useAppNavigation } from "../../../mapPage/types";
 
 import { useNotificationsStore } from "../../store/useNotificationsStore";
 import FeedItemPhotoLike from "./messages/photoLike";
@@ -36,6 +37,7 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function FeedList() {
   const { t } = useTranslation();
+  const navigation = useAppNavigation();
   const closeScreen = useFeedScreenStore((s) => s.closeScreen);
 
   const list = useNotificationsStore((s) => s.list);
@@ -120,8 +122,8 @@ export default function FeedList() {
       <View style={styles.headerRow}>
         <ButtonIcon
           icon="chevron-left"
-          onPress={closeScreen}
-          size="small"
+          onPress={() => navigation.goBack()}
+          size='small'
           fillColor={colors.neutralGrey}
         />
       </View>

@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { Platform } from "react-native";
 
 import { activeFonts, buttonSizes, colors, fontSizes } from "../styles";
 
@@ -21,7 +20,7 @@ export const SafeAreaTop = styled.SafeAreaView`
 
 export const SafeAreaBottom = styled.SafeAreaView`
     position: absolute;
-    bottom: ${Platform.OS === "android" ? moderateScale(46) : 0};
+    bottom: 0;
     left: 0;
     right: 0;
 `;
@@ -77,6 +76,16 @@ export const TargetWrapper = styled.View`
     align-items: flex-end;
     margin-right: ${moderateScale(10)}px;
     margin-bottom: ${moderateScale(10)}px;
+    z-index: 10;
+    pointer-events: box-none;
+`;
+
+export const TargetWrapperAlt = styled.View`
+    flex: 1; 
+    align-self: flex-end;
+    align-items: flex-end;
+    margin-right: ${moderateScale(-50)}px;
+    margin-bottom: ${moderateScale(20)}px;
     z-index: 10;
     pointer-events: box-none;
 `;

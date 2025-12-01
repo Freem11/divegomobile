@@ -9,10 +9,14 @@ import { DiveSiteBasic } from "../../entities/diveSite";
 import { Coordinates } from "../../entities/coordinates";
 import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
+import SearchTool from "../searchTool";
+import * as S from "../mapPage/styles";
+import ButtonIcon from "../reusables/buttonIcon-new";
+import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
-import { ClusterProperty, PointFeatureCategory } from "./types";
+import { ClusterProperty, MapConfigurations, PointFeatureCategory } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
 import { MarkerDiveSiteCluster } from "./marker/markerDiveSiteCluster";
@@ -21,6 +25,7 @@ import { MarkerHeatPoint } from "./marker/markerHeatPoint";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
+import { useMapStore } from "./useMapStore";
 
 type MapViewProps = {
   mapConfig: number;
@@ -35,14 +40,15 @@ type MapViewProps = {
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
   handleOnMapReady: () => void;
-  diveSites?:  DiveSiteBasic[] | null;
-  diveShops?:  DiveShop[] | null;
-  heatPoints?: HeatPoint[] | null
+  diveSites?: DiveSiteBasic[] | null;
+  diveShops?: DiveShop[] | null;
+  heatPoints?: HeatPoint[] | null;
 };
 
 export default function GoogleMapView(props: MapViewProps) {
-
   const [initialRegion, setInitialRegion] = useState(null);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const mapRegion = useMapStore((state) => state.mapRegion);
 
   const styles = StyleSheet.create({
     container: {
@@ -57,7 +63,7 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   });
 
-  const getCurrentLocation = async() => {
+  const getStartLocation = async () => {
     try {
       const photoLocation = await getMostRecentPhoto();
       if (photoLocation) {
@@ -74,9 +80,25 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   };
 
+  const getCurrentLocation = async () => {
+    try {
+      const { coords } = await getCurrentCoordinates();
+      if (coords) {
+        mapRef?.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
+        }, 500);
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
+  };
   const [map, setMap] = useState<MapView | null>(null);
 
-  const onMapLoad = async(map: MapView) => {
+  const onMapLoad = async (map: MapView) => {
+
     setMap(map);
     if (typeof props.onLoad === "function") {
       props.onLoad(map);
@@ -92,11 +114,19 @@ export default function GoogleMapView(props: MapViewProps) {
   const { clusters, supercluster } = useSupercluster(clusterConfig);
 
   useEffect(() => {
-    getCurrentLocation();
-  },[]);
+    if (mapRegion) {
+      setInitialRegion(mapRegion);
+    } else {
+      getStartLocation();
+    }
+  }, [mapRegion]);
 
   useEffect(() => {
-    (async() => {
+
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       if (!map) {
         return;
       }
@@ -152,10 +182,18 @@ export default function GoogleMapView(props: MapViewProps) {
     })();
   }, [props.diveSites, props.diveShops]);
 
+  if (!initialRegion) {
+    return (
+      <View style={styles.container}>
+        {/* Or a Loading indicator */}
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <MapView
-        key={1}
+        key={props.mapConfig}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         mapType="hybrid"
@@ -171,7 +209,7 @@ export default function GoogleMapView(props: MapViewProps) {
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
-        {clusters.map((cluster) => {
+        {clusters?.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const { cluster: isCluster } = cluster.properties;
 
@@ -206,26 +244,49 @@ export default function GoogleMapView(props: MapViewProps) {
               />
             );
           }
+          return null;
         })}
 
       </MapView>
 
-      {props.mapConfig === 1 && (
-        <MarkerDraggable  />
+      {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
+        <S.SafeAreaTop edges={["top"]}>
+          <SearchTool />
+        </S.SafeAreaTop>
       )}
 
-      {props.mapConfig === 1 && (
+      {props?.mapConfig === MapConfigurations.PinDrop && (
+        <MarkerDraggable />
+      )}
+
+      {props?.mapConfig === MapConfigurations.PinDrop && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+          <S.TargetWrapperAlt>
+            <ButtonIcon
+              icon="target"
+              size={36}
+              onPress={() => getCurrentLocation()}
+              style={{ pointerEvents: "auto" }}
+            />
+          </S.TargetWrapperAlt>
           <ReturnToSiteSubmitterButton />
         </View>
       )}
-      {props.mapConfig === 2 && (
+      {props?.mapConfig === MapConfigurations.TripView && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToShopButton />
         </View>
       )}
-      {props.mapConfig === 3 && (
+      {props?.mapConfig === MapConfigurations.TripBuild && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+          <S.TargetWrapperAlt>
+            <ButtonIcon
+              icon="target"
+              size={36}
+              onPress={() => getCurrentLocation()}
+              style={{ pointerEvents: "auto" }}
+            />
+          </S.TargetWrapperAlt>
           <ReturnToCreateTripButton />
         </View>
       )}

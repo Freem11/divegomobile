@@ -1,19 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { getShopByUserID } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { DiveShop } from "../../../entities/diveShop";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { useAppNavigation } from "../../mapPage/types";
 
 import ShopListPageView from "./shopList";
 
 export default function ShopListPage() {
-
+  const appNavigation = useAppNavigation();
   const { userProfile } = useUserProfile();
   const [listOfShops, setListOfShops] = useState<DiveShop[]>([]);
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
 
   useEffect(() => {
     console.log(userProfile);
@@ -22,7 +19,7 @@ export default function ShopListPage() {
     }
   }, []);
 
-  const getShops = async(id: string) => {
+  const getShops = async (id: string) => {
     try {
       const shops = await getShopByUserID(id);
       if (shops) {
@@ -34,8 +31,7 @@ export default function ShopListPage() {
   };
 
   const handleDiveCenterSelection = (shopId: number) => {
-    setActiveScreen("DiveShopScreen", { id: shopId });
-    setLevelOneScreen(true);
+    appNavigation.navigate("DiveShopNavigator", { id: shopId });
   };
 
   return (

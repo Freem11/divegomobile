@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import {
   colors,

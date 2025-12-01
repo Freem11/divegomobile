@@ -8,11 +8,11 @@ import { showError, showSuccess, showWarning } from "../../toast";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import { useUserHandler } from "../../../store/user/useUserHandler";
 
 import { BasicFormData } from "./editsParallax";
 import { Form } from "./form";
 import EditScreenView from "./view";
-import { useUserHandler } from "../../../store/user/useUserHandler";
 
 type EdittingScreenProps = {
   localPreviewUri: string | null
@@ -33,7 +33,7 @@ export default function EdittingScreen({
   const { setSelectedProfile } = useContext(SelectedProfileContext);
   const userHandler = useUserHandler();
 
-  const tryUpload = async(uri: string) => {
+  const tryUpload = async (uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
@@ -42,7 +42,7 @@ export default function EdittingScreen({
     }
   };
 
-  const onSubmit = async(formData: Required<Form>) => {
+  const onSubmit = async (formData: Required<Form>) => {
 
     if (!formData.name) {
       showWarning("Please fill in all required fields.");
@@ -50,14 +50,14 @@ export default function EdittingScreen({
     }
 
     let formDataUri: string;
-    if (formData.uri){
+    if (formData.uri) {
       formDataUri = formData.uri.split("/").pop() || "X";
     } else {
       formDataUri = "X";
     }
 
     let uploadedPhotoUri: string;
-    if (localPreviewUri){
+    if (localPreviewUri) {
       uploadedPhotoUri = localPreviewUri.split("/").pop() || "X";
     } else {
       uploadedPhotoUri = "X";
@@ -65,7 +65,7 @@ export default function EdittingScreen({
 
     let updatedUri = null;
 
-    if (formDataUri !== uploadedPhotoUri){
+    if (formDataUri !== uploadedPhotoUri) {
       setIsUploading(true);
 
       try {
@@ -86,38 +86,38 @@ export default function EdittingScreen({
       }
     }
 
-    if (initialFormData.dataType === "Dive Site"){
+    if (initialFormData.dataType === "Dive Site") {
       const response = await updateDiveSite({
-        id:                   formData.id,
-        name:                 formData.name,
-        diveSiteBio:          formData.bio,
+        id: formData.id,
+        name: formData.name,
+        diveSiteBio: formData.bio,
         diveSiteProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
       setSelectedDiveSite(response);
-      if (response){setSupabaseResponse(response);}
-    } else if (initialFormData.dataType === "Dive Center"){
+      if (response) { setSupabaseResponse(response); }
+    } else if (initialFormData.dataType === "Dive Center") {
       const response = await updateDiveShop({
-        id:                   formData.id,
-        orgName:              formData.name,
-        diveShopBio:          formData.bio,
+        id: formData.id,
+        orgName: formData.name,
+        diveShopBio: formData.bio,
         diveShopProfilePhoto: updatedUri ? updatedUri : formData.uri
       });
       setSelectedShop(response);
-      if (response){setSupabaseResponse(response);}
+      if (response) { setSupabaseResponse(response); }
 
-    }  else if (initialFormData.dataType === "Profile"){
+    } else if (initialFormData.dataType === "Profile") {
       const response = await updateProfile({
-        id:             formData.id,
-        UserName:       formData.name,
-        profileBio:     formData.bio,
-        profilePhoto:   updatedUri ? updatedUri : formData.uri
+        id: formData.id,
+        UserName: formData.name,
+        profileBio: formData.bio,
+        profilePhoto: updatedUri ? updatedUri : formData.uri
       });
       setSelectedProfile(response);
       userHandler.userInit(true);
-      if (response){setSupabaseResponse(response);}
+      if (response) { setSupabaseResponse(response); }
     }
 
-    if (supabaseResponse && supabaseResponse.error){
+    if (supabaseResponse && supabaseResponse.error) {
       showError("unable to save updates, please try again later");
       return;
     }

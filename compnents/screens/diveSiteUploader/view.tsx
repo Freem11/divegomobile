@@ -1,13 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { ScreenReturn } from "../../googleMap/types";
+import { MapConfigurations, ScreenReturn } from "../../googleMap/types";
 import { showWarning } from "../../toast";
+import { useAppNavigation } from "../../mapPage/types";
+import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 
 import { Form, FormRules } from "./form";
 import * as S from "./styles";
@@ -29,7 +30,10 @@ export default function DiveSiteUploaderView({
 }: Props) {
 
   const { t } = useTranslation();
-  const { levelTwoScreen } = useContext(LevelTwoScreenContext);
+  const navigation = useAppNavigation();
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
   const { control, handleSubmit, formState: { isSubmitting, errors }, getValues, reset } = useForm<Form>({
@@ -45,16 +49,18 @@ export default function DiveSiteUploaderView({
     });
   };
 
-  useEffect(() => {
-    if (levelTwoScreen){
-      restoreParallax();
-    }
-  }, [levelTwoScreen]);
+  const handleMapFlip = async (formData: Required<Form>) => {
+    if (mapRef) {
+      setInitConfig(MapConfigurations.PinDrop);
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
 
-  const handleMapFlip = async(formData: Required<Form>) => {
-    setMapConfig(1, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
-    closeParallax(1);
-    setFormValues(formData);
+      navigation.navigate("GoogleMap");
+
+      setMapConfig(MapConfigurations.PinDrop, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
+      setFormValues(formData);
+    }
+
   };
 
   useEffect(() => {
@@ -96,7 +102,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Latitude}
                 iconLeft="latitude"
                 placeholder={t("DiveSiteAdd.latPlaceholder")}
-                value={value ? String(value): null}
+                value={value ? String(value) : null}
                 onChangeText={onChange}
                 keyboardType="numbers-and-punctuation"
               />
@@ -114,7 +120,7 @@ export default function DiveSiteUploaderView({
                 error={errors.Longitude}
                 iconLeft="longitude"
                 placeholder={t("DiveSiteAdd.lngPlaceholder")}
-                value={value ? String(value): null}
+                value={value ? String(value) : null}
                 onChangeText={onChange}
                 keyboardType="numbers-and-punctuation"
               />

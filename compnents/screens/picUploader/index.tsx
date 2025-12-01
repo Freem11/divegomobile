@@ -1,4 +1,4 @@
-import React, { Dispatch, useContext, useState } from "react";
+import React, { Dispatch, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "react-i18next";
 
@@ -10,8 +10,8 @@ import { saveFailedUpload } from "../../feed/store/asyncStore";
 import { FailedUploadFeedItem, FEED_ITEM_TYPE, RETRY_TYPE } from "../../feed/store/types";
 import { checkNetworkStatus } from "../../feed/store/utils";
 import { DynamicSelectOptionsAnimals } from "../../../entities/DynamicSelectOptionsAnimals";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { DiveSiteWithUserName } from "../../../entities/diveSite";
 
 import PicUploaderView from "./view";
 
@@ -44,6 +44,7 @@ type PicUploaderProps = {
   handleImageUpload?: () => void;
   localPreviewUri: string;
   setLocalPreviewUri: Dispatch<React.SetStateAction<string | null>>;
+  selectedDiveSite: DiveSiteWithUserName;
 };
 
 export default function PicUploader({
@@ -51,14 +52,14 @@ export default function PicUploader({
   handleImageUpload,
   localPreviewUri,
   setLocalPreviewUri,
+  selectedDiveSite
 }: PicUploaderProps) {
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const selectedDiveSite = useActiveScreenStore((state) => state.activeScreen.params);
 
-  const tryUpload = async(uri: string) => {
+  const tryUpload = async (uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
@@ -102,7 +103,7 @@ export default function PicUploader({
     };
   };
 
-  const onSubmitOrCache = async(formData: Required<Form>) => {
+  const onSubmitOrCache = async (formData: Required<Form>) => {
     console.log("1 onSubmitOrCache", formData);
     if (!localPreviewUri || !formData.date || !formData.animal) {
       showWarning(t("PicUploader.fillRequiredFields"));
@@ -120,7 +121,7 @@ export default function PicUploader({
     }
   };
 
-  const onSubmit = async(formData: Required<Form>) => {
+  const onSubmit = async (formData: Required<Form>) => {
     setIsUploading(true);
     try {
       const fileName = await tryUpload(localPreviewUri);
@@ -161,6 +162,8 @@ export default function PicUploader({
       setIsUploading(false);
     }
   };
+
+  console.log(selectedDiveSite);
 
   return (
     <PicUploaderView

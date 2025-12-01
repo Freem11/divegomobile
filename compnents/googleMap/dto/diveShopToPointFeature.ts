@@ -9,7 +9,7 @@ export const diveShopToPointFeature = (diveShop: DiveShop) => {
     type: "Feature",
     properties: {
       id: diveShop.id,
-      title: diveShop.orgname,
+      title: diveShop.orgName,
       category: PointFeatureCategory.DiveShop,
     },
     geometry: { type: "Point", coordinates: [diveShop.lng, diveShop.lat] },

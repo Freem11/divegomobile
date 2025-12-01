@@ -8,13 +8,22 @@ import { useUserHandler } from "../../../store/user/useUserHandler";
 import LoginPageView from "./view";
 import { Form } from "./form";
 
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AuthenticationRoutes } from "../authNavigator";
+
+export type LoginScreenNavigationProp = NativeStackNavigationProp<
+  AuthenticationRoutes,
+  "Login"
+>;
+
 interface IProps {
   moveToSignUpPage: () => void;
   moveToLandingPage: () => void;
   moveToForgotPasswordPage: () => void;
 }
 
-export default function LoginPage(props: IProps) {
+export default function LoginScreen(props: IProps) {
   const userHandler = useUserHandler();
 
   const onSubmit = async(data: Form) => {
@@ -35,11 +44,13 @@ export default function LoginPage(props: IProps) {
     }
   };
 
+  const navigation = useNavigation<LoginScreenNavigationProp>();
+
   return (
     <LoginPageView
-      moveToLandingPage={props.moveToLandingPage}
-      moveToForgotPasswordPage={props.moveToForgotPasswordPage}
-      moveToSignUpPage={props.moveToSignUpPage}
+      moveToLandingPage={() => navigation.goBack()}
+      moveToForgotPasswordPage={() => navigation.navigate("ForgotPassword")}
+      moveToSignUpPage={() => navigation.replace("SignUp")}
       onSubmit={onSubmit}
     />
   );

@@ -13,7 +13,7 @@ type CardProps = {
   photoPath: string;
   subData?: string
   onPressHandler: () => void;
-  seaLifeSelections?: string[]
+  seaLifeSelections?: string
 };
 
 export default function Card(props: CardProps) {
@@ -34,7 +34,7 @@ export default function Card(props: CardProps) {
           }}
         />
         <S.Overlay pointerEvents="none">
-          {props.seaLifeSelections && props.seaLifeSelections.includes(props.name) ? <Histogram animal={props.name} /> : null}
+          {props.seaLifeSelections && props.seaLifeSelections === props.name ? <Histogram animal={props.name} /> : null}
           <S.SeaLifeName>{props.name}</S.SeaLifeName>
           <S.SubData>{props.subData}</S.SubData>
         </S.Overlay>

@@ -5,11 +5,11 @@ import Svg, { Path } from "react-native-svg";
 import { moderateScale } from "react-native-size-matters";
 
 import { Coordinates } from "../../../../entities/coordinates";
-import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { LevelOneScreenContext } from "../../../contexts/levelOneScreenContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
 import iconConfig from "../../../../icons/_config.json";
+import { useAppNavigation } from "../../../mapPage/types";
+import { MapConfigurations } from "../../types";
 
 type MarkerDiveSiteProps = {
   id: number;
@@ -17,10 +17,9 @@ type MarkerDiveSiteProps = {
 };
 
 export function MarkerDiveSite(props: MarkerDiveSiteProps) {
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
+  const navigation = useAppNavigation();
   const mapConfig = useMapStore((state) => state.mapConfig);
   const [tracksViewChanges, setTracksViewChanges] = useState(true);
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
   const pathData = iconConfig.anchor?.[1] ?? "";
@@ -30,19 +29,20 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
   const translate = center * (1 - scale); // 38.4
 
   const handleScreen = () => {
-    setActiveScreen("DiveSiteScreen", { id: props.id });
-    setLevelOneScreen(true);
+    navigation.navigate("DiveSiteNavigator", { id: props.id });
   };
 
   function handlePress() {
-    if (mapConfig !== 3) {
+    if (mapConfig !== MapConfigurations.TripBuild) {
       handleScreen();
     } else {
+      setTracksViewChanges(false);
       if (sitesArray.includes(props.id)) {
         setSitesArray(prev => prev.filter(id => id !== props.id));
       } else {
         setSitesArray(prev => [...prev, props.id]);
       }
+      setTracksViewChanges(true);
     }
   }
 
@@ -54,7 +54,7 @@ export function MarkerDiveSite(props: MarkerDiveSiteProps) {
       onPress={handlePress}
     >
       <View style={{ width: moderateScale(30), height: moderateScale(30) }}>
-        <Svg width={moderateScale(30)}height={moderateScale(30)} viewBox="0 0 512 512">
+        <Svg width={moderateScale(30)} height={moderateScale(30)} viewBox="0 0 512 512">
           <Path
             d={pathData as string}
             fill={sitesArray.includes(props.id) ? "gold" : "skyblue"}

@@ -1,53 +1,50 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
+import { RouteProp, useRoute } from "@react-navigation/native";
 
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
 import noImage from "../../png/NoImage.png";
 import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { LevelTwoScreenContext } from "../../contexts/levelTwoScreenContext";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { EditsContext } from "../../contexts/editsContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { MainRoutes } from "../../mapPage/mainNavigator";
+import { useAppNavigation } from "../../mapPage/types";
+import { MapConfigurations } from "../../googleMap/types";
+
+import { useDiveShopNavigation } from "./types";
 
 import DiveShopScreen from ".";
 
-type DiveCentreProps = {
-  shopID: number
+type DiveShopParallaxProps = {
+  id: number;
 };
 
-export default function DiveShopParallax(props: DiveCentreProps) {
+type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
+
+export default function DiveShopParallax(props: DiveShopParallaxProps) {
+  const diveShopNavigation = useDiveShopNavigation();
   const { t } = useTranslation();
-  const setActiveScreen = useActiveScreenStore((state) => state.setActiveScreen);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-  const { levelTwoScreen, setLevelTwoScreen } = useContext(
-    LevelTwoScreenContext
-  );
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
   const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const { userProfile } = useUserProfile();
   const [isMyShop, setIsMyShop] = useState(false);
 
-  const { editInfo, setEditInfo } = useContext(EditsContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { setEditInfo } = useContext(EditsContext);
 
   useEffect(() => {
     getDiveSiteinfo();
-  }, [props.shopID]);
+  }, [props.id]);
 
-  const getDiveSiteinfo = async() => {
-    const diveCentreinfo = await getDiveShopById(props.shopID);
+  const getDiveSiteinfo = async () => {
+    const diveCentreinfo = await getDiveShopById(props.id);
     setSelectedShop(diveCentreinfo[0]);
   };
 
@@ -75,27 +72,24 @@ export default function DiveShopParallax(props: DiveCentreProps) {
 
   }, [selectedShop]);
 
-  const onClose = () => {
-    setLevelOneScreen(false);
+  const onClose = async () => {
+    diveShopNavigation.goBack();
   };
 
+  //Needs Navigator
   const onNavigate = () => {
     Keyboard.dismiss();
     setChosenModal("DiveSite");
-    setMapConfig(2, { pageName: "DiveShop", itemId: selectedShop.id });
-    setLevelOneScreen(false);
+    setMapConfig(MapConfigurations.TripView, { pageName: "DiveShop", itemId: selectedShop.id });
   };
 
   const openTripCreatorScreen = () => {
-    setLevelOneScreen(false);
-    setLevelTwoScreen(true);
-    setActiveScreen("TripCreatorScreen");
+    diveShopNavigation.navigate("TripCreator", { id: null, subTitle: "New Trip", shopId: selectedShop.id });
   };
 
   const openEditsPage = () => {
-    setFullScreenModal(true);
+    diveShopNavigation.navigate("EditScreen");
     setEditInfo("DiveShop");
-    setActiveTutorialID("EditsScreen");
   };
 
   const popoverContent = () => {
@@ -123,7 +117,7 @@ export default function DiveShopParallax(props: DiveCentreProps) {
       popoverContent={isMyShop && popoverContent}
       isMyShop={isMyShop}
     >
-      <DiveShopScreen isMyShop={isMyShop} selectedShop={selectedShop}/>
+      <DiveShopScreen isMyShop={isMyShop} selectedShop={selectedShop} />
     </ParallaxDrawer>
   );
 }

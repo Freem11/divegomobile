@@ -16,8 +16,8 @@ export type PicUploaderRetryPayload = [
     photoFile: string | null;
     label: string;
     dateTaken: string;
-    latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
     UserId: string;
   }
 ];

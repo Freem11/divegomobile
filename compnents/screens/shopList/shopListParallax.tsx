@@ -1,53 +1,43 @@
-import React, { useContext } from "react";
+import React, { } from "react";
+import { Keyboard } from "react-native";
+import { useTranslation } from "react-i18next";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+
+import { useMapStore } from "../../googleMap/useMapStore";
+import Center from "../../png/Beach.jpg";
+import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
+import { MapConfigurations } from "../../googleMap/types";
 
 import ShopListPage from ".";
 
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-
-;
-import { Keyboard } from "react-native";
-import { useTranslation } from "react-i18next";
-
-import Center from "../../png/Beach.jpg";
-import { useMapStore } from "../../googleMap/useMapStore";
-import { LevelOneScreenContext } from "../../contexts/levelOneScreenContext";
+type ShopListParallaxNavigationProp = BottomTabNavigationProp<
+  BottomTabRoutes,
+  "Itinerary"
+>;
 
 export default function ShopListParallax() {
   const { t } = useTranslation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const navigation = useNavigation<ShopListParallaxNavigationProp>();
 
-  const { setLevelOneScreen } = useContext(LevelOneScreenContext);
-
-  const onClose = () => {
-    setLevelOneScreen(false);
+  const onClose = async () => {
+    navigation.goBack();
   };
 
-  const onNavigate = async() => {
+  const onNavigate = async () => {
     Keyboard.dismiss();
-    setMapConfig(3, { pageName: "Diveshop", itemId: 0 });
-    setLevelOneScreen(false);
+    setMapConfig(MapConfigurations.TripBuild, { pageName: "Diveshop", itemId: 0 });
   };
-
-  // const popoverContent = () => {
-  //   return (
-  //   <>
-  //   <IconWithLabel
-  //   label={t('TripCreator.cloneButton')}
-  //   iconName="vector-arrange-below"
-  //   buttonAction={() => cloneButtonPress()}
-  //   />
-  //   </>
-  //   )
-  // };
 
   return (
     <ParallaxDrawer
       headerImage={Center}
       onClose={onClose}
       onMapFlip={onNavigate}
-      // popoverContent={popoverContent}
     >
-      <ShopListPage/>
+      <ShopListPage />
 
     </ParallaxDrawer>
   );

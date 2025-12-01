@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { TouchableOpacity, Image as RNImage } from "react-native";
+import React, { useState, useContext } from "react";
+import { TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import email from "react-native-email";
@@ -15,11 +15,11 @@ import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { windowWidth } from "../paginator/styles";
-import { useActiveScreenStore } from "../../../store/useActiveScreenStore";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { cloudflareBucketUrl } from "../../globalVariables";
 import { createPhotoLikeNotification, deletePhotoLikeNotification } from "../../../supabaseCalls/notificationsSupabaseCalls";
+import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
 
@@ -52,9 +52,8 @@ interface PictureProps {
 const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-  const activeScreen2 = useActiveScreenStore((state) => state.activeScreen);
 
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
+  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
   const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { userProfile } = useUserProfile();
   const { setSelectedPicture } = useContext(SelectedPictureContext);
@@ -68,6 +67,8 @@ const SeaLifeImageCard = (props: PictureProps) => {
   // Construct remote image URL
   const fileName = pic.photoFile?.split("/").pop();
   const remoteUri = `${cloudflareBucketUrl}${fileName}`;
+
+  const navigation = useAppNavigation();
 
   // useEffect(() => {
   //   if (remoteUri) {
@@ -98,7 +99,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }).catch(console.error);
   };
 
-  const handleLike = async(picId: number) => {
+  const handleLike = async (picId: number) => {
     if (picLiked) {
       await deletePhotoLike(likeData);
       setPicLiked(false);
@@ -124,8 +125,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const togglePhotoBoxModal = (photo: string) => {
     setSelectedPhoto(photo);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
+    navigation.navigate("PinchAndZoomPhoto");
   };
 
   const containerWidth = windowWidth - windowWidth * 0.07;

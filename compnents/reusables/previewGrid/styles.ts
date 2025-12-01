@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 
-import { activeFonts, colors } from "../../styles";
+import { activeFonts, colors, fontSizes } from "../../styles";
 
 export const Wrapper = styled.View`
   align-self: center;
@@ -32,4 +32,5 @@ export const AddSightingText = styled.Text`
   flex-direction: column;
   color: ${colors.primaryBlue};
   font-family: ${activeFonts.Medium};
+  font-size: ${moderateScale(fontSizes.XSmall)}px;
 `;

@@ -4,6 +4,7 @@ import { moderateScale } from "react-native-size-matters";
 
 import readableDate from "../../helpers/readableDate";
 import { Review, ReviewCondition } from "../../../entities/diveSiteReview";
+import { cloudflareBucketUrl } from "../../globalVariables";
 
 import * as S from "./styles";
 import { renderLabel } from "./conditionLabel";
@@ -22,17 +23,18 @@ type ReviewCardViewProps = {
   onDelete: (reviewId: number) => void;
 };
 
-export default function ReviewCardView({ userName,photo , date, description, conditions, review, currentUserId, onEdit, onDelete }: ReviewCardViewProps) {
+export default function ReviewCardView({ userName, photo , date, description, conditions, review, currentUserId, onEdit, onDelete }: ReviewCardViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
+  const fileName = photo?.split("/").pop();
 
   return (
     <S.Card>
       <S.Header>
         <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-          <Avatar photo={photo}/>
+          <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`}/>
           <S.UserInfo>
             <S.Title>{userName}</S.Title>
             <S.Date>

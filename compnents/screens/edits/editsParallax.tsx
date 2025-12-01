@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import noImage from "../../png/NoImage.png";
 import { chooseImageHandler } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { EditsContext } from "../../contexts/editsContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import { useAppNavigation } from "../../mapPage/types";
 
 import EdittingScreen from ".";
 
@@ -25,8 +24,6 @@ export type BasicFormData = {
 };
 
 export default function EditScreenParallax() {
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { activeTutotialID, setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { editInfo } = useContext(EditsContext);
   const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
   const { selectedShop } = useContext(SelectedShopContext);
@@ -45,7 +42,7 @@ export default function EditScreenParallax() {
           id: selectedDiveSite.id,
           name: selectedDiveSite.name,
           bio: selectedDiveSite.diveSiteBio,
-          uri: selectedDiveSite.diveSiteProfilePhoto ? selectedDiveSite.diveSiteProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
+          uri: selectedDiveSite.diveSiteProfilePhoto ? selectedDiveSite.diveSiteProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}` : null,
           placeholderName: "Dive Site Name cannot be blank!",
           placeholderBio: `A little about ${selectedDiveSite.name}`
         });
@@ -58,7 +55,7 @@ export default function EditScreenParallax() {
           id: selectedShop.id,
           name: selectedShop.orgName,
           bio: selectedShop.diveShopBio,
-          uri: selectedShop.diveShopProfilePhoto ? selectedShop.diveShopProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
+          uri: selectedShop.diveShopProfilePhoto ? selectedShop.diveShopProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}` : null,
           placeholderName: "Dive Centre Name cannot be blank!",
           placeholderBio: `A little about ${selectedShop.orgName}`
         });
@@ -71,17 +68,18 @@ export default function EditScreenParallax() {
           id: selectedProfile.id,
           name: selectedProfile.UserName,
           bio: selectedProfile.profileBio,
-          uri: selectedProfile.profilePhoto ? selectedProfile.profilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}`: null,
+          uri: selectedProfile.profilePhoto ? selectedProfile.profilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}` : null,
           placeholderName: "You Diver Name cannot be blank!",
           placeholderBio: "Tell other divers about yourself"
         });
         break;
     }
-  },[selectedDiveSite, selectedShop, selectedProfile, editInfo, activeTutotialID]);
+  }, [selectedDiveSite, selectedShop, selectedProfile, editInfo]);
 
-  const onClose = () => {
-    setFullScreenModal(false);
-    setActiveTutorialID(null);
+  const navigation = useAppNavigation();
+
+  const onClose = async () => {
+    navigation.goBack();
   };
 
   const popoverContent = () => {
@@ -96,7 +94,7 @@ export default function EditScreenParallax() {
     );
   };
 
-  const handleSelectImage = async() => {
+  const handleSelectImage = async () => {
     try {
       const result = await chooseImageHandler();
       if (result?.assets?.[0]?.uri) {
@@ -107,7 +105,7 @@ export default function EditScreenParallax() {
     }
   };
 
-  const handleImageUpload = async(argPicture: string) => {
+  const handleImageUpload = async (argPicture: string) => {
     setLocalPreviewUri(argPicture);
   };
 

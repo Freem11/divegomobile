@@ -26,8 +26,8 @@ import {
   buttonSizes,
 } from "../../styles";
 import { SearchStatusContext } from "../../contexts/searchStatusContext";
+import { region } from "../../../entities/region";
 
-import * as S from "./styles";
 import HorizontalPager from "./flatListCombo.tsx";
 
 const windowWidth = Dimensions.get("window").width;
@@ -37,10 +37,22 @@ const DRAWER_CLOSED = moderateScale(30);
 const DRAWER_PARTIAL = moderateScale(120);
 const DRAWER_OPEN = windowHeight;
 
-export default function BottomDrawer() {
+type BottomDrawerProps = {
+  mapRegion: region,
+  mapConfig: number
+};
+export default function BottomDrawer({ mapRegion, mapConfig }: BottomDrawerProps) {
   const { searchStatus, setSearchStatus } = useContext(SearchStatusContext);
 
-  const boxheight = useSharedValue(DRAWER_OPEN);
+  let drawerStart: number;
+
+  if (mapConfig === 0 && mapRegion) {
+    drawerStart = DRAWER_PARTIAL;
+  } else {
+    drawerStart = DRAWER_OPEN;
+  }
+
+  const boxheight = useSharedValue(drawerStart);
   const buttonWidth = useSharedValue(moderateScale(buttonSizes.small.width));
   const buttonOpacity = useSharedValue(1);
   const buttonActiveProgress = useSharedValue(1);
