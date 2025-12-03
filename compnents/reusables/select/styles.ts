@@ -8,7 +8,7 @@ import {
 } from "../../styles";
 
 export const Container = styled.View`
-  position: relative; /* ⬅️ CRITICAL CHANGE */
+  position: relative;
   width: 100%;
   border-color: ${props => props.hasError ? colors.red : colors.border};
   border-width: ${moderateScale(1)}px;
@@ -22,7 +22,7 @@ export const Trigger = styled.TouchableOpacity`
 `;
 
 export const IconLeft = styled.View`
-  margin-right: ${moderateScale(6)}px;
+  margin-horizontal: ${moderateScale(7)}px;
   width: ${moderateScale(24)}px;
   height:${moderateScale(24)}px;
 `;
