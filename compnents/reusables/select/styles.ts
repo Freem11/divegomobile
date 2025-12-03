@@ -8,10 +8,11 @@ import {
 } from "../../styles";
 
 export const Container = styled.View`
+  position: relative; /* ⬅️ CRITICAL CHANGE */
+  width: 100%;
   border-color: ${props => props.hasError ? colors.red : colors.border};
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(8)}px;
-   padding-horizontal: ${moderateScale(6)}px;
 `;
 
 export const Trigger = styled.TouchableOpacity`
@@ -47,5 +48,14 @@ export const Arrow = styled.Text`
 `;
 
 export const DropdownWrapper = styled.View`
-  margin-top:  ${moderateScale(4)}px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: white;
+  border-width: 1px;
+  border-color: #ccc;
+  border-top-width: 0;
 `;

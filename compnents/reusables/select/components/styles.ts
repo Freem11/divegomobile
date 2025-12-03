@@ -41,16 +41,18 @@ export const SearchTerm = styled.Text`
 //DropDownItem
 
 export const ItemWrapper = styled.View`
-   margin-vertical: ${moderateScale(4)}px;
+   margin-horizontal: ${moderateScale(6)}px;
+   margin-vertical: ${moderateScale(2)}px;
 `;
 
 export const ItemButton = styled.TouchableOpacity<{ selected: boolean }>`
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 10px;
   background-color: ${({ selected }) => (selected ? "#cce5ff" : "#eee")};
 `;
 
 export const ItemText = styled.Text`
+  text-align: center;
   font-size: ${moderateScale(16)}px;;
 `;
 
