@@ -1,22 +1,26 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
-} from '../../../styles';
+} from "../../../styles";
 
 //DropDown
 
 export const Dropdown = styled.View`
-  border-color:${colors.neutralGrey};
-  border-width: ${moderateScale(1)}px;
-  border-radius: ${moderateScale(4)}px;
-  padding-vertical: ${moderateScale(8)}px;
-  padding-horizontal: ${moderateScale(12)}px;
+  border-color: #dadada;
+  border-top-width: ${(props) =>
+    props.childCount === 0 ? "0px" : `${moderateScale(1)}px`};
+  border-radius: ${(props) =>
+    props.childCount === 0 ? "0px" : `${moderateScale(10)}px`};
+  padding-vertical: ${(props) =>
+    props.childCount === 0 ? "0px" : `${moderateScale(8)}px`};
 `;
 
 export const OptionList = styled.View`
   flex-direction: column;
+
 `;
 
 export const CreateButton = styled.TouchableOpacity`
@@ -24,6 +28,7 @@ export const CreateButton = styled.TouchableOpacity`
   padding:  ${moderateScale(10)}px;
   background-color: ${colors.buttonPressOverlay};
   border-radius: ${moderateScale(4)}px;
+  
 `;
 
 export const TextWrapper = styled.Text`
@@ -42,13 +47,12 @@ export const ItemWrapper = styled.View`
 export const ItemButton = styled.TouchableOpacity<{ selected: boolean }>`
   padding: 10px;
   border-radius: 4px;
-  background-color: ${({ selected }) => (selected ? '#cce5ff' : '#eee')};
+  background-color: ${({ selected }) => (selected ? "#cce5ff" : "#eee")};
 `;
 
 export const ItemText = styled.Text`
   font-size: ${moderateScale(16)}px;;
 `;
-
 
 //SelectedTag
 

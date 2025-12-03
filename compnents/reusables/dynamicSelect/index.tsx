@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import Select, { SelectProps } from '../select';
-import { TextInput } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { TextInput } from "react-native";
+
+import Select, { SelectProps } from "../select";
 
 const defaultProps = {
   searchLimit: 100,
@@ -25,6 +26,7 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
     const [options, setOptions] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
     const [searchOffset, setSearchOffset] = useState(0);
+    const [currentSearch, setCurrentSearch] = useState("");
 
     useEffect(() => {
       init();
@@ -41,7 +43,7 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
         }
 
         if (!props.disabled) {
-          loadOptions('');
+          loadOptions("", 0, true);
         }
       } catch (e) {
         setIsFetching(false);
@@ -50,19 +52,22 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
     };
 
     const onSearch = (search: string) => {
-      loadOptions(search, true);
+      setCurrentSearch(search);
+      loadOptions(search, 0, true);
     };
 
     const loadOptions = async (
       search: string,
+      offset: number,
       replaceExistingOptions = false
     ) => {
       if (!getMoreOptions) return;
 
       setIsFetching(true);
+
       const [data] = await Promise.all([
-        getMoreOptions(search, searchLimit, searchOffset),
-        new Promise(resolve => setTimeout(resolve, 300)), // artificial delay
+        getMoreOptions(search, searchLimit, offset),
+        new Promise(resolve => setTimeout(resolve, 300)),
       ]);
 
       setIsFetching(false);

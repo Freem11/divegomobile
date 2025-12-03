@@ -1,20 +1,23 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   activeFonts,
   colors,
   fontSizes,
-} from '../../styles';
+} from "../../styles";
 
 export const Container = styled.View`
+  border-color: ${props => props.hasError ? colors.red : colors.border};
+  border-width: ${moderateScale(1)}px;
+  border-radius: ${moderateScale(8)}px;
+   padding-horizontal: ${moderateScale(6)}px;
 `;
 
 export const Trigger = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   padding-top:  ${moderateScale(4)}px;
-  border-color: ${colors.neutralGrey};
-  border-bottom-width:  ${moderateScale(2)}px;
 `;
 
 export const IconLeft = styled.View`
