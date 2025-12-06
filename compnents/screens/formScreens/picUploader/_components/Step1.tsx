@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Dimensions, Pressable } from "react-native";
 import { Control, Controller, FieldErrors, UseFormWatch } from "react-hook-form";;
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -20,6 +20,8 @@ interface Step1Props {
   setValue: (name: keyof Form, value: any) => void
   errors: FieldErrors<Form>
   watch: UseFormWatch<Form>
+  images: string[],
+  setImages: React.Dispatch<React.SetStateAction<string[]>>
   datePickerVisible: boolean
   showDatePicker: () => void
   hideDatePicker: () => void
@@ -31,12 +33,13 @@ export const Step1: React.FC<Step1Props> = ({
   setValue,
   errors,
   watch,
+  images,
+  setImages,
   datePickerVisible,
   showDatePicker,
   hideDatePicker,
 }) => {
   const { t } = useTranslation();
-  const [images, setImages] = useState([]);
   const screenWidth = Dimensions.get("window").width;
 
   const handleDatePickerConfirm = (selectedDate: Date) => {

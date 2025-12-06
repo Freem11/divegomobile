@@ -10,7 +10,7 @@ import { ProgressBar } from "../progressBar";
 import { StepNavigation } from "../stepNavigation";
 import * as S from "../styles";
 
-import { Step1, Step2, Step3 } from "./_components";
+import { Step1, StepX, Step3 } from "./_components";
 import { Form } from "./form";
 
 type PicUploaderProps = {
@@ -28,6 +28,7 @@ type PicUploaderProps = {
   isCompleted?: boolean;
   trigger: UseFormTrigger<Form>;
   existingPhotos: ReviewPhotos[]
+  getMoreAnimals: (search: string, limit: number, skip: number) => Promise<any>
 };
 
 export default function PicUploaderPageView({
@@ -42,11 +43,19 @@ export default function PicUploaderPageView({
   onSubmit,
   isCompleted = false,
   trigger,
+  getMoreAnimals,
   existingPhotos
 }: PicUploaderProps) {
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  const [images, setImages] = useState([]);
+  const [steps, setSteps] = useState(2);
+
+  useEffect(() => {
+    setSteps(images.length + 2);
+  }, [images]);
+
+  const totalSteps = 2 + (images && images.length);
 
   const handleGoNext = useCallback(async () => {
     let fieldsToValidate: (keyof Form)[] = [];
@@ -75,13 +84,15 @@ export default function PicUploaderPageView({
 
   useEffect(() => {
     if (isCompleted) {
-      setCurrentStep(4);
+      setCurrentStep(images.length + 1);
     }
   }, [isCompleted]);
 
+  console.log("currentStep", currentStep);
+  console.log("images", images.length);
   return (
     <S.ContentContainer insets={insets}>
-      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+      <ProgressBar currentStep={currentStep} totalSteps={steps} />
 
       <ScrollView
         style={{ flex: 1, width: "100%" }}
@@ -95,6 +106,8 @@ export default function PicUploaderPageView({
             setValue={setValue}
             errors={errors}
             watch={watch}
+            images={images}
+            setImages={setImages}
             datePickerVisible={datePickerVisible}
             showDatePicker={showDatePicker}
             hideDatePicker={() => {
@@ -103,28 +116,30 @@ export default function PicUploaderPageView({
             }}
           />
         )}
-        {currentStep === 2 && (
-          <Step2
+
+        {currentStep > 1 && currentStep <= images.length + 1 && (
+          <StepX
+            image={images[currentStep - 2]}
+            control={control}
             watch={watch}
+            errors={errors}
+            getMoreAnimals={getMoreAnimals}
           />
         )}
-        {currentStep === 3 && (
+
+        {currentStep === images.length + 2 && (
           <Step3
             control={control}
             setValue={setValue}
             watch={watch}
             errors={errors}
-            existingPhotos={existingPhotos}
           />
-        )}
-        {currentStep === 4 && (
-          <Step4 />
         )}
       </ScrollView>
 
       <StepNavigation
         currentStep={currentStep}
-        totalSteps={totalSteps}
+        totalSteps={steps}
         onBack={() => setCurrentStep(currentStep - 1)}
         onNext={handleGoNext}
         onSubmit={onSubmit}

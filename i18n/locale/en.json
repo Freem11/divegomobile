@@ -97,6 +97,9 @@
     "PicUploader": {
         "step1Title": "When your sighting(s) happened",
         "datePlaceholder": "Date of your Sighting(s)",
+        "stepXTitle": "Sea Life Identification",
+        "stepXDescription": "( Your best guess is fine )",
+        "seaLifeId": "What's This?",
         "header": "Your Sea Creature Sighting",
         "uploadButton": "Upload a Photo",
         "whatLabel": "What you saw",

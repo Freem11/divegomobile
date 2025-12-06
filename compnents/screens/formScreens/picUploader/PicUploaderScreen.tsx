@@ -12,6 +12,7 @@ import { useUserProfile } from "../../../../store/user/useUserProfile";
 import { RootStackParamList } from "../../../../providers/navigation";
 import { imageUploadMultiple } from "../../imageUploadHelpers";
 import { showError } from "../../../toast";
+import { DynamicSelectOptionsAnimals } from "../../../../entities/DynamicSelectOptionsAnimals";
 
 import PicUploaderPageView from "./picUploader";
 import { Form } from "./form";
@@ -156,6 +157,7 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
         isCompleted={isCompleted}
         trigger={trigger}
         existingPhotos={reviewToEdit?.photos}
+        getMoreAnimals={DynamicSelectOptionsAnimals.getMoreOptions}
       />
     </View>
   );
