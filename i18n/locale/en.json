@@ -95,6 +95,8 @@
         "submitButton": "Submit"
     },
     "PicUploader": {
+        "step1Title": "When your sighting(s) happened",
+        "datePlaceholder": "Date of your Sighting(s)",
         "header": "Your Sea Creature Sighting",
         "uploadButton": "Upload a Photo",
         "whatLabel": "What you saw",

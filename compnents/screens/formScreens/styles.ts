@@ -30,6 +30,10 @@ export const CompleteContainer = styled.View`
   justify-content: center;
 `;
 
+export const MiniSpacer = styled.View`
+  height: ${moderateScale(16)}px;
+`;
+
 export const Spacer = styled.View`
   height: ${moderateScale(32)}px;
 `;

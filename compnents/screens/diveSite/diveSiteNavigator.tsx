@@ -2,17 +2,17 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import EditScreenParallax from "../edits/editsParallax";
-import PicUploaderParallax from "../picUploader/picUploaderParallax";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import GoogleMap from "../../googleMap";
 import { Review } from "../../../entities/diveSiteReview";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
 import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 import SiteReviewCreatorScreen from "../formScreens/siteReviewCreator/SiteReviewCreatorScreen";
-
-import DiveSiteParallax from "./diveSiteParallax";
 import DiveSitePhotosPage from "../diveSitePhotos";
 import DiveSiteTripsPage from "../diveSiteTrips";
+import PicUploaderScreen from "../formScreens/picUploader/PicUploaderScreen";
+
+import DiveSiteParallax from "./diveSiteParallax";
 
 type DiveSiteNavigatorProps = {
   id: number;
@@ -21,7 +21,7 @@ type DiveSiteNavigatorProps = {
 export type DiveSiteRoutes = {
   DiveSite: undefined;
   EditScreen: undefined;
-  AddSighting: { selectedDiveSite: DiveSiteWithUserName };
+  AddSighting: { selectedDiveSite: DiveSiteWithUserName, siteName?: string; };
   DiveSitePhotos: undefined;
   DiveSiteTrips: undefined;
   GoogleMap: undefined;
@@ -52,14 +52,32 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
 
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
 
-      <Stack.Screen name="AddSighting" component={PicUploaderParallax} />
-
       <Stack.Screen name="DiveSitePhotos" component={DiveSitePhotosPage} />
 
       <Stack.Screen name="DiveSiteTrips" component={DiveSiteTripsPage} />
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       {/* Map Navigator - view trip & limited dive site*/}
+
+      <Stack.Screen
+        name={"AddSighting"}
+        component={PicUploaderScreen}
+        options={({ route }) => ({
+          headerShown: true,
+          header: ({ navigation }) => (
+            <NavigationHeader
+              title={"Sea Life Sighting"}
+              subtitle={route.params?.siteName}
+              left={(
+                <NavigationButton
+                  onPress={() => navigation.goBack()}
+                  iconName="close"
+                />
+              )}
+            />
+          )
+        })}
+      />
 
       <Stack.Screen
         name={"SiteReviewCreator"}
