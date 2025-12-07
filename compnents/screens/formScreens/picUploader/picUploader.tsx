@@ -44,7 +44,6 @@ export default function PicUploaderPageView({
   isCompleted = false,
   trigger,
   getMoreAnimals,
-  existingPhotos
 }: PicUploaderProps) {
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
@@ -55,32 +54,36 @@ export default function PicUploaderPageView({
     setSteps(images.length + 2);
   }, [images]);
 
-  const totalSteps = 2 + (images && images.length);
-
   const handleGoNext = useCallback(async () => {
-    let fieldsToValidate: (keyof Form)[] = [];
+    let fieldsToValidate: (keyof Form | string)[] = [];
+    const maxStepX = images.length + 1;
 
-    switch (currentStep) {
-      case 1:
-        fieldsToValidate = ["SightingDate"];
-        break;
-      case 2:
-        fieldsToValidate = [];
-        break;
-      case 3:
-        fieldsToValidate = [];
-        break;
+    if (currentStep === 1) {
+      fieldsToValidate = ["SightingDate"];
+    } else if (currentStep > 1 && currentStep <= maxStepX) {
+      const fieldIndex = currentStep - 2;
+      const fieldName = `SeaLife.${fieldIndex}`;
+
+      // 🎯 FIX: Manually set the field as touched before validation.
+      // This is necessary because `trigger()` alone often doesn't update the `isTouched` state,
+      // which is required for error messages to appear in your `DynamicSelect` component.
+      const currentValue = watch(fieldName as keyof Form);
+      setValue(fieldName as keyof Form, currentValue, { shouldTouch: true });
+
+      fieldsToValidate = [fieldName];
+    } else {
+      fieldsToValidate = [];
     }
 
     if (fieldsToValidate.length > 0) {
-      const isValid = await trigger(fieldsToValidate);
+      const isValid = await trigger(fieldsToValidate as (keyof Form)[]);
       if (isValid) {
         setCurrentStep(currentStep + 1);
       }
     } else {
       setCurrentStep(currentStep + 1);
     }
-  }, [currentStep, trigger]);
+  }, [currentStep, trigger, images.length, watch, setValue]);
 
   useEffect(() => {
     if (isCompleted) {
@@ -88,8 +91,6 @@ export default function PicUploaderPageView({
     }
   }, [isCompleted]);
 
-  console.log("currentStep", currentStep);
-  console.log("images", images.length);
   return (
     <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={steps} />
@@ -119,7 +120,9 @@ export default function PicUploaderPageView({
 
         {currentStep > 1 && currentStep <= images.length + 1 && (
           <StepX
+            key={currentStep}
             image={images[currentStep - 2]}
+            fieldIndex={currentStep - 2}
             control={control}
             watch={watch}
             errors={errors}

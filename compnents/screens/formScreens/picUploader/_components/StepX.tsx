@@ -13,6 +13,7 @@ import Icon from "../../../../../icons/Icon";
 
 interface StepXProps {
   image: string
+  fieldIndex: number
   control: Control<Form, any, Form>
   watch: UseFormWatch<Form>
   errors: FieldErrors<Form>
@@ -21,6 +22,7 @@ interface StepXProps {
 
 export const StepX: React.FC<StepXProps> = ({
   image,
+  fieldIndex,
   control,
   watch,
   errors,
@@ -28,6 +30,12 @@ export const StepX: React.FC<StepXProps> = ({
 }) => {
   const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;
+  // Construct the dynamic field name for RHF
+  const fieldName = `SeaLife.${fieldIndex}`;
+
+  // Access the specific error object for this array item
+  // Note: The error object itself is of type FieldError | undefined
+  const fieldError = errors.SeaLife?.[fieldIndex];
 
   return (
     <S.InputGroupContainer>
@@ -36,9 +44,13 @@ export const StepX: React.FC<StepXProps> = ({
       <S.MiniSpacer />
       <Controller
         control={control}
-        name="SeaLife"
-        rules={FormRules.SeaLife}
-        render={({ field: { onChange, onBlur, value } }) => (
+        name={fieldName as "SeaLife.0"}
+        rules={{
+          required: "A sea life species must be entered for this photo.",
+          validate: (value) =>
+            (value && value.key && value.key !== "") || "Please make a selection.",
+        }}
+        render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => (
           <DynamicSelect
             allowCreate={true}
             labelInValue={true}
@@ -47,8 +59,9 @@ export const StepX: React.FC<StepXProps> = ({
             getMoreOptions={getMoreAnimals}
             iconLeft={<Icon name="shark" fill={colors.primaryBlue} />}
             iconRight={<Icon name="chevron-down" fill={colors.neutralGrey} />}
-            error={errors.SeaLife}
+            error={fieldError}
             value={value}
+            isTouched={isTouched}
             onChange={onChange}
           />
         )}
