@@ -127,7 +127,10 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
   };
 
   const onSubmit = async (data: Form) => {
-    await handleCreate(data);
+    if (data.Photos.length !== 0) {
+      await handleCreate(data);
+    }
+
   };
 
   const getDiveSiteInfo = async (siteId: number) => {

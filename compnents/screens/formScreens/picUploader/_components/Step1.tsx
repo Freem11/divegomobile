@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Dimensions, Pressable } from "react-native";
-import { Control, Controller, FieldErrors, UseFormWatch } from "react-hook-form";;
+import { Control, Controller, FieldErrors, UseFormTrigger, UseFormWatch } from "react-hook-form";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ interface Step1Props {
   setValue: (name: keyof Form, value: any) => void
   errors: FieldErrors<Form>
   watch: UseFormWatch<Form>
+  trigger: UseFormTrigger<Form>;
   images: string[],
   setImages: React.Dispatch<React.SetStateAction<string[]>>
   datePickerVisible: boolean
@@ -33,6 +34,7 @@ export const Step1: React.FC<Step1Props> = ({
   setValue,
   errors,
   watch,
+  trigger,
   images,
   setImages,
   datePickerVisible,
@@ -41,6 +43,9 @@ export const Step1: React.FC<Step1Props> = ({
 }) => {
   const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;
+  t;
+
+  const photosError = errors.Photos;
 
   const handleDatePickerConfirm = (selectedDate: Date) => {
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
@@ -65,6 +70,7 @@ export const Step1: React.FC<Step1Props> = ({
 
     const currentFormPhotos = watch("Photos");
     setValue("Photos", [...currentFormPhotos, ...newPicArray]);
+    void trigger(["Photos"]);
   };
 
   const handleRemovePhoto = (indexToRemove: number) => {
@@ -112,6 +118,13 @@ export const Step1: React.FC<Step1Props> = ({
 
       <S.Title>{t("DiveSiteReviewer.addPhotos")}</S.Title>
 
+      <Controller
+        control={control}
+        name={"Photos"}
+        rules={FormRules.Photos}
+        render={() => <View style={{ height: 0, opacity: 0 }} />}
+      />
+
       {imagesArray && imagesArray.length > 0 ? (
         <PhotoUpload
           items={imagesArray}
@@ -127,6 +140,10 @@ export const Step1: React.FC<Step1Props> = ({
             height={moderateScale(50)}
           />
         </S.EmptyStateContainer>
+      )}
+
+      {photosError && photosError.message && (
+        <S.ErrorText>{photosError.message}</S.ErrorText>
       )}
 
       <DateTimePickerModal

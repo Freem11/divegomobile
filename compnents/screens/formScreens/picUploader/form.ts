@@ -34,7 +34,14 @@ export const FormRules: FormValidationRules<Form> = {
     }
   },
   Photos: {
-    required: "No Photos?",
+    validate: {
+      validatePhotoCount: (value) => {
+        if (!Array.isArray(value) || value.length === 0) {
+          return "Sea Life photos are needed to proceed";
+        }
+        return true;
+      }
+    }
   },
   SeaLife: {
     required: "You must specify sea life for all uploaded photos.",

@@ -128,3 +128,11 @@ export const CloneTripBox = styled.View`
   flex-direction: row;
   justify-content: center;
 `;
+
+export const ErrorText = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.red};
+  margin-top: ${moderateScale(4)}px;
+  margin-left: ${moderateScale(2)}px;
+`;

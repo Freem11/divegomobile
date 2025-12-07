@@ -48,7 +48,7 @@ export default function PicUploaderPageView({
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
   const [images, setImages] = useState([]);
-  const [steps, setSteps] = useState(2);
+  const [steps, setSteps] = useState(3);
 
   useEffect(() => {
     setSteps(images.length + 2);
@@ -59,14 +59,15 @@ export default function PicUploaderPageView({
     const maxStepX = images.length + 1;
 
     if (currentStep === 1) {
-      fieldsToValidate = ["SightingDate"];
+      const currentPhotos = watch("Photos");
+      setValue("Photos", currentPhotos, { shouldTouch: true });
+
+      fieldsToValidate = ["SightingDate", "Photos"];
+
     } else if (currentStep > 1 && currentStep <= maxStepX) {
       const fieldIndex = currentStep - 2;
       const fieldName = `SeaLife.${fieldIndex}`;
 
-      // 🎯 FIX: Manually set the field as touched before validation.
-      // This is necessary because `trigger()` alone often doesn't update the `isTouched` state,
-      // which is required for error messages to appear in your `DynamicSelect` component.
       const currentValue = watch(fieldName as keyof Form);
       setValue(fieldName as keyof Form, currentValue, { shouldTouch: true });
 
@@ -77,13 +78,16 @@ export default function PicUploaderPageView({
 
     if (fieldsToValidate.length > 0) {
       const isValid = await trigger(fieldsToValidate as (keyof Form)[]);
+
       if (isValid) {
         setCurrentStep(currentStep + 1);
+      } else {
+        console.log("Validation Failed, Errors:", errors);
       }
     } else {
       setCurrentStep(currentStep + 1);
     }
-  }, [currentStep, trigger, images.length, watch, setValue]);
+  }, [currentStep, trigger, images.length, watch, setValue, errors]);
 
   useEffect(() => {
     if (isCompleted) {
@@ -107,6 +111,7 @@ export default function PicUploaderPageView({
             setValue={setValue}
             errors={errors}
             watch={watch}
+            trigger={trigger}
             images={images}
             setImages={setImages}
             datePickerVisible={datePickerVisible}
@@ -145,7 +150,7 @@ export default function PicUploaderPageView({
         totalSteps={steps}
         onBack={() => setCurrentStep(currentStep - 1)}
         onNext={handleGoNext}
-        onSubmit={onSubmit}
+        onSubmit={currentStep === 1 ? handleGoNext : onSubmit}
         isSubmitting={isSubmitting}
       />
     </S.ContentContainer>
