@@ -16,6 +16,7 @@ import SiteSubmitterRouter from "../screens/diveSiteUploader/siteSubmitterRouter
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
+import { useNotificationsStore } from "../feed/store/useNotificationsStore";
 
 export type BottomTabRoutes = {
     Home: undefined;
@@ -35,6 +36,8 @@ const Tab = createBottomTabNavigator<BottomTabRoutes>();
 export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const { userProfile } = useUserProfile();
     const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
+
+    const notificationsCount = useNotificationsStore((s) => s.count);
 
     const { t } = useTranslation();
     const navigation = useAppNavigation();
@@ -67,6 +70,13 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                 const tabBarIconMargin = isTablet
                     ? moderateScale(4)
                     : moderateScale(0);
+                const isNotificationsRoute = route.name === "Notifications";
+                const badge =
+                    notificationsCount > 0
+                        ? notificationsCount > 99
+                            ? "99+"
+                            : notificationsCount
+                        : undefined;
 
                 return {
                     headerShown: false,
@@ -89,6 +99,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                     tabBarLabel: label,
                     animation: "shift",
                     tabBarLabelPosition: "below-icon",
+                    tabBarBadge: isNotificationsRoute ? badge : undefined
                 };
             }}
         >

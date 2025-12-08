@@ -8,10 +8,10 @@ import { set } from "react-hook-form";
 
 import { useMapStore } from "../googleMap/useMapStore";
 import { useUserProfile } from "../../store/user/useUserProfile";
-import NotificationsButton from "../reusables/bottomMenu/buttons/notificationsButton";
 import { useNotificationsStore } from "../feed/store/useNotificationsStore";
 
 import MainNavigator from "./mainNavigator";
+import { useNotificationsRealTime } from "../feed/store/useNotificationRealTime";
 
 export default function MapPage() {
   if (Platform.OS === "ios") {
@@ -50,6 +50,8 @@ export default function MapPage() {
     getProfile();
     initNotifications(userProfile.UserID);
   }, []);
+
+   useNotificationsRealTime(userProfile.UserID);
 
   return (
     <MainNavigator showOnboarding={showOnboarding} mapConfig={mapConfig} />

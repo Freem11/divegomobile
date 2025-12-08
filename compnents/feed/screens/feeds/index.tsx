@@ -28,7 +28,6 @@ import FeedItemPhotoLike from "./messages/photoLike";
 import FeedItemPhotoComment from "./messages/photoComment";
 import type { Notification } from "../../store/types";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { LevelTwoScreenContext } from "../../../contexts/levelTwoScreenContext";
 import { FullScreenModalContext } from "../../../contexts/fullScreenModalContext";
 import { ActiveTutorialIDContext } from "../../../contexts/activeTutorialIDContext";
 import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
@@ -71,18 +70,15 @@ export default function FeedList() {
 
   const togglePhotoBoxModal = (n: Notification) => {
     setSelectedPhoto(n.notification_photo_like.photo.photoFile);
-    setFullScreenModal(true);
-    setActiveTutorialID("PinchAndZoomPhoto");
+    navigation.navigate("PinchAndZoomPhoto");
   };
 
   const setActiveScreen = useActiveScreenStore(
     (state) => state.setActiveScreen
   );
-  const { setLevelTwoScreen } = useContext(LevelTwoScreenContext);
 
   const goToUserProfile = (n: Notification) => {
-    setActiveScreen("ProfileScreen", { id: n.sender.id });
-    setLevelTwoScreen(true);
+    navigation.navigate("UserProfile", { id: n.sender.id });
   };
 
   const onTrashPress = (n: Notification) => {

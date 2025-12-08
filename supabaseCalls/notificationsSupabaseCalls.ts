@@ -1,6 +1,12 @@
 import { Pagination } from "../entities/pagination";
 import { supabase } from "../supabase";
-import { Notification, RawNotification, normalizeNotification } from "../compnents/feed/store/types";
+import { RawNotification, normalizeNotification } from "../compnents/feed/store/types";
+
+function getThirtyDaysAgoIso(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - 30);
+  return d.toISOString();
+}
 
 export async function getNotifications(userId) {
   const { data, error } = await supabase
@@ -47,11 +53,15 @@ export async function getNotifications(userId) {
 }
 
 export async function getNotificationsCount(userId: string) {
+
+  const thirtyDaysAgo = getThirtyDaysAgoIso();
+
   const { count, error } = await supabase
     .from("ui_notifications")
     .select("*", { count: "exact", head: true })
     .eq("recipient_id", userId)
-    .eq("is_seen", false);
+    .eq("is_seen", false)
+    .gte("created_at", thirtyDaysAgo);
 
   if (error) {
     console.log("Error fetching notification count:", error);
@@ -65,6 +75,7 @@ export async function fetchNotificationsPageOffset(params: {
   userId: string;
   pagination: Pagination;
 }) {
+  const thirtyDaysAgo = getThirtyDaysAgoIso();
   const { userId, pagination } = params;
 
   const { data, error } = await supabase
@@ -97,6 +108,7 @@ export async function fetchNotificationsPageOffset(params: {
     `)
     .eq("recipient_id", userId)
     //.eq("is_seen", false)
+    .gte("created_at", thirtyDaysAgo)
     .order("created_at", { ascending: false })
     .order("id", { ascending: false })
     .range(pagination.from(), pagination.to());
@@ -250,5 +262,116 @@ export async function deletePhotoLikeNotification({
     console.log("🗑️ Notification deleted for photo", photoId);
   } catch (err) {
     console.error("❌ deletePhotoLikeNotification fatal error:", err);
+  }
+}
+
+export async function createPhotoCommentNotification({
+  senderId,
+  recipientId,
+  photoId,
+  commentId,
+}: {
+  senderId: string;
+  recipientId: string;
+  photoId: number;
+  commentId: number;
+}) {
+  try {
+    if (!senderId || !recipientId || senderId === recipientId) {
+      console.log("⚠️ Invalid sender or recipient, skipping comment notification");
+      return;
+    }
+
+    const { data: existing, error: existingErr } = await supabase
+      .from("notification_photo_comment")
+      .select("id")
+      .eq("comment_id", commentId)
+      .limit(1);
+
+    if (existingErr) {
+      console.warn("⚠️ check existing comment notification error:", existingErr.message);
+    }
+
+    if (existing && existing.length > 0) {
+      console.log("ℹ️ Comment notification already exists, skip insert");
+      return;
+    }
+
+    const { data: notif, error: notifErr } = await supabase
+      .from("ui_notifications")
+      .insert([
+        {
+          sender_id: senderId,
+          recipient_id: recipientId,
+          notification_type_id: 2,
+          is_seen: false,
+          created_at: new Date().toISOString(),
+        },
+      ])
+      .select()
+      .single();
+
+    if (notifErr) {
+      console.error("❌ createPhotoCommentNotification error:", notifErr.message);
+      return;
+    }
+
+    const { error: linkErr } = await supabase
+      .from("notification_photo_comment")
+      .insert([
+        {
+          notification_id: notif.id,
+          photo_id: photoId,
+          comment_id: commentId,
+        },
+      ]);
+
+    if (linkErr) {
+      console.error(
+        "❌ notification_photo_comment insert error:",
+        linkErr.message
+      );
+    } else {
+      console.log("✅ Comment notification created for photo", photoId);
+    }
+  } catch (err) {
+    console.error("❌ createPhotoCommentNotification fatal error:", err);
+  }
+}
+
+export async function deletePhotoCommentNotification({
+  commentId,
+}: {
+  commentId: number;
+}) {
+  try {
+    const { data, error } = await supabase
+      .from("notification_photo_comment")
+      .select("notification_id")
+      .eq("comment_id", commentId)
+      .limit(1);
+
+    if (error) {
+      console.error("❌ deletePhotoCommentNotification query error:", error.message);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.log("ℹ️ No comment notification found for this comment");
+      return;
+    }
+
+    const notifId = data[0].notification_id;
+
+    await supabase
+      .from("notification_photo_comment")
+      .delete()
+      .eq("comment_id", commentId);
+
+    await supabase.from("ui_notifications").delete().eq("id", notifId);
+
+    console.log("🗑️ Comment notification deleted for comment", commentId);
+  } catch (err) {
+    console.error("❌ deletePhotoCommentNotification fatal error:", err);
   }
 }
