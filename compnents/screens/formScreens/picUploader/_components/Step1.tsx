@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { } from "react";
 import { View, Dimensions, Pressable } from "react-native";
 import { Control, Controller, FieldErrors, UseFormTrigger, UseFormWatch } from "react-hook-form";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -21,12 +21,9 @@ interface Step1Props {
   errors: FieldErrors<Form>
   watch: UseFormWatch<Form>
   trigger: UseFormTrigger<Form>;
-  images: string[],
-  setImages: React.Dispatch<React.SetStateAction<string[]>>
   datePickerVisible: boolean
   showDatePicker: () => void
   hideDatePicker: () => void
-  handleBooleanConditions: (buttonId: number, isMultiple?: boolean) => void
 }
 
 export const Step1: React.FC<Step1Props> = ({
@@ -35,17 +32,15 @@ export const Step1: React.FC<Step1Props> = ({
   errors,
   watch,
   trigger,
-  images,
-  setImages,
   datePickerVisible,
   showDatePicker,
   hideDatePicker,
 }) => {
   const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;
-  t;
 
   const photosError = errors.Photos;
+  const photosArrayInForm: string[] = watch("Photos") || [];
 
   const handleDatePickerConfirm = (selectedDate: Date) => {
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
@@ -57,7 +52,7 @@ export const Step1: React.FC<Step1Props> = ({
     try {
       const result = await multiImageHandler();
       if (result?.assets?.[0]?.uri) {
-        handlePreviewImages(result?.assets);
+        await handlePreviewImages(result?.assets);
       }
     } catch (e: any) {
       console.log("Image selection cancelled", e.message);
@@ -66,27 +61,22 @@ export const Step1: React.FC<Step1Props> = ({
 
   const handlePreviewImages = async (pictures: ImagePickerAsset[]) => {
     const newPicArray = pictures.map((picture) => (picture.uri));
-    setImages((prevImages) => [...prevImages, ...newPicArray]);
 
-    const currentFormPhotos = watch("Photos");
+    const currentFormPhotos = watch("Photos") || [];
     setValue("Photos", [...currentFormPhotos, ...newPicArray]);
     void trigger(["Photos"]);
   };
 
   const handleRemovePhoto = (indexToRemove: number) => {
-    const updatedImages = images.filter((_, index) => index !== indexToRemove);
-    setImages(updatedImages);
+    const updatedImages = photosArrayInForm.filter((_, index) => index !== indexToRemove);
     setValue("Photos", updatedImages);
+    void trigger(["Photos"]);
   };
 
   const imagesArray = [];
-  images.forEach((image) => {
+  photosArrayInForm.forEach((image) => {
     imagesArray.push({ photofile: image });
   });
-
-  useEffect(() => {
-    setImages([...images]);
-  }, []);
 
   return (
     <S.InputGroupContainer>

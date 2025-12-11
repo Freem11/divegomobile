@@ -35,11 +35,11 @@ export const Step3: React.FC = () => {
       </View>
 
       <S.Title style={{ textAlign: "center" }}>
-        {t("DiveSiteReviewer.completeTitle")}
+        {t("PicUploader.completeTitle")}
       </S.Title>
 
       <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32) }}>
-        {t("DiveSiteReviewer.completeDescription")}
+        {t("PicUploader.completeDescription")}
       </S.Subtitle>
     </S.CompleteContainer>
   );

@@ -24,7 +24,6 @@ type PicUploaderProps = {
   watch: UseFormWatch<Form>
   onSubmit: () => void;
   selectedDiveSite: DiveSiteWithUserName;
-  unitSystem: string;
   isCompleted?: boolean;
   trigger: UseFormTrigger<Form>;
   existingPhotos: ReviewPhotos[]
@@ -47,21 +46,20 @@ export default function PicUploaderPageView({
 }: PicUploaderProps) {
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
-  const [images, setImages] = useState([]);
-  const [steps, setSteps] = useState(3);
+  const images = watch("Photos") || [];
+  const steps = images.length + 2;
 
   useEffect(() => {
-    setSteps(images.length + 2);
-  }, [images]);
+    if (isCompleted) {
+      setCurrentStep(currentStep + 1);
+    }
+  }, [isCompleted]);
 
   const handleGoNext = useCallback(async () => {
     let fieldsToValidate: (keyof Form | string)[] = [];
     const maxStepX = images.length + 1;
 
     if (currentStep === 1) {
-      const currentPhotos = watch("Photos");
-      setValue("Photos", currentPhotos, { shouldTouch: true });
-
       fieldsToValidate = ["SightingDate", "Photos"];
 
     } else if (currentStep > 1 && currentStep <= maxStepX) {
@@ -87,13 +85,7 @@ export default function PicUploaderPageView({
     } else {
       setCurrentStep(currentStep + 1);
     }
-  }, [currentStep, trigger, images.length, watch, setValue, errors]);
-
-  useEffect(() => {
-    if (isCompleted) {
-      setCurrentStep(images.length + 1);
-    }
-  }, [isCompleted]);
+  }, [currentStep, trigger, images.length, watch, setValue]);
 
   return (
     <S.ContentContainer insets={insets}>
@@ -112,8 +104,6 @@ export default function PicUploaderPageView({
             errors={errors}
             watch={watch}
             trigger={trigger}
-            images={images}
-            setImages={setImages}
             datePickerVisible={datePickerVisible}
             showDatePicker={showDatePicker}
             hideDatePicker={() => {

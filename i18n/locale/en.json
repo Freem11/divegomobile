@@ -101,6 +101,9 @@
         "stepXDescription": "( Your best guess is fine )",
         "seaLifeId": "What's This?",
         "header": "Your Sea Creature Sighting",
+        "completeTitle": "Sea Life Sighting(s) Submitted!",
+        "completeDescription": "Your sea life sighting(s) have been successfully submitted and will help fellow divers plan their future adventures! Please allow up to 24 hours for us to valdiate your sightings information.",
+
         "uploadButton": "Upload a Photo",
         "whatLabel": "What you saw",
         "whatPlaceholder": "Sea Life Encountered",

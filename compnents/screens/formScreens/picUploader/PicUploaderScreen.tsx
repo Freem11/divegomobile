@@ -1,13 +1,12 @@
 import type { RouteProp } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
-import { insertReview, insertReviewConditions, insertReviewPhotos } from "../../../../supabaseCalls/diveSiteReviewCalls/posts";
+import { insertPhotoWaits } from "../../../../supabaseCalls/seaLifePhotoCalls/posts";
 import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
-import { DiveConditions } from "../../../../entities/diveSiteCondidtions";
 import { useUserProfile } from "../../../../store/user/useUserProfile";
 import { RootStackParamList } from "../../../../providers/navigation";
 import { imageUploadMultiple } from "../../imageUploadHelpers";
@@ -30,41 +29,7 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
   const [siteInfo, setSiteInfo] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const unitSystem = userProfile && userProfile.unit_system;
-
-  let default_viz = 30;
-  if (unitSystem === "Imperial") {
-    default_viz = 100;
-  }
-
-  const getDefaultValues = () => {
-    if (reviewToEdit) {
-      const formConditions = reviewToEdit.conditions?.map(condition => ({
-        conditionId: condition.condition_type_id,
-        value: condition.value
-      })) || [
-          { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 },
-          { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }
-        ];
-
-      return {
-        DiveDate: reviewToEdit.dive_date || "",
-        Conditions: formConditions,
-        Description: reviewToEdit.description || "",
-        Photos: reviewToEdit.photos?.map(photo => photo.photoPath) || []
-      };
-    }
-
-    return {
-      DiveDate: "",
-      Conditions: [{ "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 }, { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }],
-      Description: "",
-      Photos: []
-    };
-  };
-
   const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
-    defaultValues: getDefaultValues(),
     mode: "onChange",
     reValidateMode: "onChange"
   });
@@ -72,14 +37,14 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
   const tryUpload = async (uri: string, index: number) => {
     try {
       return await imageUploadMultiple({ assets: [{ uri }] }, index);
-    } catch (e) {
+    } catch (e: any) {
       showError(e.message);
       console.error("Error uploading image:", e);
       return null;
     }
   };
 
-  const handleCreate = async (data: Form) => {
+  const handleCreate = useCallback(async (data: Form) => {
     const photoUploadPromises = data.Photos.map(async (photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
@@ -96,42 +61,35 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
 
     try {
       const uploadedFileNames = await Promise.all(photoUploadPromises);
-      const newPhotosArray = uploadedFileNames.map(fileName => (fileName));
-      data.Photos = newPhotosArray;
 
-      const reviewResult = await insertReview({
-        created_by: userProfile.UserID,
-        dive_date: data.DiveDate,
-        description: data.Description,
-        diveSite_id: selectedDiveSite
-      });
-
-      const reviewId = reviewResult.data[0].id;
-      const conditions = formatConditions(data.Conditions, reviewId);
-
-      await insertReviewConditions(conditions);
-
-      const reviewPhotos = data.Photos.map(photo => ({
-        review_id: reviewId,
-        photoPath: photo
+      const seaLifePhotoRecords = data.SeaLife.map((record, index) => ({
+        label: record.label,
+        dateTaken: data.SightingDate,
+        UserID: userProfile.UserID,
+        latitude: selectedDiveSite.lat,
+        longitude: selectedDiveSite.lng,
+        photoFile: `animalphotos/public/${uploadedFileNames[index]}`
       }));
 
-      await insertReviewPhotos(reviewPhotos);
+      await insertPhotoWaits(seaLifePhotoRecords);
 
     } catch (error) {
       console.error("Form submission failed due to photo upload errors:", error);
+      showError(t("Error during review creation."));
     } finally {
       setIsCompleted(true);
       setTimeout(() => navigation.goBack(), 3000);
     }
-  };
+  }, [userProfile.UserID, selectedDiveSite, siteInfo, t, setIsCompleted, navigation, tryUpload]);
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = useCallback(async (data: Form) => {
     if (data.Photos.length !== 0) {
       await handleCreate(data);
     }
+  }, [handleCreate]);
 
-  };
+  const showDatePicker = useCallback(() => setDatePickerVisible(true), []);
+  const hideDatePicker = useCallback(() => setDatePickerVisible(false), []);
 
   const getDiveSiteInfo = async (siteId: number) => {
     if (siteId) {
@@ -148,8 +106,8 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <PicUploaderPageView
         datePickerVisible={datePickerVisible}
-        showDatePicker={() => setDatePickerVisible(true)}
-        hideDatePicker={() => setDatePickerVisible(false)}
+        showDatePicker={showDatePicker}
+        hideDatePicker={hideDatePicker}
         onSubmit={handleSubmit(onSubmit)}
         control={control}
         setValue={setValue}

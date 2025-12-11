@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { moderateScale } from "react-native-size-matters";
 import { Dimensions } from "react-native";
 
-import { Form, FormRules } from "../form";
+import { Form } from "../form";
 import * as S from "../../styles";
 import DynamicSelect from "../../../../reusables/dynamicSelect";
 import { colors } from "../../../../styles";
@@ -24,17 +24,12 @@ export const StepX: React.FC<StepXProps> = ({
   image,
   fieldIndex,
   control,
-  watch,
   errors,
   getMoreAnimals
 }) => {
   const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;
-  // Construct the dynamic field name for RHF
   const fieldName = `SeaLife.${fieldIndex}`;
-
-  // Access the specific error object for this array item
-  // Note: The error object itself is of type FieldError | undefined
   const fieldError = errors.SeaLife?.[fieldIndex];
 
   return (
@@ -50,7 +45,7 @@ export const StepX: React.FC<StepXProps> = ({
           validate: (value) =>
             (value && value.key && value.key !== "") || "Please make a selection.",
         }}
-        render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => (
+        render={({ field: { onChange, value }, fieldState: { isTouched } }) => (
           <DynamicSelect
             allowCreate={true}
             labelInValue={true}
