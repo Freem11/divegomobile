@@ -87,6 +87,16 @@ export default function PicUploaderPageView({
     }
   }, [currentStep, trigger, images.length, watch, setValue]);
 
+  const formValues = watch();
+
+  // Use useEffect to log the values whenever they change
+  useEffect(() => {
+    // This will log the entire form object whenever any field changes
+    console.log("Current Form Values:", formValues);
+
+    // You can also log a specific field, e.g., console.log('Username:', formValues.username);
+  }, [formValues]);
+
   return (
     <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={steps} />

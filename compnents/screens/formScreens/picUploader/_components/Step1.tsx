@@ -41,6 +41,7 @@ export const Step1: React.FC<Step1Props> = ({
 
   const photosError = errors.Photos;
   const photosArrayInForm: string[] = watch("Photos") || [];
+  const seaLifeArrayInForm = watch("SeaLife") || [];
 
   const handleDatePickerConfirm = (selectedDate: Date) => {
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
@@ -70,7 +71,11 @@ export const Step1: React.FC<Step1Props> = ({
   const handleRemovePhoto = (indexToRemove: number) => {
     const updatedImages = photosArrayInForm.filter((_, index) => index !== indexToRemove);
     setValue("Photos", updatedImages);
-    void trigger(["Photos"]);
+
+    const updatedSeaLife = seaLifeArrayInForm.filter((_, index) => index !== indexToRemove);
+    setValue("SeaLife", updatedSeaLife);
+
+    void trigger(["Photos", "SeaLife"]);
   };
 
   const imagesArray = [];
@@ -106,7 +111,7 @@ export const Step1: React.FC<Step1Props> = ({
       <S.Spacer />
       <S.MiniSpacer />
 
-      <S.Title>{t("DiveSiteReviewer.addPhotos")}</S.Title>
+      <S.Title>{t("PicUploader.addPhotos")}</S.Title>
 
       <Controller
         control={control}

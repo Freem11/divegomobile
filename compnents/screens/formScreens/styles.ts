@@ -59,6 +59,8 @@ export const Subtitle = styled.Text`
   font-family: ${activeFonts.Light};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
+  margin-left: ${moderateScale(3)}px;
+  margin-top: ${moderateScale(-8)}px;
   width: 90%;
 `;
 
