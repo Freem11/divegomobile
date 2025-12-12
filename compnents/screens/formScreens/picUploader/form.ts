@@ -1,6 +1,5 @@
 import moment from "moment";
 
-import { i18n } from "../../../../i18n";
 import { FormValidationRules } from "../../../utils/forms";
 
 type dropDownItem = { key: string, label: string };
