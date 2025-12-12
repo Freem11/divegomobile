@@ -38,8 +38,12 @@ export const Step3: React.FC = () => {
         {t("PicUploader.completeTitle")}
       </S.Title>
 
-      <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32) }}>
+      <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32), paddingVertical: moderateScale(20) }}>
         {t("PicUploader.completeDescription")}
+      </S.Subtitle>
+
+      <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32), paddingVertical: moderateScale(10) }}>
+        {t("PicUploader.completeDescription2")}
       </S.Subtitle>
     </S.CompleteContainer>
   );
