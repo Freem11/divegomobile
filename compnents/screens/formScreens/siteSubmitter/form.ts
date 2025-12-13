@@ -1,5 +1,5 @@
 
-import { FormValidationRules } from "../../../forms/form";
+import { FormValidationRules } from "../../../../forms/form";
 
 export interface Form {
   Site?: string

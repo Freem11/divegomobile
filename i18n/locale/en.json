@@ -67,6 +67,17 @@
     },
     "PartnerRequestPage": {
         "header": "Partner Account Upgrade",
+        "step1Title": "Please Note:",
+        "step1Description": "To qualify for a 'Partner Account' Your Account must represent a diving business that takes divers out diving.",
+        "step1Description2": "Examples include: Dive Shops, Dive Charters, Diver Centres and Liveaboards.",
+        "step2Name": "Basic information",
+        "step2Location": "Where is it?",
+        "step2Helper": "To help you get the location",
+        "completeTitle": "Partner Account Request Submitted!",
+        "completeDescription": "Your partner account upgrade request was successfully submitted, soon you will have access to exclusive partner features!",
+        "completeDescription2": "Please allow up to 24 hours for us to review and approve your application.",
+    
+
         "explanation": "To qualify for a 'Partner Account' Your Account must represent a diving business that takes divers out diving. \n Examples include: Dive Shops, Dive Charters, Diver Centres and Liveaboards",
         "businessPlaceholder": "Full business name",
         "businessExplainer": "For display purposes",
@@ -85,9 +96,16 @@
     },
     "DiveSiteAdd": {
         "header": "Add a New Dive Site",
+        "step1Name": "What's it called?",
+        "step1Location": "Where is it?",
+        "step1Helper": "To help you get the location",
         "siteNamePlaceholder": "Dive Site Name",
         "latPlaceholder": "Latitude",
         "lngPlaceholder": "Longitude",
+        "completeTitle": "New Dive Site Submitted!",
+        "completeDescription": "Your dive site has been successfully submitted, divers worldwide will be able to review and add sea life sightings to it!",
+        "completeDescription2": "Please allow up to 24 hours for us to review and approve it.",
+    
         "myLocationButton": "Use my location",
         "myLocationexplainer": "This can take up to 30 seconds",
         "successUpload": "{{site}} has been successfully submitted! Please allow up to 24 hours for us to review and approve it.",
