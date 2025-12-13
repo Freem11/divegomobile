@@ -10,16 +10,17 @@ import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
 import { calculateRegionFromBoundaries } from "../../../googleMap/regionCalculator";
 import { insertDiveSiteWaits } from "../../../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { useUserProfile } from "../../../../store/user/useUserProfile";
-import { SiteSubmitterRoutes } from "../SiteSubmitterNavigator";
+import { createPartnerAccountRequest } from "../../../../supabaseCalls/partnerSupabaseCalls";
 
+import { PartnerRequestRoutes } from "./partnerRequestNavigator";
 import { Form } from "./form";
-import SiteSubmitterPageView from "./siteSubmitter";
-import { useDiveSiteNavigation } from "./types";
+import { usePartnerRequestNavigation } from "./types";
+import PartnerRequestPageView from "./partnerRequests";
 
-export default function SiteSubmitterScreen() {
+export default function PartnerRequestScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const submitterNavigation = useDiveSiteNavigation<SiteSubmitterRoutes>();
+  const partnerRequestNavigation = usePartnerRequestNavigation<PartnerRequestRoutes>();
   const { userProfile } = useUserProfile();
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -35,34 +36,37 @@ export default function SiteSubmitterScreen() {
     mode: "onChange",
     reValidateMode: "onChange",
     values: {
-      Site: storeFormValues?.Site || "",
+      OrgName: storeFormValues?.OrgName || "",
+      URL: storeFormValues?.URL || "",
       Latitude: storeFormValues?.Latitude || null,
       Longitude: storeFormValues?.Longitude || null
     }
   });
 
   const cleanupAndGoBack = useCallback(() => {
-    setValue("Site", null);
+    setValue("OrgName", null);
+    setValue("URL", null);
     setValue("Latitude", null);
     setValue("Longitude", null);
     clearFormValues();
     setIsCompleted(false);
-    submitterNavigation.goBack();
-  }, [clearFormValues, setValue, submitterNavigation]);
+    partnerRequestNavigation.goBack();
+  }, [clearFormValues, setValue, partnerRequestNavigation]);
 
   const onSubmit = async (data: Form) => {
     try {
-      await insertDiveSiteWaits({
-        name: data.Site,
-        lat: data.Latitude,
-        lng: data.Longitude,
-        UserID: userProfile.UserID
+      await createPartnerAccountRequest({
+        webpageLink: data.URL,
+        businessName: data.OrgName,
+        latitude: data.Latitude,
+        longitude: data.Longitude,
+        userId: userProfile.UserID
       });
     } catch (error) {
-      console.error("Dive site submission failed due error:", error);
+      console.error("partner account request sumbission failed due error:", error);
     } finally {
       setIsCompleted(true);
-      setTimeout(() => cleanupAndGoBack(), 3000);
+      setTimeout(() => cleanupAndGoBack(), 5000);
     }
   };
 
@@ -113,7 +117,7 @@ export default function SiteSubmitterScreen() {
       setInitConfig(MapConfigurations.PinDrop);
       const region = await calculateRegionFromBoundaries(mapRef);
       setMapRegion(region);
-      submitterNavigation.navigate("GoogleMap");
+      partnerRequestNavigation.navigate("GoogleMap");
 
       setMapConfig(MapConfigurations.PinDrop, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
       setFormValues(currentValues);
@@ -122,7 +126,7 @@ export default function SiteSubmitterScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <SiteSubmitterPageView
+      <PartnerRequestPageView
         onSubmit={handleSubmit(onSubmit)}
         control={control}
         setValue={setValue}

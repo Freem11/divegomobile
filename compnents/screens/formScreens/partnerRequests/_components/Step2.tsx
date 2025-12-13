@@ -10,7 +10,7 @@ import { FeatureButton } from "../../featureButton";
 import { Explainer } from "../../explainer";
 import { activeFonts } from "../../../../styles";
 
-interface Step1Props {
+interface Step2Props {
   control: Control<Form, any, Form>
   setValue: (name: keyof Form, value: any) => void
   errors: FieldErrors<Form>
@@ -20,7 +20,7 @@ interface Step1Props {
   values: Form
 }
 
-export const Step1: React.FC<Step1Props> = ({
+export const Step2: React.FC<Step2Props> = ({
   control,
   errors,
   getCurrentLocation,
@@ -28,7 +28,41 @@ export const Step1: React.FC<Step1Props> = ({
 }) => {
   const { t } = useTranslation();
 
-  const popoverContent = () => {
+  const popoverContentBasic = () => {
+    const Bold = styled(S.PopOverText)`
+      font-family: ${activeFonts.Medium}
+    `;
+
+    return (
+      <S.PopOver>
+        <S.PopOverText>
+          <Bold>Business Name</Bold>
+          {"\n"}Is for display purposes, on your page and on the map.
+          {"\n"}
+          {"\n"}
+          <Bold>Web page URL</Bold>
+          {"\n"}We use this to evaluate and validate your business.
+        </S.PopOverText>
+      </S.PopOver >
+    );
+  };
+
+  const popoverContentWhere = () => {
+    const Bold = styled(S.PopOverText)`
+      font-family: ${activeFonts.Medium}
+    `;
+
+    return (
+      <S.PopOver>
+        <S.PopOverText>
+          <Bold>Coordinates</Bold>
+          {"\n"}Used to place your business on our map.
+        </S.PopOverText>
+      </S.PopOver >
+    );
+  };
+
+  const popoverContentLocation = () => {
     const Bold = styled(S.PopOverText)`
       font-family: ${activeFonts.Medium}
     `;
@@ -49,17 +83,17 @@ export const Step1: React.FC<Step1Props> = ({
   return (
     <S.InputGroupContainer>
 
-      <S.Label>{t("DiveSiteAdd.step1Name")}</S.Label>
+      <S.Label>{t("PartnerRequestPage.step2Name")} <Explainer popoverContent={popoverContentBasic} /></S.Label>
       <Controller
         control={control}
-        name="Site"
-        rules={FormRules.Site}
+        name="OrgName"
+        rules={FormRules.OrgName}
         render={({ field: { onChange, value } }) => (
           <S.TextBuffer>
             <MobileTextInput
-              error={errors.Site}
+              error={errors.OrgName}
               iconLeft="diving-scuba-flag"
-              placeholder={t("DiveSiteAdd.siteNamePlaceholder")}
+              placeholder={t("PartnerRequestPage.businessPlaceholder")}
               onChangeText={onChange}
               value={value}
             />
@@ -67,7 +101,24 @@ export const Step1: React.FC<Step1Props> = ({
         )}
       />
 
-      <S.Label>{t("DiveSiteAdd.step1Location")}</S.Label>
+      <Controller
+        control={control}
+        name="URL"
+        rules={FormRules.URL}
+        render={({ field: { onChange, value } }) => (
+          <S.TextBuffer>
+            <MobileTextInput
+              error={errors.URL}
+              iconLeft="link"
+              placeholder={t("PartnerRequestPage.websitePlaceholder")}
+              onChangeText={onChange}
+              value={value}
+            />
+          </S.TextBuffer>
+        )}
+      />
+
+      <S.Label>{t("PartnerRequestPage.step2Location")} <Explainer popoverContent={popoverContentWhere} /></S.Label>
       <Controller
         control={control}
         name="Latitude"
@@ -77,7 +128,7 @@ export const Step1: React.FC<Step1Props> = ({
             <MobileTextInput
               error={errors.Latitude}
               iconLeft="latitude"
-              placeholder={t("DiveSiteAdd.latPlaceholder")}
+              placeholder={t("PartnerRequestPage.latPlaceholder")}
               value={value ? String(value) : null}
               onChangeText={onChange}
               keyboardType="numbers-and-punctuation"
@@ -95,7 +146,7 @@ export const Step1: React.FC<Step1Props> = ({
             <MobileTextInput
               error={errors.Longitude}
               iconLeft="longitude"
-              placeholder={t("DiveSiteAdd.lngPlaceholder")}
+              placeholder={t("PartnerRequestPage.lngPlaceholder")}
               value={value ? String(value) : null}
               onChangeText={onChange}
               keyboardType="numbers-and-punctuation"
@@ -104,7 +155,7 @@ export const Step1: React.FC<Step1Props> = ({
         )}
       />
 
-      <S.Label>{t("DiveSiteAdd.step1Helper")}  <Explainer popoverContent={popoverContent} /></S.Label>
+      <S.Label>{t("PartnerRequestPage.step2Helper")}  <Explainer popoverContent={popoverContentLocation} /></S.Label>
 
       <S.ButtonContainer>
         <FeatureButton iconName="target" title="I'm there" onPress={getCurrentLocation} />

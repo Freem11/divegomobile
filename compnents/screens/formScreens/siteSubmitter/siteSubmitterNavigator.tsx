@@ -45,7 +45,6 @@ export default function SiteSubmitterNavigator() {
       />
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
-      {/* Map Navigator - view trip & limited dive site*/}
 
     </Stack.Navigator>
   );

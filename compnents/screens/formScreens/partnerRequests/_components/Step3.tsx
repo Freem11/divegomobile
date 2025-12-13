@@ -6,7 +6,7 @@ import LottieView from "lottie-react-native";
 
 import * as S from "../../styles";
 
-export const Step2: React.FC = () => {
+export const Step3: React.FC = () => {
   const { t } = useTranslation();
   const animationRef = useRef<LottieView>(null);
 
@@ -35,15 +35,15 @@ export const Step2: React.FC = () => {
       </View>
 
       <S.Title style={{ textAlign: "center" }}>
-        {t("DiveSiteAdd.completeTitle")}
+        {t("PartnerRequestPage.completeTitle")}
       </S.Title>
 
       <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32), paddingVertical: moderateScale(32) }}>
-        {t("DiveSiteAdd.completeDescription")}
+        {t("PartnerRequestPage.completeDescription")}
       </S.Subtitle>
 
       <S.Subtitle style={{ textAlign: "center", paddingHorizontal: moderateScale(32) }}>
-        {t("DiveSiteAdd.completeDescription2")}
+        {t("PartnerRequestPage.completeDescription2")}
       </S.Subtitle>
     </S.CompleteContainer>
   );

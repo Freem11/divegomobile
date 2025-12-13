@@ -42,6 +42,24 @@ export const Label = styled.Text`
   margin-top: ${moderateScale(20)}px;
 `;
 
+export const NoticeTitle = styled.Text`
+  align-self: left;
+  font-size: ${moderateScale(fontSizes.Large)}px;
+  font-family: ${activeFonts.Black};
+  color: ${colors.themeBlack};
+  margin-bottom: ${moderateScale(48)}px;
+  margin-top: ${moderateScale(20)}px;
+  margin-left: ${moderateScale(20)}px;
+`;
+
+export const NoticeSubtitle = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.primaryBlue};
+  line-height: ${moderateScale(22)}px;
+  width: 100%;
+`;
+
 export const Title = styled.Text`
   font-size: ${moderateScale(fontSizes.Medium)}px;
   font-family: ${activeFonts.Bold};
@@ -52,7 +70,7 @@ export const Title = styled.Text`
 
 export const Subtitle = styled.Text`
   font-size: ${moderateScale(fontSizes.Base)}px;
-  font-family: ${activeFonts.Light};
+  font-family: ${activeFonts.Regular};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
   width: 90%;

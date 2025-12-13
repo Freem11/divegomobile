@@ -11,9 +11,10 @@ import * as S from "../styles";
 
 import { Step1 } from "./_components/Step1";
 import { Step2 } from "./_components/Step2";
+import { Step3 } from "./_components/Step3";
 import { Form } from "./form";
 
-type ShopSubmitterProps = {
+type PartnerRequestProps = {
   control: Control<Form, any, Form>
   setValue: UseFormSetValue<Form>
   isSubmitting: boolean
@@ -28,7 +29,7 @@ type ShopSubmitterProps = {
   values: Form
 };
 
-export default function SiteSubmitterPageView({
+export default function PartnerRequestPageView({
   control,
   setValue,
   isSubmitting,
@@ -40,19 +41,22 @@ export default function SiteSubmitterPageView({
   getCurrentLocation,
   useMapFlip,
   values
-}: ShopSubmitterProps) {
+}: PartnerRequestProps) {
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 2;
+  const totalSteps = 3;
 
   const handleGoNext = useCallback(async () => {
     let fieldsToValidate: (keyof Form)[] = [];
 
     switch (currentStep) {
       case 1:
-        fieldsToValidate = ["Site", "Latitude", "Longitude"];
+        fieldsToValidate = [];
         break;
       case 2:
+        fieldsToValidate = ["OrgName", "URL", "Latitude", "Longitude"];
+        break;
+      case 3:
         fieldsToValidate = [];
         break;
     }
@@ -69,7 +73,7 @@ export default function SiteSubmitterPageView({
 
   useEffect(() => {
     if (isCompleted) {
-      setCurrentStep(2);
+      setCurrentStep(3);
     } else {
       setCurrentStep(1);
     }
@@ -86,7 +90,10 @@ export default function SiteSubmitterPageView({
         keyboardShouldPersistTaps={"handled"}
       >
         {currentStep === 1 && (
-          <Step1
+          <Step1 />
+        )}
+        {currentStep === 2 && (
+          <Step2
             control={control}
             setValue={setValue}
             errors={errors}
@@ -96,8 +103,8 @@ export default function SiteSubmitterPageView({
             values={values}
           />
         )}
-        {currentStep === 2 && (
-          <Step2 />
+        {currentStep === 3 && (
+          <Step3 />
         )}
       </ScrollView>
 

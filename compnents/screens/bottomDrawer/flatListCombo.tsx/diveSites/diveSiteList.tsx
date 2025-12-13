@@ -43,7 +43,7 @@ export default function DiveSiteList() {
   };
 
   const handleScreen = () => {
-    navigation.navigate("SiteSubmitterNavigator");
+    navigation.navigate("AddSite");
   };
 
   const [layoutReady, setLayoutReady] = useState(false);

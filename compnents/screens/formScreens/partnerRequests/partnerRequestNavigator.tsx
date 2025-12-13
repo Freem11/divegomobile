@@ -1,21 +1,24 @@
 import React, { } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import GoogleMap from "../../googleMap";
-import { NavigationButton } from "../../navigationHeader/NavigationButton";
+import GoogleMap from "../../../googleMap";
+import { NavigationHeader } from "../../../navigationHeader/NavigationHeader";
+import { NavigationButton } from "../../../navigationHeader/NavigationButton";
 
-export type SiteSubmitterRoutes = {
-  SiteSubmitter: undefined;
+import PartnerRequestScreen from "./PartnerRequestsScreen";
+
+export type PartnerRequestRoutes = {
+  PartnerRequest: undefined;
   GoogleMap: undefined;
 };
 
-const Stack = createNativeStackNavigator<SiteSubmitterRoutes>();
+const Stack = createNativeStackNavigator<PartnerRequestRoutes>();
 
-export default function SiteSubmitterNavigator2() {
+export default function PartnerRequestNavigator() {
 
   return (
     <Stack.Navigator
-      initialRouteName="SiteSubmitter"
+      initialRouteName="PartnerRequest"
       screenOptions={() => ({
         headerShown: false,
         animation: "slide_from_bottom",
@@ -23,13 +26,14 @@ export default function SiteSubmitterNavigator2() {
     >
 
       <Stack.Screen
-        name={"SiteSubmitter"}
-        component={TripCreatorScreen}
+        name={"PartnerRequest"}
+        component={PartnerRequestScreen}
         options={({ route }) => ({
           headerShown: true,
           header: ({ navigation }) => (
-            <SiteSubmitterParallax
-              title={"New Dive Site"}
+            <NavigationHeader
+              title={"Partner Account"}
+              subtitle={"Request Form"}
               left={(
                 <NavigationButton
                   onPress={() => navigation.goBack()}
