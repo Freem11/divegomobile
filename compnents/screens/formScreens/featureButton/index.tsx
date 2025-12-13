@@ -9,7 +9,7 @@ import * as S from "./styles";
 
 interface FeatureButtonProps {
   title: string,
-  onPress?: (formData: Required<Form>) => void;
+  onPress?: () => void;
   formValues?: Required<Form>
   iconName: IconName
 }
@@ -18,7 +18,7 @@ export const FeatureButton: FC<FeatureButtonProps> = ({ title, onPress, formValu
 
   return (
     <S.FeatureButton
-      onPress={() => onPress()}
+      onPress={onPress}
     >
       <Icon
         name={iconName}

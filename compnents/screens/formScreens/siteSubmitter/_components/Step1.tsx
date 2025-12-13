@@ -16,6 +16,8 @@ interface Step1Props {
   setValue: (name: keyof Form, value: any) => void
   errors: FieldErrors<Form>
   watch: UseFormWatch<Form>
+  getCurrentLocation: () => void;
+  values: Form
 }
 
 export const Step1: React.FC<Step1Props> = ({
@@ -23,6 +25,8 @@ export const Step1: React.FC<Step1Props> = ({
   setValue,
   errors,
   watch,
+  getCurrentLocation,
+  values
 }) => {
   const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;
@@ -107,7 +111,7 @@ export const Step1: React.FC<Step1Props> = ({
       <S.Label>{t("DiveSiteAdd.step1Helper")}  <Explainer popoverContent={popoverContent} /></S.Label>
 
       <S.ButtonContainer>
-        <FeatureButton iconName="target" title="I'm there" />
+        <FeatureButton iconName="target" title="I'm there" onPress={getCurrentLocation} />
         <FeatureButton iconName="location-on" title="Drop a pin" />
       </S.ButtonContainer>
 

@@ -1,12 +1,14 @@
 import type { RouteProp } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
 import { useUserProfile } from "../../../../store/user/useUserProfile";
 import { RootStackParamList } from "../../../../providers/navigation";
+import { getCurrentCoordinates } from "../../../tutorial/locationTrackingRegistry";
+import { useMapStore } from "../../../googleMap/useMapStore";
 
 import SiteSubmitterPageView from "./siteSubmitter";
 import { Form } from "./form";
@@ -18,6 +20,8 @@ export default function SiteSubmitterScreen() {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [siteInfo, setSiteInfo] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const mapAction = useMapStore((state) => state.actions);
+  const storeFormValues = useMapStore((state) => state.formValues);
 
   const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
     mode: "onChange",
@@ -29,10 +33,34 @@ export default function SiteSubmitterScreen() {
     }
   });
 
-  console.log("Control inside SiteSubmitterScreen:", !!control); // Should be true
-
   const onSubmit = async (data: Form) => {
     console.log("data", data);
+  };
+
+  const handleGetLocation = () => {
+    const currentValues = watch() as Required<Form>;
+    getCurrentLocation(currentValues);
+  };
+
+  const getCurrentLocation = async (formData: Required<Form>) => {
+    Keyboard.dismiss();
+    try {
+      const location = await getCurrentCoordinates();
+      console.log("location", location);
+      console.log("formData", formData);
+      console.log("storeFormValues", storeFormValues);
+      if (location) {
+        setValue("Latitude", location.coords.latitude);
+        setValue("Longitude", location.coords.longitude);
+        mapAction.setFormValues({
+          Site: formData.Site || storeFormValues?.Site,
+          Latitude: location.coords.latitude,
+          Longitude: location.coords.longitude
+        });
+      }
+    } catch (e) {
+      console.log({ title: "Error", message: e.message });
+    }
   };
 
   return (
@@ -46,6 +74,12 @@ export default function SiteSubmitterScreen() {
         watch={watch}
         isCompleted={isCompleted}
         trigger={trigger}
+        getCurrentLocation={handleGetLocation}
+        values={{
+          SiteName: storeFormValues?.SiteName,
+          Latitude: storeFormValues?.Latitude,
+          Longitude: storeFormValues?.Longitude
+        }}
       />
     </View>
   );

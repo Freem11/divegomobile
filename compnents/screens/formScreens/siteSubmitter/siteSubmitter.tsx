@@ -8,7 +8,6 @@ import { ReviewPhotos } from "../../../../entities/diveSiteReview";
 import { ProgressBar } from "../progressBar";
 import { StepNavigation } from "../stepNavigation";
 import * as S from "../styles";
-import { combineComponents } from "../../../combineComponents";
 
 import { Step1 } from "./_components/Step1";
 import { Step2 } from "./_components/Step2";
@@ -24,6 +23,8 @@ type ShopSubmitterProps = {
   isCompleted?: boolean;
   trigger: UseFormTrigger<Form>;
   existingPhotos: ReviewPhotos[]
+  getCurrentLocation: () => void;
+  values: Form
 };
 
 export default function SiteSubmitterPageView({
@@ -34,7 +35,9 @@ export default function SiteSubmitterPageView({
   watch,
   onSubmit,
   isCompleted = false,
-  trigger
+  trigger,
+  getCurrentLocation,
+  values
 }: ShopSubmitterProps) {
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
@@ -68,8 +71,6 @@ export default function SiteSubmitterPageView({
     }
   }, [isCompleted]);
 
-  console.log("control", control);
-
   return (
     <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
@@ -86,6 +87,8 @@ export default function SiteSubmitterPageView({
             setValue={setValue}
             errors={errors}
             watch={watch}
+            getCurrentLocation={getCurrentLocation}
+            values={values}
           />
         )}
         {currentStep === 2 && (
