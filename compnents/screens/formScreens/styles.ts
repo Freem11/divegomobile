@@ -30,6 +30,10 @@ export const CompleteContainer = styled.View`
   justify-content: center;
 `;
 
+export const MiniSpacer = styled.View`
+  height: ${moderateScale(16)}px;
+`;
+
 export const Spacer = styled.View`
   height: ${moderateScale(32)}px;
 `;
@@ -73,6 +77,8 @@ export const Subtitle = styled.Text`
   font-family: ${activeFonts.Regular};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
+  margin-left: ${moderateScale(3)}px;
+  margin-top: ${moderateScale(-8)}px;
   width: 90%;
 `;
 
@@ -168,4 +174,12 @@ export const PopOverText = styled.Text`
   font-family: ${activeFonts.Thin};
   text-align: center;
   color: ${colors.themeBlack};
+`;
+
+export const ErrorText = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.red};
+  margin-top: ${moderateScale(4)}px;
+  margin-left: ${moderateScale(2)}px;
 `;

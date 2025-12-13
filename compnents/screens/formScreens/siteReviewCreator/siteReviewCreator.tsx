@@ -44,7 +44,8 @@ export default function SiteReviewPageView({
   unitSystem,
   isCompleted = false,
   trigger,
-  existingPhotos
+  existingPhotos,
+  getMoreAnimals
 }: ShopReviewCreatorProps) {
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
