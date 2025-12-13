@@ -124,3 +124,30 @@ export const CloneTripBox = styled.View`
   flex-direction: row;
   justify-content: center;
 `;
+
+export const TextBuffer = styled.View`
+  margin-top: ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(10)}px;
+  margin-left: 1%;
+  width: 98%;
+`;
+
+export const ButtonContainer = styled.View`
+  padding-top: ${moderateScale(35)};
+  flex-direction: row;
+  justify-content: space-between;
+  align-self: center;
+  width: ${width - moderateScale(56)}
+`;
+
+export const PopOver = styled.View`
+  padding-horizontal: ${moderateScale(15)}px;
+  padding-vertical: ${moderateScale(20)}px;
+`;
+
+export const PopOverText = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Thin};
+  text-align: center;
+  color: ${colors.themeBlack};
+`;

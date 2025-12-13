@@ -85,6 +85,9 @@
     },
     "DiveSiteAdd": {
         "header": "Add a New Dive Site",
+        "step1Name": "What's it called?",
+        "step1Location": "Where is it?",
+        "step1Helper": "To help you get the location",
         "siteNamePlaceholder": "Dive Site Name",
         "latPlaceholder": "Latitude",
         "lngPlaceholder": "Longitude",

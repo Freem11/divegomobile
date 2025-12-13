@@ -1,8 +1,11 @@
 import React, { } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import GoogleMap from "../../googleMap";
-import { NavigationButton } from "../../navigationHeader/NavigationButton";
+import GoogleMap from "../../../googleMap";
+import { NavigationButton } from "../../../navigationHeader/NavigationButton";
+import { NavigationHeader } from "../../../navigationHeader/NavigationHeader";
+
+import SiteSubmitterScreen from "./SiteSubmitterScreen";
 
 export type SiteSubmitterRoutes = {
   SiteSubmitter: undefined;
@@ -11,7 +14,7 @@ export type SiteSubmitterRoutes = {
 
 const Stack = createNativeStackNavigator<SiteSubmitterRoutes>();
 
-export default function SiteSubmitterNavigator2() {
+export default function SiteSubmitterNavigator() {
 
   return (
     <Stack.Navigator
@@ -24,11 +27,11 @@ export default function SiteSubmitterNavigator2() {
 
       <Stack.Screen
         name={"SiteSubmitter"}
-        component={TripCreatorScreen}
+        component={SiteSubmitterScreen}
         options={({ route }) => ({
           headerShown: true,
           header: ({ navigation }) => (
-            <SiteSubmitterParallax
+            <NavigationHeader
               title={"New Dive Site"}
               left={(
                 <NavigationButton

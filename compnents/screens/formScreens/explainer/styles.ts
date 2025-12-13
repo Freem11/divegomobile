@@ -10,8 +10,8 @@ export const Explainer = styled.TouchableOpacity`
   overflow: hidden;
   background: ${colors.lighterBlue};
   align-items: center;
-  border-radius: ${moderateScale(30)}px;
-  height: ${moderateScale(30)};
-  width: ${moderateScale(30)};
+  border-radius: ${moderateScale(24)}px;
+  height: ${moderateScale(24)};
+  width: ${moderateScale(24)};
   margin-left: ${moderateScale(8)}
 `;
