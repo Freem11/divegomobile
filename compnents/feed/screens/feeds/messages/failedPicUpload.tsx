@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import * as S from "./styles";
-import { useFileExists } from "../../../store/useFileExists";
 import { useTranslation } from "react-i18next";
+
+import { useFileExists } from "../../../store/useFileExists";
 import { showError, showSuccess, showWarning } from "../../../../toast";
 import { imageUpload } from "../../../../screens/imageUploadHelpers";
 import { insertPhotoWaits } from "../../../../../supabaseCalls/photoWaitSupabaseCalls";
 import { removePhoto } from "../../../../cloudflareBucketCalls/cloudflareAWSCalls";
-import { FILE_PATH } from "../../../../screens/picUploader";
+import { cloudflareBucketUrl } from "../../../../globalVariables";
 import { FailedUploadFeedItem, FeedItem, RETRY_TYPE } from "../../../store/types";
 import { checkNetworkStatus } from "../../../store/utils";
 import ButtonIcon from "../../../../reusables/buttonIcon";
 import { colors } from "../../../../styles";
+
+import * as S from "./styles";
 
 export type FeedItemComponentProps = {
   item: FeedItem;
@@ -63,7 +65,7 @@ export default function FeedItemFailedUpload({
 
     if (error) {
       await removePhoto({
-        filePath: FILE_PATH,
+        filePath: cloudflareBucketUrl,
         fileName: fullPath,
       });
 
@@ -86,9 +88,9 @@ export default function FeedItemFailedUpload({
     }
     try {
       switch (item.retryMetaData.payloadType) {
-      case RETRY_TYPE.PIC_UPLOADER:
+        case RETRY_TYPE.PIC_UPLOADER:
           await uploadPicture();
-          break;  
+          break;
         default:
           showWarning(t("Toast.errorMessage"));
           console.warn(

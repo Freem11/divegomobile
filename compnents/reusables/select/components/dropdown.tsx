@@ -1,6 +1,8 @@
-import React from 'react';
-import { Values } from '..';
-import * as S from './styles';
+import React from "react";
+
+import { Values } from "..";
+
+import * as S from "./styles";
 
 export type DropdownProps = {
   options: Values;
@@ -11,9 +13,10 @@ export type DropdownProps = {
 };
 
 export default function Dropdown(props: DropdownProps) {
+
   return (
-    <S.Dropdown>
-      <S.OptionList>
+    <S.Dropdown childCount={props.children.length}>
+      <S.OptionList >
         {props.children}
 
         {props.shouldDisplayCreate && (

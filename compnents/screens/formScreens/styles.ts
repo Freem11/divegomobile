@@ -30,6 +30,10 @@ export const CompleteContainer = styled.View`
   justify-content: center;
 `;
 
+export const MiniSpacer = styled.View`
+  height: ${moderateScale(16)}px;
+`;
+
 export const Spacer = styled.View`
   height: ${moderateScale(32)}px;
 `;
@@ -55,6 +59,8 @@ export const Subtitle = styled.Text`
   font-family: ${activeFonts.Light};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
+  margin-left: ${moderateScale(3)}px;
+  margin-top: ${moderateScale(-8)}px;
   width: 90%;
 `;
 
@@ -123,4 +129,12 @@ export const CloneTripBox = styled.View`
   padding-top: ${moderateScale(20)};
   flex-direction: row;
   justify-content: center;
+`;
+
+export const ErrorText = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.red};
+  margin-top: ${moderateScale(4)}px;
+  margin-left: ${moderateScale(2)}px;
 `;
