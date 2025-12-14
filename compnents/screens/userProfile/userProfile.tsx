@@ -17,6 +17,7 @@ type UserProfileProps = {
   selectedProfile: ActiveProfile | null;
   speciesCount: number;
   sightingsCount: number;
+  reviewCount: number;
   openAllPhotosPage: () => void;
   reviews: Review[];
 };
@@ -26,6 +27,7 @@ export default function UserProfileScreenView({
   selectedProfile,
   speciesCount,
   sightingsCount,
+  reviewCount,
   openAllPhotosPage,
   reviews
 }: UserProfileProps) {
@@ -57,10 +59,11 @@ export default function UserProfileScreenView({
       />
 
       <S.LabelWrapper>
-        <Label label={"Recent Reviews"} />
+        <Label label={"Dive Site Reviews"} />
       </S.LabelWrapper>
 
       <S.ReviewsWrapper>
+        <S.Stats>{`${reviewCount} review${reviewCount === 1 ? "" : "s"}`}</S.Stats>
         {reviews && reviews.length > 0 ? (
           <S.ReviewsContent>
             {reviews.map((review) => (

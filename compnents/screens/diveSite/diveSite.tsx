@@ -7,7 +7,7 @@ import SealifePreview from "../../reusables/sealifePreview";
 import ItineraryCard from "../../reusables/itineraryCard";
 import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
-import Label from "../../reusables/label";
+import Label from "../../reusables/label-new";
 import ReviewCard from "../../reusables/reviewCard";
 import { Review } from "../../../entities/diveSiteReview";
 import Button from "../../reusables/button";

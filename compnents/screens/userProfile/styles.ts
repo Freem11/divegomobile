@@ -35,8 +35,14 @@ export const Content = styled.Text`
 `;
 
 export const LabelWrapper = styled.View`
+  width: 100%;
+  margin-top: ${moderateScale(40)}px;
+  margin-bottom: ${moderateScale(5)}px;
   padding: 0 ${moderateScale(20)}px;
-  margin-bottom: ${moderateScale(10)}px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const ReviewsWrapper = styled.View`
@@ -52,4 +58,11 @@ export const EmptyStateWrapper = styled.View`
   align-items: center;
   justify-content: center;
   padding: ${moderateScale(20)}px 0;
+`;
+
+export const Stats = styled.Text`
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.darkGrey};
+  margin-bottom: ${moderateScale(20)}px;
 `;
