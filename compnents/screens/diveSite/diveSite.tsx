@@ -175,7 +175,7 @@ export default function DiveSiteScreenView({
                 title={"Add First Review"}
                 iconLeft="diving-scuba-flag"
                 round={false}
-                style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+                style={{ width: moderateScale(240) }}
                 onPress={() => openDiveSiteReviewer()}
               />
             </S.ButtonContainer>

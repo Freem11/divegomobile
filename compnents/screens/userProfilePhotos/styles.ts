@@ -32,7 +32,7 @@ export const BackButtonWrapper = styled.View`
 export const PhotoContainer = styled.View`
   width: 98%;
   align-items: center;
-  margin-left: 3%;
+  align-self: center;
   margin-top: ${moderateScale(20)}px;
   margin-bottom: ${moderateScale(20)}px;
 `;

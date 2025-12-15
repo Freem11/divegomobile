@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { moderateScale } from "react-native-size-matters";
 
 import Card from "../../card";
 import { AreaPicsContext } from "../../../../contexts/areaPicsContext";
@@ -10,8 +9,7 @@ import { AnimalMultiSelectContext } from "../../../../contexts/animalMultiSelect
 import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
-
-import * as S from "./styles";
+import * as S from "../styles";
 
 type SeaLifeListProps = {
   scrollToDiveSiteList?: () => void;
@@ -105,7 +103,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
                 title={"Nearby Dive Sites"}
                 iconLeft="shark"
                 round={false}
-                style={{ marginLeft: "10%", width: "80%" }}
+                style={{ alignSelf: "center", width: "80%" }}
                 onPress={() => scrollToDiveSiteList()}
               />
             </S.EmptyStateWrapper>

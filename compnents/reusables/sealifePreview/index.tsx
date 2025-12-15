@@ -71,7 +71,7 @@ export default function SealifePreview({
               title={"Add First Sighting"}
               iconLeft="camera-plus"
               round={false}
-              style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+              style={{ width: moderateScale(240) }}
               onPress={onAddSighting}
             />
           )}
