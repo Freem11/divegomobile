@@ -72,6 +72,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
       }}
     >
       <S.Header>Nearby Sea Life</S.Header>
+      <S.Subtitle>Swipe right for nearby dive sites</S.Subtitle>
       {renderListHeader}
 
       {layoutReady ? (

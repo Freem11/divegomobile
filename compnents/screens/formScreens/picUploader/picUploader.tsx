@@ -87,6 +87,11 @@ export default function PicUploaderPageView({
     }
   }, [currentStep, trigger, images.length, watch, setValue]);
 
+  const lastIndex = images.length > 0 ? images.length - 1 : 0;
+  const lastSeaLife = watch(`SeaLife.${lastIndex}`);
+
+  const canSubmit = !!(lastSeaLife?.label?.trim());
+
   return (
     <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={steps} />
@@ -142,6 +147,7 @@ export default function PicUploaderPageView({
         onNext={handleGoNext}
         onSubmit={currentStep === 1 ? handleGoNext : onSubmit}
         isSubmitting={isSubmitting}
+        canSubmit={canSubmit}
       />
     </S.ContentContainer>
   );

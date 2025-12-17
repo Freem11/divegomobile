@@ -75,6 +75,11 @@ export default function SiteSubmitterPageView({
     }
   }, [isCompleted]);
 
+  const SiteName = watch("Site");
+  const Lat = watch("Latitude");
+  const Lng = watch("Longitude");
+  const canSubmit = SiteName && SiteName.trim().length > 0 && Lat && Lng;
+
   return (
     <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
@@ -108,6 +113,7 @@ export default function SiteSubmitterPageView({
         onNext={handleGoNext}
         onSubmit={onSubmit}
         isSubmitting={isSubmitting}
+        canSubmit={canSubmit}
       />
     </S.ContentContainer>
   );

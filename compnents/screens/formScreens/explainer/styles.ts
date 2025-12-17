@@ -3,15 +3,19 @@ import { moderateScale } from "react-native-size-matters";
 
 import { colors } from "../../../styles";
 
-export const Explainer = styled.TouchableOpacity`
+interface ExplainerStyleProps {
+  size: number;
+}
+
+export const Explainer = styled.TouchableOpacity<ExplainerStyleProps>`
   flex-direction: row;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   background: ${colors.lighterBlue};
-  align-items: center;
-  border-radius: ${moderateScale(24)}px;
-  height: ${moderateScale(24)};
-  width: ${moderateScale(24)};
-  margin-left: ${moderateScale(8)}
+  height: ${props => moderateScale(props.size)}px;
+  width: ${props => moderateScale(props.size)}px;
+  border-radius: ${props => moderateScale(props.size / 2)}px;
+  
+  margin-left: ${moderateScale(8)}px;
 `;

@@ -89,3 +89,28 @@ export const TargetWrapperAlt = styled.View`
     z-index: 10;
     pointer-events: box-none;
 `;
+
+export const PopOverWrapper = styled.View`
+    flex: 1; 
+    align-self: flex-start;
+    align-items: bottom;
+    margin-left: ${moderateScale(7)}px;
+    margin-bottom: ${moderateScale(-42)}px;
+    z-index: 10;
+    pointer-events: box-none;
+`;
+
+export const PopOver = styled.View`
+  padding: ${moderateScale(15)}px;
+  align-items: center; 
+  justify-content: center;
+`;
+
+export const PopOverText = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Thin};
+  text-align: center;
+  color: ${colors.themeBlack};
+  margin-top: ${moderateScale(4)}px;
+  margin-bottom: ${moderateScale(12)}px;
+`;

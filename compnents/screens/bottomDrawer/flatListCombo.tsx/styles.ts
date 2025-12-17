@@ -16,6 +16,14 @@ export const Header = styled.Text`
   color: ${colors.headersBlue};
   align-self: center;
   margin-top: ${width > 700 ? height * 0.2 : height * 0.20}px;
+  margin-bottom: ${moderateScale(5)}px;
+`;
+
+export const Subtitle = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  color: ${colors.lightGrey};
+  font-family: ${activeFonts.Medium};
+  text-align: center;
 `;
 
 export const FilterContainer = styled.View`

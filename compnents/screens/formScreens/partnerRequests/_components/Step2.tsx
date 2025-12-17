@@ -83,7 +83,7 @@ export const Step2: React.FC<Step2Props> = ({
   return (
     <S.InputGroupContainer>
 
-      <S.Label>{t("PartnerRequestPage.step2Name")} <Explainer popoverContent={popoverContentBasic} /></S.Label>
+      <S.Label>{t("PartnerRequestPage.step2Name")} <Explainer popoverContent={popoverContentBasic} iconSize={20} /></S.Label>
       <Controller
         control={control}
         name="OrgName"
@@ -118,7 +118,7 @@ export const Step2: React.FC<Step2Props> = ({
         )}
       />
 
-      <S.Label>{t("PartnerRequestPage.step2Location")} <Explainer popoverContent={popoverContentWhere} /></S.Label>
+      <S.Label>{t("PartnerRequestPage.step2Location")} <Explainer popoverContent={popoverContentWhere} iconSize={20} /></S.Label>
       <Controller
         control={control}
         name="Latitude"
@@ -155,7 +155,7 @@ export const Step2: React.FC<Step2Props> = ({
         )}
       />
 
-      <S.Label>{t("PartnerRequestPage.step2Helper")}  <Explainer popoverContent={popoverContentLocation} /></S.Label>
+      <S.Label>{t("PartnerRequestPage.step2Helper")}  <Explainer popoverContent={popoverContentLocation} iconSize={20} /></S.Label>
 
       <S.ButtonContainer>
         <FeatureButton iconName="target" title="I'm there" onPress={getCurrentLocation} />

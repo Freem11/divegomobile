@@ -11,9 +11,10 @@ import * as S from "./styles";
 
 interface ExplainerProps {
   popoverContent?: () => React.JSX.Element,
+  iconSize: number;
 }
 
-export const Explainer = forwardRef<View, ExplainerProps>(({ popoverContent }, ref) => {
+export const Explainer = forwardRef<View, ExplainerProps>(({ popoverContent, iconSize }, ref) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const internalRef = useRef<View>(null);
@@ -29,14 +30,15 @@ export const Explainer = forwardRef<View, ExplainerProps>(({ popoverContent }, r
 
   return (
     <S.Explainer
+      size={iconSize + 4}
       ref={setRefs}
       onPress={() => setIsVisible(true)}
     >
       <Icon
         name={"question-mark"}
         color={colors.borderActive}
-        width={moderateScale(15)}
-        height={moderateScale(15)}
+        width={moderateScale(iconSize)}
+        height={moderateScale(iconSize)}
       />
 
       <Popover

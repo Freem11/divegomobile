@@ -79,6 +79,12 @@ export default function PartnerRequestPageView({
     }
   }, [isCompleted]);
 
+  const OrganizationName = watch("OrgName");
+  const URLSubmit = watch("URL");
+  const Lat = watch("Latitude");
+  const Lng = watch("Longitude");
+  const canSubmit = OrganizationName && OrganizationName.trim().length > 0 && URLSubmit && URLSubmit.trim().length > 0 && Lat && Lng;
+
   return (
     <S.ContentContainer insets={insets}>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
@@ -115,6 +121,7 @@ export default function PartnerRequestPageView({
         onNext={handleGoNext}
         onSubmit={onSubmit}
         isSubmitting={isSubmitting}
+        canSubmit={canSubmit}
       />
     </S.ContentContainer>
   );

@@ -104,7 +104,7 @@ export const Step1: React.FC<Step1Props> = ({
         )}
       />
 
-      <S.Label>{t("DiveSiteAdd.step1Helper")}  <Explainer popoverContent={popoverContent} /></S.Label>
+      <S.Label>{t("DiveSiteAdd.step1Helper")}  <Explainer popoverContent={popoverContent} iconSize={20} /></S.Label>
 
       <S.ButtonContainer>
         <FeatureButton iconName="target" title="I'm there" onPress={getCurrentLocation} />
