@@ -76,7 +76,7 @@ export const TargetWrapper = styled.View`
     align-items: flex-end;
     margin-right: ${moderateScale(10)}px;
     margin-bottom: ${moderateScale(10)}px;
-    z-index: 10;
+    z-index: 1;
     pointer-events: box-none;
 `;
 
@@ -86,7 +86,7 @@ export const TargetWrapperAlt = styled.View`
     align-items: flex-end;
     margin-right: ${moderateScale(-50)}px;
     margin-bottom: ${moderateScale(20)}px;
-    z-index: 10;
+    z-index: 1;
     pointer-events: box-none;
 `;
 
@@ -96,7 +96,7 @@ export const PopOverWrapper = styled.View`
     align-items: bottom;
     margin-left: ${moderateScale(7)}px;
     margin-bottom: ${moderateScale(-42)}px;
-    z-index: 10;
+    z-index: 1;
     pointer-events: box-none;
 `;
 
