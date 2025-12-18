@@ -61,7 +61,7 @@ export default function DiveCenterList() {
       }}
     >
       <S.Header>Nearby Dive Centers</S.Header>
-      <S.Subtitle>Swipe left for nearby dive sites</S.Subtitle>
+      <S.Subtitle>Swipe right for nearby dive sites</S.Subtitle>
       {renderListHeader}
 
       {layoutReady ? (
