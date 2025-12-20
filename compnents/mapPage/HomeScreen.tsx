@@ -69,7 +69,7 @@ export default function HomeScreen() {
                     <MarkerDiveShop />
                 </View>
                 <S.PopOverText>
-                    The anchor represents a dive centre. Tapping it will open that centre's page.
+                    The snorkel & roof represents a dive centre. Tapping it will open that centre's page.
                 </S.PopOverText>
 
                 <Image
