@@ -6,9 +6,10 @@ import {
   Platform,
   KeyboardAvoidingView,
   Keyboard,
-  Dimensions
+  Dimensions,
+  Image
 } from "react-native";
-import React, { useState, useContext, useEffect, Fragment } from "react";
+import React, { useState, useContext, useEffect, Fragment, use } from "react";
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
@@ -26,6 +27,10 @@ import {
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
+import { useUserProfile } from "../../store/user/useUserProfile";
+import fallbackAvatar from "../../assets/icon.png";
+import { cloudflareBucketUrl } from "../../compnents/globalVariables";
+import AvatarTextInputField from "../authentication/utils/textInputWithAvatar";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -40,12 +45,22 @@ export default function CommentsModal() {
   const { fullScreenModal, setFullScreenModal } = useContext(
     FullScreenModalContext
   );
+
+   const { userProfile } = useUserProfile();
+
+  const fileName = userProfile.profilePhoto?.split("/").pop();
+  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
+  const avatarSource = fileName ? { uri: remoteUri } : fallbackAvatar;
+
+
   const { t } = useTranslation();
   useEffect(() => {
     if (selectedPicture) {
       getAllPictureComments(selectedPicture.id);
     }
   }, [fullScreenModal]);
+
+console.log("Rendering CommentsModal", userProfile.profilePhoto);
 
   const getAllPictureComments = async(picId) => {
     const picComments = await grabPhotoCommentsByPicId(picId);
@@ -182,19 +197,27 @@ export default function CommentsModal() {
                   <ButtonIcon
                     icon="close"
                     onPress={() => setReplyTo(null)}
-                    size="icon"
-                    fillColor={colors.darkGrey}
+                    size="micro"
+                    fillColor={colors.primaryBlue}
+                    style={{marginTop: 2}}
                   />
                 </View>
               ) : null}
               <View style={styles.replyBox}>
-                <TextInputField
-                  icon={"send-circle-outline"}
+                <AvatarTextInputField 
+                  avatarSource={avatarSource}
                   inputValue={commentContent}
                   placeHolderText={t("Comments.blowBubbles")}
                   onChangeText={(text) => handleChange(text)}
                   handleClear={() => handleCommentInsert()}
                 />
+                {/* <TextInputField
+                  icon={"send-circle-outline"}
+                  inputValue={commentContent}
+                  placeHolderText={t("Comments.blowBubbles")}
+                  onChangeText={(text) => handleChange(text)}
+                  handleClear={() => handleCommentInsert()}
+                /> */}
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -277,23 +300,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginLeft: "3%",
     width: "98%",
-    height: "100%",
+    paddingBottom: moderateScale(20),
+    //height: "100%",
   },
   replyLine: {
     flexDirection: "row",
-    backgroundColor: colors.themeWhite,
-    marginLeft: moderateScale(15),
-    marginRight: moderateScale(55),
-    marginBottom: moderateScale(-14),
-    marginTop: moderateScale(10),
+    backgroundColor: colors.lighterGrey,
+    //width: "100%",
+    marginLeft: moderateScale(13),
+    //marginRight: moderateScale(55),
+    //marginBottom: moderateScale(-14),
+    //marginTop: moderateScale(10),
     paddingLeft: moderateScale(10),
-    paddingRight: moderateScale(10)
+    paddingRight: moderateScale(10),
+    marginBottom: moderateScale(5)
   },
   userTxt: {
     fontFamily: activeFonts.Thin,
-    fontSize: moderateScale(13),
+    fontSize: moderateScale(18),
     color: colors.themeBlack,
-    marginBottom: moderateScale(-15),
+    //marginBottom: moderateScale(-15),
     marginRight: moderateScale(5)
   },
 });

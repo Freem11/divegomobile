@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 
 export default function CommentListItem(props) {
   const { commentDetails, setReplyTo, replyTo, toggleShowReplies, selectedReplyId, nbReplies } = props;
+  console.log("Rendering CommentListItem:", commentDetails);
   let newDate = new Date(commentDetails.created_at);
   let finalDate = newDate.toLocaleString().substring(0, 10);
   let lastChar = finalDate.slice(-1)

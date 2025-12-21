@@ -51,6 +51,6 @@ const styles = StyleSheet.create({
     width: windowWidth,
     zIndex: 50,
     left: 0,
-    backgroundColor: colors.themeBlack
+    //backgroundColor: colors.themeBlack
   },
 });
