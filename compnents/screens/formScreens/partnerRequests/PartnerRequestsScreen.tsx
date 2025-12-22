@@ -8,7 +8,6 @@ import { getCurrentCoordinates } from "../../../tutorial/locationTrackingRegistr
 import { useMapStore } from "../../../googleMap/useMapStore";
 import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
 import { calculateRegionFromBoundaries } from "../../../googleMap/regionCalculator";
-import { insertDiveSiteWaits } from "../../../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { useUserProfile } from "../../../../store/user/useUserProfile";
 import { createPartnerAccountRequest } from "../../../../supabaseCalls/partnerSupabaseCalls";
 
