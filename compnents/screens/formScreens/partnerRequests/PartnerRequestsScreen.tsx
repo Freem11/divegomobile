@@ -77,7 +77,8 @@ export default function PartnerRequestScreen() {
         const nextRoute = state.routes[state.index];
 
         if (nextRoute.name !== "GoogleMap") {
-          setValue("Site", null);
+          setValue("OrgName", null);
+          setValue("URL", null);
           setValue("Latitude", null);
           setValue("Longitude", null);
 
@@ -101,7 +102,8 @@ export default function PartnerRequestScreen() {
         setValue("Latitude", location.coords.latitude);
         setValue("Longitude", location.coords.longitude);
         mapAction.setFormValues({
-          Site: formData.Site || storeFormValues?.Site,
+          OrgName: formData.OrgName || storeFormValues?.OrgName,
+          URL: formData.URL || storeFormValues?.URL,
           Latitude: location.coords.latitude,
           Longitude: location.coords.longitude
         });
@@ -138,7 +140,8 @@ export default function PartnerRequestScreen() {
         getCurrentLocation={handleGetLocation}
         useMapFlip={handleMapFlip}
         values={{
-          Site: storeFormValues?.Site,
+          OrgName: storeFormValues?.OrgName,
+          URL: storeFormValues.URL,
           Latitude: storeFormValues?.Latitude,
           Longitude: storeFormValues?.Longitude
         }}

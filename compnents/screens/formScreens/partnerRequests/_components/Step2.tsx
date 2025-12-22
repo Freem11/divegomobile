@@ -71,11 +71,11 @@ export const Step2: React.FC<Step2Props> = ({
       <S.PopOver>
         <S.PopOverText>
           <Bold>I'm there</Bold>
-          {"\n"}Will use your current location, so use when you are at the dive site.
+          {"\n"}Will use your current location, so use when you are at your dive centre's location.
           {"\n"}
           {"\n"}
           <Bold>Drop a pin</Bold>
-          {"\n"}Will take you to the map where you can place a pin to mark the site's location.
+          {"\n"}Will take you to the map where you can place a pin to mark your dive centre's location.
         </S.PopOverText>
       </S.PopOver >
     );
