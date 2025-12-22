@@ -12,7 +12,7 @@ import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
 import { colors, fontSizes } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
-import SiteSubmitterRouter from "../screens/diveSiteUploader/siteSubmitterRouter";
+import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";

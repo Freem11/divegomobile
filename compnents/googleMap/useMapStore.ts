@@ -49,6 +49,10 @@ const mutator = (set, get) => ({
     setMapRegion: (region: region) => {
       set({ mapRegion: region });
     },
+
+    clearFormValues: () => {
+      set({ formValues: {} });
+    },
   },
 }
 );

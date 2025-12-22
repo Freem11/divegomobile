@@ -24,10 +24,14 @@ export const InputGroupContainer = styled.View`
 
 export const CompleteContainer = styled.View`
   width: 100%;
-  padding: 40% ${moderateScale(16)}px 0;
+  padding: ${width > 700 ? "20%" : "40%"} ${moderateScale(16)}px 0;
   flex: 1;
   align-items: center;
   justify-content: center;
+`;
+
+export const MiniSpacer = styled.View`
+  height: ${moderateScale(16)}px;
 `;
 
 export const Spacer = styled.View`
@@ -42,6 +46,24 @@ export const Label = styled.Text`
   margin-top: ${moderateScale(20)}px;
 `;
 
+export const NoticeTitle = styled.Text`
+  align-self: left;
+  font-size: ${moderateScale(fontSizes.Large)}px;
+  font-family: ${activeFonts.Black};
+  color: ${colors.themeBlack};
+  margin-bottom: ${moderateScale(48)}px;
+  margin-top: ${moderateScale(20)}px;
+  margin-left: ${moderateScale(20)}px;
+`;
+
+export const NoticeSubtitle = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.primaryBlue};
+  line-height: ${moderateScale(22)}px;
+  width: 100%;
+`;
+
 export const Title = styled.Text`
   font-size: ${moderateScale(fontSizes.Medium)}px;
   font-family: ${activeFonts.Bold};
@@ -52,9 +74,11 @@ export const Title = styled.Text`
 
 export const Subtitle = styled.Text`
   font-size: ${moderateScale(fontSizes.Base)}px;
-  font-family: ${activeFonts.Light};
+  font-family: ${activeFonts.Regular};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
+  margin-left: ${moderateScale(3)}px;
+  margin-top: ${moderateScale(-8)}px;
   width: 90%;
 `;
 
@@ -123,4 +147,39 @@ export const CloneTripBox = styled.View`
   padding-top: ${moderateScale(20)};
   flex-direction: row;
   justify-content: center;
+`;
+
+export const TextBuffer = styled.View`
+  margin-top: ${moderateScale(20)}px;
+  margin-bottom: ${moderateScale(10)}px;
+  margin-left: 1%;
+  width: 98%;
+`;
+
+export const ButtonContainer = styled.View`
+  padding-top: ${moderateScale(35)};
+  flex-direction: row;
+  justify-content: space-between;
+  align-self: center;
+  width: ${width - moderateScale(56)}
+`;
+
+export const PopOver = styled.View`
+  padding-horizontal: ${moderateScale(15)}px;
+  padding-vertical: ${moderateScale(20)}px;
+`;
+
+export const PopOverText = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Thin};
+  text-align: center;
+  color: ${colors.themeBlack};
+`;
+
+export const ErrorText = styled.Text`
+  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.red};
+  margin-top: ${moderateScale(4)}px;
+  margin-left: ${moderateScale(2)}px;
 `;

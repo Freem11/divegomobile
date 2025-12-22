@@ -9,12 +9,12 @@ import DiveSiteRouter from "../screens/diveSite/diveSiteRouter";
 import UserProfilePhotosPage from "../screens/userProfilePhotos";
 import PhotoBoxModal from "../screens/photoBox/photoBoxModal";
 import DiveShopRouter from "../screens/diveShop/diveShopRouter";
-import PartnerRequestRouter from "../screens/partnerAccountRequest/partnerRequestRouter";
-
-import BottomTabNavigator from "./bottomTabNavigator";
-import HomeScreen from "./HomeScreen";
-import SiteSubmitterNavigator from "../screens/diveSiteUploader/siteSubmitterNavigator";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
+import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
+import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
+
+import HomeScreen from "./HomeScreen";
+import BottomTabNavigator from "./bottomTabNavigator";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -75,7 +75,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
-      <Stack.Screen name="SiteSubmitterNavigator" component={SiteSubmitterNavigator} />
+      <Stack.Screen name="SiteSubmitterNavigator" component={SiteSubmitterRouter} />
 
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />

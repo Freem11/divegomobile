@@ -110,6 +110,7 @@ export default function useSearchTool() {
 
   const handleMapOptionSelected = async (place: string) => {
 
+    setAnimalMultiSelection(null);
     setList([]);
     try {
       const json = await Geocoder.from(place);
@@ -134,6 +135,7 @@ export default function useSearchTool() {
   const handleDiveSiteOptionSelected = async (diveSite: string) => {
     if (!diveSite) return;
 
+    setAnimalMultiSelection(null);
     setList([]);
 
     const [name, region] = diveSite.split(" ~ ");

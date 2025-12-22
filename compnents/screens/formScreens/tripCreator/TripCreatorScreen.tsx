@@ -1,6 +1,6 @@
 import type { RouteProp } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Keyboard, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
@@ -24,17 +24,19 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const { id, shopId } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
-  const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName[]>();
-  const setFormValues = useMapStore((state) => state.actions.setFormValues);
-  const storeFormValues = useMapStore((state) => state.formValues);
 
+  // Context & Store
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const clearFormValues = useMapStore((state) => state.actions.clearFormValues);
+  const storeFormValues = useMapStore((state) => state.formValues);
 
+  // Local State
+  const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
+  const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName[]>();
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-
   const [dateType, setDateType] = useState("");
 
   const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
@@ -48,30 +50,52 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
       Start: selectedTrip?.startDate,
       End: selectedTrip?.endDate,
       Details: selectedTrip?.description,
-      SiteList: selectedTrip?.siteList
+      SiteList: sitesArray // Priority given to context sitesArray
     }
   });
 
+  /**
+   * CLEANUP LOGIC
+   * Resets both the Global Context and the Map Store
+   */
+  const performCleanup = useCallback(() => {
+    setSitesArray([]);
+    clearFormValues();
+    setEditMode(false);
+  }, [setSitesArray, clearFormValues, setEditMode]);
+
+  /**
+   * NAVIGATION LISTENER
+   * Triggers when the user leaves the screen.
+   * If they go anywhere EXCEPT the GoogleMap, we wipe the data.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        const state = navigation.getState();
+        const nextRoute = state.routes[state.index];
+
+        // Only clear if the user is NOT navigating to the map to pick sites
+        if (nextRoute?.name !== "GoogleMap") {
+          performCleanup();
+        }
+      };
+    }, [navigation, performCleanup])
+  );
+
+  // Sync sites from context to form and fetch info for display
   useEffect(() => {
     setFormValues({ ...storeFormValues, SiteList: sitesArray });
     setValue("SiteList", sitesArray);
-    getTripDiveSites(sitesArray);
-
+    if (sitesArray.length > 0) {
+      getTripDiveSites(sitesArray);
+    }
   }, [sitesArray]);
 
   const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
-
-    console.log(siteIdNo, siteList);
-    const index = siteList.indexOf(siteIdNo);
-    if (index > -1) {
-      siteList.splice(index, 1);
-    }
-    setSitesArray(siteList);
-    const indexLocal = siteList.indexOf(siteIdNo);
-    if (indexLocal > -1) {
-      siteList.splice(index, 1);
-    }
-    getTripDiveSites(siteList);
+    const newSiteList = siteList.filter(id => id !== siteIdNo);
+    setSitesArray(newSiteList);
+    getTripDiveSites(newSiteList);
   };
 
   const showDatePicker = (value: string) => {
@@ -84,32 +108,33 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     setDatePickerVisible(false);
   };
 
+  // Initial Load Logic
   useEffect(() => {
-    getDiveSiteinfo();
-    if (!id) {
-      setSitesArray([]);
-      setEditMode(false);
+    if (id) {
+      getDiveSiteinfo();
+    } else {
+      // If we don't have an ID and we aren't returning from the map, reset
+      if (!storeFormValues.Name) {
+        setSitesArray([]);
+        setEditMode(false);
+      }
     }
   }, [id]);
 
   const getDiveSiteinfo = async () => {
     const tripInfo = await getTripById(id);
-    setSelectedTrip(tripInfo[0]);
-    setSitesArray(tripInfo[0].siteList);
-    if (tripInfo) {
+    if (tripInfo && tripInfo[0]) {
+      setSelectedTrip(tripInfo[0]);
+      setSitesArray(tripInfo[0].siteList);
       setEditMode(true);
     }
-
   };
 
-  useEffect(() => {
-    if (selectedTrip) {
-      getTripDiveSites(selectedTrip.siteList);
-    }
-
-  }, [selectedTrip]);
-
   const getTripDiveSites = async (siteIds: number[]) => {
+    if (!siteIds || siteIds.length === 0) {
+      setTripDiveSites([]);
+      return;
+    }
     try {
       const success = await getItineraryDiveSiteByIdArray(siteIds);
       if (success) {
@@ -132,12 +157,13 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
         description: data.Details,
         siteList: data.SiteList
       });
-
-    } catch (error) {
-      console.error("Form submission failed due to photo upload errors:", error);
-    } finally {
       setIsCompleted(true);
-      setTimeout(() => navigation.goBack(), 3000);
+      setTimeout(() => {
+        performCleanup(); // Clear before leaving
+        navigation.goBack();
+      }, 3000);
+    } catch (error) {
+      console.error("Form submission failed:", error);
     }
   };
 
@@ -154,11 +180,13 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
         description: data.Details,
         siteList: data.SiteList
       }, "Edit");
+      setIsCompleted(true);
+      setTimeout(() => {
+        performCleanup(); // Clear before leaving
+        navigation.goBack();
+      }, 3000);
     } catch (error) {
       console.error("Trip edit submission failed:", error);
-    } finally {
-      setIsCompleted(true);
-      setTimeout(() => navigation.goBack(), 3000);
     }
   };
 
@@ -168,7 +196,6 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     } else {
       await handleCreate(data);
     }
-
   };
 
   return (

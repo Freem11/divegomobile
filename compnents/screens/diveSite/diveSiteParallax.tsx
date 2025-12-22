@@ -95,7 +95,10 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   };
 
   const openPicUploader = () => {
-    diveSiteNavigation.navigate("AddSighting", { selectedDiveSite });
+    diveSiteNavigation.navigate("AddSighting", {
+      selectedDiveSite: selectedDiveSite,
+      siteName: selectedDiveSite.name
+    });
   };
 
   const openEditsPage = () => {

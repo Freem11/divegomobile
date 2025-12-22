@@ -3,10 +3,10 @@ import React, { useContext } from "react";
 
 import { buttonTextAlt, primaryButtonAlt } from "../../../styles";
 import { useMapStore } from "../../useMapStore";
-import { useDiveSiteNavigation } from "../../../screens/diveSite/types";
-import { usePartnerRequestNavigation } from "../../../screens/partnerAccountRequest/types";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { MapConfigurations } from "../../types";
+import { useDiveSiteNavigation } from "../../../screens/formScreens/siteSubmitter/types";
+import { usePartnerRequestNavigation } from "../../../screens/formScreens/partnerRequests/types";
 
 const styles = StyleSheet.create({
   lowerButtonText: buttonTextAlt,

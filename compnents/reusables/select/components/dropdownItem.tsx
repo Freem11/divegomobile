@@ -1,6 +1,8 @@
-import React from 'react';
-import { Option } from '..';
-import * as S from './styles';
+import React from "react";
+
+import { Option } from "..";
+
+import * as S from "./styles";
 
 export type DropdownItemProps = {
   option: Option;

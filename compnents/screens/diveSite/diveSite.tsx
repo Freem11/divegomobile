@@ -7,7 +7,7 @@ import SealifePreview from "../../reusables/sealifePreview";
 import ItineraryCard from "../../reusables/itineraryCard";
 import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
-import Label from "../../reusables/label";
+import Label from "../../reusables/label-new";
 import ReviewCard from "../../reusables/reviewCard";
 import { Review } from "../../../entities/diveSiteReview";
 import Button from "../../reusables/button";
@@ -175,7 +175,7 @@ export default function DiveSiteScreenView({
                 title={"Add First Review"}
                 iconLeft="diving-scuba-flag"
                 round={false}
-                style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+                style={{ width: moderateScale(240) }}
                 onPress={() => openDiveSiteReviewer()}
               />
             </S.ButtonContainer>

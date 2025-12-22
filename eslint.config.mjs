@@ -66,8 +66,8 @@ export default tseslint.config(
         "newlines-between": "always"
       }
     ],
-    "@stylistic/jsx-indent": ["error", 4],
-    "@stylistic/jsx-indent-props": ["error", 4],
+    "@stylistic/jsx-indent": ["error", 2],
+    "@stylistic/jsx-indent-props": ["error", 2],
     "@stylistic/jsx-closing-bracket-location": ["error", "tag-aligned"],
     "@stylistic/jsx-closing-tag-location": ["error"],
     "@stylistic/jsx-wrap-multilines": ["error", {
@@ -91,6 +91,6 @@ export default tseslint.config(
     "@stylistic/no-multiple-empty-lines": ["error", { "max": 1 }],
     "@stylistic/semi": ["error", "always"],
     "@stylistic/keyword-spacing": ["error", { "before": true, "after": true }],
-    "@stylistic/indent": ["error", 4]
+    "@stylistic/indent": ["error", 2]
   }
 });

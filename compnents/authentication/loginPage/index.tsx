@@ -1,16 +1,15 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { basicSignIn } from "../../helpers/loginHelpers";
 import { i18n } from "../../../i18n";
 import { showWarning } from "../../toast";
 import { useUserHandler } from "../../../store/user/useUserHandler";
+import { AuthenticationRoutes } from "../authNavigator";
 
 import LoginPageView from "./view";
 import { Form } from "./form";
-
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthenticationRoutes } from "../authNavigator";
 
 export type LoginScreenNavigationProp = NativeStackNavigationProp<
   AuthenticationRoutes,
@@ -26,11 +25,11 @@ interface IProps {
 export default function LoginScreen(props: IProps) {
   const userHandler = useUserHandler();
 
-  const onSubmit = async(data: Form) => {
+  const onSubmit = async (data: Form) => {
     const response = await basicSignIn(data.Email, data.Password);
     if (response.error) {
       console.log("Error: ", response.error);
-      if (response.error.status === 400){
+      if (response.error.status === 400) {
         showWarning(i18n.t("Validators.invalidCredentials"));
       } else {
         showWarning(i18n.t("Common.unknownError"));
