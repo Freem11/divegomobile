@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch } from "react-hook-form";
-import { moderateScale } from "react-matter-size-matters"; // Note: Check if this was a typo in original (usually react-native-size-matters)
+import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
