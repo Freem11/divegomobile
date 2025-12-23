@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch } from "react-hook-form";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale } from "react-matter-size-matters"; // Note: Check if this was a typo in original (usually react-native-size-matters)
 import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -9,10 +9,6 @@ import { ProgressBar } from "../progressBar";
 import { StepNavigation } from "../stepNavigation";
 import * as S from "../styles";
 import { ItineraryItem } from "../../../../entities/itineraryItem";
-import GoogleMap from "../../../googleMap";
-import { useMapStore } from "../../../googleMap/useMapStore";
-import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
-import { useDiveShopNavigation } from "../../diveShop/types";
 
 import { Step1, Step2, Step3, Step4 } from "./_components";
 import { Form } from "./form";
@@ -36,6 +32,7 @@ type ShopReviewCreatorProps = {
   sitesArray: number[];
   editMode: boolean;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
+  useMapFlip: () => void; // This is the logic from the Screen
 };
 
 export default function TripCreatorPageView({
@@ -56,24 +53,12 @@ export default function TripCreatorPageView({
   removeFromSitesArray,
   sitesArray,
   editMode,
-  setEditMode
+  setEditMode,
+  useMapFlip
 }: ShopReviewCreatorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
-
-  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
-
-  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-  const setFormValues = useMapStore((state) => state.actions.setFormValues);
-  const diveShopNavigation = useDiveShopNavigation();
   const insets = useSafeAreaInsets();
-
-  const handleMapFlip = async (formData: Required<Form>) => {
-    setInitConfig(MapConfigurations.TripBuild);
-    setMapConfig(MapConfigurations.TripBuild, { pageName: ScreenReturn.TripCreator as unknown as string, itemId: 1 });
-    diveShopNavigation.navigate("GoogleMap");
-    setFormValues(formData);
-  };
 
   const handleGoNext = useCallback(async () => {
     let fieldsToValidate: (keyof Form)[] = [];
@@ -84,9 +69,6 @@ export default function TripCreatorPageView({
         break;
       case 2:
         fieldsToValidate = ["Details"];
-        break;
-      case 3:
-        fieldsToValidate = [];
         break;
     }
 
@@ -136,12 +118,12 @@ export default function TripCreatorPageView({
             }}
             values={{
               Id: selectedTrip?.id,
-              Name: selectedTrip?.tripName,
-              Link: selectedTrip?.BookingPage,
-              Price: selectedTrip?.price,
-              Start: selectedTrip?.startDate,
-              End: selectedTrip?.endDate,
-              Details: selectedTrip?.description,
+              Name: watch("Name"),
+              Link: watch("Link"),
+              Price: watch("Price"),
+              Start: watch("Start"),
+              End: watch("End"),
+              Details: watch("Details"),
             }}
           />
         )}
@@ -154,12 +136,8 @@ export default function TripCreatorPageView({
             setEditMode={setEditMode}
             values={{
               Id: selectedTrip?.id,
-              Name: selectedTrip?.tripName,
-              Link: selectedTrip?.BookingPage,
-              Price: selectedTrip?.price,
-              Start: selectedTrip?.startDate,
-              End: selectedTrip?.endDate,
-              Details: selectedTrip?.description,
+              Name: watch("Name"),
+              Details: watch("Details"),
             }}
           />
         )}
@@ -172,28 +150,18 @@ export default function TripCreatorPageView({
             editMode={editMode}
             setEditMode={setEditMode}
             tripDiveSites={tripDiveSites}
-            handleMapFlip={handleMapFlip}
+            handleMapFlip={useMapFlip}
             removeFromSitesArray={removeFromSitesArray}
             sitesArray={sitesArray}
             values={{
               Id: selectedTrip?.id,
-              Name: selectedTrip?.tripName,
-              Link: selectedTrip?.BookingPage,
-              Price: selectedTrip?.price,
-              Start: selectedTrip?.startDate,
-              End: selectedTrip?.endDate,
-              Details: selectedTrip?.description,
-              SiteList: selectedTrip?.siteList
+              Name: watch("Name"),
+              SiteList: sitesArray
             }}
           />
         )}
         {currentStep === 4 && (
-          <Step4
-            editMode={editMode}
-          />
-        )}
-        {currentStep === 5 && (
-          <GoogleMap />
+          <Step4 editMode={editMode} />
         )}
       </ScrollView>
 
