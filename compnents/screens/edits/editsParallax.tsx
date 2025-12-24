@@ -1,14 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import { ImagePickerAsset } from "expo-image-picker";
+import { useForm } from "react-hook-form";
 
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import noImage from "../../png/NoImage.png";
-import { chooseImageHandler } from "../imageUploadHelpers";
+import { chooseImageHandler, imageUploadClean } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { useAppNavigation } from "../../mapPage/types";
+import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
+import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
+import { cloudflareBucketUrl } from "../../globalVariables";
+
+import { Form } from "./form";
 
 import EdittingScreen from ".";
 
@@ -25,56 +31,23 @@ export type BasicFormData = {
 
 export default function EditScreenParallax() {
   const { editInfo } = useContext(EditsContext);
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-  const { selectedShop } = useContext(SelectedShopContext);
-  const { selectedProfile } = useContext(SelectedProfileContext);
+  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
+  const { selectedProfile, setSelectedProfile } = useContext(SelectedProfileContext);
 
-  const [localPreviewUri, setLocalPreviewUri] = useState<string | null>(null);
-  const [initialFormData, setInitialFormData] = useState<BasicFormData | null>(null);
+  const preImage = `${cloudflareBucketUrl}${selectedProfile ? selectedProfile.profilePhoto.split("/").pop() : selectedShop.diveShopProfilePhoto.split("/").pop()}`;
 
-  useEffect(() => {
-    switch (editInfo) {
-      case "DiveSite":
-        setLocalPreviewUri(selectedDiveSite.diveSiteProfilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.diveSiteProfilePhoto.split("/").pop()}` : localPreviewUri);
-        setInitialFormData({
-          dataType: "Dive Site",
-          title: "Dive Site Edit",
-          id: selectedDiveSite.id,
-          name: selectedDiveSite.name,
-          bio: selectedDiveSite.diveSiteBio,
-          uri: selectedDiveSite.diveSiteProfilePhoto ? selectedDiveSite.diveSiteProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}` : null,
-          placeholderName: "Dive Site Name cannot be blank!",
-          placeholderBio: `A little about ${selectedDiveSite.name}`
-        });
-        break;
-      case "DiveShop":
-        setLocalPreviewUri(selectedShop.diveShopProfilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop.diveShopProfilePhoto.split("/").pop()}` : localPreviewUri);
-        setInitialFormData({
-          dataType: "Dive Center",
-          title: "Dive Center Edit",
-          id: selectedShop.id,
-          name: selectedShop.orgName,
-          bio: selectedShop.diveShopBio,
-          uri: selectedShop.diveShopProfilePhoto ? selectedShop.diveShopProfilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}` : null,
-          placeholderName: "Dive Centre Name cannot be blank!",
-          placeholderBio: `A little about ${selectedShop.orgName}`
-        });
-        break;
-      case "Profile":
-        setLocalPreviewUri(selectedProfile.profilePhoto ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}` : localPreviewUri);
-        setInitialFormData({
-          dataType: "Profile",
-          title: "Edit My Profile",
-          id: selectedProfile.id,
-          name: selectedProfile.UserName,
-          bio: selectedProfile.profileBio,
-          uri: selectedProfile.profilePhoto ? selectedProfile.profilePhoto : localPreviewUri ? `animalphotos/public/${localPreviewUri?.split("/").pop()}` : null,
-          placeholderName: "You Diver Name cannot be blank!",
-          placeholderBio: "Tell other divers about yourself"
-        });
-        break;
+  const [image, setImage] = useState<string>(preImage);
+
+  const { control, setValue, handleSubmit } = useForm<Form>({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    values: {
+      id: selectedShop.id || selectedProfile.id,
+      name: selectedShop.orgName || selectedProfile.UserName,
+      bio: selectedShop.diveShopBio || selectedProfile.profileBio || "",
+      uri: selectedShop.diveShopProfilePhoto || selectedProfile.profilePhoto || ""
     }
-  }, [selectedDiveSite, selectedShop, selectedProfile, editInfo]);
+  });
 
   const navigation = useAppNavigation();
 
@@ -94,30 +67,76 @@ export default function EditScreenParallax() {
     );
   };
 
+  const handlePreviewImage = async (picture: ImagePickerAsset) => {
+    const newPic = picture.uri;
+    setImage(newPic);
+
+    setValue("uri", newPic);
+  };
+
   const handleSelectImage = async () => {
     try {
       const result = await chooseImageHandler();
       if (result?.assets?.[0]?.uri) {
-        handleImageUpload(result?.assets?.[0]?.uri);
+        handlePreviewImage(result?.assets?.[0]);
       }
     } catch (e: any) {
       console.log("Image selection cancelled", e.message);
     }
   };
 
-  const handleImageUpload = async (argPicture: string) => {
-    setLocalPreviewUri(argPicture);
+  const tryUpload = async (uri: string) => {
+    try {
+      return await imageUploadClean({ assets: [{ uri }] });
+    } catch (e) {
+      console.error("Error uploading image:", e);
+      return null;
+    }
+  };
+
+  const onSubmit = async (formData: Required<Form>) => {
+    try {
+      const fileName = await tryUpload(formData.uri);
+      if (!fileName) {
+        throw new Error("Photo upload failed");
+      }
+
+      const fullPath = `animalphotos/public/${fileName}`;
+
+      if (editInfo === "Profile") {
+        const response = await updateProfile({
+          id: formData.id,
+          UserName: formData.name,
+          profileBio: formData.bio,
+          profilePhoto: fullPath
+        });
+        setSelectedProfile(response);
+      } else if (editInfo === "Dive Center") {
+        const response = await updateDiveShop({
+          id: formData.id,
+          orgName: formData.name,
+          diveShopBio: formData.bio,
+          diveShopProfilePhoto: fullPath
+        });
+        setSelectedShop(response);
+      }
+
+    } catch (err) {
+      console.error("Error uploading image:", err);
+    }
   };
 
   return (
     <ParallaxDrawer
-      headerImage={localPreviewUri ? { uri: localPreviewUri } : noImage}
+      headerImage={image ? { uri: image } : noImage}
       onClose={onClose}
       popoverContent={popoverContent}
     >
       <EdittingScreen
-        localPreviewUri={localPreviewUri}
-        initialFormData={initialFormData}
+        editInfo={editInfo}
+        control={control}
+        localPreviewUri={image}
+        onSubmit={handleSubmit(onSubmit)}
       />
     </ParallaxDrawer>
   );

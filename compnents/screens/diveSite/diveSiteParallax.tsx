@@ -6,7 +6,6 @@ import email from "react-native-email";
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { EditsContext } from "../../contexts/editsContext";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
@@ -35,7 +34,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
   const { setChosenModal } = useContext(ModalSelectContext);
-  const { setEditInfo } = useContext(EditsContext);
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
@@ -101,11 +99,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     });
   };
 
-  const openEditsPage = () => {
-    diveSiteNavigation.navigate("EditScreen");
-    setEditInfo("DiveSite");
-  };
-
   const handleReport = () => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
@@ -119,13 +112,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const popoverContent = () => {
     return (
       <>
-        {isPartnerAccount && (
-          <IconWithLabel
-            label="Update Dive Site Info"
-            iconName="camera-flip-outline"
-            buttonAction={() => openEditsPage()}
-          />
-        )}
         <IconWithLabel
           label={t("DiveSite.addReview")}
           iconName="diving-scuba-flag"
