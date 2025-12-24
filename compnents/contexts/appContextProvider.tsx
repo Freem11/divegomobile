@@ -12,7 +12,6 @@ import AnimalMultiSelectContextProvider from "./animalMultiSelectContext";
 import SelectedDiveSiteContextProvider from "./selectedDiveSiteContext";
 import PictureContextProvider from "./pictureContext";
 import AnimalSelectContextProvider from "./animalSelectContext";
-import CommentsModalContextProvider from "./commentsModalContext";
 import SelectedPictureContextProvider from "./selectedPictureContext";
 import SelectedProfileContextProvider from "./selectedProfileModalContext";
 import SelectedPhotoContextProvider from "./selectedPhotoContext";
@@ -37,7 +36,6 @@ const providers = [
     SelectedDiveSiteContextProvider,
     PictureContextProvider,
     AnimalSelectContextProvider,
-    CommentsModalContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
     SelectedPhotoContextProvider,

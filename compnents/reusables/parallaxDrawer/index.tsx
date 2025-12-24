@@ -9,7 +9,6 @@ import Popover from "react-native-popover-view";
 import { useNavigation } from "@react-navigation/native";
 
 import ButtonIcon from "../buttonIcon-new";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 import * as S from "./styles";
 import { WavyImg } from "./wavyImg";
@@ -47,14 +46,7 @@ const ParallaxDrawer = ({
 
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
-  const { fullScreenModal } = useContext(FullScreenModalContext);
   const navigation = useNavigation();
-
-  useEffect(() => {
-    if (fullScreenModal) {
-      setIsVisible(false);
-    }
-  }, [fullScreenModal]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {

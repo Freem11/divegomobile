@@ -4,13 +4,10 @@ import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import email from "react-native-email";
 
-import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
 import {
   insertPhotoLike,
   deletePhotoLike,
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
@@ -53,10 +50,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { userProfile } = useUserProfile();
-  const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
@@ -64,7 +58,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const [aspectRatio, setAspectRatio] = useState<number | null>(1);
 
-  // Construct remote image URL
   const fileName = pic.photoFile?.split("/").pop();
   const remoteUri = `${cloudflareBucketUrl}${fileName}`;
 
@@ -84,12 +77,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
   //     );
   //   }
   // }, [remoteUri]);
-
-  const handleCommentModal = (pic: Photo) => {
-    setFullScreenModal(true);
-    setActiveTutorialID("CommentsModal");
-    setSelectedPicture(pic);
-  };
 
   const handleEmail = (pic: Photo) => {
     email(["scubaseasons@gmail.com"], {
