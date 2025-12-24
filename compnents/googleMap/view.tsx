@@ -303,7 +303,7 @@ export default function GoogleMapView(props: MapViewProps) {
         <View style={{ position: "absolute", bottom: "12%", left: "5%" }}>
           <Explainer popoverContent={popoverContentTripView} iconSize={34} />
         </View>
-      )};
+      )}
 
       {props?.mapConfig === MapConfigurations.TripView && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
@@ -315,7 +315,7 @@ export default function GoogleMapView(props: MapViewProps) {
         <View style={{ position: "absolute", bottom: "12%", left: "5%" }}>
           <Explainer popoverContent={popoverContentTripBuild} iconSize={34} />
         </View>
-      )};
+      )}
 
       {props?.mapConfig === MapConfigurations.TripBuild && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
