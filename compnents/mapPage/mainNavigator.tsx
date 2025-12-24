@@ -12,6 +12,7 @@ import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
+import CommentsModal from "../modals/commentsModal";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
@@ -33,6 +34,7 @@ export type MainRoutes = {
   PartnerRequestUpgrade: undefined;
   EditScreen: undefined;
   UserProfilePhotos: undefined;
+  PhotoComments: { id: number };
   PinchAndZoomPhoto: undefined;
   UserProfile: { id: number };
 };
@@ -81,6 +83,15 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
+
+      <Stack.Screen name="PhotoComments">
+        {({ route }) => (
+          <CommentsModal
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
+
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
       <Stack.Screen name="UserProfile">
         {({ route }) => (

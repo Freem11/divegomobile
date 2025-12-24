@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { FlatList } from "react-native";
 import { useTranslation } from "react-i18next";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import ButtonIcon from "../../reusables/buttonIcon";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
@@ -8,6 +9,8 @@ import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import AnimatedFullScreenModal from "../../reusables/animatedFullScreenModal";
+import { DiveSiteRoutes } from "../diveSite/diveSiteNavigator";
+import { Photo } from "../../../entities/photos";
 
 import * as S from "./styles";
 
@@ -22,7 +25,7 @@ export default function DiveSitePhotosPageView({
   diveSites,
   title,
   onClose,
-  handleProfileMove
+  handleProfileMove,
 }: DiveSitePhotosPageViewProps) {
 
   const { t } = useTranslation();

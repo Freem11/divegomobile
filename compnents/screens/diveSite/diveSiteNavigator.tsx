@@ -11,6 +11,7 @@ import SiteReviewCreatorScreen from "../formScreens/siteReviewCreator/SiteReview
 import DiveSitePhotosPage from "../diveSitePhotos";
 import DiveSiteTripsPage from "../diveSiteTrips";
 import PicUploaderScreen from "../formScreens/picUploader/PicUploaderScreen";
+import CommentsModal from "../../modals/commentsModal";
 
 import DiveSiteParallax from "./diveSiteParallax";
 
@@ -23,6 +24,7 @@ export type DiveSiteRoutes = {
   EditScreen: undefined;
   AddSighting: { selectedDiveSite: DiveSiteWithUserName, siteName?: string; };
   DiveSitePhotos: undefined;
+  DiveSiteComment: undefined;
   DiveSiteTrips: undefined;
   GoogleMap: undefined;
   SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
@@ -53,6 +55,8 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
 
       <Stack.Screen name="DiveSitePhotos" component={DiveSitePhotosPage} />
+
+      <Stack.Screen name="DiveSiteComment" component={CommentsModal} />
 
       <Stack.Screen name="DiveSiteTrips" component={DiveSiteTripsPage} />
 

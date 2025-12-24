@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import email from "react-native-email";
@@ -14,7 +14,6 @@ import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext"
 import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
-import { windowWidth } from "../paginator/styles";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { cloudflareBucketUrl } from "../../globalVariables";
@@ -47,6 +46,8 @@ interface PictureProps {
   diveSiteAction?: () => void;
   profileViewAction?: () => void;
 }
+
+const windowWidth = Dimensions.get("window").width;
 
 const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
@@ -183,7 +184,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
           />
           <IconCounterButton
             icon="comment"
-            onPress={() => handleCommentModal(pic)}
+            onPress={() => navigation.navigate("PhotoComments", { id: pic.id })}
             size="icon"
             count={abbreviateNumber(pic.commentcount)}
           />
