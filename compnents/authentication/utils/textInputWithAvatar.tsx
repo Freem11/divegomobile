@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(8),
         padding: moderateScale(5),
         marginBottom: moderateScale(30),
-        //marginTop: moderateScale(50),
     },
     image: {
         width: 46,
@@ -59,19 +58,4 @@ const styles = StyleSheet.create({
         height: moderateScale(40),
         fontFamily: activeFonts.Regular,
     },
-    // container: {
-    //     flex: 1,
-    //     flexDirection: "row",
-    //     borderBottomColor: "darkgrey",
-    //     borderBottomWidth: moderateScale(2),
-    //     alignItems: "center",
-    //     backgroundColor: colors.themeWhite,
-    //     borderRadius: moderateScale(5),
-    //     alignItems: "center"
-    // },
-    // input: {
-    //     width: "83%",
-    //     height: moderateScale(40),
-    //     fontFamily: activeFonts.Regular,
-    // },
 });
