@@ -13,6 +13,8 @@ import { useAppNavigation } from "../../mapPage/types";
 import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
 import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { cloudflareBucketUrl } from "../../globalVariables";
+import { clearPhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
+import { showError, showSuccess } from "../../toast";
 
 import { Form } from "./form";
 
@@ -95,6 +97,7 @@ export default function EditScreenParallax() {
   };
 
   const onSubmit = async (formData: Required<Form>) => {
+    await clearPhoto(preImage);
     try {
       const fileName = await tryUpload(formData.uri);
       if (!fileName) {
@@ -120,8 +123,9 @@ export default function EditScreenParallax() {
         });
         setSelectedShop(response);
       }
-
+      showSuccess(`You ${editInfo} info was sucessfully updated!`);
     } catch (err) {
+      showError(`We ran into and errro updating you ${editInfo}, please try again later`);
       console.error("Error uploading image:", err);
     }
   };
