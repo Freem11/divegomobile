@@ -23,7 +23,7 @@ import {
 import TextInputField from "../authentication/utils/textInput";
 import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import {
-  grabPhotoCommentsByPicId,
+  grabPhotoCommentsByPicId,insertPhotoComment
 } from "../../supabaseCalls/photoCommentSupabaseCalls";
 import CommentListItem from "../commentListItem/commentListItem";
 import { FullScreenModalContext } from "../contexts/fullScreenModalContext";
@@ -46,7 +46,7 @@ export default function CommentsModal() {
     FullScreenModalContext
   );
 
-   const { userProfile } = useUserProfile();
+  const { userProfile } = useUserProfile();
 
   const fileName = userProfile.profilePhoto?.split("/").pop();
   const remoteUri = `${cloudflareBucketUrl}${fileName}`;
@@ -60,18 +60,13 @@ export default function CommentsModal() {
     }
   }, [fullScreenModal]);
 
-console.log("Rendering CommentsModal", userProfile.profilePhoto);
-
   const getAllPictureComments = async(picId) => {
     const picComments = await grabPhotoCommentsByPicId(picId);
     setListOfComments(picComments);
   };
 
   const handleChange = (text) => {
-    if (isClearOn) {
-      setIsClearOn(false);
-      return;
-    }
+    if (isClearOn) setIsClearOn(false);
     setCommentContent(text);
   };
 
@@ -90,7 +85,7 @@ console.log("Rendering CommentsModal", userProfile.profilePhoto);
         finalContent = commentContent;
       }
       const newComment = await insertPhotoComment(
-        profile[0].UserID,
+        userProfile.UserID,
         selectedPicture.id,
         finalContent,
         userIdentity
@@ -110,7 +105,7 @@ console.log("Rendering CommentsModal", userProfile.profilePhoto);
 
   const hideRepliesForChildren = (parentId, newSelectedReplyId) => {
     newSelectedReplyId = [...newSelectedReplyId.filter((id) => parentId !== id)];
-    for (comment of listOfComments) {
+    for (const comment of listOfComments) {
       if (comment.replied_to === parentId) {
         newSelectedReplyId = hideRepliesForChildren(comment.id, newSelectedReplyId);
       }
@@ -120,6 +115,7 @@ console.log("Rendering CommentsModal", userProfile.profilePhoto);
   };
 
   const toggleShowReplies = (comment) => {
+    if (!comment?.id) return;
     if (selectedReplyId.includes(comment.id)) {
       const selectedReplyIdTemp = hideRepliesForChildren(comment.id, selectedReplyId);
       setSelectedReplyId(selectedReplyIdTemp);
@@ -211,13 +207,6 @@ console.log("Rendering CommentsModal", userProfile.profilePhoto);
                   onChangeText={(text) => handleChange(text)}
                   handleClear={() => handleCommentInsert()}
                 />
-                {/* <TextInputField
-                  icon={"send-circle-outline"}
-                  inputValue={commentContent}
-                  placeHolderText={t("Comments.blowBubbles")}
-                  onChangeText={(text) => handleChange(text)}
-                  handleClear={() => handleCommentInsert()}
-                /> */}
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -277,7 +266,7 @@ const styles = StyleSheet.create({
   commentListContainer: {
     flex: 1,
     width: "100%",
-    height: "85%",
+    paddingBottom: moderateScale(10),
   },
   keyboardAvoid: {
     alignItems: "center",
@@ -301,16 +290,11 @@ const styles = StyleSheet.create({
     marginLeft: "3%",
     width: "98%",
     paddingBottom: moderateScale(20),
-    //height: "100%",
   },
   replyLine: {
     flexDirection: "row",
     backgroundColor: colors.lighterGrey,
-    //width: "100%",
     marginLeft: moderateScale(13),
-    //marginRight: moderateScale(55),
-    //marginBottom: moderateScale(-14),
-    //marginTop: moderateScale(10),
     paddingLeft: moderateScale(10),
     paddingRight: moderateScale(10),
     marginBottom: moderateScale(5)
@@ -319,7 +303,6 @@ const styles = StyleSheet.create({
     fontFamily: activeFonts.Thin,
     fontSize: moderateScale(18),
     color: colors.themeBlack,
-    //marginBottom: moderateScale(-15),
     marginRight: moderateScale(5)
   },
 });
