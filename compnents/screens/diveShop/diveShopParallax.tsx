@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
-import { RouteProp, useRoute } from "@react-navigation/native";
 
 import noImage from "../../png/NoImage.png";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -12,8 +10,6 @@ import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { EditsContext } from "../../contexts/editsContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
-import { MainRoutes } from "../../mapPage/mainNavigator";
-import { useAppNavigation } from "../../mapPage/types";
 import { MapConfigurations } from "../../googleMap/types";
 
 import { useDiveShopNavigation } from "./types";
@@ -24,15 +20,12 @@ type DiveShopParallaxProps = {
   id: number;
 };
 
-type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
-
 export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const diveShopNavigation = useDiveShopNavigation();
   const { t } = useTranslation();
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const { userProfile } = useUserProfile();
   const [isMyShop, setIsMyShop] = useState(false);
@@ -79,7 +72,6 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   //Needs Navigator
   const onNavigate = () => {
     Keyboard.dismiss();
-    setChosenModal("DiveSite");
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveShop", itemId: selectedShop.id });
   };
 

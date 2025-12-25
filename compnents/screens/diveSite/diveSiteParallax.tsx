@@ -11,7 +11,6 @@ import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext"
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
 import { MetricItem } from "../../../entities/metricItem";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { MapConfigurations } from "../../googleMap/types";
 
@@ -32,8 +31,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-
-  const { setChosenModal } = useContext(ModalSelectContext);
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
@@ -81,7 +78,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setChosenModal("DiveSite");
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
   };
 
