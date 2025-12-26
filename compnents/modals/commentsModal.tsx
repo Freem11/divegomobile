@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, Fragment, ReactElement } from "react";
+import React, { useState, useEffect, Fragment, ReactElement } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,10 +14,10 @@ import {
 import { moderateScale } from "react-native-size-matters";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
+import { Image } from "expo-image";
 
 import ButtonIcon from "../reusables/buttonIcon";
 import { activeFonts, colors, fontSizes } from "../styles";
-import { SelectedPictureContext } from "../contexts/selectedPictureContext";
 import {
   grabPhotoCommentsByPicId,
   insertPhotoComment
@@ -28,6 +28,8 @@ import fallbackAvatar from "../../assets/icon.png";
 import { cloudflareBucketUrl } from "../globalVariables";
 import AvatarTextInputField from "../authentication/utils/textInputWithAvatar";
 import { useAppNavigation } from "../mapPage/types";
+import { getPhotoByID } from "../../supabaseCalls/seaLifePhotoCalls/gets";
+import { Photo } from "../../entities/photos";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -45,14 +47,15 @@ interface CommentsModalProps {
   id: number;
 }
 
+const screenWidth = Dimensions.get("window").width;
+
 export default function CommentsModal({ id }: CommentsModalProps) {
   const [isClearOn, setIsClearOn] = useState<boolean>(false);
   const [commentContent, setCommentContent] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(null);
   const [listOfComments, setListOfComments] = useState<Comment[] | null>(null);
   const [replyTo, setReplyTo] = useState<ReplyToState>(null);
   const [selectedReplyId, setSelectedReplyId] = useState<number[]>([]);
-
-  const { selectedPicture } = useContext(SelectedPictureContext);
 
   const { userProfile } = useUserProfile();
   const navigation = useAppNavigation();
@@ -63,8 +66,16 @@ export default function CommentsModal({ id }: CommentsModalProps) {
   const avatarSource: ImageSourcePropType = fileName ? { uri: remoteUri } : fallbackAvatar;
 
   useEffect(() => {
+    getPhoto(id);
     getAllPictureComments(id);
   }, [id]);
+
+  const getPhoto = async (picId: number): Promise<void> => {
+    const pic = await getPhotoByID(picId);
+    const picFileName = pic[0]?.photoFile.split("/").pop();
+    const uri = `${cloudflareBucketUrl}${picFileName}`;
+    setImage(uri);
+  };
 
   const getAllPictureComments = async (picId: number): Promise<void> => {
     const picComments = await grabPhotoCommentsByPicId(picId);
@@ -86,7 +97,7 @@ export default function CommentsModal({ id }: CommentsModalProps) {
 
     await insertPhotoComment(
       userProfile.UserID,
-      selectedPicture.id,
+      id,
       finalContent,
       userIdentity
     );
@@ -94,7 +105,7 @@ export default function CommentsModal({ id }: CommentsModalProps) {
     setIsClearOn(true);
     setCommentContent("");
     setReplyTo(null);
-    getAllPictureComments(selectedPicture.id);
+    getAllPictureComments(id);
     Keyboard.dismiss();
   };
 
@@ -171,6 +182,13 @@ export default function CommentsModal({ id }: CommentsModalProps) {
             </View>
           </TouchableWithoutFeedback>
 
+          <Image
+            source={{ uri: image }}
+            style={{ width: screenWidth - moderateScale(64), height: screenWidth - moderateScale(64), resizeMode: "cover", borderRadius: moderateScale(40) }}
+            contentFit="cover"
+            transition={1000}
+          />
+
           {getCommentListView(null)}
 
           <KeyboardAvoidingView
@@ -186,8 +204,8 @@ export default function CommentsModal({ id }: CommentsModalProps) {
                     icon="close"
                     onPress={() => setReplyTo(null)}
                     size="micro"
-                    fillColor={colors.primaryBlue}
-                    style={{ marginTop: 2 }}
+                    fillColor={colors.darkGrey}
+                    style={{ marginTop: moderateScale(2) }}
                   />
                 </View>
               )}
@@ -234,7 +252,7 @@ const styles = StyleSheet.create<Styles>({
   },
   commentsModal: {
     position: "absolute",
-    height: windowHeight - windowHeight * 0.38,
+    height: windowHeight - windowHeight * 0.08,
     width: windowWidth,
     backgroundColor: colors.themeWhite,
     borderRadius: 15,
@@ -278,37 +296,36 @@ const styles = StyleSheet.create<Styles>({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    height: "15%",
+
   },
   commentEntryContainer: {
     flexDirection: "column",
     justifyContent: "center",
     width: "100%",
-    height: moderateScale(60),
-    backgroundColor: colors.themeWhite,
-    marginTop: moderateScale(5),
-    marginLeft: moderateScale(-10)
+    marginHorizontal: moderateScale(8)
   },
   replyBox: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginLeft: "3%",
     width: "98%",
-    paddingBottom: moderateScale(20),
   },
   replyLine: {
     flexDirection: "row",
-    backgroundColor: colors.lighterGrey,
-    marginLeft: moderateScale(13),
+    height: moderateScale(35),
+    marginBottom: moderateScale(-10),
+    backgroundColor: colors.lighterBlue,
+    marginRight: moderateScale(15),
     paddingLeft: moderateScale(10),
     paddingRight: moderateScale(10),
-    marginBottom: moderateScale(5)
+    borderTopLeftRadius: moderateScale(10),
+    borderTopRightRadius: moderateScale(10)
   },
   userTxt: {
     fontFamily: activeFonts.Thin,
     fontSize: moderateScale(18),
     color: colors.themeBlack,
-    marginRight: moderateScale(5)
+    marginTop: moderateScale(2),
+    paddingBottom: moderateScale(4),
   },
 });

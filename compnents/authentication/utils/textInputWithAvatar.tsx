@@ -22,7 +22,7 @@ export default function AvatarTextInputField(props) {
                 secureTextEntry={secure}
                 keyboardType={keyboardValue}
                 autoCapitalize="none"
-                width={Platform.OS === "android" ? "75%" : "83%"}
+                width={Platform.OS === "android" ? "75%" : "75%"}
             />
             <ButtonIcon
                 icon="chevron-right"
@@ -31,7 +31,7 @@ export default function AvatarTextInputField(props) {
                 fillColor={colors.darkGrey}
             />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

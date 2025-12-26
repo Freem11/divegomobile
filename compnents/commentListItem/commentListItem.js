@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Pressable, Image } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { activeFonts, colors, fontSizes } from "../styles";
 import { useTranslation } from "react-i18next";
+
+import { activeFonts, colors, fontSizes } from "../styles";
 import fallbackAvatar from "../../assets/icon.png";
 import { cloudflareBucketUrl } from "../../compnents/globalVariables";
 
@@ -18,9 +19,9 @@ export default function CommentListItem(props) {
 
   const [expanded, setExpanded] = useState(false);
 
-  let newDate = new Date(commentDetails.created_at);
+  const newDate = new Date(commentDetails.created_at);
   let finalDate = newDate.toLocaleString().substring(0, 10);
-  let lastChar = finalDate.slice(-1);
+  const lastChar = finalDate.slice(-1);
   if (lastChar == ",") {
     finalDate = finalDate.slice(0, -1);
   }
@@ -33,6 +34,7 @@ export default function CommentListItem(props) {
   const shouldShowReadMore = expanded || content.length > 90;
 
   const { t } = useTranslation();
+
   return (
     <View style={styles.wrapper} key={commentDetails.id}>
       <View style={styles.card}>
@@ -71,8 +73,7 @@ export default function CommentListItem(props) {
           onPress={() =>
             replyTo?.[0] === commentDetails.username
               ? setReplyTo(null)
-              : setReplyTo([commentDetails.username, commentDetails.id])
-          }
+              : setReplyTo([commentDetails.username, commentDetails.id])}
           hitSlop={10}
         >
           <Text style={styles.actionTxt}>Reply</Text>
@@ -86,7 +87,7 @@ export default function CommentListItem(props) {
             <Text style={styles.actionTxt}>
               {selectedReplyId.includes(commentDetails.id)
                 ? t("Comments.hideReplies")
-                : t("Comments.showReplies", { count: nbReplies })}
+                : nbReplies === 1 ? t("Comments.viewReply", { count: nbReplies }) :t("Comments.viewReplies", { count: nbReplies })}
             </Text>
           </Pressable>
         ) : null}
