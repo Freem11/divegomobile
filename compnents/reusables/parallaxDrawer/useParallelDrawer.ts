@@ -230,8 +230,8 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
     translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
-        translateY.value = 0;
-        startY.value = 0;
+        translateY.value = getHalfHeight();
+        startY.value = getHalfHeight();
 
         runOnJS(cleanupAndClose)(mapConfig, currentScreen);
       }

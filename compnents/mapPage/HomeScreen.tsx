@@ -40,11 +40,12 @@ export default function HomeScreen() {
         }
     };
 
+    const Bold = styled(S.PopOverText)`
+    font-family: ${activeFonts.Medium};
+    margin-bottom: ${moderateScale(10)}px;
+  `;
+
     const popoverContent = () => {
-        const Bold = styled(S.PopOverText)`
-          font-family: ${activeFonts.Medium};
-          margin-bottom: ${moderateScale(10)}px;
-        `;
 
         return (
             <S.PopOver>
@@ -86,6 +87,7 @@ export default function HomeScreen() {
             </S.PopOver>
         );
     };
+
     return (
         <S.Container>
 

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
 
 import Card from "../../card";
-import { AreaPicsContext } from "../../../../contexts/areaPicsContext";
 import { getAnimalsInBubble } from "../../../../../supabaseCalls/photoSupabaseCalls";
 import { useMapStore } from "../../../../googleMap/useMapStore";
 import { AnimalMultiSelectContext } from "../../../../contexts/animalMultiSelectContext";
@@ -19,7 +18,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
 
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [filterValue, setFilterValue] = useState("");
-  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
+  const [areaPics, setAreaPics] = useState([]);
 
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext

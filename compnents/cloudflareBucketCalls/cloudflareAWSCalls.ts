@@ -15,7 +15,7 @@ import { showError } from "../toast";
 
 globalThis.ReadableStream = ReadableStream;
 
-export const uploadphoto = async(file, fileName) => {
+export const uploadphoto = async (file, fileName) => {
   try {
     const fileBuffer = Buffer.from(file, "base64");
     const fileSize = fileBuffer.length;
@@ -50,11 +50,11 @@ export const uploadphoto = async(file, fileName) => {
   }
 };
 
-export const removePhoto = async(values) => {
+export const removePhoto = async (values) => {
 
   const shortPath = values.fileName.split("/").pop();
 
-  if (shortPath){
+  if (shortPath) {
     const input = {
       "Bucket": "scubaseasons",
       "Key": shortPath
@@ -75,11 +75,35 @@ export const removePhoto = async(values) => {
 
 };
 
-export const removePhotoReviews = async(values) => {
+export const clearPhoto = async (values) => {
 
   const shortPath = values.split("/").pop();
 
-  if (shortPath){
+  if (shortPath) {
+    const input = {
+      "Bucket": "scubaseasons",
+      "Key": shortPath
+    };
+
+    const command = new DeleteObjectCommand(input);
+    const response = await aws3.send(command);
+
+    // if (error) {
+    //   console.log("couldn't upload,", error);
+    // }
+
+    if (response) {
+      // console.log("cloudFlare", response)
+      console.log(`Deletion of photo: ${shortPath} was sucessful`);
+    }
+  }
+
+};
+export const removePhotoReviews = async (values) => {
+
+  const shortPath = values.split("/").pop();
+
+  if (shortPath) {
     const input = {
       "Bucket": "scubaseasons",
       "Key": shortPath
