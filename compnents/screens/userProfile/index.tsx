@@ -51,10 +51,12 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
     navigation.navigate("UserProfilePhotos");
   };
 
-  const handleDiveSiteMove = async (diveSiteName: string) => {
-    const diveSite = await getDiveSiteByName(diveSiteName);
-    navigation.navigate("DiveSiteNavigator", { id: diveSite[0].id });
+  const handleDiveSiteMove = async (diveSiteName: string, diveSiteId: number) => {
+
+    navigation.navigate("DiveSiteNavigator", { id: diveSiteId });
   };
+
+  console.log(reviews);
 
   return (
     <UserProfileScreenView

@@ -18,13 +18,14 @@ type ReviewCardViewProps = {
   conditions: ReviewCondition[];
   photo: string;
   review: Review;
+  id: number | string;
   currentUserId: string;
-  handleNavigate: (name: string) => void;
+  handleNavigate: (name: string, id: string | number) => void;
   onEdit: (review: Review) => void;
   onDelete: (reviewId: number) => void;
 };
 
-export default function ReviewCardView({ name, photo, date, description, conditions, review, currentUserId, handleNavigate, onEdit, onDelete }: ReviewCardViewProps) {
+export default function ReviewCardView({ name, photo, date, description, conditions, review, id, currentUserId, handleNavigate, onEdit, onDelete }: ReviewCardViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
@@ -34,7 +35,7 @@ export default function ReviewCardView({ name, photo, date, description, conditi
   return (
     <S.Card onPress={null}>
       <S.Header>
-        <TouchableWithoutFeedback onPress={() => handleNavigate(name)}>
+        <TouchableWithoutFeedback onPress={() => handleNavigate(name, id)}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
             <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} />
             <S.UserInfo>

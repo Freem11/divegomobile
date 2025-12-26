@@ -72,8 +72,8 @@ export default function DiveSiteScreen({
     console.log("Report review:", reviewId);
   };
 
-  const handleProfileMove = async (userName: string) => {
-    console.log("userName", userName);
+  const handleProfileMove = async (userName: string, user_id: string) => {
+
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (userProfile.UserID === picOwnerAccount[0].UserID) {

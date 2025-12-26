@@ -73,6 +73,7 @@ export default function UserProfileScreenView({
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
+                id={review.divesite_id}
                 name={review.divesite_name}
                 photo={review.profilePhoto}
                 review={review}
