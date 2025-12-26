@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { Photo } from "../../../entities/photos";
 import { ActiveProfile } from "../../../entities/profile";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { Review } from "../../../entities/diveSiteReview";
@@ -19,6 +18,7 @@ type UserProfileProps = {
   sightingsCount: number;
   reviewCount: number;
   openAllPhotosPage: () => void;
+  handleDiveSiteMove: (name: string) => void;
   reviews: Review[];
 };
 
@@ -29,6 +29,7 @@ export default function UserProfileScreenView({
   sightingsCount,
   reviewCount,
   openAllPhotosPage,
+  handleDiveSiteMove,
   reviews
 }: UserProfileProps) {
 
@@ -72,10 +73,11 @@ export default function UserProfileScreenView({
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
-                userName={review.user_name}
+                name={review.divesite_name}
                 photo={review.profilePhoto}
                 review={review}
                 currentUserId={userProfile.UserID}
+                handleNavigate={handleDiveSiteMove}
                 onEdit={() => { }}
                 onDelete={() => { }}
               />

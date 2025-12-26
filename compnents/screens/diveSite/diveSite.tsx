@@ -30,6 +30,7 @@ type DiveSiteProps = {
   openDiveSiteReviewer: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
+  handleProfileMove: (name: string) => void;
   handleMapFlip: (sites: number[]) => void;
   onEditReview: (review: Review) => void;
   onDeleteReview: (reviewId: number) => void;
@@ -49,6 +50,7 @@ export default function DiveSiteScreenView({
   openDiveSiteReviewer,
   openAllPhotosPage,
   openAllTripsPage,
+  handleProfileMove,
   handleMapFlip,
   onEditReview,
   onDeleteReview
@@ -153,10 +155,11 @@ export default function DiveSiteScreenView({
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
-                userName={review.user_name}
+                name={review.user_name}
                 photo={review.profilePhoto}
                 review={review}
                 currentUserId={currentUserId}
+                handleNavigate={handleProfileMove}
                 onEdit={onEditReview}
                 onDelete={onDeleteReview}
               />

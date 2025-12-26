@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { TouchableWithoutFeedback, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
 import readableDate from "../../helpers/readableDate";
@@ -12,18 +12,19 @@ import Avatar from "./avatarCreator";
 import { Menu } from "./Menu";
 
 type ReviewCardViewProps = {
-  userName: string;
+  name: string;
   date: string;
   description: string;
   conditions: ReviewCondition[];
   photo: string;
   review: Review;
   currentUserId: string;
+  handleNavigate: (name: string) => void;
   onEdit: (review: Review) => void;
   onDelete: (reviewId: number) => void;
 };
 
-export default function ReviewCardView({ userName, photo , date, description, conditions, review, currentUserId, onEdit, onDelete }: ReviewCardViewProps) {
+export default function ReviewCardView({ name, photo, date, description, conditions, review, currentUserId, handleNavigate, onEdit, onDelete }: ReviewCardViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
@@ -31,17 +32,19 @@ export default function ReviewCardView({ userName, photo , date, description, co
   const fileName = photo?.split("/").pop();
 
   return (
-    <S.Card>
+    <S.Card onPress={null}>
       <S.Header>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-          <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`}/>
-          <S.UserInfo>
-            <S.Title>{userName}</S.Title>
-            <S.Date>
-              {date && readableDate(date)}
-            </S.Date>
-          </S.UserInfo>
-        </View>
+        <TouchableWithoutFeedback onPress={() => handleNavigate(name)}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
+            <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} />
+            <S.UserInfo>
+              <S.Title>{name}</S.Title>
+              <S.Date>
+                {date && readableDate(date)}
+              </S.Date>
+            </S.UserInfo>
+          </View>
+        </TouchableWithoutFeedback>
 
         <Menu
           isVisible={isPopoverVisible}
@@ -82,7 +85,7 @@ export default function ReviewCardView({ userName, photo , date, description, co
           </S.ShowMoreText>
         )}
         <S.LabelsContainer>
-          {conditions && conditions.slice(0,6).map((condition) => {
+          {conditions && conditions.slice(0, 6).map((condition) => {
             const label = renderLabel(condition);
 
             if (label) {

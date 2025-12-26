@@ -6,6 +6,8 @@ import { getDiveSiteRecentNinePhotos, getuserReveiewCount, getUserSightingsCount
 import { getRecentReviewsByUserId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
 import { useAppNavigation } from "../../mapPage/types";
+import { useDiveSiteNavigation } from "../diveSite/types";
+import { getDiveSiteByName } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 
 import UserProfileScreenView from "./userProfile";
 
@@ -49,6 +51,11 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
     navigation.navigate("UserProfilePhotos");
   };
 
+  const handleDiveSiteMove = async (diveSiteName: string) => {
+    const diveSite = await getDiveSiteByName(diveSiteName);
+    navigation.navigate("DiveSiteNavigator", { id: diveSite[0].id });
+  };
+
   return (
     <UserProfileScreenView
       profilePhotos={profilePhotos}
@@ -57,6 +64,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
       sightingsCount={sightingsCount}
       reviewCount={reviewCount}
       openAllPhotosPage={openAllPhotosPage}
+      handleDiveSiteMove={handleDiveSiteMove}
       reviews={reviews}
     />
   );

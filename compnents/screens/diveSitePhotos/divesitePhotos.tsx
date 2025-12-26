@@ -25,9 +25,6 @@ export default function DiveSitePhotosPageView({
   handleProfileMove
 }: DiveSitePhotosPageViewProps) {
 
-  const { t } = useTranslation();
-  const { selectedDiveSite } = useContext(SelectedDiveSiteContext);
-
   return (
     <S.ContentContainer>
 
