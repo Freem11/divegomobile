@@ -29,10 +29,11 @@ export const Header = styled.Text`
 
 export const Content = styled.Text`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
+  text-align: center;
   font-family: ${activeFonts.Light};
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
-  margin-top: ${moderateScale(20)}px;
+  margin-vertical: ${moderateScale(20)}px;
 `;
 
 export const LabelWrapper = styled.View`

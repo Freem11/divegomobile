@@ -1,7 +1,7 @@
 import { moderateScale, scale } from "react-native-size-matters";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import React, { FC } from "react";
-import { ScrollView } from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import Icon from "../../../../icons/Icon";
@@ -24,6 +24,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({ items, onAddSighting, onRemo
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        nestedScrollEnabled={true}
         contentContainerStyle={{
           paddingRight: scale(16),
           gap: scale(1),

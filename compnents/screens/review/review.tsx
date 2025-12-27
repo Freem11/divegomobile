@@ -2,12 +2,13 @@ import React from "react";
 import { View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
-import { ReviewSingle } from "../../../entities/diveSiteReview";
+import { ReviewPhotos, ReviewSingle } from "../../../entities/diveSiteReview";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
 import { cloudflareBucketUrl } from "../../globalVariables";
 import Avatar from "../../reusables/reviewCard/avatarCreator";
 import readableDate from "../../helpers/readableDate";
+import { PhotoUpload } from "../formScreens/photoUpload";
 
 import * as S from "./styles";
 
@@ -16,6 +17,8 @@ type DiveShopProps = {
 };
 
 export default function ReviewScreenView({ selectedReview }: DiveShopProps) {
+
+  const photos = selectedReview.photos.map((photo) => ({ photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}` }));
 
   return (
     <S.ContentContainer>
@@ -32,12 +35,16 @@ export default function ReviewScreenView({ selectedReview }: DiveShopProps) {
         </View>
 
         <S.StatRow>
-          <Icon name="calendar-month" fill={colors.primaryBlue} style={{ width: 42, height: 42, marginRight: 5 }} />
+          <Icon name="calendar-month" fill={colors.primaryBlue} style={{ width: 40, height: 40, marginRight: 5 }} />
           <S.Title>
             {selectedReview && readableDate(selectedReview.dive_date)}
           </S.Title>
         </S.StatRow>
       </S.StatRowMajor>
+
+      <S.Content>{selectedReview?.description}</S.Content>
+
+      <PhotoUpload items={photos} />
 
     </S.ContentContainer>
   );
