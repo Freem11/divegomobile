@@ -14,6 +14,25 @@ export type Review = {
   profilePhoto: string;
 };
 
+export type ReviewSingle = {
+  review_id: number;
+  active: boolean;
+  created_at: string;
+  created_by: string;
+  description: string;
+  dive_date: string;
+  diveSite_id: number;
+  divesite_name: string;
+  updated_at: string | null;
+  updated_by: string | null;
+  user_id: string;
+  user_name: string;
+  conditions: ReviewCondition[]
+  photos: ReviewPhotos[]
+  profilePhoto: string;
+  diveSiteProfilePhoto: string;
+};
+
 export type ReviewCondition = {
   condition_entry_id: number;
   condition_type_id?: number

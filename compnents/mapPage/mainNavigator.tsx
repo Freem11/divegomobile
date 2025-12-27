@@ -12,6 +12,7 @@ import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
+import ReviewParallax from "../screens/review/reviewParallax";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
@@ -35,6 +36,7 @@ export type MainRoutes = {
   UserProfilePhotos: undefined;
   PinchAndZoomPhoto: undefined;
   UserProfile: { id: number };
+  SingleReviewScreen: { id: number };
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
@@ -82,6 +84,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
+
       <Stack.Screen name="UserProfile">
         {({ route }) => (
           <UserProfileParallax
@@ -90,6 +93,13 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
+      <Stack.Screen name="SingleReviewScreen">
+        {({ route }) => (
+          <ReviewParallax
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }
