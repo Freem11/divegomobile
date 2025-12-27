@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import noImage from "../../png/NoImage.png";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { useDiveShopNavigation } from "../diveShop/types";
 import { getReviewById } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
@@ -34,7 +35,7 @@ export default function ReviewParallax(props: ReviewParallaxProps) {
 
   return (
     <ParallaxDrawer
-      headerImage={{ uri: remoteUri }}
+      headerImage={diveSitePhoto ? { uri: remoteUri } : noImage}
       onClose={onClose}
     >
       <ReviewScreen selectedReview={selectedReview?.data} />

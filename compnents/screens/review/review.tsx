@@ -18,7 +18,7 @@ type DiveShopProps = {
 
 export default function ReviewScreenView({ selectedReview }: DiveShopProps) {
 
-  const photos = selectedReview.photos.map((photo) => ({ photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}` }));
+  const photos = selectedReview?.photos.map((photo) => ({ photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}` }));
 
   return (
     <S.ContentContainer>
