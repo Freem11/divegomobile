@@ -21,9 +21,8 @@ import { ReviewCondition } from "../../../entities/diveSiteReview";
 //19 = downwelling -> most common of the 4
 //20 = contrasting -> most common of the 4
 
-export function renderStatLabel(condition: ReviewCondition) {
+export function formatConditions(condition: ReviewCondition) {
 
-  console.log("HEWY", condition);
   const getStrength = (value) => {
     if (value <= 1) {
       return "Weak";
@@ -38,49 +37,44 @@ export function renderStatLabel(condition: ReviewCondition) {
 
   switch (condition.condition_type_id) {
     case 2:
+      return { id: 2, value: "Boat Dive" };
     case 7:
+      return { id: 7, value: "Salt Water" };
     case 14:
-      return null;
+      return { id: 14, value: "Pollution" };
     case 1:
-      return "Shore Dive";
+      return { id: 1, value: "Shore Dive" };
     case 3:
-      return "Night Diving";
+      return { id: 3, value: "Night Dive" };
     case 4:
-      return "Altitude";
+      return { id: 4, value: "Altitude" };
     case 5:
-      return "Wreck Dive";
+      return { id: 5, value: "Wreck Dive" };
     case 6:
-      return "Cave Dive";
+      return { id: 6, value: "Cave Dive" };
     case 8:
-      return "Fresh Water";
+      return { id: 8, value: "Fresh Water" };
     case 9:
-      return "Surface Traffic";
+      return { id: 9, value: "Surface Traffic" };
     case 10:
-      return "Surge";
+      return { id: 10, value: "Surge" };
     case 11:
-      return "No Reference Points";
+      return { id: 11, value: "No Reference Points" };
     case 12:
-      return "Bottom Depth > AOW";
+      return { id: 21, value: "Bottom Depth > AOW Limits" };
     case 13:
-      return "Kelp";
+      return { id: 13, value: "Kelp" };
     case 15:
-      if (condition.value < 10) {
-        return "Poor Visibility";
-      } else if (condition.value > 10 && condition.value < 20) {
-        return "Moderate Visibility";
-      } else {
-        return "Great Visibility";
-      }
+      return { id: 15, value: `${condition.value}m Visibility` };
     case 16:
-      return null;
     case 17:
-      return `${getStrength(condition.value)} Lateral Currents`;
+      return { id: 17, value: `${getStrength(condition.value)} Lateral Currents` };
     case 18:
-      return `${getStrength(condition.value)} Upwellings`;
+      return { id: 18, value: `${getStrength(condition.value)} Upwellings` };
     case 19:
-      return `${getStrength(condition.value)} Downwellings`;
+      return { id: 19, value: `${getStrength(condition.value)} Downwellings` };
     case 20:
-      return `${getStrength(condition.value)} Contrasting Currents`;
+      return { id: 20, value: `${getStrength(condition.value)} Contrasting Currents` };
     default:
       return null;
   }

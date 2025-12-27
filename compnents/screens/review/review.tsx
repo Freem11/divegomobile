@@ -9,6 +9,7 @@ import { cloudflareBucketUrl } from "../../globalVariables";
 import Avatar from "../../reusables/reviewCard/avatarCreator";
 import readableDate from "../../helpers/readableDate";
 import { PhotoUpload } from "../formScreens/photoUpload";
+import ConditionsCard from "../../reusables/condidtionsCard";
 
 import * as S from "./styles";
 
@@ -45,6 +46,8 @@ export default function ReviewScreenView({ selectedReview }: DiveShopProps) {
       <S.Content>{selectedReview?.description}</S.Content>
 
       <PhotoUpload items={photos} />
+
+      <ConditionsCard conditions={selectedReview?.conditions} />
 
     </S.ContentContainer>
   );
