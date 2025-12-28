@@ -12,10 +12,10 @@ import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
-import CommentsModal from "../modals/commentsModal";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
+import PhotoCommentsParallax from "../modals/photoCommentsParallax";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -84,9 +84,17 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
 
-      <Stack.Screen name="PhotoComments">
+      {/* <Stack.Screen name="PhotoComments">
         {({ route }) => (
           <CommentsModal
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen> */}
+
+      <Stack.Screen name="PhotoComments">
+        {({ route }) => (
+          <PhotoCommentsParallax
             id={route.params.id}
           />
         )}

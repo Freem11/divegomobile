@@ -5,6 +5,9 @@ import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-ha
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
+
+import type { SharedValue } from "react-native-reanimated";
+
 import Popover from "react-native-popover-view";
 import { useNavigation } from "@react-navigation/native";
 
@@ -23,6 +26,7 @@ type ParallaxDrawerProps = {
   isMyShop?: boolean
   isPartnerAccount?: boolean
   popoverContent?: () => React.JSX.Element,
+  contentScrollY?: SharedValue<number>;
 };
 
 const ParallaxDrawer = ({
@@ -30,7 +34,8 @@ const ParallaxDrawer = ({
   children,
   onClose,
   onMapFlip,
-  popoverContent
+  popoverContent,
+  contentScrollY,
 }: ParallaxDrawerProps) => {
 
   const {
@@ -42,7 +47,7 @@ const ParallaxDrawer = ({
     closeParallax,
     restoreParallax,
     bottomHitCount
-  } = useParallaxDrawer(onClose, onMapFlip);
+  } = useParallaxDrawer(onClose, onMapFlip, contentScrollY);
 
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
