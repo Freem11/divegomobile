@@ -12,6 +12,7 @@ import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
+import { EDIT_TYPE } from "../../entities/editTypes";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
@@ -31,7 +32,7 @@ export type MainRoutes = {
   Settings: undefined;
   Home: undefined;
   PartnerRequestUpgrade: undefined;
-  EditScreen: undefined;
+  EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
   PinchAndZoomPhoto: undefined;
   UserProfile: { id: number };
@@ -75,11 +76,18 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
+      <Stack.Screen name="EditScreen">
+        {({ route }) => (
+          <EditScreenParallax
+            id={route.params.id}
+            dataType={route.params.dataType}
+          />
+        )}
+      </Stack.Screen>
       <Stack.Screen name="SiteSubmitterNavigator" component={SiteSubmitterRouter} />
 
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
-      <Stack.Screen name="EditScreen" component={EditScreenParallax} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
       <Stack.Screen name="UserProfile">

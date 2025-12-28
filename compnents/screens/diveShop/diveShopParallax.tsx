@@ -11,6 +11,7 @@ import { EditsContext } from "../../contexts/editsContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MapConfigurations } from "../../googleMap/types";
+import { EDIT_TYPE } from "../../../entities/editTypes";
 
 import { useDiveShopNavigation } from "./types";
 
@@ -80,7 +81,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   };
 
   const openEditsPage = () => {
-    diveShopNavigation.navigate("EditScreen");
+    diveShopNavigation.navigate("EditScreen", { id: selectedShop.id, dataType: EDIT_TYPE.DIVE_CENTRE });
     setEditInfo("DiveShop");
   };
 

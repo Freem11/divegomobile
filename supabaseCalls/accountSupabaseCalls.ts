@@ -145,7 +145,7 @@ export const grabProfileByUserId = async (id: string) => {
   return null;
 };
 
-export const grabProfileById = async (id: string) => {
+export const grabProfileById = async (id: number) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()

@@ -23,7 +23,7 @@ type ParallaxDrawerProps = {
   handleImageUpload?: () => void;
   isMyShop?: boolean
   isPartnerAccount?: boolean
-  popoverContent?: () => React.JSX.Element,
+  popoverContent?: (close: () => void) => React.JSX.Element;
 };
 
 const ParallaxDrawer = ({
@@ -94,7 +94,7 @@ const ParallaxDrawer = ({
                   placement={Placement.AUTO}
                   popoverStyle={{ borderRadius: moderateScale(10) }}
                 >
-                  {popoverContent()}
+                  {popoverContent(() => setIsVisible(false))}
                 </Popover>
               )}
             </S.HeaderWrapper>

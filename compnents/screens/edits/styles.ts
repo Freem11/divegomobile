@@ -59,7 +59,7 @@ export const MultilineTextInput = styled.TextInput`
   padding: ${moderateScale(10)}px;
   font-size: ${moderateScale(16)}px;
   font-family: ${activeFonts.Light};
-   border-width: ${moderateScale(1)}px;
+  border-width: ${moderateScale(1)}px;
   border-color: ${colors.border};
   border-radius: ${moderateScale(8)}px;
   textAlignVertical: top;

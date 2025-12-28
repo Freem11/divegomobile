@@ -12,6 +12,7 @@ import { registerForPushNotificationsAsync } from "../../tutorial/notificationsR
 import { EditsContext } from "../../contexts/editsContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useAppNavigation } from "../../mapPage/types";
+import { EDIT_TYPE } from "../../../entities/editTypes";
 
 import UserProfileScreen from ".";
 
@@ -108,8 +109,8 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const openEditsPage = () => {
+    navigation.navigate("EditScreen", { id: selectedProfile.id, dataType: EDIT_TYPE.USER_PROFILE });
     setEditInfo("Profile");
-    navigation.navigate("EditScreen");
   };
 
   const handleShare = async () => {
