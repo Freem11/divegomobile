@@ -61,12 +61,13 @@ export function formatConditions(condition: ReviewCondition) {
     case 11:
       return { id: 11, value: "No Reference Points" };
     case 12:
-      return { id: 21, value: "Bottom Depth > AOW Limits" };
+      return { id: 12, value: "Bottom Depth > AOW Limits" };
     case 13:
       return { id: 13, value: "Kelp" };
     case 15:
       return { id: 15, value: `${condition.value}m Visibility` };
     case 16:
+      return [];
     case 17:
       return { id: 17, value: `${getStrength(condition.value)} Lateral Currents` };
     case 18:

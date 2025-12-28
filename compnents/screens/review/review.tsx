@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
-import { ReviewPhotos, ReviewSingle } from "../../../entities/diveSiteReview";
+import { ReviewSingle } from "../../../entities/diveSiteReview";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
 import { cloudflareBucketUrl } from "../../globalVariables";
@@ -19,7 +19,7 @@ type DiveShopProps = {
 
 export default function ReviewScreenView({ selectedReview }: DiveShopProps) {
 
-  const photos = selectedReview?.photos.map((photo) => ({ photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}` }));
+  const photos = selectedReview?.photos?.map((photo) => ({ photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}` }));
 
   return (
     <S.ContentContainer>

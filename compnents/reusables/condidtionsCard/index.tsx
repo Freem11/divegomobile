@@ -1,6 +1,7 @@
 import React from "react";
 
 import { ReviewCondition } from "../../../entities/diveSiteReview";
+import { colors } from "../../styles";
 
 import * as S from "./styles";
 import HeaderCard from "./components/HeaderCard";
@@ -13,10 +14,12 @@ interface ConditionsCard {
 
 export default function ConditionsCard({ conditions }: ConditionsCard) {
 
+  console.log("conditions", conditions);
   const formattedConditions = conditions?.map((condition) => {
     return formatConditions(condition);
   });
 
+  console.log("formattedConditions", formattedConditions);
   const visibility = formattedConditions?.find(c => c.id === 15);
 
   const allowedIds = [17, 18, 19, 20];
@@ -48,6 +51,7 @@ export default function ConditionsCard({ conditions }: ConditionsCard) {
   const kelp = formattedConditions?.find(c => c.id === 13);
   const pollution = formattedConditions?.find(c => c.id === 14);
 
+  console.log(currents);
   return (
 
     <S.Body>
@@ -57,31 +61,31 @@ export default function ConditionsCard({ conditions }: ConditionsCard) {
       </S.HeaderRow>
 
       <S.MidSection>
-        {nightDive && <Chip value={nightDive?.value} />}
-        {saltWater && <Chip value={saltWater?.value} />}
-        {freshWater && <Chip value={freshWater?.value} />}
+        {nightDive && <Chip value={nightDive?.value} bgColor={colors.themeBlack} textColor={colors.themeWhite} />}
+        {saltWater && <Chip value={saltWater?.value} bgColor={colors.primaryBlue} textColor={colors.themeWhite} />}
+        {freshWater && <Chip value={freshWater?.value} bgColor={colors.primaryBlue} textColor={colors.themeWhite} />}
       </S.MidSection>
 
       <S.LowerSection>
         {(boatDive || shoreDive || altitudeDive || caveDive || wreckDive) && <S.RowLabel>Type of dive</S.RowLabel>}
         <S.Row>
-          <Chip value={boatDive?.value} />
-          <Chip value={shoreDive?.value} />
-          <Chip value={altitudeDive?.value} />
-          <Chip value={caveDive?.value} />
-          <Chip value={wreckDive?.value} />
+          <Chip value={boatDive?.value} bgColor={colors.primaryBlue} textColor={colors.themeWhite} />
+          <Chip value={shoreDive?.value} bgColor={colors.primaryBlue} textColor={colors.themeWhite} />
+          <Chip value={altitudeDive?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
+          <Chip value={caveDive?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
+          <Chip value={wreckDive?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
         </S.Row>
         {(surge || surfaceTraffic) && <S.RowLabel>At the surface</S.RowLabel>}
         <S.Row>
-          <Chip value={surge?.value} />
-          <Chip value={surfaceTraffic?.value} />
+          <Chip value={surge?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
+          <Chip value={surfaceTraffic?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
         </S.Row>
         {(noRefpts || bottomLimits || kelp || pollution) && <S.RowLabel>In the water</S.RowLabel>}
         <S.Row>
-          <Chip value={noRefpts?.value} />
-          <Chip value={bottomLimits?.value} />
-          <Chip value={kelp?.value} />
-          <Chip value={pollution?.value} />
+          <Chip value={noRefpts?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
+          <Chip value={bottomLimits?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
+          <Chip value={kelp?.value} bgColor={colors.orangeLight} textColor={colors.themeBlack} />
+          <Chip value={pollution?.value} bgColor={colors.green} textColor={colors.themeWhite} />
         </S.Row>
       </S.LowerSection>
 

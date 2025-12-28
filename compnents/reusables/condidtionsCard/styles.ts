@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { Platform } from "react-native";
 
 import { activeFonts, colors, fontSizes } from "../../styles";
 
@@ -48,9 +47,10 @@ export const RowLabel = styled.Text`
 `;
 
 export const Row = styled.View`
-padding-vertical: ${moderateScale(5)}px;
+  padding-vertical: ${moderateScale(5)}px;
   gap: ${moderateScale(5)}px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
 `;

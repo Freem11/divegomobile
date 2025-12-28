@@ -9,7 +9,8 @@ interface HeaderCardStyleProps {
 }
 
 export const HeaderCard = styled.View<HeaderCardStyleProps>`  
-  width: 48%;
+  min-width: 42%;
+  max-width: 52%;
   flex-direction: row;
   background-color: ${props => props.bgColor};
   height: ${moderateScale(50)}px;
@@ -36,7 +37,6 @@ export const Title = styled.Text`
 `;
 
 export const IconBox = styled.View`
-aling-self: center;
   width: ${moderateScale(30)}px;
   padding-right: ${moderateScale(5)}px;
 `;

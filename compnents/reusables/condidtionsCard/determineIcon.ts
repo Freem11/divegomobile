@@ -39,7 +39,7 @@ export function determineChipIcon(conditionText: string) {
     return "anchor-alt";
   }
 
-  if (conditionText === "Altitude Dive") {
+  if (conditionText === "Altitude") {
     return "mountains";
   }
 
@@ -59,7 +59,7 @@ export function determineChipIcon(conditionText: string) {
     return "GPS-splash";
   }
 
-  if (conditionText === "Bottom?") {
+  if (conditionText === "Bottom Depth > AOW Limits") {
     return "warning-diamond";
   }
 
@@ -67,7 +67,7 @@ export function determineChipIcon(conditionText: string) {
     return "plant";
   }
 
-  if (conditionText === "pollution") {
+  if (conditionText === "Pollution") {
     return "beer-bottle";
   }
 
