@@ -305,6 +305,6 @@ const styles = StyleSheet.create<Styles>({
     opacity: 0.6,
   },
   emptySpacer: {
-    height: moderateScale(120), // подбери под твой экран
+    height: moderateScale(120),
   },
 });
