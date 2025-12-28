@@ -39,6 +39,7 @@ export const Title = styled.Text`
 
 export const IconBox = styled.View`
   aling-self: center;
+  height: ${moderateScale(20)}px;
   width: ${moderateScale(30)}px;
   padding-right: ${moderateScale(5)}px;
 `;
