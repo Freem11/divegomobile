@@ -2,22 +2,19 @@ import React from "react";
 
 import { colors } from "../../../../styles";
 import Icon from "../../../../../icons/Icon";
-import { determineIcon } from "../../determineIcon";
+import { determineChipIcon, determineIcon } from "../../determineIcon";
 
 import * as S from "./styles";
 
-interface HeaderCard {
+interface Chip {
   value: string;
 }
 
-export default function HeaderCard({ value }: HeaderCard) {
+export default function Chip({ value }: Chip) {
 
   if (!value) return;
 
-  const arrangedText = value?.trim().split(/\s+/) || [];
-  const [first, ...rest] = arrangedText;
-  const restOfText = rest.join(" ").trimStart();
-  const icon = determineIcon(first, rest);
+  const icon = determineChipIcon(value);
 
   return (
     <S.HeaderCard bgColor={colors.primaryBlue}>
@@ -25,8 +22,7 @@ export default function HeaderCard({ value }: HeaderCard) {
         <Icon name={icon} color={colors.themeWhite} />
       </S.IconBox>
       <S.TextLayout>
-        <S.Title>{first}</S.Title>
-        <S.Title>{restOfText}</S.Title>
+        <S.Title>{value}</S.Title>
       </S.TextLayout>
     </S.HeaderCard>
 

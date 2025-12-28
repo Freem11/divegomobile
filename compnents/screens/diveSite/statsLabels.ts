@@ -23,7 +23,6 @@ import { ReviewCondition } from "../../../entities/diveSiteReview";
 
 export function renderStatLabel(condition: ReviewCondition) {
 
-  console.log("HEWY", condition);
   const getStrength = (value) => {
     if (value <= 1) {
       return "Weak";
