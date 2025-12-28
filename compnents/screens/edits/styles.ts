@@ -1,14 +1,14 @@
-import styled from 'styled-components/native';
-import { Dimensions, Platform } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { Dimensions } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
   activeFonts,
-} from '../../styles';
+} from "../../styles";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
 
 export const FullScreenCenter = styled.View`
   flex: 1;
@@ -29,8 +29,6 @@ export const ContentContainer = styled.View`
   align-items: center;
 `;
 
-// margin-top: ${Platform.OS === 'ios' ? windowHeight / 2.4 : windowHeight / 2.2}px;
-
 export const InputGroupContainer = styled.View`
   margin-bottom: ${moderateScale(10)}px;
   width: ${windowWidth * 0.75}px;
@@ -50,7 +48,6 @@ export const TextBuffer = styled.View`
   margin-bottom: ${moderateScale(20)}px;
 `;
 
-
 export const ButtonBox = styled.View`
   width: 100%;
   align-items: flex-end;
@@ -60,13 +57,14 @@ export const ButtonBox = styled.View`
 
 export const MultilineTextInput = styled.TextInput`
   padding: ${moderateScale(10)}px;
-  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-size: ${moderateScale(16)}px;
   font-family: ${activeFonts.Light};
-  text-align: center;
-  borderWidth: ${moderateScale(1)}px;
-  borderColor: ${colors.neutralGrey};
-  borderRadius: ${moderateScale(10)}px;
-  color: ${colors.themeBlack};
+   border-width: ${moderateScale(1)}px;
+  border-color: ${colors.border};
+  border-radius: ${moderateScale(8)}px;
+  textAlignVertical: top;
+  text-align: left;
+  min-height: 200px;
 `;
 
 export const BackButtonWrapper = styled.View`
