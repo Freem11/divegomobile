@@ -21,19 +21,22 @@ import { ReviewCondition } from "../../../entities/diveSiteReview";
 //19 = downwelling -> most common of the 4
 //20 = contrasting -> most common of the 4
 
-export function formatConditions(condition: ReviewCondition) {
+export function formatConditions(condition: ReviewCondition, intensityValue: number) {
 
-  const getStrength = (value) => {
-    if (value <= 1) {
+  const getStrength = (value: number) => {
+    console.log("strength", value);
+    if (value <= 0.5) {
       return "Weak";
-    } else if (value <= 1.5) {
+    } else if (value <= 1) {
       return "Moderate";
-    } else if (value <= 2) {
+    } else if (value <= 1.5) {
       return "Strong";
     } else {
       return "Dangerous";
     }
   };
+
+  console.log(condition);
 
   switch (condition.condition_type_id) {
     case 2:
@@ -67,15 +70,15 @@ export function formatConditions(condition: ReviewCondition) {
     case 15:
       return { id: 15, value: `${condition.value}m Visibility` };
     case 16:
-      return [];
+      return {};
     case 17:
-      return { id: 17, value: `${getStrength(condition.value)} Lateral Currents` };
+      return { id: 17, value: `${getStrength(intensityValue)} Lateral Currents` };
     case 18:
-      return { id: 18, value: `${getStrength(condition.value)} Upwellings` };
+      return { id: 18, value: `${getStrength(intensityValue)} Upwellings` };
     case 19:
-      return { id: 19, value: `${getStrength(condition.value)} Downwellings` };
+      return { id: 19, value: `${getStrength(intensityValue)} Downwellings` };
     case 20:
-      return { id: 20, value: `${getStrength(condition.value)} Contrasting Currents` };
+      return { id: 20, value: `${getStrength(intensityValue)} Contrasting Currents` };
     default:
       return null;
   }

@@ -1,3 +1,4 @@
+import { colors } from "../../styles";
 
 export function determineIcon(first: string, rest: string[]) {
 
@@ -81,6 +82,50 @@ export function determineChipIcon(conditionText: string) {
 
   if (conditionText === "Fresh Water") {
     return "fresh-water";
+  }
+
+}
+
+export function determineViz(vizVal: number) {
+
+  if (vizVal >= 0 && vizVal <= 3) {
+    return { bgColor: colors.red, textColor: colors.themeWhite };
+  }
+
+  if (vizVal > 3 && vizVal <= 10) {
+    return { bgColor: colors.orangeLight, textColor: colors.themeBlack };
+  }
+
+  if (vizVal > 10 && vizVal <= 20) {
+    return { bgColor: colors.primaryBlue, textColor: colors.themeWhite };
+  }
+
+  if (vizVal > 20) {
+    return { bgColor: colors.greenLight, textColor: colors.themeBlack };
+  }
+
+}
+
+export function determineIntensity(intensityVal: string) {
+
+  if (intensityVal === "No") {
+    return { bgColor: colors.greenLight, textColor: colors.themeBlack };
+  }
+
+  if (intensityVal === "Weak") {
+    return { bgColor: colors.primaryBlue, textColor: colors.themeWhite };
+  }
+
+  if (intensityVal === "Moderate") {
+    return { bgColor: colors.yellow, textColor: colors.themeBlack };
+  }
+
+  if (intensityVal === "Strong") {
+    return { bgColor: colors.orangeLight, textColor: colors.themeBlack };
+  }
+
+  if (intensityVal === "Dangerous") {
+    return { bgColor: colors.red, textColor: colors.themeBlack };
   }
 
 }

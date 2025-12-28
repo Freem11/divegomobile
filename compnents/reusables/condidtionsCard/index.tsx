@@ -14,17 +14,21 @@ interface ConditionsCard {
 
 export default function ConditionsCard({ conditions }: ConditionsCard) {
 
-  console.log("conditions", conditions);
+  const visibilityValue = conditions?.find(c => c.condition_type_id === 15).value;
+
+  const intensityValue = conditions?.find(c => c.condition_type_id === 16).value;
+
   const formattedConditions = conditions?.map((condition) => {
-    return formatConditions(condition);
+    return formatConditions(condition, intensityValue);
   });
 
-  console.log("formattedConditions", formattedConditions);
   const visibility = formattedConditions?.find(c => c.id === 15);
 
+  console.log("formattedConditions", formattedConditions);
   const allowedIds = [17, 18, 19, 20];
   let currents = formattedConditions?.find(c => allowedIds.includes(c.id));
 
+  console.log("currents", currents);
   if (!currents) {
     currents = { "id": 0, "value": "No Current" };
   }
@@ -51,12 +55,11 @@ export default function ConditionsCard({ conditions }: ConditionsCard) {
   const kelp = formattedConditions?.find(c => c.id === 13);
   const pollution = formattedConditions?.find(c => c.id === 14);
 
-  console.log(currents);
   return (
 
     <S.Body>
       <S.HeaderRow>
-        <HeaderCard value={visibility?.value} />
+        <HeaderCard value={visibility?.value} vizVal={visibilityValue} />
         <HeaderCard value={currents?.value} />
       </S.HeaderRow>
 

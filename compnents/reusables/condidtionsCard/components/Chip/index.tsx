@@ -1,8 +1,7 @@
 import React from "react";
 
-import { colors } from "../../../../styles";
 import Icon from "../../../../../icons/Icon";
-import { determineChipIcon, determineIcon } from "../../determineIcon";
+import { determineChipIcon } from "../../determineIcon";
 
 import * as S from "./styles";
 

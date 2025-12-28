@@ -1,7 +1,7 @@
 import { moderateScale } from "react-native-size-matters";
 import styled from "styled-components/native";
 
-import { activeFonts, colors } from "../../../../styles";
+import { activeFonts } from "../../../../styles";
 
 interface HeaderCardStyleProps {
   bgColor: string;
@@ -27,13 +27,22 @@ export const TextLayout = styled.View<HeaderCardStyleProps>`
   border-radius: ${moderateScale(5)}px;
 `;
 
+export const TitleBig = styled.Text`
+  line-height: ${moderateScale(18)}px;
+  font-size: ${moderateScale(16)}px;
+  font-family: ${activeFonts.Semibold};
+  text-align: left;
+  text-wrap: pretty;
+  color: ${props => props.bgColor};
+`;
+
 export const Title = styled.Text`
   line-height: ${moderateScale(18)}px;
   font-size: ${moderateScale(12)}px;
   font-family: ${activeFonts.Semibold};
   text-align: left;
   text-wrap: pretty;
-  color: ${colors.themeWhite}
+  color: ${props => props.bgColor};
 `;
 
 export const IconBox = styled.View`

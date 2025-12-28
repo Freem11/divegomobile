@@ -1,16 +1,16 @@
 import React from "react";
 
-import { colors } from "../../../../styles";
 import Icon from "../../../../../icons/Icon";
-import { determineIcon } from "../../determineIcon";
+import { determineIcon, determineIntensity, determineViz } from "../../determineIcon";
 
 import * as S from "./styles";
 
 interface HeaderCard {
   value: string;
+  vizVal?: number;
 }
 
-export default function HeaderCard({ value }: HeaderCard) {
+export default function HeaderCard({ value, vizVal }: HeaderCard) {
 
   if (!value) return;
 
@@ -19,14 +19,22 @@ export default function HeaderCard({ value }: HeaderCard) {
   const restOfText = rest.join(" ").trimStart();
   const icon = determineIcon(first, rest);
 
+  let colors: { bgColor: string, textColor: string };
+
+  if (vizVal) {
+    colors = determineViz(vizVal);
+  } else {
+    colors = determineIntensity(first);
+  }
+  ;
   return (
-    <S.HeaderCard bgColor={colors.primaryBlue}>
+    <S.HeaderCard bgColor={colors.bgColor}>
       <S.IconBox>
-        <Icon name={icon} color={colors.themeWhite} />
+        <Icon name={icon} color={colors.textColor} />
       </S.IconBox>
       <S.TextLayout>
-        <S.Title>{first}</S.Title>
-        <S.Title>{restOfText}</S.Title>
+        <S.TitleBig bgColor={colors.textColor}>{first}</S.TitleBig>
+        <S.Title bgColor={colors.textColor}>{restOfText}</S.Title>
       </S.TextLayout>
     </S.HeaderCard>
 

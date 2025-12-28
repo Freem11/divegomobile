@@ -103,10 +103,11 @@ export const Date = styled.Text`
 
 export const StatRowMajor = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: ${moderateScale(2)}px;
-  margin: 0 ${moderateScale(32)}px;
+  gap: ${moderateScale(25)}px;
+  text-wrap: pretty;
 `;
 
 export const StatRow = styled.View`
