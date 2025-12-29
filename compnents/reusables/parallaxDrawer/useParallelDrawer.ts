@@ -81,7 +81,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   }, [bottomHitCount]);
 
   const MIN_SHRINK = moderateScale(150);
-  const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
 
   useAnimatedReaction(
     () => ({
@@ -98,8 +97,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
 
       if (contentShrankSignificantly) {
-        lastAdjustedHeightRef.value = newHeight;
-
         const minTranslateY = Math.min(
           dynamicScreenHeight.value - newHeight - TOP_SECTION_HEIGHT,
           getHalfHeight()
@@ -133,7 +130,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
 
-      const isAtBottom = Math.abs(translateY.value - minY) < 2000;
+      const isAtBottom = Math.abs(translateY.value - minY) < 20;
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
         runOnJS(handleDrawerHitBottom)();
@@ -207,7 +204,8 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const cleanupAndClose = (
     mapConfig: number | null,
-    currentScreen: ActiveSceen
+    currentScreen: ActiveSceen,
+    shouldNavigate: boolean // New Flag
   ) => {
     runOnJS(setSavedTranslateY)(getHalfHeight());
     runOnJS(setEditInfo)(null);
@@ -220,10 +218,13 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       runOnJS(onMapFlip)();
     }
 
-    runOnJS(onClose)();
+    // Only go back if we are closing via UI button, not tab switch
+    if (shouldNavigate) {
+      runOnJS(onClose)();
+    }
   };
 
-  const closeParallax = (mapConfig: number | null) => {
+  const closeParallax = (mapConfig: number | null, shouldNavigate: boolean = true) => {
     const currentScreen: ActiveSceen = activeScreen;
     setSavedTranslateY(translateY.value);
     setBottomHitCount(1);
@@ -233,7 +234,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
         translateY.value = getHalfHeight();
         startY.value = getHalfHeight();
 
-        runOnJS(cleanupAndClose)(mapConfig, currentScreen);
+        runOnJS(cleanupAndClose)(mapConfig, currentScreen, shouldNavigate);
       }
     });
   };

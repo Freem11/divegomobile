@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { Photo } from "../../../entities/photos";
 import { ActiveProfile } from "../../../entities/profile";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { Review } from "../../../entities/diveSiteReview";
