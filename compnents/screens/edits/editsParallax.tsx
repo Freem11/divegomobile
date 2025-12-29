@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, View } from "react-native";
 
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import noImage from "../../png/NoImage.png";
 import { chooseImageHandler, imageUploadClean } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -27,6 +27,7 @@ interface EditsScreenProps {
 }
 
 export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
   const { editInfo } = useContext(EditsContext);
   const [info, setInfo] = useState<any>(null);
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -158,6 +159,7 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={image ? { uri: image } : noImage}
       onClose={onClose}
       popoverContent={(close) => (

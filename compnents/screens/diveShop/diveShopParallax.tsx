@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -6,7 +6,7 @@ import noImage from "../../png/NoImage.png";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { EditsContext } from "../../contexts/editsContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
@@ -24,6 +24,8 @@ type DiveShopParallaxProps = {
 export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const diveShopNavigation = useDiveShopNavigation();
   const { t } = useTranslation();
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
+
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
@@ -104,6 +106,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : noImage}
       onClose={onClose}
       onMapFlip={onNavigate}
