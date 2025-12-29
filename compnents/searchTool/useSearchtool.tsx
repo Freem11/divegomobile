@@ -79,7 +79,7 @@ export default function useSearchTool() {
     const megaArray = [
       ...addIconType(placesArray, "compass"),
       ...addIconType([...new Set(diveSiteArray)], "anchor"),
-      ...addIconType([...new Set(seaLifeArray)], "shark"),
+      ...addIconType([...new Set(seaLifeArray)], "fish"),
     ];
 
     setList(addIndexNumber(megaArray));
