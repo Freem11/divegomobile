@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import noImage from "../../png/NoImage.png";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { useDiveShopNavigation } from "../diveShop/types";
 import { getReviewById } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { cloudflareBucketUrl } from "../../globalVariables";
@@ -13,6 +13,7 @@ type ReviewParallaxProps = {
 };
 
 export default function ReviewParallax(props: ReviewParallaxProps) {
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
   const diveShopNavigation = useDiveShopNavigation();
   const [selectedReview, setSelectedReview] = useState(null);
 
@@ -35,6 +36,7 @@ export default function ReviewParallax(props: ReviewParallaxProps) {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={diveSitePhoto ? { uri: remoteUri } : noImage}
       onClose={onClose}
     >

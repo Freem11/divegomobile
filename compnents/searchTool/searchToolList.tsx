@@ -1,6 +1,7 @@
 import React from "react";
 import { FlatList, View, StyleSheet, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { colors } from "../styles";
 
@@ -13,13 +14,22 @@ export default function SearchToolList({
   handleSeaLifeOptionSelected,
   setSearchStatus
 }) {
+  const insets = useSafeAreaInsets();
+
   if (!data || data.length === 0) return null;
+
+  const BOTTOM_BAR_HEIGHT = moderateScale(120);
+  const totalBottomPadding = insets.bottom + BOTTOM_BAR_HEIGHT;
 
   return (
     <View style={styles.listContainer}>
       <FlatList
         data={data}
+        keyboardShouldPersistTaps="handled"
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{
+          paddingBottom: totalBottomPadding,
+        }}
         renderItem={({ item }) => (
           <SearchToolListItem
             name={item.title}
@@ -36,7 +46,6 @@ export default function SearchToolList({
 }
 
 const styles = StyleSheet.create({
-
   listContainer: {
     flex: 1,
     backgroundColor: colors.themeWhite,
