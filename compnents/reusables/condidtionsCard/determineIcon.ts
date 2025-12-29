@@ -117,7 +117,7 @@ export function determineIntensity(intensityVal: string) {
   }
 
   if (intensityVal === "Moderate") {
-    return { bgColor: colors.yellow, textColor: colors.themeBlack };
+    return { bgColor: colors.secondaryYellow, textColor: colors.themeBlack };
   }
 
   if (intensityVal === "Strong") {
