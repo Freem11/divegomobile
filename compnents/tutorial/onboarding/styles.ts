@@ -2,16 +2,16 @@ import {
   StyleSheet, Dimensions,
 } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
+import styled from "styled-components/native";
 
 import { activeFonts, colors, fontSizes } from "../../styles";
-import styled from "styled-components/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const screenHeight = Dimensions.get("screen").height;
 
 export const FloatingImage = styled.Image({
-  position: 'absolute',
+  position: "absolute",
   bottom: moderateScale(95),
   right: moderateScale(-50),
   zIndex: 1,
@@ -116,6 +116,8 @@ const styles = StyleSheet.create({
   buttonOne: {
     borderRadius: moderateScale(10),
     backgroundColor: colors.themeWhite,
+    borderColor: colors.themeWhite,
+    borderWidth: moderateScale(2),
   },
   buttonOneText: {
     fontFamily: activeFonts.Medium,
@@ -142,7 +144,8 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(10),
   },
   inputBox: {
-    width: "70%",
+    width: "60%",
+    height: moderateScale(40),
     marginTop: "-10%",
   },
 });
