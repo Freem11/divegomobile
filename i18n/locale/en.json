@@ -235,7 +235,10 @@
         "alreadyHaveAccount": "Already have an account ?",
         "resetPassword": "Reset Password",
         "enterAccountEmail": "Enter Your Account Email",
-        "sendRecoverEmail": "Send Email"
+        "sendRecoverEmail": "Send Email",
+        "newPassword": "New Password",
+        "newPasswordPlaceholder": "Enter your new password",
+        "updatePassword": "Submit"
     },
     "Photo": {
         "diveDeeper": "Dive Deeper!"

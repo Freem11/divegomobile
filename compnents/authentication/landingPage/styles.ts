@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { Dimensions } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+
 import {
   activeFonts,
   colors,
@@ -83,7 +84,7 @@ export const RegisterText = styled.Text`
 `;
 
 export const IconRow = styled.View`
-  width: ${moderateScale(200)}px;
+  width: ${moderateScale(160)}px;
   margin-top: ${windowHeight / 30}px;
   align-items: center;
   justify-content: space-around;

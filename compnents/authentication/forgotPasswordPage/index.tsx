@@ -1,13 +1,12 @@
 import React from "react";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { supabase } from "../../../supabase";
 import { createSessionFromUrl } from "../../helpers/loginHelpers";
 import { showError, showSuccess } from "../../toast";
-
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthenticationRoutes } from "../authNavigator";
 
 import { Form } from "./form";
@@ -25,29 +24,37 @@ type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function ForgotPasswordScreen(props: IProps) {
-
   const url = Linking.useURL();
-  if (url){
-    createSessionFromUrl(url);
-  }
+
+  React.useEffect(() => {
+    if (url) {
+      createSessionFromUrl(url);
+    }
+  }, [url]);
 
   const navigation = useNavigation<ForgotPasswordScreenNavigationProp>();
 
-  const onSubmit = async(form: Form) => {
+  const onSubmit = async (form: Form) => {
+    try {
+      // Ensure this matches your Supabase Dashboard "Redirect URLs" exactly
+      const resetPasswordURL = "scubaseasons://account/password";
 
-    // const resetPasswordURL = Linking.createURL("account/password/");
-    const resetPasswordURL = "https://scubaseasons.netlify.app/account/password";
+      console.log("Attempting reset for:", form.Email);
 
-    const response = await supabase.auth.resetPasswordForEmail(form.Email, {
-      redirectTo: resetPasswordURL,
-      skipBrowserRedirect: true,
-    });
+      const { error } = await supabase.auth.resetPasswordForEmail(form.Email!, {
+        redirectTo: resetPasswordURL,
+      });
 
-    if (response.error){
-      showSuccess("Password Reset Email Sent! Check Your Inbox for it");
-    } else {
-      showError("Error sending password recovery email. Please try again later");
-      console.error("Error sending password recovery email:", response);
+      if (error) {
+        console.error("Supabase Auth Error:", error.message);
+        showError(error.message);
+      } else {
+        console.log("Reset email sent successfully");
+        showSuccess("Check your inbox for the reset link!");
+      }
+    } catch (err) {
+      console.error("Critical Submission Error:", err);
+      showError("Something went wrong. Please check your connection.");
     }
   };
 
@@ -55,9 +62,7 @@ export default function ForgotPasswordScreen(props: IProps) {
     <ForgotPageView
       moveToLoginPage={() => navigation.goBack()}
       onSubmit={onSubmit}
-      defaultFormValues={{
-        Email:""
-      }}
+      defaultFormValues={{ Email: "" }}
     />
   );
 }

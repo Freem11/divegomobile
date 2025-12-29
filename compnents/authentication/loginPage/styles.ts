@@ -49,6 +49,7 @@ export const ForgotBox = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: center;
+  padding-bottom: ${moderateScale(16)}px;
 `;
 
 export const PromptBox = styled.View`

@@ -53,7 +53,6 @@ export default function LandingPageView(props: IProps) {
         <S.SocialText>{t("Auth.socialText")}</S.SocialText>
 
         <S.IconRow>
-
           <TouchableWithoutFeedback onPress={props.onGoogle} disabled={props.isSignedIn}>
             <S.GoogleButton>
               <Image source={googleLogo} style={S.GLogo} />

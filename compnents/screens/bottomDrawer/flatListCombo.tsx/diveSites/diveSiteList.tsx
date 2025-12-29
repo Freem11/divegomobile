@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
+import { moderateScale } from "react-native-size-matters";
 
 import Card from "../../card";
 import { useMapStore } from "../../../../googleMap/useMapStore";
@@ -9,6 +10,8 @@ import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
 import { useAppNavigation } from "../../../../mapPage/types";
 import * as S from "../styles";
+import Icon from "../../../../../icons/Icon";
+import { colors } from "../../../../styles";
 
 export default function DiveSiteList() {
   const navigation = useAppNavigation();
@@ -67,8 +70,23 @@ export default function DiveSiteList() {
       }}
     >
       <S.Header>Nearby Dive Sites</S.Header>
-      <S.Subtitle>Swipe right for nearby sea life</S.Subtitle>
-      <S.Subtitle>Swipe left for nearby dive centres</S.Subtitle>
+
+      <S.SubHeaderWrapper>
+        <S.SwipeIndicator>
+          <S.IconWrapper>
+            <Icon name="double-chevron-left" color={colors.border} />
+          </S.IconWrapper>
+          <S.Subtitle>Sea Life</S.Subtitle>
+        </S.SwipeIndicator>
+
+        <S.SwipeIndicator>
+          <S.Subtitle>Dive Centres</S.Subtitle>
+          <S.IconWrapper>
+            <Icon name="double-chevron-right" color={colors.border} />
+          </S.IconWrapper>
+        </S.SwipeIndicator>
+      </S.SubHeaderWrapper>
+
       {renderListHeader}
 
       {layoutReady ? (

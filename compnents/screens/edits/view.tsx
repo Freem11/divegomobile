@@ -56,7 +56,7 @@ export default function EditScreenView({
             render={({ field: { onChange, onBlur, value } }) => (
               <S.MultilineTextInput
                 multiline
-                placeholder={"test"}
+                placeholder={"about info"}
                 placeholderTextColor={colors.neutralGrey}
                 value={value}
                 onBlur={onBlur}

@@ -9,6 +9,8 @@ import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
 import * as S from "../styles";
+import Icon from "../../../../../icons/Icon";
+import { colors } from "../../../../styles";
 
 type SeaLifeListProps = {
   scrollToDiveSiteList?: () => void;
@@ -71,7 +73,15 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
       }}
     >
       <S.Header>Nearby Sea Life</S.Header>
-      <S.Subtitle>Swipe left for nearby dive sites</S.Subtitle>
+      <S.SubHeaderRight>
+        <S.SwipeIndicator>
+          <S.Subtitle>Dive Sites</S.Subtitle>
+          <S.IconWrapper>
+            <Icon name="double-chevron-right" color={colors.border} />
+          </S.IconWrapper>
+        </S.SwipeIndicator>
+      </S.SubHeaderRight>
+
       {renderListHeader}
 
       {layoutReady ? (

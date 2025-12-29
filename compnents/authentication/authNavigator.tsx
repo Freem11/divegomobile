@@ -1,14 +1,15 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import { colors } from "../styles";
+import ButtonIcon from "../reusables/buttonIcon";
+
 import LandingScreen from "./landingPage";
 import LoginScreen from "./loginPage";
 import SignUpScreen from "./signupPage";
 import ForgotPasswordScreen from "./forgotPasswordPage";
 import AuthHeader from "./AuthHeader";
-import ButtonIcon from "../reusables/buttonIcon"
 
-// All Authentication flow related routes for type safety.
 export type AuthenticationRoutes = {
   Landing: undefined;
   Login: undefined;
@@ -19,7 +20,6 @@ export type AuthenticationRoutes = {
 export const Stack = createNativeStackNavigator<AuthenticationRoutes>();
 
 export default function AuthenticationNavigator() {
-
   return (
     <Stack.Navigator
       initialRouteName="Landing"
@@ -29,7 +29,7 @@ export default function AuthenticationNavigator() {
         headerLeft: () => ButtonIcon({
           icon: "chevron-left",
           onPress: navigation.goBack,
-          size: 'small',
+          size: "small",
           fillColor: colors.neutralGrey
         }),
         animation: "slide_from_right",
