@@ -101,7 +101,7 @@ export function determineViz(vizVal: number) {
   }
 
   if (vizVal > 20) {
-    return { bgColor: colors.greenLight, textColor: colors.themeBlack };
+    return { bgColor: colors.green, textColor: colors.themeBlack };
   }
 
 }
@@ -109,7 +109,7 @@ export function determineViz(vizVal: number) {
 export function determineIntensity(intensityVal: string) {
 
   if (intensityVal === "No") {
-    return { bgColor: colors.greenLight, textColor: colors.themeBlack };
+    return { bgColor: colors.green, textColor: colors.themeBlack };
   }
 
   if (intensityVal === "Weak") {
