@@ -16,7 +16,7 @@ export default function ConditionsCard({ conditions }: ConditionsCard) {
 
   const visibilityValue = conditions?.find(c => c.condition_type_id === 15).value;
 
-  const intensityValue = conditions?.find(c => c.condition_type_id === 16).value;
+  const intensityValue = conditions?.find(c => c.condition_type_id === 16)?.value;
 
   const formattedConditions = conditions?.map((condition) => {
     return formatConditions(condition, intensityValue);

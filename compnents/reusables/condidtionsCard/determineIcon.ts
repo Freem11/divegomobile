@@ -29,7 +29,7 @@ export function determineIcon(first: string, rest: string[]) {
 export function determineChipIcon(conditionText: string) {
 
   if (conditionText === "Boat Dive") {
-    return "sailboat";
+    return "dive-boat";
   }
 
   if (conditionText === "Shore Dive") {
