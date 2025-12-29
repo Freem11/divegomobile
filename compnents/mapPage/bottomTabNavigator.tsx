@@ -40,10 +40,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     const navigation = useAppNavigation();
 
     /**
-                                           * For Android only.
-                                           * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-                                           * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-                                           */
+                                             * For Android only.
+                                             * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
+                                             * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+                                             */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
@@ -96,7 +96,7 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
             <Tab.Screen name="Profile">
                 {props => <UserProfileParallax {...props} profileID={userProfile?.id} />}
             </Tab.Screen>
-            <Tab.Screen name="Notifications" component={FeedList} />
+            {/* <Tab.Screen name="Notifications" component={FeedList} /> */}
             <Tab.Screen name="AddSite" component={SiteSubmitterRouter} options={{ tabBarLabel: "Site Add" }} />
 
             {PARTNER_ACCOUNT_STATUS &&
@@ -106,10 +106,10 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     );
 
     /**
-                                       * Returns the icon name and label for each tab based on route.
-                                       * @param route The route name of the current tab
-                                       * @returns Object literal containing Icon name and label strings
-                                       */
+                                         * Returns the icon name and label for each tab based on route.
+                                         * @param route The route name of the current tab
+                                         * @returns Object literal containing Icon name and label strings
+                                         */
     function getTabProps(route: string): { icon: string; label: string } {
         switch (route) {
             case "Home": return { icon: "map-outlined", label: t("BottomTabBar.home") };
