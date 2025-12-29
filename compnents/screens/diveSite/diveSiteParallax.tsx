@@ -112,7 +112,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
       <>
         <IconWithLabel
           label={t("DiveSite.addReview")}
-          iconName="diving-scuba-flag"
+          iconName="diving-snorkel"
           buttonAction={() => openDiveSiteReviewer()}
         />
         <IconWithLabel

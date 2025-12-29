@@ -61,7 +61,7 @@ export default function SealifePreview({
       ) : (
         <S.EmptyStateContainer>
           <EmptyState
-            iconName="fish"
+            iconName="camera-plus"
             title={"No sightings yet"}
             subtitle={onAddSighting ? "Be the first to spot some sea life here!" : `${selectedProfile && selectedProfile.UserName} hasn't made any sightings yet.`}
           />
