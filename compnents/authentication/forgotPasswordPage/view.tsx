@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { colors } from "../../styles";
 import { showWarning } from "../../toast";
 
 import * as S from "./styles";
@@ -22,7 +19,6 @@ export default function ForgotPageView(props: IProps) {
   const { t } = useTranslation();
   const [isEnabled, setIsEnabled] = useState(true);
 
-  const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
   const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
     defaultValues: props.defaultFormValues
   });
@@ -67,8 +63,8 @@ export default function ForgotPageView(props: IProps) {
             }}
             alt={false}
             size="medium"
-            title={t("Auth.sendRecoverEmail")}
             iconRight="chevron-right"
+            title={t("Auth.sendRecoverEmail")}
             disabled={!isEnabled || isSubmitting}
           />
         </S.ButtonBox>

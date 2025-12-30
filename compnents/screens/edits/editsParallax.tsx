@@ -118,11 +118,19 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
       await clearPhoto(preImagePath);
     }
 
-    try {
-      const fileName = await imageUploadClean({ assets: [{ uri: formData.uri }] });
-      if (!fileName) throw new Error("Photo upload failed");
+    console.log("formData", formData);
+    let fileName: string | null = null;
 
-      const fullPath = `animalphotos/public/${fileName}`;
+    try {
+      if (formData.uri.length > 0) {
+        fileName = await imageUploadClean({ assets: [{ uri: formData.uri }] });
+        if (!fileName) throw new Error("Photo upload failed");
+      }
+
+      let fullPath = null;
+      if (fileName) {
+        fullPath = `animalphotos/public/${fileName}`;
+      }
 
       if (dataType === EDIT_TYPE.USER_PROFILE) {
         const response = await updateProfile({
