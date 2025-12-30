@@ -50,11 +50,12 @@ export default function ForgotPasswordScreen(props: IProps) {
         showError(error.message);
       } else {
         console.log("Reset email sent successfully");
-        showSuccess("Check your inbox for the reset link!");
+        showSuccess(`A reset link has bee sent to ${form.Email} Check your inbox for it!`);
       }
     } catch (err) {
       console.error("Critical Submission Error:", err);
       showError("Something went wrong. Please check your connection.");
+
     }
   };
 

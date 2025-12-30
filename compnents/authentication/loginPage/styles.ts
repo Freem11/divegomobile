@@ -57,17 +57,17 @@ export const PromptBox = styled.View`
   flex-direction: row;
   gap: 10px;
   justify-content: center;
+  align-items: center;
   padding-bottom: ${Platform.OS === "ios" ? 0 : "15px"};
 `;
 
 export const PromptText = styled.Text`
-  font-size: ${moderateScale(15)}px;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
   font-family: ${activeFonts.Italic};
   color: ${colors.themeBlack};
 `;
 
 export const PromptLinkText = styled.Text`
-  margin-top: ${moderateScale(1)}px;
   font-size: ${moderateScale(fontSizes.SmallText)}px;
   color: ${colors.primaryBlue};
 `;

@@ -50,6 +50,7 @@ export const PromptBox = styled.View`
   flex-direction: row;
   gap: 10px;
   justify-content: center;
+  align-items: center;
 `;
 
 export const PromptText = styled.Text`

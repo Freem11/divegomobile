@@ -18,9 +18,15 @@ interface IProps {
 export default function ForgotPageView(props: IProps) {
   const { t } = useTranslation();
 
+  const onLocalSubmit = async (data: Form) => {
+    await props.onSubmit(data);
+    reset();
+  };
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<Form>({
     defaultValues: props.defaultFormValues,
@@ -61,7 +67,7 @@ export default function ForgotPageView(props: IProps) {
 
         <S.ButtonBox>
           <Button
-            onPress={handleSubmit(props.onSubmit, handleError)}
+            onPress={handleSubmit(onLocalSubmit, handleError)}
             alt={false}
             size="medium"
             title={t("Auth.sendRecoverEmail")}
