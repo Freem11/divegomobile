@@ -12,8 +12,8 @@ import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
-import CommentsModal from "../modals/commentsModal";
 import { EDIT_TYPE } from "../../entities/editTypes";
+import PhotoCommentsParallax from "../modals/photoCommentsParallax";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
@@ -94,7 +94,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
 
       <Stack.Screen name="PhotoComments">
         {({ route }) => (
-          <CommentsModal
+          <PhotoCommentsParallax
             id={route.params.id}
           />
         )}
