@@ -58,7 +58,7 @@ export const Step1: React.FC<Step1Props> = ({
           <S.TextBuffer>
             <MobileTextInput
               error={errors.Site}
-              iconLeft="diving-scuba-flag"
+              iconLeft="anchor"
               placeholder={t("DiveSiteAdd.siteNamePlaceholder")}
               onChangeText={onChange}
               value={value}

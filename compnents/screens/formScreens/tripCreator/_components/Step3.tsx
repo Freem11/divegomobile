@@ -60,7 +60,7 @@ export const Step3: React.FC<Step3Props> = ({
       {!tripDiveSites && (
         <S.EmptyStateWrapper>
           <EmptyState
-            iconName="diving-scuba-flag"
+            iconName="anchor"
             title={t("TripCreator.emptyState")}
             subtitle=""
           />

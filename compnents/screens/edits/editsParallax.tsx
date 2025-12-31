@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
-import { ImagePickerAsset } from "expo-image-picker";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { ActivityIndicator, View } from "react-native";
 
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import noImage from "../../png/NoImage.png";
 import { chooseImageHandler, imageUploadClean } from "../imageUploadHelpers";
 import IconWithLabel from "../../reusables/iconWithLabal";
@@ -10,103 +10,129 @@ import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { EditsContext } from "../../contexts/editsContext";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
 import { useAppNavigation } from "../../mapPage/types";
-import { updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
-import { updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
+import { grabProfileById, updateProfile } from "../../../supabaseCalls/accountSupabaseCalls";
+import { getDiveShopById, updateDiveShop } from "../../../supabaseCalls/shopsSupabaseCalls";
 import { cloudflareBucketUrl } from "../../globalVariables";
 import { clearPhoto } from "../../cloudflareBucketCalls/cloudflareAWSCalls";
 import { showError, showSuccess } from "../../toast";
+import { EDIT_TYPE } from "../../../entities/editTypes";
 
 import { Form } from "./form";
 
 import EdittingScreen from ".";
 
-export type BasicFormData = {
-  dataType: string
-  title: string
-  id: number
-  name: string
-  bio: string
-  uri: string
-  placeholderName: string
-  placeholderBio: string
-};
+interface EditsScreenProps {
+  id: number;
+  dataType: EDIT_TYPE;
+}
 
-export default function EditScreenParallax() {
+export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
   const { editInfo } = useContext(EditsContext);
-  const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { selectedProfile, setSelectedProfile } = useContext(SelectedProfileContext);
+  const [info, setInfo] = useState<any>(null);
+  const [image, setImage] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
 
-  const preImage = `${cloudflareBucketUrl}${selectedProfile ? selectedProfile.profilePhoto.split("/").pop() : selectedShop.diveShopProfilePhoto.split("/").pop()}`;
+  const { setSelectedShop } = useContext(SelectedShopContext);
+  const { setSelectedProfile } = useContext(SelectedProfileContext);
+  const navigation = useAppNavigation();
 
-  const [image, setImage] = useState<string>(preImage);
-
-  const { control, setValue, handleSubmit } = useForm<Form>({
+  const { control, setValue, handleSubmit, reset } = useForm<Form>({
     mode: "onChange",
     reValidateMode: "onChange",
     values: {
-      id: selectedShop.id || selectedProfile.id,
-      name: selectedShop.orgName || selectedProfile.UserName,
-      bio: selectedShop.diveShopBio || selectedProfile.profileBio || "",
-      uri: selectedShop.diveShopProfilePhoto || selectedProfile.profilePhoto || ""
+      id: id,
+      name: info?.orgName || info?.UserName || "",
+      bio: info?.diveShopBio || info?.profileBio || "",
+      uri: info?.diveShopProfilePhoto || info?.profilePhoto || ""
     }
   });
 
-  const navigation = useAppNavigation();
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let fetchedInfo;
+        if (dataType === EDIT_TYPE.DIVE_CENTRE) {
+          const res = await getDiveShopById(id);
+          fetchedInfo = res[0];
+        } else {
+          fetchedInfo = await grabProfileById(id);
+        }
 
-  const onClose = async () => {
+        setInfo(fetchedInfo);
+
+        const photoPath = fetchedInfo?.profilePhoto || fetchedInfo?.diveShopProfilePhoto;
+        if (photoPath) {
+          const fileName = photoPath.split("/").pop();
+          setImage(`${cloudflareBucketUrl}${fileName}`);
+        }
+      } catch (error) {
+        showError("Failed to load information");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id, dataType]);
+
+  useEffect(() => {
+    return () => {
+      setInfo(null);
+      setImage(undefined);
+      reset({
+        id: undefined,
+        name: "",
+        bio: "",
+        uri: ""
+      });
+    };
+  }, [reset]);
+
+  const onClose = () => {
     navigation.goBack();
   };
 
-  const popoverContent = () => {
-    return (
-      <>
-        <IconWithLabel
-          label="Change Header Image"
-          iconName="camera-flip-outline"
-          buttonAction={() => handleSelectImage()}
-        />
-      </>
-    );
-  };
-
-  const handlePreviewImage = async (picture: ImagePickerAsset) => {
-    const newPic = picture.uri;
-    setImage(newPic);
-
-    setValue("uri", newPic);
-  };
-
   const handleSelectImage = async () => {
-    try {
-      const result = await chooseImageHandler();
-      if (result?.assets?.[0]?.uri) {
-        handlePreviewImage(result?.assets?.[0]);
+    setTimeout(async () => {
+      try {
+        const result = await chooseImageHandler();
+        if (result?.assets?.[0]?.uri) {
+          const newPic = result.assets[0].uri;
+          setImage(newPic);
+          setValue("uri", newPic, { shouldDirty: true });
+        }
+      } catch (e: any) {
+        console.log("Image selection cancelled", e.message);
       }
-    } catch (e: any) {
-      console.log("Image selection cancelled", e.message);
-    }
-  };
+    }, 300);
 
-  const tryUpload = async (uri: string) => {
-    try {
-      return await imageUploadClean({ assets: [{ uri }] });
-    } catch (e) {
-      console.error("Error uploading image:", e);
-      return null;
-    }
   };
 
   const onSubmit = async (formData: Required<Form>) => {
-    await clearPhoto(preImage);
+    const originalPhoto = info?.profilePhoto || info?.diveShopProfilePhoto;
+    const preImagePath = originalPhoto ? `${cloudflareBucketUrl}${originalPhoto.split("/").pop()}` : "";
+
+    if (preImagePath) {
+      await clearPhoto(preImagePath);
+    }
+
+    console.log("formData", formData);
+    let fileName: string | null = null;
+
     try {
-      const fileName = await tryUpload(formData.uri);
-      if (!fileName) {
-        throw new Error("Photo upload failed");
+      if (formData.uri.length > 0) {
+        fileName = await imageUploadClean({ assets: [{ uri: formData.uri }] });
+        if (!fileName) throw new Error("Photo upload failed");
       }
 
-      const fullPath = `animalphotos/public/${fileName}`;
+      let fullPath = null;
+      if (fileName) {
+        fullPath = `animalphotos/public/${fileName}`;
+      }
 
-      if (editInfo === "Profile") {
+      if (dataType === EDIT_TYPE.USER_PROFILE) {
         const response = await updateProfile({
           id: formData.id,
           UserName: formData.name,
@@ -114,7 +140,7 @@ export default function EditScreenParallax() {
           profilePhoto: fullPath
         });
         setSelectedProfile(response);
-      } else if (editInfo === "Dive Center") {
+      } else {
         const response = await updateDiveShop({
           id: formData.id,
           orgName: formData.name,
@@ -123,23 +149,44 @@ export default function EditScreenParallax() {
         });
         setSelectedShop(response);
       }
-      showSuccess(`You ${editInfo} info was sucessfully updated!`);
+      showSuccess(`Your ${editInfo} info was successfully updated!`);
+      onClose();
     } catch (err) {
-      showError(`We ran into and errro updating you ${editInfo}, please try again later`);
-      console.error("Error uploading image:", err);
+      showError(`Error updating ${editInfo}`);
+      console.error(err);
     }
   };
 
+  if (loading || !info) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
+  }
+
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={image ? { uri: image } : noImage}
       onClose={onClose}
-      popoverContent={popoverContent}
+      popoverContent={(close) => (
+        <IconWithLabel
+          label="Change Header Image"
+          iconName="camera-flip-outline"
+          buttonAction={() => {
+            close();
+            setTimeout(() => {
+              handleSelectImage();
+            }, 100);
+          }}
+        />
+      )}
     >
       <EdittingScreen
         editInfo={editInfo}
         control={control}
-        localPreviewUri={image}
+        reset={reset}
         onSubmit={handleSubmit(onSubmit)}
       />
     </ParallaxDrawer>

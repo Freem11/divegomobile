@@ -26,7 +26,7 @@ const SearchInput = React.forwardRef<TextInput, SearchInputProps>(function Searc
     <S.TextInputWrapper>
       {iconLeft && (
         <S.IconWrapperLeft>
-          <Icon name={iconLeft as IconName} fill={colors.neutralGrey}/>
+          <Icon name={iconLeft as IconName} fill={colors.neutralGrey} />
         </S.IconWrapperLeft>
       )}
       <Animated.View style={value ? null : [{ opacity: placeholderOpacity }]}>
@@ -44,11 +44,11 @@ const SearchInput = React.forwardRef<TextInput, SearchInputProps>(function Searc
       {iconRight && value.length > 0 ? (
         <TouchableOpacity onPress={handleClear}>
           <S.IconWrapperRight>
-            <Icon name={iconRight as IconName} fill={colors.themeBlack}/>
+            <Icon name={iconRight as IconName} fill={colors.themeBlack} />
           </S.IconWrapperRight>
         </TouchableOpacity>
       )
-        :  <S.IconWrapperRight/>}
+        : <S.IconWrapperRight />}
     </S.TextInputWrapper>
   );
 });

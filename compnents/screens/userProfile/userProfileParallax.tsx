@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Share from "react-native-share";
 import { Keyboard } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import noImage from "../../png/NoImage.png";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import IconWithLabel from "../../reusables/iconWithLabal";
 import { grabProfileById } from "../../../supabaseCalls/accountSupabaseCalls";
 import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
@@ -12,6 +13,7 @@ import { registerForPushNotificationsAsync } from "../../tutorial/notificationsR
 import { EditsContext } from "../../contexts/editsContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useAppNavigation } from "../../mapPage/types";
+import { EDIT_TYPE } from "../../../entities/editTypes";
 
 import UserProfileScreen from ".";
 
@@ -21,6 +23,7 @@ type UserProfileProps = {
 
 export default function UserProfileParallax(props: UserProfileProps) {
   const navigation = useAppNavigation();
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
 
   const { selectedProfile, setSelectedProfile } = useContext(
     SelectedProfileContext
@@ -33,6 +36,14 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   const { setEditInfo } = useContext(EditsContext);
   const { userProfile } = useUserProfile();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        drawerRef.current?.close(null, false);
+      };
+    }, [])
+  );
 
   useEffect(() => {
     getProfileinfo();
@@ -108,8 +119,8 @@ export default function UserProfileParallax(props: UserProfileProps) {
   };
 
   const openEditsPage = () => {
+    navigation.navigate("EditScreen", { id: selectedProfile.id, dataType: EDIT_TYPE.USER_PROFILE });
     setEditInfo("Profile");
-    navigation.navigate("EditScreen");
   };
 
   const handleShare = async () => {
@@ -165,6 +176,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={profileVals && profileVals.photo ? { uri: profileVals.photo } : noImage}
       onClose={onClose}
       onMapFlip={onNavigate}

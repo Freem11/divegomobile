@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import email from "react-native-email";
 
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
@@ -26,6 +26,8 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   const diveSiteNavigation = useDiveSiteNavigation();
   const { t } = useTranslation();
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
+
   const { userProfile } = useUserProfile();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
@@ -110,7 +112,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
       <>
         <IconWithLabel
           label={t("DiveSite.addReview")}
-          iconName="diving-scuba-flag"
+          iconName="diving-snorkel"
           buttonAction={() => openDiveSiteReviewer()}
         />
         <IconWithLabel
@@ -129,6 +131,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={diveSiteVals && diveSiteVals.photo ? { uri: diveSiteVals.photo } : noImage}
       onClose={onClose}
       onMapFlip={onNavigate}

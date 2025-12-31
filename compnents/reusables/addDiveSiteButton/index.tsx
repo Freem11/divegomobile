@@ -22,7 +22,7 @@ export const DiveSitesCard: FC<DiveSiteCardProps> = ({ onPress, diveSiteId, dive
       key={diveSiteId}
       onPress={() => onPress?.(diveSiteId, sitesArray)}
     >
-      <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} defaultImage={"diving-scuba-flag"} />
+      <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} defaultImage={"anchor"} />
       <S.Label>{diveSiteName}</S.Label>
     </S.DiveSitesCard>
   );

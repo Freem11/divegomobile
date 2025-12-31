@@ -165,7 +165,7 @@ export default function DiveSiteScreenView({
         ) : (
           <S.EmptyStateWrapper key="no-reviews">
             <EmptyState
-              iconName="diving-scuba-flag"
+              iconName="diving-snorkel"
               title="No Reviews Here Yet"
               subtitle={`No one has left a review for ${selectedDiveSite?.name}`}
             />
@@ -173,7 +173,7 @@ export default function DiveSiteScreenView({
               <Button
                 size="thin"
                 title={"Add First Review"}
-                iconLeft="diving-scuba-flag"
+                iconLeft="diving-snorkel"
                 round={false}
                 style={{ width: moderateScale(240) }}
                 onPress={() => openDiveSiteReviewer()}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, useImperativeHandle, forwardRef } from "react";
 import { StyleSheet, ImageBackground, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
@@ -14,24 +14,29 @@ import * as S from "./styles";
 import { WavyImg } from "./wavyImg";
 import { useParallaxDrawer } from "./useParallelDrawer";
 
+// Define the handle type so parents can use it with useRef
+export type ParallaxDrawerHandle = {
+  close: (mapConfig: number | null, shouldNavigate?: boolean) => void;
+};
+
 type ParallaxDrawerProps = {
-  headerImage: () => React.JSX.Element | string;
+  headerImage: () => React.JSX.Element | string | any;
   children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number }>;
   onClose: () => void;
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
-  isMyShop?: boolean
-  isPartnerAccount?: boolean
-  popoverContent?: () => React.JSX.Element,
+  isMyShop?: boolean;
+  isPartnerAccount?: boolean;
+  popoverContent?: (close: () => void) => React.JSX.Element;
 };
 
-const ParallaxDrawer = ({
+const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
   headerImage,
   children,
   onClose,
   onMapFlip,
   popoverContent
-}: ParallaxDrawerProps) => {
+}, ref) => {
 
   const {
     SCREEN_WIDTH,
@@ -47,6 +52,13 @@ const ParallaxDrawer = ({
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
   const navigation = useNavigation();
+
+  // Expose closeParallax to the parent via Ref
+  useImperativeHandle(ref, () => ({
+    close: (mapConfig: number | null, shouldNavigate: boolean = true) => {
+      closeParallax(mapConfig, shouldNavigate);
+    }
+  }));
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {
@@ -86,7 +98,7 @@ const ParallaxDrawer = ({
                   placement={Placement.AUTO}
                   popoverStyle={{ borderRadius: moderateScale(10) }}
                 >
-                  {popoverContent()}
+                  {popoverContent(() => setIsVisible(false))}
                 </Popover>
               )}
             </S.HeaderWrapper>
@@ -144,7 +156,6 @@ const ParallaxDrawer = ({
       </TouchableWithoutFeedback>
     </GestureHandlerRootView>
   );
-
-};
+});
 
 export default ParallaxDrawer;
