@@ -1,8 +1,8 @@
-import { moderateScale } from 'react-native-size-matters';
-import styled from 'styled-components/native';
+import { moderateScale } from "react-native-size-matters";
+import styled from "styled-components/native";
 import { Platform } from "react-native";
 
-import { colors, activeFonts, fontSizes } from '../../styles';
+import { colors, activeFonts, fontSizes } from "../../styles";
 
 export const Container = styled.View`
   width: 100%;
@@ -46,10 +46,10 @@ export const IconWrapperRight = styled.View`
   align-items: center;
 `;
 
-
 export const IconWrapperRightClear = styled.View`
     width: ${moderateScale(20)}px;
-    margin-left: ${moderateScale(-15)}px;
+    margin-left: ${moderateScale(4)}px;
+    margin-right: ${moderateScale(8)}px;
     justify-content: center;
     align-items: center;
 `;

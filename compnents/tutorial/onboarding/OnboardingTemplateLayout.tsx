@@ -28,10 +28,10 @@ export function OnboardingTemplateLayout(params: OnboardingConfigParams) {
     const { t } = useTranslation();
 
     /**
-     * For Android only.
-     * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-     * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-     */
+       * For Android only.
+       * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
+       * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
+       */
     const insets = useSafeAreaInsets();
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
     const buttonBottomPosition: number = (Platform.OS === "android" && bottomInset) ? bottomInset : scale(20);

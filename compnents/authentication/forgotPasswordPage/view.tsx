@@ -70,8 +70,8 @@ export default function ForgotPageView(props: IProps) {
             onPress={handleSubmit(onLocalSubmit, handleError)}
             alt={false}
             size="medium"
-            title={t("Auth.sendRecoverEmail")}
             iconRight="chevron-right"
+            title={t("Auth.sendRecoverEmail")}
             disabled={isSubmitting}
           />
         </S.ButtonBox>

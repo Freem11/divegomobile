@@ -94,7 +94,7 @@ export const Step1: React.FC<Step1Props> = ({
           },
           {
             label: t("DiveSiteReviewer.boatDiveButton"),
-            icon: "sailboat",
+            icon: "dive-boat",
             value: DiveConditions.BOAT_DIVE
           },
           {
