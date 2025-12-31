@@ -1,61 +1,75 @@
+import React from "react";
 import {
   StyleSheet,
   View,
   Dimensions,
   ImageBackground,
-  Platform,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { moderateScale } from "react-native-size-matters";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+
+/**
+ * Custom Path:
+ * Starts LOW (350), Peaks at 25% (50),
+ * Dips at 75% (450), Ends HIGH (150).
+ */
+const CustomWave = () => (
+  <Path
+    fill="white"
+    d="M0,350
+       C250,50 250,50 500,250
+       S750,450 1000,150
+       V500 H0 Z"
+  />
+);
 
 export default function WavyHeader() {
   return (
-    <View style={styles.customStyles}>
+    <View style={styles.container}>
+      {/* 1. The Background Image */}
       <ImageBackground
         style={styles.backgroundImage}
         source={require("./png/blackManta.png")}
       />
-      <View
-        style={{
-          flex: 1,
-          marginTop:
-            Platform.OS === "android"
-              ? windowHeight * -0.77
-              : windowWidth > 600
-              ? windowHeight * -0.9
-              : windowHeight * -0.77,
-        }}
-      >
+
+      {/* 2. The Wave Layer */}
+      <View style={styles.waveContainer}>
         <Svg
-          height="100%"
-          width="100%"
-          viewBox="0 0 1440 320"
-          style={{
-            position: "absolute",
-            backgroundColor: "transparent",
-            zIndex: 5,
-          }}
+          width={windowWidth}
+          height={moderateScale(180)}
+          viewBox="0 0 1000 1400"
+          preserveAspectRatio="none"
         >
-          <Path
-            fill="#ffffff"
-            d="M 0,700 L 0,262 C 123.33333333333331,187.60000000000002 246.66666666666663,113.20000000000002 401,132 C 555.3333333333334,150.79999999999998 740.6666666666667,262.8 919,300 C 1097.3333333333333,337.2 1268.6666666666665,299.6 1540,102 L 1440,2200 L 0,2200 Z"
-          />
+          <CustomWave />
         </Svg>
       </View>
+
+      {/* 3. The Content Area */}
+      <View style={styles.contentArea} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  customStyles: {
+  container: {
     flex: 1,
+    backgroundColor: "white",
   },
   backgroundImage: {
-    alignItems: "center",
-    justifyContent: "center",
     width: windowWidth,
     aspectRatio: 1,
+  },
+  waveContainer: {
+    position: "absolute",
+    // This value controls where the wave starts cutting the image
+    top: windowWidth - moderateScale(80),
+    width: windowWidth,
+    zIndex: 10,
+  },
+  contentArea: {
+    flex: 1,
+    backgroundColor: "white",
   },
 });
