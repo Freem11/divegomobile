@@ -20,6 +20,7 @@ import { useUserProfile } from "./store/user/useUserProfile";
 import { useUserHandler } from "./store/user/useUserHandler";
 import { initI18n, i18n } from "./i18n";
 import { createSessionFromUrl } from "./compnents/helpers/loginHelpers";
+import { resetPasswordURL } from "./compnents/globalVariables";
 
 export const navigationRef = createNavigationContainerRef<any>();
 
@@ -41,7 +42,7 @@ export default function App() {
       const onReceiveURL = async ({ url }: { url: string }) => {
         console.log("Incoming Deep Link:", url);
 
-        if (url.includes("account/password") || url.includes("type=recovery")) {
+        if (url.startsWith(resetPasswordURL) && url.includes("type=recovery")) {
           console.log("Processing Recovery Link...");
 
           await createSessionFromUrl(url);
@@ -58,7 +59,7 @@ export default function App() {
       const checkInitialUrl = async () => {
         const initialUrl = await Linking.getInitialURL();
         if (initialUrl) {
-          if (initialUrl.includes("account/password") || initialUrl.includes("type=recovery")) {
+          if (initialUrl.startsWith(resetPasswordURL) && initialUrl.includes("type=recovery")) {
             await createSessionFromUrl(initialUrl);
             userHandler.setIsRecovering(true);
             await userHandler.userInit(true);

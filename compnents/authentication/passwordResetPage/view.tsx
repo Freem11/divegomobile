@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import Button from "../../reusables/button";
-import { showWarning } from "../../toast";
+import { showError } from "../../toast";
 import SecureTextInput from "../../reusables/secureTextInput";
 
 import * as S from "./styles";
@@ -21,7 +21,7 @@ export default function ResetPageView(props: IProps) {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<Form>({
     defaultValues: props.defaultFormValues,
   });
@@ -30,7 +30,7 @@ export default function ResetPageView(props: IProps) {
     console.log("Validation Errors:", errors);
     Object.values(errors).forEach((error) => {
       if (error?.message) {
-        showWarning(error.message);
+        showError(error.message);
       }
     });
   };
@@ -47,9 +47,26 @@ export default function ResetPageView(props: IProps) {
           render={({ field: { onChange, value } }) => (
             <S.SecureTextInputWrapper>
               <SecureTextInput
+                error={errors.NewPass}
                 onChangeText={onChange}
                 value={value}
                 placeholder={t("Auth.newPasswordPlaceholder")}
+              />
+            </S.SecureTextInputWrapper>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="ConfirmPass"
+          rules={FormRules.ConfirmPass}
+          render={({ field: { onChange, value } }) => (
+            <S.SecureTextInputWrapper>
+              <SecureTextInput
+                error={errors.ConfirmPass}
+                onChangeText={onChange}
+                value={value}
+                placeholder={t("Auth.confirmPasswordPlaceholder")}
               />
             </S.SecureTextInputWrapper>
           )}

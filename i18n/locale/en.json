@@ -237,6 +237,7 @@
         "enterAccountEmail": "Enter Your Account Email",
         "newPassword": "New Password",
         "newPasswordPlaceholder": "Enter your new password",
+        "confirmPasswordPlaceholder": "Confirm your new password",
         "updatePassword": "Submit",
         "sendRecoverEmail": "Submit"
     },

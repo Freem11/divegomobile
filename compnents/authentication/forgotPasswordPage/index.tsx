@@ -8,6 +8,7 @@ import { supabase } from "../../../supabase";
 import { createSessionFromUrl } from "../../helpers/loginHelpers";
 import { showError, showSuccess } from "../../toast";
 import { AuthenticationRoutes } from "../authNavigator";
+import { resetPasswordURL } from "../../globalVariables";
 
 import { Form } from "./form";
 import ForgotPageView from "./view";
@@ -37,7 +38,6 @@ export default function ForgotPasswordScreen(props: IProps) {
   const onSubmit = async (form: Form) => {
     try {
       // Ensure this matches your Supabase Dashboard "Redirect URLs" exactly
-      const resetPasswordURL = "scubaseasons://account/password";
 
       console.log("Attempting reset for:", form.Email);
 
