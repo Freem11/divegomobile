@@ -1,10 +1,8 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
-import { Dimensions, Platform } from "react-native";
 
 import { colors, activeFonts, fontSizes } from "../../styles";
 import ButtonIcon from "../../reusables/buttonIcon-new";
-const { width, height } = Dimensions.get("window");
 
 export const MainContainer = styled.KeyboardAvoidingView`
   flex: 1;
@@ -58,5 +56,50 @@ export const StyledButtonIcon = styled(ButtonIcon)`
   height: ${moderateScale(25)}px;
   margin-left: ${moderateScale(5)}px;
   margin-right: 0px;
-   background-color: transparent;
+  background-color: transparent;
+`;
+
+export const MainScreen = styled.View`
+  flex: 1;
+  width: 100%;
+  background-color: ${colors.themeWhite};
+  padding-top: ${moderateScale(8)}px;
+`;
+
+export const HeaderText = styled.Text`
+  font-size: ${moderateScale(fontSizes.Header)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.themeBlack};
+  margin-bottom: ${moderateScale(8)}px;
+  text-align: center;
+`;
+
+export const CommentsContainer = styled.View`
+  flex: 1;
+  padding-bottom: ${moderateScale(130)}px;
+`;
+
+export const EmptyState = styled.View`
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: ${moderateScale(20)}px;
+`;
+
+export const EmptyText = styled.Text`
+  font-size: ${moderateScale(fontSizes.SubHeading)}px;
+  font-family: ${activeFonts.Light};
+  color: ${colors.themeBlack};
+`;
+
+export const EmptySubText = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Thin};
+  color: ${colors.darkGrey};
+  margin-top: ${moderateScale(6)}px;
+`;
+
+export const EmptySpacer = styled.View`
+    height: ${moderateScale(120)}px;
 `;

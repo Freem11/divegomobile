@@ -1,16 +1,12 @@
 import React, { Fragment, ReactElement, useState } from "react";
 import {
-  StyleSheet,
-  Text,
   View,
   Dimensions,
 } from "react-native";
-import { moderateScale } from "react-native-size-matters";
 import type { SharedValue } from "react-native-reanimated";
 import { EdgeInsets } from "react-native-safe-area-context";
 
-import { activeFonts, colors, fontSizes } from "../../styles";
-
+import * as S from "./styles";
 import CommentListItem from "./commentListItem/commentListItem";
 import { CommentItem } from "./photoCommentsParallax";
 
@@ -91,63 +87,20 @@ export default function PhotoCommentsScreen({
   };
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.headerText}>Comments</Text>
+    <S.MainScreen>
+      <S.HeaderText>Comments</S.HeaderText>
 
-      <View style={styles.commentsContainer}>
+      <S.CommentsContainer>
         {listOfComments && listOfComments.length > 0 ? (
           getCommentListView(null)
         ) : (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No comments yet</Text>
-            <Text style={styles.emptySubText}>Be the first to blow some bubbles 🫧</Text>
-            <View style={styles.emptySpacer} />
-          </View>
+          <S.EmptyState>
+            <S.EmptyText>No comments yet</S.EmptyText>
+            <S.EmptySubText>Be the first to blow some bubbles 🫧</S.EmptySubText>
+            <S.EmptySpacer />
+          </S.EmptyState>
         )}
-      </View>
-    </View>
+      </S.CommentsContainer>
+    </S.MainScreen>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.themeWhite,
-    width: "100%",
-    paddingTop: moderateScale(8),
-  },
-  headerText: {
-    color: colors.themeBlack,
-    fontFamily: activeFonts.Light,
-    fontSize: fontSizes.Header,
-    marginBottom: moderateScale(8),
-    textAlign: "center",
-  },
-  commentsContainer: {
-    flex: 1,
-    paddingBottom: moderateScale(120),
-  },
-  emptyState: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingTop: moderateScale(20),
-  },
-  emptyText: {
-    fontFamily: activeFonts.Light,
-    fontSize: moderateScale(18),
-    color: colors.themeBlack,
-    opacity: 0.7,
-  },
-  emptySubText: {
-    marginTop: moderateScale(6),
-    fontFamily: activeFonts.Thin,
-    fontSize: moderateScale(14),
-    color: colors.darkGrey,
-    opacity: 0.6,
-  },
-  emptySpacer: {
-    height: moderateScale(120),
-  },
-});
