@@ -3,10 +3,11 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
-  ImageBackground
+  StyleSheet,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import Svg, { Path } from "react-native-svg";
+import Video from "react-native-video";
 
 import googleLogo from "../../png/loginIcons/google.png";
 import facebookLogo from "../../png/loginIcons/facebook.png";
@@ -43,11 +44,18 @@ export default function LandingPageView(props: IProps) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <S.Container>
 
+        {/* Background Video Section */}
         <S.BackgroundContainer>
-          <ImageBackground
-            source={require("../../png/blackManta.png")}
-            style={{ width: "100%", height: "100%" }}
+          <Video
+            source={{ uri: "https://pub-9114df4c0fd044d0806a9e8819aa3212.r2.dev/HeroVideo2026-1.mov" }}
+            style={styles.backgroundVideo}
+            muted={true}
+            repeat={true}
             resizeMode="cover"
+            rate={1.0}
+            ignoreSilentSwitch={"obey"}
+            playWhenInactive={false}
+            playInBackground={false}
           />
         </S.BackgroundContainer>
 
@@ -69,10 +77,20 @@ export default function LandingPageView(props: IProps) {
 
             <S.ButtonBox>
               <S.ButtonSpacer>
-                <Button onPress={props.onLogin} alt={false} size="large" title={t("Common.login")} />
+                <Button
+                  onPress={props.onLogin}
+                  alt={false}
+                  size="large"
+                  title={t("Common.login")}
+                />
               </S.ButtonSpacer>
               <S.ButtonSpacer>
-                <Button onPress={props.onSignUp} alt={true} size="large" title={t("Common.registerAccount")} />
+                <Button
+                  onPress={props.onSignUp}
+                  alt={true}
+                  size="large"
+                  title={t("Common.registerAccount")}
+                />
               </S.ButtonSpacer>
             </S.ButtonBox>
 
@@ -107,3 +125,13 @@ export default function LandingPageView(props: IProps) {
     </TouchableWithoutFeedback>
   );
 }
+
+const styles = StyleSheet.create({
+  backgroundVideo: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+});
