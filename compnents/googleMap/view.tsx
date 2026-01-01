@@ -60,7 +60,7 @@ export default function GoogleMapView(props: MapViewProps) {
     },
     map: {
       width: Dimensions.get("window").width,
-      height: "100%",
+      height: Dimensions.get("window").height,
     }
   });
 

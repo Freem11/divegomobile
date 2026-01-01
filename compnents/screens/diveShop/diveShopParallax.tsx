@@ -36,10 +36,10 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const { setEditInfo } = useContext(EditsContext);
 
   useEffect(() => {
-    getDiveSiteinfo();
+    getDiveCentreInfo();
   }, [props.id]);
 
-  const getDiveSiteinfo = async () => {
+  const getDiveCentreInfo = async () => {
     const diveCentreinfo = await getDiveShopById(props.id);
     setSelectedShop(diveCentreinfo[0]);
   };
