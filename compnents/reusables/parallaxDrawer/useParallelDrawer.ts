@@ -13,6 +13,8 @@ import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
 
+import type { SharedValue } from "react-native-reanimated";
+
 import { EditsContext } from "../../contexts/editsContext";
 import { SavedTranslateYContext } from "../../contexts/savedTranslateYContext";
 import { ActiveSceen, useActiveScreenStore } from "../../../store/useActiveScreenStore";
@@ -21,7 +23,7 @@ const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const TOP_SECTION_HEIGHT = moderateScale(70);
 const DECELERATION = 0.985;
 
-export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) => {
+export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void, contentScrollY?: SharedValue<number>) => {
   const translateY = useSharedValue(SCREEN_HEIGHT / 2);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
@@ -118,9 +120,12 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
-      startY.value = translateY.value;
+    if (contentScrollY && contentScrollY.value > 0) return;
+    startY.value = translateY.value;
+      //startY.value = translateY.value;
     })
     .onUpdate((event) => {
+      if (contentScrollY && contentScrollY.value > 0) return;
       const rawMinY = dynamicScreenHeight.value - contentHeight.value - TOP_SECTION_HEIGHT;
       const halfHeight = getHalfHeight();
       const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < halfHeight;
@@ -137,6 +142,7 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       }
     })
     .onEnd((event) => {
+      if (contentScrollY && contentScrollY.value > 0) return;
       const rawMinY = dynamicScreenHeight.value - contentHeight.value - TOP_SECTION_HEIGHT;
       const halfHeight = getHalfHeight();
       const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < halfHeight;

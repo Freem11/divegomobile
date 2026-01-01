@@ -6,7 +6,6 @@ import ButtonIcon from "../../reusables/buttonIcon";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
-import AnimatedFullScreenModal from "../../reusables/animatedFullScreenModal";
 
 import * as S from "./styles";
 
@@ -80,7 +79,6 @@ export default function UserProfilePhotosPageView({
           </S.PhotoContainer>
         )}
       />
-      <AnimatedFullScreenModal />
     </S.ContentContainer>
   );
 }

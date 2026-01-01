@@ -9,6 +9,7 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useDiveSiteNavigation } from "../diveSite/types";
 import { useAppNavigation } from "../../mapPage/types";
 import { getSingleDiveSite } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import { Photo } from "../../../entities/photos";
 
 import DiveSitePhotosPageView from "./divesitePhotos";
 

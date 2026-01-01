@@ -9,24 +9,22 @@ import React, { useContext } from "react";
 import {
   colors,
 } from "../../styles";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
+import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
 import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
-import { useAppNavigation } from "../../mapPage/types";
 
 const windowHeight = Dimensions.get("window").height;
 
 export default function PhotoBoxModal() {
-  const { fullScreenModal } = useContext(FullScreenModalContext);
   const { selectedPhoto } = useContext(SelectedPhotoContext);
 
   const navigation = useAppNavigation();
 
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
-    usePinchAndZoomAnimation([selectedPhoto, fullScreenModal]);
+    usePinchAndZoomAnimation([selectedPhoto]);
 
   const fileName = selectedPhoto && selectedPhoto.split("/").pop();
   let cacheDir = null;
