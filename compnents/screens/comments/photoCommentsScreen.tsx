@@ -40,7 +40,7 @@ export default function PhotoCommentsScreen({
     return newIds;
   };
 
-  const toggleShowReplies = (comment: Comment): void => {
+  const toggleShowReplies = (comment: CommentItem): void => {
     if (!comment?.id) return;
     if (selectedReplyId.includes(comment.id)) {
       setSelectedReplyId(hideRepliesForChildren(comment.id, selectedReplyId));
