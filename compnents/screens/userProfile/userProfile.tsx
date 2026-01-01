@@ -44,6 +44,8 @@ export default function UserProfileScreenView({
 
   }, [selectedProfile]);
 
+  console.log(reviews);
+
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
@@ -68,14 +70,15 @@ export default function UserProfileScreenView({
         {reviews && reviews.length > 0 ? (
           <S.ReviewsContent>
             {reviews.map((review) => (
-              <ReviewCard
+
+              < ReviewCard
                 key={review.review_id}
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
                 id={review.divesite_id}
                 name={review.divesite_name}
-                photo={review.profilePhoto}
+                photo={review.diveSiteProfilePhoto}
                 review={review}
                 currentUserId={userProfile.UserID}
                 handleNavigate={handleDiveSiteMove}

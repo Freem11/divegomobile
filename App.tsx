@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useLayoutEffect, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, createNavigationContainerRef } from "@react-navigation/native";
 import { I18nextProvider } from "react-i18next";
 import Toast from "react-native-toast-message";
 import "react-native-get-random-values";
@@ -10,6 +10,7 @@ import { Platform } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import * as ScreenOrientation from "expo-screen-orientation";
+import * as Linking from "expo-linking";
 
 import MapPage from "./compnents/mapPage/mapPage";
 import { AppContextProvider } from "./compnents/contexts/appContextProvider";
@@ -18,15 +19,60 @@ import AuthenticationNavigator from "./compnents/authentication/authNavigator";
 import { useUserProfile } from "./store/user/useUserProfile";
 import { useUserHandler } from "./store/user/useUserHandler";
 import { initI18n, i18n } from "./i18n";
+import { createSessionFromUrl } from "./compnents/helpers/loginHelpers";
+import { resetPasswordURL } from "./compnents/globalVariables";
+
+export const navigationRef = createNavigationContainerRef<any>();
 
 export default function App() {
-
   if (Platform.OS === "ios") {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }
+
   const [appIsReady, setAppIsReady] = useState(false);
   const { userProfile } = useUserProfile();
   const userHandler = useUserHandler();
+
+  const linking = {
+    prefixes: ["scubaseasons://"],
+    config: {
+      screens: {},
+    },
+    subscribe(listener: (url: string) => void) {
+      const onReceiveURL = async ({ url }: { url: string }) => {
+        console.log("Incoming Deep Link:", url);
+
+        if (url.startsWith(resetPasswordURL) && url.includes("type=recovery")) {
+          console.log("Processing Recovery Link...");
+
+          await createSessionFromUrl(url);
+          userHandler.setIsRecovering(true);
+          await userHandler.userInit(true);
+
+          return;
+        }
+        listener(url);
+      };
+
+      const subscription = Linking.addEventListener("url", onReceiveURL);
+
+      const checkInitialUrl = async () => {
+        const initialUrl = await Linking.getInitialURL();
+        if (initialUrl) {
+          if (initialUrl.startsWith(resetPasswordURL) && initialUrl.includes("type=recovery")) {
+            await createSessionFromUrl(initialUrl);
+            userHandler.setIsRecovering(true);
+            await userHandler.userInit(true);
+          } else {
+            listener(initialUrl);
+          }
+        }
+      };
+
+      checkInitialUrl();
+      return () => subscription.remove();
+    },
+  };
 
   /* eslint-disable @typescript-eslint/no-require-imports */
   const [fontsLoaded] = useFonts({
@@ -63,20 +109,13 @@ export default function App() {
   }, []);
 
   useLayoutEffect(() => {
-
     const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
 
-      if (Platform.OS === "ios") {
-        await ScreenOrientation.lockAsync(
-          ScreenOrientation.OrientationLock.PORTRAIT_UP
-        );
-      }
-
       try {
         await userHandler.userInit();
-      } catch (error) {
-        console.log("no dice:", error.message);
+      } catch (error: any) {
+        console.log("Initialization error:", error.message);
       } finally {
         setAppIsReady(true);
       }
@@ -91,11 +130,7 @@ export default function App() {
     }
   }, [appIsReady]);
 
-  if (!appIsReady) {
-    return null;
-  }
-
-  if (!fontsLoaded) {
+  if (!appIsReady || !fontsLoaded) {
     return null;
   }
 
@@ -103,7 +138,7 @@ export default function App() {
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
         <I18nextProvider i18n={i18n}>
-          <NavigationContainer>
+          <NavigationContainer linking={linking} ref={navigationRef}>
             {userProfile ? (
               <MapPage />
             ) : (
@@ -113,7 +148,6 @@ export default function App() {
         </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />
-      {/* <Toast /> */}
     </GestureHandlerRootView>
   );
 }

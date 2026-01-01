@@ -10,7 +10,6 @@ import SignUpScreen from "./signupPage";
 import ForgotPasswordScreen from "./forgotPasswordPage";
 import AuthHeader from "./AuthHeader";
 
-// All Authentication flow related routes for type safety.
 export type AuthenticationRoutes = {
   Landing: undefined;
   Login: undefined;
@@ -21,7 +20,6 @@ export type AuthenticationRoutes = {
 export const Stack = createNativeStackNavigator<AuthenticationRoutes>();
 
 export default function AuthenticationNavigator() {
-
   return (
     <Stack.Navigator
       initialRouteName="Landing"

@@ -27,7 +27,7 @@
         "diverNamePlaceholder": "Diver Name",
         "diverNameContent": "Scuba SEAsons relies on user contributions of dive sites and sea creature sightings.\n\nTo credit and to let others know about your contributions please provide us with your “diver name”.\n\n\n\n\n",
         "locationTitle": "Location Tracking",
-        "locationContent": "Scuba SEAsons uses location tracking for two features within the app:\n\nFirst, to allow the map to centre on your current location when needed\n&\nTo allow you to use your current location as the GPS location of a dive site when you are physically at the dive site and you want to add it to the app.\n\n\n\n\n",
+        "locationContent": "Scuba SEAsons uses location tracking for two features within the app:\n\nTo Allow the map to be centred on your location.\n&\nTo use your device's location to mark the GPS of a dive site for submission.\n\n\n\n\n",
         "galleryTitle": "Photo Gallery Access",
         "galleryContent": "In order to make a sea creature sighting contribution to Scuba SEAsons, we need to request access to your photo library.\n\nThis will allow you to choose photos from your device to upload.\n\n\n\n\n",
         "notificationsTitle": "Notifications",
@@ -235,6 +235,10 @@
         "alreadyHaveAccount": "Already have an account ?",
         "resetPassword": "Reset Password",
         "enterAccountEmail": "Enter Your Account Email",
+        "newPassword": "New Password",
+        "newPasswordPlaceholder": "Enter your new password",
+        "confirmPasswordPlaceholder": "Confirm your new password",
+        "updatePassword": "Submit",
         "sendRecoverEmail": "Submit"
     },
     "Photo": {

@@ -4,7 +4,6 @@ import {
   statusCodes
 } from "@react-native-google-signin/google-signin";
 import { makeRedirectUri } from "expo-auth-session";
-import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import { Platform } from "react-native";
 import { Session } from "@supabase/supabase-js";
@@ -14,7 +13,7 @@ import { supabase } from "../../supabase";
 
 const redirectTo = makeRedirectUri();
 
-export const getSession = async() => {
+export const getSession = async () => {
   const session = await sessionCheck();
   console.log({ session });
 
@@ -36,24 +35,51 @@ export const getSession = async() => {
   return session.data.session as Session;
 };
 
-export const createSessionFromUrl = async url => {
-  const { params, errorCode } = QueryParams.getQueryParams(url);
+export const createSessionFromUrl = async (url: string) => {
+  console.log("Processing URL:", url);
 
-  if (errorCode) throw new Error(errorCode);
+  const splitByHash = url.split("#");
+  const splitByQuery = url.split("?");
+
+  const dataString = splitByHash[1] || splitByQuery[1];
+
+  if (!dataString) {
+    console.log("No token data found in URL structure");
+    return;
+  }
+
+  const params: any = {};
+  dataString.split("&").forEach((part) => {
+    const [key, value] = part.split("=");
+    if (key && value) {
+      params[key] = decodeURIComponent(value);
+    }
+  });
+
   const { access_token, refresh_token } = params;
 
-  if (!access_token) return;
+  if (!access_token || !refresh_token) {
+    console.log("Missing tokens. Found params:", Object.keys(params));
+    return;
+  }
 
-  const { data, error } = await supabase.auth.setSession({
+  console.log("Valid tokens found. Setting Supabase session...");
+
+  const { data: sessionData, error } = await supabase.auth.setSession({
     access_token,
-    refresh_token
+    refresh_token,
   });
-  if (error) throw error;
-  return data.session;
+
+  if (error) {
+    console.error("Supabase setSession error:", error.message);
+    throw error;
+  }
+
+  return sessionData.session;
 };
 
 //Sign Ins
-export const facebookSignIn = async() => {
+export const facebookSignIn = async () => {
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "facebook",
@@ -84,7 +110,7 @@ export const facebookSignIn = async() => {
   }
 };
 
-export const basicSignIn = async(email, password) => {
+export const basicSignIn = async (email, password) => {
   const response = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
@@ -93,7 +119,7 @@ export const basicSignIn = async(email, password) => {
   return response;
 };
 
-export const googleSignIn = async() => {
+export const googleSignIn = async () => {
   // TODO: add ability to sign out and choose another google account
   // await GoogleSignin.signOut();
   // await GoogleSignin.revokeAccess();
@@ -130,7 +156,7 @@ export const googleSignIn = async() => {
   return null;
 };
 
-export const appleLogin = async() => {
+export const appleLogin = async () => {
   try {
     const userInfo = await AppleAuthentication.signInAsync({
       requestedScopes: [

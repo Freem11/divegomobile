@@ -20,10 +20,9 @@ export const Header = styled.Text`
 `;
 
 export const Subtitle = styled.Text`
-  font-size: ${moderateScale(fontSizes.Small)}px;
+  font-size: ${moderateScale(fontSizes.SubHeading)}px;
   color: ${colors.lightGrey};
-  font-family: ${activeFonts.Medium};
-  text-align: center;
+  font-family: ${activeFonts.Thin};
 `;
 
 export const FilterContainer = styled.View`
@@ -33,5 +32,36 @@ export const FilterContainer = styled.View`
 `;
 
 export const EmptyStateWrapper = styled.View`
-  padding-top:${width > 700 ? "5%" : "20%"};
+  padding-top:${width > 700 ? "5%" : "10%"};
+`;
+
+export const SubHeaderWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: ${moderateScale(40)}px;
+`;
+
+export const SubHeaderRight = styled.View`
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  height: ${moderateScale(40)}px;
+`;
+
+export const SubHeaderLeft = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: ${moderateScale(40)}px;
+`;
+export const SwipeIndicator = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: ${moderateScale(40)}px;
+`;
+
+export const IconWrapper = styled.View`
+  width: ${moderateScale(40)}px;
 `;

@@ -41,7 +41,7 @@ export default function ReviewCardView({ name, photo, date, description, conditi
         <S.Header>
           <TouchableWithoutFeedback onPress={() => handleNavigate(name, id)}>
             <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-              <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} />
+              <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} defaultImage="anchor" />
               <S.UserInfo>
                 <S.Title>{name}</S.Title>
                 <S.Date>

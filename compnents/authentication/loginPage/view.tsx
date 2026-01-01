@@ -4,11 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { colors } from "../../styles";
 import { showWarning } from "../../toast";
 
 import * as S from "./styles";
@@ -27,6 +27,7 @@ export default function LoginPageView(props: IProps) {
 
   const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
   const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({});
+  const insets = useSafeAreaInsets();
 
   const handleError = (errors: FieldErrors<Form>) => {
     console.log({ errors });
@@ -92,7 +93,7 @@ export default function LoginPageView(props: IProps) {
         </TouchableWithoutFeedback>
       </S.ForgotBox>
 
-      <S.PromptBox>
+      <S.PromptBox style={{ paddingBottom: insets.bottom }}>
         <S.PromptText>{t("Auth.noAccount")}</S.PromptText>
         <TouchableWithoutFeedback onPress={props.moveToSignUpPage}>
           <S.PromptLinkText>{t("Common.signup")}</S.PromptLinkText>

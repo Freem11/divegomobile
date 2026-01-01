@@ -2,7 +2,11 @@ import styled, { css } from "styled-components/native";
 import { Dimensions, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 
-import { activeFonts, colors, fontSizes } from "../../styles";
+import {
+  activeFonts,
+  colors,
+  fontSizes,
+} from "../../styles";
 
 export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;

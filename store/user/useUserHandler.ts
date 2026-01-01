@@ -4,14 +4,13 @@ import { createProfile, grabProfileByUserId } from "../../supabaseCalls/accountS
 import { signOut } from "../../supabaseCalls/authenticateSupabaseCalls";
 
 export const useUserHandler = () => {
-
   let initialized = null;
   const setUserState = useStore((state) => state.setUserState);
 
-  const userInit = async(force = false) => {
+  const setIsRecovering = useStore((state) => state.setIsRecovering);
+
+  const userInit = async (force = false) => {
     if (force) {
-      // sometimes we need to profile reinitialization:
-      // after logging in or out, after changing profile data...
       initialized = null;
     }
 
@@ -19,10 +18,7 @@ export const useUserHandler = () => {
       initialized = false;
       const session = await getSession();
 
-      
-
       if (!session?.user.id) {
-        // User is not signed in - profile will be empty
         setUserState(null, true);
         return;
       }
@@ -32,38 +28,37 @@ export const useUserHandler = () => {
         setUserState(profile, true);
       } else {
         const created = await createProfile({
-          id:    session.user.id,
+          id: session.user.id,
           email: session.user.email,
         });
 
         if (created.error) {
-          setUserState(null, false );
+          setUserState(null, false);
           console.log("Unable to create new profile for user ", session.user.id);
           return;
         }
 
         const profile = await grabProfileByUserId(session.user.id);
         if (!profile) {
-          setUserState( null, false );
+          setUserState(null, false);
           console.log("Unable to fetch new profile");
           return;
         }
         setUserState(profile, true);
-
       }
       initialized = true;
     }
   };
 
-  const userLogout = async() => {
+  const userLogout = async () => {
     await signOut();
     setUserState(null, false);
-    // allow initProfile to be called again to re-initialize(login right after logging out)
     initialized = null;
   };
 
   return {
     userInit,
     userLogout,
+    setIsRecovering,
   };
 };
