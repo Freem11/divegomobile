@@ -9,9 +9,9 @@ import { moderateScale } from "react-native-size-matters";
 import type { SharedValue } from "react-native-reanimated";
 import { EdgeInsets } from "react-native-safe-area-context";
 
-import { activeFonts, colors, fontSizes } from "../styles";
-import CommentListItem from "../commentListItem/commentListItem";
+import { activeFonts, colors, fontSizes } from "../../styles";
 
+import CommentListItem from "./commentListItem/commentListItem";
 import { CommentItem } from "./photoCommentsParallax";
 
 type PhotoCommentsScreenProps = {

@@ -13,7 +13,7 @@ import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
 import { EDIT_TYPE } from "../../entities/editTypes";
-import PhotoCommentsParallax from "../modals/photoCommentsParallax";
+import PhotoCommentsParallax from "../screens/comments/photoCommentsParallax";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";

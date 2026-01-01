@@ -3,9 +3,9 @@ import { StyleSheet, View, Text, Pressable, TextStyle, ViewStyle } from "react-n
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
 
-import { activeFonts, colors, fontSizes } from "../styles";
-import { cloudflareBucketUrl } from "../globalVariables";
-import Avatar from "../reusables/reviewCard/avatarCreator";
+import { activeFonts, colors, fontSizes } from "../../../styles";
+import { cloudflareBucketUrl } from "../../../globalVariables";
+import Avatar from "../../../reusables/reviewCard/avatarCreator";
 
 export interface CommentDetails {
   id: number;
