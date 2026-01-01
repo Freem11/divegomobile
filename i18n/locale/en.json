@@ -267,6 +267,7 @@
     },
     "Comments": {
         "hideReplies": "Hide Replies",
+        "viewReply": "Show {{ count }} Reply",
         "viewReplies": "Show {{ count }} Replies",
         "blowBubbles": "Blow some bubbles"
     },

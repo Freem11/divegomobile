@@ -11,6 +11,7 @@ import SiteReviewCreatorScreen from "../formScreens/siteReviewCreator/SiteReview
 import DiveSitePhotosPage from "../diveSitePhotos";
 import DiveSiteTripsPage from "../diveSiteTrips";
 import PicUploaderScreen from "../formScreens/picUploader/PicUploaderScreen";
+import PhotoCommentsParallax from "../comments/photoCommentsParallax";
 
 import DiveSiteParallax from "./diveSiteParallax";
 
@@ -26,6 +27,7 @@ export type DiveSiteRoutes = {
   DiveSiteTrips: undefined;
   GoogleMap: undefined;
   SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
+  PhotoComments: { id: number };
 };
 
 const Stack = createNativeStackNavigator<DiveSiteRoutes>();
@@ -53,6 +55,14 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
       <Stack.Screen name="EditScreen" component={EditScreenParallax} />
 
       <Stack.Screen name="DiveSitePhotos" component={DiveSitePhotosPage} />
+
+      <Stack.Screen name="PhotoComments">
+        {({ route }) => (
+          <PhotoCommentsParallax
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
 
       <Stack.Screen name="DiveSiteTrips" component={DiveSiteTripsPage} />
 

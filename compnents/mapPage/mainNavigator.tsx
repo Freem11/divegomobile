@@ -15,6 +15,7 @@ import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partner
 import ResetPasswordConfirmScreen from "../authentication/passwordResetPage";
 import { EDIT_TYPE } from "../../entities/editTypes";
 import { useStore } from "../../store";
+import PhotoCommentsParallax from "../screens/comments/photoCommentsParallax";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
@@ -36,6 +37,7 @@ export type MainRoutes = {
   PartnerRequestUpgrade: undefined;
   EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
+  PhotoComments: { id: number };
   PinchAndZoomPhoto: undefined;
   UserProfile: { id: number };
   ResetPasswordConfirm: undefined;
@@ -84,6 +86,15 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
+
+      <Stack.Screen name="PhotoComments">
+        {({ route }) => (
+          <PhotoCommentsParallax
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
+
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
 
       <Stack.Screen name="UserProfile">
