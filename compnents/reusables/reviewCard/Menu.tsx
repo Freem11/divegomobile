@@ -15,6 +15,7 @@ interface MenuProps {
   setIsVisible: (isVisible: boolean) => void;
   handleEdit: () => void;
   handleDelete: () => void;
+  handleNavigate: () => void;
   isMyReview?: boolean;
 }
 
@@ -23,6 +24,7 @@ export const Menu: FC<MenuProps> = ({
   setIsVisible,
   handleEdit,
   handleDelete,
+  handleNavigate,
   isMyReview = false
 }) => {
   const iconRef = useRef<View>(null);
@@ -67,6 +69,14 @@ export const Menu: FC<MenuProps> = ({
           iconName={"trash"}
           buttonAction={() => {
             handleDelete();
+            setIsVisible(false);
+          }}
+        />
+        <IconWithLabel
+          label={"Open Review"}
+          iconName={"diving-snorkel"}
+          buttonAction={() => {
+            handleNavigate();
             setIsVisible(false);
           }}
         />

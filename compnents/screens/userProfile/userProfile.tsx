@@ -18,7 +18,7 @@ type UserProfileProps = {
   sightingsCount: number;
   reviewCount: number;
   openAllPhotosPage: () => void;
-  handleDiveSiteMove: (name: string) => void;
+  handleDiveSiteMove: (name: string, id: string | number) => void;
   reviews: Review[];
 };
 
@@ -43,8 +43,6 @@ export default function UserProfileScreenView({
     });
 
   }, [selectedProfile]);
-
-  console.log(reviews);
 
   return (
     <S.ContentContainer>
@@ -71,7 +69,7 @@ export default function UserProfileScreenView({
           <S.ReviewsContent>
             {reviews.map((review) => (
 
-              < ReviewCard
+              <ReviewCard
                 key={review.review_id}
                 date={review.dive_date}
                 description={review.description}

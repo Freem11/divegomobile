@@ -56,6 +56,7 @@ export default function ReviewCardView({ name, photo, date, description, conditi
             setIsVisible={setIsPopoverVisible}
             handleEdit={() => onEdit(review)}
             handleDelete={() => onDelete(review.id)}
+            handleNavigate={() => navigation.navigate("SingleReviewScreen", { id: review.review_id })}
             isMyReview={currentUserId === review.user_id}
           />
         </S.Header>
