@@ -5,11 +5,11 @@ import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-ha
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
+import type { SharedValue } from "react-native-reanimated";
 import Popover from "react-native-popover-view";
 import { useNavigation } from "@react-navigation/native";
 
 import ButtonIcon from "../buttonIcon-new";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 import * as S from "./styles";
 import { WavyImg } from "./wavyImg";
@@ -29,6 +29,7 @@ type ParallaxDrawerProps = {
   isMyShop?: boolean;
   isPartnerAccount?: boolean;
   popoverContent?: (close: () => void) => React.JSX.Element;
+  contentScrollY?: SharedValue<number>;
 };
 
 const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
@@ -36,6 +37,7 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
   children,
   onClose,
   onMapFlip,
+  contentScrollY,
   popoverContent
 }, ref) => {
 
@@ -48,11 +50,10 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
     closeParallax,
     restoreParallax,
     bottomHitCount
-  } = useParallaxDrawer(onClose, onMapFlip);
+  } = useParallaxDrawer(onClose, onMapFlip, contentScrollY);
 
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
-  const { fullScreenModal } = useContext(FullScreenModalContext);
   const navigation = useNavigation();
 
   // Expose closeParallax to the parent via Ref
@@ -61,12 +62,6 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
       closeParallax(mapConfig, shouldNavigate);
     }
   }));
-
-  useEffect(() => {
-    if (fullScreenModal) {
-      setIsVisible(false);
-    }
-  }, [fullScreenModal]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {
