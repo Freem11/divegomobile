@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState, useImperativeHandle, forwardRef } from "react";
+import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef, createContext } from "react";
 import { StyleSheet, ImageBackground, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
@@ -32,6 +32,8 @@ type ParallaxDrawerProps = {
   contentScrollY?: SharedValue<number>;
 };
 
+export const DrawerGestureContext = createContext<any>(null);
+
 const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
   headerImage,
   children,
@@ -40,6 +42,8 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
   contentScrollY,
   popoverContent
 }, ref) => {
+
+  const horizontalScrollRef = useRef(null);
 
   const {
     SCREEN_WIDTH,
@@ -50,7 +54,7 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
     closeParallax,
     restoreParallax,
     bottomHitCount
-  } = useParallaxDrawer(onClose, onMapFlip, contentScrollY);
+  } = useParallaxDrawer(onClose, onMapFlip, contentScrollY, horizontalScrollRef);
 
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
@@ -136,23 +140,25 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
                 </S.StyledSvg>
               </S.TopTransparentSection>
 
-              <S.BottomOpaqueSection>
-                <S.Content
-                  onLayout={(event) => {
-                    contentHeight.value = event.nativeEvent.layout.height;
-                  }}
-                >
-                  <S.EmptyContainer>
-                    {React.isValidElement(children)
-                      ? React.cloneElement(children, {
-                        closeParallax,
-                        restoreParallax,
-                        bottomHitCount,
-                      })
-                      : children}
-                  </S.EmptyContainer>
-                </S.Content>
-              </S.BottomOpaqueSection>
+              <DrawerGestureContext.Provider value={panGesture}>
+                <S.BottomOpaqueSection pointerEvents="box-none">
+                  <S.Content
+                    onLayout={(event) => {
+                      contentHeight.value = event.nativeEvent.layout.height;
+                    }}
+                  >
+                    <S.EmptyContainer pointerEvents="box-none">
+                      {React.isValidElement(children)
+                        ? React.cloneElement(children, {
+                          closeParallax,
+                          restoreParallax,
+                          bottomHitCount,
+                        })
+                        : children}
+                    </S.EmptyContainer>
+                  </S.Content>
+                </S.BottomOpaqueSection>
+              </DrawerGestureContext.Provider>
             </Animated.View>
           </GestureDetector>
         </View>

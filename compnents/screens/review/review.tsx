@@ -15,11 +15,17 @@ import * as S from "./styles";
 
 type DiveShopProps = {
   selectedReview: ReviewSingle;
+  gestureRef?: any;
 };
 
-export default function ReviewScreenView({ selectedReview }: DiveShopProps) {
+export default function ReviewScreenView({
+  selectedReview,
+  gestureRef // 2. Destructure the prop
+}: DiveShopProps) {
 
-  const photos = selectedReview?.photos?.map((photo) => ({ photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}` }));
+  const photos = selectedReview?.photos?.map((photo) => ({
+    photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}`
+  }));
 
   return (
     <S.ContentContainer>
@@ -45,7 +51,10 @@ export default function ReviewScreenView({ selectedReview }: DiveShopProps) {
 
       <S.Content>{selectedReview?.description}</S.Content>
 
-      <PhotoUpload items={photos} />
+      <PhotoUpload
+        items={photos}
+        gestureRef={gestureRef}
+      />
 
       <ConditionsCard conditions={selectedReview?.conditions} />
 

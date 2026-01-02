@@ -5,18 +5,23 @@ import { ReviewSingle } from "../../../entities/diveSiteReview";
 import ReviewScreenView from "./review";
 
 type ReviewProps = {
-  closeParallax?: (mapConfig: number) => void;
+  closeParallax?: (mapConfig: number | null) => void;
   restoreParallax?: () => void;
   selectedReview: ReviewSingle;
   bottomHitCount?: number;
+  gestureRef?: any;
 };
 
 export default function ReviewScreen({
-  selectedReview
+  selectedReview,
+  gestureRef,
+  ...rest
 }: ReviewProps) {
-
   return (
-    <ReviewScreenView selectedReview={selectedReview} />
+    <ReviewScreenView
+      selectedReview={selectedReview}
+      gestureRef={gestureRef}
+      {...rest}
+    />
   );
-
 }

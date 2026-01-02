@@ -12,7 +12,6 @@ import {
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
-
 import type { SharedValue } from "react-native-reanimated";
 
 import { EditsContext } from "../../contexts/editsContext";
@@ -23,7 +22,7 @@ const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const TOP_SECTION_HEIGHT = moderateScale(70);
 const DECELERATION = 0.985;
 
-export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void, contentScrollY?: SharedValue<number>) => {
+export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void, contentScrollY?: SharedValue<number>, horizontalScrollRef?: React.RefObject<any>) => {
   const translateY = useSharedValue(SCREEN_HEIGHT / 2);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
@@ -119,9 +118,15 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void, c
   };
 
   const panGesture = Gesture.Pan()
+    .minPointers(1)
+    .simultaneousWithExternalGesture(horizontalScrollRef)
+    .requireExternalGestureToFail(horizontalScrollRef)
+    .failOffsetX([-40, 40])
+    .activeOffsetY([-60, 60])
+    .activeOffsetX([-500, 500])
     .onStart(() => {
-    if (contentScrollY && contentScrollY.value > 0) return;
-    startY.value = translateY.value;
+      if (contentScrollY && contentScrollY.value > 0) return;
+      startY.value = translateY.value;
       //startY.value = translateY.value;
     })
     .onUpdate((event) => {
