@@ -18,6 +18,7 @@ type UserProfileProps = {
   sightingsCount: number;
   reviewCount: number;
   openAllPhotosPage: () => void;
+  handleDiveSiteMove: (name: string, id: string | number) => void;
   reviews: Review[];
 };
 
@@ -28,6 +29,7 @@ export default function UserProfileScreenView({
   sightingsCount,
   reviewCount,
   openAllPhotosPage,
+  handleDiveSiteMove,
   reviews
 }: UserProfileProps) {
 
@@ -66,15 +68,18 @@ export default function UserProfileScreenView({
         {reviews && reviews.length > 0 ? (
           <S.ReviewsContent>
             {reviews.map((review) => (
+
               <ReviewCard
                 key={review.review_id}
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
-                userName={review.user_name}
-                photo={review.profilePhoto}
+                id={review.divesite_id}
+                name={review.divesite_name}
+                photo={review.diveSiteProfilePhoto}
                 review={review}
                 currentUserId={userProfile.UserID}
+                handleNavigate={handleDiveSiteMove}
                 onEdit={() => { }}
                 onDelete={() => { }}
               />

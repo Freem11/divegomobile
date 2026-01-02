@@ -22,6 +22,7 @@ import { ReviewCondition } from "../../../entities/diveSiteReview";
 //20 = contrasting -> most common of the 4
 
 export function renderStatLabel(condition: ReviewCondition) {
+
   const getStrength = (value) => {
     if (value <= 1) {
       return "Weak";

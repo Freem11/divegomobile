@@ -9,12 +9,7 @@ import { useAppNavigation } from "../../mapPage/types";
 
 import UserProfileScreenView from "./userProfile";
 
-type UserProfileProps = {
-  closeParallax?: (mapConfig: number) => void
-  bottomHitCount?: number;
-};
-
-export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
+export default function UserProfileScreen() {
   const { selectedProfile } = useContext(SelectedProfileContext);
 
   const [profilePhotos, setProfilePhotos] = useState(null);
@@ -49,6 +44,12 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
     navigation.navigate("UserProfilePhotos");
   };
 
+  const handleDiveSiteMove = async (diveSiteName: string, diveSiteId: number) => {
+
+    console.log(diveSiteName, diveSiteId);
+    navigation.navigate("DiveSiteNavigator", { id: diveSiteId });
+  };
+
   return (
     <UserProfileScreenView
       profilePhotos={profilePhotos}
@@ -57,6 +58,7 @@ export default function UserProfileScreen({ closeParallax }: UserProfileProps) {
       sightingsCount={sightingsCount}
       reviewCount={reviewCount}
       openAllPhotosPage={openAllPhotosPage}
+      handleDiveSiteMove={handleDiveSiteMove}
       reviews={reviews}
     />
   );

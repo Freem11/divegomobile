@@ -12,6 +12,7 @@ type AvatarProps = {
 };
 
 function Avatar({ photo, defaultImage }: AvatarProps = {}) {
+
   if (photo) {
     return (
       <S.StyledImage

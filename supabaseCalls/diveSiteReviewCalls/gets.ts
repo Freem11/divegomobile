@@ -1,7 +1,23 @@
 import { Review } from "../../entities/diveSiteReview";
 import { supabase } from "../../supabase";
 
-export const getReviewsBySiteId= async(divesite_id: number) => {
+export const getReviewById = async (reveiw_id: number) => {
+
+  const { data, error } = await supabase
+    .rpc("get_review_by_id", { q_review_id: reveiw_id });
+
+  if (error) {
+    console.log("couldn't do it GET_SINGLE_REVIEW,", error);
+    return [];
+  }
+
+  return {
+    data,
+    error,
+  };
+};
+
+export const getReviewsBySiteId = async (divesite_id: number) => {
   const { data, error } = await supabase.rpc("get_review_data_by_divesite_id", {
     q_divesite_id: divesite_id,
   });
@@ -17,7 +33,7 @@ export const getReviewsBySiteId= async(divesite_id: number) => {
   return [] as Review[];
 };
 
-export const getRecentThreeReviewsBySiteId= async(divesite_id: number) => {
+export const getRecentThreeReviewsBySiteId = async (divesite_id: number) => {
   const { data, error } = await supabase.rpc("get_recent_review_data_by_divesite_id", {
     q_divesite_id: divesite_id,
     req_limit: 3,
@@ -34,7 +50,7 @@ export const getRecentThreeReviewsBySiteId= async(divesite_id: number) => {
   return [] as Review[];
 };
 
-export const getRecentReviewsByUserId= async({ userId, limit }: { userId: string, limit: number }) => {
+export const getRecentReviewsByUserId = async ({ userId, limit }: { userId: string, limit: number }) => {
   const { data, error } = await supabase.rpc("get_recent_review_data_by_user_id", {
     q_user_id: userId,
     req_limit: limit,
@@ -51,7 +67,7 @@ export const getRecentReviewsByUserId= async({ userId, limit }: { userId: string
   return [] as Review[];
 };
 
-export const getReviewPhotosByReviewId = async(reveiw_id: number) => {
+export const getReviewPhotosByReviewId = async (reveiw_id: number) => {
 
   const { data, error } = await supabase.from("diveSiteReviewPhotos")
     .select()

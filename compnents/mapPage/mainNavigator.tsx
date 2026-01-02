@@ -12,6 +12,7 @@ import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
+import ReviewParallax from "../screens/review/reviewParallax";
 import ResetPasswordConfirmScreen from "../authentication/passwordResetPage";
 import { EDIT_TYPE } from "../../entities/editTypes";
 import { useStore } from "../../store";
@@ -40,6 +41,7 @@ export type MainRoutes = {
   PhotoComments: { id: number };
   PinchAndZoomPhoto: undefined;
   UserProfile: { id: number };
+  SingleReviewScreen: { id: number };
   ResetPasswordConfirm: undefined;
 };
 
@@ -101,6 +103,13 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         {({ route }) => <UserProfileParallax profileID={route.params.id} />}
       </Stack.Screen>
 
+      <Stack.Screen name="SingleReviewScreen">
+        {({ route }) => (
+          <ReviewParallax
+            id={route.params.id}
+          />
+        )}
+      </Stack.Screen>
       <Stack.Screen
         name="ResetPasswordConfirm"
         component={ResetPasswordConfirmScreen}
