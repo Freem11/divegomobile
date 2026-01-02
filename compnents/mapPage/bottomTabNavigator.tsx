@@ -7,7 +7,6 @@ import { Platform } from "react-native";
 
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import ShopListParallax from "../screens/shopList/shopListParallax";
-import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
 import { colors } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
@@ -18,7 +17,7 @@ import HomeScreen from "./HomeScreen";
 
 export type BottomTabRoutes = {
     Home: undefined;
-    Profile: undefined;
+    Profile: { id: number };
     Notifications: undefined;
     AddSite: undefined;
     Guides: undefined;
@@ -26,31 +25,33 @@ export type BottomTabRoutes = {
 };
 
 type BottomTabNavigatorProps = {
-    showOnboarding: boolean
+    showOnboarding: boolean;
+    route: any; // Contains nested params from MainNavigator
 };
 
 const Tab = createBottomTabNavigator<BottomTabRoutes>();
 
-export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
+export default function BottomTabNavigator({ route, showOnboarding }: BottomTabNavigatorProps) {
     const { userProfile } = useUserProfile();
-    const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
-
     const { t } = useTranslation();
     const navigation = useAppNavigation();
+    const insets = useSafeAreaInsets();
 
     /**
-                                                                 * For Android only.
-                                                                 * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-                                                                 * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-                                                                 */
-    const insets = useSafeAreaInsets();
+       * Logic to determine which Profile ID to show.
+       * 1. Check if an ID was passed via navigation params (e.g., from a search result).
+       * 2. Fallback to the logged-in user's ID from the store.
+       */
+    const passedId = route.params?.params?.id || userProfile?.id;
+
+    const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
     const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
     useEffect(() => {
-        if (props.showOnboarding) {
+        if (showOnboarding) {
             navigation.navigate("Onboarding");
         }
-    }, [props.showOnboarding, navigation]);
+    }, [showOnboarding, navigation]);
 
     return (
         <Tab.Navigator
@@ -58,14 +59,11 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
             screenOptions={({ route }) => {
                 const { icon, label } = getTabProps(route.name);
 
-                const isTablet = (Platform.OS === "ios" && (Platform as any).isPad) || (Platform.OS === "android" && (Platform as any).isTablet);
-                const tabBarIconHeightSurplus = isTablet
-                    ? moderateScale(5)
-                    : moderateScale(0);
+                const isTablet = (Platform.OS === "ios" && (Platform as any).isPad) ||
+                    (Platform.OS === "android" && (Platform as any).isTablet);
 
-                const tabBarIconMargin = isTablet
-                    ? moderateScale(4)
-                    : moderateScale(0);
+                const tabBarIconHeightSurplus = isTablet ? moderateScale(5) : moderateScale(0);
+                const tabBarIconMargin = isTablet ? moderateScale(4) : moderateScale(0);
 
                 return {
                     headerShown: false,
@@ -79,7 +77,14 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                     tabBarActiveTintColor: colors.themeWhite,
                     tabBarInactiveTintColor: colors.neutralGrey,
                     tabBarIcon: ({ color, size }) => {
-                        return <Icon name={icon} color={color} width={size + tabBarIconHeightSurplus} height={size + tabBarIconHeightSurplus} />;
+                        return (
+                            <Icon
+                                name={icon}
+                                color={color}
+                                width={size + tabBarIconHeightSurplus}
+                                height={size + tabBarIconHeightSurplus}
+                            />
+                        );
                     },
                     tabBarIconStyle: {
                         marginTop: tabBarIconMargin,
@@ -92,23 +97,32 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
             }}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
+
             <Tab.Screen name="Profile">
-                {props => <UserProfileParallax {...props} profileID={userProfile?.id} />}
+                {(screenProps) => (
+                    <UserProfileParallax
+                        {...screenProps}
+                        profileID={passedId}
+                    />
+                )}
             </Tab.Screen>
-            {/* <Tab.Screen name="Notifications" component={FeedList} /> */}
-            <Tab.Screen name="AddSite" component={SiteSubmitterRouter} options={{ tabBarLabel: "Site Add", unmountOnBlur: true }} />
 
-            {PARTNER_ACCOUNT_STATUS &&
-                <Tab.Screen name="Itinerary" component={ShopListParallax} options={{ tabBarLabel: "My Centres" }} />}
+            <Tab.Screen
+                name="AddSite"
+                component={SiteSubmitterRouter}
+                options={{ tabBarLabel: "Site Add", unmountOnBlur: true }}
+            />
+
+            {PARTNER_ACCOUNT_STATUS && (
+                <Tab.Screen
+                    name="Itinerary"
+                    component={ShopListParallax}
+                    options={{ tabBarLabel: "My Centres" }}
+                />
+            )}
         </Tab.Navigator>
-
     );
 
-    /**
-                                                             * Returns the icon name and label for each tab based on route.
-                                                             * @param route The route name of the current tab
-                                                             * @returns Object literal containing Icon name and label strings
-                                                             */
     function getTabProps(route: string): { icon: string; label: string } {
         switch (route) {
             case "Home": return { icon: "map-outlined", label: t("BottomTabBar.home") };

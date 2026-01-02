@@ -50,10 +50,8 @@ export default function SearchToolList({ data, ...props }) {
         keyboardShouldPersistTaps="handled"
         nestedScrollEnabled={true}
         removeClippedSubviews={false}
-        style={{ flex: 1, backgroundColor: "pink" }}
+        style={{ flex: 1 }}
         contentContainerStyle={{
-          // FIX: This padding ensures the first item starts below the bar,
-          // and items "disappear" behind the bar when scrolling up.
           paddingTop: 0,
           paddingHorizontal: moderateScale(15),
           paddingBottom: keyboardHeight > 0

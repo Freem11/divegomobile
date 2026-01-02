@@ -80,7 +80,10 @@ export default function DiveSiteScreen({
       return;
     }
 
-    navigation.navigate("UserProfile", { id: picOwnerAccount[0].id });
+    navigation.navigate("BottomTab", {
+      screen: "Profile",
+      params: { id: picOwnerAccount[0].id },
+    });
   };
 
   const handleMapFlip = async (sites: number[]) => {

@@ -9,7 +9,6 @@ import DiveSiteRouter from "../screens/diveSite/diveSiteRouter";
 import UserProfilePhotosPage from "../screens/userProfilePhotos";
 import PhotoBoxModal from "../screens/photoBox/photoBoxModal";
 import DiveShopRouter from "../screens/diveShop/diveShopRouter";
-import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
 import ReviewParallax from "../screens/review/reviewParallax";
 import ResetPasswordConfirmScreen from "../authentication/passwordResetPage";
@@ -38,7 +37,6 @@ export type MainRoutes = {
   UserProfilePhotos: undefined;
   PhotoComments: { id: number };
   PinchAndZoomPhoto: undefined;
-  UserProfile: { id: number };
   SingleReviewScreen: { id: number };
   ResetPasswordConfirm: undefined;
 };
@@ -64,7 +62,12 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
     >
       <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
       <Stack.Screen name="BottomTab">
-        {props => <BottomTabNavigator {...props} showOnboarding={showOnboarding} />}
+        {(props) => (
+          <BottomTabNavigator
+            {...props}
+            showOnboarding={showOnboarding}
+          />
+        )}
       </Stack.Screen>
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
@@ -95,10 +98,6 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       </Stack.Screen>
 
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
-
-      <Stack.Screen name="UserProfile">
-        {({ route }) => <UserProfileParallax profileID={route.params.id} />}
-      </Stack.Screen>
 
       <Stack.Screen name="SingleReviewScreen">
         {({ route }) => (
