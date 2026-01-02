@@ -22,6 +22,7 @@ export default function SiteSubmitterNavigator() {
       screenOptions={() => ({
         headerShown: false,
         animation: "slide_from_bottom",
+        detachPreviousScreen: false
       })}
     >
 

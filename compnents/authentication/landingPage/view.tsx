@@ -45,7 +45,7 @@ export default function LandingPageView(props: IProps) {
 
         <S.BackgroundContainer>
           <ImageBackground
-            source={require("../../png/blackManta.png")}
+            source={require("../../png/Manta.jpg")}
             style={{ width: "100%", height: "100%" }}
             resizeMode="cover"
           />

@@ -10,7 +10,6 @@ import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
 import { calculateRegionFromBoundaries } from "../../../googleMap/regionCalculator";
 import { insertDiveSiteWaits } from "../../../../supabaseCalls/diveSiteWaitSupabaseCalls";
 import { useUserProfile } from "../../../../store/user/useUserProfile";
-import { SiteSubmitterRoutes } from "../SiteSubmitterNavigator";
 
 import { Form } from "./form";
 import SiteSubmitterPageView from "./siteSubmitter";
@@ -19,7 +18,7 @@ import { useDiveSiteNavigation } from "./types";
 export default function SiteSubmitterScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const submitterNavigation = useDiveSiteNavigation<SiteSubmitterRoutes>();
+  const submitterNavigation = useDiveSiteNavigation();
   const { userProfile } = useUserProfile();
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
@@ -70,15 +69,13 @@ export default function SiteSubmitterScreen() {
     useCallback(() => {
       return () => {
         const state = navigation.getState();
-        const nextRoute = state.routes[state.index];
+        const nextRoute = state?.routes[state?.index];
 
-        if (nextRoute.name !== "GoogleMap") {
+        if (nextRoute?.name !== "GoogleMap") {
           setValue("Site", null);
           setValue("Latitude", null);
           setValue("Longitude", null);
-
           clearFormValues();
-        } else {
         }
       };
     }, [navigation, setValue, clearFormValues])
@@ -109,16 +106,30 @@ export default function SiteSubmitterScreen() {
 
   const handleMapFlip = async () => {
     const currentValues = watch() as Required<Form>;
+
     if (mapRef) {
       setInitConfig(MapConfigurations.PinDrop);
-      const region = await calculateRegionFromBoundaries(mapRef);
-      setMapRegion(region);
-      submitterNavigation.navigate("GoogleMap");
-
-      setMapConfig(MapConfigurations.PinDrop, { pageName: ScreenReturn.SiteSubmitter as unknown as string, itemId: 1 });
       setFormValues(currentValues);
+
+      const region = await calculateRegionFromBoundaries(mapRef);
+
+      requestAnimationFrame(() => {
+        setMapRegion(region);
+        setMapConfig(MapConfigurations.PinDrop, {
+          pageName: ScreenReturn.SiteSubmitter as unknown as string,
+          itemId: 1
+        });
+        submitterNavigation.navigate("GoogleMap");
+      });
     }
   };
+
+  if (!userProfile) {
+    return (
+      <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: "center", alignItems: "center" }}>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>

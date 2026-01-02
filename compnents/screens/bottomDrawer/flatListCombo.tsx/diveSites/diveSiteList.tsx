@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { moderateScale } from "react-native-size-matters";
 
 import Card from "../../card";
 import { useMapStore } from "../../../../googleMap/useMapStore";
@@ -45,7 +44,9 @@ export default function DiveSiteList() {
   };
 
   const handleScreen = () => {
-    navigation.navigate("AddSite");
+    navigation.navigate("BottomTab", {
+      screen: "AddSite"
+    });
   };
 
   const [layoutReady, setLayoutReady] = useState(false);

@@ -10,7 +10,6 @@ import UserProfilePhotosPage from "../screens/userProfilePhotos";
 import PhotoBoxModal from "../screens/photoBox/photoBoxModal";
 import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
-import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
 import ReviewParallax from "../screens/review/reviewParallax";
 import ResetPasswordConfirmScreen from "../authentication/passwordResetPage";
@@ -19,7 +18,7 @@ import { useStore } from "../../store";
 import PhotoCommentsParallax from "../screens/comments/photoCommentsParallax";
 
 import HomeScreen from "./HomeScreen";
-import BottomTabNavigator from "./bottomTabNavigator";
+import BottomTabNavigator, { BottomTabRoutes } from "./bottomTabNavigator";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -28,11 +27,10 @@ type MainNavigatorProps = {
 
 export type MainRoutes = {
   Onboarding: undefined;
-  BottomTab: undefined;
+  BottomTab: undefined | { screen: keyof BottomTabRoutes; params?: any };
   GoogleMap: undefined;
   DiveSiteNavigator: { id: number };
   DiveShopNavigator: { id: number };
-  SiteSubmitterNavigator: undefined;
   Settings: undefined;
   Home: undefined;
   PartnerRequestUpgrade: undefined;
@@ -84,7 +82,6 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         {({ route }) => <EditScreenParallax id={route.params.id} dataType={route.params.dataType} />}
       </Stack.Screen>
 
-      <Stack.Screen name="SiteSubmitterNavigator" component={SiteSubmitterRouter} />
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
