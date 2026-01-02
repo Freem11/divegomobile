@@ -93,9 +93,9 @@ export default function HomeScreen() {
 
             <GoogleMap style={StyleSheet.absoluteFillObject} />
 
-            <S.SafeAreaTop edges={["top"]}>
-                <SearchTool />
-            </S.SafeAreaTop>
+            {/* <S.SafeAreaTop edges={["top"]}> */}
+            <SearchTool />
+            {/* </S.SafeAreaTop> */}
 
             {mapConfig === 0 ? (
                 <S.SafeAreaBottom edges={["bottom"]}>

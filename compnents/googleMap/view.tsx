@@ -277,9 +277,9 @@ export default function GoogleMapView(props: MapViewProps) {
       </MapView>
 
       {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
-        <S.SafeAreaTop edges={["top"]}>
-          <SearchTool />
-        </S.SafeAreaTop>
+        // <S.SafeAreaTop edges={["top"]}>
+        <SearchTool />
+        // </S.SafeAreaTop>
       )}
 
       {props?.mapConfig === MapConfigurations.PinDrop && (

@@ -5,89 +5,75 @@ import {
   StyleSheet,
   Platform,
   Keyboard,
+  StatusBar
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colors } from "../styles";
-
 import SearchToolListItem from "./searchToolListItem";
 
-export default function SearchToolList({
-  data,
-  handleMapOptionSelected,
-  handleDiveSiteOptionSelected,
-  handleSeaLifeOptionSelected,
-  setSearchStatus,
-}) {
+export default function SearchToolList({ data, ...props }) {
   const insets = useSafeAreaInsets();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  useEffect(() => {
-    // We manually track the keyboard height
-    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
-    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+  // 1. Calculate how much space to "leave" at the top so items don't go behind the bar
+  // This should match your TOP_POSITION + SearchBar Height
+  const topInset = Platform.select({
+    ios: insets.top + moderateScale(65),
+    android: (StatusBar.currentHeight || 0) + moderateScale(70),
+  });
 
-    const showSub = Keyboard.addListener(showEvent, (e) => {
-      setKeyboardHeight(e.endCoordinates.height);
+  useEffect(() => {
+    const show = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hide = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+    const sub1 = Keyboard.addListener(show, (e) => {
+      const height = Platform.OS === "ios"
+        ? e.endCoordinates.height - insets.bottom
+        : e.endCoordinates.height;
+      setKeyboardHeight(height);
     });
-    const hideSub = Keyboard.addListener(hideEvent, () => {
-      setKeyboardHeight(0);
-    });
+
+    const sub2 = Keyboard.addListener(hide, () => setKeyboardHeight(0));
 
     return () => {
-      showSub.remove();
-      hideSub.remove();
+      sub1.remove();
+      sub2.remove();
     };
-  }, []);
-
-  if (!data || data.length === 0) return null;
-
-  const BOTTOM_BAR_HEIGHT = moderateScale(120);
-
-  const totalBottomPadding = keyboardHeight > 0
-    ? moderateScale(80)
-    : insets.bottom + BOTTOM_BAR_HEIGHT;
+  }, [insets.bottom]);
 
   return (
-    <View
-      style={[
-        styles.masterContainer,
-        { marginBottom: keyboardHeight }
-      ]}
-    >
-      <View style={styles.listContainer}>
-        <FlatList
-          data={data}
-          keyboardShouldPersistTaps="handled"
-          keyExtractor={(item, index) => item.id?.toString() || index.toString()}
-          extraData={keyboardHeight}
-          contentContainerStyle={{
-            paddingBottom: totalBottomPadding,
-          }}
-          renderItem={({ item }) => (
-            <SearchToolListItem
-              name={item.title}
-              soureImage={item.source}
-              handleMapOptionSelected={handleMapOptionSelected}
-              handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
-              handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
-              setSearchStatus={setSearchStatus}
-            />
-          )}
-        />
-      </View>
+    <View style={{ flex: 1 }}>
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => index.toString()}
+        keyboardShouldPersistTaps="handled"
+        nestedScrollEnabled={true}
+        removeClippedSubviews={false}
+        style={{ flex: 1, backgroundColor: "pink" }}
+        contentContainerStyle={{
+          // FIX: This padding ensures the first item starts below the bar,
+          // and items "disappear" behind the bar when scrolling up.
+          paddingTop: 0,
+          paddingHorizontal: moderateScale(15),
+          paddingBottom: keyboardHeight > 0
+            ? keyboardHeight + moderateScale(-30)
+            : moderateScale(10),
+        }}
+        renderItem={({ item }) => (
+          <SearchToolListItem
+            name={item.title}
+            soureImage={item.source}
+            {...props}
+          />
+        )}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  masterContainer: {
+  flexWrapper: {
     flex: 1,
-  },
-  listContainer: {
-    flex: 1,
-    backgroundColor: colors.themeWhite,
-    paddingTop: Platform.OS === "ios" ? moderateScale(5) : moderateScale(60),
   },
 });

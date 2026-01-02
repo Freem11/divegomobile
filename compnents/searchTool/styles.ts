@@ -6,21 +6,25 @@ import { activeFonts, colors, fontSizes } from "../styles";
 
 const windowWidth = Dimensions.get("window").width;
 
+export const PositioningWrapper = styled.View`
+  width: 90%;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: ${Platform.OS === "android" ? moderateScale(50) : windowWidth > 700 ? moderateScale(15) : 0};
+  padding-bottom: 25px;
+  z-index: 20; 
+`;
+
 export const SearchInputContainer = styled.View`
   z-index: 1;
-  width: ${windowWidth*0.8}px;
+  width: 100%;
   padding: ${moderateScale(10)}px;
+  margin-horizontal: 5%;
   align-items: center;
   justify-content: center;
   border-radius: ${moderateScale(120)}px;
   background-color: rgb(232, 232, 232);
-`;
-
-export const PositioningWrapper = styled.View`
-  padding-top: ${Platform.OS  === "android" ? moderateScale(50) : windowWidth > 700 ? moderateScale(15) : 0};
-  padding-bottom: 25px;
-  align-self: center;
-  z-index: 20; 
 `;
 
 export const SearchResultContainer = styled.View`
@@ -68,4 +72,3 @@ export const SearchResultText = styled.Text`
   text-align: left;
   color: ${colors.themeBlack};
 `;
-
