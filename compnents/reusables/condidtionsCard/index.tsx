@@ -1,5 +1,4 @@
-import React, { useRef } from "react";
-import { View } from "react-native";
+import React from "react";
 
 import { ReviewCondition } from "../../../entities/diveSiteReview";
 import { colors } from "../../styles";
@@ -15,11 +14,6 @@ interface ConditionsCard {
 }
 
 export default function ConditionsCard({ conditions }: ConditionsCard) {
-  const visibilityRef = useRef<View>(null);
-  const currentRef = useRef<View>(null);
-
-  const bottomLimitsRef = useRef<View>(null);
-
   const visibilityValue = conditions?.find(c => c.condition_type_id === 15).value;
 
   const intensityValue = conditions?.find(c => c.condition_type_id === 16)?.value;
@@ -30,11 +24,9 @@ export default function ConditionsCard({ conditions }: ConditionsCard) {
 
   const visibility = formattedConditions?.find(c => c.id === 15);
 
-  console.log("formattedConditions", formattedConditions);
   const allowedIds = [17, 18, 19, 20];
   let currents = formattedConditions?.find(c => allowedIds.includes(c.id));
 
-  console.log("currents", currents);
   if (!currents) {
     currents = { "id": 0, "value": "No Current" };
   }

@@ -24,7 +24,6 @@ import { ReviewCondition } from "../../../entities/diveSiteReview";
 export function formatConditions(condition: ReviewCondition, intensityValue: number) {
 
   const getStrength = (value: number) => {
-    console.log("strength", value);
     if (value <= 0.5) {
       return "Weak";
     } else if (value <= 1) {
@@ -35,8 +34,6 @@ export function formatConditions(condition: ReviewCondition, intensityValue: num
       return "Dangerous";
     }
   };
-
-  console.log(condition);
 
   switch (condition.condition_type_id) {
     case 2:
