@@ -1,27 +1,40 @@
-import { moderateScale, scale } from "react-native-size-matters";
-import React, { FC, useContext } from "react";
-import { TouchableWithoutFeedback, View } from "react-native";
-import { Gesture, GestureDetector, ScrollView } from "react-native-gesture-handler";
+import React, { FC } from "react";
+import { View } from "react-native";
+import { scale, moderateScale } from "react-native-size-matters";
+import {
+  ScrollView,
+  Gesture,
+  GestureDetector,
+  TouchableOpacity, // Use this version for better Android hit testing
+  Pressable
+} from "react-native-gesture-handler";
 
-import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import Icon from "../../../../icons/Icon";
 import { colors } from "../../../styles";
 import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
-import { DrawerGestureContext } from "../../../reusables/parallaxDrawer";
 
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: DiveSiteWithUserName[] | null;
+  items: { photofile: string }[] | null;
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
+  gestureRef?: any;
 }
 
-export const PhotoUpload: FC<PhotoUploadProps & { gestureRef: any }> = ({ gestureRef, items, onAddSighting, onRemovePhoto }) => {
+export const PhotoUpload: FC<PhotoUploadProps> = ({
+  items,
+  onAddSighting,
+  onRemovePhoto,
+  gestureRef
+}) => {
   const itemSize = scale(100);
+
+  // Link to the parent (Bottom Sheet) but allow children to activate
   const nativeGesture = Gesture.Native()
     .withRef(gestureRef)
-    .shouldActivateOnStart(true);
+    .shouldActivateOnStart(true)
+    .shouldCancelWhenOutside(true);
 
   return (
     <S.Wrapper>
@@ -29,42 +42,40 @@ export const PhotoUpload: FC<PhotoUploadProps & { gestureRef: any }> = ({ gestur
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
           nestedScrollEnabled={true}
-          disallowInterruption={true}
-          pagingEnabled={false}
-          directionalLockEnabled={true}
+          // Critical for Android: allows buttons to finish their click
+          disallowInterruption={false}
           contentContainerStyle={{
             paddingRight: scale(16),
-            gap: scale(1),
+            flexDirection: "row",
+            gap: scale(10),
           }}
         >
           {onAddSighting && (
-            <S.AddSightingButton
-              onPress={onAddSighting}
-              style={{
-                width: itemSize,
-                height: itemSize,
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Add Photo Clicked");
+                onAddSighting();
               }}
+              activeOpacity={0.6}
             >
-              <Icon
-                name={"camera-plus"}
-                color={colors.borderActive}
-                width={moderateScale(40)}
-                height={moderateScale(40)}
-              />
-            </S.AddSightingButton>
+              <S.AddSightingButton
+                pointerEvents="none" // Lets the Touchable handle the tap
+                style={{ width: itemSize, height: itemSize }}
+              >
+                <Icon
+                  name={"camera-plus"}
+                  color={colors.borderActive}
+                  width={moderateScale(40)}
+                  height={moderateScale(40)}
+                />
+              </S.AddSightingButton>
+            </TouchableOpacity>
           )}
-          {items && items.length > 0 && items.map((item, index) => (
-            <S.Item
-              key={index}
-              style={{
-                width: itemSize,
-                height: itemSize,
-                backgroundColor: colors.lightGrey,
-              }}
-            >
-              <TouchableWithoutFeedback>
+
+          {items?.map((item, index) => (
+            <View key={`${item.photofile}-${index}`} style={{ position: "relative" }}>
+              <S.Item style={{ width: itemSize, height: itemSize }}>
                 <ImageCasherDynamicLocal
                   photoFile={item.photofile}
                   style={{
@@ -73,18 +84,33 @@ export const PhotoUpload: FC<PhotoUploadProps & { gestureRef: any }> = ({ gestur
                     resizeMode: "cover",
                   }}
                 />
-              </TouchableWithoutFeedback>
+              </S.Item>
+
               {onRemovePhoto && (
-                <S.RemoveButton onPress={() => onRemovePhoto(index)}>
-                  <Icon
-                    name={"close"}
-                    color={"white"}
-                    width={moderateScale(16)}
-                    height={moderateScale(16)}
-                  />
-                </S.RemoveButton>
+                <Pressable
+                  onPress={() => {
+                    console.log("Remove Photo Clicked index:", index);
+                    onRemovePhoto(index);
+                  }}
+                  hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                  style={{
+                    position: "absolute",
+                    top: moderateScale(4),
+                    right: moderateScale(4),
+                    zIndex: 9999,
+                  }}
+                >
+                  <S.RemoveButton>
+                    <Icon
+                      name={"close"}
+                      color={"white"}
+                      width={moderateScale(16)}
+                      height={moderateScale(16)}
+                    />
+                  </S.RemoveButton>
+                </Pressable>
               )}
-            </S.Item>
+            </View>
           ))}
         </ScrollView>
       </GestureDetector>

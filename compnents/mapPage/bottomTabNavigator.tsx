@@ -63,8 +63,9 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
                         <Icon name={icon} color={color} width={size} height={size} />
                     ),
                     tabBarLabel: label,
-                    // Android optimization: prevent the 'shift' animation from flickering
                     animation: Platform.OS === "android" ? "none" : "shift",
+
+                    detachPreviousScreen: Platform.OS !== "android",
                 };
             }}
         >
@@ -73,14 +74,10 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
             <Tab.Screen
                 name="Profile"
                 options={{
-                    // CRITICAL FIX FOR ANDROID:
-                    // This forces the profile to mount from scratch when clicking the tab,
-                    // preventing the 'stuck' white screen.
                     unmountOnBlur: true,
                 }}
                 listeners={{
                     tabPress: () => {
-                        // Reset to own profile on tab press
                         setActiveProfileId(userProfile?.id);
                     },
                 }}

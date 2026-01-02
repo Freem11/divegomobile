@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Control, Controller, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { ImagePickerAsset } from "expo-image-picker";
@@ -29,25 +29,33 @@ export const Step3: React.FC<Step3Props> = ({
   existingPhotos
 }) => {
   const { t } = useTranslation();
-  const [images, setImages] = useState([]);
+
+  // Initialize state with existing photos if they exist
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (existingPhotos && existingPhotos.length > 0) {
+      const formattedExisting = existingPhotos.map(
+        (img) => `${cloudflareBucketUrl}${img.photoPath.split("/").pop()}`
+      );
+      setImages(formattedExisting);
+      setValue("Photos", formattedExisting);
+    }
+  }, [existingPhotos, setValue]);
 
   const handleSelectImages = async () => {
     try {
       const result = await multiImageHandler();
-      if (result?.assets?.[0]?.uri) {
-        handlePreviewImages(result?.assets);
+      if (result?.assets) {
+        const newUris = result.assets.map((asset) => asset.uri);
+        const updatedImages = [...images, ...newUris];
+
+        setImages(updatedImages);
+        setValue("Photos", updatedImages);
       }
     } catch (e: any) {
       console.log("Image selection cancelled", e.message);
     }
-  };
-
-  const handlePreviewImages = async (pictures: ImagePickerAsset[]) => {
-    const newPicArray = pictures.map((picture) => (picture.uri));
-    setImages((prevImages) => [...prevImages, ...newPicArray]);
-
-    const currentFormPhotos = watch("Photos");
-    setValue("Photos", [...currentFormPhotos, ...newPicArray]);
   };
 
   const handleRemovePhoto = (indexToRemove: number) => {
@@ -56,24 +64,17 @@ export const Step3: React.FC<Step3Props> = ({
     setValue("Photos", updatedImages);
   };
 
-  const imagesArray = [];
-  images.forEach((image) => {
-    imagesArray.push({ photofile: image });
-  });
-
-  useEffect(() => {
-    const tempImagesArray = [];
-    existingPhotos?.forEach((image) => {
-      imagesArray.push({ photofile: `${cloudflareBucketUrl}${image.photoPath.split("/").pop()}` });
-      tempImagesArray.push(`${cloudflareBucketUrl}${image.photoPath.split("/").pop()}`);
-      setImages([...images, ...tempImagesArray]);
-    });
-  }, []);
+  // Memoize this to prevent unnecessary object creation on every render
+  const imagesForUpload = useMemo(() =>
+    images.map((uri) => ({ photofile: uri })),
+    [images]);
 
   return (
     <S.InputGroupContainer>
       <S.Title>{t("DiveSiteReviewer.step3Title")}</S.Title>
-      <S.Subtitle style={{ marginBottom: moderateScale(12) }}>{t("DiveSiteReviewer.step3Description")}</S.Subtitle>
+      <S.Subtitle style={{ marginBottom: moderateScale(12) }}>
+        {t("DiveSiteReviewer.step3Description")}
+      </S.Subtitle>
 
       <S.DescriptionBox>
         <Controller
@@ -93,9 +94,9 @@ export const Step3: React.FC<Step3Props> = ({
 
       <S.Title>{t("DiveSiteReviewer.addPhotos")}</S.Title>
 
-      {imagesArray && imagesArray.length > 0 ? (
+      {imagesForUpload.length > 0 ? (
         <PhotoUpload
-          items={imagesArray}
+          items={imagesForUpload}
           onAddSighting={handleSelectImages}
           onRemovePhoto={handleRemovePhoto}
         />
