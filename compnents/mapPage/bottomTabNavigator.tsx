@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { Platform } from "react-native";
+import { Platform, View, ActivityIndicator } from "react-native";
 
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import ShopListParallax from "../screens/shopList/shopListParallax";
@@ -24,100 +24,91 @@ export type BottomTabRoutes = {
     Itinerary: undefined;
 };
 
-type BottomTabNavigatorProps = {
-    showOnboarding: boolean;
-    route: any; // Contains nested params from MainNavigator
-};
-
 const Tab = createBottomTabNavigator<BottomTabRoutes>();
 
-export default function BottomTabNavigator({ route, showOnboarding }: BottomTabNavigatorProps) {
+export default function BottomTabNavigator({ route, showOnboarding }: any) {
     const { userProfile } = useUserProfile();
     const { t } = useTranslation();
     const navigation = useAppNavigation();
     const insets = useSafeAreaInsets();
 
-    /**
-       * Logic to determine which Profile ID to show.
-       * 1. Check if an ID was passed via navigation params (e.g., from a search result).
-       * 2. Fallback to the logged-in user's ID from the store.
-       */
-    const passedId = route.params?.params?.id || userProfile?.id;
+    const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
 
-    const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
-    const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
-
+    // Sync the ID from route params
     useEffect(() => {
-        if (showOnboarding) {
-            navigation.navigate("Onboarding");
+        const nestedId = route.params?.params?.id;
+        if (nestedId) {
+            setActiveProfileId(nestedId);
+        } else if (userProfile?.id) {
+            setActiveProfileId(userProfile.id);
         }
-    }, [showOnboarding, navigation]);
+    }, [route.params?.params?.id, userProfile?.id]);
+
+    const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
     return (
         <Tab.Navigator
             initialRouteName="Home"
             screenOptions={({ route }) => {
                 const { icon, label } = getTabProps(route.name);
-
-                const isTablet = (Platform.OS === "ios" && (Platform as any).isPad) ||
-                    (Platform.OS === "android" && (Platform as any).isTablet);
-
-                const tabBarIconHeightSurplus = isTablet ? moderateScale(5) : moderateScale(0);
-                const tabBarIconMargin = isTablet ? moderateScale(4) : moderateScale(0);
-
                 return {
                     headerShown: false,
                     tabBarStyle: {
                         backgroundColor: colors.primaryBlue,
                         height: moderateScale(50) + (bottomInset ?? 0),
                     },
-                    tabBarLabelStyle: {
-                        fontSize: moderateScale(11),
-                    },
                     tabBarActiveTintColor: colors.themeWhite,
                     tabBarInactiveTintColor: colors.neutralGrey,
-                    tabBarIcon: ({ color, size }) => {
-                        return (
-                            <Icon
-                                name={icon}
-                                color={color}
-                                width={size + tabBarIconHeightSurplus}
-                                height={size + tabBarIconHeightSurplus}
-                            />
-                        );
-                    },
-                    tabBarIconStyle: {
-                        marginTop: tabBarIconMargin,
-                        marginBottom: tabBarIconMargin,
-                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name={icon} color={color} width={size} height={size} />
+                    ),
                     tabBarLabel: label,
-                    animation: "shift",
-                    tabBarLabelPosition: "below-icon",
+                    // Android optimization: prevent the 'shift' animation from flickering
+                    animation: Platform.OS === "android" ? "none" : "shift",
                 };
             }}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
 
-            <Tab.Screen name="Profile">
+            <Tab.Screen
+                name="Profile"
+                options={{
+                    // CRITICAL FIX FOR ANDROID:
+                    // This forces the profile to mount from scratch when clicking the tab,
+                    // preventing the 'stuck' white screen.
+                    unmountOnBlur: true,
+                }}
+                listeners={{
+                    tabPress: () => {
+                        // Reset to own profile on tab press
+                        setActiveProfileId(userProfile?.id);
+                    },
+                }}
+            >
                 {(screenProps) => (
-                    <UserProfileParallax
-                        {...screenProps}
-                        profileID={passedId}
-                    />
+                    activeProfileId ? (
+                        <UserProfileParallax
+                            {...screenProps}
+                            profileID={activeProfileId}
+                        />
+                    ) : (
+                        <View style={{ flex: 1, backgroundColor: colors.primaryBlue, justifyContent: "center" }}>
+                            <ActivityIndicator color="white" />
+                        </View>
+                    )
                 )}
             </Tab.Screen>
 
             <Tab.Screen
                 name="AddSite"
                 component={SiteSubmitterRouter}
-                options={{ tabBarLabel: "Site Add", unmountOnBlur: true }}
+                options={{ unmountOnBlur: true }}
             />
 
-            {PARTNER_ACCOUNT_STATUS && (
+            {(userProfile?.partnerAccount) && (
                 <Tab.Screen
                     name="Itinerary"
                     component={ShopListParallax}
-                    options={{ tabBarLabel: "My Centres" }}
                 />
             )}
         </Tab.Navigator>
@@ -127,11 +118,9 @@ export default function BottomTabNavigator({ route, showOnboarding }: BottomTabN
         switch (route) {
             case "Home": return { icon: "map-outlined", label: t("BottomTabBar.home") };
             case "Profile": return { icon: "person", label: t("BottomTabBar.profile") };
-            case "Notifications": return { icon: "bell-ring-outline", label: t("BottomTabBar.notifications") };
             case "AddSite": return { icon: "anchor-plus", label: t("BottomTabBar.addsite") };
-            case "Guides": return { icon: "question-mark", label: t("BottomTabBar.guides") };
             case "Itinerary": return { icon: "diving-scuba-flag", label: t("BottomTabBar.itinerary") };
-            default: throw new Error(`Unknown route: ${route}`);
+            default: return { icon: "question-mark", label: "Error" };
         }
     }
 }
