@@ -148,7 +148,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
 
   const selectItem = useCallback((key: string) => {
     setSearchValue("");
-
+    Keyboard.dismiss();
     setValue((prev) => {
       const option = options.get(key);
       if (!option) return prev;
