@@ -4,7 +4,7 @@ import { Keyboard, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
-import { getCurrentCoordinates } from "../../../tutorial/locationTrackingRegistry";
+import { getSurveyGradeCoordinates } from "../../../tutorial/locationTrackingRegistry";
 import { useMapStore } from "../../../googleMap/useMapStore";
 import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
 import { calculateRegionFromBoundaries } from "../../../googleMap/regionCalculator";
@@ -96,7 +96,7 @@ export default function PartnerRequestScreen() {
   const getCurrentLocation = async (formData: Required<Form>) => {
     Keyboard.dismiss();
     try {
-      const location = await getCurrentCoordinates();
+      const location = await getSurveyGradeCoordinates();
       if (location) {
         setValue("Latitude", location.coords.latitude);
         setValue("Longitude", location.coords.longitude);
@@ -140,7 +140,7 @@ export default function PartnerRequestScreen() {
         useMapFlip={handleMapFlip}
         values={{
           OrgName: storeFormValues?.OrgName,
-          URL: storeFormValues.URL,
+          URL: storeFormValues?.URL,
           Latitude: storeFormValues?.Latitude,
           Longitude: storeFormValues?.Longitude
         }}

@@ -18,6 +18,8 @@ const mutator = (set, get) => ({
   draggablePoint: null as Coordinates | null,
   formValues: {},
   mapRegion: null as region | null,
+  userLocation: null as Coordinates | null,
+  isLocating: false,
 
   actions: {
     setMapRef: (newMap: MapView) => {
@@ -48,6 +50,13 @@ const mutator = (set, get) => ({
     },
     setMapRegion: (region: region) => {
       set({ mapRegion: region });
+    },
+
+    setUserLocation: (location: Coordinates | null) => {
+      set({ userLocation: location });
+    },
+    setIsLocating: (isLocating: boolean) => {
+      set({ isLocating: isLocating });
     },
 
     clearFormValues: () => {

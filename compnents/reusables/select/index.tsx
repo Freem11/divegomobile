@@ -6,7 +6,7 @@ import React, {
   useCallback,
   forwardRef,
 } from "react";
-import { TextInput } from "react-native";
+import { Keyboard, TextInput } from "react-native";
 
 import { colors } from "../../styles";
 
@@ -130,6 +130,7 @@ const Select = forwardRef<TextInput, SelectProps>((incomingProps, forwardedRef) 
       shouldDisplayCreate
     ) {
       setIsOpen(!isOpen);
+      Keyboard.dismiss();
     }
   };
 

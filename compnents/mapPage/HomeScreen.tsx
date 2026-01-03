@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Image } from "react-native";
 import { styled } from "styled-components";
 import { moderateScale } from "react-native-size-matters";
@@ -9,7 +9,7 @@ import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
 import SearchTool from "../searchTool";
 import { useMapStore } from "../googleMap/useMapStore";
 import ButtonIcon from "../reusables/buttonIcon-new";
-import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
+import { getCurrentCoordinates, warmUpLocation } from "../tutorial/locationTrackingRegistry";
 import { Explainer } from "../screens/formScreens/explainer";
 import { activeFonts } from "../styles";
 import { MarkerDiveShop } from "../googleMap/marker/markerDiveShop";
@@ -24,6 +24,10 @@ export default function HomeScreen() {
     const mapConfig = useMapStore((state) => state.mapConfig);
     const mapRef = useMapStore((state) => state.mapRef);
 
+    useEffect(() => {
+        warmUpLocation();
+    }, []);
+
     const getCurrentLocation = async () => {
         try {
             const { coords } = await getCurrentCoordinates();
@@ -31,8 +35,8 @@ export default function HomeScreen() {
                 mapRef?.animateToRegion({
                     latitude: coords.latitude,
                     longitude: coords.longitude,
-                    latitudeDelta: 1,
-                    longitudeDelta: 1,
+                    latitudeDelta: 0.1,
+                    longitudeDelta: 0.1,
                 }, 500);
             }
         } catch (e) {

@@ -153,7 +153,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     try {
       await Share.open({
         title: "Share Scuba SEAsons Profile",
-        url: "https://scuba-seasons.web.app",
+        url: "https://scubaseasons.com",
       });
     } catch (error) {
       console.log("Share error:", error);
