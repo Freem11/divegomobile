@@ -108,8 +108,8 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
 
   return (
     <S.MainContainer
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={0}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "android" ? moderateScale(20) : 0}
     >
       <S.ParallaxWrapper>
         <ParallaxDrawer

@@ -269,8 +269,8 @@ const styles = StyleSheet.create({
     elevation: 20,
     width: windowWidth,
     borderWidth: moderateScale(1),
-    borderTopRightRadius: moderateScale(25),
-    borderTopLeftRadius: moderateScale(25),
+    borderTopRightRadius: moderateScale(15),
+    borderTopLeftRadius: moderateScale(15),
     overflow: "visible",
   },
   handle: {

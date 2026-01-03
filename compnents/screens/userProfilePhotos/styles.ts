@@ -48,6 +48,8 @@ export const Header = styled.Text`
   color: ${colors.headersBlue};
   align-self: center;
   text-align: center;
+  z-index: 20;
+  margin-top: ${moderateScale(-50)}px;
 `;
 
 export const PacketHeader = styled.View`
