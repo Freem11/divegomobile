@@ -95,11 +95,15 @@ export default function PartnerRequestScreen() {
 
   const getCurrentLocation = async (formData: Required<Form>) => {
     Keyboard.dismiss();
+    mapAction.setIsLocating(true);
+
     try {
       const location = await getSurveyGradeCoordinates();
+
       if (location) {
         setValue("Latitude", location.coords.latitude);
         setValue("Longitude", location.coords.longitude);
+
         mapAction.setFormValues({
           OrgName: formData.OrgName || storeFormValues?.OrgName,
           URL: formData.URL || storeFormValues?.URL,
@@ -109,6 +113,8 @@ export default function PartnerRequestScreen() {
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
+    } finally {
+      mapAction.setIsLocating(false);
     }
   };
 

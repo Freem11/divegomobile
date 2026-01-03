@@ -88,6 +88,11 @@ export default function SiteSubmitterScreen() {
 
   const getCurrentLocation = async (formData: Required<Form>) => {
     Keyboard.dismiss();
+
+    // 1. Tell the store we are starting the search
+    // This makes the "Acquiring..." text pop up in Step1
+    mapAction.setIsLocating(true);
+
     try {
       const location = await getSurveyGradeCoordinates();
       if (location) {
@@ -101,6 +106,8 @@ export default function SiteSubmitterScreen() {
       }
     } catch (e) {
       console.log({ title: "Error", message: e.message });
+    } finally {
+      mapAction.setIsLocating(false);
     }
   };
 
