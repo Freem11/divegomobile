@@ -43,7 +43,7 @@ export default function SealifePreview({
             </S.TotalCount>
           </S.StatRow>
           <S.StatRow>
-            <Icon name="shark" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
+            <Icon name="fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
             <S.TotalCount>
               {speciesCount ? `${speciesCount} species` : "0 species"}
             </S.TotalCount>
@@ -61,7 +61,7 @@ export default function SealifePreview({
       ) : (
         <S.EmptyStateContainer>
           <EmptyState
-            iconName="shark"
+            iconName="camera-plus"
             title={"No sightings yet"}
             subtitle={onAddSighting ? "Be the first to spot some sea life here!" : `${selectedProfile && selectedProfile.UserName} hasn't made any sightings yet.`}
           />
@@ -71,7 +71,7 @@ export default function SealifePreview({
               title={"Add First Sighting"}
               iconLeft="camera-plus"
               round={false}
-              style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+              style={{ width: moderateScale(240) }}
               onPress={onAddSighting}
             />
           )}

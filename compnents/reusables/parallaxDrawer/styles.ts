@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import {StyleSheet, Animated, Dimensions, Platform } from "react-native";
+import { StyleSheet, Animated, Dimensions, Platform } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import Svg from "react-native-svg";
 
@@ -44,11 +44,12 @@ export const TopTransparentSection = styled(Animated.View)`
 
 export const BottomOpaqueSection = styled(Animated.View)`
   position: absolute;
-  top: ${moderateScale(75)}px;
+  top: ${moderateScale(75) - 1}px; 
   left: 0;
   right: 0;
   background-color: ${colors.themeWhite};
   z-index: 3;
+  margin-top: -1px; 
 `;
 
 export const Content = styled.View`

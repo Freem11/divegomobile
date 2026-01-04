@@ -1,13 +1,12 @@
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { useTranslation } from "react-i18next";
-import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import SecureTextInput from "../../reusables/secureTextInput";
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { colors } from "../../styles";
 import { showWarning } from "../../toast";
 
 import * as S from "./styles";
@@ -22,6 +21,7 @@ interface IProps {
 export default function CreateAccountPageView(props: IProps) {
   const { t } = useTranslation();
   const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({});
+  const insets = useSafeAreaInsets();
 
   const handleError = (errors: FieldErrors<Form>) => {
     console.log({ errors });
@@ -98,7 +98,7 @@ export default function CreateAccountPageView(props: IProps) {
 
       </S.Content>
 
-      <S.PromptBox>
+      <S.PromptBox style={{ paddingBottom: insets.bottom }}>
         <S.PromptText>{t("Auth.alreadyHaveAccount")}</S.PromptText>
         <TouchableWithoutFeedback onPress={props.moveToLoginPage}>
           <S.PromptLinkText>{t("Common.login")}</S.PromptLinkText>

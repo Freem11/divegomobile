@@ -8,16 +8,18 @@ import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
 import { EditModeContext } from "../../contexts/editModeContext";
 import Confirmations from "../confirmationPage/confirmations";
+import { EDIT_TYPE } from "../../../entities/editTypes";
 
 import DiveShopeParallax from "./diveShopParallax";
 
 type DiveShopNavigatorProps = {
   id: number;
+  dataType: EDIT_TYPE;
 };
 
 export type DiveShopRoutes = {
   DiveCentre: undefined;
-  EditScreen: undefined;
+  EditScreen: { id: number, dataType: EDIT_TYPE };
   GoogleMap: undefined;
   TripCreator: { id: number | null, subTitle: string, shopId: number };
   ConfirmationScreen: { title: string, subTitle: string, returnNav: () => void };
@@ -46,7 +48,14 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
         )}
       </Stack.Screen>
 
-      <Stack.Screen name="EditScreen" component={EditScreenParallax} />
+      <Stack.Screen name="EditScreen">
+        {({ route }) => (
+          <EditScreenParallax
+            id={route.params.id}
+            dataType={route.params.dataType}
+          />
+        )}
+      </Stack.Screen>
 
       <Stack.Screen name="ConfirmationScreen">
         {({ route }) => (

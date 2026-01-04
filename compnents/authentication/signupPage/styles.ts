@@ -50,7 +50,7 @@ export const PromptBox = styled.View`
   flex-direction: row;
   gap: 10px;
   justify-content: center;
-  padding-bottom: ${Platform.OS === "ios" ? 0 : "15px"};
+  align-items: center;
 `;
 
 export const PromptText = styled.Text`

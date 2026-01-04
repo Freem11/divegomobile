@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { moderateScale } from "react-native-size-matters";
 
 import Card from "../../card";
-import { AreaPicsContext } from "../../../../contexts/areaPicsContext";
 import { getAnimalsInBubble } from "../../../../../supabaseCalls/photoSupabaseCalls";
 import { useMapStore } from "../../../../googleMap/useMapStore";
 import { AnimalMultiSelectContext } from "../../../../contexts/animalMultiSelectContext";
 import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
-
-import * as S from "./styles";
+import * as S from "../styles";
+import Icon from "../../../../../icons/Icon";
+import { colors } from "../../../../styles";
 
 type SeaLifeListProps = {
   scrollToDiveSiteList?: () => void;
@@ -21,7 +20,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
 
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [filterValue, setFilterValue] = useState("");
-  const { areaPics, setAreaPics } = useContext(AreaPicsContext);
+  const [areaPics, setAreaPics] = useState([]);
 
   const { animalMultiSelection, setAnimalMultiSelection } = useContext(
     AnimalMultiSelectContext
@@ -57,7 +56,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
   const renderListHeader = useMemo(() => (
     <S.FilterContainer>
       <MobileTextInput
-        iconLeft={"shark"}
+        iconLeft={"fish"}
         iconRight={"close"}
         placeholder="Filter Sea Creatures"
         onChangeText={(text: string) => setFilterValue(text)}
@@ -74,6 +73,15 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
       }}
     >
       <S.Header>Nearby Sea Life</S.Header>
+      <S.SubHeaderRight>
+        <S.SwipeIndicator>
+          <S.Subtitle>Dive Sites</S.Subtitle>
+          <S.IconWrapper>
+            <Icon name="double-chevron-right" color={colors.border} />
+          </S.IconWrapper>
+        </S.SwipeIndicator>
+      </S.SubHeaderRight>
+
       {renderListHeader}
 
       {layoutReady ? (
@@ -96,16 +104,16 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
           ListEmptyComponent={(
             <S.EmptyStateWrapper>
               <EmptyState
-                iconName="shark"
+                iconName="fish"
                 title="No Sea Life Sightings in this area!"
                 subtitle={"Currently no one has submitted any sea life sightings in this area, if you have, please add it to the dive site you were diving at!"}
               />
               <Button
                 size="thin"
                 title={"Nearby Dive Sites"}
-                iconLeft="shark"
+                iconLeft="anchor"
                 round={false}
-                style={{ marginLeft: "10%", width: "80%" }}
+                style={{ alignSelf: "center", width: "80%" }}
                 onPress={() => scrollToDiveSiteList()}
               />
             </S.EmptyStateWrapper>

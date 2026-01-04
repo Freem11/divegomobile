@@ -12,6 +12,7 @@ import {
 import { Gesture } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { useContext, useEffect, useState } from "react";
+import type { SharedValue } from "react-native-reanimated";
 
 import { EditsContext } from "../../contexts/editsContext";
 import { SavedTranslateYContext } from "../../contexts/savedTranslateYContext";
@@ -21,7 +22,7 @@ const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 const TOP_SECTION_HEIGHT = moderateScale(70);
 const DECELERATION = 0.985;
 
-export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) => {
+export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void, contentScrollY?: SharedValue<number>, horizontalScrollRef?: React.RefObject<any>) => {
   const translateY = useSharedValue(SCREEN_HEIGHT / 2);
   const contentHeight = useSharedValue(0);
   const startY = useSharedValue(0);
@@ -81,7 +82,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   }, [bottomHitCount]);
 
   const MIN_SHRINK = moderateScale(150);
-  const lastAdjustedHeightRef = useSharedValue(Number.MAX_VALUE);
 
   useAnimatedReaction(
     () => ({
@@ -98,8 +98,6 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const contentShrankSignificantly = shrinkAmount > MIN_SHRINK;
 
       if (contentShrankSignificantly) {
-        lastAdjustedHeightRef.value = newHeight;
-
         const minTranslateY = Math.min(
           dynamicScreenHeight.value - newHeight - TOP_SECTION_HEIGHT,
           getHalfHeight()
@@ -120,10 +118,19 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
   };
 
   const panGesture = Gesture.Pan()
+    .minPointers(1)
+    .simultaneousWithExternalGesture(horizontalScrollRef)
+    .requireExternalGestureToFail(horizontalScrollRef)
+    .failOffsetX([-40, 40])
+    .activeOffsetY([-60, 60])
+    .activeOffsetX([-500, 500])
     .onStart(() => {
+      if (contentScrollY && contentScrollY.value > 0) return;
       startY.value = translateY.value;
+      //startY.value = translateY.value;
     })
     .onUpdate((event) => {
+      if (contentScrollY && contentScrollY.value > 0) return;
       const rawMinY = dynamicScreenHeight.value - contentHeight.value - TOP_SECTION_HEIGHT;
       const halfHeight = getHalfHeight();
       const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < halfHeight;
@@ -133,13 +140,14 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       const nextY = startY.value + event.translationY;
       translateY.value = Math.min(maxY, Math.max(minY, nextY));
 
-      const isAtBottom = Math.abs(translateY.value - minY) < 2000;
+      const isAtBottom = Math.abs(translateY.value - minY) < 20;
       if (isAtBottom && !hasHitBottom.value) {
         hasHitBottom.value = true;
         runOnJS(handleDrawerHitBottom)();
       }
     })
     .onEnd((event) => {
+      if (contentScrollY && contentScrollY.value > 0) return;
       const rawMinY = dynamicScreenHeight.value - contentHeight.value - TOP_SECTION_HEIGHT;
       const halfHeight = getHalfHeight();
       const isShortContent = contentHeight.value + TOP_SECTION_HEIGHT < halfHeight;
@@ -207,7 +215,8 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
 
   const cleanupAndClose = (
     mapConfig: number | null,
-    currentScreen: ActiveSceen
+    currentScreen: ActiveSceen,
+    shouldNavigate: boolean // New Flag
   ) => {
     runOnJS(setSavedTranslateY)(getHalfHeight());
     runOnJS(setEditInfo)(null);
@@ -220,20 +229,23 @@ export const useParallaxDrawer = (onClose: () => void, onMapFlip?: () => void) =
       runOnJS(onMapFlip)();
     }
 
-    runOnJS(onClose)();
+    // Only go back if we are closing via UI button, not tab switch
+    if (shouldNavigate) {
+      runOnJS(onClose)();
+    }
   };
 
-  const closeParallax = (mapConfig: number | null) => {
+  const closeParallax = (mapConfig: number | null, shouldNavigate: boolean = true) => {
     const currentScreen: ActiveSceen = activeScreen;
     setSavedTranslateY(translateY.value);
     setBottomHitCount(1);
 
     translateY.value = withTiming(0, { duration: 100 }, (finished) => {
       if (finished) {
-        translateY.value = 0;
-        startY.value = 0;
+        translateY.value = getHalfHeight();
+        startY.value = getHalfHeight();
 
-        runOnJS(cleanupAndClose)(mapConfig, currentScreen);
+        runOnJS(cleanupAndClose)(mapConfig, currentScreen, shouldNavigate);
       }
     });
   };

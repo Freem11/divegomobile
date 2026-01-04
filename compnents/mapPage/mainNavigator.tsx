@@ -1,4 +1,4 @@
-import React, { } from "react";
+import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import GoogleMap from "../googleMap";
@@ -9,12 +9,15 @@ import DiveSiteRouter from "../screens/diveSite/diveSiteRouter";
 import UserProfilePhotosPage from "../screens/userProfilePhotos";
 import PhotoBoxModal from "../screens/photoBox/photoBoxModal";
 import DiveShopRouter from "../screens/diveShop/diveShopRouter";
-import PartnerRequestRouter from "../screens/partnerAccountRequest/partnerRequestRouter";
+import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
+import ReviewParallax from "../screens/review/reviewParallax";
+import ResetPasswordConfirmScreen from "../authentication/passwordResetPage";
+import { EDIT_TYPE } from "../../entities/editTypes";
+import { useStore } from "../../store";
+import PhotoCommentsParallax from "../screens/comments/photoCommentsParallax";
 
-import BottomTabNavigator from "./bottomTabNavigator";
 import HomeScreen from "./HomeScreen";
-import SiteSubmitterNavigator from "../screens/diveSiteUploader/siteSubmitterNavigator";
-import UserProfileParallax from "../screens/userProfile/userProfileParallax";
+import BottomTabNavigator, { BottomTabRoutes } from "./bottomTabNavigator";
 
 type MainNavigatorProps = {
   showOnboarding: boolean;
@@ -23,73 +26,98 @@ type MainNavigatorProps = {
 
 export type MainRoutes = {
   Onboarding: undefined;
-  BottomTab: undefined;
+  BottomTab: undefined | { screen: keyof BottomTabRoutes; params?: any };
   GoogleMap: undefined;
   DiveSiteNavigator: { id: number };
   DiveShopNavigator: { id: number };
-  SiteSubmitterNavigator: undefined;
   Settings: undefined;
   Home: undefined;
   PartnerRequestUpgrade: undefined;
-  EditScreen: undefined;
+  EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
+  PhotoComments: { id: number };
   PinchAndZoomPhoto: undefined;
-  UserProfile: { id: number };
+  SingleReviewScreen: { id: number };
+  ResetPasswordConfirm: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
 
 export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigatorProps) {
+  const isRecovering = useStore((state) => state.isRecovering);
+  const setIsRecovering = useStore((state) => state.setIsRecovering);
+
+  const getInitialRoute = () => {
+    if (isRecovering) return "ResetPasswordConfirm";
+    return mapConfig === 0 ? "BottomTab" : "GoogleMap";
+  };
 
   return (
-    // The Bottom tab bar only needs to show with config = 0, otherwise simply show the Map page.
     <Stack.Navigator
-      initialRouteName={mapConfig === 0 ? "BottomTab" : "GoogleMap"}
-      screenOptions={() => ({
+      initialRouteName={getInitialRoute()}
+      screenOptions={{
         headerShown: false,
         animation: "slide_from_bottom",
-      })}
+      }}
     >
-
       <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
       <Stack.Screen name="BottomTab">
-        {props => <BottomTabNavigator {...props} showOnboarding={showOnboarding} />}
+        {(props) => (
+          <BottomTabNavigator
+            {...props}
+            showOnboarding={showOnboarding}
+          />
+        )}
       </Stack.Screen>
 
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       <Stack.Screen name="Home" component={HomeScreen} />
 
       <Stack.Screen name="DiveSiteNavigator">
-        {({ route }) => (
-          <DiveSiteRouter
-            id={route.params.id}
-          />
-        )}
+        {({ route }) => <DiveSiteRouter id={route.params.id} />}
       </Stack.Screen>
 
       <Stack.Screen name="DiveShopNavigator">
+        {({ route }) => <DiveShopRouter id={route.params.id} />}
+      </Stack.Screen>
+
+      <Stack.Screen name="EditScreen">
+        {({ route }) => <EditScreenParallax id={route.params.id} dataType={route.params.dataType} />}
+      </Stack.Screen>
+
+      <Stack.Screen name="Settings" component={SettingsPage} />
+      <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
+      <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
+
+      <Stack.Screen name="PhotoComments">
         {({ route }) => (
-          <DiveShopRouter
+          <PhotoCommentsParallax
             id={route.params.id}
           />
         )}
       </Stack.Screen>
 
-      <Stack.Screen name="SiteSubmitterNavigator" component={SiteSubmitterNavigator} />
-
-      <Stack.Screen name="Settings" component={SettingsPage} />
-      <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
-      <Stack.Screen name="EditScreen" component={EditScreenParallax} />
-      <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
-      <Stack.Screen name="UserProfile">
+
+      <Stack.Screen name="SingleReviewScreen">
         {({ route }) => (
-          <UserProfileParallax
-            profileID={route.params.id}
+          <ReviewParallax
+            id={route.params.id}
           />
         )}
       </Stack.Screen>
-
+      <Stack.Screen
+        name="ResetPasswordConfirm"
+        component={ResetPasswordConfirmScreen}
+        options={{
+          headerShown: false,
+          headerTitle: "Reset Password",
+          animation: "slide_from_bottom"
+        }}
+        listeners={{
+          blur: () => setIsRecovering(false),
+        }}
+      />
     </Stack.Navigator>
   );
 }

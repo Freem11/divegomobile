@@ -39,7 +39,7 @@ export const CloneTripButton: FC<CloneTripButtonProps> = ({ setEditMode }) => {
         />
         <S.Label>Clone This Trip</S.Label>
       </S.CloneTripButton>
-      <Explainer popoverContent={popoverContent} />
+      <Explainer popoverContent={popoverContent} iconSize={20} />
     </>
   );
 };

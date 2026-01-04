@@ -1,20 +1,16 @@
 import React, { useState, useContext } from "react";
-import { TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
 import email from "react-native-email";
 
-import { SelectedPictureContext } from "../../contexts/selectedPictureContext";
 import {
   insertPhotoLike,
   deletePhotoLike,
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "../../contexts/activeTutorialIDContext";
 import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
-import { windowWidth } from "../paginator/styles";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { cloudflareBucketUrl } from "../../globalVariables";
@@ -49,14 +45,13 @@ interface PictureProps {
   profileViewAction?: () => void;
 }
 
+const windowWidth = Dimensions.get("window").width;
+
 const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
-  const { fullScreenModal, setFullScreenModal } = useContext(FullScreenModalContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { userProfile } = useUserProfile();
-  const { setSelectedPicture } = useContext(SelectedPictureContext);
 
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
   const [likeData, setLikeData] = useState(pic.likeid);
@@ -64,7 +59,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const [aspectRatio, setAspectRatio] = useState<number | null>(1);
 
-  // Construct remote image URL
   const fileName = pic.photoFile?.split("/").pop();
   const remoteUri = `${cloudflareBucketUrl}${fileName}`;
 
@@ -84,12 +78,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
   //     );
   //   }
   // }, [remoteUri]);
-
-  const handleCommentModal = (pic: Photo) => {
-    setFullScreenModal(true);
-    setActiveTutorialID("CommentsModal");
-    setSelectedPicture(pic);
-  };
 
   const handleEmail = (pic: Photo) => {
     email(["scubaseasons@gmail.com"], {
@@ -195,7 +183,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
           />
           <IconCounterButton
             icon="comment"
-            onPress={() => handleCommentModal(pic)}
+            onPress={() => navigation.navigate("PhotoComments", { id: pic.id })}
             size="icon"
             count={abbreviateNumber(pic.commentcount)}
           />

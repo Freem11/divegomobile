@@ -1,20 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
-import { RouteProp, useRoute } from "@react-navigation/native";
 
 import noImage from "../../png/NoImage.png";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { SelectedShopContext } from "../../contexts/selectedShopContext";
 import { getDiveShopById } from "../../../supabaseCalls/shopsSupabaseCalls";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { EditsContext } from "../../contexts/editsContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
-import { MainRoutes } from "../../mapPage/mainNavigator";
-import { useAppNavigation } from "../../mapPage/types";
 import { MapConfigurations } from "../../googleMap/types";
+import { EDIT_TYPE } from "../../../entities/editTypes";
 
 import { useDiveShopNavigation } from "./types";
 
@@ -24,15 +21,14 @@ type DiveShopParallaxProps = {
   id: number;
 };
 
-type DiveCentreRouteProp = RouteProp<MainRoutes, "DiveCentre">;
-
 export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const diveShopNavigation = useDiveShopNavigation();
   const { t } = useTranslation();
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
+
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
   const { selectedShop, setSelectedShop } = useContext(SelectedShopContext);
-  const { setChosenModal } = useContext(ModalSelectContext);
   const [diveShopVals, setDiveShopVals] = useState(null);
   const { userProfile } = useUserProfile();
   const [isMyShop, setIsMyShop] = useState(false);
@@ -40,10 +36,10 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   const { setEditInfo } = useContext(EditsContext);
 
   useEffect(() => {
-    getDiveSiteinfo();
+    getDiveCentreInfo();
   }, [props.id]);
 
-  const getDiveSiteinfo = async () => {
+  const getDiveCentreInfo = async () => {
     const diveCentreinfo = await getDiveShopById(props.id);
     setSelectedShop(diveCentreinfo[0]);
   };
@@ -79,7 +75,6 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   //Needs Navigator
   const onNavigate = () => {
     Keyboard.dismiss();
-    setChosenModal("DiveSite");
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveShop", itemId: selectedShop.id });
   };
 
@@ -88,7 +83,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
   };
 
   const openEditsPage = () => {
-    diveShopNavigation.navigate("EditScreen");
+    diveShopNavigation.navigate("EditScreen", { id: selectedShop.id, dataType: EDIT_TYPE.DIVE_CENTRE });
     setEditInfo("DiveShop");
   };
 
@@ -111,6 +106,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={diveShopVals && diveShopVals.photo ? { uri: diveShopVals.photo } : noImage}
       onClose={onClose}
       onMapFlip={onNavigate}

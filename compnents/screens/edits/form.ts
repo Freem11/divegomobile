@@ -4,7 +4,6 @@ export interface Form {
   id?: number;
   name?: string;
   bio?: string;
-  photo?: string | null;
   uri?: string | null
 }
 

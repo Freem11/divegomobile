@@ -8,8 +8,9 @@ import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
 import { useAppNavigation } from "../../../../mapPage/types";
-
-import * as S from "./styles";
+import * as S from "../styles";
+import Icon from "../../../../../icons/Icon";
+import { colors } from "../../../../styles";
 
 export default function DiveSiteList() {
   const navigation = useAppNavigation();
@@ -43,7 +44,9 @@ export default function DiveSiteList() {
   };
 
   const handleScreen = () => {
-    navigation.navigate("SiteSubmitterNavigator");
+    navigation.navigate("BottomTab", {
+      screen: "AddSite"
+    });
   };
 
   const [layoutReady, setLayoutReady] = useState(false);
@@ -68,6 +71,23 @@ export default function DiveSiteList() {
       }}
     >
       <S.Header>Nearby Dive Sites</S.Header>
+
+      <S.SubHeaderWrapper>
+        <S.SwipeIndicator>
+          <S.IconWrapper>
+            <Icon name="double-chevron-left" color={colors.border} />
+          </S.IconWrapper>
+          <S.Subtitle>Sea Life</S.Subtitle>
+        </S.SwipeIndicator>
+
+        <S.SwipeIndicator>
+          <S.Subtitle>Dive Centres</S.Subtitle>
+          <S.IconWrapper>
+            <Icon name="double-chevron-right" color={colors.border} />
+          </S.IconWrapper>
+        </S.SwipeIndicator>
+      </S.SubHeaderWrapper>
+
       {renderListHeader}
 
       {layoutReady ? (
@@ -98,7 +118,7 @@ export default function DiveSiteList() {
                 title={"Add New Dive Site"}
                 iconLeft="anchor"
                 round={false}
-                style={{ marginLeft: "10%", width: "80%" }}
+                style={{ alignSelf: "center", width: "80%" }}
                 onPress={() => handleScreen()}
               />
             </S.EmptyStateWrapper>

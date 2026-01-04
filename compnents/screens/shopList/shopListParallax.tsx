@@ -1,12 +1,12 @@
-import React, { } from "react";
+import React, { useCallback, useRef } from "react";
 import { Keyboard } from "react-native";
 import { useTranslation } from "react-i18next";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { useMapStore } from "../../googleMap/useMapStore";
 import Center from "../../png/Beach.jpg";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { BottomTabRoutes } from "../../mapPage/bottomTabNavigator";
 import { MapConfigurations } from "../../googleMap/types";
 
@@ -19,8 +19,17 @@ type ShopListParallaxNavigationProp = BottomTabNavigationProp<
 
 export default function ShopListParallax() {
   const { t } = useTranslation();
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const navigation = useNavigation<ShopListParallaxNavigationProp>();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        drawerRef.current?.close(null, false);
+      };
+    }, [])
+  );
 
   const onClose = async () => {
     navigation.goBack();
@@ -33,6 +42,7 @@ export default function ShopListParallax() {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={Center}
       onClose={onClose}
       onMapFlip={onNavigate}

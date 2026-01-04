@@ -33,7 +33,7 @@ export const BackButtonWrapper = styled.View`
 export const PhotoContainer = styled.View`
   width: 98%;
   align-items: center;
-  margin-left: 3%;
+  align-self: center;
   margin-top: ${moderateScale(20)}px;
   margin-bottom: ${moderateScale(20)}px;
 `;
@@ -49,6 +49,8 @@ export const Header = styled.Text`
   color: ${colors.headersBlue};
   align-self: center;
   text-align: center;
+  z-index: 20;
+  margin-top: ${moderateScale(-50)}px;
 `;
 
 export const PacketHeader = styled.View`

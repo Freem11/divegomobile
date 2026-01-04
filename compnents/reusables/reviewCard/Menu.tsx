@@ -15,11 +15,21 @@ interface MenuProps {
   setIsVisible: (isVisible: boolean) => void;
   handleEdit: () => void;
   handleDelete: () => void;
+  handleNavigate: () => void;
   isMyReview?: boolean;
 }
 
-export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handleDelete, isMyReview = false }) => {
+export const Menu: FC<MenuProps> = ({
+  isVisible,
+  setIsVisible,
+  handleEdit,
+  handleDelete,
+  handleNavigate,
+  isMyReview = false
+}) => {
   const iconRef = useRef<View>(null);
+
+  if (!isMyReview) return null;
 
   return (
     <S.Actions>
@@ -40,37 +50,37 @@ export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handl
         from={iconRef}
         isVisible={isVisible}
         onRequestClose={() => setIsVisible(false)}
-        placement={Placement.AUTO}
-        popoverStyle={{borderRadius: moderateScale(10)}}
+        placement={Placement.BOTTOM}
+        popoverStyle={{
+          borderRadius: moderateScale(10),
+          padding: moderateScale(5)
+        }}
       >
-        {!isMyReview && (
-          <IconWithLabel
-            label={'Report'}
-            iconName={'flag'}
-            buttonAction={() => {}}
-          />
-        )}
-        {isMyReview && (
-          <IconWithLabel
-            label={'Edit'}
-            iconName={'pencil'}
-            buttonAction={() => {
-              handleEdit();
-              setIsVisible(false);
-            }}
-          />
-        )}
-        {isMyReview && (
-          <IconWithLabel
-            label={'Delete'}
-            iconName={'trash'}
-            buttonAction={() => {
-              handleDelete();
-              setIsVisible(false);
-            }}
-          />
-        )}
+        <IconWithLabel
+          label={"Edit"}
+          iconName={"pencil"}
+          buttonAction={() => {
+            handleEdit();
+            setIsVisible(false);
+          }}
+        />
+        <IconWithLabel
+          label={"Delete"}
+          iconName={"trash"}
+          buttonAction={() => {
+            handleDelete();
+            setIsVisible(false);
+          }}
+        />
+        <IconWithLabel
+          label={"Open Review"}
+          iconName={"diving-snorkel"}
+          buttonAction={() => {
+            handleNavigate();
+            setIsVisible(false);
+          }}
+        />
       </Popover>
     </S.Actions>
-  )
-}
+  );
+};

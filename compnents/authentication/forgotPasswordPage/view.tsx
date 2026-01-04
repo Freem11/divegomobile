@@ -1,12 +1,9 @@
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import Animated from "react-native-reanimated";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 
 import MobileTextInput from "../../reusables/textInput";
 import Button from "../../reusables/button";
-import { colors } from "../../styles";
 import { showWarning } from "../../toast";
 
 import * as S from "./styles";
@@ -20,15 +17,23 @@ interface IProps {
 
 export default function ForgotPageView(props: IProps) {
   const { t } = useTranslation();
-  const [isEnabled, setIsEnabled] = useState(true);
 
-  const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
-  const { control, handleSubmit, formState: { isSubmitting, errors } } = useForm<Form>({
-    defaultValues: props.defaultFormValues
+  const onLocalSubmit = async (data: Form) => {
+    await props.onSubmit(data);
+    reset();
+  };
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, errors },
+  } = useForm<Form>({
+    defaultValues: props.defaultFormValues,
   });
 
   const handleError = (errors: FieldErrors<Form>) => {
-    console.log({ errors });
+    console.log("Validation Errors:", errors);
     Object.values(errors).forEach((error) => {
       if (error?.message) {
         showWarning(error.message);
@@ -45,13 +50,14 @@ export default function ForgotPageView(props: IProps) {
           control={control}
           name="Email"
           rules={FormRules.Email}
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, value } }) => (
             <S.TopInputWrapper>
               <MobileTextInput
                 error={errors.Email}
                 iconLeft="at"
                 placeholder={t("Auth.enterAccountEmail")}
                 onChangeText={onChange}
+                value={value}
               />
             </S.TopInputWrapper>
           )}
@@ -61,15 +67,12 @@ export default function ForgotPageView(props: IProps) {
 
         <S.ButtonBox>
           <Button
-            onPress={() => {
-              setIsEnabled(false);
-              return handleSubmit(props.onSubmit, handleError);
-            }}
+            onPress={handleSubmit(onLocalSubmit, handleError)}
             alt={false}
             size="medium"
-            title={t("Auth.sendRecoverEmail")}
             iconRight="chevron-right"
-            disabled={!isEnabled || isSubmitting}
+            title={t("Auth.sendRecoverEmail")}
+            disabled={isSubmitting}
           />
         </S.ButtonBox>
       </S.Content>

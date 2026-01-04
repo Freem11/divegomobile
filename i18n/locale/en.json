@@ -27,7 +27,7 @@
         "diverNamePlaceholder": "Diver Name",
         "diverNameContent": "Scuba SEAsons relies on user contributions of dive sites and sea creature sightings.\n\nTo credit and to let others know about your contributions please provide us with your “diver name”.\n\n\n\n\n",
         "locationTitle": "Location Tracking",
-        "locationContent": "Scuba SEAsons uses location tracking for two features within the app:\n\nFirst, to allow the map to centre on your current location when needed\n&\nTo allow you to use your current location as the GPS location of a dive site when you are physically at the dive site and you want to add it to the app.\n\n\n\n\n",
+        "locationContent": "Scuba SEAsons uses location tracking for two features within the app:\n\nTo Allow the map to be centred on your location.\n&\nTo use your device's location to mark the GPS of a dive site for submission.\n\n\n\n\n",
         "galleryTitle": "Photo Gallery Access",
         "galleryContent": "In order to make a sea creature sighting contribution to Scuba SEAsons, we need to request access to your photo library.\n\nThis will allow you to choose photos from your device to upload.\n\n\n\n\n",
         "notificationsTitle": "Notifications",
@@ -49,7 +49,7 @@
     "notifications": "Notifications",
     "addsite": "Site Add",
     "guides": "Guides",
-    "itinerary": "Itinerary"
+    "itinerary": "My Centres"
   },
   "SettingsPage": {
         "header": "Settings",
@@ -67,6 +67,17 @@
     },
     "PartnerRequestPage": {
         "header": "Partner Account Upgrade",
+        "step1Title": "Please Note:",
+        "step1Description": "To qualify for a 'Partner Account' Your Account must represent a diving business that takes divers out diving.",
+        "step1Description2": "Examples include: Dive Shops, Dive Charters, Diver Centres and Liveaboards.",
+        "step2Name": "Basic information",
+        "step2Location": "Where is it?",
+        "step2Helper": "To help you get the location",
+        "completeTitle": "Partner Account Request Submitted!",
+        "completeDescription": "Your partner account upgrade request was successfully submitted, soon you will have access to exclusive partner features!",
+        "completeDescription2": "Please allow up to 24 hours for us to review and approve your application.",
+    
+
         "explanation": "To qualify for a 'Partner Account' Your Account must represent a diving business that takes divers out diving. \n Examples include: Dive Shops, Dive Charters, Diver Centres and Liveaboards",
         "businessPlaceholder": "Full business name",
         "businessExplainer": "For display purposes",
@@ -85,9 +96,16 @@
     },
     "DiveSiteAdd": {
         "header": "Add a New Dive Site",
+        "step1Name": "What's it called?",
+        "step1Location": "Where is it?",
+        "step1Helper": "To help you get the location",
         "siteNamePlaceholder": "Dive Site Name",
         "latPlaceholder": "Latitude",
         "lngPlaceholder": "Longitude",
+        "completeTitle": "New Dive Site Submitted!",
+        "completeDescription": "Your dive site has been successfully submitted, divers worldwide will be able to review and add sea life sightings to it!",
+        "completeDescription2": "Please allow up to 24 hours for us to review and approve it.",
+    
         "myLocationButton": "Use my location",
         "myLocationexplainer": "This can take up to 30 seconds",
         "successUpload": "{{site}} has been successfully submitted! Please allow up to 24 hours for us to review and approve it.",
@@ -95,24 +113,22 @@
         "submitButton": "Submit"
     },
     "PicUploader": {
+        "step1Title": "When your sighting(s) happened",
+        "datePlaceholder": "Date of your Sighting(s)",
+        "addPhotos": "Sea Life Photos",
+        "stepXTitle": "Sea Life Identification",
+        "stepXDescription": "( Your best guess is fine )",
+        "seaLifeId": "What's This?",
         "header": "Your Sea Creature Sighting",
-        "uploadButton": "Upload a Photo",
-        "whatLabel": "What you saw",
-        "whatPlaceholder": "Sea Life Encountered",
-        "whenLabel": "When you saw it",
-        "whenPlaceholder": "Date of Sighting",
-        "whereLabel": "Where you saw it",
-        "wherePlaceholder": "Location of Sighting",
+        "completeTitle": "Sea Life Sighting(s) Submitted!",
+        "completeDescription": "Your sea life sighting(s) have been successfully submitted!",
+        "completeDescription2": "Please allow up to 24 hours for us to valdiate your sightings information.",
+        "seaLifePlaceholder": "Sea Life Encountered",
+
         "noPreviewAvailable": "No preview available",
-        "submitButton": "Submit",
-        "fillRequiredFields": "Please fill in all required fields.",
-        "uploadFailedTitle": "Upload Failed",
-        "couldUploadMsg": "Couldnt upload {{animal}} on {{diveSite}}",
         "offlineMsg": "You are offline / slow network. Retry from the feed menu.",
         "successUpload": "Your photo of {{sealife}} uploaded successfully! Please allow up to 24 hours for our team to review and approve it.",
         "failedUpload": "Photo upload failed.",
-        "failedToSave": "Failed to save a photo",
-        "noPictureFound": "No picture found, reupload",
         "retryFailedUpload": "Retry upload failed, you should try to reupload the photo"
     },
     "DiveSiteReviewer": {
@@ -219,7 +235,11 @@
         "alreadyHaveAccount": "Already have an account ?",
         "resetPassword": "Reset Password",
         "enterAccountEmail": "Enter Your Account Email",
-        "sendRecoverEmail": "Send Email"
+        "newPassword": "New Password",
+        "newPasswordPlaceholder": "Enter your new password",
+        "confirmPasswordPlaceholder": "Confirm your new password",
+        "updatePassword": "Submit",
+        "sendRecoverEmail": "Submit"
     },
     "Photo": {
         "diveDeeper": "Dive Deeper!"
@@ -247,6 +267,7 @@
     },
     "Comments": {
         "hideReplies": "Hide Replies",
+        "viewReply": "Show {{ count }} Reply",
         "viewReplies": "Show {{ count }} Replies",
         "blowBubbles": "Blow some bubbles"
     },

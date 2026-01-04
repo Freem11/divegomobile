@@ -7,7 +7,7 @@ import SealifePreview from "../../reusables/sealifePreview";
 import ItineraryCard from "../../reusables/itineraryCard";
 import GhostButton from "../../reusables/ghostButton";
 import EmptyState from "../../reusables/emptyState-new";
-import Label from "../../reusables/label";
+import Label from "../../reusables/label-new";
 import ReviewCard from "../../reusables/reviewCard";
 import { Review } from "../../../entities/diveSiteReview";
 import Button from "../../reusables/button";
@@ -30,6 +30,7 @@ type DiveSiteProps = {
   openDiveSiteReviewer: () => void;
   openAllPhotosPage: () => void;
   openAllTripsPage: () => void;
+  handleProfileMove: (name: string, id: string | number) => void;
   handleMapFlip: (sites: number[]) => void;
   onEditReview: (review: Review) => void;
   onDeleteReview: (reviewId: number) => void;
@@ -49,6 +50,7 @@ export default function DiveSiteScreenView({
   openDiveSiteReviewer,
   openAllPhotosPage,
   openAllTripsPage,
+  handleProfileMove,
   handleMapFlip,
   onEditReview,
   onDeleteReview
@@ -153,10 +155,12 @@ export default function DiveSiteScreenView({
                 date={review.dive_date}
                 description={review.description}
                 conditions={review.conditions}
-                userName={review.user_name}
+                name={review.user_name}
                 photo={review.profilePhoto}
+                id={review.user_id}
                 review={review}
                 currentUserId={currentUserId}
+                handleNavigate={handleProfileMove}
                 onEdit={onEditReview}
                 onDelete={onDeleteReview}
               />
@@ -165,7 +169,7 @@ export default function DiveSiteScreenView({
         ) : (
           <S.EmptyStateWrapper key="no-reviews">
             <EmptyState
-              iconName="diving-scuba-flag"
+              iconName="diving-snorkel"
               title="No Reviews Here Yet"
               subtitle={`No one has left a review for ${selectedDiveSite?.name}`}
             />
@@ -173,9 +177,9 @@ export default function DiveSiteScreenView({
               <Button
                 size="thin"
                 title={"Add First Review"}
-                iconLeft="diving-scuba-flag"
+                iconLeft="diving-snorkel"
                 round={false}
-                style={{ width: moderateScale(240), marginTop: moderateScale(15) }}
+                style={{ width: moderateScale(240) }}
                 onPress={() => openDiveSiteReviewer()}
               />
             </S.ButtonContainer>

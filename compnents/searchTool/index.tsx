@@ -1,20 +1,24 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Animated, View, StyleSheet, Dimensions, TouchableWithoutFeedback } from "react-native";
+import {
+  Animated,
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableWithoutFeedback,
+  Platform,
+  StatusBar,
+} from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { colors } from "../styles";
 import { SearchStatusContext } from "../contexts/searchStatusContext";
 
-import * as S from "./styles";
 import useSearchTool from "./useSearchtool";
 import SearchToolInput from "./searchToolInput";
 import SearchToolList from "./searchToolList";
 
-const { height } = Dimensions.get("window");
-const INPUT_TOP_MARGIN = moderateScale(0);
-const INPUT_BAR_HEIGHT = moderateScale(50);
-const LIST_VISUAL_START_Y = INPUT_TOP_MARGIN + INPUT_BAR_HEIGHT ;
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function SearchTool() {
   const {
@@ -26,51 +30,77 @@ export default function SearchTool() {
     handleDiveSiteOptionSelected,
     handleSeaLifeOptionSelected,
     handleFocus,
-    handleCancelSearch
+    handleCancelSearch,
   } = useSearchTool();
 
-  const { setSearchStatus } = useContext(
-    SearchStatusContext
-  );
-
+  const { setSearchStatus } = useContext(SearchStatusContext);
   const insets = useSafeAreaInsets();
 
-  const shouldBeVisible = list.length > 0;
-
+  const isActive = list && list.length > 0;
   const anim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(anim, {
-      toValue: shouldBeVisible ? 1 : 0,
-      duration: 600,
-      useNativeDriver: false,
+      toValue: isActive ? 1 : 0,
+      duration: 300,
+      useNativeDriver: true,
     }).start();
-  }, [shouldBeVisible]);
+  }, [isActive]);
 
-  const backgroundOverlayAnimatedStyle = {
-    backgroundColor: anim.interpolate({
-      inputRange: [0, 1],
-      outputRange: ["rgba(255, 255, 255, 0)", colors.themeWhite],
-    }),
-    opacity: anim,
-    top: -insets.top,
-    height: height + insets.top,
-  };
-
-  const listContentAnimatedStyle = {
-    top: LIST_VISUAL_START_Y,
-
-    height: anim.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, height - LIST_VISUAL_START_Y],
-    }),
-    opacity: anim,
-  };
+  // UNIFIED TOP POSITION
+  const TOP_POSITION = Platform.select({
+    ios: insets.top + moderateScale(5),
+    android: (StatusBar.currentHeight || 0) + moderateScale(10),
+  });
 
   return (
-    <TouchableWithoutFeedback onPress={handleCancelSearch}>
-      <View style={{ flex: 1 }}>
-        <S.PositioningWrapper>
+    <View style={styles.masterAnchor} pointerEvents="box-none">
+
+      {/* LAYER 1: FULL SCREEN OVERLAY */}
+      <Animated.View
+        pointerEvents={isActive ? "auto" : "none"}
+        style={[
+          styles.fullScreenWhite,
+          {
+            opacity: anim,
+            top: 0,
+            left: 0,
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT,
+          },
+        ]}
+      >
+        <TouchableWithoutFeedback onPress={handleCancelSearch}>
+          <View style={{ flex: 1 }} />
+        </TouchableWithoutFeedback>
+      </Animated.View>
+
+      {/* LAYER 2: THE RESULTS LIST */}
+      <Animated.View
+        pointerEvents={isActive ? "auto" : "none"}
+        style={[
+          styles.listContainer,
+          {
+            top: TOP_POSITION + moderateScale(55),
+            opacity: anim,
+          },
+        ]}
+      >
+        <SearchToolList
+          data={list}
+          handleMapOptionSelected={handleMapOptionSelected}
+          handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
+          handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
+          setSearchStatus={setSearchStatus}
+        />
+      </Animated.View>
+
+      {/* LAYER 3: THE CENTERED INPUT BAR */}
+      <View
+        style={[styles.inputAbsolute, { top: TOP_POSITION }]}
+        pointerEvents="box-none"
+      >
+        <View style={styles.inputWidthLimit}>
           <SearchToolInput
             iconLeft="navigation-variant-outline"
             iconRight="close"
@@ -79,45 +109,38 @@ export default function SearchTool() {
             handleClear={handleClear}
             handleFocus={handleFocus}
           />
-        </S.PositioningWrapper>
-
-        <Animated.View
-          pointerEvents={shouldBeVisible ? "auto" : "none"}
-          style={[
-            StyleSheet.absoluteFillObject,
-            backgroundOverlayAnimatedStyle,
-            { zIndex: 10 },
-          ]}
-        />
-
-        <Animated.View
-          pointerEvents={shouldBeVisible ? "auto" : "none"}
-          style={[
-            styles.listWrapper,
-            listContentAnimatedStyle,
-            { zIndex: 15 },
-          ]}
-        >
-
-          <SearchToolList
-            data={list}
-            handleMapOptionSelected={handleMapOptionSelected}
-            handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
-            handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
-            setSearchStatus={setSearchStatus}
-          />
-        </Animated.View>
-
+        </View>
       </View>
-    </TouchableWithoutFeedback>
+
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  listWrapper: {
+  masterAnchor: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 9999,
+    backgroundColor: "rgba(255, 255, 255, 0.01)",
+  },
+  fullScreenWhite: {
     position: "absolute",
-    left: 0,
-    width: "100%",
-    overflow: "hidden",
+    backgroundColor: colors.themeWhite,
+    zIndex: 10,
+  },
+  inputAbsolute: {
+    position: "absolute",
+    width: SCREEN_WIDTH,
+    alignSelf: "center",
+    zIndex: 100,
+  },
+  inputWidthLimit: {
+    width: "90%", // The search bar width
+  },
+  listContainer: {
+    position: "absolute",
+    width: SCREEN_WIDTH,
+    bottom: 0,
+    zIndex: 50,
+    backgroundColor: "transparent",
   },
 });

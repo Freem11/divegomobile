@@ -1,17 +1,23 @@
 import type { RouteProp } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Keyboard, View } from "react-native";
-import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 
 import { RootStackParamList } from "../../../../providers/navigation";
 import { ItineraryItem } from "../../../../entities/itineraryItem";
-import { getItineraryDiveSiteByIdArray, getTripById, insertItinerary, insertItineraryRequest } from "../../../../supabaseCalls/itinerarySupabaseCalls";
+import {
+  getItineraryDiveSiteByIdArray,
+  getTripById,
+  insertItinerary,
+  insertItineraryRequest
+} from "../../../../supabaseCalls/itinerarySupabaseCalls";
 import { EditModeContext } from "../../../contexts/editModeContext";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import { useMapStore } from "../../../googleMap/useMapStore";
+import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
+import { calculateRegionFromBoundaries } from "../../../googleMap/regionCalculator";
 
 import TripCreatorPageView from "./tripCreator";
 import { Form } from "./form";
@@ -22,19 +28,25 @@ type TripCreatorScreenProps = {
 
 export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const { id, shopId } = route.params;
-  const { t } = useTranslation();
   const navigation = useNavigation();
-  const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
-  const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName[]>();
-  const setFormValues = useMapStore((state) => state.actions.setFormValues);
-  const storeFormValues = useMapStore((state) => state.formValues);
 
+  // Context & Store
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
+  const setFormValues = useMapStore((state) => state.actions.setFormValues);
+  const clearFormValues = useMapStore((state) => state.actions.clearFormValues);
+  const storeFormValues = useMapStore((state) => state.formValues);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
+
+  // Local State
+  const [selectedTrip, setSelectedTrip] = useState<ItineraryItem>();
+  const [tripDiveSites, setTripDiveSites] = useState<DiveSiteWithUserName[]>();
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-
   const [dateType, setDateType] = useState("");
 
   const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
@@ -42,36 +54,46 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     reValidateMode: "onChange",
     values: {
       Id: selectedTrip?.id,
-      Name: selectedTrip?.tripName,
-      Link: selectedTrip?.BookingPage,
-      Price: selectedTrip?.price,
-      Start: selectedTrip?.startDate,
-      End: selectedTrip?.endDate,
-      Details: selectedTrip?.description,
-      SiteList: selectedTrip?.siteList
+      Name: storeFormValues?.Name || selectedTrip?.tripName || "",
+      Link: storeFormValues?.Link || selectedTrip?.BookingPage || "",
+      Price: storeFormValues?.Price || selectedTrip?.price || "",
+      Start: storeFormValues?.Start || selectedTrip?.startDate || "",
+      End: storeFormValues?.End || selectedTrip?.endDate || "",
+      Details: storeFormValues?.Details || selectedTrip?.description || "",
+      SiteList: sitesArray
     }
   });
 
-  useEffect(() => {
-    setFormValues({ ...storeFormValues, SiteList: sitesArray });
-    setValue("SiteList", sitesArray);
-    getTripDiveSites(sitesArray);
+  const performCleanup = useCallback(() => {
+    setSitesArray([]);
+    clearFormValues();
+    setEditMode(false);
+  }, [setSitesArray, clearFormValues, setEditMode]);
 
+  // THE GUARD
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        const state = navigation.getState();
+        const nextRoute = state?.routes[state.index];
+        // If the user isn't going to the Map, clean up everything
+        if (nextRoute?.name !== "GoogleMap") {
+          performCleanup();
+        }
+      };
+    }, [navigation, performCleanup])
+  );
+
+  useEffect(() => {
+    setValue("SiteList", sitesArray);
+    if (sitesArray.length > 0) {
+      getTripDiveSites(sitesArray);
+    }
   }, [sitesArray]);
 
-  const removeFromSitesArray = async (siteIdNo: number, siteList: number[]) => {
-
-    console.log(siteIdNo, siteList);
-    const index = siteList.indexOf(siteIdNo);
-    if (index > -1) {
-      siteList.splice(index, 1);
-    }
-    setSitesArray(siteList);
-    const indexLocal = siteList.indexOf(siteIdNo);
-    if (indexLocal > -1) {
-      siteList.splice(index, 1);
-    }
-    getTripDiveSites(siteList);
+  const removeFromSitesArray = (siteIdNo: number, siteList: number[]) => {
+    const newSiteList = siteList.filter(id => id !== siteIdNo);
+    setSitesArray(newSiteList);
   };
 
   const showDatePicker = (value: string) => {
@@ -80,95 +102,74 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     setDatePickerVisible(true);
   };
 
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
+  const hideDatePicker = () => setDatePickerVisible(false);
 
   useEffect(() => {
-    getDiveSiteinfo();
-    if (!id) {
-      setSitesArray([]);
-      setEditMode(false);
+    if (id) {
+      getDiveSiteinfo();
     }
   }, [id]);
 
   const getDiveSiteinfo = async () => {
     const tripInfo = await getTripById(id);
-    setSelectedTrip(tripInfo[0]);
-    setSitesArray(tripInfo[0].siteList);
-    if (tripInfo) {
+    if (tripInfo?.[0]) {
+      setSelectedTrip(tripInfo[0]);
+      setSitesArray(tripInfo[0].siteList);
       setEditMode(true);
     }
-
   };
-
-  useEffect(() => {
-    if (selectedTrip) {
-      getTripDiveSites(selectedTrip.siteList);
-    }
-
-  }, [selectedTrip]);
 
   const getTripDiveSites = async (siteIds: number[]) => {
     try {
       const success = await getItineraryDiveSiteByIdArray(siteIds);
-      if (success) {
-        setTripDiveSites(success);
-      }
+      if (success) setTripDiveSites(success);
     } catch (e) {
-      console.log({ title: "Error", message: e.message });
+      console.log("Error fetching sites:", e.message);
     }
   };
 
-  const handleCreate = async (data: Form) => {
-    try {
-      await insertItinerary({
-        shopID: shopId,
-        tripName: data.Name,
-        BookingPage: data.Link,
-        price: data.Price,
-        startDate: data.Start,
-        endDate: data.End,
-        description: data.Details,
-        siteList: data.SiteList
+  const handleMapFlip = async () => {
+    const currentValues = watch();
+    if (mapRef) {
+      setInitConfig(MapConfigurations.TripBuild);
+      const region = await calculateRegionFromBoundaries(mapRef);
+      setMapRegion(region);
+
+      // Save form data to store so the guard knows we are in "map mode"
+      setFormValues({ ...currentValues, SiteList: sitesArray });
+      setMapConfig(MapConfigurations.TripBuild, {
+        pageName: ScreenReturn.TripCreator as unknown as string,
+        itemId: 1
       });
 
-    } catch (error) {
-      console.error("Form submission failed due to photo upload errors:", error);
-    } finally {
-      setIsCompleted(true);
-      setTimeout(() => navigation.goBack(), 3000);
-    }
-  };
-
-  const handleEdit = async (data: Form) => {
-    try {
-      await insertItineraryRequest({
-        OriginalItineraryID: data.Id,
-        shopID: shopId,
-        tripName: data.Name,
-        BookingPage: data.Link,
-        price: data.Price,
-        startDate: data.Start,
-        endDate: data.End,
-        description: data.Details,
-        siteList: data.SiteList
-      }, "Edit");
-    } catch (error) {
-      console.error("Trip edit submission failed:", error);
-    } finally {
-      setIsCompleted(true);
-      setTimeout(() => navigation.goBack(), 3000);
+      navigation.navigate("GoogleMap" as any);
     }
   };
 
   const onSubmit = async (data: Form) => {
-    if (editMode) {
-      await handleEdit(data);
-    } else {
-      await handleCreate(data);
-    }
+    const call = editMode ? insertItineraryRequest : insertItinerary;
+    const payload = {
+      shopID: shopId,
+      tripName: data.Name,
+      BookingPage: data.Link,
+      price: data.Price,
+      startDate: data.Start,
+      endDate: data.End,
+      description: data.Details,
+      siteList: data.SiteList,
+      ...(editMode && { OriginalItineraryID: data.Id })
+    };
 
+    try {
+      await (editMode ? insertItineraryRequest(payload as any, "Edit") : insertItinerary(payload as any));
+      setIsCompleted(true);
+      setTimeout(() => {
+        performCleanup();
+        navigation.goBack();
+      }, 3000);
+    } catch (error) {
+      console.error("Submission failed:", error);
+    }
   };
 
   return (
@@ -186,12 +187,13 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
         watch={watch}
         isCompleted={isCompleted}
         trigger={trigger}
-        selectedTrip={selectedTrip}
-        tripDiveSites={tripDiveSites}
+        selectedTrip={selectedTrip!}
+        tripDiveSites={tripDiveSites!}
         removeFromSitesArray={removeFromSitesArray}
         sitesArray={sitesArray}
         editMode={editMode}
         setEditMode={setEditMode}
+        useMapFlip={handleMapFlip}
       />
     </View>
   );

@@ -5,7 +5,6 @@ import { Alert, Linking } from "react-native";
 import { i18n } from "../../i18n";
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME";
-const foregroundSubscription = null;
 
 TaskManager.defineTask(LOCATION_TASK_NAME, async({ data, error }) => {
   if (error) {
@@ -16,19 +15,11 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async({ data, error }) => {
 
 export const registerForForegroundLocationTrackingsAsync = async() => {
   try {
-    const forground = await Location.requestForegroundPermissionsAsync();
-    return forground.status;
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    return status;
   } catch (e) {
     console.log({ title: "Error76", message: e.message });
-  }
-};
-
-const requestHighAccuracy = async() => {
-  try {
-    const accurate = await Location.enableNetworkProviderAsync();
-    return accurate.status;
-  } catch (e) {
-    console.log({ title: "Error87", message: e.message });
+    return "undetermined";
   }
 };
 
@@ -36,25 +27,67 @@ export const getCurrentCoordinates = async() => {
   const { granted } = await Location.getForegroundPermissionsAsync();
 
   if (!granted) {
-    registerForForegroundLocationTrackingsAsync();
-    requestHighAccuracy();
+    const status = await registerForForegroundLocationTrackingsAsync();
+    if (status !== "granted") return null;
   }
-  foregroundSubscription?.remove();
 
   try {
+    const lastKnown = await Location.getLastKnownPositionAsync({
+      maxAge: 30000
+    });
+
+    if (lastKnown) {
+      Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      return lastKnown;
+    }
+
     const location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
-      maximumAge: 10000,
+      accuracy: Location.Accuracy.Balanced,
     });
     return location;
   } catch (e) {
-    Alert.alert(
-      i18n.t("OnBoarding.locationAlertTitle"),
-      i18n.t("OnBoarding.locationAlertMessage"),
-      [
-        { text: i18n.t("OnBoarding.goToSettings"), onPress: () => Linking.openSettings() },
-        { text: i18n.t("Common.close"), onPress: () => console.log("no tapped") },
-      ]
-    );
+    showErrorAlert();
   }
+};
+
+export const getSurveyGradeCoordinates = async() => {
+  const { granted } = await Location.getForegroundPermissionsAsync();
+  if (!granted) {
+    const status = await registerForForegroundLocationTrackingsAsync();
+    if (status !== "granted") return null;
+  }
+
+  try {
+    return await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+    });
+  } catch (e) {
+    showErrorAlert();
+    throw e;
+  }
+};
+
+export const warmUpLocation = async() => {
+  const { granted } = await Location.getForegroundPermissionsAsync();
+  if (!granted) return;
+
+  try {
+    await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Balanced,
+    });
+    console.log("GPS Warmed up");
+  } catch (e) {
+    console.log("Error warming up users GPS",  e);
+  }
+};
+
+const showErrorAlert = () => {
+  Alert.alert(
+    i18n.t("OnBoarding.locationAlertTitle"),
+    i18n.t("OnBoarding.locationAlertMessage"),
+    [
+      { text: i18n.t("OnBoarding.goToSettings"), onPress: () => Linking.openSettings() },
+      { text: i18n.t("Common.close") },
+    ]
+  );
 };

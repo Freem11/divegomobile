@@ -1,38 +1,49 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef, createContext } from "react";
 import { StyleSheet, ImageBackground, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { Placement } from "react-native-popover-view/dist/Types";
 import { moderateScale } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
+import type { SharedValue } from "react-native-reanimated";
 import Popover from "react-native-popover-view";
 import { useNavigation } from "@react-navigation/native";
 
 import ButtonIcon from "../buttonIcon-new";
-import { FullScreenModalContext } from "../../contexts/fullScreenModalContext";
 
 import * as S from "./styles";
 import { WavyImg } from "./wavyImg";
 import { useParallaxDrawer } from "./useParallelDrawer";
 
+// Define the handle type so parents can use it with useRef
+export type ParallaxDrawerHandle = {
+  close: (mapConfig: number | null, shouldNavigate?: boolean) => void;
+};
+
 type ParallaxDrawerProps = {
-  headerImage: () => React.JSX.Element | string;
+  headerImage: () => React.JSX.Element | string | any;
   children: React.ReactElement<{ closeParallax?: (mapConfig: number | null) => void, restoreParallax?: () => void, bottomHitCount: number }>;
   onClose: () => void;
   onMapFlip?: () => void;
   handleImageUpload?: () => void;
-  isMyShop?: boolean
-  isPartnerAccount?: boolean
-  popoverContent?: () => React.JSX.Element,
+  isMyShop?: boolean;
+  isPartnerAccount?: boolean;
+  popoverContent?: (close: () => void) => React.JSX.Element;
+  contentScrollY?: SharedValue<number>;
 };
 
-const ParallaxDrawer = ({
+export const DrawerGestureContext = createContext<any>(null);
+
+const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
   headerImage,
   children,
   onClose,
   onMapFlip,
+  contentScrollY,
   popoverContent
-}: ParallaxDrawerProps) => {
+}, ref) => {
+
+  const horizontalScrollRef = useRef(null);
 
   const {
     SCREEN_WIDTH,
@@ -43,18 +54,18 @@ const ParallaxDrawer = ({
     closeParallax,
     restoreParallax,
     bottomHitCount
-  } = useParallaxDrawer(onClose, onMapFlip);
+  } = useParallaxDrawer(onClose, onMapFlip, contentScrollY, horizontalScrollRef);
 
   const [isVisible, setIsVisible] = useState(false);
   const iconRef = useRef<View>(null);
-  const { fullScreenModal } = useContext(FullScreenModalContext);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    if (fullScreenModal) {
-      setIsVisible(false);
+  // Expose closeParallax to the parent via Ref
+  useImperativeHandle(ref, () => ({
+    close: (mapConfig: number | null, shouldNavigate: boolean = true) => {
+      closeParallax(mapConfig, shouldNavigate);
     }
-  }, [fullScreenModal]);
+  }));
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {
@@ -94,7 +105,7 @@ const ParallaxDrawer = ({
                   placement={Placement.AUTO}
                   popoverStyle={{ borderRadius: moderateScale(10) }}
                 >
-                  {popoverContent()}
+                  {popoverContent(() => setIsVisible(false))}
                 </Popover>
               )}
             </S.HeaderWrapper>
@@ -129,30 +140,31 @@ const ParallaxDrawer = ({
                 </S.StyledSvg>
               </S.TopTransparentSection>
 
-              <S.BottomOpaqueSection>
-                <S.Content
-                  onLayout={(event) => {
-                    contentHeight.value = event.nativeEvent.layout.height;
-                  }}
-                >
-                  <S.EmptyContainer>
-                    {React.isValidElement(children)
-                      ? React.cloneElement(children, {
-                        closeParallax,
-                        restoreParallax,
-                        bottomHitCount,
-                      })
-                      : children}
-                  </S.EmptyContainer>
-                </S.Content>
-              </S.BottomOpaqueSection>
+              <DrawerGestureContext.Provider value={panGesture}>
+                <S.BottomOpaqueSection pointerEvents="box-none">
+                  <S.Content
+                    onLayout={(event) => {
+                      contentHeight.value = event.nativeEvent.layout.height;
+                    }}
+                  >
+                    <S.EmptyContainer pointerEvents="box-none">
+                      {React.isValidElement(children)
+                        ? React.cloneElement(children, {
+                          closeParallax,
+                          restoreParallax,
+                          bottomHitCount,
+                        })
+                        : children}
+                    </S.EmptyContainer>
+                  </S.Content>
+                </S.BottomOpaqueSection>
+              </DrawerGestureContext.Provider>
             </Animated.View>
           </GestureDetector>
         </View>
       </TouchableWithoutFeedback>
     </GestureHandlerRootView>
   );
-
-};
+});
 
 export default ParallaxDrawer;

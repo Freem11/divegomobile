@@ -8,7 +8,6 @@ import { ActiveProfile } from "../../../entities/profile";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useDiveSiteNavigation } from "../diveSite/types";
 import { useAppNavigation } from "../../mapPage/types";
-import { getSingleDiveSite } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 
 import DiveSitePhotosPageView from "./divesitePhotos";
 
@@ -40,7 +39,10 @@ export default function DiveSitePhotosPage() {
       return;
     }
 
-    mainNavigation.navigate("UserProfile", { id: picOwnerAccount[0].id });
+    mainNavigation.navigate("BottomTab", {
+      screen: "Profile",
+      params: { id: picOwnerAccount[0].id },
+    });
   };
 
   const onClose = async () => {

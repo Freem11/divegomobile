@@ -14,6 +14,7 @@ import { MetricItem } from "../../../entities/metricItem";
 import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator";
 import { useAppNavigation } from "../../mapPage/types";
 import { MapConfigurations } from "../../googleMap/types";
+import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
 
 import DiveSiteScreenView from "./diveSite";
 import { useDiveSiteNavigation } from "./types";
@@ -69,6 +70,20 @@ export default function DiveSiteScreen({
 
   const handleDeleteReview = (reviewId: number) => {
     console.log("Report review:", reviewId);
+  };
+
+  const handleProfileMove = async (userName: string, user_id: string) => {
+
+    const picOwnerAccount = await grabProfileByUserName(userName);
+
+    if (userProfile.UserID === picOwnerAccount[0].UserID) {
+      return;
+    }
+
+    navigation.navigate("BottomTab", {
+      screen: "Profile",
+      params: { id: picOwnerAccount[0].id },
+    });
   };
 
   const handleMapFlip = async (sites: number[]) => {
@@ -140,6 +155,7 @@ export default function DiveSiteScreen({
       openDiveSiteReviewer={openDiveSiteReviewer}
       openAllPhotosPage={openAllPhotosPage}
       openAllTripsPage={openAllTripsPage}
+      handleProfileMove={handleProfileMove}
       handleMapFlip={handleMapFlip}
       onEditReview={handleEditReview}
       onDeleteReview={handleDeleteReview}

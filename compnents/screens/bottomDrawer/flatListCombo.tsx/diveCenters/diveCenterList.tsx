@@ -8,8 +8,9 @@ import MobileTextInput from "../../../../reusables/textInput";
 import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
 import { useAppNavigation } from "../../../../mapPage/types";
-
-import * as S from "./styles";
+import * as S from "../styles";
+import { colors } from "../../../../styles";
+import Icon from "../../../../../icons/Icon";
 
 export default function DiveCenterList() {
   const navigation = useAppNavigation();
@@ -62,6 +63,14 @@ export default function DiveCenterList() {
       }}
     >
       <S.Header>Nearby Dive Centers</S.Header>
+      <S.SubHeaderLeft>
+        <S.SwipeIndicator>
+          <S.IconWrapper>
+            <Icon name="double-chevron-left" color={colors.border} />
+          </S.IconWrapper>
+          <S.Subtitle>Dive Sites</S.Subtitle>
+        </S.SwipeIndicator>
+      </S.SubHeaderLeft>
       {renderListHeader}
 
       {layoutReady ? (
@@ -84,7 +93,7 @@ export default function DiveCenterList() {
                 title={"Upgrade My Account"}
                 iconLeft="diving-scuba-flag"
                 round={false}
-                style={{ marginLeft: "10%", width: "80%" }}
+                style={{ alignSelf: "center", width: "90%" }}
                 onPress={() => handleScreen()}
               />
             </S.EmptyStateWrapper>

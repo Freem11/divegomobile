@@ -1,18 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import email from "react-native-email";
 
 import noImage from "../../png/NoImage.png";
 import IconWithLabel from "../../reusables/iconWithLabal";
-import ParallaxDrawer from "../../reusables/parallaxDrawer";
-import { EditsContext } from "../../contexts/editsContext";
+import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { getDiveSiteById } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { SelectedDiveSiteContext } from "../../contexts/selectedDiveSiteContext";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
 import { MetricItem } from "../../../entities/metricItem";
-import { ModalSelectContext } from "../../contexts/modalSelectContext";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { MapConfigurations } from "../../googleMap/types";
 
@@ -28,14 +26,13 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   const diveSiteNavigation = useDiveSiteNavigation();
   const { t } = useTranslation();
+  const drawerRef = useRef<ParallaxDrawerHandle>(null);
+
   const { userProfile } = useUserProfile();
 
   const [diveSiteVals, setDiveSiteVals] = useState(null);
   const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-
-  const { setChosenModal } = useContext(ModalSelectContext);
-  const { setEditInfo } = useContext(EditsContext);
 
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
@@ -83,7 +80,6 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   const onNavigate = () => {
     Keyboard.dismiss();
-    setChosenModal("DiveSite");
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
   };
 
@@ -95,12 +91,10 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   };
 
   const openPicUploader = () => {
-    diveSiteNavigation.navigate("AddSighting", { selectedDiveSite });
-  };
-
-  const openEditsPage = () => {
-    diveSiteNavigation.navigate("EditScreen");
-    setEditInfo("DiveSite");
+    diveSiteNavigation.navigate("AddSighting", {
+      selectedDiveSite: selectedDiveSite,
+      siteName: selectedDiveSite.name
+    });
   };
 
   const handleReport = () => {
@@ -116,16 +110,9 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const popoverContent = () => {
     return (
       <>
-        {isPartnerAccount && (
-          <IconWithLabel
-            label="Update Dive Site Info"
-            iconName="camera-flip-outline"
-            buttonAction={() => openEditsPage()}
-          />
-        )}
         <IconWithLabel
           label={t("DiveSite.addReview")}
-          iconName="diving-scuba-flag"
+          iconName="diving-snorkel"
           buttonAction={() => openDiveSiteReviewer()}
         />
         <IconWithLabel
@@ -144,6 +131,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
 
   return (
     <ParallaxDrawer
+      ref={drawerRef}
       headerImage={diveSiteVals && diveSiteVals.photo ? { uri: diveSiteVals.photo } : noImage}
       onClose={onClose}
       onMapFlip={onNavigate}

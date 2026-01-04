@@ -13,6 +13,7 @@ import SearchTool from "../searchTool";
 import * as S from "../mapPage/styles";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
+import { Explainer } from "../screens/formScreens/explainer";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -59,7 +60,7 @@ export default function GoogleMapView(props: MapViewProps) {
     },
     map: {
       width: Dimensions.get("window").width,
-      height: "100%",
+      height: Dimensions.get("window").height,
     }
   });
 
@@ -190,6 +191,32 @@ export default function GoogleMapView(props: MapViewProps) {
     );
   }
 
+  const popoverContentTripView = () => {
+    return (
+      <S.PopOver>
+        <S.PopOverText>
+          Dive sites (anchors) coloured gold are part of this trip.
+          {"\n"}
+          {"\n"}
+          Dive sites coloured blue are not.
+        </S.PopOverText>
+      </S.PopOver>
+    );
+  };
+
+  const popoverContentTripBuild = () => {
+    return (
+      <S.PopOver>
+        <S.PopOverText>
+          Tap dive sites (anchors) to add them to your trip, the will turn gold when added.
+          {"\n"}
+          {"\n"}
+          Tap them again to remove them from your trip, they will return to their blue color when deselected.
+        </S.PopOverText>
+      </S.PopOver>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -250,9 +277,9 @@ export default function GoogleMapView(props: MapViewProps) {
       </MapView>
 
       {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
-        <S.SafeAreaTop edges={["top"]}>
-          <SearchTool />
-        </S.SafeAreaTop>
+        // <S.SafeAreaTop edges={["top"]}>
+        <SearchTool />
+        // </S.SafeAreaTop>
       )}
 
       {props?.mapConfig === MapConfigurations.PinDrop && (
@@ -273,10 +300,23 @@ export default function GoogleMapView(props: MapViewProps) {
         </View>
       )}
       {props?.mapConfig === MapConfigurations.TripView && (
+        <View style={{ position: "absolute", bottom: "12%", left: "5%" }}>
+          <Explainer popoverContent={popoverContentTripView} iconSize={34} />
+        </View>
+      )}
+
+      {props?.mapConfig === MapConfigurations.TripView && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <ReturnToShopButton />
         </View>
       )}
+
+      {props?.mapConfig === MapConfigurations.TripBuild && (
+        <View style={{ position: "absolute", bottom: "12%", left: "5%" }}>
+          <Explainer popoverContent={popoverContentTripBuild} iconSize={34} />
+        </View>
+      )}
+
       {props?.mapConfig === MapConfigurations.TripBuild && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <S.TargetWrapperAlt>

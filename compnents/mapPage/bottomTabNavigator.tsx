@@ -1,60 +1,57 @@
-import React, { } from "react";
-import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { moderateScale } from "react-native-size-matters";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { Platform } from "react-native";
+import { Platform, View, ActivityIndicator, Dimensions } from "react-native";
 
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import ShopListParallax from "../screens/shopList/shopListParallax";
-import FeedList from "../feed/screens/feeds";
 import Icon from "../../icons/Icon";
-import { colors, fontSizes } from "../styles";
+import { colors } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
-import SiteSubmitterRouter from "../screens/diveSiteUploader/siteSubmitterRouter";
+import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
 import { useNotificationsStore } from "../feed/store/useNotificationsStore";
 
+// Tablet detection
+const { width, height } = Dimensions.get("window");
+const isTablet = Math.min(width, height) >= 600;
+
 export type BottomTabRoutes = {
     Home: undefined;
-    Profile: undefined;
+    Profile: { id: number };
     Notifications: undefined;
     AddSite: undefined;
     Guides: undefined;
     Itinerary: undefined;
 };
 
-type BottomTabNavigatorProps = {
-    showOnboarding: boolean
-};
-
 const Tab = createBottomTabNavigator<BottomTabRoutes>();
 
-export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
+export default function BottomTabNavigator({ route, showOnboarding }: any) {
     const { userProfile } = useUserProfile();
     const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
     const notificationsCount = useNotificationsStore((s) => s.count);
 
     const { t } = useTranslation();
-    const navigation = useAppNavigation();
-
-    /**
-                               * For Android only.
-                               * If Android users have the 3 button Bottom system bar navigation enabled instead of gesture navigation,
-                               * then we need to add additional space underneath the button(s) so that the button(s) do not overlap the Bottom system bar.
-                               */
     const insets = useSafeAreaInsets();
-    const bottomInset: number | null = (insets.bottom > 0) ? insets.bottom : null;
 
-    if (props.showOnboarding) {
-        setTimeout(() => {
-            navigation.navigate("Onboarding");
-        }, 500);
-    }
+    const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
+
+    useEffect(() => {
+        const nestedId = route.params?.params?.id;
+        if (nestedId) {
+            setActiveProfileId(nestedId);
+        } else if (userProfile?.id) {
+            setActiveProfileId(userProfile.id);
+        }
+    }, [route.params?.params?.id, userProfile?.id]);
+
+    const bottomInset = insets.bottom > 0 ? insets.bottom : 0;
 
     return (
         <Tab.Navigator
@@ -77,72 +74,89 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
                             ? "99+"
                             : notificationsCount
                         : undefined;
+                const iconSize = moderateScale(isTablet ? 30 : 24, 0.4);
+                const barHeight = moderateScale(isTablet ? 75 : 55, 0.4);
+                const fontSize = moderateScale(isTablet ? 12 : 10, 0.3);
+                const paddingTopValue = isTablet ? 30 : 5;
 
                 return {
                     headerShown: false,
+                    tabBarLabelPosition: "below-icon",
                     tabBarStyle: {
                         backgroundColor: colors.primaryBlue,
-                        height: moderateScale(50) + (bottomInset ?? 0),
+                        height: barHeight + bottomInset,
+                        // --- THE FIX ---
+                        // Move bar up 1px to close the gap with the drawer/screen
+                        marginTop: -1,
+                        borderTopWidth: 0,
+                        elevation: 0, // Removes shadow on Android that can cause gaps
+                        shadowOpacity: 0, // Removes shadow on iOS
                     },
-                    tabBarLabelStyle: {
-                        fontSize: moderateScale(11),
+                    tabBarItemStyle: {
+                        flexDirection: "column",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        paddingTop: paddingTopValue,
                     },
                     tabBarActiveTintColor: colors.themeWhite,
                     tabBarInactiveTintColor: colors.neutralGrey,
-                    tabBarIcon: ({ color, size }) => {
-                        return <Icon name={icon} color={color} width={size + tabBarIconHeightSurplus} height={size + tabBarIconHeightSurplus} />;
-                    },
+
                     tabBarIconStyle: {
-                        marginTop: tabBarIconMargin,
-                        marginBottom: tabBarIconMargin,
+                        marginBottom: moderateScale(isTablet ? 4 : 2),
                     },
+
+                    tabBarLabelStyle: {
+                        fontSize: fontSize,
+                        fontWeight: "500",
+                    },
+                    tabBarIcon: ({ color }) => (
+                        <Icon
+                            name={icon}
+                            color={color}
+                            width={iconSize}
+                            height={iconSize}
+                        />
+                    ),
                     tabBarLabel: label,
                     animation: "shift",
                     tabBarLabelPosition: "below-icon",
                     tabBarBadge: isNotificationsRoute ? badge : undefined
+                    animation: Platform.OS === "android" ? "none" : "shift",
                 };
             }}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Profile">
-                {props => <UserProfileParallax {...props} profileID={userProfile?.id} />}
+            <Tab.Screen
+                name="Profile"
+                options={{ unmountOnBlur: true }}
+                listeners={{
+                    tabPress: () => { setActiveProfileId(userProfile?.id); },
+                }}
+            >
+                {(screenProps) => (
+                    activeProfileId ? (
+                        <UserProfileParallax {...screenProps} profileID={activeProfileId} />
+                    ) : (
+                        <View style={{ flex: 1, backgroundColor: colors.primaryBlue, justifyContent: "center" }}>
+                            <ActivityIndicator color="white" />
+                        </View>
+                    )
+                )}
             </Tab.Screen>
-            <Tab.Screen name="Notifications" component={FeedList} />
-            <Tab.Screen name="AddSite" component={SiteSubmitterRouter} options={{ tabBarLabel: "Site Add" }} />
-
-            {PARTNER_ACCOUNT_STATUS ?
-                <Tab.Screen name="Itinerary" component={ShopListParallax} options={{ tabBarLabel: "My Centres" }} /> :
-                <Tab.Screen name="Guides" component={ComingSoonScreen} />}
+            <Tab.Screen name="AddSite" component={SiteSubmitterRouter} options={{ unmountOnBlur: true }} />
+            {(userProfile?.partnerAccount) && (
+                <Tab.Screen name="Itinerary" component={ShopListParallax} />
+            )}
         </Tab.Navigator>
-
     );
 
-    /**
-                           * Returns the icon name and label for each tab based on route.
-                           * @param route The route name of the current tab
-                           * @returns Object literal containing Icon name and label strings
-                           */
     function getTabProps(route: string): { icon: string; label: string } {
         switch (route) {
-            case "Home": return { icon: "shark", label: t("BottomTabBar.home") };
+            case "Home": return { icon: "map-outlined", label: t("BottomTabBar.home") };
             case "Profile": return { icon: "person", label: t("BottomTabBar.profile") };
-            case "Notifications": return { icon: "bell-ring-outline", label: t("BottomTabBar.notifications") };
             case "AddSite": return { icon: "anchor-plus", label: t("BottomTabBar.addsite") };
-            case "Guides": return { icon: "question-mark", label: t("BottomTabBar.guides") };
             case "Itinerary": return { icon: "diving-scuba-flag", label: t("BottomTabBar.itinerary") };
-            default: throw new Error(`Unknown route: ${route}`);
+            default: return { icon: "question-mark", label: "Error" };
         }
     }
-}
-
-/**
- * A placeholder screen until the functionality is implemented.
- * @returns Placeholder screen view.
- */
-function ComingSoonScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ fontSize: moderateScale(fontSizes.SubHeading), color: colors.headersBlue }}>Coming soon...</Text>
-        </View>
-    );
 }
