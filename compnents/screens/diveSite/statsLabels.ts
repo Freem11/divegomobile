@@ -24,11 +24,11 @@ import { ReviewCondition } from "../../../entities/diveSiteReview";
 export function renderStatLabel(condition: ReviewCondition) {
 
   const getStrength = (value) => {
-    if (value <= 1) {
+    if (value <= 0.5) {
       return "Weak";
-    } else if (value <= 1.5) {
+    } else if (value <= 1) {
       return "Moderate";
-    } else if (value <= 2) {
+    } else if (value <= 1.5) {
       return "Strong";
     } else {
       return "Dangerous";
