@@ -10,7 +10,7 @@ interface HeaderCardStyleProps {
 
 export const HeaderCard = styled.View<HeaderCardStyleProps>`  
   min-width: 42%;
-  max-width: 52%;
+  max-width: 56%;
   flex-direction: row;
   background-color: ${props => props.bgColor};
   height: ${moderateScale(50)}px;

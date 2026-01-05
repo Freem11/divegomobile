@@ -20,7 +20,7 @@ export const HeaderRow = styled.View`
 `;
 
 export const MidSection = styled.View`
-  width: 90%;
+  width: 100%;
   gap: ${moderateScale(15)}px;
   align-self: center; 
   flex-direction: row;
