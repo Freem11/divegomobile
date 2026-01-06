@@ -11,6 +11,7 @@ import Icon from "../../icons/Icon";
 import { colors } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
+import UniversalSync from "../screens/QRscreen";
 
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
@@ -26,6 +27,7 @@ export type BottomTabRoutes = {
     AddSite: undefined;
     Guides: undefined;
     Itinerary: undefined;
+    QR: undefined;
 };
 
 const Tab = createBottomTabNavigator<BottomTabRoutes>();
@@ -65,12 +67,10 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
                     tabBarStyle: {
                         backgroundColor: colors.primaryBlue,
                         height: barHeight + bottomInset,
-                        // --- THE FIX ---
-                        // Move bar up 1px to close the gap with the drawer/screen
                         marginTop: -1,
                         borderTopWidth: 0,
-                        elevation: 0, // Removes shadow on Android that can cause gaps
-                        shadowOpacity: 0, // Removes shadow on iOS
+                        elevation: 0,
+                        shadowOpacity: 0,
                     },
                     tabBarItemStyle: {
                         flexDirection: "column",
@@ -124,6 +124,8 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
             {(userProfile?.partnerAccount) && (
                 <Tab.Screen name="Itinerary" component={ShopListParallax} />
             )}
+
+            <Tab.Screen name="QR" component={UniversalSync} />
         </Tab.Navigator>
     );
 
