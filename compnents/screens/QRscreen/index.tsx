@@ -148,8 +148,9 @@ const UniversalSync = () => {
                 style={styles.helpButton}
                 onPress={() => Linking.openURL("https://gopro.github.io/labs/")}
             >
-                <Text style={styles.helpText}>GoPro Users: Click to setup Labs Sync</Text>
+                <Text style={styles.helpText}>GoPro Users: Tap to setup Labs Sync</Text>
             </TouchableOpacity>
+            <Text style={styles.instructionText}>to allow this QR update your GoPro's date & time!</Text>
 
             {/* Non-GoPro Instruction */}
             <View style={styles.bottomMessage} >

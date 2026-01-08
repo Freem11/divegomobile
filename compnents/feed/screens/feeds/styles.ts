@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
-import { StyleSheet, Animated, Dimensions, ImageBackground, Platform } from "react-native";
+import { StyleSheet, Animated, Dimensions, Platform } from "react-native";
+import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { moderateScale } from "react-native-size-matters";
 import Svg from "react-native-svg";
@@ -35,8 +36,6 @@ export const BackgroundContainer = styled(Animated.View)`
   width: 100%;
   z-index: 0;
 `;
-
-export const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground);
 
 export const StyledSvg = styled(Svg)`
   position: absolute;
