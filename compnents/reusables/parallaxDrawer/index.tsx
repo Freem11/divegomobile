@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef, createContext } from "react";
-import { StyleSheet, ImageBackground, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { StyleSheet, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { Placement } from "react-native-popover-view/dist/Types";
@@ -118,10 +119,10 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
               {typeof headerImage === "function" ? (
                 headerImage()
               ) : (
-                <ImageBackground
+                <Image
                   source={headerImage}
                   style={StyleSheet.absoluteFill}
-                  resizeMode="cover"
+                  contentFit="cover"
                 />
               )}
             </Animated.View>

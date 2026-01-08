@@ -2,9 +2,9 @@ import React from "react";
 import {
   StyleSheet,
   View,
-  Dimensions,
-  ImageBackground,
+  Dimensions
 } from "react-native";
+import { Image } from "expo-image";
 import Svg, { Path } from "react-native-svg";
 import { moderateScale } from "react-native-size-matters";
 
@@ -29,7 +29,7 @@ export default function WavyHeader() {
   return (
     <View style={styles.container}>
       {/* 1. The Background Image */}
-      <ImageBackground
+      <Image
         style={styles.backgroundImage}
         source={require("./png/blackManta.png")}
       />
