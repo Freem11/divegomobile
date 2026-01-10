@@ -11,9 +11,8 @@ import Icon from "../../icons/Icon";
 import { colors } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
-import UniversalSync from "../screens/QRscreen";
+import LogsNavigator from "../screens/QRscreen/logsNavigator";
 
-import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
 
 // Tablet detection
@@ -125,7 +124,7 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
                 <Tab.Screen name="Itinerary" component={ShopListParallax} />
             )}
 
-            <Tab.Screen name="QR" component={UniversalSync} />
+            <Tab.Screen name="QR" component={LogsNavigator} />
         </Tab.Navigator>
     );
 

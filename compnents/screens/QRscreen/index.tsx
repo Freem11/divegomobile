@@ -83,11 +83,11 @@ const UniversalSync = () => {
     }
 
     // The QR contains 24h data for GoPro + Unix Timestamp for your scraper
-    const qrValue = `oT${formatGoProTime(now)}|UTC:${now}`;
+    const qrValue = `oT${formatGoProTime(now)}|ScubaSEAsons:${now}`;
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Device Sync</Text>
+            {/* <Text style={styles.header}>Device Sync</Text> */}
 
             <View style={styles.qrWrapper}>
                 <QRCode
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
+        marginTop: 40,
     },
     displaySection: {
         marginTop: 30,

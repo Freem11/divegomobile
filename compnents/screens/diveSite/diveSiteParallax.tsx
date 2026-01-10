@@ -63,7 +63,9 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   useEffect(() => {
     let photoName = null;
     if (selectedDiveSite?.divesiteprofilephoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`;
+      const fileName = selectedDiveSite.divesiteprofilephoto.split("/").pop();
+      const imageUrl = `https://images.scubaseasons.com/?name=${fileName}&w=800`;
+      photoName = imageUrl;
     }
 
     setDiveSiteVals({
