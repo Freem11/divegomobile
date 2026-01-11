@@ -24,7 +24,7 @@ export const fetchAiBlurb = async (
     }
 };
 
-export const loadFishInfo = async (speciesName) => {
+export const loadSeaLifeInfo = async (speciesName) => {
     try {
         // We pass only the name; the backend defaults to species logic
         const fact = await fetchAiBlurb(speciesName, "species");

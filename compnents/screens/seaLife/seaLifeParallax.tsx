@@ -9,21 +9,21 @@ import { cloudflareBucketUrl } from "../../globalVariables";
 import SeaLifeScreen from ".";
 
 type SeaLifeParallaxProps = {
-  id: number;
+  species: string;
 };
 
 export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
   const drawerRef = useRef<ParallaxDrawerHandle>(null);
   const diveShopNavigation = useDiveShopNavigation();
-  const [selectedReview, setSelectedReview] = useState(null);
+  const [selectedSeaLife, setSelectedSeaLife] = useState(null);
 
   useEffect(() => {
-    getReview();
-  }, [props.id]);
+    getSeaLifeInfo();
+  }, [props.species]);
 
-  const getReview = async () => {
-    const reviewInfo = await getReviewById(props.id);
-    setSelectedReview(reviewInfo);
+  const getSeaLifeInfo = async () => {
+    const seaLifeInfo = await getReviewById(props.species);
+    setSelectedSeaLife(seaLifeInfo);
   };
 
   const diveSitePhoto = selectedReview?.data.diveSiteProfilePhoto;

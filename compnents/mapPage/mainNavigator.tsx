@@ -15,6 +15,7 @@ import ResetPasswordConfirmScreen from "../authentication/passwordResetPage";
 import { EDIT_TYPE } from "../../entities/editTypes";
 import { useStore } from "../../store";
 import PhotoCommentsParallax from "../screens/comments/photoCommentsParallax";
+import SeaLifeParallax from "../screens/seaLife/seaLifeParallax";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator, { BottomTabRoutes } from "./bottomTabNavigator";
@@ -38,6 +39,7 @@ export type MainRoutes = {
   PhotoComments: { id: number };
   PinchAndZoomPhoto: undefined;
   SingleReviewScreen: { id: number };
+  SeaLifeScreen: { species: string };
   ResetPasswordConfirm: undefined;
 };
 
@@ -106,6 +108,15 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
           />
         )}
       </Stack.Screen>
+
+      <Stack.Screen name="SeaLifeScreen">
+        {({ route }) => (
+          <SeaLifeParallax
+            species={route.params.species}
+          />
+        )}
+      </Stack.Screen>
+
       <Stack.Screen
         name="ResetPasswordConfirm"
         component={ResetPasswordConfirmScreen}
