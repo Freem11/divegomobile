@@ -1,11 +1,11 @@
-import React, { FC, useContext } from "react";
-import { TouchableWithoutFeedback, View } from "react-native";
+import React, { FC } from "react";
+import { View } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
 import {
   ScrollView,
   Gesture,
   GestureDetector,
-  Pressable
+  Pressable,
 } from "react-native-gesture-handler";
 
 import Icon from "../../../../icons/Icon";
@@ -16,16 +16,17 @@ import { useAppNavigation } from "../../../mapPage/types";
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: { photofile: string, id: number | null }[] | null;
+  items: { photofile: string; id: number | null }[] | null;
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;
 }
+
 export const PhotoUpload: FC<PhotoUploadProps> = ({
   items,
   onAddSighting,
   onRemovePhoto,
-  gestureRef
+  gestureRef,
 }) => {
   const itemSize = scale(100);
   const navigation = useAppNavigation();
@@ -36,17 +37,18 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
     .shouldCancelWhenOutside(true);
 
   const renderPhotoItem = (item: { photofile: string }, index: number) => (
-    <View style={{ position: "relative" }}>
+    <View style={{ position: "relative" }} pointerEvents="box-none">
       <S.Item style={{ width: itemSize, height: itemSize }}>
         <ImageCasherDynamicLocal
           photoFile={item.photofile}
           style={{ height: "100%", width: "100%", resizeMode: "cover" }}
         />
       </S.Item>
+
       {onRemovePhoto && (
         <Pressable
           onPress={() => onRemovePhoto(index)}
-          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+          hitSlop={15}
           style={{
             position: "absolute",
             top: moderateScale(4),
@@ -55,7 +57,12 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           }}
         >
           <S.RemoveButton>
-            <Icon name={"close"} color={"white"} width={moderateScale(16)} height={moderateScale(16)} />
+            <Icon
+              name={"close"}
+              color={"white"}
+              width={moderateScale(16)}
+              height={moderateScale(16)}
+            />
           </S.RemoveButton>
         </Pressable>
       )}
@@ -70,6 +77,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           showsHorizontalScrollIndicator={false}
           nestedScrollEnabled={true}
           disallowInterruption={false}
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={{
             paddingRight: scale(16),
             flexDirection: "row",
@@ -79,14 +87,19 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           {onAddSighting && (
             <Pressable
               onPress={onAddSighting}
-              style={({ pressed }) => [
-                {
-                  opacity: pressed ? 0.6 : 1,
-                },
-              ]}
+              hitSlop={5}
+              style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
             >
-              <S.AddSightingButton pointerEvents="none" style={{ width: itemSize, height: itemSize }}>
-                <Icon name={"camera-plus"} color={colors.borderActive} width={moderateScale(40)} height={moderateScale(40)} />
+              <S.AddSightingButton
+                pointerEvents="none"
+                style={{ width: itemSize, height: itemSize }}
+              >
+                <Icon
+                  name={"camera-plus"}
+                  color={colors.borderActive}
+                  width={moderateScale(40)}
+                  height={moderateScale(40)}
+                />
               </S.AddSightingButton>
             </Pressable>
           )}
@@ -94,14 +107,28 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           {items?.map((item, index) => {
             const itemKey = `${item.photofile}-${index}`;
 
-            return item.id ? (
-              <TouchableWithoutFeedback
-                key={itemKey}
-                onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: item.photofile })}
-              >
-                <View>{renderPhotoItem(item, index)}</View>
-              </TouchableWithoutFeedback>
-            ) : (
+            if (item.id) {
+              return (
+                <Pressable
+                  key={itemKey}
+                  onPress={() =>
+                    navigation.navigate("PinchAndZoomPhoto", {
+                      photoFile: item.photofile,
+                    })}
+                  hitSlop={10}
+                  style={({ pressed }) => [
+                    {
+                      opacity: pressed ? 0.8 : 1,
+                      transform: [{ scale: pressed ? 0.99 : 1 }],
+                    },
+                  ]}
+                >
+                  {renderPhotoItem(item, index)}
+                </Pressable>
+              );
+            }
+
+            return (
               <View key={itemKey}>
                 {renderPhotoItem(item, index)}
               </View>
@@ -109,6 +136,6 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           })}
         </ScrollView>
       </GestureDetector>
-    </S.Wrapper >
+    </S.Wrapper>
   );
 };

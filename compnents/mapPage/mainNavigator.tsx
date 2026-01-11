@@ -97,8 +97,6 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
-      {/* <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} /> */}
-
       <Stack.Screen name="PinchAndZoomPhoto">
         {({ route }) => (
           <PhotoBoxModal
