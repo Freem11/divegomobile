@@ -1,27 +1,27 @@
-import React, { FC } from "react";
-import { View } from "react-native";
+import React, { FC, useContext } from "react";
+import { TouchableWithoutFeedback, View } from "react-native";
 import { scale, moderateScale } from "react-native-size-matters";
 import {
   ScrollView,
   Gesture,
   GestureDetector,
-  TouchableOpacity, // Use this version for better Android hit testing
   Pressable
 } from "react-native-gesture-handler";
 
 import Icon from "../../../../icons/Icon";
 import { colors } from "../../../styles";
 import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
+import { useAppNavigation } from "../../../mapPage/types";
+import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
 
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: { photofile: string }[] | null;
+  items: { photofile: string, id: number | null }[] | null;
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;
 }
-
 export const PhotoUpload: FC<PhotoUploadProps> = ({
   items,
   onAddSighting,
@@ -29,12 +29,45 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
   gestureRef
 }) => {
   const itemSize = scale(100);
+  const navigation = useAppNavigation();
+  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
-  // Link to the parent (Bottom Sheet) but allow children to activate
+  const togglePhotoBoxModal = (photo: string) => {
+    setSelectedPhoto(photo);
+    navigation.navigate("PinchAndZoomPhoto");
+  };
+
   const nativeGesture = Gesture.Native()
     .withRef(gestureRef)
     .shouldActivateOnStart(true)
     .shouldCancelWhenOutside(true);
+
+  const renderPhotoItem = (item: { photofile: string }, index: number) => (
+    <View style={{ position: "relative" }}>
+      <S.Item style={{ width: itemSize, height: itemSize }}>
+        <ImageCasherDynamicLocal
+          photoFile={item.photofile}
+          style={{ height: "100%", width: "100%", resizeMode: "cover" }}
+        />
+      </S.Item>
+      {onRemovePhoto && (
+        <Pressable
+          onPress={() => onRemovePhoto(index)}
+          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+          style={{
+            position: "absolute",
+            top: moderateScale(4),
+            right: moderateScale(4),
+            zIndex: 9999,
+          }}
+        >
+          <S.RemoveButton>
+            <Icon name={"close"} color={"white"} width={moderateScale(16)} height={moderateScale(16)} />
+          </S.RemoveButton>
+        </Pressable>
+      )}
+    </View>
+  );
 
   return (
     <S.Wrapper>
@@ -43,7 +76,6 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           horizontal
           showsHorizontalScrollIndicator={false}
           nestedScrollEnabled={true}
-          // Critical for Android: allows buttons to finish their click
           disallowInterruption={false}
           contentContainerStyle={{
             paddingRight: scale(16),
@@ -52,66 +84,36 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           }}
         >
           {onAddSighting && (
-            <TouchableOpacity
-              onPress={() => {
-                console.log("Add Photo Clicked");
-                onAddSighting();
-              }}
-              activeOpacity={0.6}
+            <Pressable
+              onPress={onAddSighting}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.6 : 1,
+                },
+              ]}
             >
-              <S.AddSightingButton
-                pointerEvents="none" // Lets the Touchable handle the tap
-                style={{ width: itemSize, height: itemSize }}
-              >
-                <Icon
-                  name={"camera-plus"}
-                  color={colors.borderActive}
-                  width={moderateScale(40)}
-                  height={moderateScale(40)}
-                />
+              <S.AddSightingButton pointerEvents="none" style={{ width: itemSize, height: itemSize }}>
+                <Icon name={"camera-plus"} color={colors.borderActive} width={moderateScale(40)} height={moderateScale(40)} />
               </S.AddSightingButton>
-            </TouchableOpacity>
+            </Pressable>
           )}
 
-          {items?.map((item, index) => (
-            <View key={`${item.photofile}-${index}`} style={{ position: "relative" }}>
-              <S.Item style={{ width: itemSize, height: itemSize }}>
-                <ImageCasherDynamicLocal
-                  photoFile={item.photofile}
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    resizeMode: "cover",
-                  }}
-                />
-              </S.Item>
+          {items?.map((item, index) => {
+            const itemKey = `${item.photofile}-${index}`;
 
-              {onRemovePhoto && (
-                <Pressable
-                  onPress={() => {
-                    console.log("Remove Photo Clicked index:", index);
-                    onRemovePhoto(index);
-                  }}
-                  hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                  style={{
-                    position: "absolute",
-                    top: moderateScale(4),
-                    right: moderateScale(4),
-                    zIndex: 9999,
-                  }}
-                >
-                  <S.RemoveButton>
-                    <Icon
-                      name={"close"}
-                      color={"white"}
-                      width={moderateScale(16)}
-                      height={moderateScale(16)}
-                    />
-                  </S.RemoveButton>
-                </Pressable>
-              )}
-            </View>
-          ))}
+            return item.id ? (
+              <TouchableWithoutFeedback
+                key={itemKey}
+                onPress={() => togglePhotoBoxModal(item.photofile)}
+              >
+                <View>{renderPhotoItem(item, index)}</View>
+              </TouchableWithoutFeedback>
+            ) : (
+              <View key={itemKey}>
+                {renderPhotoItem(item, index)}
+              </View>
+            );
+          })}
         </ScrollView>
       </GestureDetector>
     </S.Wrapper>
