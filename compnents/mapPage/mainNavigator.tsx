@@ -36,7 +36,7 @@ export type MainRoutes = {
   EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
   PhotoComments: { id: number };
-  PinchAndZoomPhoto: undefined;
+  PinchAndZoomPhoto: { id?: number, photoFile: string };
   SingleReviewScreen: { id: number };
   ResetPasswordConfirm: undefined;
 };
@@ -97,7 +97,16 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
-      <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
+      {/* <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} /> */}
+
+      <Stack.Screen name="PinchAndZoomPhoto">
+        {({ route }) => (
+          <PhotoBoxModal
+            id={route.params.id}
+            photoFile={route.params.photoFile}
+          />
+        )}
+      </Stack.Screen>
 
       <Stack.Screen name="SingleReviewScreen">
         {({ route }) => (
@@ -106,6 +115,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
           />
         )}
       </Stack.Screen>
+
       <Stack.Screen
         name="ResetPasswordConfirm"
         component={ResetPasswordConfirmScreen}

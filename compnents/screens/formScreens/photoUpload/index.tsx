@@ -12,7 +12,6 @@ import Icon from "../../../../icons/Icon";
 import { colors } from "../../../styles";
 import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
 import { useAppNavigation } from "../../../mapPage/types";
-import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
 
 import * as S from "./styles";
 
@@ -30,12 +29,6 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
 }) => {
   const itemSize = scale(100);
   const navigation = useAppNavigation();
-  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-
-  const togglePhotoBoxModal = (photo: string) => {
-    setSelectedPhoto(photo);
-    navigation.navigate("PinchAndZoomPhoto");
-  };
 
   const nativeGesture = Gesture.Native()
     .withRef(gestureRef)
@@ -104,7 +97,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
             return item.id ? (
               <TouchableWithoutFeedback
                 key={itemKey}
-                onPress={() => togglePhotoBoxModal(item.photofile)}
+                onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: item.photofile })}
               >
                 <View>{renderPhotoItem(item, index)}</View>
               </TouchableWithoutFeedback>
@@ -116,6 +109,6 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           })}
         </ScrollView>
       </GestureDetector>
-    </S.Wrapper>
+    </S.Wrapper >
   );
 };

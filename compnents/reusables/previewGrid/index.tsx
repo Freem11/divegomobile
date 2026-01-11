@@ -1,13 +1,11 @@
-import React, { FC, useContext, useMemo } from "react";
-import { Dimensions } from "react-native";
+import React, { FC, useMemo } from "react";
+import { Dimensions, Pressable } from "react-native";
 import { moderateScale, scale } from "react-native-size-matters";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
-import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";
@@ -19,8 +17,6 @@ interface PreviewGridProps {
 }
 
 export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, buttonText }) => {
-  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-
   const screenWidth = Dimensions.get("window").width;
   const containerPadding = scale(20);
   const gap = scale(8);
@@ -36,11 +32,6 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
     return { numColumns: columns, itemSize: size };
   }, [screenWidth, containerPadding, gap]);
 
-  const togglePhotoBoxModal = (photo: string) => {
-    setSelectedPhoto(photo);
-    navigation.navigate("PinchAndZoomPhoto");
-  };
-
   return (
     <S.Wrapper>
       <S.Container>
@@ -55,7 +46,7 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
               backgroundColor: colors.lightGrey,
             }}
           >
-            <TouchableWithoutFeedback onPress={() => togglePhotoBoxModal(item.photofile)}>
+            <Pressable onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: item.photofile })}>
               <ImageCasherDynamic
                 photoFile={item.photofile}
                 style={{
@@ -65,7 +56,7 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
                   resizeMode: "cover",
                 }}
               />
-            </TouchableWithoutFeedback>
+            </Pressable>
           </S.Item>
         ))}
         {onAddSighting && (
