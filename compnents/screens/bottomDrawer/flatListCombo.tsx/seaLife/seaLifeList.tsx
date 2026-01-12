@@ -13,13 +13,14 @@ import Button from "../../../../reusables/button";
 import * as S from "../styles";
 import Icon from "../../../../../icons/Icon";
 import { colors } from "../../../../styles";
+import { useAppNavigation } from "../../../../mapPage/types";
 
 type SeaLifeListProps = {
   scrollToDiveSiteList?: () => void;
 };
 
 export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) {
-
+  const navigation = useAppNavigation();
   const boundaries = useMapStore((state) => state.gpsBubble);
   const [filterValue, setFilterValue] = useState("");
   const [areaPics, setAreaPics] = useState([]);
@@ -95,7 +96,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
               id={item.id}
               name={item.label}
               photoPath={item.photofile}
-              onPressHandler={() => handleAnimalSelect(item.label)}
+              onPressHandler={() => navigation.navigate("SeaLifeScreen", { species: item.label })}
               seaLifeSelections={animalMultiSelection}
               subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? "s" : ""}`}
             />

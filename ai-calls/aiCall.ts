@@ -10,6 +10,7 @@ export const fetchAiBlurb = async (
     location?: string
 ) => {
     try {
+        console.log(`[Frontend] Fetching ${type}: ${name}...`);
         const response = await fetch(`${BASE_URL}/api/ai-info`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -24,31 +25,26 @@ export const fetchAiBlurb = async (
     }
 };
 
-export const loadSeaLifeInfo = async (speciesName) => {
-    try {
-        // We pass only the name; the backend defaults to species logic
-        const fact = await fetchAiBlurb(speciesName, "species");
+export const loadSeaLifeInfo = async (speciesName: string) => {
+    const fact = await fetchAiBlurb(speciesName, "species");
 
-        if (fact) {
-            console.log(`Fun Fact for ${speciesName}:`, fact);
-            return fact;
-        }
-    } catch (error) {
-        console.error("Error loading species info:", error);
+    if (fact) {
+        console.log(`[Success] ${speciesName} fact received.`);
+        return fact;
     }
+
+    console.warn(`[Fail] No info returned for ${speciesName}`);
     return "No fun facts found for this species.";
 };
 
-export const loadDiveSiteInfo = async (siteName, siteLocation) => {
-    try {
-        const description = await fetchAiBlurb(siteName, "dive_site", siteLocation);
+export const loadDiveSiteInfo = async (siteName: string, siteLocation: string) => {
+    const description = await fetchAiBlurb(siteName, "dive_site", siteLocation);
 
-        if (description) {
-            console.log(`Site Info for ${siteName}:`, description);
-            return description;
-        }
-    } catch (error) {
-        console.error("Error loading dive site info:", error);
+    if (description) {
+        console.log(`[Success] ${siteName} info received.`);
+        return description;
     }
+
+    console.warn(`[Fail] No info returned for site: ${siteName}`);
     return "Description currently unavailable for this site.";
 };
