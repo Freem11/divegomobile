@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-
-import { SelectedProfileContext } from "../../contexts/selectedProfileModalContext";
+import React, { useEffect, useState } from "react";
 import { ActiveProfile } from "../../../entities/profile";
 import { getDiveSiteRecentNinePhotos, getuserReveiewCount, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
 import { getRecentReviewsByUserId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
@@ -9,9 +7,12 @@ import { useAppNavigation } from "../../mapPage/types";
 
 import UserProfileScreenView from "./userProfile";
 
-export default function UserProfileScreen() {
-  const { selectedProfile } = useContext(SelectedProfileContext);
+type UserProfileScreenProps = {
+  selectedProfile: any
+};
 
+export default function UserProfileScreen({ selectedProfile }: UserProfileScreenProps) {
+=
   const [profilePhotos, setProfilePhotos] = useState(null);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);

@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from "rea
 import Share from "react-native-share";
 import { Keyboard, ActivityIndicator, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { StackActions } from "@react-navigation/native";
 
 import noImage from "../../png/NoImage.png";
 import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
@@ -33,7 +34,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const [profileVals, setProfileVals] = useState(null);
   const [isMyProfile, setIsMyProfile] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isFollowing, setIsfFollowing] = useState<string | null>(null);
+  const [isFollowing, setIsfFollowing] = useState(null);
 
   const { setEditInfo } = useContext(EditsContext);
   const { userProfile } = useUserProfile();
@@ -47,18 +48,14 @@ export default function UserProfileParallax(props: UserProfileProps) {
   );
 
   /**
-   * Effect 1: Trigger data fetch whenever the profileID prop changes.
-   * This is the core fix for the blank screen when navigating between users.
+   * Effect 1: Fetch data.
+   * Note: We no longer nullify state immediately to prevent
+   * navigation logic from breaking during transitions.
    */
   useEffect(() => {
     const loadData = async () => {
       if (!props.profileID) return;
-
       setLoading(true);
-      // We clear the context and local values to avoid showing "User A" while loading "User B"
-      setSelectedProfile(null);
-      setProfileVals(null);
-
       await getProfileinfo();
       setLoading(false);
     };
@@ -68,16 +65,14 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   const getProfileinfo = async () => {
     const profileinfo = await grabProfileById(props.profileID);
-    // Safety check for array response from Supabase
     const data = Array.isArray(profileinfo) ? profileinfo[0] : profileinfo;
     setSelectedProfile(data);
   };
 
   /**
-   * Effect 2: Process the profile data once it has been fetched into the context.
+   * Effect 2: Update UI values when profile data returns.
    */
   useEffect(() => {
-    // Ensure we only process if the data in context matches the requested ID
     if (selectedProfile && Number(selectedProfile.id) === Number(props.profileID)) {
       if (selectedProfile?.user_id === userProfile?.UserID) {
         setIsMyProfile(true);
@@ -98,51 +93,34 @@ export default function UserProfileParallax(props: UserProfileProps) {
         photo: photoName,
       });
     }
-  }, [selectedProfile, props.profileID]);
+  }, [selectedProfile, props.profileID, userProfile?.UserID]);
 
   async function followCheck() {
     if (!userProfile?.UserID || !selectedProfile?.user_id) return;
-    const follows = await checkIfUserFollows(
-      userProfile.UserID,
-      selectedProfile.user_id
-    );
-    if (follows && follows.length > 0) {
-      setIsfFollowing(follows[0].id);
-    } else {
-      setIsfFollowing(null);
-    }
+    const follows = await checkIfUserFollows(userProfile.UserID, selectedProfile.user_id);
+    setIsfFollowing(follows?.[0]?.id || null);
   }
 
   const addFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) return;
 
-    const newRecord = await insertUserFollow(
-      userProfile.UserID,
-      selectedProfile.user_id
-    );
+    const newRecord = await insertUserFollow(userProfile.UserID, selectedProfile.user_id);
     setIsfFollowing(newRecord.id);
   };
 
   const removeFollow = async () => {
-    const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
-    if (!permissionGiven) return;
-
+    if (!isFollowing) return;
     await deleteUserFollow(isFollowing);
     setIsfFollowing(null);
   };
 
   const onClose = () => {
-    navigation.goBack();
-  };
-
-  const onNavigate = () => {
     Keyboard.dismiss();
+    navigation.dispatch(StackActions.pop(1));
   };
 
-  const openSettingsScreen = () => {
-    navigation.navigate("Settings");
-  };
+  const openSettingsScreen = () => navigation.navigate("Settings");
 
   const openEditsPage = () => {
     navigation.navigate("EditScreen", { id: selectedProfile.id, dataType: EDIT_TYPE.USER_PROFILE });
@@ -151,61 +129,34 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   const handleShare = async () => {
     try {
-      await Share.open({
-        title: "Share Scuba SEAsons Profile",
-        url: "https://scubaseasons.com",
-      });
+      await Share.open({ title: "Share Profile", url: "https://scubaseasons.com" });
     } catch (error) {
       console.log("Share error:", error);
     }
   };
 
-  const popoverContent = () => {
-    return (
-      <>
-        {isMyProfile && (
-          <IconWithLabel
-            label="Update My Profile"
-            iconName="camera-flip-outline"
-            buttonAction={() => openEditsPage()}
-          />
-        )}
-        {isMyProfile && (
-          <IconWithLabel
-            label="Open Settings"
-            iconName="settings"
-            buttonAction={() => openSettingsScreen()}
-          />
-        )}
-        <IconWithLabel
-          label="Share Profile"
-          iconName="share"
-          buttonAction={() => handleShare()}
-        />
-        {!isMyProfile && !isFollowing && (
-          <IconWithLabel
-            label={`Follow ${selectedProfile?.UserName || "User"}`}
-            iconName="plus"
-            buttonAction={() => addFollow()}
-          />
-        )}
-        {!isMyProfile && isFollowing && (
-          <IconWithLabel
-            label={`UnFollow ${selectedProfile?.UserName || "User"}`}
-            iconName="minus"
-            buttonAction={() => removeFollow()}
-          />
-        )}
-      </>
-    );
-  };
+  const popoverContent = () => (
+    <>
+      {isMyProfile && <IconWithLabel label="Update Profile" iconName="camera-flip-outline" buttonAction={openEditsPage} />}
+      {isMyProfile && <IconWithLabel label="Settings" iconName="settings" buttonAction={openSettingsScreen} />}
+      <IconWithLabel label="Share Profile" iconName="share" buttonAction={handleShare} />
+      {!isMyProfile && !isFollowing && (
+        <IconWithLabel label={`Follow ${selectedProfile?.UserName || "User"}`} iconName="plus" buttonAction={addFollow} />
+      )}
+      {!isMyProfile && isFollowing && (
+        <IconWithLabel label={`Unfollow ${selectedProfile?.UserName || "User"}`} iconName="minus" buttonAction={removeFollow} />
+      )}
+    </>
+  );
 
-  // Prevent rendering child screens if we don't have basic profile values yet
+  // Still show the drawer structure so the 'Back' button works during load
   if (loading && !profileVals) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.primaryBlue }}>
-        <ActivityIndicator size="large" color={colors.themeWhite} />
-      </View>
+      <ParallaxDrawer ref={drawerRef} headerImage={noImage} onClose={onClose}>
+        <View style={{ flex: 1, justifyContent: "center", paddingTop: 100 }}>
+          <ActivityIndicator size="large" color={colors.primaryBlue} />
+        </View>
+      </ParallaxDrawer>
     );
   }
 
@@ -214,12 +165,11 @@ export default function UserProfileParallax(props: UserProfileProps) {
       ref={drawerRef}
       headerImage={profileVals?.photo ? { uri: profileVals.photo } : noImage}
       onClose={onClose}
-      onMapFlip={onNavigate}
+      onMapFlip={() => Keyboard.dismiss()}
       popoverContent={popoverContent}
       isMyShop={isMyProfile}
     >
-      {/* We pass profileID as a key to force UserProfileScreen to re-mount/refresh when the ID changes */}
-      <UserProfileScreen key={props.profileID} />
+      <UserProfileScreen key={props.profileID} selectedProfile={selectedProfile} />
     </ParallaxDrawer>
   );
 }

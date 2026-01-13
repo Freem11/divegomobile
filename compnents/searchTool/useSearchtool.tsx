@@ -161,7 +161,6 @@ export default function useSearchTool() {
   const handleSeaLifeOptionSelected = async (seaCreature: string) => {
 
     setList([]);
-    setAnimalMultiSelection(seaCreature);
     try {
       const seaLifeSet = await getCoordsForSeaLife(seaCreature);
 
