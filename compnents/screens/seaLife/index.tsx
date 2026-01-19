@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { getSpeciesSiteCount, getSpeciesUserCount } from "../../../supabaseCalls/seaLifeMetrics/gets";
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { SeaLife } from "../../../entities/seaLIfe";
-import { useDiveSiteNavigation } from "../diveSite/types";
 import { useAppNavigation } from "../../mapPage/types";
 
 import SeaLifeScreenView from "./seaLife";
@@ -33,11 +32,12 @@ export type userStat = {
 export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife }: SeaLifeProps) {
   const [speciesDiveSiteCount, setSpeciesDiveSiteCount] = useState<diveSiteStat[] | null>(null);
   const [speciesUserCount, setSpeciesUserCount] = useState<userStat[] | null>(null);
-  const diveSiteNavigation = useDiveSiteNavigation();
   const mainNavigation = useAppNavigation();
 
   useEffect(() => {
+    console.log("species", species);
     getStats(species);
+
   }, [species]);
 
   const getStats = async (species) => {

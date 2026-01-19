@@ -32,6 +32,7 @@ type MapViewProps = {
   mapConfig: number;
   center: Coordinates;
   zoomLevel: number;
+  species?: string
 
   /**
    * On load event happens a lot - dont put heavy stuff here
@@ -59,8 +60,8 @@ export default function GoogleMapView(props: MapViewProps) {
       justifyContent: "center",
     },
     map: {
-      width: Dimensions.get("window").width,
-      height: Dimensions.get("window").height,
+      width: props.species ? "100%" : Dimensions.get("window").width,
+      height: props.species ? "100%" : Dimensions.get("window").height,
     }
   });
 

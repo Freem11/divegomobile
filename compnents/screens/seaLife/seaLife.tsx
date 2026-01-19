@@ -1,9 +1,12 @@
 import React from "react";
+import { View } from "react-native";
+import { moderateScale } from "react-native-size-matters";
 
 import { cloudflareBucketUrl } from "../../globalVariables";
 import SealifePreview from "../../reusables/sealifePreview";
 import { SeaLife } from "../../../entities/seaLIfe";
 import Label from "../../reusables/label-new";
+import GoogleMap from "../../googleMap";
 
 import * as S from "./styles";
 import { RankingCard } from "./rankingCard";
@@ -82,6 +85,23 @@ export default function SeaLifeScreenView({
         />
       ))}
 
-    </S.ContentContainer>
+      <S.LabelWrapper>
+        <Label label="Oberved Range" />
+      </S.LabelWrapper>
+
+      <View
+        pointerEvents="none"
+        style={{
+          width: "100%",
+          height: moderateScale(400),
+          alignSelf: "center",
+          overflow: "hidden",
+          borderRadius: moderateScale(10)
+        }}
+      >
+        <GoogleMap species={species} />
+      </View>
+
+    </S.ContentContainer >
   );
 }

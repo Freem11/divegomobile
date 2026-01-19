@@ -43,6 +43,7 @@ export const LabelWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding-top: ${moderateScale(30)}px;
 `;
 
 export const HeaderWrapper = styled.View`
