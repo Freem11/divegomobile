@@ -34,6 +34,7 @@ export const Content = styled.Text`
   color: ${colors.themeBlack};
   line-height: ${moderateScale(22)}px;
   margin-vertical: ${moderateScale(20)}px;
+  padding-bottom: ${moderateScale(10)}px;
 `;
 
 export const LabelWrapper = styled.View`
@@ -61,9 +62,9 @@ export const PacketHeaderItem = styled.Text`
 `;
 
 export const IconWrapper = styled.View`
-    width: ${moderateScale(24)}px;
-    height: ${moderateScale(24)}px;
-      margin-right: ${moderateScale(4)}px;
+  width: ${moderateScale(24)}px;
+  height: ${moderateScale(24)}px;
+  margin-right: ${moderateScale(4)}px;
 `;
 
 export const StyledImage = styled(Image)`
@@ -116,4 +117,12 @@ export const StatRow = styled.View`
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${moderateScale(2)}px;
+`;
+
+export const MapContainer = styled.View`
+  width: 100%;
+  height: ${moderateScale(400)}px;
+  align-self: center;
+  overflow: hidden;
+  border-radius: ${moderateScale(10)}px;
 `;

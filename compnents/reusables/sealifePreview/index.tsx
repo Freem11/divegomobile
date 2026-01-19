@@ -42,12 +42,14 @@ export default function SealifePreview({
               {sightingsCount ? `${sightingsCount} sightings` : "0 sightings"}
             </S.TotalCount>
           </S.StatRow>
-          <S.StatRow>
-            <Icon name="fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
-            <S.TotalCount>
-              {speciesCount ? `${speciesCount} species` : "0 species"}
-            </S.TotalCount>
-          </S.StatRow>
+          {speciesCount > 0 && (
+            <S.StatRow>
+              <Icon name="fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
+              <S.TotalCount>
+                {speciesCount ? `${speciesCount} species` : "0 species"}
+              </S.TotalCount>
+            </S.StatRow>
+          )}
         </S.StatsContainer>
       </S.LabelWrapper>
 

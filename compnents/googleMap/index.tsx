@@ -117,7 +117,7 @@ export default function GoogleMap({ species }: GoogleMapProps) {
       const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble, { animal: species && [species] });
       setHeatPoints(heatPoints);
     })();
-  }, [animalMultiSelection, bubble]);
+  }, [species, bubble]);
 
   const handleBoundsChange = debounce(async () => {
     if (!mapRef) {
