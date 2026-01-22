@@ -35,16 +35,14 @@ export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife 
   const mainNavigation = useAppNavigation();
 
   useEffect(() => {
-    console.log("species", species);
     getStats(species);
-
   }, [species]);
 
-  const getStats = async (species) => {
-    const speciesDiveSiteCounts = await getSpeciesSiteCount(species, 3);
+  const getStats = async (speciesName: string) => {
+    const speciesDiveSiteCounts = await getSpeciesSiteCount(speciesName, 3);
     setSpeciesDiveSiteCount(speciesDiveSiteCounts);
 
-    const speciesUserCounts = await getSpeciesUserCount(species, 3);
+    const speciesUserCounts = await getSpeciesUserCount(speciesName, 3);
     setSpeciesUserCount(speciesUserCounts);
   };
 
@@ -52,11 +50,12 @@ export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife 
     mainNavigation.navigate("DiveSiteNavigator", { id });
   };
 
-  const onPressUser = async (id: number) => {
-    mainNavigation.navigate("BottomTab", {
-      screen: "Profile",
-      params: { id },
-    });
+  const onPressUser = (id: string | number) => {
+    const numericId = typeof id === "string" ? parseInt(id, 10) : id;
+
+    if (!isNaN(numericId)) {
+      mainNavigation.navigate("UserProfile", { id: numericId });
+    }
   };
 
   return (

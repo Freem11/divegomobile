@@ -1,6 +1,9 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { useStore } from "../../store";
+
+// Screens
 import GoogleMap from "../googleMap";
 import OnboardingNavigator from "../tutorial/onboarding/onboardingNavigator";
 import SettingsPage from "../screens/settings";
@@ -12,10 +15,10 @@ import DiveShopRouter from "../screens/diveShop/diveShopRouter";
 import PartnerRequestRouter from "../screens/formScreens/partnerRequests/partnerRequestRouter";
 import ReviewParallax from "../screens/review/reviewParallax";
 import ResetPasswordConfirmScreen from "../authentication/passwordResetPage";
-import { EDIT_TYPE } from "../../entities/editTypes";
-import { useStore } from "../../store";
 import PhotoCommentsParallax from "../screens/comments/photoCommentsParallax";
 import SeaLifeParallax from "../screens/seaLife/seaLifeParallax";
+import UserProfileParallax from "../screens/userProfile/userProfileParallax"; // Imported here
+import { EDIT_TYPE } from "../../entities/editTypes";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator, { BottomTabRoutes } from "./bottomTabNavigator";
@@ -33,6 +36,7 @@ export type MainRoutes = {
   DiveShopNavigator: { id: number };
   Settings: undefined;
   Home: undefined;
+  UserProfile: { id: number }; // <-- Added for navigating to others
   PartnerRequestUpgrade: undefined;
   EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
@@ -63,6 +67,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       }}
     >
       <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
+
       <Stack.Screen name="BottomTab">
         {(props) => (
           <BottomTabNavigator
@@ -72,62 +77,40 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         )}
       </Stack.Screen>
 
+      {/* This handles all user profiles pushed from lists/comments */}
+      <Stack.Screen name="UserProfile">
+        {({ route }) => <UserProfileParallax profileID={route.params.id} />}
+      </Stack.Screen>
+
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
       <Stack.Screen name="Home" component={HomeScreen} />
-
       <Stack.Screen name="DiveSiteNavigator">
         {({ route }) => <DiveSiteRouter id={route.params.id} />}
       </Stack.Screen>
-
       <Stack.Screen name="DiveShopNavigator">
         {({ route }) => <DiveShopRouter id={route.params.id} />}
       </Stack.Screen>
-
       <Stack.Screen name="EditScreen">
         {({ route }) => <EditScreenParallax id={route.params.id} dataType={route.params.dataType} />}
       </Stack.Screen>
-
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
-
       <Stack.Screen name="PhotoComments">
-        {({ route }) => (
-          <PhotoCommentsParallax
-            id={route.params.id}
-          />
-        )}
+        {({ route }) => <PhotoCommentsParallax id={route.params.id} />}
       </Stack.Screen>
-
       <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
-
       <Stack.Screen name="SingleReviewScreen">
-        {({ route }) => (
-          <ReviewParallax
-            id={route.params.id}
-          />
-        )}
+        {({ route }) => <ReviewParallax id={route.params.id} />}
       </Stack.Screen>
-
       <Stack.Screen name="SeaLifeScreen">
-        {({ route }) => (
-          <SeaLifeParallax
-            species={route.params.species}
-          />
-        )}
+        {({ route }) => <SeaLifeParallax species={route.params.species} />}
       </Stack.Screen>
-
       <Stack.Screen
         name="ResetPasswordConfirm"
         component={ResetPasswordConfirmScreen}
-        options={{
-          headerShown: false,
-          headerTitle: "Reset Password",
-          animation: "slide_from_bottom"
-        }}
-        listeners={{
-          blur: () => setIsRecovering(false),
-        }}
+        options={{ animation: "slide_from_bottom" }}
+        listeners={{ blur: () => setIsRecovering(false) }}
       />
     </Stack.Navigator>
   );
