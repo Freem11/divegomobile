@@ -47,11 +47,6 @@ export default function UserProfileParallax(props: UserProfileProps) {
     }, [])
   );
 
-  /**
-   * Effect 1: Fetch data.
-   * Note: We no longer nullify state immediately to prevent
-   * navigation logic from breaking during transitions.
-   */
   useEffect(() => {
     const loadData = async () => {
       if (!props.profileID) return;
@@ -69,9 +64,6 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setSelectedProfile(data);
   };
 
-  /**
-   * Effect 2: Update UI values when profile data returns.
-   */
   useEffect(() => {
     if (selectedProfile && Number(selectedProfile.id) === Number(props.profileID)) {
       if (selectedProfile?.user_id === userProfile?.UserID) {
@@ -115,9 +107,11 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setIsfFollowing(null);
   };
 
-  const onClose = () => {
+  const handleOnClose = () => {
     Keyboard.dismiss();
-    navigation.dispatch(StackActions.pop(1));
+    if (navigation.canGoBack()) {
+      navigation.dispatch(StackActions.pop(1));
+    }
   };
 
   const openSettingsScreen = () => navigation.navigate("Settings");
@@ -152,7 +146,11 @@ export default function UserProfileParallax(props: UserProfileProps) {
   // Still show the drawer structure so the 'Back' button works during load
   if (loading && !profileVals) {
     return (
-      <ParallaxDrawer ref={drawerRef} headerImage={noImage} onClose={onClose}>
+      <ParallaxDrawer
+        ref={drawerRef}
+        headerImage={noImage}
+        onClose={!isMyProfile ? handleOnClose : undefined}
+      >
         <View style={{ flex: 1, justifyContent: "center", paddingTop: 100 }}>
           <ActivityIndicator size="large" color={colors.primaryBlue} />
         </View>
@@ -164,7 +162,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     <ParallaxDrawer
       ref={drawerRef}
       headerImage={profileVals?.photo ? { uri: profileVals.photo } : noImage}
-      onClose={onClose}
+      onClose={!isMyProfile ? handleOnClose : undefined}
       onMapFlip={() => Keyboard.dismiss()}
       popoverContent={popoverContent}
       isMyShop={isMyProfile}
