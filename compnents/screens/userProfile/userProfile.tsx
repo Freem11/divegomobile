@@ -32,16 +32,16 @@ export default function UserProfileScreenView({
   handleDiveSiteMove,
   reviews
 }: UserProfileProps) {
-
   const [profileVals, setProfileVals] = useState(null);
   const { userProfile } = useUserProfile();
 
   useEffect(() => {
-    setProfileVals({
-      userName: selectedProfile?.UserName,
-      bio: selectedProfile?.profileBio,
-    });
-
+    if (selectedProfile) {
+      setProfileVals({
+        userName: selectedProfile?.UserName,
+        bio: selectedProfile?.profileBio,
+      });
+    }
   }, [selectedProfile]);
 
   return (
@@ -68,7 +68,6 @@ export default function UserProfileScreenView({
         {reviews && reviews.length > 0 ? (
           <S.ReviewsContent>
             {reviews.map((review) => (
-
               <ReviewCard
                 key={review.review_id}
                 date={review.dive_date}

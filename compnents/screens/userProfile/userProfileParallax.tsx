@@ -1,8 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Share from "react-native-share";
 import { Keyboard, ActivityIndicator, View } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import { StackActions } from "@react-navigation/native";
+import { useFocusEffect, useRoute, StackActions } from "@react-navigation/native";
 
 import noImage from "../../png/NoImage.png";
 import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
@@ -20,17 +19,19 @@ import { colors } from "../../styles";
 import UserProfileScreen from ".";
 
 type UserProfileProps = {
-  profileID: number
+  profileID?: number
 };
 
 export default function UserProfileParallax(props: UserProfileProps) {
   const navigation = useAppNavigation();
+  const route = useRoute<any>();
   const drawerRef = useRef<ParallaxDrawerHandle>(null);
 
-  const { selectedProfile, setSelectedProfile } = useContext(
-    SelectedProfileContext
-  );
+  const effectiveID = route.params?.id || props.profileID;
 
+  const { setSelectedProfile } = useContext(SelectedProfileContext);
+
+  const [localProfile, setLocalProfile] = useState<any>(null);
   const [profileVals, setProfileVals] = useState(null);
   const [isMyProfile, setIsMyProfile] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -49,24 +50,25 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   useEffect(() => {
     const loadData = async () => {
-      if (!props.profileID) return;
+      if (!effectiveID) return;
       setLoading(true);
-      await getProfileinfo();
+
+      const profileinfo = await grabProfileById(effectiveID);
+      const data = Array.isArray(profileinfo) ? profileinfo[0] : profileinfo;
+
+      setLocalProfile(data);
+
+      setSelectedProfile(data);
+
       setLoading(false);
     };
 
     loadData();
-  }, [props.profileID]);
-
-  const getProfileinfo = async () => {
-    const profileinfo = await grabProfileById(props.profileID);
-    const data = Array.isArray(profileinfo) ? profileinfo[0] : profileinfo;
-    setSelectedProfile(data);
-  };
+  }, [effectiveID]);
 
   useEffect(() => {
-    if (selectedProfile && Number(selectedProfile.id) === Number(props.profileID)) {
-      if (selectedProfile?.user_id === userProfile?.UserID) {
+    if (localProfile && Number(localProfile.id) === Number(effectiveID)) {
+      if (localProfile?.user_id === userProfile?.UserID) {
         setIsMyProfile(true);
       } else {
         setIsMyProfile(false);
@@ -74,30 +76,29 @@ export default function UserProfileParallax(props: UserProfileProps) {
       }
 
       let photoName = null;
-      if (selectedProfile?.profilePhoto) {
-        photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}`;
+      if (localProfile?.profilePhoto) {
+        photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${localProfile.profilePhoto.split("/").pop()}`;
       }
 
       setProfileVals({
-        id: selectedProfile?.id,
-        name: selectedProfile?.UserName,
-        bio: selectedProfile?.profileBio,
+        id: localProfile?.id,
+        name: localProfile?.UserName,
+        bio: localProfile?.profileBio,
         photo: photoName,
       });
     }
-  }, [selectedProfile, props.profileID, userProfile?.UserID]);
+  }, [localProfile, effectiveID, userProfile?.UserID]);
 
   async function followCheck() {
-    if (!userProfile?.UserID || !selectedProfile?.user_id) return;
-    const follows = await checkIfUserFollows(userProfile.UserID, selectedProfile.user_id);
+    if (!userProfile?.UserID || !localProfile?.user_id) return;
+    const follows = await checkIfUserFollows(userProfile.UserID, localProfile.user_id);
     setIsfFollowing(follows?.[0]?.id || null);
   }
 
   const addFollow = async () => {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) return;
-
-    const newRecord = await insertUserFollow(userProfile.UserID, selectedProfile.user_id);
+    const newRecord = await insertUserFollow(userProfile.UserID, localProfile.user_id);
     setIsfFollowing(newRecord.id);
   };
 
@@ -117,7 +118,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   const openSettingsScreen = () => navigation.navigate("Settings");
 
   const openEditsPage = () => {
-    navigation.navigate("EditScreen", { id: selectedProfile.id, dataType: EDIT_TYPE.USER_PROFILE });
+    navigation.navigate("EditScreen", { id: localProfile.id, dataType: EDIT_TYPE.USER_PROFILE });
     setEditInfo("Profile");
   };
 
@@ -135,24 +136,19 @@ export default function UserProfileParallax(props: UserProfileProps) {
       {isMyProfile && <IconWithLabel label="Settings" iconName="settings" buttonAction={openSettingsScreen} />}
       <IconWithLabel label="Share Profile" iconName="share" buttonAction={handleShare} />
       {!isMyProfile && !isFollowing && (
-        <IconWithLabel label={`Follow ${selectedProfile?.UserName || "User"}`} iconName="plus" buttonAction={addFollow} />
+        <IconWithLabel label={`Follow ${localProfile?.UserName || "User"}`} iconName="plus" buttonAction={addFollow} />
       )}
       {!isMyProfile && isFollowing && (
-        <IconWithLabel label={`Unfollow ${selectedProfile?.UserName || "User"}`} iconName="minus" buttonAction={removeFollow} />
+        <IconWithLabel label={`Unfollow ${localProfile?.UserName || "User"}`} iconName="minus" buttonAction={removeFollow} />
       )}
     </>
   );
 
-  // Still show the drawer structure so the 'Back' button works during load
-  if (loading && !profileVals) {
+  if (loading || !localProfile || Number(localProfile.id) !== Number(effectiveID)) {
     return (
-      <ParallaxDrawer
-        ref={drawerRef}
-        headerImage={noImage}
-        onClose={!isMyProfile ? handleOnClose : undefined}
-      >
-        <View style={{ flex: 1, justifyContent: "center", paddingTop: 100 }}>
-          <ActivityIndicator size="large" color={colors.primaryBlue} />
+      <ParallaxDrawer ref={drawerRef} headerImage={noImage} onClose={!isMyProfile ? handleOnClose : undefined}>
+        <View style={{ flex: 1, backgroundColor: colors.primaryBlue, justifyContent: "center", paddingTop: 100 }}>
+          <ActivityIndicator size="large" color="white" />
         </View>
       </ParallaxDrawer>
     );
@@ -167,7 +163,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
       popoverContent={popoverContent}
       isMyShop={isMyProfile}
     >
-      <UserProfileScreen key={props.profileID} selectedProfile={selectedProfile} />
+      <UserProfileScreen key={`profile-${effectiveID}`} selectedProfile={localProfile} />
     </ParallaxDrawer>
   );
 }

@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 import { ActiveProfile } from "../../../entities/profile";
-import { getDiveSiteRecentNinePhotos, getuserReveiewCount, getUserSightingsCount, getUserSpeciesCount } from "../../../supabaseCalls/accountSupabaseCalls";
+import {
+  getDiveSiteRecentNinePhotos,
+  getuserReveiewCount,
+  getUserSightingsCount,
+  getUserSpeciesCount
+} from "../../../supabaseCalls/accountSupabaseCalls";
 import { getRecentReviewsByUserId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
 import { useAppNavigation } from "../../mapPage/types";
@@ -22,22 +27,29 @@ export default function UserProfileScreen({ selectedProfile }: UserProfileScreen
   const navigation = useAppNavigation();
 
   useEffect(() => {
-    getData(selectedProfile);
-  }, [selectedProfile]);
+    if (selectedProfile?.UserID) {
+      getData(selectedProfile);
+    }
+  }, [selectedProfile?.UserID]);
 
-  const getData = async (selectedProfile: ActiveProfile) => {
-    const species = await getUserSpeciesCount(selectedProfile.UserID);
+  const getData = async (profile: ActiveProfile) => {
+    setProfilePhotos(null);
+    setReviews([]);
+    setSpeciesCount(0);
+    setSightingsCount(0);
+
+    const [species, sightings, recentNine, userReviewCount, userReviews] = await Promise.all([
+      getUserSpeciesCount(profile.UserID),
+      getUserSightingsCount(profile.UserID),
+      getDiveSiteRecentNinePhotos(profile.UserID),
+      getuserReveiewCount(profile.UserID),
+      getRecentReviewsByUserId({ userId: profile.UserID, limit: 3 })
+    ]);
+
     setSpeciesCount(species.distinct_label_count);
-
-    const sightings = await getUserSightingsCount(selectedProfile.UserID);
     setSightingsCount(sightings.label_count);
-    const recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID);
     setProfilePhotos(recentNine);
-
-    const userReviewCount = await getuserReveiewCount(selectedProfile.UserID);
     setReviewCount(userReviewCount.label_count);
-
-    const userReviews = await getRecentReviewsByUserId({ userId: selectedProfile.UserID, limit: 3 });
     setReviews(userReviews);
   };
 
@@ -46,8 +58,6 @@ export default function UserProfileScreen({ selectedProfile }: UserProfileScreen
   };
 
   const handleDiveSiteMove = async (diveSiteName: string, diveSiteId: number) => {
-
-    console.log(diveSiteName, diveSiteId);
     navigation.navigate("DiveSiteNavigator", { id: diveSiteId });
   };
 
@@ -63,5 +73,4 @@ export default function UserProfileScreen({ selectedProfile }: UserProfileScreen
       reviews={reviews}
     />
   );
-
 }
