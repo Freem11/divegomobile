@@ -1,64 +1,60 @@
 import { createClient } from "@supabase/supabase-js";
 
-/**
- * NOTE: For Expo API Routes, ensure these variables are in your root .env file:
- * SUPABASE_URL=https://your-id.supabase.co
- * SUPABASE_SERVICE_ROLE_KEY=your-key
- * GEMINI_API_KEY=your-gemini-key
- */
-
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_API_KEY;
 const geminiKey = process.env.GEMINI_API_KEY;
 
-// Initialize Supabase Client
-// We use the Service Role key here because this is a secure server-side route
 const supabase = createClient(supabaseUrl || "", supabaseKey || "");
 
 export async function POST(request: Request) {
     try {
-        const { name, type, location } = await request.json();
+        const { id, name, type, location } = await request.json();
 
-        // 1. Health Check for Env Variables
         if (!supabaseUrl || !geminiKey) {
-            console.error("[Backend] Missing environment variables");
+            console.error("[Backend] Environment variables missing");
             return Response.json({ error: "Server configuration missing" }, { status: 500 });
         }
 
-        // 2. Step 1: Check Supabase Cache
-        // Matches your 'species' or 'dive_sites' table
-        const tableName = type === "species" ? "species" : "dive_sites";
+        const isSpecies = type === "species";
+        const tableName = isSpecies ? "species" : "diveSites";
+        const lookupField = isSpecies ? "name" : "id";
+        const lookupValue = isSpecies ? name : id;
+        const columnToUpdate = isSpecies ? "blurb" : "diveSiteBio";
 
-        console.log(`[Backend] Checking cache for ${name} in ${tableName}...`);
-
-        const { data: cachedRow, error: fetchError } = await supabase
+        // 1. Check Cache
+        const { data: cachedRow } = await supabase
             .from(tableName)
-            .select("blurb")
-            .eq("name", name)
+            .select(columnToUpdate)
+            .eq(lookupField, lookupValue)
             .single();
 
-        // If we have it, return it and save the Gemini quota!
-        if (cachedRow?.blurb) {
-            console.log(`[Cache Hit] Found: ${name}`);
-            return Response.json({ blurb: cachedRow.blurb });
+        if (cachedRow && cachedRow[columnToUpdate] && !cachedRow[columnToUpdate].startsWith("AI Error:")) {
+            console.log(`[Cache Hit] Returning saved info for ${name}`);
+            return Response.json({ blurb: cachedRow[columnToUpdate] });
         }
 
-        // 3. Step 2: Request from Gemini (only if not in cache)
-        console.log(`[AI] Cache miss. Requesting Gemini 2.0 for: ${name}`);
+        // 2. Request from Gemini 2.0
+        // We use gemini-2.0-flash-exp or gemini-2.0-flash
+        const MODEL_ID = "gemini-2.0-flash-exp";
+        console.log(`[AI] Cache miss. Requesting ${MODEL_ID} for: ${name}`);
 
-        const taskPrompt = type === "dive_site"
-            ? `Describe the dive site "${name}" in ${location || "British Columbia"}. Focus on marine life. 2 sentences max.`
-            : `Give me a 2-sentence fun fact about the marine animal "${name}". Focus on underwater behavior.`;
+        const taskPrompt = !isSpecies
+            ? `Write a 2-3 sentence description for the dive site "${name}". 
+               Use these coordinates only for context: ${location}. 
+               Focus on marine life and topography. Do not mention coordinates.`
+            : `Provide a 2-sentence fun fact about the marine animal "${name}".`;
 
         const aiResponse = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${geminiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:generateContent?key=${geminiKey}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     contents: [{ parts: [{ text: taskPrompt }] }],
                     systemInstruction: {
-                        parts: [{ text: "You are a helpful scuba diving guide. Provide facts in plain text only. No introductions." }]
+                        parts: [{
+                            text: "You are a local scuba diving expert. Speak naturally. No introductions. No coordinates."
+                        }]
                     }
                 })
             }
@@ -66,25 +62,28 @@ export async function POST(request: Request) {
 
         const aiData = await aiResponse.json();
 
+        // 3. Error Handling
         if (aiData.error) {
             console.error("[Gemini Error]", aiData.error.message);
-            return Response.json({ blurb: `AI temporarily unavailable: ${aiData.error.message}` });
+            // If it's a quota error (Limit 0), return 429 to stop the frontend
+            const isQuota = aiData.error.message?.toLowerCase().includes("quota");
+            return Response.json({ error: aiData.error.message }, { status: isQuota ? 429 : 400 });
         }
 
         const blurb = aiData.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 
-        // 4. Step 3: Update Supabase with the new fact
-        if (blurb) {
-            console.log(`[Cache Save] Saving new blurb for ${name}`);
+        // 4. Update Cache
+        if (blurb && blurb.length > 5) {
+            console.log(`[Cache Save] Updating ${tableName} row ${lookupValue}`);
             await supabase
                 .from(tableName)
-                .update({ blurb: blurb })
-                .eq("name", name);
+                .update({ [columnToUpdate]: blurb })
+                .eq(lookupField, lookupValue);
 
             return Response.json({ blurb });
         }
 
-        return Response.json({ blurb: "No information found." });
+        return Response.json({ error: "No information found." }, { status: 404 });
 
     } catch (error) {
         console.error("[Backend Crash]", error);

@@ -24,7 +24,7 @@ export const Header = styled.Text`
   text-align: center;
   font-size: ${moderateScale(fontSizes.Header)}px;
   font-family: ${activeFonts.Bold};
-  color: ${colors.themeBlack};
+  color: ${colors.headersBlue};
 `;
 
 export const Content = styled.Text`

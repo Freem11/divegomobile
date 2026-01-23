@@ -108,7 +108,7 @@ export default function DiveSiteScreen({
     if (selectedDiveSite) {
       getData(selectedDiveSite);
     }
-  }, [selectedDiveSite.id]);
+  }, [selectedDiveSite]);
 
   useFocusEffect(
     React.useCallback(() => {
