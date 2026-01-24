@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 
-import { activeFonts, colors, fontSizes } from "../../../../styles";
+import { activeFonts, colors } from "../../../../styles";
 
 export const MainContainer = styled.View`
   width: 100%;
