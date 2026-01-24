@@ -1,30 +1,30 @@
-import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
-import { colors, fontSizes } from "../../../../styles";
+import styled from "styled-components/native";
+import { moderateScale } from "react-native-size-matters";
+
+import { activeFonts, colors, fontSizes } from "../../../../styles";
 
 export const MainContainer = styled.View`
+  width: 100%;
   align-self: flex-start;
-  margin-left: 5%;
 `;
 
 export const BarBox = styled.View`
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
-  height: ${moderateScale(230)}px;
+  align-items: flex-end;
 `;
 
 export const HistogramLine = styled.View`
-  flex-direction: row;
+  flex-direction: column-reverse;
   margin: ${moderateScale(3)}px;
   margin-left: ${moderateScale(2)}px;
   align-items: center;
 `;
 
 export const MonthLabel = styled.Text`
-  font-size: ${moderateScale(8)}px;
-  color: ${colors.themeWhite};
-  margin-right: ${moderateScale(5)}px;
+  font-size: ${moderateScale(11)}px;
+  color: ${colors.primaryBlue};
+  font-family: ${activeFonts.Bold}
 `;
 
 export type BarContainerProps = {
@@ -32,8 +32,8 @@ export type BarContainerProps = {
 };
 
 export const BarContainer = styled.View<BarContainerProps>`
-  height: ${moderateScale(10)}px;
-  width: ${(props) => props.barWidth}px;
-  background-color: ${colors.themeWhite};
+  width: ${moderateScale(10)}px;
+  height: ${(props: BarContainerProps) => props.barWidth}px;
+  background-color: ${colors.primaryBlue};
   border-radius: ${moderateScale(8)}px;
 `;

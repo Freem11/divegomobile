@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import HistogramView from './view';
+import React, { useState, useEffect } from "react";
+
 import { HistogramItem, HistogramSupaData } from "../../../../../entities/histogram";
 import { GPSBubble } from "../../../../../entities/GPSBubble";
 import { useMapStore } from "../../../../googleMap/useMapStore";
 import { getHistoData } from "../../../../../supabaseCalls/photoSupabaseCalls";
 
+import HistogramView from "./view";
+
 type HistogramProps = {
-  animal:    string
+  animal: string
 };
 
 export default function Histogram(props: HistogramProps) {
@@ -25,14 +27,14 @@ export default function Histogram(props: HistogramProps) {
 
       let i = 1;
       const dataArray = [];
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
       if (historgramData) {
         const maxVal = Math.max(...historgramData.map((item: { num: number }) => item.num));
         for (i = 1; i < 13; i++) {
           historgramData.forEach((dataPoint: HistogramSupaData) => {
             if (dataPoint.month === i) {
-              dataArray.push({ value: (dataPoint.num / maxVal) * 100, month: months[i - 1] });
+              dataArray.push({ value: (dataPoint.num / maxVal) * 50, month: months[i - 1] });
             }
           });
           if (dataArray.length < i) {

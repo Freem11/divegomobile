@@ -1,12 +1,11 @@
 import React from "react";
-import { View } from "react-native";
-import { moderateScale } from "react-native-size-matters";
 
 import { cloudflareBucketUrl } from "../../globalVariables";
 import SealifePreview from "../../reusables/sealifePreview";
 import { SeaLife } from "../../../entities/seaLIfe";
 import Label from "../../reusables/label-new";
 import GoogleMap from "../../googleMap";
+import Histogram from "../bottomDrawer/flatListCombo.tsx/histogram";
 
 import * as S from "./styles";
 import { RankingCard } from "./rankingCard";
@@ -59,8 +58,14 @@ export default function SeaLifeScreenView({
         <Label label="Oberved Range" />
       </S.LabelWrapper>
 
+      <S.StatRowMajor>
+        <S.MiniLabel>Seasonal Trend</S.MiniLabel>
+      </S.StatRowMajor>
+
+      <Histogram animal={species} />
+
       <S.MapContainer
-        pointerEvents="none"
+      // pointerEvents="none"
       >
         <GoogleMap species={species} />
       </S.MapContainer>

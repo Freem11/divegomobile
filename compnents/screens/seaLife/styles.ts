@@ -47,6 +47,22 @@ export const LabelWrapper = styled.View`
   padding-top: ${moderateScale(30)}px;
 `;
 
+export const MiniLabelWrapper = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: pink;
+`;
+
+export const MiniLabel = styled.Text`
+  width: 100%;
+  font-size: ${moderateScale(fontSizes.Micro)}px;
+  font-family: ${activeFonts.ThinItalic};
+  text-wrap: pretty;
+`;
+
 export const HeaderWrapper = styled.View`
  flex-direction: row;
  align-items: center;
