@@ -1,75 +1,43 @@
-import React, { } from "react";
-import { FieldErrors, UseFormWatch, Controller, Control } from "react-hook-form";
-import { Image } from "expo-image";
-import { useTranslation } from "react-i18next";
-import { moderateScale } from "react-native-size-matters";
-import { Dimensions } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
+import { Controller } from "react-hook-form";
 
-import { Form } from "../form";
-import * as S from "../../styles";
 import DynamicSelect from "../../../../reusables/dynamicSelect";
-import { colors } from "../../../../styles";
-import Icon from "../../../../../icons/Icon";
 
-interface StepXProps {
-  image: string
-  fieldIndex: number
-  control: Control<Form, any, Form>
-  watch: UseFormWatch<Form>
-  errors: FieldErrors<Form>
-  getMoreAnimals: (search: string, limit: number, skip: number) => Promise<any>
-}
+export const StepX = ({ fieldIndex, control, watch, runAIForIndex, getMoreAnimals }: any) => {
+  const aiOriginal = watch(`SeaLife.${fieldIndex}.aiOriginal`);
 
-export const StepX: React.FC<StepXProps> = ({
-  image,
-  fieldIndex,
-  control,
-  errors,
-  getMoreAnimals
-}) => {
-  const { t } = useTranslation();
-  const screenWidth = Dimensions.get("window").width;
-  const fieldName = `SeaLife.${fieldIndex}`;
-  const fieldError = errors.SeaLife?.[fieldIndex];
+  useEffect(() => {
+    runAIForIndex(fieldIndex);
+  }, [fieldIndex]);
+
+  const isAiLoading = aiOriginal?.key === "loading";
 
   return (
-    <S.InputGroupContainer>
-      <S.Title>{t("PicUploader.stepXTitle")}</S.Title>
-      <S.Subtitle>{t("PicUploader.stepXDescription")}</S.Subtitle>
-      <S.MiniSpacer />
+    <View style={{ marginBottom: 20 }}>
+      <View style={{ padding: 10, backgroundColor: "#f9f9f9", borderRadius: 8, marginBottom: 10 }}>
+        <Text style={{ fontSize: 10, fontWeight: "700" }}>AI SUGGESTION</Text>
+        {isAiLoading ? (
+          <ActivityIndicator size="small" style={{ alignSelf: "flex-start" }} />
+        ) : (
+          <Text>{aiOriginal?.label || "No guess available"}</Text>
+        )}
+      </View>
+
       <Controller
         control={control}
-        name={fieldName as "SeaLife.0"}
-        rules={{
-          required: "A sea life species must be entered for this photo.",
-          validate: (value) =>
-            (value && value.key && value.key !== "") || "Please make a selection.",
-        }}
-        render={({ field: { onChange, value }, fieldState: { isTouched } }) => (
+        name={`SeaLife.${fieldIndex}`}
+        key={`${fieldIndex}-${aiOriginal?.key}`}
+        render={({ field: { onChange, value } }) => (
           <DynamicSelect
-            allowCreate={true}
-            labelInValue={true}
-            modeSelectedTags="on"
-            placeholder={t("PicUploader.seaLifePlaceholder")}
-            getMoreOptions={getMoreAnimals}
-            iconLeft={<Icon name="fish" fill={colors.primaryBlue} />}
-            iconRight={<Icon name="chevron-down" fill={colors.neutralGrey} />}
-            error={fieldError}
-            value={value}
-            isTouched={isTouched}
+            value={value?.key === "loading" ? null : value}
             onChange={onChange}
+            getMoreOptions={getMoreAnimals}
+            extraOptions={!isAiLoading && aiOriginal ? [aiOriginal] : []}
+            placeholder="Select species..."
           />
         )}
       />
-      <S.MiniSpacer />
-      <S.Title>{t("PicUploader.seaLifeId")}</S.Title>
-      <Image
-        source={{ uri: image }}
-        style={{ width: screenWidth - moderateScale(32), height: screenWidth - moderateScale(32), resizeMode: "cover", borderRadius: moderateScale(40) }}
-        contentFit="cover"
-        transition={1000}
-      />
-
-    </S.InputGroupContainer>
+    </View>
   );
 };

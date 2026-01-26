@@ -2,14 +2,19 @@ import moment from "moment";
 
 import { FormValidationRules } from "../../../utils/forms";
 
-type dropDownItem = { key: string, label: string };
+// Updated to match the object structure required by DynamicSelect and our AI logic
+type dropDownItem = {
+  key: string;
+  label: string;
+  value?: string;
+  aiOriginal?: dropDownItem | null; // The Shadow Lane
+};
 
 export interface Form {
   DiveSiteName: string;
-  SightingDate: string;
+  SightingDate: Date; // Changed to Date to match your DatePicker usage
   Photos: string[];
   SeaLife: dropDownItem[];
-
 }
 
 export const FormRules: FormValidationRules<Form> = {
@@ -21,7 +26,7 @@ export const FormRules: FormValidationRules<Form> = {
     validate: {
       validDate: (value) => {
         if (!value) return "Date is required";
-        const date = moment(value, "YYYY-MM-DD", true);
+        const date = moment(value);
         if (!date.isValid()) {
           return "Please enter a valid date";
         }
@@ -43,16 +48,20 @@ export const FormRules: FormValidationRules<Form> = {
     }
   },
   SeaLife: {
-    required: "You must specify sea life for all uploaded photos.",
     validate: {
       allDropdownsSelected: (seaLifeItems, formValues) => {
-        if (seaLifeItems.length !== formValues.Photos.length) {
+        // Ensure we have an entry for every photo
+        if (!seaLifeItems || seaLifeItems.length !== formValues.Photos.length) {
           return "Please select a sea life type for every photo.";
         }
-        const allValid = seaLifeItems.every(item => item && item.key && item.key !== "");
+
+        // Check that every item has a valid key and isn't stuck in "loading"
+        const allValid = seaLifeItems.every(
+          item => item && item.key && item.key !== "" && item.key !== "loading"
+        );
 
         if (!allValid) {
-          return "Please select a sea life type for all photos before proceeding.";
+          return "Please wait for identification or select a species manually.";
         }
 
         return true;

@@ -183,3 +183,19 @@ export const ErrorText = styled.Text`
   margin-top: ${moderateScale(4)}px;
   margin-left: ${moderateScale(2)}px;
 `;
+
+export const InputContainer = styled.TouchableOpacity`
+  border-width: ${moderateScale(1)}px;
+  border-color: ${colors.border};
+  border-radius: ${moderateScale(8)}px;
+  padding: ${moderateScale(12)}px;
+  margin-bottom: ${moderateScale(20)}px;
+  background-color: ${colors.themeWhite};
+  width: 100%;
+`;
+
+export const ValueText = styled.Text`
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.themeBlack};
+`;

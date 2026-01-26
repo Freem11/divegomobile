@@ -1,111 +1,78 @@
-import React, { useState, useEffect } from "react";
-import { TextInput } from "react-native";
-import { FieldError } from "react-hook-form";
-
-import Select, { SelectProps } from "../select";
+import React, { useState, useEffect, forwardRef, useMemo } from "react";
+import { TextInput, FlatList, TouchableOpacity, Text, Keyboard } from "react-native";
 
 import * as S from "./styles";
 
-const defaultProps = {
-  searchLimit: 100,
+const Select = forwardRef<TextInput, any>((props, ref) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
-};
+  const optionsMap = useMemo(() =>
+    new Map((props.options || []).map((o: any) => [String(o.key), o])),
+    [props.options]
+  );
 
-export type GetMoreOptions = (
-  search: string,
-  limit: number,
-  skip: number
-) => Promise<{ options: any[] }>;
+  // This ensures the label shows up when navigating back or AI finishes
+  useEffect(() => {
+    const activeValue = Array.isArray(props.value) ? props.value[0] : props.value;
+    if (activeValue?.label && activeValue.key !== "loading") {
+      setSearchValue(activeValue.label);
+    } else if (!activeValue) {
+      setSearchValue("");
+    }
+  }, [props.value]);
 
-type DynamicSelectProps = SelectProps & Partial<typeof defaultProps> & {
-  getMoreOptions: GetMoreOptions;
-  getSelectedOptions?: (values: any) => Promise<any>;
-  error?: FieldError;
-  isTouched: boolean;
-};
+  const handleSelect = (item: any) => {
+    setSearchValue(item.label);
+    setIsOpen(false);
+    Keyboard.dismiss();
+    if (props.onChange) {
+      props.onChange({ target: { value: item } });
+    }
+  };
 
-const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
-  function DynamicSelect(_props, forwardedRef) {
-    const props = { ...defaultProps, ..._props };
-    const { getSelectedOptions, getMoreOptions, searchLimit, error, isTouched, ...rest } = props;
-
-    const [options, setOptions] = useState([]);
-    const [isFetching, setIsFetching] = useState(false);
-    const [searchOffset, setSearchOffset] = useState(0);
-    const [currentSearch, setCurrentSearch] = useState("");
-
-    useEffect(() => {
-      init();
-    }, []);
-
-    const init = async () => {
-      try {
-        if (getSelectedOptions) {
-          const data = await getSelectedOptions(props.value);
-          setIsFetching(false);
-          if (data?.options?.length) {
-            setOptions(data.options);
-          }
-        }
-
-        if (!props.disabled) {
-          loadOptions("", 0, true);
-        }
-      } catch (e) {
-        setIsFetching(false);
-        console.warn(e);
-      }
-    };
-
-    const onSearch = (search: string) => {
-      setCurrentSearch(search);
-      loadOptions(search, 0, true);
-    };
-
-    const loadOptions = async (
-      search: string,
-      offset: number,
-      replaceExistingOptions = false
-    ) => {
-      if (!getMoreOptions) return;
-
-      setIsFetching(true);
-
-      const [data] = await Promise.all([
-        getMoreOptions(search, searchLimit, offset),
-        new Promise(resolve => setTimeout(resolve, 300)),
-      ]);
-
-      setIsFetching(false);
-
-      if (!data?.options) {
-        setOptions([]);
-        return;
-      }
-
-      setOptions(prev =>
-        replaceExistingOptions ? data.options : [...prev, ...data.options]
-      );
-    };
-
-    const shouldShowError = !!error && isTouched;
-
-    return (
-      <>
-        <Select
-          ref={forwardedRef}
-          isFetching={isFetching}
-          options={options}
-          onSearch={onSearch}
-          error={error}
-          {...rest}
+  return (
+    <S.Container hasError={!!props.error}>
+      <S.Trigger onPress={() => setIsOpen(!isOpen)} activeOpacity={1}>
+        <S.Input
+          ref={ref}
+          value={searchValue}
+          onChangeText={(t) => {
+            setSearchValue(t);
+            props.onSearch?.(t);
+          }}
+          onFocus={() => setIsOpen(true)}
+          placeholder={props.placeholder}
         />
-        {shouldShowError && error?.message && (
-          <S.ErrorText>{error.message}</S.ErrorText>
-        )}
-      </>
-    );
-  }
-);
+        <S.IconRight>
+          <S.ArrowIcon isOpen={isOpen}>{isOpen ? "▲" : "▼"}</S.ArrowIcon>
+        </S.IconRight>
+      </S.Trigger>
 
-export default DynamicSelect;
+      {isOpen && (
+        <S.DropdownWrapper>
+          <FlatList
+            data={props.options}
+            keyExtractor={(item) => String(item.key)}
+            keyboardShouldPersistTaps="handled"
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => handleSelect(item)}
+                style={{ padding: 15, borderBottomWidth: 1, borderColor: "#eee" }}
+              >
+                <Text>{item.label}</Text>
+              </TouchableOpacity>
+            )}
+            ListEmptyComponent={() => (
+              <Text style={{ padding: 15, textAlign: "center", color: "#999" }}>
+                {props.isFetching ? "Searching..." : "No results found"}
+              </Text>
+            )}
+          />
+        </S.DropdownWrapper>
+      )}
+    </S.Container>
+  );
+});
+
+export default Select;

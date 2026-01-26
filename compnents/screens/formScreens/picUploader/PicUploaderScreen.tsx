@@ -1,125 +1,70 @@
-import type { RouteProp } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState, useCallback } from "react";
-import { View } from "react-native";
-import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useCallback, useRef } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import * as FileSystem from "expo-file-system/legacy";
 
-import { insertPhotoWaits } from "../../../../supabaseCalls/seaLifePhotoCalls/posts";
-import { getDiveSiteById } from "../../../../supabaseCalls/diveSiteSupabaseCalls";
-import { useUserProfile } from "../../../../store/user/useUserProfile";
-import { RootStackParamList } from "../../../../providers/navigation";
-import { imageUploadMultiple } from "../../imageUploadHelpers";
-import { showError } from "../../../toast";
+import { identifySeaLife } from "../../../../ai-calls/aiCall";
 import { DynamicSelectOptionsAnimals } from "../../../../entities/DynamicSelectOptionsAnimals";
 
 import PicUploaderPageView from "./picUploader";
-import { Form } from "./form";
 
-type PicUploaderScreenProps = {
-  route: RouteProp<RootStackParamList, "SiteReviewCreator">;
-};
-
-export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
-  const { selectedDiveSite, reviewToEdit } = route.params;
-  const { t } = useTranslation();
-  const navigation = useNavigation();
-  const { userProfile } = useUserProfile();
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [siteInfo, setSiteInfo] = useState(null);
-  const [isCompleted, setIsCompleted] = useState(false);
-
-  const { control, setValue, handleSubmit, watch, formState: { isSubmitting, errors }, trigger } = useForm<Form>({
+export default function PicUploaderScreen() {
+  const { control, setValue, watch, getValues, formState: { errors } } = useForm({
     mode: "onChange",
-    reValidateMode: "onChange"
+    shouldUnregister: false,
+    defaultValues: { SightingDate: new Date(), Photos: [], SeaLife: [] }
   });
 
-  const tryUpload = async (uri: string, index: number) => {
-    try {
-      return await imageUploadMultiple({ assets: [{ uri }] }, index);
-    } catch (e: any) {
-      showError(e.message);
-      console.error("Error uploading image:", e);
-      return null;
-    }
-  };
-
-  const handleCreate = useCallback(async (data: Form) => {
-    const photoUploadPromises = data.Photos.map(async (photo, index) => {
-      try {
-        const fileName = await tryUpload(photo, index);
-
-        if (!fileName) {
-          throw new Error(t("PicUploader.failedUpload"));
-        }
-        return fileName;
-      } catch (error) {
-        console.error("Upload failed for a photo:", error);
-        throw error;
-      }
-    });
-
-    try {
-      const uploadedFileNames = await Promise.all(photoUploadPromises);
-
-      const seaLifePhotoRecords = data.SeaLife.map((record, index) => ({
-        label: record.label,
-        dateTaken: data.SightingDate,
-        UserID: userProfile.UserID,
-        latitude: selectedDiveSite.lat,
-        longitude: selectedDiveSite.lng,
-        photoFile: `animalphotos/public/${uploadedFileNames[index]}`
-      }));
-
-      await insertPhotoWaits(seaLifePhotoRecords);
-
-    } catch (error) {
-      console.error("Form submission failed due to photo upload errors:", error);
-      showError(t("Error during review creation."));
-    } finally {
-      setIsCompleted(true);
-      setTimeout(() => navigation.goBack(), 3000);
-    }
-  }, [userProfile.UserID, selectedDiveSite, siteInfo, t, setIsCompleted, navigation, tryUpload]);
-
-  const onSubmit = useCallback(async (data: Form) => {
-    if (data.Photos.length !== 0) {
-      await handleCreate(data);
-    }
-  }, [handleCreate]);
-
-  const showDatePicker = useCallback(() => setDatePickerVisible(true), []);
-  const hideDatePicker = useCallback(() => setDatePickerVisible(false), []);
-
-  const getDiveSiteInfo = async (siteId: number) => {
-    if (siteId) {
-      const diveSiteInfo = await getDiveSiteById(siteId);
-      setSiteInfo(diveSiteInfo[0]);
-    }
-  };
+  const { fields, append } = useFieldArray({ control, name: "SeaLife" });
+  const photos = watch("Photos");
+  const aiProcessing = useRef<Record<number, boolean>>({});
 
   useEffect(() => {
-    void getDiveSiteInfo(selectedDiveSite);
-  }, [selectedDiveSite]);
+    if (photos.length > fields.length) {
+      for (let i = fields.length; i < photos.length; i++) {
+        append({ label: "Identifying...", key: "loading", aiOriginal: { label: "Identifying...", key: "loading" } });
+      }
+    }
+  }, [photos.length]);
+
+  const runAIForIndex = useCallback(async (index: number) => {
+    const image = photos[index];
+    const fieldPath = `SeaLife.${index}`;
+    const shadowPath = `SeaLife.${index}.aiOriginal`;
+
+    const currentVal = getValues(fieldPath);
+    const currentAi = getValues(shadowPath);
+
+    if (aiProcessing.current[index] ||
+      (currentAi && currentAi.key !== "loading" && currentAi.key !== "none") ||
+      (currentVal && currentVal.key !== "loading" && currentVal.key !== "none")) return;
+
+    aiProcessing.current[index] = true;
+    try {
+      const base64 = await FileSystem.readAsStringAsync(image, { encoding: "base64" });
+      const result = await identifySeaLife(base64);
+      if (result) {
+        const aiObj = { label: result, key: result, value: result };
+        setValue(shadowPath, aiObj);
+        if (!getValues(fieldPath) || getValues(fieldPath).key === "loading") {
+          setValue(fieldPath, aiObj);
+        }
+      }
+    } catch (e) {
+      setValue(shadowPath, { label: "Not identified", key: "none" });
+    } finally {
+      aiProcessing.current[index] = false;
+    }
+  }, [photos, getValues, setValue]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <PicUploaderPageView
-        datePickerVisible={datePickerVisible}
-        showDatePicker={showDatePicker}
-        hideDatePicker={hideDatePicker}
-        onSubmit={handleSubmit(onSubmit)}
-        control={control}
-        setValue={setValue}
-        isSubmitting={isSubmitting}
-        errors={errors}
-        watch={watch}
-        selectedDiveSite={siteInfo}
-        isCompleted={isCompleted}
-        trigger={trigger}
-        existingPhotos={reviewToEdit?.photos}
-        getMoreAnimals={DynamicSelectOptionsAnimals.getMoreOptions}
-      />
-    </View>
+    <PicUploaderPageView
+      control={control}
+      errors={errors}
+      watch={watch}
+      setValue={setValue}
+      seaLifeFields={fields}
+      runAIForIndex={runAIForIndex}
+      getMoreAnimals={DynamicSelectOptionsAnimals.getMoreOptions}
+    />
   );
 }
