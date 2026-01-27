@@ -29,9 +29,10 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
   );
   const getPhotos = async (filterValue: string) => {
     if (boundaries) {
-      const diveSiteData = await getAnimalsInBubble(boundaries, { label: filterValue });
+      const seaLifeData = await getAnimalsInBubble(boundaries, { label: filterValue });
 
-      setAreaPics(diveSiteData);
+      console.log("seaLifeData", seaLifeData);
+      setAreaPics(seaLifeData);
     }
   };
 
@@ -94,7 +95,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
             <Card
               id={item.id}
               name={item.label}
-              photoPath={item.photofile}
+              photoPath={item}
               onPressHandler={() => handleAnimalSelect(item.label)}
               seaLifeSelections={animalMultiSelection}
               subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? "s" : ""}`}

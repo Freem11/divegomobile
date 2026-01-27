@@ -29,6 +29,8 @@ export default function DiveSiteList() {
         maxLng: boundaries.maxLng
       }, { label: filterValue });
 
+      console.log("diveSiteData", diveSiteData);
+
       setDiveSites(diveSiteData);
     }
   };
@@ -100,7 +102,7 @@ export default function DiveSiteList() {
             <Card
               id={item.id}
               name={item.name}
-              photoPath={item.divesiteprofilephoto}
+              photoPath={item}
               subData={item.times_seen}
               onPressHandler={() => handleDiveSiteSelection(item.id)}
             />

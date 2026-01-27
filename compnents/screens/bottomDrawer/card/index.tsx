@@ -24,6 +24,7 @@ export default function Card(props: CardProps) {
         <ImageCasher
           photoFile={props.photoPath}
           id={props.id}
+          size="md"
           style={{
             flex: 1,
             borderBottomRightRadius: moderateScale(14),

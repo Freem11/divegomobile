@@ -1,49 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Image } from "react-native";
-import * as FileSystem from "expo-file-system/legacy";
 
+import DEFAULT_IMAGE from "../png/NoImage.png";
 import { cloudflareBucketUrl } from "../globalVariables";
-import noImage from "../png/NoImage.png"; // image module
 
-export default function ImageCasher({ photoFile, style }) {
-  const [picUri, setPicUri] = useState(null);
+export default function ImageCasher({ id ,photoFile, style, size }) {
+  let remoteUri = null;
 
-  useEffect(() => {
-    if (!photoFile) {
-      setPicUri(Image.resolveAssetSource(noImage).uri);
-      return;
+  if (photoFile) {
+    if (photoFile.public_domain) {
+      remoteUri = `${photoFile.public_domain}/${photoFile[size] || photoFile.md}`;
     }
+    else {
+      const photoPath = photoFile.divesiteprofilephoto || photoFile.diveShopProfilePhoto;
 
-    const loadImage = async() => {
-      const fileName = photoFile.split("/").pop();
-      const cachePath = FileSystem.cacheDirectory + fileName;
-      const remoteUri = `${cloudflareBucketUrl}${fileName}`;
-
-      try {
-        const cacheInfo = await FileSystem.getInfoAsync(cachePath);
-
-        if (cacheInfo.exists) {
-          setPicUri(cacheInfo.uri);
-        } else {
-          const downloadResumable = FileSystem.createDownloadResumable(remoteUri, cachePath);
-          const downloadResult = await downloadResumable.downloadAsync();
-
-          if (downloadResult && downloadResult.uri) {
-            setPicUri(downloadResult.uri);
-          } else {
-            setPicUri(remoteUri); // fallback to remote URL
-          }
-        }
-      } catch (err) {
-        console.warn("Image cache error:", err);
-        setPicUri(remoteUri); // fallback again
+      if (photoPath) {
+        const filename = photoPath.split("/").pop();
+        remoteUri = `${cloudflareBucketUrl}${filename}`;
       }
-    };
+    }
+  }
 
-    loadImage();
-  }, [photoFile]);
+  if (!remoteUri) {
+    return <Image source={{ uri: Image.resolveAssetSource(DEFAULT_IMAGE).uri }} style={style}/>;
+  }
 
-  if (!picUri) return null;
-
-  return <Image source={{ uri: picUri }} style={style} />;
+  return (
+    <Image
+      source={{ uri: remoteUri }}
+      style={style}
+      defaultSource={DEFAULT_IMAGE}
+    />
+  );
 }
