@@ -46,9 +46,10 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
               backgroundColor: colors.lightGrey,
             }}
           >
-            <Pressable onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: item.photofile })}>
+            <Pressable onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: `${item.public_domain}/${item.xl}` })}>
               <ImageCasherDynamic
-                photoFile={item.photofile}
+                photoFile={item}
+                size="sm"
                 style={{
                   height: "100%",
                   width: "100%",
