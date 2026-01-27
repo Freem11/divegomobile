@@ -71,6 +71,7 @@ export default function UserProfilePhotosPageView({
               renderItem={({ item: photo }) => (
                 <SeaLifeImageCard
                   pic={photo}
+                  size="lg"
                   dataSetType={"ProfilePhotos"}
                   diveSiteAction={() => handleDiveSiteMove(photo.latitude, photo.longitude)}
                 />

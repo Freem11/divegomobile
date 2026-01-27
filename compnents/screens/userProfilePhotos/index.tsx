@@ -38,6 +38,7 @@ export default function UserProfilePhotosPage({ }: UserProfilePhotosPageProps) {
         profile.UserID
       );
     }
+
     setProfilePhotos(photos);
   };
 

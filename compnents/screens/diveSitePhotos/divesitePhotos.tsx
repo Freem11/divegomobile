@@ -62,6 +62,7 @@ export default function DiveSitePhotosPageView({
               renderItem={({ item: photo }) => (
                 <SeaLifeImageCard
                   pic={photo}
+                  size="lg"
                   dataSetType={"DiveSitePhotos"}
                   profileViewAction={() => handleProfileMove(photo.UserName)}
                 />
