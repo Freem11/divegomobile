@@ -29,8 +29,6 @@ export default function DiveSiteList() {
         maxLng: boundaries.maxLng
       }, { label: filterValue });
 
-      console.log("diveSiteData", diveSiteData);
-
       setDiveSites(diveSiteData);
     }
   };

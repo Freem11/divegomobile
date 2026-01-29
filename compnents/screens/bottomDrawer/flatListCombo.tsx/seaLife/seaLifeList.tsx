@@ -31,7 +31,6 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
     if (boundaries) {
       const seaLifeData = await getAnimalsInBubble(boundaries, { label: filterValue });
 
-      console.log("seaLifeData", seaLifeData);
       setAreaPics(seaLifeData);
     }
   };
