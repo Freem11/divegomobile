@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
         // 2. Request from Gemini 2.0
         // We use gemini-2.0-flash-exp or gemini-2.0-flash
-        const MODEL_ID = "gemini-2.0-flash-exp";
+        const MODEL_ID = "gemini-2.0-flash";
         console.log(`[AI] Cache miss. Requesting ${MODEL_ID} for: ${name}`);
 
         const taskPrompt = !isSpecies
