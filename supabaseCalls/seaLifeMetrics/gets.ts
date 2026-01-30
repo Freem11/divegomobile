@@ -87,3 +87,20 @@ export const getSpeciesUserCount = async (species: string, limit?: number) => {
         profilePhoto: item.user_id?.profilePhoto
     }));
 };
+
+export const getSingleSpecies = async (species: string) => {
+    const { data, error } = await supabase.rpc("get_single_species_with_images", {
+        p_species: species
+    });
+
+    if (error) {
+        console.log("couldn't do it GET_SINGLE_SPECIES,", error);
+        return [];
+    }
+
+    if (data) {
+        return data as unknown as SeaLife[];
+    }
+
+    return [];
+};

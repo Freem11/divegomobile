@@ -4,7 +4,7 @@ import noImage from "../../png/NoImage.png";
 import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { useDiveShopNavigation } from "../diveShop/types";
 import { cloudflareBucketUrl } from "../../globalVariables";
-import { getSpeciesData, getSpeciesPhotos } from "../../../supabaseCalls/seaLifeMetrics/gets";
+import { getSingleSpecies, getSpeciesData, getSpeciesPhotos } from "../../../supabaseCalls/seaLifeMetrics/gets";
 import { loadSeaLifeInfo } from "../../../ai-calls/aiCall";
 import { updateSpeciesFact } from "../../../supabaseCalls/seaLifeMetrics/updates";
 import { SeaLife } from "../../../entities/seaLIfe";
@@ -26,12 +26,12 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
   }, [props.species]);
 
   const getSeaLifeInfo = async (label: string) => {
-    const speciesExists = await getSpeciesData(label);
-    if (speciesExists && !speciesExists.description) {
+    const speciesExists = await getSingleSpecies(label);
+    if (speciesExists && !speciesExists[0].description) {
       console.log("No description found, calling Gemini...");
       getBlurb();
     } else {
-      setSelectedSeaLife(speciesExists);
+      setSelectedSeaLife(speciesExists[0]);
     }
 
     const seaLifeInfo = await getSpeciesPhotos(label);
@@ -45,9 +45,14 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
     setSelectedSeaLife(updatedSeaLife);
   };
 
-  const speciesPhoto = seaLifePhotos && seaLifePhotos[0]?.photoFile;
-  const fileName = speciesPhoto ? speciesPhoto.split("/").pop() : null;
-  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
+  let remoteUri: string;
+  if (selectedSeaLife && selectedSeaLife.image_id) {
+    remoteUri = `${selectedSeaLife.public_domain}/${selectedSeaLife.md}`;
+  } else {
+    const speciesPhoto = seaLifePhotos && seaLifePhotos[0]?.photoFile;
+    const fileName = speciesPhoto ? speciesPhoto.split("/").pop() : null;
+    remoteUri = `${cloudflareBucketUrl}${fileName}`;
+  }
 
   const onClose = async () => {
     diveShopNavigation.goBack();
@@ -56,7 +61,7 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
   return (
     <ParallaxDrawer
       ref={drawerRef}
-      headerImage={speciesPhoto ? { uri: remoteUri } : noImage}
+      headerImage={remoteUri ? { uri: remoteUri } : noImage}
       onClose={onClose}
     >
       <SeaLifeScreen
