@@ -11,7 +11,7 @@ import Icon from "../../icons/Icon";
 import { colors } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
-
+import FeedList from "../feed/screens/feeds";
 import { useAppNavigation } from "./types";
 import HomeScreen from "./HomeScreen";
 import { useNotificationsStore } from "../feed/store/useNotificationsStore";
@@ -33,7 +33,6 @@ const Tab = createBottomTabNavigator<BottomTabRoutes>();
 
 export default function BottomTabNavigator({ route, showOnboarding }: any) {
     const { userProfile } = useUserProfile();
-    const PARTNER_ACCOUNT_STATUS = (userProfile?.partnerAccount) || false;
 
     const notificationsCount = useNotificationsStore((s) => s.count);
 
@@ -58,15 +57,6 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
             initialRouteName="Home"
             screenOptions={({ route }) => {
                 const { icon, label } = getTabProps(route.name);
-
-                const isTablet = (Platform.OS === "ios" && (Platform as any).isPad) || (Platform.OS === "android" && (Platform as any).isTablet);
-                const tabBarIconHeightSurplus = isTablet
-                    ? moderateScale(5)
-                    : moderateScale(0);
-
-                const tabBarIconMargin = isTablet
-                    ? moderateScale(4)
-                    : moderateScale(0);
                 const isNotificationsRoute = route.name === "Notifications";
                 const badge =
                     notificationsCount > 0
@@ -81,6 +71,13 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
 
                 return {
                     headerShown: false,
+                    tabBarBadge: isNotificationsRoute ? badge : undefined,
+                    tabBarBadgeStyle: {
+                        backgroundColor: "red",
+                        color: "white",
+                        fontSize: moderateScale(10),
+                        fontWeight: "600",
+                    },
                     tabBarLabelPosition: "below-icon",
                     tabBarStyle: {
                         backgroundColor: colors.primaryBlue,
@@ -118,9 +115,6 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
                         />
                     ),
                     tabBarLabel: label,
-                    animation: "shift",
-                    tabBarLabelPosition: "below-icon",
-                    tabBarBadge: isNotificationsRoute ? badge : undefined
                     animation: Platform.OS === "android" ? "none" : "shift",
                 };
             }}
@@ -143,6 +137,7 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
                     )
                 )}
             </Tab.Screen>
+            <Tab.Screen name="Notifications" component={FeedList} />
             <Tab.Screen name="AddSite" component={SiteSubmitterRouter} options={{ unmountOnBlur: true }} />
             {(userProfile?.partnerAccount) && (
                 <Tab.Screen name="Itinerary" component={ShopListParallax} />
@@ -154,6 +149,7 @@ export default function BottomTabNavigator({ route, showOnboarding }: any) {
         switch (route) {
             case "Home": return { icon: "map-outlined", label: t("BottomTabBar.home") };
             case "Profile": return { icon: "person", label: t("BottomTabBar.profile") };
+            case "Notifications": return { icon: "bell-ring-outline", label: t("BottomTabBar.notifications") };
             case "AddSite": return { icon: "anchor-plus", label: t("BottomTabBar.addsite") };
             case "Itinerary": return { icon: "diving-scuba-flag", label: t("BottomTabBar.itinerary") };
             default: return { icon: "question-mark", label: "Error" };

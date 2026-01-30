@@ -28,8 +28,6 @@ import FeedItemPhotoLike from "./messages/photoLike";
 import FeedItemPhotoComment from "./messages/photoComment";
 import type { Notification } from "../../store/types";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { FullScreenModalContext } from "../../../contexts/fullScreenModalContext";
-import { ActiveTutorialIDContext } from "../../../contexts/activeTutorialIDContext";
 import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
 
 const windowHeight = Dimensions.get("window").height;
@@ -51,9 +49,6 @@ export default function FeedList() {
   const oldItems = items.filter((n) => n.is_seen);
 
   const data = activeTab === "new" ? newItems : oldItems;
-
-  const { setFullScreenModal } = useContext(FullScreenModalContext);
-  const { setActiveTutorialID } = useContext(ActiveTutorialIDContext);
   const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -68,8 +63,16 @@ export default function FeedList() {
     setRefreshing(false);
   };
 
-  const togglePhotoBoxModal = (n: Notification) => {
-    setSelectedPhoto(n.notification_photo_like.photo.photoFile);
+  const togglePhotoBoxModal = (n: Notification, type: "photo_like" | "photo_comment") => {
+    const photoFile =type === "photo_like"
+      ? n.notification_photo_like?.photo?.photoFile
+      : n.notification_photo_comment?.photo?.photoFile;
+
+    if (!photoFile) {
+      console.warn("No photoFile found for notification", { type, n });
+      return;
+    }
+    setSelectedPhoto(photoFile);
     navigation.navigate("PinchAndZoomPhoto");
   };
 
@@ -77,9 +80,22 @@ export default function FeedList() {
     (state) => state.setActiveScreen
   );
 
-  const goToUserProfile = (n: Notification) => {
-    navigation.navigate("UserProfile", { id: n.sender.id });
-  };
+  // const goToUserProfile = (n: Notification) => {
+  //   navigation.navigate("Profile", { id: n.sender.id });
+  // };
+
+    const goToUserProfile = async (user_id: string) => {
+      // const picOwnerAccount = await grabProfileByUserName(userName);
+  
+      // if (userProfile.UserID === picOwnerAccount[0].UserID) {
+      //   return;
+      // }
+  
+      navigation.navigate("BottomTab", {
+        screen: "Profile",
+        params: { id: user_id },
+      });
+    };
 
   const onTrashPress = (n: Notification) => {
     if (!n.is_seen) {
@@ -94,8 +110,8 @@ export default function FeedList() {
         return (
           <FeedItemPhotoLike
             item={item}
-            onUsernamePress={goToUserProfile}
-            onPhotoPress={togglePhotoBoxModal}
+            onUsernamePress={() =>goToUserProfile(item.sender.user_id)}
+            onPhotoPress={(n) => togglePhotoBoxModal(n, "photo_like")}
             onTrashPress={onTrashPress}
           />
         );
@@ -103,8 +119,8 @@ export default function FeedList() {
         return (
           <FeedItemPhotoComment
             item={item}
-            onUsernamePress={goToUserProfile}
-            onPhotoPress={togglePhotoBoxModal}
+            onUsernamePress={() => goToUserProfile(item.sender.user_id)}
+            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_comment?.photo?.id, userId: item.sender.user_id })}
             onTrashPress={onTrashPress}
           />
         );

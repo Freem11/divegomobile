@@ -35,7 +35,7 @@ export type MainRoutes = {
   PartnerRequestUpgrade: undefined;
   EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
-  PhotoComments: { id: number };
+  PhotoComments: { id: number; userId: string };
   PinchAndZoomPhoto: undefined;
   SingleReviewScreen: { id: number };
   ResetPasswordConfirm: undefined;
@@ -93,6 +93,7 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         {({ route }) => (
           <PhotoCommentsParallax
             id={route.params.id}
+            userId={route.params.userId}
           />
         )}
       </Stack.Screen>

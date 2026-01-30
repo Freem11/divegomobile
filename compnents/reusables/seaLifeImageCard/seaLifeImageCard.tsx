@@ -183,7 +183,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
           />
           <IconCounterButton
             icon="comment"
-            onPress={() => navigation.navigate("PhotoComments", { id: pic.id })}
+            onPress={() => navigation.navigate("PhotoComments", { id: pic.id, userId: pic.UserID })}
             size="icon"
             count={abbreviateNumber(pic.commentcount)}
           />

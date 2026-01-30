@@ -17,7 +17,7 @@ type SealifePreviewProps = {
   speciesCount?: number
   sightingsCount: number
   diveSitePics: DiveSiteWithUserName[] | null
-  onViewMore: () => void
+  onViewMore: (userId?: string) => void
   onAddSighting?: () => void
   selectedProfile: ActiveProfile | null
 };
@@ -55,7 +55,7 @@ export default function SealifePreview({
         <>
           <PreviewGrid items={diveSitePics} onAddSighting={onAddSighting} buttonText="Add a Sighting" />
           <S.SectionFooterWrapper>
-            <GhostButton onPress={onViewMore} title={"View More"} />
+            <GhostButton onPress={() => onViewMore(selectedProfile?.UserID)} title={"View More"} />
           </S.SectionFooterWrapper>
         </>
       ) : (
