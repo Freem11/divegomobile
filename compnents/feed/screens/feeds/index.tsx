@@ -1,7 +1,6 @@
 import React, {
   useEffect,
   useState,
-  useContext,
 } from "react";
 import {
   ActivityIndicator,
@@ -28,7 +27,6 @@ import FeedItemPhotoLike from "./messages/photoLike";
 import FeedItemPhotoComment from "./messages/photoComment";
 import type { Notification } from "../../store/types";
 import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
-import { SelectedPhotoContext } from "../../../contexts/selectedPhotoContext";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -49,7 +47,6 @@ export default function FeedList() {
   const oldItems = items.filter((n) => n.is_seen);
 
   const data = activeTab === "new" ? newItems : oldItems;
-  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -72,8 +69,7 @@ export default function FeedList() {
       console.warn("No photoFile found for notification", { type, n });
       return;
     }
-    setSelectedPhoto(photoFile);
-    navigation.navigate("PinchAndZoomPhoto");
+    navigation.navigate("PinchAndZoomPhoto", { id: n.id, photoFile });
   };
 
   const setActiveScreen = useActiveScreenStore(

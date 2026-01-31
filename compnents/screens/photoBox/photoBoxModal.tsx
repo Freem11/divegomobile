@@ -23,6 +23,7 @@ type PinchAndZoomProps = {
 };
 
 export default function PhotoBoxModal(props: PinchAndZoomProps) {
+  console.log("PhotoBoxModal rendered with props:", props);
   const navigation = useAppNavigation();
 
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
