@@ -31,7 +31,6 @@ export default function ReviewCardView({ name, photo, date, description, conditi
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-  const fileName = photo?.split("/").pop();
 
   const navigation = useAppNavigation();
 
@@ -41,7 +40,7 @@ export default function ReviewCardView({ name, photo, date, description, conditi
         <S.Header>
           <TouchableWithoutFeedback onPress={() => handleNavigate(name, id)}>
             <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-              <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} defaultImage="anchor" />
+              <Avatar photo={photo} defaultImage="anchor" />
               <S.UserInfo>
                 <S.Title>{name}</S.Title>
                 <S.Date>

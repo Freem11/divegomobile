@@ -20,7 +20,7 @@ type DiveShopProps = {
 
 export default function ReviewScreenView({
   selectedReview,
-  gestureRef // 2. Destructure the prop
+  gestureRef
 }: DiveShopProps) {
 
   const photos = selectedReview?.photos?.map((photo) => ({
@@ -36,7 +36,7 @@ export default function ReviewScreenView({
 
       <S.StatRowMajor>
         <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-          <Avatar photo={`${cloudflareBucketUrl}${selectedReview?.profilePhoto.split("/").pop()}`} />
+          <Avatar photo={`${selectedReview?.reviewer_public_domain}/${selectedReview?.reviewer_sm}`} />
           <S.Title>
             {selectedReview?.user_name}
           </S.Title>

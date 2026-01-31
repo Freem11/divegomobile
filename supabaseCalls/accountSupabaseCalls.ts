@@ -129,20 +129,16 @@ export const deleteProfile = async (id) => {
 };
 
 export const grabProfileByUserId = async (id: string) => {
-  const { data, error } = await supabase
-    .from("UserProfiles")
-    .select()
-    .eq("UserID", id);
+  const { data, error } = await supabase.rpc("get_profile_by_user_uuid", {
+    p_uuid: id
+  });
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it GRAB_PROFILE_BY_USER_ID,", error);
     return null;
   }
 
-  if (data[0]) {
-    return data[0] as ActiveProfile;
-  }
-  return null;
+  return data && data.length > 0 ? (data[0] as ActiveProfile) : null;
 };
 
 export const grabProfileById = async (id: number) => {

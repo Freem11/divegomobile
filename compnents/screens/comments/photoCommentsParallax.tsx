@@ -40,9 +40,8 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
   const { userProfile } = useUserProfile();
   const insets = useSafeAreaInsets();
 
-  const fileName = userProfile?.profilePhoto?.split("/").pop();
-  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
-  const avatarSource: ImageSourcePropType = fileName ? { uri: remoteUri } : fallbackAvatar;
+  const remoteUri = `${userProfile.public_domain}/${userProfile.sm}`;
+  const avatarSource: ImageSourcePropType = remoteUri ? { uri: remoteUri } : fallbackAvatar;
 
   const [isClearOn, setIsClearOn] = useState<boolean>(false);
   const [commentContent, setCommentContent] = useState<string>("");
@@ -59,8 +58,8 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
     let isMounted = true;
     const load = async () => {
       const pic = await getPhotoByID(id);
-      const picFileName = pic?.[0]?.photoFile?.split("/")?.pop();
-      const uri = picFileName ? `${cloudflareBucketUrl}${picFileName}` : null;
+      const picFileName = `${pic.public_domain}/${pic.xl}`;
+      const uri = picFileName ? picFileName : null;
       if (isMounted) setHeaderUri(uri);
     };
     load();

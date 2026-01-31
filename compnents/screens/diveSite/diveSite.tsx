@@ -79,6 +79,7 @@ export default function DiveSiteScreenView({
 
   const customOrder = [8, 1, 5, 4, 6, 12, 15, 20, 19, 18, 17, 13, 3, 9, 10, 11, 14];
 
+  console.log("reviews", reviews);
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
@@ -156,7 +157,7 @@ export default function DiveSiteScreenView({
                 description={review.description}
                 conditions={review.conditions}
                 name={review.user_name}
-                photo={review.profilePhoto}
+                photo={`${review.public_domain}/${review.sm}`}
                 id={review.user_id}
                 review={review}
                 currentUserId={currentUserId}
