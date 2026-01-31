@@ -1,10 +1,9 @@
 import React from "react";
 import {
-  Image,
   TouchableWithoutFeedback,
-  Keyboard,
-  ImageBackground
+  Keyboard
 } from "react-native";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import Svg, { Path } from "react-native-svg";
 
@@ -44,10 +43,10 @@ export default function LandingPageView(props: IProps) {
       <S.Container>
 
         <S.BackgroundContainer>
-          <ImageBackground
+          <Image
             source={require("../../png/Manta.jpg")}
             style={{ width: "100%", height: "100%" }}
-            resizeMode="cover"
+            contentFit="cover"
           />
         </S.BackgroundContainer>
 

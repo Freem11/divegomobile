@@ -4,12 +4,11 @@ import {
 } from "react-native";
 import Animated from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
-import React, { useContext } from "react";
+import React from "react";
 
 import {
   colors,
 } from "../../styles";
-import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { useAppNavigation } from "../../mapPage/types";
 
@@ -18,15 +17,18 @@ import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function PhotoBoxModal() {
-  const { selectedPhoto } = useContext(SelectedPhotoContext);
+type PinchAndZoomProps = {
+  id?: number;
+  photoFile: string;
+};
 
+export default function PhotoBoxModal(props: PinchAndZoomProps) {
   const navigation = useAppNavigation();
 
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
-    usePinchAndZoomAnimation([selectedPhoto]);
+    usePinchAndZoomAnimation([props.photoFile]);
 
-  const fileName = selectedPhoto && selectedPhoto.split("/").pop();
+  const fileName = props.photoFile && props.photoFile.split("/").pop();
   let cacheDir = null;
 
   if (fileName) {

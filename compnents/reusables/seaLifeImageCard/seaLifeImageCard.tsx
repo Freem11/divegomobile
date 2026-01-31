@@ -10,7 +10,6 @@ import {
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
 import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
-import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { cloudflareBucketUrl } from "../../globalVariables";
@@ -49,8 +48,6 @@ const windowWidth = Dimensions.get("window").width;
 
 const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
-  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-
   const { userProfile } = useUserProfile();
 
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
@@ -111,11 +108,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }
   };
 
-  const togglePhotoBoxModal = (photo: string) => {
-    setSelectedPhoto(photo);
-    navigation.navigate("PinchAndZoomPhoto");
-  };
-
   const containerWidth = windowWidth - windowWidth * 0.07;
   const containerHeight = aspectRatio
     ? containerWidth / aspectRatio
@@ -124,7 +116,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
   return (
     <S.Container key={pic.id} style={{ width: containerWidth, height: containerHeight }}>
       <TouchableOpacity
-        onPress={() => togglePhotoBoxModal(pic.photoFile)}
+        onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: pic.photoFile })}
         style={{
           width: "100%",
           height: "100%",

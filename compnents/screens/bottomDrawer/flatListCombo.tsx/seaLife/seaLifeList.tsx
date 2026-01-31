@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
+import { View } from "react-native";
+import { moderateScale } from "react-native-size-matters";
 
 import Card from "../../card";
 import { getAnimalsInBubble } from "../../../../../supabaseCalls/photoSupabaseCalls";
@@ -101,6 +103,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
           nestedScrollEnabled
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"
+          ListFooterComponent={<View style={{ height: moderateScale(30) }}></View>}
           ListEmptyComponent={(
             <S.EmptyStateWrapper>
               <EmptyState

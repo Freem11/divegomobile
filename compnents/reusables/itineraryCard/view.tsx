@@ -11,8 +11,8 @@ import * as S from "./styles";
 import { Menu } from "./Menu";
 
 type TripCardViewProps = {
-  itinerary:           ItineraryItem
-  isMyShop?:           boolean
+  itinerary: ItineraryItem
+  isMyShop?: boolean
   handleEdit: (sites: ItineraryItem) => void;
   handleDelete: (sites: ItineraryItem) => void;
   handleMapFlip: () => void;
@@ -81,7 +81,7 @@ export default function ItineraryCardView({
               numberOfLines={isMeasuring === 0 ? undefined : 2}
               onTextLayout={(e) => {
                 const lines = e.nativeEvent.lines.length;
-                if (lines > 2){
+                if (lines > 2) {
                   setIsOverflowing(true);
                 }
                 setIsMeasuring(2);
@@ -103,7 +103,6 @@ export default function ItineraryCardView({
             <S.StyledButton
               size={"thin"}
               title={"View on Map"}
-              iconLeft={"map-outlined"}
               round={false}
               onPress={handleMapFlip}
             />

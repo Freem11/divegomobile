@@ -24,6 +24,7 @@ export default function ReviewScreenView({
 }: DiveShopProps) {
 
   const photos = selectedReview?.photos?.map((photo) => ({
+    id: photo.photo_id,
     photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}`
   }));
 
