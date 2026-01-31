@@ -46,16 +46,11 @@ export default function UserProfileParallax(props: UserProfileProps) {
     }, [])
   );
 
-  /**
-   * Effect 1: Trigger data fetch whenever the profileID prop changes.
-   * This is the core fix for the blank screen when navigating between users.
-   */
   useEffect(() => {
     const loadData = async () => {
       if (!props.profileID) return;
 
       setLoading(true);
-      // We clear the context and local values to avoid showing "User A" while loading "User B"
       setSelectedProfile(null);
       setProfileVals(null);
 
@@ -68,16 +63,11 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   const getProfileinfo = async () => {
     const profileinfo = await grabProfileById(props.profileID);
-    // Safety check for array response from Supabase
     const data = Array.isArray(profileinfo) ? profileinfo[0] : profileinfo;
     setSelectedProfile(data);
   };
 
-  /**
-   * Effect 2: Process the profile data once it has been fetched into the context.
-   */
   useEffect(() => {
-    // Ensure we only process if the data in context matches the requested ID
     if (selectedProfile && Number(selectedProfile.id) === Number(props.profileID)) {
       if (selectedProfile?.user_id === userProfile?.UserID) {
         setIsMyProfile(true);
@@ -95,7 +85,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
         id: selectedProfile?.id,
         name: selectedProfile?.UserName,
         bio: selectedProfile?.profileBio,
-        photo: photoName,
+        photo: `${selectedProfile?.public_domain}/${selectedProfile?.lg}`,
       });
     }
   }, [selectedProfile, props.profileID]);
@@ -200,7 +190,6 @@ export default function UserProfileParallax(props: UserProfileProps) {
     );
   };
 
-  // Prevent rendering child screens if we don't have basic profile values yet
   if (loading && !profileVals) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.primaryBlue }}>
@@ -218,7 +207,6 @@ export default function UserProfileParallax(props: UserProfileProps) {
       popoverContent={popoverContent}
       isMyShop={isMyProfile}
     >
-      {/* We pass profileID as a key to force UserProfileScreen to re-mount/refresh when the ID changes */}
       <UserProfileScreen key={props.profileID} />
     </ParallaxDrawer>
   );

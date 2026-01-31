@@ -146,20 +146,16 @@ export const grabProfileByUserId = async (id: string) => {
 };
 
 export const grabProfileById = async (id: number) => {
-  const { data, error } = await supabase
-    .from("UserProfiles")
-    .select()
-    .eq("id", id);
+  const { data, error } = await supabase.rpc("get_profile_with_image", {
+    p_user_id: id
+  });
 
   if (error) {
     console.log("couldn't do it,", error);
     return null;
   }
 
-  if (data[0]) {
-    return data[0] as ActiveProfile;
-  }
-  return null;
+  return data && data.length > 0 ? (data[0] as ActiveProfile) : null;
 };
 
 export const grabProfileByUserName = async (userName) => {
