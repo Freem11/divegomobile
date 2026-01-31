@@ -12,7 +12,7 @@ export default function ImageCasher({ id ,photoFile, style, size }) {
       remoteUri = `${photoFile.public_domain}/${photoFile[size] || photoFile.md}`;
     }
     else {
-      const photoPath = photoFile.divesiteprofilephoto || photoFile.diveShopProfilePhoto;
+      const photoPath = photoFile.divesiteprofilephoto;
 
       if (photoPath) {
         const filename = photoPath.split("/").pop();
