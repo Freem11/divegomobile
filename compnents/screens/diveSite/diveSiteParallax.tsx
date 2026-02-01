@@ -56,14 +56,14 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const getDiveSiteinfo = async () => {
     if (props.id) {
       const diveSiteinfo = await getDiveSiteById(props.id);
-      setSelectedDiveSite(diveSiteinfo[0]);
+      setSelectedDiveSite(diveSiteinfo);
     }
   };
 
   useEffect(() => {
     let photoName = null;
-    if (selectedDiveSite?.divesiteprofilephoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`;
+    if (selectedDiveSite?.public_domain) {
+      photoName = `${selectedDiveSite.public_domain}/${selectedDiveSite.lg}`;
     }
 
     setDiveSiteVals({

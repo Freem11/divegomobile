@@ -4,9 +4,6 @@ import { Animated } from "react-native";
 export default function ImageCasherDynamicLocal(props) {
   const { photoFile, id, style, aspectRatio } = props;
 
-  // const fileName = photoFile?.split("/").pop();
-  // const fallbackUri = "https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/MantaWhite.jpg";
-
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const handleImageLoad = () => {

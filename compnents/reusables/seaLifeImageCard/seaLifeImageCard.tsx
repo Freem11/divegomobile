@@ -67,9 +67,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
     remoteUri = `${pic.public_domain}/${pic.xl}`;
   }
 
-  // const fileName = pic.photoFile?.split("/").pop();
-  // const remoteUri = `${cloudflareBucketUrl}${fileName}`;
-
   const navigation = useAppNavigation();
 
   // useEffect(() => {

@@ -2,7 +2,6 @@ import React from "react";
 import { Image } from "react-native";
 
 import DEFAULT_IMAGE from "../png/NoImage.png";
-import { cloudflareBucketUrl } from "../globalVariables";
 
 export default function ImageCasher({ id ,photoFile, style, size }) {
   let remoteUri = null;
@@ -10,14 +9,6 @@ export default function ImageCasher({ id ,photoFile, style, size }) {
   if (photoFile) {
     if (photoFile.public_domain) {
       remoteUri = `${photoFile.public_domain}/${photoFile[size] || photoFile.md}`;
-    }
-    else {
-      const photoPath = photoFile.divesiteprofilephoto;
-
-      if (photoPath) {
-        const filename = photoPath.split("/").pop();
-        remoteUri = `${cloudflareBucketUrl}${filename}`;
-      }
     }
   }
 
