@@ -54,18 +54,15 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
       try {
         let fetchedInfo;
         if (dataType === EDIT_TYPE.DIVE_CENTRE) {
-          const res = await getDiveShopById(id);
-          fetchedInfo = res[0];
+          fetchedInfo = await getDiveShopById(id);
         } else {
           fetchedInfo = await grabProfileById(id);
         }
 
         setInfo(fetchedInfo);
 
-        const photoPath = fetchedInfo?.profilePhoto || fetchedInfo?.diveShopProfilePhoto;
-        if (photoPath) {
-          const fileName = photoPath.split("/").pop();
-          setImage(`${cloudflareBucketUrl}${fileName}`);
+        if (fetchedInfo) {
+          setImage(`${fetchedInfo.public_domain}/${fetchedInfo.xl}`);
         }
       } catch (error) {
         showError("Failed to load information");
