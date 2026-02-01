@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native";
 
 import Histogram from "../flatListCombo.tsx/histogram";
 import ImageCasher from "../../../helpers/imageCashing";
+import { PHOTO_SIZES } from "../../../../entities/photoSizes";
 
 import * as S from "./styles";
 
@@ -24,7 +25,7 @@ export default function Card(props: CardProps) {
         <ImageCasher
           photoFile={props.photoPath}
           id={props.id}
-          size="md"
+          size={PHOTO_SIZES.Medium}
           style={{
             flex: 1,
             borderBottomRightRadius: moderateScale(14),

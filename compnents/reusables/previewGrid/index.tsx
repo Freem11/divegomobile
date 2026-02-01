@@ -7,6 +7,7 @@ import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { useAppNavigation } from "../../mapPage/types";
+import { PHOTO_SIZES } from "../../../entities/photoSizes";
 
 import * as S from "./styles";
 
@@ -49,7 +50,7 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
             <Pressable onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: `${item.public_domain}/${item.xl}` })}>
               <ImageCasherDynamic
                 photoFile={item}
-                size="sm"
+                size={PHOTO_SIZES.Small}
                 style={{
                   height: "100%",
                   width: "100%",

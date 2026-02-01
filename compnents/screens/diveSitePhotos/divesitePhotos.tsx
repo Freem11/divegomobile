@@ -5,6 +5,7 @@ import ButtonIcon from "../../reusables/buttonIcon";
 import SeaLifeImageCard from "../../reusables/seaLifeImageCard/seaLifeImageCard";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
+import { PHOTO_SIZES } from "../../../entities/photoSizes";
 
 import * as S from "./styles";
 
@@ -62,7 +63,7 @@ export default function DiveSitePhotosPageView({
               renderItem={({ item: photo }) => (
                 <SeaLifeImageCard
                   pic={photo}
-                  size="lg"
+                  size={PHOTO_SIZES.Large}
                   dataSetType={"DiveSitePhotos"}
                   profileViewAction={() => handleProfileMove(photo.UserName)}
                 />
