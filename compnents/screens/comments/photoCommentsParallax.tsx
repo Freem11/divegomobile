@@ -13,7 +13,6 @@ import noImage from "../../png/NoImage.png";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { useAppNavigation } from "../../mapPage/types";
 import { getPhotoByID } from "../../../supabaseCalls/seaLifePhotoCalls/gets";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import { colors } from "../../styles";
 import AvatarTextInputField from "../../authentication/utils/textInputWithAvatar";
 import { useUserProfile } from "../../../store/user/useUserProfile";

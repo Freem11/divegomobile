@@ -1,6 +1,6 @@
 import { supabase } from "../supabase";
 
-export const insertPhotoComment = async(userId, photoId, comment, userID) => {
+export const insertPhotoComment = async (userId, photoId, comment, userID) => {
   const { data, error } = await supabase
     .from("photoComments")
     .insert([
@@ -21,7 +21,7 @@ export const insertPhotoComment = async(userId, photoId, comment, userID) => {
   }
 };
 
-export const deletePhotoComment = async(id) => {
+export const deletePhotoComment = async (id) => {
   const { data, error } = await supabase
     .from("photoComments")
     .delete()
@@ -37,22 +37,20 @@ export const deletePhotoComment = async(id) => {
   // }
 };
 
-export const grabPhotoCommentsByPicId = async(picId) => {
+export const grabPhotoCommentsByPicId = async (id: number) => {
   const { data, error } = await supabase.rpc("get_comments_with_user", {
-    photoid: picId
+    photo_id_param: id
   });
 
   if (error) {
-    console.log("couldn't do it 52,", error);
+    console.log("couldn't do it GET_COMMENTS_BY_PHOTO_ID,", error);
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  return data || [];
 };
 
-export const countPhotoCommentById = async(picId) => {
+export const countPhotoCommentById = async (picId) => {
   const { error, count } = await supabase
     .from("photoComments")
     .select("*", { count: "exact" })

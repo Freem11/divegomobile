@@ -4,7 +4,6 @@ import { moderateScale } from "react-native-size-matters";
 
 import readableDate from "../../helpers/readableDate";
 import { Review, ReviewCondition } from "../../../entities/diveSiteReview";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import { useAppNavigation } from "../../mapPage/types";
 
 import * as S from "./styles";

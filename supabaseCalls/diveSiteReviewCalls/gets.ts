@@ -44,7 +44,6 @@ export const getRecentThreeReviewsBySiteId = async (divesite_id: number) => {
     return [];
   }
 
-  console.log("data", data);
   if (data) {
     return data as Review[];
   }
