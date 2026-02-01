@@ -1,16 +1,13 @@
 export default function abbreviateNumber(number: number) {
-  // Handle 0 or non-numeric values early
-  if (!number || number < 1000) return number?.toString() || "0";
+  if (number < 1000) return number.toString(); // If the number is less than 1000, no abbreviation needed
 
-  const abbreviations = ["K", "M", "B", "T"];
-  let abbreviationIndex = -1; // Start at -1 because 1000/1000 = index 0 ('K')
+  const abbreviations = ["K", "M", "B", "T"]; // Array of abbreviations
+  let abbreviationIndex = 0; // Start with the first abbreviation (K)
 
   while (number >= 1000 && abbreviationIndex < abbreviations.length - 1) {
-    number /= 1000;
-    abbreviationIndex++;
+    number /= 1000; // Divide the number by 1000
+    abbreviationIndex++; // Move to the next abbreviation
   }
 
-  // Use fixed precision (e.g., 1.5K) and ensure we have a valid index
-  const formattedNumber = Math.floor(number * 10) / 10;
-  return formattedNumber + abbreviations[abbreviationIndex];
+  return Math.floor(number * 10) / 10 + abbreviations[abbreviationIndex - 1]; // Return the abbreviated number with the appropriate suffix, with a maximum of three number characters
 }

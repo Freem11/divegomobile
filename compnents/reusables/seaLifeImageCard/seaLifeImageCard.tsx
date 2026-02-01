@@ -13,6 +13,7 @@ import ButtonIcon from "../../reusables/buttonIcon";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useAppNavigation } from "../../mapPage/types";
+import { PHOTO_SIZES } from "../../../entities/photoSizes";
 
 import * as S from "./styles";
 
@@ -57,13 +58,13 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   let remoteUri;
 
-  if (size === "sm") {
+  if (size === PHOTO_SIZES.Small) {
     remoteUri = `${pic.public_domain}/${pic.sm}`;
-  } else if (size === "md") {
+  } else if (size === PHOTO_SIZES.Medium) {
     remoteUri = `${pic.public_domain}/${pic.md}`;
-  } else if (size === "lg") {
+  } else if (size === PHOTO_SIZES.Large) {
     remoteUri = `${pic.public_domain}/${pic.lg}`;
-  } else if (size === "xl") {
+  } else if (size === PHOTO_SIZES.ExtraLarge) {
     remoteUri = `${pic.public_domain}/${pic.xl}`;
   }
 
@@ -110,10 +111,12 @@ const SeaLifeImageCard = (props: PictureProps) => {
     ? containerWidth / aspectRatio
     : moderateScale(200);
 
+  const pinAndZoomImage = `${pic.public_domain}/${pic.xl}`;
+
   return (
     <S.Container key={pic.id} style={{ width: containerWidth, height: containerHeight }}>
       <TouchableOpacity
-        onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: `${pic.public_domain}/${pic.xl}` })}
+        onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: pinAndZoomImage })}
         style={{
           width: "100%",
           height: "100%",

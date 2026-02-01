@@ -56,6 +56,7 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
                   borderRadius: moderateScale(8),
                   resizeMode: "cover",
                 }}
+                aspectRatio={0}
               />
             </Pressable>
           </S.Item>

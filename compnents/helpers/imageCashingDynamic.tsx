@@ -1,18 +1,28 @@
 import React, { useRef } from "react";
-import { Animated } from "react-native";
+import { Animated, ImageStyle, StyleProp } from "react-native";
 
-export default function ImageCasherDynamic(props) {
-  const { photoFile , size, style, aspectRatio } = props;
+import { DiveSiteWithUserName } from "../../entities/diveSite";
+import { PHOTO_SIZES } from "../../entities/photoSizes";
+
+type ImageCasherDynamicProps = {
+  size: string;
+  photoFile: DiveSiteWithUserName;
+  aspectRatio: number;
+  style?: StyleProp<ImageStyle>;
+};
+
+export default function ImageCasherDynamic(props: ImageCasherDynamicProps) {
+  const { photoFile, size, style, aspectRatio } = props;
 
   let remoteUri;
 
-  if (size === "sm") {
+  if (size === PHOTO_SIZES.Small) {
     remoteUri = `${photoFile.public_domain}/${photoFile.sm}`;
-  } else if (size === "md"){
+  } else if (size === PHOTO_SIZES.Medium) {
     remoteUri = `${photoFile.public_domain}/${photoFile.md}`;
-  } else if (size === "lg"){
+  } else if (size === PHOTO_SIZES.Large) {
     remoteUri = `${photoFile.public_domain}/${photoFile.lg}`;
-  } else if (size === "xl"){
+  } else if (size === PHOTO_SIZES.ExtraLarge) {
     remoteUri = `${photoFile.public_domain}/${photoFile.xl}`;
   }
 

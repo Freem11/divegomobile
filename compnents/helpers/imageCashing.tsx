@@ -1,9 +1,16 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, ImageStyle, StyleProp } from "react-native";
 
 import DEFAULT_IMAGE from "../png/NoImage.png";
 
-export default function ImageCasher({ id ,photoFile, style, size }) {
+type ImageCasherProps = {
+  id: number;
+  photoFile: string;
+  size: string;
+  style?: StyleProp<ImageStyle>;
+};
+
+export default function ImageCasher({ id, photoFile, style, size }: ImageCasherProps) {
   let remoteUri = null;
 
   if (photoFile) {
@@ -13,7 +20,7 @@ export default function ImageCasher({ id ,photoFile, style, size }) {
   }
 
   if (!remoteUri) {
-    return <Image source={{ uri: Image.resolveAssetSource(DEFAULT_IMAGE).uri }} style={style}/>;
+    return <Image source={{ uri: Image.resolveAssetSource(DEFAULT_IMAGE).uri }} style={style} />;
   }
 
   return (

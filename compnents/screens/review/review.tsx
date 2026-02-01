@@ -28,6 +28,8 @@ export default function ReviewScreenView({
     photofileZoom: `${photo.public_domain}/${photo.xl}`
   }));
 
+  const avatarImage = `${selectedReview?.reviewer_public_domain}/${selectedReview?.reviewer_sm}`;
+
   return (
     <S.ContentContainer>
       <S.InfoContainer>
@@ -36,7 +38,7 @@ export default function ReviewScreenView({
 
       <S.StatRowMajor>
         <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-          <Avatar photo={`${selectedReview?.reviewer_public_domain}/${selectedReview?.reviewer_sm}`} />
+          <Avatar photo={avatarImage} />
           <S.Title>
             {selectedReview?.user_name}
           </S.Title>

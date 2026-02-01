@@ -42,6 +42,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
         <ImageCasherDynamicLocal
           photoFile={item.photofile}
           style={{ height: "100%", width: "100%", resizeMode: "cover" }}
+          aspectRatio={0}
         />
       </S.Item>
 
