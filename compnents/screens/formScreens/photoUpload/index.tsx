@@ -16,7 +16,7 @@ import { useAppNavigation } from "../../../mapPage/types";
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: { photofile: string; id: number | null }[] | null;
+  items: { photofile: string; photofileZoom: string; id: number | null }[] | null;
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;
@@ -113,7 +113,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
                   key={itemKey}
                   onPress={() =>
                     navigation.navigate("PinchAndZoomPhoto", {
-                      photoFile: item.photofile,
+                      photoFile: item.photofileZoom,
                     })}
                   hitSlop={10}
                   style={({ pressed }) => [

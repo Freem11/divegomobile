@@ -24,7 +24,8 @@ export default function ReviewScreenView({
 
   const photos = selectedReview?.photos?.map((photo) => ({
     id: photo.photo_id,
-    photofile: `${photo.public_domain}/${photo.md}`
+    photofile: `${photo.public_domain}/${photo.md}`,
+    photofileZoom: `${photo.public_domain}/${photo.xl}`
   }));
 
   return (
