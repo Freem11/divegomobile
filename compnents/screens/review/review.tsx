@@ -5,7 +5,6 @@ import { moderateScale } from "react-native-size-matters";
 import { ReviewSingle } from "../../../entities/diveSiteReview";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import Avatar from "../../reusables/reviewCard/avatarCreator";
 import readableDate from "../../helpers/readableDate";
 import { PhotoUpload } from "../formScreens/photoUpload";
@@ -25,7 +24,7 @@ export default function ReviewScreenView({
 
   const photos = selectedReview?.photos?.map((photo) => ({
     id: photo.photo_id,
-    photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}`
+    photofile: `${photo.public_domain}/${photo.md}`
   }));
 
   return (

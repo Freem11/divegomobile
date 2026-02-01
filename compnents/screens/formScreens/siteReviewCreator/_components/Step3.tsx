@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Control, Controller, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
-import { ImagePickerAsset } from "expo-image-picker";
 import { useTranslation } from "react-i18next";
 import { styled } from "styled-components";
 

@@ -4,7 +4,6 @@ import noImage from "../../png/NoImage.png";
 import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { useDiveShopNavigation } from "../diveShop/types";
 import { getReviewById } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
-import { cloudflareBucketUrl } from "../../globalVariables";
 
 import ReviewScreen from ".";
 
@@ -26,9 +25,8 @@ export default function ReviewParallax(props: ReviewParallaxProps) {
     setSelectedReview(reviewInfo);
   };
 
-  const diveSitePhoto = selectedReview?.data.diveSiteProfilePhoto;
-  const fileName = diveSitePhoto ? diveSitePhoto.split("/").pop() : null;
-  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
+  const diveSitePhoto = selectedReview?.data;
+  const remoteUri = diveSitePhoto && `${diveSitePhoto.ds_public_domain}/${diveSitePhoto.ds_lg}`;
 
   const onClose = async () => {
     diveShopNavigation.goBack();
