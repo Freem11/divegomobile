@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 
 import Avatar from "../reviewCard/avatarCreator";
-import { cloudflareBucketUrl } from "../../globalVariables";
 
 import * as S from "./styles";
 
@@ -15,14 +14,12 @@ interface DiveSiteCardProps {
 
 export const DiveSitesCard: FC<DiveSiteCardProps> = ({ onPress, diveSiteId, diveSiteName, diveSitePhoto, sitesArray }) => {
 
-  const fileName = diveSitePhoto?.split("/").pop();
-
   return (
     <S.DiveSitesCard
       key={diveSiteId}
       onPress={() => onPress?.(diveSiteId, sitesArray)}
     >
-      <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} defaultImage={"anchor"} />
+      <Avatar photo={diveSitePhoto && diveSitePhoto} defaultImage={"anchor"} />
       <S.Label>{diveSiteName}</S.Label>
     </S.DiveSitesCard>
   );

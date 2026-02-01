@@ -82,20 +82,17 @@ export const updateDiveShop = async (values) => {
   }
 };
 
-export const getShopByUserID = async (value: string) => {
-  const { data, error } = await supabase
-    .from("shops")
-    .select()
-    .eq("userId", value);
+export const getShopByUserID = async (value: string): Promise<DiveShop[]> => {
+  const { data, error } = await supabase.rpc("get_shop_by_user_id_with_images", {
+    p_user_id: value
+  });
 
   if (error) {
-    console.log("couldn't do it 39,", error);
+    console.log("couldn't do it getShopByUserID,", error);
     return [];
   }
 
-  if (data) {
-    return data as DiveShop[];
-  }
+  return data || [];
 };
 
 export const getDiveShopById = async (id: number) => {

@@ -20,8 +20,6 @@ export default function ShopListPageView({
 
   const { t } = useTranslation();
 
-  console.log(listOfShops);
-
   return (
     <S.ContentContainer>
 
@@ -32,7 +30,7 @@ export default function ShopListPageView({
           data={listOfShops}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) =>
-            <Card id={item.id} name={item.orgName} photoPath={item.diveShopProfilePhoto} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
+            <Card id={item.id} name={item.orgName} photoPath={item} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"

@@ -49,7 +49,7 @@ export const Step3: React.FC<Step3Props> = ({
             key={diveSite.id}
             diveSiteId={diveSite.id}
             diveSiteName={diveSite.name}
-            diveSitePhoto={diveSite.divesiteprofilephoto}
+            diveSitePhoto={diveSite.public_domain && `${diveSite.public_domain}/${diveSite.sm}`}
             sitesArray={sitesArray}
             onPress={() => removeFromSitesArray(diveSite.id, sitesArray)}
 

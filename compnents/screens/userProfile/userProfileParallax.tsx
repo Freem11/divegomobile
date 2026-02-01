@@ -76,11 +76,6 @@ export default function UserProfileParallax(props: UserProfileProps) {
         followCheck();
       }
 
-      let photoName = null;
-      if (selectedProfile?.profilePhoto) {
-        photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedProfile.profilePhoto.split("/").pop()}`;
-      }
-
       setProfileVals({
         id: selectedProfile?.id,
         name: selectedProfile?.UserName,
