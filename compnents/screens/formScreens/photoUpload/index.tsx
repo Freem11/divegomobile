@@ -29,6 +29,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
   onRemovePhoto,
   gestureRef,
 }) => {
+
   const itemSize = scale(100);
   const navigation = useAppNavigation();
 
@@ -41,7 +42,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
     <View style={{ position: "relative" }} pointerEvents="box-none">
       <S.Item style={{ width: itemSize, height: itemSize }}>
         <FadeInImage
-          photoFile={{ "original_image": item.original_image, "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.lg, "xl": item.xl }}
+          photoFile={{ "photofile": item.photofile, "original_image": item.original_image, "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.lg, "xl": item.xl }}
           style={{ height: "100%", width: "100%", resizeMode: "cover" }}
           size={PHOTO_SIZES.Medium}
         />
@@ -115,7 +116,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
                   key={itemKey}
                   onPress={() =>
                     navigation.navigate("PinchAndZoomPhoto", {
-                      photoFile: item.photofileZoom,
+                      photoFile: item.original_image,
                     })}
                   hitSlop={10}
                   style={({ pressed }) => [

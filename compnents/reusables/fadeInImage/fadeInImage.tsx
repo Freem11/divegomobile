@@ -36,12 +36,14 @@ export default function FadeInImage({ photoFile, style, size }: FadeInImageProps
       remoteUri = `${photoFile.public_domain}/${photoFile.xl}`;
     }
   } else {
-    if (photoFile.original_image) {
+    if (photoFile.photofile) {
+      remoteUri = photoFile.photofile;
+    } else if (photoFile.original_image) {
       remoteUri = `${cloudflareBucketUrl}${photoFile?.original_image.split("/").pop()}`;
     }
   }
 
-  if (!photoFile.original_image) {
+  if (!remoteUri) {
     return <Image source={{ uri: Image.resolveAssetSource(DEFAULT_IMAGE).uri }} style={style} />;
   }
 
