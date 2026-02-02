@@ -68,7 +68,6 @@ export default function UserProfileScreenView({
         {reviews && reviews.length > 0 ? (
           <S.ReviewsContent>
             {reviews.map((review) => (
-
               <ReviewCard
                 key={review.review_id}
                 date={review.dive_date}
@@ -76,7 +75,7 @@ export default function UserProfileScreenView({
                 conditions={review.conditions}
                 id={review.divesite_id}
                 name={review.divesite_name}
-                photo={review.diveSiteProfilePhoto}
+                photo={`${review.public_domain}/${review.sm}`}
                 review={review}
                 currentUserId={userProfile.UserID}
                 handleNavigate={handleDiveSiteMove}

@@ -7,6 +7,7 @@ export enum PHOTO_SIZES {
 }
 
 export type PhotoVariantSet = {
+    original_image: string
     public_domain: string
     sm: string
     md: string

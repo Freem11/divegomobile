@@ -24,7 +24,6 @@ export default function Card(props: CardProps) {
       <S.ImageHousing key={props.id}>
         <FadeInImage
           photoFile={props.photoPath}
-          aspectRatio={0}
           size={PHOTO_SIZES.Medium}
           style={{
             flex: 1,

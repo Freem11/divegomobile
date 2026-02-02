@@ -11,10 +11,7 @@ import { region } from "../../../entities/region";
 
 import UserProfilePhotosPageView from "./userProfilePhotos";
 
-type UserProfilePhotosPageProps = {};
-
-export default function UserProfilePhotosPage({ }: UserProfilePhotosPageProps) {
-  const mapRef = useMapStore((state) => state.mapRef);
+export default function UserProfilePhotosPage() {
   const { userProfile } = useUserProfile();
   const { selectedProfile } = useContext(SelectedProfileContext);
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);

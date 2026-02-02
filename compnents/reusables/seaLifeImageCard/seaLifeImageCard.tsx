@@ -14,6 +14,7 @@ import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useAppNavigation } from "../../mapPage/types";
 import { PHOTO_SIZES } from "../../../entities/photoSizes";
+import { cloudflareBucketUrl } from "../../globalVariables";
 
 import * as S from "./styles";
 
@@ -32,6 +33,11 @@ interface Photo {
   likeid: number | null;
   month: number;
   photoFile: string;
+  public_domain: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
 }
 
 interface PictureProps {
@@ -70,21 +76,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const navigation = useAppNavigation();
 
-  // useEffect(() => {
-  //   if (remoteUri) {
-  //     RNImage.getSize(
-  //       remoteUri,
-  //       (width, height) => {
-  //         setAspectRatio(width / height);
-  //       },
-  //       (error) => {
-  //         console.log("Failed to get image size:", error);
-  //         setAspectRatio(1);
-  //       }
-  //     );
-  //   }
-  // }, [remoteUri]);
-
   const handleEmail = (pic: Photo) => {
     email(["scubaseasons@gmail.com"], {
       subject: `Reporting issue with picture: "${pic.label}" - ${pic.photoFile} `,
@@ -111,7 +102,9 @@ const SeaLifeImageCard = (props: PictureProps) => {
     ? containerWidth / aspectRatio
     : moderateScale(200);
 
-  const pinAndZoomImage = `${pic.public_domain}/${pic.xl}`;
+  const pinAndZoomImage = pic?.public_domain
+    ? `${pic.public_domain}/${pic.xl}`
+    : `${cloudflareBucketUrl}${pic?.photoFile?.split("/").pop()}`;
 
   return (
     <S.Container key={pic.id} style={{ width: containerWidth, height: containerHeight }}>

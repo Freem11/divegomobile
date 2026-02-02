@@ -134,8 +134,9 @@ export default function DiveSiteScreen({
     const recentNine = await getDiveSiteRecentNinePhotos({ lat: selectedDiveSite.lat, lng: selectedDiveSite.lng });
 
     const formattedRecentNine = recentNine.map(({
-      public_domain, sm, md, lg, xl,
+      photofile, public_domain, sm, md, lg, xl,
     }) => ({
+      original_image: photofile,
       public_domain,
       sm,
       md,

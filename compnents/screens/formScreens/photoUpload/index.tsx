@@ -41,9 +41,8 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
     <View style={{ position: "relative" }} pointerEvents="box-none">
       <S.Item style={{ width: itemSize, height: itemSize }}>
         <FadeInImage
-          photoFile={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.lg, "xl": item.xl }}
+          photoFile={{ "original_image": item.original_image, "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.lg, "xl": item.xl }}
           style={{ height: "100%", width: "100%", resizeMode: "cover" }}
-          aspectRatio={0}
           size={PHOTO_SIZES.Medium}
         />
       </S.Item>
@@ -108,7 +107,7 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           )}
 
           {items?.map((item, index) => {
-            const itemKey = `${item.photofile}-${index}`;
+            const itemKey = `${item.sm}-${index}`;
 
             if (item.id) {
               return (

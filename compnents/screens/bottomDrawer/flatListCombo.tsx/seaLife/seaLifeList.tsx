@@ -30,7 +30,6 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
   const getPhotos = async (filterValue: string) => {
     if (boundaries) {
       const seaLifeData = await getAnimalsInBubble(boundaries, { label: filterValue });
-
       setAreaPics(seaLifeData);
     }
   };
@@ -89,17 +88,27 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
       {layoutReady ? (
         <FlatList
           data={areaPics}
-          keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
-          renderItem={({ item }) => (
-            <Card
-              id={item.id}
-              name={item.label}
-              photoPath={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.ldg, "xl": item.xl }}
-              onPressHandler={() => handleAnimalSelect(item.label)}
-              seaLifeSelections={animalMultiSelection}
-              subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? "s" : ""}`}
-            />
-          )}
+          keyExtractor={(item) => item.id?.toString() || item.label}
+          renderItem={({ item }) => {
+            const path = {
+              original_image: item.photofile,
+              public_domain: item.public_domain,
+              sm: item.sm,
+              md: item.md,
+              lg: item.lg,
+              xl: item.xl
+            };
+
+            return (
+              <Card
+                id={item.label}
+                name={item.label}
+                photoPath={path}
+                subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? "s" : ""}`}
+                onPressHandler={() => handleAnimalSelect(item.label)}
+              />
+            );
+          }}
           nestedScrollEnabled
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"

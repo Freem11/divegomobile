@@ -7,6 +7,7 @@ import Icon from "../../../icons/Icon";
 import { useAppNavigation } from "../../mapPage/types";
 import { PHOTO_SIZES, PhotoVariantSet } from "../../../entities/photoSizes";
 import FadeInImage from "../fadeInImage/fadeInImage";
+import { cloudflareBucketUrl } from "../../globalVariables";
 
 import * as S from "./styles";
 
@@ -46,7 +47,7 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
               backgroundColor: colors.lightGrey,
             }}
           >
-            <Pressable onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: `${item.public_domain}/${item.xl}` })}>
+            <Pressable onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: `${item.public_domain}/${item.xl}` || `${cloudflareBucketUrl}${item?.original_image.split("/").pop()}` })}>
               <FadeInImage
                 photoFile={item}
                 size={PHOTO_SIZES.Small}
@@ -56,7 +57,6 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
                   borderRadius: moderateScale(8),
                   resizeMode: "cover",
                 }}
-                aspectRatio={0}
               />
             </Pressable>
           </S.Item>

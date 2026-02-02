@@ -24,8 +24,9 @@ export default function ReviewScreenView({
 }: DiveShopProps) {
 
   const photos: PhotoVariantSet[] = selectedReview?.photos.map(({
-    public_domain, sm, md, lg, xl,
+    photoPath, public_domain, sm, md, lg, xl,
   }) => ({
+    original_image: photoPath,
     public_domain,
     sm,
     md,

@@ -95,16 +95,28 @@ export default function DiveSiteList() {
       {layoutReady ? (
         <FlatList
           data={diveSites}
-          keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
-          renderItem={({ item }) => (
-            <Card
-              id={item.id}
-              name={item.name}
-              photoPath={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.ldg, "xl": item.xl }}
-              subData={item.times_seen}
-              onPressHandler={() => handleDiveSiteSelection(item.id)}
-            />
-          )}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            const path = {
+              original_image: item.diveSiteProfilePhoto,
+              public_domain: item.public_domain,
+              sm: item.sm,
+              md: item.md,
+              lg: item.lg,
+              xl: item.xl
+            };
+
+            return (
+              <Card
+                id={item.id}
+                name={item.name}
+                photoPath={path}
+                subData={item.times_seen}
+                onPressHandler={() => handleDiveSiteSelection(item.id)}
+              />
+            );
+          }}
+
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"

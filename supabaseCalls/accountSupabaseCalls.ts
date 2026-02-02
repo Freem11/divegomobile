@@ -59,7 +59,6 @@ export const updateProfileUserName = async (values: Partial<ActiveProfile>) => {
 };
 
 export const updateProfile = async (values: Partial<ActiveProfile>) => {
-  console.log("supa", values);
   const { data, error } = await supabase
     .from("UserProfiles")
     .update(values)

@@ -34,8 +34,9 @@ export default function UserProfileScreen() {
     const recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID);
 
     const formattedRecentNine = recentNine.map(({
-      public_domain, sm, md, lg, xl,
+      photofile, public_domain, sm, md, lg, xl,
     }) => ({
+      original_image: photofile,
       public_domain,
       sm,
       md,
@@ -57,8 +58,6 @@ export default function UserProfileScreen() {
   };
 
   const handleDiveSiteMove = async (diveSiteName: string, diveSiteId: number) => {
-
-    console.log(diveSiteName, diveSiteId);
     navigation.navigate("DiveSiteNavigator", { id: diveSiteId });
   };
 

@@ -78,8 +78,26 @@ export default function DiveCenterList() {
       {layoutReady ? (
         <FlatList
           data={diveCenters}
-          keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
-          renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.ldg, "xl": item.xl }} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            const path = {
+              original_image: item.diveShopProfilePhoto,
+              public_domain: item.public_domain,
+              sm: item.sm,
+              md: item.md,
+              lg: item.lg,
+              xl: item.xl
+            };
+
+            return (
+              <Card
+                id={item.id}
+                name={item.orgName}
+                photoPath={path}
+                onPressHandler={() => handleDiveCenterSelection(item.id)}
+              />
+            );
+          }}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"
