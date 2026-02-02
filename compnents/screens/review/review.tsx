@@ -9,6 +9,7 @@ import Avatar from "../../reusables/reviewCard/avatarCreator";
 import readableDate from "../../helpers/readableDate";
 import { PhotoUpload } from "../formScreens/photoUpload";
 import ConditionsCard from "../../reusables/condidtionsCard";
+import { PhotoVariantSet } from "../../../entities/photoSizes";
 
 import * as S from "./styles";
 
@@ -22,10 +23,14 @@ export default function ReviewScreenView({
   gestureRef
 }: DiveShopProps) {
 
-  const photos = selectedReview?.photos?.map((photo) => ({
-    id: photo.photo_id,
-    photofile: `${photo.public_domain}/${photo.md}`,
-    photofileZoom: `${photo.public_domain}/${photo.xl}`
+  const photos: PhotoVariantSet[] = selectedReview?.photos.map(({
+    public_domain, sm, md, lg, xl,
+  }) => ({
+    public_domain,
+    sm,
+    md,
+    lg,
+    xl
   }));
 
   const avatarImage = `${selectedReview?.reviewer_public_domain}/${selectedReview?.reviewer_sm}`;

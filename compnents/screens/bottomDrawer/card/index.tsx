@@ -3,15 +3,15 @@ import { moderateScale } from "react-native-size-matters";
 import { TouchableOpacity } from "react-native";
 
 import Histogram from "../flatListCombo.tsx/histogram";
-import ImageCasher from "../../../helpers/imageCashing";
-import { PHOTO_SIZES } from "../../../../entities/photoSizes";
+import FadeInImage from "../../../reusables/fadeInImage/fadeInImage";
+import { PHOTO_SIZES, PhotoVariantSet } from "../../../../entities/photoSizes";
 
 import * as S from "./styles";
 
 type CardProps = {
   id: number;
   name: string;
-  photoPath: string;
+  photoPath: PhotoVariantSet;
   subData?: string
   onPressHandler: () => void;
   seaLifeSelections?: string
@@ -22,9 +22,9 @@ export default function Card(props: CardProps) {
   return (
     <TouchableOpacity onPress={props.onPressHandler}>
       <S.ImageHousing key={props.id}>
-        <ImageCasher
+        <FadeInImage
           photoFile={props.photoPath}
-          id={props.id}
+          aspectRatio={0}
           size={PHOTO_SIZES.Medium}
           style={{
             flex: 1,

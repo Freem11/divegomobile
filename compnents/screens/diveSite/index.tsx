@@ -15,6 +15,7 @@ import { calculateRegionFromBoundaries } from "../../googleMap/regionCalculator"
 import { useAppNavigation } from "../../mapPage/types";
 import { MapConfigurations } from "../../googleMap/types";
 import { grabProfileByUserName } from "../../../supabaseCalls/accountSupabaseCalls";
+import { PhotoVariantSet } from "../../../entities/photoSizes";
 
 import DiveSiteScreenView from "./diveSite";
 import { useDiveSiteNavigation } from "./types";
@@ -44,7 +45,7 @@ export default function DiveSiteScreen({
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
-  const [diveSitePics, setDiveSitePics] = useState([]);
+  const [diveSitePics, setDiveSitePics] = useState<PhotoVariantSet[] | null>([]);
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
@@ -131,7 +132,18 @@ export default function DiveSiteScreen({
     setSightingsCount(sightingsCount.label_count);
 
     const recentNine = await getDiveSiteRecentNinePhotos({ lat: selectedDiveSite.lat, lng: selectedDiveSite.lng });
-    setDiveSitePics(recentNine);
+
+    const formattedRecentNine = recentNine.map(({
+      public_domain, sm, md, lg, xl,
+    }) => ({
+      public_domain,
+      sm,
+      md,
+      lg,
+      xl
+    }));
+
+    setDiveSitePics(formattedRecentNine);
 
     const diveSiteItineraries = await getItinerariesForDiveSite(selectedDiveSite.id, true);
     setItineraries(diveSiteItineraries);

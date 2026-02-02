@@ -1,7 +1,6 @@
 import React from "react";
 import { moderateScale } from "react-native-size-matters";
 
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../previewGrid";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
@@ -10,13 +9,14 @@ import Button from "../button";
 import GhostButton from "../ghostButton";
 import EmptyState from "../emptyState-new";
 import { ActiveProfile } from "../../../entities/profile";
+import { PhotoVariantSet } from "../../../entities/photoSizes";
 
 import * as S from "./styles";
 
 type SealifePreviewProps = {
   speciesCount?: number
   sightingsCount: number
-  diveSitePics: DiveSiteWithUserName[] | null
+  photoVariants: PhotoVariantSet[] | null
   onViewMore: () => void
   onAddSighting?: () => void
   selectedProfile: ActiveProfile | null
@@ -25,7 +25,7 @@ type SealifePreviewProps = {
 export default function SealifePreview({
   speciesCount,
   sightingsCount,
-  diveSitePics,
+  photoVariants,
   onViewMore,
   onAddSighting,
   selectedProfile
@@ -53,7 +53,7 @@ export default function SealifePreview({
 
       {sightingsCount > 0 ? (
         <>
-          <PreviewGrid items={diveSitePics} onAddSighting={onAddSighting} buttonText="Add a Sighting" />
+          <PreviewGrid items={photoVariants} onAddSighting={onAddSighting} buttonText="Add a Sighting" />
           <S.SectionFooterWrapper>
             <GhostButton onPress={onViewMore} title={"View More"} />
           </S.SectionFooterWrapper>

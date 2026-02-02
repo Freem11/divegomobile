@@ -6,13 +6,14 @@ import { getDiveSiteRecentNinePhotos, getuserReveiewCount, getUserSightingsCount
 import { getRecentReviewsByUserId } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
 import { Review } from "../../../entities/diveSiteReview";
 import { useAppNavigation } from "../../mapPage/types";
+import { PhotoVariantSet } from "../../../entities/photoSizes";
 
 import UserProfileScreenView from "./userProfile";
 
 export default function UserProfileScreen() {
   const { selectedProfile } = useContext(SelectedProfileContext);
 
-  const [profilePhotos, setProfilePhotos] = useState(null);
+  const [profilePhotos, setProfilePhotos] = useState<PhotoVariantSet[] | null>(null);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
@@ -31,7 +32,18 @@ export default function UserProfileScreen() {
     const sightings = await getUserSightingsCount(selectedProfile.UserID);
     setSightingsCount(sightings.label_count);
     const recentNine = await getDiveSiteRecentNinePhotos(selectedProfile.UserID);
-    setProfilePhotos(recentNine);
+
+    const formattedRecentNine = recentNine.map(({
+      public_domain, sm, md, lg, xl,
+    }) => ({
+      public_domain,
+      sm,
+      md,
+      lg,
+      xl
+    }));
+
+    setProfilePhotos(formattedRecentNine);
 
     const userReviewCount = await getuserReveiewCount(selectedProfile.UserID);
     setReviewCount(userReviewCount.label_count);

@@ -94,7 +94,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
             <Card
               id={item.id}
               name={item.label}
-              photoPath={item}
+              photoPath={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.ldg, "xl": item.xl }}
               onPressHandler={() => handleAnimalSelect(item.label)}
               seaLifeSelections={animalMultiSelection}
               subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? "s" : ""}`}

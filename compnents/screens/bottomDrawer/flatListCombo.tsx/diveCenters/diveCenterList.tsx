@@ -79,7 +79,7 @@ export default function DiveCenterList() {
         <FlatList
           data={diveCenters}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
-          renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={item} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
+          renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.ldg, "xl": item.xl }} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"

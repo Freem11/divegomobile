@@ -100,7 +100,7 @@ export default function DiveSiteList() {
             <Card
               id={item.id}
               name={item.name}
-              photoPath={item}
+              photoPath={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.ldg, "xl": item.xl }}
               subData={item.times_seen}
               onPressHandler={() => handleDiveSiteSelection(item.id)}
             />

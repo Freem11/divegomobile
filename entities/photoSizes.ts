@@ -5,3 +5,11 @@ export enum PHOTO_SIZES {
     Large = "lg",
     ExtraLarge = "xl"
 }
+
+export type PhotoVariantSet = {
+    public_domain: string
+    sm: string
+    md: string
+    lg: string
+    xl: string
+};

@@ -10,13 +10,14 @@ import {
 
 import Icon from "../../../../icons/Icon";
 import { colors } from "../../../styles";
-import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
 import { useAppNavigation } from "../../../mapPage/types";
+import { PHOTO_SIZES, PhotoVariantSet } from "../../../../entities/photoSizes";
+import FadeInImage from "../../../reusables/fadeInImage/fadeInImage";
 
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: { photofile: string; photofileZoom: string; id: number | null }[] | null;
+  items: PhotoVariantSet[];
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;
@@ -36,13 +37,14 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
     .shouldActivateOnStart(true)
     .shouldCancelWhenOutside(true);
 
-  const renderPhotoItem = (item: { photofile: string }, index: number) => (
+  const renderPhotoItem = (item: PhotoVariantSet, index: number) => (
     <View style={{ position: "relative" }} pointerEvents="box-none">
       <S.Item style={{ width: itemSize, height: itemSize }}>
-        <ImageCasherDynamicLocal
-          photoFile={item.photofile}
+        <FadeInImage
+          photoFile={{ "public_domain": item.public_domain, "sm": item.sm, "md": item.md, "lg": item.lg, "xl": item.xl }}
           style={{ height: "100%", width: "100%", resizeMode: "cover" }}
           aspectRatio={0}
+          size={PHOTO_SIZES.Medium}
         />
       </S.Item>
 

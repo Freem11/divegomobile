@@ -2,17 +2,16 @@ import React, { FC, useMemo } from "react";
 import { Dimensions, Pressable } from "react-native";
 import { moderateScale, scale } from "react-native-size-matters";
 
-import ImageCasherDynamic from "../../helpers/imageCashingDynamic";
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { colors } from "../../styles";
 import Icon from "../../../icons/Icon";
 import { useAppNavigation } from "../../mapPage/types";
-import { PHOTO_SIZES } from "../../../entities/photoSizes";
+import { PHOTO_SIZES, PhotoVariantSet } from "../../../entities/photoSizes";
+import FadeInImage from "../fadeInImage/fadeInImage";
 
 import * as S from "./styles";
 
 interface PreviewGridProps {
-  items: DiveSiteWithUserName[] | null;
+  items: PhotoVariantSet[] | null;
   onAddSighting?: () => void;
   buttonText: string
 }
@@ -48,7 +47,7 @@ export const PreviewGrid: FC<PreviewGridProps> = ({ items, onAddSighting, button
             }}
           >
             <Pressable onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: `${item.public_domain}/${item.xl}` })}>
-              <ImageCasherDynamic
+              <FadeInImage
                 photoFile={item}
                 size={PHOTO_SIZES.Small}
                 style={{
