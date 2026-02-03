@@ -9,9 +9,17 @@ export type Review = {
   updated_at: string | null;
   updated_by: string | null;
   user_name: string;
+  user_id: string;
   conditions: ReviewCondition[]
   photos: ReviewPhotos[]
   profilePhoto: string;
+  divesite_id: number;
+  divesite_name: string;
+  public_domain: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
 };
 
 export type ReviewSingle = {
@@ -31,6 +39,11 @@ export type ReviewSingle = {
   photos: any[]
   profilePhoto: string;
   diveSiteProfilePhoto: string;
+  reviewer_public_domain: string;
+  reviewer_sm: string;
+  reviewer_md: string;
+  reviewer_lg: string;
+  reviewer_xl: string;
 };
 
 export type ReviewCondition = {

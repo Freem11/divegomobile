@@ -31,6 +31,11 @@ export interface CommentItem {
   replied_to: number | null;
   content: string;
   user_id: string;
+  public_domain: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
 }
 
 type ReplyToState = [string, string] | null;
@@ -81,6 +86,8 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
     const picComments = await grabPhotoCommentsByPicId(picId);
     setListOfComments(picComments);
   };
+
+  console.log("listOfComments", listOfComments);
 
   const handleCommentInsert = async (): Promise<void> => {
     try {

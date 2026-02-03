@@ -11,8 +11,13 @@ export interface CommentDetails {
   profilePhoto?: string;
   content: string;
   replied_to?: number | null;
-  username?: string
+  UserName?: string
   created_at?: string
+  public_domain: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
 }
 
 interface CommentListItemProps {
@@ -53,7 +58,7 @@ export default function CommentListItem({
             <Avatar photo={remoteUri} />
           </S.AvatarContainer>
           <S.HeaderTextCol>
-            <S.UserTxt numberOfLines={1}>{commentDetails.username}</S.UserTxt>
+            <S.UserTxt numberOfLines={1}>{commentDetails.UserName}</S.UserTxt>
             <S.DateTxt numberOfLines={1}>{finalDate}</S.DateTxt>
           </S.HeaderTextCol>
         </S.HeaderRow>
@@ -77,9 +82,9 @@ export default function CommentListItem({
       <S.ActionsRow>
         <Pressable
           onPress={() =>
-            replyTo?.[0] === commentDetails.username
+            replyTo?.[0] === commentDetails.UserName
               ? setReplyTo(null)
-              : setReplyTo([commentDetails.username, String(commentDetails.id)])}
+              : setReplyTo([commentDetails.UserName, String(commentDetails.id)])}
           hitSlop={10}
         >
           <S.ActionTxt>Reply</S.ActionTxt>

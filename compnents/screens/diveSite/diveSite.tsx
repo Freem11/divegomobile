@@ -80,6 +80,7 @@ export default function DiveSiteScreenView({
 
   const customOrder = [8, 1, 5, 4, 6, 12, 15, 20, 19, 18, 17, 13, 3, 9, 10, 11, 14];
 
+  console.log("reviews", reviews);
   return (
     <S.ContentContainer>
       <S.InputGroupContainer>
