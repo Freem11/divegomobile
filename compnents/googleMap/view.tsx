@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo, useCallback, useRef, memo } from "react";
-import { Dimensions, StyleSheet, View, InteractionManager } from "react-native";
+import React, { useEffect, useState, useMemo, useCallback, useRef, memo, useContext } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
@@ -14,6 +14,7 @@ import * as S from "../mapPage/styles";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { Explainer } from "../screens/formScreens/explainer";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
 import { MarkerDiveSite } from "./marker/markerDiveSite";
@@ -44,11 +45,15 @@ const GoogleMapView = memo((props: MapViewProps) => {
   const [initialRegion, setInitialRegion] = useState<any>(null);
   const mapRef = useMapStore((state) => state.mapRef);
   const mapRegion = useMapStore((state) => state.mapRegion);
+  const { sitesArray } = useContext(SitesArrayContext);
 
   // --- REFS ---
   const isMapReady = useRef(false);
   const isAnimating = useRef(false);
   const localMapRef = useRef<MapView | null>(null);
+
+  // Use a state-based lock for the UI to prevent NSRangeException
+  const [isMapLocked, setIsMapLocked] = useState(false);
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "transparent", alignItems: "center", justifyContent: "center" },
@@ -85,16 +90,13 @@ const GoogleMapView = memo((props: MapViewProps) => {
     } catch (e) { console.log("Loc Error", e); }
   };
 
-  // --- MAP LIFECYCLE ---
   const onMapLoad = useCallback((map: MapView | null) => {
     if (map) {
       localMapRef.current = map;
       props.onLoad(map);
-      // We don't set isMapReady here, we wait for onMapReady for total safety
     }
   }, [props.onLoad]);
 
-  // --- DATA ---
   const points = useMemo(() => {
     const pts = [] as Supercluster.PointFeature<ClusterProperty>[];
     props.diveSites?.forEach((item) => pts.push(diveSiteToPointFeature(item)));
@@ -114,7 +116,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
     else getStartLocation();
   }, [mapRegion]);
 
-  // --- CLUSTER SYNC ---
   const syncClusters = useCallback(async () => {
     if (!localMapRef.current || !isMapReady.current || isAnimating.current) return;
     try {
@@ -130,7 +131,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
         ],
       });
     } catch (err) { }
-  }, [points, props.zoomLevel, isAnimating.current]);
+  }, [points, props.zoomLevel]);
 
   useEffect(() => {
     syncClusters();
@@ -141,6 +142,8 @@ const GoogleMapView = memo((props: MapViewProps) => {
     if (!activeMap || !supercluster || isAnimating.current || !isMapReady.current) return;
 
     isAnimating.current = true;
+    setIsMapLocked(true); // Lock the UI markers
+
     const expansionZoom = Math.min(supercluster.getClusterExpansionZoom(clusterId), 16);
 
     activeMap.animateToRegion({
@@ -150,15 +153,20 @@ const GoogleMapView = memo((props: MapViewProps) => {
       longitudeDelta: 1 / Math.pow(2, expansionZoom - 8),
     }, 500);
 
-    setTimeout(() => { isAnimating.current = false; }, 600);
-  }, [supercluster, mapRef]);
+    // Release the lock after animation completes
+    setTimeout(() => {
+      isAnimating.current = false;
+      setIsMapLocked(false);
+      syncClusters();
+    }, 600);
+  }, [supercluster, mapRef, syncClusters]);
 
   if (!initialRegion) return <View style={styles.container} />;
 
   return (
     <View style={styles.container}>
       <MapView
-        key="diving-map-persistent-v2"
+        key="diving-map-persistent-v-stable"
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         mapType="hybrid"
@@ -169,10 +177,10 @@ const GoogleMapView = memo((props: MapViewProps) => {
         onMapReady={() => {
           isMapReady.current = true;
           props.handleOnMapReady();
-          syncClusters(); // Kickstart markers as soon as map is native-ready
+          syncClusters();
         }}
         onRegionChangeComplete={() => {
-          if (isMapReady.current) {
+          if (isMapReady.current && !isAnimating.current) {
             props.handleBoundsChange();
             syncClusters();
           }
@@ -183,7 +191,11 @@ const GoogleMapView = memo((props: MapViewProps) => {
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
-        {clusters?.map((cluster) => {
+        {/* CRITICAL FIX: We skip mapping over clusters IF the map is locked/animating.
+            This prevents NSRangeException by ensuring we don't try to add markers
+            into a native view that is currently re-calculating indices.
+        */}
+        {!isMapLocked && clusters?.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const { cluster: isCluster, point_count: pointCount } = cluster.properties;
 
@@ -199,12 +211,15 @@ const GoogleMapView = memo((props: MapViewProps) => {
           }
 
           const zoomKey = props.zoomLevel < 12 ? "lo" : "hi";
+
           if (cluster.properties.category === PointFeatureCategory.DiveSite) {
+            const isSelected = sitesArray.includes(cluster.properties.id);
             return (
               <MarkerDiveSite
-                key={`site-${cluster.properties.id}-${zoomKey}`}
+                key={`site-${cluster.properties.id}-${zoomKey}-${isSelected ? "blue" : "white"}`}
                 id={cluster.properties.id}
                 coordinate={{ latitude, longitude }}
+                isSelected={isSelected}
               />
             );
           }
@@ -232,7 +247,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
       {props?.mapConfig === MapConfigurations.PinDrop && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
-          {/* Use capture to kill the link just before navigation triggers */}
           <View onTouchStart={() => { isMapReady.current = false; }}>
             <ReturnToSiteSubmitterButton />
           </View>

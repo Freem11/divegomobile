@@ -7,35 +7,33 @@ import { useAppNavigation } from "../../../mapPage/types";
 import { MapConfigurations } from "../../types";
 import { Coordinates } from "../../entities/coordinates";
 
-// Move require OUTSIDE to keep the reference stable
 const ANCHOR_WHITE = require("../../../png/mapIcons/AnchorWhite.png");
+const ANCHOR_GOlD = require("../../../png/mapIcons/AnchorGold.png");
 
 type MarkerDiveSiteProps = {
   id: number;
   coordinate: Coordinates;
+  isSelected: boolean; // Add this prop
 };
 
-// Wrap in memo to prevent unnecessary native re-draws
 export const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
   const navigation = useAppNavigation();
   const mapConfig = useMapStore((state) => state.mapConfig);
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
+  const { setSitesArray } = useContext(SitesArrayContext);
 
-  const isSelected = sitesArray.includes(props.id);
   const [tracksViewChanges, setTracksViewChanges] = useState(true);
 
-  // WAKE UP / FREEZE LOGIC
   useEffect(() => {
     setTracksViewChanges(true);
     const timer = setTimeout(() => setTracksViewChanges(false), 600);
     return () => clearTimeout(timer);
-  }, [isSelected, mapConfig]);
+  }, [props.isSelected, mapConfig]); // Use prop here
 
   function handlePress() {
     if (mapConfig !== MapConfigurations.TripBuild) {
       navigation.navigate("DiveSiteNavigator", { id: props.id });
     } else {
-      if (isSelected) {
+      if (props.isSelected) {
         setSitesArray((prev: number[]) => prev.filter(id => id !== props.id));
       } else {
         setSitesArray((prev: number[]) => [...prev, props.id]);
@@ -45,17 +43,14 @@ export const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
 
   return (
     <Marker
-      // REMOVED internal key - handled by the Parent's .map()
       coordinate={props.coordinate}
       onPress={handlePress}
-      image={ANCHOR_WHITE}
+      // Toggle image based on prop
+      image={props.isSelected ? ANCHOR_GOlD : ANCHOR_WHITE}
       tracksViewChanges={tracksViewChanges}
-      // prevents touch events from bubbling to clusters/map
       stopPropagation={true}
-      zIndex={isSelected ? 100 : 2}
-      // Visual cue for selection
-      opacity={mapConfig === MapConfigurations.TripBuild && !isSelected ? 0.6 : 1}
-      // Stability for Fabric
+      zIndex={props.isSelected ? 100 : 2}
+      opacity={mapConfig === MapConfigurations.TripBuild && !props.isSelected ? 0.6 : 1}
       pointerEvents="auto"
     />
   );
