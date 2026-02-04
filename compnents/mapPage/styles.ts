@@ -1,8 +1,8 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { activeFonts, buttonSizes, colors, fontSizes } from "../styles";
-
 export const Container = styled.View`
     flex: 1; 
     align-items: center;
@@ -10,7 +10,7 @@ export const Container = styled.View`
     background-color: green;
 `;
 
-export const SafeAreaTop = styled.SafeAreaView`
+export const SafeAreaTop = styled(SafeAreaView)`
     position: absolute;
     top: 0;
     left: 0;
@@ -18,7 +18,7 @@ export const SafeAreaTop = styled.SafeAreaView`
     z-index: 10;
 `;
 
-export const SafeAreaBottom = styled.SafeAreaView`
+export const SafeAreaBottom = styled.View`
     position: absolute;
     bottom: 0;
     left: 0;

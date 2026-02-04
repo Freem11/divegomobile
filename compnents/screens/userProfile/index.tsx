@@ -46,7 +46,6 @@ export default function UserProfileScreen() {
 
   const handleDiveSiteMove = async (diveSiteName: string, diveSiteId: number) => {
 
-    console.log(diveSiteName, diveSiteId);
     navigation.navigate("DiveSiteNavigator", { id: diveSiteId });
   };
 
