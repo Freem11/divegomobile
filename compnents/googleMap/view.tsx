@@ -217,7 +217,8 @@ const GoogleMapView = memo((props: MapViewProps) => {
             const isSelected = sitesArray.includes(cluster.properties.id);
             return (
               <MarkerDiveSite
-                key={`site-${cluster.properties.id}-${zoomKey}-${isSelected ? "blue" : "white"}`}
+                key={`site-${cluster.properties.id}`}
+                // key={`site-${cluster.properties.id}-${zoomKey}-${isSelected ? "blue" : "white"}`}
                 id={cluster.properties.id}
                 coordinate={{ latitude, longitude }}
                 isSelected={isSelected}

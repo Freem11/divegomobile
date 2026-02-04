@@ -50,7 +50,7 @@ export const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
       tracksViewChanges={tracksViewChanges}
       stopPropagation={true}
       zIndex={props.isSelected ? 100 : 2}
-      opacity={mapConfig === MapConfigurations.TripBuild && !props.isSelected ? 0.6 : 1}
+      // opacity={mapConfig === MapConfigurations.TripBuild && !props.isSelected ? 0.6 : 1}
       pointerEvents="auto"
     />
   );
