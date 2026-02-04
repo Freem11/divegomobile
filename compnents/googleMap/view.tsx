@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback, useRef, memo, useContext } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View, InteractionManager } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
@@ -13,7 +13,6 @@ import SearchTool from "../searchTool";
 import * as S from "../mapPage/styles";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
-import { Explainer } from "../screens/formScreens/explainer";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
 import { MarkerDiveShop } from "./marker/markerDiveShop";
@@ -47,12 +46,11 @@ const GoogleMapView = memo((props: MapViewProps) => {
   const mapRegion = useMapStore((state) => state.mapRegion);
   const { sitesArray } = useContext(SitesArrayContext);
 
-  // --- REFS ---
   const isMapReady = useRef(false);
   const isAnimating = useRef(false);
   const localMapRef = useRef<MapView | null>(null);
 
-  // Use a state-based lock for the UI to prevent NSRangeException
+  const [currentZoom, setCurrentZoom] = useState(props.zoomLevel);
   const [isMapLocked, setIsMapLocked] = useState(false);
 
   const styles = StyleSheet.create({
@@ -70,6 +68,8 @@ const GoogleMapView = memo((props: MapViewProps) => {
           latitudeDelta: 2,
           longitudeDelta: 0.4
         });
+      } else {
+        setInitialRegion({ latitude: 0, longitude: 0, latitudeDelta: 10, longitudeDelta: 10 });
       }
     } catch (e) { console.log("Start Loc Error", e); }
   };
@@ -106,7 +106,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
 
   const [clusterConfig, setClusterConfig] = useState<UseSuperclusterArgument<ClusterProperty, any>>({
     points: [],
-    zoom: 0,
+    zoom: props.zoomLevel,
   });
 
   const { clusters, supercluster } = useSupercluster(clusterConfig);
@@ -116,15 +116,16 @@ const GoogleMapView = memo((props: MapViewProps) => {
     else getStartLocation();
   }, [mapRegion]);
 
-  const syncClusters = useCallback(async () => {
-    if (!localMapRef.current || !isMapReady.current || isAnimating.current) return;
+  const syncClusters = useCallback(async (forcedZoom?: number) => {
+    if (!localMapRef.current || !isMapReady.current) return;
     try {
       const bounds = await localMapRef.current.getMapBoundaries();
-      if (!bounds) return;
+      if (!bounds || !bounds.northEast) return;
+
       setClusterConfig({
         points,
         options: { radius: 50, maxZoom: 15 },
-        zoom: props.zoomLevel,
+        zoom: forcedZoom ?? props.zoomLevel,
         bounds: [
           bounds.southWest.longitude, bounds.southWest.latitude,
           bounds.northEast.longitude, bounds.northEast.latitude,
@@ -134,7 +135,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
   }, [points, props.zoomLevel]);
 
   useEffect(() => {
-    syncClusters();
+    if (!isAnimating.current) syncClusters();
   }, [syncClusters]);
 
   const handleClusterPress = useCallback((clusterId: number, latitude: number, longitude: number) => {
@@ -142,9 +143,10 @@ const GoogleMapView = memo((props: MapViewProps) => {
     if (!activeMap || !supercluster || isAnimating.current || !isMapReady.current) return;
 
     isAnimating.current = true;
-    setIsMapLocked(true); // Lock the UI markers
+    setIsMapLocked(true);
 
     const expansionZoom = Math.min(supercluster.getClusterExpansionZoom(clusterId), 16);
+    setCurrentZoom(expansionZoom);
 
     activeMap.animateToRegion({
       latitude,
@@ -153,12 +155,14 @@ const GoogleMapView = memo((props: MapViewProps) => {
       longitudeDelta: 1 / Math.pow(2, expansionZoom - 8),
     }, 500);
 
-    // Release the lock after animation completes
     setTimeout(() => {
-      isAnimating.current = false;
-      setIsMapLocked(false);
-      syncClusters();
-    }, 600);
+      InteractionManager.runAfterInteractions(() => {
+        isAnimating.current = false;
+        setIsMapLocked(false);
+        syncClusters(expansionZoom);
+      });
+    }, 650);
+
   }, [supercluster, mapRef, syncClusters]);
 
   if (!initialRegion) return <View style={styles.container} />;
@@ -191,11 +195,8 @@ const GoogleMapView = memo((props: MapViewProps) => {
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
 
-        {/* CRITICAL FIX: We skip mapping over clusters IF the map is locked/animating.
-            This prevents NSRangeException by ensuring we don't try to add markers
-            into a native view that is currently re-calculating indices.
-        */}
-        {!isMapLocked && clusters?.map((cluster) => {
+        {!isMapLocked && clusters?.length > 0 && clusters.map((cluster) => {
+          if (!cluster || !cluster.geometry) return null;
           const [longitude, latitude] = cluster.geometry.coordinates;
           const { cluster: isCluster, point_count: pointCount } = cluster.properties;
 
@@ -210,7 +211,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
             );
           }
 
-          const zoomKey = props.zoomLevel < 12 ? "lo" : "hi";
+          const zoomKey = currentZoom < 12 ? "lo" : "hi";
 
           if (cluster.properties.category === PointFeatureCategory.DiveSite) {
             const isSelected = sitesArray.includes(cluster.properties.id);
@@ -234,7 +235,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
             );
           }
           return null;
-        })}
+        }).filter(Boolean)}
       </MapView>
 
       {/* --- OVERLAYS --- */}
@@ -244,6 +245,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
 
       {props?.mapConfig === MapConfigurations.PinDrop && <MarkerDraggable />}
 
+      {/* Consolidated location button and return buttons for different configs */}
       {props?.mapConfig === MapConfigurations.PinDrop && (
         <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
           <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
@@ -255,6 +257,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
 
       {props?.mapConfig === MapConfigurations.TripView && (
         <View style={{ position: "absolute", bottom: "5%", width: "100%", alignItems: "center" }}>
+          <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
           <ReturnToShopButton />
         </View>
       )}
