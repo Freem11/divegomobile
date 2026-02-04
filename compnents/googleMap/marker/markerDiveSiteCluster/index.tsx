@@ -1,51 +1,49 @@
-import React, { useState } from "react";
-import { View } from "react-native";
+import React, { useState, useEffect, memo } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Marker } from "react-native-maps";
-import Svg, { Circle, Path } from "react-native-svg";
-import { moderateScale } from "react-native-size-matters";
 
-import { useMapStore } from "../../useMapStore";
-import { Coordinates } from "../../../../entities/coordinates";
-import iconConfig from "../../../../icons/_config.json";
-import { colors } from "../../../styles";
+interface ClusterProps {
+  coordinate: { latitude: number; longitude: number };
+  pointCount: number;
+  onPress: () => void;
+}
 
-type MarkerDiveSiteClusterProps = {
-  coordinate: Coordinates;
-  getExpansionZoom: () => number;
-};
+// 1. Wrap in memo to prevent coordinate flickering during zoom
+export const MarkerDiveSiteCluster = memo((props: ClusterProps) => {
+  const [tracksView, setTracksView] = useState(true);
+  const [isLocked, setIsLocked] = useState(false);
 
-export function MarkerDiveSiteCluster(props: MarkerDiveSiteClusterProps) {
-  const mapRef = useMapStore((state) => state.mapRef);
-  const pathData = iconConfig.anchors?.[1] ?? "";
-  const [tracksViewChanges, setTracksViewChanges] = useState(true);
+  // 2. Static reference for the image
+  const ANCHOR_BLUE = require("../../../png/mapIcons/AnchorBlue.png");
 
-  const scale = 0.85;
-  const center = 256;
-  const translate = center * (1 - scale); // 38.4
+  useEffect(() => {
+    setTracksView(true);
+    const timer = setTimeout(() => { setTracksView(false); }, 600);
+    return () => clearTimeout(timer);
+  }, [props.pointCount]);
+
+  const handlePress = () => {
+    if (isLocked || !props.coordinate) return;
+    setIsLocked(true);
+    props.onPress();
+    setTimeout(() => setIsLocked(false), 1000);
+  };
+
+  // 3. Safety Check: If coordinate is missing, don't render.
+  // This prevents the "latitude of undefined" crash on the native side.
+  if (!props.coordinate || !props.coordinate.latitude) {
+    return null;
+  }
 
   return (
     <Marker
-      tracksViewChanges={tracksViewChanges}
-      onLayout={() => setTracksViewChanges(false)}
       coordinate={props.coordinate}
-      onPress={() => {
-        const expansionZoom = Math.min(props.getExpansionZoom(), 16);
-        mapRef?.animateCamera({
-          center: props.coordinate,
-          zoom: expansionZoom,
-        });
-      }}
-    >
-      <View style={{ width: moderateScale(30), height: moderateScale(30) }}>
-        <Svg width={moderateScale(30)} height={moderateScale(30)} viewBox="0 0 512 512">
-          <Circle fill="gray" cx="256" cy="256" r="256" />
-          <Path
-            d={pathData as string}
-            fill="white"
-            transform={`translate(${translate}, ${translate}) scale(${scale})`}
-          />
-        </Svg>
-      </View>
-    </Marker>
+      tracksViewChanges={tracksView}
+      onPress={handlePress}
+      stopPropagation={true}
+      image={ANCHOR_BLUE}
+      pointerEvents="auto"
+    // 4. Ensure no children are passed if using the image prop
+    />
   );
-}
+});

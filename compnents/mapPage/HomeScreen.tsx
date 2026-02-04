@@ -56,7 +56,7 @@ export default function HomeScreen() {
                 <Bold>How to use the map</Bold>
 
                 <View style={{ height: moderateScale(40), alignItems: "center", justifyContent: "center" }}>
-                    <MarkerDiveSiteCluster />
+                    <Image source={require("../png/mapIcons/AnchorBlue.png")} />
                 </View>
 
                 <S.PopOverText>
@@ -64,14 +64,14 @@ export default function HomeScreen() {
                 </S.PopOverText>
 
                 <View style={{ height: moderateScale(40), alignItems: "center", justifyContent: "center" }}>
-                    <MarkerDiveSite />
+                    <Image source={require("../png/mapIcons/AnchorWhite.png")} />
                 </View>
                 <S.PopOverText>
                     The anchor represents a dive site. Tapping it will open that site's page.
                 </S.PopOverText>
 
                 <View style={{ height: moderateScale(40), alignItems: "center", justifyContent: "center" }}>
-                    <MarkerDiveShop />
+                    <Image source={require("../png/mapIcons/MaskWhite.png")} />
                 </View>
                 <S.PopOverText>
                     The snorkel & roof represents a dive centre. Tapping it will open that centre's page.
