@@ -13,10 +13,10 @@ const ANCHOR_GOlD = require("../../../png/mapIcons/AnchorGold.png");
 type MarkerDiveSiteProps = {
   id: number;
   coordinate: Coordinates;
-  isSelected: boolean; // Add this prop
+  isSelected: boolean;
 };
 
-export const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
+const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
   const navigation = useAppNavigation();
   const mapConfig = useMapStore((state) => state.mapConfig);
   const { setSitesArray } = useContext(SitesArrayContext);
@@ -27,7 +27,7 @@ export const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
     setTracksViewChanges(true);
     const timer = setTimeout(() => setTracksViewChanges(false), 600);
     return () => clearTimeout(timer);
-  }, [props.isSelected, mapConfig]); // Use prop here
+  }, [props.isSelected, mapConfig]);
 
   function handlePress() {
     if (mapConfig !== MapConfigurations.TripBuild) {
@@ -45,13 +45,13 @@ export const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
     <Marker
       coordinate={props.coordinate}
       onPress={handlePress}
-      // Toggle image based on prop
       image={props.isSelected ? ANCHOR_GOlD : ANCHOR_WHITE}
       tracksViewChanges={tracksViewChanges}
       stopPropagation={true}
       zIndex={props.isSelected ? 100 : 2}
-      // opacity={mapConfig === MapConfigurations.TripBuild && !props.isSelected ? 0.6 : 1}
       pointerEvents="auto"
     />
   );
 });
+
+export default MarkerDiveSite;

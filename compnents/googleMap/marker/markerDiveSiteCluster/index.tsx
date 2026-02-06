@@ -1,5 +1,4 @@
 import React, { useState, useEffect, memo } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { Marker } from "react-native-maps";
 
 interface ClusterProps {
@@ -8,29 +7,17 @@ interface ClusterProps {
   onPress: () => void;
 }
 
-// 1. Wrap in memo to prevent coordinate flickering during zoom
-export const MarkerDiveSiteCluster = memo((props: ClusterProps) => {
-  const [tracksView, setTracksView] = useState(true);
-  const [isLocked, setIsLocked] = useState(false);
+const ANCHOR_BLUE = require("../../../png/mapIcons/AnchorBlue.png");
 
-  // 2. Static reference for the image
-  const ANCHOR_BLUE = require("../../../png/mapIcons/AnchorBlue.png");
+const MarkerDiveSiteCluster = memo((props: ClusterProps) => {
+  const [tracksView, setTracksView] = useState(false);
 
   useEffect(() => {
     setTracksView(true);
-    const timer = setTimeout(() => { setTracksView(false); }, 600);
+    const timer = setTimeout(() => setTracksView(false), 200);
     return () => clearTimeout(timer);
-  }, [props.pointCount]);
+  }, []);
 
-  const handlePress = () => {
-    if (isLocked || !props.coordinate) return;
-    setIsLocked(true);
-    props.onPress();
-    setTimeout(() => setIsLocked(false), 1000);
-  };
-
-  // 3. Safety Check: If coordinate is missing, don't render.
-  // This prevents the "latitude of undefined" crash on the native side.
   if (!props.coordinate || !props.coordinate.latitude) {
     return null;
   }
@@ -38,12 +25,14 @@ export const MarkerDiveSiteCluster = memo((props: ClusterProps) => {
   return (
     <Marker
       coordinate={props.coordinate}
-      tracksViewChanges={tracksView}
-      onPress={handlePress}
-      stopPropagation={true}
       image={ANCHOR_BLUE}
-      pointerEvents="auto"
-    // 4. Ensure no children are passed if using the image prop
+      tracksViewChanges={tracksView}
+      onPress={props.onPress}
+      stopPropagation={true}
+      anchor={{ x: 0.5, y: 0.5 }}
+      zIndex={5}
     />
   );
 });
+
+export default MarkerDiveSiteCluster;
