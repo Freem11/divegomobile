@@ -86,35 +86,39 @@ export default function DiveSiteScreenView({
         {selectedDiveSite?.newUserName && (
           <S.Contributor>Added by {selectedDiveSite?.newUserName}</S.Contributor>
         )}
-        <S.LabelsContainer>
-          {metricInfo &&
-            [...metricInfo]
-              .sort((a, b) => {
-                const idA = a.condition_id;
-                const idB = b.condition_id;
+        {metricInfo?.length > 0 && (
+          <S.LabelsContainer>
+            {metricInfo &&
+              [...metricInfo]
+                .sort((a, b) => {
+                  const idA = a.condition_id;
+                  const idB = b.condition_id;
 
-                const positionA = customOrder.indexOf(idA);
-                const positionB = customOrder.indexOf(idB);
+                  const positionA = customOrder.indexOf(idA);
+                  const positionB = customOrder.indexOf(idB);
 
-                return positionA - positionB;
-              }).map((metric) => {
-                const label = renderStatLabel({
-                  condition_entry_id: metric.condition_id,
-                  condition_type_id: metric.condition_id,
-                  value: metric.sum_value_other ?? metric.average_value_15_16
-                });
+                  return positionA - positionB;
+                }).map((metric) => {
+                  const label = renderStatLabel({
+                    condition_entry_id: metric.condition_id,
+                    condition_type_id: metric.condition_id,
+                    value: metric.sum_value_other ?? metric.average_value_15_16
+                  });
 
-                if (label) {
-                  return (
-                    <S.TagWrapper key={`${metric.condition_id}-${metric.divesite_id}-${metric.review_month}`}>
-                      <S.TagText>{label}</S.TagText>
-                    </S.TagWrapper>
-                  );
-                }
+                  if (label) {
+                    return (
+                      <S.TagWrapper key={`${metric.condition_id}-${metric.divesite_id}-${metric.review_month}`}>
+                        <S.TagText>{label}</S.TagText>
+                      </S.TagWrapper>
+                    );
+                  }
 
-              })}
+                })}
 
-        </S.LabelsContainer>
+          </S.LabelsContainer>
+        )}
+
+        {!metricInfo || metricInfo.length === 0 && (<S.NoLabels />)}
 
         <S.Content>{selectedDiveSite?.divesitebio}</S.Content>
 
