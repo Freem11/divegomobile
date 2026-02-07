@@ -41,7 +41,7 @@ export type MainRoutes = {
   EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
   PhotoComments: { id: number };
-  PinchAndZoomPhoto: undefined;
+  PinchAndZoomPhoto: { id?: number, photoFile: string };
   SingleReviewScreen: { id: number };
   SeaLifeScreen: { species: string };
   ResetPasswordConfirm: undefined;
@@ -97,15 +97,29 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
       <Stack.Screen name="PartnerRequestUpgrade" component={PartnerRequestRouter} />
       <Stack.Screen name="UserProfilePhotos" component={UserProfilePhotosPage} />
       <Stack.Screen name="PhotoComments">
-        {({ route }) => <PhotoCommentsParallax id={route.params.id} />}
+        {({ route }) => (
+          <PhotoCommentsParallax
+            id={route.params.id}
+          />
+        )}
       </Stack.Screen>
-      <Stack.Screen name="PinchAndZoomPhoto" component={PhotoBoxModal} />
+
+      <Stack.Screen name="PinchAndZoomPhoto">
+        {({ route }) => (
+          <PhotoBoxModal
+            id={route.params.id}
+            photoFile={route.params.photoFile}
+          />
+        )}
+      </Stack.Screen>
+
       <Stack.Screen name="SingleReviewScreen">
         {({ route }) => <ReviewParallax id={route.params.id} />}
       </Stack.Screen>
       <Stack.Screen name="SeaLifeScreen">
         {({ route }) => <SeaLifeParallax species={route.params.species} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="ResetPasswordConfirm"
         component={ResetPasswordConfirmScreen}
