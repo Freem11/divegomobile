@@ -4,7 +4,7 @@ import { supabase } from "../../supabase";
 export const updateDiveSiteFact = async (id: number, aiFact: string) => {
     const { data, error } = await supabase
         .from("diveSites")
-        .update({ diveSiteBio: aiFact })
+        .update({ "diveSiteBio": aiFact })
         .eq("id", id)
         .select();
 

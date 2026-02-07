@@ -142,3 +142,58 @@ export const MapContainer = styled.View`
   overflow: hidden;
   border-radius: ${moderateScale(10)}px;
 `;
+
+export const MapWrapper = styled.View`
+  height: ${moderateScale(400)}px;
+  width: 100%;
+`;
+
+export const MapOverlay = styled.Pressable`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+`;
+
+export const OverlayText = styled.Text`
+  color: white;
+  font-family: ${activeFonts.Bold};
+  font-size: ${moderateScale(fontSizes.StandardText)}px;
+  margin-top: ${moderateScale(10)}px;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.5);
+`;
+
+export const CloseMapButton = styled.Pressable`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: ${colors.primaryBlue};
+  padding: 8px 15px;
+  border-radius: 20px;
+  elevation: 5;
+  shadow-color: #000;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+`;
+
+export const MapLockOverlay = styled.Pressable`
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background-color: ${colors.primaryBlue};
+  padding: 10px 18px;
+  border-radius: 25px;
+  z-index: 99; /* Ensures it sits on top of Map Pins */
+  elevation: 5;
+`;
+
+export const LockText = styled.Text`
+  color: white;
+  font-family: ${activeFonts.Bold};
+  font-size: ${moderateScale(12)}px;
+`;

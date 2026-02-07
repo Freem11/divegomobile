@@ -1,4 +1,5 @@
 import React from "react";
+import { Pressable } from "react-native-gesture-handler";
 
 import { cloudflareBucketUrl } from "../../globalVariables";
 import SealifePreview from "../../reusables/sealifePreview";
@@ -32,6 +33,9 @@ export default function SeaLifeScreenView({
   onPressUser
 }: SeaLifeProps) {
 
+  const [mapActive, setMapActive] = React.useState(false);
+  const toggleMap = () => setMapActive(!mapActive);
+
   const photos = seaLifePhotos?.map((item) => ({
     ...item,
     photofile: `${cloudflareBucketUrl}${item.photoFile?.split("/").pop()}`
@@ -64,10 +68,24 @@ export default function SeaLifeScreenView({
 
       <Histogram animal={species} />
 
-      <S.MapContainer
-      // pointerEvents="none"
-      >
-        <GoogleMap species={species} />
+      <S.MapContainer>
+        <S.MapWrapper pointerEvents={mapActive ? "auto" : "none"}>
+          <GoogleMap species={species} />
+        </S.MapWrapper>
+
+        {/* This is now a Pressable styled component */}
+        {!mapActive && (
+          <S.MapOverlay onPress={() => setMapActive(true)}>
+            <S.OverlayText>Tap to explore map</S.OverlayText>
+          </S.MapOverlay>
+        )}
+
+        {/* This is also a Pressable styled component */}
+        {mapActive && (
+          <S.MapLockOverlay onPress={() => setMapActive(false)}>
+            <S.LockText>Done</S.LockText>
+          </S.MapLockOverlay>
+        )}
       </S.MapContainer>
 
       <S.LabelWrapper>

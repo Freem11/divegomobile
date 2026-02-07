@@ -4,6 +4,7 @@ import { getSpeciesSiteCount, getSpeciesUserCount } from "../../../supabaseCalls
 import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { SeaLife } from "../../../entities/seaLIfe";
 import { useAppNavigation } from "../../mapPage/types";
+import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import SeaLifeScreenView from "./seaLife";
 
@@ -33,6 +34,7 @@ export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife 
   const [speciesDiveSiteCount, setSpeciesDiveSiteCount] = useState<diveSiteStat[] | null>(null);
   const [speciesUserCount, setSpeciesUserCount] = useState<userStat[] | null>(null);
   const mainNavigation = useAppNavigation();
+  const { userProfile } = useUserProfile();
 
   useEffect(() => {
     getStats(species);
@@ -53,7 +55,9 @@ export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife 
   const onPressUser = (id: string | number) => {
     const numericId = typeof id === "string" ? parseInt(id, 10) : id;
 
-    if (!isNaN(numericId)) {
+    const isDifferentUser = Number(numericId) !== userProfile.id;
+
+    if (!isNaN(numericId) && isDifferentUser) {
       mainNavigation.navigate("UserProfile", { id: numericId });
     }
   };
