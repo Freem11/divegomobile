@@ -40,10 +40,12 @@ export default function DiveSiteScreen({
   const { userProfile } = useUserProfile();
   const navigation = useAppNavigation();
   const diveSiteNavigation = useDiveSiteNavigation();
+
   const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const mapRef = useMapStore((state) => state.mapRef);
   const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
+
   const [diveSitePics, setDiveSitePics] = useState([]);
   const [tripCount, setTripCount] = useState(0);
   const [speciesCount, setSpeciesCount] = useState(0);
@@ -73,17 +75,22 @@ export default function DiveSiteScreen({
   };
 
   const handleProfileMove = async (userName: string, user_id: string) => {
-
     const picOwnerAccount = await grabProfileByUserName(userName);
 
-    if (userProfile.UserID === picOwnerAccount[0].UserID) {
+    if (!picOwnerAccount || picOwnerAccount.length === 0) {
+      console.error("Profile not found");
       return;
     }
 
-    navigation.navigate("BottomTab", {
-      screen: "Profile",
-      params: { id: picOwnerAccount[0].id },
-    });
+    const targetProfile = picOwnerAccount[0];
+
+    if (userProfile.UserID === targetProfile.UserID) {
+      return;
+    } else {
+      navigation.navigate("UserProfile", {
+        id: targetProfile.id,
+      });
+    }
   };
 
   const handleMapFlip = async (sites: number[]) => {
@@ -91,11 +98,8 @@ export default function DiveSiteScreen({
       setInitConfig(MapConfigurations.TripView);
       const region = await calculateRegionFromBoundaries(mapRef);
       setMapRegion(region);
-
       setSitesArray(sites);
-
       navigation.navigate("GoogleMap");
-
       setMapConfig(MapConfigurations.TripView, { pageName: "DiveSite", itemId: selectedDiveSite.id });
     }
   };
@@ -104,9 +108,8 @@ export default function DiveSiteScreen({
     if (selectedDiveSite) {
       getData(selectedDiveSite);
     }
-  }, [selectedDiveSite.id]);
+  }, [selectedDiveSite]);
 
-  // Refresh reviews when screen comes back into focus (e.g., after editing a review)
   useFocusEffect(
     React.useCallback(() => {
       refreshReviews();
@@ -161,5 +164,4 @@ export default function DiveSiteScreen({
       onDeleteReview={handleDeleteReview}
     />
   );
-
 }
