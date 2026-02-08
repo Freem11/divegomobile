@@ -1,4 +1,4 @@
-import React, { } from "react";
+import React from "react";
 import { Control, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
@@ -36,44 +36,52 @@ export const Step3: React.FC<Step3Props> = ({
 }) => {
   const { t } = useTranslation();
 
+  // Diagnostic log to ensure state is actually reaching this component
+  console.log("Current sitesArray in Step3:", sitesArray);
+
+  // Filter the list so we only render what is actually in the state array
+  const activeDiveSites = React.useMemo(() => {
+    if (!tripDiveSites) return [];
+    return tripDiveSites.filter(site => sitesArray.includes(site.id));
+  }, [tripDiveSites, sitesArray]);
+
   return (
     <S.InputGroupContainer>
       <S.Title>{t("TripCreator.step3Title")}</S.Title>
-      <S.Subtitle style={{ marginBottom: moderateScale(12) }}>{t("TripCreator.step3Description")}</S.Subtitle>
+      <S.Subtitle style={{ marginBottom: moderateScale(12) }}>
+        {t("TripCreator.step3Description")}
+      </S.Subtitle>
 
       <AddSitesButton onAddSites={handleMapFlip} formValues={values} />
 
       <S.DiveSiteListWrapper>
-        {tripDiveSites && tripDiveSites.map((diveSite) => (
-          <DiveSitesCard
-            key={diveSite.id}
-            diveSiteId={diveSite.id}
-            diveSiteName={diveSite.name}
-            diveSitePhoto={diveSite.divesiteprofilephoto}
-            sitesArray={sitesArray}
-            onPress={() => removeFromSitesArray(diveSite.id, sitesArray)}
-
-          />
-        ))}
+        {activeDiveSites.length > 0 ? (
+          activeDiveSites.map((diveSite) => (
+            <DiveSitesCard
+              key={diveSite.id}
+              diveSiteId={diveSite.id}
+              diveSiteName={diveSite.name}
+              diveSitePhoto={diveSite.divesiteprofilephoto}
+              sitesArray={sitesArray}
+              onPress={() => removeFromSitesArray(diveSite.id, sitesArray)}
+            />
+          ))
+        ) : (
+          <S.EmptyStateWrapper>
+            <EmptyState
+              iconName="anchor"
+              title={t("TripCreator.emptyState")}
+              subtitle=""
+            />
+          </S.EmptyStateWrapper>
+        )}
       </S.DiveSiteListWrapper>
-
-      {!tripDiveSites && (
-        <S.EmptyStateWrapper>
-          <EmptyState
-            iconName="anchor"
-            title={t("TripCreator.emptyState")}
-            subtitle=""
-          />
-
-        </S.EmptyStateWrapper>
-      )}
 
       {editMode && (
         <S.CloneTripBox>
           <CloneTripButton setEditMode={setEditMode} />
         </S.CloneTripBox>
       )}
-
     </S.InputGroupContainer>
   );
 };
