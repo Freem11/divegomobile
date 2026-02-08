@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Platform, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { NavigationContainer, createNavigationContainerRef } from "@react-navigation/native";
+import { NavigationContainer, createNavigationContainerRef, NavigationIndependentTree } from "@react-navigation/native";
 import { I18nextProvider } from "react-i18next";
 import Toast from "react-native-toast-message";
 import "react-native-get-random-values";
@@ -141,9 +141,11 @@ export default function App() {
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
         <I18nextProvider i18n={i18n}>
-          <NavigationContainer linking={linking} ref={navigationRef}>
-            {userProfile ? <MapPage /> : <AuthenticationNavigator />}
-          </NavigationContainer>
+          <NavigationIndependentTree>
+            <NavigationContainer linking={linking} ref={navigationRef}>
+              {userProfile ? <MapPage /> : <AuthenticationNavigator />}
+            </NavigationContainer>
+          </NavigationIndependentTree>
         </I18nextProvider>
       </AppContextProvider>
       <Toast config={toastConfig} visibilityTime={2000} />

@@ -1,15 +1,15 @@
 import { supabase } from "../supabase";
 
-export const insertUserFollow = async (userId, followUserId) => {
+export const insertUserFollow = async(userId, followUserId) => {
 
   const { data, error } = await supabase
-  .from("followUsers")
-  .insert([
-    {
-      user: userId,
-      follows: followUserId,
-    },
-  ]);
+    .from("followUsers")
+    .insert([
+      {
+        user: userId,
+        follows: followUserId,
+      },
+    ]);
 
   if (error) {
     console.log("couldn't do it 40,", error);
@@ -20,7 +20,7 @@ export const insertUserFollow = async (userId, followUserId) => {
   }
 };
 
-export const deleteUserFollow = async (id) => {
+export const deleteUserFollow = async(id) => {
   const { data, error } = await supabase
     .from("followUsers")
     .delete()
@@ -36,12 +36,12 @@ export const deleteUserFollow = async (id) => {
   // }
 };
 
-export const checkIfUserFollows = async (userId, followUserId) => {
+export const checkIfUserFollows = async(userId, followUserId) => {
   const { data, error } = await supabase
-  .from("followUsers")
-  .select()
-  .eq("user", userId)
-  .eq("follows", followUserId);
+    .from("followUsers")
+    .select()
+    .eq("user", userId)
+    .eq("follows", followUserId);
 
   if (error) {
     console.log("couldn't do it 40,", error);

@@ -12,12 +12,17 @@ import { getHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { HeatPoint } from "../../entities/heatPoint";
 import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
+import { getCoordsForSeaLife } from "../../supabaseCalls/photoSupabaseCalls";
 
 import { useMapStore } from "./useMapStore";
 import GoogleMapView from "./view";
 import { MapConfigurations } from "./types";
 
-export default function GoogleMap() {
+type GoogleMapProps = {
+  species?: string;
+};
+
+export default function GoogleMap({ species }: GoogleMapProps) {
   const { width: mapPixelWidth } = Dimensions.get("window");
   const TILE_SIZE = 256;
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -55,7 +60,31 @@ export default function GoogleMap() {
     });
   };
 
+  const handleSeaLifeOptionSelected = async (seaCreature: string) => {
+    try {
+      const seaLifeSet = await getCoordsForSeaLife(seaCreature);
+
+      const coordinates = seaLifeSet.map(site => ({
+        latitude: site.latitude,
+        longitude: site.longitude,
+      }));
+
+      mapRef?.fitToCoordinates(coordinates, {
+        edgePadding: species ? { top: 50, right: 0, bottom: 50, left: 0 } : { top: 150, right: 50, bottom: 300, left: 50 },
+        animated: true,
+      });
+
+    } catch (err) {
+      console.warn("Geocoder error:", err);
+    }
+  };
+
   const handleOnMapReady = () => {
+
+    if (species) {
+      handleSeaLifeOptionSelected(species);
+    }
+
     handleBoundsChange();
 
     switch (initConfig) {
@@ -85,10 +114,10 @@ export default function GoogleMap() {
 
   useEffect(() => {
     (async () => {
-      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble, { animal: animalMultiSelection && [animalMultiSelection] });
+      const heatPoints = await GPSBubble.getItemsInGpsBubble(getHeatPoints, bubble, { animal: species && [species] });
       setHeatPoints(heatPoints);
     })();
-  }, [animalMultiSelection, bubble]);
+  }, [species, bubble]);
 
   const handleBoundsChange = debounce(async () => {
     if (!mapRef) {
@@ -123,6 +152,7 @@ export default function GoogleMap() {
       diveSites={diveSites}
       diveShops={diveShops}
       zoomLevel={zoomLevel}
+      species={species}
     />
   );
 }
