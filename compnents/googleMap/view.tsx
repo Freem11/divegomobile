@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback, useRef, memo, useContext } from "react";
-import { Dimensions, StyleSheet, View, InteractionManager, Region } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { Dimensions, StyleSheet, View, InteractionManager } from "react-native";
+import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster from "use-supercluster";
 
@@ -15,7 +15,6 @@ import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
-// --- SYNCHRONIZED DEFAULT IMPORTS ---
 import MarkerDiveShop from "./marker/markerDiveShop";
 import MarkerDiveSite from "./marker/markerDiveSite";
 import MarkerDiveSiteCluster from "./marker/markerDiveSiteCluster";
@@ -39,6 +38,7 @@ type MapViewProps = {
   diveSites?: DiveSiteBasic[] | null;
   diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null;
+  species: string;
 };
 
 const GoogleMapView = memo((props: MapViewProps) => {
