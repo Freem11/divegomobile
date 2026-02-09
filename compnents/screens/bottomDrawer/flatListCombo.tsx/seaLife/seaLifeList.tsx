@@ -14,6 +14,8 @@ import * as S from "../styles";
 import Icon from "../../../../../icons/Icon";
 import { colors } from "../../../../styles";
 import { useAppNavigation } from "../../../../mapPage/types";
+import getImagePublicUrl from "../../../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../../../entities/image";
 
 type SeaLifeListProps = {
   scrollToDiveSiteList?: () => void;
@@ -95,7 +97,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
             <Card
               id={item.id}
               name={item.label}
-              photoPath={item.photofile}
+              photoPath={getImagePublicUrl(item, IMAGE_SIZE.LG)}
               onPressHandler={() => navigation.navigate("SeaLifeScreen", { species: item.label })}
               seaLifeSelections={animalMultiSelection}
               subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? "s" : ""}`}

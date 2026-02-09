@@ -13,6 +13,8 @@ import { useAppNavigation } from "../../../../mapPage/types";
 import * as S from "../styles";
 import Icon from "../../../../../icons/Icon";
 import { colors } from "../../../../styles";
+import getImagePublicUrl from "../../../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../../../entities/image";
 
 export default function DiveSiteList() {
   const navigation = useAppNavigation();
@@ -100,7 +102,7 @@ export default function DiveSiteList() {
             <Card
               id={item.id}
               name={item.name}
-              photoPath={item.divesiteprofilephoto}
+              photoPath={getImagePublicUrl(item.diveSiteProfilePhoto, IMAGE_SIZE.LG)}
               subData={item.times_seen}
               onPressHandler={() => handleDiveSiteSelection(item.id)}
             />

@@ -26,7 +26,7 @@ export type PhotosGroupedByDate = {
 export type Photo = {
   id: number
   created_at: string
-  photoFile: string
+  photoFile: Image
   label: string
   dateTaken: string
   latitude: number

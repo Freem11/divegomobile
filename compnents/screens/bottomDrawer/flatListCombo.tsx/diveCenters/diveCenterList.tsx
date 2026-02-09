@@ -13,6 +13,8 @@ import { useAppNavigation } from "../../../../mapPage/types";
 import * as S from "../styles";
 import { colors } from "../../../../styles";
 import Icon from "../../../../../icons/Icon";
+import getImagePublicUrl from "../../../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../../../entities/image";
 
 export default function DiveCenterList() {
   const navigation = useAppNavigation();
@@ -79,7 +81,7 @@ export default function DiveCenterList() {
         <FlatList
           data={diveCenters}
           keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
-          renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={item.diveShopProfilePhoto} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
+          renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={getImagePublicUrl(item.diveShopProfilePhoto, IMAGE_SIZE.LG)} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"

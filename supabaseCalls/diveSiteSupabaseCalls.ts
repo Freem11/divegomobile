@@ -2,6 +2,7 @@ import { DiveSiteBasic, DiveSiteWithUserName } from "../entities/diveSite";
 import { GPSBubble } from "../entities/GPSBubble";
 import { Photo } from "../entities/photos";
 import { supabase } from "../supabase";
+import { Image } from "../entities/image";
 
 export const diveSites = async () => {
   const { data, error } = await supabase.from("diveSites").select();
@@ -36,12 +37,12 @@ export const getDiveSitesBasic = async (
 };
 
 export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>,) => {
-  const builder = supabase.rpc("get_divesites_with_username", {
+  const builder = supabase.rpc("get_dive_sites_with_images", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: "",
+    p_user_id: "",
   });
 
   if (filter?.label) {
@@ -53,10 +54,23 @@ export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>,) => 
     return [];
   }
 
-  if (data) {
-    return data as DiveSiteWithUserName[];
-  }
-  return [];
+  const result: Partial<Photo>[] = data.map((item: any) => {
+    const sitePhoto: Image = {
+      file_name: item.diveSiteProfilePhoto,
+      public_domain: item.public_domain,
+      sm: item.sm,
+      md: item.md,
+      lg: item.lg,
+      xl: item.xl,
+    };
+
+    return {
+      ...item,
+      diveSiteProfilePhoto: sitePhoto,
+    };
+  });
+
+  return result;
 };
 
 export const getSiteNamesThatFit = async (value) => {

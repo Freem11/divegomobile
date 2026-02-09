@@ -1,5 +1,6 @@
 import { DiveShop } from "../entities/diveShop";
 import { GPSBubble } from "../entities/GPSBubble";
+import { Image } from "../entities/image";
 import { supabase } from "../supabase";
 
 // export const sss = async (GPSBubble) => {
@@ -36,26 +37,36 @@ import { supabase } from "../supabase";
 // };
 
 export const getDiveShops = async (bubble: GPSBubble, filerValue: string = ""): Promise<DiveShop[]> => {
-  let query = supabase
-    .from("shops")
-    .select()
-    .gte("lat", bubble.minLat)
-    .gte("lng", bubble.minLng)
-    .lte("lat", bubble.maxLat)
-    .lte("lng", bubble.maxLng);
-
-  if (filerValue && filerValue.trim()) {
-    query = query.ilike("orgName", "%" + filerValue + "%");
-  }
-
-  const { data, error } = await query;
+  const { data, error } = await supabase.rpc("get_dive_shops_with_images", {
+    min_lat: bubble.minLat,
+    max_lat: bubble.maxLat,
+    min_lng: bubble.minLng,
+    max_lng: bubble.maxLng,
+    filter_value: filerValue
+  });
 
   if (error || !data) {
-    console.log("couldn't do it,", error);
+    console.error("Supabase Error:", error);
     return [];
   }
 
-  return data;
+  const result: DiveShop[] = data.map((item: any) => {
+    const shopPhoto: Image = {
+      file_name: item.diveShopProfilePhoto,
+      public_domain: item.public_domain,
+      sm: item.sm,
+      md: item.md,
+      lg: item.lg,
+      xl: item.xl,
+    };
+
+    return {
+      ...item,
+      diveShopProfilePhoto: shopPhoto,
+    };
+  });
+
+  return result;
 };
 
 export const getShopByName = async (value) => {
@@ -78,24 +89,24 @@ export const updateDiveShop = async (values) => {
     .eq("id", values.id)
     .select();
 
-    if (error) {
-      console.log("couldn't do it dive shop update,", error);
-      return null;
-    }
-  
-    if (data[0]) {
-      return data[0] as DiveShop;
-    }
+  if (error) {
+    console.log("couldn't do it dive shop update,", error);
+    return null;
+  }
+
+  if (data[0]) {
+    return data[0] as DiveShop;
+  }
 };
 
 export const getShopByUserID = async (value: string) => {
   const { data, error } = await supabase
-    .from('shops')
+    .from("shops")
     .select()
-    .eq('userId', value);
+    .eq("userId", value);
 
   if (error) {
-    console.log('couldn\'t do it 39,', error);
+    console.log("couldn't do it 39,", error);
     return [];
   }
 
@@ -106,12 +117,12 @@ export const getShopByUserID = async (value: string) => {
 
 export const getDiveShopById = async (id: number) => {
   const { data, error } = await supabase
-    .from('shops')
+    .from("shops")
     .select()
-    .eq('id', id);
+    .eq("id", id);
 
   if (error) {
-    console.log('couldn\'t do it 39,', error);
+    console.log("couldn't do it 39,", error);
   }
 
   if (data) {
