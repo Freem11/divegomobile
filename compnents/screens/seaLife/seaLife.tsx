@@ -1,7 +1,6 @@
 import React from "react";
 import { Pressable } from "react-native-gesture-handler";
 
-import { cloudflareBucketUrl } from "../../globalVariables";
 import SealifePreview from "../../reusables/sealifePreview";
 import { SeaLife } from "../../../entities/seaLIfe";
 import Label from "../../reusables/label-new";
@@ -12,12 +11,13 @@ import * as S from "./styles";
 import { RankingCard } from "./rankingCard";
 
 import { diveSiteStat, userStat } from ".";
+import { Animal } from "../../../entities/photos";
 
 type SeaLifeProps = {
   species: string;
   speciesDiveSiteCount: diveSiteStat[];
   speciesUserCount: userStat[];
-  seaLifePhotos: any[]
+  seaLifePhotos: Animal[]
   selectedSeaLife: SeaLife
   onPressDiveSite: (id: number) => void;
   onPressUser: (id: string) => void;
@@ -36,10 +36,6 @@ export default function SeaLifeScreenView({
   const [mapActive, setMapActive] = React.useState(false);
   const toggleMap = () => setMapActive(!mapActive);
 
-  const photos = seaLifePhotos?.map((item) => ({
-    ...item,
-    photofile: `${cloudflareBucketUrl}${item.photoFile?.split("/").pop()}`
-  }));
 
   return (
     <S.ContentContainer>
@@ -51,8 +47,8 @@ export default function SeaLifeScreenView({
 
       <SealifePreview
         speciesCount={null}
-        sightingsCount={photos && photos.length}
-        diveSitePics={photos}
+        sightingsCount={seaLifePhotos?.length}
+        diveSitePics={seaLifePhotos.map((item) => item.image)}
         onViewMore={null}
         onAddSighting={null}
         selectedProfile={null}

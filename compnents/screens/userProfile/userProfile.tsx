@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { ActiveProfile } from "../../../entities/profile";
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { Review } from "../../../entities/diveSiteReview";
 import SealifePreview from "../../reusables/sealifePreview";
 import ReviewCard from "../../reusables/reviewCard";
@@ -10,9 +9,10 @@ import EmptyState from "../../reusables/emptyState-new";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import * as S from "./styles";
+import { Animal } from "../../../entities/photos";
 
 type UserProfileProps = {
-  profilePhotos: DiveSiteWithUserName[] | null;
+  profilePhotos: Animal[] | null;
   selectedProfile: ActiveProfile | null;
   speciesCount: number;
   sightingsCount: number;
@@ -54,7 +54,7 @@ export default function UserProfileScreenView({
       <SealifePreview
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
-        diveSitePics={profilePhotos}
+        diveSitePics={profilePhotos.map(item => item.image)}
         onViewMore={openAllPhotosPage}
         selectedProfile={selectedProfile}
       />

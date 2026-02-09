@@ -1,3 +1,4 @@
+import { Animal } from "../entities/photos";
 import { ActiveProfile } from "../entities/profile";
 import { supabase } from "../supabase";
 
@@ -225,7 +226,7 @@ export const getUserSightingsCount = async (userId: string) => {
   return [];
 };
 
-export const getDiveSiteRecentNinePhotos = async (userId: string) => {
+export const getDiveSiteRecentNinePhotos = async (userId: string): Promise<Animal[]> => {
   const { data, error } = await supabase.rpc("get_profile_recent_nine", {
     p_user_id: userId
   });
@@ -235,10 +236,27 @@ export const getDiveSiteRecentNinePhotos = async (userId: string) => {
     return [];
   }
 
+  const result = [] as Animal[];
   if (data) {
-    return data;
+    data.forEach((item: any) => {
+      const animal: Animal = {
+        label: item.label,
+        times_seen: item.times_seen,
+        image: {
+          file_name: item.photofile,
+          public_domain: item.public_domain,
+          sm: item.sm,
+          md: item.md,
+          lg: item.lg,
+          xl: item.xl,
+        },
+      };
+
+      result.push(animal);
+    });
+
   }
-  return [];
+  return result;
 };
 
 export const getuserReveiewCount = async (user_id: string) => {

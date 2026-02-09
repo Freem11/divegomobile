@@ -1,3 +1,4 @@
+import { Animal } from "../../entities/photos";
 import { SeaLife } from "../../entities/seaLIfe";
 import { supabase } from "../../supabase";
 
@@ -17,20 +18,37 @@ export const getSpeciesData = async (species: string) => {
     }
 };
 
-export const getSpeciesPhotos = async (species: string) => {
-    const { data, error } = await supabase
-        .from("photos")
-        .select()
-        .eq("label", species);
+export const getSpeciesPhotos = async (species: string): Promise<Animal[]> => {
+    const { data, error } = await supabase.rpc("get_species_photos_with_variants", {
+        p_species: species
+    });
 
     if (error) {
         console.log("couldn't do it GET_SPECIES_PHOTOS,", error);
         return [];
     }
 
+    const result = [] as Animal[];
     if (data) {
-        return data;
+        data.forEach((item: any) => {
+            const animal: Animal = {
+                label: item.label,
+                times_seen: item.times_seen,
+                image: {
+                    file_name: item.photofile,
+                    public_domain: item.public_domain,
+                    sm: item.sm,
+                    md: item.md,
+                    lg: item.lg,
+                    xl: item.xl,
+                },
+            };
+
+            result.push(animal);
+        });
+
     }
+    return result;
 };
 export const getSpeciesSiteCount = async (species: string, limit?: number) => {
     let query = supabase

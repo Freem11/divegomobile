@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 
 import { getSpeciesSiteCount, getSpeciesUserCount } from "../../../supabaseCalls/seaLifeMetrics/gets";
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { SeaLife } from "../../../entities/seaLIfe";
 import { useAppNavigation } from "../../mapPage/types";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 
 import SeaLifeScreenView from "./seaLife";
+import { Animal } from "../../../entities/photos";
 
 type SeaLifeProps = {
   species: string;
-  seaLifePhotos: DiveSiteWithUserName[]
+  seaLifePhotos: Animal[]
   selectedSeaLife: SeaLife
 };
 
