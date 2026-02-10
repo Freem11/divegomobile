@@ -38,7 +38,7 @@ type MapViewProps = {
   diveSites?: DiveSiteBasic[] | null;
   diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null;
-  species: string;
+  species?: string;
 };
 
 const GoogleMapView = memo((props: MapViewProps) => {
@@ -85,14 +85,27 @@ const GoogleMapView = memo((props: MapViewProps) => {
     return Math.round(Math.log2(360 / region.longitudeDelta));
   };
 
+  /**
+   * FIX: BREAKOUT LOGIC
+   * We filter out selected sites from the 'points' array so the cluster engine
+   * doesn't "swallow" Gold anchors into a cluster bubble.
+   */
   const points = useMemo(() => {
     const pts = [] as Supercluster.PointFeature<ClusterProperty>[];
-    props.diveSites?.forEach((item) => pts.push(diveSiteToPointFeature(item)));
+
+    props.diveSites?.forEach((item) => {
+      const isSelected = sitesArray.includes(item.id);
+      // Only add to cluster engine if NOT selected
+      if (!isSelected) {
+        pts.push(diveSiteToPointFeature(item));
+      }
+    });
+
     props.diveShops?.forEach((item) => pts.push(diveShopToPointFeature(item)));
     return pts;
-  }, [props.diveSites, props.diveShops]);
+  }, [props.diveSites, props.diveShops, sitesArray]);
 
-  const { clusters, supercluster } = useSupercluster({
+  const { clusters } = useSupercluster({
     points,
     bounds,
     zoom,
@@ -100,14 +113,23 @@ const GoogleMapView = memo((props: MapViewProps) => {
   });
 
   useEffect(() => {
-    if (mapRegion) setInitialRegion(mapRegion);
-    else {
+    if (mapRegion) {
+      setInitialRegion(mapRegion);
+    } else {
       getMostRecentPhoto().then((loc) => {
-        if (loc) setInitialRegion({ latitude: loc[0].latitude, longitude: loc[0].longitude, latitudeDelta: 2, longitudeDelta: 0.4 });
-        else setInitialRegion({ latitude: 0, longitude: 0, latitudeDelta: 10, longitudeDelta: 10 });
+        if (loc && loc[0]) {
+          setInitialRegion({
+            latitude: loc[0].latitude,
+            longitude: loc[0].longitude,
+            latitudeDelta: 2,
+            longitudeDelta: 0.4
+          });
+        } else {
+          setInitialRegion({ latitude: 0, longitude: 0, latitudeDelta: 10, longitudeDelta: 10 });
+        }
       });
     }
-  }, [mapRegion]);
+  }, []);
 
   const updateMapPositions = useCallback((region: Region) => {
     const nextZoom = getZoomFromRegion(region);
@@ -134,8 +156,8 @@ const GoogleMapView = memo((props: MapViewProps) => {
         activeMap.animateToRegion({
           latitude: coords.latitude,
           longitude: coords.longitude,
-          latitudeDelta: 1,
-          longitudeDelta: 1,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
         }, 500);
       }
     } catch (e) { console.log("Loc Error", e); }
@@ -149,7 +171,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
     const nextZoom = Math.min(currentZoom + 3, 16);
 
     isAnimating.current = true;
-
     activeMap.animateCamera({
       center: { latitude, longitude },
       zoom: nextZoom,
@@ -167,16 +188,21 @@ const GoogleMapView = memo((props: MapViewProps) => {
     }, 500);
   }, [mapRef, updateMapPositions]);
 
+  /**
+   * FIX: TWO-PASS RENDERING
+   * We render standard clusters/unselected sites first, then overlay Gold sites
+   */
   const renderedMarkers = useMemo(() => {
     if (!clusters) return [];
 
-    return clusters.map((cluster) => {
+    // Pass 1: Standard clusters and unselected items
+    const mapElements = clusters.map((cluster) => {
       const [longitude, latitude] = cluster.geometry.coordinates;
       const { cluster: isCluster, point_count: pointCount, id, category } = cluster.properties;
 
       const stableKey = isCluster
-        ? `cluster-${id}-${latitude.toFixed(3)}-${longitude.toFixed(3)}`
-        : `site-${id}`;
+        ? `cluster-${id}-${latitude.toFixed(4)}-${longitude.toFixed(4)}`
+        : `${category}-${id}`;
 
       if (isCluster) {
         return (
@@ -190,13 +216,12 @@ const GoogleMapView = memo((props: MapViewProps) => {
       }
 
       if (category === PointFeatureCategory.DiveSite) {
-        const isSelected = sitesArray.includes(id);
         return (
           <MarkerDiveSite
-            key={`site-${id}`}
-            id={id}
+            key={stableKey}
+            id={id as number}
             coordinate={{ latitude, longitude }}
-            isSelected={isSelected}
+            isSelected={false}
           />
         );
       }
@@ -204,15 +229,29 @@ const GoogleMapView = memo((props: MapViewProps) => {
       if (category === PointFeatureCategory.DiveShop) {
         return (
           <MarkerDiveShop
-            key={`shop-${id}`}
-            id={id}
+            key={stableKey}
+            id={id as number}
             coordinate={{ latitude, longitude }}
           />
         );
       }
       return null;
-    }).filter(Boolean);
-  }, [clusters, sitesArray, handleClusterPress]);
+    });
+
+    // Pass 2: Selected Gold Sites (Rendered on top, excluded from clusters)
+    const goldElements = (props.diveSites || [])
+      .filter((site) => sitesArray.includes(site.id))
+      .map((site) => (
+        <MarkerDiveSite
+          key={`gold-${site.id}`}
+          id={site.id}
+          coordinate={{ latitude: site.lat, longitude: site.lng }}
+          isSelected={true}
+        />
+      ));
+
+    return [...mapElements, ...goldElements].filter(Boolean);
+  }, [clusters, sitesArray, props.diveSites, handleClusterPress]);
 
   if (!initialRegion) return <View style={styles.container} />;
 
@@ -226,8 +265,10 @@ const GoogleMapView = memo((props: MapViewProps) => {
         initialRegion={initialRegion}
         maxZoomLevel={16}
         ref={(map) => {
-          localMapRef.current = map;
-          props.onLoad(map!);
+          if (map) {
+            localMapRef.current = map;
+            props.onLoad(map);
+          }
         }}
         onMapReady={() => {
           isMapReady.current = true;
@@ -248,30 +289,46 @@ const GoogleMapView = memo((props: MapViewProps) => {
         {renderedMarkers}
       </MapView>
 
+      {/* --- UI OVERLAYS RESTORED --- */}
+
       {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
         <SearchTool />
       )}
-      {props?.mapConfig === MapConfigurations.PinDrop && <MarkerDraggable />}
-      {props?.mapConfig === MapConfigurations.PinDrop && (
-        <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
-          <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
-          <View onTouchStart={() => { isMapReady.current = false; }}>
-            <ReturnToSiteSubmitterButton />
-          </View>
+
+      {props?.mapConfig === MapConfigurations.Default && !props.species && (
+        <View style={{ position: "absolute", bottom: "5%", right: "5%" }}>
+          <S.TargetWrapperAlt>
+            <ButtonIcon icon="target" size={36} onPress={getCurrentLocation} />
+          </S.TargetWrapperAlt>
         </View>
       )}
+
+      {props?.mapConfig === MapConfigurations.PinDrop && (
+        <>
+          <MarkerDraggable />
+          <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+            <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
+            <View onTouchStart={() => { isMapReady.current = false; }}>
+              <ReturnToSiteSubmitterButton />
+            </View>
+          </View>
+        </>
+      )}
+
       {props?.mapConfig === MapConfigurations.TripView && (
         <View style={{ position: "absolute", bottom: "5%", width: "100%", alignItems: "center" }}>
           <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
           <ReturnToShopButton />
         </View>
       )}
+
       {props?.mapConfig === MapConfigurations.TripBuild && (
         <View style={{ position: "absolute", bottom: "5%", width: "100%", alignItems: "center" }}>
           <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
           <ReturnToCreateTripButton />
         </View>
       )}
+
     </View>
   );
 });

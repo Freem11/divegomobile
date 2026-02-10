@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import MapView from "react-native-maps";
 import { Dimensions } from "react-native";
 
 import { debounce } from "../reusables/_helpers/debounce";
 import { GPSBubble } from "../../entities/GPSBubble";
-import { getDiveSitesBasic } from "../../supabaseCalls/diveSiteSupabaseCalls";
+import { getDiveSitesBasic, getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { DiveShop } from "../../entities/diveShop";
@@ -12,6 +12,7 @@ import { HeatPoint } from "../../entities/heatPoint";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
 import { getCoordsForSeaLife } from "../../supabaseCalls/photoSupabaseCalls";
 
+import { MapConfigurations } from "./types";
 import { useMapStore } from "./useMapStore";
 import GoogleMapView from "./view";
 
@@ -29,9 +30,14 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
   const camera = useMapStore((state) => state.camera);
   const mapRegion = useMapStore((state) => state.mapRegion);
   const mapConfig = useMapStore((state) => state.mapConfig);
+  const initConfig = useMapStore((state) => state.initConfig);
 
-  // We use a local ref for the Map instance to distinguish between Main and Mini
+  const { sitesArray } = useContext(SitesArrayContext);
   const [localMapRef, setLocalMapRef] = useState<MapView | null>(null);
+  const isInitialMoveDone = useRef(false);
+
+  // State to hold full objects fetched via getDiveSitesByIDs
+  const [fullTripSites, setFullTripSites] = useState<any[]>([]);
 
   const [diveSites, setDiveSites] = useState<DiveSiteBasic[] | null>(null);
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
@@ -39,57 +45,134 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
 
   const handleOnLoad = async (map: MapView) => {
     setLocalMapRef(map);
-    // Only the Main Map (no species) is registered as the global MapRef
     if (!species) {
       mapAction.setMapRef(map);
     }
   };
 
-  const handleSeaLifeOptionSelected = async (seaCreature: string) => {
-    if (!localMapRef) return;
-    try {
-      const seaLifeSet = await getCoordsForSeaLife(seaCreature);
-      const coordinates = seaLifeSet.map(site => ({
-        latitude: site.latitude,
-        longitude: site.longitude,
-      }));
+  /**
+   * HYDRATION LOGIC
+   * Matching your old style: stringifying the IDs before sending to the helper.
+   */
+  useEffect(() => {
+    const hydrateTrip = async () => {
+      if (!sitesArray || sitesArray.length === 0) return;
 
+      const ids = sitesArray
+        .map((s: any) => (s && typeof s === "object" ? s.id : s))
+        .filter((id) => id !== undefined && id !== null);
+
+      if (ids.length > 0) {
+        try {
+          // Matching your old code's requirement for JSON.stringify
+          const fullSites = await getDiveSitesByIDs(JSON.stringify(ids));
+          if (fullSites) {
+            setFullTripSites(fullSites);
+          }
+        } catch (err) {
+          console.warn("Error hydrating trip sites:", err);
+        }
+      }
+    };
+
+    if (initConfig === MapConfigurations.TripView || initConfig === MapConfigurations.TripBuild) {
+      hydrateTrip();
+    }
+  }, [sitesArray, initConfig]);
+
+  /**
+   * MOVE TO TRIP
+   * Updated to use .lat and .lng based on your old code.
+   */
+  const moveToTrip = (sites: any[]) => {
+    if (!localMapRef || !sites || sites.length === 0) return;
+
+    const coordinates = sites.map(site => ({
+      latitude: Number(site.lat), // Changed from .latitude to .lat
+      longitude: Number(site.lng), // Changed from .longitude to .lng
+    })).filter(c => !isNaN(c.latitude) && !isNaN(c.longitude));
+
+    if (coordinates.length > 0) {
       localMapRef.fitToCoordinates(coordinates, {
         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
         animated: true,
       });
-    } catch (err) {
-      console.warn("SeaLife zoom error:", err);
     }
   };
 
-  const handleOnMapReady = () => {
-    if (species) {
-      handleSeaLifeOptionSelected(species);
-    } else if (mapRegion && localMapRef) {
-      localMapRef.animateToRegion(mapRegion, 10);
+  const handleSeaLifeFocus = async (creature: string) => {
+    if (!localMapRef) return;
+    try {
+      const seaLifeSet = await getCoordsForSeaLife(creature);
+      const coords = seaLifeSet.map((site) => ({
+        latitude: Number(site.latitude),
+        longitude: Number(site.longitude),
+      }));
+      if (coords.length > 0) {
+        localMapRef.fitToCoordinates(coords, {
+          edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+          animated: true,
+        });
+      }
+    } catch (err) {
+      console.warn("SeaLife focus error:", err);
     }
+  };
+
+  /**
+   * WATCHER
+   */
+  useEffect(() => {
+    if (!localMapRef || isInitialMoveDone.current) return;
+
+    const performInitialMove = () => {
+      if (species) {
+        handleSeaLifeFocus(species);
+        isInitialMoveDone.current = true;
+      } else {
+        switch (initConfig) {
+          case MapConfigurations.Default:
+            if (mapRegion) {
+              localMapRef.animateToRegion(mapRegion, 10);
+              isInitialMoveDone.current = true;
+            }
+            break;
+          case MapConfigurations.TripView:
+          case MapConfigurations.TripBuild:
+            if (fullTripSites && fullTripSites.length > 0) {
+              moveToTrip(fullTripSites);
+              isInitialMoveDone.current = true;
+            }
+            break;
+          default:
+            if (initConfig !== undefined) isInitialMoveDone.current = true;
+            break;
+        }
+      }
+    };
+
+    const timer = setTimeout(performInitialMove, 250);
+    return () => clearTimeout(timer);
+  }, [localMapRef, fullTripSites, species, initConfig, mapRegion]);
+
+  const handleOnMapReady = () => {
     handleBoundsChange();
   };
 
   const getZoomFromBounds = (neLng: number, swLng: number) => {
     const lngDelta = Math.abs(neLng - swLng);
-    const zoom = Math.log2((360 * mapPixelWidth) / (lngDelta * TILE_SIZE));
-    return Math.floor(zoom);
+    return Math.floor(Math.log2((360 * mapPixelWidth) / (lngDelta * TILE_SIZE)));
   };
 
   const handleBoundsChange = debounce(async () => {
     if (!localMapRef) return;
-
     const boundaries = await localMapRef.getMapBoundaries();
     const currentBubble = GPSBubble.createFromBoundaries(boundaries);
 
-    // 1. Notify the local listener (Histogram) if on Sea Life Screen
     if (onBoundsChangeLocal) {
       onBoundsChangeLocal(currentBubble);
     }
 
-    // 2. PROTECT GLOBAL STORE: Only update lists if NOT a mini-map
     if (!species) {
       mapAction.setGpsBubble(currentBubble);
       mapAction.setMapRegion({
