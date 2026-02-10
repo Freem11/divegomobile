@@ -7,9 +7,9 @@ import ReviewCard from "../../reusables/reviewCard";
 import Label from "../../reusables/label-new";
 import EmptyState from "../../reusables/emptyState-new";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { Animal } from "../../../entities/photos";
 
 import * as S from "./styles";
-import { Animal } from "../../../entities/photos";
 
 type UserProfileProps = {
   profilePhotos: Animal[] | null;
@@ -54,7 +54,7 @@ export default function UserProfileScreenView({
       <SealifePreview
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
-        diveSitePics={profilePhotos.map(item => item.image)}
+        diveSitePics={profilePhotos?.map(item => item.image)}
         onViewMore={openAllPhotosPage}
         selectedProfile={selectedProfile}
       />

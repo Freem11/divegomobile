@@ -6,12 +6,12 @@ import { SeaLife } from "../../../entities/seaLIfe";
 import Label from "../../reusables/label-new";
 import GoogleMap from "../../googleMap";
 import Histogram from "../bottomDrawer/flatListCombo.tsx/histogram";
+import { Animal } from "../../../entities/photos";
 
 import * as S from "./styles";
 import { RankingCard } from "./rankingCard";
 
 import { diveSiteStat, userStat } from ".";
-import { Animal } from "../../../entities/photos";
 
 type SeaLifeProps = {
   species: string;
@@ -36,7 +36,6 @@ export default function SeaLifeScreenView({
   const [mapActive, setMapActive] = React.useState(false);
   const toggleMap = () => setMapActive(!mapActive);
 
-
   return (
     <S.ContentContainer>
       <S.InfoContainer>
@@ -48,7 +47,7 @@ export default function SeaLifeScreenView({
       <SealifePreview
         speciesCount={null}
         sightingsCount={seaLifePhotos?.length}
-        diveSitePics={seaLifePhotos.map((item) => item.image)}
+        diveSitePics={seaLifePhotos?.map((item) => item.image)}
         onViewMore={null}
         onAddSighting={null}
         selectedProfile={null}

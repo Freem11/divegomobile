@@ -128,7 +128,7 @@ export default function DiveSiteScreenView({
       <SealifePreview
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
-        diveSitePics={diveSitePics.map(photo => photo.image)}
+        diveSitePics={diveSitePics?.map(photo => photo.image)}
         onViewMore={openAllPhotosPage}
         onAddSighting={openPicUploader}
         selectedProfile={null}
