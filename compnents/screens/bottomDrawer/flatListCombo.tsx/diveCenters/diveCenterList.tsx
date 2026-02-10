@@ -70,7 +70,7 @@ export default function DiveCenterList() {
       {layoutReady && (
         <FlatList
           data={diveCenters}
-          keyExtractor={(item) => item.id?.toString()}
+          keyExtractor={(item, index) => item.id?.toString() || `shop-${index}`}
           renderItem={({ item }) => (
             <Card
               id={item.id}

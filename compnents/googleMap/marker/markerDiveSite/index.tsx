@@ -1,67 +1,57 @@
-import React, { useContext, useState } from "react";
-import { View } from "react-native";
+import React, { useContext, useEffect, useState, memo } from "react";
 import { Marker } from "react-native-maps";
-import Svg, { Path } from "react-native-svg";
-import { moderateScale } from "react-native-size-matters";
 
-import { Coordinates } from "../../../../entities/coordinates";
 import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
-import iconConfig from "../../../../icons/_config.json";
 import { useAppNavigation } from "../../../mapPage/types";
 import { MapConfigurations } from "../../types";
+import { Coordinates } from "../../entities/coordinates";
+
+const ANCHOR_WHITE = require("../../../png/mapIcons/AnchorWhite.png");
+const ANCHOR_GOlD = require("../../../png/mapIcons/AnchorGold.png");
 
 type MarkerDiveSiteProps = {
   id: number;
   coordinate: Coordinates;
+  isSelected: boolean;
 };
 
-export function MarkerDiveSite(props: MarkerDiveSiteProps) {
+const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
   const navigation = useAppNavigation();
   const mapConfig = useMapStore((state) => state.mapConfig);
+  const { setSitesArray } = useContext(SitesArrayContext);
+
   const [tracksViewChanges, setTracksViewChanges] = useState(true);
-  const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
 
-  const pathData = iconConfig.anchor?.[1] ?? "";
-
-  const scale = 0.85;
-  const center = 256;
-  const translate = center * (1 - scale); // 38.4
-
-  const handleScreen = () => {
-    navigation.navigate("DiveSiteNavigator", { id: props.id });
-  };
+  useEffect(() => {
+    setTracksViewChanges(true);
+    const timer = setTimeout(() => setTracksViewChanges(false), 600);
+    return () => clearTimeout(timer);
+  }, [props.isSelected, mapConfig]);
 
   function handlePress() {
     if (mapConfig !== MapConfigurations.TripBuild) {
-      handleScreen();
+      navigation.navigate("DiveSiteNavigator", { id: props.id });
     } else {
-      setTracksViewChanges(false);
-      if (sitesArray.includes(props.id)) {
-        setSitesArray(prev => prev.filter(id => id !== props.id));
+      if (props.isSelected) {
+        setSitesArray((prev: number[]) => prev.filter(id => id !== props.id));
       } else {
-        setSitesArray(prev => [...prev, props.id]);
+        setSitesArray((prev: number[]) => [...prev, props.id]);
       }
-      setTracksViewChanges(true);
     }
   }
 
   return (
     <Marker
-      tracksViewChanges={tracksViewChanges}
-      onLayout={() => setTracksViewChanges(false)}
       coordinate={props.coordinate}
       onPress={handlePress}
-    >
-      <View style={{ width: moderateScale(30), height: moderateScale(30) }}>
-        <Svg width={moderateScale(30)} height={moderateScale(30)} viewBox="0 0 512 512">
-          <Path
-            d={pathData as string}
-            fill={sitesArray.includes(props.id) ? "gold" : "skyblue"}
-            transform={`translate(${translate}, ${translate}) scale(${scale})`}
-          />
-        </Svg>
-      </View>
-    </Marker>
+      image={props.isSelected ? ANCHOR_GOlD : ANCHOR_WHITE}
+      tracksViewChanges={tracksViewChanges}
+      stopPropagation={true}
+      zIndex={props.isSelected ? 100 : 2}
+      pointerEvents="auto"
+    />
   );
-}
+});
+
+export default MarkerDiveSite;

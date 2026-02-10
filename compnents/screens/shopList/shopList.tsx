@@ -20,8 +20,6 @@ export default function ShopListPageView({
 
   const { t } = useTranslation();
 
-  console.log(listOfShops);
-
   return (
     <S.ContentContainer>
 

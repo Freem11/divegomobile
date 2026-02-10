@@ -77,7 +77,7 @@ export default function DiveSiteList() {
       {layoutReady && (
         <FlatList
           data={diveSites}
-          keyExtractor={(item) => item.id?.toString()}
+          keyExtractor={(item, index) => item.id?.toString() || `site-${index}`}
           renderItem={({ item }) => (
             <Card
               id={item.id}

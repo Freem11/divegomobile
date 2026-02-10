@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
@@ -83,7 +83,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
       {layoutReady && (
         <FlatList
           data={areaPics}
-          keyExtractor={(item) => item.id?.toString() || item.photoFile}
+          keyExtractor={(item, index) => item.id?.toString() || `${item.label}-${index}`}
           renderItem={({ item }) => (
             <Card
               id={item.id}

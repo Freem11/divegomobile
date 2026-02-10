@@ -65,9 +65,6 @@ export default function SeaLifeScreenView({
         <S.MiniLabel>Seasonal Trend</S.MiniLabel>
       </S.StatRowMajor>
 
-      {/* CRITICAL: The Histogram must receive the localBoundaries.
-          If this prop doesn't change, the Histogram won't re-fetch.
-      */}
       <Histogram animal={species} boundaries={localBoundaries} />
 
       <S.MapContainer>

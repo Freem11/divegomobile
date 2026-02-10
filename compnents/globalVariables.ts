@@ -27,6 +27,6 @@ if (useProdKeys) {
   cloudflareBucketUrl = prodCloudflareBucketUrl;
 };
 
-console.log(cloudflareBucketUrl, awsAccessKeyId, awsSecretKey, awsAccountId);
+// console.log(cloudflareBucketUrl, awsAccessKeyId, awsSecretKey, awsAccountId);
 
 export { cloudflareBucketUrl, awsAccessKeyId, awsSecretKey, awsAccountId, resetPasswordURL };
