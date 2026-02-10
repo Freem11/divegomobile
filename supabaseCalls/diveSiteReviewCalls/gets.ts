@@ -12,10 +12,32 @@ export const getReviewById = async (reveiw_id: number) => {
     return [];
   }
 
-  return {
-    data,
-    error,
+  const sitePhoto: Image = {
+    file_name: data.diveSiteProfilePhoto,
+    public_domain: data.ds_public_domain,
+    sm: data.ds_sm,
+    md: data.ds_md,
+    lg: data.ds_lg,
+    xl: data.ds_xl,
   };
+
+  const reviewerPhoto: Image = {
+    file_name: data.profilePhoto,
+    public_domain: data.reviewer_public_domain,
+    sm: data.reviewer_sm,
+    md: data.reviewer_md,
+    lg: data.reviewer_lg,
+    xl: data.reviewer_xl,
+  };
+
+  const result = {
+    ...data,
+    profilePhoto: reviewerPhoto,
+    diveSiteProfilePhoto: sitePhoto,
+  };
+
+  return { result, error };
+
 };
 
 export const getReviewsBySiteId = async (divesite_id: number) => {

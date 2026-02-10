@@ -5,11 +5,12 @@ import { moderateScale } from "react-native-size-matters";
 import { ReviewSingle } from "../../../entities/diveSiteReview";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import Avatar from "../../reusables/reviewCard/avatarCreator";
 import readableDate from "../../helpers/readableDate";
 import { PhotoUpload } from "../formScreens/photoUpload";
 import ConditionsCard from "../../reusables/condidtionsCard";
+import { IMAGE_SIZE } from "../../../entities/image";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
 
 import * as S from "./styles";
 
@@ -31,7 +32,7 @@ export default function ReviewScreenView({
 
       <S.StatRowMajor>
         <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-          <Avatar photo={`${cloudflareBucketUrl}${selectedReview?.profilePhoto.split("/").pop()}`} />
+          <Avatar photo={getImagePublicUrl(selectedReview?.profilePhoto, IMAGE_SIZE.SM)} />
           <S.Title>
             {selectedReview?.user_name}
           </S.Title>

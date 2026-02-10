@@ -31,8 +31,8 @@ export type ReviewSingle = {
   user_name: string;
   conditions: ReviewCondition[]
   photos: Image[]
-  profilePhoto: string;
-  diveSiteProfilePhoto: string;
+  profilePhoto: Image;
+  diveSiteProfilePhoto: Image;
 };
 
 export type ReviewCondition = {
