@@ -1,5 +1,6 @@
 import React, { useMemo, memo } from "react";
 import { Heatmap } from "react-native-maps";
+import { moderateScale } from "react-native-size-matters";
 
 import { HeatPoint } from "../../../../entities/heatPoint";
 import { heatPointToWeightedLocation } from "../../dto/heatPointToWeightedLocation";
@@ -22,7 +23,7 @@ const MarkerHeatPoint = (props: MarkerHeatPointProps) => {
     <Heatmap
       points={weightedPoints}
       radius={40}
-      opacity={0.7}
+      opacity={1}
     />
   );
 };

@@ -6,10 +6,12 @@ import { debounce } from "../reusables/_helpers/debounce";
 import { GPSBubble } from "../../entities/GPSBubble";
 import { getDiveSitesBasic, getDiveSitesByIDs } from "../../supabaseCalls/diveSiteSupabaseCalls";
 import { getDiveShops } from "../../supabaseCalls/shopsSupabaseCalls";
+import { getHeatPoints } from "../../supabaseCalls/heatPointSupabaseCalls";
 import { DiveSiteBasic } from "../../entities/diveSite";
 import { DiveShop } from "../../entities/diveShop";
 import { HeatPoint } from "../../entities/heatPoint";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
+import { AnimalMultiSelectContext } from "../contexts/animalMultiSelectContext";
 import { getCoordsForSeaLife } from "../../supabaseCalls/photoSupabaseCalls";
 
 import { MapConfigurations } from "./types";
@@ -31,14 +33,15 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
   const mapRegion = useMapStore((state) => state.mapRegion);
   const mapConfig = useMapStore((state) => state.mapConfig);
   const initConfig = useMapStore((state) => state.initConfig);
+  const bubble = useMapStore((state) => state.gpsBubble);
 
   const { sitesArray } = useContext(SitesArrayContext);
+  const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
+
   const [localMapRef, setLocalMapRef] = useState<MapView | null>(null);
   const isInitialMoveDone = useRef(false);
 
-  // State to hold full objects fetched via getDiveSitesByIDs
   const [fullTripSites, setFullTripSites] = useState<any[]>([]);
-
   const [diveSites, setDiveSites] = useState<DiveSiteBasic[] | null>(null);
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[] | null>(null);
@@ -51,8 +54,21 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
   };
 
   /**
+   * HEATPOINT RESTORATION
+   */
+  useEffect(() => {
+    (async () => {
+      const heatPointsData = await GPSBubble.getItemsInGpsBubble(
+        getHeatPoints,
+        bubble,
+        { animal: animalMultiSelection && [animalMultiSelection] }
+      );
+      setHeatPoints(heatPointsData);
+    })();
+  }, [animalMultiSelection, bubble]);
+
+  /**
    * HYDRATION LOGIC
-   * Matching your old style: stringifying the IDs before sending to the helper.
    */
   useEffect(() => {
     const hydrateTrip = async () => {
@@ -64,7 +80,6 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
 
       if (ids.length > 0) {
         try {
-          // Matching your old code's requirement for JSON.stringify
           const fullSites = await getDiveSitesByIDs(JSON.stringify(ids));
           if (fullSites) {
             setFullTripSites(fullSites);
@@ -82,14 +97,13 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
 
   /**
    * MOVE TO TRIP
-   * Updated to use .lat and .lng based on your old code.
    */
   const moveToTrip = (sites: any[]) => {
     if (!localMapRef || !sites || sites.length === 0) return;
 
     const coordinates = sites.map(site => ({
-      latitude: Number(site.lat), // Changed from .latitude to .lat
-      longitude: Number(site.lng), // Changed from .longitude to .lng
+      latitude: Number(site.lat),
+      longitude: Number(site.lng),
     })).filter(c => !isNaN(c.latitude) && !isNaN(c.longitude));
 
     if (coordinates.length > 0) {
@@ -175,12 +189,6 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
 
     if (!species) {
       mapAction.setGpsBubble(currentBubble);
-      mapAction.setMapRegion({
-        latitude: (boundaries.northEast.latitude + boundaries.southWest.latitude) / 2,
-        longitude: (boundaries.northEast.longitude + boundaries.southWest.longitude) / 2,
-        latitudeDelta: Math.abs(boundaries.northEast.latitude - boundaries.southWest.latitude),
-        longitudeDelta: Math.abs(boundaries.northEast.longitude - boundaries.southWest.longitude),
-      });
     }
 
     const zoom = getZoomFromBounds(boundaries.northEast.longitude, boundaries.southWest.longitude);
