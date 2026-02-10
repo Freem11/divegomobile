@@ -1,5 +1,4 @@
 import React from "react";
-import { Pressable } from "react-native-gesture-handler";
 
 import SealifePreview from "../../reusables/sealifePreview";
 import { SeaLife } from "../../../entities/seaLIfe";
@@ -34,7 +33,6 @@ export default function SeaLifeScreenView({
 }: SeaLifeProps) {
 
   const [mapActive, setMapActive] = React.useState(false);
-  const toggleMap = () => setMapActive(!mapActive);
 
   return (
     <S.ContentContainer>
