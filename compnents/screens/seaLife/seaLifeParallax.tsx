@@ -8,6 +8,8 @@ import { getSingleSpecies, getSpeciesData, getSpeciesPhotos } from "../../../sup
 import { loadSeaLifeInfo } from "../../../ai-calls/aiCall";
 import { updateSpeciesFact } from "../../../supabaseCalls/seaLifeMetrics/updates";
 import { SeaLife } from "../../../entities/seaLIfe";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../entities/image";
 
 import SeaLifeScreen from ".";
 
@@ -27,11 +29,11 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
 
   const getSeaLifeInfo = async (label: string) => {
     const speciesExists = await getSingleSpecies(label);
-    if (speciesExists && !speciesExists[0].description) {
+    if (speciesExists && !speciesExists.description) {
       console.log("No description found, calling Gemini...");
       getBlurb();
     } else {
-      setSelectedSeaLife(speciesExists[0]);
+      setSelectedSeaLife(speciesExists);
     }
 
     const seaLifeInfo = await getSpeciesPhotos(label);
@@ -46,12 +48,10 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
   };
 
   let remoteUri: string;
-  if (selectedSeaLife && selectedSeaLife.image_id) {
-    remoteUri = `${selectedSeaLife.public_domain}/${selectedSeaLife.md}`;
+  if (selectedSeaLife?.speciesPhoto?.public_domain) {
+    remoteUri = getImagePublicUrl(selectedSeaLife?.speciesPhoto, IMAGE_SIZE.LG);
   } else {
-    const speciesPhoto = seaLifePhotos && seaLifePhotos[0]?.photoFile;
-    const fileName = speciesPhoto ? speciesPhoto.split("/").pop() : null;
-    remoteUri = `${cloudflareBucketUrl}${fileName}`;
+    remoteUri = seaLifePhotos && getImagePublicUrl(seaLifePhotos[0]?.image, IMAGE_SIZE.LG);
   }
 
   const onClose = async () => {

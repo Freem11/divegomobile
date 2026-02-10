@@ -92,7 +92,7 @@ export default function SeaLifeScreenView({
           key={diveSite.id}
           item_id={diveSite.id}
           label={diveSite.siteName}
-          avatar={diveSite.sitePhoto}
+          avatar={diveSite.imageVariants}
           item_count={diveSite.photo_count}
           onPress={onPressDiveSite}
         />
@@ -107,7 +107,7 @@ export default function SeaLifeScreenView({
           key={user.id}
           item_id={user.id}
           label={user.userName}
-          avatar={user.profilePhoto}
+          avatar={user.imageVariants}
           item_count={user.photo_count}
           onPress={onPressUser}
         />

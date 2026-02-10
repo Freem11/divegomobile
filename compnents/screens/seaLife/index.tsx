@@ -4,9 +4,10 @@ import { getSpeciesSiteCount, getSpeciesUserCount } from "../../../supabaseCalls
 import { SeaLife } from "../../../entities/seaLIfe";
 import { useAppNavigation } from "../../mapPage/types";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { Animal } from "../../../entities/photos";
+import { Image } from "../../../entities/image";
 
 import SeaLifeScreenView from "./seaLife";
-import { Animal } from "../../../entities/photos";
 
 type SeaLifeProps = {
   species: string;
@@ -19,7 +20,7 @@ export type diveSiteStat = {
   label: string;
   photo_count: number
   siteName: string,
-  sitePhoto: string
+  imageVariants: Image
 };
 
 export type userStat = {
@@ -27,7 +28,7 @@ export type userStat = {
   label: string;
   photo_count: number,
   userName: string,
-  profilePhoto: string
+  imageVariants: Image
 };
 
 export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife }: SeaLifeProps) {
