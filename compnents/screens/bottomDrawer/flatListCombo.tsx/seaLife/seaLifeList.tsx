@@ -24,16 +24,16 @@ type SeaLifeListProps = {
 export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) {
   const navigation = useAppNavigation();
   const boundaries = useMapStore((state) => state.gpsBubble);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
+
   const [filterValue, setFilterValue] = useState("");
   const [areaPics, setAreaPics] = useState([]);
+  const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
-  const { animalMultiSelection, setAnimalMultiSelection } = useContext(
-    AnimalMultiSelectContext
-  );
-  const getPhotos = async (filterValue: string) => {
+  const getPhotos = async (val: string) => {
     if (boundaries) {
-      const diveSiteData = await getAnimalsInBubble(boundaries, { label: filterValue });
-
+      const diveSiteData = await getAnimalsInBubble(boundaries, { label: val });
       setAreaPics(diveSiteData);
     }
   };
@@ -42,41 +42,23 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
     getPhotos(filterValue);
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
-  const handleAnimalSelect = (label: string) => {
-    setAnimalMultiSelection((prev) => {
-      if (prev === label) {
-        return;
-      } else {
-        return label;
-      }
-    });
-  };
-
-  const handleClear = () => {
-    setFilterValue("");
+  const handleSelection = async (species: string) => {
+    if (mapRef) {
+      const b = await mapRef.getMapBoundaries();
+      setMapRegion({
+        latitude: (b.northEast.latitude + b.southWest.latitude) / 2,
+        longitude: (b.northEast.longitude + b.southWest.longitude) / 2,
+        latitudeDelta: Math.abs(b.northEast.latitude - b.southWest.latitude),
+        longitudeDelta: Math.abs(b.northEast.longitude - b.southWest.longitude),
+      });
+    }
+    navigation.navigate("SeaLifeScreen", { species });
   };
 
   const [layoutReady, setLayoutReady] = useState(false);
 
-  const renderListHeader = useMemo(() => (
-    <S.FilterContainer>
-      <MobileTextInput
-        iconLeft={"fish"}
-        iconRight={"close"}
-        placeholder="Filter Sea Creatures"
-        onChangeText={(text: string) => setFilterValue(text)}
-        handleClear={handleClear}
-        filterValue={filterValue}
-      />
-    </S.FilterContainer>
-  ), [filterValue, handleClear, setFilterValue]);
-
   return (
-    <S.VerticalFlatlistContainer
-      onLayout={() => {
-        if (!layoutReady) setLayoutReady(true);
-      }}
-    >
+    <S.VerticalFlatlistContainer onLayout={() => setLayoutReady(true)}>
       <S.Header>Nearby Sea Life</S.Header>
       <S.SubHeaderRight>
         <S.SwipeIndicator>
@@ -87,26 +69,34 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
         </S.SwipeIndicator>
       </S.SubHeaderRight>
 
-      {renderListHeader}
+      <S.FilterContainer>
+        <MobileTextInput
+          iconLeft="fish"
+          iconRight="close"
+          placeholder="Filter Sea Creatures"
+          onChangeText={setFilterValue}
+          handleClear={() => setFilterValue("")}
+          filterValue={filterValue}
+        />
+      </S.FilterContainer>
 
-      {layoutReady ? (
+      {layoutReady && (
         <FlatList
           data={areaPics}
-          keyExtractor={(item) => item.id?.toString() || item.photoFile || JSON.stringify(item)}
+          keyExtractor={(item) => item.id?.toString() || item.photoFile}
           renderItem={({ item }) => (
             <Card
               id={item.id}
               name={item.label}
               photoPath={getImagePublicUrl(item, IMAGE_SIZE.LG)}
-              onPressHandler={() => navigation.navigate("SeaLifeScreen", { species: item.label })}
+              onPressHandler={() => handleSelection(item.label)}
               seaLifeSelections={animalMultiSelection}
               subData={`${item.times_seen} Sighting${item.times_seen !== 1 ? "s" : ""}`}
             />
           )}
           nestedScrollEnabled
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
-          ListFooterComponent={<View style={{ height: moderateScale(30) }}></View>}
+          ListFooterComponent={<View style={{ height: moderateScale(30) }} />}
           ListEmptyComponent={(
             <S.EmptyStateWrapper>
               <EmptyState
@@ -120,12 +110,12 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
                 iconLeft="anchor"
                 round={false}
                 style={{ alignSelf: "center", width: "80%" }}
-                onPress={() => scrollToDiveSiteList()}
+                onPress={() => scrollToDiveSiteList?.()}
               />
             </S.EmptyStateWrapper>
           )}
         />
-      ) : null}
+      )}
     </S.VerticalFlatlistContainer>
   );
-};
+}

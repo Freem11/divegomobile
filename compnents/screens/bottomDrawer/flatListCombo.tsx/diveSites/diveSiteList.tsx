@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { View } from "react-native";
@@ -19,98 +19,76 @@ import { IMAGE_SIZE } from "../../../../../entities/image";
 export default function DiveSiteList() {
   const navigation = useAppNavigation();
   const boundaries = useMapStore((state) => state.gpsBubble);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
+
   const [diveSites, setDiveSites] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
-  const getDiveSiteData = async (filterValue: string) => {
-    if (boundaries) {
-      const diveSiteData = await getDiveSitesWithUser({
-        minLat: boundaries.minLat,
-        maxLat: boundaries.maxLat,
-        minLng: boundaries.minLng,
-        maxLng: boundaries.maxLng
-      }, { label: filterValue });
-
-      setDiveSites(diveSiteData);
-    }
-  };
-
   useEffect(() => {
-    getDiveSiteData(filterValue);
-  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
+    if (boundaries) {
+      getDiveSitesWithUser({
+        minLat: boundaries.minLat, maxLat: boundaries.maxLat,
+        minLng: boundaries.minLng, maxLng: boundaries.maxLng
+      }, { label: filterValue }).then(setDiveSites);
+    }
+  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng]);
 
-  const handleDiveSiteSelection = (siteId: number) => {
+  const handleSelection = async (siteId: number) => {
+    if (mapRef) {
+      const b = await mapRef.getMapBoundaries();
+      setMapRegion({
+        latitude: (b.northEast.latitude + b.southWest.latitude) / 2,
+        longitude: (b.northEast.longitude + b.southWest.longitude) / 2,
+        latitudeDelta: Math.abs(b.northEast.latitude - b.southWest.latitude),
+        longitudeDelta: Math.abs(b.northEast.longitude - b.southWest.longitude),
+      });
+    }
     navigation.navigate("DiveSiteNavigator", { id: siteId });
-  };
-
-  const handleClear = () => {
-    setFilterValue("");
-  };
-
-  const handleScreen = () => {
-    navigation.navigate("BottomTab", {
-      screen: "AddSite"
-    });
   };
 
   const [layoutReady, setLayoutReady] = useState(false);
 
-  const renderListHeader = useMemo(() => (
-    <S.FilterContainer>
-      <MobileTextInput
-        iconLeft={"anchor"}
-        iconRight={"close"}
-        placeholder="Filter Dive Sites"
-        onChangeText={(text: string) => setFilterValue(text)}
-        handleClear={() => handleClear()}
-        filterValue={filterValue}
-      />
-    </S.FilterContainer>
-  ), [filterValue, handleClear, setFilterValue]);
-
   return (
-    <S.VerticalFlatlistContainer
-      onLayout={() => {
-        if (!layoutReady) setLayoutReady(true);
-      }}
-    >
+    <S.VerticalFlatlistContainer onLayout={() => setLayoutReady(true)}>
       <S.Header>Nearby Dive Sites</S.Header>
-
       <S.SubHeaderWrapper>
         <S.SwipeIndicator>
-          <S.IconWrapper>
-            <Icon name="double-chevron-left" color={colors.border} />
-          </S.IconWrapper>
+          <S.IconWrapper><Icon name="double-chevron-left" color={colors.border} /></S.IconWrapper>
           <S.Subtitle>Sea Life</S.Subtitle>
         </S.SwipeIndicator>
-
         <S.SwipeIndicator>
           <S.Subtitle>Dive Centres</S.Subtitle>
-          <S.IconWrapper>
-            <Icon name="double-chevron-right" color={colors.border} />
-          </S.IconWrapper>
+          <S.IconWrapper><Icon name="double-chevron-right" color={colors.border} /></S.IconWrapper>
         </S.SwipeIndicator>
       </S.SubHeaderWrapper>
 
-      {renderListHeader}
+      <S.FilterContainer>
+        <MobileTextInput
+          iconLeft="anchor"
+          iconRight="close"
+          placeholder="Filter Dive Sites"
+          onChangeText={setFilterValue}
+          handleClear={() => setFilterValue("")}
+          filterValue={filterValue}
+        />
+      </S.FilterContainer>
 
-      {layoutReady ? (
+      {layoutReady && (
         <FlatList
           data={diveSites}
-          keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
+          keyExtractor={(item) => item.id?.toString()}
           renderItem={({ item }) => (
             <Card
               id={item.id}
               name={item.name}
               photoPath={getImagePublicUrl(item.diveSiteProfilePhoto, IMAGE_SIZE.LG)}
               subData={item.times_seen}
-              onPressHandler={() => handleDiveSiteSelection(item.id)}
+              onPressHandler={() => handleSelection(item.id)}
             />
           )}
-          nestedScrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
-          ListFooterComponent={<View style={{ height: moderateScale(30) }}></View>}
+          nestedScrollEnabled
+          ListFooterComponent={<View style={{ height: moderateScale(30) }} />}
           ListEmptyComponent={(
             <S.EmptyStateWrapper>
               <EmptyState
@@ -124,12 +102,12 @@ export default function DiveSiteList() {
                 iconLeft="anchor"
                 round={false}
                 style={{ alignSelf: "center", width: "80%" }}
-                onPress={() => handleScreen()}
+                onPress={() => navigation.navigate("BottomTab", { screen: "AddSite" })}
               />
             </S.EmptyStateWrapper>
           )}
         />
-      ) : null}
+      )}
     </S.VerticalFlatlistContainer>
   );
 }
