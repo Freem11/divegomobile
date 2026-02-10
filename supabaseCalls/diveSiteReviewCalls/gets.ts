@@ -1,4 +1,5 @@
 import { Review } from "../../entities/diveSiteReview";
+import { Image } from "../../entities/image";
 import { supabase } from "../../supabase";
 
 export const getReviewById = async (reveiw_id: number) => {

@@ -23,11 +23,6 @@ export default function ReviewScreenView({
   gestureRef // 2. Destructure the prop
 }: DiveShopProps) {
 
-  const photos = selectedReview?.photos?.map((photo) => ({
-    id: photo.photo_id,
-    photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}`
-  }));
-
   return (
     <S.ContentContainer>
       <S.InfoContainer>
@@ -53,7 +48,7 @@ export default function ReviewScreenView({
       <S.Content>{selectedReview?.description}</S.Content>
 
       <PhotoUpload
-        items={photos}
+        items={selectedReview?.photos}
         gestureRef={gestureRef}
       />
 
