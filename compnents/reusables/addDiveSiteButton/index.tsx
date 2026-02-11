@@ -1,28 +1,27 @@
 import React, { FC } from "react";
 
 import Avatar from "../reviewCard/avatarCreator";
-import { cloudflareBucketUrl } from "../../globalVariables";
+import { Image, IMAGE_SIZE } from "../../../entities/image";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
 
 import * as S from "./styles";
 
 interface DiveSiteCardProps {
   diveSiteId: number;
   diveSiteName: string;
-  diveSitePhoto: string;
+  diveSitePhoto: Image;
   sitesArray: number[]
   onPress?: (siteIdNo: number, siteList: number[]) => void;
 }
 
 export const DiveSitesCard: FC<DiveSiteCardProps> = ({ onPress, diveSiteId, diveSiteName, diveSitePhoto, sitesArray }) => {
 
-  const fileName = diveSitePhoto?.split("/").pop();
-
   return (
     <S.DiveSitesCard
       key={diveSiteId}
       onPress={() => onPress?.(diveSiteId, sitesArray)}
     >
-      <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} defaultImage={"anchor"} />
+      <Avatar photo={diveSitePhoto && getImagePublicUrl(diveSitePhoto, IMAGE_SIZE.SM)} defaultImage={"anchor"} />
       <S.Label>{diveSiteName}</S.Label>
     </S.DiveSitesCard>
   );

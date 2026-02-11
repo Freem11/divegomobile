@@ -1,5 +1,7 @@
+import { DiveSiteWithUserName } from "../entities/diveSite";
 import { ItineraryItem } from "../entities/itineraryItem";
 import { supabase } from "../supabase";
+import { Image } from "../entities/image";
 
 export const itineraries = async (IdNo) => {
   const { data, error } = await supabase
@@ -59,9 +61,25 @@ export const getItineraryDiveSiteByIdArray = async (siteIds) => {
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  const result = [] as DiveSiteWithUserName[];
+  data.forEach((item: any) => {
+    const profilePhoto: Image = {
+      file_name: item.diveSiteProfilePhoto,
+      public_domain: item.public_domain,
+      sm: item.sm,
+      md: item.md,
+      lg: item.lg,
+      xl: item.xl,
+    };
+    const newReview = {
+      ...item,
+      diveSiteProfilePhoto: profilePhoto,
+    };
+
+    result.push(newReview);
+  });
+  return result;
+
 };
 
 export const insertItinerary = async (values: ItineraryItem) => {
