@@ -234,9 +234,19 @@ export const getDiveSiteById = async (id: string | number) => {
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  const profilehoto: Image = {
+    file_name: data[0].divesiteprofilephoto,
+    public_domain: data[0].public_domain,
+    sm: data[0].sm,
+    md: data[0].md,
+    lg: data[0].lg,
+    xl: data[0].xl,
+  };
+
+  return {
+    ...data[0],
+    profilePhoto: profilehoto,
+  };
 };
 
 export const getMapDiveSiteCount = async (values) => {
