@@ -56,13 +56,15 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const [aspectRatio, setAspectRatio] = useState<number | null>(1);
 
+  console.log("pic", pic);
+
   const variants: ImageVar = {
-    file_name: pic.file_name,
-    public_domain: pic.public_domain,
-    sm: pic.sm,
-    md: pic.md,
-    lg: pic.lg,
-    xl: pic.xl
+    file_name: pic?.photoFile,
+    public_domain: pic?.public_domain,
+    sm: pic?.sm,
+    md: pic?.md,
+    lg: pic?.lg,
+    xl: pic?.xl
   };
 
   const navigation = useAppNavigation();
@@ -96,7 +98,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
-      const newRecord = await insertPhotoLike(userProfile.UserID, pic.id);
+      const newRecord = await insertPhotoLike(userProfile.UserID, pic.photo_table_id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
@@ -109,7 +111,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     : moderateScale(200);
 
   return (
-    <S.Container key={pic.id} style={{ width: containerWidth, height: containerHeight }}>
+    <S.Container key={pic.photo_table_id} style={{ width: containerWidth, height: containerHeight }}>
       <TouchableOpacity
         onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: getImagePublicUrl(variants, IMAGE_SIZE.XL) })}
         style={{
@@ -163,14 +165,14 @@ const SeaLifeImageCard = (props: PictureProps) => {
         <S.IconsWrapper>
           <IconCounterButton
             icon="like-hand"
-            onPress={() => handleLike(pic.id)}
+            onPress={() => handleLike(pic.photo_table_id)}
             size="icon"
             fillColor={picLiked ? "red" : undefined}
             count={abbreviateNumber(countOfLikes)}
           />
           <IconCounterButton
             icon="comment"
-            onPress={() => navigation.navigate("PhotoComments", { id: pic.id })}
+            onPress={() => navigation.navigate("PhotoComments", { id: pic.photo_table_id })}
             size="icon"
             count={abbreviateNumber(pic.commentcount)}
           />

@@ -1,3 +1,5 @@
+import { constants } from "buffer";
+
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Keyboard,
@@ -13,12 +15,13 @@ import noImage from "../../png/NoImage.png";
 import ParallaxDrawer from "../../reusables/parallaxDrawer";
 import { useAppNavigation } from "../../mapPage/types";
 import { getPhotoByID } from "../../../supabaseCalls/seaLifePhotoCalls/gets";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import { colors } from "../../styles";
 import AvatarTextInputField from "../../authentication/utils/textInputWithAvatar";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import fallbackAvatar from "../../../assets/icon.png";
 import { grabPhotoCommentsByPicId, insertPhotoComment } from "../../../supabaseCalls/photoCommentSupabaseCalls";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE, Image } from "../../../entities/image";
 
 import PhotoCommentsScreen from "./photoCommentsScreen";
 import * as S from "./styles";
@@ -32,6 +35,7 @@ export interface CommentItem {
   replied_to: number | null;
   content: string;
   user_id: string;
+  avatar: Image
 }
 
 type ReplyToState = [string, string] | null;
@@ -40,11 +44,8 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
   const { userProfile } = useUserProfile();
   const insets = useSafeAreaInsets();
 
-  console.log("userProfile", userProfile);
-
-  const fileName = userProfile?.profilePhoto?.split("/").pop();
-  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
-  const avatarSource: ImageSourcePropType = fileName ? { uri: remoteUri } : fallbackAvatar;
+  const remoteUri = getImagePublicUrl(userProfile.profilePhoto, IMAGE_SIZE.LG);
+  const avatarSource: ImageSourcePropType = remoteUri ? { uri: remoteUri } : fallbackAvatar;
 
   const [isClearOn, setIsClearOn] = useState<boolean>(false);
   const [commentContent, setCommentContent] = useState<string>("");
@@ -61,8 +62,17 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
     let isMounted = true;
     const load = async () => {
       const pic = await getPhotoByID(id);
-      const picFileName = pic?.[0]?.photoFile?.split("/")?.pop();
-      const uri = picFileName ? `${cloudflareBucketUrl}${picFileName}` : null;
+      console.log("pic", pic);
+      const variants: Image = {
+        file_name: pic?.photoFile,
+        public_domain: pic?.public_domain,
+        sm: pic?.sm,
+        md: pic?.md,
+        lg: pic?.lg,
+        xl: pic?.xl
+      };
+
+      const uri = variants ? getImagePublicUrl(variants, IMAGE_SIZE.LG) : null;
       if (isMounted) setHeaderUri(uri);
     };
     load();

@@ -61,7 +61,6 @@ export const updateProfileUserName = async (values: Partial<ActiveProfile>) => {
 };
 
 export const updateProfile = async (values: Partial<ActiveProfile>) => {
-  console.log("supa", values);
   const { data, error } = await supabase
     .from("UserProfiles")
     .update(values)
@@ -141,16 +140,16 @@ export const grabProfileByUserId = async (id: string) => {
   }
 
   const profilehoto: Image = {
-    file_name: data.diveSiteProfilePhoto,
-    public_domain: data.public_domain,
-    sm: data.sm,
-    md: data.md,
-    lg: data.lg,
-    xl: data.xl,
+    file_name: data[0].diveSiteProfilePhoto,
+    public_domain: data[0].public_domain,
+    sm: data[0].sm,
+    md: data[0].md,
+    lg: data[0].lg,
+    xl: data[0].xl,
   };
 
   return {
-    ...data,
+    ...data[0],
     profilePhoto: profilehoto,
   };
 };

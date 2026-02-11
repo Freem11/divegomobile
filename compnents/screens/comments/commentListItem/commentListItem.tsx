@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import { cloudflareBucketUrl } from "../../../globalVariables";
 import Avatar from "../../../reusables/reviewCard/avatarCreator";
+import getImagePublicUrl from "../../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../../entities/image";
 
 import * as S from "./styles";
 
@@ -42,9 +44,7 @@ export default function CommentListItem({
     finalDate = finalDate.slice(0, -1);
   }
 
-  const fileName = commentDetails.profilePhoto?.split("/").pop();
-  const remoteUri = fileName ? `${cloudflareBucketUrl}${fileName}` : null;
-
+  const remoteUri = commentDetails ? getImagePublicUrl(commentDetails.avatar, IMAGE_SIZE.SM) : null;
   const content = commentDetails.content ?? "";
   const shouldShowReadMore = content.length > 90;
 
