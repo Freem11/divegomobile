@@ -206,20 +206,19 @@ export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
 // };
 
 export const getDiveSitePhotos = async (lat: number, lng: number, userId: string) => {
+  console.log("supa", lat, lng, userId);
   const { data, error } = await supabase.rpc("get_photos_for_divesite_with_social_info_test", {
-    lat,
-    lng,
-    connecteduserid: userId
+    _lat: lat,
+    _lng: lng,
+    _connecteduserid: userId
   });
 
   if (error) {
-    console.error("couldn't do it 98,", error);
+    console.error("RPC Error 98:", error);
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  return data || [];
 };
 
 export const getProfilePhotosByUser = async (userId: string, connectedUserId: string, pagination?: Pagination) => {

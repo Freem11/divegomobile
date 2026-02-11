@@ -1,6 +1,7 @@
 import { Animal } from "../entities/photos";
 import { ActiveProfile } from "../entities/profile";
 import { supabase } from "../supabase";
+import { Image } from "../entities/image";
 
 export const addDeletedAccountInfo = async (values) => {
 
@@ -130,37 +131,53 @@ export const deleteProfile = async (id) => {
 };
 
 export const grabProfileByUserId = async (id: string) => {
-  const { data, error } = await supabase
-    .from("UserProfiles")
-    .select()
-    .eq("UserID", id);
+  const { data, error } = await supabase.rpc("get_profile_by_user_uuid", {
+    p_uuid: id
+  });
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it GRAB_PROFILE_BY_USER_ID,", error);
     return null;
   }
 
-  if (data[0]) {
-    return data[0] as ActiveProfile;
-  }
-  return null;
+  const profilehoto: Image = {
+    file_name: data.diveSiteProfilePhoto,
+    public_domain: data.public_domain,
+    sm: data.sm,
+    md: data.md,
+    lg: data.lg,
+    xl: data.xl,
+  };
+
+  return {
+    ...data,
+    profilePhoto: profilehoto,
+  };
 };
 
 export const grabProfileById = async (id: number) => {
-  const { data, error } = await supabase
-    .from("UserProfiles")
-    .select()
-    .eq("id", id);
+  const { data, error } = await supabase.rpc("get_profile_with_image", {
+    p_user_id: id
+  });
 
   if (error) {
     console.log("couldn't do it,", error);
     return null;
   }
 
-  if (data[0]) {
-    return data[0] as ActiveProfile;
-  }
-  return null;
+  const profilehoto: Image = {
+    file_name: data.diveSiteProfilePhoto,
+    public_domain: data.public_domain,
+    sm: data.sm,
+    md: data.md,
+    lg: data.lg,
+    xl: data.xl,
+  };
+
+  return {
+    ...data,
+    profilePhoto: profilehoto,
+  };
 };
 
 export const grabProfileByUserName = async (userName) => {

@@ -40,6 +40,8 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
   const { userProfile } = useUserProfile();
   const insets = useSafeAreaInsets();
 
+  console.log("userProfile", userProfile);
+
   const fileName = userProfile?.profilePhoto?.split("/").pop();
   const remoteUri = `${cloudflareBucketUrl}${fileName}`;
   const avatarSource: ImageSourcePropType = fileName ? { uri: remoteUri } : fallbackAvatar;

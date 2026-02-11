@@ -1,6 +1,5 @@
 import React, { useMemo, memo } from "react";
 import { Heatmap } from "react-native-maps";
-import { moderateScale } from "react-native-size-matters";
 
 import { HeatPoint } from "../../../../entities/heatPoint";
 import { heatPointToWeightedLocation } from "../../dto/heatPointToWeightedLocation";

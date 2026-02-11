@@ -24,8 +24,8 @@ export const useUserHandler = () => {
       }
 
       const profile = await grabProfileByUserId(session.user.id);
-      if (profile) {
-        setUserState(profile, true);
+      if (profile[0]) {
+        setUserState(profile[0], true);
       } else {
         const created = await createProfile({
           id: session.user.id,
