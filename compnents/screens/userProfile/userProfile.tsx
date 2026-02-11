@@ -75,7 +75,7 @@ export default function UserProfileScreenView({
                 conditions={review.conditions}
                 id={review.divesite_id}
                 name={review.divesite_name}
-                photo={review.diveSiteProfilePhoto}
+                photo={review.profilePhoto}
                 review={review}
                 currentUserId={userProfile.UserID}
                 handleNavigate={handleDiveSiteMove}

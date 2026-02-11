@@ -62,7 +62,6 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
     let isMounted = true;
     const load = async () => {
       const pic = await getPhotoByID(id);
-      console.log("pic", pic);
       const variants: Image = {
         file_name: pic?.photoFile,
         public_domain: pic?.public_domain,

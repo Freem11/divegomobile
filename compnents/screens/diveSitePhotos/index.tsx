@@ -63,7 +63,6 @@ export default function DiveSitePhotosPage() {
     }
   }, [selectedDiveSite, userProfile]);
 
-  console.log("diveSitePics", diveSitePics);
   return (
     <DiveSitePhotosPageView
       diveSites={diveSitePics}

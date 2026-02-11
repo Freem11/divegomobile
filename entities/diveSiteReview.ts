@@ -13,7 +13,7 @@ export type Review = {
   user_name: string;
   conditions: ReviewCondition[]
   photos: ReviewPhotos[]
-  profilePhoto: string;
+  profilePhoto: Image;
 };
 
 export type ReviewSingle = {

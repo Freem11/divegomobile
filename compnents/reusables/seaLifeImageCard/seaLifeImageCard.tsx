@@ -56,8 +56,6 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const [aspectRatio, setAspectRatio] = useState<number | null>(1);
 
-  console.log("pic", pic);
-
   const variants: ImageVar = {
     file_name: pic?.photoFile,
     public_domain: pic?.public_domain,

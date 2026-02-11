@@ -67,10 +67,24 @@ export const getRecentThreeReviewsBySiteId = async (divesite_id: number) => {
     return [];
   }
 
-  if (data) {
-    return data as Review[];
-  }
-  return [] as Review[];
+  const result = [] as Review[];
+  data.forEach((item: any) => {
+    const profilePhoto: Image = {
+      file_name: item.profilePhoto,
+      public_domain: item.public_domain,
+      sm: item.sm,
+      md: item.md,
+      lg: item.lg,
+      xl: item.xl,
+    };
+    const newReview = {
+      ...item,
+      profilePhoto: profilePhoto,
+    };
+
+    result.push(newReview);
+  });
+  return result;
 };
 
 export const getRecentReviewsByUserId = async ({ userId, limit }: { userId: string, limit: number }) => {
@@ -84,10 +98,24 @@ export const getRecentReviewsByUserId = async ({ userId, limit }: { userId: stri
     return [];
   }
 
-  if (data) {
-    return data as Review[];
-  }
-  return [] as Review[];
+  const result = [] as Review[];
+  data.forEach((item: any) => {
+    const profilePhoto: Image = {
+      file_name: item.profilePhoto,
+      public_domain: item.public_domain,
+      sm: item.sm,
+      md: item.md,
+      lg: item.lg,
+      xl: item.xl,
+    };
+    const newReview = {
+      ...item,
+      profilePhoto: profilePhoto,
+    };
+
+    result.push(newReview);
+  });
+  return result;
 };
 
 export const getReviewPhotosByReviewId = async (reveiw_id: number) => {
