@@ -131,16 +131,27 @@ export const getShopByUserID = async (value: string): Promise<DiveShop[]> => {
 };
 
 export const getDiveShopById = async (id: number) => {
-  const { data, error } = await supabase
-    .from("shops")
-    .select()
-    .eq("id", id);
+  const { data, error } = await supabase.rpc("get_dive_shop_by_id_with_images", {
+    q_shop_id: id
+  });
 
   if (error) {
-    console.log("couldn't do it 39,", error);
+    console.log("Error in getDiveShopById:", error);
+    return null;
   }
 
-  if (data) {
-    return data;
-  }
+  const profilePhoto: Image = {
+    file_name: data[0].diveShopProfilePhoto,
+    public_domain: data[0].public_domain,
+    sm: data[0].sm,
+    md: data[0].md,
+    lg: data[0].lg,
+    xl: data[0].xl,
+  };
+  const result = {
+    ...data[0],
+    diveShopProfilePhoto: profilePhoto,
+  };
+
+  return result;
 };
