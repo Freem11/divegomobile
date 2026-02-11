@@ -56,7 +56,7 @@ export default function CommentListItem({
             <Avatar photo={remoteUri} />
           </S.AvatarContainer>
           <S.HeaderTextCol>
-            <S.UserTxt numberOfLines={1}>{commentDetails.username}</S.UserTxt>
+            <S.UserTxt numberOfLines={1}>{commentDetails.UserName}</S.UserTxt>
             <S.DateTxt numberOfLines={1}>{finalDate}</S.DateTxt>
           </S.HeaderTextCol>
         </S.HeaderRow>
