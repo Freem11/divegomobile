@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { Pressable } from "react-native";
 import { useTranslation } from "react-i18next";
 
-import { cloudflareBucketUrl } from "../../../globalVariables";
 import Avatar from "../../../reusables/reviewCard/avatarCreator";
 import getImagePublicUrl from "../../../helpers/getImagePublicUrl";
-import { IMAGE_SIZE } from "../../../../entities/image";
+import { IMAGE_SIZE, Image } from "../../../../entities/image";
 
 import * as S from "./styles";
 
@@ -14,8 +13,9 @@ export interface CommentDetails {
   profilePhoto?: string;
   content: string;
   replied_to?: number | null;
-  username?: string
+  UserName?: string
   created_at?: string
+  avatar: Image
 }
 
 interface CommentListItemProps {
@@ -80,9 +80,9 @@ export default function CommentListItem({
       <S.ActionsRow>
         <Pressable
           onPress={() =>
-            replyTo?.[0] === commentDetails.username
+            replyTo?.[0] === commentDetails.UserName
               ? setReplyTo(null)
-              : setReplyTo([commentDetails.username, String(commentDetails.id)])}
+              : setReplyTo([commentDetails.UserName, String(commentDetails.id)])}
           hitSlop={10}
         >
           <S.ActionTxt>Reply</S.ActionTxt>
