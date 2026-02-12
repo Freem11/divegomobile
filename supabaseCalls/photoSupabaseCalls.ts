@@ -207,9 +207,9 @@ export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
 
 export const getDiveSitePhotos = async (lat: number, lng: number, userId: string) => {
   const { data, error } = await supabase.rpc("get_photos_for_divesite_with_social_info_test", {
-    _lat: lat,
-    _lng: lng,
-    _connecteduserid: userId
+    lat: lat,
+    lng: lng,
+    connecteduserid: userId
   });
 
   if (error) {
@@ -249,8 +249,8 @@ export const getPhotosByUserWithExtra = async (userId: string, connectedUserId: 
     data,
     error,
   } = await supabase.rpc("get_photos_by_userid_groupby_divesite_date", {
-    _userid: userId,
-    _connecteduserid: connectedUserId
+    userid: userId,
+    connecteduserid: connectedUserId
   });
 
   if (error) {

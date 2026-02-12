@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from "rea
 import Share from "react-native-share";
 import { Keyboard, ActivityIndicator, View } from "react-native";
 import { useFocusEffect, useRoute, StackActions } from "@react-navigation/native";
-import { preProcessFile } from "typescript";
 
 import noImage from "../../png/NoImage.png";
 import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";

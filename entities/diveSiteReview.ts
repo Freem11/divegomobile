@@ -14,6 +14,7 @@ export type Review = {
   conditions: ReviewCondition[]
   photos: ReviewPhotos[]
   profilePhoto: Image;
+  user_id: number;
 };
 
 export type ReviewSingle = {
