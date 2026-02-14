@@ -12,6 +12,8 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { MapConfigurations } from "../../googleMap/types";
 import { EDIT_TYPE } from "../../../entities/editTypes";
+import { IMAGE_SIZE } from "../../../entities/image";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
 
 import { useDiveShopNavigation } from "./types";
 
@@ -41,7 +43,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
 
   const getDiveCentreInfo = async () => {
     const diveCentreinfo = await getDiveShopById(props.id);
-    setSelectedShop(diveCentreinfo[0]);
+    setSelectedShop(diveCentreinfo);
   };
 
   useEffect(() => {
@@ -55,15 +57,10 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
       setIsMyShop(false);
     }
 
-    let photoName = null;
-    if (selectedShop.diveShopProfilePhoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedShop.diveShopProfilePhoto.split("/").pop()}`;
-    }
-
     setDiveShopVals({
-      id: selectedShop.id,
-      bio: selectedShop.diveShopBio,
-      photo: photoName,
+      id: selectedShop?.id,
+      bio: selectedShop?.diveShopBio,
+      photo: getImagePublicUrl(selectedShop?.diveShopProfilePhoto, IMAGE_SIZE.XL)
     });
 
   }, [selectedShop]);
@@ -72,7 +69,6 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
     diveShopNavigation.goBack();
   };
 
-  //Needs Navigator
   const onNavigate = () => {
     Keyboard.dismiss();
     setMapConfig(MapConfigurations.TripView, { pageName: "DiveShop", itemId: selectedShop.id });

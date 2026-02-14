@@ -15,6 +15,8 @@ import { useUserProfile } from "../../../store/user/useUserProfile";
 import { useAppNavigation } from "../../mapPage/types";
 import { EDIT_TYPE } from "../../../entities/editTypes";
 import { colors } from "../../styles";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../entities/image";
 
 import UserProfileScreen from ".";
 
@@ -54,11 +56,10 @@ export default function UserProfileParallax(props: UserProfileProps) {
       setLoading(true);
 
       const profileinfo = await grabProfileById(effectiveID);
-      const data = Array.isArray(profileinfo) ? profileinfo[0] : profileinfo;
 
-      setLocalProfile(data);
+      setLocalProfile(profileinfo);
 
-      setSelectedProfile(data);
+      setSelectedProfile(profileinfo);
 
       setLoading(false);
     };
@@ -75,16 +76,11 @@ export default function UserProfileParallax(props: UserProfileProps) {
         followCheck();
       }
 
-      let photoName = null;
-      if (localProfile?.profilePhoto) {
-        photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${localProfile.profilePhoto.split("/").pop()}`;
-      }
-
       setProfileVals({
         id: localProfile?.id,
         name: localProfile?.UserName,
         bio: localProfile?.profileBio,
-        photo: photoName,
+        photo: getImagePublicUrl(localProfile?.profilePhoto, IMAGE_SIZE.XL),
       });
     }
   }, [localProfile, effectiveID, userProfile?.UserID]);

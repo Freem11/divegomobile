@@ -36,10 +36,6 @@ export const Step3: React.FC<Step3Props> = ({
 }) => {
   const { t } = useTranslation();
 
-  // Diagnostic log to ensure state is actually reaching this component
-  console.log("Current sitesArray in Step3:", sitesArray);
-
-  // Filter the list so we only render what is actually in the state array
   const activeDiveSites = React.useMemo(() => {
     if (!tripDiveSites) return [];
     return tripDiveSites.filter(site => sitesArray.includes(site.id));
@@ -61,7 +57,7 @@ export const Step3: React.FC<Step3Props> = ({
               key={diveSite.id}
               diveSiteId={diveSite.id}
               diveSiteName={diveSite.name}
-              diveSitePhoto={diveSite.divesiteprofilephoto}
+              diveSitePhoto={diveSite.diveSiteProfilePhoto}
               sitesArray={sitesArray}
               onPress={() => removeFromSitesArray(diveSite.id, sitesArray)}
             />

@@ -15,6 +15,8 @@ import { useMapStore } from "../../googleMap/useMapStore";
 import { MapConfigurations } from "../../googleMap/types";
 import { loadDiveSiteInfo } from "../../../ai-calls/aiCall";
 import { updateDiveSiteFact } from "../../../supabaseCalls/diveSiteCalls/updates";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../entities/image";
 
 import { useDiveSiteNavigation } from "./types";
 
@@ -60,9 +62,10 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
         allMetrics(props.id)
       ]);
 
-      if (diveSiteinfo && diveSiteinfo[0]) {
-        if (diveSiteinfo[0].id === props.id) {
-          setSelectedDiveSite(diveSiteinfo[0]);
+      console.log("diveSiteinfo", diveSiteinfo);
+      if (diveSiteinfo) {
+        if (diveSiteinfo.id === props.id) {
+          setSelectedDiveSite(diveSiteinfo);
         }
       }
       setMetricInfo(monthlyMetrics);
@@ -147,14 +150,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     }
   };
 
-  // 3. Image Logic
-  const photoUri = selectedDiveSite?.divesiteprofilephoto
-    ? `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`
-    : null;
-
-  const headerImageSource = photoUri ? { uri: photoUri } : noImage;
-
-  // --- Handlers ---
+  const headerImageSource = getImagePublicUrl(selectedDiveSite?.profilePhoto, IMAGE_SIZE.XL, noImage);
   const onClose = async () => {
     diveSiteNavigation.goBack();
   };

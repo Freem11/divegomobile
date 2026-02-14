@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 
 import { ActiveProfile } from "../../../entities/profile";
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { Review } from "../../../entities/diveSiteReview";
 import SealifePreview from "../../reusables/sealifePreview";
 import ReviewCard from "../../reusables/reviewCard";
 import Label from "../../reusables/label-new";
 import EmptyState from "../../reusables/emptyState-new";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { Animal } from "../../../entities/photos";
 
 import * as S from "./styles";
 
 type UserProfileProps = {
-  profilePhotos: DiveSiteWithUserName[] | null;
+  profilePhotos: Animal[] | null;
   selectedProfile: ActiveProfile | null;
   speciesCount: number;
   sightingsCount: number;
@@ -54,7 +54,7 @@ export default function UserProfileScreenView({
       <SealifePreview
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
-        diveSitePics={profilePhotos}
+        diveSitePics={profilePhotos?.map(item => item.image)}
         onViewMore={openAllPhotosPage}
         selectedProfile={selectedProfile}
       />
@@ -75,7 +75,7 @@ export default function UserProfileScreenView({
                 conditions={review.conditions}
                 id={review.divesite_id}
                 name={review.divesite_name}
-                photo={review.diveSiteProfilePhoto}
+                photo={review.profilePhoto}
                 review={review}
                 currentUserId={userProfile.UserID}
                 handleNavigate={handleDiveSiteMove}

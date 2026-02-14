@@ -22,7 +22,7 @@ const MarkerHeatPoint = (props: MarkerHeatPointProps) => {
     <Heatmap
       points={weightedPoints}
       radius={40}
-      opacity={0.7}
+      opacity={1}
     />
   );
 };

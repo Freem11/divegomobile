@@ -1,5 +1,5 @@
-import { SeaLife } from "../../entities/seaLIfe";
 import { supabase } from "../../supabase";
+import { Image } from "../../entities/image";
 
 export const updateSpeciesFact = async (species: string, aiFact: string) => {
     const { data, error } = await supabase
@@ -13,7 +13,18 @@ export const updateSpeciesFact = async (species: string, aiFact: string) => {
         return null;
     }
 
-    if (data) {
-        return data[0] as SeaLife;
-    }
+    const animal: Image = {
+        file_name: data[0].photofile,
+        public_domain: data[0].public_domain,
+        sm: data[0].sm,
+        md: data[0].md,
+        lg: data[0].lg,
+        xl: data[0].xl,
+    };
+
+    return {
+        ...data[0],
+        speciesPhoto: animal,
+    };
+
 };

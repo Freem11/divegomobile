@@ -1,5 +1,7 @@
+import { Animal } from "../entities/photos";
 import { ActiveProfile } from "../entities/profile";
 import { supabase } from "../supabase";
+import { Image } from "../entities/image";
 
 export const addDeletedAccountInfo = async (values) => {
 
@@ -59,7 +61,6 @@ export const updateProfileUserName = async (values: Partial<ActiveProfile>) => {
 };
 
 export const updateProfile = async (values: Partial<ActiveProfile>) => {
-  console.log("supa", values);
   const { data, error } = await supabase
     .from("UserProfiles")
     .update(values)
@@ -129,37 +130,53 @@ export const deleteProfile = async (id) => {
 };
 
 export const grabProfileByUserId = async (id: string) => {
-  const { data, error } = await supabase
-    .from("UserProfiles")
-    .select()
-    .eq("UserID", id);
+  const { data, error } = await supabase.rpc("get_profile_by_user_uuid", {
+    p_uuid: id
+  });
 
   if (error) {
-    console.log("couldn't do it,", error);
+    console.log("couldn't do it GRAB_PROFILE_BY_USER_ID,", error);
     return null;
   }
 
-  if (data[0]) {
-    return data[0] as ActiveProfile;
-  }
-  return null;
+  const profilehoto: Image = {
+    file_name: data[0].diveSiteProfilePhoto,
+    public_domain: data[0].public_domain,
+    sm: data[0].sm,
+    md: data[0].md,
+    lg: data[0].lg,
+    xl: data[0].xl,
+  };
+
+  return {
+    ...data[0],
+    profilePhoto: profilehoto,
+  };
 };
 
 export const grabProfileById = async (id: number) => {
-  const { data, error } = await supabase
-    .from("UserProfiles")
-    .select()
-    .eq("id", id);
+  const { data, error } = await supabase.rpc("get_profile_with_image", {
+    p_user_id: id
+  });
 
   if (error) {
     console.log("couldn't do it,", error);
     return null;
   }
 
-  if (data[0]) {
-    return data[0] as ActiveProfile;
-  }
-  return null;
+  const profilehoto: Image = {
+    file_name: data[0].profilePhoto,
+    public_domain: data[0].public_domain,
+    sm: data[0].sm,
+    md: data[0].md,
+    lg: data[0].lg,
+    xl: data[0].xl,
+  };
+
+  return {
+    ...data[0],
+    profilePhoto: profilehoto,
+  };
 };
 
 export const grabProfileByUserName = async (userName) => {
@@ -225,7 +242,7 @@ export const getUserSightingsCount = async (userId: string) => {
   return [];
 };
 
-export const getDiveSiteRecentNinePhotos = async (userId: string) => {
+export const getDiveSiteRecentNinePhotos = async (userId: string): Promise<Animal[]> => {
   const { data, error } = await supabase.rpc("get_profile_recent_nine", {
     p_user_id: userId
   });
@@ -235,10 +252,27 @@ export const getDiveSiteRecentNinePhotos = async (userId: string) => {
     return [];
   }
 
+  const result = [] as Animal[];
   if (data) {
-    return data;
+    data.forEach((item: any) => {
+      const animal: Animal = {
+        label: item.label,
+        times_seen: item.times_seen,
+        image: {
+          file_name: item.photofile,
+          public_domain: item.public_domain,
+          sm: item.sm,
+          md: item.md,
+          lg: item.lg,
+          xl: item.xl,
+        },
+      };
+
+      result.push(animal);
+    });
+
   }
-  return [];
+  return result;
 };
 
 export const getuserReveiewCount = async (user_id: string) => {

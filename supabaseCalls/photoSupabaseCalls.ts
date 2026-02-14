@@ -207,22 +207,21 @@ export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
 
 export const getDiveSitePhotos = async (lat: number, lng: number, userId: string) => {
   const { data, error } = await supabase.rpc("get_photos_for_divesite_with_social_info_test", {
-    lat,
-    lng,
+    lat: lat,
+    lng: lng,
     connecteduserid: userId
   });
 
   if (error) {
-    console.error("couldn't do it 98,", error);
+    console.error("RPC Error 98:", error);
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  return data || [];
 };
 
 export const getProfilePhotosByUser = async (userId: string, connectedUserId: string, pagination?: Pagination) => {
+  console.log(userId, connectedUserId, pagination);
 
   const builder = supabase.rpc("get_photos_by_userid_with_divesite", {
     userid: userId,
@@ -414,7 +413,7 @@ export const getDiveSiteSightingCount = async (values) => {
   return [];
 };
 
-export const getDiveSiteRecentNinePhotos = async (values) => {
+export const getDiveSiteRecentNinePhotos = async (values): Promise<Animal[]> => {
   const { data, error } = await supabase.rpc("get_divesite_recent_nine", {
     lat: values.lat,
     lng: values.lng,
@@ -425,10 +424,27 @@ export const getDiveSiteRecentNinePhotos = async (values) => {
     return [];
   }
 
+  const result = [] as Animal[];
   if (data) {
-    return data;
+    data.forEach((item: any) => {
+      const animal: Animal = {
+        label: item.label,
+        times_seen: item.times_seen,
+        image: {
+          file_name: item.photofile,
+          public_domain: item.public_domain,
+          sm: item.sm,
+          md: item.md,
+          lg: item.lg,
+          xl: item.xl,
+        },
+      };
+
+      result.push(animal);
+    });
+
   }
-  return [];
+  return result;
 };
 
 export const getMapSightingCount = async (values) => {

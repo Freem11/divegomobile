@@ -5,10 +5,10 @@ import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { useMapStore } from "../../useMapStore";
 import { useAppNavigation } from "../../../mapPage/types";
 import { MapConfigurations } from "../../types";
-import { Coordinates } from "../../entities/coordinates";
+import { Coordinates } from "../../../entities/coordinates";
 
 const ANCHOR_WHITE = require("../../../png/mapIcons/AnchorWhite.png");
-const ANCHOR_GOlD = require("../../../png/mapIcons/AnchorGold.png");
+const ANCHOR_GOLD = require("../../../png/mapIcons/AnchorGold.png");
 
 type MarkerDiveSiteProps = {
   id: number;
@@ -23,21 +23,29 @@ const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
 
   const [tracksViewChanges, setTracksViewChanges] = useState(true);
 
+  // When selection changes, we enable tracking to refresh the icon,
+  // then disable it to save battery/CPU.
   useEffect(() => {
     setTracksViewChanges(true);
-    const timer = setTimeout(() => setTracksViewChanges(false), 600);
+    const timer = setTimeout(() => {
+      setTracksViewChanges(false);
+    }, 500); // 500ms is standard for native image swap
     return () => clearTimeout(timer);
-  }, [props.isSelected, mapConfig]);
+  }, [props.isSelected]);
 
-  function handlePress() {
-    if (mapConfig !== MapConfigurations.TripBuild) {
-      navigation.navigate("DiveSiteNavigator", { id: props.id });
-    } else {
+  function handlePress(e: any) {
+    if (e && e.stopPropagation) e.stopPropagation();
+
+    if (mapConfig === MapConfigurations.TripBuild) {
       if (props.isSelected) {
-        setSitesArray((prev: number[]) => prev.filter(id => id !== props.id));
+        setSitesArray((prev: any[]) => prev.filter(item =>
+          (typeof item === "object" ? item.id !== props.id : item !== props.id)
+        ));
       } else {
-        setSitesArray((prev: number[]) => [...prev, props.id]);
+        setSitesArray((prev: any[]) => [...prev, props.id]);
       }
+    } else {
+      navigation.navigate("DiveSiteNavigator", { id: props.id });
     }
   }
 
@@ -45,11 +53,12 @@ const MarkerDiveSite = memo((props: MarkerDiveSiteProps) => {
     <Marker
       coordinate={props.coordinate}
       onPress={handlePress}
-      image={props.isSelected ? ANCHOR_GOlD : ANCHOR_WHITE}
+      image={props.isSelected ? ANCHOR_GOLD : ANCHOR_WHITE}
       tracksViewChanges={tracksViewChanges}
       stopPropagation={true}
-      zIndex={props.isSelected ? 100 : 2}
-      pointerEvents="auto"
+      // Gold anchors sit above White anchors for clarity
+      zIndex={props.isSelected ? 999 : 10}
+      anchor={{ x: 0.5, y: 0.5 }}
     />
   );
 });

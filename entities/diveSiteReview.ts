@@ -1,3 +1,5 @@
+import { Image } from "../entities/image";
+
 export type Review = {
   review_id: number;
   active: boolean;
@@ -11,7 +13,8 @@ export type Review = {
   user_name: string;
   conditions: ReviewCondition[]
   photos: ReviewPhotos[]
-  profilePhoto: string;
+  profilePhoto: Image;
+  user_id: number;
 };
 
 export type ReviewSingle = {
@@ -28,9 +31,9 @@ export type ReviewSingle = {
   user_id: string;
   user_name: string;
   conditions: ReviewCondition[]
-  photos: any[]
-  profilePhoto: string;
-  diveSiteProfilePhoto: string;
+  photos: Image[]
+  profilePhoto: Image;
+  diveSiteProfilePhoto: Image;
 };
 
 export type ReviewCondition = {

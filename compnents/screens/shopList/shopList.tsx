@@ -5,6 +5,8 @@ import { View } from "react-native";
 
 import Card from "../bottomDrawer/card";
 import { DiveShop } from "../../../entities/diveShop";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../entities/image";
 
 import * as S from "./styles";
 
@@ -30,7 +32,7 @@ export default function ShopListPageView({
           data={listOfShops}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) =>
-            <Card id={item.id} name={item.orgName} photoPath={item.diveShopProfilePhoto} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
+            <Card id={item.id} name={item.orgName} photoPath={getImagePublicUrl(item.diveShopProfilePhoto, IMAGE_SIZE.LG)} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"
