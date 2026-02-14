@@ -41,7 +41,7 @@ export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife 
     getStats(species);
   }, [species]);
 
-  const getStats = async (speciesName: string) => {
+  const getStats = async(speciesName: string) => {
     const speciesDiveSiteCounts = await getSpeciesSiteCount(speciesName, 3);
     setSpeciesDiveSiteCount(speciesDiveSiteCounts);
 
@@ -49,7 +49,7 @@ export default function SeaLifeScreen({ species, seaLifePhotos, selectedSeaLife 
     setSpeciesUserCount(speciesUserCounts);
   };
 
-  const onPressDiveSite = async (id: number) => {
+  const onPressDiveSite = async(id: number) => {
     mainNavigation.navigate("DiveSiteNavigator", { id });
   };
 

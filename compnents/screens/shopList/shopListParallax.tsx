@@ -31,11 +31,11 @@ export default function ShopListParallax() {
     }, [])
   );
 
-  const onClose = async () => {
+  const onClose = async() => {
     navigation.goBack();
   };
 
-  const onNavigate = async () => {
+  const onNavigate = async() => {
     Keyboard.dismiss();
     setMapConfig(MapConfigurations.TripBuild, { pageName: "Diveshop", itemId: 0 });
   };

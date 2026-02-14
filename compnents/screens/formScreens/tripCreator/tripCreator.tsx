@@ -60,7 +60,7 @@ export default function TripCreatorPageView({
   const totalSteps = 4;
   const insets = useSafeAreaInsets();
 
-  const handleGoNext = useCallback(async () => {
+  const handleGoNext = useCallback(async() => {
     let fieldsToValidate: (keyof Form)[] = [];
 
     switch (currentStep) {

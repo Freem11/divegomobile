@@ -48,7 +48,7 @@ const getLabelColors = (label: string): LabelStyles => {
 
 export const useGetCurrentLabel = (rightValue: number, value: number): LabelResult => {
   let label = "";
-  
+
   if (rightValue > 0 && value > 0) {
     const onePercent = rightValue / 100;
 

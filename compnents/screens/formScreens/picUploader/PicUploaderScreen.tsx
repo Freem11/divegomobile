@@ -34,7 +34,7 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
     reValidateMode: "onChange"
   });
 
-  const tryUpload = async (uri: string, index: number) => {
+  const tryUpload = async(uri: string, index: number) => {
     try {
       return await imageUploadMultiple({ assets: [{ uri }] }, index);
     } catch (e: any) {
@@ -44,8 +44,8 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
     }
   };
 
-  const handleCreate = useCallback(async (data: Form) => {
-    const photoUploadPromises = data.Photos.map(async (photo, index) => {
+  const handleCreate = useCallback(async(data: Form) => {
+    const photoUploadPromises = data.Photos.map(async(photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
 
@@ -82,7 +82,7 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
     }
   }, [userProfile.UserID, selectedDiveSite, siteInfo, t, setIsCompleted, navigation, tryUpload]);
 
-  const onSubmit = useCallback(async (data: Form) => {
+  const onSubmit = useCallback(async(data: Form) => {
     if (data.Photos.length !== 0) {
       await handleCreate(data);
     }
@@ -91,7 +91,7 @@ export default function PicUploaderScreen({ route }: PicUploaderScreenProps) {
   const showDatePicker = useCallback(() => setDatePickerVisible(true), []);
   const hideDatePicker = useCallback(() => setDatePickerVisible(false), []);
 
-  const getDiveSiteInfo = async (siteId: number) => {
+  const getDiveSiteInfo = async(siteId: number) => {
     if (siteId) {
       const diveSiteInfo = await getDiveSiteById(siteId);
       setSiteInfo(diveSiteInfo[0]);

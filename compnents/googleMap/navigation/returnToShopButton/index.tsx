@@ -27,7 +27,7 @@ export function ReturnToShopButton() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const { setSitesArray } = useContext(SitesArrayContext);
 
-  const onPress = async () => {
+  const onPress = async() => {
 
     if (navProps.pageName === "DiveSite") {
       diveSiteNavigation.goBack();

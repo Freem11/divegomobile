@@ -51,7 +51,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
   );
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadData = async() => {
       if (!effectiveID) return;
       setLoading(true);
 
@@ -91,14 +91,14 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setIsfFollowing(follows?.[0]?.id || null);
   }
 
-  const addFollow = async () => {
+  const addFollow = async() => {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) return;
     const newRecord = await insertUserFollow(userProfile.UserID, localProfile.user_id);
     setIsfFollowing(newRecord.id);
   };
 
-  const removeFollow = async () => {
+  const removeFollow = async() => {
     if (!isFollowing) return;
     await deleteUserFollow(isFollowing);
     setIsfFollowing(null);
@@ -118,7 +118,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     setEditInfo("Profile");
   };
 
-  const handleShare = async () => {
+  const handleShare = async() => {
     try {
       await Share.open({ title: "Share Profile", url: "https://scubaseasons.com" });
     } catch (error) {

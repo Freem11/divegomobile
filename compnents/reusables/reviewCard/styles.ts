@@ -1,9 +1,9 @@
 import styled from "styled-components/native";
 import { moderateScale } from "react-native-size-matters";
 import { Image } from "expo-image";
+import { Platform } from "react-native";
 
 import { colors, fontSizes, activeFonts } from "../../styles";
-import { Platform } from "react-native";
 
 export const StyledImage = styled(Image)`
   width: ${moderateScale(40)}px;

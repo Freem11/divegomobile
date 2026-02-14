@@ -1,18 +1,17 @@
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import React from "react";
+import type { Meta, StoryObj } from "@storybook/react";
 
-import PriceTextInput from './index';
-
+import PriceTextInput from "./index";
 
 const meta: Meta<typeof PriceTextInput> = {
-  title:      'Components/Reusables/PriceTextInput',
+  title:      "Components/Reusables/PriceTextInput",
   component:  PriceTextInput,
-  tags:       ['autodocs'],
+  tags:       ["autodocs"],
   args:       { },
   decorators: [
     Story => (
-      <div style={{ width: '400px' }}>
+      <div style={{ width: "400px" }}>
         <Story />
       </div>
     ),
@@ -22,7 +21,6 @@ const meta: Meta<typeof PriceTextInput> = {
 export default meta;
 type Story = StoryObj<typeof PriceTextInput>;
 
-
 export const Input: Story = {
   args: {
   },
@@ -30,6 +28,6 @@ export const Input: Story = {
 
 export const InputWithValue: Story = {
   args: {
-    value: '$250',
+    value: "$250",
   },
 };

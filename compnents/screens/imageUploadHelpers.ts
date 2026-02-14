@@ -5,7 +5,7 @@ import { registerForPhotoLibraryAccessAsync } from "../tutorial/photoLibraryRegi
 import { uploadphoto } from "../cloudflareBucketCalls/cloudflareAWSCalls";
 import { showError } from "../toast";
 
-export const chooseImageHandler = async () => {
+export const chooseImageHandler = async() => {
   const permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
 
   if (!permissionGiven) {
@@ -27,7 +27,7 @@ export const chooseImageHandler = async () => {
   }
 };
 
-export const multiImageHandler = async () => {
+export const multiImageHandler = async() => {
   const permissionGiven = await registerForPhotoLibraryAccessAsync("yes");
 
   if (!permissionGiven) {
@@ -49,7 +49,7 @@ export const multiImageHandler = async () => {
   }
 };
 
-export const imageUploadClean = async (image) => {
+export const imageUploadClean = async(image) => {
   try {
     const uriLink = image.assets[0].uri;
     const extension = uriLink.split(".").pop();
@@ -86,7 +86,7 @@ export const imageUploadClean = async (image) => {
   }
 };
 
-export const imageUpload = async (image) => {
+export const imageUpload = async(image) => {
   try {
     const uriLink = image.assets[0].uri.uri;
     const extension = uriLink.split(".").pop();
@@ -123,7 +123,7 @@ export const imageUpload = async (image) => {
   }
 };
 
-export const imageUploadMultiple = async (image, index) => {
+export const imageUploadMultiple = async(image, index) => {
   try {
     const uriLink = image.assets[0].uri;
     const extension = uriLink.split(".").pop();

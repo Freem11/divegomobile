@@ -30,7 +30,7 @@ export function ReturnToSiteSubmitterButton() {
   const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const { setSitesArray } = useContext(SitesArrayContext);
 
-  const onPress = async () => {
+  const onPress = async() => {
 
     const camera = await mapRef.getCamera();
 

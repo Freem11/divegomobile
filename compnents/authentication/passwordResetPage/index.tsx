@@ -18,7 +18,7 @@ type ResetPasswordScreenNavigationProp = NativeStackNavigationProp<
 export default function ResetPasswordScreen() {
   const navigation = useNavigation<ResetPasswordScreenNavigationProp>();
   const mainNavigation = useAppNavigation();
-  const onSubmit = async (form: Form) => {
+  const onSubmit = async(form: Form) => {
     try {
       const { error } = await supabase.auth.updateUser({
         password: form.NewPass,

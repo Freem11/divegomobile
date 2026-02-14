@@ -15,12 +15,12 @@ import { activeFonts, colors } from "../../../styles";
 import { useFeedScreenStore } from "../../store/useScreenStore";
 import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
 import ButtonIcon from "../../../reusables/buttonIcon";
+import { useAppNavigation } from "../../../mapPage/types";
 
 import FeedItemFailedUpload from "./messages/failedPicUpload";
 import FeedItemFailedSync from "./messages/failedSync";
 import FeedItemNotification from "./messages/notification";
 import * as S from "./styles";
-import { useAppNavigation } from "../../../mapPage/types";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -44,7 +44,6 @@ const windowHeight = Dimensions.get("window").height;
 //     message: "You have a new message from John.",
 //   },
 // ];
-
 
 export default function FeedList() {
   const { t } = useTranslation();
@@ -79,7 +78,7 @@ export default function FeedList() {
         <ButtonIcon
           icon="chevron-left"
           onPress={() => navigation.goBack()}
-          size='small'
+          size="small"
           fillColor={colors.neutralGrey}
         />
         <ButtonIcon

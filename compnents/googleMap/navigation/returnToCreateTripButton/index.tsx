@@ -26,7 +26,7 @@ export function ReturnToCreateTripButton() {
   const diveShopNavigation = useDiveShopNavigation();
   const { sitesArray } = useContext(SitesArrayContext);
 
-  const onPress = async () => {
+  const onPress = async() => {
     mapAction.setFormValues({ ...storeFormValues, Sitelist: sitesArray });
     diveShopNavigation.goBack();
     setMapConfig(MapConfigurations.Default, { pageName: "", itemId: 0 });

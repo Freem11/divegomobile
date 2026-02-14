@@ -110,7 +110,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     }
   }, [id]);
 
-  const getDiveSiteinfo = async () => {
+  const getDiveSiteinfo = async() => {
     const tripInfo = await getTripById(id);
     if (tripInfo?.[0]) {
       setSelectedTrip(tripInfo[0]);
@@ -119,7 +119,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     }
   };
 
-  const getTripDiveSites = async (siteIds: number[]) => {
+  const getTripDiveSites = async(siteIds: number[]) => {
     try {
       const success = await getItineraryDiveSiteByIdArray(siteIds);
       if (success) setTripDiveSites(success);
@@ -128,7 +128,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     }
   };
 
-  const handleMapFlip = async () => {
+  const handleMapFlip = async() => {
     const currentValues = watch();
     if (mapRef) {
       setInitConfig(MapConfigurations.TripBuild);
@@ -146,7 +146,7 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
     }
   };
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async(data: Form) => {
     const call = editMode ? insertItineraryRequest : insertItinerary;
     const payload = {
       shopID: shopId,

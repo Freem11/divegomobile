@@ -45,7 +45,7 @@ export const Step3: React.FC<Step3Props> = ({
     }
   }, [existingPhotos, setValue]);
 
-  const handleSelectImages = async () => {
+  const handleSelectImages = async() => {
     try {
       const result = await multiImageHandler();
       if (result?.assets) {
@@ -69,7 +69,7 @@ export const Step3: React.FC<Step3Props> = ({
   // Memoize this to prevent unnecessary object creation on every render
   const imagesForUpload = useMemo(() =>
     images.map((uri) => ({ photofile: uri })),
-    [images]);
+  [images]);
 
   const popoverContent = () => {
     const Bold = styled(S.PopOverText)`

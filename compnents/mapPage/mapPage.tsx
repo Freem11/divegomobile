@@ -22,7 +22,7 @@ export default function MapPage() {
 
   const { t } = useTranslation();
 
-  const getProfile = async () => {
+  const getProfile = async() => {
     try {
       if (userProfile) {
         if (userProfile.UserName == null || userProfile.UserName === "") {

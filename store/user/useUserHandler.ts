@@ -9,7 +9,7 @@ export const useUserHandler = () => {
 
   const setIsRecovering = useStore((state) => state.setIsRecovering);
 
-  const userInit = async (force = false) => {
+  const userInit = async(force = false) => {
     if (force) {
       initialized = null;
     }
@@ -50,7 +50,7 @@ export const useUserHandler = () => {
     }
   };
 
-  const userLogout = async () => {
+  const userLogout = async() => {
     await signOut();
     setUserState(null, false);
     initialized = null;

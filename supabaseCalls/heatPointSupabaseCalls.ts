@@ -6,7 +6,7 @@ type HeatPointFilter = {
   animal?: string[]
 };
 
-export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter) => {
+export const getHeatPoints = async(bubble: GPSBubble, filter?: HeatPointFilter) => {
   const builder = supabase
     .from("heatPoints")
     .select("lat,lng,weight")
@@ -210,7 +210,7 @@ export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter)
 // };
 
 /** @deprecated */
-export const getHeatPointsWithUser = async (values) => {
+export const getHeatPointsWithUser = async(values) => {
   const { data, error } = await supabase.rpc("get_heatpoints_with_user", {
     animals: values.animalMultiSelection,
     max_lat: values.maxLat,
@@ -230,7 +230,7 @@ export const getHeatPointsWithUser = async (values) => {
   }
 };
 /** @deprecated */
-export const getHeatPointsWithUserEmpty = async (values) => {
+export const getHeatPointsWithUserEmpty = async(values) => {
   const { data, error } = await supabase.rpc("get_heatpoints_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,

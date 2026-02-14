@@ -2,7 +2,7 @@ import { supabase } from "../supabase";
 import { CommentItem } from "../compnents/screens/comments/photoCommentsParallax";
 import { Image } from "../entities/image";
 
-export const insertPhotoComment = async (userId, photoId, comment, userID) => {
+export const insertPhotoComment = async(userId, photoId, comment, userID) => {
   const { data, error } = await supabase
     .from("photoComments")
     .insert([
@@ -23,7 +23,7 @@ export const insertPhotoComment = async (userId, photoId, comment, userID) => {
   }
 };
 
-export const deletePhotoComment = async (id) => {
+export const deletePhotoComment = async(id) => {
   const { data, error } = await supabase
     .from("photoComments")
     .delete()
@@ -39,7 +39,7 @@ export const deletePhotoComment = async (id) => {
   // }
 };
 
-export const grabPhotoCommentsByPicId = async (id: number) => {
+export const grabPhotoCommentsByPicId = async(id: number) => {
   const { data, error } = await supabase.rpc("get_comments_with_user_new", {
     photo_id_param: id
   });
@@ -74,7 +74,7 @@ export const grabPhotoCommentsByPicId = async (id: number) => {
   return result;
 };
 
-export const countPhotoCommentById = async (picId) => {
+export const countPhotoCommentById = async(picId) => {
   const { error, count } = await supabase
     .from("photoComments")
     .select("*", { count: "exact" })

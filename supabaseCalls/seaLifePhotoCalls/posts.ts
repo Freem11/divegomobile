@@ -1,7 +1,7 @@
 import { PhotoWaitInsert } from "../../entities/photoWaits";
 import { supabase } from "../../supabase";
 
-export const insertPhotoWaits = async (values: PhotoWaitInsert[]) => {
+export const insertPhotoWaits = async(values: PhotoWaitInsert[]) => {
   const { data, error } = await supabase
     .from("photoWait")
     .insert(values)

@@ -22,12 +22,12 @@ export default function ReviewParallax(props: ReviewParallaxProps) {
     getReview();
   }, [props.id]);
 
-  const getReview = async () => {
+  const getReview = async() => {
     const reviewInfo = await getReviewById(props.id);
     setSelectedReview(reviewInfo.result);
   };
 
-  const onClose = async () => {
+  const onClose = async() => {
     diveShopNavigation.goBack();
   };
 

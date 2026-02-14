@@ -28,7 +28,7 @@ export default function Histogram(props: HistogramProps) {
     }
   }, [activeBoundaries, props.animal]);
 
-  const getHistogramData = async () => {
+  const getHistogramData = async() => {
     if (activeBoundaries) {
       // Use activeBoundaries (local or global) for the fetch
       const historgramData = await GPSBubble.getItemsInGpsBubble(

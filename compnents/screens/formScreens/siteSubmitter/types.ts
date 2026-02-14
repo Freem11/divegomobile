@@ -4,5 +4,5 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SiteSubmitterRoutes } from "./siteSubmitterNavigator";
 
 export function useDiveSiteNavigation() {
-    return useNavigation<NativeStackNavigationProp<SiteSubmitterRoutes>>();
+  return useNavigation<NativeStackNavigationProp<SiteSubmitterRoutes>>();
 }

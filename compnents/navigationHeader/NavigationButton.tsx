@@ -2,7 +2,8 @@ import { TouchableOpacity } from "react-native";
 import React, { FC } from "react";
 
 import Icon, { IconName } from "../../icons/Icon";
-import { styles } from './styles';
+
+import { styles } from "./styles";
 
 interface BackButtonProps {
   iconName: IconName

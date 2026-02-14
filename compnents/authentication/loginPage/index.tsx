@@ -25,7 +25,7 @@ interface IProps {
 export default function LoginScreen(props: IProps) {
   const userHandler = useUserHandler();
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async(data: Form) => {
     const response = await basicSignIn(data.Email, data.Password);
     if (response.error) {
       console.log("Error: ", response.error);

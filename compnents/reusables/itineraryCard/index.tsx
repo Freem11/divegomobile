@@ -24,7 +24,7 @@ export default function ItineraryCard({
   handleBooking
 }: ItineraryCardProps) {
 
-   return (
+  return (
     <ItineraryCardView
       itinerary={itinerary}
       isMyShop={isMyShop}

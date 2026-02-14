@@ -13,7 +13,7 @@ import { supabase } from "../../supabase";
 
 const redirectTo = makeRedirectUri();
 
-export const getSession = async () => {
+export const getSession = async() => {
   const session = await sessionCheck();
   console.log({ session });
 
@@ -35,7 +35,7 @@ export const getSession = async () => {
   return session.data.session as Session;
 };
 
-export const createSessionFromUrl = async (url: string) => {
+export const createSessionFromUrl = async(url: string) => {
   console.log("Processing URL:", url);
 
   const splitByHash = url.split("#");
@@ -79,7 +79,7 @@ export const createSessionFromUrl = async (url: string) => {
 };
 
 //Sign Ins
-export const facebookSignIn = async () => {
+export const facebookSignIn = async() => {
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "facebook",
@@ -110,7 +110,7 @@ export const facebookSignIn = async () => {
   }
 };
 
-export const basicSignIn = async (email, password) => {
+export const basicSignIn = async(email, password) => {
   const response = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
@@ -119,7 +119,7 @@ export const basicSignIn = async (email, password) => {
   return response;
 };
 
-export const googleSignIn = async () => {
+export const googleSignIn = async() => {
   // TODO: add ability to sign out and choose another google account
   // await GoogleSignin.signOut();
   // await GoogleSignin.revokeAccess();
@@ -156,7 +156,7 @@ export const googleSignIn = async () => {
   return null;
 };
 
-export const appleLogin = async () => {
+export const appleLogin = async() => {
   try {
     const userInfo = await AppleAuthentication.signInAsync({
       requestedScopes: [

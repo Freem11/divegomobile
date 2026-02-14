@@ -49,7 +49,7 @@ export const Step1: React.FC<Step1Props> = ({
     hideDatePicker();
   };
 
-  const handleSelectImages = async () => {
+  const handleSelectImages = async() => {
     try {
       const result = await multiImageHandler();
       if (result?.assets?.[0]?.uri) {
@@ -60,7 +60,7 @@ export const Step1: React.FC<Step1Props> = ({
     }
   };
 
-  const handlePreviewImages = async (pictures: ImagePickerAsset[]) => {
+  const handlePreviewImages = async(pictures: ImagePickerAsset[]) => {
     const newPicArray = pictures.map((picture) => (picture.uri));
 
     const currentFormPhotos = watch("Photos") || [];

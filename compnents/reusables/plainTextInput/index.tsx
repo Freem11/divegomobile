@@ -1,8 +1,11 @@
-import React, { InputHTMLAttributes, useRef, useState } from 'react';
-import ButtonIcon from '../buttonIcon';
-import { TextInput } from 'react-native';
-import * as S from './styles';
+import React, { InputHTMLAttributes, useRef, useState } from "react";
+import { TextInput } from "react-native";
+
+import ButtonIcon from "../buttonIcon";
 import { colors } from "../../styles";
+
+import * as S from "./styles";
+
 ;
 
 type TextInputProps = InputHTMLAttributes<HTMLInputElement>;
@@ -17,7 +20,6 @@ type CustomInputProps = {
   isMyShop:            boolean
 };
 
-
 const PlainTextInput = React.forwardRef<TextInput, TextInputProps & CustomInputProps>(function PlainTextInput(props: TextInputProps & CustomInputProps, forwardedRef) {
   const [value, setValue] = useState(props.value);
   const ref = useRef<TextInput>(null);
@@ -27,25 +29,25 @@ const PlainTextInput = React.forwardRef<TextInput, TextInputProps & CustomInputP
       <S.StyledTextInput multiline type="hidden" readOnly={!props.isEditModeOn} name={props.name} value={props.value} onChange={props.onChange} ref={forwardedRef} placeholder={!props.isEditModeOn && props.placeholder}/>
 
       {props.isMyShop && !props.isEditModeOn && (
-        <ButtonIcon 
-        icon={"pencil"}
-        onPress={() => {
-          props.setIsEditModeOn(true);
-        }}
-        size='icon'
-        fillColor={colors.neutralGrey}
+        <ButtonIcon
+          icon={"pencil"}
+          onPress={() => {
+            props.setIsEditModeOn(true);
+          }}
+          size="icon"
+          fillColor={colors.neutralGrey}
         />
       )}
 
       {props.isMyShop && props.isEditModeOn  && (
-           <ButtonIcon 
-           icon={"check-bold"}
-           onPress={() => {
+        <ButtonIcon
+          icon={"check-bold"}
+          onPress={() => {
             props.setIsEditModeOn(false);
           }}
-           size='icon'
-           fillColor="green"
-           />
+          size="icon"
+          fillColor="green"
+        />
       )}
     </S.MainContainer>
   );

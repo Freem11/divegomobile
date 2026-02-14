@@ -48,9 +48,9 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
         conditionId: condition.condition_type_id,
         value: condition.value
       })) || [
-          { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 },
-          { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }
-        ];
+        { "conditionId": DiveConditions.CURRENT_INTENSITY, "value": 0 },
+        { "conditionId": DiveConditions.VISIBILITY, "value": default_viz }
+      ];
 
       return {
         DiveDate: reviewToEdit.dive_date || "",
@@ -74,7 +74,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     reValidateMode: "onChange"
   });
 
-  const tryUpload = async (uri: string, index: number) => {
+  const tryUpload = async(uri: string, index: number) => {
     try {
       return await imageUploadMultiple({ assets: [{ uri }] }, index);
     } catch (e) {
@@ -110,8 +110,8 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }));
   };
 
-  const handleCreate = async (data: Form) => {
-    const photoUploadPromises = data.Photos.map(async (photo, index) => {
+  const handleCreate = async(data: Form) => {
+    const photoUploadPromises = data.Photos.map(async(photo, index) => {
       try {
         const fileName = await tryUpload(photo, index);
 
@@ -157,7 +157,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const handleUpdate = async (data: Form) => {
+  const handleUpdate = async(data: Form) => {
     const PREFIX = "animalphotos/public/";
 
     const currentPhotos = (await getReviewPhotosByReviewId(reviewToEdit.review_id)).data;
@@ -165,7 +165,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
 
     const { deletes, uploads, reviewPhotos } = photoFateDeterminer(reviewToEdit.review_id, currentPhotos, newPhotos);
 
-    const photoUploadPromises = uploads.map(async (photo, index) => {
+    const photoUploadPromises = uploads.map(async(photo, index) => {
       try {
         const fileName = await tryUpload(photo.photoPath, index);
         if (!fileName) {
@@ -178,7 +178,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
       }
     });
 
-    const photoDeletePromises = deletes.map(async (photo) => {
+    const photoDeletePromises = deletes.map(async(photo) => {
       const isGated = currentPhotos.some(
         (currentPhoto) =>
           currentPhoto.photoPath === photo &&
@@ -235,7 +235,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async(data: Form) => {
     if (reviewToEdit) {
       await handleUpdate(data);
     } else {
@@ -243,7 +243,7 @@ export default function SiteReviewCreatorScreen({ route }: SiteReviewCreatorScre
     }
   };
 
-  const getDiveSiteInfo = async (siteId: number) => {
+  const getDiveSiteInfo = async(siteId: number) => {
     if (siteId) {
       const diveSiteInfo = await getDiveSiteById(siteId);
       setSiteInfo(diveSiteInfo[0]);

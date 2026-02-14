@@ -19,7 +19,7 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
 
-Deno.serve(async (req) => {
+Deno.serve(async(req) => {
   const payload: WebhookPayload = await req.json();
   const { data } = await supabase
     .from("UserProfiles")

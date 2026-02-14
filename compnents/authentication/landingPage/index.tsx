@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import {
   appleLogin,
@@ -8,12 +10,9 @@ import {
 } from "../../helpers/loginHelpers";
 import { useUserHandler } from "../../../store/user/useUserHandler";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { AuthenticationRoutes } from "../authNavigator";
 
 import LandingPageView from "./view";
-
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthenticationRoutes } from "../authNavigator";
 
 type LandingScreenNavigationProp = NativeStackNavigationProp<
   AuthenticationRoutes,
@@ -33,7 +32,7 @@ export default function LandingScreen(props: IProps) {
 
   const navigation = useNavigation<LandingScreenNavigationProp>();
 
-    useLayoutEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 

@@ -24,12 +24,12 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
 
   const { t } = useTranslation();
 
-  const getTrips = async (diveSiteId: number) => {
+  const getTrips = async(diveSiteId: number) => {
     const data = await getItinerariesForDiveSite(diveSiteId);
     setDiveSiteTrips(data);
   };
 
-  const onClose = async () => {
+  const onClose = async() => {
     diveSiteNavigation.goBack();
   };
 
@@ -37,7 +37,7 @@ export default function DiveSiteTripsPage({ }: DiveSiteTripsPageProps) {
     getTrips(selectedDiveSite.id);
   }, [selectedDiveSite]);
 
-  const handleMapFlip = async (sites: number[]) => {
+  const handleMapFlip = async(sites: number[]) => {
     setSitesArray(sites);
     const itinerizedDiveSites = await getDiveSitesByIDs(JSON.stringify(sites));
 

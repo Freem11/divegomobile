@@ -74,7 +74,7 @@ export default function DiveSiteScreen({
     console.log("Report review:", reviewId);
   };
 
-  const handleProfileMove = async (userName: string, user_id: string) => {
+  const handleProfileMove = async(userName: string, user_id: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (!picOwnerAccount || picOwnerAccount.length === 0) {
@@ -93,7 +93,7 @@ export default function DiveSiteScreen({
     }
   };
 
-  const handleMapFlip = async (sites: number[]) => {
+  const handleMapFlip = async(sites: number[]) => {
     if (mapRef) {
       setInitConfig(MapConfigurations.TripView);
       const region = await calculateRegionFromBoundaries(mapRef);
@@ -116,14 +116,14 @@ export default function DiveSiteScreen({
     }, [selectedDiveSite?.id])
   );
 
-  const refreshReviews = async () => {
+  const refreshReviews = async() => {
     if (selectedDiveSite?.id) {
       const diveSiteReviews = await getRecentThreeReviewsBySiteId(selectedDiveSite.id);
       setReviews(diveSiteReviews);
     }
   };
 
-  const getData = async (selectedDiveSite: DiveSiteWithUserName) => {
+  const getData = async(selectedDiveSite: DiveSiteWithUserName) => {
     const trips = await getDiveSiteTripCount(selectedDiveSite.id);
     setTripCount(trips.label_count);
 

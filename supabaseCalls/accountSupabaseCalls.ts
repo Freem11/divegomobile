@@ -3,7 +3,7 @@ import { ActiveProfile } from "../entities/profile";
 import { supabase } from "../supabase";
 import { Image } from "../entities/image";
 
-export const addDeletedAccountInfo = async (values) => {
+export const addDeletedAccountInfo = async(values) => {
 
   const { data, error } = await supabase
     .from("deletedUsers")
@@ -25,7 +25,7 @@ export const addDeletedAccountInfo = async (values) => {
   }
 };
 
-export const createProfile = async (values) => {
+export const createProfile = async(values) => {
   const response = await supabase
     .from("UserProfiles")
     .insert([
@@ -42,7 +42,7 @@ export const createProfile = async (values) => {
   return response;
 };
 
-export const updateProfileUserName = async (values: Partial<ActiveProfile>) => {
+export const updateProfileUserName = async(values: Partial<ActiveProfile>) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .update({ UserName: values.UserName })
@@ -60,7 +60,7 @@ export const updateProfileUserName = async (values: Partial<ActiveProfile>) => {
   return null;
 };
 
-export const updateProfile = async (values: Partial<ActiveProfile>) => {
+export const updateProfile = async(values: Partial<ActiveProfile>) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .update(values)
@@ -78,7 +78,7 @@ export const updateProfile = async (values: Partial<ActiveProfile>) => {
 
 };
 
-export const updatePushToken = async (values) => {
+export const updatePushToken = async(values) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .update({ expo_push_token: values.token })
@@ -94,7 +94,7 @@ export const updatePushToken = async (values) => {
   return [];
 };
 
-export const updateProfileFeeback = async (values) => {
+export const updateProfileFeeback = async(values) => {
 
   console.log(values);
 
@@ -113,7 +113,7 @@ export const updateProfileFeeback = async (values) => {
   }
 };
 
-export const deleteProfile = async (id) => {
+export const deleteProfile = async(id) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .delete()
@@ -129,7 +129,7 @@ export const deleteProfile = async (id) => {
   }
 };
 
-export const grabProfileByUserId = async (id: string) => {
+export const grabProfileByUserId = async(id: string) => {
   const { data, error } = await supabase.rpc("get_profile_by_user_uuid", {
     p_uuid: id
   });
@@ -154,7 +154,7 @@ export const grabProfileByUserId = async (id: string) => {
   };
 };
 
-export const grabProfileById = async (id: number) => {
+export const grabProfileById = async(id: number) => {
   const { data, error } = await supabase.rpc("get_profile_with_image", {
     p_user_id: id
   });
@@ -179,7 +179,7 @@ export const grabProfileById = async (id: number) => {
   };
 };
 
-export const grabProfileByUserName = async (userName) => {
+export const grabProfileByUserName = async(userName) => {
   const { data, error } = await supabase
     .from("UserProfiles")
     .select()
@@ -195,7 +195,7 @@ export const grabProfileByUserName = async (userName) => {
   }
 };
 
-export const getProfileWithStats = async (userId) => {
+export const getProfileWithStats = async(userId) => {
   const { data, error } = await supabase.rpc("get_userprofile_with_stats", {
     userid: userId,
   });
@@ -210,7 +210,7 @@ export const getProfileWithStats = async (userId) => {
   }
 };
 
-export const getUserSpeciesCount = async (userId: string) => {
+export const getUserSpeciesCount = async(userId: string) => {
   const { data, error } = await supabase.rpc("get_user_species", {
     p_user_id: userId,
   });
@@ -226,7 +226,7 @@ export const getUserSpeciesCount = async (userId: string) => {
   return [];
 };
 
-export const getUserSightingsCount = async (userId: string) => {
+export const getUserSightingsCount = async(userId: string) => {
   const { data, error } = await supabase.rpc("get_user_sightings", {
     p_user_id: userId,
   });
@@ -242,7 +242,7 @@ export const getUserSightingsCount = async (userId: string) => {
   return [];
 };
 
-export const getDiveSiteRecentNinePhotos = async (userId: string): Promise<Animal[]> => {
+export const getDiveSiteRecentNinePhotos = async(userId: string): Promise<Animal[]> => {
   const { data, error } = await supabase.rpc("get_profile_recent_nine", {
     p_user_id: userId
   });
@@ -275,7 +275,7 @@ export const getDiveSiteRecentNinePhotos = async (userId: string): Promise<Anima
   return result;
 };
 
-export const getuserReveiewCount = async (user_id: string) => {
+export const getuserReveiewCount = async(user_id: string) => {
   const { data, error } = await supabase.rpc("get_users_review_count", {
     user_id,
   });

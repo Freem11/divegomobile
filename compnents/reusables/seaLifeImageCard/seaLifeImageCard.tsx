@@ -90,7 +90,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }).catch(console.error);
   };
 
-  const handleLike = async (picId: number) => {
+  const handleLike = async(picId: number) => {
     if (picLiked) {
       await deletePhotoLike(likeData);
       setPicLiked(false);

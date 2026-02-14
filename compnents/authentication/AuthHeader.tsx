@@ -1,15 +1,16 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { buttonSizes, colors } from "../styles";
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { moderateScale } from "react-native-size-matters";
+
+import { buttonSizes, colors } from "../styles";
 import ButtonIcon from "../reusables/buttonIcon";
 
 /**
- * A custom header for Auth flow as the default header on iOS will partially truncate 
+ * A custom header for Auth flow as the default header on iOS will partially truncate
  * our scalable back button icon {@link ButtonIcon}.
- * @returns 
+ * @returns
  */
 function AuthHeader() {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ function AuthHeader() {
       <ButtonIcon
         icon="chevron-left"
         onPress={navigation.goBack}
-        size='small'
+        size="small"
         fillColor={colors.neutralGrey}
       />
     </View>
@@ -32,12 +33,12 @@ function AuthHeader() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     shadowOpacity: 0,
     borderBottomWidth: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingStart: '3%'
+    flexDirection: "row",
+    alignItems: "center",
+    paddingStart: "3%"
   },
 });
 

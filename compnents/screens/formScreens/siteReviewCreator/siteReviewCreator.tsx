@@ -125,7 +125,7 @@ export default function SiteReviewPageView({
     setValue("Conditions", updatedConditions);
   };
 
-  const handleGoNext = useCallback(async () => {
+  const handleGoNext = useCallback(async() => {
     let fieldsToValidate: (keyof Form)[] = [];
 
     switch (currentStep) {

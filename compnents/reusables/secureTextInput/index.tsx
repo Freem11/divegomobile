@@ -39,10 +39,9 @@ const SecureTextInput = React.forwardRef<TextInput, SecureTextInputProps>(functi
       />
       <TouchableOpacity onPress={() => onClick()}>
         <S.IconWrapperRight>
-          {secure ? 
+          {secure ?
             <Icon name={"eye-off"} fill={colors.neutralGrey}/>
-            : <Icon name={"eye"} fill={colors.neutralGrey}/>
-          }
+            : <Icon name={"eye"} fill={colors.neutralGrey}/>}
         </S.IconWrapperRight>
       </TouchableOpacity>
     </S.TextInputWrapper>

@@ -3,7 +3,6 @@ import { moderateScale } from "react-native-size-matters";
 
 import { colors } from "../../styles";
 
-
 export const StyledTouchableHighlight = styled.TouchableHighlight`
   height: ${moderateScale(44)}px;
   width: ${moderateScale(44)}px;

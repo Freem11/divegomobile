@@ -25,7 +25,7 @@ export default function UserProfilePhotosPage({ }: UserProfilePhotosPageProps) {
 
   const navigation = useAppNavigation();
 
-  const getPhotos = async (selectedProfile, profile: ActiveProfile) => {
+  const getPhotos = async(selectedProfile, profile: ActiveProfile) => {
     let photos;
     if (selectedProfile?.UserID) {
       photos = await getPhotosByUserWithExtra(
@@ -47,7 +47,7 @@ export default function UserProfilePhotosPage({ }: UserProfilePhotosPageProps) {
     }
   }, [selectedProfile, userProfile]);
 
-  const handleDiveSiteMove = async (latitude: number, longitude: number) => {
+  const handleDiveSiteMove = async(latitude: number, longitude: number) => {
 
     const diveSiteLocation: region = {
       latitude,

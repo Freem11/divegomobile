@@ -3,7 +3,7 @@ import { Pagination } from "../entities/pagination";
 import { Animal, Photo } from "../entities/photos";
 import { supabase } from "../supabase";
 
-export const getAnimalNames = async () => {
+export const getAnimalNames = async() => {
   const { data, error } = await supabase.from("photos").select("label");
 
   if (error) {
@@ -16,7 +16,7 @@ export const getAnimalNames = async () => {
   }
 };
 
-export const insertphoto = async (values, monthID) => {
+export const insertphoto = async(values, monthID) => {
   const { data, error } = await supabase.from("photos").insert([
     {
       photoFile: values.photoFile,
@@ -34,7 +34,7 @@ export const insertphoto = async (values, monthID) => {
   }
 };
 
-export const getAnimalNamesThatFit = async (value: string) => {
+export const getAnimalNamesThatFit = async(value: string) => {
   if (value === "") {
     return [];
   }
@@ -52,7 +52,7 @@ export const getAnimalNamesThatFit = async (value: string) => {
   }
 };
 
-export const getSeaCreatures = async (value: string, limit: number) => {
+export const getSeaCreatures = async(value: string, limit: number) => {
   if (value === "") {
     return [];
   }
@@ -70,7 +70,7 @@ export const getSeaCreatures = async (value: string, limit: number) => {
   return data || [];
 };
 
-export const getCoordsForSeaLife = async (seaLifeName: string) => {
+export const getCoordsForSeaLife = async(seaLifeName: string) => {
   const { data, error } = await supabase
     .from("photos")
     .select("label, latitude, longitude")
@@ -86,7 +86,7 @@ export const getCoordsForSeaLife = async (seaLifeName: string) => {
   }
 };
 
-export const getPhotosforAnchor = async (value) => {
+export const getPhotosforAnchor = async(value) => {
   const { data, error } = await supabase
     .from("photos")
     .select()
@@ -107,7 +107,7 @@ export const getPhotosforAnchor = async (value) => {
   }
 };
 
-export const getAnimalMultiSelect = async (text) => {
+export const getAnimalMultiSelect = async(text) => {
   const { data, error } = await supabase
     .from("photos")
     .select("id, label")
@@ -124,7 +124,7 @@ export const getAnimalMultiSelect = async (text) => {
   }
 };
 
-export const getPhotosforMapArea = async (value) => {
+export const getPhotosforMapArea = async(value) => {
   const { data, error } = await supabase
     .from("photos")
     .select()
@@ -153,7 +153,7 @@ type GetPhotosParams = {
   limit_count?: number;
 };
 
-export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
+export const getPhotosByDiveSiteWithExtra = async(values: GetPhotosParams) => {
   const params: {
     lat: number;
     lng: number;
@@ -205,7 +205,7 @@ export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
 //   }
 // };
 
-export const getDiveSitePhotos = async (lat: number, lng: number, userId: string) => {
+export const getDiveSitePhotos = async(lat: number, lng: number, userId: string) => {
   const { data, error } = await supabase.rpc("get_photos_for_divesite_with_social_info_test", {
     lat: lat,
     lng: lng,
@@ -220,7 +220,7 @@ export const getDiveSitePhotos = async (lat: number, lng: number, userId: string
   return data || [];
 };
 
-export const getProfilePhotosByUser = async (userId: string, connectedUserId: string, pagination?: Pagination) => {
+export const getProfilePhotosByUser = async(userId: string, connectedUserId: string, pagination?: Pagination) => {
   console.log(userId, connectedUserId, pagination);
 
   const builder = supabase.rpc("get_photos_by_userid_with_divesite", {
@@ -244,7 +244,7 @@ export const getProfilePhotosByUser = async (userId: string, connectedUserId: st
   }
 };
 
-export const getPhotosByUserWithExtra = async (userId: string, connectedUserId: string) => {
+export const getPhotosByUserWithExtra = async(userId: string, connectedUserId: string) => {
   const {
     data,
     error,
@@ -263,7 +263,7 @@ export const getPhotosByUserWithExtra = async (userId: string, connectedUserId: 
   }
 };
 
-export const getPhotosWithUser = async (values) => {
+export const getPhotosWithUser = async(values) => {
   const { data, error } = await supabase.rpc("get_photos_with_user", {
     animals: values.animalMultiSelection,
     max_lat: values.maxLat,
@@ -284,7 +284,7 @@ export const getPhotosWithUser = async (values) => {
   }
 };
 
-export const getPhotosWithUserEmpty = async (values) => {
+export const getPhotosWithUserEmpty = async(values) => {
   const { data, error } = await supabase.rpc("get_photos_with_username", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
@@ -304,7 +304,7 @@ export const getPhotosWithUserEmpty = async (values) => {
   }
 };
 
-export const getHistoData = async (bubble: GPSBubble, animal: string[]) => {
+export const getHistoData = async(bubble: GPSBubble, animal: string[]) => {
   const { data, error } = await supabase.rpc("histogram3", {
     animals: animal,
     max_lat: bubble.maxLat,
@@ -323,7 +323,7 @@ export const getHistoData = async (bubble: GPSBubble, animal: string[]) => {
   }
 };
 
-export const getRecentPhotos = async (today) => {
+export const getRecentPhotos = async(today) => {
   const { data, error } = await supabase.rpc("three_randomz");
 
   if (error) {
@@ -336,7 +336,7 @@ export const getRecentPhotos = async (today) => {
   }
 };
 
-export const getMostRecentPhoto = async () => {
+export const getMostRecentPhoto = async() => {
   const { data, error } = await supabase.rpc("maximum_value");
 
   if (error) {
@@ -349,7 +349,7 @@ export const getMostRecentPhoto = async () => {
   }
 };
 
-export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Photo>, pagination?: Pagination) => {
+export const getAnimalsInBubble = async(bubble: GPSBubble, filter?: Partial<Photo>, pagination?: Pagination) => {
   const builder = supabase.rpc("get_unique_photo_in_bounds", {
     max_lat: bubble.maxLat,
     min_lat: bubble.minLat,
@@ -379,7 +379,7 @@ export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Pho
   return [];
 };
 
-export const getDiveSiteSpeciesCount = async (values) => {
+export const getDiveSiteSpeciesCount = async(values) => {
   const { data, error } = await supabase.rpc("get_divesite_species", {
     lat: values.lat,
     lng: values.lng,
@@ -396,7 +396,7 @@ export const getDiveSiteSpeciesCount = async (values) => {
   return [];
 };
 
-export const getDiveSiteSightingCount = async (values) => {
+export const getDiveSiteSightingCount = async(values) => {
   const { data, error } = await supabase.rpc("get_divesite_sightings", {
     lat: values.lat,
     lng: values.lng,
@@ -413,7 +413,7 @@ export const getDiveSiteSightingCount = async (values) => {
   return [];
 };
 
-export const getDiveSiteRecentNinePhotos = async (values): Promise<Animal[]> => {
+export const getDiveSiteRecentNinePhotos = async(values): Promise<Animal[]> => {
   const { data, error } = await supabase.rpc("get_divesite_recent_nine", {
     lat: values.lat,
     lng: values.lng,
@@ -447,7 +447,7 @@ export const getDiveSiteRecentNinePhotos = async (values): Promise<Animal[]> => 
   return result;
 };
 
-export const getMapSightingCount = async (values) => {
+export const getMapSightingCount = async(values) => {
   const { data, error } = await supabase.rpc("get_sightings_on_map", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
@@ -466,7 +466,7 @@ export const getMapSightingCount = async (values) => {
   return [];
 };
 
-export const getMapSpeciesCount = async (values) => {
+export const getMapSpeciesCount = async(values) => {
   const { data, error } = await supabase.rpc("get_species_on_map", {
     max_lat: values.maxLat,
     min_lat: values.minLat,

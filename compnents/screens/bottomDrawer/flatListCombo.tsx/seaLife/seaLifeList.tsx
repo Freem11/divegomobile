@@ -31,7 +31,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
   const [areaPics, setAreaPics] = useState([]);
   const { animalMultiSelection } = useContext(AnimalMultiSelectContext);
 
-  const getPhotos = async (val: string) => {
+  const getPhotos = async(val: string) => {
     if (boundaries) {
       const diveSiteData = await getAnimalsInBubble(boundaries, { label: val });
       setAreaPics(diveSiteData);
@@ -42,7 +42,7 @@ export default function SeaLifeList({ scrollToDiveSiteList }: SeaLifeListProps) 
     getPhotos(filterValue);
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
 
-  const handleSelection = async (species: string) => {
+  const handleSelection = async(species: string) => {
     if (mapRef) {
       const b = await mapRef.getMapBoundaries();
       setMapRegion({

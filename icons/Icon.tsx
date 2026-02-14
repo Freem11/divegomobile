@@ -1,6 +1,7 @@
-import React, { ReactElement } from 'react';
-import Svg, { Path, SvgProps } from 'react-native-svg';
-import config from './_config.json';
+import React, { ReactElement } from "react";
+import Svg, { Path, SvgProps } from "react-native-svg";
+
+import config from "./_config.json";
 
 type IconName = keyof typeof config;
 
@@ -14,7 +15,7 @@ const getFigure = (content: string): ReactElement | null => {
     return null;
   }
 
-  if (content.startsWith('<')) {
+  if (content.startsWith("<")) {
     return <g dangerouslySetInnerHTML={{ __html: content }}></g>;
   } else {
     return <Path d={content}></Path>;
@@ -22,7 +23,7 @@ const getFigure = (content: string): ReactElement | null => {
 };
 
 const getViewBox = (data: viewBoxEncoded): string => {
-  let result = '';
+  let result = "";
   if (!data) {
     return result;
   }
@@ -35,32 +36,31 @@ const getViewBox = (data: viewBoxEncoded): string => {
       result = `0 0 ${data[0]} ${data[1]}`;
     }
     if (data.length === 4) {
-      result = data.join(' ');
+      result = data.join(" ");
     }
   }
 
-  if (typeof data === 'string') {
+  if (typeof data === "string") {
     result = data;
   }
 
-  if (typeof data === 'number') {
+  if (typeof data === "number") {
     result = `0 0 ${data} ${data}`;
   }
 
   return result;
 };
 
-
 const Icon = (props: Props & SvgProps) => {
   if (!config) {
-    console.error(`_config.json not found. Run "_build-svg.js" generate config.`);
+    console.error("_config.json not found. Run \"_build-svg.js\" generate config.");
     return <></>;
   }
 
   const { ...restProps } = props;
   const iconName = props.name;
   if (!iconName) {
-    console.error(`icon name is required.`);
+    console.error("icon name is required.");
     return <></>;
   }
 

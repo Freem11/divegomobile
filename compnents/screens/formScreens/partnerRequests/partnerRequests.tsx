@@ -46,7 +46,7 @@ export default function PartnerRequestPageView({
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
 
-  const handleGoNext = useCallback(async () => {
+  const handleGoNext = useCallback(async() => {
     let fieldsToValidate: (keyof Form)[] = [];
 
     switch (currentStep) {

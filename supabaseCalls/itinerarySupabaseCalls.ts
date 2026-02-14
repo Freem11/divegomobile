@@ -3,7 +3,7 @@ import { ItineraryItem } from "../entities/itineraryItem";
 import { supabase } from "../supabase";
 import { Image } from "../entities/image";
 
-export const itineraries = async (IdNo) => {
+export const itineraries = async(IdNo) => {
   const { data, error } = await supabase
     .from("itineraries")
     .select()
@@ -19,7 +19,7 @@ export const itineraries = async (IdNo) => {
   }
 };
 
-export const getTripById = async (id) => {
+export const getTripById = async(id) => {
   const { data, error } = await supabase
     .from("itineraries")
     .select()
@@ -35,7 +35,7 @@ export const getTripById = async (id) => {
   }
 };
 
-export const getItinerariesByUserId = async (id) => {
+export const getItinerariesByUserId = async(id) => {
   const { data, error } = await supabase.rpc("get_itineraries_for_userid", {
     userid: id,
   });
@@ -50,7 +50,7 @@ export const getItinerariesByUserId = async (id) => {
   }
 };
 
-export const getItineraryDiveSiteByIdArray = async (siteIds) => {
+export const getItineraryDiveSiteByIdArray = async(siteIds) => {
   const { data, error } = await supabase.rpc(
     "get_multiple_divesites_with_usernames",
     { divesitesid: siteIds }
@@ -82,7 +82,7 @@ export const getItineraryDiveSiteByIdArray = async (siteIds) => {
 
 };
 
-export const insertItinerary = async (values: ItineraryItem) => {
+export const insertItinerary = async(values: ItineraryItem) => {
   const { data, error } = await supabase.from("itineraries").insert([
     {
       shopID: values.shopID,
@@ -103,7 +103,7 @@ export const insertItinerary = async (values: ItineraryItem) => {
   return { data, error };
 };
 
-export const insertItineraryRequest = async (values: ItineraryItem, reqType: string) => {
+export const insertItineraryRequest = async(values: ItineraryItem, reqType: string) => {
   const { data, error } = await supabase.from("itineraryRequests").insert([
     {
       shopID: values.shopID,
@@ -125,7 +125,7 @@ export const insertItineraryRequest = async (values: ItineraryItem, reqType: str
   return { data, error };
 };
 
-export const getItinerariesForDiveSite = async (IdNo: number, limitTo3: boolean = false) => {
+export const getItinerariesForDiveSite = async(IdNo: number, limitTo3: boolean = false) => {
   let query = supabase
     .from("itineraries")
     .select()
@@ -145,7 +145,7 @@ export const getItinerariesForDiveSite = async (IdNo: number, limitTo3: boolean 
   return data as ItineraryItem[];
 };
 
-export const getDiveSiteTripCount = async (siteId: number) => {
+export const getDiveSiteTripCount = async(siteId: number) => {
   const { data, error } = await supabase.rpc("get_divesite_trip_count", {
     divesite_id: siteId,
   });

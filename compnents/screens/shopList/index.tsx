@@ -18,7 +18,7 @@ export default function ShopListPage() {
     }
   }, []);
 
-  const getShops = async (id: string) => {
+  const getShops = async(id: string) => {
     try {
       const shops = await getShopByUserID(id);
       if (shops) {

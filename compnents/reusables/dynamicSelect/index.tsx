@@ -38,7 +38,7 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
       init();
     }, []);
 
-    const init = async () => {
+    const init = async() => {
       try {
         if (getSelectedOptions) {
           const data = await getSelectedOptions(props.value);
@@ -62,7 +62,7 @@ const DynamicSelect = React.forwardRef<TextInput, DynamicSelectProps>(
       loadOptions(search, 0, true);
     };
 
-    const loadOptions = async (
+    const loadOptions = async(
       search: string,
       offset: number,
       replaceExistingOptions = false

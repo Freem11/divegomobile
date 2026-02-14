@@ -1,5 +1,5 @@
 function setupClusters(diveSiteData, sitesArray) {
-  let points = diveSiteData.map((site) => ({
+  const points = diveSiteData.map((site) => ({
     type: "Feature",
     properties: {
       cluster: false,
@@ -17,7 +17,7 @@ function setupClusters(diveSiteData, sitesArray) {
 }
 
 function setupShopClusters(shopData) {
-  let points = shopData.map((shop) => ({
+  const points = shopData.map((shop) => ({
     type: "Feature",
     properties: {
       cluster: false,

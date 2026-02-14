@@ -15,7 +15,7 @@ import { showError } from "../toast";
 
 globalThis.ReadableStream = ReadableStream;
 
-export const uploadphoto = async (file, fileName) => {
+export const uploadphoto = async(file, fileName) => {
   try {
     const fileBuffer = Buffer.from(file, "base64");
     const fileSize = fileBuffer.length;
@@ -50,7 +50,7 @@ export const uploadphoto = async (file, fileName) => {
   }
 };
 
-export const removePhoto = async (values) => {
+export const removePhoto = async(values) => {
 
   const shortPath = values.fileName.split("/").pop();
 
@@ -75,7 +75,7 @@ export const removePhoto = async (values) => {
 
 };
 
-export const clearPhoto = async (values) => {
+export const clearPhoto = async(values) => {
 
   const shortPath = values.split("/").pop();
 
@@ -99,7 +99,7 @@ export const clearPhoto = async (values) => {
   }
 
 };
-export const removePhotoReviews = async (values) => {
+export const removePhotoReviews = async(values) => {
 
   const shortPath = values.split("/").pop();
 

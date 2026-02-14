@@ -1,16 +1,15 @@
 import React, { useLayoutEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { register } from "../../../supabaseCalls/authenticateSupabaseCalls";
 import { i18n } from "../../../i18n";
 import { showWarning } from "../../toast";
 import { useUserHandler } from "../../../store/user/useUserHandler";
+import { AuthenticationRoutes } from "../authNavigator";
 
 import CreateAccountPageView from "./view";
 import { Form } from "./form";
-
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthenticationRoutes } from "../authNavigator";
 
 type SignUpScreenNavigationProp = NativeStackNavigationProp<
   AuthenticationRoutes,

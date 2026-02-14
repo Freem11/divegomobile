@@ -1,7 +1,9 @@
-import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
-import * as S from './styles';
+import React, { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+
 import Icon, { IconName } from "../../../icons/Icon";
 import { colors } from "../../styles";
+
+import * as S from "./styles";
 
 type StandardButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
@@ -22,7 +24,7 @@ export default function IconCounterButton(props: IconCounterButtonProps & Standa
         <S.IconWrapper>
           <Icon name={icon as IconName} fill={fillColor? fillColor : colors.themeWhite}/>
         </S.IconWrapper>
-       <S.CounterText>{count}</S.CounterText>
+        <S.CounterText>{count}</S.CounterText>
       </S.StyledButton>
     </S.StyledTouchableHighlight>
   );

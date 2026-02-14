@@ -15,10 +15,10 @@ export type ButtonIconProps = {
 
 export default function ButtonIcon(props: ButtonIconProps) {
   const { icon, fillColor, size, onPress, disabled, ...rest } = props;
-  
+
   return (
     <S.StyledTouchableHighlight
-      disabled={disabled} 
+      disabled={disabled}
       underlayColor={colors.buttonPressOverlay}
       onPress={onPress}
       {...rest}

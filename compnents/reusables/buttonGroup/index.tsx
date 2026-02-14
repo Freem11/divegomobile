@@ -1,6 +1,8 @@
-import React from 'react'
-import { IconName } from '../../../icons/Icon'
-import * as S from './styles'
+import React from "react";
+
+import { IconName } from "../../../icons/Icon";
+
+import * as S from "./styles";
 
 export interface ButtonOption {
   label: string
@@ -15,23 +17,23 @@ export interface ButtonGroupProps {
   columns?: number
 }
 
-export default function ButtonGroup({ 
-  options, 
+export default function ButtonGroup({
+  options,
   onButtonPress,
   selectedValues = [],
   columns = 3
 }: ButtonGroupProps) {
   const handleButtonPress = (option: ButtonOption) => {
-    onButtonPress?.(option.value)
-  }
+    onButtonPress?.(option.value);
+  };
 
   const isSelected = (option: ButtonOption) => {
-    return selectedValues.includes(option.value)
-  }
+    return selectedValues.includes(option.value);
+  };
 
-  const rows: ButtonOption[][] = []
+  const rows: ButtonOption[][] = [];
   for (let i = 0; i < options.length; i += columns) {
-    rows.push(options.slice(i, i + columns))
+    rows.push(options.slice(i, i + columns));
   }
 
   return (
@@ -41,7 +43,7 @@ export default function ButtonGroup({
           {row.map((option) => (
             <S.StyledButton
               key={option.value}
-              size={'thin'}
+              size={"thin"}
               title={option.label}
               iconLeft={option.icon}
               active={isSelected(option)}
@@ -52,5 +54,5 @@ export default function ButtonGroup({
         </S.ButtonRow>
       ))}
     </S.ButtonGroupContainer>
-  )
+  );
 }

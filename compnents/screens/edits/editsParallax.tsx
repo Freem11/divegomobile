@@ -49,7 +49,7 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async() => {
       setLoading(true);
       try {
         let fetchedInfo;
@@ -94,8 +94,8 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
     navigation.goBack();
   };
 
-  const handleSelectImage = async () => {
-    setTimeout(async () => {
+  const handleSelectImage = async() => {
+    setTimeout(async() => {
       try {
         const result = await chooseImageHandler();
         if (result?.assets?.[0]?.uri) {
@@ -110,7 +110,7 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
 
   };
 
-  const onSubmit = async (formData: Required<Form>) => {
+  const onSubmit = async(formData: Required<Form>) => {
     const originalPhoto = info?.profilePhoto || info?.diveShopProfilePhoto;
     const preImagePath = originalPhoto ? `${cloudflareBucketUrl}${originalPhoto.split("/").pop()}` : "";
 

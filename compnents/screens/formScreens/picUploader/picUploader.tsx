@@ -55,7 +55,7 @@ export default function PicUploaderPageView({
     }
   }, [isCompleted]);
 
-  const handleGoNext = useCallback(async () => {
+  const handleGoNext = useCallback(async() => {
     let fieldsToValidate: (keyof Form | string)[] = [];
     const maxStepX = images.length + 1;
 

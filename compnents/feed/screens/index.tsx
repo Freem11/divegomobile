@@ -5,10 +5,12 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+
 import { colors } from "../../styles";
 import {  useFeedScreenStore } from "../store/useScreenStore";
-import FeedList from "./feeds";
 import { FEED_SCREEN } from "../store/types";
+
+import FeedList from "./feeds";
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("screen");
 
@@ -16,14 +18,14 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get("screen");
 export default function FeedScreens() {
   const currentScreen = useFeedScreenStore((state) => state.currentScreen);
   const isVisible = useFeedScreenStore((state) => state.isVisible);
-  const levelOneScreenY = useSharedValue(windowHeight); 
+  const levelOneScreenY = useSharedValue(windowHeight);
 
   const modalSlide = useAnimatedStyle(() => ({
     transform: [{ translateY: levelOneScreenY.value }],
   }));
 
   useEffect(() => {
-    levelOneScreenY.value = withTiming(isVisible ? 0 : windowHeight, { duration: 300 }); 
+    levelOneScreenY.value = withTiming(isVisible ? 0 : windowHeight, { duration: 300 });
   }, [isVisible]);
 
   const renderContent = () => {

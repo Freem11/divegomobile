@@ -44,7 +44,7 @@ export default function App() {
     prefixes: ["scubaseasons://"],
     config: { screens: {} },
     subscribe(listener: (url: string) => void) {
-      const onReceiveURL = async ({ url }: { url: string }) => {
+      const onReceiveURL = async({ url }: { url: string }) => {
         if (url.startsWith(resetPasswordURL) && url.includes("type=recovery")) {
           await createSessionFromUrl(url);
           userHandler.setIsRecovering(true);
@@ -54,7 +54,7 @@ export default function App() {
         listener(url);
       };
       const subscription = Linking.addEventListener("url", onReceiveURL);
-      const checkInitialUrl = async () => {
+      const checkInitialUrl = async() => {
         const initialUrl = await Linking.getInitialURL();
         if (initialUrl) {
           if (initialUrl.startsWith(resetPasswordURL) && initialUrl.includes("type=recovery")) {
@@ -116,7 +116,7 @@ export default function App() {
   }, []);
 
   // Callback to hide splash screen once UI is ready
-  const onLayoutRootView = useCallback(async () => {
+  const onLayoutRootView = useCallback(async() => {
     if (appIsReady && fontsLoaded) {
       await SplashScreen.hideAsync();
     }

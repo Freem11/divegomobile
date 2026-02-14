@@ -1,10 +1,12 @@
 import React from "react";
-import * as S from "./styles";
-import { FeedItemComponentProps } from "./failedPicUpload";
+import { View } from "react-native";
+
 import { NotificationFeedItem } from "../../../store/types";
 import ButtonIcon from "../../../../reusables/buttonIcon";
 import { colors } from "../../../../styles";
-import { View } from "react-native";
+
+import * as S from "./styles";
+import { FeedItemComponentProps } from "./failedPicUpload";
 
 export default function FeedItemNotification({
   item,

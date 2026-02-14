@@ -36,7 +36,7 @@ import { supabase } from "../supabase";
 //   }
 // };
 
-export const getDiveShops = async (bubble: GPSBubble, filerValue: string = ""): Promise<DiveShop[]> => {
+export const getDiveShops = async(bubble: GPSBubble, filerValue: string = ""): Promise<DiveShop[]> => {
   const { data, error } = await supabase.rpc("get_dive_shops_with_images", {
     min_lat: bubble.minLat,
     max_lat: bubble.maxLat,
@@ -69,7 +69,7 @@ export const getDiveShops = async (bubble: GPSBubble, filerValue: string = ""): 
   return result;
 };
 
-export const getShopByName = async (value) => {
+export const getShopByName = async(value) => {
   const { data, error } = await supabase.from("shops").select().eq("orgname", value);
 
   if (error) {
@@ -82,7 +82,7 @@ export const getShopByName = async (value) => {
   }
 };
 
-export const updateDiveShop = async (values) => {
+export const updateDiveShop = async(values) => {
   const { data, error } = await supabase
     .from("shops")
     .update(values)
@@ -99,7 +99,7 @@ export const updateDiveShop = async (values) => {
   }
 };
 
-export const getShopByUserID = async (value: string): Promise<DiveShop[]> => {
+export const getShopByUserID = async(value: string): Promise<DiveShop[]> => {
   const { data, error } = await supabase.rpc("get_shop_by_user_id_with_images", {
     p_user_id: value
   });
@@ -130,7 +130,7 @@ export const getShopByUserID = async (value: string): Promise<DiveShop[]> => {
   ;
 };
 
-export const getDiveShopById = async (id: number) => {
+export const getDiveShopById = async(id: number) => {
   const { data, error } = await supabase.rpc("get_dive_shop_by_id_with_images", {
     q_shop_id: id
   });

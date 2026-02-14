@@ -52,7 +52,7 @@ export default function PartnerRequestScreen() {
     partnerRequestNavigation.goBack();
   }, [clearFormValues, setValue, partnerRequestNavigation]);
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async(data: Form) => {
     try {
       await createPartnerAccountRequest({
         webpageLink: data.URL,
@@ -93,7 +93,7 @@ export default function PartnerRequestScreen() {
     getCurrentLocation(currentValues);
   };
 
-  const getCurrentLocation = async (formData: Required<Form>) => {
+  const getCurrentLocation = async(formData: Required<Form>) => {
     Keyboard.dismiss();
     mapAction.setIsLocating(true);
 
@@ -118,7 +118,7 @@ export default function PartnerRequestScreen() {
     }
   };
 
-  const handleMapFlip = async () => {
+  const handleMapFlip = async() => {
     const currentValues = watch() as Required<Form>;
     if (mapRef) {
       setInitConfig(MapConfigurations.PinDrop);

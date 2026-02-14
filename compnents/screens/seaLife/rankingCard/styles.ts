@@ -20,16 +20,16 @@ export const RankingCard = styled.TouchableOpacity`
   border-width: ${moderateScale(1)}px;
   border-radius: ${moderateScale(12)}px;
   ${Platform.select({
-  ios: `
+    ios: `
       shadow-color: #000;
       shadow-offset: 0px 0px;
       shadow-opacity: 0.04;
       shadow-radius: 4px;
     `,
-  android: `
+    android: `
       elevation: 0;
     `,
-})}
+  })}
 `;
 
 export const CardSeparator = styled.View`

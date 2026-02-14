@@ -27,7 +27,7 @@ export default function FeedItemFailedUpload({
   const { isExist, resolvedUri } = useFileExists(item.imageUri);
   const { t } = useTranslation();
 
-  const tryUpload = async (uri: string) => {
+  const tryUpload = async(uri: string) => {
     try {
       return await imageUpload({ assets: [{ uri }] });
     } catch (e) {
@@ -36,7 +36,7 @@ export default function FeedItemFailedUpload({
     }
   };
 
-  const uploadPicture = async () => {
+  const uploadPicture = async() => {
     if (!isExist) {
       showError(t("PicUploader.retryFailedUpload"));
       setIsUploading(false);
@@ -78,7 +78,7 @@ export default function FeedItemFailedUpload({
     onRemove(item.id);
   };
 
-  const handleOnRetry = async () => {
+  const handleOnRetry = async() => {
     setIsUploading(true);
     const { isStableConnection } = await checkNetworkStatus();
     if (!isStableConnection) {

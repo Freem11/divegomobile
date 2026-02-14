@@ -38,7 +38,7 @@ export default function DiveShopScreen({
   const [itineraryList, setItineraryList] = useState<ItineraryItem[] | null>();
   const { setSitesArray } = useContext(SitesArrayContext);
 
-  const getItineraries = async (IdNum: number) => {
+  const getItineraries = async(IdNum: number) => {
     try {
       const itins = await itineraries(IdNum);
       setItineraryList(itins);
@@ -54,7 +54,7 @@ export default function DiveShopScreen({
     }
   }, [selectedShop]);
 
-  const handleMapFlip = async (sites: number[]) => {
+  const handleMapFlip = async(sites: number[]) => {
     if (mapRef) {
       setInitConfig(MapConfigurations.TripView);
       const region = await calculateRegionFromBoundaries(mapRef);

@@ -9,17 +9,17 @@ const getSvgAttribute = (attribute, content) => {
 };
 
 const getSvgXml = (content) => {
-  const regex = new RegExp(`<svg.*?>(.*)<\/svg>`, 'ms');
+  const regex = new RegExp("<svg.*?>(.*)<\/svg>", "ms");
   const match = regex.exec(content);
   if (!match || match[1] === undefined) {
     return null;
   }
 
   let result = match[1];
-  result = result.replaceAll('\n', '');
-  result = result.replaceAll(/\s+/g, ' ');
-  result = result.replaceAll(/>\s+</g, '><');
-  result = result.replaceAll(/,\s+/g, ',');
+  result = result.replaceAll("\n", "");
+  result = result.replaceAll(/\s+/g, " ");
+  result = result.replaceAll(/>\s+</g, "><");
+  result = result.replaceAll(/,\s+/g, ",");
 
   return result;
 };
@@ -35,7 +35,7 @@ const getOptimizedPathData = (xml) => {
   if (!xml) {
     return null;
   }
-  const regex = new RegExp('^<path.*?d="(.*?)"/?>(</path>)?$', 'ms');
+  const regex = new RegExp("^<path.*?d=\"(.*?)\"/?>(</path>)?$", "ms");
   const match = regex.exec(xml.trim());
   if (!match || match[1] === undefined) {
     return null;
@@ -45,12 +45,12 @@ const getOptimizedPathData = (xml) => {
 };
 
 const getSvgViewBox = (content) => {
-  let viewBoxStr = getSvgAttribute('viewBox', content);
+  const viewBoxStr = getSvgAttribute("viewBox", content);
   if (!viewBoxStr) {
     return null;
   }
 
-  let result = viewBoxStr.split(' ').map(coord => parseInt(coord));
+  const result = viewBoxStr.split(" ").map(coord => parseInt(coord));
   if (Array.isArray(result) && result.length === 4) {
     if (result[0] === 0 && result[1] === 0) {
       if (result[2] === result[3]) {
@@ -65,9 +65,8 @@ const getSvgViewBox = (content) => {
 };
 
 const parseSvgContent = (content) => {
-  let viewBox = getSvgViewBox(content);
-  let xml = getSvgXml(content);
-
+  const viewBox = getSvgViewBox(content);
+  const xml = getSvgXml(content);
 
   if (xml) {
     const pathData = getOptimizedPathData(xml);

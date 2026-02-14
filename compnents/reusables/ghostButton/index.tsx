@@ -24,7 +24,7 @@ export default function GhostButton({
       </S.GhostButtonText>
       <Icon
         name={iconRight}
-        style={{ top: moderateScale(2)}}
+        style={{ top: moderateScale(2) }}
         width={moderateScale(26)}
         height={moderateScale(26)}
         fill={colors.primaryBlue}

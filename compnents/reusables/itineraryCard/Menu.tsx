@@ -40,7 +40,7 @@ export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handl
         isVisible={isVisible}
         onRequestClose={() => setIsVisible(false)}
         placement={Placement.AUTO}
-        popoverStyle={{borderRadius: moderateScale(10)}}
+        popoverStyle={{ borderRadius: moderateScale(10) }}
       >
         <IconWithLabel
           label="Edit"
@@ -60,5 +60,5 @@ export const Menu: FC<MenuProps> = ({ isVisible, setIsVisible, handleEdit, handl
         />
       </Popover>
     </S.Actions>
-  )
-}
+  );
+};

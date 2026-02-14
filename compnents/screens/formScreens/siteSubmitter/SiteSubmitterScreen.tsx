@@ -49,7 +49,7 @@ export default function SiteSubmitterScreen() {
     submitterNavigation.goBack();
   }, [clearFormValues, setValue, submitterNavigation]);
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async(data: Form) => {
     try {
       await insertDiveSiteWaits({
         name: data.Site,
@@ -86,7 +86,7 @@ export default function SiteSubmitterScreen() {
     getCurrentLocation(currentValues);
   };
 
-  const getCurrentLocation = async (formData: Required<Form>) => {
+  const getCurrentLocation = async(formData: Required<Form>) => {
     Keyboard.dismiss();
 
     // 1. Tell the store we are starting the search
@@ -111,7 +111,7 @@ export default function SiteSubmitterScreen() {
     }
   };
 
-  const handleMapFlip = async () => {
+  const handleMapFlip = async() => {
     const currentValues = watch() as Required<Form>;
 
     if (mapRef) {

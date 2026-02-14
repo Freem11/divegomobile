@@ -31,7 +31,7 @@ export default function DiveCenterList() {
     }
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng]);
 
-  const handleSelection = async (shopId: number) => {
+  const handleSelection = async(shopId: number) => {
     if (mapRef) {
       const b = await mapRef.getMapBoundaries();
       setMapRegion({

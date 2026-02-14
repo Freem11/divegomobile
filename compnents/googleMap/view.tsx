@@ -147,7 +147,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
     }
   }, []);
 
-  const getCurrentLocation = async () => {
+  const getCurrentLocation = async() => {
     if (!isMapReady.current) return;
     try {
       const { coords } = await getCurrentCoordinates();

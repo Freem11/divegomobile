@@ -22,8 +22,8 @@ export class DynamicSelectOptions {
     result.options = response.map(item => this.convertItem(item));
 
     const headers = response.headers;
-    if (headers?.hasOwnProperty('x-total-count')) {
-      result.totalCount = parseInt(response.headers['x-total-count']);
+    if (headers?.hasOwnProperty("x-total-count")) {
+      result.totalCount = parseInt(response.headers["x-total-count"]);
     } else {
       result.totalCount = null;
     }

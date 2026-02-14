@@ -27,7 +27,7 @@ export default function useSearchTool() {
   const [textSource, setTextSource] = useState(false);
   const [isClearOn, setIsClearOn] = useState(false);
 
-  const getPlaces = async (text: string) => {
+  const getPlaces = async(text: string) => {
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${GoogleMapsApiKey}`
@@ -47,7 +47,7 @@ export default function useSearchTool() {
     }
   };
 
-  const handleDataList = async (value: string) => {
+  const handleDataList = async(value: string) => {
 
     if (value === activeSearchValueRef.current && activeSearchValueRef.current !== "") {
       console.log(`Defense: Blocking search for final selected value: ${value}`);
@@ -108,7 +108,7 @@ export default function useSearchTool() {
     activeSearchValueRef.current = "";
   };
 
-  const handleMapOptionSelected = async (place: string) => {
+  const handleMapOptionSelected = async(place: string) => {
 
     setAnimalMultiSelection(null);
     setList([]);
@@ -132,7 +132,7 @@ export default function useSearchTool() {
     finalizeSelection(place);
   };
 
-  const handleDiveSiteOptionSelected = async (diveSite: string) => {
+  const handleDiveSiteOptionSelected = async(diveSite: string) => {
     if (!diveSite) return;
 
     setAnimalMultiSelection(null);
@@ -158,7 +158,7 @@ export default function useSearchTool() {
     finalizeSelection(diveSite);
   };
 
-  const handleSeaLifeOptionSelected = async (seaCreature: string) => {
+  const handleSeaLifeOptionSelected = async(seaCreature: string) => {
 
     setList([]);
     try {

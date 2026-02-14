@@ -35,7 +35,7 @@ export default function ForgotPasswordScreen(props: IProps) {
 
   const navigation = useNavigation<ForgotPasswordScreenNavigationProp>();
 
-  const onSubmit = async (form: Form) => {
+  const onSubmit = async(form: Form) => {
     try {
       // Ensure this matches your Supabase Dashboard "Redirect URLs" exactly
 

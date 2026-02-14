@@ -58,7 +58,7 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
 
   useEffect(() => {
     let isMounted = true;
-    const load = async () => {
+    const load = async() => {
       const pic = await getPhotoByID(id);
       const variants: Image = {
         file_name: pic?.photoFile,
@@ -88,12 +88,12 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
     getAllPictureComments(id);
   }, [id]);
 
-  const getAllPictureComments = async (picId: number): Promise<void> => {
+  const getAllPictureComments = async(picId: number): Promise<void> => {
     const picComments = await grabPhotoCommentsByPicId(picId);
     setListOfComments(picComments);
   };
 
-  const handleCommentInsert = async (): Promise<void> => {
+  const handleCommentInsert = async(): Promise<void> => {
     try {
       let userIdentity: string | null = null;
       if (replyTo) userIdentity = replyTo[1];

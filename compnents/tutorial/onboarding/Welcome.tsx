@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 import { OnboardingRoutes } from "./onboardingNavigator";
 import { OnboardingConfigParams, OnboardingTemplateLayout } from "./OnboardingTemplateLayout";
 
@@ -11,7 +12,7 @@ type WelcomeScreenNavigationProp = NativeStackNavigationProp<
 export default function WelcomeScreen() {
   const navigation = useNavigation<WelcomeScreenNavigationProp>();
 
-  const onPress = async () => {
+  const onPress = async() => {
     navigation.replace("DiverName");
   };
 

@@ -9,9 +9,9 @@ import Button from "../button";
 import GhostButton from "../ghostButton";
 import EmptyState from "../emptyState-new";
 import { ActiveProfile } from "../../../entities/profile";
+import { Image } from "../../../entities/image";
 
 import * as S from "./styles";
-import { Image } from "../../../entities/image";
 
 type SealifePreviewProps = {
   speciesCount?: number

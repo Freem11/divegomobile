@@ -15,21 +15,21 @@ import SavedTranslateYContextProvider from "./savedTranslateYContext";
 import SearchStatusContextProvider from "./searchStatusContext";
 
 const providers = [
-    SitesArrayContextProvider,
-    SelectedShopContextProvider,
-    SearchTextContextProvider,
-    AnchorPhotosContextProvider,
-    AnimalMultiSelectContextProvider,
-    SelectedDiveSiteContextProvider,
-    PictureContextProvider,
-    SelectedPictureContextProvider,
-    SelectedProfileContextProvider,
-    SelectedPictureContextProvider,
-    SelectedProfileContextProvider,
-    EditModeContextProvider,
-    EditsContextProvider,
-    SavedTranslateYContextProvider,
-    SearchStatusContextProvider,
+  SitesArrayContextProvider,
+  SelectedShopContextProvider,
+  SearchTextContextProvider,
+  AnchorPhotosContextProvider,
+  AnimalMultiSelectContextProvider,
+  SelectedDiveSiteContextProvider,
+  PictureContextProvider,
+  SelectedPictureContextProvider,
+  SelectedProfileContextProvider,
+  SelectedPictureContextProvider,
+  SelectedProfileContextProvider,
+  EditModeContextProvider,
+  EditsContextProvider,
+  SavedTranslateYContextProvider,
+  SearchStatusContextProvider,
 ];
 
 export const AppContextProvider = combineComponents(...providers);

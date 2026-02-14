@@ -32,7 +32,7 @@ export default function UserProfileScreen({ selectedProfile }: UserProfileScreen
     }
   }, [selectedProfile?.UserID]);
 
-  const getData = async (profile: ActiveProfile) => {
+  const getData = async(profile: ActiveProfile) => {
     setProfilePhotos(null);
     setReviews([]);
     setSpeciesCount(0);
@@ -57,7 +57,7 @@ export default function UserProfileScreen({ selectedProfile }: UserProfileScreen
     navigation.navigate("UserProfilePhotos");
   };
 
-  const handleDiveSiteMove = async (diveSiteName: string, diveSiteId: number) => {
+  const handleDiveSiteMove = async(diveSiteName: string, diveSiteId: number) => {
     navigation.navigate("DiveSiteNavigator", { id: diveSiteId });
   };
 

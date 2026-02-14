@@ -90,9 +90,9 @@ const sharedIconStyle = css`
   align-items: center;
   justify-content: center;
   ${Platform.select({
-  ios: "shadow-offset: 1px 1px; shadow-opacity: 0.2; shadow-radius: 2px;",
-  android: "elevation: 5;",
-})}
+    ios: "shadow-offset: 1px 1px; shadow-opacity: 0.2; shadow-radius: 2px;",
+    android: "elevation: 5;",
+  })}
 `;
 
 export const GoogleButton = styled.View`

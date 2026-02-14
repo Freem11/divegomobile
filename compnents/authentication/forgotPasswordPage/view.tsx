@@ -18,7 +18,7 @@ interface IProps {
 export default function ForgotPageView(props: IProps) {
   const { t } = useTranslation();
 
-  const onLocalSubmit = async (data: Form) => {
+  const onLocalSubmit = async(data: Form) => {
     await props.onSubmit(data);
     reset();
   };

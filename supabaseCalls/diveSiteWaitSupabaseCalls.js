@@ -1,10 +1,10 @@
 import { supabase } from "../supabase";
 
-export const diveSiteWaits = async () => {
+export const diveSiteWaits = async() => {
 
   const { data, error } = await supabase
-  .from("diveSiteWait")
-  .select();
+    .from("diveSiteWait")
+    .select();
 
   if (error) {
     console.log("couldn't do it 8,", error);
@@ -16,17 +16,17 @@ export const diveSiteWaits = async () => {
   }
 };
 
-export const insertDiveSiteWaits = async (values) => {
+export const insertDiveSiteWaits = async(values) => {
   const { data, error } = await supabase
-  .from("diveSiteWait")
-  .insert([
-    {
-      name: values.name,
-      lat: values.lat,
-      lng: values.lng,
-      UserID: values.UserID
-    },
-  ]);
+    .from("diveSiteWait")
+    .insert([
+      {
+        name: values.name,
+        lat: values.lat,
+        lng: values.lng,
+        UserID: values.UserID
+      },
+    ]);
 
   if (error) {
     console.log("couldn't do it 9,", error);
@@ -38,12 +38,12 @@ export const insertDiveSiteWaits = async (values) => {
   };
 };
 
-export const grabDiveSiteWaitById = async (id) => {
+export const grabDiveSiteWaitById = async(id) => {
 
   const { data, error } = await supabase
     .from("diveSiteWait")
     .select()
-    .eq("id", id)
+    .eq("id", id);
 
   if (error) {
     console.log("couldn't do it 10,", error);
@@ -55,20 +55,20 @@ export const grabDiveSiteWaitById = async (id) => {
   }
 };
 
-export const deleteDiveSiteWait = async (id) => {
+export const deleteDiveSiteWait = async(id) => {
 
   const { data, error } = await supabase
-  .from("diveSiteWait")
-  .delete()
-  .eq("id", id);
+    .from("diveSiteWait")
+    .delete()
+    .eq("id", id);
 
-if (error) {
-  console.log("couldn't do it 11,", error);
-  return [];
-}
+  if (error) {
+    console.log("couldn't do it 11,", error);
+    return [];
+  }
 
-if (data) {
-  return data
+  if (data) {
+    return data;
   // console.log(data);
-}
-}
+  }
+};

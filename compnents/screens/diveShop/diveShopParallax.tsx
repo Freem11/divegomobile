@@ -41,7 +41,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
     getDiveCentreInfo();
   }, [props.id]);
 
-  const getDiveCentreInfo = async () => {
+  const getDiveCentreInfo = async() => {
     const diveCentreinfo = await getDiveShopById(props.id);
     setSelectedShop(diveCentreinfo);
   };
@@ -65,7 +65,7 @@ export default function DiveShopParallax(props: DiveShopParallaxProps) {
 
   }, [selectedShop]);
 
-  const onClose = async () => {
+  const onClose = async() => {
     diveShopNavigation.goBack();
   };
 

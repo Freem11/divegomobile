@@ -46,7 +46,7 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
   const [diveShops, setDiveShops] = useState<DiveShop[] | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[] | null>(null);
 
-  const handleOnLoad = async (map: MapView) => {
+  const handleOnLoad = async(map: MapView) => {
     setLocalMapRef(map);
     if (!species) {
       mapAction.setMapRef(map);
@@ -57,7 +57,7 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
    * HEATPOINT RESTORATION
    */
   useEffect(() => {
-    (async () => {
+    (async() => {
       const heatPointsData = await GPSBubble.getItemsInGpsBubble(
         getHeatPoints,
         bubble,
@@ -71,7 +71,7 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
    * HYDRATION LOGIC
    */
   useEffect(() => {
-    const hydrateTrip = async () => {
+    const hydrateTrip = async() => {
       if (!sitesArray || sitesArray.length === 0) return;
 
       const ids = sitesArray
@@ -114,7 +114,7 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
     }
   };
 
-  const handleSeaLifeFocus = async (creature: string) => {
+  const handleSeaLifeFocus = async(creature: string) => {
     if (!localMapRef) return;
     try {
       const seaLifeSet = await getCoordsForSeaLife(creature);
@@ -178,7 +178,7 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
     return Math.floor(Math.log2((360 * mapPixelWidth) / (lngDelta * TILE_SIZE)));
   };
 
-  const handleBoundsChange = debounce(async () => {
+  const handleBoundsChange = debounce(async() => {
     if (!localMapRef) return;
     const boundaries = await localMapRef.getMapBoundaries();
     const currentBubble = GPSBubble.createFromBoundaries(boundaries);

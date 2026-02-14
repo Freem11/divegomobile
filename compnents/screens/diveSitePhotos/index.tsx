@@ -21,7 +21,7 @@ export default function DiveSitePhotosPage() {
 
   const { t } = useTranslation();
 
-  const getPhotos = async (site, userProfile: ActiveProfile) => {
+  const getPhotos = async(site, userProfile: ActiveProfile) => {
     const photos = await getDiveSitePhotos(
       site.lat,
       site.lng,
@@ -31,7 +31,7 @@ export default function DiveSitePhotosPage() {
     setDiveSitePics(photos);
   };
 
-  const handleProfileMove = async (userName: string) => {
+  const handleProfileMove = async(userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
     if (!picOwnerAccount || picOwnerAccount.length === 0) {
@@ -53,7 +53,7 @@ export default function DiveSitePhotosPage() {
     }
   };
 
-  const onClose = async () => {
+  const onClose = async() => {
     diveSiteNavigation.goBack();
   };
 

@@ -45,7 +45,7 @@ export default function SiteSubmitterPageView({
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 2;
 
-  const handleGoNext = useCallback(async () => {
+  const handleGoNext = useCallback(async() => {
     let fieldsToValidate: (keyof Form)[] = [];
 
     switch (currentStep) {

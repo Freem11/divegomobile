@@ -34,7 +34,7 @@ export default function DiveSiteList() {
     }
   }, [filterValue, boundaries?.maxLat, boundaries?.maxLng]);
 
-  const handleSelection = async (siteId: number) => {
+  const handleSelection = async(siteId: number) => {
     if (mapRef) {
       const b = await mapRef.getMapBoundaries();
       setMapRegion({

@@ -1,13 +1,14 @@
-import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
+import styled from "styled-components/native";
+import { Dimensions } from "react-native";
+import { moderateScale } from "react-native-size-matters";
+
 import {
   colors,
   fontSizes,
   activeFonts,
-} from '../../styles';
+} from "../../styles";
 
-const windowWidth = Dimensions.get('screen').width;
+const windowWidth = Dimensions.get("screen").width;
 
 export const ContentContainer = styled.View`
   width: ${windowWidth}px;

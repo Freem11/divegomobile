@@ -41,11 +41,11 @@ export default function SettingsPage() {
     navigation.goBack();
   };
 
-  const handleLogout = async () => {
+  const handleLogout = async() => {
     userHandler.userLogout();
   };
 
-  const alertHandler = async () => {
+  const alertHandler = async() => {
     Alert.alert(
       t("SettingsPage.aboutToDeleteAccountTitle"),
       t("SettingsPage.deleteAccountMessage"),
@@ -85,7 +85,7 @@ export default function SettingsPage() {
     }).catch(console.error);
   };
 
-  const handleAccountDelete = async () => {
+  const handleAccountDelete = async() => {
     if (blurb) {
       await addDeletedAccountInfo({
         firstName: first,

@@ -26,7 +26,7 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
     getSeaLifeInfo(props.species);
   }, [props.species]);
 
-  const getSeaLifeInfo = async (label: string) => {
+  const getSeaLifeInfo = async(label: string) => {
     const speciesExists = await getSingleSpecies(label);
     if (speciesExists && !speciesExists.description) {
       console.log("No description found, calling Gemini...");
@@ -40,7 +40,7 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
 
   };
 
-  const getBlurb = async () => {
+  const getBlurb = async() => {
     const blurb = await loadSeaLifeInfo(props.species);
     const updatedSeaLife = await updateSpeciesFact(props.species, blurb);
     setSelectedSeaLife(updatedSeaLife);
@@ -53,7 +53,7 @@ export default function SeaLifeParallax(props: SeaLifeParallaxProps) {
     remoteUri = seaLifePhotos && getImagePublicUrl(seaLifePhotos[0]?.image, IMAGE_SIZE.LG);
   }
 
-  const onClose = async () => {
+  const onClose = async() => {
     diveShopNavigation.goBack();
   };
 

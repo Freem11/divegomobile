@@ -55,7 +55,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     };
   }, [props.id]);
 
-  const getInitialData = async () => {
+  const getInitialData = async() => {
     try {
       const [diveSiteinfo, monthlyMetrics] = await Promise.all([
         getDiveSiteById(props.id),
@@ -98,7 +98,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     };
   }, [selectedDiveSite?.id, selectedDiveSite?.divesitebio]);
 
-  const handleGetAiBlurb = async () => {
+  const handleGetAiBlurb = async() => {
     if (isFetchingAi.current || hasErrorThisSession.current) return;
     isFetchingAi.current = true;
 
@@ -151,7 +151,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   };
 
   const headerImageSource = getImagePublicUrl(selectedDiveSite?.profilePhoto, IMAGE_SIZE.XL, noImage);
-  const onClose = async () => {
+  const onClose = async() => {
     diveSiteNavigation.goBack();
   };
 
