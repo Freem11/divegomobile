@@ -62,6 +62,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
         allMetrics(props.id)
       ]);
 
+      console.log("diveSiteinfo", diveSiteinfo);
       if (diveSiteinfo) {
         if (diveSiteinfo.id === props.id) {
           setSelectedDiveSite(diveSiteinfo);
