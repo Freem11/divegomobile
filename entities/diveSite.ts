@@ -9,7 +9,7 @@ export type DiveSiteWithUserName = {
   created_at: string
   divesitebio: string
   newUserName: string
-  divesiteprofilephoto: string
+  diveSiteProfilePhoto: string
   photofile: string
 };
 
