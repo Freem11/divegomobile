@@ -96,7 +96,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
     } else {
-      const newRecord = await insertPhotoLike(userProfile.UserID, pic.photo_table_id);
+      const newRecord = await insertPhotoLike(userProfile.UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
@@ -163,14 +163,14 @@ const SeaLifeImageCard = (props: PictureProps) => {
         <S.IconsWrapper>
           <IconCounterButton
             icon="like-hand"
-            onPress={() => handleLike(pic.photo_table_id)}
+            onPress={() => handleLike(pic.id)}
             size="icon"
             fillColor={picLiked ? "red" : undefined}
             count={abbreviateNumber(countOfLikes)}
           />
           <IconCounterButton
             icon="comment"
-            onPress={() => navigation.navigate("PhotoComments", { id: pic.photo_table_id })}
+            onPress={() => navigation.navigate("PhotoComments", { id: pic.id })}
             size="icon"
             count={abbreviateNumber(pic.commentcount)}
           />

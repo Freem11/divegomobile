@@ -40,7 +40,7 @@ export const deletePhotoComment = async (id) => {
 };
 
 export const grabPhotoCommentsByPicId = async (id: number) => {
-  const { data, error } = await supabase.rpc("get_comments_with_user", {
+  const { data, error } = await supabase.rpc("get_comments_with_user_new", {
     photo_id_param: id
   });
 
