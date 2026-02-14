@@ -34,7 +34,7 @@ export default function ReviewParallax(props: ReviewParallaxProps) {
   return (
     <ParallaxDrawer
       ref={drawerRef}
-      headerImage={selectedReview ? { uri: getImagePublicUrl(selectedReview?.diveSiteProfilePhoto, IMAGE_SIZE.XL) } : noImage}
+      headerImage={getImagePublicUrl(selectedReview?.diveSiteProfilePhoto, IMAGE_SIZE.XL, noImage)}
       onClose={onClose}
     >
       <ReviewScreen selectedReview={selectedReview} />

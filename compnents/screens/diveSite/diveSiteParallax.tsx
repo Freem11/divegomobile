@@ -149,7 +149,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     }
   };
 
-  const headerImageSource = selectedDiveSite?.profilePhoto ? { uri: getImagePublicUrl(selectedDiveSite?.profilePhoto, IMAGE_SIZE.XL) } : noImage;
+  const headerImageSource = getImagePublicUrl(selectedDiveSite?.profilePhoto, IMAGE_SIZE.XL, noImage);
   const onClose = async () => {
     diveSiteNavigation.goBack();
   };

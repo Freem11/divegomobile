@@ -44,7 +44,7 @@ export default function CommentListItem({
     finalDate = finalDate.slice(0, -1);
   }
 
-  const remoteUri = commentDetails ? getImagePublicUrl(commentDetails.avatar, IMAGE_SIZE.SM) : null;
+  const remoteUri = getImagePublicUrl(commentDetails.avatar, IMAGE_SIZE.SM);
   const content = commentDetails.content ?? "";
   const shouldShowReadMore = content.length > 90;
 
