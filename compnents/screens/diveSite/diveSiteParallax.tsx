@@ -62,6 +62,7 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
         allMetrics(props.id)
       ]);
 
+      console.log("diveSiteinfo", diveSiteinfo);
       if (diveSiteinfo) {
         if (diveSiteinfo.id === props.id) {
           setSelectedDiveSite(diveSiteinfo);
@@ -149,7 +150,9 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
     }
   };
 
-  const headerImageSource = selectedDiveSite?.profilePhoto ? { uri: getImagePublicUrl(selectedDiveSite?.profilePhoto, IMAGE_SIZE.XL) } : noImage;
+  console.log("selectedDiveSite", selectedDiveSite);
+
+  const headerImageSource = selectedDiveSite?.profilePhoto?.file_name ? { uri: getImagePublicUrl(selectedDiveSite?.profilePhoto, IMAGE_SIZE.XL) } : noImage;
   const onClose = async () => {
     diveSiteNavigation.goBack();
   };
