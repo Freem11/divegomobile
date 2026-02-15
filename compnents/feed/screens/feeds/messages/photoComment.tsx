@@ -14,7 +14,7 @@ type Props = {
   onPhotoPress: (n: Notification) => void;
 };
 
-export default function FeedItemPhotoComment({
+export default function NotificationItemPhotoComment({
   item,
   onUsernamePress,
   onTrashPress,
@@ -37,7 +37,7 @@ export default function FeedItemPhotoComment({
             <Text style={{ fontWeight: "600" }}>{username}</Text>
             {" commented your photo of a "}
             <Text style={styles.photo_text} onPress={() => onPhotoPress(item)}>
-              {item.notification_photo_like?.photo?.label ?? "creature"}
+              {item.notification_photo_comment?.photo?.label ?? "creature"}
             </Text>
           </Text>
         </View>

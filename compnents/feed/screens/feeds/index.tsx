@@ -9,7 +9,6 @@ import {
   View,
   StyleSheet,
   Platform,
-  Dimensions,
   RefreshControl,
   TouchableOpacity,
 } from "react-native";
@@ -17,23 +16,18 @@ import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
 
 import { activeFonts, colors } from "../../../styles";
-import { useFeedScreenStore } from "../../store/useScreenStore";
 import ButtonIcon from "../../../reusables/buttonIcon";
 import * as S from "./styles";
 import { useAppNavigation } from "../../../mapPage/types";
 
 import { useNotificationsStore } from "../../store/useNotificationsStore";
-import FeedItemPhotoLike from "./messages/photoLike";
-import FeedItemPhotoComment from "./messages/photoComment";
+import NotificationItemPhotoLike from "./messages/photoLike";
+import NotificationItemPhotoComment from "./messages/photoComment";
 import type { Notification } from "../../store/types";
-import { useActiveScreenStore } from "../../../../store/useActiveScreenStore";
 
-const windowHeight = Dimensions.get("window").height;
-
-export default function FeedList() {
+export default function Notifications() {
   const { t } = useTranslation();
   const navigation = useAppNavigation();
-  const closeScreen = useFeedScreenStore((s) => s.closeScreen);
 
   const list = useNotificationsStore((s) => s.list);
   const loadMore = useNotificationsStore((s) => s.loadMore);
@@ -61,7 +55,7 @@ export default function FeedList() {
   };
 
   const togglePhotoBoxModal = (n: Notification, type: "photo_like" | "photo_comment") => {
-    const photoFile =type === "photo_like"
+    const photoFile = type === "photo_like"
       ? n.notification_photo_like?.photo?.photoFile
       : n.notification_photo_comment?.photo?.photoFile;
 
@@ -72,26 +66,15 @@ export default function FeedList() {
     navigation.navigate("PinchAndZoomPhoto", { id: n.id, photoFile });
   };
 
-  const setActiveScreen = useActiveScreenStore(
-    (state) => state.setActiveScreen
-  );
+  const goToUserProfile = (n: Notification) => {
+    const id = n?.sender?.id;
+    if (!id) return;
 
-  // const goToUserProfile = (n: Notification) => {
-  //   navigation.navigate("Profile", { id: n.sender.id });
-  // };
-
-    const goToUserProfile = async (user_id: string) => {
-      // const picOwnerAccount = await grabProfileByUserName(userName);
-  
-      // if (userProfile.UserID === picOwnerAccount[0].UserID) {
-      //   return;
-      // }
-  
-      navigation.navigate("BottomTab", {
-        screen: "Profile",
-        params: { id: user_id },
-      });
-    };
+    navigation.navigate("BottomTab", {
+      screen: "Profile",
+      params: { id, from: "Notifications" },
+    });
+  };
 
   const onTrashPress = (n: Notification) => {
     if (!n.is_seen) {
@@ -104,18 +87,18 @@ export default function FeedList() {
     switch (code) {
       case "photo_like":
         return (
-          <FeedItemPhotoLike
+          <NotificationItemPhotoLike
             item={item}
-            onUsernamePress={() =>goToUserProfile(item.sender.user_id)}
+            onUsernamePress={() => goToUserProfile(item)}
             onPhotoPress={(n) => togglePhotoBoxModal(n, "photo_like")}
             onTrashPress={onTrashPress}
           />
         );
       case "photo_comment":
         return (
-          <FeedItemPhotoComment
+          <NotificationItemPhotoComment
             item={item}
-            onUsernamePress={() => goToUserProfile(item.sender.user_id)}
+            onUsernamePress={() => goToUserProfile(item)}
             onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_comment?.photo?.id, userId: item.sender.user_id })}
             onTrashPress={onTrashPress}
           />

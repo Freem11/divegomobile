@@ -13,6 +13,7 @@ import { useUserProfile } from "../../store/user/useUserProfile";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
 import HomeScreen from "./HomeScreen";
 import { useNotificationsStore } from "../feed/store/useNotificationsStore";
+import Notifications from "../feed/screens/feeds";
 
 const { width, height } = Dimensions.get("window");
 const isTablet = Math.min(width, height) >= 600;
@@ -20,6 +21,7 @@ const isTablet = Math.min(width, height) >= 600;
 export type BottomTabRoutes = {
     Home: undefined;
     Profile: { id: number };
+    Notifications: undefined;
     AddSite: undefined;
     Itinerary: undefined;
 };
@@ -48,13 +50,6 @@ export default function BottomTabNavigator() {
 
                 return {
                     headerShown: false,
-                    tabBarBadge: isNotificationsRoute ? badge : undefined,
-                    tabBarBadgeStyle: {
-                        backgroundColor: "red",
-                        color: "white",
-                        fontSize: moderateScale(10),
-                        fontWeight: "600",
-                    },
                     tabBarLabelPosition: "below-icon",
                     tabBarStyle: {
                         backgroundColor: colors.primaryBlue,
@@ -94,6 +89,22 @@ export default function BottomTabNavigator() {
                         navigation.navigate("Profile", { id: userProfile?.id });
                     },
                 })}
+            />
+
+            <Tab.Screen
+                name="Notifications"
+                component={Notifications}
+                options={{
+                    tabBarBadge:
+                        notificationsCount > 99 ? "99+" :
+                            notificationsCount > 0 ? notificationsCount : undefined,
+                    tabBarBadgeStyle: {
+                        backgroundColor: "red",
+                        color: "white",
+                        fontSize: moderateScale(10),
+                        fontWeight: "600",
+                    },
+                }}
             />
 
             <Tab.Screen

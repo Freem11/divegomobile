@@ -7,7 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { colors } from "../../styles";
 import { useFeedScreenStore } from "../store/useScreenStore";
-import FeedList from "./feeds";
+import Notifications from "./feeds";
 import { FEED_SCREEN } from "../store/types";
 import { useNotificationsStore } from "../store/useNotificationsStore";
 
@@ -40,9 +40,9 @@ export default function FeedScreens() {
   const renderContent = () => {
     switch (currentScreen) {
       case FEED_SCREEN.FEED_MESSAGES:
-        return <FeedList />;
+        return <Notifications />;
       case FEED_SCREEN.NOTIFICATIONS:
-        return <FeedList />;
+        return <Notifications />;
       default:
         return null;
     }

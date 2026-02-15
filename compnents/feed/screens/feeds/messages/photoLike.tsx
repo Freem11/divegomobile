@@ -14,7 +14,7 @@ type Props = {
   onPhotoPress: (n: Notification) => void;
 };
 
-export default function FeedItemPhotoLike({
+export default function NotificationItemPhotoLike({
   item,
   onUsernamePress,
   onTrashPress,
