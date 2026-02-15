@@ -22,6 +22,7 @@ import MarkerHeatPoint from "./marker/markerHeatPoint";
 import { ClusterProperty, MapConfigurations, PointFeatureCategory } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
+import { heatPointToWeightedLocation } from "./dto/heatPointToWeightedLocation";
 import { MarkerDraggable } from "./marker/markerDraggable";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
@@ -30,7 +31,7 @@ import { useMapStore } from "./useMapStore";
 
 type MapViewProps = {
   mapConfig: number;
-  center: Coordinates;
+  center?: Coordinates | null;
   zoomLevel: number;
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
@@ -56,6 +57,12 @@ const GoogleMapView = memo((props: MapViewProps) => {
 
   const lastSyncZoom = useRef<number>(props.zoomLevel);
   const lastSyncBounds = useRef<string>("");
+
+  const showHeatmap = useMemo(() => {
+    if (!props.heatPoints?.length || ![0, 2].includes(props.mapConfig)) return false;
+    const weighted = props.heatPoints.map(heatPointToWeightedLocation);
+    return weighted.some((p) => p && Number.isFinite(p.latitude) && Number.isFinite(p.longitude));
+  }, [props.heatPoints, props.mapConfig]);
 
   const styles = StyleSheet.create({
     container: {
@@ -105,7 +112,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
     return pts;
   }, [props.diveSites, props.diveShops, sitesArray]);
 
-  const { clusters } = useSupercluster({
+  const { clusters = [] } = useSupercluster({
     points,
     bounds,
     zoom,
@@ -188,59 +195,60 @@ const GoogleMapView = memo((props: MapViewProps) => {
     }, 500);
   }, [mapRef, updateMapPositions]);
 
+  const isValidCoord = (lat: number, lng: number) =>
+    typeof lat === "number" && typeof lng === "number" && Number.isFinite(lat) && Number.isFinite(lng);
+
   /**
    * FIX: TWO-PASS RENDERING
-   * We render standard clusters/unselected sites first, then overlay Gold sites
+   * We render standard clusters/unselected sites first, then overlay Gold sites.
+   * Never pass null/undefined as MapView children (causes NSInvalidArgumentException on iOS).
    */
   const renderedMarkers = useMemo(() => {
-    if (!clusters) return [];
+    const mapElements: React.ReactNode[] = [];
+    const safeClusters = clusters ?? [];
+    for (const cluster of safeClusters) {
+      const coords = cluster?.geometry?.coordinates;
+      if (!Array.isArray(coords) || coords.length < 2) continue;
+      const [longitude, latitude] = coords;
+      if (!isValidCoord(latitude, longitude)) continue;
 
-    // Pass 1: Standard clusters and unselected items
-    const mapElements = clusters.map((cluster) => {
-      const [longitude, latitude] = cluster.geometry.coordinates;
       const { cluster: isCluster, point_count: pointCount, id, category } = cluster.properties;
-
       const stableKey = isCluster
         ? `cluster-${id}-${latitude.toFixed(4)}-${longitude.toFixed(4)}`
         : `${category}-${id}`;
+      const coord = { latitude, longitude };
 
       if (isCluster) {
-        return (
+        mapElements.push(
           <MarkerDiveSiteCluster
             key={stableKey}
-            coordinate={{ latitude, longitude }}
+            coordinate={coord}
             pointCount={pointCount}
             onPress={() => handleClusterPress(id as number, latitude, longitude)}
           />
         );
+        continue;
       }
-
       if (category === PointFeatureCategory.DiveSite) {
-        return (
+        mapElements.push(
           <MarkerDiveSite
             key={stableKey}
             id={id as number}
-            coordinate={{ latitude, longitude }}
+            coordinate={coord}
             isSelected={false}
           />
         );
+        continue;
       }
-
       if (category === PointFeatureCategory.DiveShop) {
-        return (
-          <MarkerDiveShop
-            key={stableKey}
-            id={id as number}
-            coordinate={{ latitude, longitude }}
-          />
+        mapElements.push(
+          <MarkerDiveShop key={stableKey} id={id as number} coordinate={coord} />
         );
       }
-      return null;
-    });
+    }
 
-    // Pass 2: Selected Gold Sites (Rendered on top, excluded from clusters)
     const goldElements = (props.diveSites || [])
-      .filter((site) => sitesArray.includes(site.id))
+      .filter((site) => sitesArray.includes(site.id) && isValidCoord(site.lat, site.lng))
       .map((site) => (
         <MarkerDiveSite
           key={`gold-${site.id}`}
@@ -250,7 +258,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
         />
       ));
 
-    return [...mapElements, ...goldElements].filter(Boolean);
+    return [...mapElements, ...goldElements];
   }, [clusters, sitesArray, props.diveSites, handleClusterPress]);
 
   if (!initialRegion) return <View style={styles.container} />;

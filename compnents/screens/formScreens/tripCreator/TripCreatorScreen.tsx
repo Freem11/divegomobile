@@ -17,7 +17,7 @@ import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import { useMapStore } from "../../../googleMap/useMapStore";
 import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
-import { calculateRegionFromBoundaries } from "../../../googleMap/regionCalculator";
+import { computeRegionFromCoordinates } from "../../../googleMap/regionCalculator";
 
 import TripCreatorPageView from "./tripCreator";
 import { Form } from "./form";
@@ -39,7 +39,6 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const setFormValues = useMapStore((state) => state.actions.setFormValues);
   const clearFormValues = useMapStore((state) => state.actions.clearFormValues);
   const storeFormValues = useMapStore((state) => state.formValues);
-  const mapRef = useMapStore((state) => state.mapRef);
   const setInitConfig = useMapStore((state) => state.actions.setInitConfig);
 
   // Local State
@@ -130,20 +129,21 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
 
   const handleMapFlip = async () => {
     const currentValues = watch();
-    if (mapRef) {
-      setInitConfig(MapConfigurations.TripBuild);
-      const region = await calculateRegionFromBoundaries(mapRef);
-      setMapRegion(region);
+    setInitConfig(MapConfigurations.TripBuild);
+    // Use site coordinates only — avoid bridge call to mapRef (stale on 2nd try and can cause NSInvalidArgumentException)
+    const coords = (tripDiveSites || [])
+      .filter((s) => sitesArray.includes(s.id))
+      .map((s) => ({ lat: s.lat, lng: s.lng }));
+    const region = computeRegionFromCoordinates(coords);
+    if (region) setMapRegion(region);
 
-      // Save form data to store so the guard knows we are in "map mode"
-      setFormValues({ ...currentValues, SiteList: sitesArray });
-      setMapConfig(MapConfigurations.TripBuild, {
-        pageName: ScreenReturn.TripCreator as unknown as string,
-        itemId: 1
-      });
+    setFormValues({ ...currentValues, SiteList: sitesArray });
+    setMapConfig(MapConfigurations.TripBuild, {
+      pageName: ScreenReturn.TripCreator as unknown as string,
+      itemId: 1
+    });
 
-      navigation.navigate("GoogleMap" as any);
-    }
+    navigation.navigate("GoogleMap" as any);
   };
 
   const onSubmit = async (data: Form) => {

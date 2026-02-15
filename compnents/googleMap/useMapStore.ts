@@ -22,8 +22,11 @@ const mutator = (set, get) => ({
   isLocating: false,
 
   actions: {
-    setMapRef: (newMap: MapView) => {
+    setMapRef: (newMap: MapView | null) => {
       set({ mapRef: newMap });
+    },
+    clearMapRef: () => {
+      set({ mapRef: null });
     },
     setGpsBubble: (newGpsBubble: GPSBubble) => {
       set({ gpsBubble: newGpsBubble });
