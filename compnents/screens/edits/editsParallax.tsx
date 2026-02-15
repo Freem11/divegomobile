@@ -44,7 +44,7 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
       id: id,
       name: info?.orgName || info?.UserName || "",
       bio: info?.diveShopBio || info?.profileBio || "",
-      uri: info?.diveShopProfilePhoto || info?.profilePhoto || ""
+      uri: info?.diveShopProfilePhoto.file_name || info?.profilePhoto.file_name || ""
     }
   });
 
@@ -54,15 +54,14 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
       try {
         let fetchedInfo;
         if (dataType === EDIT_TYPE.DIVE_CENTRE) {
-          const res = await getDiveShopById(id);
-          fetchedInfo = res[0];
+          fetchedInfo = await getDiveShopById(id);
         } else {
           fetchedInfo = await grabProfileById(id);
         }
 
         setInfo(fetchedInfo);
 
-        const photoPath = fetchedInfo?.profilePhoto || fetchedInfo?.diveShopProfilePhoto;
+        const photoPath = fetchedInfo?.profilePhoto?.file_name || fetchedInfo?.diveShopProfilePhoto?.file_name;
         if (photoPath) {
           const fileName = photoPath.split("/").pop();
           setImage(`${cloudflareBucketUrl}${fileName}`);
@@ -111,14 +110,13 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
   };
 
   const onSubmit = async (formData: Required<Form>) => {
-    const originalPhoto = info?.profilePhoto || info?.diveShopProfilePhoto;
+    const originalPhoto = info?.profilePhoto?.file_name || info?.diveShopProfilePhoto?.file_name;
     const preImagePath = originalPhoto ? `${cloudflareBucketUrl}${originalPhoto.split("/").pop()}` : "";
 
     if (preImagePath) {
       await clearPhoto(preImagePath);
     }
 
-    console.log("formData", formData);
     let fileName: string | null = null;
 
     try {
