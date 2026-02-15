@@ -5,11 +5,12 @@ import { moderateScale } from "react-native-size-matters";
 import { ReviewSingle } from "../../../entities/diveSiteReview";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import Avatar from "../../reusables/reviewCard/avatarCreator";
 import readableDate from "../../helpers/readableDate";
 import { PhotoUpload } from "../formScreens/photoUpload";
 import ConditionsCard from "../../reusables/condidtionsCard";
+import { IMAGE_SIZE } from "../../../entities/image";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
 
 import * as S from "./styles";
 
@@ -23,11 +24,6 @@ export default function ReviewScreenView({
   gestureRef // 2. Destructure the prop
 }: DiveShopProps) {
 
-  const photos = selectedReview?.photos?.map((photo) => ({
-    id: photo.photo_id,
-    photofile: `${cloudflareBucketUrl}${photo.photoPath.split("/").pop()}`
-  }));
-
   return (
     <S.ContentContainer>
       <S.InfoContainer>
@@ -36,7 +32,7 @@ export default function ReviewScreenView({
 
       <S.StatRowMajor>
         <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-          <Avatar photo={`${cloudflareBucketUrl}${selectedReview?.profilePhoto.split("/").pop()}`} />
+          <Avatar photo={getImagePublicUrl(selectedReview?.profilePhoto, IMAGE_SIZE.SM)} />
           <S.Title>
             {selectedReview?.user_name}
           </S.Title>
@@ -53,7 +49,7 @@ export default function ReviewScreenView({
       <S.Content>{selectedReview?.description}</S.Content>
 
       <PhotoUpload
-        items={photos}
+        items={selectedReview?.photos}
         gestureRef={gestureRef}
       />
 

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import React, { useEffect, useState, useMemo, useCallback, useRef, memo, useContext } from "react";
+import { Dimensions, StyleSheet, View, InteractionManager } from "react-native";
+import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import Supercluster from "supercluster";
-import useSupercluster, { UseSuperclusterArgument } from "use-supercluster";
+import useSupercluster from "use-supercluster";
 
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
@@ -13,16 +13,16 @@ import SearchTool from "../searchTool";
 import * as S from "../mapPage/styles";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
-import { Explainer } from "../screens/formScreens/explainer";
+import { SitesArrayContext } from "../contexts/sitesArrayContext";
 
-import { MarkerDiveShop } from "./marker/markerDiveShop";
-import { MarkerDiveSite } from "./marker/markerDiveSite";
+import MarkerDiveShop from "./marker/markerDiveShop";
+import MarkerDiveSite from "./marker/markerDiveSite";
+import MarkerDiveSiteCluster from "./marker/markerDiveSiteCluster";
+import MarkerHeatPoint from "./marker/markerHeatPoint";
 import { ClusterProperty, MapConfigurations, PointFeatureCategory } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
-import { MarkerDiveSiteCluster } from "./marker/markerDiveSiteCluster";
 import { MarkerDraggable } from "./marker/markerDraggable";
-import { MarkerHeatPoint } from "./marker/markerHeatPoint";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
@@ -32,25 +32,30 @@ type MapViewProps = {
   mapConfig: number;
   center: Coordinates;
   zoomLevel: number;
-  species?: string
-
-  /**
-   * On load event happens a lot - dont put heavy stuff here
-   * @param map
-   * @returns
-   */
   onLoad: (map: MapView) => void;
   handleBoundsChange: () => void;
   handleOnMapReady: () => void;
   diveSites?: DiveSiteBasic[] | null;
   diveShops?: DiveShop[] | null;
   heatPoints?: HeatPoint[] | null;
+  species?: string;
 };
 
-export default function GoogleMapView(props: MapViewProps) {
-  const [initialRegion, setInitialRegion] = useState(null);
+const GoogleMapView = memo((props: MapViewProps) => {
+  const [initialRegion, setInitialRegion] = useState<Region | null>(null);
   const mapRef = useMapStore((state) => state.mapRef);
   const mapRegion = useMapStore((state) => state.mapRegion);
+  const { sitesArray } = useContext(SitesArrayContext);
+
+  const isMapReady = useRef(false);
+  const isAnimating = useRef(false);
+  const localMapRef = useRef<MapView | null>(null);
+
+  const [bounds, setBounds] = useState<[number, number, number, number] | undefined>(undefined);
+  const [zoom, setZoom] = useState(props.zoomLevel);
+
+  const lastSyncZoom = useRef<number>(props.zoomLevel);
+  const lastSyncBounds = useRef<string>("");
 
   const styles = StyleSheet.create({
     container: {
@@ -65,273 +70,267 @@ export default function GoogleMapView(props: MapViewProps) {
     }
   });
 
-  const getStartLocation = async () => {
-    try {
-      const photoLocation = await getMostRecentPhoto();
-      if (photoLocation) {
-        setInitialRegion({
-          ...initialRegion,
-          latitude: photoLocation[0].latitude,
-          longitude: photoLocation[0].longitude,
-          latitudeDelta: 2,
-          longitudeDelta: 0.4
-        });
+  const getBoundsFromRegion = (region: Region): [number, number, number, number] => {
+    const latD = Math.abs(region.latitudeDelta);
+    const lonD = Math.abs(region.longitudeDelta);
+    return [
+      region.longitude - lonD / 2,
+      region.latitude - latD / 2,
+      region.longitude + lonD / 2,
+      region.latitude + latD / 2,
+    ];
+  };
+
+  const getZoomFromRegion = (region: Region): number => {
+    return Math.round(Math.log2(360 / region.longitudeDelta));
+  };
+
+  /**
+   * FIX: BREAKOUT LOGIC
+   * We filter out selected sites from the 'points' array so the cluster engine
+   * doesn't "swallow" Gold anchors into a cluster bubble.
+   */
+  const points = useMemo(() => {
+    const pts = [] as Supercluster.PointFeature<ClusterProperty>[];
+
+    props.diveSites?.forEach((item) => {
+      const isSelected = sitesArray.includes(item.id);
+      // Only add to cluster engine if NOT selected
+      if (!isSelected) {
+        pts.push(diveSiteToPointFeature(item));
       }
-    } catch (e) {
-      console.log({ title: "Error65", message: e.message });
-    }
-  };
+    });
 
-  const getCurrentLocation = async () => {
-    try {
-      const { coords } = await getCurrentCoordinates();
-      if (coords) {
-        mapRef?.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          latitudeDelta: 1,
-          longitudeDelta: 1,
-        }, 500);
-      }
-    } catch (e) {
-      console.log({ title: "Error", message: e.message });
-    }
-  };
-  const [map, setMap] = useState<MapView | null>(null);
+    props.diveShops?.forEach((item) => pts.push(diveShopToPointFeature(item)));
+    return pts;
+  }, [props.diveSites, props.diveShops, sitesArray]);
 
-  const onMapLoad = async (map: MapView) => {
-
-    setMap(map);
-    if (typeof props.onLoad === "function") {
-      props.onLoad(map);
-    }
-  };
-
-  const [clusterConfig, setClusterConfig] = useState<
-    UseSuperclusterArgument<ClusterProperty, Supercluster.AnyProps>
-  >({
-    points: [],
-    zoom: 0,
+  const { clusters } = useSupercluster({
+    points,
+    bounds,
+    zoom,
+    options: { radius: 50, maxZoom: 17 }
   });
-  const { clusters, supercluster } = useSupercluster(clusterConfig);
 
   useEffect(() => {
     if (mapRegion) {
       setInitialRegion(mapRegion);
     } else {
-      getStartLocation();
+      getMostRecentPhoto().then((loc) => {
+        if (loc && loc[0]) {
+          setInitialRegion({
+            latitude: loc[0].latitude,
+            longitude: loc[0].longitude,
+            latitudeDelta: 2,
+            longitudeDelta: 0.4
+          });
+        } else {
+          setInitialRegion({ latitude: 0, longitude: 0, latitudeDelta: 10, longitudeDelta: 10 });
+        }
+      });
     }
-  }, [mapRegion]);
-
-  useEffect(() => {
-
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      if (!map) {
-        return;
-      }
+  const updateMapPositions = useCallback((region: Region) => {
+    const nextZoom = getZoomFromRegion(region);
+    const rawBounds = getBoundsFromRegion(region);
+    const boundsFingerprint = rawBounds.map(b => b.toFixed(4)).join(",");
 
-      const bounds = await map.getMapBoundaries();
-      if (!bounds) {
-        return;
-      }
+    if (nextZoom !== lastSyncZoom.current || boundsFingerprint !== lastSyncBounds.current) {
+      lastSyncZoom.current = nextZoom;
+      lastSyncBounds.current = boundsFingerprint;
 
-      const camera = await map.getCamera();
-      if (!camera) {
-        return;
-      }
-
-      let MapZoom: number;
-      if (props.zoomLevel < 5) {
-        MapZoom = 500;
-      } else if (props.zoomLevel < 6) {
-        MapZoom = 350;
-      } else if (props.zoomLevel < 7) {
-        MapZoom = 300;
-      } else if (props.zoomLevel < 8) {
-        MapZoom = 250;
-      } else if (props.zoomLevel < 9) {
-        MapZoom = 200;
-      } else if (props.zoomLevel < 10) {
-        MapZoom = 150;
-      } else if (props.zoomLevel < 11) {
-        MapZoom = 100;
-      } else if (props.zoomLevel < 12) {
-        MapZoom = 50;
-      } else {
-        MapZoom = 25;
-      }
-      const points = [] as Supercluster.PointFeature<ClusterProperty>[];
-      props.diveSites?.forEach((item) =>
-        points.push(diveSiteToPointFeature(item))
-      );
-      props.diveShops?.forEach((item) =>
-        points.push(diveShopToPointFeature(item))
-      );
-      setClusterConfig({
-        points: points,
-        options: { radius: MapZoom },
-        zoom: camera.zoom,
-        bounds: [
-          bounds.southWest.longitude,
-          bounds.southWest.latitude,
-          bounds.northEast.longitude,
-          bounds.northEast.latitude,
-        ],
+      InteractionManager.runAfterInteractions(() => {
+        setZoom(nextZoom);
+        setBounds(rawBounds);
       });
-    })();
-  }, [props.diveSites, props.diveShops]);
+    }
+  }, []);
 
-  if (!initialRegion) {
-    return (
-      <View style={styles.container}>
-        {/* Or a Loading indicator */}
-      </View>
-    );
-  }
-
-  const popoverContentTripView = () => {
-    return (
-      <S.PopOver>
-        <S.PopOverText>
-          Dive sites (anchors) coloured gold are part of this trip.
-          {"\n"}
-          {"\n"}
-          Dive sites coloured blue are not.
-        </S.PopOverText>
-      </S.PopOver>
-    );
+  const getCurrentLocation = async () => {
+    if (!isMapReady.current) return;
+    try {
+      const { coords } = await getCurrentCoordinates();
+      const activeMap = localMapRef.current || mapRef;
+      if (coords && activeMap) {
+        activeMap.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }, 500);
+      }
+    } catch (e) { console.log("Loc Error", e); }
   };
 
-  const popoverContentTripBuild = () => {
-    return (
-      <S.PopOver>
-        <S.PopOverText>
-          Tap dive sites (anchors) to add them to your trip, the will turn gold when added.
-          {"\n"}
-          {"\n"}
-          Tap them again to remove them from your trip, they will return to their blue color when deselected.
-        </S.PopOverText>
-      </S.PopOver>
-    );
-  };
+  const handleClusterPress = useCallback((clusterId: number, latitude: number, longitude: number) => {
+    const activeMap = localMapRef.current || mapRef;
+    if (!activeMap || isAnimating.current) return;
+
+    const currentZoom = lastSyncZoom.current;
+    const nextZoom = Math.min(currentZoom + 3, 16);
+
+    isAnimating.current = true;
+    activeMap.animateCamera({
+      center: { latitude, longitude },
+      zoom: nextZoom,
+    }, { duration: 400 });
+
+    setTimeout(() => {
+      isAnimating.current = false;
+      const nextDelta = 360 / Math.pow(2, nextZoom);
+      updateMapPositions({
+        latitude,
+        longitude,
+        latitudeDelta: nextDelta,
+        longitudeDelta: nextDelta
+      });
+    }, 500);
+  }, [mapRef, updateMapPositions]);
+
+  /**
+   * FIX: TWO-PASS RENDERING
+   * We render standard clusters/unselected sites first, then overlay Gold sites
+   */
+  const renderedMarkers = useMemo(() => {
+    if (!clusters) return [];
+
+    // Pass 1: Standard clusters and unselected items
+    const mapElements = clusters.map((cluster) => {
+      const [longitude, latitude] = cluster.geometry.coordinates;
+      const { cluster: isCluster, point_count: pointCount, id, category } = cluster.properties;
+
+      const stableKey = isCluster
+        ? `cluster-${id}-${latitude.toFixed(4)}-${longitude.toFixed(4)}`
+        : `${category}-${id}`;
+
+      if (isCluster) {
+        return (
+          <MarkerDiveSiteCluster
+            key={stableKey}
+            coordinate={{ latitude, longitude }}
+            pointCount={pointCount}
+            onPress={() => handleClusterPress(id as number, latitude, longitude)}
+          />
+        );
+      }
+
+      if (category === PointFeatureCategory.DiveSite) {
+        return (
+          <MarkerDiveSite
+            key={stableKey}
+            id={id as number}
+            coordinate={{ latitude, longitude }}
+            isSelected={false}
+          />
+        );
+      }
+
+      if (category === PointFeatureCategory.DiveShop) {
+        return (
+          <MarkerDiveShop
+            key={stableKey}
+            id={id as number}
+            coordinate={{ latitude, longitude }}
+          />
+        );
+      }
+      return null;
+    });
+
+    // Pass 2: Selected Gold Sites (Rendered on top, excluded from clusters)
+    const goldElements = (props.diveSites || [])
+      .filter((site) => sitesArray.includes(site.id))
+      .map((site) => (
+        <MarkerDiveSite
+          key={`gold-${site.id}`}
+          id={site.id}
+          coordinate={{ latitude: site.lat, longitude: site.lng }}
+          isSelected={true}
+        />
+      ));
+
+    return [...mapElements, ...goldElements].filter(Boolean);
+  }, [clusters, sitesArray, props.diveSites, handleClusterPress]);
+
+  if (!initialRegion) return <View style={styles.container} />;
 
   return (
     <View style={styles.container}>
       <MapView
-        key={props.mapConfig}
+        key="diving-map-v-stable-final"
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         mapType="hybrid"
         initialRegion={initialRegion}
         maxZoomLevel={16}
-        minZoomLevel={1}
-        ref={onMapLoad}
-        onMapReady={() => props.handleOnMapReady()}
-        onRegionChangeComplete={() => props.handleBoundsChange()}
+        ref={(map) => {
+          if (map) {
+            localMapRef.current = map;
+            props.onLoad(map);
+          }
+        }}
+        onMapReady={() => {
+          isMapReady.current = true;
+          props.handleOnMapReady();
+          updateMapPositions(initialRegion);
+        }}
+        onRegionChangeComplete={(region) => {
+          if (!isAnimating.current) {
+            props.handleBoundsChange();
+            updateMapPositions(region);
+          }
+        }}
         toolbarEnabled={false}
       >
-        {props?.heatPoints?.length > 0 && [0, 2].includes(props.mapConfig) && (
+        {props?.heatPoints && props.heatPoints.length > 0 && [0, 2].includes(props.mapConfig) && (
           <MarkerHeatPoint heatPoints={props.heatPoints} />
         )}
-
-        {clusters?.map((cluster) => {
-          const [longitude, latitude] = cluster.geometry.coordinates;
-          const { cluster: isCluster } = cluster.properties;
-
-          if (isCluster) {
-            return (
-              <MarkerDiveSiteCluster
-                key={cluster.id}
-                coordinate={{ latitude, longitude }}
-                getExpansionZoom={() => {
-                  return supercluster.getClusterExpansionZoom(+cluster.id);
-                }}
-              />
-            );
-          }
-
-          if (cluster.properties.category === PointFeatureCategory.DiveSite) {
-            return (
-              <MarkerDiveSite
-                key={cluster.id}
-                id={cluster.properties.id}
-                coordinate={{ latitude, longitude }}
-              />
-            );
-          }
-
-          if (cluster.properties.category === PointFeatureCategory.DiveShop) {
-            return (
-              <MarkerDiveShop
-                key={cluster.id}
-                id={cluster.properties.id}
-                coordinate={{ latitude, longitude }}
-              />
-            );
-          }
-          return null;
-        })}
-
+        {renderedMarkers}
       </MapView>
 
+      {/* --- UI OVERLAYS RESTORED --- */}
+
       {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
-        // <S.SafeAreaTop edges={["top"]}>
         <SearchTool />
-        // </S.SafeAreaTop>
       )}
 
-      {props?.mapConfig === MapConfigurations.PinDrop && (
-        <MarkerDraggable />
-      )}
-
-      {props?.mapConfig === MapConfigurations.PinDrop && (
-        <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+      {props?.mapConfig === MapConfigurations.Default && !props.species && (
+        <View style={{ position: "absolute", bottom: "5%", right: "5%" }}>
           <S.TargetWrapperAlt>
-            <ButtonIcon
-              icon="target"
-              size={36}
-              onPress={() => getCurrentLocation()}
-              style={{ pointerEvents: "auto" }}
-            />
+            <ButtonIcon icon="target" size={36} onPress={getCurrentLocation} />
           </S.TargetWrapperAlt>
-          <ReturnToSiteSubmitterButton />
-        </View>
-      )}
-      {props?.mapConfig === MapConfigurations.TripView && (
-        <View style={{ position: "absolute", bottom: "12%", left: "5%" }}>
-          <Explainer popoverContent={popoverContentTripView} iconSize={34} />
         </View>
       )}
 
+      {props?.mapConfig === MapConfigurations.PinDrop && (
+        <>
+          <MarkerDraggable />
+          <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+            <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
+            <View onTouchStart={() => { isMapReady.current = false; }}>
+              <ReturnToSiteSubmitterButton />
+            </View>
+          </View>
+        </>
+      )}
+
       {props?.mapConfig === MapConfigurations.TripView && (
-        <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
+        <View style={{ position: "absolute", bottom: "5%", width: "100%", alignItems: "center" }}>
+          <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
           <ReturnToShopButton />
         </View>
       )}
 
       {props?.mapConfig === MapConfigurations.TripBuild && (
-        <View style={{ position: "absolute", bottom: "12%", left: "5%" }}>
-          <Explainer popoverContent={popoverContentTripBuild} iconSize={34} />
-        </View>
-      )}
-
-      {props?.mapConfig === MapConfigurations.TripBuild && (
-        <View style={{ position: "absolute", bottom: "5%", alignSelf: "center" }}>
-          <S.TargetWrapperAlt>
-            <ButtonIcon
-              icon="target"
-              size={36}
-              onPress={() => getCurrentLocation()}
-              style={{ pointerEvents: "auto" }}
-            />
-          </S.TargetWrapperAlt>
+        <View style={{ position: "absolute", bottom: "5%", width: "100%", alignItems: "center" }}>
+          <S.TargetWrapperAlt><ButtonIcon icon="target" size={36} onPress={getCurrentLocation} /></S.TargetWrapperAlt>
           <ReturnToCreateTripButton />
         </View>
       )}
 
     </View>
   );
-}
+});
+
+export default GoogleMapView;

@@ -10,13 +10,15 @@ import {
 
 import Icon from "../../../../icons/Icon";
 import { colors } from "../../../styles";
-import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
 import { useAppNavigation } from "../../../mapPage/types";
+import { Image, IMAGE_SIZE } from "../../../../entities/image";
+import getImagePublicUrl from "../../../helpers/getImagePublicUrl";
+import FadeInImage from "../../../reusables/fadeinImage";
 
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: { photofile: string; id: number | null }[] | null;
+  items: Image[];
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;
@@ -36,11 +38,11 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
     .shouldActivateOnStart(true)
     .shouldCancelWhenOutside(true);
 
-  const renderPhotoItem = (item: { photofile: string }, index: number) => (
+  const renderPhotoItem = (item: string, index: number) => (
     <View style={{ position: "relative" }} pointerEvents="box-none">
       <S.Item style={{ width: itemSize, height: itemSize }}>
-        <ImageCasherDynamicLocal
-          photoFile={item.photofile}
+        <FadeInImage
+          photoFile={item}
           style={{ height: "100%", width: "100%", resizeMode: "cover" }}
         />
       </S.Item>
@@ -105,15 +107,15 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           )}
 
           {items?.map((item, index) => {
-            const itemKey = `${item.photofile}-${index}`;
+            const itemKey = `${item}-${index}`;
 
-            if (item.id) {
+            if (item) {
               return (
                 <Pressable
                   key={itemKey}
                   onPress={() =>
                     navigation.navigate("PinchAndZoomPhoto", {
-                      photoFile: item.photofile,
+                      photoFile: getImagePublicUrl(item, IMAGE_SIZE.XL),
                     })}
                   hitSlop={10}
                   style={({ pressed }) => [
@@ -123,14 +125,14 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
                     },
                   ]}
                 >
-                  {renderPhotoItem(item, index)}
+                  {renderPhotoItem(item.file_name ? (getImagePublicUrl(item, IMAGE_SIZE.SM), index) : item.photofile, index)}
                 </Pressable>
               );
             }
 
             return (
               <View key={itemKey}>
-                {renderPhotoItem(item, index)}
+                {renderPhotoItem(item.file_name ? (getImagePublicUrl(item, IMAGE_SIZE.SM), index) : item.photofile, index)}
               </View>
             );
           })}

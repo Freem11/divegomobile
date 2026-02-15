@@ -35,15 +35,15 @@ export const insertphoto = async (values, monthID) => {
 };
 
 export const getAnimalNamesThatFit = async (value: string) => {
-  if (value === '') {
+  if (value === "") {
     return [];
   }
 
-  const { data, error } = await supabase.rpc('get_unique_photo')
-    .ilike('label', '%' + value + '%');
+  const { data, error } = await supabase.rpc("get_unique_photo")
+    .ilike("label", "%" + value + "%");
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 
@@ -53,12 +53,11 @@ export const getAnimalNamesThatFit = async (value: string) => {
 };
 
 export const getSeaCreatures = async (value: string, limit: number) => {
-  if (value === '') {
+  if (value === "") {
     return [];
   }
 
-
-  const { data, error } = await supabase.rpc('get_unique_sea_life_with_limit', {
+  const { data, error } = await supabase.rpc("get_unique_sea_life_with_limit", {
     search_label: value,
     limit_count: limit,
   });
@@ -74,7 +73,7 @@ export const getSeaCreatures = async (value: string, limit: number) => {
 export const getCoordsForSeaLife = async (seaLifeName: string) => {
   const { data, error } = await supabase
     .from("photos")
-    .select('label, latitude, longitude')
+    .select("label, latitude, longitude")
     .eq("label", seaLifeName);
 
   if (error) {
@@ -130,7 +129,7 @@ export const getPhotosforMapArea = async (value) => {
     .from("photos")
     .select()
     .ilike("label", "%" + value.animal + "%")
-    .ilike("UserID", "%" + '' + "%")
+    .ilike("UserID", "%" + "" + "%")
     .gte("latitude", value.minLat)
     .gte("longitude", value.minLng)
     .lte("latitude", value.maxLat)
@@ -166,7 +165,7 @@ export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
     connecteduserid: values.userId,
   };
 
-  if (typeof values.limit_count === 'number') {
+  if (typeof values.limit_count === "number") {
     params.limit_count = values.limit_count;
   }
 
@@ -183,9 +182,7 @@ export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
   return data || [];
 };
 
-
-
-// export const getDiveSitePhotos = async (lat: number, lng: number, userId: string, pagination?: Pagination) => {  
+// export const getDiveSitePhotos = async (lat: number, lng: number, userId: string, pagination?: Pagination) => {
 //   const builder = supabase.rpc("get_photos_for_divesite_with_social_info", {
 //     lat,
 //     lng,
@@ -208,27 +205,24 @@ export const getPhotosByDiveSiteWithExtra = async (values: GetPhotosParams) => {
 //   }
 // };
 
-
-export const getDiveSitePhotos = async (lat: number, lng: number, userId: string) => {  
+export const getDiveSitePhotos = async (lat: number, lng: number, userId: string) => {
   const { data, error } = await supabase.rpc("get_photos_for_divesite_with_social_info_test", {
-    lat,
-    lng,
+    lat: lat,
+    lng: lng,
     connecteduserid: userId
   });
 
-    if (error) {
-    console.error("couldn't do it 98,", error);
+  if (error) {
+    console.error("RPC Error 98:", error);
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  return data || [];
 };
 
 export const getProfilePhotosByUser = async (userId: string, connectedUserId: string, pagination?: Pagination) => {
-  console.log(userId, connectedUserId, pagination)
-  
+  console.log(userId, connectedUserId, pagination);
+
   const builder = supabase.rpc("get_photos_by_userid_with_divesite", {
     userid: userId,
     connecteduserid: connectedUserId
@@ -240,7 +234,7 @@ export const getProfilePhotosByUser = async (userId: string, connectedUserId: st
 
   const { data, error } = await builder;
 
-    if (error) {
+  if (error) {
     console.error("couldn't do it 98,", error);
     return [];
   }
@@ -249,8 +243,6 @@ export const getProfilePhotosByUser = async (userId: string, connectedUserId: st
     return data;
   }
 };
-
-
 
 export const getPhotosByUserWithExtra = async (userId: string, connectedUserId: string) => {
   const {
@@ -313,7 +305,7 @@ export const getPhotosWithUserEmpty = async (values) => {
 };
 
 export const getHistoData = async (bubble: GPSBubble, animal: string[]) => {
-  const { data, error } = await supabase.rpc('histogram3', {
+  const { data, error } = await supabase.rpc("histogram3", {
     animals: animal,
     max_lat: bubble.maxLat,
     min_lat: bubble.minLat,
@@ -322,7 +314,7 @@ export const getHistoData = async (bubble: GPSBubble, animal: string[]) => {
   });
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 
@@ -358,7 +350,7 @@ export const getMostRecentPhoto = async () => {
 };
 
 export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Photo>, pagination?: Pagination) => {
-  const builder = supabase.rpc('get_unique_photo_in_bounds', {
+  const builder = supabase.rpc("get_unique_photo_in_bounds", {
     max_lat: bubble.maxLat,
     min_lat: bubble.minLat,
     max_lng: bubble.maxLng,
@@ -366,10 +358,10 @@ export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Pho
   });
 
   if (filter?.label) {
-    builder.ilike('label', '%' + filter.label + '%');
+    builder.ilike("label", "%" + filter.label + "%");
   }
 
-  builder.order('times_seen', { ascending: false });
+  builder.order("times_seen", { ascending: false });
 
   if (pagination?.page) {
     builder.range(pagination.from(), pagination.to());
@@ -377,7 +369,7 @@ export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Pho
 
   const { data, error } = await builder;
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 
@@ -387,7 +379,6 @@ export const getAnimalsInBubble = async (bubble: GPSBubble, filter?: Partial<Pho
   return [];
 };
 
-
 export const getDiveSiteSpeciesCount = async (values) => {
   const { data, error } = await supabase.rpc("get_divesite_species", {
     lat: values.lat,
@@ -395,7 +386,7 @@ export const getDiveSiteSpeciesCount = async (values) => {
   });
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 
@@ -412,7 +403,7 @@ export const getDiveSiteSightingCount = async (values) => {
   });
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 
@@ -422,23 +413,39 @@ export const getDiveSiteSightingCount = async (values) => {
   return [];
 };
 
-export const getDiveSiteRecentNinePhotos = async (values) => {
+export const getDiveSiteRecentNinePhotos = async (values): Promise<Animal[]> => {
   const { data, error } = await supabase.rpc("get_divesite_recent_nine", {
     lat: values.lat,
     lng: values.lng,
   });
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 
+  const result = [] as Animal[];
   if (data) {
-    return data;
-  }
-  return [];
-};
+    data.forEach((item: any) => {
+      const animal: Animal = {
+        label: item.label,
+        times_seen: item.times_seen,
+        image: {
+          file_name: item.photofile,
+          public_domain: item.public_domain,
+          sm: item.sm,
+          md: item.md,
+          lg: item.lg,
+          xl: item.xl,
+        },
+      };
 
+      result.push(animal);
+    });
+
+  }
+  return result;
+};
 
 export const getMapSightingCount = async (values) => {
   const { data, error } = await supabase.rpc("get_sightings_on_map", {
@@ -449,7 +456,7 @@ export const getMapSightingCount = async (values) => {
   });
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 
@@ -468,7 +475,7 @@ export const getMapSpeciesCount = async (values) => {
   });
 
   if (error) {
-    console.log('couldn\'t do it,', error);
+    console.log("couldn't do it,", error);
     return [];
   }
 

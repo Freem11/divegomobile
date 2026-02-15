@@ -12,13 +12,14 @@ import ReviewCard from "../../reusables/reviewCard";
 import { Review } from "../../../entities/diveSiteReview";
 import Button from "../../reusables/button";
 import { MetricItem } from "../../../entities/metricItem";
+import { Animal } from "../../../entities/photos";
 
 import * as S from "./styles";
 import { renderStatLabel } from "./statsLabels";
 
 type DiveSiteProps = {
   selectedDiveSite: DiveSiteWithUserName
-  diveSitePics: DiveSiteWithUserName[]
+  diveSitePics: Animal[]
   speciesCount: number;
   sightingsCount: number;
   tripCount: number;
@@ -127,7 +128,7 @@ export default function DiveSiteScreenView({
       <SealifePreview
         speciesCount={speciesCount}
         sightingsCount={sightingsCount}
-        diveSitePics={diveSitePics}
+        diveSitePics={diveSitePics?.map(photo => photo.image)}
         onViewMore={openAllPhotosPage}
         onAddSighting={openPicUploader}
         selectedProfile={null}

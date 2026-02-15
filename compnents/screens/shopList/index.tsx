@@ -13,7 +13,6 @@ export default function ShopListPage() {
   const [listOfShops, setListOfShops] = useState<DiveShop[]>([]);
 
   useEffect(() => {
-    console.log(userProfile);
     if (userProfile) {
       getShops(userProfile.UserID);
     }
