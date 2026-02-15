@@ -125,14 +125,14 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
                     },
                   ]}
                 >
-                  {renderPhotoItem(getImagePublicUrl(item, IMAGE_SIZE.SM), index)}
+                  {renderPhotoItem(item.file_name ? (getImagePublicUrl(item, IMAGE_SIZE.SM), index) : item.photofile, index)}
                 </Pressable>
               );
             }
 
             return (
               <View key={itemKey}>
-                {renderPhotoItem(getImagePublicUrl(item, IMAGE_SIZE.SM), index)}
+                {renderPhotoItem(item.file_name ? (getImagePublicUrl(item, IMAGE_SIZE.SM), index) : item.photofile, index)}
               </View>
             );
           })}
