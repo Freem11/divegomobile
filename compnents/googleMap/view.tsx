@@ -270,18 +270,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
     return [...mapElements, ...goldElements];
   }, [clusters, sitesArray, props.diveSites, handleClusterPress]);
 
-  // Single array of MapView children — no false/null/undefined (prevents nil insert on 2nd open)
-  const mapChildren = useMemo(() => {
-    const list: React.ReactElement[] = [];
-    if (showHeatmap && props.heatPoints && props.heatPoints.length > 0) {
-      list.push(<MarkerHeatPoint key="heatmap" heatPoints={props.heatPoints} />);
-    }
-    React.Children.forEach(renderedMarkers, (child) => {
-      if (child != null && React.isValidElement(child)) list.push(child as React.ReactElement);
-    });
-    return list;
-  }, [showHeatmap, props.heatPoints, renderedMarkers]);
-
   if (!initialRegion) return <View style={styles.container} />;
 
   return (
@@ -315,7 +303,10 @@ const GoogleMapView = memo((props: MapViewProps) => {
         }}
         toolbarEnabled={false}
       >
-        {mapChildren}
+        {props?.heatPoints && props.heatPoints.length > 0 && [0, 2].includes(props.mapConfig) && (
+          <MarkerHeatPoint heatPoints={props.heatPoints} />
+        )}
+        {renderedMarkers}
       </MapView>
 
       {/* --- UI OVERLAYS RESTORED --- */}

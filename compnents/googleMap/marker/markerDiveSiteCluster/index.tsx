@@ -18,22 +18,19 @@ const MarkerDiveSiteCluster = memo((props: ClusterProps) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Never return null — AIRGoogleMap insertReactSubview throws NSInvalidArgumentException for nil
-  const coord = props.coordinate && typeof props.coordinate.latitude === "number" && typeof props.coordinate.longitude === "number"
-    ? props.coordinate
-    : { latitude: 0, longitude: 0 };
+  if (!props.coordinate || !props.coordinate.latitude) {
+    return null;
+  }
 
   return (
     <Marker
-      coordinate={coord}
+      coordinate={props.coordinate}
       image={ANCHOR_BLUE}
       tracksViewChanges={tracksView}
       onPress={props.onPress}
       stopPropagation={true}
       anchor={{ x: 0.5, y: 0.5 }}
       zIndex={5}
-      opacity={coord === props.coordinate ? 1 : 0}
-      pointerEvents={coord === props.coordinate ? "auto" : "none"}
     />
   );
 });
