@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback, useRef, memo, useContext } from "react";
-import { Dimensions, StyleSheet, View, InteractionManager } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster from "use-supercluster";
@@ -54,9 +54,9 @@ const GoogleMapView = memo((props: MapViewProps) => {
 
   const [bounds, setBounds] = useState<[number, number, number, number] | undefined>(undefined);
   const [zoom, setZoom] = useState(props.zoomLevel);
-
-  const lastSyncZoom = useRef<number>(props.zoomLevel);
-  const lastSyncBounds = useRef<string>("");
+  const zoomRef = useRef(props.zoomLevel);
+  const lastRegionUpdate = useRef(0);
+  const REGION_UPDATE_THROTTLE_MS = 80;
 
   const showHeatmap = useMemo(() => {
     if (!props.heatPoints?.length || ![0, 2].includes(props.mapConfig)) return false;
@@ -77,16 +77,19 @@ const GoogleMapView = memo((props: MapViewProps) => {
     }
   });
 
-  const getBoundsFromRegion = (region: Region): [number, number, number, number] => {
+  /** Bounds as [west, south, east, north]. Optional padding expands so edge markers don't pop off. */
+  const getBoundsFromRegion = useCallback((region: Region, paddingFactor = 1.2): [number, number, number, number] => {
     const latD = Math.abs(region.latitudeDelta);
     const lonD = Math.abs(region.longitudeDelta);
+    const halfLat = (latD / 2) * paddingFactor;
+    const halfLon = (lonD / 2) * paddingFactor;
     return [
-      region.longitude - lonD / 2,
-      region.latitude - latD / 2,
-      region.longitude + lonD / 2,
-      region.latitude + latD / 2,
+      region.longitude - halfLon,
+      region.latitude - halfLat,
+      region.longitude + halfLon,
+      region.latitude + halfLat,
     ];
-  };
+  }, []);
 
   const getZoomFromRegion = (region: Region): number => {
     return Math.round(Math.log2(360 / region.longitudeDelta));
@@ -138,21 +141,27 @@ const GoogleMapView = memo((props: MapViewProps) => {
     }
   }, []);
 
-  const updateMapPositions = useCallback((region: Region) => {
+  useEffect(() => {
+    if (initialRegion && bounds === undefined) {
+      const b = getBoundsFromRegion(initialRegion);
+      const z = getZoomFromRegion(initialRegion);
+      zoomRef.current = z;
+      setBounds(b);
+      setZoom(z);
+    }
+  }, [initialRegion, bounds, getBoundsFromRegion]);
+
+  const updateMapPositions = useCallback((region: Region, force = false) => {
+    const now = Date.now();
+    if (!force && now - lastRegionUpdate.current < REGION_UPDATE_THROTTLE_MS) return;
+    lastRegionUpdate.current = now;
+
     const nextZoom = getZoomFromRegion(region);
     const rawBounds = getBoundsFromRegion(region);
-    const boundsFingerprint = rawBounds.map(b => b.toFixed(4)).join(",");
-
-    if (nextZoom !== lastSyncZoom.current || boundsFingerprint !== lastSyncBounds.current) {
-      lastSyncZoom.current = nextZoom;
-      lastSyncBounds.current = boundsFingerprint;
-
-      InteractionManager.runAfterInteractions(() => {
-        setZoom(nextZoom);
-        setBounds(rawBounds);
-      });
-    }
-  }, []);
+    zoomRef.current = nextZoom;
+    setZoom(nextZoom);
+    setBounds(rawBounds);
+  }, [getBoundsFromRegion]);
 
   const getCurrentLocation = async () => {
     if (!isMapReady.current) return;
@@ -174,7 +183,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
     const activeMap = localMapRef.current || mapRef;
     if (!activeMap || isAnimating.current) return;
 
-    const currentZoom = lastSyncZoom.current;
+    const currentZoom = zoomRef.current;
     const nextZoom = Math.min(currentZoom + 3, 16);
 
     isAnimating.current = true;
@@ -281,12 +290,15 @@ const GoogleMapView = memo((props: MapViewProps) => {
         onMapReady={() => {
           isMapReady.current = true;
           props.handleOnMapReady();
-          updateMapPositions(initialRegion);
+          updateMapPositions(initialRegion, true);
+        }}
+        onRegionChange={(region) => {
+          if (!isAnimating.current) updateMapPositions(region);
         }}
         onRegionChangeComplete={(region) => {
           if (!isAnimating.current) {
             props.handleBoundsChange();
-            updateMapPositions(region);
+            updateMapPositions(region, true);
           }
         }}
         toolbarEnabled={false}
