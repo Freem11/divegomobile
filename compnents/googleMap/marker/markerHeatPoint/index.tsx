@@ -14,15 +14,16 @@ const MarkerHeatPoint = (props: MarkerHeatPointProps) => {
     return props.heatPoints.map(point => heatPointToWeightedLocation(point));
   }, [props.heatPoints]);
 
-  if (weightedPoints.length === 0) {
-    return null;
-  }
+  // Never return null — AIRGoogleMap insertReactSubview throws for nil
+  const points = weightedPoints.length > 0
+    ? weightedPoints
+    : [{ latitude: 0, longitude: 0, weight: 0 }];
 
   return (
     <Heatmap
-      points={weightedPoints}
-      radius={40}
-      opacity={1}
+      points={points}
+      radius={weightedPoints.length > 0 ? 40 : 0}
+      opacity={weightedPoints.length > 0 ? 1 : 0}
     />
   );
 };
