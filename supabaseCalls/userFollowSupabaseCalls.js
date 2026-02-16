@@ -9,7 +9,7 @@ export const insertUserFollow = async(userId, followUserId) => {
         user: userId,
         follows: followUserId,
       },
-    ]);
+    ]).select();
 
   if (error) {
     console.log("couldn't do it 40,", error);

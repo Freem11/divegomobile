@@ -26,6 +26,10 @@ export const Header = styled.Text`
   text-align: center;
 `;
 
+export const ChipContainer = styled.View`
+  align-self: center;
+`;
+
 export const Content = styled.Text`
   font-size: ${moderateScale(fontSizes.StandardText)}px;
   font-family: ${activeFonts.Thin};

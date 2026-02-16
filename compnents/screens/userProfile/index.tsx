@@ -14,10 +14,12 @@ import { useAppNavigation } from "../../mapPage/types";
 import UserProfileScreenView from "./userProfile";
 
 type UserProfileScreenProps = {
-  selectedProfile: any
+  selectedProfile: any;
+  followInfo: () => { label: string; action: () => void } | null
+  isMyProfile: boolean
 };
 
-export default function UserProfileScreen({ selectedProfile }: UserProfileScreenProps) {
+export default function UserProfileScreen({ selectedProfile, followInfo, isMyProfile }: UserProfileScreenProps) {
   const [profilePhotos, setProfilePhotos] = useState(null);
   const [speciesCount, setSpeciesCount] = useState(0);
   const [sightingsCount, setSightingsCount] = useState(0);
@@ -71,6 +73,8 @@ export default function UserProfileScreen({ selectedProfile }: UserProfileScreen
       openAllPhotosPage={openAllPhotosPage}
       handleDiveSiteMove={handleDiveSiteMove}
       reviews={reviews}
+      followInfo={followInfo}
+      isMyProfile={isMyProfile}
     />
   );
 }

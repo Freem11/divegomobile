@@ -9,7 +9,6 @@ type FadeInImageProps = {
 };
 
 export default function FadeInImage({ photoFile, style }: FadeInImageProps) {
-
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const handleImageLoad = () => {

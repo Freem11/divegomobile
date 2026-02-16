@@ -84,6 +84,14 @@ export function determineChipIcon(conditionText: string) {
     return "fresh-water";
   }
 
+  if (conditionText.includes("Follow")) {
+    return "plus";
+  }
+
+  if (conditionText.includes("Unfollow")) {
+    return "close";
+  }
+
 }
 
 export function determineViz(vizVal: number) {
