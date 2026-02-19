@@ -164,7 +164,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
   }, [getBoundsFromRegion]);
 
   const getCurrentLocation = async () => {
-    if (!isMapReady.current) return;
     try {
       const { coords } = await getCurrentCoordinates();
       const activeMap = localMapRef.current || mapRef;

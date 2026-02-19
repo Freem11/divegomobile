@@ -95,7 +95,7 @@ export default function UserProfileParallax(props: UserProfileProps) {
     const permissionGiven = await registerForPushNotificationsAsync(userProfile.UserID, "yes");
     if (!permissionGiven) return;
     const newRecord = await insertUserFollow(userProfile.UserID, localProfile.user_id);
-    setIsfFollowing(newRecord.id);
+    setIsfFollowing(newRecord[0].id);
   };
 
   const removeFollow = async () => {
@@ -126,17 +126,19 @@ export default function UserProfileParallax(props: UserProfileProps) {
     }
   };
 
+  const followInfo = () => {
+    if (isFollowing) {
+      return { label: `Unfollow ${localProfile?.UserName || "User"}`, action: removeFollow };
+    } else {
+      return { label: `Follow ${localProfile?.UserName || "User"}`, action: addFollow };
+    }
+  };
+
   const popoverContent = () => (
     <>
       {isMyProfile && <IconWithLabel label="Update Profile" iconName="camera-flip-outline" buttonAction={openEditsPage} />}
       {isMyProfile && <IconWithLabel label="Settings" iconName="settings" buttonAction={openSettingsScreen} />}
       <IconWithLabel label="Share Profile" iconName="share" buttonAction={handleShare} />
-      {!isMyProfile && !isFollowing && (
-        <IconWithLabel label={`Follow ${localProfile?.UserName || "User"}`} iconName="plus" buttonAction={addFollow} />
-      )}
-      {!isMyProfile && isFollowing && (
-        <IconWithLabel label={`Unfollow ${localProfile?.UserName || "User"}`} iconName="minus" buttonAction={removeFollow} />
-      )}
     </>
   );
 
@@ -159,7 +161,12 @@ export default function UserProfileParallax(props: UserProfileProps) {
       popoverContent={popoverContent}
       isMyShop={isMyProfile}
     >
-      <UserProfileScreen key={`profile-${effectiveID}`} selectedProfile={localProfile} />
+      <UserProfileScreen
+        key={`profile-${effectiveID}`}
+        selectedProfile={localProfile}
+        followInfo={followInfo}
+        isMyProfile={isMyProfile}
+      />
     </ParallaxDrawer>
   );
 }

@@ -8,6 +8,8 @@ import Label from "../../reusables/label-new";
 import EmptyState from "../../reusables/emptyState-new";
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import { Animal } from "../../../entities/photos";
+import Chip from "../../reusables/condidtionsCard/components/Chip";
+import { colors } from "../../styles";
 
 import * as S from "./styles";
 
@@ -20,6 +22,8 @@ type UserProfileProps = {
   openAllPhotosPage: () => void;
   handleDiveSiteMove: (name: string, id: string | number) => void;
   reviews: Review[];
+  followInfo: () => { label: string; action: () => void } | null
+  isMyProfile: boolean
 };
 
 export default function UserProfileScreenView({
@@ -30,7 +34,9 @@ export default function UserProfileScreenView({
   reviewCount,
   openAllPhotosPage,
   handleDiveSiteMove,
-  reviews
+  reviews,
+  followInfo,
+  isMyProfile
 }: UserProfileProps) {
   const [profileVals, setProfileVals] = useState(null);
   const { userProfile } = useUserProfile();
@@ -48,6 +54,11 @@ export default function UserProfileScreenView({
     <S.ContentContainer>
       <S.InputGroupContainer>
         <S.Header>{profileVals?.userName}</S.Header>
+        {!isMyProfile && (
+          <S.ChipContainer>
+            <Chip value={followInfo().label} onPress={followInfo().action} bgColor={colors.lighterBlue} textColor={colors.themeBlack} />
+          </S.ChipContainer>
+        )}
         <S.Content>{profileVals?.bio}</S.Content>
       </S.InputGroupContainer>
 

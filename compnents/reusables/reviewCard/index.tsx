@@ -4,7 +4,6 @@ import { moderateScale } from "react-native-size-matters";
 
 import readableDate from "../../helpers/readableDate";
 import { Review, ReviewCondition } from "../../../entities/diveSiteReview";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import { useAppNavigation } from "../../mapPage/types";
 import { IMAGE_SIZE, Image } from "../../../entities/image";
 import getImagePublicUrl from "../../helpers/getImagePublicUrl";
@@ -22,7 +21,7 @@ type ReviewCardViewProps = {
   photo: Image;
   review: Review;
   id: number | string;
-  currentUserId: string;
+  currentUserId: number;
   handleNavigate: (name: string, id: string | number) => void;
   onEdit: (review: Review) => void;
   onDelete: (reviewId: number) => void;

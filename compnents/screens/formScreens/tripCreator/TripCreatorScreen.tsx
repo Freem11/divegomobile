@@ -17,7 +17,7 @@ import { SitesArrayContext } from "../../../contexts/sitesArrayContext";
 import { DiveSiteWithUserName } from "../../../../entities/diveSite";
 import { useMapStore } from "../../../googleMap/useMapStore";
 import { MapConfigurations, ScreenReturn } from "../../../googleMap/types";
-import { computeRegionFromCoordinates } from "../../../googleMap/regionCalculator";
+import { calculateRegionFromBoundaries, computeRegionFromCoordinates } from "../../../googleMap/regionCalculator";
 
 import TripCreatorPageView from "./tripCreator";
 import { Form } from "./form";
@@ -29,7 +29,7 @@ type TripCreatorScreenProps = {
 export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const { id, shopId } = route.params;
   const navigation = useNavigation();
-
+  const mapRef = useMapStore((state) => state.mapRef);
   // Context & Store
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { sitesArray, setSitesArray } = useContext(SitesArrayContext);
@@ -130,11 +130,15 @@ export default function TripCreatorScreen({ route }: TripCreatorScreenProps) {
   const handleMapFlip = async () => {
     const currentValues = watch();
     setInitConfig(MapConfigurations.TripBuild);
-    // Use site coordinates only — avoid bridge call to mapRef (stale on 2nd try and can cause NSInvalidArgumentException)
-    const coords = (tripDiveSites || [])
-      .filter((s) => sitesArray.includes(s.id))
-      .map((s) => ({ lat: s.lat, lng: s.lng }));
-    const region = computeRegionFromCoordinates(coords);
+    let region;
+    if (sitesArray.length === 0) {
+      region = await calculateRegionFromBoundaries(mapRef);
+    } else {
+      const coords = (tripDiveSites || [])
+        .filter((s) => sitesArray.includes(s.id))
+        .map((s) => ({ lat: s.lat, lng: s.lng }));
+      region = computeRegionFromCoordinates(coords);
+    }
     if (region) setMapRegion(region);
 
     setFormValues({ ...currentValues, SiteList: sitesArray });
