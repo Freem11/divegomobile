@@ -1,3 +1,6 @@
+import React from "react";
+
+import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
 
 export function determineIcon(first: string, rest: string[]) {
@@ -26,70 +29,70 @@ export function determineIcon(first: string, rest: string[]) {
   }
 }
 
-export function determineChipIcon(conditionText: string) {
+export function determineChipIcon(conditionText: string, textColor: string) {
 
   if (conditionText === "Boat Dive") {
-    return "dive-boat";
-  }
+    return <Icon name="dive-boat" color={textColor} />;
+  };
 
   if (conditionText === "Shore Dive") {
-    return "island";
+    return <Icon name="island" color={textColor} />;
   }
 
   if (conditionText === "Wreck Dive") {
-    return "anchor-alt";
+    return <Icon name="anchor-alt" color={textColor} />;
   }
 
   if (conditionText === "Altitude") {
-    return "mountains";
+    return <Icon name="mountains" color={textColor} />;
   }
 
   if (conditionText === "Cave Dive") {
-    return "vinyl-record";
+    return <Icon name="vinyl-record" color={textColor} />;
   }
 
   if (conditionText === "Surge") {
-    return "waves";
+    return <Icon name="waves" color={textColor} />;
   }
 
   if (conditionText === "Surface Traffic") {
-    return "traffic-light";
+    return <Icon name="traffic-light" color={textColor} />;
   }
 
   if (conditionText === "No Reference Points") {
-    return "GPS-splash";
+    return <Icon name="GPS-splash" color={textColor} />;
   }
 
   if (conditionText === "Bottom Depth > AOW Limits") {
-    return "warning-diamond";
+    return <Icon name="warning-diamond" color={textColor} />;
   }
 
   if (conditionText === "Kelp") {
-    return "plant";
+    return <Icon name="plant" color={textColor} />;
   }
 
   if (conditionText === "Pollution") {
-    return "beer-bottle";
+    return <Icon name="beer-bottle" color={textColor} />;
   }
 
   if (conditionText === "Night Dive") {
-    return "moon-stars";
+    return <Icon name="moon-stars" color={textColor} />;
   }
 
   if (conditionText === "Salt Water") {
-    return "salt-water";
+    return <Icon name="salt-water" color={textColor} />;
   }
 
   if (conditionText === "Fresh Water") {
-    return "fresh-water";
+    return <Icon name="fresh-water" color={textColor} />;
   }
 
   if (conditionText.includes("Follow")) {
-    return "plus";
+    return <Icon name="plus" color={textColor} />;
   }
 
   if (conditionText.includes("Unfollow")) {
-    return "close";
+    return <Icon name="close" color={textColor} />;
   }
 
 }

@@ -23,7 +23,7 @@ type UserProfileProps = {
   handleDiveSiteMove: (name: string, id: string | number) => void;
   reviews: Review[];
   followInfo: () => { label: string; action: () => void } | null
-  isMyProfile; boolean
+  isMyProfile: boolean
 };
 
 export default function UserProfileScreenView({

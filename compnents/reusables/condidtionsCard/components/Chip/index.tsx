@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 
-import Icon from "../../../../../icons/Icon";
 import { determineChipIcon } from "../../determineIcon";
 
 import * as S from "./styles";
@@ -17,13 +16,13 @@ export default function Chip({ value, bgColor, textColor, onPress }: Chip) {
 
   if (!value) return;
 
-  const icon = determineChipIcon(value);
+  const icon = determineChipIcon(value, textColor);
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <S.HeaderCard bgColor={bgColor}>
         <S.IconBox>
-          <Icon name={icon} color={textColor} />
+          {icon}
         </S.IconBox>
         <S.TextLayout>
           <S.Title textColor={textColor}>{value}</S.Title>
