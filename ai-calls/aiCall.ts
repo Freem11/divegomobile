@@ -1,8 +1,10 @@
 import Constants from "expo-constants";
 
-const BASE_URL = Constants.expoConfig?.hostUri
-    ? `http://${Constants.expoConfig.hostUri.split(":").shift()}:8081`
-    : "";
+const BASE_URL = __DEV__
+    ? (Constants.expoConfig?.hostUri
+        ? `http://${Constants.expoConfig.hostUri.split(":").shift()}:8081`
+        : "http://localhost:8081")
+    : "https://divegomobile.expo.app";
 
 export const fetchAiBlurb = async (
     name: string,
