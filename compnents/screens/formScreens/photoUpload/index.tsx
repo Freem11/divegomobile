@@ -18,7 +18,7 @@ import FadeInImage from "../../../reusables/fadeinImage";
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: Image[];
+  items: Image[] | { photoFile: string }[];
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;

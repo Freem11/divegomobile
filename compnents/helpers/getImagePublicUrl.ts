@@ -27,5 +27,12 @@ export default function getImagePublicUrl(image: Image | null, size: IMAGE_SIZE,
       return cloudflareBucketUrl + `${fileName}`;
     }
   }
+
+  if (image.photoPath) {
+    const fileName = image.photoPath.split("/").pop();
+    if (fileName) {
+      return cloudflareBucketUrl + `${fileName}`;
+    }
+  }
   return fallback;
 }
