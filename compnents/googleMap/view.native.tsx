@@ -302,14 +302,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
         <SearchTool />
       )}
 
-      {props?.mapConfig === MapConfigurations.Default && !props.species && (
-        <View style={{ position: "absolute", bottom: "5%", right: "5%" }}>
-          <S.TargetWrapperAlt>
-            <ButtonIcon icon="target" size={36} onPress={getCurrentLocation} />
-          </S.TargetWrapperAlt>
-        </View>
-      )}
-
       {props?.mapConfig === MapConfigurations.PinDrop && (
         <>
           <MarkerDraggable />
