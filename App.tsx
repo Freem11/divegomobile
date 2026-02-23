@@ -137,6 +137,8 @@ export default function App() {
     );
   }
 
+  console.log("App is ready, rendering main content.", userProfile);
+
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <AppContextProvider>
