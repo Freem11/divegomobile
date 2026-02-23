@@ -47,8 +47,6 @@ export default function MapPage() {
     getProfile();
   }, []);
 
-  console.log("showOnboarding state:", showOnboarding);
-
   return (
     <MainNavigator
       showOnboarding={showOnboarding}
