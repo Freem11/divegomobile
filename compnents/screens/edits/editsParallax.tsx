@@ -44,7 +44,7 @@ export default function EditScreenParallax({ id, dataType }: EditsScreenProps) {
       id: id,
       name: info?.orgName || info?.UserName || "",
       bio: info?.diveShopBio || info?.profileBio || "",
-      uri: info?.diveShopProfilePhoto.file_name || info?.profilePhoto.file_name || ""
+      uri: info?.diveShopProfilePhoto?.file_name || info?.profilePhoto?.file_name || ""
     }
   });
 

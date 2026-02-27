@@ -87,7 +87,11 @@ export default function DiveShopNavigator(props: DiveShopNavigatorProps) {
         })}
       />
 
-      <Stack.Screen name="GoogleMap" component={GoogleMap} />
+      <Stack.Screen
+        name="GoogleMap"
+        component={GoogleMap}
+        options={{ unmountOnBlur: true }}
+      />
       {/* Map Navigator - view trip & limited dive site*/}
     </Stack.Navigator>
   );

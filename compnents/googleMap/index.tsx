@@ -53,6 +53,12 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (!species) mapAction.clearMapRef();
+    };
+  }, [species, mapAction]);
+
   /**
    * HEATPOINT RESTORATION
    */
@@ -134,7 +140,7 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
   };
 
   /**
-   * WATCHER
+   * WATCHER: initial camera move once. In TripBuild we must not pan/zoom when user selects sites.
    */
   useEffect(() => {
     if (!localMapRef || isInitialMoveDone.current) return;
@@ -155,8 +161,9 @@ export default function GoogleMap({ species, onBoundsChangeLocal }: GoogleMapPro
           case MapConfigurations.TripBuild:
             if (fullTripSites && fullTripSites.length > 0) {
               moveToTrip(fullTripSites);
-              isInitialMoveDone.current = true;
             }
+            // Mark done so we never pan/zoom again when fullTripSites updates (e.g. user selects first site)
+            isInitialMoveDone.current = true;
             break;
           default:
             if (initConfig !== undefined) isInitialMoveDone.current = true;

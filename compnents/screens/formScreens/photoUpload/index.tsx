@@ -18,7 +18,7 @@ import FadeInImage from "../../../reusables/fadeinImage";
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: Image[];
+  items: Image[] | { photoFile: string }[];
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;
@@ -108,7 +108,6 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
 
           {items?.map((item, index) => {
             const itemKey = `${item}-${index}`;
-
             if (item) {
               return (
                 <Pressable
@@ -125,14 +124,16 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
                     },
                   ]}
                 >
-                  {renderPhotoItem(item.file_name ? (getImagePublicUrl(item, IMAGE_SIZE.SM), index) : item.photofile, index)}
+                  {item.photofile ?
+                    renderPhotoItem(item.photofile, index) : renderPhotoItem(getImagePublicUrl(item, IMAGE_SIZE.SM), index)}
                 </Pressable>
               );
             }
 
             return (
               <View key={itemKey}>
-                {renderPhotoItem(item.file_name ? (getImagePublicUrl(item, IMAGE_SIZE.SM), index) : item.photofile, index)}
+                {item.photofile ?
+                  renderPhotoItem(item.photofile, index) : renderPhotoItem(getImagePublicUrl(item, IMAGE_SIZE.SM), index)}
               </View>
             );
           })}
