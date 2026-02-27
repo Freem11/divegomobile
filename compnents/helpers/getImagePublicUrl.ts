@@ -34,5 +34,13 @@ export default function getImagePublicUrl(image: Image | null, size: IMAGE_SIZE,
       return cloudflareBucketUrl + `${fileName}`;
     }
   }
+
+  if (image.photofile) {
+    const fileName = image.photofile.split("/").pop();
+    if (fileName) {
+      return cloudflareBucketUrl + `${fileName}`;
+    }
+  }
+
   return fallback;
 }

@@ -36,7 +36,7 @@ export const getSpeciesPhotos = async (species: string): Promise<Animal[]> => {
                 label: item.label,
                 times_seen: item.times_seen,
                 image: {
-                    file_name: item.photofile,
+                    file_name: item.photoFile,
                     public_domain: item.public_domain,
                     sm: item.sm,
                     md: item.md,
