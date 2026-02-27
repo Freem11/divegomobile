@@ -27,7 +27,7 @@ export type DiveSiteRoutes = {
   DiveSiteTrips: undefined;
   GoogleMap: undefined;
   SiteReviewCreator: { selectedDiveSite: number; siteName?: string; reviewToEdit?: Review };
-  PhotoComments: { id: number; userId: string};
+  PhotoComments: { id: number; userId?: string };
 };
 
 const Stack = createNativeStackNavigator<DiveSiteRoutes>();
@@ -60,7 +60,6 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
         {({ route }) => (
           <PhotoCommentsParallax
             id={route.params.id}
-            userId={route.params.userId}
           />
         )}
       </Stack.Screen>

@@ -24,10 +24,14 @@ import { useNotificationsStore } from "../../store/useNotificationsStore";
 import NotificationItemPhotoLike from "./messages/photoLike";
 import NotificationItemPhotoComment from "./messages/photoComment";
 import type { Notification } from "../../store/types";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import getImagePublicUrl from "../../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../../entities/image";
 
 export default function Notifications() {
   const { t } = useTranslation();
   const navigation = useAppNavigation();
+  const mainNavigation = useAppNavigation();
 
   const list = useNotificationsStore((s) => s.list);
   const loadMore = useNotificationsStore((s) => s.loadMore);
@@ -54,26 +58,10 @@ export default function Notifications() {
     setRefreshing(false);
   };
 
-  const togglePhotoBoxModal = (n: Notification, type: "photo_like" | "photo_comment") => {
-    const photoFile = type === "photo_like"
-      ? n.notification_photo_like?.photo?.photoFile
-      : n.notification_photo_comment?.photo?.photoFile;
-
-    if (!photoFile) {
-      console.warn("No photoFile found for notification", { type, n });
-      return;
-    }
-    navigation.navigate("PinchAndZoomPhoto", { id: n.id, photoFile });
-  };
-
   const goToUserProfile = (n: Notification) => {
     const id = n?.sender?.id;
     if (!id) return;
-
-    navigation.navigate("BottomTab", {
-      screen: "Profile",
-      params: { id, from: "Notifications" },
-    });
+    mainNavigation.navigate("UserProfile", { id });
   };
 
   const onTrashPress = (n: Notification) => {
@@ -90,7 +78,7 @@ export default function Notifications() {
           <NotificationItemPhotoLike
             item={item}
             onUsernamePress={() => goToUserProfile(item)}
-            onPhotoPress={(n) => togglePhotoBoxModal(n, "photo_like")}
+            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_like?.photo?.id })}
             onTrashPress={onTrashPress}
           />
         );
@@ -99,7 +87,7 @@ export default function Notifications() {
           <NotificationItemPhotoComment
             item={item}
             onUsernamePress={() => goToUserProfile(item)}
-            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_comment?.photo?.id, userId: item.sender.user_id })}
+            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_comment?.photo?.id })}
             onTrashPress={onTrashPress}
           />
         );

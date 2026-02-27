@@ -24,7 +24,7 @@ export async function getNotifications(userId) {
 
         notification_photo_like (
           photo_id,
-          photo:photo_id ( id, label, photoFile )
+          photo:photo_id ( id, label, photoFile, image_id )
         ),
 
         notification_photo_comment (

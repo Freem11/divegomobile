@@ -40,7 +40,7 @@ export type MainRoutes = {
   PartnerRequestUpgrade: undefined;
   EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
-  PhotoComments: { id: number; userId: string };
+  PhotoComments: { id: number };
   PinchAndZoomPhoto: { id?: number, photoFile: string };
   SingleReviewScreen: { id: number };
   SeaLifeScreen: { species: string };
@@ -100,7 +100,6 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
         {({ route }) => (
           <PhotoCommentsParallax
             id={route.params.id}
-            userId={route.params.userId}
           />
         )}
       </Stack.Screen>
