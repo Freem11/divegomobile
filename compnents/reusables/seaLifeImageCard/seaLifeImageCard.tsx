@@ -12,6 +12,8 @@ import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { cloudflareBucketUrl } from "../../globalVariables";
+import { createPhotoLikeNotification, deletePhotoLikeNotification } from "../../../supabaseCalls/notificationsSupabaseCalls";
 import { useAppNavigation } from "../../mapPage/types";
 import getImagePublicUrl from "../../helpers/getImagePublicUrl";
 import { IMAGE_SIZE, Image as ImageVar } from "../../../entities/image";
@@ -95,11 +97,22 @@ const SeaLifeImageCard = (props: PictureProps) => {
       await deletePhotoLike(likeData);
       setPicLiked(false);
       setCountOfLikes(countOfLikes - 1);
+      await deletePhotoLikeNotification({
+        senderId: userProfile.UserID,
+        recipientId: pic.UserID,
+        photoId: pic.id,
+      });
     } else {
       const newRecord = await insertPhotoLike(userProfile.UserID, pic.id);
       setPicLiked(true);
       setLikeData(newRecord[0].id);
       setCountOfLikes(countOfLikes + 1);
+      await createPhotoLikeNotification({
+        senderId: userProfile.UserID,
+        recipientId: pic.UserID,
+        photoId: pic.id,
+        photoPath: pic.photoFile,
+      });
     }
   };
 
@@ -170,7 +183,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
           />
           <IconCounterButton
             icon="comment"
-            onPress={() => navigation.navigate("PhotoComments", { id: pic.id })}
+            onPress={() => navigation.navigate("PhotoComments", { id: pic.id, userId: pic.UserID })}
             size="icon"
             count={abbreviateNumber(pic.commentcount)}
           />

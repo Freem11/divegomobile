@@ -18,6 +18,7 @@ import AvatarTextInputField from "../../authentication/utils/textInputWithAvatar
 import { useUserProfile } from "../../../store/user/useUserProfile";
 import fallbackAvatar from "../../../assets/icon.png";
 import { grabPhotoCommentsByPicId, insertPhotoComment } from "../../../supabaseCalls/photoCommentSupabaseCalls";
+import { createPhotoCommentNotification } from "../../../supabaseCalls/notificationsSupabaseCalls";
 import getImagePublicUrl from "../../helpers/getImagePublicUrl";
 import { IMAGE_SIZE, Image } from "../../../entities/image";
 
@@ -26,6 +27,7 @@ import * as S from "./styles";
 
 type PhotoCommentsParallaxProps = {
   id: number;
+  userId: string;
 };
 
 export interface CommentItem {
@@ -38,7 +40,8 @@ export interface CommentItem {
 
 type ReplyToState = [string, string] | null;
 
-export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps) {
+export default function PhotoCommentsParallax({ id, userId }: PhotoCommentsParallaxProps) {
+  console.log("PhotoCommentsParallax props: id:", id, "userId:", userId);
   const { userProfile } = useUserProfile();
   const insets = useSafeAreaInsets();
 
@@ -102,8 +105,15 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
       const finalContent = replyTo ? `@${replyTo[0]} - ${commentContent}` : commentContent;
       setCommentContent("");
       setReplyTo(null);
-
-      await insertPhotoComment(userProfile.UserID, id, finalContent, userIdentity);
+      const inserted = await insertPhotoComment(userProfile.UserID, id, finalContent, userIdentity);
+      const recipientId = replyTo?.[1]?? userId;
+      if (!inserted?.id) return;
+      await createPhotoCommentNotification({
+        senderId: userProfile.UserID,
+        recipientId,
+        photoId: id,
+        commentId: inserted.id,
+      });
       await getAllPictureComments(id);
       Keyboard.dismiss();
     } catch (e) {

@@ -65,3 +65,22 @@ export const FallbackText = styled.Text`
   font-family: ${activeFonts.Italic};
   font-size: ${moderateScale(fontSizes.SmallText)}px;
 `;
+
+export const CommentBlock = styled.View`
+  margin-top: 8px;
+`;
+
+export const CommentText = styled.Text`
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  color: ${colors.themeBlack};
+  font-family: ${activeFonts.Regular};
+  line-height: ${moderateScale(fontSizes.SmallText) * 1.4}px;
+`;
+
+export const PlaceholderAvatar = styled.View`
+  width: 42px;
+  height: 42px;
+  border-radius: 21px;
+  background-color: #e8e8e8;
+  margin-right: 10px;
+`;

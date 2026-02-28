@@ -106,9 +106,15 @@ export default function UserProfileParallax(props: UserProfileProps) {
 
   const handleOnClose = () => {
     Keyboard.dismiss();
-    if (navigation.canGoBack()) {
-      navigation.dispatch(StackActions.pop(1));
+    // if (navigation.canGoBack()) {
+    //   navigation.dispatch(StackActions.pop(1));
+    // }
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      return;
     }
+
+    navigation.navigate("Home");
   };
 
   const openSettingsScreen = () => navigation.navigate("Settings");

@@ -295,6 +295,7 @@
     },
     "Feed": {
         "noFeeds": "No feed items yet.",
-        "openNotifications": "Open Notifications List"
+        "openNotifications": "Open Notifications List",
+        "noNotifications": "You have no notifications yet"
     }
 }

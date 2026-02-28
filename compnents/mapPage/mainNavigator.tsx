@@ -40,7 +40,7 @@ export type MainRoutes = {
   PartnerRequestUpgrade: undefined;
   EditScreen: { id: number, dataType: EDIT_TYPE };
   UserProfilePhotos: undefined;
-  PhotoComments: { id: number };
+  PhotoComments: { id: number;  userId: string };
   PinchAndZoomPhoto: { id?: number, photoFile: string };
   SingleReviewScreen: { id: number };
   SeaLifeScreen: { species: string };
