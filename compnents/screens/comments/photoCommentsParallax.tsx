@@ -41,7 +41,6 @@ export interface CommentItem {
 type ReplyToState = [string, string] | null;
 
 export default function PhotoCommentsParallax({ id, userId }: PhotoCommentsParallaxProps) {
-  console.log("PhotoCommentsParallax props: id:", id, "userId:", userId);
   const { userProfile } = useUserProfile();
   const insets = useSafeAreaInsets();
 
