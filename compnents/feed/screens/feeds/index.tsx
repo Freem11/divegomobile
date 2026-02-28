@@ -87,7 +87,7 @@ export default function Notifications() {
           <NotificationItemPhotoComment
             item={item}
             onUsernamePress={() => goToUserProfile(item)}
-            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_comment?.photo?.id })}
+            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_comment?.photo?.id, userId: item.sender.user_id })}
             onTrashPress={onTrashPress}
           />
         );

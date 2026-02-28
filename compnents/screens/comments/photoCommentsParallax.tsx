@@ -27,6 +27,7 @@ import * as S from "./styles";
 
 type PhotoCommentsParallaxProps = {
   id: number;
+  userId: string;
 };
 
 export interface CommentItem {
@@ -39,7 +40,8 @@ export interface CommentItem {
 
 type ReplyToState = [string, string] | null;
 
-export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps) {
+export default function PhotoCommentsParallax({ id, userId }: PhotoCommentsParallaxProps) {
+  console.log("PhotoCommentsParallax props: id:", id, "userId:", userId);
   const { userProfile } = useUserProfile();
   const insets = useSafeAreaInsets();
 
@@ -103,9 +105,8 @@ export default function PhotoCommentsParallax({ id }: PhotoCommentsParallaxProps
       const finalContent = replyTo ? `@${replyTo[0]} - ${commentContent}` : commentContent;
       setCommentContent("");
       setReplyTo(null);
-
       const inserted = await insertPhotoComment(userProfile.UserID, id, finalContent, userIdentity);
-      const recipientId = replyTo?.[1];
+      const recipientId = replyTo?.[1]?? userId;
       if (!inserted?.id) return;
       await createPhotoCommentNotification({
         senderId: userProfile.UserID,

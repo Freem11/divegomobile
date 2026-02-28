@@ -60,6 +60,7 @@ export default function DiveSiteNavigator(props: DiveSiteNavigatorProps) {
         {({ route }) => (
           <PhotoCommentsParallax
             id={route.params.id}
+            userId={route.params.userId}
           />
         )}
       </Stack.Screen>
