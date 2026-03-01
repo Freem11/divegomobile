@@ -5,12 +5,14 @@ import { NavigationButton } from "../../navigationHeader/NavigationButton";
 import { NavigationHeader } from "../../navigationHeader/NavigationHeader";
 
 import { PhotoUploader } from "./components/photoUploader";
+import SuuntoLoginButton from "./suunto";
 
 import UniversalSync from ".";
 
 export type LogsRoutes = {
   QRSync: undefined;
   PhotoUploader: undefined;
+  SuuntoScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<LogsRoutes>();
@@ -43,7 +45,7 @@ export default function LogsNavigator() {
               )}
               right={(
                 <NavigationButton
-                  onPress={() => navigation.navigate("PhotoUploader")}
+                  onPress={() => navigation.navigate("SuuntoScreen")}
                   iconName="close"
                 />
               )}
@@ -55,6 +57,25 @@ export default function LogsNavigator() {
       <Stack.Screen
         name={"PhotoUploader"}
         component={PhotoUploader}
+        options={({ route }) => ({
+          headerShown: true,
+          header: ({ navigation }) => (
+            <NavigationHeader
+              title={"Photo Test"}
+              left={(
+                <NavigationButton
+                  onPress={() => navigation.goBack()}
+                  iconName="close"
+                />
+              )}
+            />
+          )
+        })}
+      />
+
+      <Stack.Screen
+        name={"SuuntoScreen"}
+        component={SuuntoLoginButton}
         options={({ route }) => ({
           headerShown: true,
           header: ({ navigation }) => (

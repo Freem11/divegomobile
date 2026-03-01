@@ -126,6 +126,17 @@ redirect_uri = ""
 # or any other third-party OIDC providers.
 url = ""
 
+# --- CUSTOM PROVIDERS ---
+
+[auth.external.suunto]
+enabled = true
+client_id = "env(EXPO_PUBLIC_SUUNTO_CLIENT_ID)"
+secret = "env(EXPO_PUBLIC_SUUNTO_CLIENT_SECRET)"
+# Suunto OIDC endpoint
+url = "https://oauth.suunto.com"
+
+# ------------------------
+
 [analytics]
 enabled = false
 port = 54327

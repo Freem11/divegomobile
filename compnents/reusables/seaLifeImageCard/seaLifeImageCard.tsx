@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Dimensions, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { moderateScale } from "react-native-size-matters";
@@ -10,11 +10,11 @@ import {
 } from "../../../supabaseCalls/photoLikeSupabaseCalls";
 import abbreviateNumber from "../../helpers/abbreviateNumber";
 import ButtonIcon from "../../reusables/buttonIcon";
-import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import IconCounterButton from "../iconCounterButton";
 import { useUserProfile } from "../../../store/user/useUserProfile";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import { useAppNavigation } from "../../mapPage/types";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE, Image as ImageVar } from "../../../entities/image";
 
 import * as S from "./styles";
 
@@ -36,7 +36,7 @@ interface Photo {
 }
 
 interface PictureProps {
-  pic: Photo;
+  pic: Image;
   dataSetType: string;
   diveSiteName?: string;
   setVisitProfileVals?: (val: any) => void;
@@ -48,8 +48,6 @@ const windowWidth = Dimensions.get("window").width;
 
 const SeaLifeImageCard = (props: PictureProps) => {
   const { pic, dataSetType } = props;
-  const { setSelectedPhoto } = useContext(SelectedPhotoContext);
-
   const { userProfile } = useUserProfile();
 
   const [picLiked, setPicLiked] = useState(pic.likedbyuser);
@@ -58,8 +56,14 @@ const SeaLifeImageCard = (props: PictureProps) => {
 
   const [aspectRatio, setAspectRatio] = useState<number | null>(1);
 
-  const fileName = pic.photoFile?.split("/").pop();
-  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
+  const variants: ImageVar = {
+    file_name: pic?.photoFile,
+    public_domain: pic?.public_domain,
+    sm: pic?.sm,
+    md: pic?.md,
+    lg: pic?.lg,
+    xl: pic?.xl
+  };
 
   const navigation = useAppNavigation();
 
@@ -99,20 +103,15 @@ const SeaLifeImageCard = (props: PictureProps) => {
     }
   };
 
-  const togglePhotoBoxModal = (photo: string) => {
-    setSelectedPhoto(photo);
-    navigation.navigate("PinchAndZoomPhoto");
-  };
-
   const containerWidth = windowWidth - windowWidth * 0.07;
   const containerHeight = aspectRatio
     ? containerWidth / aspectRatio
     : moderateScale(200);
 
   return (
-    <S.Container key={pic.id} style={{ width: containerWidth, height: containerHeight }}>
+    <S.Container key={pic.photo_table_id} style={{ width: containerWidth, height: containerHeight }}>
       <TouchableOpacity
-        onPress={() => togglePhotoBoxModal(pic.photoFile)}
+        onPress={() => navigation.navigate("PinchAndZoomPhoto", { photoFile: getImagePublicUrl(variants, IMAGE_SIZE.XL) })}
         style={{
           width: "100%",
           height: "100%",
@@ -125,7 +124,7 @@ const SeaLifeImageCard = (props: PictureProps) => {
       >
         {aspectRatio ? (
           <Image
-            source={{ uri: remoteUri }}
+            source={{ uri: getImagePublicUrl(variants, IMAGE_SIZE.LG) }}
             style={{ width: "100%", height: "100%", resizeMode: "cover" }}
             contentFit="cover"
             // placeholder={require("../../../assets/icon.png")}

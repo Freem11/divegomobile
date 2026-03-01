@@ -13,6 +13,10 @@ import { allMetrics } from "../../../supabaseCalls/monthlyReviewMetrics/gets";
 import { MetricItem } from "../../../entities/metricItem";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { MapConfigurations } from "../../googleMap/types";
+import { loadDiveSiteInfo } from "../../../ai-calls/aiCall";
+import { updateDiveSiteFact } from "../../../supabaseCalls/diveSiteCalls/updates";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../entities/image";
 
 import { useDiveSiteNavigation } from "./types";
 
@@ -23,57 +27,129 @@ type DiveSiteParallaxProps = {
 };
 
 export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
-
   const diveSiteNavigation = useDiveSiteNavigation();
   const { t } = useTranslation();
   const drawerRef = useRef<ParallaxDrawerHandle>(null);
 
   const { userProfile } = useUserProfile();
-
-  const [diveSiteVals, setDiveSiteVals] = useState(null);
-  const [isPartnerAccount, setIsPartnerAccount] = useState(false);
-  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
-
   const { selectedDiveSite, setSelectedDiveSite } = useContext(SelectedDiveSiteContext);
 
+  const [isPartnerAccount, setIsPartnerAccount] = useState(false);
   const [metricInfo, setMetricInfo] = useState<MetricItem[]>(null);
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
 
+  // --- AI Rate Limit Shields ---
+  const isFetchingAi = useRef(false);
+  const hasErrorThisSession = useRef(false); // Blocks retries if API fails once
+
+  // 1. Initial Data Load
   useEffect(() => {
-    getDiveSiteinfo();
-    getMetrics();
-    if (userProfile?.partnerAccount) {
-      setIsPartnerAccount(true);
+    if (props.id) {
+      getInitialData();
+      if (userProfile?.partnerAccount) {
+        setIsPartnerAccount(true);
+      }
     }
+    return () => {
+      setMetricInfo(null);
+    };
   }, [props.id]);
 
-  const getMetrics = async () => {
-    if (props.id) {
-      const monthlyMetrics = await allMetrics(props.id);
+  const getInitialData = async () => {
+    try {
+      const [diveSiteinfo, monthlyMetrics] = await Promise.all([
+        getDiveSiteById(props.id),
+        allMetrics(props.id)
+      ]);
+
+      if (diveSiteinfo) {
+        if (diveSiteinfo.id === props.id) {
+          setSelectedDiveSite(diveSiteinfo);
+        }
+      }
       setMetricInfo(monthlyMetrics);
+    } catch (error) {
+      console.error("Error fetching initial data:", error);
     }
   };
 
-  const getDiveSiteinfo = async () => {
-    if (props.id) {
-      const diveSiteinfo = await getDiveSiteById(props.id);
-      setSelectedDiveSite(diveSiteinfo[0]);
-    }
-  };
-
+  // 2. AI Fact Detection & Trigger with Debounce
   useEffect(() => {
-    let photoName = null;
-    if (selectedDiveSite?.divesiteprofilephoto) {
-      photoName = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${selectedDiveSite.divesiteprofilephoto.split("/").pop()}`;
+    let debounceTimer: NodeJS.Timeout;
+
+    // Condition: Correct site, no bio exists, not currently fetching, and no previous session error
+    const shouldAttemptAI =
+      selectedDiveSite?.id === props.id &&
+      !selectedDiveSite.divesitebio &&
+      !isFetchingAi.current &&
+      !hasErrorThisSession.current;
+
+    if (shouldAttemptAI) {
+      // Shield 1: Debounce. Wait 2.5 seconds before firing.
+      // If the user closes the drawer or moves sites, this is cancelled.
+      debounceTimer = setTimeout(() => {
+        handleGetAiBlurb();
+      }, 2500);
     }
 
-    setDiveSiteVals({
-      id: selectedDiveSite?.id,
-      bio: selectedDiveSite?.divesitebio,
-      photo: photoName,
-    });
+    return () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+    };
+  }, [selectedDiveSite?.id, selectedDiveSite?.divesitebio]);
 
-  }, [selectedDiveSite]);
+  const handleGetAiBlurb = async () => {
+    if (isFetchingAi.current || hasErrorThisSession.current) return;
+    isFetchingAi.current = true;
 
+    try {
+      // Shield 2: Development Mock
+      // Toggle this to true when you want to test UI without wasting Gemini Quota
+      const USE_MOCK_AI = __DEV__ && false;
+
+      if (USE_MOCK_AI) {
+        console.log("[AI] Dev Mode: Returning Mock Bio for", selectedDiveSite.name);
+        const mockBlurb = `This is a beautiful dive site at ${selectedDiveSite.name}. (Mock AI Description)`;
+        setSelectedDiveSite({ ...selectedDiveSite, divesitebio: mockBlurb });
+        return;
+      }
+
+      console.log(`[AI] Calling Gemini for: ${selectedDiveSite.name}`);
+      const blurb = await loadDiveSiteInfo(
+        selectedDiveSite.id,
+        selectedDiveSite.name,
+        selectedDiveSite.lat,
+        selectedDiveSite.lng
+      );
+
+      // Shield 3: Circuit Breaker for Errors
+      if (blurb && (blurb.includes("Quota exceeded") || blurb.startsWith("AI Error:"))) {
+        console.warn("[AI] Quota hit or error received. Silencing AI for this session.");
+        hasErrorThisSession.current = true;
+
+        // Optionally show the error to the user once
+        setSelectedDiveSite({ ...selectedDiveSite, divesitebio: "Description temporarily unavailable." });
+        return;
+      }
+
+      if (blurb && blurb !== "Description currently unavailable for this site.") {
+        // 1. Perform the background update
+        await updateDiveSiteFact(selectedDiveSite.id, blurb);
+
+        // 2. Update local state by MERGING so we don't lose the photo
+        setSelectedDiveSite((prev) => ({
+          ...prev,
+          divesitebio: blurb
+        }));
+      }
+    } catch (error) {
+      hasErrorThisSession.current = true;
+      console.error("AI Update Failed:", error);
+    } finally {
+      isFetchingAi.current = false;
+    }
+  };
+
+  const headerImageSource = getImagePublicUrl(selectedDiveSite?.profilePhoto, IMAGE_SIZE.XL, noImage);
   const onClose = async () => {
     diveSiteNavigation.goBack();
   };
@@ -100,50 +176,37 @@ export default function DiveSiteParallax(props: DiveSiteParallaxProps) {
   const handleReport = () => {
     const to = ["scubaseasons@gmail.com"];
     email(to, {
-      // Optional additional arguments
-      subject: `Reporting issue with Dive Site: "${selectedDiveSite.name}" at Latitude: ${selectedDiveSite.lat} Longitude: ${selectedDiveSite.lng} `,
-      body: "Type of issue: \n \n 1) Dive Site name not correct \n (Please provide the correct dive site name and we will correct the record)\n \n 2)Dive Site GPS Coordinates are not correct \n (Please provide a correct latitude and longitude and we will update the record)",
-      checkCanOpen: false, // Call Linking.canOpenURL prior to Linking.openURL
+      subject: `Reporting issue with Dive Site: "${selectedDiveSite.name}"`,
+      body: `Latitude: ${selectedDiveSite.lat}\nLongitude: ${selectedDiveSite.lng}\n\nIssue Details:`,
+      checkCanOpen: false,
     }).catch(console.error);
   };
 
-  const popoverContent = () => {
-    return (
-      <>
-        <IconWithLabel
-          label={t("DiveSite.addReview")}
-          iconName="diving-snorkel"
-          buttonAction={() => openDiveSiteReviewer()}
-        />
-        <IconWithLabel
-          label={t("DiveSite.addSighting")}
-          iconName="camera-plus"
-          buttonAction={() => openPicUploader()}
-        />
-        <IconWithLabel
-          label={t("DiveSite.report")}
-          iconName="flag"
-          buttonAction={() => handleReport()}
-        />
-      </>
-    );
-  };
+  const popoverContent = () => (
+    <>
+      <IconWithLabel label={t("DiveSite.addReview")} iconName="diving-snorkel" buttonAction={openDiveSiteReviewer} />
+      <IconWithLabel label={t("DiveSite.addSighting")} iconName="camera-plus" buttonAction={openPicUploader} />
+      <IconWithLabel label={t("DiveSite.report")} iconName="flag" buttonAction={handleReport} />
+    </>
+  );
 
   return (
     <ParallaxDrawer
       ref={drawerRef}
-      headerImage={diveSiteVals && diveSiteVals.photo ? { uri: diveSiteVals.photo } : noImage}
+      headerImage={headerImageSource}
       onClose={onClose}
       onMapFlip={onNavigate}
       popoverContent={popoverContent}
       isMyShop={isPartnerAccount}
     >
-      <DiveSiteScreen
-        selectedDiveSite={selectedDiveSite}
-        openPicUploader={openPicUploader}
-        openDiveSiteReviewer={openDiveSiteReviewer}
-        metricInfo={metricInfo}
-      />
+      {selectedDiveSite ? (
+        <DiveSiteScreen
+          selectedDiveSite={selectedDiveSite}
+          openPicUploader={openPicUploader}
+          openDiveSiteReviewer={openDiveSiteReviewer}
+          metricInfo={metricInfo}
+        />
+      ) : null}
     </ParallaxDrawer>
   );
 }

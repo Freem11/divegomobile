@@ -4,8 +4,9 @@ import { moderateScale } from "react-native-size-matters";
 
 import readableDate from "../../helpers/readableDate";
 import { Review, ReviewCondition } from "../../../entities/diveSiteReview";
-import { cloudflareBucketUrl } from "../../globalVariables";
 import { useAppNavigation } from "../../mapPage/types";
+import { IMAGE_SIZE, Image } from "../../../entities/image";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
 
 import * as S from "./styles";
 import { renderLabel } from "./conditionLabel";
@@ -17,10 +18,10 @@ type ReviewCardViewProps = {
   date: string;
   description: string;
   conditions: ReviewCondition[];
-  photo: string;
+  photo: Image;
   review: Review;
   id: number | string;
-  currentUserId: string;
+  currentUserId: number;
   handleNavigate: (name: string, id: string | number) => void;
   onEdit: (review: Review) => void;
   onDelete: (reviewId: number) => void;
@@ -31,8 +32,6 @@ export default function ReviewCardView({ name, photo, date, description, conditi
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isMeasuring, setIsMeasuring] = useState(0);
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-  const fileName = photo?.split("/").pop();
-
   const navigation = useAppNavigation();
 
   return (
@@ -41,7 +40,7 @@ export default function ReviewCardView({ name, photo, date, description, conditi
         <S.Header>
           <TouchableWithoutFeedback onPress={() => handleNavigate(name, id)}>
             <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(12) }}>
-              <Avatar photo={fileName && `${cloudflareBucketUrl}${fileName}`} defaultImage="anchor" />
+              <Avatar photo={photo && getImagePublicUrl(photo, IMAGE_SIZE.SM)} defaultImage="anchor" />
               <S.UserInfo>
                 <S.Title>{name}</S.Title>
                 <S.Date>

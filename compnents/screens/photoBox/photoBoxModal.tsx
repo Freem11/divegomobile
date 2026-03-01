@@ -4,12 +4,11 @@ import {
 } from "react-native";
 import Animated from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
-import React, { useContext } from "react";
+import React from "react";
 
 import {
   colors,
 } from "../../styles";
-import { SelectedPhotoContext } from "../../contexts/selectedPhotoContext";
 import ButtonIcon from "../../reusables/buttonIcon";
 import { useAppNavigation } from "../../mapPage/types";
 
@@ -18,20 +17,16 @@ import { usePinchAndZoomAnimation } from "./usePinchAndZoom";
 
 const windowHeight = Dimensions.get("window").height;
 
-export default function PhotoBoxModal() {
-  const { selectedPhoto } = useContext(SelectedPhotoContext);
+type PinchAndZoomProps = {
+  id?: number;
+  photoFile: string;
+};
 
+export default function PhotoBoxModal(props: PinchAndZoomProps) {
   const navigation = useAppNavigation();
 
   const { gesture, animatedPictureStyle, animatedPictureFocalStyle } =
-    usePinchAndZoomAnimation([selectedPhoto]);
-
-  const fileName = selectedPhoto && selectedPhoto.split("/").pop();
-  let cacheDir = null;
-
-  if (fileName) {
-    cacheDir = `https://pub-c089cae46f7047e498ea7f80125058d5.r2.dev/${fileName}`;
-  }
+    usePinchAndZoomAnimation([props.photoFile]);
 
   return (
     <S.ContentContainer>
@@ -53,10 +48,10 @@ export default function PhotoBoxModal() {
             alignSelf: "center",
           }}
         >
-          {cacheDir && (
+          {props.photoFile && (
             <Animated.Image
               source={{
-                uri: cacheDir,
+                uri: props.photoFile,
               }}
               onError={(e) => {
                 console.log("Image load error:", e.nativeEvent.error);

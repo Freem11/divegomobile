@@ -5,18 +5,20 @@ import {
   ScrollView,
   Gesture,
   GestureDetector,
-  TouchableOpacity, // Use this version for better Android hit testing
-  Pressable
+  Pressable,
 } from "react-native-gesture-handler";
 
 import Icon from "../../../../icons/Icon";
 import { colors } from "../../../styles";
-import ImageCasherDynamicLocal from "../../../helpers/imageCashingDynamicLocal";
+import { useAppNavigation } from "../../../mapPage/types";
+import { Image, IMAGE_SIZE } from "../../../../entities/image";
+import getImagePublicUrl from "../../../helpers/getImagePublicUrl";
+import FadeInImage from "../../../reusables/fadeinImage";
 
 import * as S from "./styles";
 
 interface PhotoUploadProps {
-  items: { photofile: string }[] | null;
+  items: Image[] | { photoFile: string }[];
   onAddSighting?: () => void;
   onRemovePhoto?: (index: number) => void;
   gestureRef?: any;
@@ -26,15 +28,48 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
   items,
   onAddSighting,
   onRemovePhoto,
-  gestureRef
+  gestureRef,
 }) => {
   const itemSize = scale(100);
+  const navigation = useAppNavigation();
 
-  // Link to the parent (Bottom Sheet) but allow children to activate
   const nativeGesture = Gesture.Native()
     .withRef(gestureRef)
     .shouldActivateOnStart(true)
     .shouldCancelWhenOutside(true);
+
+  const renderPhotoItem = (item: string, index: number) => (
+    <View style={{ position: "relative" }} pointerEvents="box-none">
+      <S.Item style={{ width: itemSize, height: itemSize }}>
+        <FadeInImage
+          photoFile={item}
+          style={{ height: "100%", width: "100%", resizeMode: "cover" }}
+        />
+      </S.Item>
+
+      {onRemovePhoto && (
+        <Pressable
+          onPress={() => onRemovePhoto(index)}
+          hitSlop={15}
+          style={{
+            position: "absolute",
+            top: moderateScale(4),
+            right: moderateScale(4),
+            zIndex: 9999,
+          }}
+        >
+          <S.RemoveButton>
+            <Icon
+              name={"close"}
+              color={"white"}
+              width={moderateScale(16)}
+              height={moderateScale(16)}
+            />
+          </S.RemoveButton>
+        </Pressable>
+      )}
+    </View>
+  );
 
   return (
     <S.Wrapper>
@@ -43,8 +78,8 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           horizontal
           showsHorizontalScrollIndicator={false}
           nestedScrollEnabled={true}
-          // Critical for Android: allows buttons to finish their click
           disallowInterruption={false}
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={{
             paddingRight: scale(16),
             flexDirection: "row",
@@ -52,15 +87,13 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
           }}
         >
           {onAddSighting && (
-            <TouchableOpacity
-              onPress={() => {
-                console.log("Add Photo Clicked");
-                onAddSighting();
-              }}
-              activeOpacity={0.6}
+            <Pressable
+              onPress={onAddSighting}
+              hitSlop={5}
+              style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
             >
               <S.AddSightingButton
-                pointerEvents="none" // Lets the Touchable handle the tap
+                pointerEvents="none"
                 style={{ width: itemSize, height: itemSize }}
               >
                 <Icon
@@ -70,48 +103,40 @@ export const PhotoUpload: FC<PhotoUploadProps> = ({
                   height={moderateScale(40)}
                 />
               </S.AddSightingButton>
-            </TouchableOpacity>
+            </Pressable>
           )}
 
-          {items?.map((item, index) => (
-            <View key={`${item.photofile}-${index}`} style={{ position: "relative" }}>
-              <S.Item style={{ width: itemSize, height: itemSize }}>
-                <ImageCasherDynamicLocal
-                  photoFile={item.photofile}
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    resizeMode: "cover",
-                  }}
-                />
-              </S.Item>
-
-              {onRemovePhoto && (
+          {items?.map((item, index) => {
+            const itemKey = `${item}-${index}`;
+            if (item) {
+              return (
                 <Pressable
-                  onPress={() => {
-                    console.log("Remove Photo Clicked index:", index);
-                    onRemovePhoto(index);
-                  }}
-                  hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                  style={{
-                    position: "absolute",
-                    top: moderateScale(4),
-                    right: moderateScale(4),
-                    zIndex: 9999,
-                  }}
+                  key={itemKey}
+                  onPress={() =>
+                    navigation.navigate("PinchAndZoomPhoto", {
+                      photoFile: getImagePublicUrl(item, IMAGE_SIZE.XL),
+                    })}
+                  hitSlop={10}
+                  style={({ pressed }) => [
+                    {
+                      opacity: pressed ? 0.8 : 1,
+                      transform: [{ scale: pressed ? 0.99 : 1 }],
+                    },
+                  ]}
                 >
-                  <S.RemoveButton>
-                    <Icon
-                      name={"close"}
-                      color={"white"}
-                      width={moderateScale(16)}
-                      height={moderateScale(16)}
-                    />
-                  </S.RemoveButton>
+                  {item.photofile ?
+                    renderPhotoItem(item.photofile, index) : renderPhotoItem(getImagePublicUrl(item, IMAGE_SIZE.SM), index)}
                 </Pressable>
-              )}
-            </View>
-          ))}
+              );
+            }
+
+            return (
+              <View key={itemKey}>
+                {item.photofile ?
+                  renderPhotoItem(item.photofile, index) : renderPhotoItem(getImagePublicUrl(item, IMAGE_SIZE.SM), index)}
+              </View>
+            );
+          })}
         </ScrollView>
       </GestureDetector>
     </S.Wrapper>
