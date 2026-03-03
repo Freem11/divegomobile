@@ -296,6 +296,7 @@ export const getuserReveiewCount = async (user_id: string) => {
 };
 
 export const updateSuuntoToken = async (values) => {
+  console.log("Updating Suunto token in DB...", values);
   const { data, error } = await supabase
     .from("UserProfiles")
     .update({ suunto_refresh_token: values.suunto_refresh_token })
