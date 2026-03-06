@@ -43,7 +43,7 @@ export default function SealifePreview({
             </S.TotalCount>
           </S.StatRow>
           <S.StatRow>
-            <Icon name="fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
+            <Icon name="Fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
             <S.TotalCount>
               {speciesCount ? `${speciesCount} species` : "0 species"}
             </S.TotalCount>

@@ -15,7 +15,7 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
   const onPressItem = () => {
     if (soureImage === "anchor") {
       handleDiveSiteOptionSelected(name);
-    } else if (soureImage === "fish") {
+    } else if (soureImage === "Fish") {
       handleSeaLifeOptionSelected(name);
     } else {
       handleMapOptionSelected(name);
@@ -33,8 +33,8 @@ export default function SearchToolListItem({ name, soureImage, handleMapOptionSe
                 {soureImage === "anchor" ?
                   <Icon name={"anchor"} fill={colors.themeGreen} />
                   :
-                  soureImage === "fish" ?
-                    <Icon name={"fish"} fill={colors.primaryBlue} />
+                  soureImage === "Fish" ?
+                    <Icon name={"Fish"} fill={colors.primaryBlue} />
                     :
                     <Icon name={"compass-outline"} fill={colors.themeBlack} />}
               </S.CardIcon>

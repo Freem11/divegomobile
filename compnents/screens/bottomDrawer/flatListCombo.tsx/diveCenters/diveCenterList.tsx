@@ -68,7 +68,7 @@ export default function DiveCenterList() {
       <S.SubHeaderLeft>
         <S.SwipeIndicator>
           <S.IconWrapper>
-            <Icon name="double-chevron-left" color={colors.border} />
+            <Icon name="chevron-double-left" color={colors.border} />
           </S.IconWrapper>
           <S.Subtitle>Dive Sites</S.Subtitle>
         </S.SwipeIndicator>

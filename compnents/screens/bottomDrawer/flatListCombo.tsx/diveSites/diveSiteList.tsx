@@ -77,7 +77,7 @@ export default function DiveSiteList() {
       <S.SubHeaderWrapper>
         <S.SwipeIndicator>
           <S.IconWrapper>
-            <Icon name="double-chevron-left" color={colors.border} />
+            <Icon name="chevron-double-left" color={colors.border} />
           </S.IconWrapper>
           <S.Subtitle>Sea Life</S.Subtitle>
         </S.SwipeIndicator>
@@ -85,7 +85,7 @@ export default function DiveSiteList() {
         <S.SwipeIndicator>
           <S.Subtitle>Dive Centres</S.Subtitle>
           <S.IconWrapper>
-            <Icon name="double-chevron-right" color={colors.border} />
+            <Icon name="chevron-double-right" color={colors.border} />
           </S.IconWrapper>
         </S.SwipeIndicator>
       </S.SubHeaderWrapper>
