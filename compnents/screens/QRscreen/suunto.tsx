@@ -1,17 +1,29 @@
 import { Buffer } from "buffer";
 
 import React, { useState, useEffect } from "react";
-import { Button, StyleSheet, View, Text, ActivityIndicator, Dimensions, ScrollView } from "react-native";
+import {
+    Button,
+    StyleSheet,
+    View,
+    Text,
+    ActivityIndicator,
+    Dimensions,
+    ScrollView,
+    Alert
+} from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import * as FileSystem from "expo-file-system/legacy";
 import FitParser from "fit-file-parser";
 import { LineChart } from "react-native-chart-kit";
+import LZString from "lz-string";
 
+// Internal Imports
+import { supabase } from "../../../supabase";
 import { updateSuuntoToken } from "../../../supabaseCalls/accountSupabaseCalls";
 import { useUserProfile } from "../../../store/user/useUserProfile";
+import { DIVE_LOG_VENDORS } from "../../../entities/vendors";
 
-// --- SUUNTO CONFIGURATION ---
 const SUUNTO_CLIENT_ID = process.env.EXPO_PUBLIC_SUUNTO_CLIENT_ID;
 const SUUNTO_CLIENT_SECRET = process.env.EXPO_PUBLIC_SUUNTO_CLIENT_SECRET;
 const REDIRECT_URI = "https://lsakqvscxozherlpunqx.supabase.co/functions/v1/suunto-redirect";
@@ -23,13 +35,12 @@ export default function SuuntoConnectButton() {
     }, []);
 
     const { userProfile } = useUserProfile();
+    const currentUserId = userProfile?.UserID;
     const suuntoRefreshToken = userProfile?.suunto_refresh_token;
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
-
-    // 💡 Store an array of Dive Log objects
     const [diveLogs, setDiveLogs] = useState<any[]>([]);
 
     const discovery = {
@@ -52,7 +63,7 @@ export default function SuuntoConnectButton() {
             });
             setAccessToken(tokenData.access_token);
             if (tokenData.refresh_token && tokenData.refresh_token !== refreshToken) {
-                updateSuuntoToken(tokenData.refresh_token);
+                updateSuuntoToken({ userId: currentUserId, suunto_refresh_token: tokenData.refresh_token });
             }
         } catch (e) {
             console.error("Refresh failed", e);
@@ -100,7 +111,7 @@ export default function SuuntoConnectButton() {
                     code: code as string,
                     redirect_uri: REDIRECT_URI,
                 });
-                updateSuuntoToken({ userId: userProfile.UserID, suunto_refresh_token: tokenData.refresh_token });
+                updateSuuntoToken({ userId: currentUserId, suunto_refresh_token: tokenData.refresh_token });
                 setAccessToken(tokenData.access_token);
             }
         } catch (e: any) {
@@ -110,7 +121,6 @@ export default function SuuntoConnectButton() {
         }
     };
 
-    // 💡 Promise wrapper for FitParser
     const parseFitFile = (buffer: Buffer): Promise<any> => {
         return new Promise((resolve, reject) => {
             const parser = new FitParser({
@@ -125,14 +135,33 @@ export default function SuuntoConnectButton() {
         });
     };
 
+    /**
+           * SYNC TO SUPABASE
+           * Splits UI data from DB data and upserts to your universal table.
+           */
+    const syncDivesToSupabase = async (logs: any[]) => {
+        // We strip the UI-specific chartConfig before sending to Supabase
+        const dbReadyLogs = logs.map(({ chartConfig, startTimeDisplay, ...dbData }) => dbData);
+
+        const { error } = await supabase
+            .from("dive_logs")
+            .upsert(dbReadyLogs, { onConflict: "user_id, external_id" });
+
+        if (error) {
+            console.error("Supabase Sync Error:", error);
+            throw new Error("Failed to save to database.");
+        }
+    };
+
     const handleImportWorkouts = async () => {
-        if (!accessToken) return;
+        if (!accessToken || !currentUserId) {
+            Alert.alert("Error", "User not authenticated or profile missing.");
+            return;
+        }
         setIsLoading(true);
         setError(null);
-        setDiveLogs([]);
 
         try {
-            // 💡 Fetch last 5 workouts
             const summaryUrl = "https://cloudapi.suunto.com/v3/workouts?limit=5&sort=desc&extensions=SummaryExtension";
             const response = await fetch(summaryUrl, {
                 method: "GET",
@@ -145,17 +174,17 @@ export default function SuuntoConnectButton() {
             const workoutData = await response.json();
             if (!workoutData.payload || workoutData.payload.length === 0) throw new Error("No workouts found.");
 
-            const logsTemp: any[] = [];
+            const processedLogs: any[] = [];
 
-            // 💡 Loop through each workout payload
             for (const payload of workoutData.payload) {
                 const workoutKey = payload.workoutKey;
                 const diveHeader = payload.extensions?.find((ext: any) => ext.type === "DiveHeaderExtension");
                 const summaryExt = payload.extensions?.find((ext: any) => ext.gear);
 
-                // Convert Kelvin to Celsius
+                // Temp Kelvin to Celsius
                 const maxTempC = diveHeader?.maxDepthTemperature ? parseFloat((diveHeader.maxDepthTemperature - 273.15).toFixed(1)) : null;
 
+                // Download FIT
                 const fitFileUrl = `https://cloudapi.suunto.com/v3/workouts/${workoutKey}/fit`;
                 const fileUri = FileSystem.cacheDirectory + `workout_${workoutKey}.fit`;
 
@@ -168,58 +197,60 @@ export default function SuuntoConnectButton() {
 
                 const fileContent = await FileSystem.readAsStringAsync(downloadResult.uri, { encoding: FileSystem.EncodingType.Base64 });
                 const buffer = Buffer.from(fileContent, "base64");
-
                 const data = await parseFitFile(buffer);
-                const records = data.records;
+                const records = data.records || [];
 
-                // Prepare Chart Data
-                const depths = records.map((record: any) => (record.depth / 1000) * -1);
-                const labels = records
-                    .filter((_: any, index: number) => index % Math.floor(records.length / 5) === 0)
-                    .map((record: any) => {
-                        const date = new Date(record.timestamp);
-                        return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
-                    });
-
-                const dbSeries = records.map((record: any) => ({
-                    timestamp_ms: new Date(record.timestamp).getTime(),
-                    depth_meters: record.depth / 1000,
-                    temperature_c: record.temperature,
+                // 💡 COMPRESSION: Time/Depth/Temp stream
+                const dbSeries = records.map((r: any) => ({
+                    ts: new Date(r.timestamp).getTime(),
+                    d: r.depth / 1000,
+                    t: r.temperature,
                 }));
+                const compressedStream = LZString.compressToUTF16(JSON.stringify(dbSeries));
 
-                // 💡 Construct the object with keys you requested
-                logsTemp.push({
-                    workoutId: workoutKey,
-                    rawStartTime: new Date(payload.startTime), // Used for sorting
-                    startTime: new Date(payload.startTime).toLocaleDateString(),
-                    maxDepth: diveHeader?.maxDepth || 0,
-                    avgDepth: diveHeader?.avgDepth || 0,
-                    maxTemp: maxTempC,
-                    diveTimeSeconds: diveHeader?.diveTime || payload.totalTime,
-                    diveMode: diveHeader?.diveMode || "Unknown",
-                    deviceName: summaryExt?.gear?.name || "Suunto Device",
+                // 💡 Build the Universal Record
+                processedLogs.push({
+                    user_id: currentUserId,
+                    external_id: workoutKey,
+                    source: DIVE_LOG_VENDORS.SUUNTO,
+                    start_time: new Date(payload.startTime).toISOString(),
+                    dive_mode: diveHeader?.diveMode || "Unknown",
+                    device_name: summaryExt?.gear?.name || "Suunto Device",
+                    max_depth: diveHeader?.maxDepth || 0,
+                    avg_depth: diveHeader?.avgDepth || 0,
+                    max_temp: maxTempC,
+                    dive_time: diveHeader?.diveTime || payload.totalTime,
+                    stream_data: compressedStream,
+
+                    // Fields for UI rendering in this screen
+                    startTimeDisplay: new Date(payload.startTime).toLocaleDateString(),
                     chartConfig: {
-                        labels: labels,
+                        labels: records
+                            .filter((_: any, index: number) => index % Math.floor(records.length / 5) === 0)
+                            .map((r: any) => {
+                                const d = new Date(r.timestamp);
+                                return `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
+                            }),
                         datasets: [{
-                            data: depths,
+                            data: records.map((r: any) => (r.depth / 1000) * -1),
                             color: (opacity = 1) => `rgba(30, 112, 254, ${opacity})`,
-                            strokeWidth: 2,
-                            fillShadowGradient: "#1E70FE",
-                            fillShadowGradientOpacity: 0.3,
+                            strokeWidth: 2
                         }],
                     },
-                    streamData: JSON.stringify(dbSeries), // Last key as requested
                 });
             }
 
-            // 💡 Sort: Newest (Top) to Oldest (Bottom)
-            logsTemp.sort((a, b) => b.rawStartTime.getTime() - a.rawStartTime.getTime());
+            processedLogs.sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime());
 
-            setDiveLogs(logsTemp);
-            alert(`Successfully imported ${logsTemp.length} dives!`);
+            // 🔥 AUTOMATED SYNC
+            await syncDivesToSupabase(processedLogs);
+
+            setDiveLogs(processedLogs);
+            Alert.alert("Success", `Imported and synced ${processedLogs.length} dives.`);
 
         } catch (e: any) {
             setError(e.message);
+            Alert.alert("Import Failed", e.message);
         } finally {
             setIsLoading(false);
         }
@@ -229,25 +260,26 @@ export default function SuuntoConnectButton() {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.header}>
                 {isLoading ? (
-                    <ActivityIndicator size="small" color="#0000ff" />
+                    <ActivityIndicator size="large" color="#1E70FE" />
                 ) : accessToken ? (
-                    <Button title="Import Last 5 Suunto Workouts" onPress={handleImportWorkouts} />
+                    <Button title="Import Recent Dives" onPress={handleImportWorkouts} />
                 ) : (
-                    <Button title="Connect Suunto" onPress={handleConnectSuunto} />
+                    <Button title="Connect Suunto Account" onPress={handleConnectSuunto} />
                 )}
-                {error && <Text style={styles.error}>Error: {error}</Text>}
+                {error && <Text style={styles.error}>{error}</Text>}
             </View>
 
-            {/* Render a chart and summary for each dive log */}
             {diveLogs.map((log) => (
-                <View key={log.workoutId} style={styles.chartContainer}>
-                    <Text style={styles.cardTitle}>{log.startTime} - {log.diveMode}</Text>
-                    <Text style={styles.cardSub}>Max Depth: {log.maxDepth}m | Temp: {log.maxTemp}°C</Text>
+                <View key={log.external_id} style={styles.chartContainer}>
+                    <Text style={styles.cardTitle}>{log.startTimeDisplay} - {log.dive_mode}</Text>
+                    <Text style={styles.cardSub}>
+                        Max: {log.max_depth}m | Temp: {log.max_temp}°C | {Math.floor(log.dive_time / 60)}m
+                    </Text>
 
                     <LineChart
                         data={log.chartConfig}
-                        width={Dimensions.get("window").width - 40}
-                        height={200}
+                        width={Dimensions.get("window").width - 60}
+                        height={160}
                         yAxisSuffix="m"
                         chartConfig={{
                             backgroundColor: "#ffffff",
@@ -256,12 +288,9 @@ export default function SuuntoConnectButton() {
                             decimalPlaces: 0,
                             color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            propsForBackgroundLines: { strokeDasharray: "", stroke: "rgba(0, 0, 0, 0.05)" },
                             propsForDots: { r: "0" }
                         }}
                         formatYLabel={(label) => Math.abs(parseFloat(label)).toString()}
-                        withVerticalLines={false}
-                        withHorizontalLines={true}
                         bezier
                         style={styles.chart}
                     />
@@ -272,24 +301,21 @@ export default function SuuntoConnectButton() {
 }
 
 const styles = StyleSheet.create({
-    scrollContainer: { paddingVertical: 40, paddingHorizontal: 15, backgroundColor: "#f5f5f5" },
-    header: { alignItems: "center", marginBottom: 20 },
-    error: { color: "red", marginTop: 10, textAlign: "center" },
+    scrollContainer: { paddingVertical: 50, paddingHorizontal: 20, backgroundColor: "#F9FAFB" },
+    header: { alignItems: "center", marginBottom: 30 },
+    error: { color: "#EF4444", marginTop: 12, fontWeight: "500" },
     chartContainer: {
         marginBottom: 20,
-        borderRadius: 16,
-        backgroundColor: "#fff",
-        padding: 15,
-        elevation: 3,
+        borderRadius: 20,
+        backgroundColor: "#FFFFFF",
+        padding: 18,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        elevation: 2
     },
-    cardTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 4 },
-    cardSub: { fontSize: 14, color: "#666", marginBottom: 10 },
-    chart: {
-        marginVertical: 8,
-        borderRadius: 16,
-    },
+    cardTitle: { fontSize: 16, fontWeight: "700", color: "#111827" },
+    cardSub: { fontSize: 13, color: "#6B7280", marginVertical: 6 },
+    chart: { marginVertical: 8, borderRadius: 12 },
 });
