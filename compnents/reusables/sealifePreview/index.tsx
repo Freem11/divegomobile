@@ -1,7 +1,6 @@
 import React from "react";
 import { moderateScale } from "react-native-size-matters";
 
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../previewGrid";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
@@ -12,11 +11,12 @@ import EmptyState from "../emptyState-new";
 import { ActiveProfile } from "../../../entities/profile";
 
 import * as S from "./styles";
+import { Image } from "../../../entities/image";
 
 type SealifePreviewProps = {
   speciesCount?: number
   sightingsCount: number
-  diveSitePics: DiveSiteWithUserName[] | null
+  diveSitePics: Image[] | null
   onViewMore: () => void
   onAddSighting?: () => void
   selectedProfile: ActiveProfile | null
@@ -42,12 +42,14 @@ export default function SealifePreview({
               {sightingsCount ? `${sightingsCount} sightings` : "0 sightings"}
             </S.TotalCount>
           </S.StatRow>
-          <S.StatRow>
-            <Icon name="fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
-            <S.TotalCount>
-              {speciesCount ? `${speciesCount} species` : "0 species"}
-            </S.TotalCount>
-          </S.StatRow>
+          {speciesCount > 0 && (
+            <S.StatRow>
+              <Icon name="fish" fill={colors.darkGrey} style={{ width: 16, marginRight: 5 }} />
+              <S.TotalCount>
+                {speciesCount ? `${speciesCount} species` : "0 species"}
+              </S.TotalCount>
+            </S.StatRow>
+          )}
         </S.StatsContainer>
       </S.LabelWrapper>
 

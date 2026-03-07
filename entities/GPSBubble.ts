@@ -53,7 +53,7 @@ export class GPSBubble {
     ...args: Parameters<T>
   ): Promise<ReturnType<T>> {
     const [bubble, ...rest] = args as GPSBubble[];
-    if (bubble.isIDL()) {
+    if (bubble && bubble.isIDL()) {
       const american = await callable(bubble.getAmericanBubble(), ...rest);
       const asian = await callable(bubble.getAsianBubble(), ...rest);
 

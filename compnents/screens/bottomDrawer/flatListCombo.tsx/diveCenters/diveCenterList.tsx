@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
@@ -11,79 +11,76 @@ import EmptyState from "../../../../reusables/emptyState-new";
 import Button from "../../../../reusables/button";
 import { useAppNavigation } from "../../../../mapPage/types";
 import * as S from "../styles";
-import { colors } from "../../../../styles";
 import Icon from "../../../../../icons/Icon";
+import { colors } from "../../../../styles";
+import getImagePublicUrl from "../../../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../../../entities/image";
 
 export default function DiveCenterList() {
   const navigation = useAppNavigation();
   const boundaries = useMapStore((state) => state.gpsBubble);
+  const mapRef = useMapStore((state) => state.mapRef);
+  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
+
   const [diveCenters, setDiveCenters] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
-  const getDiveCenterData = async (filterValue: string) => {
-    if (boundaries) {
-      const diveCenterData = await getDiveShops(boundaries, filterValue);
-      setDiveCenters(diveCenterData);
-    }
-  };
-
   useEffect(() => {
-    getDiveCenterData(filterValue);
-  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng, boundaries?.minLat, boundaries?.minLng]);
+    if (boundaries) {
+      getDiveShops(boundaries, filterValue).then(setDiveCenters);
+    }
+  }, [filterValue, boundaries?.maxLat, boundaries?.maxLng]);
 
-  const handleDiveCenterSelection = (shopId: number) => {
+  const handleSelection = async (shopId: number) => {
+    if (mapRef) {
+      const b = await mapRef.getMapBoundaries();
+      setMapRegion({
+        latitude: (b.northEast.latitude + b.southWest.latitude) / 2,
+        longitude: (b.northEast.longitude + b.southWest.longitude) / 2,
+        latitudeDelta: Math.abs(b.northEast.latitude - b.southWest.latitude),
+        longitudeDelta: Math.abs(b.northEast.longitude - b.southWest.longitude),
+      });
+    }
     navigation.navigate("DiveShopNavigator", { id: shopId });
-  };
-
-  const handleClear = () => {
-    setFilterValue("");
-  };
-
-  const handleScreen = () => {
-    navigation.navigate("Settings");
   };
 
   const [layoutReady, setLayoutReady] = useState(false);
 
-  const renderListHeader = useMemo(() => (
-    <S.FilterContainer>
-      <MobileTextInput
-        iconLeft={"diving-scuba-flag"}
-        iconRight={"close"}
-        placeholder="Filter Dive Centers"
-        onChangeText={(text: string) => setFilterValue(text)}
-        handleClear={() => handleClear()}
-        filterValue={filterValue}
-      />
-    </S.FilterContainer>
-  ), [filterValue, handleClear, setFilterValue]);
-
   return (
-    <S.VerticalFlatlistContainer
-      onLayout={() => {
-        if (!layoutReady) setLayoutReady(true);
-      }}
-    >
+    <S.VerticalFlatlistContainer onLayout={() => setLayoutReady(true)}>
       <S.Header>Nearby Dive Centers</S.Header>
       <S.SubHeaderLeft>
         <S.SwipeIndicator>
-          <S.IconWrapper>
-            <Icon name="double-chevron-left" color={colors.border} />
-          </S.IconWrapper>
+          <S.IconWrapper><Icon name="double-chevron-left" color={colors.border} /></S.IconWrapper>
           <S.Subtitle>Dive Sites</S.Subtitle>
         </S.SwipeIndicator>
       </S.SubHeaderLeft>
-      {renderListHeader}
 
-      {layoutReady ? (
+      <S.FilterContainer>
+        <MobileTextInput
+          iconLeft="diving-scuba-flag"
+          iconRight="close"
+          placeholder="Filter Dive Centers"
+          onChangeText={setFilterValue}
+          handleClear={() => setFilterValue("")}
+          filterValue={filterValue}
+        />
+      </S.FilterContainer>
+
+      {layoutReady && (
         <FlatList
           data={diveCenters}
-          keyExtractor={(item) => item.id?.toString() || item.id || JSON.stringify(item)}
-          renderItem={({ item }) => <Card id={item.id} name={item.orgName} photoPath={item.diveShopProfilePhoto} onPressHandler={() => handleDiveCenterSelection(item.id)} />}
-          nestedScrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
-          ListFooterComponent={<View style={{ height: moderateScale(30) }}></View>}
+          keyExtractor={(item, index) => item.id?.toString() || `shop-${index}`}
+          renderItem={({ item }) => (
+            <Card
+              id={item.id}
+              name={item.orgName}
+              photoPath={getImagePublicUrl(item.diveShopProfilePhoto, IMAGE_SIZE.LG)}
+              onPressHandler={() => handleSelection(item.id)}
+            />
+          )}
+          nestedScrollEnabled
+          ListFooterComponent={<View style={{ height: moderateScale(30) }} />}
           ListEmptyComponent={(
             <S.EmptyStateWrapper>
               <EmptyState
@@ -97,12 +94,12 @@ export default function DiveCenterList() {
                 iconLeft="diving-scuba-flag"
                 round={false}
                 style={{ alignSelf: "center", width: "90%" }}
-                onPress={() => handleScreen()}
+                onPress={() => navigation.navigate("Settings")}
               />
             </S.EmptyStateWrapper>
           )}
         />
-      ) : null}
+      )}
     </S.VerticalFlatlistContainer>
   );
 }

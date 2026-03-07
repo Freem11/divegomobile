@@ -1,12 +1,10 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { colors } from "../../styles";
 import emilio from "../../png/guideIcons/EmilioNew.png";
 
-import WelcomeScreen from "./Welcome"
+import WelcomeScreen from "./Welcome";
 import DiverNameScreen from "./DiverName";
-import { NavigationContainer } from "@react-navigation/native";
 import LocationScreen from "./Location";
 import GalleryScreen from "./Gallery";
 import NotificationsScreen from "./Notifications";
@@ -21,7 +19,7 @@ export type OnboardingRoutes = {
     Gallery: undefined,
     Notifications: undefined,
     Finish: undefined
-}
+};
 
 export default function OnboardingNavigator() {
     const Stack = createNativeStackNavigator<OnboardingRoutes>();

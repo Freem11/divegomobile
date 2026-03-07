@@ -102,6 +102,9 @@ export const Step1: React.FC<Step1Props> = ({
                 placeholder={t("PicUploader.datePlaceholder")}
                 onChangeText={onChange}
                 value={value}
+                editable={false}
+                showSoftInputOnFocus={false}
+                onPress={() => showDatePicker()}
               />
             </View>
           </Pressable>

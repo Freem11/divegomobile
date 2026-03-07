@@ -9,7 +9,6 @@ import SelectedDiveSiteContextProvider from "./selectedDiveSiteContext";
 import PictureContextProvider from "./pictureContext";
 import SelectedPictureContextProvider from "./selectedPictureContext";
 import SelectedProfileContextProvider from "./selectedProfileModalContext";
-import SelectedPhotoContextProvider from "./selectedPhotoContext";
 import EditModeContextProvider from "./editModeContext";
 import EditsContextProvider from "./editsContext";
 import SavedTranslateYContextProvider from "./savedTranslateYContext";
@@ -25,10 +24,8 @@ const providers = [
     PictureContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
-    SelectedPhotoContextProvider,
     SelectedPictureContextProvider,
     SelectedProfileContextProvider,
-    SelectedPhotoContextProvider,
     EditModeContextProvider,
     EditsContextProvider,
     SavedTranslateYContextProvider,

@@ -80,13 +80,19 @@ const ParallaxDrawer = forwardRef<ParallaxDrawerHandle, ParallaxDrawerProps>(({
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{ flex: 1 }}>
-          <SafeAreaView style={[S.styles.safeArea]}>
-            <S.HeaderWrapper>
-              <ButtonIcon
-                icon="chevron-left"
-                size={30}
-                onPress={() => closeParallax(null)}
-              />
+          <SafeAreaView style={[S.styles.safeArea]} pointerEvents="box-none">
+            <S.HeaderWrapper style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+
+              {/* --- UPDATED: Conditional Back Button Area --- */}
+              <View style={{ minWidth: 40 }}>
+                {onClose && (
+                  <ButtonIcon
+                    icon="chevron-left"
+                    size={30}
+                    onPress={() => closeParallax(null)}
+                  />
+                )}
+              </View>
 
               {popoverContent && (
                 <View ref={iconRef} collapsable={false}>
