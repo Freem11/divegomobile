@@ -22,7 +22,6 @@ export default function DiveSitePhotosPage() {
   const { t } = useTranslation();
 
   const getPhotos = async (site, userProfile: ActiveProfile) => {
-
     const photos = await getDiveSitePhotos(
       site.lat,
       site.lng,
@@ -35,14 +34,23 @@ export default function DiveSitePhotosPage() {
   const handleProfileMove = async (userName: string) => {
     const picOwnerAccount = await grabProfileByUserName(userName);
 
-    if (userProfile.UserID === picOwnerAccount[0].UserID) {
+    if (!picOwnerAccount || picOwnerAccount.length === 0) {
+      console.error("Profile not found");
       return;
     }
 
-    mainNavigation.navigate("BottomTab", {
-      screen: "Profile",
-      params: { id: picOwnerAccount[0].id },
-    });
+    const targetProfile = picOwnerAccount[0];
+
+    if (userProfile.UserID === targetProfile.UserID) {
+      mainNavigation.navigate("BottomTab", {
+        screen: "Profile",
+        params: { id: targetProfile.id },
+      });
+    } else {
+      mainNavigation.navigate("UserProfile", {
+        id: targetProfile.id,
+      });
+    }
   };
 
   const onClose = async () => {
@@ -63,5 +71,4 @@ export default function DiveSitePhotosPage() {
       handleProfileMove={handleProfileMove}
     />
   );
-
 }

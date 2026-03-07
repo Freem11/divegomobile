@@ -1,3 +1,6 @@
+import React from "react";
+
+import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
 
 export function determineIcon(first: string, rest: string[]) {
@@ -6,19 +9,19 @@ export function determineIcon(first: string, rest: string[]) {
     return "more";
   }
   if (rest.includes("Lateral")) {
-    return "arrow-left-right";
+    return "ArrowsLeftRight";
   }
 
   if (rest.includes("Upwellings")) {
-    return "circle-arrow-up";
+    return "ArrowCircleUp";
   }
 
   if (rest.includes("Downwellings")) {
-    return "circle-arrow-down";
+    return "ArrowCircleDown";
   }
 
   if (rest.includes("Contrasting")) {
-    return "arrow-left-right-reverse";
+    return "ArrowsHorizontal";
   }
 
   if (rest.includes("Visibility")) {
@@ -26,62 +29,70 @@ export function determineIcon(first: string, rest: string[]) {
   }
 }
 
-export function determineChipIcon(conditionText: string) {
+export function determineChipIcon(conditionText: string, textColor: string) {
 
   if (conditionText === "Boat Dive") {
-    return "dive-boat";
-  }
+    return <Icon name="Sailboat" color={textColor} />;
+  };
 
   if (conditionText === "Shore Dive") {
-    return "island";
+    return <Icon name="Island" color={textColor} />;
   }
 
   if (conditionText === "Wreck Dive") {
-    return "anchor-alt";
+    return <Icon name="anchor-alt" color={textColor} />;
   }
 
   if (conditionText === "Altitude") {
-    return "mountains";
+    return <Icon name="Mountains" color={textColor} />;
   }
 
   if (conditionText === "Cave Dive") {
-    return "vinyl-record";
+    return <Icon name="VinylRecord" color={textColor} />;
   }
 
   if (conditionText === "Surge") {
-    return "waves";
+    return <Icon name="Waves" color={textColor} />;
   }
 
   if (conditionText === "Surface Traffic") {
-    return "traffic-light";
+    return <Icon name="TrafficSignal" color={textColor} />;
   }
 
   if (conditionText === "No Reference Points") {
-    return "GPS-splash";
+    return <Icon name="GpsSlash" color={textColor} />;
   }
 
   if (conditionText === "Bottom Depth > AOW Limits") {
-    return "warning-diamond";
+    return <Icon name="WarningDiamond" color={textColor} />;
   }
 
   if (conditionText === "Kelp") {
-    return "plant";
+    return <Icon name="coral-svgrepo-com 1" color={textColor} />;
   }
 
   if (conditionText === "Pollution") {
-    return "beer-bottle";
+    return <Icon name="BeerBottle" color={textColor} />;
   }
 
   if (conditionText === "Night Dive") {
-    return "moon-stars";
+    return <Icon name="MoonStars" color={textColor} />;
   }
 
   if (conditionText === "Salt Water") {
-    return "salt-water";
+    return <Icon name="salt-water" color={textColor} />;
   }
 
   if (conditionText === "Fresh Water") {
-    return "fresh-water";
+    return <Icon name="fresh-water" color={textColor} />;
+  }
+
+  if (conditionText.includes("Follow")) {
+    return <Icon name="plus" color={textColor} />;
+  }
+
+  if (conditionText.includes("Unfollow")) {
+    return <Icon name="close" color={textColor} />;
   }
 
 }

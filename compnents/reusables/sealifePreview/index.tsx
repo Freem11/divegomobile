@@ -1,7 +1,6 @@
 import React from "react";
 import { moderateScale } from "react-native-size-matters";
 
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import { PreviewGrid } from "../previewGrid";
 import Icon from "../../../icons/Icon";
 import { colors } from "../../styles";
@@ -10,13 +9,14 @@ import Button from "../button";
 import GhostButton from "../ghostButton";
 import EmptyState from "../emptyState-new";
 import { ActiveProfile } from "../../../entities/profile";
+import { Image } from "../../../entities/image";
 
 import * as S from "./styles";
 
 type SealifePreviewProps = {
   speciesCount?: number
   sightingsCount: number
-  diveSitePics: DiveSiteWithUserName[] | null
+  diveSitePics: Image[] | null
   onViewMore: () => void
   onAddSighting?: () => void
   selectedProfile: ActiveProfile | null

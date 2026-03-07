@@ -1,0 +1,26 @@
+diff --git a/node_modules/react-native-maps/lib/ios/AirGoogleMaps/AIRGoogleMap.m b/node_modules/react-native-maps/lib/ios/AirGoogleMaps/AIRGoogleMap.m
+--- a/node_modules/react-native-maps/lib/ios/AirGoogleMaps/AIRGoogleMap.m
++++ b/node_modules/react-native-maps/lib/ios/AirGoogleMaps/AIRGoogleMap.m
+@@ -186,7 +186,11 @@
+       [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
+     }
+   }
+-  [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
++  // Nil safety: prevent crash when React passes nil subview (e.g. 2nd open from TripCreator)
++  if (subview != nil) {
++    NSUInteger safeIndex = MIN((NSUInteger)atIndex, [_reactSubviews count]);
++    [_reactSubviews insertObject:(UIView *)subview atIndex:safeIndex];
++  }
+ }
+ #pragma clang diagnostic pop
+ 
+@@ -233,7 +237,9 @@
+       [self removeReactSubview:(UIView *)childSubviews[i]];
+     }
+   }
+-  [_reactSubviews removeObject:(UIView *)subview];
++  if (subview != nil) {
++    [_reactSubviews removeObject:(UIView *)subview];
++  }
+ }
+ #pragma clang diagnostic pop

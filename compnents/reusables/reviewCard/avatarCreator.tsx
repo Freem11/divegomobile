@@ -25,7 +25,7 @@ function Avatar({ photo, defaultImage }: AvatarProps = {}) {
     return (
       <S.StyledIcon>
         <Icon
-          name={defaultImage ? defaultImage as IconName : "user"}
+          name={defaultImage ? defaultImage as IconName : "User"}
           style={{ width: moderateScale(18), height: moderateScale(18) }}
           fill={colors.primaryBlue}
         />

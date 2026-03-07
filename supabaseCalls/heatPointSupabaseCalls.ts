@@ -2,24 +2,22 @@ import { GPSBubble } from "../entities/GPSBubble";
 import { HeatPoint } from "../entities/heatPoint";
 import { supabase } from "../supabase";
 
-
 type HeatPointFilter = {
   animal?: string[]
 };
 
 export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter) => {
   const builder = supabase
-    .from('heatPoints')
-    .select('lat,lng,weight')
-    .gte('lat', bubble.minLat)
-    .gte('lng', bubble.minLng)
-    .lte('lat', bubble.maxLat)
-    .lte('lng', bubble.maxLng);
+    .from("heatPoints")
+    .select("lat,lng,weight")
+    .gte("lat", bubble && bubble.minLat)
+    .gte("lng", bubble && bubble.minLng)
+    .lte("lat", bubble && bubble.maxLat)
+    .lte("lng", bubble && bubble.maxLng);
 
   if (filter?.animal?.length) {
-    builder.in('animal', filter.animal);
+    builder.in("animal", filter.animal);
   }
-
 
   const { data } = await builder;
 
@@ -70,7 +68,7 @@ export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter)
 //   }
 //   }
 
-// not in use 
+// not in use
 // export const getLoneHeatPoint = async (values) => {
 //   const { data, error } = await supabase
 //     .from("heatPoints")
@@ -92,7 +90,6 @@ export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter)
 //     return data;
 //   }
 // };
-
 
 // not in use
 // export const insertHeatPoint = async (values) => {
@@ -183,7 +180,7 @@ export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter)
 //         creatureList = creatureList + creature + ",";
 //       }
 //     });
-  
+
 //   let creatureListFinal;
 
 //   if (creatureList !== undefined) {
@@ -209,7 +206,7 @@ export const getHeatPoints = async (bubble: GPSBubble, filter?: HeatPointFilter)
 //     return data;
 //   }
 // }
- 
+
 // };
 
 /** @deprecated */
@@ -220,7 +217,7 @@ export const getHeatPointsWithUser = async (values) => {
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: '',
+    userid: "",
   });
 
   if (error) {
@@ -239,7 +236,7 @@ export const getHeatPointsWithUserEmpty = async (values) => {
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: '',
+    userid: "",
   });
 
   if (error) {
@@ -253,7 +250,7 @@ export const getHeatPointsWithUserEmpty = async (values) => {
   }
 };
 
-// not in use 
+// not in use
 // export const picClickheatPoints = async (GPSBubble, animal) => {
 //   // console.log("HIHIHIH", GPSBubble, animal)
 //   let animalVal;

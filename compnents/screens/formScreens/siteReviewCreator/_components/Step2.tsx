@@ -78,22 +78,22 @@ export const Step2: React.FC<Step2Props> = ({
         options={[
           {
             label: t("DiveSiteReviewer.noRefsButton"),
-            icon: "GPS-splash",
+            icon: "GpsSlash",
             value: DiveConditions.NO_REFS
           },
           {
             label: t("DiveSiteReviewer.limitsButton"),
-            icon: "warning-diamond",
+            icon: "WarningDiamond",
             value: DiveConditions.MAX_DEPTH
           },
           {
             label: t("DiveSiteReviewer.kelpButton"),
-            icon: "plant",
+            icon: "coral-svgrepo-com 1",
             value: DiveConditions.KELP
           },
           {
             label: t("DiveSiteReviewer.pollutionButton"),
-            icon: "beer-bottle",
+            icon: "BeerBottle",
             value: DiveConditions.POLLUTION
           }
         ]}
@@ -133,22 +133,22 @@ export const Step2: React.FC<Step2Props> = ({
             options={[
               {
                 label: t("DiveSiteReviewer.latCurrentButton"),
-                icon: "arrow-left-right",
+                icon: "ArrowsLeftRight",
                 value: DiveConditions.CURRENT_LATTERAL
               },
               {
                 label: t("DiveSiteReviewer.upCurrentButton"),
-                icon: "circle-arrow-up",
+                icon: "ArrowCircleUp",
                 value: DiveConditions.CURRENT_UP
               },
               {
                 label: t("DiveSiteReviewer.downCurrentButton"),
-                icon: "circle-arrow-down",
+                icon: "ArrowCircleDown",
                 value: DiveConditions.CURRENT_DOWN
               },
               {
                 label: t("DiveSiteReviewer.contrastCurrentButton"),
-                icon: "arrow-left-right-reverse",
+                icon: "ArrowsHorizontal",
                 value: DiveConditions.CURRENT_CONTRASTING
               }
             ]}

@@ -4,7 +4,8 @@ import noImage from "../../png/NoImage.png";
 import ParallaxDrawer, { ParallaxDrawerHandle } from "../../reusables/parallaxDrawer";
 import { useDiveShopNavigation } from "../diveShop/types";
 import { getReviewById } from "../../../supabaseCalls/diveSiteReviewCalls/gets";
-import { cloudflareBucketUrl } from "../../globalVariables";
+import getImagePublicUrl from "../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../entities/image";
 
 import ReviewScreen from ".";
 
@@ -23,12 +24,8 @@ export default function ReviewParallax(props: ReviewParallaxProps) {
 
   const getReview = async () => {
     const reviewInfo = await getReviewById(props.id);
-    setSelectedReview(reviewInfo);
+    setSelectedReview(reviewInfo.result);
   };
-
-  const diveSitePhoto = selectedReview?.data.diveSiteProfilePhoto;
-  const fileName = diveSitePhoto ? diveSitePhoto.split("/").pop() : null;
-  const remoteUri = `${cloudflareBucketUrl}${fileName}`;
 
   const onClose = async () => {
     diveShopNavigation.goBack();
@@ -37,10 +34,10 @@ export default function ReviewParallax(props: ReviewParallaxProps) {
   return (
     <ParallaxDrawer
       ref={drawerRef}
-      headerImage={diveSitePhoto ? { uri: remoteUri } : noImage}
+      headerImage={getImagePublicUrl(selectedReview?.diveSiteProfilePhoto, IMAGE_SIZE.XL, noImage)}
       onClose={onClose}
     >
-      <ReviewScreen selectedReview={selectedReview?.data} />
+      <ReviewScreen selectedReview={selectedReview} />
     </ParallaxDrawer>
   );
 }

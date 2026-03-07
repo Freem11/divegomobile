@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { StyleSheet, Animated, Dimensions, Platform } from "react-native";
-import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { moderateScale } from "react-native-size-matters";
 import Svg from "react-native-svg";

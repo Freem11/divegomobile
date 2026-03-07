@@ -92,6 +92,10 @@ export const LabelsContainer = styled.View`
   width: 95%;
 `;
 
+export const NoLabels = styled.View`
+  height: ${moderateScale(25)}px;
+`;
+
 export const TagWrapper = styled.View`
   background-color: ${colors.lighterBlue};
   border-radius: ${moderateScale(7)}px;

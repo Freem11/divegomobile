@@ -1,49 +1,51 @@
+import { Image } from "./image";
+
 export type PhotoWithLikesAndComments = {
-  id:           number
-  created_at:   string
-  photoFile:    string
-  label:        string
-  dateTaken:    string
-  latitude:     number
-  longitude:    number
-  month:        number
-  UserID:       string
-  UserName:     string
-  likecount:    number
-  likedbyuser:  boolean
-  likeid:       number | null
+  id: number
+  created_at: string
+  photoFile: string
+  label: string
+  dateTaken: string
+  latitude: number
+  longitude: number
+  month: number
+  UserID: string
+  UserName: string
+  likecount: number
+  likedbyuser: boolean
+  likeid: number | null
   commentcount: number
 };
 
 export type PhotosGroupedByDate = {
   dateTaken: string
-  name:      string
-  photos:    PhotoWithLikesAndComments[]
+  name: string
+  photos: PhotoWithLikesAndComments[]
 };
 
 export type Photo = {
-  id:         number
+  id: number
   created_at: string
-  photoFile:  string
-  label:      string
-  dateTaken:  string
-  latitude:   number
-  longitude:  number
-  month:      number
-  UserID:     string
-  UserName:   string
+  photoFile: Image
+  label: string
+  dateTaken: string
+  latitude: number
+  longitude: number
+  month: number
+  UserID: string
+  UserName: string
 };
 
 export type Animal = {
-  label:      string
-  photofile:  string
+  label: string
+  image: Image
   times_seen: number
 };
 
 export type HistogramData = {
   animals: string[]
-  minLat:  number
-  maxLat:  number
-  minLng:  number
-  maxLng:  number
+  minLat: number
+  maxLat: number
+  minLng: number
+  maxLng: number
 };

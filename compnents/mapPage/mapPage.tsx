@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import {
-  Platform,
-} from "react-native";
+import React, { useEffect, useLayoutEffect } from "react";
+import { Platform } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useTranslation } from "react-i18next";
 
 import { useMapStore } from "../googleMap/useMapStore";
 import { useUserProfile } from "../../store/user/useUserProfile";
+import { useStore } from "../../store"; // Import your main store
 
 import MainNavigator from "./mainNavigator";
 
@@ -17,17 +16,21 @@ export default function MapPage() {
 
   const mapConfig = useMapStore((state) => state.mapConfig);
 
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const { userProfile } = useUserProfile();
+  // 1. Hook into the global store instead of local useState
+  const showOnboarding = useStore((state) => state.showOnboarding);
+  const setShowOnBoarding = useStore((state) => state.setShowOnBoarding);
 
+  const { userProfile } = useUserProfile();
   const { t } = useTranslation();
 
   const getProfile = async () => {
     try {
       if (userProfile) {
+        // If the user has no UserName, trigger the onboarding flow
         if (userProfile.UserName == null || userProfile.UserName === "") {
           setTimeout(() => {
-            setShowOnboarding(true);
+            // 2. Update the global store
+            setShowOnBoarding(true);
           }, 500);
         }
       }
@@ -38,13 +41,16 @@ export default function MapPage() {
 
   useLayoutEffect(() => {
     getProfile();
-  }, []);
+  }, [userProfile]);
 
   useEffect(() => {
     getProfile();
   }, []);
 
   return (
-    <MainNavigator showOnboarding={showOnboarding} mapConfig={mapConfig} />
+    <MainNavigator
+      showOnboarding={showOnboarding}
+      mapConfig={mapConfig}
+    />
   );
 }

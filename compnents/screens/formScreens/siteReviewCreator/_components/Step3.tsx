@@ -3,15 +3,17 @@ import { Control, Controller, FieldErrors, UseFormSetValue, UseFormWatch } from 
 import { moderateScale } from "react-native-size-matters";
 import { ImagePickerAsset } from "expo-image-picker";
 import { useTranslation } from "react-i18next";
+import { styled } from "styled-components";
 
 import { multiImageHandler } from "../../../imageUploadHelpers";
 import Icon from "../../../../../icons/Icon";
-import { colors } from "../../../../styles";
+import { activeFonts, colors } from "../../../../styles";
 import { Form } from "../form";
 import * as S from "../../styles";
 import { ReviewPhotos } from "../../../../../entities/diveSiteReview";
 import { cloudflareBucketUrl } from "../../../../globalVariables";
 import { PhotoUpload } from "../../photoUpload";
+import { Explainer } from "../../explainer";
 
 interface Step3Props {
   control: Control<Form, any, Form>
@@ -69,6 +71,26 @@ export const Step3: React.FC<Step3Props> = ({
     images.map((uri) => ({ photofile: uri })),
     [images]);
 
+  const popoverContent = () => {
+    const Bold = styled(S.PopOverText)`
+        font-family: ${activeFonts.Medium}
+      `;
+
+    return (
+      <S.PopOver>
+        <S.PopOverText>
+          Photos attached to your review may be eligible for special bonuses!
+          {"\n"}
+          {"\n"}
+          1) Sea life photos can be <Bold>promoted to Sea Life Sightings</Bold> by our team.
+          {"\n"}
+          {"\n"}
+          2) Dive site photos that capture the location perfectly <Bold>may be selected as the Official Header Photo for that site.</Bold>
+        </S.PopOverText>
+      </S.PopOver >
+    );
+  };
+
   return (
     <S.InputGroupContainer>
       <S.Title>{t("DiveSiteReviewer.step3Title")}</S.Title>
@@ -92,7 +114,9 @@ export const Step3: React.FC<Step3Props> = ({
         />
       </S.DescriptionBox>
 
-      <S.Title>{t("DiveSiteReviewer.addPhotos")}</S.Title>
+      <S.Title>{t("DiveSiteReviewer.addPhotos")}
+        <Explainer popoverContent={popoverContent} iconSize={20} />
+      </S.Title>
 
       {imagesForUpload.length > 0 ? (
         <PhotoUpload

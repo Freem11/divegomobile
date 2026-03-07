@@ -2,8 +2,9 @@ import { DiveSiteBasic, DiveSiteWithUserName } from "../entities/diveSite";
 import { GPSBubble } from "../entities/GPSBubble";
 import { Photo } from "../entities/photos";
 import { supabase } from "../supabase";
+import { Image } from "../entities/image";
 
-export const diveSites = async() => {
+export const diveSites = async () => {
   const { data, error } = await supabase.from("diveSites").select();
 
   if (error) {
@@ -16,7 +17,7 @@ export const diveSites = async() => {
   }
 };
 
-export const getDiveSitesBasic = async(
+export const getDiveSitesBasic = async (
   bubble: GPSBubble
 ): Promise<DiveSiteBasic[]> => {
   const { data, error } = await supabase
@@ -35,13 +36,13 @@ export const getDiveSitesBasic = async(
   return data;
 };
 
-export const getDiveSitesWithUser = async(values, filter?: Partial<Photo>,) => {
-  const builder = supabase.rpc("get_divesites_with_username", {
+export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>,) => {
+  const builder = supabase.rpc("get_dive_sites_with_images", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
     max_lng: values.maxLng,
     min_lng: values.minLng,
-    userid: "",
+    p_user_id: "",
   });
 
   if (filter?.label) {
@@ -53,13 +54,26 @@ export const getDiveSitesWithUser = async(values, filter?: Partial<Photo>,) => {
     return [];
   }
 
-  if (data) {
-    return data as DiveSiteWithUserName[];
-  }
-  return [];
+  const result: Partial<Photo>[] = data.map((item: any) => {
+    const sitePhoto: Image = {
+      file_name: item.diveSiteProfilePhoto,
+      public_domain: item.public_domain,
+      sm: item.sm,
+      md: item.md,
+      lg: item.lg,
+      xl: item.xl,
+    };
+
+    return {
+      ...item,
+      diveSiteProfilePhoto: sitePhoto,
+    };
+  });
+
+  return result;
 };
 
-export const getSiteNamesThatFit = async(value) => {
+export const getSiteNamesThatFit = async (value) => {
   if (value === "") {
     return [];
   }
@@ -80,7 +94,7 @@ export const getSiteNamesThatFit = async(value) => {
   }
 };
 
-export const insertDiveSite = async(values) => {
+export const insertDiveSite = async (values) => {
   const { data, error } = await supabase.from("diveSites").insert([
     {
       name: values.name,
@@ -100,7 +114,7 @@ export const insertDiveSite = async(values) => {
   }
 };
 
-export const getDiveSiteByName = async(value) => {
+export const getDiveSiteByName = async (value) => {
   const { data, error } = await supabase
     .from("diveSites")
     .select()
@@ -116,7 +130,7 @@ export const getDiveSiteByName = async(value) => {
   }
 };
 
-export const getDiveSiteWithUserName = async(values) => {
+export const getDiveSiteWithUserName = async (values) => {
   const { data, error } = await supabase.rpc(
     "get_single_divesite_info_with_username",
     {
@@ -135,7 +149,7 @@ export const getDiveSiteWithUserName = async(values) => {
   }
 };
 
-export const getDiveSitesByIDs = async(valueArray) => {
+export const getDiveSitesByIDs = async (valueArray) => {
   const Q1 = valueArray.substring(1, valueArray.length);
   const Q2 = Q1.substring(Q1.length - 1, 0);
 
@@ -154,7 +168,7 @@ export const getDiveSitesByIDs = async(valueArray) => {
   }
 };
 
-export const getSingleDiveSiteByNameAndRegion = async(values) => {
+export const getSingleDiveSiteByNameAndRegion = async (values) => {
   const query = supabase.from("diveSites").select("*").eq("name", values.name);
 
   if (values.region === undefined) {
@@ -176,8 +190,8 @@ export const getSingleDiveSiteByNameAndRegion = async(values) => {
   }
 };
 
-export const updateDiveSite = async(values) => {
-  const { data, error } =  await supabase
+export const updateDiveSite = async (values) => {
+  const { data, error } = await supabase
     .from("diveSites")
     .update(values)
     .eq("id", values.id)
@@ -193,7 +207,7 @@ export const updateDiveSite = async(values) => {
   }
 };
 
-export const getSingleDiveSite = async(lat, lng) => {
+export const getSingleDiveSite = async (lat, lng) => {
   const { data, error } = await supabase
     .from("diveSites")
     .select()
@@ -210,7 +224,7 @@ export const getSingleDiveSite = async(lat, lng) => {
   }
 };
 
-export const getDiveSiteById = async(id: string | number) => {
+export const getDiveSiteById = async (id: string | number) => {
   const { data, error } = await supabase.rpc("get_single_divesite_byid_info_with_username", {
     idnum: id,
   });
@@ -220,12 +234,22 @@ export const getDiveSiteById = async(id: string | number) => {
     return [];
   }
 
-  if (data) {
-    return data;
-  }
+  const profilehoto: Image = {
+    file_name: data[0].divesiteprofilephoto,
+    public_domain: data[0].public_domain,
+    sm: data[0].sm,
+    md: data[0].md,
+    lg: data[0].lg,
+    xl: data[0].xl,
+  };
+
+  return {
+    ...data[0],
+    profilePhoto: profilehoto,
+  };
 };
 
-export const getMapDiveSiteCount = async(values) => {
+export const getMapDiveSiteCount = async (values) => {
   const { data, error } = await supabase.rpc("get_dive_sites_on_map", {
     max_lat: values.maxLat,
     min_lat: values.minLat,

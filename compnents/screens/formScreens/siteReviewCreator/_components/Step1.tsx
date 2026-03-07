@@ -89,22 +89,22 @@ export const Step1: React.FC<Step1Props> = ({
         options={[
           {
             label: t("DiveSiteReviewer.shoreDiveButton"),
-            icon: "island",
+            icon: "Island",
             value: DiveConditions.SHORE_DIVE
           },
           {
             label: t("DiveSiteReviewer.boatDiveButton"),
-            icon: "dive-boat",
+            icon: "Sailboat",
             value: DiveConditions.BOAT_DIVE
           },
           {
             label: t("DiveSiteReviewer.nightDiveButton"),
-            icon: "moon-stars",
+            icon: "MoonStars",
             value: DiveConditions.NIHGT_DIVE
           },
           {
             label: t("DiveSiteReviewer.altitudeDiveButton"),
-            icon: "mountains",
+            icon: "Mountains",
             value: DiveConditions.ALTITUDE_DIVE
           },
           {
@@ -114,7 +114,7 @@ export const Step1: React.FC<Step1Props> = ({
           },
           {
             label: t("DiveSiteReviewer.caveDiveButton"),
-            icon: "vinyl-record",
+            icon: "VinylRecord",
             value: DiveConditions.CAVE_DIVE
           }
         ]}
@@ -147,12 +147,12 @@ export const Step1: React.FC<Step1Props> = ({
         options={[
           {
             label: t("DiveSiteReviewer.trafficButton"),
-            icon: "traffic-light",
+            icon: "TrafficSignal",
             value: DiveConditions.SURFACE_TRAFFIC
           },
           {
             label: t("DiveSiteReviewer.surgeButton"),
-            icon: "waves",
+            icon: "Waves",
             value: DiveConditions.SURGE
           }
         ]}

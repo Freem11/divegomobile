@@ -115,6 +115,8 @@ export const Step1: React.FC<Step1Props> = ({
                   onChangeText={onChange}
                   value={value}
                   pointerEvents="none"
+                  editable={false}
+                  showSoftInputOnFocus={false}
                   onPress={() => showDatePicker("Start")}
                 />
               </Pressable>
@@ -136,6 +138,9 @@ export const Step1: React.FC<Step1Props> = ({
                   onChangeText={onChange}
                   value={value}
                   pointerEvents="none"
+                  editable={false}
+                  showSoftInputOnFocus={false}
+                  onPress={() => showDatePicker("End")}
                 />
               </Pressable>
             )}

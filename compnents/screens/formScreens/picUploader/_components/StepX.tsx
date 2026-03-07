@@ -52,7 +52,7 @@ export const StepX: React.FC<StepXProps> = ({
             modeSelectedTags="on"
             placeholder={t("PicUploader.seaLifePlaceholder")}
             getMoreOptions={getMoreAnimals}
-            iconLeft={<Icon name="fish" fill={colors.primaryBlue} />}
+            iconLeft={<Icon name="Fish" fill={colors.primaryBlue} />}
             iconRight={<Icon name="chevron-down" fill={colors.neutralGrey} />}
             error={fieldError}
             value={value}

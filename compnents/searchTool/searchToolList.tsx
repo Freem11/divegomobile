@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   FlatList,
   View,
-  StyleSheet,
   Platform,
   Keyboard,
   StatusBar
@@ -12,12 +11,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import SearchToolListItem from "./searchToolListItem";
 
-export default function SearchToolList({ data, ...props }) {
+export default function SearchToolList({ data, handleMapOptionSelected, handleDiveSiteOptionSelected, handleSeaLifeOptionSelected, setSearchStatus, ...props }) {
   const insets = useSafeAreaInsets();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  // 1. Calculate how much space to "leave" at the top so items don't go behind the bar
-  // This should match your TOP_POSITION + SearchBar Height
   const topInset = Platform.select({
     ios: insets.top + moderateScale(65),
     android: (StatusBar.currentHeight || 0) + moderateScale(70),
@@ -62,6 +59,10 @@ export default function SearchToolList({ data, ...props }) {
           <SearchToolListItem
             name={item.title}
             soureImage={item.source}
+            handleSeaLifeOptionSelected={handleSeaLifeOptionSelected}
+            handleMapOptionSelected={handleMapOptionSelected}
+            handleDiveSiteOptionSelected={handleDiveSiteOptionSelected}
+            setSearchStatus={setSearchStatus}
             {...props}
           />
         )}
@@ -69,9 +70,3 @@ export default function SearchToolList({ data, ...props }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  flexWrapper: {
-    flex: 1,
-  },
-});
