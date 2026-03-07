@@ -2,7 +2,8 @@ export enum MapConfigurations {
   Default = 0,
   PinDrop = 1,
   TripView = 2,
-  TripBuild = 3
+  TripBuild = 3,
+  DiveSiteSearch = 4
 };
 
 export enum PointFeatureCategory {
@@ -21,5 +22,7 @@ export type ClusterProperty = {
 export enum ScreenReturn {
   SiteSubmitter = 1,
   PartnerRequestPage = 2,
-  TripCreator = 3
+  TripCreator = 3,
+  SeaLifeSightings = 4,
+  DiveSiteReview = 5
 }

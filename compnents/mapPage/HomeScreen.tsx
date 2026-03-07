@@ -16,6 +16,7 @@ import { MarkerDiveShop } from "../googleMap/marker/markerDiveShop";
 import { MarkerDiveSite } from "../googleMap/marker/markerDiveSite";
 import { MarkerDiveSiteCluster } from "../googleMap/marker/markerDiveSiteCluster";
 import HeatPoint from "../png/guideIcons/heatpoint.png";
+import HorizontalPager from "../screens/bottomDrawer/flatListCombo.tsx";
 
 import * as S from "./styles";
 
@@ -114,7 +115,7 @@ export default function HomeScreen() {
                             style={{ pointerEvents: "auto" }}
                         />
                     </S.TargetWrapper>
-                    <BottomDrawer mapRegion={mapRegion} mapConfig={mapConfig} />
+                    <BottomDrawer mapRegion={mapRegion} mapConfig={mapConfig} Content={(props) => <HorizontalPager {...props} />} />
                 </S.SafeAreaBottom>
             )
                 : null}

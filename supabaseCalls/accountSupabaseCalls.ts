@@ -142,7 +142,6 @@ export const grabProfileByUserId = async (id: string) => {
   if (!data || data.length === 0) {
     return null;
   }
-  console.log("grab profile by user id data: ", data);
 
   const profilehoto: Image = {
     file_name: data[0].diveSiteProfilePhoto,

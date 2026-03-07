@@ -28,28 +28,49 @@ import {
 import { SearchStatusContext } from "../../contexts/searchStatusContext";
 import { region } from "../../../entities/region";
 
-import HorizontalPager from "./flatListCombo.tsx";
-
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const DRAWER_CLOSED = moderateScale(30);
+const DRAWER_DEFAULT_CLOSED = moderateScale(30);
 const DRAWER_PARTIAL = moderateScale(120);
-const DRAWER_OPEN = windowHeight;
+const DRAWER_DEFAULT_OPEN = windowHeight;
+
+const DRAWER_SEARCH_CLOSED = moderateScale(30);
+const DRAWER_SEARCH_OPEN = windowHeight * 0.4;
+interface PagerProps {
+  shouldShowButton: boolean;
+  animatedButtonStyle: any;
+  animatedStatsStyle: any;
+  closeDrawer: () => void;
+}
 
 type BottomDrawerProps = {
   mapRegion: region,
-  mapConfig: number
+  mapConfig: number,
+  Content: (props: PagerProps) => React.ReactElement;
 };
-export default function BottomDrawer({ mapRegion, mapConfig }: BottomDrawerProps) {
+export default function BottomDrawer({ mapRegion, mapConfig, Content }: BottomDrawerProps) {
   const { searchStatus, setSearchStatus } = useContext(SearchStatusContext);
 
   let drawerStart: number;
 
+  let DRAWER_OPEN;
+  let DRAWER_CLOSED;
+
+  if (mapConfig === 0) {
+    DRAWER_OPEN = DRAWER_DEFAULT_OPEN;
+    DRAWER_CLOSED = DRAWER_DEFAULT_CLOSED;
+  } else if (mapConfig === 4) {
+    DRAWER_OPEN = DRAWER_SEARCH_OPEN;
+    DRAWER_CLOSED = DRAWER_PARTIAL;
+  }
+
   if (mapConfig === 0 && mapRegion) {
     drawerStart = DRAWER_PARTIAL;
+  } else if (mapConfig === 4) {
+    drawerStart = DRAWER_PARTIAL;
   } else {
-    drawerStart = DRAWER_OPEN;
+    drawerStart = DRAWER_DEFAULT_OPEN;
   }
 
   const boxheight = useSharedValue(drawerStart);
@@ -214,12 +235,20 @@ export default function BottomDrawer({ mapRegion, mapConfig }: BottomDrawerProps
     });
 
   const animatedBoxStyle = useAnimatedStyle(() => {
-    const bgColor = interpolateColor(
-      boxheight.value,
-      [DRAWER_CLOSED, DRAWER_PARTIAL],
-      [colors.primaryBlue, colors.themeWhite]
-    );
-
+    let bgColor;
+    if (mapConfig === 0) {
+      bgColor = interpolateColor(
+        boxheight.value,
+        [DRAWER_CLOSED, DRAWER_PARTIAL],
+        [colors.primaryBlue, colors.themeWhite]
+      );
+    } else if (mapConfig === 4) {
+      bgColor = interpolateColor(
+        boxheight.value,
+        [DRAWER_CLOSED, DRAWER_PARTIAL],
+        [colors.themeWhite, colors.themeWhite]
+      );
+    }
     return {
       height: boxheight.value,
       backgroundColor: bgColor,
@@ -245,12 +274,12 @@ export default function BottomDrawer({ mapRegion, mapConfig }: BottomDrawerProps
           </View>
 
           <View style={{ flex: 1, width: "100%" }}>
-            <HorizontalPager
-              shouldShowButton={isDrawerOpen}
-              animatedButtonStyle={animatedButtonStyle}
-              animatedStatsStyle={animatedStatsStyle}
-              closeDrawer={closeDrawer}
-            />
+            {Content({
+              shouldShowButton: isDrawerOpen,
+              animatedButtonStyle: animatedButtonStyle,
+              animatedStatsStyle: animatedStatsStyle,
+              closeDrawer: closeDrawer,
+            })}
           </View>
         </Animated.View>
       </GestureDetector>
@@ -272,6 +301,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: moderateScale(15),
     borderTopLeftRadius: moderateScale(15),
     overflow: "visible",
+    backgroundColor: "green",
   },
   handle: {
     zIndex: 11,

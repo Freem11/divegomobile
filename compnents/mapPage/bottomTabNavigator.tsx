@@ -21,7 +21,7 @@ export type BottomTabRoutes = {
     Home: undefined;
     Profile: { id: number };
     Notifications: undefined;
-    ContributionLaunchPad: undefined;
+    ContributionLaunch: undefined;
     Itinerary: undefined;
 };
 
@@ -87,7 +87,7 @@ export default function BottomTabNavigator() {
                 })}
             />
 
-            <Tab.Screen name="ContributionLaunchPad" component={ContributionLaunchPadRouter} options={{ unmountOnBlur: true }} />
+            <Tab.Screen name="ContributionLaunch" component={ContributionLaunchPadRouter} options={{ unmountOnBlur: true }} />
 
             {(userProfile?.partnerAccount) && (
                 <Tab.Screen name="Itinerary" component={ShopListParallax} />

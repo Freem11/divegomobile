@@ -38,3 +38,18 @@ export const Label = styled.Text`
   color: ${colors.themeBlack};
   padding-left: ${moderateScale(15)}px;
 `;
+
+export const SiteNumber = styled.View`
+  background-color: ${colors.primaryBlue};
+  width: ${moderateScale(40)}px;
+  height: ${moderateScale(40)}px;
+  border-radius: ${moderateScale(40)}px;
+  align-items: center;
+  justify-content: center; 
+`;
+
+export const SiteLabel = styled.Text`
+  font-size: ${moderateScale(fontSizes.SubHeading)}px;
+  font-family: ${activeFonts.Medium};
+  color: ${colors.themeWhite};
+`;

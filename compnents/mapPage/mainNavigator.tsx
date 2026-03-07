@@ -19,6 +19,10 @@ import PhotoCommentsParallax from "../screens/comments/photoCommentsParallax";
 import SeaLifeParallax from "../screens/seaLife/seaLifeParallax";
 import UserProfileParallax from "../screens/userProfile/userProfileParallax";
 import { EDIT_TYPE } from "../../entities/editTypes";
+import UniversalSync from "../screens/QRscreen";
+import SiteSubmitterScreen from "../screens/formScreens/siteSubmitter/SiteSubmitterScreen";
+import { NavigationButton } from "../navigationHeader/NavigationButton";
+import { NavigationHeader } from "../navigationHeader/NavigationHeader";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator, { BottomTabRoutes } from "./bottomTabNavigator";
@@ -45,6 +49,8 @@ export type MainRoutes = {
   SingleReviewScreen: { id: number };
   SeaLifeScreen: { species: string };
   ResetPasswordConfirm: undefined;
+  SiteSubmitter: undefined;
+  SyncScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainRoutes>();
@@ -132,6 +138,44 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
           <Stack.Screen name="SeaLifeScreen">
             {({ route }) => <SeaLifeParallax species={route.params.species} />}
           </Stack.Screen>
+
+          <Stack.Screen
+            name={"SiteSubmitter"}
+            component={SiteSubmitterScreen}
+            options={({ route }) => ({
+              headerShown: true,
+              header: ({ navigation }) => (
+                <NavigationHeader
+                  title={"New Dive Site"}
+                  left={(
+                    <NavigationButton
+                      onPress={() => navigation.goBack()}
+                      iconName="close"
+                    />
+                  )}
+                />
+              )
+            })}
+          />
+
+          <Stack.Screen
+            name={"SyncScreen"}
+            component={UniversalSync}
+            options={({ route }) => ({
+              headerShown: true,
+              header: ({ navigation }) => (
+                <NavigationHeader
+                  title={"Device Sync"}
+                  left={(
+                    <NavigationButton
+                      onPress={() => navigation.goBack()}
+                      iconName="close"
+                    />
+                  )}
+                />
+              )
+            })}
+          />
         </>
       )}
     </Stack.Navigator>

@@ -14,6 +14,8 @@ import * as S from "../mapPage/styles";
 import ButtonIcon from "../reusables/buttonIcon-new";
 import { getCurrentCoordinates } from "../tutorial/locationTrackingRegistry";
 import { SitesArrayContext } from "../contexts/sitesArrayContext";
+import BottomDrawer from "../screens/bottomDrawer/animatedBottomDrawer";
+import DiveSiteSearchList from "../screens/diveSiteSearch/diveSiteSearchList";
 
 import MarkerDiveShop from "./marker/markerDiveShop";
 import MarkerDiveSite from "./marker/markerDiveSite";
@@ -328,6 +330,11 @@ const GoogleMapView = memo((props: MapViewProps) => {
         </View>
       )}
 
+      {props?.mapConfig === MapConfigurations.DiveSiteSearch && (
+        <View style={{ position: "absolute", bottom: 0, width: "100%", alignItems: "center" }}>
+          <BottomDrawer mapRegion={mapRegion} mapConfig={props.mapConfig} Content={() => <DiveSiteSearchList />} />
+        </View>
+      )}
     </View>
   );
 });

@@ -9,20 +9,21 @@ import * as S from "./styles";
 interface DiveSiteCardProps {
   diveSiteId: number;
   diveSiteName: string;
-  diveSitePhoto: Image;
-  sitesArray: number[]
+  siteNumber?: number;
+  diveSitePhoto?: Image;
+  sitesArray?: number[]
   onPress?: (siteIdNo: number, siteList: number[]) => void;
 }
 
-export const DiveSitesCard: FC<DiveSiteCardProps> = ({ onPress, diveSiteId, diveSiteName, diveSitePhoto, sitesArray }) => {
-
+export const DiveSitesCard: FC<DiveSiteCardProps> = ({ onPress, diveSiteId, diveSiteName, diveSitePhoto, sitesArray, siteNumber }) => {
   return (
     <S.DiveSitesCard
       key={diveSiteId}
       onPress={() => onPress?.(diveSiteId, sitesArray)}
     >
-      <Avatar photo={diveSitePhoto && getImagePublicUrl(diveSitePhoto, IMAGE_SIZE.SM)} defaultImage={"anchor"} />
-      <S.Label>{diveSiteName}</S.Label>
+      {diveSitePhoto && <Avatar photo={getImagePublicUrl(diveSitePhoto, IMAGE_SIZE.SM)} defaultImage={"anchor"} />}
+      {siteNumber && <S.SiteNumber><S.SiteLabel>{siteNumber}</S.SiteLabel></S.SiteNumber>}
+      <S.Label>{siteNumber}. {diveSiteName}</S.Label>
     </S.DiveSitesCard>
   );
 };

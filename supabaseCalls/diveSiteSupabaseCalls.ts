@@ -36,7 +36,7 @@ export const getDiveSitesBasic = async (
   return data;
 };
 
-export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>,) => {
+export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>) => {
   const builder = supabase.rpc("get_dive_sites_with_images", {
     max_lat: values.maxLat,
     min_lat: values.minLat,
@@ -48,13 +48,15 @@ export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>,) => 
   if (filter?.label) {
     builder.ilike("name", "%" + filter.label + "%");
   }
+
   const { data, error } = await builder;
+
   if (error) {
     console.log("couldn't do it,", error);
     return [];
   }
 
-  const result: Partial<Photo>[] = data.map((item: any) => {
+  const result: Partial<Photo>[] = data.map((item: any, i: number) => {
     const sitePhoto: Image = {
       file_name: item.diveSiteProfilePhoto,
       public_domain: item.public_domain,
@@ -66,6 +68,7 @@ export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>,) => 
 
     return {
       ...item,
+      siteNumber: i + 1,
       diveSiteProfilePhoto: sitePhoto,
     };
   });
