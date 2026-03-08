@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useMemo, useCallback, useRef, memo, useContext } from "react";
 import { Dimensions, StyleSheet, View, InteractionManager } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region, EdgePadding } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster from "use-supercluster";
+import Animated, { useSharedValue, useDerivedValue, runOnJS } from "react-native-reanimated";
 
 import { DiveShop } from "../../entities/diveShop";
 import { DiveSiteBasic } from "../../entities/diveSite";
@@ -31,21 +32,10 @@ import { ReturnToShopButton } from "./navigation/returnToShopButton";
 import { ReturnToCreateTripButton } from "./navigation/returnToCreateTripButton";
 import { useMapStore } from "./useMapStore";
 
-type MapViewProps = {
-  mapConfig: number;
-  center?: Coordinates | null;
-  zoomLevel: number;
-  onLoad: (map: MapView) => void;
-  handleBoundsChange: () => void;
-  handleOnMapReady: () => void;
-  diveSites?: DiveSiteBasic[] | null;
-  diveShops?: DiveShop[] | null;
-  heatPoints?: HeatPoint[] | null;
-  species?: string;
-};
+const { width, height } = Dimensions.get("window");
+const MAX_PADDING = 300; // This should roughly match your drawer's open height
 
 const GoogleMapView = memo((props: MapViewProps) => {
-
   const [initialRegion, setInitialRegion] = useState<Region | null>(null);
   const mapRef = useMapStore((state) => state.mapRef);
   const mapRegion = useMapStore((state) => state.mapRegion);
@@ -55,28 +45,25 @@ const GoogleMapView = memo((props: MapViewProps) => {
   const isAnimating = useRef(false);
   const localMapRef = useRef<MapView | null>(null);
 
+  // --- MAP PADDING STATE ---
+  // mapPadding doesn't support Reanimated Shared Values directly in all versions,
+  // so we use a standard state updated by the drawer's progress.
+  const [paddingBottom, setPaddingBottom] = useState(0);
+
   const [bounds, setBounds] = useState<[number, number, number, number] | undefined>(undefined);
   const [zoom, setZoom] = useState(props.zoomLevel);
 
   const lastSyncZoom = useRef<number>(props.zoomLevel);
   const lastSyncBounds = useRef<string>("");
 
-  const showHeatmap = useMemo(() => {
-    if (!props.heatPoints?.length || ![0, 2].includes(props.mapConfig)) return false;
-    const weighted = props.heatPoints.map(heatPointToWeightedLocation);
-    return weighted.some((p) => p && Number.isFinite(p.latitude) && Number.isFinite(p.longitude));
-  }, [props.heatPoints, props.mapConfig]);
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "transparent",
-      alignItems: "center",
-      justifyContent: "center",
+      backgroundColor: "#000",
     },
     map: {
-      width: props.species ? "100%" : Dimensions.get("window").width,
-      height: props.species ? "100%" : Dimensions.get("window").height,
+      width: props.species ? "100%" : width,
+      height: props.species ? "100%" : height,
     }
   });
 
@@ -95,22 +82,13 @@ const GoogleMapView = memo((props: MapViewProps) => {
     return Math.round(Math.log2(360 / region.longitudeDelta));
   };
 
-  /**
-   * FIX: BREAKOUT LOGIC
-   * We filter out selected sites from the 'points' array so the cluster engine
-   * doesn't "swallow" Gold anchors into a cluster bubble.
-   */
   const points = useMemo(() => {
     const pts = [] as Supercluster.PointFeature<ClusterProperty>[];
-
     props.diveSites?.forEach((item) => {
-      const isSelected = sitesArray.includes(item.id);
-      // Only add to cluster engine if NOT selected
-      if (!isSelected) {
+      if (!sitesArray.includes(item.id)) {
         pts.push(diveSiteToPointFeature(item));
       }
     });
-
     props.diveShops?.forEach((item) => pts.push(diveShopToPointFeature(item)));
     return pts;
   }, [props.diveSites, props.diveShops, sitesArray]);
@@ -200,11 +178,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
   const isValidCoord = (lat: number, lng: number) =>
     typeof lat === "number" && typeof lng === "number" && Number.isFinite(lat) && Number.isFinite(lng);
 
-  /**
-   * FIX: TWO-PASS RENDERING
-   * We render standard clusters/unselected sites first, then overlay Gold sites.
-   * Never pass null/undefined as MapView children (causes NSInvalidArgumentException on iOS).
-   */
   const renderedMarkers = useMemo(() => {
     const mapElements: React.ReactNode[] = [];
     const safeClusters = clusters ?? [];
@@ -239,7 +212,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
             id={id as number}
             coordinate={coord}
             isSelected={false}
-            siteNumber={siteData.siteNumber}
+            siteNumber={siteData?.siteNumber}
           />
         );
         continue;
@@ -277,6 +250,9 @@ const GoogleMapView = memo((props: MapViewProps) => {
         mapType="hybrid"
         initialRegion={initialRegion}
         maxZoomLevel={16}
+        // KEY CHANGE: Add mapPadding
+        // This ensures the "logical center" of the map is above the drawer
+        mapPadding={{ top: 0, right: 0, left: 0, bottom: paddingBottom }}
         ref={(map) => {
           if (map) {
             localMapRef.current = map;
@@ -301,8 +277,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
         )}
         {renderedMarkers}
       </MapView>
-
-      {/* --- UI OVERLAYS RESTORED --- */}
 
       {(props?.mapConfig !== MapConfigurations.Default && props?.mapConfig !== MapConfigurations.TripView) && (
         <SearchTool />
@@ -336,7 +310,15 @@ const GoogleMapView = memo((props: MapViewProps) => {
 
       {props?.mapConfig === MapConfigurations.DiveSiteSearch && (
         <View style={{ position: "absolute", bottom: 0, width: "100%", alignItems: "center" }}>
-          <BottomDrawer mapRegion={mapRegion} mapConfig={props.mapConfig} Content={() => <DiveSiteSearchList />} />
+          <BottomDrawer
+            mapRegion={mapRegion}
+            mapConfig={props.mapConfig}
+            Content={() => <DiveSiteSearchList />}
+            onProgress={(val) => {
+              // Map the 0-1 progress to 0-300px padding
+              setPaddingBottom(val * MAX_PADDING);
+            }}
+          />
         </View>
       )}
     </View>
