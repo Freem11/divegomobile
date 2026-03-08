@@ -101,7 +101,7 @@ export default function BottomTabNavigator() {
             case "Home": return { icon: "map-outlined", label: t("BottomTabBar.home") };
             case "Profile": return { icon: "person", label: t("BottomTabBar.profile") };
             case "Itinerary": return { icon: "diving-scuba-flag", label: t("BottomTabBar.itinerary") };
-            case "ContributionLaunchPad": return { icon: "anchor-plus", label: t("BottomTabBar.contribution") };
+            case "ContributionLaunch": return { icon: "anchor-plus", label: t("BottomTabBar.contribution") };
             default: return { icon: "question-mark", label: "Error" };
         }
     }

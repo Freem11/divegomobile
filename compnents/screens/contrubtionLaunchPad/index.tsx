@@ -24,7 +24,7 @@ export default function ContributionLaunchPad() {
     mainNavigation.navigate("SyncScreen");
   };
 
-  const handleMapFlip = async (screenForward: ScreenReturn) => {
+  const handleMapFlip = async () => {
 
     if (mapRef) {
       setInitConfig(MapConfigurations.DiveSiteSearch);
@@ -38,10 +38,7 @@ export default function ContributionLaunchPad() {
           latitudeDelta: 0.1,
           longitudeDelta: 0.1
         });
-        setMapConfig(MapConfigurations.DiveSiteSearch, {
-          pageName: screenForward as unknown as string,
-          itemId: 0
-        });
+        setMapConfig(MapConfigurations.DiveSiteSearch);
         mainNavigation.navigate("GoogleMap");
       });
     }

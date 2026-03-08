@@ -1,14 +1,9 @@
 import React, { useEffect, useState, useMemo, useCallback, useRef, memo, useContext } from "react";
 import { Dimensions, StyleSheet, View, InteractionManager } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Region, EdgePadding } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import Supercluster from "supercluster";
 import useSupercluster from "use-supercluster";
-import Animated, { useSharedValue, useDerivedValue, runOnJS } from "react-native-reanimated";
 
-import { DiveShop } from "../../entities/diveShop";
-import { DiveSiteBasic } from "../../entities/diveSite";
-import { Coordinates } from "../../entities/coordinates";
-import { HeatPoint } from "../../entities/heatPoint";
 import { getMostRecentPhoto } from "../../supabaseCalls/photoSupabaseCalls";
 import SearchTool from "../searchTool";
 import * as S from "../mapPage/styles";
@@ -22,10 +17,9 @@ import MarkerDiveShop from "./marker/markerDiveShop";
 import MarkerDiveSite from "./marker/markerDiveSite";
 import MarkerDiveSiteCluster from "./marker/markerDiveSiteCluster";
 import MarkerHeatPoint from "./marker/markerHeatPoint";
-import { ClusterProperty, MapConfigurations, PointFeatureCategory } from "./types";
+import { ClusterProperty, MapConfigurations, PointFeatureCategory, ScreenReturn } from "./types";
 import { diveSiteToPointFeature } from "./dto/diveSiteToPointFeature";
 import { diveShopToPointFeature } from "./dto/diveShopToPointFeature";
-import { heatPointToWeightedLocation } from "./dto/heatPointToWeightedLocation";
 import { MarkerDraggable } from "./marker/markerDraggable";
 import { ReturnToSiteSubmitterButton } from "./navigation/returnToSiteSubmitterButton";
 import { ReturnToShopButton } from "./navigation/returnToShopButton";
@@ -35,7 +29,7 @@ import { useMapStore } from "./useMapStore";
 const { width, height } = Dimensions.get("window");
 const MAX_PADDING = 300; // This should roughly match your drawer's open height
 
-const GoogleMapView = memo((props: MapViewProps) => {
+const GoogleMapView = memo((props: GoogleMapsProps) => {
   const [initialRegion, setInitialRegion] = useState<Region | null>(null);
   const mapRef = useMapStore((state) => state.mapRef);
   const mapRegion = useMapStore((state) => state.mapRegion);
@@ -45,9 +39,6 @@ const GoogleMapView = memo((props: MapViewProps) => {
   const isAnimating = useRef(false);
   const localMapRef = useRef<MapView | null>(null);
 
-  // --- MAP PADDING STATE ---
-  // mapPadding doesn't support Reanimated Shared Values directly in all versions,
-  // so we use a standard state updated by the drawer's progress.
   const [paddingBottom, setPaddingBottom] = useState(0);
 
   const [bounds, setBounds] = useState<[number, number, number, number] | undefined>(undefined);
@@ -313,7 +304,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
           <BottomDrawer
             mapRegion={mapRegion}
             mapConfig={props.mapConfig}
-            Content={() => <DiveSiteSearchList />}
+            Content={() => <DiveSiteSearchList nextScreen={props.nextScreen} />}
             onProgress={(val) => {
               // Map the 0-1 progress to 0-300px padding
               setPaddingBottom(val * MAX_PADDING);

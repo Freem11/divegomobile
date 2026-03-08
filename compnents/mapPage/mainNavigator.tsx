@@ -23,6 +23,7 @@ import UniversalSync from "../screens/QRscreen";
 import SiteSubmitterScreen from "../screens/formScreens/siteSubmitter/SiteSubmitterScreen";
 import { NavigationButton } from "../navigationHeader/NavigationButton";
 import { NavigationHeader } from "../navigationHeader/NavigationHeader";
+import { ScreenReturn } from "../googleMap/types";
 
 import HomeScreen from "./HomeScreen";
 import BottomTabNavigator, { BottomTabRoutes } from "./bottomTabNavigator";
@@ -95,7 +96,9 @@ export default function MainNavigator({ showOnboarding, mapConfig }: MainNavigat
               {(props) => <BottomTabNavigator {...props} showOnboarding={showOnboarding} />}
             </Stack.Screen>
           )}
-          {mapConfig === 0 && <Stack.Screen name="GoogleMap" component={GoogleMap} />}
+          {mapConfig === 0 && (
+            <Stack.Screen name="GoogleMap" component={GoogleMap} />
+          )}
 
           <Stack.Screen name="Home" component={HomeScreen} />
 

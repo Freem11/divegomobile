@@ -19,60 +19,16 @@ export const ContentContainer = styled.View`
   height: ${windowHeight}px;
 `;
 
-export const SafeArea = styled(SafeAreaView)`
-  z-index: 20;
-  margin-top: ${Platform.OS === "ios" ? 0 : "10%"};
-  background-color: ${colors.themeWhite};
-`;
-
-export const BackButtonWrapper = styled.View`
-  width: 50%;
-  align-items: flex-start;
-`;
-
-export const PhotoContainer = styled.View`
-  width: 98%;
-  align-items: center;
-  align-self: center;
-  margin-top: ${moderateScale(20)}px;
-  margin-bottom: ${moderateScale(20)}px;
-`;
-
-export const HeaderWrapper = styled.View`
- flex-direction: row;
- align-items: center;
-`;
-
-export const Header = styled.Text`
-  font-size: ${moderateScale(fontSizes.Header)}px;
-  font-family: ${activeFonts.Medium};
-  color: ${colors.headersBlue};
-  align-self: center;
-  text-align: center;
-  z-index: 20;
-  margin-top: ${moderateScale(-50)}px;
-`;
-
-export const PacketHeader = styled.View`
-  width: 100%;
-  font-family: ${activeFonts.Light};
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-`;
-
-export const PacketHeaderItem = styled.Text`
-  margin: 0 2% 1% 0;
-  font-size: ${moderateScale(fontSizes.SubHeading)}px;
-  font-family: ${activeFonts.Thin};
-  color: ${colors.primaryBlue};
+export const HelpText = styled.Text`
+margin-top: ${moderateScale(10)}px;
+  font-size: ${moderateScale(fontSizes.SmallText)}px;
+  font-family: ${activeFonts.Regular};
+  color: ${colors.neutralGrey};
   align-self: flex-start;
   text-align: center;
 `;
 
-export const IconWrapper = styled.View`
-    width: ${moderateScale(24)}px;
-    height: ${moderateScale(24)}px;
-      margin-right: ${moderateScale(4)}px;
+export const ButtonAndText = styled.View`
+  align-items: center;
+  justify-content: center;
 `;

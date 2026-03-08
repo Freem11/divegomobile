@@ -3,25 +3,36 @@ import { FlatList } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 import { View } from "react-native";
 
-// import { useAppNavigation } from "../../../../mapPage/types";
 import { DiveSitesCard } from "../../reusables/addDiveSiteButton";
 import { getDiveSitesBasic } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useMapStore } from "../../googleMap/useMapStore";
-import { EmptyState } from "../comments/styles";
+import { useDiveSiteNavigation } from "../diveSite/types";
+import { useAppNavigation } from "../../mapPage/types";
+import ButtonIcon from "../../reusables/buttonIcon";
+import { colors } from "../../styles";
+import EmptyState from "../../reusables/emptyState-new";
 
 import * as S from "./styles";
 
 export default function DiveSiteSearchList() {
-  // const navigation = useAppNavigation();
+  const diveSiteNavigation = useDiveSiteNavigation();
+  const mainNavigation = useAppNavigation();
+  const setMapConfig = useMapStore((state) => state.actions.setMapConfig);
   const boundaries = useMapStore((state) => state.gpsBubble);
-  const mapRef = useMapStore((state) => state.mapRef);
-  const setMapRegion = useMapStore((state) => state.actions.setMapRegion);
-
   const [diveSites, setDiveSites] = useState([]);
 
   const getSites = async () => {
     const data = await getDiveSitesBasic(boundaries);
     setDiveSites(data);
+  };
+
+  const openDiveSite = (id: number) => {
+    diveSiteNavigation.navigate("DiveSiteNavigator", { id });
+  };
+
+  const handleBack = () => {
+    setMapConfig(0);
+    mainNavigation.goBack();
   };
 
   useEffect(() => {
@@ -32,9 +43,19 @@ export default function DiveSiteSearchList() {
 
   const [layoutReady, setLayoutReady] = useState(false);
 
+  console.log(diveSites);
   return (
     <S.VerticalFlatlistContainer onLayout={() => setLayoutReady(true)}>
-      <S.Header>Find Your Dive Site</S.Header>
+      <S.HeaderContainer>
+        <S.Header>Find Your Dive Site</S.Header>
+        <ButtonIcon
+          icon="close"
+          onPress={handleBack}
+          size="icon"
+          fillColor={colors.darkGrey}
+        />
+
+      </S.HeaderContainer>
 
       {layoutReady && (
         <FlatList
@@ -46,17 +67,18 @@ export default function DiveSiteSearchList() {
               diveSiteId={item.id}
               siteNumber={item.siteNumber}
               diveSiteName={item.name}
-              onPress={() => null}
+              onPress={() => openDiveSite(item.id)}
             />
           )}
           nestedScrollEnabled
           ListFooterComponent={<View style={{ height: moderateScale(30) }} />}
+          contentContainerStyle={{ flexGrow: 1 }}
           ListEmptyComponent={(
             <S.EmptyStateWrapper>
               <EmptyState
                 iconName="anchor"
                 title="No Nearby Dive Sites!"
-                subtitle={"Currently we have no Dive Sites in this area, if you know of one, please add it via our Dive Site Submission Tool!"}
+                subtitle={"No dive sites found nearby. \nIf you know one, add it!"}
               />
             </S.EmptyStateWrapper>
           )}

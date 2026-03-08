@@ -18,7 +18,7 @@ import {
 } from "react-native-gesture-handler";
 import { moderateScale } from "react-native-size-matters";
 
-import { colors, buttonSizes } from "../../styles";
+import { colors } from "../../styles";
 import { SearchStatusContext } from "../../contexts/searchStatusContext";
 import { region } from "../../../entities/region";
 

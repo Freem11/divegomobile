@@ -1,14 +1,13 @@
 import React from "react";
 
 import Button from "../../reusables/button";
-import { ScreenReturn } from "../../googleMap/types";
 
 import * as S from "./styles";
 
 type ContributionLaunchPadViewProps = {
   handleDeviceSyncMove: () => void;
   handleSiteSubmitterMove: () => void;
-  handleMapFlip: (screenForward: number) => void;
+  handleMapFlip: () => void;
 };
 
 export default function ContributionLaunchPadView({
@@ -23,30 +22,28 @@ export default function ContributionLaunchPadView({
       <Button
         size="large"
         iconLeft="sync"
-        title="Device Sync"
+        title="Sync your Device"
         onPress={handleDeviceSyncMove}
       />
 
       <Button
         size="large"
         iconLeft="anchor-plus"
-        title="Add Dive Site"
+        title="Add a Dive Site"
         onPress={handleSiteSubmitterMove}
       />
 
-      <Button
-        size="large"
-        iconLeft="Fish"
-        title="Add Sea Life Sightings"
-        onPress={() => handleMapFlip(ScreenReturn.SeaLifeSightings)}
-      />
-
-      <Button
-        size="large"
-        iconLeft="diving-snorkel"
-        title="Add Dive Site Review"
-        onPress={() => handleMapFlip(ScreenReturn.DiveSiteReview)}
-      />
+      <S.ButtonAndText>
+        <Button
+          size="large"
+          iconLeft="diving-scuba-flag"
+          title="Contribute to a Dive Site"
+          onPress={handleMapFlip}
+        />
+        <S.HelpText>
+          ( Review a Dive Site or Add a Sea Life Sighting )
+        </S.HelpText>
+      </S.ButtonAndText>
 
     </S.ContentContainer>
   );

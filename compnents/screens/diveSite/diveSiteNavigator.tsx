@@ -2,7 +2,6 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import EditScreenParallax from "../edits/editsParallax";
-import { DiveSiteWithUserName } from "../../../entities/diveSite";
 import GoogleMap from "../../googleMap";
 import { Review } from "../../../entities/diveSiteReview";
 import { NavigationButton } from "../../navigationHeader/NavigationButton";
@@ -22,7 +21,7 @@ type DiveSiteNavigatorProps = {
 export type DiveSiteRoutes = {
   DiveSite: undefined;
   EditScreen: undefined;
-  AddSighting: { selectedDiveSite: DiveSiteWithUserName, siteName?: string; };
+  AddSighting: { selectedDiveSite: number, siteName?: string; };
   DiveSitePhotos: undefined;
   DiveSiteTrips: undefined;
   GoogleMap: undefined;
