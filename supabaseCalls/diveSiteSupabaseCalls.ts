@@ -33,7 +33,11 @@ export const getDiveSitesBasic = async (
     return [];
   }
 
-  return data;
+  // Map through the data to inject the 1-based index
+  return data.map((site, i) => ({
+    ...site,
+    siteNumber: i + 1,
+  }));
 };
 
 export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>) => {
@@ -56,7 +60,7 @@ export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>) => {
     return [];
   }
 
-  const result: Partial<Photo>[] = data.map((item: any, i: number) => {
+  const result: Partial<Photo>[] = data.map((item: any) => {
     const sitePhoto: Image = {
       file_name: item.diveSiteProfilePhoto,
       public_domain: item.public_domain,
@@ -68,7 +72,6 @@ export const getDiveSitesWithUser = async (values, filter?: Partial<Photo>) => {
 
     return {
       ...item,
-      siteNumber: i + 1,
       diveSiteProfilePhoto: sitePhoto,
     };
   });

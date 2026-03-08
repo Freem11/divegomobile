@@ -23,7 +23,7 @@ export const DiveSitesCard: FC<DiveSiteCardProps> = ({ onPress, diveSiteId, dive
     >
       {diveSitePhoto && <Avatar photo={getImagePublicUrl(diveSitePhoto, IMAGE_SIZE.SM)} defaultImage={"anchor"} />}
       {siteNumber && <S.SiteNumber><S.SiteLabel>{siteNumber}</S.SiteLabel></S.SiteNumber>}
-      <S.Label>{siteNumber}. {diveSiteName}</S.Label>
+      <S.Label>{diveSiteName}</S.Label>
     </S.DiveSitesCard>
   );
 };

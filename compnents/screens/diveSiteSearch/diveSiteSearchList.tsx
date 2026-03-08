@@ -5,9 +5,7 @@ import { View } from "react-native";
 
 // import { useAppNavigation } from "../../../../mapPage/types";
 import { DiveSitesCard } from "../../reusables/addDiveSiteButton";
-import { IMAGE_SIZE } from "../../../entities/image";
-import getImagePublicUrl from "../../helpers/getImagePublicUrl";
-import { getDiveSitesWithUser } from "../../../supabaseCalls/diveSiteSupabaseCalls";
+import { getDiveSitesBasic } from "../../../supabaseCalls/diveSiteSupabaseCalls";
 import { useMapStore } from "../../googleMap/useMapStore";
 import { EmptyState } from "../comments/styles";
 
@@ -21,12 +19,14 @@ export default function DiveSiteSearchList() {
 
   const [diveSites, setDiveSites] = useState([]);
 
+  const getSites = async () => {
+    const data = await getDiveSitesBasic(boundaries);
+    setDiveSites(data);
+  };
+
   useEffect(() => {
     if (boundaries) {
-      getDiveSitesWithUser({
-        minLat: boundaries.minLat, maxLat: boundaries.maxLat,
-        minLng: boundaries.minLng, maxLng: boundaries.maxLng
-      }).then(setDiveSites);
+      getSites();
     }
   }, [boundaries?.maxLat, boundaries?.maxLng]);
 
@@ -34,7 +34,7 @@ export default function DiveSiteSearchList() {
 
   return (
     <S.VerticalFlatlistContainer onLayout={() => setLayoutReady(true)}>
-      <S.Header>Nearby Dive Sites</S.Header>
+      <S.Header>Find Your Dive Site</S.Header>
 
       {layoutReady && (
         <FlatList

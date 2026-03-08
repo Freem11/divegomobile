@@ -45,6 +45,7 @@ type MapViewProps = {
 };
 
 const GoogleMapView = memo((props: MapViewProps) => {
+
   const [initialRegion, setInitialRegion] = useState<Region | null>(null);
   const mapRef = useMapStore((state) => state.mapRef);
   const mapRegion = useMapStore((state) => state.mapRegion);
@@ -218,6 +219,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
         ? `cluster-${id}-${latitude.toFixed(4)}-${longitude.toFixed(4)}`
         : `${category}-${id}`;
       const coord = { latitude, longitude };
+      const siteData = props.diveSites?.find(s => s.id === id);
 
       if (isCluster) {
         mapElements.push(
@@ -237,6 +239,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
             id={id as number}
             coordinate={coord}
             isSelected={false}
+            siteNumber={siteData.siteNumber}
           />
         );
         continue;
@@ -256,6 +259,7 @@ const GoogleMapView = memo((props: MapViewProps) => {
           id={site.id}
           coordinate={{ latitude: site.lat, longitude: site.lng }}
           isSelected={true}
+          siteNumber={site.siteNumber}
         />
       ));
 
