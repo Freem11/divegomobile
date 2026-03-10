@@ -12,15 +12,15 @@ export const insertPhotoComment = async (userId, photoId, comment, userID) => {
         content: comment,
         replied_to: userID
       },
-    ]);
+    ])
+    .select("id")
+    .single();
 
   if (error) {
     console.log("couldn't do it 50,", error);
   }
 
-  if (data) {
-    return (data);
-  }
+  return data;
 };
 
 export const deletePhotoComment = async (id) => {

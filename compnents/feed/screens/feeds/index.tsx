@@ -1,104 +1,182 @@
-import React, { useEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 import {
-  Dimensions,
+  ActivityIndicator,
   FlatList,
   Text,
   View,
   StyleSheet,
   Platform,
+  RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
 
-import { useFeedDataStore } from "../../store/useFeedDataStore";
 import { activeFonts, colors } from "../../../styles";
-import { useFeedScreenStore } from "../../store/useScreenStore";
-import { FEED_ITEM_TYPE, FeedItem } from "../../store/types";
 import ButtonIcon from "../../../reusables/buttonIcon";
-
-import FeedItemFailedUpload from "./messages/failedPicUpload";
-import FeedItemFailedSync from "./messages/failedSync";
-import FeedItemNotification from "./messages/notification";
 import * as S from "./styles";
 import { useAppNavigation } from "../../../mapPage/types";
 
-const windowHeight = Dimensions.get("window").height;
+import { useNotificationsStore } from "../../store/useNotificationsStore";
+import NotificationItemPhotoLike from "./messages/photoLike";
+import NotificationItemPhotoComment from "./messages/photoComment";
+import type { Notification } from "../../store/types";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import getImagePublicUrl from "../../../helpers/getImagePublicUrl";
+import { IMAGE_SIZE } from "../../../../entities/image";
 
-// const mockFeedItems = [
-//   {
-//     id: "1",
-//     type: FEED_ITEM_TYPE.FAILED_UPLOAD,
-//     title: "Failed to upload image",
-//     message: "Please try again later.",
-//   },
-//   {
-//     id: "2",
-//     type: FEED_ITEM_TYPE.FAILED_SYNC,
-//     title: "Failed to sync data",
-//     message: "Check your internet connection.",
-//   },
-//   {
-//     id: "3",
-//     type: FEED_ITEM_TYPE.NOTIFICATION,
-//     title: "New message received",
-//     message: "You have a new message from John.",
-//   },
-// ];
-
-
-export default function FeedList() {
+export default function Notifications() {
   const { t } = useTranslation();
   const navigation = useAppNavigation();
-  const feedItems = useFeedDataStore((state) => state.feedItems);
-  //const feedItems = mockFeedItems;
-  const loadFeedItems = useFeedDataStore((state) => state.loadFeedItems);
-  const removeFeedItem = useFeedDataStore((state) => state.removeFeedItem);
-  const clearFeedItems = useFeedDataStore((state) => state.clearFeedItems);
-  const closeScreen = useFeedScreenStore((state) => state.closeScreen);
+  const mainNavigation = useAppNavigation();
+
+  const list = useNotificationsStore((s) => s.list);
+  const loadMore = useNotificationsStore((s) => s.loadMore);
+  const loadFirst = useNotificationsStore((s) => s.loadFirst);
+  const markOneSeen = useNotificationsStore((s) => s.markOneSeen);
+  const newCount = useNotificationsStore((s) => s.count);
+
+  const [activeTab, setActiveTab] = useState<"new" | "old">("new");
+  const items = list.items ?? [];
+  const newItems = items.filter((n) => !n.is_seen);
+  const oldItems = items.filter((n) => n.is_seen);
+
+  const data = activeTab === "new" ? newItems : oldItems;
+
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    loadFeedItems();
+    loadFirst();
   }, []);
 
-  const renderItem = ({ item }: { item: FeedItem }) => {
-    switch (item.type) {
-      case FEED_ITEM_TYPE.FAILED_UPLOAD:
-        return <FeedItemFailedUpload item={item} onRemove={removeFeedItem} />;
-      case FEED_ITEM_TYPE.FAILED_SYNC:
-        return <FeedItemFailedSync item={item} onRemove={removeFeedItem} />;
-      case FEED_ITEM_TYPE.NOTIFICATION:
-        return <FeedItemNotification item={item} onRemove={removeFeedItem} />;
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadFirst();
+    setRefreshing(false);
+  };
+
+  const goToUserProfile = (n: Notification) => {
+    const id = n?.sender?.id;
+    if (!id) return;
+    mainNavigation.navigate("UserProfile", { id });
+  };
+
+  const onTrashPress = (n: Notification) => {
+    if (!n.is_seen) {
+      markOneSeen(n.id);
+    }
+  };
+
+  const renderItem = ({ item }: { item: Notification }) => {
+    const code = item.notification_types?.code;
+    switch (code) {
+      case "photo_like":
+        return (
+          <NotificationItemPhotoLike
+            item={item}
+            onUsernamePress={() => goToUserProfile(item)}
+            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_like?.photo?.id })}
+            onTrashPress={onTrashPress}
+          />
+        );
+      case "photo_comment":
+        return (
+          <NotificationItemPhotoComment
+            item={item}
+            onUsernamePress={() => goToUserProfile(item)}
+            onPhotoPress={() => navigation.navigate("PhotoComments", { id: item.notification_photo_comment?.photo?.id, userId: item.sender.user_id })}
+            onTrashPress={onTrashPress}
+          />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <S.SafeArea>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+    <S.SafeArea style={styles.container}>
+      <View style={styles.headerRow}>
         <ButtonIcon
           icon="chevron-left"
           onPress={() => navigation.goBack()}
           size='small'
           fillColor={colors.neutralGrey}
         />
-        <ButtonIcon
-          icon="trash"
-          onPress={() => clearFeedItems()}
-          size="headerIcon"
-          fillColor={colors.themeRed}
-        />
       </View>
-      <S.Header>Your Notifications</S.Header>
+      <View style={styles.secondHeaderRow}>
+        <Text style={styles.title}>Your Notifications</Text>
+      </View>
+      <View style={styles.tabsRow}>
+        <TouchableOpacity
+          style={[
+            styles.tab,
+            activeTab === "new" && styles.tabActive,
+          ]}
+          onPress={() => setActiveTab("new")}
+        >
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "new" && styles.tabLabelActive,
+            ]}
+          >
+            New ({newCount})
+          </Text>
+        </TouchableOpacity>
 
-      {feedItems.length === 0 ? (
-        <Text style={styles.emptyMessage}>{t("Feed.noFeeds")}</Text>
+        <TouchableOpacity
+          style={[
+            styles.tab,
+            activeTab === "old" && styles.tabActive,
+          ]}
+          onPress={() => setActiveTab("old")}
+        >
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "old" && styles.tabLabelActive,
+            ]}
+          >
+            Old
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {(!list.items || list.items.length === 0) && list.isLoading ? (
+        <ActivityIndicator />
+      ) : (!list.items || list.items.length === 0) && !list.isLoading ? (
+        <Text style={styles.emptyMessage}>{t("Feed.noNotifications")}</Text>
       ) : (
         <FlatList
-          data={feedItems}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContainer}
+          data={data}
+          keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}
+          onEndReachedThreshold={0.3}
+          onEndReached={loadMore}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: moderateScale(12) }} />
+          )}
+          ListFooterComponent={
+            list.isLoading ? (
+              <View style={{ padding: moderateScale(12) }}>
+                <ActivityIndicator />
+              </View>
+            ) : null
+          }
+          ListEmptyComponent={
+            !list.isLoading ? (
+              <Text style={styles.emptyMessage}>
+                {activeTab === "new"
+                  ? "No new notifications"
+                  : "No old notifications"}
+              </Text>
+            ) : null
+          }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
     </S.SafeArea>
@@ -110,18 +188,58 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.themeWhite,
     paddingHorizontal: moderateScale(16),
-    paddingBottom: moderateScale(100),
-    height: windowHeight,
+    paddingBottom: moderateScale(16),
     paddingTop: Platform.OS === "ios" ? moderateScale(15) : moderateScale(10),
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: moderateScale(20),
+  },
+  secondHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: moderateScale(20),
+  },
+  title: {
+    fontSize: moderateScale(24),
+    fontFamily: activeFonts.Bold,
+    color: colors.headersBlue,
+    marginVertical: moderateScale(8),
   },
   emptyMessage: {
     fontSize: moderateScale(16),
-    fontFamily: activeFonts.Thin,
+    fontFamily: activeFonts.Medium,
     color: colors.themeBlack,
   },
-  listContainer: {
-    width: "100%",
-    display: "flex",
+  tabsRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: moderateScale(16),
     gap: moderateScale(12),
+  },
+  tab: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: moderateScale(6),
+    paddingHorizontal: moderateScale(14),
+    borderRadius: moderateScale(16),
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.themeWhite,
+  },
+  tabActive: {
+    backgroundColor: colors.headersBlue,
+    borderColor: colors.headersBlue,
+  },
+  tabLabel: {
+    fontSize: moderateScale(14),
+    fontFamily: activeFonts.Medium,
+    color: colors.headersBlue,
+  },
+  tabLabelActive: {
+    color: colors.themeWhite,
   },
 });

@@ -11,8 +11,9 @@ import Icon from "../../icons/Icon";
 import { colors } from "../styles";
 import { useUserProfile } from "../../store/user/useUserProfile";
 import SiteSubmitterRouter from "../screens/formScreens/siteSubmitter/siteSubmitterRouter";
-
 import HomeScreen from "./HomeScreen";
+import { useNotificationsStore } from "../feed/store/useNotificationsStore";
+import Notifications from "../feed/screens/feeds";
 
 const { width, height } = Dimensions.get("window");
 const isTablet = Math.min(width, height) >= 600;
@@ -20,6 +21,7 @@ const isTablet = Math.min(width, height) >= 600;
 export type BottomTabRoutes = {
     Home: undefined;
     Profile: { id: number };
+    Notifications: undefined;
     AddSite: undefined;
     Itinerary: undefined;
 };
@@ -28,6 +30,9 @@ const Tab = createBottomTabNavigator<BottomTabRoutes>();
 
 export default function BottomTabNavigator() {
     const { userProfile } = useUserProfile();
+
+    const notificationsCount = useNotificationsStore((s) => s.count);
+
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const bottomInset = insets.bottom > 0 ? insets.bottom : 0;
@@ -87,6 +92,22 @@ export default function BottomTabNavigator() {
             />
 
             <Tab.Screen
+                name="Notifications"
+                component={Notifications}
+                options={{
+                    tabBarBadge:
+                        notificationsCount > 99 ? "99+" :
+                            notificationsCount > 0 ? notificationsCount : undefined,
+                    tabBarBadgeStyle: {
+                        backgroundColor: "red",
+                        color: "white",
+                        fontSize: moderateScale(10),
+                        fontWeight: "600",
+                    },
+                }}
+            />
+
+            <Tab.Screen
                 name="AddSite"
                 component={SiteSubmitterRouter}
                 options={{ unmountOnBlur: true }}
@@ -102,6 +123,7 @@ export default function BottomTabNavigator() {
         switch (route) {
             case "Home": return { icon: "map-outlined", label: t("BottomTabBar.home") };
             case "Profile": return { icon: "person", label: t("BottomTabBar.profile") };
+            case "Notifications": return { icon: "bell-ring-outline", label: t("BottomTabBar.notifications") };
             case "AddSite": return { icon: "anchor-plus", label: t("BottomTabBar.addsite") };
             case "Itinerary": return { icon: "diving-scuba-flag", label: t("BottomTabBar.itinerary") };
             default: return { icon: "question-mark", label: "Error" };
